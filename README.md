@@ -1,1 +1,1 @@
-# virtual-coffee.github.com
+# [Virtual Coffee - The (always remote) Hallway Track](virtualcoffee.io)
