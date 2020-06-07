@@ -1,1 +1,1 @@
-# [Virtual Coffee - The (always remote) Hallway Track](https://virtualcoffee.io)
+# [Virtual Coffee - The (always remote) Hallway Track](http://virtualcoffee.io)
