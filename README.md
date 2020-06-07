@@ -8,4 +8,4 @@ The purpose of the coffee is to form community, allow for growth and mentorship,
 
 See you there!
 
-![Virtual Coffee Logo](logo.png)
+![](VirtualCoffee.png)
