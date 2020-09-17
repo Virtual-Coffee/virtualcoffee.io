@@ -6,7 +6,7 @@ Anyone can join, whether you're just thinking about getting into tech or have be
 
 The purpose of the coffee is to form community, allow for growth and mentorship, and to both meet new people and hang out with the regulars in a safe and positive space.
 
-Please take a moment to read our [Code of Conduct](https://github.com/Virtual-Coffee/virtual-coffee.github.io/blob/master/CODE_OF_CONDUCT.md)
+Please take a moment to read our [Code of Conduct](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/master/CODE_OF_CONDUCT.md)
 
 See you there!
 
