@@ -73,12 +73,12 @@ The moderator is responsible for clarifying and enforcing our standards of accep
 Privacy
 -------
 
-While Virtual Coffee is an open and welcoming community,citation of other's comments in a public forum must have the prior permission of the contributor(s). 
+While Virtual Coffee is an open and welcoming community, citation of other's comments in a public forum must have the prior permission of the contributor(s). 
 
 Enforcement
 -----------
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the Moderator responsible for enforcement at thevirtualcoffee@gmail.com. All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the Moderator responsible for enforcement at hello@virtualcoffee.io. All complaints will be reviewed and investigated promptly and fairly.
 
 The Moderator is obligated to respect the privacy and security of the reporter of any incident.
 
