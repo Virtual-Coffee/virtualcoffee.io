@@ -3,11 +3,9 @@
   "version": "5.0.2",
   "description": "A starter repository for a blog web site using the Eleventy static site generator.",
   "scripts": {
-    "build": "eleventy",
-    "watch": "eleventy --watch",
-    "serve": "eleventy --serve",
-    "start": "eleventy --serve",
-    "debug": "DEBUG=* eleventy"
+    "start": "npx grunt watch",
+    "build": "NODE_ENV=production npx grunt release-prep",
+    "serve": "npx grunt connect:server"
   },
   "repository": {
     "type": "git",
@@ -28,8 +26,37 @@
     "@11ty/eleventy-navigation": "^0.1.6",
     "@11ty/eleventy-plugin-rss": "^1.0.9",
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.1",
+    "@lodder/grunt-postcss": "^3.0.0",
+    "autoprefixer": "^10.0.0",
+    "css-mqpacker": "^7.0.0",
+    "cssnano": "^4.1.10",
+    "grunt": "^1.3.0",
+    "grunt-cli": "^1.3.2",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-connect": "^3.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^5.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-deployments": "^0.2.0",
+    "grunt-filerev": "^2.3.1",
+    "grunt-filerev-assets": "^1.0.0",
+    "grunt-prompt": "^1.3.3",
+    "grunt-replace": "^1.0.1",
+    "grunt-sass": "^3.1.0",
+    "grunt-shell": "^3.0.1",
+    "lodash": "^4.17.20",
     "luxon": "^1.21.3",
     "markdown-it": "^8.4.2",
-    "markdown-it-anchor": "^5.2.5"
+    "markdown-it-anchor": "^5.2.5",
+    "matchdep": "^2.0.0",
+    "postcss": "^8.0.9",
+    "prettier": "^2.1.2",
+    "sass": "^1.26.11",
+    "time-grunt": "^2.0.0"
+  },
+  "dependencies": {
+    "concurrently": "^5.3.0",
+    "load-grunt-tasks": "^5.1.0"
   }
 }

@@ -7,6 +7,7 @@ const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
 
 module.exports = function (eleventyConfig) {
+  eleventyConfig.setWatchThrottleWaitTime(100); // in milliseconds
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
@@ -67,6 +68,15 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy('src/img');
   eleventyConfig.addPassthroughCopy('src/assets');
   eleventyConfig.addPassthroughCopy('src/css');
+
+  eleventyConfig.addFilter('assetPath', function (value) {
+    if (process.env.NODE_ENV === 'production') {
+      const manifestPath = 'assets.json';
+      const manifest = JSON.parse(fs.readFileSync(manifestPath));
+      return manifest[value] ? manifest[value] : value;
+    }
+    return value;
+  });
 
   /* Markdown Overrides */
   let markdownLibrary = markdownIt({

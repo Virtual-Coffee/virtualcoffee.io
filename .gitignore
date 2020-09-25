@@ -2,3 +2,7 @@
 .DS_Store
 node_modules
 /_site
+/src/assets/css
+/src/assets/rev
+/assets.json
+/.env
