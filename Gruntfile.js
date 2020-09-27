@@ -209,7 +209,13 @@ module.exports = function (grunt) {
         },
       },
     },
-
+    copy: {
+      coc: {
+        expand: true,
+        src: 'CODE_OF_CONDUCT.md',
+        dest: 'src/_generatedfiles',
+      },
+    },
     replace: {
       dist: {
         options: {
@@ -253,6 +259,7 @@ module.exports = function (grunt) {
     'filerev:css',
     // 'filerev:js',
     'filerev_assets',
+    'copy:coc',
     'shell:eleventyProduction',
   ]);
 

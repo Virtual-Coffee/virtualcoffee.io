@@ -1,3 +1,11 @@
+---
+title: Virtual Coffee Code of Conduct
+description: Virtual Coffee Code of Conduct
+date: 2020-01-01
+layout: layouts/post.njk
+permalink: code-of-conduct/
+---
+
 # Virtual Coffee Code of Conduct
 
 Our Pledge
@@ -55,7 +63,7 @@ Examples of unacceptable behavior include, but are not limited to:
 Culture Citizenship
 -------------------
 
-One of the many goals of this Code of Conduct is to strengthen our community, uplift and encourage each other, and to recognize the positive effects of our community on the industry as a whole. 
+One of the many goals of this Code of Conduct is to strengthen our community, uplift and encourage each other, and to recognize the positive effects of our community on the industry as a whole.
 
 If you see someone who is making an extra effort to ensure our community is welcoming, friendly, and encourages all participants to contribute to the fullest extent, please recognize their efforts.
 
@@ -73,7 +81,7 @@ The moderator is responsible for clarifying and enforcing our standards of accep
 Privacy
 -------
 
-While Virtual Coffee is an open and welcoming community, citation of other's comments in a public forum must have the prior permission of the contributor(s). 
+While Virtual Coffee is an open and welcoming community, citation of other's comments in a public forum must have the prior permission of the contributor(s).
 
 Enforcement
 -----------
@@ -133,7 +141,7 @@ Attribution
 
 This Code of Conduct is adapted from:
 
--   [Contributor Covenant](https://www.contributor-covenant.org/version/2/0/code_of_conduct), version 2.0, available at <https://www.contributor-covenant.org/version/2/0/code_of_conduct> 
+-   [Contributor Covenant](https://www.contributor-covenant.org/version/2/0/code_of_conduct), version 2.0, available at <https://www.contributor-covenant.org/version/2/0/code_of_conduct>
 
 -   WeAllJS Code of Conduct, available at[  https://wealljs.org/code-of-conduct](https://wealljs.org/code-of-conduct)
 
