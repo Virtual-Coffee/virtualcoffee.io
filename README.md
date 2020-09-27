@@ -12,7 +12,6 @@ See you there!
 
 ![](VirtualCoffee.png)
 
-
 # WIP 11ty notes:
 
 ## Getting Started
@@ -22,7 +21,6 @@ See you there!
 ```
 git clone https://github.com/Virtual-Coffee/virtualcoffee.io.git virtualcoffee.io
 ```
-
 
 ### 2. Navigate to the directory
 
@@ -38,21 +36,30 @@ yarn
 
 ### 4. Run Eleventy
 
+If you don't have eleventy installed, you can run
+
+```
+npm i @11ty/eleventy or yarn add @11ty/eleventy
+```
+
 ```
 npx eleventy
 ```
 
 Or build and host locally for local development
+
 ```
 npx eleventy --serve
 ```
 
 Or build automatically when a template changes:
+
 ```
 npx eleventy --watch
 ```
 
 Or in debug mode:
+
 ```
 DEBUG=* npx eleventy
 ```
