@@ -1,0 +1,18 @@
+html {
+  font-size: 18px;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+.direct-link {
+  font-size: 0.75em;
+}
+
+.container-default {
+  @include media-breakpoint-up(sm) {
+    max-width: map-get($container-max-widths, md);
+  }
+}

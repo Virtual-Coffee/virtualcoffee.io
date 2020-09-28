@@ -1,0 +1,77 @@
+---
+layout: layouts/home.njk
+eleventyNavigation:
+  key: Home
+  order: 1
+---
+
+<div class="hero">
+  <img
+    class="hero-img"
+    alt=""
+    src="{{ '/assets/images/bg@0.1x.jpg' | assetPath }}"
+    srcset="
+      {{ '/assets/images/bg@0.1x.jpg' | assetPath }} 551w,
+      {{ '/assets/images/bg@0.2x.jpg' | assetPath }} 1090w,
+      {{ '/assets/images/bg@0.3x.jpg' | assetPath }} 1637w,
+      {{ '/assets/images/bg@0.4x.jpg' | assetPath }} 2183w,
+      {{ '/assets/images/bg@0.5x.jpg' | assetPath }} 2728w,
+      {{ '/assets/images/bg@0.6x.jpg' | assetPath }} 3273w,
+      {{ '/assets/images/bg@0.7x.jpg' | assetPath }} 3819w,
+      {{ '/assets/images/bg@0.8x.jpg' | assetPath }} 4363w,
+      {{ '/assets/images/bg@0.9x.jpg' | assetPath }} 4909w,
+      {{ '/assets/images/bg.jpg' | assetPath }} 555w
+    "
+    sizes="100vw"
+/>
+  <div class="container text-white">
+    <h1 class="display-1 font-weight-bold">Virtual Coffee ☕️</h1>
+    <p class="lead font-weight-bold">It's the (always remote) hallway track at the conference.</p>
+  </div>
+</div>
+
+<div class="container pt-5 lead">
+
+  <p>A laid-back conversation with developers that is usually tech-related.</p>
+
+  <p>Anyone can join! Whether you're just thinking about getting into tech or have been in it for decades.</p>
+
+  <p>Come with a question or a topic to discuss, ask for feedback on your portfolio, or just sit back and listen to others talk about tech.</p>
+
+  <p>Our mission is to form community, allow room for growth and mentorship, and to meet with both new people and our regulars in a safe and positive space.</p>
+
+  <h2 class="text-center my-6 display-4">All are Welcome ❤️</h2>
+</div>
+
+<div class="bg-light">
+  <div class="container py-5 lead">
+    <h2 class="text-center mb-6 display-4">Get Involved</h2>
+
+    <div class="row ">
+      <a href="/code-of-conduct" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center">
+        <div class="flex-fill mb-4 w-50">
+          {% include "svg/undraw_loving_story_0j59.svg" %}
+        </div>
+        <h3>Code of Conduct</h3>
+      </a>
+      <a href="https://github.com/Virtual-Coffee" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center" target="_blank" rel=”noopener noreferrer”>
+        <div class="flex-fill mb-4 w-50">
+          {% include "svg/undraw_version_control_9bpv.svg" %}
+        </div>
+        <h3>GitHub</h3>
+      </a>
+      <a href="https://meetingplace.io/virtual-coffee/events" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center" target="_blank" rel=”noopener noreferrer”>
+        <div class="flex-fill mb-4 w-50">
+          {% include "svg/undraw_group_hangout_5gmq.svg" %}
+        </div>
+        <h3>Community Events</h3>
+      </a>
+      <a href="https://www.youtube.com/channel/UCc0579aGEy7jTAgRglR4J0g" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center" target="_blank" rel=”noopener noreferrer”>
+        <div class="flex-fill mb-4 w-50">
+          {% include "svg/undraw_online_video_ivvq.svg" %}
+        </div>
+        <h3>YouTube</h3>
+      </a>
+    </div>
+  </div>
+</div>

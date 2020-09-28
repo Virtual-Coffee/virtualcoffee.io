@@ -1,0 +1,7 @@
+---
+layout: layouts/base.njk
+templateClass: tmpl-home
+---
+<div class="container container-default py-5 {% if templateClass %} {{ templateClass }}{% endif %}">
+  {{ content | safe }}
+</div>
