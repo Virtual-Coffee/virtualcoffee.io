@@ -54,11 +54,11 @@
     "postcss": "^8.0.9",
     "prettier": "^2.1.2",
     "sass": "^1.26.11",
-    "time-grunt": "^2.0.0"
+    "time-grunt": "^2.0.0",
+    "load-grunt-tasks": "^5.1.0",
+    "concurrently": "^5.3.0"
   },
   "dependencies": {
-    "bootstrap": "^4.5.2",
-    "concurrently": "^5.3.0",
-    "load-grunt-tasks": "^5.1.0"
+    "bootstrap": "^4.5.2"
   }
 }
