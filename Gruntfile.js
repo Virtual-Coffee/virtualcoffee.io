@@ -187,6 +187,10 @@ module.exports = function (grunt) {
               reduceIdents: false,
               safe: true,
             }), // minify the result
+
+            require('@fullhuman/postcss-purgecss')({
+              content: ['./src/**/*.njk'],
+            }),
           ],
         },
         expand: true,

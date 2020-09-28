@@ -27,8 +27,10 @@
     "@11ty/eleventy-navigation": "^0.1.6",
     "@11ty/eleventy-plugin-rss": "^1.0.9",
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.1",
+    "@fullhuman/postcss-purgecss": "^3.0.0",
     "@lodder/grunt-postcss": "^3.0.0",
     "autoprefixer": "^10.0.0",
+    "concurrently": "^5.3.0",
     "css-mqpacker": "^7.0.0",
     "cssnano": "^4.1.10",
     "grunt": "^1.3.0",
@@ -46,6 +48,7 @@
     "grunt-replace": "^1.0.1",
     "grunt-sass": "^3.1.0",
     "grunt-shell": "^3.0.1",
+    "load-grunt-tasks": "^5.1.0",
     "lodash": "^4.17.20",
     "luxon": "^1.21.3",
     "markdown-it": "^8.4.2",
@@ -54,9 +57,7 @@
     "postcss": "^8.0.9",
     "prettier": "^2.1.2",
     "sass": "^1.26.11",
-    "time-grunt": "^2.0.0",
-    "load-grunt-tasks": "^5.1.0",
-    "concurrently": "^5.3.0"
+    "time-grunt": "^2.0.0"
   },
   "dependencies": {
     "bootstrap": "^4.5.2"
