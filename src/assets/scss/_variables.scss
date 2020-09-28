@@ -1,0 +1,14 @@
+$enable-responsive-font-sizes: true;
+
+$spacer: 1rem;
+$spacers: (
+  6: (
+    $spacer * 6,
+  ),
+  7: (
+    $spacer * 9,
+  ),
+  8: (
+    $spacer * 12,
+  ),
+);

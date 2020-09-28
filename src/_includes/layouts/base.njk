@@ -6,56 +6,53 @@
     <title>{{ title or metadata.title }}</title>
     <meta name="description" content="{{ description or metadata.description }}">
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | assetPath }}"/>
-    <noscript><link rel="stylesheet" href="{{ '/assets/css/noscript.css' | assetPath }}"/></noscript>
-    <link rel="stylesheet" href="{{ '/css/prism-base16-monokai.dark.css' | url }}">
+    {# <link rel="stylesheet" href="{{ '/css/prism-base16-monokai.dark.css' | url }}"> #}
     <link rel="alternate" href="{{ metadata.feed.path | url }}" type="application/atom+xml" title="{{ metadata.title }}">
     <link rel="alternate" href="{{ metadata.jsonfeed.path | url }}" type="application/json" title="{{ metadata.title }}">
   </head>
-  <body class="is-preload">
+  <body>
 
-    <div id="wrapper">
-      {#- nav example from 11ty template:
-          Read more about `eleventy-navigation` at https://www.11ty.dev/docs/plugins/navigation/
-          <ul class="nav">
-            {%- for entry in collections.all | eleventyNavigation %}
-              <li class="nav-item{% if entry.url == page.url %} nav-item-active{% endif %}">
-                <a href="{{ entry.url | url }}">{{ entry.title }}</a>
-              </li>
-            {%- endfor %}
-          </ul>
-          #}
-
-      <section id="main"{% if templateClass %} class="{{ templateClass }}"{% endif %}>
-        {{ content | safe }}
-      </section>
-
-      <footer id="footer">
-        <ul class="copyright">
-          <li>&copy; Virtual Coffee</li>
+    <nav class="navbar navbar-expand-sm navbar-light bg-white">
+      <a class="navbar-brand" href="#">
+        <img loading="lazy" src="{{ '/assets/images/vc-logo-64.png' | assetPath }}" sizes="(min-width: 768px) 96px, 64px" srcset="{{ '/assets/images/vc-logo-64.png' | assetPath }} 64w, {{ '/assets/images/vc-logo-96.png' | assetPath }} 96w, {{ '/assets/images/vc-logo-128.png' | assetPath }} 128w, {{ '/assets/images/vc-logo-192.png' | assetPath }} 192w, {{ '/assets/images/vc-logo-288.png' | assetPath }} 288w" alt="">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Virtual Coffee <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/code-of-conduct">Code of Conduct</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/Virtual-Coffee" target="_blank" rel=”noopener noreferrer”>GitHub</a>
+          </li>
           <li>
-            <a href="mailto:hello@virtualcoffee.io">Contact Us</a>
+            <a class="nav-link" href="https://meetingplace.io/virtual-coffee/events" target="_blank" rel=”noopener noreferrer”>Community Events</a>
+          </li>
+          <li>
+            <a class="nav-link" href="https://www.youtube.com/channel/UCc0579aGEy7jTAgRglR4J0g" target="_blank" rel=”noopener noreferrer”>YouTube</a>
           </li>
         </ul>
-        <div>
-          <a href="https://www.netlify.com">This site is powered by Netlify</a>
-        </div>
-      </footer>
-    </div>
+      </div>
+    </nav>
 
-    <script>
-      if ('addEventListener' in window) {
-        window.addEventListener('load', function () {
-          document.body.className = document
-            .body
-            .className
-            .replace(/\bis-preload\b/, '');
-        });
-        document.body.className += (
-          navigator.userAgent.match(/(MSIE|rv:11\.0)/)
-          ? ' is-ie'
-          : '');
-      }
-    </script>
+    {{ content | safe }}
+
+    <footer class="mt-5 text-center text-muted">
+      <ul class="list-inline">
+        <li class="list-inline-item">&copy; {{page.date.getFullYear()}} Virtual Coffee</li>
+        <li class="list-inline-item">
+          <a href="mailto:hello@virtualcoffee.io">Contact Us</a>
+        </li>
+        <li class="list-inline-item">
+          <a href="https://www.netlify.com">This site is powered by Netlify</a>
+        </li>
+      </ul>
+    </footer>
 
     <!-- Current page: {{ page.url | url }} -->
   </body>

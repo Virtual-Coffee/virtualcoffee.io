@@ -143,6 +143,7 @@ module.exports = function (grunt) {
       options: {
         implementation: sass,
         sourceMap: true,
+        includePaths: ['node_modules'],
       },
       dev: {
         files: [

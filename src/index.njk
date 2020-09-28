@@ -5,50 +5,53 @@ eleventyNavigation:
   order: 1
 ---
 
-<header>
-  <!-- avatar.jpg is - original template image -->
-  <span class="avatar"><img src="{{ '/assets/images/vc-logo-250.png' | assetPath }}" alt=""/></span>
-  <!-- <h1>Virtual Coffee</h1> -->
-  <p>It's the (always remote) hallway track at the conference.</p>
-</header>
+<div class="hero">
+  <img class="hero-img" src="{{ '/assets/images/bg.jpg' | assetPath }}" alt=""/>
+  <div class="container text-white">
+    <h1 class="display-1 font-weight-bold">Virtual Coffee ☕️</h1>
+    <p class="lead font-weight-bold">It's the (always remote) hallway track at the conference.</p>
+  </div>
+</div>
 
-<hr/>
+<div class="container pt-5 lead">
 
-<p>A laid-back conversation with developers that is usually tech-related.</p>
+  <p>A laid-back conversation with developers that is usually tech-related.</p>
 
-<p>Anyone can join! Whether you're just thinking about getting into tech or have been in it for decades.</p>
+  <p>Anyone can join! Whether you're just thinking about getting into tech or have been in it for decades.</p>
 
-<p>Come with a question or a topic to discuss, ask for feedback on your portfolio, or just sit back and listen to others talk about tech.</p>
+  <p>Come with a question or a topic to discuss, ask for feedback on your portfolio, or just sit back and listen to others talk about tech.</p>
 
-<p>Our mission is to form community, allow room for growth and mentorship, and to meet with both new people and our regulars in a safe and positive space.</p>
+  <p>Our mission is to form community, allow room for growth and mentorship, and to meet with both new people and our regulars in a safe and positive space.</p>
 
-<h2>All are welcome!</h2>
+</div>
 
-<p>Want to keep things going after our events? Join the Virtual Coffee Slack community!</p>
+<div class="container py-5 lead">
+  <h2 class="text-center mb-6 display-4">Get Involved — All are Welcome ❤️</h2>
 
-<hr/>
-
-<footer>
-  <ul class="icons">
-    <li>
-      <a href="https://github.com/Virtual-Coffee/virtualcoffee.io/blob/master/CODE_OF_CONDUCT.md" class="icon brands fa-readme" target="_blank" rel=”noopener noreferrer”>&nbsp; Code of Conduct</a>
-    </li>
-    <li>
-      <a href="https://github.com/Virtual-Coffee" class="icon brands fa-github" target="_blank" rel=”noopener noreferrer”>&nbsp; GitHub</a>
-    </li>
-    <li>
-      <a href="https://meetingplace.io/virtual-coffee/events" class="icon fa-calendar" target="_blank" rel=”noopener noreferrer”>&nbsp; Community Events</a>
-    </li>
-    <li>
-      <a href="https://www.youtube.com/channel/UCc0579aGEy7jTAgRglR4J0g" class="icon brands fa-youtube" target="_blank" rel=”noopener noreferrer”>&nbsp;YouTube</a>
-    </li>
-  </ul>
-</footer>
-
-{# <h1>Latest 3 Posts</h1>
-
-{% set postslist = collections.posts | head(-3) %}
-{% set postslistCounter = collections.posts | length %}
-{% include "postslist.njk" %}
-
-<p>More posts can be found in <a href="{{ '/posts/' | url }}">the archive</a>.</p> #}
+  <div class="row ">
+    <a href="/code-of-conduct" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center">
+      <div class="flex-fill mb-4 w-50">
+        {% include "svg/undraw_loving_story_0j59.svg" %}
+      </div>
+      <h3>Code of Conduct</h3>
+    </a>
+    <a href="https://github.com/Virtual-Coffee" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center" target="_blank" rel=”noopener noreferrer”>
+      <div class="flex-fill mb-4 w-50">
+        {% include "svg/undraw_version_control_9bpv.svg" %}
+      </div>
+      <h3>GitHub</h3>
+    </a>
+    <a href="https://meetingplace.io/virtual-coffee/events" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center" target="_blank" rel=”noopener noreferrer”>
+      <div class="flex-fill mb-4 w-50">
+        {% include "svg/undraw_group_hangout_5gmq.svg" %}
+      </div>
+      <h3>Community Events</h3>
+    </a>
+    <a href="https://www.youtube.com/channel/UCc0579aGEy7jTAgRglR4J0g" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center" target="_blank" rel=”noopener noreferrer”>
+      <div class="flex-fill mb-4 w-50">
+        {% include "svg/undraw_online_video_ivvq.svg" %}
+      </div>
+      <h3>YouTube</h3>
+    </a>
+  </div>
+</div>
