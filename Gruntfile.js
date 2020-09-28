@@ -193,7 +193,13 @@ module.exports = function (grunt) {
             }), // minify the result
 
             require('@fullhuman/postcss-purgecss')({
-              content: ['./src/**/*.njk'],
+              content: [
+                './src/**/*.njk',
+                './src/**/*.md',
+                './src/**/*.html',
+                './src/**/*.liquid',
+                './src/**/*.js',
+              ],
             }),
           ],
         },
