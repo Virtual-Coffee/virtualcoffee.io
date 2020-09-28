@@ -1,0 +1,20 @@
+.main-footer {
+  ul {
+    margin-bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  li {
+    padding: 1rem;
+  }
+
+  a {
+    color: $white;
+    text-decoration: underline;
+  }
+}
