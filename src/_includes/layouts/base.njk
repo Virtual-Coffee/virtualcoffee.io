@@ -10,10 +10,10 @@
   <body>
 
     <nav class="navbar navbar-expand-sm navbar-light bg-white">
-      <a class="navbar-brand" href="#">
-        <img loading="lazy" src="{{ '/assets/images/vc-logo-64.png' | assetPath }}" sizes="(min-width: 768px) 96px, 64px" srcset="{{ '/assets/images/vc-logo-64.png' | assetPath }} 64w, {{ '/assets/images/vc-logo-96.png' | assetPath }} 96w, {{ '/assets/images/vc-logo-128.png' | assetPath }} 128w, {{ '/assets/images/vc-logo-192.png' | assetPath }} 192w, {{ '/assets/images/vc-logo-288.png' | assetPath }} 288w" alt="">
+      <a class="navbar-brand" href="/">
+        <img loading="lazy" src="{{ '/assets/images/vc-logo-96.png' | assetPath }}" sizes="96px" srcset="{{ '/assets/images/vc-logo-96.png' | assetPath }} 96w, {{ '/assets/images/vc-logo-192.png' | assetPath }} 192w, {{ '/assets/images/vc-logo-288.png' | assetPath }} 288w" alt="">
       </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -50,6 +50,26 @@
         </li>
       </ul>
     </footer>
+
+    <script>
+
+      var toggle = document.querySelector('[aria-controls="navbarNav"]');
+      var menu = document.querySelector('#navbarNav');
+
+      toggle.addEventListener('click', function () {
+        if (menu.classList.contains('show')) {
+          this.setAttribute('aria-expanded', 'false');
+          menu
+            .classList
+            .remove('show');
+        } else {
+          menu
+            .classList
+            .add('show');
+          this.setAttribute('aria-expanded', 'true');
+        }
+      });
+    </script>
 
     <!-- Current page: {{ page.url | url }} -->
   </body>
