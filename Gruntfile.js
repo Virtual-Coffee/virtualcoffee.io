@@ -91,6 +91,10 @@ module.exports = function (grunt) {
         files: ['src/**/*', '!src/assets/**/*'],
         tasks: ['shell:eleventy'],
       },
+      coc: {
+        files: ['CODE_OF_CONDUCT.md'],
+        tasks: ['copy:coc', 'shell:eleventy'],
+      },
       options: {
         livereload: true,
       },
@@ -247,7 +251,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('assets', ['sass', 'postcss:dev']);
 
-  grunt.registerTask('default', ['assets', 'shell:eleventy']);
+  grunt.registerTask('default', ['assets', 'copy:coc', 'shell:eleventy']);
 
   grunt.registerTask('start', ['default', 'connect:watch', 'watch']);
 
