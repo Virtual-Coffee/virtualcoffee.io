@@ -243,9 +243,9 @@ module.exports = function (grunt) {
 
   grunt.registerTask('assets', ['sass', 'postcss:dev']);
 
-  grunt.registerTask('start', ['assets', 'connect:watch', 'watch']);
+  grunt.registerTask('default', ['assets', 'shell:eleventy']);
 
-  grunt.registerTask('default', ['assets']);
+  grunt.registerTask('start', ['default', 'connect:watch', 'watch']);
 
   grunt.registerTask('release-prep', [
     'clean:dist',

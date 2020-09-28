@@ -3,9 +3,10 @@
   "version": "2.0.0",
   "description": "The public site for virtualcoffee.io",
   "scripts": {
-    "start": "npx grunt watch",
+    "start": "npx grunt start",
     "build": "NODE_ENV=production npx grunt release-prep",
-    "serve": "npx grunt connect:server"
+    "serve": "npx grunt connect:server",
+    "build-preview": "yarn build && yarn serve"
   },
   "repository": {
     "type": "git",
@@ -16,7 +17,7 @@
     "email": "hello@virtualcoffee.io",
     "url": "https://virtualcoffee.io/"
   },
-  "license": "Creative Commons Attribution 3.0 Unported",
+  "license": "CC-BY-3.0",
   "bugs": {
     "url": "https://github.com/Virtual-Coffee/virtualcoffee.io/issues"
   },

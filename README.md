@@ -13,9 +13,8 @@ See you there!
 ![](VirtualCoffee.png)
 
 
-# WIP 11ty notes:
 
-## Getting Started
+## Run and Install
 
 ### 1. Clone this Repository
 
@@ -36,23 +35,28 @@ cd virtualcoffee.io
 yarn
 ```
 
-### 4. Run Eleventy
+At this point you're ready to roll! The following commands are available:
+
+### `yarn start`
 
 ```
-npx eleventy
+yarn start
 ```
 
-Or build and host locally for local development
+Starts a local server running at http://localhost:9000 and watches the `src` directory for changes. Use this to preview local development.
+
+### `yarn build`
+
 ```
-npx eleventy --serve
+yarn build
 ```
 
-Or build automatically when a template changes:
+Builds a production-ready version of the site. This is what Netlify uses to build our site.
+
+### `yarn build-preview`
+
 ```
-npx eleventy --watch
+yarn build-preview
 ```
 
-Or in debug mode:
-```
-DEBUG=* npx eleventy
-```
+If you'd like to see a preview of the production build, use this command to build the site and start up a server at http://localhost:9000. To see any subsequent changes, you can leave this server running, but you'll have to run `yarn build` again in another console tab.
