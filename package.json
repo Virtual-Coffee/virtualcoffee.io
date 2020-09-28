@@ -1,7 +1,7 @@
 {
-  "name": "eleventy-base-blog",
-  "version": "5.0.2",
-  "description": "A starter repository for a blog web site using the Eleventy static site generator.",
+  "name": "virtualcoffee-io",
+  "version": "2.0.0",
+  "description": "The public site for virtualcoffee.io",
   "scripts": {
     "start": "npx grunt watch",
     "build": "NODE_ENV=production npx grunt release-prep",
@@ -9,18 +9,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/11ty/eleventy-base-blog.git"
+    "url": "git://github.com/Virtual-Coffee/virtualcoffee.io.git"
   },
   "author": {
-    "name": "Zach Leatherman",
-    "email": "zachleatherman@gmail.com",
-    "url": "https://zachleat.com/"
+    "name": "Virtual Coffee",
+    "email": "hello@virtualcoffee.io",
+    "url": "https://virtualcoffee.io/"
   },
-  "license": "MIT",
+  "license": "Creative Commons Attribution 3.0 Unported",
   "bugs": {
-    "url": "https://github.com/11ty/eleventy-base-blog/issues"
+    "url": "https://github.com/Virtual-Coffee/virtualcoffee.io/issues"
   },
-  "homepage": "https://github.com/11ty/eleventy-base-blog#readme",
+  "homepage": "https://github.com/Virtual-Coffee/virtualcoffee.io#readme",
   "devDependencies": {
     "@11ty/eleventy": "^0.11.0",
     "@11ty/eleventy-navigation": "^0.1.6",
