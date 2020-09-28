@@ -1,7 +1,5 @@
 ---
 title: Virtual Coffee Code of Conduct
-description: Virtual Coffee Code of Conduct
-date: 2020-01-01
 layout: layouts/default.njk
 permalink: code-of-conduct/
 ---
