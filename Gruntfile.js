@@ -116,7 +116,7 @@ module.exports = function (grunt) {
       },
     },
     clean: {
-      dist: ['<%= ui.ui %>/css/**/*'],
+      dist: ['<%= ui.ui %>/css/**/*', '_site/**/*'],
       assets: {
         src: ['<%= ui.ui %>/rev/**/*'],
         filter: function (filepath) {
