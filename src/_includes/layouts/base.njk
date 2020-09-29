@@ -39,14 +39,16 @@
 
     {{ content | safe }}
 
-    <footer class="my-5 text-center text-muted">
-      <ul class="list-inline">
-        <li class="list-inline-item">&copy; {{page.date.getFullYear()}} Virtual Coffee</li>
-        <li class="list-inline-item">
+    <footer class="py-5 text-center text-muted bg-white border-top border-secondary main-footer">
+      <ul>
+        <li>&copy; {{page.date.getFullYear()}} Virtual Coffee</li>
+        <li>
           <a href="mailto:hello@virtualcoffee.io">Contact Us</a>
         </li>
-        <li class="list-inline-item">
-          <a href="https://www.netlify.com">This site is powered by Netlify</a>
+        <li class="py-0">
+          <a href="https://www.netlify.com" target="_blank" rel=”noopener noreferrer”>
+            <img src="https://www.netlify.com/img/global/badges/netlify-dark.svg" alt="Deploys by Netlify" loading="lazy"/>
+          </a>
         </li>
       </ul>
     </footer>
