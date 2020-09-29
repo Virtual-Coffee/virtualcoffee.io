@@ -35,7 +35,7 @@ or writing code which can be incorporated into the application codebase itself.
 
 # Asking to Pair
 
-This is a beginner friendly repo. Contributors can request a pairing (zoom/google hangouts) to pair with a maintainer on tackling an issue/submitting a PR/etc. If you want to do it for a pre-existing issue, simple indicate so in a comment under that issue. If not, you may open a new Question issue and request a pairing.
+This is a beginner friendly repo. Contributors can request a pairing (zoom/google hangouts) to pair with a maintainer on tackling an issue/submitting a PR/etc. If you want to do it for a pre-existing issue, simple indicate so in a comment under that issue. If not, you may open a new Question issue and request a pairing. Please understand that this is a volunteer effort; maintainers may not always be available for pairing.
 
 # The Basics
 
@@ -83,7 +83,7 @@ At this point, you have two options.
 
 ## Awaiting Review
 
-Once you've submitted your pull request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all of course, we ask for patience if you don't see a response immediately. Sometimes it takes about a day for someone's schedule to clear up to have the sit to properly review incoming PRs. We'd rather not rush a response after someone has put time and effort into submitted. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your PR reminding of it's status. If **two weeks** have passed with no feedback, you can email the project maintainer at kirk.shilling@gmail.com.
+Once you've submitted your pull request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all of course, we ask for patience if you don't see a response immediately. Sometimes it takes about a day for someone's schedule to clear up to have the sit to properly review incoming PRs. We'd rather not rush a response after someone has put time and effort into submitted. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your PR reminding of it's status. 
 
 If the PR looks good, a maintainer will typically give feedback and merge the request immediately, otherwise they'll let you know what questions they have or what needs to change before your work can be accepted. Once it is, you'll see your changes on the main branch and VOILA, open source contribution complete!
 
@@ -99,9 +99,8 @@ That's all for now. If you feel like anything is missing from this document that
 
 
 # Reporting a bug
-If you find a **critical security vulnerability**, do NOT open an issue. Email kirk.shilling@gmail.com instead. This app does not now, nor does it have plans to store critical personal info, so any such leak should come from third party integrations, and remains highly unlikely, but you never know.
 
-For any other bug, we have a bug report template already created for your use. Just select it when opening up an issue on github and follow the headers to formulating your issue.
+We have a bug report template already created for your use. Just select it when opening up an issue on github and follow the headers to formulating your issue.
 
 When filing an issue, make sure to answer these three questions:
 
@@ -109,20 +108,7 @@ When filing an issue, make sure to answer these three questions:
 - What did you expect to see?
 - What did you see instead?
 
-# Preferred Code style
 
-1. Please use abbreviations for object names sparingly. Full names are fine.
-2. We highly encourage you to integrate [Elm-format](https://github.com/avh4/elm-format) with your IDE but you don't have to.
-
-# Commit message conventions
-
-We tend to use a `Type:Description` style for commit messages so it's easy to see what type of change is being made.
-Common types are:
-- DOCS: - Creating of new documents
-- FIX: - Bug fixes
-- EDIT: - Usually a follow up commit if a small error was spotted in a previous version
-- REFACTOR: - Changing code structure without changing code functionality
-- FEATURE: - Adding new functionality
 
 # Labelling Conventions
 
