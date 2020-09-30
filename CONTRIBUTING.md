@@ -63,7 +63,7 @@ The meanings for those are hopefully pretty self explanatory. If you feel like y
 
 1. If you don't have it already, download and install
   - [NODE.js](https://nodejs.org/en/download/) and
-  - [yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
+  - [yarn](https://classic.yarnpkg.com/en/docs/install/)
 2. Fork this repo
 3. Create a local copy on your machine
 4. In a shell terminal/command line, navigate to the repository
@@ -83,7 +83,7 @@ At this point, you have two options.
 
 ## Awaiting Review
 
-Once you've submitted your pull request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all of course, we ask for patience if you don't see a response immediately. Sometimes it takes about a day for someone's schedule to clear up to have the sit to properly review incoming PRs. We'd rather not rush a response after someone has put time and effort into submitted. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your PR reminding of it's status. 
+Once you've submitted your pull request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all of course, we ask for patience if you don't see a response immediately. Sometimes it takes about a day for someone's schedule to clear up to have the sit to properly review incoming PRs. We'd rather not rush a response after someone has put time and effort into submitted. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your PR reminding of it's status.
 
 If the PR looks good, a maintainer will typically give feedback and merge the request immediately, otherwise they'll let you know what questions they have or what needs to change before your work can be accepted. Once it is, you'll see your changes on the main branch and VOILA, open source contribution complete!
 
