@@ -1,18 +1,20 @@
 # [Virtual Coffee](https://virtualcoffee.io)
 
-It's the (always remote) hallway track at the conference. A laid-back conversation with devs that's usually tech-related.
+Virtual Coffee is a laid-back conversation with developers twice a week. It's the conversation that keeps going in slack. It's the online events that support developers at all stages of the journey. It's the place where you go to make friends who all just happen to be in tech.
 
-Anyone can join, whether you're just thinking about getting into tech or have been in it for decades. Come with a question or a topic to discuss, ask for feedback on your portfolio, or just sit back and listen to others talk about tech.
+Anyone can join! Whether you're just thinking about getting into tech or have been in it for decades.
 
-The purpose of the coffee is to form community, allow for growth and mentorship, and to both meet new people and hang out with the regulars in a safe and positive space.
+We know that growth comes at all levels and that no matter what stage of the journey you're on, you can teach and learn.
+
+So come with a question or a topic to discuss, ask for feedback on your portfolio, answer another developer's question, or just sit back and listen to others talk about tech.
+
+Our mission is to form community, allow room for growth and mentorship at all levels, and to provide a safe space for everyone interested in tech.
 
 Please take a moment to read our [Code of Conduct](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/master/CODE_OF_CONDUCT.md)
 
 See you there!
 
 ![](VirtualCoffee.png)
-
-
 
 ## Run and Install
 
@@ -21,7 +23,6 @@ See you there!
 ```
 git clone https://github.com/Virtual-Coffee/virtualcoffee.io.git virtualcoffee.io
 ```
-
 
 ### 2. Navigate to the directory
 
