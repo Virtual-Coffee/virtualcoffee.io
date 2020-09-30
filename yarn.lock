@@ -2132,13 +2132,6 @@ grunt-contrib-watch@^1.1.0:
     lodash "^4.17.10"
     tiny-lr "^1.1.1"
 
-grunt-deployments@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/grunt-deployments/-/grunt-deployments-0.2.0.tgz#a617b3538f54e1811a7ea158f309da29881bfa9d"
-  integrity sha1-phezU49U4YEafqFY8wnaKYgb+p0=
-  dependencies:
-    shelljs "~0.1.4"
-
 grunt-filerev-assets@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/grunt-filerev-assets/-/grunt-filerev-assets-1.0.0.tgz#7375310fd281f79d051949654b9a6df22969731c"
@@ -4783,11 +4776,6 @@ setprototypeof@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.1.1.tgz#7e95acb24aa92f5885e0abef5ba131330d4ae683"
   integrity sha512-JvdAWfbXeIGaZ9cILp38HntZSFSo3mWg6xGcJJsd+d4aRMOqauag1C63dJfDw7OaMYwEbHMOxEZ1lqVRYP2OAw==
-
-shelljs@~0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/shelljs/-/shelljs-0.1.4.tgz#dfbbe78d56c3c0168d2fb79e10ecd1dbcb07ec0e"
-  integrity sha1-37vnjVbDwBaNL7eeEOzR28sH7A4=
 
 sigmund@^1.0.1:
   version "1.0.1"
