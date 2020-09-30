@@ -68,6 +68,7 @@ The meanings for those are hopefully pretty self explanatory. If you feel like y
 3. Create a local copy on your machine
 4. In a shell terminal/command line, navigate to the repository
 5. Run the live development server with:
+
 ```
 yarn start
 ```
