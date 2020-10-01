@@ -1,0 +1,67 @@
+.membercards {
+  display: flex;
+  flex-direction: column;
+
+  @include media-breakpoint-up(md) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding-left: 2%;
+    padding-right: 2%;
+  }
+}
+
+.membercard {
+  margin-bottom: map-get($spacers, 5);
+
+  @include media-breakpoint-up(md) {
+    max-width: 48%;
+  }
+}
+
+.membercard-header {
+  margin-bottom: map-get($spacers, 2);
+
+  @include media-breakpoint-up(lg) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  h5 {
+    flex: 1;
+    margin-bottom: 0;
+  }
+}
+
+.membercard-icon {
+  display: inline-block;
+  width: 1.25rem;
+  color: $secondary;
+
+  @include media-breakpoint-up(lg) {
+    width: 1.5rem;
+  }
+
+  .membercard-icon + &,
+  .badge + & {
+    margin-left: 0.5rem;
+  }
+
+  svg {
+    fill: currentColor;
+  }
+
+  @include hover-focus() {
+    color: darken($secondary, 10%);
+  }
+}
+
+.member-footer {
+  display: flex;
+  justify-content: center;
+
+  svg {
+    max-width: 600px;
+  }
+}

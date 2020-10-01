@@ -19,193 +19,51 @@ description: Meet our amazing members!
 </div>
 
 <div class="bg-light py-5">
-  <div class="container">
-    <div class="row row-cols-1 row-cols-md-3">
-      <div class="col mb-4">
-        <div class="card">
-          <img src="https://avatars2.githubusercontent.com/u/360261?v=4" class="card-img-top" alt="Dan Ott profile image">
-          <div class="card-body">
-            <h5 class="card-title">Dan Ott</h5>
-            <p class="card-text">Independent front-end designer and developer, father, #ADHD person, and Clevelander. He/him</p>
+  <div class="container-xl">
+    <div class="membercards">
+      {% for member in members %}
+        <div class="row membercard">
+          <div class="col-3">
+            <img src="{{member.avatar_url}}" class="shadow-sm rounded" alt="{{member.name}} profile image">
           </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <a href="https://dtott.com">https://dtott.com</a>
-            </li>
-            <li class="list-group-item">
-              <a href="https://github.com/danieltott">github:danieltott</a>
-            </li>
-            <li class="list-group-item">
-              <a href="https://twitter.com/danieltott">twitter:danieltott</a>
-            </li>
-          </ul>
-          <div class="card-footer">
-            <strong>Looking for Work</strong>
-          </div>
-        </div>
-      </div>
-      <div class="col mb-4">
-        <div class="card">
-          <img src="https://avatars2.githubusercontent.com/u/360261?v=4" class="card-img-top" alt="Dan Ott profile image">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
+          <div class="col-9">
+            <div class="membercard-header">
+              <h5>
+                {% if member.blog %}
+                  <a href="{{member.blog}}" target="_blank" rel=”noopener noreferrer”>{{member.name}}</a>
+                {% else %}
+                  {{member.name}}
+                {% endif %}
+
+              </h5>
+              <div class="membercard-social">
+                {% if member.hireable %}
+                  {% if member.blog %}
+                    <a href="{{members.blog}}" class="badge badge-secondary">Available for work!</a>
+                  {% else %}
+                    <span class="badge badge-secondary">Hireable!</span>
+                  {% endif %}
+                {% endif %}
+
+                <a href="{{member.html_url}}" class="membercard-icon" title="{{member.login}} on GitHub" target="_blank" rel=”noopener noreferrer”>{% include "svg/github.svg" %}</a>
+                {% if member.twitter_username %}
+                  <a href="https://twitter.com/{{member.twitter_username}}" title="{{member.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel=”noopener noreferrer”>{% include "svg/twitter.svg" %}</a>
+                {% endif %}
+              </div>
+            </div>
+            <p class="text-muted">{{member.bio}}</p>
+            {% if member.blog %}
+              <div>
+                <a href="{{member.blog}}" target="_blank" rel=”noopener noreferrer”>{{member.blog | replace('https://','') | replace('http://','')}}</a>
+              </div>
+            {% endif %}
           </div>
         </div>
-      </div>
-      <div class="col mb-4">
-        <div class="card">
-          <img src="https://avatars2.githubusercontent.com/u/360261?v=4" class="card-img-top" alt="Dan Ott profile image">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-        </div>
-      </div>
-      <div class="col mb-4">
-        <div class="card">
-          <img src="https://avatars2.githubusercontent.com/u/360261?v=4" class="card-img-top" alt="Dan Ott profile image">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-        </div>
-      </div>
-      <div class="col mb-4">
-        <div class="card">
-          <img src="https://avatars2.githubusercontent.com/u/360261?v=4" class="card-img-top" alt="Dan Ott profile image">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-        </div>
-      </div>
-      <div class="col mb-4">
-        <div class="card">
-          <img src="https://avatars2.githubusercontent.com/u/360261?v=4" class="card-img-top" alt="Dan Ott profile image">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-        </div>
-      </div>
-      <div class="col mb-4">
-        <div class="card">
-          <img src="https://avatars2.githubusercontent.com/u/360261?v=4" class="card-img-top" alt="Dan Ott profile image">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-        </div>
-      </div>
-      <div class="col mb-4">
-        <div class="card">
-          <img src="https://avatars2.githubusercontent.com/u/360261?v=4" class="card-img-top" alt="Dan Ott profile image">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-        </div>
-      </div>
-      <div class="col mb-4">
-        <div class="card">
-          <img src="https://avatars2.githubusercontent.com/u/360261?v=4" class="card-img-top" alt="Dan Ott profile image">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-        </div>
-      </div>
-      <div class="col mb-4">
-        <div class="card">
-          <img src="https://avatars2.githubusercontent.com/u/360261?v=4" class="card-img-top" alt="Dan Ott profile image">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Vestibulum at eros</li>
-          </ul>
-          <div class="card-body">
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
+    </div>
+
+    <div class="p-6 member-footer">
+      {% include "svg/undraw_celebration_0jvk.svg" %}
     </div>
   </div>
 </div>
