@@ -1,4 +1,3 @@
-
 ## Linked Issue
 
 _[Whenever possible, a pull request should address a pre-existing issue.
