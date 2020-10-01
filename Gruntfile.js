@@ -259,7 +259,39 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['assets', 'copy:coc', 'shell:eleventy']);
 
-  grunt.registerTask('start', ['default', 'connect:watch', 'watch']);
+  grunt.registerTask('watchingNotice', function () {
+    grunt.log.writeln(
+      `
+**`['rainbow'].bold
+    );
+    grunt.log.writeln(
+      `
+A local server is now running at http://localhost:9000! Any changes you make to the src folder should also re-build the site and re-load your browser.
+
+You should see 'waiting...' below, which means the watcher is waiting to build your awesome changes!
+
+Use ctrl-c to quit the server when you're done.`['green'].bold
+    );
+
+    grunt.log.writeln(
+      `
+Hack away!
+
+**
+`['rainbow'].bold
+    );
+  });
+
+  grunt.event.on('watch', function (action, filepath, target) {
+    grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
+  });
+
+  grunt.registerTask('start', [
+    'default',
+    'connect:watch',
+    'watchingNotice',
+    'watch',
+  ]);
 
   grunt.registerTask('release-prep', [
     'clean:dist',

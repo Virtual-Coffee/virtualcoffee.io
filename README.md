@@ -16,15 +16,18 @@ See you there!
 
 ![](VirtualCoffee.png)
 
-## Run and Install
+## Local Development
 
-### 1. Clone this Repository
+Steps to run the site locally for development or curiosity
 
-```
-git clone https://github.com/Virtual-Coffee/virtualcoffee.io.git virtualcoffee.io
-```
+### 1. Fork and clone the repsitory
 
-### 2. Navigate to the directory
+Follow [these steps](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo) to create a fork of this repository and clone it to your local machine.
+
+
+### 2. Navigate to the repo directory
+
+If you have just run `git clone ...` , the next step would be to move into the cloned repo:
 
 ```
 cd virtualcoffee.io
@@ -33,31 +36,44 @@ cd virtualcoffee.io
 ### 3. Install dependencies
 
 ```
-yarn
+npm install
 ```
 
 At this point you're ready to roll! The following commands are available:
 
-### `yarn start`
+### `npm run start`
 
 ```
-yarn start
+npm run start
 ```
 
-Starts a local server running at http://localhost:9000 and watches the `src` directory for changes. Use this to preview local development.
+This is the only command you need to do normal local development.
 
-### `yarn build`
+Starts a local server and watches the `src` directory for changes. Use this to preview local development.
+
+Once you run this command, a local server is running at http://localhost:9000! Any changes you make to the src folder should also re-build the site and re-load your browser.
+
+You should see 'Waiting...' below, which means the watcher is waiting to build your awesome changes!
+
+Use ctrl-c to quit the server when you're done.
+
+
+## Build Commands
+
+The following commands are for building production-ready versions of the site. If you're interested in seeing what they look like on your machine, feel free to run them! But they are not needed for normal local development.
+
+### `npm run build`
 
 ```
-yarn build
+npm run build
 ```
 
 Builds a production-ready version of the site. This is what Netlify uses to build our site.
 
-### `yarn build-preview`
+### `npm run build-preview`
 
 ```
-yarn build-preview
+npm run build-preview
 ```
 
-If you'd like to see a preview of the production build, use this command to build the site and start up a server at http://localhost:9000. To see any subsequent changes, you can leave this server running, but you'll have to run `yarn build` again in another console tab.
+If you'd like to see a preview of the production build, use this command to build the site and start up a server at http://localhost:9000. To see any subsequent changes, you can leave this server running, but you'll have to run `npm build` again in another console tab.
