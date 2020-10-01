@@ -59,6 +59,9 @@
     "time-grunt": "^2.0.0"
   },
   "dependencies": {
-    "bootstrap": "^4.5.2"
+    "@11ty/eleventy-cache-assets": "^2.0.3",
+    "bootstrap": "^4.5.2",
+    "glob": "^7.1.6",
+    "node-fetch": "^2.6.1"
   }
 }
