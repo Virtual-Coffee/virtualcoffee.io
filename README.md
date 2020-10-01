@@ -16,7 +16,7 @@ See you there!
 
 ![](VirtualCoffee.png)
 
-## Steps to run the site locally for development or curiosity
+## [Steps to run the site locally for development or curiosity](#local-development)
 
 ### 1. Fork and clone the repsitory
 
