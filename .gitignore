@@ -6,3 +6,4 @@ node_modules
 /src/assets/rev
 /assets.json
 /.env
+/.cache
