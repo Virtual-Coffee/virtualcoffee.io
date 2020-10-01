@@ -6,7 +6,7 @@
     "start": "npx grunt start",
     "build": "NODE_ENV=production npx grunt release-prep",
     "serve": "npx grunt connect:server",
-    "build-preview": "yarn build && yarn serve"
+    "build-preview": "npm build && npm serve"
   },
   "repository": {
     "type": "git",
