@@ -60,21 +60,9 @@ If you feel like there's a contribution you would like to make that isn't repres
 
 If you feel like you have an issue that doesn't match those categories though, go ahead and ignore the templates and create an issue the old fashioned way.
 
-## Run and Install
+## Local development
 
-1. If you don't have it already, download and install
-
-- [NODE.js](https://nodejs.org/en/download/) and
-- [yarn](https://classic.yarnpkg.com/en/docs/install/)
-
-2. [Fork](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo) this repo
-3. Create a local copy on your machine
-4. In a shell terminal/command line, navigate to the repository
-5. Run the live development server with:
-
-```
-yarn start
-```
+Follow the steps for local development [in our README](README.md#local-development)
 
 ## Creating a Pull Request
 
