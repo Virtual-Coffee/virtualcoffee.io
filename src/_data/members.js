@@ -26,7 +26,7 @@ module.exports = async function () {
       );
 
       if(response.blog && !response.blog.startsWith('http')){
-        response.blog = 'https://' + response.blog
+        response.blog = 'http://' + response.blog
       }
 
       members.push(response);
