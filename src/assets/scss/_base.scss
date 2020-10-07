@@ -11,8 +11,10 @@ svg {
   font-size: 0.75em;
 }
 
-.container-default {
+.bodycopy {
   @include media-breakpoint-up(sm) {
     max-width: map-get($container-max-widths, md);
+    margin-left: auto;
+    margin-right: auto;
   }
 }

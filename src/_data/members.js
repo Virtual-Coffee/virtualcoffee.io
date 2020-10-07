@@ -25,6 +25,10 @@ module.exports = async function () {
         }
       );
 
+      if(response.blog && !response.blog.startsWith('http')){
+        response.blog = 'http://' + response.blog
+      }
+
       members.push(response);
     } catch (e) {
       console.warn(`Unable to read ${file}, skipping and moving on!`);
