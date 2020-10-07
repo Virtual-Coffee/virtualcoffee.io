@@ -18,8 +18,57 @@ description: Meet our amazing members!
   </div>
 </div>
 
+
 <div class="bg-light py-5">
   <div class="container-xl">
+    <h5 class="text-danger">Our Founders</h5>
+    <div class="membercards">
+      {% for founder in founders %}
+        <div class="row membercard">
+          <div class="col-3">
+            <img src="{{founder.avatar_url}}" class="shadow-sm rounded" alt="{{founder.name}} profile image">
+          </div>
+          <div class="col-9">
+            <div class="membercard-header">
+              <h5>
+                {% if founder.blog %}
+                  <a href="{{founder.blog}}" target="_blank" rel=”noopener noreferrer”>{{founder.name}}</a>
+                {% else %}
+                  {{founder.name}}
+                {% endif %}
+
+              </h5>
+             <div class="membercard-social">
+                {% if founder.hireable %}
+                  {% if founder.blog %}
+                    <a href="{{founders.blog}}" class="badge badge-secondary">Available for work!</a>
+                  {% else %}
+                    <span class="badge badge-secondary">Hireable!</span>
+                  {% endif %}
+                {% endif %}
+
+                <a href="{{founder.html_url}}" class="membercard-icon" title="{{founder.login}} on GitHub" target="_blank" rel=”noopener noreferrer”>{% include "svg/github.svg" %}</a>
+                {% if founder.twitter_username %}
+                  <a href="https://twitter.com/{{founder.twitter_username}}" title="{{founder.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel=”noopener noreferrer”>{% include "svg/twitter.svg" %}</a>
+                {% endif %}
+              </div>
+            </div>
+            <p class="text-muted">{{founder.bio}}</p>
+            {% if founder.blog %}
+              <div>
+                <a href="{{founder.blog}}" target="_blank" rel=”noopener noreferrer”>{{founder.blog | replace('https://','') | replace('http://','')}}</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  <hr class="bg-danger">
+
+
+<div class="bg-light py-5">
+  <div class="container-xl">
+    <h5 class="text-danger">Our Members</h5>
     <div class="membercards">
       {% for member in members %}
         <div class="row membercard">
