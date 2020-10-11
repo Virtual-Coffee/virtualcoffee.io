@@ -28,7 +28,7 @@ description: See our upcoming events!
     <div class="card w-100 mb-3" style="width: 18rem;">
       <div class="card-body">
         <h5 class="card-title">{{event.name}}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{ event.start_time | readableDate }}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">{{ event.start_time | dateForDisplay }}</h6>
         <p class="card-text">{{ event.description | striptags(true) }}</p>
         <a href="{{ event.url }}" class="card-link" target="_blank" rel=”noopener noreferrer">Details</a>
       </div>
