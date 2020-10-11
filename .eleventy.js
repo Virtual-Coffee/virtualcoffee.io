@@ -27,6 +27,10 @@ module.exports = function (eleventyConfig) {
     return DateTime.fromJSDate(dateObj, { zone: 'utc' }).toFormat('yyyy-LL-dd');
   });
 
+  eleventyConfig.addFilter('dateForDisplay', (dateString) => {
+    return DateTime.fromISO(dateString).toFormat('fff');
+  })
+
   // Get the first `n` elements of a collection.
   eleventyConfig.addFilter('head', (array, n) => {
     if (n < 0) {

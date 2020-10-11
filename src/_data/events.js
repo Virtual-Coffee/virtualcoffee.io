@@ -1,8 +1,7 @@
 const Cache = require('@11ty/eleventy-cache-assets');
 
 module.exports = async function () {
-  console.log("Fetching events");
-    
+  console.log("Fetching events");   
   try {
     const response = await Cache(
       `https://meetingplace.io/api/v1/group/virtual-coffee/events`,
@@ -11,13 +10,20 @@ module.exports = async function () {
         type: 'json', // also supports "text" or "buffer"
       }
     )
-    console.log(response);
-    return response.slice(0, 10);
+    // return response.slice(0, 10);
+    return response;
   } catch (e) {
     console.error(e);
   }
-  
 };
+
+
+
+
+
+
+
+
 
 
 
