@@ -31,7 +31,7 @@ description: Meet our amazing members!
             <div class="membercard-header">
               <h5>
                 {% if founder.blog %}
-                  <a href="{{founder.blog}}" target="_blank" rel="”noopener" noreferrer”="noreferrer”">{{founder.name}}</a>
+                  <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer">{{founder.name}}</a>
                 {% else %}
                   {{founder.name}}
                 {% endif %}
@@ -46,16 +46,16 @@ description: Meet our amazing members!
                   {% endif %}
                 {% endif %}
 
-                <a href="{{founder.html_url}}" class="membercard-icon" title="{{founder.login}} on GitHub" target="_blank" rel="”noopener" noreferrer”="noreferrer”">{% include "svg/github.svg" %}</a>
+                <a href="{{founder.html_url}}" class="membercard-icon" title="{{founder.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
                 {% if founder.twitter_username %}
-                  <a href="https://twitter.com/{{founder.twitter_username}}" title="{{founder.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel="”noopener" noreferrer”="noreferrer”">{% include "svg/twitter.svg" %}</a>
+                  <a href="https://twitter.com/{{founder.twitter_username}}" title="{{founder.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel="noopener noreferrer">{% include "svg/twitter.svg" %}</a>
                 {% endif %}
               </div>
             </div>
             <p class="text-muted">{{founder.bio}}</p>
             {% if founder.blog %}
               <div>
-                <a href="{{founder.blog}}" target="_blank" rel="”noopener" noreferrer”="noreferrer”">{{founder.blog | replace('https://','') | replace('http://','')}}</a>
+                <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer">{{founder.blog | replace('https://','') | replace('http://','')}}</a>
               </div>
             {% endif %}
           </div>
@@ -76,7 +76,7 @@ description: Meet our amazing members!
                 <div class="membercard-header">
                   <h5>
                     {% if member.blog %}
-                      <a href="{{member.blog}}" target="_blank" rel="”noopener" noreferrer”="noreferrer”">{{member.name}}</a>
+                      <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
                     {% else %}
                       {{member.name}}
                     {% endif %}
@@ -91,16 +91,16 @@ description: Meet our amazing members!
                       {% endif %}
                     {% endif %}
 
-                    <a href="{{member.html_url}}" class="membercard-icon" title="{{member.login}} on GitHub" target="_blank" rel="”noopener" noreferrer”="noreferrer”">{% include "svg/github.svg" %}</a>
+                    <a href="{{member.html_url}}" class="membercard-icon" title="{{member.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
                     {% if member.twitter_username %}
-                      <a href="https://twitter.com/{{member.twitter_username}}" title="{{member.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel="”noopener" noreferrer”="noreferrer”">{% include "svg/twitter.svg" %}</a>
+                      <a href="https://twitter.com/{{member.twitter_username}}" title="{{member.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel="noopener noreferrer">{% include "svg/twitter.svg" %}</a>
                     {% endif %}
                   </div>
                 </div>
                 <p class="text-muted">{{member.bio}}</p>
                 {% if member.blog %}
                   <div>
-                    <a href="{{member.blog}}" target="_blank" rel="”noopener" noreferrer”="noreferrer”">{{member.blog | replace('https://','') | replace('http://','')}}</a>
+                    <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.blog | replace('https://','') | replace('http://','')}}</a>
                   </div>
                 {% endif %}
               </div>
