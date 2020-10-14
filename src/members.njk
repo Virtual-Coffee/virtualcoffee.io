@@ -31,7 +31,7 @@ description: Meet our amazing members!
             <div class="membercard-header">
               <h5>
                 {% if founder.blog %}
-                  <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer">{{founder.name}}</a>
+                  <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer" class="text-truncate">{{founder.name}}</a>
                 {% else %}
                   {{founder.name}}
                 {% endif %}
@@ -55,7 +55,7 @@ description: Meet our amazing members!
             <p class="text-muted">{{founder.bio}}</p>
             {% if founder.blog %}
               <div>
-                <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer">{{founder.blog | replace('https://','') | replace('http://','')}}</a>
+                <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer" class="text-truncate">{{founder.blog | replace('https://','') | replace('http://','')}}</a>
               </div>
             {% endif %}
           </div>
@@ -76,7 +76,7 @@ description: Meet our amazing members!
                 <div class="membercard-header">
                   <h5>
                     {% if member.blog %}
-                      <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
+                      <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer" class="text-truncate">{{member.name}}</a>
                     {% else %}
                       {{member.name}}
                     {% endif %}
@@ -100,7 +100,7 @@ description: Meet our amazing members!
                 <p class="text-muted">{{member.bio}}</p>
                 {% if member.blog %}
                   <div>
-                    <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.blog | replace('https://','') | replace('http://','')}}</a>
+                    <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer" class="text-truncate">{{member.blog | replace('https://','') | replace('http://','')}}</a>
                   </div>
                 {% endif %}
               </div>
