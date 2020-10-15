@@ -15,7 +15,7 @@ description: See our upcoming events!
         <p class="lead ">Join us at one of our <a href="https://meetingplace.io/virtual-coffee/events" target="_blank" rel=”noopener noreferrer"> upcoming events</a>!</p>
       </div>
     </div>
-  </div>
+  </div>   
 </div>
 
 
@@ -26,7 +26,7 @@ description: See our upcoming events!
       <a href="https://meetingplace.io/virtual-coffee/events" target="_blank" rel=”noopener noreferrer">View events on Meetingplace.io</a>
     </div>
 
-    {% for event in events %}
+    {% for event in events | head(20) %}
 
     <div class="card w-100 shadow p-3 mb-4 bg-white rounded" style="width: 18rem;">
       <div class="card-body">
