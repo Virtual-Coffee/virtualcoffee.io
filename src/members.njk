@@ -29,9 +29,9 @@ description: Meet our amazing members!
           </div>
           <div class="col-9">
             <div class="membercard-header">
-              <h5>
+              <h5 class="text-truncate">
                 {% if founder.blog %}
-                  <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer" class="text-truncate">{{founder.name}}</a>
+                  <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer">{{founder.name}}</a>
                 {% else %}
                   {{founder.name}}
                 {% endif %}
@@ -54,8 +54,8 @@ description: Meet our amazing members!
             </div>
             <p class="text-muted">{{founder.bio}}</p>
             {% if founder.blog %}
-              <div>
-                <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer" class="text-truncate">{{founder.blog | replace('https://','') | replace('http://','')}}</a>
+              <div class="text-truncate">
+                <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer">{{founder.blog | replace('https://','') | replace('http://','')}}</a>
               </div>
             {% endif %}
           </div>
@@ -74,9 +74,9 @@ description: Meet our amazing members!
               </div>
               <div class="col-9">
                 <div class="membercard-header">
-                  <h5>
+                  <h5 class="text-truncate">
                     {% if member.blog %}
-                      <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer" class="text-truncate">{{member.name}}</a>
+                      <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
                     {% else %}
                       {{member.name}}
                     {% endif %}
@@ -99,8 +99,8 @@ description: Meet our amazing members!
                 </div>
                 <p class="text-muted">{{member.bio}}</p>
                 {% if member.blog %}
-                  <div>
-                    <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer" class="text-truncate">{{member.blog | replace('https://','') | replace('http://','')}}</a>
+                  <div class="text-truncate">
+                    <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.blog | replace('https://','') | replace('http://','')}}</a>
                   </div>
                 {% endif %}
               </div>
