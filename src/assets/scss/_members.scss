@@ -13,9 +13,10 @@
 
 .membercard {
   margin-bottom: map-get($spacers, 5);
+  width: 100%;
 
   @include media-breakpoint-up(md) {
-    max-width: 48%;
+    width: 50%;
   }
 }
 
