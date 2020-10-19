@@ -1,0 +1,14 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Trigger Netlify Build
+on:
+  schedule:
+    # Run at 0815 daily
+    - cron: '15 8 * * *'
+jobs:
+  build:
+    name: Request Netlify Webhook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Curl request
+        run: curl -X POST -d {} https://api.netlify.com/build_hooks/5f8de8e7034b0e1ae146bfff
