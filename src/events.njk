@@ -28,12 +28,12 @@ description: See our upcoming events!
 
     {% for event in events | head(20) %}
 
-    <div class="card w-100 shadow p-3 mb-4 bg-white rounded" style="width: 18rem;">
+    <div class="card mb-4">
       <div class="card-body">
         <h5 class="card-title">{{event.name}}</h5>
         <h6 class="card-subtitle mb-2 text-muted">{{ event.start_time | dateForDisplay }}</h6>
         <p class="card-text">{{ event.description | striptags(true) }}</p>
-        <a href="{{ event.url }}" class="card-link" target="_blank" rel="noopener noreferrer">Details</a>
+        <a href="{{ event.url }}" class="card-link" target="_blank" rel="noopener noreferrer">Details and RSVP</a>
       </div>
     </div>
     {% endfor %}
