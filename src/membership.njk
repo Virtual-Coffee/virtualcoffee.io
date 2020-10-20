@@ -39,6 +39,7 @@ layout: layouts/home.njk
           type="text"
           class="form-control"
           id="formName"
+          name="name"
           aria-describedby="nameHelp"
           required
         />
@@ -50,6 +51,7 @@ layout: layouts/home.njk
           type="email"
           class="form-control"
           id="formEmail"
+          name="email"
           aria-describedby="emailHelp"
           required
         />
@@ -64,38 +66,40 @@ layout: layouts/home.njk
           type="text"
           class="form-control"
           id="pronouns"
+          name="pronouns"
         />
       </div>
       <div class="form-group">
-        <label for="formName">Your GitHub username (if you have one)</label>
+        <label for="githubUsername">Your GitHub username (if you have one)</label>
         <input
           type="text"
           class="form-control"
-          id="formName"
+          id="githubUsername"
+          name="githubUsername"
         />
       </div>
       <div class="form-group">
         <label for="howDidYouHearAboutUs">How did you hear about Virtual Coffee?</label>
-        <textarea class="form-control" id="howDidYouHearAboutUs" rows="3"></textarea>
+        <textarea class="form-control" id="howDidYouHearAboutUs" name="howDidYouHearAboutUs" rows="3"></textarea>
       </div>
       <div class="form-group">
         <label for="journey">Where are you in your coding journey?</label>
-        <textarea class="form-control" id="journey" rows="3"></textarea>
+        <textarea class="form-control" id="journey" name="journey" rows="3"></textarea>
       </div>
       <div class="form-group">
         <label for="codeInterests">What sorts of code-related things are you interesting in?</label>
-        <textarea class="form-control" id="codeInterests" rows="3"></textarea>
+        <textarea class="form-control" id="codeInterests" name="codeInterests" rows="3"></textarea>
       </div>
       <div class="form-group">
         <label for="virtualCoffee">What are you hoping to get out of joining Virtual Coffee?</label>
-        <textarea class="form-control" id="virtualCoffee" rows="3"></textarea>
+        <textarea class="form-control" id="virtualCoffee" name="virtualCoffee" rows="3"></textarea>
       </div>
       </fieldset>
 
       <p class="lead">Please take a moment to read our <a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>.</p>
 
       <label class="form-group form-check">
-        <input type="checkbox" class="form-check-input" required value="agree">
+        <input type="checkbox" name="agree" class="form-check-input" required value="agree">
         <span class="form-check-label">I'll do my best to abide by the Code of Conduct ❤️</span>
       </label>
 
