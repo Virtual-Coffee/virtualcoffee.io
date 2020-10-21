@@ -4,7 +4,7 @@
   "description": "The public site for virtualcoffee.io",
   "scripts": {
     "start": "npx grunt start",
-    "build": "NODE_ENV=production npx grunt release-prep",
+    "build": "ELEVENTY_ENV=production npx grunt release-prep",
     "serve": "npx grunt connect:server",
     "build-preview": "npm build && npm serve"
   },

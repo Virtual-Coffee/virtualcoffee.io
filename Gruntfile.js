@@ -218,7 +218,7 @@ module.exports = function (grunt) {
         },
       },
       eleventyProduction: {
-        command: 'NODE_ENV=production npx @11ty/eleventy --quiet',
+        command: 'ELEVENTY_ENV=production npx @11ty/eleventy --quiet',
         options: {
           execOptions: {},
         },

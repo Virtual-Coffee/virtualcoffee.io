@@ -45,7 +45,7 @@ module.exports = function (eleventyConfig) {
   // eleventyConfig.addPassthroughCopy('CODE_OF_CONDUCT.md');
 
   eleventyConfig.addFilter('assetPath', function (value) {
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.ELEVENTY_ENV === 'production') {
       const manifestPath = 'assets.json';
       const manifest = JSON.parse(fs.readFileSync(manifestPath));
       return manifest[value] ? manifest[value] : value;
