@@ -61,7 +61,9 @@
   "dependencies": {
     "@11ty/eleventy-cache-assets": "^2.0.3",
     "bootstrap": "^4.5.2",
+    "dotenv": "^8.2.0",
     "glob": "^7.1.6",
+    "imgix-core-js": "^2.3.2",
     "node-fetch": "^2.6.1"
   }
 }

@@ -9,19 +9,10 @@ eleventyNavigation:
   <img
     class="hero-img"
     alt=""
-    src="{{ '/assets/images/bg@0.1x.jpg' | assetPath }}"
-    srcset="
-      {{ '/assets/images/bg@0.1x.jpg' | assetPath }} 551w,
-      {{ '/assets/images/bg@0.2x.jpg' | assetPath }} 1090w,
-      {{ '/assets/images/bg@0.3x.jpg' | assetPath }} 1637w,
-      {{ '/assets/images/bg@0.4x.jpg' | assetPath }} 2183w,
-      {{ '/assets/images/bg@0.5x.jpg' | assetPath }} 2728w,
-      {{ '/assets/images/bg@0.6x.jpg' | assetPath }} 3273w,
-      {{ '/assets/images/bg@0.7x.jpg' | assetPath }} 3819w,
-      {{ '/assets/images/bg@0.8x.jpg' | assetPath }} 4363w,
-      {{ '/assets/images/bg@0.9x.jpg' | assetPath }} 4909w,
-      {{ '/assets/images/bg.jpg' | assetPath }} 555w
-    "
+    src="{{ '/assets/images/bg.jpg' | buildImgixUrl({w:551}) }}"
+    srcset="{{ '/assets/images/bg.jpg' | buildImgixSrcSet(
+      [551,1090,1637,2183,2728,3273,3819,4363,4909]
+      ) }}"
     sizes="100vw"
 />
   <div class="container text-white">

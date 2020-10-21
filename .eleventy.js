@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { DateTime } = require('luxon');
 const fs = require('fs');
 const pluginRss = require('@11ty/eleventy-plugin-rss');
@@ -11,6 +12,8 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
+
+  require('./utils/imgix')(eleventyConfig);
 
   eleventyConfig.setDataDeepMerge(true);
 
