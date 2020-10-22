@@ -39,11 +39,7 @@ description: Meet our amazing members!
               </h5>
               <div class="membercard-social">
                 {% if founder.hireable %}
-                  {% if founder.blog %}
-                    <a href="{{founders.blog}}" class="badge badge-secondary">Available for work!</a>
-                  {% else %}
-                    <span class="badge badge-secondary">Hireable!</span>
-                  {% endif %}
+                  <span class="badge badge-secondary">Available for work!</span>
                 {% endif %}
 
                 <a href="{{founder.html_url}}" class="membercard-icon" title="{{founder.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
@@ -84,11 +80,7 @@ description: Meet our amazing members!
                   </h5>
                   <div class="membercard-social">
                     {% if member.hireable %}
-                      {% if member.blog %}
-                        <a href="{{members.blog}}" class="badge badge-secondary">Available for work!</a>
-                      {% else %}
-                        <span class="badge badge-secondary">Available for work!</span>
-                      {% endif %}
+                      <span class="badge badge-secondary">Available for work!</span>
                     {% endif %}
 
                     <a href="{{member.html_url}}" class="membercard-icon" title="{{member.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
