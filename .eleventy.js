@@ -19,14 +19,10 @@ module.exports = function (eleventyConfig) {
 
   eleventyConfig.addLayoutAlias('post', 'layouts/post.njk');
 
-  const defaultDateOptions = {
-    zone: 'edt',
-  };
   eleventyConfig.addFilter(
     'dateForDisplay',
     (dateString, format = 'fff', opts = {}) => {
       const resolvedOptions = {
-        ...defaultDateOptions,
         ...opts,
       };
       return DateTime.fromISO(dateString).setZone("America/New_York").toFormat(format, resolvedOptions);
