@@ -29,7 +29,7 @@ module.exports = function (eleventyConfig) {
         ...defaultDateOptions,
         ...opts,
       };
-      return DateTime.fromISO(dateString).toFormat(format, resolvedOptions);
+      return DateTime.fromISO(dateString).setZone("America/New_York").toFormat(format, resolvedOptions);
     }
   );
 
