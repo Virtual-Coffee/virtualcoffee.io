@@ -34,7 +34,7 @@ description: Meet our amazing members!
                 {% if founder.blog %}
                   <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer">{{founder.name}}</a>
                 {% else %}
-                  {{founder.name}}
+                  <a href="{{founder.html_url}}" target="_blank" rel="noopener noreferrer">{{founder.name}}</a>
                 {% endif %}
 
               </h5>
@@ -72,7 +72,7 @@ description: Meet our amazing members!
                 {% if leader.blog %}
                   <a href="{{leader.blog}}" target="_blank" rel="noopener noreferrer">{{leader.name}}</a>
                 {% else %}
-                  {{leader.name}}
+                  <a href="{{leader.html_url}}" target="_blank" rel="noopener noreferrer">{{leader.name}}</a>
                 {% endif %}
 
               </h5>
@@ -97,7 +97,7 @@ description: Meet our amazing members!
         </div>
       {% endfor %}
     </div>
-  
+
 
     <div class="bg-light py-5">
       <div class="container-xl">
@@ -114,7 +114,7 @@ description: Meet our amazing members!
                     {% if member.blog %}
                       <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
                     {% else %}
-                      {{member.name}}
+                      <a href="{{member.html_url}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
                     {% endif %}
 
                   </h5>
