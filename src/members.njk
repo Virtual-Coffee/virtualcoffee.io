@@ -4,6 +4,8 @@ title: Virtual Coffee Members
 description: Meet our amazing members!
 ---
 
+{% from "macros/members.njk" import membercards %}
+
 <div class="py-4">
   <div class="container">
     <div class="row align-items-center">
@@ -22,129 +24,17 @@ description: Meet our amazing members!
   <div class="container-xl">
     <h2 class="mb-sm-3 mb-md-4 display-4">Leadership Team</h2>
     <h3 class="mb-sm-3 mb-md-3">Our Founders</h3>
-    <div class="membercards">
-      {% for founder in founders %}
-        <div class="row membercard">
-          <div class="col-3">
-            <img src="{{founder.avatar_url}}" class="shadow-sm rounded" alt="{{founder.name}} profile image">
-          </div>
-          <div class="col-9">
-            <div class="membercard-header">
-              <h5 class="text-truncate">
-                {% if founder.blog %}
-                  <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer">{{founder.name}}</a>
-                {% else %}
-                  <a href="{{founder.html_url}}" target="_blank" rel="noopener noreferrer">{{founder.name}}</a>
-                {% endif %}
-
-              </h5>
-              <div class="membercard-social">
-                {% if founder.hireable %}
-                  <span class="badge badge-secondary">Available for work!</span>
-                {% endif %}
-
-                <a href="{{founder.html_url}}" class="membercard-icon" title="{{founder.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
-                {% if founder.twitter_username %}
-                  <a href="https://twitter.com/{{founder.twitter_username}}" title="{{founder.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel="noopener noreferrer">{% include "svg/twitter.svg" %}</a>
-                {% endif %}
-              </div>
-            </div>
-            <p class="text-muted">{{founder.bio}}</p>
-            {% if founder.blog %}
-              <div class="text-truncate">
-                <a href="{{founder.blog}}" target="_blank" rel="noopener noreferrer">{{founder.blog | replace('https://','') | replace('http://','')}}</a>
-              </div>
-            {% endif %}
-          </div>
-        </div>
-      {% endfor %}
-    </div>
+    {{ membercards(founders) }}
     <h3 class="mb-sm-3 mb-md-3">Community Engagement</h3>
-    <div class="membercards">
-      {% for leader in communityEngagement %}
-        <div class="row membercard">
-          <div class="col-3">
-            <img src="{{leader.avatar_url}}" class="shadow-sm rounded" alt="{{leader.name}} profile image">
-          </div>
-          <div class="col-9">
-            <div class="membercard-header">
-              <h5 class="text-truncate">
-                {% if leader.blog %}
-                  <a href="{{leader.blog}}" target="_blank" rel="noopener noreferrer">{{leader.name}}</a>
-                {% else %}
-                  <a href="{{leader.html_url}}" target="_blank" rel="noopener noreferrer">{{leader.name}}</a>
-                {% endif %}
+    {{ membercards(communityEngagement) }}
 
-              </h5>
-              <div class="membercard-social">
-                {% if leader.hireable %}
-                  <span class="badge badge-secondary">Available for work!</span>
-                {% endif %}
-
-                <a href="{{leader.html_url}}" class="membercard-icon" title="{{leader.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
-                {% if founder.twitter_username %}
-                  <a href="https://twitter.com/{{leader.twitter_username}}" title="{{leader.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel="noopener noreferrer">{% include "svg/twitter.svg" %}</a>
-                {% endif %}
-              </div>
-            </div>
-            <p class="text-muted">{{leader.bio}}</p>
-            {% if leader.blog %}
-              <div class="text-truncate">
-                <a href="{{leader.blog}}" target="_blank" rel="noopener noreferrer">{{leader.blog | replace('https://','') | replace('http://','')}}</a>
-              </div>
-            {% endif %}
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-
-
-    <div class="bg-light py-5">
-      <div class="container-xl">
+    <div class="container-xl">
         <h2 class="mb-sm-3 mb-md-5 display-4">Our Members</h2>
-        <div class="membercards">
-          {% for member in members %}
-            <div class="row membercard">
-              <div class="col-3">
-                <img src="{{member.avatar_url}}" class="shadow-sm rounded" alt="{{member.name}} profile image">
-              </div>
-              <div class="col-9">
-                <div class="membercard-header">
-                  <h5 class="text-truncate">
-                    {% if member.blog %}
-                      <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
-                    {% else %}
-                      <a href="{{member.html_url}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
-                    {% endif %}
-
-                  </h5>
-                  <div class="membercard-social">
-                    {% if member.hireable %}
-                      <span class="badge badge-secondary">Available for work!</span>
-                    {% endif %}
-
-                    <a href="{{member.html_url}}" class="membercard-icon" title="{{member.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
-                    {% if member.twitter_username %}
-                      <a href="https://twitter.com/{{member.twitter_username}}" title="{{member.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel="noopener noreferrer">{% include "svg/twitter.svg" %}</a>
-                    {% endif %}
-                  </div>
-                </div>
-                <p class="text-muted">{{member.bio}}</p>
-                {% if member.blog %}
-                  <div class="text-truncate">
-                    <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.blog | replace('https://','') | replace('http://','')}}</a>
-                  </div>
-                {% endif %}
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-
+        {{ membercards(members) }}
         <div class="p-sm-1 p-sm-2 p-md-3 member-footer">
           <h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
           {% include "svg/undraw_celebration_0jvk.svg" %}
         </div>
       </div>
-    </div>
   </div>
 </div>
