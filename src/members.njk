@@ -28,13 +28,11 @@ description: Meet our amazing members!
     <h3 class="mb-sm-3 mb-md-3">Community Engagement</h3>
     {{ membercards(communityEngagement) }}
 
-    <div class="container-xl">
-        <h2 class="mb-sm-3 mb-md-5 display-4">Our Members</h2>
-        {{ membercards(members) }}
-        <div class="p-sm-1 p-sm-2 p-md-3 member-footer">
-          <h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
-          {% include "svg/undraw_celebration_0jvk.svg" %}
-        </div>
-      </div>
+    <h2 class="mb-sm-3 mb-md-5 display-4">Our Members</h2>
+    {{ membercards(members) }}
+    <div class="member-footer">
+      <h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
+      {% include "svg/undraw_celebration_0jvk.svg" %}
+    </div>
   </div>
 </div>
