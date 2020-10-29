@@ -12,4 +12,6 @@ jobs:
     if: github.repository == 'Virtual-Coffee/virtualcoffee.io'
     steps:
       - name: Curl request
-        run: curl -X POST -d {} https://api.netlify.com/build_hooks/5f8de8e7034b0e1ae146bfff
+        env:
+          NETLIFY_BUILD_HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: curl -X POST -d {} "$NETLIFY_BUILD_HOOK"
