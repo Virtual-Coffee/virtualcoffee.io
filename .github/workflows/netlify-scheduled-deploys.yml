@@ -9,6 +9,7 @@ jobs:
   build:
     name: Request Netlify Webhook
     runs-on: ubuntu-latest
+    if: github.repository == 'Virtual-Coffee/virtualcoffee.io'
     steps:
       - name: Curl request
         run: curl -X POST -d {} https://api.netlify.com/build_hooks/5f8de8e7034b0e1ae146bfff
