@@ -2,6 +2,9 @@
 title: Virtual Coffee Code of Conduct
 layout: layouts/default.njk
 permalink: code-of-conduct/
+eleventyNavigation:
+  key: Code of Conduct
+  order: 2
 ---
 
 # Virtual Coffee Code of Conduct

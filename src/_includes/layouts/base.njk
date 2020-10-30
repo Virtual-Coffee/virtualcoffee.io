@@ -6,25 +6,46 @@
     <title>{{ title or metadata.title }}</title>
     <meta name="description" content="{{ description or metadata.description }}">
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | assetPath }}"/>
-    <link rel="shortcut icon" href="{{ '/assets/images/favicon.ico' | assetPath }}"/>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/assets/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
   </head>
   <body>
 
     <nav class="navbar navbar-expand-sm navbar-light bg-white">
       <a class="navbar-brand" href="/">
-        <img
-          src="{{ '/assets/images/vc-logo-500.png' | buildImgixUrl({w:96}) }}"
-          sizes="96px"
-          srcset="{{ '/assets/images/vc-logo-500.png' | buildImgixSrcSet([96,192,288]) }}"
-          alt="Virtual Coffee Home">
+        <svg viewBox="0 0 916.3 703.3" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="navlogotitle"><title id="navlogotitle">Virtual Coffee</title><g fill="#2a2a2a"><path d="m149 689.05c-40 0-65.66-27.17-65.66-67.92v-169.06c0-42.18-28.73-65.44-68.63-67.08a4.71 4.71 0 0 1 -4.58-4.67v-61a4.72 4.72 0 0 1 4.58-4.67c39.9-1.64 68.63-24.87 68.63-66.32v-169.1c.01-40.76 25.66-67.93 65.66-67.93h66.26a4.68 4.68 0 0 1 4.74 4.7v51.75a4.68 4.68 0 0 1 -4.68 4.69h-53.32a4.68 4.68 0 0 0 -4.69 4.68v172.68c0 46.16-30.59 85.93-71.06 95.8a4.71 4.71 0 0 0 -3.66 4.55v.06a4.71 4.71 0 0 0 3.66 4.55c40.47 9.87 71.06 49.63 71.06 95.8v172.68a4.69 4.69 0 0 0 4.69 4.68h53.27a4.68 4.68 0 0 1 4.68 4.69v51.76a4.67 4.67 0 0 1 -4.68 4.68z"/><path d="m621.82 11.3c40 0 67.16 27.17 67.16 67.93v169.06c0 41.45 28.73 64.68 68.63 66.32a4.72 4.72 0 0 1 4.59 4.67v61a4.71 4.71 0 0 1 -4.59 4.67c-39.9 1.64-68.63 24.9-68.63 67.08v169.1c0 40.75-27.16 67.92-67.16 67.92h-66.26a4.68 4.68 0 0 1 -4.69-4.68v-51.76a4.69 4.69 0 0 1 4.69-4.69h54.78a4.69 4.69 0 0 0 4.68-4.68v-172.68c0-46.2 29.22-86 71-95.82a4.72 4.72 0 0 0 3.69-4.56 4.71 4.71 0 0 0 -3.69-4.56c-41.81-9.84-71-49.62-71-95.82v-172.68a4.68 4.68 0 0 0 -4.68-4.68h-54.78a4.69 4.69 0 0 1 -4.69-4.69v-51.75a4.69 4.69 0 0 1 4.69-4.69z"/><path d="m906 108.22v490.09a4.68 4.68 0 0 1 -4.69 4.68h-138.64a4.68 4.68 0 0 1 -4.69-4.68v-41.8a4.69 4.69 0 0 1 4.69-4.69h73.57a4.68 4.68 0 0 0 4.69-4.68v-387.75a4.69 4.69 0 0 0 -4.69-4.69h-73.57a4.69 4.69 0 0 1 -4.67-4.7v-41.78a4.69 4.69 0 0 1 4.69-4.69h138.62a4.69 4.69 0 0 1 4.69 4.69z"/></g><path d="m199.26 359.3v-19.39a5 5 0 0 1 2.33-4.27l107.66-69a5.06 5.06 0 0 1 7.79 4.25l.07 26.08a5.08 5.08 0 0 1 -2.41 4.33l-76.7 47.18v2l76.94 46.73a5 5 0 0 1 2.43 4.31l.07 26.09a5.06 5.06 0 0 1 -7.76 4.29l-108-68.39a5 5 0 0 1 -2.42-4.21z" fill="#d9386e"/><path d="m328.53 473.38 80.28-251.56a5 5 0 0 1 4.81-3.52l20.76-.06a5.06 5.06 0 0 1 4.84 6.6l-80.28 251.56a5.07 5.07 0 0 1 -4.81 3.52l-20.76.05a5.06 5.06 0 0 1 -4.84-6.59z" fill="#d9386e"/><path d="m456 401.2a5.07 5.07 0 0 1 2.41-4.33l76.69-47.14v-2.06l-76.9-46.73a5.07 5.07 0 0 1 -2.44-4.31l-.07-26.09a5.07 5.07 0 0 1 7.77-4.29l108 68.39a5 5 0 0 1 2.35 4.26v19.11a5.05 5.05 0 0 1 -2.31 4.26l-107.58 69.51a5.06 5.06 0 0 1 -7.8-4.24z" fill="#d9386e"/></svg>
       </a>
       <button class="navbar-toggler" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
+      {{ collections.all | eleventyNavigation | eleventyNavigationToHtml({
+        listClass: "navbar-nav",
+        listItemClass: "nav-item",
+        activeListItemClass: "active",
+        anchorClass: "nav-link",
+        activeKey: eleventyNavigation.key
+      }) | safe }}
+        {# <ul class="navbar-nav">
           <li class="nav-item active">
-            <a class="nav-link" href="/">Virtual Coffee <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="/">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/members">Members</a>
@@ -41,7 +62,7 @@
           <li>
             <a class="nav-link" href="https://www.youtube.com/channel/UCc0579aGEy7jTAgRglR4J0g" target="_blank" rel="noopener noreferrer">YouTube</a>
           </li>
-        </ul>
+        </ul> #}
       </div>
     </nav>
 
