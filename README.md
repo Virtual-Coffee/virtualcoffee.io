@@ -20,7 +20,7 @@ See you there!
 
 Steps to run the site locally for development or curiosity
 
-### 1. Fork and clone the repsitory
+### 1. Fork and clone the repository
 
 Follow [these steps](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo) to create a fork of this repository and clone it to your local machine.
 
