@@ -1,9 +1,9 @@
 {
   "title": "Virtual Coffee",
   "url": "https://virtualcoffee.io/",
-  "description": "It's the (always remote) hallway track at the conference.",
+  "description": "An intimate community for all devs, optimized for you",
   "feed": {
-    "subtitle": "It's the (always remote) hallway track at the conference.",
+    "subtitle": "An intimate community for all devs, optimized for you",
     "filename": "feed.xml",
     "path": "/feed/feed.xml",
     "id": "https://virtualcoffee.io/"
