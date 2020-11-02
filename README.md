@@ -1,4 +1,5 @@
-# [Virtual Coffee](https://virtualcoffee.io)
+# [![Virtual Coffee](src/assets/images/virtual-coffee-full-tagline.png)](https://virtualcoffee.io)
+
 
 Virtual Coffee is a laid-back conversation with developers twice a week. It's the conversation that keeps going in slack. It's the online events that support developers at all stages of the journey. It's the place where you go to make friends who all just happen to be in tech.
 
@@ -14,7 +15,7 @@ Please take a moment to read our [Code of Conduct](https://github.com/Virtual-Co
 
 See you there!
 
-![](VirtualCoffee.png)
+# Working on the site:
 
 ## Local Development
 
