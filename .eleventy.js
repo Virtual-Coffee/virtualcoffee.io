@@ -54,6 +54,14 @@ module.exports = function (eleventyConfig) {
     return value;
   });
 
+  eleventyConfig.addFilter('qualifiedUrl', function (path) {
+    if (process.env.DEPLOY_PRIME_URL) {
+      return process.env.DEPLOY_PRIME_URL + path;
+    }
+
+    return path;
+  });
+
   /* Markdown Overrides */
   let markdownLibrary = markdownIt({
     html: true,
