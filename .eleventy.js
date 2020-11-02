@@ -25,7 +25,9 @@ module.exports = function (eleventyConfig) {
       const resolvedOptions = {
         ...opts,
       };
-      return DateTime.fromISO(dateString).setZone("America/New_York").toFormat(format, resolvedOptions);
+      return DateTime.fromISO(dateString)
+        .setZone('America/New_York')
+        .toFormat(format, resolvedOptions);
     }
   );
 
@@ -50,6 +52,14 @@ module.exports = function (eleventyConfig) {
       return manifest[value] ? manifest[value] : value;
     }
     return value;
+  });
+
+  eleventyConfig.addFilter('qualifiedUrl', function (path) {
+    if (process.env.DEPLOY_PRIME_URL) {
+      return process.env.DEPLOY_PRIME_URL + path;
+    }
+
+    return path;
   });
 
   /* Markdown Overrides */

@@ -1,3 +1,4 @@
+{% set pageUrl = page.url | qualifiedUrl %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,42 +7,48 @@
     <title>{{ title or metadata.title }}</title>
     <meta name="description" content="{{ description or metadata.description }}">
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | assetPath }}"/>
-    <link rel="shortcut icon" href="{{ '/assets/images/favicon.ico' | assetPath }}"/>
+    <link rel="canonical" href="{{pageUrl}}" />
+
+    <meta property="og:title" content="{{ title or metadata.title }}" />
+    <meta property="og:description" content="{{ description or metadata.description }}" />
+    <meta property="og:url" content="{{pageUrl}}" />
+    <meta property="og:image" content="{{ '/assets/images/vc-social-card.png' | qualifiedUrl }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ title or metadata.title }}" />
+    <meta name="twitter:description" content="{{ description or metadata.description }}" />
+    <meta name="twitter:url" content="{{pageUrl}}" />
+    <meta name="twitter:image" content="{{ '/assets/images/vc-social-card.png' | qualifiedUrl }}">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#d9376e">
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#d9376e">
+    <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+    {# <link rel="stylesheet" href="https://rsms.me/inter/inter.css"> #}
   </head>
   <body>
 
-    <nav class="navbar navbar-expand-sm navbar-light bg-white">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top w-100">
       <a class="navbar-brand" href="/">
-        <img
-          src="{{ '/assets/images/vc-logo-500.png' | buildImgixUrl({w:96}) }}"
-          sizes="96px"
-          srcset="{{ '/assets/images/vc-logo-500.png' | buildImgixSrcSet([96,192,288]) }}"
-          alt="Virtual Coffee Home">
+        {% include "svg/virtual-coffee-full-w.svg" %}
+        {# {% include "svg/vc-logo-mug.svg" %} #}
       </a>
       <button class="navbar-toggler" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="/">Virtual Coffee <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/members">Members</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/code-of-conduct">Code of Conduct</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://github.com/Virtual-Coffee" target="_blank" rel="noopener noreferrer">GitHub</a>
-          </li>
-          <li>
-            <a class="nav-link" href="/events">Community Events</a>
-          </li>
-          <li>
-            <a class="nav-link" href="https://www.youtube.com/channel/UCc0579aGEy7jTAgRglR4J0g" target="_blank" rel="noopener noreferrer">YouTube</a>
-          </li>
-        </ul>
+      {{ collections.all | eleventyNavigation | eleventyNavigationToHtml({
+        listClass: "navbar-nav",
+        listItemClass: "nav-item",
+        activeListItemClass: "active",
+        anchorClass: "nav-link",
+        activeKey: eleventyNavigation.key
+      }) | safe }}
       </div>
     </nav>
 
