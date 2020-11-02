@@ -16,6 +16,10 @@
       }
     }
 
+    @include media-breakpoint-up(sm) {
+      text-align: center;
+    }
+
     strong {
       font-weight: 500;
     }
