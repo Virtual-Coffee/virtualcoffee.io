@@ -1,3 +1,4 @@
+{% set pageUrl = page.url | url %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -6,6 +7,17 @@
     <title>{{ title or metadata.title }}</title>
     <meta name="description" content="{{ description or metadata.description }}">
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | assetPath }}"/>
+    <link rel="canonical" href="{{pageUrl}}" />
+
+    <meta property="og:title" content="{{ title or metadata.title }}" />
+    <meta property="og:description" content="{{ description or metadata.description }}" />
+    <meta property="og:url" content="{{pageUrl}}" />
+    <meta property="og:image" content="{{ '/assets/images/vc-social-card.png' | assetPath }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ title or metadata.title }}" />
+    <meta name="twitter:description" content="{{ description or metadata.description }}" />
+    <meta name="twitter:url" content="{{pageUrl}}" />
+    <meta name="twitter:image" content="{{ '/assets/images/vc-social-card.png' | assetPath }}">
 
     <link rel="apple-touch-icon" sizes="57x57" href="/assets/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/assets/favicon/apple-icon-60x60.png">
