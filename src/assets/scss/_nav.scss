@@ -1,6 +1,14 @@
 .navbar-brand img,
 .navbar-brand svg {
-  height: 60px;
-  width: 60px;
+  height: 40px;
+  width: 40px;
   max-width: none;
+}
+
+.nav-item {
+  font-weight: 300;
+}
+
+.nav-item.active {
+  font-weight: 700;
 }
