@@ -1,7 +1,7 @@
 module.exports = function () {
   return {
     title: 'Virtual Coffee',
-    url: process.env.DEPLOY_PRIME_URL,
+    url: process.env.DEPLOY_PRIME_URL | '',
     description: 'An intimate community for all devs, optimized for you',
     feed: {
       subtitle: 'An intimate community for all devs, optimized for you',
