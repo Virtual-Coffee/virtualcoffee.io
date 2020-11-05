@@ -7,7 +7,9 @@ const Cache = require('@11ty/eleventy-cache-assets');
 module.exports = async function () {
   console.log('Fetching github users');
   const communityEngagement = [];
-  const files = glob.sync(`${path.resolve(__dirname, 'communityEngagement')}/*.json`);
+  const files = glob.sync(
+    `${path.resolve(__dirname, 'communityEngagement')}/*.json`
+  );
 
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
@@ -20,7 +22,7 @@ module.exports = async function () {
       const response = await Cache(
         `https://api.github.com/users/${obj.username}`,
         {
-          duration: '1d', // 1 day
+          duration: '5d', // 1 day
           type: 'json', // also supports "text" or "buffer"
         }
       );
@@ -33,4 +35,3 @@ module.exports = async function () {
 
   return communityEngagement;
 };
-

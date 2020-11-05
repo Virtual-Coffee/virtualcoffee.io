@@ -20,13 +20,13 @@ module.exports = async function () {
       const response = await Cache(
         `https://api.github.com/users/${obj.username}`,
         {
-          duration: '1d', // 1 day
+          duration: '5d', // 1 day
           type: 'json', // also supports "text" or "buffer"
         }
       );
 
-      if(response.blog && !response.blog.startsWith('http')){
-        response.blog = 'http://' + response.blog
+      if (response.blog && !response.blog.startsWith('http')) {
+        response.blog = 'http://' + response.blog;
       }
 
       members.push(response);

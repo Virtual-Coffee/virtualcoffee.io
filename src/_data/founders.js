@@ -20,7 +20,7 @@ module.exports = async function () {
       const response = await Cache(
         `https://api.github.com/users/${obj.username}`,
         {
-          duration: '1d', // 1 day
+          duration: '5d', // 1 day
           type: 'json', // also supports "text" or "buffer"
         }
       );

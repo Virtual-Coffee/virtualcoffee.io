@@ -6,7 +6,7 @@ module.exports = async function () {
     const response = await Cache(
       `https://meetingplace.io/api/v1/group/virtual-coffee/events`,
       {
-        duration: '1d', // 1 day
+        duration: '5d', // 1 day
         type: 'json', // also supports "text" or "buffer"
       }
     );
