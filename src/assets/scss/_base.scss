@@ -21,7 +21,7 @@ body {
 
 .bodycopy {
   @include media-breakpoint-up(sm) {
-    max-width: map-get($container-max-widths, md);
+    max-width: map-get($container-max-widths, lg);
     margin-left: auto;
     margin-right: auto;
   }
