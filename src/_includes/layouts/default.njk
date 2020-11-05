@@ -1,7 +1,4 @@
 ---
 layout: layouts/base.njk
-templateClass: tmpl-home
 ---
-<div class="mt-6 container bodycopy py-5 {% if templateClass %} {{ templateClass }}{% endif %}">
-  {{ content | safe }}
-</div>
+{{ content | safe }}

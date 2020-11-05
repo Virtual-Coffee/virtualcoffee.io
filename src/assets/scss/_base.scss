@@ -7,6 +7,14 @@ svg {
   max-width: 100%;
 }
 
+body {
+  margin-top: 6rem;
+
+  &.vc-home {
+    margin-top: 0;
+  }
+}
+
 .direct-link {
   font-size: 0.75em;
 }

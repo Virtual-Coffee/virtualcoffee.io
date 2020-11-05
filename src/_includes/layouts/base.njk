@@ -31,7 +31,7 @@
 
     {# <link rel="stylesheet" href="https://rsms.me/inter/inter.css"> #}
   </head>
-  <body>
+  <body {% if bodyClass %}class="{{ bodyClass }}"{% endif %}>
 
     <nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top w-100">
       <a class="navbar-brand" href="/">
