@@ -1,0 +1,45 @@
+{% macro netlifyForm(action='',name='') %}
+  <form action="{{action}}" method="POST" netlify="true" name="{{name}}">
+  {{ caller() }}
+  </form>
+{% endmacro %}
+{#
+{% macro fieldGroup(inputId='', labelText='', descText='', descId='') %}
+  <div class="form-group">
+    <label for="{{inputId}}">{{labelText}}</label>
+    {{ caller() }}
+    <small id="nameHelp" class="form-text text-muted">Required</small>
+  </div>
+{% endmacro %}
+
+{% macro text(inputId='', inputName='', labelText='', descText='', type='text', required=false, inputClass='', inputAttributes=[]) %}
+  {% set descId='desc'~inputId %}
+
+  {% call fieldGroup(
+    inputId=inputId,
+    labelText=labelText,
+    descText=descText,
+    descId=descId
+    )
+  %}
+    <input
+          type="{{type}}"
+          class="form-control {{inputClass}}"
+          id="{{inputId}}"
+          name="{{inputName ? inputName : inputId}}"
+          {% if descText %}
+          aria-describedby="{{descId}}"
+          {% endif %}
+          {% if required %}
+          required
+          {% endif %}
+          {% if inputAttributes|length %}
+            inputAttributes|join(' ')
+          {% endif %}
+        />
+  {% endcall %}
+
+
+
+
+{% endmacro %} #}

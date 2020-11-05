@@ -1,0 +1,108 @@
+---
+layout: layouts/default.njk
+title: Hacktoberfest Contributor Survey
+description: Please help us improve for next time!
+---
+
+{% from "macros/forms.njk" import netlifyForm %}
+
+
+<div class="py-4">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-sm-4">
+        {% include "svg/undraw_feedback_h2ft.svg" %}
+      </div>
+      <div class="col-sm-8">
+        <h1 class="display-4">Hacktoberfest Contributor Feedback</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-5">
+  <div class="container bodycopy">
+    <div class="lead mb-5">
+      <p>Hacktoberfest is over, and we at Virtual Coffee had a blast! We learned a lot during this process, and would love to get your input as well.</p>
+    </div>
+    {% call netlifyForm('/forms/hacktoberfest-contributor-survey-thanks', 'hacktoberfest-contributor-survey') %}
+
+      <fieldset>
+      <legend>Your Information:</legend>
+        <p class="text-muted">Just a couple quick pieces of info that we'll need:</p>
+        <div class="form-group">
+          <label for="formName">Your Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="formName"
+            name="name"
+            aria-describedby="nameHelp"
+            required
+          />
+          <small id="nameHelp" class="form-text text-muted">Required</small>
+        </div>
+        <div class="form-group">
+          <label for="formEmail">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="formEmail"
+            name="email"
+            aria-describedby="emailHelp"
+            required
+          />
+          <small id="emailHelp" class="form-text text-muted">Required. We'll never share your email with anyone else.</small>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Your Virtual Coffee Hacktoberfest Initiative Experience:</legend>
+        <div class="form-group">
+          <label for="didYouComplete">Did you complete the Hacktoberfest challenge?</label>
+          <textarea class="form-control" id="didYouComplete" name="didYouComplete" rows="3"></textarea>
+          <small id="emailHelp" class="form-text text-muted">Four Pull Requests accepted by the Digital Ocean Hacktoberfest team.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="didYouAccomplishGoals">Did you accomplish your personal goals for Hacktoberfest?</label>
+          <textarea class="form-control" id="didYouAccomplishGoals" name="didYouAccomplishGoals" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="whichRepos">Which repositories did you contribute to for Hacktoberfest?</label>
+          <textarea class="form-control" id="whichRepos" name="whichRepos" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="whatPrevented">If you weren't able to complete the challenge or your personal goals, what prevented you?</label>
+          <textarea class="form-control" id="whatPrevented" name="whatPrevented" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="didVcHelp">What did Virtual Coffee do that helped you during Hacktoberfest?</label>
+          <textarea class="form-control" id="didVcHelp" name="didVcHelp" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="didVcNotHelp">What could Virtual Coffee have done to help you more effectively?</label>
+          <textarea class="form-control" id="didVcNotHelp" name="didVcNotHelp" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="additionalThoughts">Do you have any additional thoughts about the Virtual Coffee Hacktoberfest Initiative?</label>
+          <textarea class="form-control" id="additionalThoughts" name="additionalThoughts" rows="3"></textarea>
+        </div>
+
+      </fieldset>
+
+
+
+      <div class="text-right">
+      <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+      </div>
+
+
+
+    {% endcall %}
+  </div>
+</div>
