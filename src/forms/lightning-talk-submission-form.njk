@@ -22,7 +22,7 @@ title: Lightning Talk Submission Form
 <div class="py-5">
   <div class="container bodycopy">
     <div class="lead mb-5">
-      <p>We're excited to kick-off our first Lightning Talk Session! Lightning talks are 5-10 minute talks on one main idea. This time around there won't be a theme, so feel free to submit a talk on any topic suitable for our Virtual Coffee Community.      If you've never given a talk, this is a great place to try it out for the first time! </p>      <p> We love supporting all our members in any way we can. If you'd like mentorship, please check the mentorship box in the form below.</p>
+      <p>We're excited to kick-off our first Lightning Talk Session! Lightning talks are 5-10 minute talks on one main idea. This time around there won't be a theme, so feel free to submit a talk on any topic suitable for our Virtual Coffee Community.      If you've never given a talk, this is a great place to try it out for the first time! </p>      <p> We love supporting all our members in any way we can. Let us know the best way we can help you for this event!</p>
     </div>
     {% call netlifyForm('/forms/lightning-talk-submission-form-thanks', 'lightning-talk-submission-form') %}
 
@@ -81,11 +81,17 @@ title: Lightning Talk Submission Form
             aria-describedby="topicLength"
           />
         </div>
-        <div>
-        <label class="form-group form-check">
-        <input type="checkbox" name="mentorship" id="mentorship" class="form-check-input"  value="agree">
-        <span class="form-check-label">I would like mentorship.</span>
-      </label>
+      <div class="form-group">
+          <label for="mentorship">Would you like mentorship?</label>
+              <input
+            type="text"
+            class="form-control"
+            id="mentorship"
+            name="mentorship"
+            aria-describedby="mentorship"
+            required
+          />
+                        
         </div>
 
         <div class="form-group">
