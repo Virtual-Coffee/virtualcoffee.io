@@ -5,7 +5,7 @@ description: We can't wait to hear your talk!
 permalink: brownbag-idea/
 ---
 
-{% from "macros/forms.njk" import netlifyForm %}
+{% from "macros/forms.njk" import netlifyForm, codeOfConduct, formSubmit %}
 
 
 <div class="py-4">
@@ -94,16 +94,9 @@ permalink: brownbag-idea/
 
       </fieldset>
 
-      <p class="lead">Just a reminder that all talks need to adhere to our <a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>.</p>
+      {{codeOfConduct()}}
 
-      <label class="form-group form-check">
-        <input type="checkbox" name="agree" class="form-check-input" required value="agree">
-        <span class="form-check-label">I've read the Code of Conduct and understand my responsibilities as a member of the Virtual Coffee community</span>
-      </label>
-
-      <div class="text-right">
-        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-      </div>
+      {{formSubmit('Submit')}}
 
     {% endcall %}
   </div>
