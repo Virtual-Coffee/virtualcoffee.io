@@ -1,0 +1,120 @@
+---
+layout: layouts/default.njk
+title: Brownbag Talk Submission Form
+---
+
+{% from "macros/forms.njk" import netlifyForm %}
+
+
+<div class="py-4">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-sm-4">
+        {% include "svg/undraw_online_video_ivvq.svg" %}
+      </div>
+      <div class="col-sm-8">
+        <h1 class="display-4">Virtual Coffee: Brownbag</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-5">
+  <div class="container bodycopy">
+    <div class="lead mb-5">
+      <p>Brownbag talks are usually hour-long sessions on one topic. It can be a traditional conference-style talk, panel discussion, question and answer, or a combination.</p>
+    </div>
+    {% call netlifyForm('/forms/brownbag-submissions-thanks', 'brownbag-submissions') %}
+
+      <fieldset>
+      <legend>Your Information:</legend>
+        <p class="text-muted">Just a couple quick pieces of info that we'll need:</p>
+        <div class="form-group">
+          <label for="formName">Your Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="formName"
+            name="name"
+            aria-describedby="nameHelp"
+            required
+          />
+          <small id="nameHelp" class="form-text text-muted">Required</small>
+        </div>
+        <div class="form-group">
+          <label for="formEmail">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="formEmail"
+            name="email"
+            aria-describedby="emailHelp"
+            required
+          />
+          <small id="emailHelp" class="form-text text-muted">Required. We'll never share your email with anyone else.</small>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Your Brownbag Idea:</legend>
+          <div class="form-group">
+          <label for="topicTitle">Title of the Brownbag</label>
+              <input
+            type="text"
+            class="form-control"
+            id="topicTitle"
+            name="topicTitle"
+            aria-describedby="topicTitle"
+            required
+          />
+                        
+        </div>
+        <div class="form-group">
+          <label for="topicIdea">Description we can share on the event page.</label>
+          <textarea class="form-control" required id="topicIdea" name="topicIdea" rows="3"></textarea></div>
+           <div class="form-group">
+          <label for="format">What is the format of your talk (question and answer, conference-style, etc.) and will you have slides?</label>
+              <input
+            type="text"
+            class="form-control"
+            id="format"
+            name="format"
+            aria-describedby="format"
+          />
+        </div>
+      <div class="form-group">
+          <label for="date-time">What date and time works for you?</label>
+              <input
+            type="text"
+            class="form-control"
+            id="date-time"
+            name="date-time"
+            aria-describedby="date-time"
+            required
+          />
+                        
+        </div>
+
+        <div class="form-group">
+          <label for="additionalThoughts">Do you have any additional thoughts about the Lightning Talks?</label>
+          <textarea class="form-control" id="additionalThoughts" name="additionalThoughts" rows="3"></textarea>
+        </div>
+
+      </fieldset>
+
+
+ <p class="lead">Just a reminder that all talks need to adhere to our <a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>.</p>
+
+      <label class="form-group form-check">
+        <input type="checkbox" name="agree" class="form-check-input" required value="agree">
+        <span class="form-check-label">I've read the Code of Conduct and understand my responsibilities as a member of the Virtual Coffee community</span>
+      </label>
+
+
+  <div class="text-right">
+      <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+      </div>
+
+
+    {% endcall %}
+  </div>
+</div>
