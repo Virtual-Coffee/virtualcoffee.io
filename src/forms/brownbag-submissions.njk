@@ -58,61 +58,55 @@ permalink: brownbag-idea/
       </fieldset>
       <fieldset>
         <legend>Your Brownbag Idea:</legend>
-          <div class="form-group">
+        <div class="form-group">
           <label for="topicTitle">Title of the Brownbag</label>
-              <input
+          <input
             type="text"
             class="form-control"
             id="topicTitle"
             name="topicTitle"
             required
           />
-
         </div>
         <div class="form-group">
           <label for="topicIdea">Description we can share on the event page.</label>
-          <textarea class="form-control" required id="topicIdea" name="topicIdea" rows="3"></textarea></div>
-           <div class="form-group">
+          <textarea class="form-control" required id="topicIdea" name="topicIdea" rows="3"></textarea>
+        </div>
+        <div class="form-group">
           <label for="format">What is the format of your talk (question and answer, conference-style, etc.) and will you have slides?</label>
-              <input
+          <input
             type="text"
             class="form-control"
             id="format"
             name="format"
           />
         </div>
-      <div class="form-group">
+        <div class="form-group">
           <label for="date-time">What date and time works for you?</label>
-              <input
+          <input
             type="text"
             class="form-control"
             id="date-time"
             name="date-time"
             required
           />
-
         </div>
-
         <div class="form-group">
           <label for="additionalThoughts">Do you have any additional thoughts about the Lightning Talks?</label>
           <textarea class="form-control" id="additionalThoughts" name="additionalThoughts" rows="3"></textarea>
         </div>
-
       </fieldset>
 
-
- <p class="lead">Just a reminder that all talks need to adhere to our <a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>.</p>
+      <p class="lead">Just a reminder that all talks need to adhere to our <a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>.</p>
 
       <label class="form-group form-check">
         <input type="checkbox" name="agree" class="form-check-input" required value="agree">
         <span class="form-check-label">I've read the Code of Conduct and understand my responsibilities as a member of the Virtual Coffee community</span>
       </label>
 
-
-  <div class="text-right">
-      <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+      <div class="text-right">
+        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
       </div>
-
 
     {% endcall %}
   </div>
