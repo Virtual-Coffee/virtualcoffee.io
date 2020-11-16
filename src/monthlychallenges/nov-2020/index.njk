@@ -1,0 +1,61 @@
+---
+title: 'Monthly Challenge for November 2020: 50k words!'
+description: 'November challenge -> Blogging: we all work together to hit 50,000 words.'
+layout: layouts/defaultMarkdown.njk
+---
+
+<h1><small>Monthly Challenge for November 2020:</small> 50k words!</h1>
+
+<p class="lead">The Virtual Coffee Monthly Challenge for November 2020 -> Blogging! We all work together to hit 50,000 words. Based off the NanWriMo (National Novel Writing Month) Challenge, but working together towards the goal while posting on our own blogs.</p>
+
+<p class="lead">Get those blog posts up!</p>
+
+<h2>Current status: {{totals.totalCount | toLocaleString}} out of 50,000 words</h2>
+
+<div class="progress my-4" style="height:3em">
+  <div class="progress-bar progress-bar progress-bar-striped" role="progressbar" style="width: {{(totals.totalCount/50000)*100}}%" aria-valuenow="totals.totalCount" aria-valuemin="0" aria-valuemax="50000">{{totals.totalCount | toLocaleString}} Words</div>
+</div>
+
+<h2 class="mt-5">Our Posts:</h2>
+
+{% for person in sortedList %}
+
+  <h3><a href="{{person.blogLink}}">{{person.name}}</a></h3>
+  <ul>
+  {% for post in person.posts %}
+    <li><a href="{{post.url}}">{{post.title}}</a> <code>({{post.count | toLocaleString}} words)</code></li>
+  {% endfor %}
+  </ul>
+{% endfor %}
+
+<h2 class="mt-5">Totals:</h2>
+
+<table class="table mt-5" style="max-width:600px">
+  <thead class="thead-dark">
+    <th scope="col">
+      Member Totals
+    </th>
+    <th scope="col" class="text-right">
+      Posts
+    </th>
+    <th scope="col" class="text-right">
+      Total Words
+    </th>
+  </thead>
+  <tbody>
+    {% for person in totals.list %}
+    <tr>
+      <td>{{person.name}}</td>
+      <td class="text-right">{{person.posts | toLocaleString}}</td>
+      <td class="text-right">{{person.total | toLocaleString}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <th scope="col">Total</th>
+      <th scope="col" class="text-right">{{totals.totalPosts | toLocaleString}}</th>
+      <th scope="col" class="text-right">{{totals.totalCount | toLocaleString}} words</th>
+    </tr>
+  </tfoot>
+</table>

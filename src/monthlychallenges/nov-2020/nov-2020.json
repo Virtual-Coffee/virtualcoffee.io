@@ -1,0 +1,161 @@
+{
+  "challengedata": [
+    {
+      "name": "Ayu",
+      "blogLink": "https://adiatiayu.hashnode.dev",
+      "posts": [
+        {
+          "title": "CSS Units",
+          "url": "https://adiatiayu.hashnode.dev/css-units",
+          "count": 466
+        },
+        {
+          "title": "Networking & Community",
+          "url": "https://adiatiayu.hashnode.dev/networking-and-community",
+          "count": 630
+        }
+      ]
+    },
+    {
+      "name": "Bekah",
+      "blogLink": "https://dev.to/bekahhw",
+      "posts": [
+        {
+          "title": "Hacktoberfest 2020: The Best One Yet",
+          "url": "https://dev.to/bekahhw/hacktoberfest-2020-the-best-one-yet-5fp7",
+          "count": 963
+        },
+        {
+          "title": "I'll say it again: Kindness Matters",
+          "url": "https://dev.to/bekahhw/i-ll-say-it-again-kindness-matters-3ef4",
+          "count": 878
+        }
+      ]
+    },
+    {
+      "name": "Chris",
+      "blogLink": "https://dev.to/jarvisscript",
+      "posts": [
+        {
+          "title": "Connecting now...",
+          "url": "https://dev.to/jarvisscript/connecting-now-18a4",
+          "count": 361
+        }
+      ]
+    },
+    {
+      "name": "Karen",
+      "blogLink": "https://dev.to/kldickenson",
+      "posts": [
+        {
+          "title": "Drupal Recipes",
+          "url": "https://dev.to/kldickenson/drupal-recipes-68f",
+          "count": 438
+        },
+        {
+          "title": "Exercise Teams - The support I needed",
+          "url": "https://dev.to/kldickenson/exercise-teams-the-support-i-needed-3390",
+          "count": 330
+        }
+      ]
+    },
+    {
+      "name": "Kirk",
+      "blogLink": "https://gistlog.co/tkshill",
+      "posts": [
+        {
+          "title": "Mimicking Choice with Delayed Generators",
+          "url": "https://gistlog.co/tkshill/5edf3eb96a1dd80b47849399c7945499",
+          "count": 1620
+        }
+      ]
+    },
+    {
+      "name": "Lucia",
+      "blogLink": "https://dev.to/cerchie",
+      "posts": [
+        {
+          "title": "How Learning to Code Gave Me A Growth Mindset",
+          "url": "https://dev.to/cerchie/how-learning-to-code-gave-me-a-growth-mindset-4lbo",
+          "count": 517
+        },
+        {
+          "title": "Why Do Most Programming Languages Count From Zero?",
+          "url": "https://dev.to/cerchie/why-do-computers-count-from-zero-3mh6",
+          "count": 505
+        }
+      ]
+    },
+    {
+      "name": "Meg",
+      "blogLink": "https://meghangutshall.com/",
+      "posts": [
+        {
+          "title": "A README.md template",
+          "url": "https://gist.github.com/meg-gutshall/ac48ef47d9d7b750c354c990c90a2a8f",
+          "count": 1152
+        }
+      ]
+    },
+    {
+      "name": "Mike",
+      "blogLink": "https://mikerogers.io/",
+      "posts": [
+        {
+          "title": "How To Be Serverless on Heroku",
+          "url": "https://mikerogers.io/2020/11/11/how-to-be-serverless-on-heroku",
+          "count": 441
+        }
+      ]
+    },
+    {
+      "name": "Nick",
+      "blogLink": "https://dev.to/nickytonline",
+      "posts": [
+        {
+          "title": "Pairing with Community Member Marie Antons",
+          "url": "https://dev.to/devteam/pairing-with-community-member-marie-antons-3doi",
+          "count": 211
+        },
+        {
+          "title": "November 5th, 2020: What did you learn this week?",
+          "url": "https://dev.to/nickytonline/november-5th-2020-what-did-you-learn-this-week-31fa",
+          "count": 109
+        }
+      ]
+    },
+    {
+      "name": "Rafi",
+      "blogLink": "https://dev.to/rafi993",
+      "posts": [
+        {
+          "title": "Implementing custom liquid tags",
+          "url": "https://dev.to/rafi993/implementing-custom-liquid-tags-16g0",
+          "count": 395
+        }
+      ]
+    },
+    {
+      "name": "Tori",
+      "blogLink": "https://dev.to/torianne02",
+      "posts": [
+        {
+          "title": "What is CI/CD?",
+          "url": "https://firehydrant.io/blog/what-is-ci-cd/",
+          "count": 877
+        }
+      ]
+    },
+    {
+      "name": "Vic",
+      "blogLink": "https://vicvijayakumar.com",
+      "posts": [
+        {
+          "title": "The terminal where it happens - basic data analysis using Unix tools",
+          "url": "https://vicvijayakumar.com/blog/basic-data-analysis-unix-tools",
+          "count": 881
+        }
+      ]
+    }
+  ]
+}
