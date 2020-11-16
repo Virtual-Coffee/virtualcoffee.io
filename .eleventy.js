@@ -31,6 +31,11 @@ module.exports = function (eleventyConfig) {
     }
   );
 
+  eleventyConfig.addFilter('toLocaleString', (number, locale = 'en-US') => {
+    const parsed = parseFloat(number);
+    return isNaN(parsed) ? number : parsed.toLocaleString(locale);
+  });
+
   // Get the first `n` elements of a collection.
   eleventyConfig.addFilter('head', (array, n) => {
     if (n < 0) {
