@@ -87,7 +87,7 @@ While Virtual Coffee is an open and welcoming community, citation of other's com
 Enforcement
 -----------
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the Moderator responsible for enforcement at hello@virtualcoffee.io. All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the Moderator responsible for enforcement at hello@virtualcoffee.io or anonymously at https://virtualcoffe.io/report-coc-violation. All complaints will be reviewed and investigated promptly and fairly.
 
 The Moderator is obligated to respect the privacy and security of the reporter of any incident.
 
