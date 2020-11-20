@@ -54,6 +54,17 @@
       ]
     },
     {
+      "name": "Debra-Kaye",
+      "blogLink": "https://dev.to/debrakayeelliott",
+      "posts": [
+        {
+          "title": "Navigating the World of Web Development",
+          "url": "https://dev.to/debrakayeelliott/navigating-the-world-of-web-development-4eao",
+          "count": 361
+        }
+      ]
+    },
+    {
       "name": "Karen",
       "blogLink": "https://dev.to/kldickenson",
       "posts": [
