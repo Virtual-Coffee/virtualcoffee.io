@@ -97,6 +97,17 @@
       ]
     },
     {
+      "name": "Kyle",
+      "blogLink": "https://dev.to/kwelch",
+      "posts": [
+        {
+          "title": "Automating the pain away",
+          "url": "https://dev.to/kwelch/automating-the-pain-away-bnb",
+          "count": 789
+        }
+      ]
+    },
+    {
       "name": "Lucia",
       "blogLink": "https://dev.to/cerchie",
       "posts": [
