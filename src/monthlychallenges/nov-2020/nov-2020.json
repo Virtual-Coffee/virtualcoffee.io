@@ -54,6 +54,17 @@
       ]
     },
     {
+      "name": "Debra-Kaye",
+      "blogLink": "https://dev.to/debrakayeelliott",
+      "posts": [
+        {
+          "title": "Navigating the World of Web Development",
+          "url": "https://dev.to/debrakayeelliott/navigating-the-world-of-web-development-4eao",
+          "count": 429
+        }
+      ]
+    },
+    {
       "name": "Karen",
       "blogLink": "https://dev.to/kldickenson",
       "posts": [
@@ -86,6 +97,17 @@
       ]
     },
     {
+      "name": "Kyle",
+      "blogLink": "https://dev.to/kwelch",
+      "posts": [
+        {
+          "title": "Automating the pain away",
+          "url": "https://dev.to/kwelch/automating-the-pain-away-bnb",
+          "count": 789
+        }
+      ]
+    },
+    {
       "name": "Lucia",
       "blogLink": "https://dev.to/cerchie",
       "posts": [
@@ -109,6 +131,21 @@
           "title": "A README.md template",
           "url": "https://gist.github.com/meg-gutshall/ac48ef47d9d7b750c354c990c90a2a8f",
           "count": 1152
+        },
+        {
+          "title": "Everyday Inspiration",
+          "url": "https://meghangutshall.com/2020/11/16/everyday_inspiration/",
+          "count": 1833
+        },
+        {
+          "title": "Code Talks Topic Request Platform: Frontend",
+          "url": "https://github.com/meg-gutshall/code-talk-requests-frontend",
+          "count": 1428
+        },
+        {
+          "title": "Code Talks Topic Request Platform: Backend",
+          "url": "https://github.com/meg-gutshall/code-talk-requests-backend",
+          "count": 1148
         }
       ]
     },
