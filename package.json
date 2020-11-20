@@ -6,7 +6,7 @@
     "start": "npx grunt start",
     "build": "ELEVENTY_ENV=production npx grunt release-prep",
     "serve": "npx grunt connect:server",
-    "build-preview": "npm build && npm serve"
+    "build-preview": "npm run build && npm run serve"
   },
   "repository": {
     "type": "git",
