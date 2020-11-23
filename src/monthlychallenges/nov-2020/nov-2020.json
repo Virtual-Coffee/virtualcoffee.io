@@ -44,8 +44,8 @@
           "title": "I'll say it again: Kindness Matters",
           "url": "https://dev.to/bekahhw/i-ll-say-it-again-kindness-matters-3ef4",
           "count": 878
-        }, 
-          {
+        },
+        {
           "title": "Let Them Write Tests: An Argument for Cypress",
           "url": "https://dev.to/bekahhw/let-them-write-tests-an-argument-for-cypress-19o2",
           "count": 571
@@ -97,6 +97,11 @@
           "title": "Exercise Teams - The support I needed",
           "url": "https://dev.to/kldickenson/exercise-teams-the-support-i-needed-3390",
           "count": 330
+        },
+        {
+          "title": "Another step to Vanquishing Imposter Syndrome",
+          "url": "https://dev.to/kldickenson/another-step-to-vanquishing-imposter-syndrome-4nk2",
+          "count": 641
         }
       ]
     },
