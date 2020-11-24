@@ -59,11 +59,12 @@
       "posts": [
         {
           "title": "Painting is Chemistry",
-          "url": "https://dev.to/danieluhl/optimal-learning-path-4dd9",
-          "count": 429
-        },{
-          "title": "Optimal Learning Path",
           "url": "https://dev.to/danieluhl/painting-is-chemistry-35pe",
+          "count": 429
+        },
+        {
+          "title": "Optimal Learning Path",
+          "url": "https://dev.to/danieluhl/optimal-learning-path-4dd9",
           "count": 605
         },
         {
