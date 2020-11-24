@@ -1,0 +1,28 @@
+---
+title: 'Virtual Coffee Monthly Challenges'
+description: 'Every month, we create a challenge for our Virtual Coffee members to complete together'
+layout: layouts/default.njk
+tags: homepageblock
+collectionKey: monthlychallenges
+---
+
+<div class="py-4">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-sm-4">
+        {% include "svg/undraw_good_team_m7uu.svg" %}
+      </div>
+      <div class="col-sm-8">
+        <h1 class="display-4">Virtual Coffee Monthly Challenges</h1>
+        <p class="lead ">Every month, we create a challenge for our Virtual Coffee members to complete together</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="bg-light py-5">
+  <div class="container-xl">
+    <h2 class="display-5">Our challenges so far:</h2>
+
+    {% displayPostList collections.monthlychallenges | reverse %}
+  </div>
+</div>
