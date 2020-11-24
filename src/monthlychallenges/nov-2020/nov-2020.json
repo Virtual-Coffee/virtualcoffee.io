@@ -85,6 +85,32 @@
       ]
     },
     {
+      "name": "Dan Uhl",
+      "blogLink": "https://dev.to/danieluhl",
+      "posts": [
+        {
+          "title": "Painting is Chemistry",
+          "url": "https://dev.to/danieluhl/painting-is-chemistry-35pe",
+          "count": 429
+        },
+        {
+          "title": "Optimal Learning Path",
+          "url": "https://dev.to/danieluhl/optimal-learning-path-4dd9",
+          "count": 605
+        },
+        {
+          "title": "Tech Community Building",
+          "url": "https://dev.to/danieluhl/tech-community-building-4onj",
+          "count": 695
+        },
+        {
+          "title": "Forem at Wayfair",
+          "url": "https://dev.to/danieluhl/forem-vs-wayfair-7cb",
+          "count": 929
+        }
+      ]
+    },
+    {
       "name": "Karen",
       "blogLink": "https://dev.to/kldickenson",
       "posts": [
