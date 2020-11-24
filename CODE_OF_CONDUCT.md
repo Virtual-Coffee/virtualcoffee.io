@@ -1,6 +1,6 @@
 ---
 title: Virtual Coffee Code of Conduct
-layout: layouts/defaultMarkdown.njk
+layout: layouts/simple.njk
 permalink: code-of-conduct/
 eleventyNavigation:
   key: Code of Conduct
