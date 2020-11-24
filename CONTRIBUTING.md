@@ -14,19 +14,19 @@ We really want to make it as easy as possible for newbies to start helping out a
 
 # Table of Contents
 
-- [Introduction](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#introduction)
-- [What type of contributions are desired](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#what-type-of-contributions-are-desired)
-- [The Basics](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#the-basics)
-  - [Making a Github Account](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#making-a-github-account)
-  - [Working with Issues](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#working-with-issues)
-  - [Install and Run](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#run-and-install)
-  - [Making Pull Requests](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#creating-a-pull-request)
-  - [Awaiting Review](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#awaiting-review)
-  - [Tips and Gotchas](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#tips-and-gotchas)
-- [Bug Reporting](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#reporting-a-bug)
-- [Preffered code style](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#preferred-code-style)
-- [Commit message conventions](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#commit-message-conventions)
-- [Labelling conventions](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#labelling-conventions)
+- [Introduction](#introduction)
+- [Table of Contents](#table-of-contents)
+- [What type of contributions we're looking for.](#what-type-of-contributions-were-looking-for)
+- [Asking to Pair](#asking-to-pair)
+- [The Basics](#the-basics)
+  - [Setting up a Github Account](#setting-up-a-github-account)
+  - [Working With Issues](#working-with-issues)
+  - [Local development](#local-development)
+  - [Creating a Pull Request](#creating-a-pull-request)
+  - [Awaiting Review](#awaiting-review)
+  - [Tips and Gotchas](#tips-and-gotchas)
+- [Reporting a bug](#reporting-a-bug)
+- [Labelling Conventions](#labelling-conventions)
 
 # What type of contributions we're looking for.
 
