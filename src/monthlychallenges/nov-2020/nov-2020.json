@@ -284,6 +284,27 @@
           "count": 881
         }
       ]
+    },
+    {
+      "name": "Rahat",
+      "blogLink": "https://dev.to/rahatch",
+      "posts": [
+        {
+          "title": "Stop Applying, Get Referrals",
+          "url": "https://dev.to/rahatch/stop-applying-get-referrals-232d",
+          "count": 971
+        },
+        {
+          "title": "Networking: Twitter Vs LinkedIn",
+          "url": "https://dev.to/rahatch/networking-twitter-vs-linkedin-i15",
+          "count": 483
+        },
+        {
+          "title": "Targeted Interview Prep",
+          "url": "https://dev.to/rahatch/targeted-interview-prep-fd9",
+          "count": 443
+        }
+      ]
     }
   ]
 }
