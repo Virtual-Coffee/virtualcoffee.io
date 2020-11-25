@@ -116,6 +116,17 @@
       ]
     },
     {
+      "name": "Glen",
+      "blogLink": "https://glenmccallum.com",
+      "posts": [
+        {
+          "title": "Adventures in Back Channel Job Hunting",
+          "url": "https://glenmccallum.com/posts/back-channel-job-hunting",
+          "count": 1351
+        }
+      ]
+    },
+    {
       "name": "Karen",
       "blogLink": "https://dev.to/kldickenson",
       "posts": [
