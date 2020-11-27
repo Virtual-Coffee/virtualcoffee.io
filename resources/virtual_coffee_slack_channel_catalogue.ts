@@ -44,18 +44,21 @@
 //  const example: z = { september: "do you remember?", night: 21 }; 
 //    example acts as javascript normally does, allowing any data type as its referenced value
 
+// interface assigns types to keys of an object. (note the lack of commas in an interface)
+
 // interface Stuff {
 //    id: number
 //    name?: string
 //    smell: string[]
 // }
 
-// interface assigns types to keys of an object.
 // const example: Stuff;
 //  example must be an object and must have the fields [id] and [smell].
 //  example[id] must be a property of the object and have the typeof(1) or typeof(0.01)
-//  example[name] ends with a "?", which means it is a an optional property of the object, but if it exists then it must be a string
-//  example[smell] will be an array, and the entries in that array will all be locked to string type. ["sweet", "4", "stanky"] is valid, but ["sweet", 4, "stanky"] is not. This same concept can be denoted with Array<string>, with some nuanced differences that are well explained in the official docs.
+//  example[name] ends with a "?" in the interface, which means it is a an optional property of the object, but if it exists then it must be a string
+//  example[smell] must be a property of the object and be an array. The entries in that array will all be locked to string type. ["sweet", "4", "stanky"] is valid, but ["sweet", 4, "stanky"] is not. This same concept can be denoted with Array<string>, with some nuanced differences that are well explained in the official docs.
+// 
+// end tutorial
 
 interface Channel {
   id: number
@@ -88,23 +91,23 @@ const generateNextChannelId = (
 /** channels object official */
 const channels: Channel[] = [
   {
-    id: 0, 
     name: "admin", 
+    id: 0, 
     description: "The inner-est of the inner circles. Like, if there are 9 rings of hell, this is the 10th ring where all the paperwork gets done. And somehow people volutarily sign up for this. <3 <3 <3"
   },
   {
-    id: generateNextChannelId(),
     name: "welcome",
+    id: generateNextChannelId(),
     description: "Virtual Coffee's front door! (Well maybe we have lots of confetti and streamers instead of a door)"
   },
   {
-    id: generateNextChannelId(),
     name: "general",
+    id: generateNextChannelId(),
     description: "Community questions, event recaps and TPS reports from #mngmnt."
   },
   {
-    id: generateNextChannelId(),
     name: "random",
+    id: generateNextChannelId(),
     description: "Diverse dialogue! Bottomless banter! Excessive exclamations! Also a landfill for Kirk's lesser memes.",
     reminders: [
       {
@@ -114,23 +117,23 @@ const channels: Channel[] = [
     ]
   },
   {
-    id: generateNextChannelId(),
     name: "announcements",
+    id: generateNextChannelId(),
     description: "This channel keeps you in the loop! Virtual Coffee endorsed events, links and dates are posted here."
   },
   {
-    id: generateNextChannelId(),
     name: "articles-and-resources",
+    id: generateNextChannelId(),
     description: "Got curiosity? Well good, because here in coder-land it's basically your health bar. Here are some things to help expand your code brain!"
   },
   {
-    id: generateNextChannelId(),
     name: "brownbags",
+    id: generateNextChannelId(),
     description: "The term 'brownbag' refers to an informal meeting, often held over a lunch break (lunches brought in brown bags) and provides a ~30 minute overview of a particular technology. At the very least, these are exceptional opportunities to expand a developer's vocabulary and keep an ear to the ever-shifting ground of technology. Have a topic or tech you want to talk about? We want to hear your brownbag on it!!!"
   },
   {
-    id: generateNextChannelId(),
     name: "politics",
+    id: generateNextChannelId(),
     description: "Discussions, comments and updates relevant to political ongoings.",
     reminders: [
       {
