@@ -51,7 +51,7 @@
 // }
 
 // interface assigns types to keys of an object.
-// const example: Stuff = { id: 2, smell: ["putrid"] };
+// const example: Stuff;
 //  example must be an object and must have the fields [id] and [smell].
 //  example[id] must be a property of the object and have the typeof(1) or typeof(0.01)
 //  example[name] ends with a "?", which means it is a an optional property of the object, but if it exists then it must be a string
@@ -72,7 +72,7 @@ interface ChannelReminders {
   priority?: number // lesser number is higher priority
 }
 
-/** closure to generate endless unique id numbers.
+/** generates endless unique id numbers.
  * Note: {[id]: 0} is always admin channel. I don't know if this is even a thing, but it should be kept as a placeholder nonetheless
 */
 const generateNextChannelId = (
