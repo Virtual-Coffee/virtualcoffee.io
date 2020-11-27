@@ -134,7 +134,7 @@ const channels: Channel[] = [
     description: "Discussions, comments and updates relevant to political ongoings.",
     reminders: [
       {
-        message: "Virtual Coffee acknowledges that governance is an unavoidable and very engaging topic which has an immediate impact on the daily lives of our members, and is therefore an important topic of discussion. However, it is imperative that those who participate in this discussion remember that without careful consideration of context, audience and perspective this can easily become a hostile environment for those with under represented perspectives. Virtual Coffee's goal is to promote positive interaction between those who have an interest in technology, of which the exchange of ideas is a crucial aspect. Please be sure to keep the Code of Conduct in consideration while participating in this channel.",
+        message: "Virtual Coffee acknowledges that governance is an unavoidable and very engaging topic which has an immediate impact on the daily lives of our members, and is therefore an important topic of discussion. However, it is imperative that those who participate in this discussion remember that without careful consideration of context, audience and perspective this can easily become a hostile environment for those with under represented perspectives. Virtual Coffee's goal is to promote positive interaction between those who have an interest in technology, during which the constructive exchange of ideas is a crucial aspect. Please be sure to keep the Code of Conduct in consideration while participating in this channel.",
         url: "https://virtualcoffee.io/code-of-conduct/",
         formatting: ["i"],
         priority: 1
