@@ -296,9 +296,14 @@
       "blogLink": "https://vicvijayakumar.com",
       "posts": [
         {
-          "title": "The terminal where it happens - basic data analysis using Unix tools",
-          "url": "https://vicvijayakumar.com/blog/basic-data-analysis-unix-tools",
-          "count": 881
+          "title": "The terminal where it happens - basic text analysis using Unix/Linux utilities",
+          "url": "https://vicvijayakumar.com/blog/basic-data-analysis-unix-linux-tools",
+          "count": 953
+        },
+        {
+          "title": "Convert JSON API responses into CSV with jq",
+          "url": "https://vicvijayakumar.com/blog/convert-api-responses-from-json-to-csv-with-jq",
+          "count": 697
         }
       ]
     },
