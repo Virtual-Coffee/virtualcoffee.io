@@ -54,7 +54,13 @@
           "title": "Let Them Write Tests: An Argument for Cypress",
           "url": "https://dev.to/bekahhw/let-them-write-tests-an-argument-for-cypress-19o2",
           "count": 571
-        }
+        },
+        {
+          "title": "I am a Woman in Tech",
+          "url": "https://dev.to/bekahhw/i-am-a-woman-in-tech-1nnl",
+          "count":  630
+       }
+
       ]
     },
     {
@@ -112,6 +118,17 @@
           "title": "Forem at Wayfair",
           "url": "https://dev.to/danieluhl/forem-vs-wayfair-7cb",
           "count": 929
+        }
+      ]
+    },
+    {
+      "name": "Glen",
+      "blogLink": "https://glenmccallum.com",
+      "posts": [
+        {
+          "title": "Adventures in Back Channel Job Hunting",
+          "url": "https://glenmccallum.com/posts/back-channel-job-hunting",
+          "count": 1351
         }
       ]
     },
@@ -279,9 +296,35 @@
       "blogLink": "https://vicvijayakumar.com",
       "posts": [
         {
-          "title": "The terminal where it happens - basic data analysis using Unix tools",
-          "url": "https://vicvijayakumar.com/blog/basic-data-analysis-unix-tools",
-          "count": 881
+          "title": "The terminal where it happens - basic text analysis using Unix/Linux utilities",
+          "url": "https://vicvijayakumar.com/blog/basic-data-analysis-unix-linux-tools",
+          "count": 953
+        },
+        {
+          "title": "Convert JSON API responses into CSV with jq",
+          "url": "https://vicvijayakumar.com/blog/convert-api-responses-from-json-to-csv-with-jq",
+          "count": 697
+        }
+      ]
+    },
+    {
+      "name": "Rahat",
+      "blogLink": "https://dev.to/rahatch",
+      "posts": [
+        {
+          "title": "Stop Applying, Get Referrals",
+          "url": "https://dev.to/rahatch/stop-applying-get-referrals-232d",
+          "count": 971
+        },
+        {
+          "title": "Networking: Twitter Vs LinkedIn",
+          "url": "https://dev.to/rahatch/networking-twitter-vs-linkedin-i15",
+          "count": 483
+        },
+        {
+          "title": "Targeted Interview Prep",
+          "url": "https://dev.to/rahatch/targeted-interview-prep-fd9",
+          "count": 443
         }
       ]
     }
