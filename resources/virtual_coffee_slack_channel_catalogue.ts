@@ -1,12 +1,8 @@
 #!usr/bin/env node
-// this file uses typescript; brief tutorial in comments.
 
 /**
  * Return of this file should always be in JSON format.
-*/
-
-/** 
- * exhaustive example of a channel object:
+ * Exhaustive example of a channel object:
  {
    id: 0,
    name: "admin_channel",
@@ -31,35 +27,6 @@
 }
 */
 
-// For those unfamiliar with typescript: it's just javascript! Deep breaths.
-// Most basic tutorial ever =>
-
-// type x = string; 
-//  const example: x = "1"; 
-//    example is now a var that's locked to the string type. It can be "1" but not 1.
-// type y = 5 | "five" | true; 
-//  const example: y = "five"; 
-//    example is locked to being exactly 5, "five", or true. It cannot be 4, "four", or "true".
-// type z = any;
-//  const example: z = { september: "do you remember?", night: 21 }; 
-//    example acts as javascript normally does, allowing any data type as its referenced value
-
-// interface assigns types to keys of an object. (note the lack of commas in an interface)
-
-// interface Stuff {
-//    id: number
-//    name?: string
-//    smell: string[]
-// }
-
-// const example: Stuff;
-//  example must be an object and must have the fields [id] and [smell].
-//  example[id] must be a property of the object and have the typeof(1) or typeof(0.01)
-//  example[name] ends with a "?" in the interface, which means it is a an optional property of the object, but if it exists then it must be a string
-//  example[smell] must be a property of the object and be an array. The entries in that array will all be locked to string type. ["sweet", "4", "stanky"] is valid, but ["sweet", 4, "stanky"] is not. This same concept can be denoted with Array<string>, with some nuanced differences that are well explained in the official docs.
-// 
-// end tutorial
-
 interface Channel {
   id: number
   name: string
@@ -76,10 +43,10 @@ interface ChannelReminders {
 }
 
 /** generates endless unique id numbers.
- * Note: {[id]: 0} is always admin channel. I don't know if this is even a thing, but it should be kept as a placeholder nonetheless
+ * Note: {[id]: 0} is always admin channel.
 */
 const generateNextChannelId = (
-  () => {
+  function() {
     let counter = 0;
     return () => {
       counter +=1;
