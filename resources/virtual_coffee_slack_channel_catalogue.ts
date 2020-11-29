@@ -8,9 +8,9 @@
 /** 
  * exhaustive example of a channel object:
  {
-   id: 1,
+   id: 0,
    name: "admin_channel",
-   icon: "/app/media/icons/epic_chalice_of_jewels_and_blood_and_dreams.svg",
+   icon: "/app/media/icons/epic_chalice_of_jewels.svg",
    description: "How'd you get in here!?! Guards, sieze them!!",
    moderators: ["Bekah HG Wells", "Danatello Otterman", "Mikhail Rogersonbergerville", "Klirk Beastwood"],
    reminders: [
@@ -93,12 +93,12 @@ const channels: Channel[] = [
   {
     name: "admin", 
     id: 0, 
-    description: "The inner-est of the inner circles. Like, if there are 9 rings of hell, this is the 10th ring where all the paperwork gets done. And somehow people volutarily sign up for this. <3 <3 <3"
+    description: ""
   },
   {
     name: "welcome",
     id: generateNextChannelId(),
-    description: "Virtual Coffee's front door! (Well maybe we have lots of confetti and streamers instead of a door)"
+    description: "Virtual Coffee's front door! (Well, maybe lots of confetti and streamers instead of a door)"
   },
   {
     name: "general",
@@ -108,7 +108,7 @@ const channels: Channel[] = [
   {
     name: "random",
     id: generateNextChannelId(),
-    description: "Diverse dialogue! Bottomless banter! Excessive exclamations! Also a landfill for Kirk's lesser memes.",
+    description: "Diverse dialogue! Bottomless banter! Excessive exclamations!",
     reminders: [
       {
         message: "All are encouraged to be familiar with our code of conduct before posting in any channel.",
@@ -124,12 +124,12 @@ const channels: Channel[] = [
   {
     name: "articles-and-resources",
     id: generateNextChannelId(),
-    description: "Got curiosity? Well good, because here in coder-land it's basically your health bar. Here are some things to help expand your code brain!"
+    description: "Got curiosity? Here are some things to help expand your code brain!"
   },
   {
     name: "brownbags",
     id: generateNextChannelId(),
-    description: "The term 'brownbag' refers to an informal meeting, often held over a lunch break (lunches brought in brown bags) and provides a ~30 minute overview of a particular technology. At the very least, these are exceptional opportunities to expand a developer's vocabulary and keep an ear to the ever-shifting ground of technology. Have a topic or tech you want to talk about? We want to hear your brownbag on it!!!"
+    description: "The term 'brownbag' refers to an informal meeting, often held over a lunch break (lunches brought in brown bags) and provides a ~30 minute overview of a particular topic. These are exceptional opportunities to expand developer vocabulary and keep aware of new tech. Have a topic you want to talk about? We want to hear your brownbag on it!"
   },
   {
     name: "politics",
@@ -137,13 +137,13 @@ const channels: Channel[] = [
     description: "Discussions, comments and updates relevant to political ongoings.",
     reminders: [
       {
-        message: "Virtual Coffee acknowledges that governance is an unavoidable and very engaging topic which has an immediate impact on the daily lives of our members, and is therefore an important topic of discussion. However, it is imperative that those who participate in this discussion remember that without careful consideration of context, audience and perspective this can easily become a hostile environment for those with under represented perspectives. Virtual Coffee's goal is to promote positive interaction between those who have an interest in technology, during which the constructive exchange of ideas is a crucial aspect. Please be sure to keep the Code of Conduct in consideration while participating in this channel.",
+        message: "Virtual Coffee acknowledges that politics is an important but often divisive topic. Our goal is to promote positive interaction between those who have an interest in technology. All participants in this channel are expected to excercise mindfulness regarding context, audience and perception, as well as be familiar with the Code of Conduct.",
         url: "https://virtualcoffee.io/code-of-conduct/",
         formatting: ["i"],
         priority: 1
       }
     ]
-  }
+  },
 ];
 
 const main = {channels};
