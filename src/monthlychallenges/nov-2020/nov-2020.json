@@ -69,6 +69,12 @@
           "title": "I am a Woman in Tech",
           "url": "https://dev.to/bekahhw/i-am-a-woman-in-tech-1nnl",
           "count":  630
+       },
+        {
+          "title": "We need to talk: more on the problems juniors are facing",
+          "url": "https://dev.to/bekahhw/we-need-to-talk-more-on-the-problems-juniors-are-facing-23oa",
+          "count":  762
+          
        }
 
       ]
@@ -91,6 +97,11 @@
           "title": "Alt text for images",
           "url": "https://dev.to/jarvisscript/alt-text-for-images-39m6",
           "count": 307
+        },
+        {
+          "title": "Black Friday Discounts",
+          "url": "https://dev.to/jarvisscript/black-friday-discounts-46b7",
+          "count": 380
         }
       ]
     },
@@ -271,6 +282,11 @@
           "title": "November 19th, 2020: What did you learn this week?",
           "url": "https://dev.to/nickytonline/november-19th-2020-what-did-you-learn-this-week-9c3",
           "count": 111
+        },
+        {
+          "title": "Testing Preact/React Portals with Testing Library",
+          "url": "https://www.iamdeveloper.com/posts/testing-preact-react-portals-with-testing-library-52ja",
+          "count": 2254
         }
       ]
     },
@@ -314,6 +330,11 @@
           "title": "Convert JSON API responses into CSV with jq",
           "url": "https://vicvijayakumar.com/blog/convert-api-responses-from-json-to-csv-with-jq",
           "count": 697
+        },
+        {
+          "title": "Prettier and ESLint with the Airbnb JavaScript Style Guide in VS Code",
+          "url": "https://vicvijayakumar.com/blog/eslint-airbnb-style-guide-prettier",
+          "count": 732
         }
       ]
     },
