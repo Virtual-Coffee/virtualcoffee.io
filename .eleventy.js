@@ -48,6 +48,30 @@ module.exports = function (eleventyConfig) {
     }
   );
 
+  eleventyConfig.addCollection('homePageBlocksSmall', function (collectionApi) {
+    return collectionApi
+      .getAll()
+      .filter(
+        (post) =>
+          post.data.homePageBlocks && post.data.homePageBlocks.type === 'small'
+      )
+      .sort(
+        (a, b) => a.data.homePageBlocks.order - b.data.homePageBlocks.order
+      );
+  });
+
+  eleventyConfig.addCollection('homePageBlocksLarge', function (collectionApi) {
+    return collectionApi
+      .getAll()
+      .filter(
+        (post) =>
+          post.data.homePageBlocks && post.data.homePageBlocks.type === 'large'
+      )
+      .sort(
+        (a, b) => a.data.homePageBlocks.order - b.data.homePageBlocks.order
+      );
+  });
+
   eleventyConfig.addFilter('toLocaleString', (number, locale = 'en-US') => {
     const parsed = parseFloat(number);
     return isNaN(parsed) ? number : parsed.toLocaleString(locale);
