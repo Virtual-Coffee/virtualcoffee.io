@@ -21,18 +21,18 @@
  * 
  * template barebones channel object:
 {
-  id: generateNextChannelId(),
   name: "",
+  id: generateNextChannelId(),
   description: "",
-}
+},
 */
 
 interface Channel {
   id: number
   name: string
-  icon?: string
   description: string
-  moderators?: string[]
+  icon?: string
+  moderators?: Array<string>
   reminders?: ChannelReminders[]
 }
 interface ChannelReminders {
@@ -42,8 +42,8 @@ interface ChannelReminders {
   priority?: number // lesser number is higher priority
 }
 
-/** generates endless unique id numbers.
- * Note: {[id]: 0} is always admin channel.
+/** Closure to generate sequential id numbers.
+ * Note: first invocation will return 1. 0 is withheld for admin channel.
 */
 const generateNextChannelId = (
   function() {
@@ -110,6 +110,146 @@ const channels: Channel[] = [
         priority: 1
       }
     ]
+  },
+  {
+    name: "heavy",
+    id: generateNextChannelId(),
+    description: "If you're having a bad day, feeling frustrated or just need a sanity check, this is the place to get it off your chest."
+  },
+  {
+    name: "music",
+    id: generateNextChannelId(),
+    description: ""
+  },
+  {
+    name: "frontend",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "consulting",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "book-club",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "add-adhd",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "event-chat",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "exercism",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "feed",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "fitness",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "food",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "game-night",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "gifts",
+    id: generateNextChannelId(),
+    description: "Gift ideas for any occassion! Especially the one that you forgot about until 5 minutes ago.",
+  },
+  {
+    name: "goals-and-wins",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "happiness",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "help-and-pairing",
+    id: generateNextChannelId(),
+    description: "Having trouble with a project? Drop your questions and code snippets here for some community feedback.",
+  },
+  {
+    name: "humor",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "job-hunt",
+    id: generateNextChannelId(),
+    description: "Job listings, discussions and questions.",
+  },
+  {
+    name: "lgbtq-plus",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "lightning-talks",
+    id: generateNextChannelId(),
+    description: "Topics and times for lightning talks.",
+  },
+  {
+    name: "monthly-challenge",
+    id: generateNextChannelId(),
+    description: "",
+  },
+  {
+    name: "office-hours",
+    id: generateNextChannelId(),
+    description: "Some veteran VC members make time available to have 1-on-1 meetings. Find and reserve those times here.",
+  },
+  {
+    name: "open-source",
+    id: generateNextChannelId(),
+    description: "Post, promote or join open source projects.",
+  },
+  {
+    name: "parenting",
+    id: generateNextChannelId(),
+    description: "Best way to get lipstick off dog? How much toothpaste is poisonous? Is ____ supposed to be that color? ... ah the joys of parenting.",
+  },
+  {
+    name: "past-midnight",
+    id: generateNextChannelId(),
+    description: "Creatures of the night such as vampires, werewolves, chronologically confused gophers and vitamin D deficient devs.",
+  },
+  {
+    name: "region-europe",
+    id: generateNextChannelId(),
+    description: "Conversations for those in the beautiful country of Europe.",
+  },
+  {
+    name: "tech-interview-study-group",
+    id: generateNextChannelId(),
+    description: "Help with preparing for technical interviews.",
+  },
+  {
+    name: "tech-products",
+    id: generateNextChannelId(),
+    description: "Chatter and links about new or cool techie gear.",
   },
 ];
 
