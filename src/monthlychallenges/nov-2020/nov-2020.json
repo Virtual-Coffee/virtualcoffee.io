@@ -276,6 +276,11 @@
           "title": "November 19th, 2020: What did you learn this week?",
           "url": "https://dev.to/nickytonline/november-19th-2020-what-did-you-learn-this-week-9c3",
           "count": 111
+        },
+        {
+          "title": "Testing Preact/React Portals with Testing Library",
+          "url": "https://www.iamdeveloper.com/posts/testing-preact-react-portals-with-testing-library-52ja",
+          "count": 2254
         }
       ]
     },
