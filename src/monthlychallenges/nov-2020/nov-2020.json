@@ -319,6 +319,11 @@
           "title": "Convert JSON API responses into CSV with jq",
           "url": "https://vicvijayakumar.com/blog/convert-api-responses-from-json-to-csv-with-jq",
           "count": 697
+        },
+        {
+          "title": "Prettier and ESLint with the Airbnb JavaScript Style Guide in VS Code",
+          "url": "https://vicvijayakumar.com/blog/eslint-airbnb-style-guide-prettier",
+          "count": 732
         }
       ]
     },
