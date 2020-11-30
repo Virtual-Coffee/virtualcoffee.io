@@ -54,3 +54,24 @@
     width: 50%;
   }
 }
+
+.smallhomepageblocks {
+  display: grid;
+  gap: 2em;
+
+  @include media-breakpoint-up(sm) {
+    align-items: center;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.smallhomepageblocks-item {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 1em;
+  align-items: center;
+
+  @include media-breakpoint-up(sm) {
+    grid-template-columns: 100px 1fr;
+  }
+}

@@ -30,24 +30,22 @@ eleventyNavigation:
 </div>
 
 <div class="bg-light">
-  <div class="container py-5 lead">
-    <h2 class="text-center mb-6 display-4">Get Involved</h2>
+  <div class="container py-5">
+    <h2 class="text-center mb-5">Get Involved</h2>
 
-    <div class="row ">
+    <div class="smallhomepageblocks mb-5">
       {% for pageBlock in collections.homePageBlocksSmall %}
-        <a href="{{pageBlock.url}}" class="col-sm-4 mb-3 mb-sm-6 d-block d-flex flex-column text-center align-items-center">
-          <div class="flex-fill mb-4 w-50">
+        <a href="{{pageBlock.url}}" class="smallhomepageblocks-item">
+          <div class="smallhomepageblocks-hero">
             {% include pageBlock.data.hero %}
           </div>
-          <h3 class="text-secondary">{{pageBlock.data.homePageBlocks.key}}</h3>
+          <h4 class="smallhomepageblocks-title">{{pageBlock.data.homePageBlocks.key}}</h3>
         </a>
       {% endfor %}
-
-
     </div>
 
-    <h3>What we're up to:</h3>
-    <div class="py-sm-5 homepageblocks">
+    <h2 class="text-center mb-5">What we're up to</h2>
+    <div class="homepageblocks">
       {% for pageBlock in collections.homePageBlocksLarge %}
           <div class="homepageblock-hero">
             {% include (pageBlock.data.hero) %}
