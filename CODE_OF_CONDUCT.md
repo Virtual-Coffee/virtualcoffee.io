@@ -2,9 +2,16 @@
 title: Virtual Coffee Code of Conduct
 layout: layouts/simple.njk
 permalink: code-of-conduct/
+homePageBlocks:
+  type: small
+  key: Code of Conduct
+  order: 1
+tags:
+  - topnav
+hero: 'svg/undraw_loving_story_0j59.svg'
 eleventyNavigation:
   key: Code of Conduct
-  order: 2
+  order: 1
 ---
 
 # Virtual Coffee Code of Conduct

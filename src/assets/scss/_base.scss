@@ -19,6 +19,12 @@ body {
   font-size: 0.75em;
 }
 
+.display-5 {
+  @include font-size(2.5rem);
+  font-weight: 300;
+  line-height: $display-line-height;
+}
+
 .bodycopy {
   @include media-breakpoint-up(sm) {
     max-width: map-get($container-max-widths, lg);

@@ -30,35 +30,51 @@ eleventyNavigation:
 </div>
 
 <div class="bg-light">
-  <div class="container py-5 lead">
-    <h2 class="text-center mb-6 display-4">Get Involved</h2>
+  <div class="container py-5">
+    <h2 class="text-center mb-5">Get Involved</h2>
 
-    <div class="row ">
-      <a href="/members" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center">
-        <div class="flex-fill mb-4 w-50">
-          {% include "svg/undraw_team_spirit_hrr4.svg" %}
-        </div>
-        <h3 class="text-secondary">Our Members</h3>
-      </a>
-      <a href="/events" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center" target="_blank" rel="noopener noreferrer">
-        <div class="flex-fill mb-4 w-50">
-          {% include "svg/undraw_group_hangout_5gmq.svg" %}
-        </div>
-        <h3 class="text-secondary">Community Events</h3>
-      </a>
-      <a href="/code-of-conduct" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center">
-        <div class="flex-fill mb-4 w-50">
-          {% include "svg/undraw_loving_story_0j59.svg" %}
-        </div>
-        <h3 class="text-secondary">Code of Conduct</h3>
-      </a>
-      <a href="https://github.com/Virtual-Coffee" class="col-sm-6 mb-6 d-block d-flex flex-column text-center align-items-center" target="_blank" rel="noopener noreferrer">
-        <div class="flex-fill mb-4 w-50">
-          {% include "svg/undraw_version_control_9bpv.svg" %}
-        </div>
-        <h3 class="text-secondary">GitHub</h3>
-      </a>
-
+    <div class="smallhomepageblocks mb-5">
+      {% for pageBlock in collections.homePageBlocksSmall %}
+        <a href="{{pageBlock.url}}" class="smallhomepageblocks-item">
+          <div class="smallhomepageblocks-hero">
+            {% include pageBlock.data.hero %}
+          </div>
+          <h4 class="smallhomepageblocks-title">{{pageBlock.data.homePageBlocks.key}}</h3>
+        </a>
+      {% endfor %}
     </div>
+
+    <h2 class="text-center mb-5">What we're up to</h2>
+    <div class="homepageblocks">
+      {% for pageBlock in collections.homePageBlocksLarge %}
+          <div class="homepageblock-hero">
+            {% include (pageBlock.data.hero) %}
+          </div>
+
+          <h3 class="text-secondary homepageblock-title"><a href="{{pageBlock.url}}">{{pageBlock.data.homePageBlocks.key}}</a></h3>
+          <div class="homepageblock-body">
+            <p class="lead">{{pageBlock.data.description}}</p>
+            {% if pageBlock.data.homePageBlocks.collectionKey %}
+              {% displayPostList collections[(pageBlock.data.homePageBlocks.collectionKey)] | reverse | head(5) %}
+            {% elseif pageBlock.fileSlug == 'events' %}
+            {#
+              Special handling for events
+              TODO: find a better way to deal with this
+            #}
+              <ul class="postlist">
+                {% for event in events | head(5) %}
+                  <li class="postlist-item">
+                    <a class="postlist-title" href="{{event.url}}">{{event.name}}</a>
+                    <p class="postlist-description"><strong>{{ event.start_time | dateForDisplay }}</strong></p>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+          <p class="homepageblock-body-foot text-muted font-italic"><a href="{{pageBlock.url}}">See more {{pageBlock.data.homePageBlocks.key}}</a></p>
+      {% endfor %}
+    </div>
+
+
   </div>
 </div>
