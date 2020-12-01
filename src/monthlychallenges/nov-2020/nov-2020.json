@@ -73,15 +73,13 @@
         {
           "title": "I am a Woman in Tech",
           "url": "https://dev.to/bekahhw/i-am-a-woman-in-tech-1nnl",
-          "count":  630
-       },
+          "count": 630
+        },
         {
           "title": "We need to talk: more on the problems juniors are facing",
           "url": "https://dev.to/bekahhw/we-need-to-talk-more-on-the-problems-juniors-are-facing-23oa",
-          "count":  762
-          
-       }
-
+          "count": 762
+        }
       ]
     },
     {
@@ -366,6 +364,17 @@
           "title": "Targeted Interview Prep",
           "url": "https://dev.to/rahatch/targeted-interview-prep-fd9",
           "count": 443
+        }
+      ]
+    },
+    {
+      "name": "Jen",
+      "blogLink": "https://the-learning-project.netlify.app/",
+      "posts": [
+        {
+          "title": "Tips from my first developer job",
+          "url": "https://the-learning-project.netlify.app/blog/first-job/",
+          "count": 752
         }
       ]
     }
