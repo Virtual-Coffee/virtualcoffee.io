@@ -59,7 +59,7 @@
   display: grid;
   gap: 2em;
 
-  @include media-breakpoint-up(sm) {
+  @include media-breakpoint-up(md) {
     align-items: center;
     grid-template-columns: 1fr 1fr 1fr;
   }
