@@ -7,10 +7,42 @@ tags: monthlychallenges
 ---
 
 <h1><small>Monthly Challenge for December, 2020:</small> Pairing!</h1>
- 
+
 <p class="lead">Pairing is more than just coding with someone else. Pairing is about communication, teaching, learning, positive reinforcements, and growing.
 </p>
- 
+
 <p class="lead">This month, let’s work together to build on these skills. For this challenge, let’s try to hit 5 pairing sessions per person, limiting your pairing sessions to one Pomodoro session--twenty-five minutes--unless you have made arrangements with your partner. When you’ve finished one of your sessions, report back to the #monthly-challenge channel in slack and let us know how you did and what you worked on! We’ll track how many pomodoro sessions we hit. Before you start, take a look at Martin Fowler’s article <a href="https://martinfowler.com/articles/on-pair-programming.html" target="_blank" rel="noopener noreferrer">On Pair Programming</a>.
 </p>
 
+<table class="table mt-5" style="max-width:600px">
+  <thead class="thead-dark">
+    <th scope="col">Pairing topic</th>
+    <th scope="col" class="text-right">Members</th>
+  </thead>
+  <tbody>
+    {% for challenge in list %}
+        <tr>
+            <td>{{ challenge.theme }}</td>
+            <td class="text-right">{{ challenge.participants | join(', ') }}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr />
+
+<h4 class="mt-5">Overview</h4>
+<table class="table" style="max-width:600px">
+    <thead>
+      <th scope="col">Member</th>
+      <th scope="col" class="text-right">Number of pairing sessions</th>
+    </thead>
+    <tbody>
+        {% for person, num in totals %}
+          <tr>
+              <td>{{ person }}</td>
+              <td class="text-right">{{ num }} event{{ 's' if num > 1 }}</td>
+          </tr>
+      {% endfor %}
+    </tbody>
+</table>
