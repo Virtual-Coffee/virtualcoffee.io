@@ -24,8 +24,6 @@ We really want to make it as easy as possible for newbies to start helping out a
   - [Awaiting Review](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#awaiting-review)
   - [Tips and Gotchas](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#tips-and-gotchas)
 - [Bug Reporting](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#reporting-a-bug)
-- [Preffered code style](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#preferred-code-style)
-- [Commit message conventions](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#commit-message-conventions)
 - [Labelling conventions](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#labelling-conventions)
 
 # What type of contributions we're looking for.
