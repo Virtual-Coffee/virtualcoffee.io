@@ -20,6 +20,13 @@
         "Nick",
         "Colleen"
       ]
+    },
+    {
+      "theme": "JavaScript - We messed around with form validation & the debugger method",
+      "participants": [
+        "Mike",
+        "Laura"
+      ]
     }
   ]
 }
