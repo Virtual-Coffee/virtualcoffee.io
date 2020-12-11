@@ -35,7 +35,7 @@ eleventyNavigation:
 
     <div class="smallhomepageblocks mb-5">
       {% for pageBlock in collections.homePageBlocksSmall %}
-        <a href="{{pageBlock.url}}" class="smallhomepageblocks-item">
+        <a href="{{ pageBlock.data.eleventyNavigation.url if pageBlock.data.permalink == false else pageBlock.url }}" class="smallhomepageblocks-item">
           <div class="smallhomepageblocks-hero">
             {% include pageBlock.data.hero %}
           </div>
