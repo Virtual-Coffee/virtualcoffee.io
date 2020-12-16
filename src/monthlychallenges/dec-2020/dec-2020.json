@@ -76,6 +76,21 @@
         "Lucia",
         "Dan"
       ]
+    },
+    {
+      "theme": "Worked on methology for converting Quarto to 3d render.",
+      "participants": [
+        "Dominic",
+        "Kirk"
+      ]
+    },
+    {
+      "theme": "Worked on Advent of Code problem one.",
+      "participants": [
+        "Sihem",
+        "Marie",
+        "Kirk"
+      ]
     }
   ]
 }
