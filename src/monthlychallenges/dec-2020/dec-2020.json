@@ -98,6 +98,17 @@
         "Bekah",
         "Dominic"
       ]
+    },
+    {
+      "theme": "We began rebuilding Meg's Code Talks app using Ruby on Rails with a Docker setup.",
+      "participants": [
+        "Mike",
+        "Meg",
+        "Ana",
+        "Aurelie V.",
+        "Christopher M. J.",
+        "Ghameerah"
+      ]
     }
   ]
 }
