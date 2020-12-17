@@ -6,18 +6,37 @@ const pluginSyntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 const pluginNavigation = require('@11ty/eleventy-navigation');
 const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
+const pluginPWA = require("eleventy-plugin-pwa");
 
 module.exports = function (eleventyConfig) {
   eleventyConfig.setWatchThrottleWaitTime(100); // in milliseconds
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
+  eleventyConfig.addPlugin(pluginPWA);
 
   require('./utils/imgix')(eleventyConfig);
 
   eleventyConfig.setDataDeepMerge(true);
 
   eleventyConfig.addLayoutAlias('post', 'layouts/post.njk');
+
+  eleventyConfig.addShortcode('displayPostList', function (posts) {
+    return `<ul class="postlist">
+    ${posts
+      .map(
+        (post) => `<li class="postlist-item">
+      <a class="postlist-title" href="${post.url}">${post.data.title}</a>
+      ${
+        post.data.description
+          ? `<p class="postlist-description">${post.data.description}</p>`
+          : ''
+      }
+    </li>`
+      )
+      .join('')}
+    </ul>`;
+  });
 
   eleventyConfig.addFilter(
     'dateForDisplay',
@@ -30,6 +49,30 @@ module.exports = function (eleventyConfig) {
         .toFormat(format, resolvedOptions);
     }
   );
+
+  eleventyConfig.addCollection('homePageBlocksSmall', function (collectionApi) {
+    return collectionApi
+      .getAll()
+      .filter(
+        (post) =>
+          post.data.homePageBlocks && post.data.homePageBlocks.type === 'small'
+      )
+      .sort(
+        (a, b) => a.data.homePageBlocks.order - b.data.homePageBlocks.order
+      );
+  });
+
+  eleventyConfig.addCollection('homePageBlocksLarge', function (collectionApi) {
+    return collectionApi
+      .getAll()
+      .filter(
+        (post) =>
+          post.data.homePageBlocks && post.data.homePageBlocks.type === 'large'
+      )
+      .sort(
+        (a, b) => a.data.homePageBlocks.order - b.data.homePageBlocks.order
+      );
+  });
 
   eleventyConfig.addFilter('toLocaleString', (number, locale = 'en-US') => {
     const parsed = parseFloat(number);

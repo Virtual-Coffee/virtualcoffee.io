@@ -1,10 +1,17 @@
 ---
 title: Virtual Coffee Code of Conduct
-layout: layouts/defaultMarkdown.njk
+layout: layouts/simple.njk
 permalink: code-of-conduct/
+homePageBlocks:
+  type: small
+  key: Code of Conduct
+  order: 1
+tags:
+  - topnav
+hero: 'svg/undraw_loving_story_0j59.svg'
 eleventyNavigation:
   key: Code of Conduct
-  order: 2
+  order: 1
 ---
 
 # Virtual Coffee Code of Conduct
@@ -87,7 +94,7 @@ While Virtual Coffee is an open and welcoming community, citation of other's com
 Enforcement
 -----------
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the Moderator responsible for enforcement at hello@virtualcoffee.io. All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the Moderator responsible for enforcement at hello@virtualcoffee.io or anonymously at https://virtualcoffee.io/report-coc-violation. All complaints will be reviewed and investigated promptly and fairly.
 
 The Moderator is obligated to respect the privacy and security of the reporter of any incident.
 

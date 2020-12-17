@@ -18,6 +18,36 @@
           "title": "CSS Unit: em",
           "url": "https://adiatiayu.hashnode.dev/css-unit-em",
           "count": 283
+        },
+        {
+          "title": "Contributing To An Open Source by A First-Timer (Part 1)",
+          "url": "https://adiatiayu.hashnode.dev/contributing-to-an-open-source-by-a-first-timer-part-1",
+          "count": 444
+        },
+        {
+          "title": "Contributing To An Open Source by A First-Timer (Part 2)",
+          "url": "https://adiatiayu.hashnode.dev/contributing-to-an-open-source-by-a-first-timer-part-2",
+          "count": 765
+        },
+        {
+          "title": "When Should You Start To Write A Blog?",
+          "url": "https://adiatiayu.hashnode.dev/when-should-you-start-to-write-a-blog",
+          "count": 918
+        },
+        {
+          "title": "React JS Log Blog - Prologue",
+          "url": "https://adiatiayu.hashnode.dev/react-js-log-blog-prologue",
+          "count": 144
+        },
+        {
+          "title": "ReactDOM.render()",
+          "url": "https://adiatiayu.hashnode.dev/reactdomrender",
+          "count": 268
+        },
+        {
+          "title": "Overcoming Burnout In Programming Learning",
+          "url": "https://dev.to/adiatiayu/overcoming-burnout-in-programming-learning-1c18",
+          "count": 1100
         }
       ]
     },
@@ -34,6 +64,21 @@
           "title": "I'll say it again: Kindness Matters",
           "url": "https://dev.to/bekahhw/i-ll-say-it-again-kindness-matters-3ef4",
           "count": 878
+        },
+        {
+          "title": "Let Them Write Tests: An Argument for Cypress",
+          "url": "https://dev.to/bekahhw/let-them-write-tests-an-argument-for-cypress-19o2",
+          "count": 571
+        },
+        {
+          "title": "I am a Woman in Tech",
+          "url": "https://dev.to/bekahhw/i-am-a-woman-in-tech-1nnl",
+          "count": 630
+        },
+        {
+          "title": "We need to talk: more on the problems juniors are facing",
+          "url": "https://dev.to/bekahhw/we-need-to-talk-more-on-the-problems-juniors-are-facing-23oa",
+          "count": 762
         }
       ]
     },
@@ -50,6 +95,16 @@
           "title": "Connecting Now: Swag",
           "url": "https://dev.to/jarvisscript/connecting-now-swag-2e9i",
           "count": 412
+        },
+        {
+          "title": "Alt text for images",
+          "url": "https://dev.to/jarvisscript/alt-text-for-images-39m6",
+          "count": 307
+        },
+        {
+          "title": "Black Friday Discounts",
+          "url": "https://dev.to/jarvisscript/black-friday-discounts-46b7",
+          "count": 380
         }
       ]
     },
@@ -61,6 +116,48 @@
           "title": "Navigating the World of Web Development",
           "url": "https://dev.to/debrakayeelliott/navigating-the-world-of-web-development-4eao",
           "count": 429
+        },
+        {
+          "title": "Just In Time Learning",
+          "url": "https://debrakayeelliott.com/just-in-time-learning",
+          "count": 489
+        }
+      ]
+    },
+    {
+      "name": "Dan Uhl",
+      "blogLink": "https://dev.to/danieluhl",
+      "posts": [
+        {
+          "title": "Painting is Chemistry",
+          "url": "https://dev.to/danieluhl/painting-is-chemistry-35pe",
+          "count": 429
+        },
+        {
+          "title": "Optimal Learning Path",
+          "url": "https://dev.to/danieluhl/optimal-learning-path-4dd9",
+          "count": 605
+        },
+        {
+          "title": "Tech Community Building",
+          "url": "https://dev.to/danieluhl/tech-community-building-4onj",
+          "count": 695
+        },
+        {
+          "title": "Forem at Wayfair",
+          "url": "https://dev.to/danieluhl/forem-vs-wayfair-7cb",
+          "count": 929
+        }
+      ]
+    },
+    {
+      "name": "Glen",
+      "blogLink": "https://glenmccallum.com",
+      "posts": [
+        {
+          "title": "Adventures in Back Channel Job Hunting",
+          "url": "https://glenmccallum.com/posts/back-channel-job-hunting",
+          "count": 1351
         }
       ]
     },
@@ -74,9 +171,14 @@
           "count": 438
         },
         {
-          "title": "Exercise Teams - The support I needed",
+          "title": "Exercism Teams - The support I needed",
           "url": "https://dev.to/kldickenson/exercise-teams-the-support-i-needed-3390",
           "count": 330
+        },
+        {
+          "title": "Another step to Vanquishing Imposter Syndrome",
+          "url": "https://dev.to/kldickenson/another-step-to-vanquishing-imposter-syndrome-4nk2",
+          "count": 641
         }
       ]
     },
@@ -93,6 +195,11 @@
           "title": "The Lone(ly) Coder",
           "url": "https://gistlog.co/tkshill/9ee9b7e74ce45e5c13cd5c1f70209c3f",
           "count": 1051
+        },
+        {
+          "title": "7 Tech Talks I Love",
+          "url": "https://gistlog.co/tkshill/58b80c82cf3b7cb873b5d49445918ffd",
+          "count": 1404
         }
       ]
     },
@@ -157,6 +264,11 @@
           "title": "How To Be Serverless on Heroku",
           "url": "https://mikerogers.io/2020/11/11/how-to-be-serverless-on-heroku",
           "count": 441
+        },
+        {
+          "title": "How I write my RSpec Specs",
+          "url": "https://mikerogers.io/2020/11/24/how-i-write-my-rspec-specs",
+          "count": 341
         }
       ]
     },
@@ -177,7 +289,17 @@
         {
           "title": "November 13th, 2020: What did you learn this week?",
           "url": "https://dev.to/nickytonline/november-13th-2020-what-did-you-learn-this-week-2520",
-          "count": 412
+          "count": 125
+        },
+        {
+          "title": "November 19th, 2020: What did you learn this week?",
+          "url": "https://dev.to/nickytonline/november-19th-2020-what-did-you-learn-this-week-9c3",
+          "count": 111
+        },
+        {
+          "title": "Testing Preact/React Portals with Testing Library",
+          "url": "https://www.iamdeveloper.com/posts/testing-preact-react-portals-with-testing-library-52ja",
+          "count": 2254
         }
       ]
     },
@@ -213,9 +335,51 @@
       "blogLink": "https://vicvijayakumar.com",
       "posts": [
         {
-          "title": "The terminal where it happens - basic data analysis using Unix tools",
-          "url": "https://vicvijayakumar.com/blog/basic-data-analysis-unix-tools",
-          "count": 881
+          "title": "The terminal where it happens - basic text analysis using Unix/Linux utilities",
+          "url": "https://vicvijayakumar.com/blog/basic-data-analysis-unix-linux-tools",
+          "count": 953
+        },
+        {
+          "title": "Convert JSON API responses into CSV with jq",
+          "url": "https://vicvijayakumar.com/blog/convert-api-responses-from-json-to-csv-with-jq",
+          "count": 697
+        },
+        {
+          "title": "Prettier and ESLint with the Airbnb JavaScript Style Guide in VS Code",
+          "url": "https://vicvijayakumar.com/blog/eslint-airbnb-style-guide-prettier",
+          "count": 732
+        }
+      ]
+    },
+    {
+      "name": "Rahat",
+      "blogLink": "https://dev.to/rahatch",
+      "posts": [
+        {
+          "title": "Stop Applying, Get Referrals",
+          "url": "https://dev.to/rahatch/stop-applying-get-referrals-232d",
+          "count": 971
+        },
+        {
+          "title": "Networking: Twitter Vs LinkedIn",
+          "url": "https://dev.to/rahatch/networking-twitter-vs-linkedin-i15",
+          "count": 483
+        },
+        {
+          "title": "Targeted Interview Prep",
+          "url": "https://dev.to/rahatch/targeted-interview-prep-fd9",
+          "count": 443
+        }
+      ]
+    },
+    {
+      "name": "Jen",
+      "blogLink": "https://the-learning-project.netlify.app/",
+      "posts": [
+        {
+          "title": "Tips from my first developer job",
+          "url": "https://the-learning-project.netlify.app/blog/first-job/",
+          "count": 752
         }
       ]
     }
