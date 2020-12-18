@@ -87,6 +87,7 @@ module.exports = function (eleventyConfig) {
   });
 
   eleventyConfig.addPassthroughCopy('src/img');
+  eleventyConfig.addPassthroughCopy('src/service-worker.js');
   eleventyConfig.addPassthroughCopy('src/assets');
   eleventyConfig.addPassthroughCopy('src/css');
   // eleventyConfig.addPassthroughCopy('CODE_OF_CONDUCT.md');
