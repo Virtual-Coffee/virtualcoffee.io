@@ -6,14 +6,12 @@ const pluginSyntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 const pluginNavigation = require('@11ty/eleventy-navigation');
 const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
-const pluginPWA = require("eleventy-plugin-pwa");
 
 module.exports = function (eleventyConfig) {
   eleventyConfig.setWatchThrottleWaitTime(100); // in milliseconds
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
-  eleventyConfig.addPlugin(pluginPWA);
 
   require('./utils/imgix')(eleventyConfig);
 
