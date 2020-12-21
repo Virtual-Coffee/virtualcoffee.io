@@ -30,7 +30,7 @@ eleventyNavigation:
 </div>
 
 
-<div class="smallhomepageblocks mb-5">
+<div class="smallhomepageblocks">
   {% for pageBlock in collections.homePageBlocksSmall %}
     <a href="{{ pageBlock.data.homePageBlocks.url if pageBlock.data.homePageBlocks.url else pageBlock.url }}" class="smallhomepageblocks-item">
       <div class="smallhomepageblocks-hero">
