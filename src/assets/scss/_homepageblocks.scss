@@ -57,11 +57,12 @@
 
 .smallhomepageblocks {
   display: grid;
-  gap: 2em;
+  gap: 1em;
 
   @include media-breakpoint-up(md) {
-    align-items: center;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding: 1em;
+    background: $pink;
   }
 }
 
@@ -70,8 +71,20 @@
   grid-template-columns: 100px 1fr;
   gap: 1em;
   align-items: center;
+  transition: outline 0.15s cubic-bezier(0.46, 0.03, 0.52, 0.96);
 
   @include media-breakpoint-up(sm) {
     grid-template-columns: 100px 1fr;
+    background: #fff;
+    padding: 0.5em;
   }
+
+  &:hover {
+    text-decoration: none;
+    outline: #a6d8d4 5px solid;
+  }
+}
+
+.smallhomepageblocks-title {
+  margin-bottom: 0;
 }

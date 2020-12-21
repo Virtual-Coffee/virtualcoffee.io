@@ -29,21 +29,21 @@ eleventyNavigation:
   <h2 class="text-center my-6 display-4">All are Welcome ❤️</h2>
 </div>
 
+
+<div class="smallhomepageblocks mb-5">
+  {% for pageBlock in collections.homePageBlocksSmall %}
+    <a href="{{ pageBlock.data.homePageBlocks.url if pageBlock.data.homePageBlocks.url else pageBlock.url }}" class="smallhomepageblocks-item">
+      <div class="smallhomepageblocks-hero">
+        {% include pageBlock.data.hero %}
+      </div>
+      <h4 class="smallhomepageblocks-title">{{pageBlock.data.homePageBlocks.key}}</h3>
+    </a>
+  {% endfor %}
+</div>
+
+
 <div class="bg-light">
   <div class="container py-5">
-    <h2 class="text-center mb-5">Get Involved</h2>
-
-    <div class="smallhomepageblocks mb-5">
-      {% for pageBlock in collections.homePageBlocksSmall %}
-        <a href="{{ pageBlock.data.homePageBlocks.url if pageBlock.data.homePageBlocks.url else pageBlock.url }}" class="smallhomepageblocks-item">
-          <div class="smallhomepageblocks-hero">
-            {% include pageBlock.data.hero %}
-          </div>
-          <h4 class="smallhomepageblocks-title">{{pageBlock.data.homePageBlocks.key}}</h3>
-        </a>
-      {% endfor %}
-    </div>
-
     <h2 class="text-center mb-5">What we're up to</h2>
     <div class="homepageblocks">
       {% for pageBlock in collections.homePageBlocksLarge %}
