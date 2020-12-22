@@ -100,6 +100,13 @@
       ]
     },
     {
+      "theme": "Worked on Forem issue",
+      "participants": [
+        "Nick",
+        "Dominic"
+      ]
+    },
+    {
       "theme": "We began rebuilding Meg's Code Talks app using Ruby on Rails with a Docker setup.",
       "participants": [
         "Mike",
