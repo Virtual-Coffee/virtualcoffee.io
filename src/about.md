@@ -36,7 +36,7 @@ Virtual Coffee's mission is to be a welcoming tech community that allows room fo
 
 <dl>
 <dt>How do I become a member?</dt>
-<dd><p>To become a member of Virtual Coffee, all you need to do is <a href="https://meetingplace.io/virtual-coffee" target="_blank" rel="noopener noreferrer">attend a Tuesday or Thursday Coffee</a> and submit the form you'll receive at coffee. We absolutely love the closeness of this community and know it’s one of the many things that sets us apart. This closeness starts with those coffees.</p></dd>
+<dd><p>To become a member of Virtual Coffee, all you need to do is <a href="/events">attend a Tuesday or Thursday Coffee</a> and submit the form you'll receive at coffee. We absolutely love the closeness of this community and know it’s one of the many things that sets us apart. This closeness starts with those coffees.</p></dd>
 
 <dt>Are there any other days and times?</dt>
 <dd><p>Not yet, but we're working on it!</p></dd>
