@@ -20,9 +20,7 @@ eleventyNavigation:
 
 Virtual Coffee is, and always will be, a genuine community of people who value and prioritize supporting one another. We know that growth comes at all levels and that no matter what stage of the developer journey you're on, you can teach and learn.
 
-Our twice-weekly live coffees with devs at all stages of the journey has grown into an online community that mentors, creates educational content, and provides a safe community at no cost.
-
-In our first year, we've added a lively slack, a site, Brownbag talks, an Interview Series, a Hacktoberfest Initiative, and Lightning Talks.
+Our twice-weekly live coffees with devs at all stages of the journey has grown into an online community that mentors, creates educational content, and provides a safe community at no cost. Since our first coffee in April 2020, we've added a lively slack, a site, Brownbag talks, an Interview Series, a Hacktoberfest Initiative, and Lightning Talks.
 
 Virtual Coffee is focused on being a positive and supporting place. We’re here to cheer you on when you land a job, get a promotion, or write your first blog post.
 
