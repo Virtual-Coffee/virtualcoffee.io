@@ -9,12 +9,12 @@ homePageBlocks:
   key: About Virtual Coffee
   order: 1
 hero: 'svg/undraw_dreamer_gxxi.svg'
+heroHeader: 'About Virtual Coffee'
 eleventyNavigation:
   key: About
   order: 1
 ---
 
-# About Virtual Coffee
 
 <h2 id="definition">Who we are</h2>
 
