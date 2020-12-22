@@ -1,7 +1,7 @@
 ---
 layout: layouts/simple.njk
 title: About Virtual Coffee
-description: "All about Virtual Coffee: Our Mission, Core Values, History, and more."
+description: 'All about Virtual Coffee: Our Mission, Core Values, History, and more.'
 tags:
   - topnav
 homePageBlocks:
@@ -18,19 +18,19 @@ eleventyNavigation:
 
 <h2 id="definition">Who we are</h2>
 
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin augue nisi, fermentum vitae, imperdiet a, auctor eu, mi. Nulla imperdiet molestie purus. Duis arcu dui, pretium in, molestie id, convallis eget, orci. Praesent eget purus. Nullam sed nunc. Etiam quis orci ac metus consectetuer consequat. Sed pulvinar aliquam sem. Vestibulum convallis. Pellentesque vestibulum dapibus est. Morbi iaculis. Morbi molestie molestie libero. Ut metus. Phasellus pulvinar. Aenean rutrum tristique neque. Morbi vulputate. Curabitur pretium, arcu a accumsan pretium, augue mi ullamcorper ligula, at tristique ligula purus quis mi. Etiam blandit arcu et lorem. Nam ligula. Aliquam nisi sem, euismod id, pharetra vitae, ullamcorper et, pede.
+Virtual Coffee is, and always will be, a genuine community of people who value and prioritize supporting one another. We know that growth comes at all levels and that no matter what stage of the developer journey you're on, you can teach and learn.
+
+Our twice-weekly live coffees with devs at all stages of the journey has grown into an online community that mentors, creates educational content, and provides a safe community at no cost.
+
+In our first year, we've added a lively slack, a site, Brownbag talks, an Interview Series, a Hacktoberfest Initiative, and Lightning Talks.
+
+Virtual Coffee is focused on being a positive and supporting place. We’re here to cheer you on when you land a job, get a promotion, or write your first blog post.
 
 ---
 
 <h2 id="mission">Our Mission</h2>
 
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin augue nisi, fermentum vitae, imperdiet a, auctor eu, mi. Nulla imperdiet molestie purus. Duis arcu dui, pretium in, molestie id, convallis eget, orci. Praesent eget purus. Nullam sed nunc. Etiam quis orci ac metus consectetuer consequat. Sed pulvinar aliquam sem. Vestibulum convallis. Pellentesque vestibulum dapibus est. Morbi iaculis. Morbi molestie molestie libero. Ut metus. Phasellus pulvinar. Aenean rutrum tristique neque. Morbi vulputate. Curabitur pretium, arcu a accumsan pretium, augue mi ullamcorper ligula, at tristique ligula purus quis mi. Etiam blandit arcu et lorem. Nam ligula. Aliquam nisi sem, euismod id, pharetra vitae, ullamcorper et, pede.
-
----
-
-<h2 id="history">Our History</h2>
-
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin augue nisi, fermentum vitae, imperdiet a, auctor eu, mi. Nulla imperdiet molestie purus. Duis arcu dui, pretium in, molestie id, convallis eget, orci. Praesent eget purus. Nullam sed nunc. Etiam quis orci ac metus consectetuer consequat. Sed pulvinar aliquam sem. Vestibulum convallis. Pellentesque vestibulum dapibus est. Morbi iaculis. Morbi molestie molestie libero. Ut metus. Phasellus pulvinar. Aenean rutrum tristique neque. Morbi vulputate. Curabitur pretium, arcu a accumsan pretium, augue mi ullamcorper ligula, at tristique ligula purus quis mi. Etiam blandit arcu et lorem. Nam ligula. Aliquam nisi sem, euismod id, pharetra vitae, ullamcorper et, pede.
+Virtual Coffee's mission is to be a welcoming tech community that allows room for growth and mentorship at all levels, and to create meaningful opportunities for learning, leadership, and contribution for everyone.
 
 ---
 
@@ -38,8 +38,8 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin augue nisi, ferm
 
 <dl>
 <dt>How do I become a member?</dt>
-<dd><p>Attend a meeting etc etc</p></dd>
+<dd><p>To become a member of Virtual Coffee, all you need to do is <a href="https://meetingplace.io/virtual-coffee" target="_blank" rel="noopener noreferrer">attend a Tuesday or Thursday Coffee</a> and submit the form you'll receive at coffee. We absolutely love the closeness of this community and know it’s one of the many things that sets us apart. This closeness starts with those coffees.</p></dd>
 
-<dt>What is another question?</dt>
-<dd><p>I dunno but here is the answer</p></dd>
+<dt>Are there any other days and times?</dt>
+<dd><p>Not yet, but we're working on it!</p></dd>
 </dl>
