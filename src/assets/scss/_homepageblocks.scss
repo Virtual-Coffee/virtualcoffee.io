@@ -58,9 +58,16 @@
 .smallhomepageblocks {
   display: grid;
   gap: 1em;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   padding: 1em;
   background: $pink;
+
+  @include media-breakpoint-up(sm) {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  @include media-breakpoint-only(xl) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .smallhomepageblocks-item {
