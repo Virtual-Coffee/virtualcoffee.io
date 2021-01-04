@@ -4,40 +4,12 @@
   @include media-breakpoint-up(md) {
     gap: 0 2em;
     grid-template-columns: 1fr 1fr;
-    // grid-template-rows: 1fr 1fr 1fr 1fr;
-    grid-template-areas:
-      'heroA  heroB'
-      'titleA titleB'
-      'bodyA  bodyB'
-      'footA  footB';
+    grid-template-rows: auto auto auto auto;
+    grid-auto-flow: column;
+  }
 
-    > *:nth-child(8n + 1) {
-      grid-area: heroA;
-    }
-    > *:nth-child(8n + 2) {
-      grid-area: titleA;
-    }
-    > *:nth-child(8n + 3) {
-      grid-area: bodyA;
-    }
-    > *:nth-child(8n + 4) {
-      grid-area: footA;
-    }
-    > *:nth-child(8n + 5) {
-      grid-area: heroB;
-    }
-    > *:nth-child(8n + 6) {
-      grid-area: titleB;
-    }
-    // > *:nth-child(8n + 7) {
-    //   grid-area: descB;
-    // }
-    > *:nth-child(8n + 7) {
-      grid-area: bodyB;
-    }
-    > *:nth-child(8n + 8) {
-      grid-area: footB;
-    }
+  .homepageblocks + & {
+    margin-top: 2em;
   }
 }
 

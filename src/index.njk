@@ -65,7 +65,16 @@ eleventyNavigation:
               </ul>
             {% endif %}
           </div>
-          <p class="homepageblock-body-foot text-muted font-italic"><a href="{{pageBlock.url}}">See more {{pageBlock.data.homePageBlocks.key}}</a></p>
+          {% if pageBlock.data.homePageBlocks.linkText %}
+            {% set linkText = pageBlock.data.homePageBlocks.linkText %}
+          {% else %}
+            {% set linkText = "See more " + pageBlock.data.homePageBlocks.key %}
+          {% endif %}
+          <p class="homepageblock-body-foot text-muted font-italic"><a href="{{pageBlock.url}}">{{linkText}}</a></p>
+
+          {% if loop.index0 % 2 == 1 and not loop.last %}
+            </div><div class="homepageblocks">
+          {% endif %}
       {% endfor %}
     </div>
 
