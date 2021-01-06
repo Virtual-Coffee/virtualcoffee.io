@@ -4,7 +4,7 @@
   @include media-breakpoint-up(md) {
     gap: 0 2em;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto auto;
+    grid-template-rows: auto auto auto;
     grid-auto-flow: column;
   }
 
@@ -34,29 +34,33 @@
   background: $pink;
 
   @include media-breakpoint-up(sm) {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  @include media-breakpoint-up(lg) {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 
-  @include media-breakpoint-only(xl) {
-    grid-template-columns: repeat(3, 1fr);
+  @include media-breakpoint-up(xl) {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }
 
 .smallhomepageblocks-item {
-  display: grid;
-  grid-template-columns: 100px 1fr;
-  gap: 1em;
+  display: flex;
+  min-height: 65px;
   align-items: center;
   transition: outline 0.15s cubic-bezier(0.46, 0.03, 0.52, 0.96);
   background: #fff;
   padding: 0.5em;
+  font-size: 1.1rem;
 
   &:hover {
     text-decoration: none;
     outline: #a6d8d4 5px solid;
   }
-}
 
-.smallhomepageblocks-title {
-  margin-bottom: 0;
+  svg {
+    fill: currentColor;
+  }
 }
