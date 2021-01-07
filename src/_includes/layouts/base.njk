@@ -30,6 +30,7 @@
     <meta name="theme-color" content="#ffffff">
 
     {# <link rel="stylesheet" href="https://rsms.me/inter/inter.css"> #}
+    {{headAdditions | safe if headAdditions is defined}}
   </head>
   <body {% if bodyClass %}class="{{ bodyClass }}"{% endif %}>
 
