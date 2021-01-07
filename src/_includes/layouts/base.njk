@@ -28,7 +28,9 @@
     <meta name="msapplication-TileColor" content="#d9376e">
     <meta name="msapplication-config" content="/assets/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
-
+    {% if includeAlpine %}
+      <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.x/dist/alpine.min.js" defer></script>
+    {% endif %}
     {# <link rel="stylesheet" href="https://rsms.me/inter/inter.css"> #}
     {{headAdditions | safe if headAdditions is defined}}
   </head>
