@@ -42,12 +42,6 @@ module.exports = function (eleventyConfig) {
   function processFormAttributes(labelText, helpText, inputAttributes) {
     const { name } = inputAttributes;
 
-    const processedHelpText = helpText
-      ? helpText
-      : inputAttributes.required
-      ? 'Required.'
-      : null;
-
     if (!labelText) {
       throw new Error('missing form label');
     }
@@ -55,6 +49,14 @@ module.exports = function (eleventyConfig) {
     if (!name) {
       throw new Error('missing form name');
     }
+
+    const inputId = inputAttributes.id || `form${name}`;
+
+    const processedHelpText = helpText
+      ? helpText
+      : inputAttributes.required
+      ? 'Required.'
+      : null;
 
     const helpTextId = `help${name}`;
 
@@ -78,7 +80,7 @@ module.exports = function (eleventyConfig) {
 
     attributes.push(`class="${inputAttributes['class'] || 'form-control'}"`);
 
-    attributes.push(`id="${inputAttributes.id || `form${name}`}"`);
+    attributes.push(`id="${inputId}"`);
 
     if (processedHelpText && !inputAttributes['aria-describedby']) {
       attributes.push(`aria-describedby="${helpTextId}"`);
@@ -88,6 +90,7 @@ module.exports = function (eleventyConfig) {
       processedHelpText,
       helpTextId,
       attributes,
+      inputId,
     };
   }
 
@@ -98,10 +101,11 @@ module.exports = function (eleventyConfig) {
         processedHelpText,
         helpTextId,
         attributes,
+        inputId,
       } = processFormAttributes(labelText, helpText, inputAttributes);
 
       return `<div class="form-group">
-        <label for="${attributes.id}">${labelText}</label>
+        <label for="${inputId}">${labelText}</label>
         <input ${attributes.join(' ')} />
         ${
           processedHelpText
@@ -119,10 +123,11 @@ module.exports = function (eleventyConfig) {
         processedHelpText,
         helpTextId,
         attributes,
+        inputId,
       } = processFormAttributes(labelText, helpText, inputAttributes);
 
       return `<div class="form-group">
-        <label for="${attributes.id}">${labelText}</label>
+        <label for="${inputId}">${labelText}</label>
         <textarea ${attributes.join(' ')}>${value}</textarea>
         ${
           processedHelpText
@@ -168,6 +173,7 @@ module.exports = function (eleventyConfig) {
         processedHelpText,
         helpTextId,
         attributes,
+        inputId,
       } = processFormAttributes(labelText, helpText, inputAttributes);
 
       function displayOption({ label, value }) {
@@ -175,7 +181,7 @@ module.exports = function (eleventyConfig) {
       }
 
       return `<div class="form-group">
-        <label for="${attributes.id}">${labelText}</label>
+        <label for="${inputId}">${labelText}</label>
         <select ${attributes.join(' ')}>
           ${options
             .map((opt) => {
@@ -224,11 +230,11 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addShortcode(
     'formRadioSelect',
     function ({ labelText, helpText, options = [], ...inputAttributes }) {
-      const {
-        processedHelpText,
-        helpTextId,
-        attributes,
-      } = processFormAttributes(labelText, helpText, inputAttributes);
+      const { processedHelpText, helpTextId } = processFormAttributes(
+        labelText,
+        helpText,
+        inputAttributes
+      );
 
       function displayOption({ label, value, checked }) {
         return `<label class="form-check">
