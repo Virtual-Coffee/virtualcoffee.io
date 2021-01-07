@@ -33,9 +33,9 @@ includeAlpine: true
     <h3>How would you like to participate in the Lightning Talks?</h3>
     <p class="text-muted">Choose all that apply.</p>
 
-    <fieldset>
+    <fieldset class="p-3 bg-light mb-4">
 
-      <label class="form-group form-check">
+      <label class="form-group form-check" x-bind:class="{ 'mb-0': !showSpeakerSet }">
         <input type="checkbox" name="roles[]" class="form-check-input"  value="speaker" x-model="showSpeakerSet">
         <span class="form-check-label font-weight-bold">I would like to give a lightning talk.</span>
       </label>
@@ -48,19 +48,21 @@ includeAlpine: true
         {% formInput {
           labelText: 'What is the working title for your talk?',
           name: 'topicTitle',
-          required: true
+          helpText: 'Required.',
+          'x-bind:required':'showSpeakerSet'
         } %}
 
         {% formTextarea {
           labelText: 'Tell us more about your topic.',
           name: 'topicIdea',
-          required: true
+          helpText: 'Required.',
+          'x-bind:required':'showSpeakerSet'
         } %}
 
         {% formSelect {
           labelText: 'How long do you think your talk will be?',
           name: 'topicLength',
-          required: true,
+          'x-bind:required':'showSpeakerSet',
           value: '5 minutes',
           options: [
             {
@@ -98,8 +100,8 @@ includeAlpine: true
       </div>
     </fieldset>
 
-    <fieldset>
-      <label class="form-group form-check">
+    <fieldset class="p-3 bg-light mb-4">
+      <label class="form-group form-check" x-bind:class="{ 'mb-0': !showSpeakerSet }">
         <input type="checkbox" name="roles[]" class="form-check-input" value="mentor" x-model="showMentorSet">
         <span class="form-check-label font-weight-bold">I would like to be a mentor.</span>
       </label>
@@ -137,8 +139,8 @@ includeAlpine: true
         } %}
       </div>
     </fieldset>
-    <fieldset>
-      <label class="form-group form-check">
+    <fieldset class="p-3 bg-light mb-4">
+      <label class="form-group form-check" x-bind:class="{ 'mb-0': !showSpeakerSet }">
         <input type="checkbox" name="roles[]" class="form-check-input" value="coordinator" x-model="showCoordinatorSet">
         <span class="form-check-label font-weight-bold">I would like to volunteer as an event coordinator.</span>
       </label>
