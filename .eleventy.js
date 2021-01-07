@@ -14,27 +14,11 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(pluginNavigation);
 
   require('./utils/imgix')(eleventyConfig);
+  require('./utils/shortcodes')(eleventyConfig);
 
   eleventyConfig.setDataDeepMerge(true);
 
   eleventyConfig.addLayoutAlias('post', 'layouts/post.njk');
-
-  eleventyConfig.addShortcode('displayPostList', function (posts) {
-    return `<ul class="postlist">
-    ${posts
-      .map(
-        (post) => `<li class="postlist-item">
-      <a class="postlist-title" href="${post.url}">${post.data.title}</a>
-      ${
-        post.data.description
-          ? `<p class="postlist-description">${post.data.description}</p>`
-          : ''
-      }
-    </li>`
-      )
-      .join('')}
-    </ul>`;
-  });
 
   eleventyConfig.addFilter(
     'dateForDisplay',
