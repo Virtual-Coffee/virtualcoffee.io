@@ -7,6 +7,10 @@ svg {
   max-width: 100%;
 }
 
+.nav-item svg {
+  fill: currentColor;
+}
+
 body {
   margin-top: 6rem;
 
