@@ -29,7 +29,14 @@ layout: layouts/base.njk
       <div class="card">
         <div class="row no-gutters">
           <div class="col-sm-4 col-md-12">
-            <img src="{{podcast.guest.headshot}}" alt="{{podcast.guest.headshotAlt}}" class="card-img-top" />
+            <img
+              alt="{{podcast.guest.headshotAlt}}"
+              class="card-img-top"
+              src="{{podcast.guest.headshot | buildImgixUrl({w:258})}}"
+              sizes="(min-width: 1200px) 338px, (min-width: 992px) 258px, (min-width: 768px) calc((100vw - 150px) * (5 / 12)), (min-width: 576px) calc((100vw - 60px) / 3), calc(100vw - 60px)"
+              srcset="{{podcast.guest.headshot | buildImgixSrcSet([1352, 1032, 1026, 704, 676, 516, 513, 352, 338, 258])}}"
+              />
+
           </div>
           <div class="col-sm-8 col-md-12">
             <div class="card-body">
