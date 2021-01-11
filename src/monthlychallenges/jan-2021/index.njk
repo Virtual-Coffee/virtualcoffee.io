@@ -52,4 +52,22 @@ tags: monthlychallenges
   </li>
 </ul>
 
+<table class="table mt-5" style="max-width:600px">
+  <thead class="thead-dark">
+    <th scope="col">Topic</th>
+    <th scope="col">Resource</th>
+    <th scope="col" class="text-right">Members</th>
+  </thead>
+  <tbody>
+    {% for challenge in list %}
+        <tr>
+            <td>{{ challenge.topic }}</td>
+                        <td>{{ challenge.resource }}</td>
 
+            <td class="text-right">{{ challenge.participants | join(', ') }}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr />

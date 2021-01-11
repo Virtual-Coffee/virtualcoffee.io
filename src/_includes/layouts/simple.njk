@@ -14,6 +14,8 @@ layout: layouts/base.njk
     </div>
   </div>
 </div>
+{% elif heroHeader %}
+  <div class="container bodycopy pt-5"><h1 class="display-4">{{heroHeader}}</h1></div>
 {% endif %}
 <div class="container bodycopy py-5">
   {{ content | safe }}

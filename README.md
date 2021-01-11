@@ -37,15 +37,15 @@ cd virtualcoffee.io
 ### 3. Install dependencies
 
 ```
-npm install
+yarn
 ```
 
 At this point you're ready to roll! The following commands are available:
 
-### `npm run start`
+### `yarn start`
 
 ```
-npm run start
+yarn start
 ```
 
 This is the only command you need to do normal local development.
@@ -63,18 +63,18 @@ Use ctrl-c to quit the server when you're done.
 
 The following commands are for building production-ready versions of the site. If you're interested in seeing what they look like on your machine, feel free to run them! But they are not needed for normal local development.
 
-### `npm run build`
+### `yarn build`
 
 ```
-npm run build
+yarn build
 ```
 
 Builds a production-ready version of the site. This is what Netlify uses to build our site.
 
-### `npm run build-preview`
+### `yarn build-preview`
 
 ```
-npm run build-preview
+yarn build-preview
 ```
 
-If you'd like to see a preview of the production build, use this command to build the site and start up a server at http://localhost:9000. To see any subsequent changes, you can leave this server running, but you'll have to run `npm build` again in another console tab.
+If you'd like to see a preview of the production build, use this command to build the site and start up a server at http://localhost:9000. To see any subsequent changes, you can leave this server running, but you'll have to run `yarn build` again in another console tab.

@@ -7,11 +7,45 @@ svg {
   max-width: 100%;
 }
 
+.nav-item svg {
+  fill: currentColor;
+}
+
 body {
   margin-top: 6rem;
 
   &.vc-home {
     margin-top: 0;
+  }
+}
+
+ul {
+  padding-left: 1em;
+}
+
+.podcastSubscribe {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  > a {
+    margin: 0 0 0.5em 0.5em;
+    background-color: #000000;
+    background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg);
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    text-indent: -9000px;
+    height: 40px;
+    background-size: 1350px 28px;
+  }
+
+  @include media-breakpoint-up(sm) {
+    flex-direction: row;
+    justify-content: flex-end;
+
+    > a {
+      margin-bottom: 0;
+    }
   }
 }
 

@@ -1,0 +1,57 @@
+---
+layout: layouts/base.njk
+---
+
+<div class="container-lg py-md-4">
+
+  <h1 class="display-5">{{title}}</h1>
+  <div class="text-right mb-2">
+  <code>
+  <span class="d-block d-sm-inline">Season {{podcast.season}}, Episode {{podcast.episode}} </span>
+  <span class="d-none d-sm-inline">|</span>
+  <span class="d-block d-sm-inline">{{ page.date | dateForDisplay('DDD') }}</span>
+  </code></div>
+
+
+  <div class="lead">{{podcast.intro | safe}}</div>
+
+  <div class="my-4">
+  {{podcast.player | safe}}
+  </div>
+
+
+  {% podcastSubscribe %}
+
+  <hr />
+
+  <div class="row">
+    <div class="col-md-5 col-lg-4 order-md-2 pb-4 pb-md-0">
+      <div class="card">
+        <div class="row no-gutters">
+          <div class="col-sm-4 col-md-12">
+            <img
+              alt="{{podcast.guest.headshotAlt}}"
+              class="card-img-top"
+              src="{{podcast.guest.headshot | buildImgixUrl({w:258})}}"
+              sizes="(min-width: 1200px) 338px, (min-width: 992px) 258px, (min-width: 768px) calc((100vw - 150px) * (5 / 12)), (min-width: 576px) calc((100vw - 60px) / 3), calc(100vw - 60px)"
+              srcset="{{podcast.guest.headshot | buildImgixSrcSet([1352, 1032, 1026, 704, 676, 516, 513, 352, 338, 258])}}"
+              />
+
+          </div>
+          <div class="col-sm-8 col-md-12">
+            <div class="card-body">
+              <h5 class="card-title">{{podcast.guest.name}}</h5>
+              {{podcast.guest.bio | safe}}
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 col-lg-8 order-md-1">
+      {{ content | safe }}
+      <p>The Virtual Coffee Podcast is produced by Dan Ott and Bekah Hawrot Weigel and edited by Dan Ott.</p>
+    </div>
+  </div>
+
+</div>

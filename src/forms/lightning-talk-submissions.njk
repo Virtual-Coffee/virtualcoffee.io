@@ -1,120 +1,156 @@
 ---
-layout: layouts/default.njk
+layout: layouts/simple.njk
 title: Lightning Talk Submission Form
+heroHeader: "Virtual Coffee: Lightning Talks"
+hero: svg/undraw_online_video_ivvq.svg
+includeAlpine: true
 ---
 
-{% from "macros/forms.njk" import netlifyForm %}
-
-
-<div class="py-4">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-sm-4">
-        {% include "svg/undraw_online_video_ivvq.svg" %}
-      </div>
-      <div class="col-sm-8">
-        <h1 class="display-4">Virtual Coffee: Lightning Talks</h1>
-      </div>
-    </div>
+<div x-data="{showMentorSet: false, showSpeakerSet: false, showCoordinatorSet: false}">
+  <div class="lead mb-5">
+    <p>We're excited to be back with Lightning Talks on February 26th, 2021! Lightning talks are 5-20 minute talks on one main idea. This time around there won't be a theme, so feel free to submit a talk on any topic suitable for our Virtual Coffee Community.      If you've never given a talk, this is a great place to try it out for the first time! </p>      <p> We love supporting all our members in any way we can. Let us know the best way we can help you for this event or fill out the section of the form to be a mentor!</p>
   </div>
-</div>
+  {% netlifyForm {action: '/forms/lightning-talk-submissions-thanks', name: 'lightning-talk-submissions'} %}
 
-<div class="py-5">
-  <div class="container bodycopy">
-    <div class="lead mb-5">
-      <p>We're excited to kick-off our first Lightning Talk Session! Lightning talks are 5-20 minute talks on one main idea. This time around there won't be a theme, so feel free to submit a talk on any topic suitable for our Virtual Coffee Community.      If you've never given a talk, this is a great place to try it out for the first time! </p>      <p> We love supporting all our members in any way we can. Let us know the best way we can help you for this event!</p>
-    </div>
-    {% call netlifyForm('/forms/lightning-talk-submissions-thanks', 'lightning-talk-submissions') %}
-
-      <fieldset>
+    <fieldset>
       <legend>Your Information:</legend>
-        <p class="text-muted">Just a couple quick pieces of info that we'll need:</p>
-        <div class="form-group">
-          <label for="formName">Your Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="formName"
-            name="name"
-            aria-describedby="nameHelp"
-            required
-          />
-          <small id="nameHelp" class="form-text text-muted">Required</small>
-        </div>
-        <div class="form-group">
-          <label for="formEmail">Email</label>
-          <input
-            type="email"
-            class="form-control"
-            id="formEmail"
-            name="email"
-            aria-describedby="emailHelp"
-            required
-          />
-          <small id="emailHelp" class="form-text text-muted">Required. We'll never share your email with anyone else.</small>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>Your Lightning Talk Idea:</legend>
-          <div class="form-group">
-          <label for="topicTitle">What is the working title for your talk?</label>
-              <input
-            type="text"
-            class="form-control"
-            id="topicTitle"
-            name="topicTitle"
-            aria-describedby="topicTitle"
-            required
-          />
-                        
-        </div>
-        <div class="form-group">
-          <label for="topicIdea">Tell us more about your topic.</label>
-          <textarea class="form-control" required id="topicIdea" name="topicIdea" rows="3"></textarea></div>
-           <div class="form-group">
-          <label for="topicLength">How long do you think your talk will be?</label>
-              <input
-            type="text"
-            class="form-control"
-            id="topicLength"
-            name="topicLength"
-            aria-describedby="topicLength"
-          />
-        </div>
-      <div class="form-group">
-          <label for="mentorship">Would you like mentorship?</label>
-              <input
-            type="text"
-            class="form-control"
-            id="mentorship"
-            name="mentorship"
-            aria-describedby="mentorship"
-            required
-          />
-                        
-        </div>
+      <p class="text-muted">Just a couple quick pieces of info that we'll need:</p>
+      {% formInput {
+        labelText: 'Your Name',
+        name: 'name',
+        required: true
+      } %}
 
-        <div class="form-group">
-          <label for="additionalThoughts">Do you have any additional thoughts about the Lightning Talks?</label>
-          <textarea class="form-control" id="additionalThoughts" name="additionalThoughts" rows="3"></textarea>
-        </div>
+      {% formInput {
+        type: 'email',
+        labelText: 'Email',
+        helpText: "Required. We'll never share your email with anyone else.",
+        name: 'email',
+        required: true
+      } %}
+    </fieldset>
 
-      </fieldset>
+    <h3>How would you like to participate in the Lightning Talks?</h3>
+    <p class="text-muted">Choose all that apply.</p>
 
+    <fieldset class="p-3 bg-light mb-4">
 
- <p class="lead">Just a reminder that all talks need to adhere to our <a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>.</p>
-
-      <label class="form-group form-check">
-        <input type="checkbox" name="agree" class="form-check-input" required value="agree">
-        <span class="form-check-label">I've read the Code of Conduct and understand my responsibilities as a member of the Virtual Coffee community</span>
+      <label class="form-group form-check" x-bind:class="{ 'mb-0': !showSpeakerSet }">
+        <input type="checkbox" name="roles[]" class="form-check-input"  value="speaker" x-model="showSpeakerSet">
+        <span class="form-check-label font-weight-bold">I would like to give a lightning talk.</span>
       </label>
 
+      <div
+        style="display: none;"
+        x-show.transition="showSpeakerSet"
+      >
 
-  <div class="text-right">
-      <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+        {% formInput {
+          labelText: 'What is the working title for your talk?',
+          name: 'topicTitle',
+          helpText: 'Required.',
+          'x-bind:required':'showSpeakerSet'
+        } %}
+
+        {% formTextarea {
+          labelText: 'Tell us more about your topic.',
+          name: 'topicIdea',
+          helpText: 'Required.',
+          'x-bind:required':'showSpeakerSet'
+        } %}
+
+        {% formSelect {
+          labelText: 'How long do you think your talk will be?',
+          name: 'topicLength',
+          'x-bind:required':'showSpeakerSet',
+          value: '5 minutes',
+          options: [
+            {
+              value: '5 minutes'
+            },
+            {
+              value: '10 minutes'
+            },
+            {
+              value: '15 minutes'
+            },
+            {
+              value: '20 minutes'
+            }
+          ]
+        } %}
+
+        {% formRadioSelect {
+          labelText: 'Would you like mentorship?',
+          name: 'wouldLikeMentorship',
+          options: [
+            {
+              value: 'Yes'
+            },
+            {
+              value: 'No'
+            }
+          ]
+        } %}
+
+        {% formTextarea {
+          labelText: 'Do you have any additional thoughts about the Lightning Talks?',
+          name: 'additionalThoughts'
+        } %}
       </div>
+    </fieldset>
 
+    <fieldset class="p-3 bg-light mb-4">
+      <label class="form-group form-check" x-bind:class="{ 'mb-0': !showSpeakerSet }">
+        <input type="checkbox" name="roles[]" class="form-check-input" value="mentor" x-model="showMentorSet">
+        <span class="form-check-label font-weight-bold">I would like to be a mentor.</span>
+      </label>
+      <div
+        style="display: none;"
+        x-show="showMentorSet"
+      >
+        {% formRadioSelect {
+          labelText: 'Are you willing to review slides, provide feedback, and practice with the speaker?',
+          name: 'willingToMentor',
+          options: [
+            {
+              value: 'Yes'
+            },
+            {
+              value: 'No'
+            }
+          ]
+        } %}
 
-    {% endcall %}
-  </div>
+        {% formRadioSelect {
+          labelText: 'How many speakers are you willing to mentor?',
+          name: 'howManyAreYouWillingToMentor',
+          options: [
+            {
+              value: 'Just One'
+            },
+            {
+              value: 'Up to Two'
+            },
+            {
+              value: 'Up to Three'
+            }
+          ]
+        } %}
+      </div>
+    </fieldset>
+    <fieldset class="p-3 bg-light mb-4">
+      <label class="form-group form-check" x-bind:class="{ 'mb-0': !showSpeakerSet }">
+        <input type="checkbox" name="roles[]" class="form-check-input" value="coordinator" x-model="showCoordinatorSet">
+        <span class="form-check-label font-weight-bold">I would like to volunteer as an event coordinator.</span>
+      </label>
+    </fieldset>
+
+    <p class="lead">Just a reminder that all talks need to adhere to our <a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>.</p>
+
+    {% formCoC %}
+
+    {% formSubmit %}
+
+  {% endnetlifyForm %}
 </div>

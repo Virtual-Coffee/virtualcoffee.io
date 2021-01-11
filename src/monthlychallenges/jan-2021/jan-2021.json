@@ -1,3 +1,10 @@
 {
-  "challengedata": []
+  "challengedata": [
+    {
+      "topic": "Machine Learning",
+      "resource": "Heydisco: How does machine learning work?",
+      "participants": [
+        "Bekah"
+      ]
+    }]
 }
