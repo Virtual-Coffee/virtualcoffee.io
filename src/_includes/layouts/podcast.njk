@@ -2,10 +2,15 @@
 layout: layouts/base.njk
 ---
 
-<div class="container-lg py-5">
+<div class="container-lg py-md-4">
 
   <h1 class="display-5">{{title}}</h1>
-  <div class="text-right"><code>Season {{podcast.season}}, Episode {{podcast.episode}} | {{ page.date | dateForDisplay('DDD') }}</code></div>
+  <div class="text-right mb-2">
+  <code>
+  <span class="d-block d-sm-inline">Season {{podcast.season}}, Episode {{podcast.episode}} </span>
+  <span class="d-none d-sm-inline">|</span>
+  <span class="d-block d-sm-inline">{{ page.date | dateForDisplay('DDD') }}</span>
+  </code></div>
 
 
   <div class="lead">{{podcast.intro | safe}}</div>
