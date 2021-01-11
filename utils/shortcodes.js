@@ -1,4 +1,12 @@
 module.exports = function (eleventyConfig) {
+  eleventyConfig.addShortcode('podcastSubscribe', function (posts) {
+    return `<div class="podcastSubscribe">
+    <a target="_blank" href="https://podcasts.apple.com/us/podcast/the-virtual-coffee-podcast/id1547260240" style="background-position: 10px 7px;  width: 162px;">Listen on Apple Podcasts</a>
+    <a target="_blank" href="https://open.spotify.com/show/2i96E6Rm2YyMcGGYSzXlBo" style="background-position: -182px 7px; width: 106px;">Listen on Spotify</a>
+    <a target="_blank" href="https://feeds.buzzsprout.com/1558601.rss" style="background-position: -317px 7px; width: 121px;">RSS Feed</a>
+  </div>`;
+  });
+
   eleventyConfig.addShortcode('displayPostList', function (posts) {
     return `<ul class="postlist">
     ${posts

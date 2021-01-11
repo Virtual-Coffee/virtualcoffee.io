@@ -26,7 +26,11 @@ module.exports = function (eleventyConfig) {
       const resolvedOptions = {
         ...opts,
       };
-      return DateTime.fromISO(dateString)
+      let d = dateString;
+      if (typeof d === 'object' && d.toISOString) {
+        d = d.toISOString();
+      }
+      return DateTime.fromISO(d)
         .setZone('America/New_York')
         .toFormat(format, resolvedOptions);
     }
