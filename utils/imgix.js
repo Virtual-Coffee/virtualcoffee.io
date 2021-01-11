@@ -9,7 +9,7 @@ var imgixClient = new ImgixClient({
 
 module.exports = function (eleventyConfig) {
   const defaultImgixParams = {
-    auto: 'compress,format,enhance',
+    auto: 'compress,format',
   };
 
   eleventyConfig.addFilter('buildImgixUrl', function (path, params = {}) {
@@ -22,28 +22,26 @@ module.exports = function (eleventyConfig) {
     return path;
   });
 
-  eleventyConfig.addFilter('buildImgixSrcSet', function (
-    path,
-    widths,
-    params = {},
-    options = {}
-  ) {
-    if (useImgix) {
-      return imgixClient.buildSrcSet(
-        path,
-        {
-          ...defaultImgixParams,
-          ...params,
-        },
-        {
-          widths,
-          ...options,
-        }
-      );
-    }
+  eleventyConfig.addFilter(
+    'buildImgixSrcSet',
+    function (path, widths, params = {}, options = {}) {
+      if (useImgix) {
+        return imgixClient.buildSrcSet(
+          path,
+          {
+            ...defaultImgixParams,
+            ...params,
+          },
+          {
+            widths,
+            ...options,
+          }
+        );
+      }
 
-    return widths && widths.map
-      ? widths.map((w) => `${path} ${w}w`).join(',')
-      : '';
-  });
+      return widths && widths.map
+        ? widths.map((w) => `${path} ${w}w`).join(',')
+        : '';
+    }
+  );
 };
