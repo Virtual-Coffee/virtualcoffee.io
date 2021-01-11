@@ -1,30 +1,31 @@
 ---
-layout: layouts/simple.njk
-title: Virtual Coffee Podcast Trailer
-description: 'Welcome to the Virtual Coffee Podcast!'
+layout: layouts/podcast.njk
+title: "Nick Taylor: Open Source, Live Streaming, and Structured YOLO"
+description: 'Season One, Episode One of the Virtual Coffee Podcast'
 tags: podcast
-date: 2021-01-04
-player: |
-  <div id="buzzsprout-player-7119532"></div>
-  <script src="https://www.buzzsprout.com/1558601/7119532-episode-0-the-virtual-coffee-podcast-trailer.js?container_id=buzzsprout-player-7119532&player=small" type="text/javascript" charset="utf-8"></script>
+date: 2021-01-21
+podcast:
+  season: 1
+  episode: 1
+  intro: |
+    <p>Dan and Bekah welcome Nick Taylor (Senior Software Engineer at Forem/DEV) to talk about his journey into tech, open source, and the importance of community</p>
+  player: |
+    <div id="buzzsprout-player-7119532"></div>
+    <script src="https://www.buzzsprout.com/1558601/7119532-episode-0-the-virtual-coffee-podcast-trailer.js?container_id=buzzsprout-player-7119532&player=small" type="text/javascript" charset="utf-8"></script>
+  guest:
+    name: Nick Taylor
+    headshot: "/assets/images/podcast/0101-nickyt.jpg"
+    headshotAlt: "Nick Talyor in a DEV shirt"
+    bio: |
+      <p>Senior Software Engineer at <a href="https://www.forem.com/">Forem</a>, the software that powers <a href="https://dev.to">DEV</a>, working on all things Forem.</p>
+      <ul>
+        <li><a href="https://iamdeveloper.com">iamdeveloper.com</a></li>
+        <li><a href="https://livecoding.ca">livecoding.ca</a></li>
+        <li><a href="https://twitter.com/nickytonline">twitter.com/nickytonline</a></li>
+        <li><a href="https://dev.to/nickytonline">dev.to/nickytonline</a></li>
+        <li><a href="https://iamdeveloper.com/hacktoberfest2020">Getting the Most Out of Open Source</a></li>
+      </ul>
 ---
-
-<h1>Nick Taylor &em; Intro to Open Source</h1>
-
-<p class="lead">Dan and Bekah welcome Nick Taylor (Senior Software Engineer at Forem/DEV) to talk about his journey into tech, open source, and the importance of community</p>
-
-<hr />
-
-<div>
-  <a target="_blank" href="https://podcasts.apple.com/us/podcast/the-virtual-coffee-podcast/id1547260240" style="vertical-align: middle;display: inline-block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: 10px 7px; height: 40px; width: 162px;">Listen on Apple Podcasts</a>
-  <a target="_blank" href="https://open.spotify.com/show/2i96E6Rm2YyMcGGYSzXlBo" style="vertical-align: middle;display: inline-block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -182px 7px; height: 40px; width: 106px;">Listen on Spotify</a>
-  <a target="_blank" href="https://feeds.buzzsprout.com/1558601.rss" style="vertical-align: middle;display: inline-block; background-color: #000000; background-image: url(https://assets.buzzsprout.com/assets/public_players/listen_on-109d5ef29be389e41e77dd2c26ae2ab0a9cc72a6703624602ab41d9387a85924.svg); background-repeat: no-repeat; background-size: 1350px 28px; border-radius: 5px; text-indent: -9000px; background-position: -317px 7px; height: 40px; width: 121px;">RSS Feed</a>
-</div>
-
-<hr />
-<div class="mb-4">
-  {{player}}
-</div>
 
 <h3>Show Notes:</h3>
 
@@ -41,5 +42,3 @@ player: |
   <li>Dan: <a href="https://dtott.com">dtott.com</a>, Twitter: <a href="https://twitter.com/danieltott">@danieltott</a></li>
 </ul>
 
-
-<p>The Virtual Coffee Podcast is produced by Dan Ott and Bekah Hawrot Weigel and edited by Dan Ott.</p>

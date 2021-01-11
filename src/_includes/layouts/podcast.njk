@@ -1,0 +1,45 @@
+---
+layout: layouts/base.njk
+---
+
+<div class="container-lg py-5">
+
+  <h1 class="display-5">{{title}}</h1>
+  <div class="text-right"><code>Season {{podcast.season}}, Episode {{podcast.episode}} | {{ page.date | dateForDisplay('DDD') }}</code></div>
+
+
+  <div class="lead">{{podcast.intro | safe}}</div>
+
+  <div class="my-4">
+  {{podcast.player | safe}}
+  </div>
+
+
+  {% podcastSubscribe %}
+
+  <hr />
+
+  <div class="row">
+    <div class="col-md-5 col-lg-4 order-md-2 pb-4 pb-md-0">
+      <div class="card">
+        <div class="row no-gutters">
+          <div class="col-sm-4 col-md-12">
+            <img src="{{podcast.guest.headshot}}" alt="{{podcast.guest.headshotAlt}}" class="card-img-top" />
+          </div>
+          <div class="col-sm-8 col-md-12">
+            <div class="card-body">
+              <h5 class="card-title">{{podcast.guest.name}}</h5>
+              {{podcast.guest.bio | safe}}
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 col-lg-8 order-md-1">
+      {{ content | safe }}
+      <p>The Virtual Coffee Podcast is produced by Dan Ott and Bekah Hawrot Weigel and edited by Dan Ott.</p>
+    </div>
+  </div>
+
+</div>
