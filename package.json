@@ -3,20 +3,14 @@
   "version": "2.0.0",
   "description": "The public site for virtualcoffee.io",
   "scripts": {
+    "preinstall": "npx only-allow yarn",
     "start": "npx grunt start",
     "build": "ELEVENTY_ENV=production npx grunt release-prep",
     "serve": "npx grunt connect:server",
     "build-preview": "npm run build && npm run serve"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/Virtual-Coffee/virtualcoffee.io.git"
-  },
-  "author": {
-    "name": "Virtual Coffee",
-    "email": "hello@virtualcoffee.io",
-    "url": "https://virtualcoffee.io/"
-  },
+  "repository": "git://github.com/Virtual-Coffee/virtualcoffee.io.git",
+  "author": "Virtual Coffee <hello@virtualcoffee.io> (https://virtualcoffee.io/)",
   "license": "CC-BY-3.0",
   "bugs": {
     "url": "https://github.com/Virtual-Coffee/virtualcoffee.io/issues"
@@ -61,6 +55,8 @@
     "eleventy-plugin-pwa": "^1.0.8",
     "glob": "7.1.6",
     "imgix-core-js": "2.3.2",
-    "node-fetch": "2.6.1"
-  }
+    "node-fetch": "2.6.1",
+    "only-allow": "^1.0.0"
+  },
+  "main": "index.js"
 }
