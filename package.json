@@ -7,7 +7,7 @@
     "start": "npx grunt start",
     "build": "ELEVENTY_ENV=production npx grunt release-prep",
     "serve": "npx grunt connect:server",
-    "build-preview": "npm run build && npm run serve"
+    "build-preview": "yarn build && yarn serve"
   },
   "repository": "git://github.com/Virtual-Coffee/virtualcoffee.io.git",
   "author": "Virtual Coffee <hello@virtualcoffee.io> (https://virtualcoffee.io/)",
