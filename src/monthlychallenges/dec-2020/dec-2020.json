@@ -98,6 +98,47 @@
         "Bekah",
         "Dominic"
       ]
+    },
+    {
+      "theme": "Advent of Code, Day 9, Part 1 in JavaScript (first half of double session)",
+      "participants": [
+        "Courtney", 
+        "Karen"
+      ]
+    },
+    {
+      "theme": "Advent of Code, Day 9, Part 1 in JavaScript (second half of double session)",
+      "participants": [
+        "Courtney", 
+        "Karen"
+      ]
+    },
+    {
+      "theme": "Worked on Forem issue",
+      "participants": [
+        "Nick",
+        "Dominic"
+      ]
+    },
+    {
+      "theme": "We began rebuilding Meg's Code Talks app using Ruby on Rails with a Docker setup.",
+      "participants": [
+        "Mike",
+        "Meg",
+        "Ana",
+        "Aurelie V.",
+        "Christopher M. J.",
+        "Ghameerah"
+      ]
+    },
+    {
+      "theme": "We reviewed Dominic's progress on the Positivity Toolbox screen for Bekah's Postpartum Wellness app and cleared up an error.",
+      "participants": [
+        "Bekah",
+        "Dominic"
+      ]
     }
   ]
 }
+
+    

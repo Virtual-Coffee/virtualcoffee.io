@@ -1,0 +1,56 @@
+---
+layout: layouts/default.njk
+title: Virtual Coffee Podcast
+description: ''
+tags:
+  - topnav
+homePageBlocks:
+  type: large
+  key: Virtual Coffee Podcast
+  order: 3
+  collectionKey: podcast
+  linkText: 'See more Podcast Episodes'
+hero: 'svg/undraw_walk_in_the_city_1ma6.svg'
+heroHeader: 'Virtual Coffee Podcast'
+eleventyNavigation:
+  key: Podcast
+  order: 5
+---
+
+<div class="py-4">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-sm-4">
+        {% include hero %}
+      </div>
+      <div class="col-sm-8">
+        <h1 class="display-4">{{heroHeader}}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container bodycopy py-5">
+
+  <p class="lead">This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories, who they are, how they found Virtual Coffee, and how that influences their lives as developers.</p>
+
+  <hr />
+
+  {% podcastSubscribe %}
+
+  <hr />
+
+  {% set latest = collections.podcast | reverse | first %}
+  <div class="text-muted">Latest Episode:</div>
+  <h3><a href="{{latest.url}}">{{latest.data.title}}</a></h3>
+  {{latest.data.podcast.player | safe}}
+
+</div>
+
+<div class="bg-light py-5">
+  <div class="container-xl">
+    <h2 class="display-5">All Episodes:</h2>
+
+    {% displayPostList collections.podcast | reverse %}
+  </div>
+</div>

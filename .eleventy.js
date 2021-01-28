@@ -6,37 +6,19 @@ const pluginSyntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 const pluginNavigation = require('@11ty/eleventy-navigation');
 const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
-const pluginPWA = require("eleventy-plugin-pwa");
 
 module.exports = function (eleventyConfig) {
   eleventyConfig.setWatchThrottleWaitTime(100); // in milliseconds
   eleventyConfig.addPlugin(pluginRss);
   eleventyConfig.addPlugin(pluginSyntaxHighlight);
   eleventyConfig.addPlugin(pluginNavigation);
-  eleventyConfig.addPlugin(pluginPWA);
 
   require('./utils/imgix')(eleventyConfig);
+  require('./utils/shortcodes')(eleventyConfig);
 
   eleventyConfig.setDataDeepMerge(true);
 
   eleventyConfig.addLayoutAlias('post', 'layouts/post.njk');
-
-  eleventyConfig.addShortcode('displayPostList', function (posts) {
-    return `<ul class="postlist">
-    ${posts
-      .map(
-        (post) => `<li class="postlist-item">
-      <a class="postlist-title" href="${post.url}">${post.data.title}</a>
-      ${
-        post.data.description
-          ? `<p class="postlist-description">${post.data.description}</p>`
-          : ''
-      }
-    </li>`
-      )
-      .join('')}
-    </ul>`;
-  });
 
   eleventyConfig.addFilter(
     'dateForDisplay',
@@ -44,7 +26,11 @@ module.exports = function (eleventyConfig) {
       const resolvedOptions = {
         ...opts,
       };
-      return DateTime.fromISO(dateString)
+      let d = dateString;
+      if (typeof d === 'object' && d.toISOString) {
+        d = d.toISOString();
+      }
+      return DateTime.fromISO(d)
         .setZone('America/New_York')
         .toFormat(format, resolvedOptions);
     }
@@ -89,6 +75,7 @@ module.exports = function (eleventyConfig) {
   });
 
   eleventyConfig.addPassthroughCopy('src/img');
+  eleventyConfig.addPassthroughCopy('src/service-worker.js');
   eleventyConfig.addPassthroughCopy('src/assets');
   eleventyConfig.addPassthroughCopy('src/css');
   // eleventyConfig.addPassthroughCopy('CODE_OF_CONDUCT.md');
