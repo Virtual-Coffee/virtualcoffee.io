@@ -2,6 +2,6 @@ module.exports = function () {
   const { challengedata } = require('./jan-2021.json');
 
   return {
-    challengedata,
+    list: challengedata.sort((a, b) => a.name.localeCompare(b.name)),
   };
 };
