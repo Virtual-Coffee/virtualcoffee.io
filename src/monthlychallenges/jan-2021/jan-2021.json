@@ -1,20 +1,21 @@
 {
   "challengedata": [
-    {"name": "Bekah",
-      "resources": [
     {
-    
-        "title": "Heydisco: How does machine learning work?",
+      "name": "Bekah",
+      "resources": [
+        {
+          "title": "Heydisco: How does machine learning work?",
           "resourceLink": "https://www.heydisco.com/",
           "description": "A high-level overview of how machine learning works. It's a good resource for beginners. It breaks down concepts into really easy to understand pieces.",
           "price": "I got it on sale in November, and I couldn't find current pricing"
-     },
-     {
-    
-      "title": "Deep Medicine: How Artificial Intelligence Can Make Healthcare Human again",
-        "resourceLink": "https://www.goodreads.com/en/book/show/40915762-deep-medicine",
-        "description": "This is another overview of Deep Learning, but focuses on use cases for the Healthcare Field. It gave a fascinating overview of a lot of different ideas, what's being developed now, what we can expect in the future.",
-        "price": "Free! I borrowed the audiobook from my library."
-   }]}
+        },
+        {
+          "title": "Deep Medicine: How Artificial Intelligence Can Make Healthcare Human again",
+          "resourceLink": "https://www.goodreads.com/en/book/show/40915762-deep-medicine",
+          "description": "This is another overview of Deep Learning, but focuses on use cases for the Healthcare Field. It gave a fascinating overview of a lot of different ideas, what's being developed now, what we can expect in the future.",
+          "price": "Free! I borrowed the audiobook from my library."
+        }
+      ]
+    }
   ]
 }
