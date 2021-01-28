@@ -1,6 +1,22 @@
 ---
 layout: layouts/base.njk
 ---
+{% if hero and heroHeader %}
+<div class="py-4">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-sm-4">
+        {% include hero %}
+      </div>
+      <div class="col-sm-8">
+        <h1 class="display-4">{{heroHeader}}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+{% elif heroHeader %}
+  <div class="container bodycopy pt-5"><h1 class="display-4">{{heroHeader}}</h1></div>
+{% endif %}
 <div class="container bodycopy py-5">
   {{ content | safe }}
 </div>
