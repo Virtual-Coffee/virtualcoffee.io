@@ -28,45 +28,45 @@ tags: monthlychallenges
 <h2>How it works</h2>
 <ul>
   <li>Challenge can be done individually, in self-organized teams, a mixture of both, or some hybrid</li>
-
-  <li>
-    Each week, members choose something they want to learn, the resources they'll use to learn about it, and then dive into learning.
-    
-  </li>
-<li>We encourage you to post your topic and resources for the week in the #monthly-challenge channel in slack, especially if you want to form a group.</li> 
-  <li>
-    At the end of each week, we'll do the official check-in where you can report on what you've learned: <ul>
-    <li>Define -> What's the topic?</li>
-<li>Reference -> Resource you used.</li>
-<li>Member name -> If you're working in a group, you can use one PR to list all members. Otherwise, you can list your name!</li>
+  <li>Each week, members choose something they want to learn, the resources they'll use to learn about it, and then dive into learning.</li>
+  <li>We encourage you to post your topic and resources for the week in the #monthly-challenge channel in slack, especially if you want to form a group.</li>
+  <li>At the end of each week, we'll do the official check-in where you can report on what you've learned:
+    <ul>
+      <li>Define -> What's the topic?</li>
+      <li>Reference -> Resource you used.</li>
+      <li>Member name -> If you're working in a group, you can use one PR to list all members. Otherwise, you can list your name!</li>
     </ul>
   </li>
   <li>
-   At the end of the month, we'll collect recommendations of the best tools, guides, and resources we found as we explored our topics for this month's challenge and share it with the whole community.
+    At the end of the month, we'll collect recommendations of the best tools, guides, and resources we found as we explored our topics for this month's challenge and share it with the whole community.
   </li>
   <li>
     Like previous challenges, you'll be able to track your progress and what you're learning as part of the community through PRs.
   </li>
- <li>
+  <li>
     We're always here to help ❤️
   </li>
 </ul>
+
 <hr />
 
-<h2>Resources Recommended by Our Members:</h2>
-</br>
-{% for person in sortedList %}
+<h2 class="mb-4">Resources Recommended by Our Members:</h2>
 
-  <h3>{{person.name}}</h3>
-  <ul>
+{% for person in list %}
+  <div class="p-3 bg-light rounded mb-3 shadow-sm">
+    <h3 class="h4">{{person.name}}:</h3>
+
     {% for resource in person.resources %}
-      <h4><a href="{{resource.resourceLink}}">{{resource.title}}</a></h4>
-            <p>
-            <strong>Cost</strong>: {{resource.price}}</p>
-            <p>{{ resource.description }}</p>
-
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title"><a href="{{resource.resourceLink}}">{{resource.title}}</a></h5>
+          <h6 class="card-subtitle mb-2 text-muted"><strong>Cost</strong>: {{resource.price}}</h6>
+          <p class="card-text">{{ resource.description }}</p>
+          <a href="{{resource.resourceLink}}">Learn More</a>
+        </div>
+      </div>
     {% endfor %}
-    </br>
+  </div>
 {% endfor %}
 
 
