@@ -1,6 +1,5 @@
 # [![Virtual Coffee](src/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
 
-
 Virtual Coffee is a laid-back conversation with developers twice a week. It's the conversation that keeps going in slack. It's the online events that support developers at all stages of the journey. It's the place where you go to make friends who all just happen to be in tech.
 
 Anyone can join! Whether you're just thinking about getting into tech or have been in it for decades.
@@ -24,7 +23,6 @@ Steps to run the site locally for development or curiosity
 ### 1. Fork and clone the repository
 
 Follow [these steps](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo) to create a fork of this repository and clone it to your local machine.
-
 
 ### 2. Navigate to the repo directory
 
@@ -58,7 +56,6 @@ You should see 'Waiting...' below, which means the watcher is waiting to build y
 
 Use ctrl-c to quit the server when you're done.
 
-
 ## Build Commands
 
 The following commands are for building production-ready versions of the site. If you're interested in seeing what they look like on your machine, feel free to run them! But they are not needed for normal local development.
@@ -78,3 +75,7 @@ yarn build-preview
 ```
 
 If you'd like to see a preview of the production build, use this command to build the site and start up a server at http://localhost:9000. To see any subsequent changes, you can leave this server running, but you'll have to run `yarn build` again in another console tab.
+
+### Heads Up
+
+You may need to [reconfigure your language settings](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/176) after working with this repo.
