@@ -1,17 +1,20 @@
 {
   "challengedata": [
+    {"name": "Bekah",
+      "resources": [
     {
     
         "title": "Heydisco: How does machine learning work?",
           "resourceLink": "https://www.heydisco.com/",
-          "description": "Dr. Grant, my dear Dr. Sattler. Welcome to Jurassic Park.” They turn and look at the view again. It’s beautiful vista, reminiscent of an African plain. A whole herd of dinosaurs crosses the plain, maybe a hundred that we see in a quick glance alone.",
-          "price": "$39 for a subscription"
+          "description": "A high-level overview of how machine learning works. It's a good resource for beginners. It breaks down concepts into really easy to understand pieces.",
+          "price": "I got it on sale in November, and I couldn't find current pricing"
      },
      {
     
-      "title": "A title about something",
-        "resourceLink": "https://www.virtualcoffee.io/",
-        "description": "Lorem ipsum dolor sit amet, id per nulla feugiat conceptam, ei vim dolore apeirian perpetua. Utamur erroribus ut per. Dolor tritani ornatus eu sea, est ex amet melius, iusto gloriatur efficiantur at mea. Sed te volumus denique mediocritatem.",
-        "price": "Free 99"
-   }]
+      "title": "Deep Medicine: How Artificial Intelligence Can Make Healthcare Human again",
+        "resourceLink": "https://www.goodreads.com/en/book/show/40915762-deep-medicine",
+        "description": "This is another overview of Deep Learning, but focuses on use cases for the Healthcare Field. It gave a fascinating overview of a lot of different ideas, what's being developed now, what we can expect in the future.",
+        "price": "Free! I borrowed the audiobook from my library."
+   }]}
+  ]
 }
