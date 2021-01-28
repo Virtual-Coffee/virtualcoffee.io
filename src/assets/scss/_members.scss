@@ -1,38 +1,89 @@
 .membercards {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  gap: map-get($spacers, 4);
+  grid-template-columns: 1fr;
+  margin-bottom: map-get($spacers, 5);
 
   @include media-breakpoint-up(md) {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding-left: 2%;
-    padding-right: 2%;
+    grid-template-columns: 1fr 1fr;
+    gap: map-get($spacers, 5);
   }
 }
 
 .membercard {
-  margin-bottom: map-get($spacers, 5);
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  align-items: flex-start;
+  grid-template-rows: min-content 1fr;
+  grid-gap: 1rem;
+  border-bottom: 1px solid rgba($pink, 0.2);
+  padding-bottom: map-get($spacers, 4);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
 
   @include media-breakpoint-up(md) {
-    width: 50%;
+    border: 0;
+    padding-bottom: 0;
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.membercard-bd {
+  grid-column: 1 / span 2;
+
+  @include media-breakpoint-up(sm) {
+    grid-column: 2;
+  }
+
+  @include media-breakpoint-only(md) {
+    grid-column: 1 / span 2;
+  }
+}
+
+.membercard-img {
+  @include media-breakpoint-up(sm) {
+    grid-row: 1 / span 2;
+  }
+  @include media-breakpoint-only(md) {
+    grid-row: 1;
   }
 }
 
 .membercard-header {
   margin-bottom: map-get($spacers, 2);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'name name'
+    'hire social';
+
+  @include media-breakpoint-only(sm) {
+    grid-template-areas:
+      'name social'
+      'hire ...';
+  }
 
   @include media-breakpoint-up(lg) {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    grid-template-areas:
+      'name social'
+      'hire ...';
   }
+}
 
-  h5 {
-    flex: 1;
-    margin-bottom: 0;
-  }
+.membercard-name {
+  grid-area: name;
+  margin: 0;
+}
+
+.membercard-social {
+  grid-area: social;
+}
+
+.membercard-hire {
+  grid-area: hire;
 }
 
 .membercard-icon {

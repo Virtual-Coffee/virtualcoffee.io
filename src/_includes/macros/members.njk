@@ -1,13 +1,14 @@
 {% macro membercards(membersList) %}
   <div class="membercards">
     {% for member in membersList %}
-      <div class="row membercard">
-        <div class="col-3">
+      <div class="membercard">
+        <div class="membercard-img">
           <img src="{{member.avatar_url}}" class="shadow-sm rounded" alt="{{member.name}} profile image">
         </div>
-        <div class="col-9">
-          <div class="membercard-header">
-            <h5 class="text-truncate">
+
+        <div class="membercard-header">
+
+            <h5 class="membercard-name">
               {% if member.blog %}
                 <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
               {% else %}
@@ -16,17 +17,20 @@
 
             </h5>
             <div class="membercard-social">
-              {% if member.hireable %}
-                <span class="badge badge-secondary">Available for work!</span>
-              {% endif %}
-
               <a href="{{member.html_url}}" class="membercard-icon" title="{{member.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
               {% if member.twitter_username %}
                 <a href="https://twitter.com/{{member.twitter_username}}" title="{{member.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel="noopener noreferrer">{% include "svg/twitter.svg" %}</a>
               {% endif %}
             </div>
-          </div>
-          <p class="text-muted">{{member.bio}}</p>
+
+
+            <div class="membercard-hire">{% if member.hireable %}<span class="badge badge-secondary">Available for work!</span>{% endif %}</div>
+
+        </div>
+        <div class="membercard-bd">
+          {% if member.bio %}
+            <p class="text-muted">{{member.bio}}</p>
+          {% endif %}
           {% if member.blog %}
             <div class="text-truncate">
               <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.blog | replace('https://','') | replace('http://','')}}</a>
