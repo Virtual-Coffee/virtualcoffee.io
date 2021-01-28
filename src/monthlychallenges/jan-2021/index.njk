@@ -55,12 +55,18 @@ tags: monthlychallenges
 
 <h2>Resources Recommended by Our Members:</h2>
 </br>
-    {% for resource in list %}
+{% for person in sortedList %}
+
+  <h3>{{person.name}}</h3>
+  <ul>
+    {% for resource in person.resources %}
       <h4><a href="{{resource.resourceLink}}">{{resource.title}}</a></h4>
             <p>
             <strong>Cost</strong>: {{resource.price}}</p>
             <p>{{ resource.description }}</p>
 
     {% endfor %}
+    </br>
+{% endfor %}
 
 
