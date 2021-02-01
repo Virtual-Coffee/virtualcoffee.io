@@ -33,6 +33,23 @@
           "price": "I got it on sale for $12.00 USD. I think it's normally $129.00 but udemy almost always has sales going on."
         }
       ]
+    },
+    {
+      "name": "Dominic",
+      "resources": [
+        {
+          "title": "A Complete Beginners Guide to React: Hooks Edition",
+          "resourceLink": "https://dev.to/aspittel/a-complete-beginner-s-guide-to-react-hooks-edition-1bi0",
+          "description": "An extremely accessible introduction to React that will get you making something real in no time at all.",
+          "price": "Free!"
+        },
+        {
+          "title": "React 16 Lifecycle Methods: How and When to Use Them",
+          "resourceLink": "https://blog.bitsrc.io/react-16-lifecycle-methods-how-and-when-to-use-them-f4ad31fb2282",
+          "description": "A comprehensive guide to Lifecycle Methods in React 16",
+          "price": "Free!"
+        }
+      ]
     }
   ]
 }
