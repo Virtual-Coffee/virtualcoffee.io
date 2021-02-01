@@ -15,7 +15,7 @@ layout: layouts/base.njk
 
   <div class="lead">{{podcast.intro | safe}}</div>
 
-  <div class="my-4">
+  <div class="my-4 podcastplayer">
   {{podcast.player | safe}}
   </div>
 
@@ -50,7 +50,8 @@ layout: layouts/base.njk
     </div>
     <div class="col-md-7 col-lg-8 order-md-1">
       {{ content | safe }}
-      <p>The Virtual Coffee Podcast is produced by Dan Ott and Bekah Hawrot Weigel and edited by Dan Ott.</p>
+      <hr>
+      <p><em>The Virtual Coffee Podcast is produced by Dan Ott and Bekah Hawrot Weigel and edited by Dan Ott.</em></p>
     </div>
   </div>
 
