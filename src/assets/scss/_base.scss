@@ -70,3 +70,16 @@ ul {
 .podcastplayer {
   min-height: 200px;
 }
+
+.transcript {
+  dt {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  time {
+    font-weight: $font-weight-light;
+    color: $text-muted;
+  }
+}
