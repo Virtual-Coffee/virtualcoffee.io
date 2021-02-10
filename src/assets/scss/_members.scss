@@ -57,20 +57,20 @@
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-areas:
-    'name name'
-    'hire social';
+    'name social'
+    'hire ...';
 
-  @include media-breakpoint-only(sm) {
-    grid-template-areas:
-      'name social'
-      'hire ...';
-  }
+  // @include media-breakpoint-only(sm) {
+  //   grid-template-areas:
+  //     'name social'
+  //     'hire ...';
+  // }
 
-  @include media-breakpoint-up(lg) {
-    grid-template-areas:
-      'name social'
-      'hire ...';
-  }
+  // @include media-breakpoint-up(lg) {
+  //   grid-template-areas:
+  //     'name social'
+  //     'hire ...';
+  // }
 }
 
 .membercard-name {
@@ -123,11 +123,16 @@
 .membercards-sm {
   display: grid;
   gap: 1rem;
-  grid-template-columns: 1fr;
   margin-bottom: map-get($spacers, 5);
+  --numRows: 1;
+  grid-template-columns: repeat(var(--numRows), 1fr);
 
   @include media-breakpoint-up(md) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    --numRows: 3;
+  }
+
+  @include media-breakpoint-up(xl) {
+    --numRows: 4;
   }
 }
 
@@ -139,10 +144,6 @@
   grid-template-columns: 60px 1fr;
 }
 
-.membercard-img-sm {
-}
-
 .membercard-name-sm {
-  // grid-area: name;
   margin: 0;
 }
