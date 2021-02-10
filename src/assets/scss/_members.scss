@@ -12,7 +12,7 @@
 
 .membercard {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 4fr;
   align-items: flex-start;
   grid-template-rows: min-content 1fr;
   grid-gap: 1rem;
@@ -27,7 +27,7 @@
   @include media-breakpoint-up(md) {
     border: 0;
     padding-bottom: 0;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 3fr;
   }
 }
 
@@ -118,4 +118,31 @@
   svg {
     max-width: 600px;
   }
+}
+
+.membercards-sm {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+  margin-bottom: map-get($spacers, 5);
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+.membercard-sm {
+  display: grid;
+  align-items: center;
+  gap: 1rem;
+
+  grid-template-columns: 60px 1fr;
+}
+
+.membercard-img-sm {
+}
+
+.membercard-name-sm {
+  // grid-area: name;
+  margin: 0;
 }

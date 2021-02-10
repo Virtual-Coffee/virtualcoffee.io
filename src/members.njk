@@ -14,7 +14,7 @@ eleventyNavigation:
   order: 2
 ---
 
-{% from "macros/members.njk" import membercards %}
+{% from "macros/members.njk" import membercards, smallMembercards %}
 
 <div class="py-4">
   <div class="container">
@@ -32,14 +32,14 @@ eleventyNavigation:
 
 <div class="bg-light py-5">
   <div class="container-xl">
-    <h2 class="mb-sm-3 mb-md-4 display-4">Leadership Team</h2>
-    <h3 class="mb-sm-3 mb-md-3">Our Founders</h3>
-    {{ membercards(founders) }}
-    <h3 class="mb-sm-3 mb-md-3">Community Engagement</h3>
-    {{ membercards(communityEngagement) }}
+
+    {% for team in members.teams %}
+      <h2 class="mb-sm-3 mb-md-4 display-4">{{team.name}}</h2>
+      {{ smallMembercards(team.members, members.memberData) }}
+    {% endfor %}
 
     <h2 class="mb-sm-3 mb-md-5 display-4">Our Members</h2>
-    {{ membercards(members) }}
+    {{ membercards(members.members, members.memberData) }}
     <div class="member-footer">
       <h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
       {% include "svg/undraw_celebration_0jvk.svg" %}
