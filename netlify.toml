@@ -2,6 +2,12 @@
   publish = "_site"
   command = "yarn build"
 
+[dev]
+  publish = "_site"
+  command = "yarn start"
+  framework = "#custom"
+  targetPort = 9000
+
 [[redirects]]
   from = "/membership"
   to = "/"
