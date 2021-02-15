@@ -51,6 +51,16 @@ layout: layouts/base.njk
     </div>
     <div class="col-md-7 col-lg-8 order-md-1">
       {{ content | safe }}
+      {% if transcript %}
+        <hr>
+        <h3>Transcript:</h3>
+        <dl class="transcript">
+          {% for line in transcript %}
+            <dt>{{line.name}}: <time>{{line.timestamp}}</time></dt>
+            <dd><p>{{line.text}}</p></dd>
+          {% endfor %}
+        </dl>
+      {% endif %}
       <hr>
       <p><em>The Virtual Coffee Podcast is produced by Dan Ott and Bekah Hawrot Weigel and edited by Dan Ott.</em></p>
     </div>
