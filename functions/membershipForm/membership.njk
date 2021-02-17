@@ -1,0 +1,110 @@
+{% set includePath = includePath if includePath else '' %}
+<div class="py-4">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-sm-4">
+
+        {% include includePath + "svg/undraw_Add_user_re_5oib.svg" %}
+
+      </div>
+      <div class="col-sm-8">
+        <h1 class="display-4">Join Virtual Coffee</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-5">
+  <div class="container">
+    <div class="bodycopy">
+    <div class="lead mb-5">
+      <p>Virtual coffee is, and always will be, a genuine community of people who value and prioritize supporting one another. We absolutely love the closeness of this community and know its one of the many things that sets us apart.</p>
+      <p>We strongly value getting to see each other every Tuesday/Thursday and at the many other events we host. Everyone here is amazing and we want to continue to be able to support your needs and personal growth. In order to support you as a community member, we'd love to know a little bit more about you.</p>
+    </div>
+    <form action="/membership-thankyou/" method="POST" netlify="true" name="membership">
+      <input type="hidden" name="form-name" value="membership" />
+      <input type="hidden" name="formID" value="{{formId}}" />
+      <h2>Tell us about yourself!</h2>
+      <fieldset>
+      <legend>Required Information:</legend>
+      <p class="text-muted">Just a couple quick pieces of info that we'll need:</p>
+      <div class="form-group">
+        <label for="formName">Your Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="formName"
+          name="name"
+          aria-describedby="nameHelp"
+          required
+        />
+        <small id="nameHelp" class="form-text text-muted">Required</small>
+      </div>
+      <div class="form-group">
+        <label for="formEmail">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          id="formEmail"
+          name="email"
+          aria-describedby="emailHelp"
+          required
+        />
+        <small id="emailHelp" class="form-text text-muted">Required. We'll never share your email with anyone else.</small>
+      </div>
+      </fieldset>
+      <fieldset>
+      <legend>Tell us some more (if you want)!</legend>
+      <div class="form-group">
+        <label for="pronouns">Your preferred pronouns</label>
+        <input
+          type="text"
+          class="form-control"
+          id="pronouns"
+          name="pronouns"
+        />
+      </div>
+      <div class="form-group">
+        <label for="githubUsername">Your GitHub username (if you have one)</label>
+        <input
+          type="text"
+          class="form-control"
+          id="githubUsername"
+          name="githubUsername"
+        />
+      </div>
+      <div class="form-group">
+        <label for="howDidYouHearAboutUs">How did you hear about Virtual Coffee?</label>
+        <textarea class="form-control" id="howDidYouHearAboutUs" name="howDidYouHearAboutUs" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="journey">Where are you in your coding journey?</label>
+        <textarea class="form-control" id="journey" name="journey" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="codeInterests">What sorts of code-related things are you interested in?</label>
+        <textarea class="form-control" id="codeInterests" name="codeInterests" rows="3"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="virtualCoffee">What are you hoping to get out of joining Virtual Coffee?</label>
+        <textarea class="form-control" id="virtualCoffee" name="virtualCoffee" rows="3"></textarea>
+      </div>
+      </fieldset>
+
+      <p class="lead">Please take a moment to read our <a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>.</p>
+
+      <label class="form-group form-check">
+        <input type="checkbox" name="agree" class="form-check-input" required value="agree">
+        <span class="form-check-label">I've read the Code of Conduct and understand my responsibilities as a member of the Virtual Coffee community</span>
+      </label>
+
+      <div class="text-right">
+      <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+      </div>
+
+
+
+    </form>
+    </div>
+  </div>
+</div>

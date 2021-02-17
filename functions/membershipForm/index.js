@@ -2,8 +2,10 @@ exports.handler = (event, context) => {
   const formId = event.queryStringParameters.formId;
   const nunjucks = require('nunjucks');
 
-  const env = nunjucks.configure('./src', { autoescape: false });
-  console.log(event);
+  const env = nunjucks.configure('./functions/membershipForm', {
+    autoescape: false,
+  });
+
   env.addFilter('assetPath', function (value) {
     if (process.env.ELEVENTY_ENV === 'production') {
       const manifestPath = '../assets.json';
@@ -34,14 +36,14 @@ exports.handler = (event, context) => {
     date: new Date(),
   };
 
-  const content = nunjucks.render('_misc/membership.njk', {
+  const content = env.render('membership.njk', {
     formId,
-    includePath: '_includes/',
+    // includePath: '_includes/',
     page,
   });
-  const body = nunjucks.render('_includes/layouts/base.njk', {
+  const body = env.render('base.njk', {
     content,
-    includePath: '_includes/',
+    // includePath: '_includes/',
     page,
   });
 
