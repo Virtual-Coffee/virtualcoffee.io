@@ -2,7 +2,7 @@ const nunjucks = require('nunjucks');
 
 exports.handler = (event, context) => {
   const formId = event.queryStringParameters.formId;
-
+  console.log(__dirname);
   const env = nunjucks.configure(__dirname, {
     autoescape: false,
   });
@@ -37,6 +37,8 @@ exports.handler = (event, context) => {
     date: new Date(),
   };
 
+  console.log('about to render');
+
   const content = env.render('membership.njk', {
     formId,
     // includePath: '_includes/',
@@ -47,7 +49,7 @@ exports.handler = (event, context) => {
     // includePath: '_includes/',
     page,
   });
-
+  console.log('rendered with no error');
   return {
     statusCode: 200,
     body,
