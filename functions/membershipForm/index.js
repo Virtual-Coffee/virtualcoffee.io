@@ -1,6 +1,6 @@
 const nunjucks = require('nunjucks');
 
-exports.handler = (event, context) => {
+exports.handler = async (event, context) => {
   const formId = event.queryStringParameters.formId;
   console.log(__dirname);
   const env = nunjucks.configure(__dirname, {
