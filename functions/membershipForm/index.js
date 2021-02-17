@@ -53,6 +53,10 @@ exports.handler = (event, context) => {
   console.log(body);
   return {
     statusCode: 200,
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Content-Type': 'text/html',
+    },
     body,
   };
 };
