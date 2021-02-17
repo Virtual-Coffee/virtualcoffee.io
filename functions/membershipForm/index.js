@@ -1,8 +1,9 @@
+const nunjucks = require('nunjucks');
+
 exports.handler = (event, context) => {
   const formId = event.queryStringParameters.formId;
-  const nunjucks = require('nunjucks');
 
-  const env = nunjucks.configure('./functions/membershipForm', {
+  const env = nunjucks.configure(__dirname, {
     autoescape: false,
   });
 
