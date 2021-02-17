@@ -1,15 +1,22 @@
 [build]
   publish = "_site"
   command = "yarn build"
+  functions = "functions" # This seems to help local Netlify detect functions
 
 [dev]
   publish = "_site"
   command = "yarn start"
   framework = "#custom"
   targetPort = 9000
+  functions = "functions" # This seems to help local Netlify detect functions
 
 [[redirects]]
   from = "/membership"
   to = "/"
   status = 301
   force = true
+
+  [[redirects]]
+  from = "/membership/:formId"
+  to = "/.netlify/functions/membershipForm?formId=:formId"
+  status = 200

@@ -1,17 +1,11 @@
----
-pagination:
-  data: membershipFormIds
-  size: 1
-  alias: id
-permalink: 'membership/{{ id }}/'
-layout: layouts/default.njk
----
-
+{% set includePath = includePath if includePath else '' %}
 <div class="py-4">
   <div class="container">
     <div class="row align-items-center">
       <div class="col-sm-4">
-        {% include "svg/undraw_Add_user_re_5oib.svg" %}
+
+        {% include includePath + "svg/undraw_Add_user_re_5oib.svg" %}
+
       </div>
       <div class="col-sm-8">
         <h1 class="display-4">Join Virtual Coffee</h1>
@@ -27,8 +21,9 @@ layout: layouts/default.njk
       <p>Virtual coffee is, and always will be, a genuine community of people who value and prioritize supporting one another. We absolutely love the closeness of this community and know its one of the many things that sets us apart.</p>
       <p>We strongly value getting to see each other every Tuesday/Thursday and at the many other events we host. Everyone here is amazing and we want to continue to be able to support your needs and personal growth. In order to support you as a community member, we'd love to know a little bit more about you.</p>
     </div>
-    <form action="/membership-thankyou" method="POST" netlify="true" name="membership">
-      <input type="hidden" name="formID" value={{id}} />
+    <form action="/membership-thankyou/" method="POST" netlify="true" name="membership">
+      <input type="hidden" name="form-name" value="membership" />
+      <input type="hidden" name="formID" value="{{formId}}" />
       <h2>Tell us about yourself!</h2>
       <fieldset>
       <legend>Required Information:</legend>
