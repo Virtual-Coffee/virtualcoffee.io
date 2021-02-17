@@ -20,3 +20,8 @@
   from = "/membership/:formId"
   to = "/.netlify/functions/membershipForm?formId=:formId"
   status = 200
+
+  [[redirects]]
+  from = "/mnmn"
+  to = "/.netlify/functions/mtest"
+  status = 200
