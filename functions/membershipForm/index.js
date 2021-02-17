@@ -50,6 +50,7 @@ exports.handler = (event, context) => {
     page,
   });
   console.log('rendered with no error');
+  console.log(body);
   return {
     statusCode: 200,
     body,
