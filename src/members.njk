@@ -40,7 +40,7 @@ eleventyNavigation:
     {% endfor %}
 
     <h2 class="mb-sm-3 mb-md-5 display-5">Our Members</h2>
-    {{ membercards(members.members, members.memberData) }}
+    {{ membercards(members.members | sort, members.memberData) }}
     <div class="member-footer">
       <h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
       {% include "svg/undraw_celebration_0jvk.svg" %}
