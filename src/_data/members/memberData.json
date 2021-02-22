@@ -119,7 +119,7 @@
     "name": "Dominic Duffin",
     "company": null,
     "location": "United Kingdom",
-    "isHireable": true,
+    "isHireable": false,
     "bio": "Coding CSS, Elm, React, JavaScript, Python. Working on open source and studying at the Open University (UK).",
     "bioHTML": "<div>Coding CSS, Elm, React, JavaScript, Python. Working on open source and studying at the Open University (UK).</div>",
     "twitterUsername": "DominicDuffin1",
@@ -419,6 +419,20 @@
     "twitterUsername": "LauraOBDev",
     "websiteUrl": null
   },
+  "matthew-dean": {
+    "login": "matthew-dean",
+    "id": "MDQ6VXNlcjQxNDc1Mg==",
+    "url": "https://github.com/matthew-dean",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/414752?u=694a7022ae5bfaed246e4caafb968d51c88d58bc&v=4",
+    "name": "Matthew Dean",
+    "company": null,
+    "location": "Vancouver, BC",
+    "isHireable": false,
+    "bio": "I'm just your regular ol' front-end expert contributing to some shnazzy CSS-y things. He / Him",
+    "bioHTML": "<div>I'm just your regular ol' front-end expert contributing to some shnazzy CSS-y things. He / Him</div>",
+    "twitterUsername": "matthewdeaners",
+    "websiteUrl": null
+  },
   "torianne02": {
     "login": "torianne02",
     "id": "MDQ6VXNlcjM3MzA4ODUz",
@@ -432,6 +446,20 @@
     "bioHTML": "<div>software engineer <a class=\"user-mention\" data-hovercard-type=\"organization\" data-hovercard-url=\"/orgs/firehydrant/hovercard\" href=\"https://github.com/firehydrant\">@firehydrant</a></div>",
     "twitterUsername": "_torrborr",
     "websiteUrl": "https://dev.to/torianne02"
+  },
+  "amyshackles": {
+    "login": "AmyShackles",
+    "id": "MDQ6VXNlcjEzNDM2NDI5",
+    "url": "https://github.com/AmyShackles",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/13436429?v=4",
+    "name": "Amy Shackles",
+    "company": null,
+    "location": null,
+    "isHireable": true,
+    "bio": "Full-Stack Software Developer with a thirst for knowledge and a passion for helping people.  Experienced in JavaScript, React, Node.js, Express.js, MongoDB",
+    "bioHTML": "<div>Full-Stack Software Developer with a thirst for knowledge and a passion for helping people.  Experienced in JavaScript, React, Node.js, Express.js, MongoDB</div>",
+    "twitterUsername": null,
+    "websiteUrl": "https://amyshackles.com"
   },
   "vanessacor": {
     "login": "vanessacor",
@@ -488,6 +516,20 @@
     "bioHTML": "<div>Frontend Developer | JavaScript, React, GraphQL | Tech for good <g-emoji class=\"g-emoji\" alias=\"purple_heart\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f49c.png\">💜</g-emoji> </div>",
     "twitterUsername": "jenkens_",
     "websiteUrl": "https://jenniferwilliams.dev/"
+  },
+  "yolandahaynes": {
+    "login": "YolandaHaynes",
+    "id": "MDQ6VXNlcjEyOTgwNzEw",
+    "url": "https://github.com/YolandaHaynes",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/12980710?u=c2ba18ab218721a35f1011120a44701e09011896&v=4",
+    "name": "Yolanda Haynes",
+    "company": null,
+    "location": null,
+    "isHireable": false,
+    "bio": "Making a career pivot from occupational therapy assistant to full stack web developer. ",
+    "bioHTML": "<div>Making a career pivot from occupational therapy assistant to full stack web developer. </div>",
+    "twitterUsername": "_YolandaHaynes",
+    "websiteUrl": null
   },
   "surajrpanchal": {
     "login": "surajrpanchal",
