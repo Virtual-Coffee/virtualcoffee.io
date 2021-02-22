@@ -1,5 +1,5 @@
 [
-  { "name": "Admins", "members": ["bekahhw", "danieltott"] },
+  { "name": "Org Maintainers", "members": ["bekahhw", "danieltott"] },
   {
     "name": "Community Maintainers",
     "members": ["bekahhw", "saramccombs", "tkshill"]
