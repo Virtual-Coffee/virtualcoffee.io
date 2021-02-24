@@ -59,7 +59,6 @@
 }
 
 .membercard-header {
-  margin-bottom: map-get($spacers, 2);
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-areas:
