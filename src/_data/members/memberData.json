@@ -48,7 +48,7 @@
     "avatarUrl": "https://avatars.githubusercontent.com/u/13651291?u=fd21500fafdf47435560c5384220644d3ed03358&v=4",
     "name": "Chuck ",
     "company": "@eclectic-coding",
-    "location": "Starbucks in Eastern North Carolina",
+    "location": "Social Distancing in Eastern North Carolina",
     "isHireable": true,
     "bio": "Software Developer Ruby, Rails, React, Vuejs, Nuxtjs\r\nLooking for work. ",
     "bioHTML": "<div>Software Developer Ruby, Rails, React, Vuejs, Nuxtjs\nLooking for work. </div>",
@@ -460,6 +460,20 @@
     "bioHTML": "<div>Full-Stack Software Developer with a thirst for knowledge and a passion for helping people.  Experienced in JavaScript, React, Node.js, Express.js, MongoDB</div>",
     "twitterUsername": null,
     "websiteUrl": "https://amyshackles.com"
+  },
+  "bogdaaamn": {
+    "login": "BogDAAAMN",
+    "id": "MDQ6VXNlcjIyODk1Mjg0",
+    "url": "https://github.com/BogDAAAMN",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/22895284?u=f0625cb575f32994dee95e18878438e4f79cc5f9&v=4",
+    "name": "Bogdan Covrig",
+    "company": "Maastricht Law&Tech Lab",
+    "location": "Netherlands x Romania",
+    "isHireable": false,
+    "bio": "Software engineer. Building data infrastructures supporting legal research frameworks. Research interest are privacy and security, consumer profiling, and HCI.",
+    "bioHTML": "<div>Software engineer. Building data infrastructures supporting legal research frameworks. Research interest are privacy and security, consumer profiling, and HCI.</div>",
+    "twitterUsername": "BogdanCovrig",
+    "websiteUrl": null
   },
   "vanessacor": {
     "login": "vanessacor",
