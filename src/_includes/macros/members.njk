@@ -46,23 +46,3 @@
     {% endfor %}
   </div>
 {% endmacro %}
-
-{% macro smallMembercards(membersList, memberData) %}
-  <div class="membercards-sm">
-    {% for username in membersList %}
-      {% set member = memberData[username | lower] %}
-      <div class="membercard-sm">
-        <div class="membercard-img-sm">
-          <img src="{{member.avatarUrl}}" class="shadow-sm rounded" alt="{{member.name}} profile image">
-        </div>
-
-
-            <h5 class="membercard-name-sm">
-                <a href="#member_{{username}}">{{member.name}}</a>
-            </h5>
-
-
-      </div>
-    {% endfor %}
-  </div>
-{% endmacro %}

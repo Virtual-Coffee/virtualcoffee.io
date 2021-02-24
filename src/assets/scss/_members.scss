@@ -124,31 +124,3 @@
     max-width: 600px;
   }
 }
-
-.membercards-sm {
-  display: grid;
-  gap: 1rem;
-  margin-bottom: map-get($spacers, 5);
-  --numRows: 1;
-  grid-template-columns: repeat(var(--numRows), 1fr);
-
-  @include media-breakpoint-up(md) {
-    --numRows: 3;
-  }
-
-  @include media-breakpoint-up(xl) {
-    --numRows: 4;
-  }
-}
-
-.membercard-sm {
-  display: grid;
-  align-items: center;
-  gap: 1rem;
-
-  grid-template-columns: 60px 1fr;
-}
-
-.membercard-name-sm {
-  margin: 0;
-}
