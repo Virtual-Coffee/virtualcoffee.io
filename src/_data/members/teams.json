@@ -1,7 +1,7 @@
 [
-  { "name": "Org Maintainers", "members": ["bekahhw", "danieltott"] },
+  { "name": "Org Maintainer", "members": ["bekahhw", "danieltott"] },
   {
-    "name": "Community Maintainers",
+    "name": "Community Maintainer",
     "members": ["bekahhw", "saramccombs", "tkshill"]
   }
 ]

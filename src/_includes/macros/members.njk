@@ -25,7 +25,11 @@
             </div>
 
 
-            <div class="membercard-hire">{% if member.isHireable %}<span class="badge badge-secondary">Available for work!</span>{% endif %}</div>
+            <div class="membercard-teams">
+              {% for team in member.teams %}
+                <span class="badge badge-secondary">{{team}}</span>
+              {% endfor %}
+            </div>
 
         </div>
         <div class="membercard-bd">

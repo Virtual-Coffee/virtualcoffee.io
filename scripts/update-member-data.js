@@ -42,13 +42,41 @@ async function main() {
     }
   `;
 
+  const teamsDict = {};
+  const teamsData = JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, '../', 'src', '_data', 'members', 'teams.json'),
+      'utf8'
+    )
+  );
+
+  teamsData.forEach((team) => {
+    team.members.forEach((member) => {
+      const lcMember = member.toLowerCase();
+      if (teamsDict[lcMember]) {
+        teamsDict[lcMember].push(team.name);
+      } else {
+        teamsDict[lcMember] = [team.name];
+      }
+    });
+  });
+
   const memberData = {};
-  const data = JSON.parse(
+  const membersdata = JSON.parse(
     fs.readFileSync(
       path.resolve(__dirname, '../', 'src', '_data', 'members', 'members.json'),
       'utf8'
     )
   );
+
+  const coredata = JSON.parse(
+    fs.readFileSync(
+      path.resolve(__dirname, '../', 'src', '_data', 'members', 'core.json'),
+      'utf8'
+    )
+  );
+
+  const data = [...coredata, ...membersdata];
 
   const queries = [];
 
@@ -71,7 +99,10 @@ async function main() {
       });
 
       response.search.nodes.forEach((user) => {
-        memberData[user.login.toLowerCase()] = user;
+        memberData[user.login.toLowerCase()] = {
+          ...user,
+          teams: teamsDict[user.login.toLowerCase()] || [],
+        };
       });
     } catch (e) {
       console.log(e.message);

@@ -33,11 +33,9 @@ eleventyNavigation:
 <div class="bg-light py-5">
   <div class="container-xl">
 
-    {% for team in members.teams %}
-      <h2 class="mb-sm-3 mb-md-4 display-5">{{team.name}}</h2>
-      {{ smallMembercards(team.members, members.memberData) }}
-      <hr>
-    {% endfor %}
+    <h2 class="mb-sm-3 mb-md-4 display-5">Core Team</h2>
+    {{ membercards(members.core, members.memberData) }}
+    <hr>
 
     <h2 class="mb-sm-3 mb-md-5 display-5">Our Members</h2>
     {{ membercards(members.members | sort, members.memberData) }}

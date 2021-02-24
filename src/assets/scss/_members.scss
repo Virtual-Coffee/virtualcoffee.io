@@ -63,18 +63,18 @@
   grid-template-columns: 1fr auto;
   grid-template-areas:
     'name social'
-    'hire ...';
+    'teams ...';
 
   // @include media-breakpoint-only(sm) {
   //   grid-template-areas:
   //     'name social'
-  //     'hire ...';
+  //     'teams ...';
   // }
 
   // @include media-breakpoint-up(lg) {
   //   grid-template-areas:
   //     'name social'
-  //     'hire ...';
+  //     'teams ...';
   // }
 }
 
@@ -87,8 +87,8 @@
   grid-area: social;
 }
 
-.membercard-hire {
-  grid-area: hire;
+.membercard-teams {
+  grid-area: teams;
 }
 
 .membercard-icon {
