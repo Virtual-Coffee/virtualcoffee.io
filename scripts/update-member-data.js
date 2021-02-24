@@ -5,11 +5,15 @@ var fs = require('fs');
 const path = require('path');
 
 async function main() {
-  const token = process.env.GITHUB_TOKEN;
   let headers = new fetch.Headers({
-    Authorization: 'bearer ' + token,
     Accept: 'application/vnd.github.v3+json',
   });
+
+  const token = process.env.GITHUB_TOKEN;
+
+  if (token) {
+    headers.set('Authorization', 'bearer ' + token);
+  }
 
   const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
     headers,
