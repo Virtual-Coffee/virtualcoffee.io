@@ -1,39 +1,44 @@
-{% macro membercards(membersList) %}
+{% macro membercards(membersList, memberData) %}
   <div class="membercards">
-    {% for member in membersList %}
-      <div class="membercard">
+    {% for username in membersList %}
+      {% set member = memberData[username | lower] %}
+      <div class="membercard" id="member_{{username}}">
         <div class="membercard-img">
-          <img src="{{member.avatar_url}}" class="shadow-sm rounded" alt="{{member.name}} profile image">
+          <img src="{{member.avatarUrl}}" alt="{{member.name}} profile image">
         </div>
 
         <div class="membercard-header">
 
             <h5 class="membercard-name">
-              {% if member.blog %}
-                <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
+              {% if member.websiteUrl %}
+                <a href="{{member.websiteUrl}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
               {% else %}
-                <a href="{{member.html_url}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
+                <a href="{{member.url}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
               {% endif %}
 
             </h5>
             <div class="membercard-social">
-              <a href="{{member.html_url}}" class="membercard-icon" title="{{member.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
-              {% if member.twitter_username %}
-                <a href="https://twitter.com/{{member.twitter_username}}" title="{{member.twitter_username}} on Twitter" class="membercard-icon" target="_blank" rel="noopener noreferrer">{% include "svg/twitter.svg" %}</a>
+              <a href="{{member.url}}" class="membercard-icon" title="{{member.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
+              {% if member.twitterUsername %}
+                <a href="https://twitter.com/{{member.twitterUsername}}" title="{{member.twitterUsername}} on Twitter" class="membercard-icon" target="_blank" rel="noopener noreferrer">{% include "svg/twitter.svg" %}</a>
               {% endif %}
             </div>
 
 
-            <div class="membercard-hire">{% if member.hireable %}<span class="badge badge-secondary">Available for work!</span>{% endif %}</div>
+            <div class="membercard-teams">
+              {% for team in member.teams %}
+                <span class="badge badge-secondary">{{team}}</span>
+              {% endfor %}
+            </div>
 
         </div>
         <div class="membercard-bd">
-          {% if member.bio %}
-            <p class="text-muted">{{member.bio}}</p>
+          {% if member.bioHTML %}
+            <div class="text-muted">{{member.bioHTML | safe}}</div>
           {% endif %}
-          {% if member.blog %}
+          {% if member.websiteUrl %}
             <div class="text-truncate">
-              <a href="{{member.blog}}" target="_blank" rel="noopener noreferrer">{{member.blog | replace('https://','') | replace('http://','')}}</a>
+              <a href="{{member.websiteUrl}}" target="_blank" rel="noopener noreferrer">{{member.websiteUrl | replace('https://','') | replace('http://','')}}</a>
             </div>
           {% endif %}
         </div>

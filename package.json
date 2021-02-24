@@ -7,7 +7,8 @@
     "start": "npx grunt start",
     "build": "ELEVENTY_ENV=production npx grunt release-prep",
     "serve": "npx grunt connect:server",
-    "build-preview": "yarn build && yarn serve"
+    "build-preview": "yarn build && yarn serve",
+    "update-member-data": "node ./scripts/update-member-data.js"
   },
   "repository": "git://github.com/Virtual-Coffee/virtualcoffee.io.git",
   "author": "Virtual Coffee <hello@virtualcoffee.io> (https://virtualcoffee.io/)",
@@ -53,7 +54,8 @@
     "bootstrap": "4.6.0",
     "dotenv": "8.2.0",
     "eleventy-plugin-pwa": "^1.0.8",
-    "glob": "7.1.6",
+    "graphql": "^15.5.0",
+    "graphql-request": "^3.4.0",
     "imgix-core-js": "2.3.2",
     "node-fetch": "2.6.1",
     "only-allow": "^1.0.0"

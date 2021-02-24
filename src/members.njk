@@ -32,14 +32,13 @@ eleventyNavigation:
 
 <div class="bg-light py-5">
   <div class="container-xl">
-    <h2 class="mb-sm-3 mb-md-4 display-4">Leadership Team</h2>
-    <h3 class="mb-sm-3 mb-md-3">Our Founders</h3>
-    {{ membercards(founders) }}
-    <h3 class="mb-sm-3 mb-md-3">Community Engagement</h3>
-    {{ membercards(communityEngagement) }}
 
-    <h2 class="mb-sm-3 mb-md-5 display-4">Our Members</h2>
-    {{ membercards(members) }}
+    <h2 class="mb-sm-3 mb-md-4 display-5">Core Team</h2>
+    {{ membercards(members.core, members.memberData) }}
+    <hr>
+
+    <h2 class="mb-sm-3 mb-md-5 display-5">Our Members</h2>
+    {{ membercards(members.members | sort, members.memberData) }}
     <div class="member-footer">
       <h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
       {% include "svg/undraw_celebration_0jvk.svg" %}
