@@ -107,8 +107,8 @@
     "isHireable": true,
     "bio": "Full Stack. Functional Programming main. F#, Elm, Python, SQL Server. Trying kindness. Community Manager at virtualcoffee.io",
     "bioHTML": "<div>Full Stack. Functional Programming main. F#, Elm, Python, SQL Server. Trying kindness. Community Manager at virtualcoffee.io</div>",
-    "twitterUsername": "tkshillinz",
-    "websiteUrl": "https://gistlog.co/tkshill",
+    "twitterUsername": "KirkCodes",
+    "websiteUrl": "https://github.com/tkshill",
     "teams": [
       "Community Maintainer"
     ]
@@ -143,21 +143,6 @@
     "websiteUrl": "https://www.linkedin.com/in/chadrstewart",
     "teams": []
   },
-  "adiati98": {
-    "login": "adiati98",
-    "id": "MDQ6VXNlcjQ1MTcyNzc1",
-    "url": "https://github.com/adiati98",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/45172775?u=f5b1e073a232933e612369da42c44d62739bb165&v=4",
-    "name": "Ayu Adiati",
-    "company": null,
-    "location": "The Netherlands",
-    "isHireable": false,
-    "bio": "🤓 Life-long learner\r\n👨‍👩‍👧 A wife & a mother \r\n📑 Aiming to be front-end/fullstack web developer ",
-    "bioHTML": "<div><g-emoji class=\"g-emoji\" alias=\"nerd_face\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f913.png\">🤓</g-emoji> Life-long learner\n<g-emoji class=\"g-emoji\" alias=\"family_man_woman_girl\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f469-1f467.png\">👨‍👩‍👧</g-emoji> A wife &amp; a mother \n<g-emoji class=\"g-emoji\" alias=\"bookmark_tabs\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4d1.png\">📑</g-emoji> Aiming to be front-end/fullstack web developer </div>",
-    "twitterUsername": "AdiatiAyu",
-    "websiteUrl": "https://adiati.com",
-    "teams": []
-  },
   "clandau": {
     "login": "clandau",
     "id": "MDQ6VXNlcjEyMzUwMDQy",
@@ -171,6 +156,21 @@
     "bioHTML": "",
     "twitterUsername": null,
     "websiteUrl": "celandau.com",
+    "teams": []
+  },
+  "adiati98": {
+    "login": "adiati98",
+    "id": "MDQ6VXNlcjQ1MTcyNzc1",
+    "url": "https://github.com/adiati98",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/45172775?u=f5b1e073a232933e612369da42c44d62739bb165&v=4",
+    "name": "Ayu Adiati",
+    "company": null,
+    "location": "The Netherlands",
+    "isHireable": false,
+    "bio": "🤓 Life-long learner\r\n👨‍👩‍👧 A wife & a mother \r\n📑 Aiming to be front-end/fullstack web developer ",
+    "bioHTML": "<div><g-emoji class=\"g-emoji\" alias=\"nerd_face\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f913.png\">🤓</g-emoji> Life-long learner\n<g-emoji class=\"g-emoji\" alias=\"family_man_woman_girl\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f469-1f467.png\">👨‍👩‍👧</g-emoji> A wife &amp; a mother \n<g-emoji class=\"g-emoji\" alias=\"bookmark_tabs\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4d1.png\">📑</g-emoji> Aiming to be front-end/fullstack web developer </div>",
+    "twitterUsername": "AdiatiAyu",
+    "websiteUrl": "https://adiati.com",
     "teams": []
   },
   "cljarvis": {
@@ -257,8 +257,8 @@
     "company": "@forem",
     "location": "Montreal, Canada",
     "isHireable": false,
-    "bio": "Lead Software Engineer @forem / @thepracticaldev",
-    "bioHTML": "<div>Lead Software Engineer <a class=\"user-mention\" data-hovercard-type=\"organization\" data-hovercard-url=\"/orgs/forem/hovercard\" href=\"https://github.com/forem\">@forem</a> / <a class=\"user-mention\" data-hovercard-type=\"organization\" data-hovercard-url=\"/orgs/thepracticaldev/hovercard\" href=\"https://github.com/thepracticaldev\">@thepracticaldev</a></div>",
+    "bio": "Lead Software Engineer @forem",
+    "bioHTML": "<div>Lead Software Engineer <a class=\"user-mention\" data-hovercard-type=\"organization\" data-hovercard-url=\"/orgs/forem/hovercard\" href=\"https://github.com/forem\">@forem</a></div>",
     "twitterUsername": "nickytonline",
     "websiteUrl": "https://iamdeveloper.com",
     "teams": []
@@ -576,6 +576,21 @@
     "bioHTML": "<div>Frontend Developer | JavaScript, React, GraphQL | Tech for good <g-emoji class=\"g-emoji\" alias=\"purple_heart\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f49c.png\">💜</g-emoji> </div>",
     "twitterUsername": "jenkens_",
     "websiteUrl": "https://jenniferwilliams.dev/",
+    "teams": []
+  },
+  "tomcudd": {
+    "login": "tomcudd",
+    "id": "MDQ6VXNlcjMwMjAzMjA3",
+    "url": "https://github.com/tomcudd",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/30203207?u=50b46c25bc7fa86c68df048d1fbd2b09ba074c34&v=4",
+    "name": "Tom Cudd",
+    "company": null,
+    "location": "Kansas City, MO",
+    "isHireable": false,
+    "bio": "As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.",
+    "bioHTML": "<div>As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.</div>",
+    "twitterUsername": "tomcudd",
+    "websiteUrl": "https://tomcudd.com",
     "teams": []
   },
   "yolandahaynes": {
