@@ -9,20 +9,11 @@ module.exports = function () {
     title: 'Virtual Coffee',
     url: baseUrl,
     description: 'An intimate community for all devs, optimized for you',
-    feed: {
-      subtitle: 'An intimate community for all devs, optimized for you',
-      filename: 'feed.xml',
-      path: '/feed/feed.xml',
-      id: baseUrl,
-    },
-    jsonfeed: {
-      path: '/feed/feed.json',
-      url: `${baseUrl}/feed/feed.json`,
-    },
-    author: {
-      name: 'Virtual Coffee',
-      email: 'hello@virtualcoffee.io',
-      url: baseUrl,
+    tags: {
+      'og:type': 'website',
+      'og:image': '/assets/images/vc-social-card.png',
+      'twitter:card': 'summary_large_image',
+      'twitter:image': '/assets/images/vc-social-card.png',
     },
   };
 };
