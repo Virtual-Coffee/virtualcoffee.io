@@ -1,23 +1,30 @@
 {% set pageUrl = page.url | qualifiedUrl %}
+{% set pageTitle = title or metadata.title  %}
+{% set pageDescription = pageDescription %}
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title or metadata.title }}</title>
+    <title>{{ pageTitle }}</title>
     <meta name="description" content="{{ description or metadata.description }}">
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | assetPath }}"/>
     <link rel="canonical" href="{{pageUrl}}" />
 
-    <meta property="og:title" content="{{ title or metadata.title }}" />
-    <meta property="og:description" content="{{ description or metadata.description }}" />
+    <meta property="og:title" content="{{ pageTitle }}" />
     <meta property="og:url" content="{{pageUrl}}" />
-    <meta property="og:image" content="{{ '/assets/images/vc-social-card.png' | qualifiedUrl }}">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ title or metadata.title }}" />
-    <meta name="twitter:description" content="{{ description or metadata.description }}" />
+    <meta property="og:description" content="{{ pageDescription }}" />
+    <meta name="twitter:title" content="{{ pageTitle }}" />
+    <meta name="twitter:description" content="{{ pageDescription }}" />
     <meta name="twitter:url" content="{{pageUrl}}" />
-    <meta name="twitter:image" content="{{ '/assets/images/vc-social-card.png' | qualifiedUrl }}">
+
+    {% for property,content in metadata.tags %}
+      {% if content[0] == '/' %}
+        <meta property="{{property}}" content="{{content | qualifiedUrl}}" />
+      {% else %}
+        <meta property="{{property}}" content="{{content}}" />
+      {% endif %}
+    {% endfor %}
 
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
