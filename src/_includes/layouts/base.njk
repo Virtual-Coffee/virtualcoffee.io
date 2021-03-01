@@ -19,7 +19,11 @@
     <meta name="twitter:url" content="{{pageUrl}}" />
 
     {% for property,content in metadata.tags %}
-      <meta property="{{property}}" content="{{content}}" />
+      {% if content[0] == '/' %}
+        <meta property="{{property}}" content="{{content | qualifiedUrl}}" />
+      {% else %}
+        <meta property="{{property}}" content="{{content}}" />
+      {% endif %}
     {% endfor %}
 
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
