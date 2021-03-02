@@ -1,6 +1,6 @@
 {% set pageUrl = page.url | qualifiedUrl %}
 {% set pageTitle = title or metadata.title  %}
-{% set pageDescription = pageDescription %}
+{% set pageDescription = description or metadata.description %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | assetPath }}"/>
     <link rel="canonical" href="{{pageUrl}}" />
 
+    <meta property="og:site_name" content="Virtual Coffee">
     <meta property="og:title" content="{{ pageTitle }}" />
     <meta property="og:url" content="{{pageUrl}}" />
     <meta property="og:description" content="{{ pageDescription }}" />
