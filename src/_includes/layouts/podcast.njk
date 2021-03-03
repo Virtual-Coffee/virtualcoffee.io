@@ -27,7 +27,10 @@ metadata:
   <div class="lead">{{podcast.intro | safe}}</div>
 
   <div class="my-4 podcastplayer">
-  {{podcast.player | safe}}
+    {% if podcast.playerSrc %}
+      <div id="buzzsprout-player-{{podcast.blob_id}}"></div>
+      <script src="{{podcast.playerSrc}}" type="text/javascript" charset="utf-8" async></script>
+    {% endif %}
   </div>
 
 

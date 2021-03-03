@@ -43,7 +43,13 @@ eleventyNavigation:
   {% set latest = collections.podcast | reverse | first %}
   <div class="text-muted">Latest Episode:</div>
   <h3><a href="{{latest.url}}">{{latest.data.title}}</a></h3>
-  {{latest.data.podcast.player | safe}}
+
+  <div class="mt-4 podcastplayer">
+    {% if latest.data.podcast.playerSrc %}
+      <div id="buzzsprout-player-{{latest.data.podcast.blob_id}}"></div>
+      <script src="{{latest.data.podcast.playerSrc}}" type="text/javascript" charset="utf-8" async></script>
+    {% endif %}
+  </div>
 
 </div>
 
