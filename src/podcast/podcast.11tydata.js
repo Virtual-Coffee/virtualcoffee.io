@@ -1,9 +1,85 @@
+const ImgixClient = require('imgix-core-js');
 const fs = require('fs');
 const path = require('path');
+const querystring = require('querystring');
+
+const useImgix =
+  process.env.USE_IMGIX || process.env.ELEVENTY_ENV === 'production';
+
+var imgixClient = new ImgixClient({
+  domain: 'virtualcoffee.imgix.net',
+});
 
 module.exports = {
   eleventyComputed: {
+    metadata: (data) => {
+      if (data.podcast) {
+        try {
+          const { mp3, card } = data.podcast;
+          if (mp3 && card) {
+            const [urlKey, query] = mp3.split('.mp3?');
+            const queries = querystring.parse(query);
+
+            return {
+              ...data.metadata,
+              tags: {
+                ...data.metadata.tags,
+                'twitter:player':
+                  urlKey +
+                  '?client_source=twitter_card&amp;player_type=full_screen',
+                'twitter:player:stream': `${urlKey}'.mp3?blob_id=${queries.blob_id}&client_source=twitter_card`,
+                'og:image': useImgix
+                  ? imgixClient.buildURL(card, {
+                      w: 250,
+                      h: 250,
+                      fit: 'crop',
+                      auto: 'compress,format',
+                    })
+                  : card,
+                'twitter:image': useImgix
+                  ? imgixClient.buildURL(card, {
+                      w: 1200,
+                      h: 1200,
+                      fit: 'crop',
+                      auto: 'compress,format',
+                    })
+                  : card,
+              },
+            };
+          }
+          return data.metadata;
+        } catch (e) {
+          console.log(e);
+          return data.metadata;
+        }
+      }
+      return data.metadata;
+    },
+
+    podcast: (data) => {
+      if (data.podcast) {
+        try {
+          const { mp3 } = data.podcast;
+          if (mp3) {
+            const [urlKey, query] = mp3.split('.mp3?');
+            const queries = querystring.parse(query);
+            return {
+              ...data.podcast,
+              blob_id: queries.blob_id,
+              playerSrc: `${urlKey}.js?container_id=buzzsprout-player-${queries.blob_id}&player=small`,
+            };
+          }
+          return data.podcast;
+        } catch (e) {
+          console.log(e);
+          return data.podcast;
+        }
+      }
+      return data.podcast;
+    },
+
     transcript: (data) => {
+      // attach transcript
       try {
         const filename = path.resolve(
           __dirname,
@@ -34,11 +110,12 @@ module.exports = {
 
           return r;
         }
-        return undefined;
       } catch (error) {
         console.log(error);
         return undefined;
       }
+
+      return undefined;
     },
   },
 };

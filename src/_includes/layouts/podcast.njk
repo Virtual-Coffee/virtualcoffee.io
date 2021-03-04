@@ -2,9 +2,10 @@
 layout: layouts/base.njk
 metadata:
   tags:
+    'fb:app_id': '1345357125835406'
     'og:type': 'video.episode'
-    'og:image:width': 600
-    'og:image:height': 600
+    'og:image:width': 250
+    'og:image:height': 250
     'twitter:card': 'player'
     'twitter:site': '@VirtualCoffeeIO'
     'twitter:player:width': '500'
@@ -26,7 +27,10 @@ metadata:
   <div class="lead">{{podcast.intro | safe}}</div>
 
   <div class="my-4 podcastplayer">
-  {{podcast.player | safe}}
+    {% if podcast.playerSrc %}
+      <div id="buzzsprout-player-{{podcast.blob_id}}"></div>
+      <script src="{{podcast.playerSrc}}" type="text/javascript" charset="utf-8" async></script>
+    {% endif %}
   </div>
 
 
