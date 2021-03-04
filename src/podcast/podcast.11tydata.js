@@ -31,12 +31,16 @@ module.exports = {
                 'og:image': useImgix
                   ? imgixClient.buildURL(card, {
                       w: 250,
+                      h: 250,
+                      fit: 'crop',
                       auto: 'compress,format',
                     })
                   : card,
                 'twitter:image': useImgix
                   ? imgixClient.buildURL(card, {
                       w: 1200,
+                      h: 1200,
+                      fit: 'crop',
                       auto: 'compress,format',
                     })
                   : card,
