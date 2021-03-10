@@ -8,8 +8,8 @@
     "company": null,
     "location": null,
     "isHireable": false,
-    "bio": "Community + Code |\r\nFounder @Virtual-Coffee |\r\nFrontend Dev \r\n",
-    "bioHTML": "<div>Community + Code |\nFounder <a class=\"user-mention\" data-hovercard-type=\"organization\" data-hovercard-url=\"/orgs/Virtual-Coffee/hovercard\" href=\"https://github.com/Virtual-Coffee\">@Virtual-Coffee</a> |\nFrontend Dev \n</div>",
+    "bio": "Community + Code |\r\nCreator, Maintainer @Virtual-Coffee |\r\nFrontend Dev \r\n",
+    "bioHTML": "<div>Community + Code |\nCreator, Maintainer <a class=\"user-mention\" data-hovercard-type=\"organization\" data-hovercard-url=\"/orgs/Virtual-Coffee/hovercard\" href=\"https://github.com/Virtual-Coffee\">@Virtual-Coffee</a> |\nFrontend Dev \n</div>",
     "twitterUsername": "bekahhw",
     "websiteUrl": "https://bekahhw.github.io/",
     "teams": [
@@ -79,23 +79,6 @@
     "websiteUrl": "https://andreamartz.dev/",
     "teams": []
   },
-  "danieltott": {
-    "login": "danieltott",
-    "id": "MDQ6VXNlcjM2MDI2MQ==",
-    "url": "https://github.com/danieltott",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/360261?u=dc2ed0011e26c0ef35bb8c1d8f8868b8a64402c5&v=4",
-    "name": "Dan Ott",
-    "company": "@Sprokets",
-    "location": "Lakewood, OH",
-    "isHireable": false,
-    "bio": "Independent front-end designer and developer, father, #ADHD person, and Clevelander. He/him",
-    "bioHTML": "<div>Independent front-end designer and developer, father, #ADHD person, and Clevelander. He/him</div>",
-    "twitterUsername": "danieltott",
-    "websiteUrl": "https://dtott.com",
-    "teams": [
-      "Org Maintainer"
-    ]
-  },
   "tkshill": {
     "login": "tkshill",
     "id": "MDQ6VXNlcjEzMjkyODg2",
@@ -111,6 +94,23 @@
     "websiteUrl": "https://github.com/tkshill",
     "teams": [
       "Community Maintainer"
+    ]
+  },
+  "danieltott": {
+    "login": "danieltott",
+    "id": "MDQ6VXNlcjM2MDI2MQ==",
+    "url": "https://github.com/danieltott",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/360261?u=dc2ed0011e26c0ef35bb8c1d8f8868b8a64402c5&v=4",
+    "name": "Dan Ott",
+    "company": "@Sprokets",
+    "location": "Lakewood, OH",
+    "isHireable": false,
+    "bio": "Independent front-end designer and developer, father, #ADHD person, and Clevelander. He/him",
+    "bioHTML": "<div>Independent front-end designer and developer, father, #ADHD person, and Clevelander. He/him</div>",
+    "twitterUsername": "danieltott",
+    "websiteUrl": "https://dtott.com",
+    "teams": [
+      "Org Maintainer"
     ]
   },
   "danieluhl": {
@@ -323,21 +323,6 @@
     "websiteUrl": "https://www.jonathanyeong.com",
     "teams": []
   },
-  "cerchie": {
-    "login": "Cerchie",
-    "id": "MDQ6VXNlcjU0MDQ2MTc5",
-    "url": "https://github.com/Cerchie",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/54046179?u=e058d96fefda9f114ca0a0c72caeb5a6ac6069d9&v=4",
-    "name": "Lucia Cerchie",
-    "company": null,
-    "location": "Phoenix",
-    "isHireable": false,
-    "bio": "Hi there! I love working with JS and Python. I'm an Arizona transplant 🌵 who gets going with coffee and winds down with yoga.",
-    "bioHTML": "<div>Hi there! I love working with JS and Python. I'm an Arizona transplant <g-emoji class=\"g-emoji\" alias=\"cactus\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f335.png\">🌵</g-emoji> who gets going with coffee and winds down with yoga.</div>",
-    "twitterUsername": "CerchieLucia",
-    "websiteUrl": "https://luciacerchie.dev/",
-    "teams": []
-  },
   "mrsantons": {
     "login": "mrsantons",
     "id": "MDQ6VXNlcjUyNTczOTgx",
@@ -351,6 +336,21 @@
     "bioHTML": "<div>\nJunior Developer</div>",
     "twitterUsername": "MarieAntons",
     "websiteUrl": null,
+    "teams": []
+  },
+  "cerchie": {
+    "login": "Cerchie",
+    "id": "MDQ6VXNlcjU0MDQ2MTc5",
+    "url": "https://github.com/Cerchie",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/54046179?u=e058d96fefda9f114ca0a0c72caeb5a6ac6069d9&v=4",
+    "name": "Lucia Cerchie",
+    "company": null,
+    "location": "Phoenix",
+    "isHireable": false,
+    "bio": "Hi there! I love working with JS and Python. I'm an Arizona transplant 🌵 who gets going with coffee and winds down with yoga.",
+    "bioHTML": "<div>Hi there! I love working with JS and Python. I'm an Arizona transplant <g-emoji class=\"g-emoji\" alias=\"cactus\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f335.png\">🌵</g-emoji> who gets going with coffee and winds down with yoga.</div>",
+    "twitterUsername": "CerchieLucia",
+    "websiteUrl": "https://luciacerchie.dev/",
     "teams": []
   },
   "dominicduffin1": {
@@ -556,11 +556,11 @@
     "name": "Cristien Natal",
     "company": null,
     "location": "Liverpool, UK",
-    "isHireable": false,
+    "isHireable": true,
     "bio": "Hello 👋 I am a Junior Front End Engineer 💫 Currently learning React ⚛ \r\n",
     "bioHTML": "<div>Hello <g-emoji class=\"g-emoji\" alias=\"wave\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f44b.png\">👋</g-emoji> I am a Junior Front End Engineer <g-emoji class=\"g-emoji\" alias=\"dizzy\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4ab.png\">💫</g-emoji> Currently learning React <g-emoji class=\"g-emoji\" alias=\"atom_symbol\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/269b.png\">⚛</g-emoji> \n</div>",
     "twitterUsername": "cristiencodes",
-    "websiteUrl": "crisbnp.github.io/portfolio",
+    "websiteUrl": "www.cristien.xyz",
     "teams": []
   },
   "zenmnky": {
@@ -591,6 +591,21 @@
     "bioHTML": "<div>Frontend Developer | JavaScript, React, GraphQL | Tech for good <g-emoji class=\"g-emoji\" alias=\"purple_heart\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f49c.png\">💜</g-emoji> </div>",
     "twitterUsername": "jenkens_",
     "websiteUrl": "https://jenniferwilliams.dev/",
+    "teams": []
+  },
+  "kfairris": {
+    "login": "kfairris",
+    "id": "MDQ6VXNlcjgwMzkyMjY=",
+    "url": "https://github.com/kfairris",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/8039226?u=608be0fb9445ee4d32b0e77f08dea0f7d2ccf9a5&v=4",
+    "name": "Kenny Fairris",
+    "company": null,
+    "location": "United States",
+    "isHireable": true,
+    "bio": "Software Engineer | Front-end Web Developer",
+    "bioHTML": "<div>Software Engineer | Front-end Web Developer</div>",
+    "twitterUsername": "kfairris",
+    "websiteUrl": "https://kennyfairris.dev",
     "teams": []
   },
   "yolandahaynes": {
