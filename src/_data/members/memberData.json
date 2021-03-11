@@ -518,6 +518,21 @@
     "websiteUrl": "https://sethhallcreative.com",
     "teams": []
   },
+  "abuna1985": {
+    "login": "abuna1985",
+    "id": "MDQ6VXNlcjIxMTYyMjI5",
+    "url": "https://github.com/abuna1985",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/21162229?u=8e8a8686e4cd5b9ad91715a47c39200f9edb7b03&v=4",
+    "name": "Adam Abundis",
+    "company": "@coding-boot-camp 2U/Trilogy Education Services",
+    "location": "Santa Ana, California",
+    "isHireable": true,
+    "bio": "A Front-end Engineer  who enjoys building user interfaces and learning more about web development best-practices.",
+    "bioHTML": "<div>A Front-end Engineer  who enjoys building user interfaces and learning more about web development best-practices.</div>",
+    "twitterUsername": "ArtooAye2",
+    "websiteUrl": "https://adamabundis.xyz",
+    "teams": []
+  },
   "bogdaaamn": {
     "login": "BogDAAAMN",
     "id": "MDQ6VXNlcjIyODk1Mjg0",
