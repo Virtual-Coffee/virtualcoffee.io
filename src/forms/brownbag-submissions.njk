@@ -29,8 +29,8 @@ permalink: brownbag-idea/
     {% call netlifyForm('/brownbag-idea-thanks/', 'brownbag-submissions') %}
 
       <fieldset>
-      <legend>Your Information:</legend>
-        <p class="text-muted">Just a couple quick pieces of info that we'll need:</p>
+      <legend>Your Information</legend>
+        <p class="text-muted">Just a couple quick pieces of info that we'll need.</p>
         <div class="form-group">
           <label for="formName">Your Name</label>
           <input
@@ -56,51 +56,300 @@ permalink: brownbag-idea/
           <small id="emailHelp" class="form-text text-muted">Required. We'll never share your email with anyone else.</small>
         </div>
       </fieldset>
+
       <fieldset>
-        <legend>Your Brownbag Idea:</legend>
+        <legend>Your Brownbag Idea</legend>
+        <p class="text-muted">This section is to gather some general information about the talk you're proposing. Don't worry if you don't have all the details ironed out yet—we can work with you to finalize your talk's title and description!</p>
         <div class="form-group">
-          <label for="topicTitle">Title of the Brownbag</label>
+          <label for="topicTitle">What is the proposed title of your talk?</label>
           <input
             type="text"
             class="form-control"
             id="topicTitle"
             name="topicTitle"
-            required
           />
         </div>
         <div class="form-group">
-          <label for="topicIdea">Description we can share on the event page.</label>
-          <textarea class="form-control" required id="topicIdea" name="topicIdea" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="format">What is the format of your talk (question and answer, conference-style, etc.) and will you have slides?</label>
-          <input
-            type="text"
+          <label for="topicDescription">What is the description of your talk?</label>
+          <textarea
             class="form-control"
-            id="format"
-            name="format"
-          />
+            id="topicDescription"
+            name="topicDescription"
+            rows="3">
+          </textarea>
         </div>
-         <div class="form-group">
-          <label for="record-permission">Do we have permission to record and post your brownbag on our YouTube channel?</label>
-          <input
-            type="text"
-            class="form-control"
-            id="record-permission"
-            name="record-permission"
-          />
+        <p>Please give three dates and times you're available to present in order of preference. Be sure to include timezone!</p>
+        <div class="form-group row">
+          <label for="date1" class="col-sm-2 col-form-label">First:</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="date1"
+              name="date1"
+            />
+          </div>
         </div>
-        <div class="form-group">
-          <label for="date-time">What date and time (with timezone) works for you?</label>
-          <input
-            type="text"
-            class="form-control"
-            id="date-time"
-            name="date-time"
-            required
-          />
+        <div class="form-group row">
+          <label for="date2" class="col-sm-2 col-form-label">Second:</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="date2"
+              name="date2"
+            />
+          </div>
         </div>
+        <div class="form-group row">
+          <label for="date3" class="col-sm-2 col-form-label">Third:</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="date3"
+              name="date3"
+            />
+          </div>
+        </div>
+        <p>What will be the format of your talk?</p>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="format" id="formatAMA" value="ama">
+          <label class="form-check-label" for="formatAMA">
+            AMA
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="format" id="formatConference" value="conference">
+          <label class="form-check-label" for="formatConference">
+            Conference
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="format" id="formatCollaborative" value="collaborative">
+          <label class="form-check-label" for="formatCollaborative">
+            Collaborative
+          </label>
+        </div>
+      </fieldset>
+      <br />
 
+      <fieldset>
+        <legend>Recording Options</legend>
+        <p class="text-muted">We like to record all talks given at Virtual Coffee to share with our members and refer back to later. Of course, this can only happen with your permission.</p>
+        <p>Do you agree to have your talk recorded and saved to Virtual Coffee's YouTube channel?</p>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="videoPermission" id="videoPermissionYes" value="yes" checked>
+          <label class="form-check-label" for="videoPermissionYes">
+            Yes
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="videoPermission" id="videoPermissionNo" value="no">
+          <label class="form-check-label" for="videoPermissionNo">
+            No
+          </label>
+        </div>
+        <br />
+        <p>Please select the YouTube privacy setting you would prefer for the recording of your talk:</p>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="videoPrivacy" id="videoPrivacyPublic" value="public" checked>
+          <label class="form-check-label" for="videoPrivacyPublic">
+            Published publicly
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="videoPrivacy" id="videoPrivacyUnlisted" value="unlisted">
+          <label class="form-check-label" for="videoPrivacyUnlisted">
+            Published as unlisted; the video link will be available to all Virtual Coffee members
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="videoPrivacy" id="videoPrivacyPrivate" value="private">
+          <label class="form-check-label" for="videoPrivacyPrivate">
+            Published privately; Virtual Coffee members must submit their email to receive access to the video
+          </label>
+        </div>
+        <small class="form-text text-muted"><strong>Tool tip:</strong> Read about the various <a href src="https://support.google.com/youtube/answer/157177?hl=en#" target="_blank" no-refer>YouTube video privacy settings</a></small>
+        <br />
+        <p>What would you like the video recording to display?</p>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="videoPrivacy" id="videoPrivacyPublic" value="public">
+          <label class="form-check-label" for="videoPrivacyPublic">
+            While sharing your screen: Zoom's "Shared screen with active speaker view" which displays the screenshare and a thumbnail of the current speaker in the top right corner of the screen.
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="videoPrivacy" id="videoPrivacyPublic" value="public">
+          <label class="form-check-label" for="videoPrivacyPublic">
+            While sharing your screen: Zoom's "Shared screen without active speaker or gallery view" which only displays the screenshare.
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="videoPrivacy" id="videoPrivacyUnlisted" value="unlisted">
+          <label class="form-check-label" for="videoPrivacyUnlisted">
+            While not sharing your screen: Zoom's "Active speaker view" which highlights the participant who is currently speaking and displays other participants in thumbnail views.
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" name="videoPrivacy" id="videoPrivacyPrivate" value="private">
+          <label class="form-check-label" for="videoPrivacyPrivate">
+            While not sharing your screen: Zoom's "Gallery view" which displays all participants in a grid pattern in windows of equal size.
+          </label>
+        </div>
+        <small class="form-text text-muted">Select one layout for use while sharing your screen and another for when not sharing your screen. <strong>Tool tip:</strong> Read about the various <a href src="https://support.zoom.us/hc/en-us/articles/360025561091-Recording-layouts#h_5c001397-33d6-47fb-bb40-1a3f68401581" target="_blank" no-refer>Zoom recording layouts</a></small>
+      </fieldset>
+      <br />
+
+      <fieldset>
+        <legend>Speaker Information</legend>
+        <p class="text-muted">Tell us what you would like to share with the other Virtual Coffee members to promote your talk. Your speaker headshot will be used in the YouTube thumbnail and intro screen as well.</p>
+        <div class="form-group">
+          <label for="speakerHeadshot">Upload your headshot here</label>
+          <input type="file" class="form-control-file" id="speakerHeadshot" name="speakerHeadshot">
+        </div>
+        <div class="form-group">
+          <label for="speakerBio">Speaker bio</label>
+          <textarea
+            class="form-control"
+            id="speakerBio"
+            name="speakerBio"
+            rows="3">
+          </textarea>
+        </div>
+        <p>List the links to any contact info, social media, or portfolio sites you would like linked to your talk.</p>
+        <div class="form-group row">
+          <label for="sharedEmail" class="col-sm-2 col-form-label">Email:</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="sharedEmail"
+              name="sharedEmail"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="website" class="col-sm-2 col-form-label">Website:</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="website"
+              name="website"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="linkedin" class="col-sm-2 col-form-label">LinkedIn:</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="linkedin"
+              name="linkedin"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="github" class="col-sm-2 col-form-label">GitHub:</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="github"
+              name="github"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="twitter" class="col-sm-2 col-form-label">Twitter:</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="twitter"
+              name="twitter"
+            />
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="other" class="col-sm-2 col-form-label">Other:</label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              class="form-control"
+              id="other"
+              name="other"
+            />
+          </div>
+        </div>
+      </fieldset>
+      <br />
+
+      <fieldset>
+        <legend>Brownbag Logistics</legend>
+        <p class="text-muted">Lastly, just a few questions to cover that will help your talk run more smoothly on presentation day.</p>
+        <p>Will you be presenting slides?</p>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="slides" id="slidesYes" value="yes" checked>
+          <label class="form-check-label" for="slidesYes">
+            Yes
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="slides" id="slidesNo" value="no">
+          <label class="form-check-label" for="slidesNo">
+            No
+          </label>
+        </div>
+        <br />
+        <p>Will you be demonstrating anything during your talk? (i.e. live coding, a website, a tool, etc.)</p>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="demo" id="demoYes" value="yes">
+          <label class="form-check-label" for="demoYes">
+            Yes
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="demo" id="demoNo" value="no">
+          <label class="form-check-label" for="demoNo">
+            No
+          </label>
+        </div>
+        <br />
+        <div class="form-group">
+          <label for="demoInfo">Please give a brief description of what you plan to demo./label>
+          <textarea
+            class="form-control"
+            id="demoInfo"
+            name="demoInfo"
+            rows="3">
+          </textarea>
+        </div>
+        <br />
+        <p>How would you prefer to address questions from the attendees?</p>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="answerQs" id="answerQsThroughout" value="throughout" checked>
+          <label class="form-check-label" for="answerQsThroughout">
+            Feel free to interrupt me with questions at any time!
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="answerQs" id="answerQsBreak" value="break">
+          <label class="form-check-label" for="answerQsBreak">
+            I will build breaks into my talk to pause for questions.
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="answerQs" id="answerQsAtEnd" value="atEnd">
+          <label class="form-check-label" for="answerQsAtEnd">
+            Please have everyone hold their questions until the end of the talk.
+          </label>
+        </div>
+        <br />
+        <br />
       </fieldset>
 
       {{codeOfConduct()}}
@@ -110,3 +359,6 @@ permalink: brownbag-idea/
     {% endcall %}
   </div>
 </div>
+<script>
+let demo = Boolean;
+</script>
