@@ -26,8 +26,8 @@
     "company": "Calendee LLC",
     "location": "McKinney TX",
     "isHireable": true,
-    "bio": "Full Stack/Mobile Developer. I dabble in : Firebase, Ionic Framework, React Native, React, Angular, Node, PHP, LAMP, Cordova, PhoneGap, MongoDB, MySQL",
-    "bioHTML": "<div>Full Stack/Mobile Developer. I dabble in : Firebase, Ionic Framework, React Native, React, Angular, Node, PHP, LAMP, Cordova, PhoneGap, MongoDB, MySQL</div>",
+    "bio": "(Mobile) app developer focused on the front-end but full stack capable:\r\n\r\n• React Native\r\n• Ionic Framework\r\n• React",
+    "bioHTML": "<div>(Mobile) app developer focused on the front-end but full stack capable:\n\n• React Native\n• Ionic Framework\n• React</div>",
     "twitterUsername": "JustinNoelDev",
     "websiteUrl": "http://justinnoel.dev",
     "teams": []
@@ -54,12 +54,29 @@
     "avatarUrl": "https://avatars.githubusercontent.com/u/49502059?u=1d71799e8fefbdb1f708d62c4cd36c18dc9274f1&v=4",
     "name": "Sara McCombs",
     "company": null,
-    "location": "Fairmont, WV USA",
+    "location": "Boston, MA",
     "isHireable": false,
-    "bio": "Software Engineer @ Aiera | Bibliophile | Diversity, Inclusion, & A11Y Advocate | Community Engagement Leader @ Project Alloy | Co-Founder @ VirtualCoffee.io ",
-    "bioHTML": "<div>Software Engineer @ Aiera | Bibliophile | Diversity, Inclusion, &amp; A11Y Advocate | Community Engagement Leader @ Project Alloy | Co-Founder @ VirtualCoffee.io </div>",
+    "bio": "Software Engineer @ Aiera ",
+    "bioHTML": "<div>Software Engineer @ Aiera </div>",
     "twitterUsername": "dino_momma",
-    "websiteUrl": "VirtualCoffee.io",
+    "websiteUrl": "coffeesaurusrex.io",
+    "teams": [
+      "Community Maintainer"
+    ]
+  },
+  "tkshill": {
+    "login": "tkshill",
+    "id": "MDQ6VXNlcjEzMjkyODg2",
+    "url": "https://github.com/tkshill",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/13292886?u=6bdb4e68580df8bb618c9bb7e5e73a4945e54cc9&v=4",
+    "name": "Kirk Shillingford",
+    "company": null,
+    "location": "Dominica",
+    "isHireable": true,
+    "bio": "Full Stack. Functional Programming main. F#, Elm, Python, SQL Server. Trying kindness. Community Maintainer at virtualcoffee.io",
+    "bioHTML": "<div>Full Stack. Functional Programming main. F#, Elm, Python, SQL Server. Trying kindness. Community Maintainer at virtualcoffee.io</div>",
+    "twitterUsername": "KirkCodes",
+    "websiteUrl": "https://github.com/tkshill",
     "teams": [
       "Community Maintainer"
     ]
@@ -78,23 +95,6 @@
     "twitterUsername": "amartzcoder",
     "websiteUrl": "https://andreamartz.dev/",
     "teams": []
-  },
-  "tkshill": {
-    "login": "tkshill",
-    "id": "MDQ6VXNlcjEzMjkyODg2",
-    "url": "https://github.com/tkshill",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/13292886?u=6bdb4e68580df8bb618c9bb7e5e73a4945e54cc9&v=4",
-    "name": "Kirk Shillingford",
-    "company": null,
-    "location": "Dominica",
-    "isHireable": true,
-    "bio": "Full Stack. Functional Programming main. F#, Elm, Python, SQL Server. Trying kindness. Community Manager at virtualcoffee.io",
-    "bioHTML": "<div>Full Stack. Functional Programming main. F#, Elm, Python, SQL Server. Trying kindness. Community Manager at virtualcoffee.io</div>",
-    "twitterUsername": "KirkCodes",
-    "websiteUrl": "https://github.com/tkshill",
-    "teams": [
-      "Community Maintainer"
-    ]
   },
   "danieltott": {
     "login": "danieltott",
@@ -173,6 +173,21 @@
     "websiteUrl": "celandau.com",
     "teams": []
   },
+  "aurelieverrot": {
+    "login": "aurelieverrot",
+    "id": "MDQ6VXNlcjUwODU3MTc5",
+    "url": "https://github.com/aurelieverrot",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/50857179?u=e318063e1d9c8657d76bd65dc398b5b1da572854&v=4",
+    "name": "Aurelie Verrot",
+    "company": "Looking for opportunities!",
+    "location": "San Francisco",
+    "isHireable": true,
+    "bio": "Software Engineer",
+    "bioHTML": "<div>Software Engineer</div>",
+    "twitterUsername": "LiliVerrot",
+    "websiteUrl": "https://www.linkedin.com/in/aurelieverrot/",
+    "teams": []
+  },
   "cljarvis": {
     "login": "ClJarvis",
     "id": "MDQ6VXNlcjEwNzAyOTkz",
@@ -216,21 +231,6 @@
     "bioHTML": "<div>Full Stack Software Developer with a passion for learning. Experienced in Rails, React, Redux, JavaScript, C#, HTML, and CSS.</div>",
     "twitterUsername": null,
     "websiteUrl": "https://brandonmichaelbrown.com",
-    "teams": []
-  },
-  "aurelieverrot": {
-    "login": "aurelieverrot",
-    "id": "MDQ6VXNlcjUwODU3MTc5",
-    "url": "https://github.com/aurelieverrot",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/50857179?u=297b238f4c40e8f52bc72a4d2bcfcf75ff4d085b&v=4",
-    "name": "Aurelie Verrot",
-    "company": "Looking for opportunities!",
-    "location": "San Francisco",
-    "isHireable": true,
-    "bio": "Software Engineer",
-    "bioHTML": "<div>Software Engineer</div>",
-    "twitterUsername": "LiliVerrot",
-    "websiteUrl": "https://www.linkedin.com/in/aurelieverrot/",
     "teams": []
   },
   "gantman": {
@@ -413,6 +413,21 @@
     "websiteUrl": "s-blais.com",
     "teams": []
   },
+  "lor1138": {
+    "login": "Lor1138",
+    "id": "MDQ6VXNlcjU0ODAzMzg0",
+    "url": "https://github.com/Lor1138",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/54803384?u=fd3826c16033f47e97aff01d1d530f7768f5ee23&v=4",
+    "name": "Laura OBrien",
+    "company": null,
+    "location": "Steubenville Ohio",
+    "isHireable": true,
+    "bio": "Hi! My name is Laura, and I love Front End Web Development! I know HTML, CSS, and Javascript. ",
+    "bioHTML": "<div>Hi! My name is Laura, and I love Front End Web Development! I know HTML, CSS, and Javascript. </div>",
+    "twitterUsername": "LauraOBDev",
+    "websiteUrl": null,
+    "teams": []
+  },
   "gervanna": {
     "login": "gervanna",
     "id": "MDQ6VXNlcjU1MTI2NTk5",
@@ -441,21 +456,6 @@
     "bioHTML": "",
     "twitterUsername": "MaylenePoulsen",
     "websiteUrl": "https://www.linkedin.com/in/maylene-poulsen/",
-    "teams": []
-  },
-  "lor1138": {
-    "login": "Lor1138",
-    "id": "MDQ6VXNlcjU0ODAzMzg0",
-    "url": "https://github.com/Lor1138",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/54803384?u=fd3826c16033f47e97aff01d1d530f7768f5ee23&v=4",
-    "name": "Laura OBrien",
-    "company": null,
-    "location": "Steubenville Ohio",
-    "isHireable": true,
-    "bio": "Hi! My name is Laura, and I love Front End Web Development! I know HTML, CSS, and Javascript. ",
-    "bioHTML": "<div>Hi! My name is Laura, and I love Front End Web Development! I know HTML, CSS, and Javascript. </div>",
-    "twitterUsername": "LauraOBDev",
-    "websiteUrl": null,
     "teams": []
   },
   "matthew-dean": {
@@ -572,8 +572,8 @@
     "company": null,
     "location": "Liverpool, UK",
     "isHireable": true,
-    "bio": "Hello 👋 I am a Junior Front End Engineer 💫 Currently learning React ⚛ \r\n",
-    "bioHTML": "<div>Hello <g-emoji class=\"g-emoji\" alias=\"wave\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f44b.png\">👋</g-emoji> I am a Junior Front End Engineer <g-emoji class=\"g-emoji\" alias=\"dizzy\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4ab.png\">💫</g-emoji> Currently learning React <g-emoji class=\"g-emoji\" alias=\"atom_symbol\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/269b.png\">⚛</g-emoji> \n</div>",
+    "bio": "Hello 👋 I am a Junior Front End Engineer 💫 Currently learning React ⚛  and Python 🐍\r\n",
+    "bioHTML": "<div>Hello <g-emoji class=\"g-emoji\" alias=\"wave\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f44b.png\">👋</g-emoji> I am a Junior Front End Engineer <g-emoji class=\"g-emoji\" alias=\"dizzy\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4ab.png\">💫</g-emoji> Currently learning React <g-emoji class=\"g-emoji\" alias=\"atom_symbol\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/269b.png\">⚛</g-emoji>  and Python <g-emoji class=\"g-emoji\" alias=\"snake\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f40d.png\">🐍</g-emoji>\n</div>",
     "twitterUsername": "cristiencodes",
     "websiteUrl": "www.cristien.xyz",
     "teams": []
@@ -593,6 +593,21 @@
     "websiteUrl": "JustinHager.codes",
     "teams": []
   },
+  "yolandahaynes": {
+    "login": "YolandaHaynes",
+    "id": "MDQ6VXNlcjEyOTgwNzEw",
+    "url": "https://github.com/YolandaHaynes",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/12980710?u=c2ba18ab218721a35f1011120a44701e09011896&v=4",
+    "name": "Yolanda Haynes",
+    "company": null,
+    "location": "San Diego",
+    "isHireable": false,
+    "bio": "Software Engineer at 100Devs\r\nLearning new skills, wanting to make things more accessible and striving to be better.",
+    "bioHTML": "<div>Software Engineer at 100Devs\nLearning new skills, wanting to make things more accessible and striving to be better.</div>",
+    "twitterUsername": "_YolandaHaynes",
+    "websiteUrl": null,
+    "teams": []
+  },
   "taljjaa": {
     "login": "Taljjaa",
     "id": "MDQ6VXNlcjI1Mzk4MDIx",
@@ -608,6 +623,21 @@
     "websiteUrl": "https://jenniferwilliams.dev/",
     "teams": []
   },
+  "debrakayeelliott": {
+    "login": "debrakayeelliott",
+    "id": "MDQ6VXNlcjc4NDUyNDMz",
+    "url": "https://github.com/debrakayeelliott",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/78452433?u=e43064cf61cc09e9c3e93a943373d35b4cd02bc1&v=4",
+    "name": "Debra-Kaye Elliott",
+    "company": null,
+    "location": "Jamaica",
+    "isHireable": false,
+    "bio": "Front End Developer | Blogger",
+    "bioHTML": "<div>Front End Developer | Blogger</div>",
+    "twitterUsername": "debrakayelliott",
+    "websiteUrl": "https://bit.ly/debrakaye",
+    "teams": []
+  },
   "kfairris": {
     "login": "kfairris",
     "id": "MDQ6VXNlcjgwMzkyMjY=",
@@ -621,21 +651,6 @@
     "bioHTML": "<div>Software Engineer | Front-end Web Developer</div>",
     "twitterUsername": "kfairris",
     "websiteUrl": "https://kennyfairris.dev",
-    "teams": []
-  },
-  "yolandahaynes": {
-    "login": "YolandaHaynes",
-    "id": "MDQ6VXNlcjEyOTgwNzEw",
-    "url": "https://github.com/YolandaHaynes",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/12980710?u=c2ba18ab218721a35f1011120a44701e09011896&v=4",
-    "name": "Yolanda Haynes",
-    "company": null,
-    "location": null,
-    "isHireable": false,
-    "bio": "Making a career pivot from occupational therapy assistant to full stack web developer. ",
-    "bioHTML": "<div>Making a career pivot from occupational therapy assistant to full stack web developer. </div>",
-    "twitterUsername": "_YolandaHaynes",
-    "websiteUrl": null,
     "teams": []
   },
   "tomcudd": {
