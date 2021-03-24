@@ -49,12 +49,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - run: |
-          echo "${{ github.base_ref }}"
-          echo "${{ github.head_ref }}"
-          echo "${{ github.ref }}"
-          echo "${{ github.event.pull_request.head.sha }}"
-      
       - name: Push changes in members data
         run: |
           git config user.name github-actions
@@ -62,4 +56,4 @@ jobs:
 
           git add src/_data/members/memberData.json
           git commit -m "GA: Update members data"
-          git push origin ${{ github.ref }}
+          git push origin ${{ github.head_ref }}
