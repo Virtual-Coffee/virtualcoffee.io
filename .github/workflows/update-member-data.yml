@@ -43,4 +43,4 @@ jobs:
 
           git add src/_data/members/memberData.json
           git commit -m "GA: Update members data"
-          git push origin ${{ github.base_ref }}
+          git push origin ${{ github.ref }}
