@@ -1,0 +1,39 @@
+name: Update Members Data
+
+# Trigger the action only when a pull_request is made to the main branch
+# when changes are commited to the members files
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+    - 'src/_data/members/members.json'
+    - 'src/_data/members/core.json'
+    - 'src/_data/members/teams.json'
+
+  # Also run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  update-member-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the merged source code
+      - uses: actions/checkout@v2
+
+      # Setup node v 14.x with npm and yarn
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+
+      - name: Install packages
+        run: yarn install
+
+      - name: Update members data
+        run: yarn update-member-data
+
+      - name: Push changes in members data
+        run: |
+          git add src/_data/members/memberData.json
+          git commit -m "GA: Update members data"
+          git push 
