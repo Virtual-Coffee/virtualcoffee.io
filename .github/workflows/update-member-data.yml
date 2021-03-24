@@ -31,9 +31,13 @@ jobs:
 
       - name: Update members data
         run: yarn update-member-data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push changes in members data
         run: |
           git add src/_data/members/memberData.json
           git commit -m "GA: Update members data"
           git push 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
