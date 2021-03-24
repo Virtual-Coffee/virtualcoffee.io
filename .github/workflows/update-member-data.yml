@@ -27,15 +27,34 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "14.x"
+      
+      # Cache yarn node_modules (save 40 seconds)
+      # as seen in https://github.com/actions/cache/blob/main/examples.md#node---yarn
+      - run: echo "::set-output name=dir::$(yarn cache dir)"
+        id: yarn-cache-dir-path
 
+      - name: Use yarn cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      
+      # Yarn install but prioritize the cache with --prefer-offline
       - name: Install packages
-        run: yarn install
+        run: yarn install --prefer-offline
 
       - name: Update members data
         run: yarn update-member-data
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      
+      - run: |
+          echo "${{ github.base_ref }}"
+          echo "${{ github.head_ref }}"
+          echo "${{ github.ref }}"
+          echo "${{ github.event.pull_request.head.sha }}"
+      
       - name: Push changes in members data
         run: |
           git config user.name github-actions
