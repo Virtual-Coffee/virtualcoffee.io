@@ -18,8 +18,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the merged source code
+      # Checkout the merged source code from PR
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       # Setup node v 14.x with npm and yarn
       - uses: actions/setup-node@v1
@@ -36,8 +38,8 @@ jobs:
 
       - name: Push changes in members data
         run: |
-          git config --global user.email "bogcov@gmail.com"
-          git config --global user.name "GitHub Actions"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
 
           git add src/_data/members/memberData.json
           git commit -m "GA: Update members data"
