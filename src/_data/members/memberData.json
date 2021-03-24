@@ -683,6 +683,21 @@
     "websiteUrl": "surajpanchal.com",
     "teams": []
   },
+  "cafloyd": {
+    "login": "cafloyd",
+    "id": "MDQ6VXNlcjU4NTMyMzY5",
+    "url": "https://github.com/cafloyd",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/58532369?u=5d4172a194cd8ffc4d2b50a1263621b8f3df9252&v=4",
+    "name": "Caitlin Floyd",
+    "company": null,
+    "location": "Washington, DC",
+    "isHireable": true,
+    "bio": "DC-based full-stack software engineer, motivated by the power of technology as a tool for positive change",
+    "bioHTML": "<div>DC-based full-stack software engineer, motivated by the power of technology as a tool for positive change</div>",
+    "twitterUsername": "caitlinfloyd",
+    "websiteUrl": "https://caitlinfloyd.com",
+    "teams": []
+  },
   "ehilst515": {
     "login": "ehilst515",
     "id": "MDQ6VXNlcjY1MzcwNjMw",
