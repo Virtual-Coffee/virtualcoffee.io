@@ -73,8 +73,8 @@
     "company": null,
     "location": "Dominica",
     "isHireable": true,
-    "bio": "Full Stack. Functional Programming main. F#, Elm, Python, SQL Server. Trying kindness. Community Maintainer at virtualcoffee.io",
-    "bioHTML": "<div>Full Stack. Functional Programming main. F#, Elm, Python, SQL Server. Trying kindness. Community Maintainer at virtualcoffee.io</div>",
+    "bio": "Community Maintainer at virtualcoffee.io. Big fan of functional Programming and SQL. Currently working on F#, Elm, Typescript, React and being kinder.\r\n",
+    "bioHTML": "<div>Community Maintainer at virtualcoffee.io. Big fan of functional Programming and SQL. Currently working on F#, Elm, Typescript, React and being kinder.\n</div>",
     "twitterUsername": "KirkCodes",
     "websiteUrl": "https://github.com/tkshill",
     "teams": [
@@ -143,6 +143,21 @@
     "websiteUrl": "https://www.linkedin.com/in/chadrstewart",
     "teams": []
   },
+  "aurelieverrot": {
+    "login": "aurelieverrot",
+    "id": "MDQ6VXNlcjUwODU3MTc5",
+    "url": "https://github.com/aurelieverrot",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/50857179?u=e318063e1d9c8657d76bd65dc398b5b1da572854&v=4",
+    "name": "Aurelie Verrot",
+    "company": "Looking for opportunities!",
+    "location": "San Francisco",
+    "isHireable": true,
+    "bio": "Software Engineer",
+    "bioHTML": "<div>Software Engineer</div>",
+    "twitterUsername": "LiliVerrot",
+    "websiteUrl": "https://www.linkedin.com/in/aurelieverrot/",
+    "teams": []
+  },
   "adiati98": {
     "login": "adiati98",
     "id": "MDQ6VXNlcjQ1MTcyNzc1",
@@ -171,21 +186,6 @@
     "bioHTML": "",
     "twitterUsername": null,
     "websiteUrl": "celandau.com",
-    "teams": []
-  },
-  "aurelieverrot": {
-    "login": "aurelieverrot",
-    "id": "MDQ6VXNlcjUwODU3MTc5",
-    "url": "https://github.com/aurelieverrot",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/50857179?u=e318063e1d9c8657d76bd65dc398b5b1da572854&v=4",
-    "name": "Aurelie Verrot",
-    "company": "Looking for opportunities!",
-    "location": "San Francisco",
-    "isHireable": true,
-    "bio": "Software Engineer",
-    "bioHTML": "<div>Software Engineer</div>",
-    "twitterUsername": "LiliVerrot",
-    "websiteUrl": "https://www.linkedin.com/in/aurelieverrot/",
     "teams": []
   },
   "cljarvis": {
@@ -402,13 +402,13 @@
     "login": "s-blais",
     "id": "MDQ6VXNlcjUxMzQxOTE0",
     "url": "https://github.com/s-blais",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/51341914?u=516187a49ae147e4d4a4d3a67936b96d35a516c1&v=4",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/51341914?u=01570035e92f68825084dbd462ddb0d8d8fb66a3&v=4",
     "name": "Stephen Blais",
     "company": null,
     "location": "Providence, Rhode Island",
     "isHireable": true,
-    "bio": "Stirring some full-stack web dev software engineering into this recipe for a new taste sensation",
-    "bioHTML": "<div>Stirring some full-stack web dev software engineering into this recipe for a new taste sensation</div>",
+    "bio": "Stirring some full-stack web developerosity into this recipe for a new taste sensation",
+    "bioHTML": "<div>Stirring some full-stack web developerosity into this recipe for a new taste sensation</div>",
     "twitterUsername": "the_s_blais",
     "websiteUrl": "s-blais.com",
     "teams": []
@@ -578,21 +578,6 @@
     "websiteUrl": "www.cristien.xyz",
     "teams": []
   },
-  "zenmnky": {
-    "login": "ZenMnky",
-    "id": "MDQ6VXNlcjU5MjM0Njgz",
-    "url": "https://github.com/ZenMnky",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/59234683?u=26e6c04197c72220268d85d65242ff5e69b799cc&v=4",
-    "name": "Justin Hager",
-    "company": null,
-    "location": "Portland, OR",
-    "isHireable": true,
-    "bio": "Web App Developer",
-    "bioHTML": "<div>Web App Developer</div>",
-    "twitterUsername": null,
-    "websiteUrl": "JustinHager.codes",
-    "teams": []
-  },
   "yolandahaynes": {
     "login": "YolandaHaynes",
     "id": "MDQ6VXNlcjEyOTgwNzEw",
@@ -606,6 +591,21 @@
     "bioHTML": "<div>Software Engineer at 100Devs\nLearning new skills, wanting to make things more accessible and striving to be better.</div>",
     "twitterUsername": "_YolandaHaynes",
     "websiteUrl": null,
+    "teams": []
+  },
+  "zenmnky": {
+    "login": "ZenMnky",
+    "id": "MDQ6VXNlcjU5MjM0Njgz",
+    "url": "https://github.com/ZenMnky",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/59234683?u=26e6c04197c72220268d85d65242ff5e69b799cc&v=4",
+    "name": "Justin Hager",
+    "company": null,
+    "location": "Portland, OR",
+    "isHireable": true,
+    "bio": "Web App Developer",
+    "bioHTML": "<div>Web App Developer</div>",
+    "twitterUsername": null,
+    "websiteUrl": "JustinHager.codes",
     "teams": []
   },
   "taljjaa": {
@@ -681,6 +681,21 @@
     "bioHTML": "<div>Full Stack Developer | C#.Net, .Net Core, MVC, Angular, NodeJs, Sql Server, MongoDB</div>",
     "twitterUsername": "surajrpanchal",
     "websiteUrl": "surajpanchal.com",
+    "teams": []
+  },
+  "ehilst515": {
+    "login": "ehilst515",
+    "id": "MDQ6VXNlcjY1MzcwNjMw",
+    "url": "https://github.com/ehilst515",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/65370630?u=50e663bfcad5bc5170ed2d8b343a13341a8dc86d&v=4",
+    "name": "Enrique Hilst",
+    "company": "Freelance",
+    "location": null,
+    "isHireable": true,
+    "bio": "ISU and DeltaV grad, working in private repos for my clients. I'm a generalist, so reach out with any opportunities! ",
+    "bioHTML": "<div>ISU and DeltaV grad, working in private repos for my clients. I'm a generalist, so reach out with any opportunities! </div>",
+    "twitterUsername": null,
+    "websiteUrl": "linkedin.com/in/ehilst/",
     "teams": []
   }
 }
