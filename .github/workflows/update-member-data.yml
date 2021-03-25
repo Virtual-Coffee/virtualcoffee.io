@@ -51,7 +51,7 @@ jobs:
       
       - name: Push changes in members data
         env:
-          PR_ID:  {{github.event.pull_request.title}} #{{github.event.pull_request.number}}
+          PR_ID:  ${{github.event.pull_request.title}} \#${{github.event.pull_request.number}}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
