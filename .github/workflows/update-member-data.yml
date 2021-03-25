@@ -20,8 +20,6 @@ jobs:
     steps:
       # Checkout the merged source code from PR
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
       # Setup node v 14.x with npm and yarn
       - uses: actions/setup-node@v1
