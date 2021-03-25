@@ -50,10 +50,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Push changes in members data
+        env:
+          PR_ID:  {{github.event.pull_request.title}} #{{github.event.pull_request.number}}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
 
           git add src/_data/members/memberData.json
-          git commit -m "GA: Update members data"
-          git push origin ${{ github.head_ref }}
+          git commit -m "chore: update membersData.json after merging $PR_ID"
+          git push origin main
