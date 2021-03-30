@@ -20,6 +20,8 @@ jobs:
     steps:
       # Checkout the merged source code from PR
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
 
       # Setup node v 14.x with npm and yarn
       - uses: actions/setup-node@v1
