@@ -81,21 +81,6 @@
       "Community Maintainer"
     ]
   },
-  "andreamartz": {
-    "login": "andreamartz",
-    "id": "MDQ6VXNlcjE0MTY1Nzg4",
-    "url": "https://github.com/andreamartz",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/14165788?u=612c35061dfc55cf1d918ac750907e0e82e40efe&v=4",
-    "name": "Andrea Martz",
-    "company": null,
-    "location": "Twin Cities",
-    "isHireable": true,
-    "bio": "Full stack developer and avid learner",
-    "bioHTML": "<div>Full stack developer and avid learner</div>",
-    "twitterUsername": "amartzcoder",
-    "websiteUrl": "https://andreamartz.dev/",
-    "teams": []
-  },
   "danieltott": {
     "login": "danieltott",
     "id": "MDQ6VXNlcjM2MDI2MQ==",
@@ -112,6 +97,21 @@
     "teams": [
       "Org Maintainer"
     ]
+  },
+  "andreamartz": {
+    "login": "andreamartz",
+    "id": "MDQ6VXNlcjE0MTY1Nzg4",
+    "url": "https://github.com/andreamartz",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/14165788?u=612c35061dfc55cf1d918ac750907e0e82e40efe&v=4",
+    "name": "Andrea Martz",
+    "company": null,
+    "location": "Twin Cities",
+    "isHireable": true,
+    "bio": "Full stack developer and avid learner",
+    "bioHTML": "<div>Full stack developer and avid learner</div>",
+    "twitterUsername": "amartzcoder",
+    "websiteUrl": "https://andreamartz.dev/",
+    "teams": []
   },
   "danieluhl": {
     "login": "danieluhl",
@@ -143,21 +143,6 @@
     "websiteUrl": "https://www.linkedin.com/in/chadrstewart",
     "teams": []
   },
-  "aurelieverrot": {
-    "login": "aurelieverrot",
-    "id": "MDQ6VXNlcjUwODU3MTc5",
-    "url": "https://github.com/aurelieverrot",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/50857179?u=e318063e1d9c8657d76bd65dc398b5b1da572854&v=4",
-    "name": "Aurelie Verrot",
-    "company": "Looking for opportunities!",
-    "location": "San Francisco",
-    "isHireable": true,
-    "bio": "Software Engineer",
-    "bioHTML": "<div>Software Engineer</div>",
-    "twitterUsername": "LiliVerrot",
-    "websiteUrl": "https://www.linkedin.com/in/aurelieverrot/",
-    "teams": []
-  },
   "adiati98": {
     "login": "adiati98",
     "id": "MDQ6VXNlcjQ1MTcyNzc1",
@@ -171,6 +156,21 @@
     "bioHTML": "<div><g-emoji class=\"g-emoji\" alias=\"nerd_face\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f913.png\">🤓</g-emoji> Life-long learner\n<g-emoji class=\"g-emoji\" alias=\"family_man_woman_girl\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f469-1f467.png\">👨‍👩‍👧</g-emoji> A wife &amp; a mother \n<g-emoji class=\"g-emoji\" alias=\"bookmark_tabs\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4d1.png\">📑</g-emoji> Aiming to be front-end/fullstack web developer </div>",
     "twitterUsername": "AdiatiAyu",
     "websiteUrl": "https://adiati.com",
+    "teams": []
+  },
+  "aurelieverrot": {
+    "login": "aurelieverrot",
+    "id": "MDQ6VXNlcjUwODU3MTc5",
+    "url": "https://github.com/aurelieverrot",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/50857179?u=e318063e1d9c8657d76bd65dc398b5b1da572854&v=4",
+    "name": "Aurelie Verrot",
+    "company": "Looking for opportunities!",
+    "location": "San Francisco",
+    "isHireable": true,
+    "bio": "Software Engineer",
+    "bioHTML": "<div>Software Engineer</div>",
+    "twitterUsername": "LiliVerrot",
+    "websiteUrl": "https://www.linkedin.com/in/aurelieverrot/",
     "teams": []
   },
   "clandau": {
@@ -188,21 +188,6 @@
     "websiteUrl": "celandau.com",
     "teams": []
   },
-  "cljarvis": {
-    "login": "ClJarvis",
-    "id": "MDQ6VXNlcjEwNzAyOTkz",
-    "url": "https://github.com/ClJarvis",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/10702993?u=77465fa7bf623411cc22401f32a55d044e397b35&v=4",
-    "name": "Chris Jarvis",
-    "company": null,
-    "location": "Nashville, TN",
-    "isHireable": true,
-    "bio": "Software developer, UI & UX. A love of creative endeavors and a desire to solve puzzles led me to delve software development.",
-    "bioHTML": "<div>Software developer, UI &amp; UX. A love of creative endeavors and a desire to solve puzzles led me to delve software development.</div>",
-    "twitterUsername": "jarvisscript",
-    "websiteUrl": "http://christopherleejarvis.com/",
-    "teams": []
-  },
   "healeyb": {
     "login": "healeyb",
     "id": "MDQ6VXNlcjExMjU0NzU=",
@@ -216,6 +201,21 @@
     "bioHTML": "",
     "twitterUsername": "Bryan_Healey",
     "websiteUrl": "http://www.bryanhealey.com/",
+    "teams": []
+  },
+  "cljarvis": {
+    "login": "ClJarvis",
+    "id": "MDQ6VXNlcjEwNzAyOTkz",
+    "url": "https://github.com/ClJarvis",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/10702993?u=77465fa7bf623411cc22401f32a55d044e397b35&v=4",
+    "name": "Chris Jarvis",
+    "company": null,
+    "location": "Nashville, TN",
+    "isHireable": true,
+    "bio": "Software developer, UI & UX. A love of creative endeavors and a desire to solve puzzles led me to delve software development.",
+    "bioHTML": "<div>Software developer, UI &amp; UX. A love of creative endeavors and a desire to solve puzzles led me to delve software development.</div>",
+    "twitterUsername": "jarvisscript",
+    "websiteUrl": "http://christopherleejarvis.com/",
     "teams": []
   },
   "brandonbrown4792": {
@@ -269,7 +269,7 @@
     "url": "https://github.com/MikeRogers0",
     "avatarUrl": "https://avatars.githubusercontent.com/u/325384?u=3c1c26378f4256828db1c98de6383a10e39830c9&v=4",
     "name": "Mike Rogers",
-    "company": "@TypoCI",
+    "company": null,
     "location": "London, UK",
     "isHireable": false,
     "bio": "A Rubyist, a menace, a web hygienist.\r\n\r\n\r\nAlt: @MikeRogers0-YouTube",
@@ -329,11 +329,11 @@
     "url": "https://github.com/mrsantons",
     "avatarUrl": "https://avatars.githubusercontent.com/u/52573981?u=37b6a9af6a369f89e7c1eb810526627e4905cd7c&v=4",
     "name": "Marie Antons",
-    "company": "STRATAFOLIO",
+    "company": null,
     "location": "Cedar Rapids, Iowa",
-    "isHireable": false,
-    "bio": "\r\nJunior Developer",
-    "bioHTML": "<div>\nJunior Developer</div>",
+    "isHireable": true,
+    "bio": "Developer",
+    "bioHTML": "<div>Developer</div>",
     "twitterUsername": "MarieAntons",
     "websiteUrl": null,
     "teams": []
@@ -597,7 +597,7 @@
     "login": "ZenMnky",
     "id": "MDQ6VXNlcjU5MjM0Njgz",
     "url": "https://github.com/ZenMnky",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/59234683?u=26e6c04197c72220268d85d65242ff5e69b799cc&v=4",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/59234683?u=1da4483f3f969a74aaa70a07605907d95f6efd1a&v=4",
     "name": "Justin Hager",
     "company": null,
     "location": "Portland, OR",
@@ -691,9 +691,9 @@
     "name": "Caitlin Floyd",
     "company": null,
     "location": "Washington, DC",
-    "isHireable": true,
-    "bio": "DC-based full-stack software engineer, motivated by the power of technology as a tool for positive change",
-    "bioHTML": "<div>DC-based full-stack software engineer, motivated by the power of technology as a tool for positive change</div>",
+    "isHireable": false,
+    "bio": "DC-based front-end engineer, motivated by the power of technology as a tool for positive change",
+    "bioHTML": "<div>DC-based front-end engineer, motivated by the power of technology as a tool for positive change</div>",
     "twitterUsername": "caitlinfloyd",
     "websiteUrl": "https://caitlinfloyd.com",
     "teams": []
@@ -711,6 +711,36 @@
     "bioHTML": "<div>ISU and DeltaV grad, working in private repos for my clients. I'm a generalist, so reach out with any opportunities! </div>",
     "twitterUsername": null,
     "websiteUrl": "linkedin.com/in/ehilst/",
+    "teams": []
+  },
+  "lincolnfleet": {
+    "login": "LincolnFleet",
+    "id": "MDQ6VXNlcjM2NjExMzQ1",
+    "url": "https://github.com/LincolnFleet",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/36611345?u=a232d94ed1b855a81008c268631dc60eb2d1c42c&v=4",
+    "name": "Travis Martin",
+    "company": "Comake.io",
+    "location": "Atlanta, GA",
+    "isHireable": false,
+    "bio": "Full-stack software dev based in Atlanta, GA.\r\nJS connoisseur, qualified nerd, and habitual smiler.",
+    "bioHTML": "<div>Full-stack software dev based in Atlanta, GA.\nJS connoisseur, qualified nerd, and habitual smiler.</div>",
+    "twitterUsername": null,
+    "websiteUrl": "https://www.linkedin.com/in/travisemartin/",
+    "teams": []
+  },
+  "tombousquet": {
+    "login": "tombousquet",
+    "id": "MDQ6VXNlcjcwOTg3MDkx",
+    "url": "https://github.com/tombousquet",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/70987091?u=2c2d2f3cabc843ac9bd0792428f735a370546a36&v=4",
+    "name": "Tom Bousquet",
+    "company": "@momentumlearn",
+    "location": "Durham, NC",
+    "isHireable": false,
+    "bio": "Basketball and soccer connoisseur and Momentum coding bootcamp alum. Seeking an entry level developer position.",
+    "bioHTML": "<div>Basketball and soccer connoisseur and Momentum coding bootcamp alum. Seeking an entry level developer position.</div>",
+    "twitterUsername": null,
+    "websiteUrl": "https://www.linkedin.com/in/tom-bousquet/",
     "teams": []
   }
 }
