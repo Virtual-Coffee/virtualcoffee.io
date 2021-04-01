@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@11ty/eleventy-cache-assets": "2.1.0",
+    "airtable": "^0.10.1",
     "bootstrap": "4.6.0",
     "dotenv": "8.2.0",
     "eleventy-plugin-pwa": "^1.0.8",
