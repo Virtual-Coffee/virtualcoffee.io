@@ -61,13 +61,11 @@ const handler = async function (event, context) {
         console.log(`found room instance ${roomInstance.getId()}`);
 
         const created = await base('room_events').create({
-          fields: {
-            event_type: request.event,
-            user_id: request.payload.object.participant.user_id,
-            user_name: request.payload.object.participant.user_name,
-            time: request.payload.object.start_time,
-            room_instance: [roomInstance.getId()],
-          },
+          event_type: request.event,
+          user_id: request.payload.object.participant.user_id,
+          user_name: request.payload.object.participant.user_name,
+          time: request.payload.object.start_time,
+          room_instance: [roomInstance.getId()],
         });
 
         if (!created) {
