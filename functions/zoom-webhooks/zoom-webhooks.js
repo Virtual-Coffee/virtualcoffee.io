@@ -60,28 +60,21 @@ const handler = async function (event, context) {
         // create room event record
         console.log(`found room instance ${roomInstance.getId()}`);
 
-        base('room_events').create(
-          [
-            {
-              fields: {
-                event_type: request.event,
-                user_id: request.payload.object.participant.user_id,
-                user_name: request.payload.object.participant.user_name,
-                time: request.payload.object.start_time,
-                room_instance: [roomInstance.getId()],
-              },
-            },
-          ],
-          function (err, records) {
-            if (err) {
-              console.error(err);
-              return;
-            }
-            records.forEach(function (record) {
-              console.log(`created room_event ${record.getId()}`);
-            });
-          }
-        );
+        const created = await base('room_events').create({
+          fields: {
+            event_type: request.event,
+            user_id: request.payload.object.participant.user_id,
+            user_name: request.payload.object.participant.user_name,
+            time: request.payload.object.start_time,
+            room_instance: [roomInstance.getId()],
+          },
+        });
+
+        if (!created) {
+          throw new Error('no record created');
+        }
+
+        console.log(`room_event created: ${created.getId()}`);
       }
 
       // find the room_instance record
