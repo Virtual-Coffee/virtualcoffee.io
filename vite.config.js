@@ -14,5 +14,14 @@ module.exports = {
           }),
       ],
     }
+  },
+  server: {
+    watch: {
+      ignoreInitial: true,
+      waitWriteFinish: {
+        stabilityThreshold: 500,
+        pollInterval: 100
+      },
+    }
   }
 };
