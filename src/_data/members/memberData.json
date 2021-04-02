@@ -132,7 +132,7 @@
     "login": "chadstewart",
     "id": "MDQ6VXNlcjExNzc3MTYx",
     "url": "https://github.com/chadstewart",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/11777161?u=27312734d940386721c0b7486b7e8d7c97003ba0&v=4",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/11777161?u=c5923838e443ef611f3ef9d6c4474a1a17a672ca&v=4",
     "name": "Chad Rhonan Stewart",
     "company": null,
     "location": "Kingston, Jamaica",
@@ -308,21 +308,6 @@
     "websiteUrl": "https://vicvijayakumar.com",
     "teams": []
   },
-  "jonathanyeong": {
-    "login": "jonathanyeong",
-    "id": "MDQ6VXNlcjM4NjEwODg=",
-    "url": "https://github.com/jonathanyeong",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/3861088?u=610225bf19ab68c71639956a92d65dff59cc7848&v=4",
-    "name": "Jonathan Yeong",
-    "company": "@highspot",
-    "location": "Seattle, Washington",
-    "isHireable": false,
-    "bio": "Software engineer 👨‍💻 • Newbie photographer 📷 • Climber 🧗🇦🇺\r\n",
-    "bioHTML": "<div>Software engineer <g-emoji class=\"g-emoji\" alias=\"man_technologist\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f4bb.png\">👨‍💻</g-emoji> • Newbie photographer <g-emoji class=\"g-emoji\" alias=\"camera\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4f7.png\">📷</g-emoji> • Climber <g-emoji class=\"g-emoji\" alias=\"climbing\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f9d7.png\">🧗</g-emoji><g-emoji class=\"g-emoji\" alias=\"australia\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f1e6-1f1fa.png\">🇦🇺</g-emoji>\n</div>",
-    "twitterUsername": "jonoyeong",
-    "websiteUrl": "https://www.jonathanyeong.com",
-    "teams": []
-  },
   "mrsantons": {
     "login": "mrsantons",
     "id": "MDQ6VXNlcjUyNTczOTgx",
@@ -336,6 +321,21 @@
     "bioHTML": "<div>Developer</div>",
     "twitterUsername": "MarieAntons",
     "websiteUrl": null,
+    "teams": []
+  },
+  "jonathanyeong": {
+    "login": "jonathanyeong",
+    "id": "MDQ6VXNlcjM4NjEwODg=",
+    "url": "https://github.com/jonathanyeong",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/3861088?u=610225bf19ab68c71639956a92d65dff59cc7848&v=4",
+    "name": "Jonathan Yeong",
+    "company": "@highspot",
+    "location": "Seattle, Washington",
+    "isHireable": false,
+    "bio": "Software engineer 👨‍💻 • Newbie photographer 📷 • Climber 🧗🇦🇺\r\n",
+    "bioHTML": "<div>Software engineer <g-emoji class=\"g-emoji\" alias=\"man_technologist\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f4bb.png\">👨‍💻</g-emoji> • Newbie photographer <g-emoji class=\"g-emoji\" alias=\"camera\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4f7.png\">📷</g-emoji> • Climber <g-emoji class=\"g-emoji\" alias=\"climbing\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f9d7.png\">🧗</g-emoji><g-emoji class=\"g-emoji\" alias=\"australia\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f1e6-1f1fa.png\">🇦🇺</g-emoji>\n</div>",
+    "twitterUsername": "jonoyeong",
+    "websiteUrl": "https://www.jonathanyeong.com",
     "teams": []
   },
   "cerchie": {
@@ -681,6 +681,21 @@
     "bioHTML": "<div>Full Stack Developer | C#.Net, .Net Core, MVC, Angular, NodeJs, Sql Server, MongoDB</div>",
     "twitterUsername": "surajrpanchal",
     "websiteUrl": "surajpanchal.com",
+    "teams": []
+  },
+  "shiftyp": {
+    "login": "shiftyp",
+    "id": "MDQ6VXNlcjEzMTkyOA==",
+    "url": "https://github.com/shiftyp",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/131928?u=162c20f484e1a01a0bffcc9d3836a5af94ad7683&v=4",
+    "name": "Ryan Lynch",
+    "company": null,
+    "location": "New York, NY",
+    "isHireable": false,
+    "bio": "🔰 Always a beginner\r\n👨🏻‍💻 Engineer and Mentor\r\n👋🏻 he/him",
+    "bioHTML": "<div><g-emoji class=\"g-emoji\" alias=\"beginner\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f530.png\">🔰</g-emoji> Always a beginner\n👨🏻‍💻 Engineer and Mentor\n👋🏻 he/him</div>",
+    "twitterUsername": "joyofui",
+    "websiteUrl": "rkahn.dev",
     "teams": []
   },
   "cafloyd": {
