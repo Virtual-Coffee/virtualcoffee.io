@@ -5,7 +5,9 @@
   "scripts": {
     "preinstall": "npx only-allow yarn",
     "start": "npx grunt start",
+    "start:vite": "eleventy && vite",
     "build": "ELEVENTY_ENV=production npx grunt release-prep",
+    "build:vite": "eleventy && vite build",
     "serve": "npx grunt connect:server",
     "build-preview": "yarn build && yarn serve",
     "update-member-data": "node ./scripts/update-member-data.js"
@@ -47,7 +49,9 @@
     "postcss": "8.2.5",
     "prettier": "2.2.1",
     "sass": "1.32.6",
-    "time-grunt": "2.0.0"
+    "time-grunt": "2.0.0",
+    "vite": "^2.1.5",
+    "rollup-plugin-entry-glob": "https://github.com/shiftyp/rollup-plugin-entry-glob.git"
   },
   "dependencies": {
     "@11ty/eleventy-cache-assets": "2.1.0",
