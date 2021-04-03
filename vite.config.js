@@ -1,18 +1,25 @@
-const entryGlob = require('rollup-plugin-entry-glob');
+const glob = require('glob');
+const path = require('path');
+
+const input = {};
+
+const inputFiles = glob.sync('_site/**/*.html');
+
+for (file of inputFiles) {
+  const key = path.dirname(file)
+    .replace(/^.*?_site\//, '')
+    .replace(/\//g, '-');
+  input[key] = file;
+}
  
 module.exports = {
   root: '_site',
   build: {
     rollupOptions: {
-      input: '_site/**/*.html',
+      input,
       output: {
           dir: 'dist/'
-      },
-      plugins: [
-          entryGlob({
-            fileName: 'compiled'
-          }),
-      ],
+      }
     }
   },
   server: {
