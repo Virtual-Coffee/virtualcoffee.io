@@ -1,0 +1,366 @@
+Bekah Hawrot Weigel  0:15  
+Hello, and welcome back to the Virtual Coffee podcast. I'm Bekah, and this is a podcast that features members of the Virtual Coffee community. Virtual Coffee is an intimate group of developers at all stages of their coding journey. And they're here on this podcast sharing their stories and what they've learned. Here with me today is my co-host, Dan.
+
+Dan Ott  0:37  
+Hey, Bekah, I am pretty excited to be here for season two; last season was really great. We had how many episodes we have eight 9...10, nine, nine amazing episodes. And I know we had some really great guests; I thought we had a good rhythm. And I'm pretty I'm pretty pumped to be back for season two. We have a very good lineup again, for this next season.
+
+Bekah Hawrot Weigel  1:03  
+And not only is it Season Two of the podcast, but also we're also moving into the second year of Virtual Coffee, which is pretty sweet as well. Pretty cool. What started as one tweet as suddenly turned into a community of developers and we have had two sessions of lightning talks, over 100 Virtual Coffees, Hacktoberfest, brown bags, bookclubs, this podcast, and a lot more. So it's been pretty great.
+
+Dan Ott  1:35  
+ newsletter 
+
+Bekah Hawrot Weigel  1:36  
+and a newsletter.
+
+Dan Ott  1:40  
+If you would like to join the Virtual Coffee if you're not a member already, the way to join is to come to one of our coffee events with so we have coffees right now. We have coffees, Tuesday mornings at 9am. Eastern and Thursday afternoons at noon, Eastern. So coming to one of our coffee zooms is the way to join the group. You can get links to those if you go to our website, Virtualcoffee.io. And I think go to the events section something like that, and come and come and hang out.
+
+Bekah Hawrot Weigel  2:12  
+In this season. We're talking about some new topics and we'll be talking about starting your journey, making hard decisions, asking for help and finding your voice, so we're really excited to be sharing these episodes with you.
+
+Dan Ott  2:26  
+Kicking off season two our first episode we have Gant Laborde. Gant Laborde is an owner of Infinite Red. He's a mentor and adjunct professor, a published author and award-winning speaker. For 20 years he has been involved in software development and continues strong today. He is recognized as a Google Developer expert in web and machine learning. But informally, he is an open sorcerer, and aspires to one day become a mad scientist. I feel like he's I feel like Gant's already there. Yeah, this is from Gant's bio that he gave us, but I feel like he doesn't need to aspire anymore. I guess for sure he's our local mad scientist. He blogs, videos, and maintains popular repositories for the community. He also just released his new book, Learning Tensorflow.js: Powerful machine learning in JavaScript. It's an O'Reilly book. It's available now. You can follow more of Dan's adventures at GantLaborde.com. And this episode we're going to talk to you about overcoming challenges, being authentic, and finding your voice.
+
+Bekah Hawrot Weigel  3:28  
+We start every episode of the podcast like we start every Virtual Coffee. So we'll introduce ourselves with our name, where we're from what we do and a random checking question. So today's random checking question is: the zombie apocalypse is coming. Who are three people you want on your team? We hope you enjoyed this episode.
+
+Bekah Hawrot Weigel  3:59  
+Hey, I'm BeKah, I am from a small town in Ohio. I am a front end developer. And if I could bring three people with me in the zombie apocalypse, I would bring Marion Ravenwood from Indiana Jones; I would bring the dog from The Sandlot even though that's not a person--oh maybe I should bring Benny "the Jet" Rodriguez who would be good. And my six year old has decided to be called Fireblade now and that just sounds like it could be cool for the zombie apocalypse. I'll bring him.
+
+Dan Ott  4:38  
+Hi, I'm Dan, a front end developer from Lakewood, Ohio. And if I had to choose three people, I feel like I, I really feel like we need to get some powers going. You know, I was trying to I was trying to pick up I was a Dumbledor, but like he's too much of a risk. Can't run like he's too slow. You know? Maybe maybe like later on Harry probably, Hermione, honestly, you know, we need her magic you know; whoever's faster of the two of them and then probably; I don't know Hulk maybe, predictable might might ruin our defenses. And yeah, I need I need a dog to I don't know, I'd have to get him in my whole power ranking of dogs too so it's a whole big thing but you know some some kind of friendly companion and well that's great, Yeah, that's it.
+
+Gant  5:37  
+Hey, I'm Gant Laborde and in the great zombie apocalypse, I would I, I guess like I'm supposed to say here my co hosts like the people here on this podcast, but I'm sorry, Y'all dead. It would be my daughter and my partner. So Alicia and Mila, my dogs but they don't count as people. And then I get one more person who gets to go with me. So I guess I'd take Dwayne "The Rock" Johnson. Because if I can't figure it out, I know he can.
+
+Dan Ott  6:15  
+I like it.
+
+Bekah Hawrot Weigel  6:17  
+Nice. I suddenly feel bad about not taking my family.
+
+Gant  6:24  
+You've got Fireblade so...
+
+Bekah Hawrot Weigel  6:27  
+I do I've got Fireblade, someone who's gonna get us to where we need to be. So welcome to the podcast, Gant. We're really, really happy to have you here. And I want to start off with asking a question: what is one non coding thing our listeners might not know about you?
+
+Gant  6:56  
+So I always hate these questions because they make me realize just how boring I really am. I'll say this. I feel like public speaking is a cool thing. But I do public speaking about coding. I'd say like building stuff, but most of the stuff I build I code like IoT stuff. So cool. I'll go with the fact that I used to be terrible at gardening. Before the pandemic, I killed artificial plants. That's how bad I was. And now I've had the sandwich yesterday. The lettuce was from the plant right here next to my monitor and the spuds were from the sprouts. We're from my window sale. And I'm working on some jalapenos in the backyard to go ahead and make my own pepper jelly to mix in with that sandwich. So truth be told, you can teach an old dog new tricks.
+
+Bekah Hawrot Weigel  8:03  
+Nice. That is amazing. I want some pepper jelly now.
+
+Gant  8:09  
+On a sandwich. It's good. Actually, I don't know if you've tried that.
+
+Bekah Hawrot Weigel  8:14  
+Oh, for sure.
+
+Gant  8:15  
+sprouts and lettuce sandwich. That's good.
+
+Bekah Hawrot Weigel  8:21  
+Sounds delicious. I I'm ready for one now. So you let me know and that pepper jelly is done. Alright, let's talk a little bit about your origin story and how you came to be Gant Laborde...
+
+Gant  8:38  
+That's a little bit boring as well. So like, everybody's got these really cool stories about how, you know oh, you know, I was an accountant or a teacher for 17 years and then one day I decided forget this I'm gonna do some kind of like workshop or something. I'm a changed my life for my career. My family hated computers. My family is like very anti computer anti technology. To not not on purpose. They're just for some reason my dad kind of kept it out of the house. And I had a Nintendo and I wasn't allowed to hook it up to any TV that was worth anything because it would cause ghosts as something he heard. Whatever. Ghosts not not like real ghosts. Back when you had CRTs you could actually cause like images to get burned into the phosphorus. So it would cause issues. So I loved that thing. And then finally he had to get a work computer that shows up. And then I make that computer say hello Gant. It was windows 3.1 or do some qbasic aren't making say hello Gant. And I was like, Okay, this is what I'm doing with my life. So I self taught myself how to program in high school. I went to college for computer programming, I graduated. I've just been in this field for so long, it wasn't like, there was like this weird, cool hero's arc to get there. It really was that once my computer was able to play games and do these cool things, I said, I'm gonna do that. And I'm gonna be the person in my family who does that. I guess they could sprinkle it in here, I did have a lot of like computer programmers anxiety, lack of support. And a few ways. Like, you know, I didn't have anybody to ask, I had the oldest computer in high school, I didn't have any money. So I guess I've self made myself into this profession. That's probably as interesting as I get.
+
+Bekah Hawrot Weigel  10:52  
+Well, I mean, I think that's great. Because you can make anything interesting, you are a storyteller. And you'll find a way to make it interesting. And I think that was great. Like, kind of going off of that. So you are basically a master of all trades, right? Like you do all of these things. You speak, you write, you code, you mentor, you're like my Yoda figure. So when I have a problem, you just ask the right questions, and then I hopefully come to the right answers. So what is your favorite thing to do?
+
+Gant  11:28  
+Um, I found that it really depends on my state of mind, I need to be creative, though, I need to let creativity flow through me. And sometimes that's writing; writing is very cathartic. If you, you know, went through high school and used to get B's in English, and you kind of enjoyed it, I feel like you could be bringing in a whole value to the whole world of computers and documentation and storytelling and the helping and giving narrative, it really misses a lot of that, you know, it's so calculated that, that sort of how I want to say that algorithmic sort of you should have known this is cold. And it could use a lot of kindness and stories and interest and examples and fun things to kind of bring in there, like zombie apocalypses. I would love to learn via zombie apocalypses as a course. Actually, there used to be this Rails course, rails for zombies, right? And it did fantastic. Where's the new version of that? Yeah. So my thing is bring the creativity through you, you know, let like, write the blog posts write the story is create a game that helps educate, create podcasts like this. And so I find that I tend to center myself around other creatives who, despite, you might be fantastic At one thing or another, or maybe your video editing skills are just like off the charts. Maybe you can make a tic toc that everybody's like, how did you do that? Whatever it is, bring it together and use it to tell a story. 
+
+Bekah Hawrot Weigel  13:12  
+Yeah, I love that. I did--I had totally forgotten about it, but--I did crypto zombies a couple of years ago. And that was really fun. So it's programming with etherium. And you were going through and defeating these zombies, I think.
+
+Dan Ott  13:27  
+Yeah, there was a CSS Flexbox course, that's all like zombie. Zombie-like, solve a bunch of zombie related puzzles to like learn CSS,
+
+Gant  13:38  
+I guess you got to like, get down in the alleyway using Flexbox without touching the zombies or something. That'd be funny. Yeah.
+
+Bekah Hawrot Weigel  13:46  
+It's awesome. Now we need a collection of all of the the zombie coding lessons that are out there.
+
+Gant  13:51  
+Yes.
+
+Bekah Hawrot Weigel  13:56  
+Um, so so speaking of zombies, and challenges, what are some of the challenges that you've gone through in this journey? I think you know, you come off as someone that can do a lot of things really, really well. But I know that we all go through something. And so I especially love to hear from people who do things so effortlessly, you know, what they had to do to get to that point.
+
+Gant  14:26  
+There's a couple there's a Choose Your Own Adventure: there's trying to graduate was really hard for me because I was a I was a D student in math. I wasn't very good at math. I didn't see how it actually pertained with anything. And that was really hard for a while. NowI actually watch math YouTube videos for fun. So that's a different version of me. The other thing I'll say is that I used to be afraid of crowds or speaking at all, at all. I had a college, you know, 101 psychology, no no it was philosophy. And I did everything wrong, like I'm getting ready to go ahead and do this right? I have no money. I'm in college first year, I decided, you know what I'm gonna do that I'm really nervous about this, I'm gonna treat myself to a really nice latte. I'll feel very happy because I've got this latte. I'm just going to put myself in the corner up until it's time for me to go ahead and give my talk. And so I drink my latte, sat in the corner, just kind of like crowded over myself, sitting over my notes, reading, reading, reading, and you know, like the first sentence, almost like, I couldn't help myself, I was just consistently rereading the whole thing. Get up there. Just super ready to go ahead and give this presentation. First sentence comes out of my mouth. Boom. There you go. Take that everybody. What's the second sentence? Gant what's the second sentence? Gant? Did you memorize the second sentence? Alright, now it's quiet. Forget the second sentence, you're completely quiet and everybody's looking at you. Come up with something that's better than the second sentence. Right now, with everybody watching, do something that's gonna be fantastic and blow everybody away. It is. Okay, you're still quiet. And everybody's still looking at you. You just need to say the second sentence. That's really good. Now, no pressure better be the best second sentence you've ever said in your life. Someone's coming over to you. They're moving you to the side of the room. They're continuing this talk without you. You still haven't said anything. That's what happened to me in college. And that's where I was. And everything I did to prepare for that was wrong. Everything I did was wrong. And from that day, to where I am now, that that's a that's another adventure. So yeah, I could talk about either of those things. Your choice?
+
+Dan Ott  16:59  
+Well, just listening to you describe that. I'm like sweating now just listening. Like,
+
+Gant  17:06  
+--you know what, you know, you're you're not hyper tuned into one person, the audience, you are reading the minds of about 30 people watching you. You're like, I think I saw somebody roll their eyes, you know, in the third row. Like, I was super tuned in to all the wrong things. So so named some of the things I did wrong there. One I took I had coffee, right before I was gonna give a talk was I was nervous about what I was crowded over myself. I had a body language. I know that there's a lot of argument about power posing being false or whatever. No, I think I think that even if it's not specifically tied to testosterone, or if they can't have, they're having trouble proving that part of it, I don't care how you're positioning yourself right before a talk helps create, you know how you're going to be doing it. I I was trying to memorize, I was rereading the same thing. I tried to come up with something right on the spot. Instead of understanding how to go ahead and present a story. I was presenting exactly what I was trying to say. It was I was trying to be perfect. And so all those things were totally wrong. And it created a super fear existing human being putting me in a crowd any more than like a small circle of people, and I would start getting extremely uncomfortable. Now, I've I've MCed conferences, online and in person with over 1000s of people, so it's a big change. But that was a bunch of steps between here and there. I do have a blog post about that, too. I can share that at some point.
+
+Bekah Hawrot Weigel  18:57  
+Yeah. Well, shall we need to drop that in the show? Yeah.
+
+Dan Ott  19:04  
+I mean, that yeah, that's very like this, that whole... That door is the one I choose. Sorry. Yeah, picking the door. But like, what were some like, I mean, obviously, it's a lot of time has passed since then. You know, and there's no you know, just like go like that to from from stage fright to where you are now. But can you like highlight some? I don't know. Some "aha" moments are like what, I don't know if it was just, you know, reading books and dressing or how did you get closer to being more comfortable? You know,
+
+Gant  19:34  
+It's a combo move. For sure. One of the things I realized was I did everything wrong, right. I was anxious, not excited. So like, which actually changes your biochemical makeup. So first thing I did was kind of like studied, what the hell did my body just do? Why did I go into fight or flight? and why would my body go into fight or flight talking to people? Why whatever evolutionary thing is that that's gonna be so good for me. And the truth is like, it's, it's great for as a societal animal not to have everybody ready to go ahead and take the stage and talk, you know, we inherently actually respect the stage and the power of it and the passing of the microphone, there's a reason why MCs will sort of like, almost like, pass the baton and shake someone's hand, as, as an authority pass to the next person who's coming up and talking, there's a certain programming that we all follow, or looking at these things. And, you know, when I was kind of like, analyzing this, I could see how wrong I was, I could see all this stuff. But like, when I was anxious, my body was releasing all this cortisol in my blood system, and it was just more and more cortisol is causing me to get more and more fight or flight. Neither of those will let you give a talk. I can't go in the front row and punch the first person I see. And I can't run out of the room. So I froze. Yeah, I didn't have I couldn't do either the fight or the flight. And so what I was missing was oxytocin, you know, which is actually what you have, as the difference between a person who's about to go on a ride, and be excited about going on a ride, you're standing in line, you're kind of jumping up and down, you're like, yeah, and so you don't have anxiety. Because cortisol is dripping through your bloodstream, telling you pay attention, as pay attention, that be afraid that's be afraid of that. And without oxytocin combined with that, your blood vessels all shrink up. And it just creates this hyper tunnel vision of what's going on. And that oxytocin helps relax you and also make sure you're paying attention to the right things. And so I wasn't leaning into that I wasn't leaning into all these things. And when I found out sort of what the biochemical and what my body was doing, I found out like, Hey, now with practice, you can figure out how to get your oxytocin released, prepare for a talk, get these things happening. And, and then I went to my local Toastmasters. And I was nervous as hell. And what they did is, let me talk as much as I was comfortable talking. It was just like me saying my name and sitting back down. That's all I had to do. But I could always like do a little bit more to a little bit more to a little bit more. And then so that let me sort of like carve through the stone a little bit. And I want to say, just, you know, half a year of Toastmasters is probably the most valuable thing I can recommend to anybody.
+
+Dan Ott  22:44  
+Can you can you share what like what Toastmasters is just general?
+
+Gant  22:47  
+Yeah, absolutely. Toastmasters was formed at the YMCA back in like 19-- whatever.
+
+Bekah Hawrot Weigel  22:55  
+I think it's 98 years old?
+
+Gant  22:57  
+Yeah, it's this ridiculously old organization is a fantastic organization where it was just the only way that you can, you can learn a lot about public speaking. But then you got to do it. It's like, you can learn how, you know, a gun works. But people still have to go to the gun range, you can learn a lot about swimming, but you still have to go swim. You have to go do the thing. And so how do you do public speaking, you know, like, you're gonna sit in the in front of a mirror and practice it and that you need, you need a bunch of people who agree that they'll listen to you, and you'll listen to them and you'll give each other feedback in a safe space. And that's what Toastmasters really is, it has three pillars, one of sort of this public speaking, another one of this evaluation, and then this third part that ties them together, which is like this Leadership Initiative. So if you want to get better at giving people feedback, speaking or leading, that's the place and so it's cheap as hell man these people haven't raised their prices since forever It's international so people who are listening to this like there's a there's a Toastmasters quite a few in Amsterdam, you know, all kinds these other places. So and they have like, the speaking competitions and fun stuff to go watch and cool people to go see and, and motivational stuff. So if you get yourself mixed up in there for a little bit, and you kind of learn what your body was doing. The inevitable conclusion is that you will sort of solve your, your your own sort of quandary that you can't solve, you know, just by being the first time you speaking in front of a class for a great, you know, like, what a terrible first experience. And way better than that is a group of friendly people who have worked with 100 people just like you, who had the same concern. Have you had and give you the amount of feedback that you're ready to receive? Because I've learned some pretty advanced tricks. But I didn't learn those my first year at Toastmasters? Hell no, I was just learning how to go ahead and get up there without having a down a whole bottle of wine at a time or something.
+
+Bekah Hawrot Weigel  25:19  
+They do have oxytocin nose spray, so maybe that's the,
+
+Gant  25:23  
+well see, there you go. Well, even even easier than that is like if you. So I'll say this, like when you're about to lift weights, you can. You can do all kinds of crazy stuff. But you can actually like, get yourself in the right mindset, to lift weights. If you're about to go for a run, you can get yourself in the right mindset to go for a run. And if you're about to give a talk, you can get yourself in the right mindset to give a talk. It's just the same thing as all those other things. So I would always go for the internal skill versus running out of nose spray at the right time, or whatever else happens. But yeah, it is it is good that we're kind of like chemically biohacking ourselves. But I think that starts with what we eat, think and do.
+
+Bekah Hawrot Weigel  26:11  
+I think that's such great advice. And that goes across so many different boards, you know, whether you're coding or, you know, we talked about interviewing a lot of Virtual Coffee, and you go into an interview, I always like to, like, watch a comedy show or Yes, funny clips beforehand, because I do that, you know, get that fight or flight. And it's so intense that unless I can bring that down. It's really hard for me to get back to a place where I can answer something confidently or present in a positive way.
+
+Gant  26:46  
+Mm hmm. Yeah. Yeah. The fight or flight is, is it is awkward for us as an evolved societal species. You know, it's fantastic. If somebody breaks into your house, but almost day to day, it's such a great skill for you to kind of manage that, that discomfort and be able to work on it a bit. So I'd say like, it's kind of a life skill. It's opened up a lot of I'll say Toastmasters has opened up a lot of doors for me, and I can never stop singing their praises for for honestly, what they've done. I can have a hard conversation with someone. You know, there was something I couldn't do either. I could do it anytime I need to know.
+
+Bekah Hawrot Weigel  27:26  
+I could do--can I call you? Instead of me doing it? I'll just let you do the hard conversation. 
+
+Gant  27:31  
+You're fired! You're done! I just just record me, you're fired?
+
+Dan Ott  27:37  
+Can you use the zombie? The like one of the zombie tones for that too? Like?
+
+Gant  27:41  
+Yeah, I have to pull up all the weird stuff.
+
+Dan Ott  27:46  
+Voice modifier for you're fired?
+
+Gant  27:48  
+Probably have to...fired? I guess. Let me let me go ahead and find one for you. And I'll come back to that. It changed their icons on me for the voice month stuff. And now I don't know what anything does.
+
+Dan Ott  28:05  
+Yeah, I don't feel like I just
+
+Dan Ott  28:11  
+That's it. That's it. We found it. That's interesting. It's really interesting. how all this stuff kind of relates, though, and the, yeah, the fight or flight and the way that your body is, like, the reasons behind why your body's doing things, you know, or your mind is reacting to things. I feel like that aspect of it is really important to learn and not just for obviously, for public speaking, I've been doing a lot of that with, like with any anxiety stuff, too. And yes, and it's all sort of part of the same puzzle, you know, and, yeah, I think that's very interesting that it's like that was one of your like, starting, you know, like one for all this is cool.
+
+Gant  29:03  
+Hey, it's about so we have a saying, I'm gonna I'm gonna Toastmaster y'all real quick with a saying we don't, we don't get rid of the butterflies in your stomach. You make them fly in formation. And it's about writing your energy levels. Like for instance, I am naturally a little bit anxious with that is what I realized, which makes me excited when I go places. So I am about to give a talk before I'm on there. I feel like I'm about to get on a cool ride. And then when I get off of it, I feel like I was on a cool ride. If you're normally a board person, you can be a relaxed person. You know, if you're stubborn, then you could be committed. It's not about changing who you are. It's about changing the outcome and what that ride is. And you could apply this to all these different things like he, I'm not going to change my biochemical makeup much more than a little bit. But that's enough. You know, you can significantly alter the outcome with some well placed chess pieces along your way. And make yourself you know, let's say like you say you get on stage, and you're just way too hyper. Well, I mean, if if you present that as energetic, I mean, that's fantastic. I mean, that's what you want, when someone's running your spin class, you know, like, people are paying a ton for the most energetic spin class, you know, like videos that are out there. And people find that niche, and they kind of ride it. That's, that's how you turn it into success.
+
+Bekah Hawrot Weigel  30:38  
+I find for me, it's much easier to do in front of a live audience. So you know, being virtual, and giving talks that way, it's been much harder because I can burn that nervous energy in front of a crowd of people. But when I'm looking at myself on the screen, giving a talk, there's nowhere to put it.
+
+Gant  30:58  
+Yeah, and there's a there's another piece of this, I'll say that when I was. So here's something I noticed, I was able, fortunately enough before the pandemic to give enough talks, to believe that audience is on my side and wants me to succeed. They are super awesome. One time we had a technical glitch, and I jumped on stage to go ahead and say the technical glitch, because the audience would, I knew they would support me, I knew they were they wanted someone to come out there and make a joke about the technical glitch. Right? That's great. But now anybody getting into speaking in a virtual world has no reinforcement on what their audience really wants, and what they're really feeling. And they don't see heads nodding in the front row, or whatever it is, and they're not looking for the positivity is hard to find. So I couldn't imagine what it's like to start breaking into that during the pandemic, and start actually having this where you don't get any kind of reinforcement as a speaker. And the second thing that's really awkward about that is, I think audiences really need to step up, send, if someone does a tweet that you like, don't just heart it, say, I love this tweet. Thank you so much. If someone does a podcast you like, you need to go find them afterwards, you can say something. It's so much more important as virtual world. Because it's just like, I know somebody who did a blog post, and they're like, nobody cared about this blog post, as like, well, what's the stats on it? And there's 1000s of people who had read the blog post, I was like, Here's 1000s of people's whose life you've influenced and like, well, how come no one left a comment. I was like, Well, welcome to the virtual world of lurking where you're gonna get one comment per 10,000 people who care. That's it. And that's a little bit weird. We're not programmed for that, either. So this is the next battle.
+
+Bekah Hawrot Weigel  32:59  
+Yeah, that is so hard to try and work through that. And you're, especially when you're writing a blog post or a tweet, like you said, or, you know, you you're releasing your second book here soon. And so you put all of this time and effort and heart into creating these things. And then when there's no feedback, it can be challenging and kind of doubt or imposter syndrome or whatever, because you have sunk a lot of yourself into it.
+
+Gant  33:31  
+Yeah, it's put yourself out into the void and it feels like nothing nothing heard you nothing said that. You know, that's, I feel very Okay, I know that some of us in this podcast has gotten some kind of value out of it. And that makes me extremely happy. I know that by the way, you know, y'all get a lot more likes on your tweets and I I got to work on my tweeting structure to have it more conversational because I just tend to tell people stuff it's to like Redux you know, it's just like uni directional process here. I need to work on that a bit. But I think being here is perfect
+
+Bekah Hawrot Weigel  34:16  
+my most liked tweets are about my kids and poop. So good. Start there.
+
+Gant  34:26  
+Okay, you got it. I will...
+
+Bekah Hawrot Weigel  34:29  
+see how that goes
+
+Dan Ott  34:30  
+Every parent has just millions of poop stories i feel like
+
+Gant  34:37  
+I i have i've been tempting fate as well. I just hung an oil painting in my living room. And if you see a photo of my living room, it is for my daughter. She has a slide and this and that and and these cushions that I apparently had to buy because they're super they're basically like mad. This is like memory foam mattresses a fold out. But they named it for kids. So now it's more expensive and I had to get those. And I've got all this stuff all over the place. They just see this oil painting. I'm like, I'm gonna defend it. I mean, it's not gonna last I know it's gonna get destroyed. I'm trying.
+
+Dan Ott  35:19  
+Yeah, we had, you know, an old TV in our family room with same deal slide all the all the all that, that we move the couches all over the place and stuff. And I was always joking about like, if you're gonna throw things at the wall, just aim it at this TV so that we can get a new one you know, but then we got a new one. And now I'm like, Okay, do not. Do not. So far so far. Everything's fine.
+
+Gant  35:46  
+That's good.
+
+Gant  35:49  
+Oh, man. All right, kids and poop, done. I'm right there right here. It's on my desk 
+
+Bekah Hawrot Weigel  35:56  
+in your Gant, Gant way of writing things you have to find. Find the right way to do it, I guess.
+
+Gant  36:03  
+Perfect.
+
+Bekah Hawrot Weigel  36:07  
+So what like kind of going back to what we were talking about before you have a really distinct voice and all of the stuff that you do. And it's nice, because it's really consistent. Like, if I opened up an article, I don't need to read that. It's by Gant Laborde because I read it. I'm like, this is definitely an again, article, right? And so you're like covering it and all these spaces? So like, how have you managed to stay like consistent across all of these things?
+
+Gant  36:36  
+Here's something funny, I wrote a blog post really late at night. And I asked a few friends to review it. And they're both their feedback was this isn't Gant enough? You've you failed as like, I don't want to rewrite it. So like, I went back in there, I was like, Oh, I see what they're saying. Then I kind of re added stuff to it as like, Here you go, can you review this? And they're like, yeah, there you are. Which is really funny. I'd say that. For me. It's my it's, it's a little bit of authenticity of myself here. And I don't, I don't think that I'm a great story. Sometimes I every I think that might be everybody's case, right? We, I know my story. I've been watching it for 40 years. So unfortunately, I am a little bit like, I'll be able to do my voice anytime. And I'll be able to do my version of something anytime. I don't know if it always is going to resonate with people or if it's going to be that. But for the most part, I need to I need to get over that. And I need to do it more. So I'd say that if you were turning yourself into a brand, or you know, if you're working on your own brand, be as authentic as you can. And I think that's what's so great about the fact that your kids and poop stories are doing so well on Twitter. Because if you were trying to do something else, I think everybody would notice, you know, like that goes away. And you got to find what you're really, really, really excited about and, and what, bring that to the forefront. And then you will always speak in your voice. So when I am talking to people, I'm very excited about the people I'm talking to. And I really want to get my story across. And I want to make it like fun and entertaining. And this is the same thing. If we saw each other at a conference, and we had to talk about what your top three movies right, then I'm going to talk about that the same exact way because that's who I am. And if we go out to dinner and have drinks, and everybody's like, Come, actually anybody come visit New Orleans, once the world opens up. Let's do that, like, let's go all have drinks and sit out there and listen to some jazz, and talk about whatever it is, but I'm going to sound exactly the same. And that gives me the easiest way to keep my voice consistent. Now I can raise that bar by by improving who I am. So this is like that same thing I was talking about before, where you've you've not destroying your energy, but you're channeling it and you're kind of improving it and you're working on it, you're letting it flow in a different different way. So if I, you know, go start taking music lessons, or if I start learning how to speak with this crazy new dialect or I start doing Shakespeare in my spare time. Those things are going to pepper into who I am, and what's going to start happening there. And then the bar raises in everything that I do. So I found that like Virtual Coffee is a lot about virtual improvement as well like improving yourself. You have book clubs you have finding your voice here. You have mentorship and things like that. Those are all perfect. As long as they're actually coming in and hitting home and being who they are, I know people who tried to open up like Twitter accounts to be a personality. They did great for three months, and then just couldn't keep it going. This is the formula for consistency. Be 100%. You.
+
+Bekah Hawrot Weigel  40:20  
+That's really great advice. I like that. And I think for me, so normally when I'm writing, it's just more, it's personal. It's storytelling. And that's where I feel comfortable. And so I've tried to write more technical things, and it's much harder, because it's like this negotiation of like, why I need to appear to be an authority or something like I'm not an authority on this. Like finding, figuring out how to find that balance of like, okay, just like, be myself, but also be myself and talk about code, you kn ow?
+
+Gant  40:57  
+Yeah. Well, and and the thority. Here's a weird thing, the authority doesn't have to say they're an authority, or doesn't have to talk like an authority to be an authority for a certain time, especially in our field. So we're used to authority coming from, like a uniform particular mentality and things like that. But, but that's just the first, you know, reaction that we have. And then after that, and authority doesn't have to say they're in authority. That's a sing. That's a sign of it. And so my last blog post for the Google Developer experts that was published, has a Harry Potter themed cartoons and terrible drawings in it, and a secret easter egg, that if you draw a skull on the website, it'll, it'll like, show these snakes that come out and call you a death either. It's like a fun little thing. And what happens is, none of that is professional. But I think that what's great about it is that, sure, we set up a little bit of the professionalism and why this is on that blog post and what the categories are, and what the technology that's going to be used are. And then the trick is not to sit there and constantly say, I am still an authority, let your let your story be told, and let people be able to leave that because they're already following you. Now you have the stage, you don't have to keep mentioning, you're on stage and you're talking into a microphone, you have the attention. Now keep it, that's the trick. If you were to bring out the most boring person on stage, I could give them an introduction and hand them a microphone and everybody would start listening. And that would be my job as an emcee or as the person who brought them on. But Five minutes later, if they're not listening, that's not my fault. That's the story that they're telling. That's what's going on. So you can start with authority, but don't stay in it. It's not, it's not really as cool as it sounds. And I would say, that's...there's, there's enough people ready to hand you a microphone that you don't have to worry about improving your authority, you just have to be willing to go ahead and accept poor microphones in your life.
+
+Dan Ott  43:23  
+I Like that, yeah, one thing that I have worked on with this sort of thing, too, is, is if you're writing about a topic, you know, you don't have to, it's okay that you don't know everything you know, and also, like your readers, or audience, or whatever, will maybe trust you more, if you are upfront about like, I'm not really sure about this part, but here's what how I solved it or, you know, that kind of thing. I found personally, like, it's a struggle to get through sometimes because you want it like you. I don't know, like, my lizard brain wants people to, you know, think that I know everything or whatever, you know. So like working on that, like little step of I really don't know everything, here's how I solve this problem, whatever, you know, and like, like, I feel like, when I'm reading as an audience member, listening or reading that, that sort of thing actually makes it helps me trust somebody, you know, more, more than if they don't mention it or act like, you know, in some way that they, you know, pretend to they know everything because nobody does, you know, so
+
+Gant  44:21  
+no one actually wants perfection man, it really doesn't, you know, the PhD presentations, like you're talking about where nobody can be wrong. You can't go up on the curb. You can't you know, you have to have driven most effectively. I mean, how many how many PhD presentations? Can you go to a conference and watch? Like, it's just, it's terrible. If you ask and then we could do this experiment right now. Think right now about the best talk that you've ever seen in person, the one that was like, Wow, that was really really good. Just choose one of the Really good ones. I want you to name three properties of that talk. Okay, so like three adjectives that describe that talk. And we'll start to you, Bekah.
+
+Bekah Hawrot Weigel  45:13  
+Um it, okay. It was engaging and no, that's not an adjective.
+
+Gant  45:20  
+Not perfect, perfect. Yeah, engaging.
+
+Bekah Hawrot Weigel  45:24  
+Something the entire audience could relate to at different stages. So I guess relatability maybe? Yeah. Um, and then was fun.
+
+Gant  45:36  
+Yeah. Perfect. And we'll get three more.
+
+Dan Ott  45:39  
+Yeah. So as I was also struggling with a word choice, but it was like, non pol..., like, not all the way polished. I don't know, what's the right word for that? Yeah.
+
+Gant  45:50  
+And that's that, you
+
+Dan Ott  45:51  
+know, like, the story was personal. I mean, it was a tech talk ostensibly, but the story behind it was, like, personal so like, you know, relatable, like kind of like Bekah saying and had a third thing, but I forget exactly what it was. I don't my mind. My mind is, is empty now.
+
+Gant  46:11  
+That's okay. Neither of y'all said perfect. No one says perfect. And that's, that's what we can get. What was it relatable? Is someone coming and feeling like they're making eye contact with you, and leading you through something fun, and relatable. That's it. Congratulations, like, that's it. Nothing you do should be perfect. No one cares about the perfect speech that they saw. That person failed. The relatable speech is the one that was everybody's favorite. teta. Now, the bar is a lot easier. I think we can reach telling a story and having people be happy that they heard it.
+
+Dan Ott  46:56  
+Yeah. I love that way of thinking about the whole thing. 
+
+Gant  47:01  
+Yeah.
+
+Bekah Hawrot Weigel  47:03  
+When I gave my first talk at a conference, it was when I was a graduate student in English. And it's a very different feel. Because it is you have to be perfect. And there will be that person in the audience who will raise their hand and try and stump you or to make you feel like you don't really know what you're talking about. Like, trying to unlearn that anxiety, that first experience, guys.
+
+Gant  47:29  
+I had that. So I did a keynote for Amazon. It was one of my favorite talks I ever gave. It was a it was amazing. It was great. And we had q&a afterward. And there were so many cool q&a. And then there was that one person, you know, who stands up and says, starts telling their life story. Like, like, Okay, you've got the microphone, and now it's your turn. Okay, go ahead. They do all this stuff, then they asked the most esoteric question. And it was like this really crazy thing and this and that. And they just wanted to sound super impressive. And I knew everybody knew I basically I could say something. And we could have this conversation be like done, because like no one else who was there was following what they were saying. And I was half following it. And if I just kind of conceded to them, they would have been like, haha, you know, I know so much. And then they would have maybe sat down or something. The way I handled it is because I saw it happen as like, this person is not supposed to be here. That's not the you know, this. You're at the wrong kind of talk. So I told them, I said, Google it. Google it. They were they were visually shocked that I said that. And I actually enjoyed that way more.
+
+Dan Ott  48:57  
+It's the "Let me Google that for you" approach.
+
+Gant  49:00  
+Yeah. Yeah, I guess they didn't expect that to come. You know, there's, there's always those people and truth is, you don't need to waste time on that.
+
+Bekah Hawrot Weigel  49:15  
+Yeah. totally true. I just need my brain to remember. You know, I like I really have enjoyed this interview. I think that you just do such a good job of like mentoring in every situation. And, you know, Have you always been that way? Like is that a skill you develop?
+
+Gant  49:43  
+I honestly say I learned a lot of how so I won Best evaluator and some Toastmasters competitions. I learned I learned how to evaluate and give constructive feedback there. Like I said, there's three pillars to it, and I really do Oh, My speaking ability, my ability to give feedback and my a lot of my leadership skills, I really do owe to the fact that I've been area governor at Toastmasters for a year, I've been a club mentor, I've spoken in competitions, as well as a club level, like hundreds of times now. And I've been an evaluator hundreds of times. It's just these are the things that that I've been allowed to practice. And anybody who goes and practices these things, is going to find that they've built a muscle that they can use in all kinds of life situations.
+
+Bekah Hawrot Weigel  50:41  
+That's so great. And I think that you've hit on this idea a couple of times of its, its practice, right? You know, it might seem effortless that you see somebody doing something, but it's because they have practice these things over and over. And it takes growth and it takes time and effort. But
+
+Gant  51:00  
+yeah, always be growing. He always be growing. What What, what book are you reading, that's, that's challenging you what, you know, blog posts, are you writing that's challenging you? What's the next thing if you're not, I mean, I know this is like the oldest and everybody hates hearing it. But if you're not growing, you're dying. And I really do believe that it's important for you to be, you know, we've got so much time with a very, very sharp intellect. And we tend to waste that, you know, for our first 28 years of our life, some people really kind of get there. But for the rest of the time, you're, you're sort of like crystallizing new thoughts and ideas and bringing those in. And I love that because, you know, you could do that till, you know, the day you die, you can always be getting these new thoughts and kind of adding new skills and getting new updates and improving who you are. And it's a little bit like as if I add a new word today, or new word a week, you know, I've got 52, amazing, cool new ways to express myself a year. If I add new concepts, I'm finding new ways to express myself. And I'm getting new nouns and new neurons that I can hold ideas and that normally I was unable to hold before. So I'm a relentless self improver, I buy books, and then sometimes they can be just brought down to one paragraph, you know, I know this, you read the whole book, and you're like, I was one paragraph, just just to say this, and then ignore the book. But I'll still, you know, that one paragraph of perfectly usable, well identified, information is locked in your brain forever, because you read that whole book, and you'll be able to reference it and use it for the rest of your life. So I think that these are, it is practice, and one of the most beautiful things we can do is constantly improve.
+
+Dan Ott  53:14  
+I...my...so one question was like, how do you personally manage, like, the learning along with obviously doing work, and he seemed to be doing, you know, like mixing in your side projects, and everything else that you have going on? Plus, you know, family and all that stuff? Do you have a specific method or anything?
+
+Gant  53:34  
+For me, I combo things as much as possible. And some people absolutely love it. And some people, there are certain situations where it's like, No, you don't combo this, right? You don't, you wouldn't go to a recital, and then like, check your emails, right, bad combo. But if you've got to learn a new technology, and you've got like a marketing task, and you have a cool idea that you want to work on, well, if you build that new idea into that new technology, yeah, it might take you three times as long. But you're, you're kind of like building your resume, or you're kind of adding a marketing concept. And so you kind of combo these things, and then you want to get as much out of those as possible. As a developer, I tend to not so for instance, I've mentioned like so I just wrote a book, write my intuition is to shut the hell up and have said that once I set up wrote a book, I put it in, I pinned the tweet. Didn't I do like all the marketing, right? That's, that's your intuition. That's my intuition is how we can just The truth is, I have to force like, other things I have to constantly like, you know, fit those things. So here, take a look at this. I'm on this amazing podcast. I'm interested in you know, I'm talking about All these cool concepts, and then boom, guess what I'm opening my spreadsheet of marketing drips. And I'm saying mentioned the book, boom combo move. So there's kind of stuff there. I think I think finding proper combinations of things is going to give you what is like attractive to go after, as well. Like this serves like all these different kinds of things. That's what I always loved about computers, like you could leave them running. And they're always crunching numbers and collecting emails and solving problems in the background back, I want to say, a billion and a half years ago, I might be off by a little bit. There was a screensaver that used to like, try to help identify radio signals and space member SETI. And so one of the things is like your computer when it went dormant, used to like try to help identify signals to spread. I love that, you know, like, when I'm not using it, it's working on this cool thing. This is of course, before crypto, because who has an extra? Now, we'd come up with that idea, then just like, Alright, everybody's gonna mind crypto for us now. I mean, now they're shoving it in the JavaScript. So it's doing in the background of webpages, right. But it's, I think it's about finding, finding situations, partnerships, interactions, where you can have a lot of the things that you want all kind of come together, and making sure that you're pushing yourself to get all the juice out of every single piece of fruit, you you get better at squeezing it out, you get better at using every piece of it, you become a chef, you know of, Okay, I'm going to cut this part over here, but these skins are gonna go over there and be flavoring for that I'm gonna leave this in the pan for this. And like this weird sort of combination in this 3d math starts to come out. That's when you know, you're getting more value out of your time. And I think that's what we're really worried about, because I spend a lot of time doing something that has low value. And then if I could do something that does a whole bunch of things. For me, that's a high value thing. And those aren't easy to figure out. And I think they're very per person. But that's my favorite thing. If I can find something that hits a bunch of different plus signs. I'm like, Yes, I deserve this dopamine.
+
+Dan Ott  57:39  
+That's awesome. I like that I like this sort of intentional, you know, approach to that, that sort of thing. Because I always have a billion different things going on, you know, and trying to like, review and figure out how to pull them all together, you know, and do some different, you know, overlaps in different circles or whatever. I think that's I think that's a great approach.
+
+Gant  57:59  
+Yeah. Venn diagramming, I guess, is like, it's the Venn diagram of life here. Like what things can I do to have the most impact and in my, and here's a trick. learn to say no to the things that don't. So you have all these things, that Venn diagram, you have five to 10 things on this list that are huge impact. The 10 things underneath that are evil, attractive things that you want to do that are low impact things that don't move the needle that don't do anything, you have to cut those those are those your do not do list at the top as you do list. And you say no to the things that go that serve the bottom, you say yes to the things that serve at the top.
+
+Dan Ott  58:45  
+I like that. Got to figure out how to say no to a different question. That's a whole nother podcast episode...
+
+Gant  59:01  
+"Saying no, the episode."
+
+Bekah Hawrot Weigel  59:03  
+We do. We need that episode. I think I get you and I met one time and you said yeah, one of the things you said to me was when you say yes to something, you're saying no to 100 other things or something like that. And I was like...yeah
+
+Gant  59:22  
+yeah,
+
+Dan Ott  59:22  
+yeah. I think we're Yeah, pretty much there, right? Right.
+
+Bekah Hawrot Weigel  59:33  
+Yeah. Yes. I was. thinking through all these things now.
+
+Gant  59:39  
+That's good. That's good. There's a there was this artist who went on stage and he played and then after he played, no one applauded. And so he felt really bad. And then the person said, they're they're still emotionally feeling what happened there. So it's okay. So I was like, whenever I say something, there's like silence afterward. That's what I tell myself. But hey, people are thinking about what you just said. That's okay. Yeah. Versus, you know, you have this inner cynic that I've fortunately been able to kill, or like, subdue, which is the one that was like, Hey, no one said anything. What did you do? Why is there silence? It is certain people who have to feel silence, they that cynics winning for them, if you can have a pleasant pause in the conversation, those are people who you are actually talking to. And that's a friendly conversation.
+
+Dan Ott  1:00:43  
+I, I'm glad you said that. This this, I mean, this, this happens to me in our podcast recordings often, right? where somebody will say something like, meaningful, or we'll just like, start, you know, my brain will start going on that. But then also need to, like host the pack, you know, it's the exact same exact thing happens where there's just silence because I'm just like, we're both just like, Whoa, you know, just like thinking, yeah, then we have to remember like, Alright, we're like podcast hosts.
+
+Gant  1:01:15  
+Wait, is this thing on? Where am I?
+
+Gant  1:01:18  
+I know that that definitely happens, you know. And I think, there, there are lots of signs that have picked up that, you know, like, when this conversation, we're not happy, we're not afraid to go down a path. And that just makes it such a friendly conversation. You know, if you had like a rigid agenda, and like, it was like, we go to this point, this point, this point, this point, like, oh, man, when somebody is listening, this podcast, it's gonna feel forced or that y'all don't do that. I really appreciate it. It's like, I you know, if I had started talking about Dwayne Johnson for 15 minutes after the zombie apocalypse conversation, I think y'all would have let me and I appreciate that a lot.
+
+Dan Ott  1:01:58  
+Yeah, no, we almost went down that road. I was close and then I think Bekah started moving on. So it's probably good, but 
+
+Gant  1:02:06  
+That's good. We.. "The Rock, the Podcast"
+
+Bekah Hawrot Weigel  1:02:16  
+I love tangents. tangents are my favorite.
+
+Gant  1:02:18  
+Yeah, yes, indeed.
+
+Bekah Hawrot Weigel  1:02:22  
+Okay, well, I think this has been a really great episode, you, we covered a lot of stuff that was really important and really meaningful. And now everybody gets to have a glimpse of what it's like to have you as their personal Yoda. So thank you so much for being here with us, we will drop all of your links in the show notes. But is there anything else that you're working on that you would like to plug right now
+
+Gant  1:02:55  
+I'll just say that I really am lucky enough to work at a company Infinite Red, where we, we really have a huge footprint. And I'm really excited because we work in the React Native space. So we build mobile apps and stuff like that. And I work with a lot of other Yodas there. A lot of really friendly people who, who could easily go off to work for Microsoft, Google, Facebook, like they could go to a fortune 500 tomorrow. And I think that I'm in a place in my life where I get to choose my company and who I'm around. And I'm around other people who do the same thing. And they kind of choose us. So we're a real fun company for explaining stuff, working with stuff and building technology. And I'll say that, like, I appreciate them for supporting me on going on podcasts, as well as like how cool it is to kind of come in and work for us as well. We have a careers application for people that we don't usually push too much now. But we're at the point where we have to grow. So it's at careers dot infinite dot red. So if you want to work with us feel free to apply. They're currently only hiring US and Canada. We're being extra picky. And then also, if you want to work with us, and a consulting standpoint, just Hello at infinite dot read and we'll send somebody your way immediately. Start talking about your app, and you'll get to meet our CTO and our CEO. And like, you know, we don't even have sales people. Just a group of group of people having fun and building great stuff.
+
+Bekah Hawrot Weigel  1:04:46  
+Yeah, that's awesome. 
+
+Dan Ott  1:04:48  
+Yeah, Infinite Red is very cool. Sorry, I didn't mean to interrupt. I just, I've been an admirer of Infinite Red for a long time. So
+
+Bekah Hawrot Weigel  1:04:58  
+yeah, I've met two out of Three of the owners, so 
+
+Gant  1:05:01  
+Oh yeah, 
+
+Bekah Hawrot Weigel  1:05:02  
+Still waiting for that third.
+
+Gant  1:05:04  
+Yeah, you gotta meet Todd, he's he is he is a bundle of fun. He focuses internally constantly, we call him our internal glue. He is, first to comment on something, the person anybody goes to if they like, they feel like they need to talk to somebody. Because he's, you know, like, I guess you could talk to me, if you're talking about career stuff and things like that. Todd knows what everybody did this weekend. He knows what everybody did this weekend. And he's, he's gonna show you what he did, you know, and to have that as a CEO, is like, great for trying to be like a humanizing sort of company. We care a lot about what, what's going on, and people, well, not what's going on in your life, but like, how you're doing, you know, and how we are part of like, what's going on there. And I know that people are super anti, saying, like, we're a family kind of thing. We're not, we're not a family, but we sure treat you as a human being and as like a friend and we, we help you with things. So like Todd, if you meet him, he's, he's gonna attach and just like find out like what you're doing this weekend and stuff like that. He's super cool. So we try to reserve his energies to internal but he, you could definitely reach out and talk to him. He's super cool.
+
+Bekah Hawrot Weigel  1:06:34  
+Okay, well, thank you so much for being here. And for always supporting Virtual Coffee because you do so much whether it's mentoring or coming to coffee and talking or giving a million brown bags on things that we need to hear. We very much appreciate it. I'm glad to have you on the podcast too.
+
+Gant  1:06:52  
+Thank you for having me.
+
+Bekah Hawrot Weigel  1:06:58  
+Thank you for listening to this episode of the Virtual Coffee podcast. This episode was produced by Dan Ott and Becca Hawrot Weigel, and edited by Dan Ott. If you have questions or comments, you can hit us up on Twitter at Virtual Coffee, IO. Or you can email us at podcast at Virtual coffee.io. You can find the show notes. Plus you can sign up for our newsletter to find out what Virtual Coffee has been up to on our website at Virtual coffee.io.
+
+Dan Ott  1:07:27  
+Please subscribe to our podcast and be sure to leave us a review. Thanks for listening and we'll see you next week.
+
