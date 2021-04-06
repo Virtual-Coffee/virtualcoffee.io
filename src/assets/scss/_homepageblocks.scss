@@ -42,7 +42,7 @@
   gap: 1em;
   padding: 1em;
   background-color: $pink;
-  background-image: linear-gradient(to right bottom, $pink, $orange);
+  background-image: linear-gradient(to right, $pink, $pinkDarker);
 
   @include media-breakpoint-up(sm) {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
