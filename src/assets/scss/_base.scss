@@ -7,10 +7,24 @@ svg {
   max-width: 100%;
 }
 
-.nav-item svg {
-  fill: currentColor;
+h5 {
+  font-weight: 500;
 }
 
+.btn-primary {
+  background-image: linear-gradient(to right bottom, $pink, $orange);
+}
+
+.navbar {
+  background-image: linear-gradient(to right, $pink, $pinkDarker);
+  .nav-item {
+    text-align: right;
+    font-weight: 500;
+    svg {
+      fill: currentColor;
+    }
+  }
+}
 body {
   margin-top: 6rem;
 
