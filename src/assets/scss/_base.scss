@@ -69,7 +69,7 @@ ul {
 
 .display-5 {
   @include font-size(2.5rem);
-  font-weight: 300;
+  font-weight: $display5-weight;
   line-height: $display-line-height;
 }
 
