@@ -24,9 +24,11 @@ $white: #fff;
 $gray-200: #eff0f3;
 $gray-900: #0d0d0d;
 $gray-800: #2a2a2a;
+$black: #000;
 
 $blue: #376ed9;
 $pink: #d9376e;
+$anotherBlue: #355074;
 $pinkDarker: #7e0029;
 $red: #dc3545;
 $orange: #da6f36;
@@ -85,3 +87,13 @@ $navbar-dark-hover-color: $white;
 $navbar-dark-active-color: $white;
 $navbar-dark-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-dark-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
 $navbar-dark-toggler-border-color: $primary;
+
+$navbar-light-color: rgba($black, 0.85);
+$navbar-light-hover-color: rgba($black, 1);
+$navbar-light-active-color: rgba($black, 1);
+$navbar-light-disabled-color: rgba($black, 0.3);
+$navbar-light-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-light-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+$navbar-light-toggler-border-color: rgba($black, 0.85);
+
+$navbar-light-brand-color: $navbar-light-active-color;
+$navbar-light-brand-hover-color: $navbar-light-active-color;
