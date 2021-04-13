@@ -64,23 +64,6 @@
       "Community Maintainer"
     ]
   },
-  "tkshill": {
-    "login": "tkshill",
-    "id": "MDQ6VXNlcjEzMjkyODg2",
-    "url": "https://github.com/tkshill",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/13292886?u=6bdb4e68580df8bb618c9bb7e5e73a4945e54cc9&v=4",
-    "name": "Kirk Shillingford",
-    "company": null,
-    "location": "Dominica",
-    "isHireable": true,
-    "bio": "Community Maintainer at virtualcoffee.io. Big fan of functional Programming and SQL. Currently working on F#, Elm, Typescript, React and being kinder.\r\n",
-    "bioHTML": "<div>Community Maintainer at virtualcoffee.io. Big fan of functional Programming and SQL. Currently working on F#, Elm, Typescript, React and being kinder.\n</div>",
-    "twitterUsername": "KirkCodes",
-    "websiteUrl": "https://github.com/tkshill",
-    "teams": [
-      "Community Maintainer"
-    ]
-  },
   "danieltott": {
     "login": "danieltott",
     "id": "MDQ6VXNlcjM2MDI2MQ==",
@@ -98,6 +81,23 @@
       "Org Maintainer"
     ]
   },
+  "tkshill": {
+    "login": "tkshill",
+    "id": "MDQ6VXNlcjEzMjkyODg2",
+    "url": "https://github.com/tkshill",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/13292886?u=6bdb4e68580df8bb618c9bb7e5e73a4945e54cc9&v=4",
+    "name": "Kirk Shillingford",
+    "company": null,
+    "location": "Dominica",
+    "isHireable": true,
+    "bio": "Community Maintainer at virtualcoffee.io. Big fan of functional Programming and SQL. Currently working on F#, Elm, Typescript, React and being kinder.\r\n",
+    "bioHTML": "<div>Community Maintainer at virtualcoffee.io. Big fan of functional Programming and SQL. Currently working on F#, Elm, Typescript, React and being kinder.\n</div>",
+    "twitterUsername": "KirkCodes",
+    "websiteUrl": "https://github.com/tkshill",
+    "teams": [
+      "Community Maintainer"
+    ]
+  },
   "andreamartz": {
     "login": "andreamartz",
     "id": "MDQ6VXNlcjE0MTY1Nzg4",
@@ -111,21 +111,6 @@
     "bioHTML": "<div>Full stack developer and avid learner</div>",
     "twitterUsername": "amartzcoder",
     "websiteUrl": "https://andreamartz.dev/",
-    "teams": []
-  },
-  "danieluhl": {
-    "login": "danieluhl",
-    "id": "MDQ6VXNlcjE1MTc4OTk=",
-    "url": "https://github.com/danieluhl",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/1517899?u=4111d0215c35b38327033bc5b51702ce3c788034&v=4",
-    "name": "Typing Turtle",
-    "company": "Wayfair",
-    "location": "Boston",
-    "isHireable": false,
-    "bio": "Engineer or Manager in Boston, MA",
-    "bioHTML": "<div>Engineer or Manager in Boston, MA</div>",
-    "twitterUsername": "danieluhl",
-    "websiteUrl": null,
     "teams": []
   },
   "chadstewart": {
@@ -143,6 +128,21 @@
     "websiteUrl": "https://www.linkedin.com/in/chadrstewart",
     "teams": []
   },
+  "danieluhl": {
+    "login": "danieluhl",
+    "id": "MDQ6VXNlcjE1MTc4OTk=",
+    "url": "https://github.com/danieluhl",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/1517899?u=4111d0215c35b38327033bc5b51702ce3c788034&v=4",
+    "name": "Typing Turtle",
+    "company": "Wayfair",
+    "location": "Boston",
+    "isHireable": false,
+    "bio": "Engineer or Manager in Boston, MA",
+    "bioHTML": "<div>Engineer or Manager in Boston, MA</div>",
+    "twitterUsername": "danieluhl",
+    "websiteUrl": null,
+    "teams": []
+  },
   "adiati98": {
     "login": "adiati98",
     "id": "MDQ6VXNlcjQ1MTcyNzc1",
@@ -158,21 +158,6 @@
     "websiteUrl": "https://adiati.com",
     "teams": []
   },
-  "aurelieverrot": {
-    "login": "aurelieverrot",
-    "id": "MDQ6VXNlcjUwODU3MTc5",
-    "url": "https://github.com/aurelieverrot",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/50857179?u=e318063e1d9c8657d76bd65dc398b5b1da572854&v=4",
-    "name": "Aurelie Verrot",
-    "company": "Looking for opportunities!",
-    "location": "San Francisco",
-    "isHireable": true,
-    "bio": "Software Engineer",
-    "bioHTML": "<div>Software Engineer</div>",
-    "twitterUsername": "LiliVerrot",
-    "websiteUrl": "https://www.linkedin.com/in/aurelieverrot/",
-    "teams": []
-  },
   "clandau": {
     "login": "clandau",
     "id": "MDQ6VXNlcjEyMzUwMDQy",
@@ -186,6 +171,21 @@
     "bioHTML": "",
     "twitterUsername": null,
     "websiteUrl": "celandau.com",
+    "teams": []
+  },
+  "aurelieverrot": {
+    "login": "aurelieverrot",
+    "id": "MDQ6VXNlcjUwODU3MTc5",
+    "url": "https://github.com/aurelieverrot",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/50857179?u=e318063e1d9c8657d76bd65dc398b5b1da572854&v=4",
+    "name": "Aurelie Verrot",
+    "company": "Looking for opportunities!",
+    "location": "San Francisco",
+    "isHireable": true,
+    "bio": "Software Engineer",
+    "bioHTML": "<div>Software Engineer</div>",
+    "twitterUsername": "LiliVerrot",
+    "websiteUrl": "https://www.linkedin.com/in/aurelieverrot/",
     "teams": []
   },
   "healeyb": {
@@ -308,21 +308,6 @@
     "websiteUrl": "https://vicvijayakumar.com",
     "teams": []
   },
-  "mrsantons": {
-    "login": "mrsantons",
-    "id": "MDQ6VXNlcjUyNTczOTgx",
-    "url": "https://github.com/mrsantons",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/52573981?u=37b6a9af6a369f89e7c1eb810526627e4905cd7c&v=4",
-    "name": "Marie Antons",
-    "company": null,
-    "location": "Cedar Rapids, Iowa",
-    "isHireable": true,
-    "bio": "Developer",
-    "bioHTML": "<div>Developer</div>",
-    "twitterUsername": "MarieAntons",
-    "websiteUrl": null,
-    "teams": []
-  },
   "jonathanyeong": {
     "login": "jonathanyeong",
     "id": "MDQ6VXNlcjM4NjEwODg=",
@@ -336,6 +321,21 @@
     "bioHTML": "<div>Software engineer <g-emoji class=\"g-emoji\" alias=\"man_technologist\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f4bb.png\">👨‍💻</g-emoji> • Newbie photographer <g-emoji class=\"g-emoji\" alias=\"camera\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4f7.png\">📷</g-emoji> • Climber <g-emoji class=\"g-emoji\" alias=\"climbing\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f9d7.png\">🧗</g-emoji><g-emoji class=\"g-emoji\" alias=\"australia\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f1e6-1f1fa.png\">🇦🇺</g-emoji>\n</div>",
     "twitterUsername": "jonoyeong",
     "websiteUrl": "https://www.jonathanyeong.com",
+    "teams": []
+  },
+  "mrsantons": {
+    "login": "mrsantons",
+    "id": "MDQ6VXNlcjUyNTczOTgx",
+    "url": "https://github.com/mrsantons",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/52573981?u=37b6a9af6a369f89e7c1eb810526627e4905cd7c&v=4",
+    "name": "Marie Antons",
+    "company": null,
+    "location": "Cedar Rapids, Iowa",
+    "isHireable": true,
+    "bio": "Developer",
+    "bioHTML": "<div>Developer</div>",
+    "twitterUsername": "MarieAntons",
+    "websiteUrl": null,
     "teams": []
   },
   "cerchie": {
@@ -507,13 +507,13 @@
     "login": "sethburtonhall",
     "id": "MDQ6VXNlcjEwMzMzMzI=",
     "url": "https://github.com/sethburtonhall",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/1033332?u=bd802e5f5d72104232e63f5e68bcc305e964d6f2&v=4",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/1033332?u=7dcbf659537ff41f72ebcd4a43f927854935fadd&v=4",
     "name": "Seth Hall",
-    "company": null,
+    "company": "FilmHub",
     "location": "North Carolina",
     "isHireable": false,
-    "bio": "Web Developer",
-    "bioHTML": "<div>Web Developer</div>",
+    "bio": "Web Developer at @filmhubhq. Creative Producer. Figuring out life, work & art one day at a time. Also building http://protege.dev",
+    "bioHTML": "<div>Web Developer at <a class=\"user-mention\" data-hovercard-type=\"user\" data-hovercard-url=\"/users/filmhubhq/hovercard\" data-octo-click=\"hovercard-link-click\" data-octo-dimensions=\"link_type:self\" href=\"https://github.com/filmhubhq\">@filmhubhq</a>. Creative Producer. Figuring out life, work &amp; art one day at a time. Also building http://protege.dev</div>",
     "twitterUsername": "sethburtonhall",
     "websiteUrl": "https://sethhallcreative.com",
     "teams": []
@@ -741,6 +741,21 @@
     "bioHTML": "<div>Full-stack software dev based in Atlanta, GA.\nJS connoisseur, qualified nerd, and habitual smiler.</div>",
     "twitterUsername": null,
     "websiteUrl": "https://www.linkedin.com/in/travisemartin/",
+    "teams": []
+  },
+  "sirohub": {
+    "login": "sirohub",
+    "id": "MDQ6VXNlcjU0MTM3OTU2",
+    "url": "https://github.com/sirohub",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/54137956?u=b30f4fde582875c137fbd21886ecd6e9946bc67b&v=4",
+    "name": "Simon Robinson",
+    "company": null,
+    "location": "London, UK",
+    "isHireable": false,
+    "bio": "I simply consider myself to be a creative person who happens to work in software development.",
+    "bioHTML": "<div>I simply consider myself to be a creative person who happens to work in software development.</div>",
+    "twitterUsername": "simonsimoff",
+    "websiteUrl": "https://www.linkedin.com/in/simon-robinson-94874295/",
     "teams": []
   },
   "tombousquet": {
