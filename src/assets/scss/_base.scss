@@ -12,7 +12,13 @@ h5 {
 }
 
 .btn-primary {
-  background-image: linear-gradient(to right bottom, $pink, $orange);
+  background-image: $gradient-primary;
+}
+
+.gradient-text-primary {
+  background-clip: text;
+  background-image: $gradient-primary;
+  color: transparent;
 }
 
 body {
@@ -62,6 +68,14 @@ ul {
   font-weight: $display5-weight;
   line-height: $display-line-height;
 }
+
+// .display-1,
+// .display-2,
+// .display-3,
+// .display-4,
+// .display-5 {
+//   @extend .gradient-text-primary;
+// }
 
 .bodycopy {
   @include media-breakpoint-up(sm) {

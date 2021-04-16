@@ -41,7 +41,7 @@
   display: grid;
   gap: 1em;
   padding: 1em;
-  background-image: linear-gradient(to right bottom, $pink, $orange);
+  background-image: $gradient-primary;
 
   @include media-breakpoint-up(sm) {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));

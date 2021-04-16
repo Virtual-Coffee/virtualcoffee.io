@@ -25,7 +25,7 @@
 }
 
 .navbar {
-  background-image: linear-gradient(to right bottom, $pink, $orange);
+  background-image: $gradient-primary;
   .nav-item {
     text-align: right;
     svg {
