@@ -15,6 +15,10 @@ h5 {
   background-image: $gradient-primary;
 }
 
+.btn {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
 .gradient-text-primary {
   background-clip: text;
   background-image: $gradient-primary;
@@ -69,13 +73,13 @@ ul {
   line-height: $display-line-height;
 }
 
-// .display-1,
-// .display-2,
-// .display-3,
-// .display-4,
-// .display-5 {
-//   @extend .gradient-text-primary;
-// }
+.display-1,
+.display-2,
+.display-3,
+.display-4,
+.display-5 {
+  color: $gray-700;
+}
 
 .bodycopy {
   @include media-breakpoint-up(sm) {
