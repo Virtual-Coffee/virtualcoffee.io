@@ -81,6 +81,9 @@
 .membercard-name {
   grid-area: name;
   margin: 0;
+  a {
+    color: $pink;
+  }
 }
 
 .membercard-social {

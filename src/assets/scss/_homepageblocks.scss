@@ -13,6 +13,16 @@
   }
 }
 
+.homepageblock-title {
+  a {
+    color: $pink;
+
+    &:hover {
+      color: $pinkDarker;
+    }
+  }
+}
+
 .homepageblock-hero {
   display: flex;
   align-items: flex-end;
@@ -31,7 +41,7 @@
   display: grid;
   gap: 1em;
   padding: 1em;
-  background: $pink;
+  background-image: $gradient-primary;
 
   @include media-breakpoint-up(sm) {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -54,10 +64,12 @@
   background: #fff;
   padding: 0.5em;
   font-size: 1.1rem;
+  color: $pinkDarker;
 
   &:hover {
     text-decoration: none;
     outline: #a6d8d4 5px solid;
+    color: $pinkDarker;
   }
 
   svg {
