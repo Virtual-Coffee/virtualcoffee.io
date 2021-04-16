@@ -24,7 +24,10 @@
     }
 
     strong {
-      font-weight: 500;
+      background-clip: text;
+      background-image: linear-gradient(to right bottom, #d9376e, #da6f36);
+      color: transparent;
+      font-weight: 900;
     }
 
     @include media-breakpoint-down(xs) {

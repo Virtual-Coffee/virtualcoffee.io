@@ -15,16 +15,6 @@ h5 {
   background-image: linear-gradient(to right bottom, $pink, $orange);
 }
 
-.navbar {
-  background-image: linear-gradient(to right bottom, $pink, $orange);
-  .nav-item {
-    text-align: right;
-    font-weight: 500;
-    svg {
-      fill: currentColor;
-    }
-  }
-}
 body {
   margin-top: 6rem;
 
