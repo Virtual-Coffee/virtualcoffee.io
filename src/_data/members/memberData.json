@@ -743,6 +743,21 @@
     "websiteUrl": "https://www.linkedin.com/in/travisemartin/",
     "teams": []
   },
+  "alexvcs": {
+    "login": "AlexVCS",
+    "id": "MDQ6VXNlcjQ5NDU4OTE3",
+    "url": "https://github.com/AlexVCS",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/49458917?u=5b72b3e64f683ef619427e92bfab807130531880&v=4",
+    "name": "Alex Curtis-Slep",
+    "company": null,
+    "location": "Tampa Bay, Florida",
+    "isHireable": false,
+    "bio": "Working on front end mostly and super excited to share my work :)",
+    "bioHTML": "<div>Working on front end mostly and super excited to share my work :)</div>",
+    "twitterUsername": null,
+    "websiteUrl": null,
+    "teams": []
+  },
   "danielcobo": {
     "login": "danielcobo",
     "id": "MDQ6VXNlcjc3Nzk4MTA=",
