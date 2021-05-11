@@ -1,7 +1,7 @@
 .hero {
   z-index: 1031;
   position: relative;
-  // box-shadow: 0 0 1rem #fff;
+  background: #fff;
 
   h2 {
     font-weight: 300;
@@ -21,7 +21,7 @@
     }
 
     strong {
-      font-weight: 500;
+      font-weight: 900;
     }
 
     @include media-breakpoint-down(xs) {

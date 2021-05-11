@@ -64,23 +64,6 @@
       "Community Maintainer"
     ]
   },
-  "danieltott": {
-    "login": "danieltott",
-    "id": "MDQ6VXNlcjM2MDI2MQ==",
-    "url": "https://github.com/danieltott",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/360261?u=dc2ed0011e26c0ef35bb8c1d8f8868b8a64402c5&v=4",
-    "name": "Dan Ott",
-    "company": "@Sprokets",
-    "location": "Lakewood, OH",
-    "isHireable": false,
-    "bio": "Independent front-end designer and developer, father, #ADHD person, and Clevelander. He/him",
-    "bioHTML": "<div>Independent front-end designer and developer, father, #ADHD person, and Clevelander. He/him</div>",
-    "twitterUsername": "danieltott",
-    "websiteUrl": "https://dtott.com",
-    "teams": [
-      "Org Maintainer"
-    ]
-  },
   "tkshill": {
     "login": "tkshill",
     "id": "MDQ6VXNlcjEzMjkyODg2",
@@ -96,6 +79,38 @@
     "websiteUrl": "https://github.com/tkshill",
     "teams": [
       "Community Maintainer"
+    ]
+  },
+  "adiati98": {
+    "login": "adiati98",
+    "id": "MDQ6VXNlcjQ1MTcyNzc1",
+    "url": "https://github.com/adiati98",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/45172775?u=f10b880af55c490f4ab155c890a63bbe351fa6c1&v=4",
+    "name": "Ayu Adiati",
+    "company": null,
+    "location": "The Netherlands",
+    "isHireable": false,
+    "bio": "🤓 Life-long learner\r\n👨‍👩‍👧 A wife & a mother \r\n📑 Aiming to be front-end/fullstack web developer ",
+    "bioHTML": "<div><g-emoji class=\"g-emoji\" alias=\"nerd_face\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f913.png\">🤓</g-emoji> Life-long learner\n<g-emoji class=\"g-emoji\" alias=\"family_man_woman_girl\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f469-1f467.png\">👨‍👩‍👧</g-emoji> A wife &amp; a mother \n<g-emoji class=\"g-emoji\" alias=\"bookmark_tabs\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4d1.png\">📑</g-emoji> Aiming to be front-end/fullstack web developer </div>",
+    "twitterUsername": "AdiatiAyu",
+    "websiteUrl": "https://adiati.com",
+    "teams": []
+  },
+  "danieltott": {
+    "login": "danieltott",
+    "id": "MDQ6VXNlcjM2MDI2MQ==",
+    "url": "https://github.com/danieltott",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/360261?u=dc2ed0011e26c0ef35bb8c1d8f8868b8a64402c5&v=4",
+    "name": "Dan Ott",
+    "company": "@Sprokets",
+    "location": "Lakewood, OH",
+    "isHireable": false,
+    "bio": "Independent front-end designer and developer, father, #ADHD person, and Clevelander. He/him",
+    "bioHTML": "<div>Independent front-end designer and developer, father, #ADHD person, and Clevelander. He/him</div>",
+    "twitterUsername": "danieltott",
+    "websiteUrl": "https://dtott.com",
+    "teams": [
+      "Org Maintainer"
     ]
   },
   "andreamartz": {
@@ -141,21 +156,6 @@
     "bioHTML": "<div>Engineer or Manager in Boston, MA</div>",
     "twitterUsername": "danieluhl",
     "websiteUrl": null,
-    "teams": []
-  },
-  "adiati98": {
-    "login": "adiati98",
-    "id": "MDQ6VXNlcjQ1MTcyNzc1",
-    "url": "https://github.com/adiati98",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/45172775?u=f5b1e073a232933e612369da42c44d62739bb165&v=4",
-    "name": "Ayu Adiati",
-    "company": null,
-    "location": "The Netherlands",
-    "isHireable": false,
-    "bio": "🤓 Life-long learner\r\n👨‍👩‍👧 A wife & a mother \r\n📑 Aiming to be front-end/fullstack web developer ",
-    "bioHTML": "<div><g-emoji class=\"g-emoji\" alias=\"nerd_face\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f913.png\">🤓</g-emoji> Life-long learner\n<g-emoji class=\"g-emoji\" alias=\"family_man_woman_girl\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f469-1f467.png\">👨‍👩‍👧</g-emoji> A wife &amp; a mother \n<g-emoji class=\"g-emoji\" alias=\"bookmark_tabs\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4d1.png\">📑</g-emoji> Aiming to be front-end/fullstack web developer </div>",
-    "twitterUsername": "AdiatiAyu",
-    "websiteUrl": "https://adiati.com",
     "teams": []
   },
   "clandau": {
@@ -308,21 +308,6 @@
     "websiteUrl": "https://vicvijayakumar.com",
     "teams": []
   },
-  "jonathanyeong": {
-    "login": "jonathanyeong",
-    "id": "MDQ6VXNlcjM4NjEwODg=",
-    "url": "https://github.com/jonathanyeong",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/3861088?u=610225bf19ab68c71639956a92d65dff59cc7848&v=4",
-    "name": "Jonathan Yeong",
-    "company": "@highspot",
-    "location": "Seattle, Washington",
-    "isHireable": false,
-    "bio": "Software engineer 👨‍💻 • Newbie photographer 📷 • Climber 🧗🇦🇺\r\n",
-    "bioHTML": "<div>Software engineer <g-emoji class=\"g-emoji\" alias=\"man_technologist\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f4bb.png\">👨‍💻</g-emoji> • Newbie photographer <g-emoji class=\"g-emoji\" alias=\"camera\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4f7.png\">📷</g-emoji> • Climber <g-emoji class=\"g-emoji\" alias=\"climbing\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f9d7.png\">🧗</g-emoji><g-emoji class=\"g-emoji\" alias=\"australia\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f1e6-1f1fa.png\">🇦🇺</g-emoji>\n</div>",
-    "twitterUsername": "jonoyeong",
-    "websiteUrl": "https://www.jonathanyeong.com",
-    "teams": []
-  },
   "mrsantons": {
     "login": "mrsantons",
     "id": "MDQ6VXNlcjUyNTczOTgx",
@@ -336,6 +321,21 @@
     "bioHTML": "<div>Developer</div>",
     "twitterUsername": "MarieAntons",
     "websiteUrl": null,
+    "teams": []
+  },
+  "jonathanyeong": {
+    "login": "jonathanyeong",
+    "id": "MDQ6VXNlcjM4NjEwODg=",
+    "url": "https://github.com/jonathanyeong",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/3861088?u=610225bf19ab68c71639956a92d65dff59cc7848&v=4",
+    "name": "Jonathan Yeong",
+    "company": "@highspot",
+    "location": "Seattle, Washington",
+    "isHireable": false,
+    "bio": "Software engineer 👨‍💻 • Newbie photographer 📷 • Climber 🧗🇦🇺\r\n",
+    "bioHTML": "<div>Software engineer <g-emoji class=\"g-emoji\" alias=\"man_technologist\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f4bb.png\">👨‍💻</g-emoji> • Newbie photographer <g-emoji class=\"g-emoji\" alias=\"camera\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4f7.png\">📷</g-emoji> • Climber <g-emoji class=\"g-emoji\" alias=\"climbing\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f9d7.png\">🧗</g-emoji><g-emoji class=\"g-emoji\" alias=\"australia\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f1e6-1f1fa.png\">🇦🇺</g-emoji>\n</div>",
+    "twitterUsername": "jonoyeong",
+    "websiteUrl": "https://www.jonathanyeong.com",
     "teams": []
   },
   "cerchie": {
@@ -398,21 +398,6 @@
     "websiteUrl": "https://www.linkedin.com/in/kldickenson/",
     "teams": []
   },
-  "s-blais": {
-    "login": "s-blais",
-    "id": "MDQ6VXNlcjUxMzQxOTE0",
-    "url": "https://github.com/s-blais",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/51341914?u=01570035e92f68825084dbd462ddb0d8d8fb66a3&v=4",
-    "name": "Stephen Blais",
-    "company": null,
-    "location": "Providence, Rhode Island",
-    "isHireable": true,
-    "bio": "Stirring some full-stack web developerosity into this recipe for a new taste sensation",
-    "bioHTML": "<div>Stirring some full-stack web developerosity into this recipe for a new taste sensation</div>",
-    "twitterUsername": "the_s_blais",
-    "websiteUrl": "s-blais.com",
-    "teams": []
-  },
   "lor1138": {
     "login": "Lor1138",
     "id": "MDQ6VXNlcjU0ODAzMzg0",
@@ -426,6 +411,21 @@
     "bioHTML": "<div>Hi! My name is Laura, and I love Front End Web Development! I know HTML, CSS, and Javascript. </div>",
     "twitterUsername": "LauraOBDev",
     "websiteUrl": null,
+    "teams": []
+  },
+  "s-blais": {
+    "login": "s-blais",
+    "id": "MDQ6VXNlcjUxMzQxOTE0",
+    "url": "https://github.com/s-blais",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/51341914?u=01570035e92f68825084dbd462ddb0d8d8fb66a3&v=4",
+    "name": "Stephen Blais",
+    "company": null,
+    "location": "Providence, Rhode Island",
+    "isHireable": true,
+    "bio": "Stirring some full-stack web developerosity into this recipe for a new taste sensation",
+    "bioHTML": "<div>Stirring some full-stack web developerosity into this recipe for a new taste sensation</div>",
+    "twitterUsername": "the_s_blais",
+    "websiteUrl": "s-blais.com",
     "teams": []
   },
   "gervanna": {
@@ -507,7 +507,7 @@
     "login": "sethburtonhall",
     "id": "MDQ6VXNlcjEwMzMzMzI=",
     "url": "https://github.com/sethburtonhall",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/1033332?u=7dcbf659537ff41f72ebcd4a43f927854935fadd&v=4",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/1033332?u=f2452f3a5dcbfd71803773e511af2d11c08b0aa9&v=4",
     "name": "Seth Hall",
     "company": "FilmHub",
     "location": "North Carolina",
@@ -677,8 +677,8 @@
     "company": null,
     "location": "Ahmedabad, Gujarat, India",
     "isHireable": false,
-    "bio": "Full Stack Developer | C#.Net, .Net Core, MVC, Angular, NodeJs, Sql Server, MongoDB",
-    "bioHTML": "<div>Full Stack Developer | C#.Net, .Net Core, MVC, Angular, NodeJs, Sql Server, MongoDB</div>",
+    "bio": "Full Stack Developer | Full Stack Developer | .Net core (ASP.Net, Web API, Windows form, HostedService), Dapper, Entity Framework Core, RabbitMQ, Micro-service,",
+    "bioHTML": "<div>Full Stack Developer | Full Stack Developer | .Net core (ASP.Net, Web API, Windows form, HostedService), Dapper, Entity Framework Core, RabbitMQ, Micro-service,</div>",
     "twitterUsername": "surajrpanchal",
     "websiteUrl": "surajpanchal.com",
     "teams": []
@@ -743,18 +743,48 @@
     "websiteUrl": "https://www.linkedin.com/in/travisemartin/",
     "teams": []
   },
+  "alexvcs": {
+    "login": "AlexVCS",
+    "id": "MDQ6VXNlcjQ5NDU4OTE3",
+    "url": "https://github.com/AlexVCS",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/49458917?u=5b72b3e64f683ef619427e92bfab807130531880&v=4",
+    "name": "Alex Curtis-Slep",
+    "company": null,
+    "location": "Tampa Bay, Florida",
+    "isHireable": false,
+    "bio": "Working on front end mostly and super excited to share my work :)",
+    "bioHTML": "<div>Working on front end mostly and super excited to share my work :)</div>",
+    "twitterUsername": null,
+    "websiteUrl": null,
+    "teams": []
+  },
+  "danielcobo": {
+    "login": "danielcobo",
+    "id": "MDQ6VXNlcjc3Nzk4MTA=",
+    "url": "https://github.com/danielcobo",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/7779810?u=02615712fd7d109bea821b9782e9f0029962be6b&v=4",
+    "name": "Daniel Cobo",
+    "company": null,
+    "location": null,
+    "isHireable": false,
+    "bio": "Full stack developer",
+    "bioHTML": "<div>Full stack developer</div>",
+    "twitterUsername": null,
+    "websiteUrl": "www.danielcobo.com",
+    "teams": []
+  },
   "sirohub": {
     "login": "sirohub",
     "id": "MDQ6VXNlcjU0MTM3OTU2",
     "url": "https://github.com/sirohub",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/54137956?u=b30f4fde582875c137fbd21886ecd6e9946bc67b&v=4",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/54137956?u=8c8ace31d94e5ffd9820ea71e22d496b001534b6&v=4",
     "name": "Simon Robinson",
     "company": null,
     "location": "London, UK",
     "isHireable": false,
-    "bio": "I simply consider myself to be a creative person who happens to work in software development.",
-    "bioHTML": "<div>I simply consider myself to be a creative person who happens to work in software development.</div>",
-    "twitterUsername": "simonsimoff",
+    "bio": "",
+    "bioHTML": "",
+    "twitterUsername": null,
     "websiteUrl": "https://www.linkedin.com/in/simon-robinson-94874295/",
     "teams": []
   },
