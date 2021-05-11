@@ -1,0 +1,507 @@
+Bekah Hawrot Weigel  0:14  
+Hello, and welcome to season two, episode six of the Virtual Coffee podcast.
+
+Bekah Hawrot Weigel  0:21  
+I'm Bekah, and this is a podcast that features members of the Virtual Coffee community. Virtual Coffee is an intimate group of developers at all stages of their coding journey. And they're here on this podcast sharing their stories and what they've learned. And we're here to share it with you. Here with me today is my co host, Dan.
+
+Dan Ott  0:40  
+Thanks, Bekah. Today we're talking with Courtney Landau. Courtney is a software engineer currently working at an early stage startup in the education technology space. We talked with Courtney about how the trend of constant self marketing and Tech has impacted her career. Our experience as a developer and what it's been like to take on a variety of roles as a Virtual Coffee contributor. 
+
+Bekah Hawrot Weigel  1:02  
+We start every episode like we start every Virtual Coffee, we introduce ourselves with our name, where we're from what we do and a random check in question. Today's random question is, if you had to delete all but three apps from your smartphone, which ones would you keep? We hope you enjoyed this episode.
+
+Bekah Hawrot Weigel  1:29  
+Hey, I'm Bekah, I am a front end developer from a small town in Ohio. And if I could keep three apps on my smartphone, I think it would be
+
+Bekah Hawrot Weigel  1:44  
+slack.
+
+Bekah Hawrot Weigel  1:47  
+Spotify.
+
+Bekah Hawrot Weigel  1:50  
+And then Google Drive.
+
+Dan Ott  1:54  
+Google Drive.
+
+Dan Ott  1:57  
+Nice. Yeah. So so one entertainment, one and two sort of work working once.
+
+Bekah Hawrot Weigel  2:04  
+That seems to know what that says about me.
+
+Dan Ott  2:06  
+Three's...three's tough. Hi, I'm Dan. I am a front end developer from Lakewood, Ohio.
+
+Dan Ott  2:14  
+And if I so if I had to keep three apps, I thought I would do Spotify as well. I would do overcast, it's just podcast app. And that I listen to pretty much all time. And I don't know. I feel like some kind of game except that I can't really get into any games right now. I'm in between games right now. So I don't really have a good I guess I'll say slack. But like I was kind of honestly looking forward to not having slack on my phone in this imaginary, you know, thing. But slack is probably pretty lost without having slack on my phone. So that'll be my choice. Choice three, slack. 
+
+Courtney Landau  2:53  
+Hi, I'm Courtney. I'm a software developer from Bethlehem, Pennsylvania. And three
+
+Courtney Landau  3:00  
+apps that I would keep were are gonna sound like everybody else's now overcast, number one, Spotify. And I would definitely not keep slack Just saying. And I guess Instagram.
+
+Courtney Landau  3:16  
+Yeah, because I do like the photos.
+
+Dan Ott  3:21  
+I have, like, you know, I could do pretty easily without Twitter. I'm not on Instagram anymore. I was like, thinking about
+
+Dan Ott  3:30  
+was it? Oh, things like my to do app? You know, except that I know. I never use it.
+
+Courtney Landau  3:38  
+would happily give up any of the work apps? Yeah. 
+
+Bekah Hawrot Weigel  3:42  
+I was like between slack and Twitter. I couldn't decide. But
+
+Dan Ott  3:49  
+well, Twitter, you can more easily get on. Just on safari. Right. Like I was thinking.
+
+Courtney Landau  3:56  
+That's true 
+
+Dan Ott  3:57  
+slack's a little... I don't know, slack works on the phone through the web.
+
+Dan Ott  4:02  
+You know, I know you can on your computer on the web. But regardless, I mentioned it would not be the fun.
+
+Bekah Hawrot Weigel  4:11  
+Yeah. All right. Oh, thanks, Courtney, for being here today. We're very, very excited to be talking to you. And usually the way we get started is asking our guests how they got into tech. So can you give us a little bit about your background and how you ended up where you are today? 
+
+Courtney Landau  4:28  
+Yeah, um, so I am Yeah, a career changer. So I came from clinical field. I was CAT scan tech. Well, actually, I still work per diem as CAT scan tech once in a while in the hospital.
+
+Courtney Landau  4:43  
+So yeah, I did that while
+
+Courtney Landau  4:47  
+out. I went to X ray school after
+
+Courtney Landau  4:51  
+and then I did CAT scan for a long time had kids and when they were young, I worked the weekend program. Kind of
+
+Courtney Landau  5:00  
+While they were young the entire time, so I worked 212 hour shifts on the weekend. And
+
+Courtney Landau  5:06  
+so that was great for when they were young. But when they were going back to school, I ended up
+
+Courtney Landau  5:13  
+thinking I wanted to change careers. And I really liked tech.
+
+Bekah Hawrot Weigel  5:19  
+What it what interested you about tech? 
+
+Courtney Landau  5:21  
+Yeah, so I was really into
+
+Courtney Landau  5:24  
+kind of computers. So I kind of went, thought it would, I would get a master's in
+
+Courtney Landau  5:32  
+Information Sciences kind of go into like, stay in medical, but kind of do like more like an IT thing. But then I took
+
+Courtney Landau  5:53  
+working out problems. And that kind of led me to focus my master's on coding moreso than it so while I was doing the Masters, I was kind of building a bunch of working on Free Code Camp at the same time kind of doing web dev stuff, along with my coursework. And that kind of led me into web dev once I graduated. 
+
+Bekah Hawrot Weigel  6:17  
+Nice, what is your master's in?
+
+Courtney Landau  6:19  
+Information Sciences. So I kind of it was my bachelor's in biology. So
+
+Courtney Landau  6:29  
+what I went when I found that this program was local, and I could go in like half time, so when I was first starting, like doing these, I did kind of some MOOCs online, like with coding, and it kind of see what I would like, and I, I figured I could, because you could kind of structure your classes around. Like, either like development or it more I and I did take some it classes along with it, but most of them were like, all
+
+Courtney Landau  7:01  
+coding classes. So 
+
+Dan Ott  7:04  
+Oh, that's so cool. So yeah, so when you started your master's program, you weren't really thinking about coding at all.
+
+Dan Ott  7:32  
+interesting. 
+
+Courtney Landau  7:34  
+Yeah, 
+
+Dan Ott  7:35  
+that's really cool. 
+
+Courtney Landau  7:36  
+I didn't want to do like a boot camp type thing, because
+
+Unknown Speaker  8:01  
+really solidifying it. 
+
+Bekah Hawrot Weigel  8:02  
+Nice. And so then what was the transition, like, from your job at the hospital to your first job in tech? 
+
+Courtney Landau  8:12  
+Yeah. So um, I ended up well, I was still working the weekends, like, I worked weekends for probably 10 years. And so when I was about to graduate, I was kind of applying when I was in school, but nothing worked out. And then I when I was about to graduate, I managed to land an internship, so I, a paid internship full time, so
+
+Courtney Landau  10:01  
+Really like
+
+Courtney Landau  10:03  
+software developments more, using more my brain basically, it's got CAT scan, there's not really any room for, like, moving up, there's no, it's either like management or go to school and become like, I don't know, pa or a doctor. But yeah. So yeah, I like being in software development now.
+
+Bekah Hawrot Weigel  10:28  
+Did that internship lead to a full time job?
+
+Courtney Landau  10:32  
+Right now, um, the internship did not lead to a full time job. I was hoping that it would. But they were not hiring at the end of it. So no one got hired.
+
+Courtney Landau  11:58  
+big company,
+
+Courtney Landau  12:01  
+Dell, which was would have been about an hour and 15 minute drive. And so I had that offer. And then the very, very small startup where I would be the only developer and working from home. So I ultimately chose this one, obviously. So yeah, I've been there since September of 19.
+
+Bekah Hawrot Weigel  12:25  
+Wow, I feel like that's a little bit overwhelming. When you were talking about the commute to the other job. I thought like why why definitely pick the remote one. But then also being new to the industry. And being the only developer seems a little bit overwhelming. How was that for you?
+
+Courtney Landau  12:46  
+Right, yeah.
+
+Courtney Landau  14:19  
+And it's here and almost a half. So 
+
+Dan Ott  14:23  
+that's really cool. That's cool that they, you know,
+
+Dan Ott  14:31  
+ newer career developer,
+
+Dan Ott  15:00  
+You don't have a somebody else that, you know, that was there before. 
+
+Courtney Landau  15:04  
+Right. So, um, I had the CTO who
+
+Courtney Landau  15:10  
+I don't know how much he actually built. I think he contracted out I think, a lot of it. So coming, I came into that. And
+
+Courtney Landau  15:23  
+so
+
+Courtney Landau  15:25  
+can you repeat that question? Sorry? 
+
+Dan Ott  15:27  
+Oh, yeah, well, no, that makes sense. Because usually, if anybody has listened to this podcast for a while, they will know that I will talk for like a minute or two and ask, like, several questions. In the middle of the sentences, no worries. The first question I was wondering about was what you answered was like, you know, if you were the only developer who built it, and then the second part was, was, yeah, like, talk more, can you? I was just wondering if you could talk more about
+
+Dan Ott  15:57  
+what it was like getting used to like that, that codebase. I know, they they said,
+
+Dan Ott  16:02  
+or you said that they sent you to some view training and stuff, which is really cool. But
+
+Dan Ott  16:07  
+just in general, like not having a another developer to sort of lean on for questions. I was just, I was just curious, let you know what that looks like for you. 
+
+Courtney Landau  16:15  
+Right? Yeah. Um, yeah, a lot of the majority of like, the code that was written at that point was the Chrome extension, which does a lot of like website tracking, and doesn't use a lot of the chrome API's.
+
+Courtney Landau  16:30  
+So that was pretty complex, and kind of overwhelming at first. But really, the Vue app was
+
+Courtney Landau  16:39  
+the easy part. So and I did have him too. He was available, you know, he still is available to for but it's at this point, he's more like big questions, big picture questions.
+
+Courtney Landau  16:52  
+And a lot of the stuff he's like, I don't know, JavaScript, so.
+
+Courtney Landau  16:57  
+Okay, you're on your own. But
+
+Courtney Landau  17:00  
+yeah, no, it was actually like, the first thing I'm remembering now that the first thing that I had to fix was like a bug. So I had to get root in the Chrome extension to really dig in to like off things. And
+
+Courtney Landau  17:15  
+so that was a lot. But yeah, it worked itself out. For questions. Yeah, I either go to him or go to, like, I use discord a lot like the when I had Firebase questions, there's pretty helpful discord on that. And 
+
+Dan Ott  17:36  
+That's awesome. Yeah, so the CTO was, like, maybe didn't write most of the code, but at least was familiar enough with it, you know, because he worked with custom contracts with whatever to point the way and answer some big questions. That is, so you're still though, like, you're still the the only developer there. At this point? After? 
+
+Courtney Landau  17:57  
+Yep. 
+
+Dan Ott  17:57  
+How long was it? A year and
+
+Courtney Landau  18:01  
+September of 19. So yeah. 
+
+Dan Ott  18:04  
+But I mean, that's really cool. It's like I was, so being a solo developer, you know, you have, there's, there's, as you know, there's, you know, some different responsibilities. So, what is it like for you, When, when, when they have a new feature, you know, that they? I guess I'm not gonna I don't want to lead the question too much. What is what is like, you know, when you when they have a new feature that they'd like, you know, to implement?
+
+Courtney Landau  18:35  
+Right, so, um, basically, I handle it all I have to come up with like, the, my plan and kind of, like, mock stuff up for them. And for new features, I'm pretty much handling Yeah, still, at this point, handling all the whole process from start to finish. And they're really good with that, that's, they're not like impatient with me, I'm sure. Especially in the beginning, things took longer than they could have with a more experienced developer. But, um, yeah, so. 
+
+Dan Ott  19:22  
+I mean, that's, that's great. Like, when I was sort of getting I was it's a lot of responsibility for for any developer, right, like, regardless of their experience level, or, you know, the path in their career. And it seems like it seems like it's a really good fit, you know, I don't know it seems like pretty cool situation to be in.
+
+Courtney Landau  19:43  
+Yes, I'm sorry. 
+
+Bekah Hawrot Weigel  19:45  
+No, I was just gonna say I think that it's amazing what you're doing. You're talking through all of this stuff, but you know, coming on and working on all this stuff by yourself. I just think is is a pretty big, I don't know if I want to accomplishment, or it's just something that I certainly admire hearing you talk about, because I don't I don't think that I would have been confident enough to take on something like that.
+
+Courtney Landau  20:14  
+Yeah, thank you. But I don't always feel that way, like the actual coding and stuff. But that's my favorite part. I don't really like all the time planning everything out and having to go through. I mean, I'm getting better at it, I think. But I wish I had a project manager to tell me what to do. Sometimes I just want to like pull a ticket off a JIRA board and call it a day. But yeah, I like it. I mean, and also, I get to do other things like, not just coding, I get to talk directly with teachers. So it's an education, tech nology. thing. So I, like I get to have meetings with teachers and talk through features and like, build what they want to like with, you know, the founders, if they agree and see how they, you know, have meetings with them, and see how they react when I build something that they want it. And that's awesome. 
+
+Bekah Hawrot Weigel  21:13  
+That's really cool. 
+
+Dan Ott  21:14  
+That's very cool.
+
+Bekah Hawrot Weigel  21:16  
+I want to talk a little bit about this is like changing gears a little bit, but you had this tweet that I was really, I really enjoyed, but it's as quiet and soft spoken doesn't mean inexperienced. And I thought that was so good, and powerful and important. Because tech is kind of a really loud place right now. Right? And we're always talking about, like, marketing yourself and putting yourself out there. And so, people kind of have to like, be a marketer, or be a devrel for themselves to get new jobs. And so I, I wanted to hear you kind of talk through, you know, maybe one what this tweet means to you, or, you know, how being somebody that is quiet or soft spoken, has impacted your tech journey?
+
+Courtney Landau  22:10  
+Yeah, um, so I've always been pretty quiet person, especially when I first meet people definitely tend to more keep things in. But then once I like, once I'm comfortable, I am probably completely the opposite. I don't know. I do, like really like to talk. I really. I like, so in tech, and just in general, I feel like even in my previous career, I feel like sometimes people take your quietness for not knowing what you're talking about, or, but yeah, I, and I feel like that continues to happen, where I'm not like, out there all the time. And like, I like on Twitter, like, I'm barely tweet at all because I like, well, Major, I really can't think of anything else. We don't have the time, but pretty much. But I don't know how people come up with stuff. But I'm saying, especially tech related, like, I feel like everything I type, everything I write will be boring. And But anyway, yeah. So I feel like, also, I think, like just being quiet and not like speaking up for yourself all the time, just like constantly saying what you're doing and things it makes people maybe like, assume that you may not have experienced or know what you're talking about. I'm not sure. But
+
+Dan Ott  23:54  
+yeah, it's I mean, it's interesting. I mean, I really like the way you phrase that. I mean, I've I feel like I've can't be the same way, especially with with Twitter and things like that. I never even never even occurs to me until much later to tweet things. Like when they're happening, you know? And I don't know. Yeah, and I, and the same with trying to, like, think of ideas to tweet about or read about or anything, you know, it's just a weird process to me. When I'm coding. It's the farthest thing from my brain, you know, 
+
+Courtney Landau  24:32  
+right. Yeah. And I also feel like, there's kind of, it's kind of, we're on Twitter, and we're reading, you know, Twitter, but there are a ton of people that are developers that don't have Twitter at all. They just, you know, work and do their thing. And or same with like, open source they don't like there's a lot of people who just do their job and then go home. If it's not open source, then it's not out there. But that doesn't mean like they don't know what they're doing. You know? I don't know. 
+
+Bekah Hawrot Weigel  25:05  
+Yeah, for sure. And I think, you know, since there's just such a focus on people who are out there talking a lot, and I was just thinking back, like, you've been coming to Virtual Coffee for a while, and I think like your first involvement in coming to more than, like, our coffee chats was with HacktoberFest, and you sign up as a mentor, and a contributor. And I think, you know, it was funny, because it kind of made me think about this. Um, I don't know how to say this. I was surprised, I'll say that you signed up as a mentor. And I had to kind of like, check myself because you are quiet. And thinking about like, okay, there are different people who are acting in different roles. And so it's important to, you know, like, I don't think that I made an assumption about you being quiet. But I also think that I didn't think to, like, reach out to you and say, like, hey, do you want to play a bigger role in this? And so like, it was great to see you do that. And all of the support that you gave was amazing. So I know, it was like a nice check for me in terms of thinking about all the members of the community and how we all work differently.
+
+Courtney Landau  26:29  
+Yeah. Thanks. Um, yeah, I really, like I feel I've been doing web dev kind of since probably, at this point. I was doing Free Code Camp probably started that in 2016. And then yeah. And so I've been doing kind of JavaScript, HTML and CSS for a while. And I felt like I could. Now that I've been more, even though at that point, maybe been working a year, I guess. Like, I could definitely help out someone new or someone completely in boot camp, like, and I really like working with people who are really new, because I like sharing my knowledge. And even though I still feel like I know nothing, I do know a little bit more than when I started. So yeah, so I worked with someone who's in boot camp, and that was a great experience. And also back when I was learning, like, I was, like, I my, I did a couple contributions to Free Code Camp actually. And so the but I never finished a whole HacktoberFest because I just never found was able to. So I liked being able to help someone through that.
+
+Bekah Hawrot Weigel  27:51  
+Yeah, that's awesome. And, and I know, I mean, you were paired with Andrea, right? You had one. And she definitely benefited from that she I just remember her saying, like, what a great experience it was to work with you. And it's just so great to see like those connections happening and the community supporting one another. So that was, I don't know. Something that I really enjoyed seeing happen.
+
+Courtney Landau  28:23  
+Yeah, I mean, community is great. And I try to help out as much as I can. Yeah, when I came into Free Code, I'm talking about Free Code Camp now I'm talking about Virtual Coffee. It was really great for me because I was working on still am working by myself. And I really don't know anybody in tech. Besides like, the three guys that were on my team at my internship, and so when you were tweeting about Virtual Coffee and even before the pandemic, I was working from home, so I was really excited and then the slack group and it's just been so great. Like I made so many friends in tech now.
+
+Dan Ott  29:21  
+That's, it's, it's pretty cool. I was gonna ask like, you know, given not sure how to phrase this, but like given your, like quietness and what is the what is the right word for that? But like, given the fact that you know, you know, you're not out there like tweeting all the time, you're not doing a lot of that other stuff. I still see you getting involved in you know, things like Bekah was saying that HacktoberFest and you You know, I've given talks at our lightning talks. For instance, do you find yourself like looking for ways to To create content or like, you know, do things like that. Other than, you know, I don't know, the traditional, like, tweets and whatever, that you know, a lot of other developers do.
+
+Courtney Landau  30:14  
+Yeah, um, I think, like, we're the lightning talks are concerned and things like that. I do want to put myself out there. And it's more like me making myself do things that are outside of my comfort zone like so 
+
+Dan Ott  30:31  
+Totally
+
+Courtney Landau  30:31  
+yeah, because I get, you know, even like this podcast, get so nervous, for it, but, yeah, it's good for, you know, I could easily just stay in my office and not contribute, but I want to get out there and I do benefit a lot from it. So yeah.
+
+Dan Ott  30:52  
+Do you have I mean, I suffer from suffer, I don't know if that stuff is the right word. But I struggle with the same thing. And especially before, if I'm got, you know, fun Virtual Coffee guy bolts, the I went through long phase years of my career where I was just like, I don't know, I just did that I just stayed in my little cave, you know, uncoated and whatever, I follow people on Twitter, probably, but I was not like, very active, and I was honestly kind of comfortable with it, you know, sometimes, and then I do find that the more that I do, force myself out of my comfort zone, you know, there's, there's these moments right before, like, like talking, you know, giving a talk, for instance.
+
+Dan Ott  31:35  
+And this was, honestly, for me, it was much worse, in person, you know, and I was, I was trying to give talks for my Meetup group, and would have these moments, like, shortly before, where I was very nervous, and I was just like, why, why, why, why did I do this? Why did I make this choice? Like, can I just, I want to just go back to my cave where nobody can see me, but afterwards, generally felt pretty good, you know, glad that I did it. And so that's one thing I keep looking for is ways to, I don't know, force myself to do things like that. You know, I don't know if that makes sense. But like signing up for things before I can think about it, for instance, you know, you know, things like that. Have you is, have you had any other out of your comfort zone adventures, recently, aside from the ones we've covered? Oh,
+
+Courtney Landau  32:41  
+yeah. But like you said, like, I just keep, you know, forcing myself the more I do it, the more the better it gets. But that's why I have to force myself but the only other situations where like, recently, we're just taking interviews while take phone calls once a month, just because I know that how that I don't know that I come across great interviews, just because I'm so nervous and things like that. So just, I made a decision to like take, because now that I've been in the industry for a little bit, now the recruiters are reaching out like crazy on LinkedIn. So I'll take a call, like once a week, and that's what I'm trying to do. Because when I go too long, without talking to people, I get worse at it. So and I know that about myself, so. And that kind of helps. But
+
+Dan Ott  33:38  
+that's really great. So I mean, yeah, so like, that's, I mean, these aren't practice interviews you're taking, you know, these are real. I mean, they might be the first round or whatever. But these are real interviews, you know, that you're just taking for your own, you know, your own I don't know, benefit or whatever. Right. That's awesome.
+
+Courtney Landau  33:55  
+Um, yeah. I mean, yeah, they're also like, if it's not just like, any random, like, if I'm interested in hearing more about it, I will reach out but yeah, totally. It's more perfect. I like where I'm at right now. But also, we are very new, and we don't have, you know, a lot of money coming in. So it's kind of assurance to to keep up my skills.
+
+Dan Ott  34:23  
+Totally. Well, and I've, you know, I've heard from other people that like this, that interviewing is is like, honestly, just a separate skill that is worth practicing. And I just think I think it's very cool that you do it sort of intentionally like that, even when there's not a need. Seems like the right time to practice is when what is that an emergency? Right? Right. Yeah. That's really, really cool.
+
+Bekah Hawrot Weigel  34:49  
+You, you've given two lightning talks. So we've had two lightning talk events, and you've given talks in both of them, which were fantastic like you do. Such a good job like communicating things through and going through, you know, the things that you're working on. And I find like, I give talks, but I am terrified, pretty much the entire time. And then wonder why I have agreed to do this. But like, Are you comfortable? You look comfortable when you're doing it? Or is this Oh, are you pushing yourself out of your comfort zone in those things?
+
+Courtney Landau  35:23  
+Oh, I'm totally pushing. But the lightning talks are nice, because I can I mean, you know, I did a traditional kind of college route. So I have, like, if you hired occasionally, you're giving presentations constantly, at least with my masters. I was. So I've done it before. And I found really just having, like, tons of preparation and practice. I practice like so many times beforehand, because if I don't, then I get, you know, also, I have to know exactly what I'm going to say. So I don't like lose, you know, my thoughts. So I don't know. Yeah. I am surprised to hear you say that back up. Because I mean, you did say that. I've done well before, you know, in my lightning talks, but I can't go back and listen to them. Because I just feel my nervousness all over again. I know that I should to improve, but
+
+Bekah Hawrot Weigel  36:29  
+it's so hard. Oh, for sure. I mean, I don't like listening to myself talk or like, let alone going back. And like watching a video of myself talking. I am given a talk next week. And the last time I gave a version of this talk, I like cried on camera for 10 minutes. And I was telling my friend Oh, yeah, I'm doing this talk. And she's like, Is that the same one that you cried? And you're gonna do it again? Well, yeah, I didn't I didn't really think about it that way. But now I will. But I think it is like that practice. And then also realizing that sometimes you can practice and things are still aren't going to happen the way that maybe you hoped. And then it's just kind of figuring out like, how do you push through that when you've got a roomful of people staring at you or whatever.
+
+Courtney Landau  37:21  
+Right. Yeah. And also, the topics I'm taking are very, like, some things I'm very familiar with, like I know pretty well that I'd be afraid to, like, do a topic on something that I've been using for just like a practice project or something. I don't know.
+
+Unknown Speaker  37:44  
+I don't know. I just,
+
+Courtney Landau  37:47  
+if I really know what I'm talking about. I feel like I could what you're talking about Bekah? Yeah, that'd be really hard for me.
+
+Bekah Hawrot Weigel  37:55  
+Well, I think that's good advice. No, something that note, well, especially if it's out of your comfort zone, or if you're doing something for the first time, like, find a topic that you're comfortable talking about, because then that can offset some of that discomfort in trying something new.
+
+Dan Ott  38:16  
+Yeah, that's, that kind of goes along with my, I'm working on these, like, I didn't need to come up with the name of them. But like, these pieces of advice, you know, for different situations, right. And like that, trying to not do something new, like too many new things all at the same time. You know, it's like, that's, that's a danger zone. Right? So, if you're, like, just getting into speaking, right, it's just like, when he was saying, like, pick, choose something you're comfortable speaking about, right? And then once you get like, I feel like the talks, you see sometimes where somebody learns, like, is presenting something that they just learned about or whatever, that stems are seasoned, you know, speakers, right. Right. So where they're like, okay, the the thing that they don't know, is just that tech or whatever, and not, you know, not being comfortable with what speaking. I do the same thing. You know, I've done the same thing, that the times that I've done. The lightning talks and stuff is it, it's nice Also, if you get off track, or something you at least, like, if you're if you know, you know the topic, you can kind of usually find your way back. Right.
+
+Courtney Landau  39:35  
+Yeah. And another thing is, yeah, I like when you're talking about so I kind of think I could only talk about like technical things. I don't know if I would be able to talk about more things that weren't like with the technical talk, it's kind of more you're, you know, you're kind of going through steps. So I find that easier.
+
+Dan Ott  40:02  
+Yeah, well, I mean, and there's lots lots and lots of value in the, like technical talks, you know? And have you found like, in your experience with, you know, the talks or whatever, that you've written, that they've actually helped you. I don't learn anything new, or reframe anything for yourself, you know, even though you, like, we're, you know, talking about a topic that you, you know, sensibly, like, knew pretty well.
+
+Courtney Landau  40:31  
+Um, yeah, I think that there's value in that, because you have to cover the topic. When you're giving the talk, like, you want to cover all aspects of it? And if it's something I haven't, you know, there's certain parts of it that I haven't really used in depth that really helps solidify things. Yeah,
+
+Dan Ott  40:54  
+yeah, I've had that experience where this was, I guess, this was for that the last round of lightning talks, I talked about CSS Grid, and I picked it because I like knew it pretty well, you know, and, like, grammie grid is like, kind of, I say, knew pretty well. And that means like, I only had to look up half of the things that I was trying to do. But like, I honestly, like, had a whole thing wrong in my head that I was going to talk about, you know, and I had, like, read it out incorrectly, and went to just reference the docs just so I could like, nail down one piece of syntax and realize that I had this whole thing that I learned it, you know, what I mean? Like, like, in preparing for the talk, I was like, actually, like, improve my own, you know, knowledge at the same time as it was kind of cool. I was just like, you know, and writing is I think that kind of the same way, except maybe with some less pressure, but like, the the act of like, teaching, you know, in some way can is like a very valuable, like learning tool for yourself, right? That's the way I look at it at least.
+
+Courtney Landau  42:01  
+Yeah, definitely. There's definitely a lot of value for. And I admire people that are making blog posts about things a lot. And I just don't know how people find that time. I wish I could do more of that. But yeah, it's very time consuming, but you do. It does really solidify your knowledge. For sure.
+
+Bekah Hawrot Weigel  42:28  
+I know, you know, it's a strategy even in teaching, like if you're in a classroom to put a student who might be a little bit ahead of another student together and have them pair. No, I'm not even on coding things, but just, you know, whatever topic you're learning about, because there's something about that peer to peer interaction, and the, how you're able to solidify your own understanding of a concept. But how teaching it and working together helps students retain information better and to grow. And I think, you know, a lot of it has to do with like that sense of accomplishment and teamwork. And I don't know, I think that's one of the great things about Virtual Coffee, because people are always kind of pairing up to work on things together. And, you know, with the mentoring you've done to Courtney, maybe you've had that experience as well. But you know, the idea of, you know, pairing with people who you talked earlier about being able to offer something, even if you're a little bit ahead of someone else. And I just think that's so important. I don't think that people realize that enough that you if you're a step ahead of somebody, you can still teach and mentor.
+
+Courtney Landau  43:52  
+Right? Yeah, and definitely
+
+Courtney Landau  43:57  
+mentoring and, like doing the Oktoberg mentoring is definitely helps solidify my knowledge as well. And I really enjoy it. Like, I like
+
+Courtney Landau  44:11  
+talking to people about tech. So I hope to continue doing that. throughout the rest of my career.
+
+Dan Ott  44:20  
+I feel like one of the nice things about nice, but like one of the most one of the important things about mentoring is like showing that it's okay to like, not know, everything, you know, and you can be like successful at whatever project or task you know, without like having the complete knowledge of all things, you know, which is one of the hardest, like, I feel like one of the hardest things about learning to be a developer and learning new, new skills is is just like you it's very natural to feel like you need to know everything, you know Yeah, but like very obvious, like,
+
+Courtney Landau  45:03  
+yeah, that is impossible.
+
+Dan Ott  45:05  
+Right? It's impossible. No, you're fine. I was just gonna say it's it's like, it can seem like everybody that's experienced does know everything, you know. And that's like a lesson we try to I don't know display is even people who have been working in the industry for a very long time. Don't know everything, no don't know nearly everything, you know what I mean? They they've just like gotten better at finding things out, you know faster, like lots of times. So it's just like learning things together is a great like mentor mentee you know, activity for lack of a better word.
+
+Unknown Speaker  45:44  
+Yeah, definitely. And
+
+Courtney Landau  45:51  
+they, especially Andrea for HacktoberFest, she
+
+Courtney Landau  45:56  
+definitely saw a lot of that I wasn't familiar with because we worked on the Virtual Coffee site itself. And I wasn't familiar with, like, the static site generator. I hadn't really used that before. And we use eleventy. And so I was learning along with her. But yeah, it was really, it was great. And she actually, I steal her story, but she taught me I knew she'd definitely taught me things cuz she, she was committing a fight like a half of not the entire file. Like I've just always just committed that entire file, but she's on how you can stage just selection and selected parts. She I think she was very happy that she got to show me something. Yeah, just she has a good experience. And yeah, we went mentoring with me will see me googling and and it's very valuable to show how you go through your process to like, and it definitely gets better over time of how to figure things out, just working through. Because I mean, web dev is constantly changing anyway.
+
+Dan Ott  47:11  
+Yes, exactly. Yeah, that's, that's really awesome. I, I feel like, Oh, no, I can't speak for Andrew. But like, being in that position, I almost would would rather that experience of like, my, like a mentor, like not, not being the total expert, and just having all the answers, right, you know, because that like learning how to figure things out is, right, it's just like, the most important thing I feel like to get under your belt, especially early.
+
+Bekah Hawrot Weigel  47:42  
+Yeah, I want to, I want to say too, so you did do the lightning talks, you have mentored, you know, take for some of our coffees. And this last time for the lightning talks, you also were a coordinator, which meant that you worked with a bunch of different speakers, and you work with us to kind of create this process or to understand the process that to create these events. And that is a lot of stuff to be doing. And you did it all really well. You had so many people that you were working with to coordinate that while you were writing your own talk. Um, do you think like maybe some of the stuff that you're doing with Project Management at your job came into play here? Or you just decided you are going to do it off?
+
+Courtney Landau  48:39  
+Um, no, for sure. Yeah. Definitely have to do I like working on I like doing stuff that like helping out where I can, you know, and doing that back end like stuff is like, right up my alley. Like, by like, doing the coordinating type things. I was always kind of one of those people who aren't here's to be
+
+Courtney Landau  49:06  
+like, oh,
+
+Courtney Landau  49:09  
+like Vice President, the one who doesn't have to do everything. Know of clubs and things. But yeah, so yeah, like doing that kind of thing. Coordinating was not hard. It was just reaching out to people every once a while wasn't Yeah, it wasn't a big deal. And my own talk was something that, you know, I was pretty familiar with, so I didn't really have to spend a ton of time. Now you notice I didn't haven't done like a brown bag. Right? That that involves a lot of work, I think like to speak for an hour, but
+
+Bekah Hawrot Weigel  49:42  
+so that's what you're gonna do next. Is that what you're saying?
+
+Courtney Landau  49:47  
+I don't know about that. 
+
+Dan Ott  49:48  
+What's your brown bag topic? Gonna be?
+
+Courtney Landau  49:50  
+Yeah, that's I that's the question though. I have no idea.
+
+Dan Ott  49:55  
+I mean, 
+
+Courtney Landau  49:56  
+I probably will. 
+
+Dan Ott  49:57  
+There's lots of options though. With the brown bag to eat. You know, they don't always have to be just like, presentation for an hour, you know, can be like, even with Firebase, you know, mix in some workshop II stuff or whatever. There's like, there's lots of options.
+
+Courtney Landau  50:12  
+Yeah. All right. Yeah, that's me. I would really like I think that's more up my alley than an hour long talk is more of a workshop personally.
+
+Dan Ott  50:22  
+Interesting, I think in general, anyway, maybe not more interesting. But I always I very much enjoy workshops, because it's fun to like work along, you know, alongside. Yeah,
+
+Courtney Landau  50:31  
+yeah. I mean, a bit of a tangent, but the code, was it. Like DEV.to's, dot com or the code newbies conference, that workshop? those workshops. were really good. I really enjoyed those. Nice. That was definitely the best part of the conference for me. Yep, so VC. Next step, we should do workshops.
+
+Bekah Hawrot Weigel  50:54  
+We've had one workshop. At the beginning of the year, this year, we're hot did one. And that was really great. I would love to see more workshops. I think that's intimidating. I don't know, I I feel like I could never give a workshop. I would be intimidated by that. But we should definitely get your workshop started Courtney. 
+
+Courtney Landau  51:20  
+Okay.
+
+Courtney Landau  51:22  
+Yeah, no, I don't know why. But I like that. I like teaching things like that.
+
+Courtney Landau  51:27  
+I think that.
+
+Courtney Landau  51:29  
+For me, my comfort level was more geared towards that kind of thing, then talking on stage, or would it not really on stage, but you know, for an hour?
+
+Dan Ott  51:41  
+Yeah, I feel the same way I feel I very much enjoy, like, especially even want a one on one, you know, like conversations, but anything where it's, the closer it is to having conversation, as opposed to you know, like you said, like standing on a huge stage or whatever, you know, I don't know, the easier it is for me to get into it and feel less nervous about it anyway.
+
+Bekah Hawrot Weigel  52:07  
+So we've talked a lot about the things that you've done to kind of push yourself out of your comfort zone and your journey. And I don't know if you have a recent win that you want to share. But if you do, we would love to hear it.
+
+Courtney Landau  52:23  
+Let me think for a second. Probably like, a month ago now or not sure. But I had for work I had designed and built. We I mentioned the Chrome extension we had for students, but I designed and built one for teachers as well, to solve a need that they saw that works with Google Classroom. But um, yeah, so that came out like, couple weeks ago, and I got some really good feedback on that. And everybody seems to really like it. So that's a win for me.
+
+Dan Ott  53:03  
+That's awesome. That's a huge win. 
+
+Bekah Hawrot Weigel  53:04  
+Yeah, it is. 
+
+Dan Ott  53:07  
+I've never messed with Chrome extensions. Are they like, is it JavaScript? Yep. Yes, it's just like a, like a whole nother world. Like, just if you know, JavaScript, are you still gonna just be totally lost until you learn it? Or is it like, you know,
+
+Courtney Landau  53:27  
+it depends on what you want to do. I guess it's really, like, there's a pop up part that's just, you know, styling, HTML, CSS, and JavaScript there. But then there's like things that you can do within, like, use Google Chrome, API's to like, inject things into the page, like, websites or grab things from them. And then there's the background that's does a bunch of stuff. But that's Yeah, and that's just JavaScript too. So, yeah, totally depends on there's it, there's a million different things you could do with the Chrome extension. But
+
+Dan Ott  54:06  
+that's, that's a whole area I've never I've never messed with, but it always seemed like, could be some, you know, possible to make some cool stuff, you know,
+
+Bekah Hawrot Weigel  54:14  
+Could be a workshop.
+
+Dan Ott  54:15  
+Yeah. Could be.
+
+Courtney Landau  54:16  
+I could do a workshop on that.
+
+Bekah Hawrot Weigel  54:20  
+That would be awesome.
+
+Dan Ott  54:21  
+I'd go.
+
+Courtney Landau  54:25  
+I don't know how, yeah. How many people want to build Chrome extensions, but
+
+Bekah Hawrot Weigel  54:31  
+I mean, I think it's cool. Everybody in the community is always interested in something, you know, there's enough people here that they just want to hear whether they want to do it or just want to have some understanding of it. I think that you know, there are always people there that are going to support the talk or the workshop.
+
+Courtney Landau  54:49  
+That's Yeah, that's really true. Because there's always a lot of people that I go to as many brown bags as I can, even if I'm not as interested in the topic, It always proves valuable some way,
+
+Bekah Hawrot Weigel  55:02  
+for sure. All right, Courtney, this has been really great. And it was nice to talk through all of these things with you and kind of hear your stories behind things. So thank you so much for being here. today. We will post all of your contact information, your Twitter handle and that kind of stuff in our show notes. So thanks for being here.
+
+Courtney Landau  55:26  
+Great. Thanks so much.
+
+Bekah Hawrot Weigel  55:32  
+Thank you for listening to this episode of the Virtual Coffee podcast. This episode was produced by Dan Ott and Bekah Hawrot Weigel, and edited by Dan Ott. If you have questions or comments, you can hit us up on Twitter at Virtual Coffee, IO. Or you can email us at podcast at Virtual coffee.io. You can find the show notes plus you can sign up for our newsletter to find out what Virtual Coffee has been up to on our website at Virtual coffee.io 
+
+Dan Ott  56:01  
+please subscribe to our podcast and be sure to leave us a review. Thanks for listening and we'll see you next week.
+
