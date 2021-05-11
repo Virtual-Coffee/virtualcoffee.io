@@ -1,6 +1,7 @@
 Bekah Hawrot Weigel  0:14  
 Hello, and welcome to season two, episode six of the Virtual Coffee podcast.
 
+Bekah Hawrot Weigel  0:21  
 I'm Bekah, and this is a podcast that features members of the Virtual Coffee community. Virtual Coffee is an intimate group of developers at all stages of their coding journey. And they're here on this podcast sharing their stories and what they've learned. And we're here to share it with you. Here with me today is my co host, Dan.
 
 Dan Ott  0:40  
@@ -9,17 +10,22 @@ Thanks, Bekah. Today we're talking with Courtney Landau. Courtney is a software 
 Bekah Hawrot Weigel  1:02  
 We start every episode like we start every Virtual Coffee, we introduce ourselves with our name, where we're from what we do and a random check in question. Today's random question is, if you had to delete all but three apps from your smartphone, which ones would you keep? We hope you enjoyed this episode.
 
+Bekah Hawrot Weigel  1:29  
 Hey, I'm Bekah, I am a front end developer from a small town in Ohio. And if I could keep three apps on my smartphone, I think it would be
 
+Bekah Hawrot Weigel  1:44  
 slack.
 
+Bekah Hawrot Weigel  1:47  
 Spotify.
 
+Bekah Hawrot Weigel  1:50  
 And then Google Drive.
 
 Dan Ott  1:54  
 Google Drive.
 
+Dan Ott  1:57  
 Nice. Yeah. So so one entertainment, one and two sort of work working once.
 
 Bekah Hawrot Weigel  2:04  
@@ -28,18 +34,22 @@ That seems to know what that says about me.
 Dan Ott  2:06  
 Three's...three's tough. Hi, I'm Dan. I am a front end developer from Lakewood, Ohio.
 
+Dan Ott  2:14  
 And if I so if I had to keep three apps, I thought I would do Spotify as well. I would do overcast, it's just podcast app. And that I listen to pretty much all time. And I don't know. I feel like some kind of game except that I can't really get into any games right now. I'm in between games right now. So I don't really have a good I guess I'll say slack. But like I was kind of honestly looking forward to not having slack on my phone in this imaginary, you know, thing. But slack is probably pretty lost without having slack on my phone. So that'll be my choice. Choice three, slack. 
 
 Courtney Landau  2:53  
 Hi, I'm Courtney. I'm a software developer from Bethlehem, Pennsylvania. And three
 
+Courtney Landau  3:00  
 apps that I would keep were are gonna sound like everybody else's now overcast, number one, Spotify. And I would definitely not keep slack Just saying. And I guess Instagram.
 
+Courtney Landau  3:16  
 Yeah, because I do like the photos.
 
 Dan Ott  3:21  
 I have, like, you know, I could do pretty easily without Twitter. I'm not on Instagram anymore. I was like, thinking about
 
+Dan Ott  3:30  
 was it? Oh, things like my to do app? You know, except that I know. I never use it.
 
 Courtney Landau  3:38  
@@ -57,6 +67,7 @@ That's true
 Dan Ott  3:57  
 slack's a little... I don't know, slack works on the phone through the web.
 
+Dan Ott  4:02  
 You know, I know you can on your computer on the web. But regardless, I mentioned it would not be the fun.
 
 Bekah Hawrot Weigel  4:11  
@@ -65,16 +76,22 @@ Yeah. All right. Oh, thanks, Courtney, for being here today. We're very, very ex
 Courtney Landau  4:28  
 Yeah, um, so I am Yeah, a career changer. So I came from clinical field. I was CAT scan tech. Well, actually, I still work per diem as CAT scan tech once in a while in the hospital.
 
+Courtney Landau  4:43  
 So yeah, I did that while
 
+Courtney Landau  4:47  
 out. I went to X ray school after
 
+Courtney Landau  4:51  
 and then I did CAT scan for a long time had kids and when they were young, I worked the weekend program. Kind of
 
+Courtney Landau  5:00  
 While they were young the entire time, so I worked 212 hour shifts on the weekend. And
 
+Courtney Landau  5:06  
 so that was great for when they were young. But when they were going back to school, I ended up
 
+Courtney Landau  5:13  
 thinking I wanted to change careers. And I really liked tech.
 
 Bekah Hawrot Weigel  5:19  
@@ -83,10 +100,13 @@ What it what interested you about tech?
 Courtney Landau  5:21  
 Yeah, so I was really into
 
+Courtney Landau  5:24  
 kind of computers. So I kind of went, thought it would, I would get a master's in
 
+Courtney Landau  5:32  
 Information Sciences kind of go into like, stay in medical, but kind of do like more like an IT thing. But then I took
 
+Courtney Landau  5:53  
 working out problems. And that kind of led me to focus my master's on coding moreso than it so while I was doing the Masters, I was kind of building a bunch of working on Free Code Camp at the same time kind of doing web dev stuff, along with my coursework. And that kind of led me into web dev once I graduated. 
 
 Bekah Hawrot Weigel  6:17  
@@ -95,13 +115,16 @@ Nice, what is your master's in?
 Courtney Landau  6:19  
 Information Sciences. So I kind of it was my bachelor's in biology. So
 
+Courtney Landau  6:29  
 what I went when I found that this program was local, and I could go in like half time, so when I was first starting, like doing these, I did kind of some MOOCs online, like with coding, and it kind of see what I would like, and I, I figured I could, because you could kind of structure your classes around. Like, either like development or it more I and I did take some it classes along with it, but most of them were like, all
 
+Courtney Landau  7:01  
 coding classes. So 
 
 Dan Ott  7:04  
 Oh, that's so cool. So yeah, so when you started your master's program, you weren't really thinking about coding at all.
 
+Dan Ott  7:32  
 interesting. 
 
 Courtney Landau  7:34  
@@ -122,8 +145,10 @@ Nice. And so then what was the transition, like, from your job at the hospital t
 Courtney Landau  8:12  
 Yeah. So um, I ended up well, I was still working the weekends, like, I worked weekends for probably 10 years. And so when I was about to graduate, I was kind of applying when I was in school, but nothing worked out. And then I when I was about to graduate, I managed to land an internship, so I, a paid internship full time, so
 
+Courtney Landau  10:01  
 Really like
 
+Courtney Landau  10:03  
 software developments more, using more my brain basically, it's got CAT scan, there's not really any room for, like, moving up, there's no, it's either like management or go to school and become like, I don't know, pa or a doctor. But yeah. So yeah, I like being in software development now.
 
 Bekah Hawrot Weigel  10:28  
@@ -132,8 +157,10 @@ Did that internship lead to a full time job?
 Courtney Landau  10:32  
 Right now, um, the internship did not lead to a full time job. I was hoping that it would. But they were not hiring at the end of it. So no one got hired.
 
+Courtney Landau  11:58  
 big company,
 
+Courtney Landau  12:01  
 Dell, which was would have been about an hour and 15 minute drive. And so I had that offer. And then the very, very small startup where I would be the only developer and working from home. So I ultimately chose this one, obviously. So yeah, I've been there since September of 19.
 
 Bekah Hawrot Weigel  12:25  
@@ -142,46 +169,61 @@ Wow, I feel like that's a little bit overwhelming. When you were talking about t
 Courtney Landau  12:46  
 Right, yeah.
 
+Courtney Landau  14:19  
 And it's here and almost a half. So 
 
 Dan Ott  14:23  
 that's really cool. That's cool that they, you know,
 
+Dan Ott  14:31  
  newer career developer,
 
+Dan Ott  15:00  
 You don't have a somebody else that, you know, that was there before. 
 
 Courtney Landau  15:04  
 Right. So, um, I had the CTO who
 
+Courtney Landau  15:10  
 I don't know how much he actually built. I think he contracted out I think, a lot of it. So coming, I came into that. And
 
+Courtney Landau  15:23  
 so
 
+Courtney Landau  15:25  
 can you repeat that question? Sorry? 
 
 Dan Ott  15:27  
 Oh, yeah, well, no, that makes sense. Because usually, if anybody has listened to this podcast for a while, they will know that I will talk for like a minute or two and ask, like, several questions. In the middle of the sentences, no worries. The first question I was wondering about was what you answered was like, you know, if you were the only developer who built it, and then the second part was, was, yeah, like, talk more, can you? I was just wondering if you could talk more about
 
+Dan Ott  15:57  
 what it was like getting used to like that, that codebase. I know, they they said,
 
+Dan Ott  16:02  
 or you said that they sent you to some view training and stuff, which is really cool. But
 
+Dan Ott  16:07  
 just in general, like not having a another developer to sort of lean on for questions. I was just, I was just curious, let you know what that looks like for you. 
 
 Courtney Landau  16:15  
 Right? Yeah. Um, yeah, a lot of the majority of like, the code that was written at that point was the Chrome extension, which does a lot of like website tracking, and doesn't use a lot of the chrome API's.
 
+Courtney Landau  16:30  
 So that was pretty complex, and kind of overwhelming at first. But really, the Vue app was
 
+Courtney Landau  16:39  
 the easy part. So and I did have him too. He was available, you know, he still is available to for but it's at this point, he's more like big questions, big picture questions.
 
+Courtney Landau  16:52  
 And a lot of the stuff he's like, I don't know, JavaScript, so.
 
+Courtney Landau  16:57  
 Okay, you're on your own. But
 
+Courtney Landau  17:00  
 yeah, no, it was actually like, the first thing I'm remembering now that the first thing that I had to fix was like a bug. So I had to get root in the Chrome extension to really dig in to like off things. And
 
+Courtney Landau  17:15  
 so that was a lot. But yeah, it worked itself out. For questions. Yeah, I either go to him or go to, like, I use discord a lot like the when I had Firebase questions, there's pretty helpful discord on that. And 
 
 Dan Ott  17:36  
@@ -259,6 +301,7 @@ yeah, because I get, you know, even like this podcast, get so nervous, for it, b
 Dan Ott  30:52  
 Do you have I mean, I suffer from suffer, I don't know if that stuff is the right word. But I struggle with the same thing. And especially before, if I'm got, you know, fun Virtual Coffee guy bolts, the I went through long phase years of my career where I was just like, I don't know, I just did that I just stayed in my little cave, you know, uncoated and whatever, I follow people on Twitter, probably, but I was not like, very active, and I was honestly kind of comfortable with it, you know, sometimes, and then I do find that the more that I do, force myself out of my comfort zone, you know, there's, there's these moments right before, like, like talking, you know, giving a talk, for instance.
 
+Dan Ott  31:35  
 And this was, honestly, for me, it was much worse, in person, you know, and I was, I was trying to give talks for my Meetup group, and would have these moments, like, shortly before, where I was very nervous, and I was just like, why, why, why, why did I do this? Why did I make this choice? Like, can I just, I want to just go back to my cave where nobody can see me, but afterwards, generally felt pretty good, you know, glad that I did it. And so that's one thing I keep looking for is ways to, I don't know, force myself to do things like that. You know, I don't know if that makes sense. But like signing up for things before I can think about it, for instance, you know, you know, things like that. Have you is, have you had any other out of your comfort zone adventures, recently, aside from the ones we've covered? Oh,
 
 Courtney Landau  32:41  
@@ -318,8 +361,10 @@ I know, you know, it's a strategy even in teaching, like if you're in a classroo
 Courtney Landau  43:52  
 Right? Yeah, and definitely
 
+Courtney Landau  43:57  
 mentoring and, like doing the Oktoberg mentoring is definitely helps solidify my knowledge as well. And I really enjoy it. Like, I like
 
+Courtney Landau  44:11  
 talking to people about tech. So I hope to continue doing that. throughout the rest of my career.
 
 Dan Ott  44:20  
@@ -337,6 +382,7 @@ Yeah, definitely. And
 Courtney Landau  45:51  
 they, especially Andrea for HacktoberFest, she
 
+Courtney Landau  45:56  
 definitely saw a lot of that I wasn't familiar with because we worked on the Virtual Coffee site itself. And I wasn't familiar with, like, the static site generator. I hadn't really used that before. And we use eleventy. And so I was learning along with her. But yeah, it was really, it was great. And she actually, I steal her story, but she taught me I knew she'd definitely taught me things cuz she, she was committing a fight like a half of not the entire file. Like I've just always just committed that entire file, but she's on how you can stage just selection and selected parts. She I think she was very happy that she got to show me something. Yeah, just she has a good experience. And yeah, we went mentoring with me will see me googling and and it's very valuable to show how you go through your process to like, and it definitely gets better over time of how to figure things out, just working through. Because I mean, web dev is constantly changing anyway.
 
 Dan Ott  47:11  
@@ -348,8 +394,10 @@ Yeah, I want to, I want to say too, so you did do the lightning talks, you have 
 Courtney Landau  48:39  
 Um, no, for sure. Yeah. Definitely have to do I like working on I like doing stuff that like helping out where I can, you know, and doing that back end like stuff is like, right up my alley. Like, by like, doing the coordinating type things. I was always kind of one of those people who aren't here's to be
 
+Courtney Landau  49:06  
 like, oh,
 
+Courtney Landau  49:09  
 like Vice President, the one who doesn't have to do everything. Know of clubs and things. But yeah, so yeah, like doing that kind of thing. Coordinating was not hard. It was just reaching out to people every once a while wasn't Yeah, it wasn't a big deal. And my own talk was something that, you know, I was pretty familiar with, so I didn't really have to spend a ton of time. Now you notice I didn't haven't done like a brown bag. Right? That that involves a lot of work, I think like to speak for an hour, but
 
 Bekah Hawrot Weigel  49:42  
@@ -388,10 +436,13 @@ We've had one workshop. At the beginning of the year, this year, we're hot did o
 Courtney Landau  51:20  
 Okay.
 
+Courtney Landau  51:22  
 Yeah, no, I don't know why. But I like that. I like teaching things like that.
 
+Courtney Landau  51:27  
 I think that.
 
+Courtney Landau  51:29  
 For me, my comfort level was more geared towards that kind of thing, then talking on stage, or would it not really on stage, but you know, for an hour?
 
 Dan Ott  51:41  
