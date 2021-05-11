@@ -3,6 +3,8 @@
     {% for username in membersList %}
       {% set member = memberData[username | lower] %}
       {% set memberSite = '' %}
+      {% if member %}
+
         {% if member.websiteUrl %}
 
           {% set memberSite = member.websiteUrl %}
@@ -10,47 +12,48 @@
             {% set memberSite = 'https://' + memberSite %}
           {% endif %}
         {% endif %}
-      <div class="membercard" id="member_{{username}}">
-        <div class="membercard-img">
-          <img src="{{member.avatarUrl}}" alt="{{member.name}} profile image">
+        <div class="membercard" id="member_{{username}}">
+          <div class="membercard-img">
+            <img src="{{member.avatarUrl}}" alt="{{member.name}} profile image">
+          </div>
+
+          <div class="membercard-header">
+
+              <h5 class="membercard-name">
+                {% if memberSite %}
+                  <a href="{{memberSite}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
+                {% else %}
+                  <a href="{{member.url}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
+                {% endif %}
+
+              </h5>
+              <div class="membercard-social">
+                <a href="{{member.url}}" class="membercard-icon" title="{{member.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
+                {% if member.twitterUsername %}
+                  <a href="https://twitter.com/{{member.twitterUsername}}" title="{{member.twitterUsername}} on Twitter" class="membercard-icon" target="_blank" rel="noopener noreferrer">{% include "svg/twitter.svg" %}</a>
+                {% endif %}
+              </div>
+
+
+              <div class="membercard-teams">
+                {% for team in member.teams %}
+                  <span class="badge badge-secondary">{{team}}</span>
+                {% endfor %}
+              </div>
+
+          </div>
+          <div class="membercard-bd">
+            {% if member.bioHTML %}
+              <div class="text-muted">{{member.bioHTML | safe}}</div>
+            {% endif %}
+            {% if memberSite %}
+              <div class="text-truncate">
+                <a href="{{memberSite}}" target="_blank" rel="noopener noreferrer">{{memberSite | replace('https://','') | replace('http://','')}}</a>
+              </div>
+            {% endif %}
+          </div>
         </div>
-
-        <div class="membercard-header">
-
-            <h5 class="membercard-name">
-              {% if memberSite %}
-                <a href="{{memberSite}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
-              {% else %}
-                <a href="{{member.url}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
-              {% endif %}
-
-            </h5>
-            <div class="membercard-social">
-              <a href="{{member.url}}" class="membercard-icon" title="{{member.login}} on GitHub" target="_blank" rel="noopener noreferrer">{% include "svg/github.svg" %}</a>
-              {% if member.twitterUsername %}
-                <a href="https://twitter.com/{{member.twitterUsername}}" title="{{member.twitterUsername}} on Twitter" class="membercard-icon" target="_blank" rel="noopener noreferrer">{% include "svg/twitter.svg" %}</a>
-              {% endif %}
-            </div>
-
-
-            <div class="membercard-teams">
-              {% for team in member.teams %}
-                <span class="badge badge-secondary">{{team}}</span>
-              {% endfor %}
-            </div>
-
-        </div>
-        <div class="membercard-bd">
-          {% if member.bioHTML %}
-            <div class="text-muted">{{member.bioHTML | safe}}</div>
-          {% endif %}
-          {% if memberSite %}
-            <div class="text-truncate">
-              <a href="{{memberSite}}" target="_blank" rel="noopener noreferrer">{{memberSite | replace('https://','') | replace('http://','')}}</a>
-            </div>
-          {% endif %}
-        </div>
-      </div>
+      {% endif %}
     {% endfor %}
   </div>
 {% endmacro %}
