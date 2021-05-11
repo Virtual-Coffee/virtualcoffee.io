@@ -19,7 +19,7 @@ module.exports = {
           if (mp3 && card) {
             const [urlKey, query] = mp3.split('.mp3?');
             const queries = querystring.parse(query);
-
+            const blobID = queries.blob_id || data.page.fileSlug;
             return {
               ...data.metadata,
               tags: {
@@ -27,7 +27,7 @@ module.exports = {
                 'twitter:player':
                   urlKey +
                   '?client_source=twitter_card&amp;player_type=full_screen',
-                'twitter:player:stream': `${urlKey}'.mp3?blob_id=${queries.blob_id}&client_source=twitter_card`,
+                'twitter:player:stream': `${urlKey}'.mp3?blob_id=${blobID}&client_source=twitter_card`,
                 'og:image': useImgix
                   ? imgixClient.buildURL(card, {
                       w: 250,
@@ -63,10 +63,11 @@ module.exports = {
           if (mp3) {
             const [urlKey, query] = mp3.split('.mp3?');
             const queries = querystring.parse(query);
+            const blobID = queries.blob_id || data.page.fileSlug;
             return {
               ...data.podcast,
-              blob_id: queries.blob_id,
-              playerSrc: `${urlKey}.js?container_id=buzzsprout-player-${queries.blob_id}&player=small`,
+              blob_id: blobID,
+              playerSrc: `${urlKey}.js?container_id=buzzsprout-player-${blobID}&player=small`,
             };
           }
           return data.podcast;
