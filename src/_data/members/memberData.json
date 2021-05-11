@@ -608,6 +608,21 @@
     "websiteUrl": "JustinHager.codes",
     "teams": []
   },
+  "jenkens-dev": {
+    "login": "jenkens-dev",
+    "id": "MDQ6VXNlcjI1Mzk4MDIx",
+    "url": "https://github.com/jenkens-dev",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/25398021?u=f041fec893f61e0d1092fcd98757e1f0abec1ac8&v=4",
+    "name": "Jen Kennedy",
+    "company": null,
+    "location": "Seattle, WA",
+    "isHireable": false,
+    "bio": "Frontend Developer | JavaScript, React, GraphQL | Tech for good 💜 ",
+    "bioHTML": "<div>Frontend Developer | JavaScript, React, GraphQL | Tech for good <g-emoji class=\"g-emoji\" alias=\"purple_heart\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f49c.png\">💜</g-emoji> </div>",
+    "twitterUsername": "jenkens_",
+    "websiteUrl": "https://www.jenkens.dev/",
+    "teams": []
+  },
   "debrakayeelliott": {
     "login": "debrakayeelliott",
     "id": "MDQ6VXNlcjc4NDUyNDMz",
@@ -623,21 +638,6 @@
     "websiteUrl": "https://bit.ly/debrakaye",
     "teams": []
   },
-  "kfairris": {
-    "login": "kfairris",
-    "id": "MDQ6VXNlcjgwMzkyMjY=",
-    "url": "https://github.com/kfairris",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/8039226?u=608be0fb9445ee4d32b0e77f08dea0f7d2ccf9a5&v=4",
-    "name": "Kenny Fairris",
-    "company": null,
-    "location": "United States",
-    "isHireable": true,
-    "bio": "Software Engineer | Front-end Web Developer",
-    "bioHTML": "<div>Software Engineer | Front-end Web Developer</div>",
-    "twitterUsername": "kfairris",
-    "websiteUrl": "https://kennyfairris.dev",
-    "teams": []
-  },
   "tomcudd": {
     "login": "tomcudd",
     "id": "MDQ6VXNlcjMwMjAzMjA3",
@@ -651,6 +651,21 @@
     "bioHTML": "<div>As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.</div>",
     "twitterUsername": "tomcudd",
     "websiteUrl": "https://tomcudd.com",
+    "teams": []
+  },
+  "kfairris": {
+    "login": "kfairris",
+    "id": "MDQ6VXNlcjgwMzkyMjY=",
+    "url": "https://github.com/kfairris",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/8039226?u=608be0fb9445ee4d32b0e77f08dea0f7d2ccf9a5&v=4",
+    "name": "Kenny Fairris",
+    "company": null,
+    "location": "United States",
+    "isHireable": true,
+    "bio": "Software Engineer | Front-end Web Developer",
+    "bioHTML": "<div>Software Engineer | Front-end Web Developer</div>",
+    "twitterUsername": "kfairris",
+    "websiteUrl": "https://kennyfairris.dev",
     "teams": []
   },
   "surajrpanchal": {
