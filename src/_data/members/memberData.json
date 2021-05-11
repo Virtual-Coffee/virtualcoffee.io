@@ -32,6 +32,23 @@
     "websiteUrl": "http://justinnoel.dev",
     "teams": []
   },
+  "tkshill": {
+    "login": "tkshill",
+    "id": "MDQ6VXNlcjEzMjkyODg2",
+    "url": "https://github.com/tkshill",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/13292886?u=6bdb4e68580df8bb618c9bb7e5e73a4945e54cc9&v=4",
+    "name": "Kirk Shillingford",
+    "company": null,
+    "location": "Dominica",
+    "isHireable": true,
+    "bio": "Community Maintainer at virtualcoffee.io. Big fan of functional Programming and SQL. Currently working on F#, Elm, Typescript, React and being kinder.\r\n",
+    "bioHTML": "<div>Community Maintainer at virtualcoffee.io. Big fan of functional Programming and SQL. Currently working on F#, Elm, Typescript, React and being kinder.\n</div>",
+    "twitterUsername": "KirkCodes",
+    "websiteUrl": "https://github.com/tkshill",
+    "teams": [
+      "Community Maintainer"
+    ]
+  },
   "eclectic-coding": {
     "login": "eclectic-coding",
     "id": "MDQ6VXNlcjEzNjUxMjkx",
@@ -60,23 +77,6 @@
     "bioHTML": "<div>Software Engineer @ Aiera </div>",
     "twitterUsername": "dino_momma",
     "websiteUrl": "coffeesaurusrex.io",
-    "teams": [
-      "Community Maintainer"
-    ]
-  },
-  "tkshill": {
-    "login": "tkshill",
-    "id": "MDQ6VXNlcjEzMjkyODg2",
-    "url": "https://github.com/tkshill",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/13292886?u=6bdb4e68580df8bb618c9bb7e5e73a4945e54cc9&v=4",
-    "name": "Kirk Shillingford",
-    "company": null,
-    "location": "Dominica",
-    "isHireable": true,
-    "bio": "Community Maintainer at virtualcoffee.io. Big fan of functional Programming and SQL. Currently working on F#, Elm, Typescript, React and being kinder.\r\n",
-    "bioHTML": "<div>Community Maintainer at virtualcoffee.io. Big fan of functional Programming and SQL. Currently working on F#, Elm, Typescript, React and being kinder.\n</div>",
-    "twitterUsername": "KirkCodes",
-    "websiteUrl": "https://github.com/tkshill",
     "teams": [
       "Community Maintainer"
     ]
@@ -188,21 +188,6 @@
     "websiteUrl": "https://www.linkedin.com/in/aurelieverrot/",
     "teams": []
   },
-  "healeyb": {
-    "login": "healeyb",
-    "id": "MDQ6VXNlcjExMjU0NzU=",
-    "url": "https://github.com/healeyb",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/1125475?u=e784ffd7720ba1e0369e790469b54e9b150cb700&v=4",
-    "name": "Bryan Healey",
-    "company": "@aiera-inc @HealeyEngineering ",
-    "location": "Boston, MA",
-    "isHireable": true,
-    "bio": "",
-    "bioHTML": "",
-    "twitterUsername": "Bryan_Healey",
-    "websiteUrl": "http://www.bryanhealey.com/",
-    "teams": []
-  },
   "cljarvis": {
     "login": "ClJarvis",
     "id": "MDQ6VXNlcjEwNzAyOTkz",
@@ -216,6 +201,21 @@
     "bioHTML": "<div>Software developer, UI &amp; UX. A love of creative endeavors and a desire to solve puzzles led me to delve software development.</div>",
     "twitterUsername": "jarvisscript",
     "websiteUrl": "http://christopherleejarvis.com/",
+    "teams": []
+  },
+  "healeyb": {
+    "login": "healeyb",
+    "id": "MDQ6VXNlcjExMjU0NzU=",
+    "url": "https://github.com/healeyb",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/1125475?u=e784ffd7720ba1e0369e790469b54e9b150cb700&v=4",
+    "name": "Bryan Healey",
+    "company": "@aiera-inc @HealeyEngineering ",
+    "location": "Boston, MA",
+    "isHireable": true,
+    "bio": "",
+    "bioHTML": "",
+    "twitterUsername": "Bryan_Healey",
+    "websiteUrl": "http://www.bryanhealey.com/",
     "teams": []
   },
   "brandonbrown4792": {
@@ -398,6 +398,21 @@
     "websiteUrl": "https://www.linkedin.com/in/kldickenson/",
     "teams": []
   },
+  "s-blais": {
+    "login": "s-blais",
+    "id": "MDQ6VXNlcjUxMzQxOTE0",
+    "url": "https://github.com/s-blais",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/51341914?u=01570035e92f68825084dbd462ddb0d8d8fb66a3&v=4",
+    "name": "Stephen Blais",
+    "company": null,
+    "location": "Providence, Rhode Island",
+    "isHireable": true,
+    "bio": "Stirring some full-stack web developerosity into this recipe for a new taste sensation! Unconventionally uncategorizable; eminently employable.",
+    "bioHTML": "<div>Stirring some full-stack web developerosity into this recipe for a new taste sensation! Unconventionally uncategorizable; eminently employable.</div>",
+    "twitterUsername": "the_s_blais",
+    "websiteUrl": "s-blais.com",
+    "teams": []
+  },
   "lor1138": {
     "login": "Lor1138",
     "id": "MDQ6VXNlcjU0ODAzMzg0",
@@ -411,21 +426,6 @@
     "bioHTML": "<div>Hi! My name is Laura, and I love Front End Web Development! I know HTML, CSS, and Javascript. </div>",
     "twitterUsername": "LauraOBDev",
     "websiteUrl": null,
-    "teams": []
-  },
-  "s-blais": {
-    "login": "s-blais",
-    "id": "MDQ6VXNlcjUxMzQxOTE0",
-    "url": "https://github.com/s-blais",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/51341914?u=01570035e92f68825084dbd462ddb0d8d8fb66a3&v=4",
-    "name": "Stephen Blais",
-    "company": null,
-    "location": "Providence, Rhode Island",
-    "isHireable": true,
-    "bio": "Stirring some full-stack web developerosity into this recipe for a new taste sensation",
-    "bioHTML": "<div>Stirring some full-stack web developerosity into this recipe for a new taste sensation</div>",
-    "twitterUsername": "the_s_blais",
-    "websiteUrl": "s-blais.com",
     "teams": []
   },
   "gervanna": {
@@ -518,6 +518,21 @@
     "websiteUrl": "https://sethhallcreative.com",
     "teams": []
   },
+  "bogdaaamn": {
+    "login": "BogDAAAMN",
+    "id": "MDQ6VXNlcjIyODk1Mjg0",
+    "url": "https://github.com/BogDAAAMN",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/22895284?u=f0625cb575f32994dee95e18878438e4f79cc5f9&v=4",
+    "name": "Bogdan Covrig",
+    "company": "Maastricht Law&Tech Lab",
+    "location": "Netherlands x Romania",
+    "isHireable": false,
+    "bio": "Software engineer. Building data infrastructures supporting legal research frameworks. Research interest are privacy and security, consumer profiling, and HCI.",
+    "bioHTML": "<div>Software engineer. Building data infrastructures supporting legal research frameworks. Research interest are privacy and security, consumer profiling, and HCI.</div>",
+    "twitterUsername": "BogdanCovrig",
+    "websiteUrl": "bogdan.covrig.dev",
+    "teams": []
+  },
   "abuna1985": {
     "login": "abuna1985",
     "id": "MDQ6VXNlcjIxMTYyMjI5",
@@ -533,18 +548,18 @@
     "websiteUrl": "https://adamabundis.xyz",
     "teams": []
   },
-  "bogdaaamn": {
-    "login": "BogDAAAMN",
-    "id": "MDQ6VXNlcjIyODk1Mjg0",
-    "url": "https://github.com/BogDAAAMN",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/22895284?u=f0625cb575f32994dee95e18878438e4f79cc5f9&v=4",
-    "name": "Bogdan Covrig",
-    "company": "Maastricht Law&Tech Lab",
-    "location": "Netherlands x Romania",
+  "yolandahaynes": {
+    "login": "YolandaHaynes",
+    "id": "MDQ6VXNlcjEyOTgwNzEw",
+    "url": "https://github.com/YolandaHaynes",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/12980710?u=e62e504e83f5ffebe97d4ea7d3e32d3cb1fe8ef4&v=4",
+    "name": "Yolanda Haynes",
+    "company": null,
+    "location": "San Diego",
     "isHireable": false,
-    "bio": "Software engineer. Building data infrastructures supporting legal research frameworks. Research interest are privacy and security, consumer profiling, and HCI.",
-    "bioHTML": "<div>Software engineer. Building data infrastructures supporting legal research frameworks. Research interest are privacy and security, consumer profiling, and HCI.</div>",
-    "twitterUsername": "BogdanCovrig",
+    "bio": "Software Engineer at 100Devs\r\nLearning new skills, wanting to make things more accessible and striving to be better.",
+    "bioHTML": "<div>Software Engineer at 100Devs\nLearning new skills, wanting to make things more accessible and striving to be better.</div>",
+    "twitterUsername": "_YolandaHaynes",
     "websiteUrl": null,
     "teams": []
   },
@@ -572,25 +587,10 @@
     "company": null,
     "location": "Liverpool, UK",
     "isHireable": true,
-    "bio": "Hello 👋 I am a Junior Front End Engineer 💫 Currently learning React ⚛  and Python 🐍\r\n",
-    "bioHTML": "<div>Hello <g-emoji class=\"g-emoji\" alias=\"wave\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f44b.png\">👋</g-emoji> I am a Junior Front End Engineer <g-emoji class=\"g-emoji\" alias=\"dizzy\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4ab.png\">💫</g-emoji> Currently learning React <g-emoji class=\"g-emoji\" alias=\"atom_symbol\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/269b.png\">⚛</g-emoji>  and Python <g-emoji class=\"g-emoji\" alias=\"snake\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f40d.png\">🐍</g-emoji>\n</div>",
+    "bio": "Hello 👋 I am a Front End Engineer 💫 Currently learning React ⚛  and Python 🐍 I am into data and design. A11Y Advocate.\r\n",
+    "bioHTML": "<div>Hello <g-emoji class=\"g-emoji\" alias=\"wave\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f44b.png\">👋</g-emoji> I am a Front End Engineer <g-emoji class=\"g-emoji\" alias=\"dizzy\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4ab.png\">💫</g-emoji> Currently learning React <g-emoji class=\"g-emoji\" alias=\"atom_symbol\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/269b.png\">⚛</g-emoji>  and Python <g-emoji class=\"g-emoji\" alias=\"snake\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f40d.png\">🐍</g-emoji> I am into data and design. A11Y Advocate.\n</div>",
     "twitterUsername": "cristiencodes",
     "websiteUrl": "www.cristien.xyz",
-    "teams": []
-  },
-  "yolandahaynes": {
-    "login": "YolandaHaynes",
-    "id": "MDQ6VXNlcjEyOTgwNzEw",
-    "url": "https://github.com/YolandaHaynes",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/12980710?u=c2ba18ab218721a35f1011120a44701e09011896&v=4",
-    "name": "Yolanda Haynes",
-    "company": null,
-    "location": "San Diego",
-    "isHireable": false,
-    "bio": "Software Engineer at 100Devs\r\nLearning new skills, wanting to make things more accessible and striving to be better.",
-    "bioHTML": "<div>Software Engineer at 100Devs\nLearning new skills, wanting to make things more accessible and striving to be better.</div>",
-    "twitterUsername": "_YolandaHaynes",
-    "websiteUrl": null,
     "teams": []
   },
   "zenmnky": {
@@ -606,21 +606,6 @@
     "bioHTML": "<div>Web App Developer</div>",
     "twitterUsername": null,
     "websiteUrl": "JustinHager.codes",
-    "teams": []
-  },
-  "taljjaa": {
-    "login": "Taljjaa",
-    "id": "MDQ6VXNlcjI1Mzk4MDIx",
-    "url": "https://github.com/Taljjaa",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/25398021?u=f041fec893f61e0d1092fcd98757e1f0abec1ac8&v=4",
-    "name": "Jen Kennedy",
-    "company": null,
-    "location": "Seattle, WA",
-    "isHireable": false,
-    "bio": "Frontend Developer | JavaScript, React, GraphQL | Tech for good 💜 ",
-    "bioHTML": "<div>Frontend Developer | JavaScript, React, GraphQL | Tech for good <g-emoji class=\"g-emoji\" alias=\"purple_heart\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f49c.png\">💜</g-emoji> </div>",
-    "twitterUsername": "jenkens_",
-    "websiteUrl": "https://jenniferwilliams.dev/",
     "teams": []
   },
   "debrakayeelliott": {
@@ -698,6 +683,21 @@
     "websiteUrl": "rkahn.dev",
     "teams": []
   },
+  "dana94": {
+    "login": "Dana94",
+    "id": "MDQ6VXNlcjIwMTMyMjY0",
+    "url": "https://github.com/Dana94",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/20132264?u=0ca14c9c707c2c9b323294709af0e3041709702e&v=4",
+    "name": "Dana Ottaviani",
+    "company": null,
+    "location": null,
+    "isHireable": true,
+    "bio": "Software Developer | Blogger",
+    "bioHTML": "<div>Software Developer | Blogger</div>",
+    "twitterUsername": null,
+    "websiteUrl": "https://www.danaottaviani.com/",
+    "teams": []
+  },
   "cafloyd": {
     "login": "cafloyd",
     "id": "MDQ6VXNlcjU4NTMyMzY5",
@@ -707,10 +707,25 @@
     "company": null,
     "location": "Washington, DC",
     "isHireable": false,
-    "bio": "DC-based front-end engineer, motivated by the power of technology as a tool for positive change",
-    "bioHTML": "<div>DC-based front-end engineer, motivated by the power of technology as a tool for positive change</div>",
+    "bio": "(she/her) DC-based front-end engineer, motivated by the power of technology as a tool for positive change",
+    "bioHTML": "<div>(she/her) DC-based front-end engineer, motivated by the power of technology as a tool for positive change</div>",
     "twitterUsername": "caitlinfloyd",
     "websiteUrl": "https://caitlinfloyd.com",
+    "teams": []
+  },
+  "nerajno": {
+    "login": "Nerajno",
+    "id": "MDQ6VXNlcjE4MjUxODQ2",
+    "url": "https://github.com/Nerajno",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/18251846?u=f9c38235da04ac924c065e6b8e850fd9322f5a6f&v=4",
+    "name": "Nerando Johnson",
+    "company": "freeCodeCamp ",
+    "location": "Atlanta",
+    "isHireable": false,
+    "bio": " Atlanta freeCodeCamp Organizer || Level 1.5 Developer || Seek New Job Oppurtunities\r\n",
+    "bioHTML": "<div> Atlanta freeCodeCamp Organizer || Level 1.5 Developer || Seek New Job Oppurtunities\n</div>",
+    "twitterUsername": "nerajno",
+    "websiteUrl": "http://www.developingdvlpr.com/",
     "teams": []
   },
   "ehilst515": {
@@ -752,10 +767,10 @@
     "company": null,
     "location": "Tampa Bay, Florida",
     "isHireable": false,
-    "bio": "Working on front end mostly and super excited to share my work :)",
-    "bioHTML": "<div>Working on front end mostly and super excited to share my work :)</div>",
-    "twitterUsername": null,
-    "websiteUrl": null,
+    "bio": "JavaScript developer leveraging React to create amazing applications",
+    "bioHTML": "<div>JavaScript developer leveraging React to create amazing applications</div>",
+    "twitterUsername": "alexcurtisslep",
+    "websiteUrl": "https://alexcurtisslep.com/",
     "teams": []
   },
   "danielcobo": {
@@ -767,10 +782,25 @@
     "company": null,
     "location": null,
     "isHireable": false,
-    "bio": "Full stack developer",
-    "bioHTML": "<div>Full stack developer</div>",
-    "twitterUsername": null,
+    "bio": "👨‍💻Full-stack developer |🍦Vanilla code advocate | ✍️Blogging at danielcobo.com",
+    "bioHTML": "<div><g-emoji class=\"g-emoji\" alias=\"man_technologist\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f4bb.png\">👨‍💻</g-emoji>Full-stack developer |<g-emoji class=\"g-emoji\" alias=\"icecream\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f366.png\">🍦</g-emoji>Vanilla code advocate | <g-emoji class=\"g-emoji\" alias=\"writing_hand\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/270d.png\">✍️</g-emoji>Blogging at danielcobo.com</div>",
+    "twitterUsername": "danielcobocom",
     "websiteUrl": "www.danielcobo.com",
+    "teams": []
+  },
+  "c0der4t": {
+    "login": "c0der4t",
+    "id": "MDQ6VXNlcjU4MTgwMzcw",
+    "url": "https://github.com/c0der4t",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/58180370?u=b14c4d7ea4f5dc8b0db146d64927488cc4432c81&v=4",
+    "name": "C0deR4t",
+    "company": "Ekron Digital Solutions",
+    "location": "South Africa",
+    "isHireable": true,
+    "bio": "A young ambitious developer hungry for success and knowledge. Working late nights and early mornings to build the steps to the top. ",
+    "bioHTML": "<div>A young ambitious developer hungry for success and knowledge. Working late nights and early mornings to build the steps to the top. </div>",
+    "twitterUsername": null,
+    "websiteUrl": "https://www.ekronds.co.za",
     "teams": []
   },
   "sirohub": {
@@ -786,6 +816,21 @@
     "bioHTML": "",
     "twitterUsername": null,
     "websiteUrl": "https://www.linkedin.com/in/simon-robinson-94874295/",
+    "teams": []
+  },
+  "chaos986": {
+    "login": "chaos986",
+    "id": "MDQ6VXNlcjE1Nzk3NTA=",
+    "url": "https://github.com/chaos986",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/1579750?u=9ff6b9d3dda124c99a40ccdb6450d8bca9480719&v=4",
+    "name": "Michael Honey-Arcement",
+    "company": null,
+    "location": "Iowa",
+    "isHireable": false,
+    "bio": "Lifetime programmer with special attachment to Internet technologies. \r\nI champion the Accessible Web and the voice of end-users. ",
+    "bioHTML": "<div>Lifetime programmer with special attachment to Internet technologies. \nI champion the Accessible Web and the voice of end-users. </div>",
+    "twitterUsername": "gwolfgarona",
+    "websiteUrl": "https:\\\\gwn-ws.com",
     "teams": []
   },
   "tombousquet": {
