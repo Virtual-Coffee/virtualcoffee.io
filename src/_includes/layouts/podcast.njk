@@ -28,7 +28,7 @@ metadata:
 
   <div class="my-4 podcastplayer">
     {% if podcast.playerSrc %}
-      <div id="buzzsprout-player-{{podcast.blob_id}}"></div>
+      <div id="buzzsprout-player-{{podcast.id}}"></div>
       <script src="{{podcast.playerSrc}}" type="text/javascript" charset="utf-8" async></script>
     {% endif %}
   </div>

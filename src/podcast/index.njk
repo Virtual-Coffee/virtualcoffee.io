@@ -46,7 +46,7 @@ eleventyNavigation:
 
   <div class="mt-4 podcastplayer">
     {% if latest.data.podcast.playerSrc %}
-      <div id="buzzsprout-player-{{latest.data.podcast.blob_id}}"></div>
+      <div id="buzzsprout-player-{{latest.data.podcast.id}}"></div>
       <script src="{{latest.data.podcast.playerSrc}}" type="text/javascript" charset="utf-8" async></script>
     {% endif %}
   </div>
