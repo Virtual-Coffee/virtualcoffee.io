@@ -548,21 +548,6 @@
     "websiteUrl": "https://adamabundis.xyz",
     "teams": []
   },
-  "vanessacor": {
-    "login": "vanessacor",
-    "id": "MDQ6VXNlcjQ2Nzc3NTYw",
-    "url": "https://github.com/vanessacor",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/46777560?u=4eba9b641c25773d6398101983566ac2ef09b946&v=4",
-    "name": "Vanessa ",
-    "company": null,
-    "location": "Barcelona",
-    "isHireable": false,
-    "bio": "An avid web developer learner.",
-    "bioHTML": "<div>An avid web developer learner.</div>",
-    "twitterUsername": "vanessapoppe",
-    "websiteUrl": "https://vanessapoppe.me/",
-    "teams": []
-  },
   "yolandahaynes": {
     "login": "YolandaHaynes",
     "id": "MDQ6VXNlcjEyOTgwNzEw",
@@ -576,6 +561,21 @@
     "bioHTML": "<div>Software Engineer at 100Devs\nLearning new skills, wanting to make things more accessible and striving to be better.</div>",
     "twitterUsername": "_YolandaHaynes",
     "websiteUrl": null,
+    "teams": []
+  },
+  "vanessacor": {
+    "login": "vanessacor",
+    "id": "MDQ6VXNlcjQ2Nzc3NTYw",
+    "url": "https://github.com/vanessacor",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/46777560?u=4eba9b641c25773d6398101983566ac2ef09b946&v=4",
+    "name": "Vanessa ",
+    "company": null,
+    "location": "Barcelona",
+    "isHireable": false,
+    "bio": "An avid web developer learner.",
+    "bioHTML": "<div>An avid web developer learner.</div>",
+    "twitterUsername": "vanessapoppe",
+    "websiteUrl": "https://vanessapoppe.me/",
     "teams": []
   },
   "crisbnp": {
@@ -816,6 +816,21 @@
     "bioHTML": "<div>JavaScript developer leveraging React to create amazing applications</div>",
     "twitterUsername": "alexcurtisslep",
     "websiteUrl": "https://alexcurtisslep.com/",
+    "teams": []
+  },
+  "lsanchez17": {
+    "login": "LSanchez17",
+    "id": "MDQ6VXNlcjIxMjYyNzYw",
+    "url": "https://github.com/LSanchez17",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/21262760?u=f24c52710fb7909e96c9b6edf2b92a9b79bc5769&v=4",
+    "name": "Luis Sanchez",
+    "company": null,
+    "location": "US",
+    "isHireable": true,
+    "bio": "Software engineer. Remote friendly. I like to cook, watch anime, and take care of plants",
+    "bioHTML": "<div>Software engineer. Remote friendly. I like to cook, watch anime, and take care of plants</div>",
+    "twitterUsername": "LuisDoesSE",
+    "websiteUrl": "https://www.linkedin.com/in/lasj",
     "teams": []
   },
   "danielcobo": {
