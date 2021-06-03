@@ -179,8 +179,8 @@
     "url": "https://github.com/aurelieverrot",
     "avatarUrl": "https://avatars.githubusercontent.com/u/50857179?u=e318063e1d9c8657d76bd65dc398b5b1da572854&v=4",
     "name": "Aurelie Verrot",
-    "company": "Looking for opportunities!",
-    "location": "San Francisco",
+    "company": "Zendesk",
+    "location": "Walnut Creek, CA",
     "isHireable": true,
     "bio": "Software Engineer",
     "bioHTML": "<div>Software Engineer</div>",
@@ -473,21 +473,6 @@
     "websiteUrl": null,
     "teams": []
   },
-  "torianne02": {
-    "login": "torianne02",
-    "id": "MDQ6VXNlcjM3MzA4ODUz",
-    "url": "https://github.com/torianne02",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/37308853?u=b1a6d3e2b616bda0b7d18a7bd8ed56595a93b8f6&v=4",
-    "name": "Tori Crawford",
-    "company": "@firehydrant ",
-    "location": "Boise, ID",
-    "isHireable": false,
-    "bio": "software engineer @firehydrant",
-    "bioHTML": "<div>software engineer <a class=\"user-mention\" data-hovercard-type=\"organization\" data-hovercard-url=\"/orgs/firehydrant/hovercard\" href=\"https://github.com/firehydrant\">@firehydrant</a></div>",
-    "twitterUsername": "_torrborr",
-    "websiteUrl": "https://dev.to/torianne02",
-    "teams": []
-  },
   "amyshackles": {
     "login": "AmyShackles",
     "id": "MDQ6VXNlcjEzNDM2NDI5",
@@ -501,6 +486,21 @@
     "bioHTML": "<div>Full-Stack Software Developer with a thirst for knowledge and a passion for helping people.  Experienced in JavaScript, React, Node.js, Express.js, MongoDB</div>",
     "twitterUsername": null,
     "websiteUrl": "https://amyshackles.com",
+    "teams": []
+  },
+  "torianne02": {
+    "login": "torianne02",
+    "id": "MDQ6VXNlcjM3MzA4ODUz",
+    "url": "https://github.com/torianne02",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/37308853?u=b1a6d3e2b616bda0b7d18a7bd8ed56595a93b8f6&v=4",
+    "name": "Tori Crawford",
+    "company": "@firehydrant ",
+    "location": "Boise, ID",
+    "isHireable": false,
+    "bio": "software engineer @firehydrant",
+    "bioHTML": "<div>software engineer <a class=\"user-mention\" data-hovercard-type=\"organization\" data-hovercard-url=\"/orgs/firehydrant/hovercard\" href=\"https://github.com/firehydrant\">@firehydrant</a></div>",
+    "twitterUsername": "_torrborr",
+    "websiteUrl": "https://dev.to/torianne02",
     "teams": []
   },
   "sethburtonhall": {
@@ -548,21 +548,6 @@
     "websiteUrl": "https://adamabundis.xyz",
     "teams": []
   },
-  "yolandahaynes": {
-    "login": "YolandaHaynes",
-    "id": "MDQ6VXNlcjEyOTgwNzEw",
-    "url": "https://github.com/YolandaHaynes",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/12980710?u=e62e504e83f5ffebe97d4ea7d3e32d3cb1fe8ef4&v=4",
-    "name": "Yolanda Haynes",
-    "company": null,
-    "location": "San Diego",
-    "isHireable": false,
-    "bio": "Software Engineer at 100Devs\r\nLearning new skills, wanting to make things more accessible and striving to be better.",
-    "bioHTML": "<div>Software Engineer at 100Devs\nLearning new skills, wanting to make things more accessible and striving to be better.</div>",
-    "twitterUsername": "_YolandaHaynes",
-    "websiteUrl": null,
-    "teams": []
-  },
   "vanessacor": {
     "login": "vanessacor",
     "id": "MDQ6VXNlcjQ2Nzc3NTYw",
@@ -576,6 +561,21 @@
     "bioHTML": "<div>An avid web developer learner.</div>",
     "twitterUsername": "vanessapoppe",
     "websiteUrl": "https://vanessapoppe.me/",
+    "teams": []
+  },
+  "yolandahaynes": {
+    "login": "YolandaHaynes",
+    "id": "MDQ6VXNlcjEyOTgwNzEw",
+    "url": "https://github.com/YolandaHaynes",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/12980710?u=e62e504e83f5ffebe97d4ea7d3e32d3cb1fe8ef4&v=4",
+    "name": "Yolanda Haynes",
+    "company": null,
+    "location": "San Diego",
+    "isHireable": false,
+    "bio": "Software Engineer at 100Devs\r\nLearning new skills, wanting to make things more accessible and striving to be better.",
+    "bioHTML": "<div>Software Engineer at 100Devs\nLearning new skills, wanting to make things more accessible and striving to be better.</div>",
+    "twitterUsername": "_YolandaHaynes",
+    "websiteUrl": null,
     "teams": []
   },
   "crisbnp": {
@@ -597,7 +597,7 @@
     "login": "ZenMnky",
     "id": "MDQ6VXNlcjU5MjM0Njgz",
     "url": "https://github.com/ZenMnky",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/59234683?u=1da4483f3f969a74aaa70a07605907d95f6efd1a&v=4",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/59234683?u=e6ea76d8c5d0476d8bd580cbd8253a4143f912b0&v=4",
     "name": "Justin Hager",
     "company": null,
     "location": "Portland, OR",
@@ -638,21 +638,6 @@
     "websiteUrl": "https://bit.ly/debrakaye",
     "teams": []
   },
-  "tomcudd": {
-    "login": "tomcudd",
-    "id": "MDQ6VXNlcjMwMjAzMjA3",
-    "url": "https://github.com/tomcudd",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/30203207?u=50b46c25bc7fa86c68df048d1fbd2b09ba074c34&v=4",
-    "name": "Tom Cudd",
-    "company": null,
-    "location": "Kansas City, MO",
-    "isHireable": false,
-    "bio": "As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.",
-    "bioHTML": "<div>As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.</div>",
-    "twitterUsername": "tomcudd",
-    "websiteUrl": "https://tomcudd.com",
-    "teams": []
-  },
   "kfairris": {
     "login": "kfairris",
     "id": "MDQ6VXNlcjgwMzkyMjY=",
@@ -666,6 +651,21 @@
     "bioHTML": "<div>Software Engineer | Front-end Web Developer</div>",
     "twitterUsername": "kfairris",
     "websiteUrl": "https://kennyfairris.dev",
+    "teams": []
+  },
+  "tomcudd": {
+    "login": "tomcudd",
+    "id": "MDQ6VXNlcjMwMjAzMjA3",
+    "url": "https://github.com/tomcudd",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/30203207?u=50b46c25bc7fa86c68df048d1fbd2b09ba074c34&v=4",
+    "name": "Tom Cudd",
+    "company": null,
+    "location": "Kansas City, MO",
+    "isHireable": false,
+    "bio": "As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.",
+    "bioHTML": "<div>As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.</div>",
+    "twitterUsername": "tomcudd",
+    "websiteUrl": "https://tomcudd.com",
     "teams": []
   },
   "surajrpanchal": {
@@ -732,7 +732,7 @@
     "login": "cafloyd",
     "id": "MDQ6VXNlcjU4NTMyMzY5",
     "url": "https://github.com/cafloyd",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/58532369?u=5d4172a194cd8ffc4d2b50a1263621b8f3df9252&v=4",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/58532369?u=4d42e9f65bb3caf951267ce7d2127d828700f779&v=4",
     "name": "Caitlin Floyd",
     "company": null,
     "location": "Washington, DC",
@@ -906,6 +906,21 @@
     "bioHTML": "<div>Basketball and soccer connoisseur and Momentum coding bootcamp alum. Seeking an entry level developer position.</div>",
     "twitterUsername": null,
     "websiteUrl": "https://www.linkedin.com/in/tom-bousquet/",
+    "teams": []
+  },
+  "chrismjohnston": {
+    "login": "chrismjohnston",
+    "id": "MDQ6VXNlcjQ2NzE3ODUw",
+    "url": "https://github.com/chrismjohnston",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/46717850?v=4",
+    "name": "Christopher Johnston",
+    "company": null,
+    "location": "New Orleans, LA",
+    "isHireable": true,
+    "bio": "Web Developer and Geek. I code by day and take care of the forked versions of me by night.",
+    "bioHTML": "<div>Web Developer and Geek. I code by day and take care of the forked versions of me by night.</div>",
+    "twitterUsername": "chrisjohnston",
+    "websiteUrl": "https://chrismjohnston.github.io/",
     "teams": []
   }
 }
