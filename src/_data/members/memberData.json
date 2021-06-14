@@ -90,8 +90,8 @@
     "company": null,
     "location": "The Netherlands",
     "isHireable": false,
-    "bio": "🤓 Life-long learner\r\n👨‍👩‍👧 A wife & a mother \r\n📑 Aiming to be front-end/fullstack web developer ",
-    "bioHTML": "<div><g-emoji class=\"g-emoji\" alias=\"nerd_face\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f913.png\">🤓</g-emoji> Life-long learner\n<g-emoji class=\"g-emoji\" alias=\"family_man_woman_girl\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f468-1f469-1f467.png\">👨‍👩‍👧</g-emoji> A wife &amp; a mother \n<g-emoji class=\"g-emoji\" alias=\"bookmark_tabs\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4d1.png\">📑</g-emoji> Aiming to be front-end/fullstack web developer </div>",
+    "bio": "📑 Frontend Developer || Technical Blogger\r\n🤓 Life-long learner\r\n ",
+    "bioHTML": "<div><g-emoji class=\"g-emoji\" alias=\"bookmark_tabs\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4d1.png\">📑</g-emoji> Frontend Developer || Technical Blogger\n<g-emoji class=\"g-emoji\" alias=\"nerd_face\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f913.png\">🤓</g-emoji> Life-long learner\n </div>",
     "twitterUsername": "AdiatiAyu",
     "websiteUrl": "https://adiati.com",
     "teams": []
@@ -100,7 +100,7 @@
     "login": "danieltott",
     "id": "MDQ6VXNlcjM2MDI2MQ==",
     "url": "https://github.com/danieltott",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/360261?u=dc2ed0011e26c0ef35bb8c1d8f8868b8a64402c5&v=4",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/360261?u=ee41da692d524a3eb932c19fcdab8b7ac0bb46f1&v=4",
     "name": "Dan Ott",
     "company": "@Sprokets",
     "location": "Lakewood, OH",
@@ -344,7 +344,7 @@
     "url": "https://github.com/Cerchie",
     "avatarUrl": "https://avatars.githubusercontent.com/u/54046179?u=e058d96fefda9f114ca0a0c72caeb5a6ac6069d9&v=4",
     "name": "Lucia Cerchie",
-    "company": null,
+    "company": "StepZen",
     "location": "Phoenix",
     "isHireable": false,
     "bio": "Hi there! I love working with JS and Python. I'm an Arizona transplant 🌵 who gets going with coffee and winds down with yoga.",
@@ -548,21 +548,6 @@
     "websiteUrl": "https://adamabundis.xyz",
     "teams": []
   },
-  "vanessacor": {
-    "login": "vanessacor",
-    "id": "MDQ6VXNlcjQ2Nzc3NTYw",
-    "url": "https://github.com/vanessacor",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/46777560?u=4eba9b641c25773d6398101983566ac2ef09b946&v=4",
-    "name": "Vanessa ",
-    "company": null,
-    "location": "Barcelona",
-    "isHireable": false,
-    "bio": "An avid web developer learner.",
-    "bioHTML": "<div>An avid web developer learner.</div>",
-    "twitterUsername": "vanessapoppe",
-    "websiteUrl": "https://vanessapoppe.me/",
-    "teams": []
-  },
   "yolandahaynes": {
     "login": "YolandaHaynes",
     "id": "MDQ6VXNlcjEyOTgwNzEw",
@@ -576,6 +561,21 @@
     "bioHTML": "<div>Software Engineer at 100Devs\nLearning new skills, wanting to make things more accessible and striving to be better.</div>",
     "twitterUsername": "_YolandaHaynes",
     "websiteUrl": null,
+    "teams": []
+  },
+  "vanessacor": {
+    "login": "vanessacor",
+    "id": "MDQ6VXNlcjQ2Nzc3NTYw",
+    "url": "https://github.com/vanessacor",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/46777560?u=4eba9b641c25773d6398101983566ac2ef09b946&v=4",
+    "name": "Vanessa ",
+    "company": null,
+    "location": "Barcelona",
+    "isHireable": false,
+    "bio": "An avid web developer learner.",
+    "bioHTML": "<div>An avid web developer learner.</div>",
+    "twitterUsername": "vanessapoppe",
+    "websiteUrl": "https://vanessapoppe.me/",
     "teams": []
   },
   "crisbnp": {
@@ -638,21 +638,6 @@
     "websiteUrl": "https://bit.ly/debrakaye",
     "teams": []
   },
-  "kfairris": {
-    "login": "kfairris",
-    "id": "MDQ6VXNlcjgwMzkyMjY=",
-    "url": "https://github.com/kfairris",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/8039226?u=608be0fb9445ee4d32b0e77f08dea0f7d2ccf9a5&v=4",
-    "name": "Kenny Fairris",
-    "company": null,
-    "location": "United States",
-    "isHireable": true,
-    "bio": "Software Engineer | Front-end Web Developer",
-    "bioHTML": "<div>Software Engineer | Front-end Web Developer</div>",
-    "twitterUsername": "kfairris",
-    "websiteUrl": "https://kennyfairris.dev",
-    "teams": []
-  },
   "tomcudd": {
     "login": "tomcudd",
     "id": "MDQ6VXNlcjMwMjAzMjA3",
@@ -666,6 +651,21 @@
     "bioHTML": "<div>As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.</div>",
     "twitterUsername": "tomcudd",
     "websiteUrl": "https://tomcudd.com",
+    "teams": []
+  },
+  "kfairris": {
+    "login": "kfairris",
+    "id": "MDQ6VXNlcjgwMzkyMjY=",
+    "url": "https://github.com/kfairris",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/8039226?u=608be0fb9445ee4d32b0e77f08dea0f7d2ccf9a5&v=4",
+    "name": "Kenny Fairris",
+    "company": null,
+    "location": "United States",
+    "isHireable": true,
+    "bio": "Software Engineer | Front-end Web Developer",
+    "bioHTML": "<div>Software Engineer | Front-end Web Developer</div>",
+    "twitterUsername": "kfairris",
+    "websiteUrl": "https://kennyfairris.dev",
     "teams": []
   },
   "surajrpanchal": {
@@ -743,21 +743,6 @@
     "websiteUrl": "https://caitlinfloyd.com",
     "teams": []
   },
-  "nerajno": {
-    "login": "Nerajno",
-    "id": "MDQ6VXNlcjE4MjUxODQ2",
-    "url": "https://github.com/Nerajno",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/18251846?u=f9c38235da04ac924c065e6b8e850fd9322f5a6f&v=4",
-    "name": "Nerando Johnson",
-    "company": "freeCodeCamp ",
-    "location": "Atlanta",
-    "isHireable": false,
-    "bio": " Atlanta freeCodeCamp Organizer || Level 1.5 Developer || Seeking My Next Job Oppurtunities\r\n",
-    "bioHTML": "<div> Atlanta freeCodeCamp Organizer || Level 1.5 Developer || Seeking My Next Job Oppurtunities\n</div>",
-    "twitterUsername": "nerajno",
-    "websiteUrl": "http://www.developingdvlpr.com/",
-    "teams": []
-  },
   "barbaralaw": {
     "login": "barbaralaw",
     "id": "MDQ6VXNlcjY0Njc3NDc0",
@@ -771,6 +756,21 @@
     "bioHTML": "<div>Creative and organized full-stack software engineer and garden gnome fan.</div>",
     "twitterUsername": "blawblawLaw",
     "websiteUrl": "https://www.barbaralaw.me",
+    "teams": []
+  },
+  "nerajno": {
+    "login": "Nerajno",
+    "id": "MDQ6VXNlcjE4MjUxODQ2",
+    "url": "https://github.com/Nerajno",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/18251846?u=f9c38235da04ac924c065e6b8e850fd9322f5a6f&v=4",
+    "name": "Nerando Johnson",
+    "company": "freeCodeCamp ",
+    "location": "Atlanta",
+    "isHireable": false,
+    "bio": " Atlanta freeCodeCamp Organizer || Level 1.5 Developer || Seeking My Next Job Oppurtunities\r\n",
+    "bioHTML": "<div> Atlanta freeCodeCamp Organizer || Level 1.5 Developer || Seeking My Next Job Oppurtunities\n</div>",
+    "twitterUsername": "nerajno",
+    "websiteUrl": "http://www.developingdvlpr.com/",
     "teams": []
   },
   "ehilst515": {
@@ -921,6 +921,21 @@
     "bioHTML": "<div>Web Developer and Geek. I code by day and take care of the forked versions of me by night.</div>",
     "twitterUsername": "chrisjohnston",
     "websiteUrl": "https://chrismjohnston.github.io/",
+    "teams": []
+  },
+  "bmeverett": {
+    "login": "bmeverett",
+    "id": "MDQ6VXNlcjM5NDEwMDY=",
+    "url": "https://github.com/bmeverett",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/3941006?v=4",
+    "name": "Brandon Everett",
+    "company": "@flocasts ",
+    "location": "Pittsburgh, PA",
+    "isHireable": false,
+    "bio": "",
+    "bioHTML": "",
+    "twitterUsername": "bme2010",
+    "websiteUrl": "https://brandoneverett.dev",
     "teams": []
   }
 }
