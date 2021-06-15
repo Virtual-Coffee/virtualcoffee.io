@@ -638,21 +638,6 @@
     "websiteUrl": "https://bit.ly/debrakaye",
     "teams": []
   },
-  "tomcudd": {
-    "login": "tomcudd",
-    "id": "MDQ6VXNlcjMwMjAzMjA3",
-    "url": "https://github.com/tomcudd",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/30203207?u=50b46c25bc7fa86c68df048d1fbd2b09ba074c34&v=4",
-    "name": "Tom Cudd",
-    "company": null,
-    "location": "Kansas City, MO",
-    "isHireable": false,
-    "bio": "As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.",
-    "bioHTML": "<div>As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.</div>",
-    "twitterUsername": "tomcudd",
-    "websiteUrl": "https://tomcudd.com",
-    "teams": []
-  },
   "kfairris": {
     "login": "kfairris",
     "id": "MDQ6VXNlcjgwMzkyMjY=",
@@ -666,6 +651,21 @@
     "bioHTML": "<div>Software Engineer | Front-end Web Developer</div>",
     "twitterUsername": "kfairris",
     "websiteUrl": "https://kennyfairris.dev",
+    "teams": []
+  },
+  "tomcudd": {
+    "login": "tomcudd",
+    "id": "MDQ6VXNlcjMwMjAzMjA3",
+    "url": "https://github.com/tomcudd",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/30203207?u=bcc3bc6466df11db63b77d2c17626e927a027d29&v=4",
+    "name": "Tom Cudd",
+    "company": null,
+    "location": "Kansas City, MO",
+    "isHireable": false,
+    "bio": "As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.",
+    "bioHTML": "<div>As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.</div>",
+    "twitterUsername": "tomcudd",
+    "websiteUrl": "https://tomcudd.com",
     "teams": []
   },
   "surajrpanchal": {
