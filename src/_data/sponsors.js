@@ -1,0 +1,125 @@
+const { GraphQLClient, gql } = require('graphql-request');
+require('dotenv').config();
+const fetch = require('node-fetch');
+const { AssetCache } = require('@11ty/eleventy-cache-assets');
+
+const sponsorOverrides = {
+  MDEyOk9yZ2FuaXphdGlvbjcxNDc2MTY2: {
+    largeAvatarUrl: '/assets/images/sponsors/whimser.png',
+  },
+};
+
+const query = gql`
+  {
+    organization(login: "Virtual-Coffee") {
+      sponsorshipsAsMaintainer(first: 100) {
+        nodes {
+          sponsorEntity {
+            ... on Organization {
+              name
+              id
+              avatarUrl(size: 120)
+              largeAvatarUrl: avatarUrl(size: 600)
+              url
+              description
+              descriptionHTML
+              websiteUrl
+            }
+            ... on User {
+              name
+              id
+              avatarUrl(size: 120)
+              largeAvatarUrl: avatarUrl(size: 600)
+              url
+              websiteUrl
+            }
+          }
+          tier {
+            id
+          }
+          tierSelectedAt
+        }
+      }
+      sponsorsListing {
+        tiers(first: 100) {
+          nodes {
+            id
+            name
+            monthlyPriceInDollars
+            monthlyPriceInCents
+            isOneTime
+            isCustomAmount
+          }
+        }
+      }
+    }
+  }
+`;
+
+module.exports = async function () {
+  // async function main() {
+  let headers = new fetch.Headers({
+    Accept: 'application/vnd.github.v3+json',
+  });
+
+  const token = process.env.GITHUB_TOKEN;
+
+  if (token) {
+    headers.set('Authorization', 'bearer ' + token);
+  }
+
+  const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
+    headers,
+  });
+
+  // // Pass in your unique custom cache key
+  // // (normally this would be tied to your API URL)
+  // let asset = new AssetCache('vc_sponsors');
+
+  // // check if the cache is fresh within the last day
+  // if (asset.isCacheValid('1d')) {
+  //   // return cached data.
+  //   return asset.getCachedValue(); // a promise
+  // }
+
+  // do some expensive operation here, this is simplified for brevity
+  const response = await graphQLClient.request(query);
+
+  const tiers = response.organization.sponsorsListing.tiers.nodes.map(
+    (tier) => {
+      const sponsors = response.organization.sponsorshipsAsMaintainer.nodes
+        .filter((sponsor) => {
+          return sponsor.tier.id === tier.id;
+        })
+        .map((sponsor) => ({
+          ...sponsor.sponsorEntity,
+          ...(sponsorOverrides[sponsor.sponsorEntity.id] || {}),
+        }));
+
+      return {
+        ...tier,
+        sponsors,
+      };
+    }
+  );
+
+  // await asset.save(response, 'json');
+
+  return {
+    logoSponsors: tiers
+      .filter(
+        (tier) =>
+          !tier.isOneTime &&
+          tier.monthlyPriceInDollars >= 100 &&
+          tier.sponsors.length > 0
+      )
+      .sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
+    supporters: tiers
+      .filter(
+        (tier) =>
+          (tier.isOneTime || tier.monthlyPriceInDollars < 100) &&
+          tier.sponsors.length > 0
+      )
+      .sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
+  };
+};

@@ -1,0 +1,57 @@
+.sponsors {
+  list-style: none;
+  padding: 0;
+  margin: 4em 0;
+  max-width: 900px;
+
+  li {
+    display: grid;
+    grid-template-columns: min(24vw, 220px) 1fr;
+    gap: 2em;
+    align-items: center;
+    margin-bottom: 4em;
+  }
+
+  img {
+    width: 220px;
+  }
+}
+
+.sponsors-body {
+  padding: 1em 0;
+
+  h4 a {
+    color: $pink;
+  }
+}
+
+.sponsors-logo {
+  align-self: flex-start;
+}
+
+.supporters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  list-style: none;
+  padding: 0;
+
+  a {
+    display: inline-block;
+    padding: 5px;
+    border-radius: 100px;
+    background: $gradient-primary;
+  }
+
+  img {
+    width: 90px;
+    border-radius: 100px;
+  }
+}
+
+.supporters-1000 {
+  transform: scale(0.8);
+}
+.supporters-500 {
+  transform: scale(0.7);
+}

@@ -47,7 +47,7 @@ eleventyNavigation:
 </div>
 
 <div class="bg-light">
-  <div class="container py-5">
+  <div class="container-lg py-5">
     <h2 class="text-center mb-5">What we're up to</h2>
     <div class="homepageblocks">
       {% for pageBlock in collections.homePageBlocksLarge %}
@@ -86,6 +86,56 @@ eleventyNavigation:
             </div><div class="homepageblocks">
           {% endif %}
       {% endfor %}
+    </div>
+
+
+  </div>
+</div>
+
+<div class="bg-light">
+  <div class="container-lg py-5">
+    <h2 class=" mb-4">Our Supporters</h2>
+
+    <p class="lead">We are eternaly grateful to our amazing supporters and sponsors!</p>
+
+    <p class="lead">If you'd like to support Virtual Coffee, please visit <a href="https://github.com/sponsors/Virtual-Coffee">our sponsorship page</a> on GitHub.</p>
+
+    <ul class="sponsors">
+      {% for tier in sponsors.logoSponsors %}
+        {% for supporter in tier.sponsors %}
+          <li data-id="{{supporter.id}}">
+            <a href="{{supporter.websiteUrl or supporter.url}}" title="{{supporter.name}}" class="sponsors-logo">
+              <img src="{{supporter.largeAvatarUrl}}" alt="{{supporter.name}} profile image">
+            </a>
+            <div class="sponsors-body">
+              <h4><a href="{{supporter.websiteUrl or supporter.url}}">{{supporter.name}}</a></h4>
+              {% if supporter.descriptionHTML %}
+                {{supporter.descriptionHTML | safe}}
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+
+    <ul class="supporters my-6">
+      {% for tier in sponsors.supporters %}
+        {% for supporter in tier.sponsors %}
+          <li class="supporters-{{tier.monthlyPriceInCents}}">
+            <a href="{{supporter.url}}" title="{{supporter.name}}">
+              <img src="{{supporter.avatarUrl}}" alt="{{supporter.name}} profile image">
+            </a>
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+
+    <div class="text-center">
+      <h2 class=" mb-5">Thank you!!</h2>
+
+      <p><a href="https://github.com/sponsors/Virtual-Coffee" class="btn btn-primary btn-lg">Sponsor Virtual Coffee</a></p>
+
+
     </div>
 
 
