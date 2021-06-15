@@ -18,8 +18,11 @@ const query = gql`
             ... on Organization {
               name
               id
-              avatarUrl(size: 120)
-              largeAvatarUrl: avatarUrl(size: 600)
+              avatarUrl_80: avatarUrl(size: 80)
+              avatarUrl_160: avatarUrl(size: 160)
+              avatarUrl_240: avatarUrl(size: 240)
+              avatarUrl_480: avatarUrl(size: 480)
+              avatarUrl_720: avatarUrl(size: 720)
               url
               description
               descriptionHTML
@@ -28,8 +31,11 @@ const query = gql`
             ... on User {
               name
               id
-              avatarUrl(size: 120)
-              largeAvatarUrl: avatarUrl(size: 600)
+              avatarUrl_80: avatarUrl(size: 80)
+              avatarUrl_160: avatarUrl(size: 160)
+              avatarUrl_240: avatarUrl(size: 240)
+              avatarUrl_480: avatarUrl(size: 480)
+              avatarUrl_720: avatarUrl(size: 720)
               url
               websiteUrl
             }

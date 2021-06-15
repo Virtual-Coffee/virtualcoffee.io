@@ -6,14 +6,14 @@
 
   li {
     display: grid;
-    grid-template-columns: min(24vw, 220px) 1fr;
+    grid-template-columns: min(24vw, 240px) 1fr;
     gap: 2em;
     align-items: center;
     margin-bottom: 4em;
   }
 
   img {
-    width: 220px;
+    width: 240px;
   }
 }
 
@@ -41,10 +41,11 @@
     padding: 5px;
     border-radius: 100px;
     background: $gradient-primary;
+    color: #fff;
   }
 
   img {
-    width: 90px;
+    width: 80px;
     border-radius: 100px;
   }
 }
