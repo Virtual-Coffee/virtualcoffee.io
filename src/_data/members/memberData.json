@@ -923,6 +923,21 @@
     "websiteUrl": "https://chrismjohnston.github.io/",
     "teams": []
   },
+  "abbeyperini": {
+    "login": "abbeyperini",
+    "id": "MDQ6VXNlcjY4MDcxMDU2",
+    "url": "https://github.com/abbeyperini",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/68071056?u=348c2cc946961d2d9138cd51d361c2b57c33d966&v=4",
+    "name": "Abbey Perini",
+    "company": "Randstad",
+    "location": "Atlanta, GA",
+    "isHireable": false,
+    "bio": "💻  Full-Stack Web Developer\r\n🧶  Fiber artist\r\n🧘🏼  Yoga Teacher\r\n🤓  Full-time nerd ",
+    "bioHTML": "<div><g-emoji class=\"g-emoji\" alias=\"computer\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f4bb.png\">💻</g-emoji>  Full-Stack Web Developer\n<g-emoji class=\"g-emoji\" alias=\"yarn\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f9f6.png\">🧶</g-emoji>  Fiber artist\n🧘🏼  Yoga Teacher\n<g-emoji class=\"g-emoji\" alias=\"nerd_face\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f913.png\">🤓</g-emoji>  Full-time nerd </div>",
+    "twitterUsername": "AbbeyPerini",
+    "websiteUrl": "https://abbeyperini.dev",
+    "teams": []
+  },
   "bmeverett": {
     "login": "bmeverett",
     "id": "MDQ6VXNlcjM5NDEwMDY=",
@@ -936,6 +951,21 @@
     "bioHTML": "",
     "twitterUsername": "bme2010",
     "websiteUrl": "https://brandoneverett.dev",
+    "teams": []
+  },
+  "lennox-codes": {
+    "login": "lennox-codes",
+    "id": "MDQ6VXNlcjc2NTMzMjY2",
+    "url": "https://github.com/lennox-codes",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/76533266?u=af72450b74443bfc159655f0668f7c9edce3afac&v=4",
+    "name": "Lennox Gilbert",
+    "company": "100Devs",
+    "location": "Waterloo, ON",
+    "isHireable": true,
+    "bio": "Software Developer at 100Devs | UWaterloo '20",
+    "bioHTML": "<div>Software Developer at 100Devs | UWaterloo '20</div>",
+    "twitterUsername": "lennoxgilbert",
+    "websiteUrl": "lennoxgilbert.com",
     "teams": []
   }
 }
