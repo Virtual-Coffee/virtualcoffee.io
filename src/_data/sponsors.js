@@ -17,6 +17,7 @@ const query = gql`
           sponsorEntity {
             ... on Organization {
               name
+              login
               id
               avatarUrl_80: avatarUrl(size: 80)
               avatarUrl_160: avatarUrl(size: 160)
@@ -30,6 +31,7 @@ const query = gql`
             }
             ... on User {
               name
+              login
               id
               avatarUrl_80: avatarUrl(size: 80)
               avatarUrl_160: avatarUrl(size: 160)
