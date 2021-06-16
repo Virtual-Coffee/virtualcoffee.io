@@ -13,7 +13,8 @@
   }
 
   img {
-    width: 240px;
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -28,6 +29,7 @@
 .sponsors-logo {
   align-self: flex-start;
 }
+
 @keyframes rotator {
   from {
     transform: scale(1) rotate(0);
