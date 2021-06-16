@@ -28,6 +28,15 @@
 .sponsors-logo {
   align-self: flex-start;
 }
+@keyframes rotator {
+  from {
+    transform: scale(1) rotate(0);
+  }
+
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
 
 .supporters {
   display: flex;
@@ -42,11 +51,47 @@
     border-radius: 100px;
     background: $gradient-primary;
     color: #fff;
+    position: relative;
   }
 
   img {
+    position: relative;
+    z-index: 2;
     width: 80px;
     border-radius: 100px;
+  }
+}
+
+.supporters-name {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  top: -20px;
+  left: -20px;
+  z-index: 1;
+  transform: scale(0);
+  transition: transform cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s;
+
+  svg {
+    width: 130px;
+    height: 130px;
+    max-width: 130px;
+
+    font-weight: 500;
+    transform: rotate(0);
+    animation-duration: 3s;
+    animation-name: rotator;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-play-state: paused;
+  }
+
+  a:hover & {
+    transform: scale(1);
+
+    svg {
+      animation-play-state: running;
+    }
   }
 }
 
