@@ -126,7 +126,7 @@ eleventyNavigation:
               <img src="{{supporter.avatarUrl_80}}" alt="{{supporter.name or supporter.login}} profile image" width="80" height="80" loading="lazy" decoding="async" sizes="80px" srcset="{{supporter.avatarUrl_80}} 80w, {{supporter.avatarUrl_160}} 160w, {{supporter.avatarUrl_240}} 240w">
               <div class="supporters-name">
                 <svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2">
-                  <circle cx="65" cy="65" r="45" fill="transparent" id="curve"/>
+                  <path d="M 20 65 A 45 45 0 1 1 110 65 A 45 45 0 1 1 20 65" id="curve" fill="transparent" stroke="transparent" />
                   <text width="500">
                     <textPath xlink:href="#curve">
                       ✨{{supporter.name or supporter.login}}✨
