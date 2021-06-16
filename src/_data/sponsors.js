@@ -5,7 +5,11 @@ const { AssetCache } = require('@11ty/eleventy-cache-assets');
 
 const sponsorOverrides = {
   MDEyOk9yZ2FuaXphdGlvbjcxNDc2MTY2: {
-    largeAvatarUrl: '/assets/images/sponsors/whimser.png',
+    avatarUrl_80: '/assets/images/sponsors/whimser.png',
+    avatarUrl_160: '/assets/images/sponsors/whimser.png',
+    avatarUrl_240: '/assets/images/sponsors/whimser.png',
+    avatarUrl_480: '/assets/images/sponsors/whimser.png',
+    avatarUrl_720: '/assets/images/sponsors/whimser.png',
   },
 };
 
@@ -82,7 +86,7 @@ module.exports = async function () {
 
   // // Pass in your unique custom cache key
   // // (normally this would be tied to your API URL)
-  let asset = new AssetCache('vc_sponsors');
+  let asset = new AssetCache('vc_sponsors1');
 
   // // check if the cache is fresh within the last day
   if (asset.isCacheValid('1d')) {
