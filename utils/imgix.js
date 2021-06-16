@@ -1,4 +1,4 @@
-const ImgixClient = require('imgix-core-js');
+const ImgixClient = require('@imgix/js-core');
 
 const useImgix =
   process.env.USE_IMGIX || process.env.ELEVENTY_ENV === 'production';

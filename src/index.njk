@@ -47,7 +47,7 @@ eleventyNavigation:
 </div>
 
 <div class="bg-light">
-  <div class="container py-5">
+  <div class="container-lg py-5">
     <h2 class="text-center mb-5">What we're up to</h2>
     <div class="homepageblocks">
       {% for pageBlock in collections.homePageBlocksLarge %}
@@ -86,6 +86,66 @@ eleventyNavigation:
             </div><div class="homepageblocks">
           {% endif %}
       {% endfor %}
+    </div>
+
+
+  </div>
+</div>
+
+<div class="bg-light">
+  <div class="container-lg py-5">
+    <h2 class=" mb-4">Our Supporters</h2>
+
+    <p class="lead">We are eternaly grateful to our amazing supporters and sponsors!</p>
+
+    <p class="lead">If you'd like to support Virtual Coffee, please visit <a href="https://github.com/sponsors/Virtual-Coffee">our sponsorship page</a> on GitHub.</p>
+
+    <ul class="sponsors">
+      {% for tier in sponsors.logoSponsors %}
+        {% for supporter in tier.sponsors %}
+          <li data-id="{{supporter.id}}">
+            <a href="{{supporter.websiteUrl or supporter.url}}" title="{{supporter.name or supporter.login}}" class="sponsors-logo">
+              <img src="{{supporter.avatarUrl_80}}" alt="{{supporter.name or supporter.login}} logo" width="240" height="240" loading="lazy" decoding="async" sizes="(min-width: 915px) 240px, 24vw" srcset="{{supporter.avatarUrl_80}} 80w, {{supporter.avatarUrl_160}} 160w, {{supporter.avatarUrl_240}} 240w, {{supporter.avatarUrl_480}} 480w, {{supporter.avatarUrl_720}} 720w">
+            </a>
+            <div class="sponsors-body">
+              <h4><a href="{{supporter.websiteUrl or supporter.url}}">{{supporter.name}}</a></h4>
+              {% if supporter.descriptionHTML %}
+                {{supporter.descriptionHTML | safe}}
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+
+    <ul class="supporters my-6">
+      {% for tier in sponsors.supporters %}
+        {% for supporter in tier.sponsors %}
+          <li class="supporters-{{tier.monthlyPriceInCents}}">
+            <a href="{{supporter.url}}" title="{{supporter.name or supporter.login}}">
+              <img src="{{supporter.avatarUrl_80}}" alt="{{supporter.name or supporter.login}} profile image" width="80" height="80" loading="lazy" decoding="async" sizes="80px" srcset="{{supporter.avatarUrl_80}} 80w, {{supporter.avatarUrl_160}} 160w, {{supporter.avatarUrl_240}} 240w">
+              <div class="supporters-name">
+                <svg viewBox="0 0 130 130" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2">
+                  <path d="M 20 65 A 45 45 0 1 1 110 65 A 45 45 0 1 1 20 65" id="curve" fill="transparent" stroke="transparent" />
+                  <text width="500">
+                    <textPath xlink:href="#curve">
+                      ✨{{supporter.name or supporter.login}}✨
+                    </textPath>
+                  </text>
+                </svg>
+              </div>
+            </a>
+          </li>
+        {% endfor %}
+      {% endfor %}
+    </ul>
+
+    <div class="text-center">
+      <h2 class=" mb-5">Thank you!!</h2>
+
+      <p><a href="https://github.com/sponsors/Virtual-Coffee" class="btn btn-primary btn-lg">Sponsor Virtual Coffee</a></p>
+
+
     </div>
 
 
