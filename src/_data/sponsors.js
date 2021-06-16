@@ -82,13 +82,13 @@ module.exports = async function () {
 
   // // Pass in your unique custom cache key
   // // (normally this would be tied to your API URL)
-  // let asset = new AssetCache('vc_sponsors');
+  let asset = new AssetCache('vc_sponsors');
 
   // // check if the cache is fresh within the last day
-  // if (asset.isCacheValid('1d')) {
-  //   // return cached data.
-  //   return asset.getCachedValue(); // a promise
-  // }
+  if (asset.isCacheValid('1d')) {
+    // return cached data.
+    return asset.getCachedValue(); // a promise
+  }
 
   // do some expensive operation here, this is simplified for brevity
   const response = await graphQLClient.request(query);
@@ -111,9 +111,7 @@ module.exports = async function () {
     }
   );
 
-  // await asset.save(response, 'json');
-
-  return {
+  const returnVal = {
     logoSponsors: tiers
       .filter(
         (tier) =>
@@ -130,4 +128,8 @@ module.exports = async function () {
       )
       .sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
   };
+
+  await asset.save(returnVal, 'json');
+
+  return returnVal;
 };
