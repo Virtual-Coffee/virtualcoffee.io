@@ -282,7 +282,7 @@
     "login": "meg-gutshall",
     "id": "MDQ6VXNlcjM3ODQyMzUy",
     "url": "https://github.com/meg-gutshall",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/37842352?u=f901926013aa4cd47c371c57412b8c898ee595ea&v=4",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/37842352?u=a6e0dcd998c710141c2b53d5d86a282150381e8d&v=4",
     "name": "Meg Gutshall",
     "company": null,
     "location": "North Wales, PA",
@@ -314,11 +314,11 @@
     "url": "https://github.com/mrsantons",
     "avatarUrl": "https://avatars.githubusercontent.com/u/52573981?u=37b6a9af6a369f89e7c1eb810526627e4905cd7c&v=4",
     "name": "Marie Antons",
-    "company": null,
+    "company": "Harness",
     "location": "Cedar Rapids, Iowa",
     "isHireable": true,
-    "bio": "Developer",
-    "bioHTML": "<div>Developer</div>",
+    "bio": "Community Engineer",
+    "bioHTML": "<div>Community Engineer</div>",
     "twitterUsername": "MarieAntons",
     "websiteUrl": null,
     "teams": []
@@ -533,21 +533,6 @@
     "websiteUrl": "bogdan.covrig.dev",
     "teams": []
   },
-  "abuna1985": {
-    "login": "abuna1985",
-    "id": "MDQ6VXNlcjIxMTYyMjI5",
-    "url": "https://github.com/abuna1985",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/21162229?u=8e8a8686e4cd5b9ad91715a47c39200f9edb7b03&v=4",
-    "name": "Adam Abundis",
-    "company": "@coding-boot-camp 2U/Trilogy Education Services",
-    "location": "Santa Ana, California",
-    "isHireable": true,
-    "bio": "A Front-end Engineer  who enjoys building user interfaces and learning more about web development best-practices.",
-    "bioHTML": "<div>A Front-end Engineer  who enjoys building user interfaces and learning more about web development best-practices.</div>",
-    "twitterUsername": "ArtooAye2",
-    "websiteUrl": "https://adamabundis.xyz",
-    "teams": []
-  },
   "yolandahaynes": {
     "login": "YolandaHaynes",
     "id": "MDQ6VXNlcjEyOTgwNzEw",
@@ -561,6 +546,21 @@
     "bioHTML": "<div>Software Engineer at 100Devs\nLearning new skills, wanting to make things more accessible and striving to be better.</div>",
     "twitterUsername": "_YolandaHaynes",
     "websiteUrl": null,
+    "teams": []
+  },
+  "abuna1985": {
+    "login": "abuna1985",
+    "id": "MDQ6VXNlcjIxMTYyMjI5",
+    "url": "https://github.com/abuna1985",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/21162229?u=8e8a8686e4cd5b9ad91715a47c39200f9edb7b03&v=4",
+    "name": "Adam Abundis",
+    "company": "@hackforla",
+    "location": "Santa Ana, California",
+    "isHireable": true,
+    "bio": "A Front-end Engineer  who enjoys building user interfaces and learning more about web development best-practices.",
+    "bioHTML": "<div>A Front-end Engineer  who enjoys building user interfaces and learning more about web development best-practices.</div>",
+    "twitterUsername": "ArtooAye2",
+    "websiteUrl": "https://adamabundis.xyz",
     "teams": []
   },
   "vanessacor": {
@@ -608,21 +608,6 @@
     "websiteUrl": "JustinHager.codes",
     "teams": []
   },
-  "jenkens-dev": {
-    "login": "jenkens-dev",
-    "id": "MDQ6VXNlcjI1Mzk4MDIx",
-    "url": "https://github.com/jenkens-dev",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/25398021?u=f041fec893f61e0d1092fcd98757e1f0abec1ac8&v=4",
-    "name": "Jen Kennedy",
-    "company": null,
-    "location": "Seattle, WA",
-    "isHireable": false,
-    "bio": "Frontend Developer | JavaScript, React, GraphQL | Tech for good 💜 ",
-    "bioHTML": "<div>Frontend Developer | JavaScript, React, GraphQL | Tech for good <g-emoji class=\"g-emoji\" alias=\"purple_heart\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f49c.png\">💜</g-emoji> </div>",
-    "twitterUsername": "jenkens_",
-    "websiteUrl": "https://www.jenkens.dev/",
-    "teams": []
-  },
   "debrakayeelliott": {
     "login": "debrakayeelliott",
     "id": "MDQ6VXNlcjc4NDUyNDMz",
@@ -638,19 +623,19 @@
     "websiteUrl": "https://bit.ly/debrakaye",
     "teams": []
   },
-  "kfairris": {
-    "login": "kfairris",
-    "id": "MDQ6VXNlcjgwMzkyMjY=",
-    "url": "https://github.com/kfairris",
-    "avatarUrl": "https://avatars.githubusercontent.com/u/8039226?u=608be0fb9445ee4d32b0e77f08dea0f7d2ccf9a5&v=4",
-    "name": "Kenny Fairris",
+  "jenkens-dev": {
+    "login": "jenkens-dev",
+    "id": "MDQ6VXNlcjI1Mzk4MDIx",
+    "url": "https://github.com/jenkens-dev",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/25398021?u=f041fec893f61e0d1092fcd98757e1f0abec1ac8&v=4",
+    "name": "Jen Kennedy",
     "company": null,
-    "location": "United States",
-    "isHireable": true,
-    "bio": "Software Engineer | Front-end Web Developer",
-    "bioHTML": "<div>Software Engineer | Front-end Web Developer</div>",
-    "twitterUsername": "kfairris",
-    "websiteUrl": "https://kennyfairris.dev",
+    "location": "Seattle, WA",
+    "isHireable": false,
+    "bio": "Frontend Developer | JavaScript, React, GraphQL | Tech for good 💜 ",
+    "bioHTML": "<div>Frontend Developer | JavaScript, React, GraphQL | Tech for good <g-emoji class=\"g-emoji\" alias=\"purple_heart\" fallback-src=\"https://github.githubassets.com/images/icons/emoji/unicode/1f49c.png\">💜</g-emoji> </div>",
+    "twitterUsername": "jenkens_",
+    "websiteUrl": "https://www.jenkens.dev/",
     "teams": []
   },
   "tomcudd": {
@@ -666,6 +651,21 @@
     "bioHTML": "<div>As an advocate for DevOps, I’ve helped bring about a positive change in the way Development and Operations teams work together.</div>",
     "twitterUsername": "tomcudd",
     "websiteUrl": "https://tomcudd.com",
+    "teams": []
+  },
+  "kfairris": {
+    "login": "kfairris",
+    "id": "MDQ6VXNlcjgwMzkyMjY=",
+    "url": "https://github.com/kfairris",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/8039226?u=608be0fb9445ee4d32b0e77f08dea0f7d2ccf9a5&v=4",
+    "name": "Kenny Fairris",
+    "company": null,
+    "location": "United States",
+    "isHireable": true,
+    "bio": "Software Engineer | Front-end Web Developer",
+    "bioHTML": "<div>Software Engineer | Front-end Web Developer</div>",
+    "twitterUsername": "kfairris",
+    "websiteUrl": "https://kennyfairris.dev",
     "teams": []
   },
   "surajrpanchal": {
@@ -966,6 +966,21 @@
     "bioHTML": "<div>Software Developer at 100Devs | UWaterloo '20</div>",
     "twitterUsername": "lennoxgilbert",
     "websiteUrl": "lennoxgilbert.com",
+    "teams": []
+  },
+  "zooglon": {
+    "login": "Zooglon",
+    "id": "MDQ6VXNlcjc2MDQ1OTE4",
+    "url": "https://github.com/Zooglon",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/76045918?u=daba08c60d5d6ba7ccd50438caec86f3404e2e9b&v=4",
+    "name": "Nath Duncan",
+    "company": null,
+    "location": "Birmingham UK",
+    "isHireable": false,
+    "bio": "Github page for me...Zooglon. ",
+    "bioHTML": "<div>Github page for me...Zooglon. </div>",
+    "twitterUsername": null,
+    "websiteUrl": null,
     "teams": []
   }
 }
