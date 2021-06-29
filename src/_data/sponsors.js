@@ -86,7 +86,7 @@ module.exports = async function () {
 
   // // Pass in your unique custom cache key
   // // (normally this would be tied to your API URL)
-  let asset = new AssetCache('vc_sponsors2');
+  let asset = new AssetCache('vc_sponsors2.0');
 
   // // check if the cache is fresh within the last day
   if (asset.isCacheValid('1d')) {
