@@ -86,7 +86,7 @@ module.exports = async function () {
 
   // // Pass in your unique custom cache key
   // // (normally this would be tied to your API URL)
-  let asset = new AssetCache('vc_sponsors1');
+  let asset = new AssetCache('vc_sponsors2');
 
   // // check if the cache is fresh within the last day
   if (asset.isCacheValid('1d')) {
@@ -94,8 +94,16 @@ module.exports = async function () {
     return asset.getCachedValue(); // a promise
   }
 
-  // do some expensive operation here, this is simplified for brevity
-  const response = await graphQLClient.request(query);
+  let response;
+
+  try {
+    // do some expensive operation here, this is simplified for brevity
+    response = await graphQLClient.request(query);
+  } catch (error) {
+    console.log('Error loading github sponsors, using fake data instead');
+
+    response = require('../__mockdata/sponsors');
+  }
 
   const tiers = response.organization.sponsorsListing.tiers.nodes.map(
     (tier) => {
