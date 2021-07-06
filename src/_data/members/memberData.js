@@ -37,7 +37,7 @@ module.exports = async function () {
     });
 
     const query = gql`
-      query($searchQuery: String!) {
+      query ($searchQuery: String!) {
         search(type: USER, query: $searchQuery, first: 20) {
           nodes {
             ... on User {
@@ -104,7 +104,6 @@ module.exports = async function () {
       const response = await graphQLClient.request(query, {
         searchQuery: queries[i],
       });
-      console.log(JSON.stringify(response));
 
       response.search.nodes.forEach((user) => {
         memberData[user.login.toLowerCase()] = {
