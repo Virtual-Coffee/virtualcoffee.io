@@ -10,3 +10,11 @@ node_modules
 
 # Local Netlify folder
 .netlify
+
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
