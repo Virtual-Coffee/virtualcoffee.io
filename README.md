@@ -1,6 +1,5 @@
 # [![Virtual Coffee](src/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
 
-
 Virtual Coffee is a laid-back conversation with developers twice a week. It's the conversation that keeps going in slack. It's the online events that support developers at all stages of the journey. It's the place where you go to make friends who all just happen to be in tech.
 
 Anyone can join! Whether you're just thinking about getting into tech or have been in it for decades.
@@ -25,18 +24,37 @@ Steps to run the site locally for development or curiosity
 
 Follow [these steps](https://docs.github.com/en/free-pro-team@latest/github/getting-started-with-github/fork-a-repo) to create a fork of this repository and clone it to your local machine.
 
-
 ### 2. Navigate to the repo directory
 
 If you have just run `git clone ...` , the next step would be to move into the cloned repo:
 
-```
+```shell
 cd virtualcoffee.io
 ```
 
 ### 3. Install dependencies
 
+This repo requires `node` and `yarn` to get started.
+
+#### Installing `node`:
+
+The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires `node` version `16`, which is the latest version.
+
+If you already have a different version of `node` installed, but don't want to update globally, you can install [a package called `nvm`](https://github.com/nvm-sh/nvm), which will allow you to easily switch `node` versions. Once you have `nvm` installed (or if you already have it installed), you can run `nvm use` in the main directory and it will install the proper version of `node`.
+
+#### Installing `yarn`:
+
+`yarn` is a package manager that is used to install the rest of our dependencies. You can install `yarn` by running the following command:
+
+```shell
+npm install -g yarn
 ```
+
+Read more about `yarn` [on their docs site](https://yarnpkg.com/getting-started/install).
+
+Once you have `yarn` installed, you're ready to install the local dependencies! Run the following command:
+
+```shell
 yarn
 ```
 
@@ -44,7 +62,7 @@ At this point you're ready to roll! The following commands are available:
 
 ### `yarn start`
 
-```
+```shell
 yarn start
 ```
 
@@ -58,14 +76,13 @@ You should see 'Waiting...' below, which means the watcher is waiting to build y
 
 Use ctrl-c to quit the server when you're done.
 
-
 ## Build Commands
 
 The following commands are for building production-ready versions of the site. If you're interested in seeing what they look like on your machine, feel free to run them! But they are not needed for normal local development.
 
 ### `yarn build`
 
-```
+```shell
 yarn build
 ```
 
@@ -73,7 +90,7 @@ Builds a production-ready version of the site. This is what Netlify uses to buil
 
 ### `yarn build-preview`
 
-```
+```shell
 yarn build-preview
 ```
 
