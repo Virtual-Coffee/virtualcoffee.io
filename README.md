@@ -95,3 +95,7 @@ yarn build-preview
 ```
 
 If you'd like to see a preview of the production build, use this command to build the site and start up a server at http://localhost:9000. To see any subsequent changes, you can leave this server running, but you'll have to run `yarn build` again in another console tab.
+
+### Heads Up
+
+If you have problems in VS Code related to `.njk` files, you may need to [reconfigure your language settings](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/176) after working with this repo.
