@@ -13,3 +13,15 @@
   to = "/"
   status = 301
   force = true
+
+  [[redirects]]
+  from = "/brownbag-idea"
+  to = "/lunch-and-learn-idea"
+  status = 301
+  force = true
+
+  [[redirects]]
+  from = "/brownbag-idea-thanks"
+  to = "/lunch-and-learn-idea-thanks"
+  status = 301
+  force = true
