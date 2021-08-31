@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to help us improve our docs!
+        # Thank you for taking the time to help us improve our docs!
 
         ![Documentation beats conversation!](https://media.tenor.co/images/79a44a3e45d1d456754832d78393395f/tenor.gif)
 

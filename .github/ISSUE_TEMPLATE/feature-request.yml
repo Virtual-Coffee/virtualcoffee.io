@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to help us improve our site!
+        # Thank you for taking the time to help us improve our site!
 
         ![feature request](https://media.tenor.co/images/a158c4c3c1b2355a9521430783f626ab/tenor.gif)
 
