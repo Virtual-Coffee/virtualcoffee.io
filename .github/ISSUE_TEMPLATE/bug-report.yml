@@ -1,6 +1,6 @@
 name: 🐞 Bug Report
 description: Something isn't working correctly! Create a report to help us improve.
-title: '[Bug]: '
+title: ''
 labels: ['Type: bug', 'Status: Needs Triage']
 body:
   - type: markdown
