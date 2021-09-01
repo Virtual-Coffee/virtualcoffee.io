@@ -1,0 +1,65 @@
+name: 🌱 Feature Request
+description: Suggest an idea for VirtualCoffee.io.
+labels: ['Type: enhancement', 'Status: Needs Triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Thank you for taking the time to help us improve our site!
+
+        ![feature request](https://media.tenor.co/images/a158c4c3c1b2355a9521430783f626ab/tenor.gif)
+
+        **Please note:** If this is a question or you're not sure about something, please consider using [our discussion board](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions) to ask a question or get some help!
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the change you're considering.
+      options:
+        - label: I have searched the existing issues
+          required: true
+  - type: textarea
+    id: context-for-change
+    attributes:
+      label: Issue Context
+      description: |
+        A clear and concise description of what the problem is.
+      placeholder: |
+        I'm always frustrated when [...]
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: |
+        Explain what solution and solution criteria looks like.
+
+        **It's ok if you don't have this right now!**
+    validations:
+      required: false
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: |
+        A clear and concise description of any alternative solutions or features you've considered.
+    validations:
+      required: false
+  - type: textarea
+    id: resources
+    attributes:
+      label: Additional Resources
+      description: |
+        Add any other context, links, or screenshots about the feature request here.
+
+        Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://virtualcoffee.io/code-of-conduct/)
+      options:
+        - label: I've read the Code of Conduct and understand my responsibilities as a member of the Virtual Coffee community
+          required: true
