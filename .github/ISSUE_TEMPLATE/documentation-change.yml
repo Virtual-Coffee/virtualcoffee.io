@@ -1,6 +1,5 @@
 name: 📄  Documentation Change
 description: A request to edit/add/fix the community docs, api docs, guides, etc.
-title: ''
 labels: ['Type: documentation', 'Status: Needs Triage']
 body:
   - type: markdown
