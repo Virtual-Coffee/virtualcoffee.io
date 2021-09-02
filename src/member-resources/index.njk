@@ -1,6 +1,6 @@
 ---
 title: 'Virtual Coffee Member Resources'
-description: 'We have multiple resources for our Virtual Coffee members'
+description: 'A collection of resources for Virtual Coffee members'
 layout: layouts/default.njk
 hero: 'svg/undraw_folder_39kl.svg'
 homePageBlocks:
@@ -17,18 +17,19 @@ homePageBlocks:
         {% include "svg/undraw_folder_39kl.svg" %}
       </div>
       <div class="col-sm-8">
-        <h1 class="display-4">Virtual Coffee Member Resources</h1>
-        <p class="lead ">We have multiple resources for our Virtual Coffee members</p>
+        <h1 class="display-4">Member Resources</h1>
+        <p class="lead ">A collection of resources for Virtual Coffee members</p>
       </div>
     </div>
   </div>
 </div>
 
-<div class="bg-light py-5">
+
+<div class="bg-white py-5">
   <div class="container-xl">
-  <!-- Add Open source Guide -->
-    <p class="lead ">Coming soon <a href="guide-to-vc">A Member's Guide to Getting the Most Out of Virtual Coffee!</a></p>
+    <h2 class="display-5">Resources Pages:</h2>
 
-
+    {% displayPostList collections.memberresources %}
   </div>
 </div>
+
