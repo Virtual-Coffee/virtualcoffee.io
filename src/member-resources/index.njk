@@ -1,0 +1,35 @@
+---
+title: 'Virtual Coffee Member Resources'
+description: 'A collection of resources for Virtual Coffee members'
+layout: layouts/default.njk
+hero: 'svg/undraw_folder_39kl.svg'
+homePageBlocks:
+  type: large
+  key: Member Resources
+  order: 6
+  collectionKey: memberresources
+---
+
+<div class="py-4">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-sm-4">
+        {% include "svg/undraw_folder_39kl.svg" %}
+      </div>
+      <div class="col-sm-8">
+        <h1 class="display-4">Member Resources</h1>
+        <p class="lead ">A collection of resources for Virtual Coffee members</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="bg-white py-5">
+  <div class="container-xl">
+    <h2 class="display-5">Resources Pages:</h2>
+
+    {% displayPostList collections.memberresources %}
+  </div>
+</div>
+
