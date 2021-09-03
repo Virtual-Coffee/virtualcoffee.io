@@ -1,8 +1,8 @@
 ---
 layout: layouts/default.njk
-title: Brownbag Talk Submission Form
+title: Lunch & Learn Talk Submission Form
 description: We can't wait to hear your talk!
-permalink: brownbag-idea/
+permalink: lunch-and-learn-idea/
 ---
 
 {% from "macros/forms.njk" import netlifyForm, codeOfConduct, formSubmit %}
@@ -15,7 +15,7 @@ permalink: brownbag-idea/
         {% include "svg/undraw_Presentation_62e1.svg" %}
       </div>
       <div class="col-sm-8">
-        <h1 class="display-4">Virtual Coffee: Brownbag</h1>
+        <h1 class="display-4">Virtual Coffee: Lunch & Learns</h1>
       </div>
     </div>
   </div>
@@ -24,9 +24,9 @@ permalink: brownbag-idea/
 <div class="py-5">
   <div class="container bodycopy">
     <div class="lead mb-5">
-      <p>Brownbag talks are usually hour-long sessions on one topic. It can be a traditional conference-style talk, panel discussion, question and answer, or a combination.</p>
+      <p>Lunch & Learn talks are usually hour-long sessions on one topic. It can be a traditional conference-style talk, panel discussion, question and answer, or a combination.</p>
     </div>
-    {% call netlifyForm('/brownbag-idea-thanks/', 'brownbag-submissions') %}
+    {% call netlifyForm('/lunch-and-learn-idea-thanks/', 'lunch-and-learn-submissions') %}
 
       <fieldset>
       <legend>Your Information:</legend>
@@ -57,9 +57,9 @@ permalink: brownbag-idea/
         </div>
       </fieldset>
       <fieldset>
-        <legend>Your Brownbag Idea:</legend>
+        <legend>Your Lunch & Learn Idea:</legend>
         <div class="form-group">
-          <label for="topicTitle">Title of the Brownbag</label>
+          <label for="topicTitle">Title of the Lunch & Learn</label>
           <input
             type="text"
             class="form-control"
