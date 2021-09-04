@@ -19,7 +19,7 @@ We really want to make it as easy as possible for newbies to start helping out a
 - [The Basics](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#the-basics)
   - [Making a Github Account](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#making-a-github-account)
   - [Working with Issues](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#working-with-issues)
-  - [Install and Run](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#run-and-install)
+  - [Install and Run](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#local-development)
   - [Making Pull Requests](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#creating-a-pull-request)
   - [Awaiting Review](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#awaiting-review)
   - [Tips and Gotchas](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#tips-and-gotchas)
