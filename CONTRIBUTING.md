@@ -1,6 +1,17 @@
-# Introduction
+# Contributors Guide
 
-Thank you for so much for considering contributing to this repository. We really appreciate all the contributors who try to make this space better. This document serves as a guide that will show you the path of least resistance for making valuable contributions to this project. Reading and following this guide shows that you respect the time of the developers managing and developing this space. In return, they will reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests. This is the only way we can produce anything of value.
+Welcome to the Virtual Coffee contributors guide! Thank you for so much for considering contributing to this repository. We really appreciate all the contributors who try to make this space better. This document serves as a guide that will show you the path of least resistance for making valuable contributions to this project. Reading and following this guide shows that you respect the time of the developers managing and developing this space. In return, they will reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests. This is the only way we can produce anything of value.
+
+We take our [Code of Conduct](https://virtualcoffee.io/code-of-conduct/) very seriously, and all contributors must abide by it. Let’s treat each other with respect and remember we are all people who care and are trying. With that said, if you believe someone has violated the Code of Conduct, please fill out our [CoC Violation Form](https://virtualcoffee.io/report-coc-violation/), which you can do anonymously.
+
+As an open source community, Virtual Coffee recognizes the importance of supporting our members and creating clear paths of communication. We know that sometimes things get lost in translation and we want to assume positive intent.
+
+## Getting Started
+
+Before you begin:
+
+- Have you read our [Code of Conduct](https://virtualcoffee.io/code-of-conduct/)?
+- Check out [existing issues](https://github.com/Virtual-Coffee/virtualcoffee.io/issues) and the [discussion board](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions) to ensure your issue hasn’t been brought up before.
 
 If you're looking to start learning how to work with this repo, this doc tries to provide all the resources to get you from confusion to productivity.
 
@@ -10,18 +21,21 @@ Most of the docs are currently written using [markdown](https://www.markdownguid
 
 We try not to take anything for granted, but in case we miss something, please reach out to the maintainers and let us know!
 
-We really want to make it as easy as possible for newbies to start helping out and docs like this provide a valuable resource for them to use.
+We really want to make space for all developers to feel comfortable and supported while contributing, and docs like this provide a valuable resource for them to use.
 
 # Table of Contents
 
-- [Introduction](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#introduction)
+- [Contrubutors Guide](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#contributors-guide)
+- [Getting Started](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#getting-started)
 - [What type of contributions are desired](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#what-type-of-contributions-are-desired)
 - [The Basics](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#the-basics)
   - [Making a Github Account](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#making-a-github-account)
+  - [Discussions](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#discussions)
   - [Working with Issues](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#working-with-issues)
   - [Install and Run](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#run-and-install)
   - [Making Pull Requests](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#creating-a-pull-request)
   - [Awaiting Review](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#awaiting-review)
+  - [Suggested Changes](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#suggested-changes)
   - [Tips and Gotchas](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#tips-and-gotchas)
 - [Bug Reporting](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#reporting-a-bug)
 - [Labelling conventions](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#labelling-conventions)
@@ -42,6 +56,12 @@ This is a beginner friendly repo. Contributors can request a pairing (zoom/googl
 We're going to assume you know what [github](https://www.howtogeek.com/180167/htg-explains-what-is-github-and-what-do-geeks-use-it-for/) is (otherwise, how would you be reading this?).
 
 If you haven't made a github account as yet, make one [now](https://github.com). It's free!
+
+## Discussions
+
+For questions, comments, or other discussion topics that don’t have a clear action, please use the [discussion board](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions).
+
+For example, if you want to ask “Should we do…” or “How do I do…”, you’ll start in the discussion board. This allows a whole-group conversation, and we can integrate the answer into docs or issues as necessary.
 
 ## Working With Issues
 
@@ -64,7 +84,11 @@ Follow the steps for local development [in our README](README.md#local-developme
 
 ## Creating a Pull Request
 
-At this point, you have two options.
+> ⚠️ **Heads up!** If you'd like to make a Pull Request, please make sure you've created an issue (or a discussion board post) first, and **that you've been assigned to the issue**. This allows the maintainer team to provide guidance and prioritize tasks — otherwise you may run the risk of spending time on something that doesn't end up getting accepted for various reasons.
+
+We appreciate everyone’s efforts, and want to ensure that our communication is clear and open as much as possible. We strongly encourage communication and clarity before doing work.
+
+Once you've been assigned the issue, you have two options.
 
 **The first option** is using the github interface to fork the repo, making an edit right here in the github client, and then submit a Pull Request (no code or terminals or IDE required). [This guide](https://guides.github.com/activities/hello-world/) shows just how to do that for a small personal repo. You would simply replace the step of creating a new repository to just navigating to this one and forking that instead. This is a great idea if you simply plan to add to or edit one of the markdown files we use for documentation in this project.
 
@@ -76,7 +100,20 @@ At this point, you have two options.
 
 Once you've submitted your pull request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all of course, we ask for patience if you don't see a response immediately. Sometimes it takes about a day for someone's schedule to clear up to have the sit to properly review incoming PRs. We'd rather not rush a response after someone has put time and effort into submitted. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your PR reminding of it's status.
 
+The purpose of reviews is to create the best experience we can for our contributors.
+
+- Reviews are always respectful, acknowledging that everyone did the best possible job with the knowledge they had at the time.
+- Reviews discuss content, not the person who created it.
+- Reviews are constructive and start conversation around feedback.
+
 If the PR looks good, a maintainer will typically give feedback and merge the request immediately, otherwise they'll let you know what questions they have or what needs to change before your work can be accepted. Once it is, you'll see your changes on the main branch and VOILA, open source contribution complete!
+
+### Suggested Changes
+
+We may ask for changes to be made before a PR can be merged, either using [suggested changes](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/incorporating-feedback-in-your-pull-request) or pull request comments. You can apply suggested changes directly through the UI. You can make any other changes in your fork, then commit them to your branch.
+
+As you update your PR and apply changes, mark each conversation as [resolved](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/commenting-on-a-pull-request#resolving-conversations).
+
 
 ## Tips and Gotchas
 
