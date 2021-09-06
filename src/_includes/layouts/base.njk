@@ -42,7 +42,7 @@
     {# <link rel="stylesheet" href="https://rsms.me/inter/inter.css"> #}
     {{headAdditions | safe if headAdditions is defined}}
   </head>
-  <body {% if bodyClass %}class="{{ bodyClass }}"{% endif %}>
+  <body {% if bodyClass %}class="{{ bodyClass }}"{% endif %} id="top">
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top w-100">
       <a class="navbar-brand" href="/" aria-label="Virtual Coffee">
