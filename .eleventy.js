@@ -103,9 +103,8 @@ module.exports = function (eleventyConfig) {
   });
 
   const markdownItAttrs = require('markdown-it-attrs');
-  const anchor = require('markdown-it-anchor');
 
-  const linkAfterHeader = anchor.permalink.linkAfterHeader({
+  const linkAfterHeader = markdownItAnchor.permalink.linkAfterHeader({
     style: 'visually-hidden',
     assistiveText: (title) => `Permalink to “${title}”`,
     visuallyHiddenClass: 'sr-only',
@@ -118,7 +117,7 @@ module.exports = function (eleventyConfig) {
     linkify: true,
   })
     .use(markdownItAttrs)
-    .use(anchor, {
+    .use(markdownItAnchor, {
       permalink(slug, opts, state, idx) {
         state.tokens.splice(
           idx,
