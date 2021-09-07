@@ -194,6 +194,8 @@ module.exports = function (grunt) {
 
             require('@fullhuman/postcss-purgecss')({
               content: [
+                './utils/**/*.js',
+                './.eleventy.js',
                 './src/**/*.njk',
                 './src/**/*.md',
                 './src/**/*.html',

@@ -125,6 +125,7 @@ module.exports = function (eleventyConfig) {
           0,
           Object.assign(new state.Token('div_open', 'div', 1), {
             attrs: [['class', 'header-anchor-wrapper']],
+            class: 'header-anchor',
             block: true,
           })
         );
