@@ -100,3 +100,22 @@ ul {
     color: $text-muted;
   }
 }
+
+.header-anchor {
+  order: -1;
+  font-size: 1.1em;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.header-anchor-wrapper {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1em 1fr;
+  align-items: baseline;
+  margin-left: -1em;
+
+  &:hover .header-anchor {
+    opacity: 1;
+  }
+}
