@@ -10,6 +10,9 @@ layout: layouts/base.njk
       </div>
       <div class="col-sm-8">
         <h1 class="display-4">{{heroHeader}}</h1>
+        {% if heroSubheader is defined %}
+          <p class="lead">{{heroSubheader}}</p>
+        {% endif %}
       </div>
     </div>
   </div>
