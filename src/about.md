@@ -15,7 +15,7 @@ eleventyNavigation:
   order: 1
 ---
 
-<h2 id="definition">Who we are</h2>
+## Who we are
 
 Virtual Coffee is, and always will be, a genuine community of people who value and prioritize supporting one another. We know that growth comes at all levels and that no matter what stage of the developer journey you're on, you can teach and learn.
 
@@ -25,13 +25,13 @@ Virtual Coffee is focused on being a positive and supporting place. We’re here
 
 ---
 
-<h2 id="mission">Our Mission</h2>
+## Our Mission
 
 Virtual Coffee's mission is to be a welcoming tech community that allows room for growth and mentorship at all levels, and to create meaningful opportunities for learning, leadership, and contribution for everyone.
 
 ---
 
-<h2 id="faq">Frequently Asked Questions</h2>
+## Frequently Asked Questions
 
 <dl>
   <dt>How do I become a member?</dt>
