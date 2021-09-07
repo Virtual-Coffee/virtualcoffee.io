@@ -102,17 +102,51 @@ module.exports = function (eleventyConfig) {
     return baseUrl ? baseUrl + path : path;
   });
 
+  const markdownItAttrs = require('markdown-it-attrs');
+  const anchor = require('markdown-it-anchor');
+
+  const linkAfterHeader = anchor.permalink.linkAfterHeader({
+    style: 'visually-hidden',
+    assistiveText: (title) => `Permalink to “${title}”`,
+    visuallyHiddenClass: 'sr-only',
+  });
+
   /* Markdown Overrides */
   let markdownLibrary = markdownIt({
     html: true,
     breaks: true,
     linkify: true,
-  });
-  // .use(markdownItAnchor, {
-  //   permalink: true,
-  //   permalinkClass: 'direct-link',
-  //   permalinkSymbol: '#',
-  // });
+  })
+    .use(markdownItAttrs)
+    .use(anchor, {
+      permalink(slug, opts, state, idx) {
+        state.tokens.splice(
+          idx,
+          0,
+          Object.assign(new state.Token('div_open', 'div', 1), {
+            attrs: [['class', 'header-anchor-wrapper']],
+            block: true,
+          })
+        );
+
+        state.tokens.splice(
+          idx + 4,
+          0,
+          Object.assign(new state.Token('div_close', 'div', -1), {
+            block: true,
+          })
+        );
+
+        linkAfterHeader(slug, opts, state, idx + 1);
+      },
+
+      level: [2, 3],
+    })
+    .use(require('markdown-it-toc-done-right'), {
+      listType: 'ul',
+      level: [2, 3],
+    });
+
   eleventyConfig.setLibrary('md', markdownLibrary);
 
   // Browsersync Overrides
