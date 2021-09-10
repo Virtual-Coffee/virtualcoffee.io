@@ -249,9 +249,9 @@ A compassionate space where people can feel comfortable expressing their gender 
 
 ---
 
-### #machine-learning
+### #machine-learning-and-data
 
-Anything about machine learning is happening in this channel.
+Anything about machine learning, statistics, and linguistics is happening in this channel.
 
 ---
 
