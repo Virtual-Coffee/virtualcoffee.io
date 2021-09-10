@@ -27,7 +27,7 @@ ${toc}
 
 ## Name, Description, Tags
 
-We'll start with the natural beginning for evaluating an OSS project: The descriptive fields that github provides.
+We'll start with the natural beginning for evaluating an OSS project: The descriptive fields that GitHub provides.
   - It should have a relevant name.
   - It should have a clear description that tells what the project does and what it's for.
   - It should have relevant tags highlighting its scope/stack/field etc.
