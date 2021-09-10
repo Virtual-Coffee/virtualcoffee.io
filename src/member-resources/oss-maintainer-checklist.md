@@ -6,6 +6,7 @@ hero: 'svg/undraw_To_do_list_re_9nt7.svg'
 heroHeader: 'Open Source Software Maintainer Checklist'
 heroSubheader: A handy checklist for Open Source maintainers!
 tags: memberresources
+order: 3
 ---
 
 {% textContainer %}
