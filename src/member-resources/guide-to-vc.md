@@ -6,6 +6,7 @@ hero: 'svg/undraw_product_teardown_elol.svg'
 heroHeader: 'About Virtual Coffee'
 heroSubheader: A user guide for current members to get the most out of Virtual Coffee.
 tags: memberresources
+order: 1
 ---
 
 {% textContainer 'light'%}
