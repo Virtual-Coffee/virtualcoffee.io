@@ -26,7 +26,7 @@ Thus, we provide here the F.A.Q. around Virtual Coffee for you!
 
 {% textContainer 'white' %}
 
-## Table of Contents
+## Table of Contents:
 
 ${toc}
 
@@ -111,6 +111,6 @@ Our members volunteer their time and support for Virtual Coffee to run.
 
 See you in one of our Coffees! ☕ {.display-5 .my-5}
 
-If you have any other questions, you can email it to our Maintainers at hello@virtualcoffee.io.
+If you have any other questions, you can email them to our Maintainers at hello@virtualcoffee.io.
 
 {% endtextContainer %}
