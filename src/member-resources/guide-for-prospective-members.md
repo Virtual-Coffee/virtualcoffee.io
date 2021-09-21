@@ -49,22 +49,22 @@ We would also like to give you the experience of Virtual Coffee in person before
 
 [Sign up and RSVP for a Coffee](https://meetingplace.io/virtual-coffee) and get the link to our Zoom.
 
-#### 2. Complete the registration form {.mt-5 .mb-4}
+#### 2. Complete the registration form :blush: {.mt-5 .mb-4}
 
-Our MC will drop the link of the New Member Form together with the Code of Conduct and other links on the intro of Coffee. The New Member Form will be dropped again at the end of the session.
+Our MC will drop the link of the New Member Form together with the [Code of Conduct](/code-of-conduct/) and other links during the intro of Coffee. The New Member Form will be dropped again at the end of the session.
 
-Grab the form, fill and submit it. Then, you will be given access to our Slack group.
+Grab the form, fill it in, and submit it. Then, you will be given access to our Slack group.
 
 #### 3. So now you’re in our Slack! Welcome! 👋 {.mt-5 .mb-4}
 
-You can introduce yourself in this channel. We would love to welcome you and get to know you better!
+You can introduce yourself in this channel. We would love to know who you are, where you are in your tech journey, and what you enjoy outside of tech!
 
 ---
 
 ### What is going on in Coffees? {.mt-3 .mb-4}
 
-We’re getting to know other members, old and new, through casual conversations on Zoom.
-Check out our [Guide To Virtual Coffee](/member-resources/guide-to-vc/) for more details.
+We’re getting to know other members, old and new, through casual conversations on Zoom. We prioritize empathy, encouraging everyone to participate in the ways that are most comfortable to them, and learning together. 
+Check out our [Guide To Virtual Coffee](/member-resources/guide-to-vc/) for more details. 
 
 ---
 
@@ -82,7 +82,7 @@ If you aren't comfortable having your camera or even sound on, feel free to turn
 
 ### I’m a newbie. Can I still join Virtual Coffee? {.mt-3 .mb-4}
 
-Of course! Our members are on all stages of the journey. Anyone can join, whether you're thinking about getting into tech or have been in it for decades!
+Of course! Our members are at all stages of the journey. Anyone can join, whether you're thinking about getting into tech or have been in it for decades!
 
 ---
 
@@ -94,16 +94,16 @@ Absolutely! If you’re into online communities, and enjoy conversations around 
 
 ### What will I get when I join Virtual Coffee? {.mt-3 .mb-4}
 
-You can participate in our [events](/events), get support and help as you need, mentorship, and most of all, FRIENDSHIPS!
+You can participate in our [events](/events), have access to our slack, get support and help as you need, mentorship, and most of all, FRIENDSHIPS!
 Feel free to take a glimpse of [what’s going on in Virtual Coffee](/member-resources/guide-to-vc/#what-to-expect-in-virtual-coffee) to get some more insights.
 
 ---
 
 ### Is there any membership fee? {.mt-3 .mb-4}
 
-None, *nada*! You don’t need to pay memberships or anything to join Virtual Coffee.
-Our members volunteer their time and support for Virtual Coffee to run.
-[Sponsorships](https://github.com/sponsors/Virtual-Coffee) helps us to continue serving the Virtual Coffee community, and to support all of the things you see on this website!
+None, *nada*! You don’t need to pay memberships to join Virtual Coffee.
+Our members volunteer their time and support for Virtual Coffee.
+[Sponsorships](https://github.com/sponsors/Virtual-Coffee) helps us to continue serving the Virtual Coffee community and to support all of the things you see on this website!
 
 {% endtextContainer %}
 
