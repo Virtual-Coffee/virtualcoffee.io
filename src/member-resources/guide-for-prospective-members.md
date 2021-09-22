@@ -49,7 +49,7 @@ We would also like to give you the experience of Virtual Coffee in person before
 
 [Sign up and RSVP for a Coffee](https://meetingplace.io/virtual-coffee) and get the link to our Zoom.
 
-#### 2. Complete the registration form :blush: {.mt-5 .mb-4}
+#### 2. Complete the registration form 😊 {.mt-5 .mb-4}
 
 Our MC will drop the link of the New Member Form together with the [Code of Conduct](/code-of-conduct/) and other links during the intro of Coffee. The New Member Form will be dropped again at the end of the session.
 
