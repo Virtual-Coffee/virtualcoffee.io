@@ -29,18 +29,27 @@ Virtual Coffee is focused on being a positive and supporting place. We’re here
 
 Virtual Coffee's mission is to be a welcoming tech community that allows room for growth and mentorship at all levels, and to create meaningful opportunities for learning, leadership, and contribution for everyone.
 
+## Our Vision
+
+We welcome and support developers at all stages to create a more empathetic tech community.
+
+## Our Core Values
+
+<ul>
+<li>We use a person-first approach.</li>
+<li>We let intimacy, empathy, and respect inform our decisions.</li>
+<li>We create and support positive and inclusive community.</li>
+<li>We work to remove tech barriers.</li>
+<li>We believe everyone has the ability to teach and learn, and that collaboration of developers at all stages enriches our community.</li>
+<li>We meet people where they are, make space for everyone, and encourage the exchange and explorations of new ideas to create close relationships.</li>
+<li>We believe in a growth-mindset and encourage and create meaningful opportunities for learning and mentorship, creating a closer community through participation, leadership, and contributions.</li>
+<li>We value synchronous communication and events as a medium that encourages all of the above and enriches the asynchronous experiences.</li>
+</ul>
+
 ---
 
-## Frequently Asked Questions
+### Becoming a Member
 
-<dl>
-  <dt>How do I become a member?</dt>
-  <dd>
-    <p>To become a member of Virtual Coffee, all you need to do is <a href="/events">attend a Tuesday or Thursday Coffee</a> and submit the form you'll receive at coffee. We absolutely love the closeness of this community and know it’s one of the many things that sets us apart. This closeness starts with those coffees.</p>
-  </dd>
+To become a member of Virtual Coffee, all you need to do is <a href="/events">attend a Tuesday or Thursday Coffee</a> and submit the form you'll receive at coffee. We absolutely love the closeness of this community and know it’s one of the many things that sets us apart. This closeness starts with those coffees.
 
-  <dt>Are there any other days and times?</dt>
-  <dd>
-    <p>Not yet, but we're working on it!</p>
-  </dd>
-</dl>
+You can find out more about our community and what we offer in our <a href="/https://virtualcoffee.io/member-resources/">Member Resources section</a>.
