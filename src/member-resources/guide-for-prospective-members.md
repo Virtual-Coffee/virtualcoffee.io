@@ -26,7 +26,7 @@ Thus, we provide here the F.A.Q. around Virtual Coffee for you!
 
 {% textContainer 'white' %}
 
-## Table of Contents:
+<h2>Table of Contents</h2>
 
 ${toc}
 
@@ -40,7 +40,7 @@ ${toc}
 
 {% leadText %}
 
-You need to attend one of [Coffees (Zoom Meetings)](/member-resources/guide-to-vc/#coffees-(zoom-meetings)) on **Tuesday at 9:00 AM ET** or **Thursday at 12:00 PM ET** that last an hour.
+You need to attend one of [Coffees (Zoom Meetings)](</member-resources/guide-to-vc/#coffees-(zoom-meetings)>) on **Tuesday at 9:00 AM ET** or **Thursday at 12:00 PM ET** that last an hour.
 
 {% endleadText %}
 
