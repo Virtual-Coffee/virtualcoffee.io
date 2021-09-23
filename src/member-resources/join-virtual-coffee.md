@@ -14,11 +14,7 @@ Hi there! 👋 {.display-5 .mb-5}
 
 {% leadText %}
 
-Since you’re on this page, you must have heard about Virtual Coffee. And now you wonder, how to join this community?
-
-That is one of the most frequent questions that we received, along with other questions.
-
-Thus, we provide here the F.A.Q. around Virtual Coffee for you!
+Since you’re on this page, you must have heard about Virtual Coffee. We're glad you're here and interested in learning more. We've created a list of the top questions about Virtual Coffee below. If there's a question you have and you don't see answered here, feel free to <a href="mailto:hello@virtualcoffee.io">reach out to us</a>.
 
 {% endleadText %}
 
