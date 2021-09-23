@@ -35,16 +35,14 @@ We welcome and support developers at all stages to create a more empathetic tech
 
 ## Our Core Values
 
-<ul>
-<li>We use a person-first approach.</li>
-<li>We let intimacy, empathy, and respect inform our decisions.</li>
-<li>We create and support positive and inclusive community.</li>
-<li>We work to remove tech barriers.</li>
-<li>We believe everyone has the ability to teach and learn, and that collaboration of developers at all stages enriches our community.</li>
-<li>We meet people where they are, make space for everyone, and encourage the exchange and explorations of new ideas to create close relationships.</li>
-<li>We believe in a growth-mindset and encourage and create meaningful opportunities for learning and mentorship, creating a closer community through participation, leadership, and contributions.</li>
-<li>We value synchronous communication and events as a medium that encourages all of the above and enriches the asynchronous experiences.</li>
-</ul>
+- We use a person-first approach.
+- We let intimacy, empathy, and respect inform our decisions.
+- We create and support positive and inclusive community.
+- We work to remove tech barriers.
+- We believe everyone has the ability to teach and learn, and that collaboration of developers at all stages enriches our community.
+- We meet people where they are, make space for everyone, and encourage the exchange and explorations of new ideas to create close relationships.
+- We believe in a growth-mindset and encourage and create meaningful opportunities for learning and mentorship, creating a closer community through participation, leadership, and contributions.
+- We value synchronous communication and events as a medium that encourages all of the above and enriches the asynchronous experiences.
 
 ---
 
