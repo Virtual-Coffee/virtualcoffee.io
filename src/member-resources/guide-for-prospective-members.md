@@ -1,7 +1,7 @@
 ---
 layout: layouts/default.njk
-title: Guide To Join Virtual Coffee
-description: A guide for people who interested to join Virtual Coffee.
+title: Join Virtual Coffee
+description: We're answering your questions around joining Virtual Coffee!
 hero: 'svg/undraw_join_of2w.svg'
 heroHeader: 'Join Virtual Coffee'
 heroSubheader: We're answering your questions around joining Virtual Coffee!
@@ -63,8 +63,8 @@ You can introduce yourself in this channel. We would love to know who you are, w
 
 ### What is going on in Coffees? {.mt-3 .mb-4}
 
-We’re getting to know other members, old and new, through casual conversations on Zoom. We prioritize empathy, encouraging everyone to participate in the ways that are most comfortable to them, and learning together. 
-Check out our [Guide To Virtual Coffee](/member-resources/guide-to-vc/) for more details. 
+We’re getting to know other members, old and new, through casual conversations on Zoom. We prioritize empathy, encouraging everyone to participate in the ways that are most comfortable to them, and learning together.
+Check out our [Guide To Virtual Coffee](/member-resources/guide-to-vc/) for more details.
 
 ---
 
@@ -101,7 +101,7 @@ Feel free to take a glimpse of [what’s going on in Virtual Coffee](/member-res
 
 ### Is there any membership fee? {.mt-3 .mb-4}
 
-None, *nada*! You don’t need to pay memberships to join Virtual Coffee.
+None, _nada_! You don’t need to pay memberships to join Virtual Coffee.
 Our members volunteer their time and support for Virtual Coffee.
 [Sponsorships](https://github.com/sponsors/Virtual-Coffee) helps us to continue serving the Virtual Coffee community and to support all of the things you see on this website!
 
