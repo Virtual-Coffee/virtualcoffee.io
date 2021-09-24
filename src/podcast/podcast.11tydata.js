@@ -1,5 +1,6 @@
 const ImgixClient = require('@imgix/js-core');
-const Cache = require('@11ty/eleventy-cache-assets');
+const fetch = require('node-fetch');
+const { AssetCache } = require('@11ty/eleventy-cache-assets');
 
 const useImgix =
   process.env.USE_IMGIX || process.env.ELEVENTY_ENV === 'production';
@@ -9,6 +10,34 @@ var imgixClient = new ImgixClient({
 });
 
 const podID = '1558601';
+
+async function cacheWithEmpty(slug, url, duration = '5d') {
+  let asset = new AssetCache(slug);
+  try {
+    // check if the cache is fresh within the last day
+    if (asset.isCacheValid(duration)) {
+      // return cached data.
+      return asset.getCachedValue(); // a promise
+    }
+    console.log(`Caching asset ${slug}`);
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error('Bad response');
+    }
+
+    const json = await response.json();
+
+    await asset.save(json, 'json');
+
+    return json;
+  } catch (error) {
+    // console.log(error);
+    console.log(`No transcript found for ${slug}`);
+    await asset.save(null, 'json');
+    return null;
+  }
+}
 
 // /:podcast_id/:episode_id/transcript(.format)
 module.exports = {
@@ -77,12 +106,9 @@ module.exports = {
       try {
         if (data.podcast.id) {
           try {
-            const response = await Cache(
-              `https://www.buzzsprout.com/${podID}/${data.podcast.id}/transcript.json`,
-              {
-                duration: '5d', // 1 day
-                type: 'json', // also supports "text" or "buffer"
-              }
+            const response = await cacheWithEmpty(
+              data.page.fileSlug,
+              `https://www.buzzsprout.com/${podID}/${data.podcast.id}/transcript.json`
             );
 
             if (response && response.segments) {
@@ -116,7 +142,7 @@ module.exports = {
               }, []);
             }
           } catch (error) {
-            console.log(`No transcript found for ${data.page.fileSlug}`);
+            console.log(`Error loading transcript: ${error.message}`);
           }
         }
       } catch (error) {
