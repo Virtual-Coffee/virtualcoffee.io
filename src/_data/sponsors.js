@@ -1,6 +1,5 @@
 const { GraphQLClient, gql } = require('graphql-request');
 require('dotenv').config();
-const fetch = require('node-fetch');
 const { AssetCache } = require('@11ty/eleventy-cache-assets');
 
 const sponsorOverrides = {
@@ -70,14 +69,14 @@ const query = gql`
 
 module.exports = async function () {
   // async function main() {
-  let headers = new fetch.Headers({
+  let headers = {
     Accept: 'application/vnd.github.v3+json',
-  });
+  };
 
   const token = process.env.GITHUB_TOKEN;
 
   if (token) {
-    headers.set('Authorization', 'bearer ' + token);
+    headers.Authorization = 'bearer ' + token;
   }
 
   const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {

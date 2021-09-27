@@ -1,20 +1,19 @@
 const { GraphQLClient, gql } = require('graphql-request');
 require('dotenv').config();
-const fetch = require('node-fetch');
 var fs = require('fs');
 const path = require('path');
 const { AssetCache } = require('@11ty/eleventy-cache-assets');
 const mockMemberData = require('../../__mockdata/memberData');
 
 module.exports = async function () {
-  let headers = new fetch.Headers({
+  let headers = {
     Accept: 'application/vnd.github.v3+json',
-  });
+  };
 
   const token = process.env.GITHUB_TOKEN;
 
   if (token) {
-    headers.set('Authorization', 'bearer ' + token);
+    headers.Authorization = 'bearer ' + token;
   } else {
     return mockMemberData;
   }
