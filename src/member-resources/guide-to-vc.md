@@ -166,7 +166,7 @@ If a member has a topic that they want to present as a Lunch & Learn, they can d
 
 Occasionally we hold Lightning Talk sessions. A group of members take turns presenting their talk in a 5-20 minutes time range. A Call for Proposals will be shared in Virtual Coffee Slack. This is a great way to try your hand at public speaking! We always provide mentorship for those who want it.
 
-Do check the (playlist on youtube)[https://www.youtube.com/playlist?list=PLh9uT23TA65infGqUUaVibI0IssI0G6NY] from our latest sessions!
+Do check the [playlist on youtube](https://www.youtube.com/playlist?list=PLh9uT23TA65infGqUUaVibI0IssI0G6NY) from our latest sessions!
 
 #### HacktoberFest
 
