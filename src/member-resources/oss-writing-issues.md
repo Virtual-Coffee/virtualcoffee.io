@@ -23,9 +23,9 @@ There is not one good way to write issues. But there are things we want to avoid
 
 Some important things to remember:
 
-- <strong>Provide facts.</strong> An issue needs facts, which can include pictures, metrics, and more. It is easier to explain than just using words.
-- <strong>Describe the issue.</strong> Follow any templates provided by the organization and/or asking yourself: What, Where, When, How and Why.
-- <strong>Don't solve the issue.</strong> You are not expected to solve the issue. It happens of course, but it's important that the issue is clearly describes so that anyone can understand it without being in your head. 🙂
+- **Provide facts.** An issue needs facts, which can include pictures, metrics, and more. It is easier to explain than just using words.
+- **Describe the issue.** Follow any templates provided by the organization and/or asking yourself: What, Where, When, How and Why.
+- **Don't solve the issue.** You are not expected to solve the issue. It happens of course, but it's important that the issue is clearly describes so that anyone can understand it without being in your head. 🙂
 
 A suggested solution can be a good thing, especially to help the contributors who have less experience. When you're writing issues on a repository that isn't your own, you might not have all of the context to provide the best solution. This is why--although suggestions are appreciated--the maintainers have the final say in the solution and/or approach to the issue.
 
@@ -55,17 +55,17 @@ Remember, there isn't one way to do it. We're going to walk you through how to c
 - A title that is clear enough to identify in few words what the problem is about.
 - Screenshots of the issue is in the UI, logs if it's a performance issue, or anything that proves the existence of the problem.
 - Your setup: type of device and OS version, type of browser and version, any kind of setup that can help reproducing the problem.
-- Description of how to reproduce the bug / behavior (the buttons you clicked, the request you've made,...)
+- Description of how to reproduce the bug / behavior (the buttons you clicked, the request you've made...)
 - If you think of a solution to solve the problem, you can suggest something. Remember that your solution may not be the best solution for that specific issue/technology/repo...
 - Links to any issue or discussion that relates to this issue.
 
 ### Feature Issue
 
-- <strong>A Title</strong>: Clear enough to identify in few words what the problem is about.
-- <strong>Context for the issue</strong>: Describe the feature request.
-- <strong>Proposed Solution</strong>: What do you think the solution should be and why? If you don't have a suggestion, that's fine too!
-- <strong>Alternatives Considered</strong>: If you have thought about other solutions, what have you thought about and why did you think they weren't the best solution to the request?
-- <strong>Links</strong>: Any issue or discussion that relates to this issue.
+- **A Title**: Clear enough to identify in few words what the problem is about.
+- **Context for the issue**: Describe the feature request.
+- **Proposed Solution**: What do you think the solution should be and why? If you don't have a suggestion, that's fine too!
+- **Alternatives Considered**: If you have thought about other solutions, what have you thought about and why did you think they weren't the best solution to the request?
+- **Links**: Any issue or discussion that relates to this issue.
 
 ### Documentation Change
 
