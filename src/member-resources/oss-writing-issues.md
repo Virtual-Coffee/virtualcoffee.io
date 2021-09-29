@@ -2,7 +2,7 @@
 layout: layouts/default.njk
 title: How to Write a Good Issue
 description: A user guide for current members to get the most out of Virtual Coffee.
-hero: 'svg/undraw_product_teardown_elol.svg'
+hero: 'svg/undraw_fixing_bugs_w7gi.svg'
 heroHeader: 'How to Write a Good Issue'
 heroSubheader: A user guide for current members to get the most out of Virtual Coffee.
 tags: memberresources
@@ -11,7 +11,7 @@ order: 1
 
 {% textContainer 'light'%}
 
-## Table of Contents:
+<h2>Table of Contents</h2>
 
 ${toc}
 
