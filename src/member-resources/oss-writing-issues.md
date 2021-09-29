@@ -44,7 +44,7 @@ A suggested solution can be a good thing, especially to help the contributors wh
 
 Remember, there isn't one way to do it. We're going to walk you through how to create an issue, and reference the Virtual Coffee repository as an example.
 
-1.  Go to a repository. Let's check out [VirtualCoffee.io](http://virtualcoffee.io/)[ repository](https://github.com/Virtual-Coffee/virtualcoffee.io/)
+1.  Go to a repository. Let's check out [Virtual Coffee repository](https://github.com/Virtual-Coffee/virtualcoffee.io/)
 2.  Navigate to the [Issue Tab](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/)
 3.  Check is if there is an [available template](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new/choose). You can find this by clicking the New Issue button on a repository.
     - In repos that are used to get a lot of traffic and issues, there is often an automatic template that appears when you create the issue. In that case, follow exactly the steps and requirements.
