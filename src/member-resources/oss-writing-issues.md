@@ -27,16 +27,16 @@ Some important things to remember:
 - **Describe the issue.** Follow any templates provided by the organization and/or asking yourself: What, Where, When, How and Why.
 - **Don't solve the issue.** You are not expected to solve the issue. It happens of course, but it's important that the issue is clearly describes so that anyone can understand it without being in your head. 🙂
 
-A suggested solution can be a good thing, especially to help the contributors who have less experience. When you're writing issues on a repository that isn't your own, you might not have all of the context to provide the best solution. This is why--although suggestions are appreciated--the maintainers have the final say in the solution and/or approach to the issue.
+A suggested solution can be a good thing, especially to help the contributors who have less experience. When you're writing issues on a repository that isn't your own, you might not have all of the context to provide the best solution. This is why, although suggestions are appreciated, the maintainers have the final say in the solution and/or approach to the issue.
 
 ---
 
 ### Tips Before Writing an Issue
 
-- Check the repository's ReadMe and Contributing guide--if they have one--to learn about how the maintainers expect communication and issues to be created. For example, some repositories require you to start a discussion before making an issue.
+- Check the repository's ReadMe and Contributing guide (if they have one) to learn about how the maintainers expect communication and issues to be created. For example, some repositories require you to start a discussion before making an issue.
 - Check current issues and closed issues to make sure no one has already written the issue you're going to write.
 - If the organization has discussions enabled, check to see if it's been mentioned there as well.
-- Check the Code of Conduct (COC) to make sure you participate in a way that's consistent with the organization's guidelines. Absence of a COC is unfortunate but doesn't mean people should be rude or disrespectful, even if the issue is "super frustrating."
+- Check the Code of Conduct (commonly abbreviated as "COC") to make sure you participate in a way that's consistent with the organization's guidelines. Absence of a COC is unfortunate but doesn't mean people should be rude or disrespectful, even if the issue is _super frustrating_.
 
 {% endtextContainer %}
 
