@@ -1,12 +1,17 @@
 ---
-layout: layouts/default.njk
+layout: layouts/resources.njk
 title: Open Source Software Maintainer Checklist
 description: A handy checklist for Open Source maintainers!
 hero: 'svg/undraw_To_do_list_re_9nt7.svg'
 heroHeader: 'Open Source Software Maintainer Checklist'
 heroSubheader: A handy checklist for Open Source maintainers!
 tags: memberresources
-order: 3
+eleventyNavigation:
+  key: MaintainerChecklist
+  title: Maintainer Checklist
+  excerpt: A handy checklist for Open Source maintainers!
+  parent: OSS
+  order: 2
 ---
 
 {% textContainer %}

@@ -1,12 +1,17 @@
 ---
-layout: layouts/default.njk
+layout: layouts/resources.njk
 title: Guide To Virtual Coffee
 description: A user guide for current members to get the most out of Virtual Coffee.
 hero: 'svg/undraw_product_teardown_elol.svg'
 heroHeader: 'About Virtual Coffee'
 heroSubheader: A user guide for current members to get the most out of Virtual Coffee.
 tags: memberresources
-order: 1
+eleventyNavigation:
+  key: GuideToVirtualCoffee
+  title: Guide To Virtual Coffee
+  excerpt: A user guide for current members to get the most out of Virtual Coffee.
+  parent: VcResources
+  order: 2
 ---
 
 {% textContainer 'light'%}
@@ -25,7 +30,7 @@ To give you the best experience, and to get the most out of Virtual Coffee, we c
 
 ---
 
-## Table of Contents:
+<h2>Table of Contents</h2>
 
 ${toc}
 

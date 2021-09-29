@@ -1,11 +1,17 @@
 ---
-layout: layouts/default.njk
+layout: layouts/resources.njk
 title: Join Virtual Coffee
 description: We're answering your questions around joining Virtual Coffee!
 hero: 'svg/undraw_join_of2w.svg'
 heroHeader: 'Join Virtual Coffee'
 heroSubheader: We're answering your questions around joining Virtual Coffee!
 tags: memberresources
+eleventyNavigation:
+  key: Join
+  title: Join Virtual Coffee
+  excerpt: We're answering your questions around joining Virtual Coffee!
+  parent: VcResources
+  order: 1
 ---
 
 {% textContainer 'light'%}
