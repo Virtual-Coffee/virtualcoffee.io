@@ -29,6 +29,8 @@ Some important things to remember:
 
 A suggested solution can be a good thing, especially to help the contributors who have less experience. When you're writing issues on a repository that isn't your own, you might not have all of the context to provide the best solution. This is why--although suggestions are appreciated--the maintainers have the final say in the solution and/or approach to the issue.
 
+---
+
 ### Tips Before Writing an Issue
 
 - Check the repository's ReadMe and Contributing guide--if they have one--to learn about how the maintainers expect communication and issues to be created. For example, some repositories require you to start a discussion before making an issue.
@@ -44,11 +46,11 @@ A suggested solution can be a good thing, especially to help the contributors wh
 
 Remember, there isn't one way to do it. We're going to walk you through how to create an issue, and reference the Virtual Coffee repository as an example.
 
-1.  Go to a repository. Let's check out [Virtual Coffee repository](https://github.com/Virtual-Coffee/virtualcoffee.io/)
-2.  Navigate to the [Issue Tab](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/)
-3.  Check is if there is an [available template](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new/choose). You can find this by clicking the New Issue button on a repository.
-    - In repos that are used to get a lot of traffic and issues, there is often an automatic template that appears when you create the issue. In that case, follow exactly the steps and requirements.
-4.  If there are no specific rules, here is a list of what's good to share in different types of issues:
+1. Go to a repository. Let's check out [Virtual Coffee repository](https://github.com/Virtual-Coffee/virtualcoffee.io/)
+2. Navigate to the [Issue Tab](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/)
+3. Check is if there is an [available template](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new/choose). You can find this by clicking the New Issue button on a repository.
+   - In repos that are used to get a lot of traffic and issues, there is often an automatic template that appears when you create the issue. In that case, follow exactly the steps and requirements.
+4. If there are no specific rules, here is a list of what's good to share in different types of issues:
 
 ### Bug Issue
 
@@ -63,11 +65,11 @@ Remember, there isn't one way to do it. We're going to walk you through how to c
 
 ### Feature Issue
 
-- **A Title**: Clear enough to identify in few words what the problem is about.
-- **Context for the issue**: Describe the feature request.
-- **Proposed Solution**: What do you think the solution should be and why? If you don't have a suggestion, that's fine too!
-- **Alternatives Considered**: If you have thought about other solutions, what have you thought about and why did you think they weren't the best solution to the request?
-- **Links**: Any issue or discussion that relates to this issue.
+- **A Title:** Clear enough to identify in few words what the problem is about.
+- **Context for the issue:** Describe the feature request.
+- **Proposed Solution:** What do you think the solution should be and why? If you don't have a suggestion, that's fine too!
+- **Alternatives Considered:** If you have thought about other solutions, what have you thought about and why did you think they weren't the best solution to the request?
+- **Links:** Any issue or discussion that relates to this issue.
 
 ### Documentation Change
 
