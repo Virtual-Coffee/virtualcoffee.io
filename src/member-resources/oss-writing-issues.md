@@ -54,10 +54,12 @@ Remember, there isn't one way to do it. We're going to walk you through how to c
 
 ### Bug Issue
 
-- A title that is clear enough to identify in few words what the problem is about.
 - Screenshots of the issue is in the UI, logs if it's a performance issue, or anything that proves the existence of the problem.
-- Your setup: type of device and OS version, type of browser and version, any kind of setup that can help reproducing the problem.
-- Description of how to reproduce the bug / behavior (the buttons you clicked, the request you've made...)
+- **Your setup**: type of device and OS version, type of browser and version, any kind of setup that can help reproducing the problem.
+- **Description**: Add the steps to reproduce the bug/behavior. Some things to consider:
+  - what you think the correct behavior _should_ be.
+  - the current behavior and how it differs.
+  - the conditions required to produce the bug. For example, the buttons you clicked, the request you've made, etc.
 - If you think of a solution to solve the problem, you can suggest something. Remember that your solution may not be the best solution for that specific issue/technology/repo...
 - Links to any issue or discussion that relates to this issue.
 
