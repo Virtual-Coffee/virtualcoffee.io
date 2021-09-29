@@ -55,8 +55,8 @@ Remember, there isn't one way to do it. We're going to walk you through how to c
 ### Bug Issue
 
 - Screenshots of the issue is in the UI, logs if it's a performance issue, or anything that proves the existence of the problem.
-- **Your setup**: type of device and OS version, type of browser and version, any kind of setup that can help reproducing the problem.
-- **Description**: Add the steps to reproduce the bug/behavior. Some things to consider:
+- **Your setup:** type of device and OS version, type of browser and version, any kind of setup that can help reproducing the problem.
+- **Description:** Add the steps to reproduce the bug/behavior. Some things to consider:
   - what you think the correct behavior _should_ be.
   - the current behavior and how it differs.
   - the conditions required to produce the bug. For example, the buttons you clicked, the request you've made, etc.
