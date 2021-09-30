@@ -14,21 +14,23 @@
               <h5 class="membercard-name">
                 <a href="{{member.mainUrl}}" target="_blank" rel="noopener noreferrer">{{member.name}}</a>
               </h5>
-              <div class="membercard-social">
-                {% for item in member.accounts %}
-                  <a href="{{item.url}}" class="membercard-icon" title="{{item.title}}" target="_blank" rel="noopener noreferrer">{% include "svg/" + item.type + ".svg" %}</a>
-
-                {% endfor %}
-              </div>
 
 
+              {% if member.teams|length %}
               <div class="membercard-teams">
                 {% for team in member.teams %}
                   <span class="badge badge-secondary">{{team}}</span>
                 {% endfor %}
               </div>
+              {% endif %}
 
           </div>
+          <div class="membercard-social">
+                {% for item in member.accounts %}
+                  <a href="{{item.url}}" class="membercard-icon" title="{{item.title}}" target="_blank" rel="noopener noreferrer">{% include "svg/" + item.type + ".svg" %}</a>
+
+                {% endfor %}
+              </div>
           <div class="membercard-bd">
             {% if member.bio %}
               <div class="text-muted">{{member.bio | safe}}</div>

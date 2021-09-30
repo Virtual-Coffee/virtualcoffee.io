@@ -127,15 +127,21 @@ module.exports = async function () {
       response.search.nodes.forEach((user) => {
         githubData[user.login.toLowerCase()] = {
           ...user,
-          teams: teamsDict[user.login.toLowerCase()] || [],
         };
       });
     }
 
     const fixupData = (data) => {
-      const github = githubData[data.github];
+      const github = githubData[data.github.toLowerCase()];
+
+      if (!github) {
+        console.log(`no github for ${data.github}`);
+        return {};
+      }
 
       data.avatarUrl = github.avatarUrl;
+
+      data.teams = teamsDict[data.github.toLowerCase()] || [];
 
       if (!data.name) {
         data.name = github.name || github.login;
