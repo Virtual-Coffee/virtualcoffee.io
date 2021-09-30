@@ -1,6 +1,6 @@
 name: 📄 Content Change
 description: The content on the site needs updated or fixed.
-labels: ['Status: Needs Triage']
+labels: ['Status: Needs Triage', 'Type: Content']
 body:
   - type: markdown
     attributes:
