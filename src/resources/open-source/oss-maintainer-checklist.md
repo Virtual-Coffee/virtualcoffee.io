@@ -14,9 +14,9 @@ eleventyNavigation:
   order: 2
 ---
 
-{% textContainer %}
+{% textContainer 'light'%}
 
-# What is this document for?
+What is this document for? {.display-5 .mb-5}
 
 {% leadText %}
 
@@ -25,6 +25,8 @@ This document is a short and simple guide to help you determine if a GitHub repo
 This also doubles as our very own guide for Virtual Coffee-endorsed Open Source projects.
 
 {% endleadText %}
+{% endtextContainer %}
+{% textContainer 'white' %}
 
 ---
 
