@@ -17,6 +17,24 @@ body:
       options:
         - label: I have searched the existing issues
           required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type of Change
+      description: What type of content change is this?
+      options:
+        - Typo
+        - Edit/Clarification on existing content
+        - New section on existing page
+        - Brand new page
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: URL of existing page
+      description: If this is a change on an existing page, paste the url here
+      placeholder: 'https://virtualcoffee.io/...'
   - type: textarea
     id: context-for-change
     attributes:
