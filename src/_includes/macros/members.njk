@@ -25,12 +25,7 @@
               {% endif %}
 
           </div>
-          <div class="membercard-social">
-                {% for item in member.accounts %}
-                  <a href="{{item.url}}" class="membercard-icon" title="{{item.title}}" target="_blank" rel="noopener noreferrer">{% include "svg/" + item.type + ".svg" %}</a>
 
-                {% endfor %}
-              </div>
           <div class="membercard-bd">
             {% if member.bio %}
               <div class="text-muted">{{member.bio | safe}}</div>
@@ -41,6 +36,12 @@
               </div>
             {% endif %}
           </div>
+          <div class="membercard-social">
+                {% for item in member.accounts %}
+                  <a href="{{item.url}}" class="membercard-icon" title="{{item.title}}" target="_blank" rel="noopener noreferrer">{% include "svg/" + item.type + ".svg" %}</a>
+
+                {% endfor %}
+              </div>
         </div>
       {% endif %}
     {% endfor %}
