@@ -24,10 +24,10 @@ module.exports = async function () {
     let asset = new AssetCache('vc_members_1.3');
 
     // // check if the cache is fresh within the last day
-    // if (asset.isCacheValid('0d')) {
-    //   // return cached data.
-    //   return asset.getCachedValue(); // a promise
-    // }
+    if (asset.isCacheValid('1d')) {
+      // return cached data.
+      return asset.getCachedValue(); // a promise
+    }
 
     console.log('Fetching member data...');
 
@@ -246,7 +246,6 @@ module.exports = async function () {
     memberData.members = memberData.members.map(fixupData);
 
     await asset.save(memberData, 'json');
-    console.log(memberData);
     return memberData;
   } catch (error) {
     console.log(error.message);
