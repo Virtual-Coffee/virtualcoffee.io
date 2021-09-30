@@ -9,7 +9,9 @@ module.exports = {
   // mainUrl: the url your name links to on the members page. defaults to your github profile
   mainUrl: 'https://www.dtott.com',
   // bio - accepts markdown.
-  bio: 'Hey _this_ is **dan**',
+  bio: `Independent front-end designer and developer, father, #ADHD person, and Clevelander.
+
+  He/him`,
   // can take  one of each type except website - you can add as many `website` accounts as you wish
   accounts: [
     { type: 'linkedin', username: 'danieltott' },
@@ -17,7 +19,11 @@ module.exports = {
     { type: 'codenewbie', username: 'danieltott' },
     { type: 'twitter', username: 'danieltott' },
     { type: 'twitch', username: 'dtott' },
-    { type: 'youtube', channelId: 'UC3PxZTbkvroxSj0QScllSBg' },
+    {
+      type: 'youtube',
+      channelId: 'UCc0579aGEy7jTAgRglR4J0g',
+      customUrl: 'https://www.youtube.com/c/VirtualCoffeeIO',
+    },
     { type: 'polywork', username: 'danieltott' },
     { type: 'medium', username: 'danieltott' },
     { type: 'hashnode', username: 'danieltott' },

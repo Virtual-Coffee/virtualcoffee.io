@@ -21,7 +21,7 @@ module.exports = {
     // { type: 'codenewbie', username: 'yourUserName' },
     // { type: 'twitter', username: 'yourUserName' },
     // { type: 'twitch', username: 'yourUserName' },
-    // { type: 'youtube', channelId: 'yourChannelId' },
+    // { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
     // { type: 'polywork', username: 'yourUserName' },
     // { type: 'medium', username: 'yourUserName' },
     // { type: 'hashnode', username: 'yourUserName' },
