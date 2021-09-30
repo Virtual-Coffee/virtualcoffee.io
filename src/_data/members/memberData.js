@@ -24,10 +24,10 @@ module.exports = async function () {
     let asset = new AssetCache('vc_members_1.3');
 
     // // check if the cache is fresh within the last day
-    if (asset.isCacheValid('1d')) {
-      // return cached data.
-      return asset.getCachedValue(); // a promise
-    }
+    // if (asset.isCacheValid('1d')) {
+    //   // return cached data.
+    //   return asset.getCachedValue(); // a promise
+    // }
 
     console.log('Fetching member data...');
 
@@ -149,6 +149,14 @@ module.exports = async function () {
 
       if (!data.bio) {
         data.bio = github.bioHTML;
+      } else {
+        const markdownIt = require('markdown-it');
+        let markdownLibrary = markdownIt({
+          html: false,
+          breaks: true,
+          linkify: true,
+        });
+        data.bio = markdownLibrary.render(data.bio);
       }
 
       if (!data.mainUrl) {

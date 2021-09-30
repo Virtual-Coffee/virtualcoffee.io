@@ -1,6 +1,6 @@
 module.exports = {
   // github username: required
-  github: 'saramccombs',
+  github: 'jonathanyeong',
   //
   // everything below here is optional. by default, we pull most profile data from your github profile.
   // you can override that data here, as well as provide some additional account links below
