@@ -16,9 +16,12 @@
   align-items: flex-start;
   grid-template-rows: min-content 1fr;
   grid-gap: 1rem;
-  border-bottom: 1px solid rgba($pink, 0.2);
-  padding-bottom: map-get($spacers, 4);
   scroll-margin-top: 100px;
+  padding-top: 15px;
+  // background-image: linear-gradient(to right, $orange, $pink);
+  background-image: $gradient-primary;
+  background-size: 100% 5px;
+  background-repeat: no-repeat;
 
   &:last-child {
     border-bottom: none;
@@ -30,8 +33,6 @@
   }
 
   @include media-breakpoint-up(md) {
-    border: 0;
-    padding-bottom: 0;
     grid-template-columns: 1fr 3fr 3.25rem;
   }
 
