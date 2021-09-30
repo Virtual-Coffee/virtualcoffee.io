@@ -24,10 +24,10 @@ module.exports = async function () {
     let asset = new AssetCache('vc_members_1.3');
 
     // // check if the cache is fresh within the last day
-    if (asset.isCacheValid('1d')) {
-      // return cached data.
-      return asset.getCachedValue(); // a promise
-    }
+    // if (asset.isCacheValid('0d')) {
+    //   // return cached data.
+    //   return asset.getCachedValue(); // a promise
+    // }
 
     console.log('Fetching member data...');
 
@@ -74,18 +74,36 @@ module.exports = async function () {
       });
     });
 
-    const memberData = {};
-    const membersdata = JSON.parse(
-      fs.readFileSync(path.resolve(__dirname, 'members.json'), 'utf8')
-    );
+    const memberData = {
+      members: fs
+        .readdirSync(path.resolve(__dirname, 'members'))
+        .map(function (filename) {
+          return require(path.resolve(__dirname, 'members', filename));
+        }),
+      core: fs
+        .readdirSync(path.resolve(__dirname, 'core'))
+        .map(function (filename) {
+          return require(path.resolve(__dirname, 'core', filename));
+        })
+        .sort(function (a, b) {
+          var nameA = a.github.toLowerCase(); // ignore upper and lowercase
+          var nameB = b.github.toLowerCase(); // ignore upper and lowercase
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
 
-    const coredata = JSON.parse(
-      fs.readFileSync(path.resolve(__dirname, 'core.json'), 'utf8')
-    );
+          // names must be equal
+          return 0;
+        }),
+    };
 
-    const data = [...coredata, ...membersdata];
+    const data = [...memberData.core, ...memberData.members];
 
     const queries = [];
+    const githubData = {};
 
     let i,
       j,
@@ -94,7 +112,9 @@ module.exports = async function () {
       queries.push(
         `${data
           .slice(i, i + chunk)
-          .map((username) => `user:${username}`)
+          .map((member) => {
+            return `user:${member.github}`;
+          })
           .join(' ')}`
       );
     }
@@ -105,17 +125,131 @@ module.exports = async function () {
       });
 
       response.search.nodes.forEach((user) => {
-        memberData[user.login.toLowerCase()] = {
+        githubData[user.login.toLowerCase()] = {
           ...user,
           teams: teamsDict[user.login.toLowerCase()] || [],
         };
       });
     }
 
-    await asset.save(memberData, 'json');
+    const fixupData = (data) => {
+      const github = githubData[data.github];
 
+      data.avatarUrl = github.avatarUrl;
+
+      if (!data.name) {
+        data.name = github.name || github.login;
+      }
+
+      if (!data.bio) {
+        data.bio = github.bioHTML;
+      }
+
+      if (!data.mainUrl) {
+        if (github.websiteUrl) {
+          data.mainUrl =
+            github.websiteUrl.slice(0, 4) !== 'http'
+              ? `https://${github.websiteUrl}`
+              : github.websiteUrl;
+        } else {
+          data.mainUrl = github.url;
+        }
+      }
+
+      if (!data.accounts) {
+        data.accounts = [{ type: 'github', username: github.login }];
+      }
+
+      if (
+        github.twitterUsername &&
+        !data.accounts.find((account) => account.type === 'twitter')
+      ) {
+        data.accounts.push({
+          type: 'twitter',
+          username: github.twitterUsername,
+        });
+      }
+
+      if (!data.accounts.find((account) => account.type === 'github')) {
+        data.accounts = [
+          { type: 'github', username: github.login },
+          ...data.accounts,
+        ];
+      }
+
+      data.accounts = data.accounts
+        .map((account) => {
+          switch (account.type) {
+            case 'github':
+              return {
+                ...account,
+                url: `https://github.com/${account.username}`,
+                title: `${data.name} on GitHub`,
+              };
+
+            case 'linkedin':
+              return {
+                ...account,
+                url: `https://www.linkedin.com/in/${account.username}`,
+                title: `${data.name} on LinkedIn`,
+              };
+
+            case 'dev':
+              return {
+                ...account,
+                url: `https://dev.to/${account.username}`,
+                title: `${data.name} on DEV.to`,
+              };
+
+            case 'codenewbie':
+              return {
+                ...account,
+                url: `https://community.codenewbie.org/${account.username}`,
+                title: `${data.name} on CodeNewbie Community`,
+              };
+
+            case 'twitter':
+              return {
+                ...account,
+                url: `https://twitter.com/${account.username}`,
+                title: `${data.name} on Twitter`,
+              };
+
+            case 'twitch':
+              return {
+                ...account,
+                url: `https://www.twitch.tv/${account.username}`,
+                title: `${data.name} on Twitch`,
+              };
+
+            case 'youtube':
+              return {
+                ...account,
+                url: `https://www.youtube.com/channel/${account.channelId}`,
+                title: `${data.name} on YouTube`,
+              };
+
+            default:
+              return {
+                ...account,
+                type: 'website',
+                title: account.title || account.url,
+              };
+          }
+        })
+        .filter((account) => !!account.url);
+
+      return data;
+    };
+
+    memberData.core = memberData.core.map(fixupData);
+    memberData.members = memberData.members.map(fixupData);
+
+    await asset.save(memberData, 'json');
+    console.log(memberData);
     return memberData;
   } catch (error) {
+    console.log(error.message);
     console.log('Error loading github member data, using fake data instead');
     return mockMemberData;
   }
