@@ -1,4 +1,4 @@
-name: 📄 Content Change
+name: 📖 Content Change
 description: The content on the site needs updated or fixed.
 labels: ['Status: Needs Triage', 'Type: Content']
 body:
