@@ -28,7 +28,7 @@ Since you’re on this page, you must have heard about Virtual Coffee. We're gla
 
 {% textContainer 'white' %}
 
-<h2>Table of Contents</h2>
+## Table of Contents
 
 ${toc}
 
