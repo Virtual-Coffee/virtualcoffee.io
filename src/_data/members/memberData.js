@@ -187,6 +187,9 @@ module.exports = async function () {
         .map((account) => {
           switch (account.type) {
             case 'github':
+              if (!account.username) {
+                return {};
+              }
               return {
                 ...account,
                 url: `https://github.com/${account.username}`,
@@ -194,6 +197,9 @@ module.exports = async function () {
               };
 
             case 'linkedin':
+              if (!account.username) {
+                return {};
+              }
               return {
                 ...account,
                 url: `https://www.linkedin.com/in/${account.username}`,
@@ -201,6 +207,9 @@ module.exports = async function () {
               };
 
             case 'dev':
+              if (!account.username) {
+                return {};
+              }
               return {
                 ...account,
                 url: `https://dev.to/${account.username}`,
@@ -208,6 +217,9 @@ module.exports = async function () {
               };
 
             case 'codenewbie':
+              if (!account.username) {
+                return {};
+              }
               return {
                 ...account,
                 url: `https://community.codenewbie.org/${account.username}`,
@@ -215,6 +227,9 @@ module.exports = async function () {
               };
 
             case 'twitter':
+              if (!account.username) {
+                return {};
+              }
               return {
                 ...account,
                 url: `https://twitter.com/${account.username}`,
@@ -222,13 +237,49 @@ module.exports = async function () {
               };
 
             case 'twitch':
+              if (!account.username) {
+                return {};
+              }
               return {
                 ...account,
                 url: `https://www.twitch.tv/${account.username}`,
                 title: `${data.name} on Twitch`,
               };
 
+            case 'polywork':
+              if (!account.username) {
+                return {};
+              }
+              return {
+                ...account,
+                url: `https://polywork.com/${account.username}`,
+                title: `${data.name} on Polywork`,
+              };
+
+            case 'medium':
+              if (!account.username) {
+                return {};
+              }
+              return {
+                ...account,
+                url: `https://medium.com/@${account.username}`,
+                title: `${data.name} on Medium`,
+              };
+
+            case 'hashnode':
+              if (!account.username) {
+                return {};
+              }
+              return {
+                ...account,
+                url: `https://hashnode.com/@${account.username}`,
+                title: `${data.name} on HashNode`,
+              };
+
             case 'youtube':
+              if (!account.channelId) {
+                return {};
+              }
               return {
                 ...account,
                 url: `https://www.youtube.com/channel/${account.channelId}`,
