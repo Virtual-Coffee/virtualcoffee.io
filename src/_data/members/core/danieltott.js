@@ -14,19 +14,8 @@ module.exports = {
   He/him`,
   // can take  one of each type except website - you can add as many `website` accounts as you wish
   accounts: [
-    { type: 'linkedin', username: 'danieltott' },
     { type: 'dev', username: 'danieltott' },
-    { type: 'codenewbie', username: 'danieltott' },
     { type: 'twitter', username: 'danieltott' },
-    { type: 'twitch', username: 'dtott' },
-    {
-      type: 'youtube',
-      channelId: 'UCc0579aGEy7jTAgRglR4J0g',
-      customUrl: 'https://www.youtube.com/c/VirtualCoffeeIO',
-    },
     { type: 'polywork', username: 'danieltott' },
-    { type: 'medium', username: 'danieltott' },
-    { type: 'hashnode', username: 'danieltott' },
-    { type: 'website', url: 'https://clereact.dev', title: 'Cleveland React' },
   ],
 };
