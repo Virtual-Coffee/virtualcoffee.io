@@ -16,7 +16,7 @@ eleventyNavigation:
 
 {% textContainer 'light'%}
 
-What is this document for? {.display-5 .mb-5}
+## What is this document for? {.display-5 .mb-5}
 
 {% leadText %}
 
@@ -30,7 +30,7 @@ This also doubles as our very own guide for Virtual Coffee-endorsed Open Source 
 
 ---
 
-## Table of Contents:
+<h2>Table of Contents</h2>
 
 ${toc}
 
