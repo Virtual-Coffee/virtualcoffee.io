@@ -12,7 +12,7 @@ module.exports = {
   // mainUrl: the url your name links to on the members page. defaults to your github profile
   // mainUrl: 'https://virtualcoffee.io',
   //
-  mainUrl: 'https://adiati.com'
+  mainUrl: 'https://adiati.com',
   // bio - accepts markdown.
   // bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
   //
