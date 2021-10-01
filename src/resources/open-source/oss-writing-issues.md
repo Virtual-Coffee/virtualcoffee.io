@@ -1,12 +1,17 @@
 ---
-layout: layouts/default.njk
+layout: layouts/resources.njk
 title: How to Write a Good Issue
-description: A user guide for current members to get the most out of Virtual Coffee.
+description: A best practices guide for how to create issues.
 hero: 'svg/undraw_fixing_bugs_w7gi.svg'
 heroHeader: 'How to Write a Good Issue'
-heroSubheader: A user guide for current members to get the most out of Virtual Coffee.
+heroSubheader: A best practices guide for how to create issues.
 tags: memberresources
-order: 1
+eleventyNavigation:
+  key: WritingIssues
+  title: Writing Issues
+  parent: OSS
+  excerpt: A best practices guide for how to create issues.
+  order: 2
 ---
 
 {% textContainer 'light'%}
