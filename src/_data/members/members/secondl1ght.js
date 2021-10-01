@@ -9,7 +9,7 @@ module.exports = {
   // name: 'Your Name',
   //
   // mainUrl: the url your name links to on the members page. defaults to your github profile
-  mainUrl: 'https://github.com/secondl1ght',
+  mainUrl: 'https://secondl1ght.site',
   //
   // bio - accepts markdown.
   // bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
