@@ -7,7 +7,7 @@ module.exports = {
   //
   // name - if not defined here, will default to your Name on github if defined, if not, then your username
   // name: 'Your Name',
-  name: 'Ayu Adiati'
+  name: 'Ayu Adiati',
   //
   // mainUrl: the url your name links to on the members page. defaults to your github profile
   // mainUrl: 'https://virtualcoffee.io',
