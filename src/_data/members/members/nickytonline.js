@@ -21,7 +21,7 @@ module.exports = {
     { type: 'codenewbie', username: 'nickytonline' },
     { type: 'twitter', username: 'nickytonline' },
     { type: 'twitch', username: 'nickytonline' },
-    { type: 'youtube', channelId: 'UCBLlEq0co24VFJIMEHNcPOQ' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
+    { type: 'youtube', customUrl: 'https://youtube.iamdeveloper.com' },
     { type: 'polywork', username: 'nickytonline' },
     // { type: 'medium', username: 'yourUserName' },
     { type: 'hashnode', username: 'nickytonline' },
