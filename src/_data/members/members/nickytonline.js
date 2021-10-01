@@ -6,7 +6,7 @@ module.exports = {
   // you can override that data here, as well as provide some additional account links below
   //
   // name - if not defined here, will default to your Name on github if defined, if not, then your username
-  // name: 'Your Name',
+  name: 'Nick Taylor',
   //
   // mainUrl: the url your name links to on the members page. defaults to your github profile
   mainUrl: 'https://iamdeveloper.com',
@@ -25,6 +25,10 @@ module.exports = {
     { type: 'polywork', username: 'nickytonline' },
     // { type: 'medium', username: 'yourUserName' },
     { type: 'hashnode', username: 'nickytonline' },
-    { type: 'website', url: 'https://iamdeveloper.com', title: 'Just Some Dev' },
+    {
+      type: 'website',
+      url: 'https://iamdeveloper.com',
+      title: 'Just Some Dev',
+    },
   ],
 };
