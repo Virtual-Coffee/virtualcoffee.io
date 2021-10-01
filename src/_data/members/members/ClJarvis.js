@@ -17,14 +17,14 @@ module.exports = {
   // can take  one of each type except website - you can add as many `website` accounts as you wish
   accounts: [
     // { type: 'linkedin', username: 'yourlinkedinUserName' },
-    // { type: 'dev', username: 'yourUserName' },
+     { type: 'dev', username: 'jarvisscript' },
     // { type: 'codenewbie', username: 'yourUserName' },
-    // { type: 'twitter', username: 'yourUserName' },
+     { type: 'twitter', username: 'JarvisScript' },
     // { type: 'twitch', username: 'yourUserName' },
     // { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
-    // { type: 'polywork', username: 'yourUserName' },
+     { type: 'polywork', username: 'chrisjarvis' },
     // { type: 'medium', username: 'yourUserName' },
     // { type: 'hashnode', username: 'yourUserName' },
-    // { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+     { type: 'website', url: 'https://christopherleejarvis.com', title: 'Portfolio' },
   ],
 };
