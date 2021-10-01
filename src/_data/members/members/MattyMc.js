@@ -12,14 +12,14 @@ module.exports = {
   // mainUrl: 'https://virtualcoffee.io',
   //
   // bio - accepts markdown.
-  // bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
+  // bio: `Full-Stack Developer, Data Scientist from Toronto, Canada.`,
   //
   // can take  one of each type except website - you can add as many `website` accounts as you wish
   accounts: [
-    // { type: 'linkedin', username: 'yourlinkedinUserName' },
+    { type: 'linkedin', username: 'mattmcinnis' },
     // { type: 'dev', username: 'yourUserName' },
     // { type: 'codenewbie', username: 'yourUserName' },
-    // { type: 'twitter', username: 'yourUserName' },
+    { type: 'twitter', username: 'MattLovesMath' },
     // { type: 'twitch', username: 'yourUserName' },
     // { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
     // { type: 'polywork', username: 'yourUserName' },
