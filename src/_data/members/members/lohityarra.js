@@ -6,7 +6,7 @@ module.exports = {
   // you can override that data here, as well as provide some additional account links below
   //
   // name - if not defined here, will default to your Name on github if defined, if not, then your username
-  // name: 'Your Name',
+  name: 'Lohit Yarra',
   //
   // mainUrl: the url your name links to on the members page. defaults to your github profile
   // mainUrl: 'https://virtualcoffee.io',
@@ -16,7 +16,7 @@ module.exports = {
   //
   // can take  one of each type except website - you can add as many `website` accounts as you wish
   accounts: [
-    // { type: 'linkedin', username: 'yourlinkedinUserName' },
+    { type: 'linkedin', username: 'lohityarra' },
     // { type: 'dev', username: 'yourUserName' },
     // { type: 'codenewbie', username: 'yourUserName' },
     // { type: 'twitter', username: 'yourUserName' },
