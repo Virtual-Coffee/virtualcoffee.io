@@ -67,7 +67,11 @@ For example, if you want to ask “Should we do…” or “How do I do…”, y
 
 Github uses a feature called _issues_. Issues are essentially a way to highlight bugs, features, problems, or any sort of suggestion or action you wish to happen on a github hosted project (you can find a more comprehensive explanation [here](https://guides.github.com/features/issues/)).
 
-We highly recommend looking at the existing repository issues to find a good open issue to start with. We always try to keep them populated with some beginner friendly issues that anyone can attempt to solve. We also use a `PR Submitted` tag to indicate when an Pull Request has been submitted for an issue, but it hasn't yet been merged, as most people would rather would on an issue with no attempted PRs yet.
+We highly recommend looking at the existing repository issues to find a good open issue to start with. We always try to keep them populated with some beginner friendly issues that anyone can attempt to solve. 
+
+If you find an issue you would like to work on, comment on the issue and a maintainer will respond and/or assign it to you. It can't be assigned to you unless you've commented on the issue.
+
+We also use a `PR Submitted` tag to indicate when an Pull Request has been submitted for an issue, but it hasn't yet been merged, as most people would rather would on an issue with no attempted PRs yet.
 
 If you feel like there's a contribution you would like to make that isn't represented by an already existing issue, feel free to create your own! We have four issue templates that you can use which provide some (hopefully) helpful guidelines on how to form your issues. They are:
 
