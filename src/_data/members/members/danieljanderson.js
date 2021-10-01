@@ -16,7 +16,7 @@ module.exports = {
   //
   // can take  one of each type except website - you can add as many `website` accounts as you wish
   accounts: [
-    // { type: 'linkedin', username: 'yourlinkedinUserName' },
+     { type: 'linkedin', username: 'danieljamesanderson' },
     // { type: 'dev', username: 'yourUserName' },
     // { type: 'codenewbie', username: 'yourUserName' },
     // { type: 'twitter', username: 'yourUserName' },
@@ -25,6 +25,6 @@ module.exports = {
     // { type: 'polywork', username: 'yourUserName' },
     // { type: 'medium', username: 'yourUserName' },
     // { type: 'hashnode', username: 'yourUserName' },
-    // { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+    { type: 'website', url: 'https://danieljanderson.github.io/', title: 'Portfolio' },
   ],
 };
