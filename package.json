@@ -18,7 +18,7 @@
   "homepage": "https://github.com/Virtual-Coffee/virtualcoffee.io#readme",
   "devDependencies": {
     "@11ty/eleventy": "^0.12.1",
-    "@11ty/eleventy-navigation": "^0.2.0",
+    "@11ty/eleventy-navigation": "^0.3.2",
     "@11ty/eleventy-plugin-rss": "^1.1.1",
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.1.1",
     "@fullhuman/postcss-purgecss": "^4.0.3",

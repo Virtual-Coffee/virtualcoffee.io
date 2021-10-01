@@ -1,17 +1,22 @@
 ---
-layout: layouts/default.njk
+layout: layouts/resources.njk
 title: Open Source Software Maintainer Checklist
 description: A handy checklist for Open Source maintainers!
 hero: 'svg/undraw_To_do_list_re_9nt7.svg'
 heroHeader: 'Open Source Software Maintainer Checklist'
 heroSubheader: A handy checklist for Open Source maintainers!
 tags: memberresources
-order: 3
+eleventyNavigation:
+  key: MaintainerChecklist
+  title: Maintainer Checklist
+  excerpt: A handy checklist for Open Source maintainers!
+  parent: OSS
+  order: 2
 ---
 
-{% textContainer %}
+{% textContainer 'light'%}
 
-# What is this document for?
+## What is this document for? {.display-5 .mb-5}
 
 {% leadText %}
 
@@ -20,10 +25,12 @@ This document is a short and simple guide to help you determine if a GitHub repo
 This also doubles as our very own guide for Virtual Coffee-endorsed Open Source projects.
 
 {% endleadText %}
+{% endtextContainer %}
+{% textContainer 'white' %}
 
 ---
 
-## Table of Contents:
+<h2>Table of Contents</h2>
 
 ${toc}
 

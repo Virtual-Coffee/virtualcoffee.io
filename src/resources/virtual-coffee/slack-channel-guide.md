@@ -1,12 +1,17 @@
 ---
-layout: layouts/default.njk
+layout: layouts/resources.njk
 title: Virtual Coffee Slack Channel Guide
 description: All the channels available in our Virtual Coffee Slack community!
 hero: 'svg/undraw_quick_chat_re_bit5.svg'
 heroHeader: 'Virtual Coffee Slack Channel Guide'
 heroSubheader: All the channels available in our Virtual Coffee Slack community!
 tags: memberresources
-order: 2
+eleventyNavigation:
+  key: SlackChannelGuide
+  title: Slack Channel Guide
+  parent: VcResources
+  excerpt: All the channels available in our Virtual Coffee Slack community!
+  order: 3
 ---
 
 {% textContainer 'light'%}
