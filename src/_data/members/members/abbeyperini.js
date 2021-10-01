@@ -9,22 +9,22 @@ module.exports = {
   // name: 'Your Name',
   //
   // mainUrl: the url your name links to on the members page. defaults to your github profile
-  // mainUrl: 'https://virtualcoffee.io',
+  mainUrl: 'https://abbeyperini.dev',
   //
   // bio - accepts markdown.
-  // bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
+  bio: `A full-stack web developer, crafter, blogger, fiber artist, cosplayer, yoga teacher, and gamer with years of recruiting industry experience.`,
   //
   // can take  one of each type except website - you can add as many `website` accounts as you wish
   accounts: [
-    // { type: 'linkedin', username: 'yourlinkedinUserName' },
-    // { type: 'dev', username: 'yourUserName' },
+    { type: 'linkedin', username: 'abigail-perini' },
+    { type: 'dev', username: 'abbeyperini' },
     // { type: 'codenewbie', username: 'yourUserName' },
-    // { type: 'twitter', username: 'yourUserName' },
+    { type: 'twitter', username: 'abbeyperini' },
     // { type: 'twitch', username: 'yourUserName' },
     // { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
-    // { type: 'polywork', username: 'yourUserName' },
-    // { type: 'medium', username: 'yourUserName' },
-    // { type: 'hashnode', username: 'yourUserName' },
+    { type: 'polywork', username: 'abbeyperini' },
+    { type: 'medium', username: 'abbeyperini' },
+    { type: 'hashnode', username: 'abbeyperini' },
     // { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
   ],
 };
