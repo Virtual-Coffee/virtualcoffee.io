@@ -9,22 +9,22 @@ module.exports = {
   // name: 'Your Name',
   //
   // mainUrl: the url your name links to on the members page. defaults to your github profile
-  // mainUrl: 'https://virtualcoffee.io',
+  mainUrl: 'https://iamdeveloper.com',
   //
   // bio - accepts markdown.
   // bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
   //
   // can take  one of each type except website - you can add as many `website` accounts as you wish
   accounts: [
-    // { type: 'linkedin', username: 'yourlinkedinUserName' },
-    // { type: 'dev', username: 'yourUserName' },
-    // { type: 'codenewbie', username: 'yourUserName' },
-    // { type: 'twitter', username: 'yourUserName' },
-    // { type: 'twitch', username: 'yourUserName' },
-    // { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
-    // { type: 'polywork', username: 'yourUserName' },
+    // { type: 'linkedin', username: 'yourUserName' },
+    { type: 'dev', username: 'nickytonline' },
+    { type: 'codenewbie', username: 'nickytonline' },
+    { type: 'twitter', username: 'nickytonline' },
+    { type: 'twitch', username: 'nickytonline' },
+    { type: 'youtube', channelId: 'UCBLlEq0co24VFJIMEHNcPOQ' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
+    { type: 'polywork', username: 'nickytonline' },
     // { type: 'medium', username: 'yourUserName' },
-    // { type: 'hashnode', username: 'yourUserName' },
-    // { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+    { type: 'hashnode', username: 'nickytonline' },
+    { type: 'website', url: 'https://iamdeveloper.com', title: 'Just Some Dev' },
   ],
 };
