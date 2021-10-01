@@ -12,7 +12,7 @@ module.exports = {
   // mainUrl: 'https://virtualcoffee.io',
   //
   // bio - accepts markdown.
-  bio: `TBA`,
+  bio: `Scientist, Biochemist & Educator`,
   //
   // can take  one of each type except website - you can add as many `website` accounts as you wish
   accounts: [
