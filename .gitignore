@@ -7,6 +7,7 @@ node_modules
 /assets.json
 /.env
 /.cache
+/.idea
 
 # Local Netlify folder
 .netlify
