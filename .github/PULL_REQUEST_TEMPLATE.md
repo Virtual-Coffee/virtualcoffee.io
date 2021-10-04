@@ -16,4 +16,3 @@ _[This section explains why the above changes explained were done.
 Sometimes a developer feels that it's okay to write "Business/Product requirement" in the description. That's fine, but doing so defeats the purpose of this section.
 If there is a better explanation as to why the changes were suggested, it's always good to attach a document reference link for that information.
 A good "Why" section should explain the reasoning behind any changes.]_
-
