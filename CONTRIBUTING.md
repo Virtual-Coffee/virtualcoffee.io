@@ -32,7 +32,7 @@ We really want to make space for all developers to feel comfortable and supporte
   - [Making a Github Account](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#making-a-github-account)
   - [Discussions](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#discussions)
   - [Working with Issues](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#working-with-issues)
-  - [Install and Run](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#run-and-install)
+  - [Local development](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#local-development)
   - [Making Pull Requests](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#creating-a-pull-request)
   - [Awaiting Review](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#awaiting-review)
   - [Suggested Changes](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#suggested-changes)
