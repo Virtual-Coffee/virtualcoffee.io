@@ -8,7 +8,8 @@
 		"build": "ELEVENTY_ENV=production npx grunt release-prep",
 		"serve": "npx grunt connect:server",
 		"build-preview": "yarn build && yarn serve",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"format": "npx prettier --write --ignore-unknown ."
 	},
 	"repository": "git://github.com/Virtual-Coffee/virtualcoffee.io.git",
 	"author": "Virtual Coffee <hello@virtualcoffee.io> (https://virtualcoffee.io/)",
