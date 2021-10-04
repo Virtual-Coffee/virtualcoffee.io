@@ -4,11 +4,11 @@ const { AssetCache } = require('@11ty/eleventy-cache-assets');
 
 const sponsorOverrides = {
   MDEyOk9yZ2FuaXphdGlvbjcxNDc2MTY2: {
-    avatarUrl_80: '/assets/images/sponsors/whimser.png',
-    avatarUrl_160: '/assets/images/sponsors/whimser.png',
-    avatarUrl_240: '/assets/images/sponsors/whimser.png',
-    avatarUrl_480: '/assets/images/sponsors/whimser.png',
-    avatarUrl_720: '/assets/images/sponsors/whimser.png',
+    avatarUrl_80: '/assets/images/sponsors/decentology-logo.png',
+    avatarUrl_160: '/assets/images/sponsors/decentology-logo.png',
+    avatarUrl_240: '/assets/images/sponsors/decentology-logo.png',
+    avatarUrl_480: '/assets/images/sponsors/decentology-logo.png',
+    avatarUrl_720: '/assets/images/sponsors/decentology-logo.png',
   },
 };
 
