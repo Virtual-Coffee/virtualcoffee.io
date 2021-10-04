@@ -1,35 +1,35 @@
 .hero {
-  z-index: 1031;
-  position: relative;
-  background: #fff;
+	z-index: 1031;
+	position: relative;
+	background: #fff;
 
-  h2 {
-    font-weight: 300;
+	h2 {
+		font-weight: 300;
 
-    span {
-      @media (min-width: 510px) {
-        display: block;
-      }
+		span {
+			@media (min-width: 510px) {
+				display: block;
+			}
 
-      @include media-breakpoint-up(md) {
-        display: inline-block;
-      }
-    }
+			@include media-breakpoint-up(md) {
+				display: inline-block;
+			}
+		}
 
-    @include media-breakpoint-up(sm) {
-      text-align: center;
-    }
+		@include media-breakpoint-up(sm) {
+			text-align: center;
+		}
 
-    strong {
-      font-weight: 900;
-    }
+		strong {
+			font-weight: 900;
+		}
 
-    @include media-breakpoint-down(xs) {
-      // font-size: 22px;
-    }
-  }
+		@include media-breakpoint-down(xs) {
+			// font-size: 22px;
+		}
+	}
 
-  .container {
-    max-width: 960px;
-  }
+	.container {
+		max-width: 960px;
+	}
 }
