@@ -12,20 +12,21 @@ module.exports = {
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// bio - accepts markdown.
-	bio: `# Hi there, I'm Sadie ✨
+	bio: `I'm a freelance writer with a background in front-end web development and digital communication. 😄 Pronouns: she / her.`,
+	//   bio: `# Hi there, I'm Sadie ✨
 
-- I'm a freelance writer with a background in front-end web development and digital communication.
-- 😄 Pronouns: she / her
+	// - I'm a freelance writer with a background in front-end web development and digital communication.
+	// - 😄 Pronouns: she / her
 
-## Here's what I'm up to right now:
-- 🌱 Learning: Vanilla JS/React/SQL/Python
-- 💥 Working on: my portfolio, finishing coding bootcamp Skillcrush, refreshing my web dev skills
-- 🔭 Exploring: open source software and contributions (Hackotber is here!) and [digital gardening](https://maggieappleton.com/garden-history)
+	// ## Here's what I'm up to right now:
+	// - 🌱 Learning: Vanilla JS/React/SQL/Python
+	// - 💥 Working on: my portfolio, finishing coding bootcamp Skillcrush, refreshing my web dev skills
+	// - 🔭 Exploring: open source software and contributions (Hackotber is here!) and [digital gardening](https://maggieappleton.com/garden-history)
 
-## Here's some of my goals:
-- 🔲 Building up and launching my portfolio with JS, SQL, Python projects
-- 🔲 Securing freelance, contract or part-time work
-- 🔲 Remote jobs only please!`,
+	// ## Here's some of my goals:
+	// - 🔲 Building up and launching my portfolio with JS, SQL, Python projects
+	// - 🔲 Securing freelance, contract or part-time work
+	// - 🔲 Remote jobs only please!`,
 	//
 	// can take  one of each type except website - you can add as many `website` accounts as you wish
 	accounts: [

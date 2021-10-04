@@ -16,15 +16,18 @@ module.exports = {
 	//
 	// can take  one of each type except website - you can add as many `website` accounts as you wish
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
-		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
-		// { type: 'twitch', username: 'yourUserName' },
+		{ type: 'linkedin', username: 'bekah-hawrot-weigel' },
+		{ type: 'dev', username: 'bekahhw' },
+		{ type: 'codenewbie', username: 'bekahhw' },
+		{ type: 'twitter', username: 'bekahhw' },
+		{ type: 'twitch', username: 'bekahhw' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
-		// { type: 'polywork', username: 'yourUserName' },
-		// { type: 'medium', username: 'yourUserName' },
+		{ type: 'polywork', username: 'bekahhw' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+		{
+			type: 'website',
+			url: 'https://bekahhw.github.io',
+			title: `Code. Community. Feelings. It's all here`,
+		},
 	],
 };

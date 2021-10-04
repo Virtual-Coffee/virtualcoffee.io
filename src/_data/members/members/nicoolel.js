@@ -1,6 +1,6 @@
 module.exports = {
 	// github username: required
-	github: 'yourGitHubUserName',
+	github: 'nicoolel',
 	//
 	// everything below here is optional. by default, we pull most profile data from your github profile.
 	// you can override that data here, as well as provide some additional account links below
@@ -11,16 +11,15 @@ module.exports = {
 	// mainUrl: the url your name links to on the members page. defaults to your github profile
 	// mainUrl: 'https://virtualcoffee.io',
 	//
-	// bio - accepts markdown. Please keep your bio to a reasonable length, refer to
-	// [members page](https://virtualcoffee.io/members/) for examples
+	// bio - accepts markdown.
 	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
 	//
 	// can take  one of each type except website - you can add as many `website` accounts as you wish
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
+		{ type: 'linkedin', username: 'nicolelee-11' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
+		{ type: 'twitter', username: 'NicoleLeeDev' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
 		// { type: 'polywork', username: 'yourUserName' },
