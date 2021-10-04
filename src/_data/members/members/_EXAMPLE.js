@@ -11,7 +11,8 @@ module.exports = {
   // mainUrl: the url your name links to on the members page. defaults to your github profile
   // mainUrl: 'https://virtualcoffee.io',
   //
-  // bio - accepts markdown.
+  // bio - accepts markdown. Please keep your bio to a reasonable length, refer to 
+  // [members page](https://virtualcoffee.io/members/) for examples
   // bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
   //
   // can take  one of each type except website - you can add as many `website` accounts as you wish
