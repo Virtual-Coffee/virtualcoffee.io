@@ -59,8 +59,7 @@
     "markdown-it-attrs": "^4.0.0",
     "markdown-it-toc-done-right": "^4.2.0",
     "node-fetch": "^2.6.1",
-    "only-allow": "^1.0.0",
-    "yarn": "^1.22.15"
+    "only-allow": "^1.0.0"
   },
   "main": "index.js"
 }
