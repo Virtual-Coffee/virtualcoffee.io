@@ -12,5 +12,13 @@
 	"singleQuote": true,
 	"tabWidth": 2,
 	"trailingComma": "all",
-	"useTabs": true
+	"useTabs": true,
+	"overrides": [
+		{
+			"files": "*.njk",
+			"options": {
+				"parser": "html"
+			}
+		}
+	]
 }
