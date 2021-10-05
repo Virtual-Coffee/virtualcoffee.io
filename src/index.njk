@@ -98,6 +98,20 @@ eleventyNavigation:
     <p class="lead">If you'd like to support Virtual Coffee, please visit <a href="https://github.com/sponsors/Virtual-Coffee">our sponsorship page</a> on GitHub.</p>
 
     <ul class="sponsors">
+      <li>
+        <a href="https://www.decentology.com/" title="Decentology" class="sponsors-logo">
+          <img
+            src="{{'/assets/images/sponsors/decentology-logo.png' | buildImgixUrl({w:80})}}"
+            srcset="{{'/assets/images/sponsors/decentology-logo.png' | buildImgixSrcSet([80, 160, 240, 480, 720])}}"
+            alt="Decentology logo" width="240" height="240" loading="lazy" decoding="async" sizes="(min-width: 915px) 240px, 24vw"
+          >
+        </a>
+        <div class="sponsors-body">
+          <h4><a href="https://www.decentology.com/">Decentology</a></h4>
+          <p>Decentology's mission is to empower developers to build awesome decentralized apps</p>
+        </div>
+      </li>
+
       {% for tier in sponsors.logoSponsors %}
         {% for supporter in tier.sponsors %}
           <li data-id="{{supporter.id}}">

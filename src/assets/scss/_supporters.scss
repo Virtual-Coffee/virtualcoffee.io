@@ -5,16 +5,20 @@
 	max-width: 900px;
 
 	li {
-		display: grid;
-		grid-template-columns: min(24vw, 240px) 1fr;
-		gap: 2em;
-		align-items: center;
 		margin-bottom: 4em;
+
+		@include media-breakpoint-up(sm) {
+			display: grid;
+			grid-template-columns: min(24vw, 240px) 1fr;
+			gap: 2em;
+			align-items: center;
+		}
 	}
 
 	img {
 		width: 100%;
 		height: 100%;
+		max-width: 250px;
 	}
 }
 
