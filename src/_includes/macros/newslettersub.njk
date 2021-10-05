@@ -1,24 +1,43 @@
-{% macro newsletterSubscribeForm(header='Subscribe to the Virtual Coffee Newsletter') %}
+{% macro newsletterSubscribeForm(header='Subscribe to the Virtual Coffee
+Newsletter') %}
 <h2>{{header}}</h2>
-<form action="https://virtualcoffee.us7.list-manage.com/subscribe/post?u=e52b6b09f8fe23f8277bfbe66&amp;id=d0267c9b8e" method="post" name="mc-embedded-subscribe-form" style="max-width:500px">
-  <fieldset>
-    <div class="form-group">
-      <label for="mce-EMAIL">Email Address:</label>
-      <input
-        type="email"
-        class="form-control"
-        id="mce-EMAIL"
-        name="EMAIL"
-        aria-describedby="emailHelp"
-        required
-      />
-      <small id="nameHelp" class="form-text text-muted">Required</small>
-    </div>
+<form
+	action="https://virtualcoffee.us7.list-manage.com/subscribe/post?u=e52b6b09f8fe23f8277bfbe66&amp;id=d0267c9b8e"
+	method="post"
+	name="mc-embedded-subscribe-form"
+	style="max-width: 500px"
+>
+	<fieldset>
+		<div class="form-group">
+			<label for="mce-EMAIL">Email Address:</label>
+			<input
+				type="email"
+				class="form-control"
+				id="mce-EMAIL"
+				name="EMAIL"
+				aria-describedby="emailHelp"
+				required
+			/>
+			<small id="nameHelp" class="form-text text-muted">Required</small>
+		</div>
 
-    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_e52b6b09f8fe23f8277bfbe66_d0267c9b8e" tabindex="-1" value=""></div>
-    <div class="text-right">
-      <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-primary btn-lg" />
-    </div>
-  </fieldset>
+		<div style="position: absolute; left: -5000px" aria-hidden="true">
+			<input
+				type="text"
+				name="b_e52b6b09f8fe23f8277bfbe66_d0267c9b8e"
+				tabindex="-1"
+				value=""
+			/>
+		</div>
+		<div class="text-right">
+			<input
+				type="submit"
+				value="Subscribe"
+				name="subscribe"
+				id="mc-embedded-subscribe"
+				class="btn btn-primary btn-lg"
+			/>
+		</div>
+	</fieldset>
 </form>
 {% endmacro %}
