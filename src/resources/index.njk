@@ -20,12 +20,11 @@ eleventyNavigation:
 ---
 
 <div class="bg-white py-5">
-  <div class="container-xl">
-    <h2 class="display-5">Resource Available:</h2>
+	<div class="container-xl">
+		<h2 class="display-5">Resource Available:</h2>
 
-    {# {% displayPostList collections.memberresources %} #}
-    {# {% assign navPages = collections.memberresources %} #}
-    {{ collections.memberresources | eleventyNavigation("Resources") | displayNavigationList | safe }}
-  </div>
+		{# {% displayPostList collections.memberresources %} #} {# {% assign
+		navPages = collections.memberresources %} #} {{ collections.memberresources
+		| eleventyNavigation("Resources") | displayNavigationList | safe }}
+	</div>
 </div>
-
