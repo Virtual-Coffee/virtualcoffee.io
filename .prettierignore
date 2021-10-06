@@ -1,0 +1,14 @@
+# Inheiriting from .gitignore following advice from prettier docs https://prettier.io/docs/en/install.html
+
+/.nova
+.DS_Store
+node_modules
+/_site
+/src/assets/css
+/src/assets/rev
+/assets.json
+/.env
+/.cache
+
+# Local Netlify folder
+.netlify
