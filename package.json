@@ -9,7 +9,7 @@
 		"serve": "npx grunt connect:server",
 		"build-preview": "yarn build && yarn serve",
 		"prepare": "husky install",
-		"format": "npx prettier --write --ignore-unknown \"(**/*.njk|**/*)\""
+		"format": "npx prettier --write --ignore-unknown \"**/*\""
 	},
 	"repository": "git://github.com/Virtual-Coffee/virtualcoffee.io.git",
 	"author": "Virtual Coffee <hello@virtualcoffee.io> (https://virtualcoffee.io/)",
@@ -67,7 +67,6 @@
 	},
 	"main": "index.js",
 	"lint-staged": {
-		"**/*": "prettier --write --ignore-unknown",
-		"**/*.njk": "prettier --write --ignore-unknown"
+		"**/*": "prettier --write --ignore-unknown"
 	}
 }
