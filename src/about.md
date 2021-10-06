@@ -50,4 +50,4 @@ We welcome and support developers at all stages to create a more empathetic tech
 
 To become a member of Virtual Coffee, all you need to do is <a href="/events">attend a Tuesday or Thursday Coffee</a> and submit the form you'll receive at coffee. We absolutely love the closeness of this community and know it’s one of the many things that sets us apart. This closeness starts with those coffees.
 
-You can find out more about our community and what we offer in our <a href="/https://virtualcoffee.io/member-resources/">Member Resources section</a>.
+You can find out more about our community and what we offer in our <a href="/resources/virtual-coffee">Member Resources section</a>.
