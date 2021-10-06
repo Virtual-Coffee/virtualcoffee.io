@@ -43,20 +43,6 @@ metadata:
 
 	{% podcastSubscribe %}
 
-	<div class="my-4 podcastplayer">
-		{% if podcast.playerSrc %}
-		<div id="buzzsprout-player-{{podcast.id}}"></div>
-		<script
-			src="{{podcast.playerSrc}}"
-			type="text/javascript"
-			charset="utf-8"
-			async
-		></script>
-		{% endif %}
-	</div>
-
-	{% podcastSubscribe %}
-
 	<hr />
 	<div class="row">
 		<div class="col-md-5 col-lg-4 order-md-2 pb-4 pb-md-0">
