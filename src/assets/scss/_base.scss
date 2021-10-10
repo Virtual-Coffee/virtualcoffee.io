@@ -84,6 +84,52 @@ ul {
 	}
 }
 
+// create a class specific to simple.njk and default.njk, replace bodycopy
+.markdown-prose {
+	@include media-breakpoint-up(sm) {
+		max-width: map-get($container-max-widths, lg);
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+.markdown-prose h1 {
+	text-align: center;
+}
+
+.markdown-prose h1 > small::before {
+	content: '\a';
+	white-space: pre;
+}
+
+.markdown-prose h2 {
+	padding: 0.5rem 0.5rem 0rem 0rem;
+}
+
+.markdown-prose h3 {
+	font-size: 1.5rem;
+	font-weight: 600;
+	padding: 0.5rem 0.5rem 0.5rem 0rem;
+}
+
+.markdown-prose h4 {
+	font-weight: 600;
+}
+
+.markdown-prose ul {
+	margin-block-start: 1em;
+	padding-inline-start: 2rem;
+}
+
+.markdown-prose li > ul {
+	margin-top: 0;
+}
+
+.resources-prose {
+	border-style: solid;
+	border-width: thick;
+}
+
 .podcastplayer {
 	min-height: 200px;
 }
