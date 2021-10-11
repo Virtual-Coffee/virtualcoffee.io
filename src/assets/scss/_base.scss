@@ -84,8 +84,7 @@ ul {
 	}
 }
 
-// create a class specific to simple.njk and default.njk, replace bodycopy
-.markdown-prose {
+.prose {
 	@include media-breakpoint-up(sm) {
 		max-width: map-get($container-max-widths, lg);
 		margin-left: auto;
@@ -93,39 +92,40 @@ ul {
 	}
 }
 
-.markdown-prose h1 {
+.prose h1 {
 	text-align: center;
 }
 
-.markdown-prose h1 > small::before {
+.prose h1 > small::before {
 	content: '\a';
 	white-space: pre;
 }
 
-.markdown-prose h2 {
-	padding: 0.5rem 0.5rem 0rem 0rem;
+.prose h2 {
+	margin: 2rem 0.5rem 0.5rem 0rem;
 }
 
-.markdown-prose h3 {
+.prose h3 {
 	font-size: 1.5rem;
 	font-weight: 600;
-	padding: 0.5rem 0.5rem 0.5rem 0rem;
+	margin: 1.5rem 0.5rem 0.5rem 0rem;
 }
 
-.markdown-prose h4 {
+.prose h4 {
 	font-weight: 600;
 }
 
-.markdown-prose ul {
+.prose ul {
 	margin-block-start: 1em;
 	padding-inline-start: 2rem;
 }
 
-.markdown-prose li > ul {
+.prose li > ul {
 	margin-top: 0;
 }
 
-.resources-prose {
+.resources-section .prose h2 {
+	// make this display h2s
 	border-style: solid;
 	border-width: thick;
 }
