@@ -1,36 +1,36 @@
 .navbar-brand img,
 .navbar-brand svg {
-  height: 30px;
-  max-width: none;
-  display: block;
-  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
+	height: 30px;
+	max-width: none;
+	display: block;
+	filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
 }
 
 .navbar-toggler {
-  filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
+	filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
 }
 
 .nav-item {
-  font-weight: 600;
-  font-size: 1.1rem;
-  line-height: 1;
+	font-weight: 600;
+	font-size: 1.1rem;
+	line-height: 1;
 
-  .nav-link {
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-  }
+	.nav-link {
+		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+	}
 }
 
 .nav-item.active {
-  font-weight: 700;
+	font-weight: 700;
 }
 
 .navbar {
-  background-image: $gradient-primary;
-  .nav-item {
-    text-align: right;
-    svg {
-      fill: currentColor;
-      filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
-    }
-  }
+	background-image: $gradient-primary;
+	.nav-item {
+		text-align: right;
+		svg {
+			fill: currentColor;
+			filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
+		}
+	}
 }
