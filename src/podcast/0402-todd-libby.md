@@ -1,6 +1,7 @@
 ---
 title: "Todd Libby - You aren't your tech stack: sharing your passion"
 description: 'Season Four, Episode Two of the Virtual Coffee Podcast'
+tags: podcast
 date: 2021-10-12
 podcast:
   season: 4

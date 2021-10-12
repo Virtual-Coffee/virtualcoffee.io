@@ -42,8 +42,7 @@ async function cacheWithEmpty(slug, url, duration = '5d') {
 // /:podcast_id/:episode_id/transcript(.format)
 module.exports = {
 	eleventyComputed: {
-		layout: 'layouts/podcast.njk',
-		tags: ['podcast'],
+		layout: (data) => data.layout || 'layouts/podcast.njk',
 		metadata: (data) => {
 			if (data.podcast) {
 				try {
