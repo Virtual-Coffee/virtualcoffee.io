@@ -112,8 +112,6 @@ module.exports = {
 						);
 
 						if (response && response.segments) {
-							const date = new Date(0);
-
 							return response.segments.reduce((arr, segment) => {
 								if (
 									arr.length &&
@@ -128,6 +126,7 @@ module.exports = {
 										},
 									];
 								} else {
+									const date = new Date(0);
 									date.setSeconds(segment.startTime);
 
 									return [
