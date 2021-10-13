@@ -1,5 +1,5 @@
 ---
-title: "Todd Libby - You aren't your tech stack: sharing your passion"
+title: 'Todd Libby - Making the web equal and accessible'
 description: 'Season Four, Episode Two of the Virtual Coffee Podcast'
 tags: podcast
 date: 2021-10-12
