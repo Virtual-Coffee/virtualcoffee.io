@@ -23,10 +23,10 @@ async function getMemberGithubData(data) {
 
 	try {
 		// // check if the cache is fresh within the last day
-		// if (asset.isCacheValid('1d')) {
-		//   // return cached data.
-		//   return asset.getCachedValue(); // a promise
-		// }
+		if (asset.isCacheValid('1d')) {
+			// return cached data.
+			return asset.getCachedValue(); // a promise
+		}
 
 		console.log('Fetching member data...');
 
