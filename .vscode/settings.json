@@ -1,11 +1,6 @@
-/* 
-Description of extensions and what they do: 
-  - Prettier: Enforces code style, and is set to autoformat on save.
-*/
 {
 	"editor.formatOnSave": true,
 
-	// explicitly associating file types for easy override later
 	"files.associations": {
 		"*.html": "html",
 		"*.njk": "html",
