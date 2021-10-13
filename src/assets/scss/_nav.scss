@@ -26,6 +26,11 @@
 
 .navbar {
 	background-image: $gradient-primary;
+
+	&:focus-within {
+		z-index: $zindex-fixed + 2;
+	}
+
 	.nav-item {
 		text-align: right;
 		svg {
