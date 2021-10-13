@@ -14,7 +14,7 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addPlugin(pluginSyntaxHighlight);
 	eleventyConfig.addPlugin(pluginNavigation);
 	eleventyConfig.addPlugin(pluginPWA, {
-		globIgnores: ['/forms/*thanks*']
+		globIgnores: ['**/*(thank)*/index.html']
 	});
 
 	require('./utils/imgix')(eleventyConfig);
