@@ -1,0 +1,43 @@
+/* 
+Description of extensions and what they do: 
+  - Eslint: Highlights coding errors in files. For example, if a variable is defined but not used.
+      Note: Eslint has its own .eslintrc config file and is not setup to autoformat on save, 
+      only adds underlines.
+  - Prettier: Enforces code style, and is set to autoformat on save.
+*/
+
+{
+	"editor.formatOnSave": true,
+
+	// explicitly associating file types for easy override later
+	"files.associations": {
+		"*.html": "html",
+		"*.njk": "html",
+		"*.js": "javascript"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	// JSON with Comments
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+
+	"eslint.packageManager": "yarn",
+
+	// Configure glob patterns for excluding files and folders in fulltext searches and quick open.
+	// Inherits all glob patterns from the `files.exclude` setting.
+	// Note: Adding .yarn to the default list
+	"search.exclude": {
+		"**/node_modules": true,
+		"**/bower_components": true,
+		"**/*.code-search": true,
+		"**/.yarn": true
+	}
+}
