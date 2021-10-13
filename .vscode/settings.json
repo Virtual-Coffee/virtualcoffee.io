@@ -1,6 +1,4 @@
 {
-	"editor.formatOnSave": true,
-
 	"files.associations": {
 		"*.html": "html",
 		"*.njk": "html",
