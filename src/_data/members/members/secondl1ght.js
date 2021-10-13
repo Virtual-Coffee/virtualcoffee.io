@@ -22,9 +22,9 @@ module.exports = {
 		// { type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
-		// { type: 'polywork', username: 'yourUserName' },
+		{ type: 'polywork', username: 'secondl1ght' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://secondl1ght.site', title: 'Portfolio' },
+		{ type: 'website', url: 'https://contra.com/secondl1ght', title: 'Contra' },
 	],
 };
