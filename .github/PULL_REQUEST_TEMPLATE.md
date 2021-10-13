@@ -1,6 +1,7 @@
 ## Linked Issue
 
 <!--
+
 If you have a pull request related to a current issue please link to that issue number.
 
 That issue can be linked to the pull request by using the side panel in the Github UI or using the `#` symbol followed by the number of the associated issue.
