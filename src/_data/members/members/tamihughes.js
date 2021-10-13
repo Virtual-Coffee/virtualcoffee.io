@@ -26,6 +26,10 @@ module.exports = {
 		{ type: 'polywork', username: 'tamsauce' },
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'tamsauce' },
-		{ type: 'website', url: 'https://www.tamsauce.com/', title: 'Personal Portfolio' },
+		{
+			type: 'website',
+			url: 'https://www.tamsauce.com/',
+			title: 'Personal Portfolio',
+		},
 	],
 };

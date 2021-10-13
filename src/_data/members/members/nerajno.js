@@ -25,6 +25,10 @@ module.exports = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://developingdvlpr.com/', title: ' Nerando Johnson - Portfolio Page' },
+		{
+			type: 'website',
+			url: 'https://developingdvlpr.com/',
+			title: ' Nerando Johnson - Portfolio Page',
+		},
 	],
 };
