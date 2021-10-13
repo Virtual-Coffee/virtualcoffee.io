@@ -1,6 +1,6 @@
 # Contributors Guide
 
-Welcome to the Virtual Coffee contributors guide! Thank you for so much for considering contributing to this repository. We really appreciate all the contributors who try to make this space better. This document serves as a guide that will show you the path of least resistance for making valuable contributions to this project. Reading and following this guide shows that you respect the time of the developers managing and developing this space. In return, they will reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests. This is the only way we can produce anything of value.
+Welcome to the Virtual Coffee contributors guide! Thank you so much for considering contributing to this repository. We really appreciate all the contributors who try to make this space better. This document serves as a guide that will show you the path of least resistance for making valuable contributions to this project. Reading and following this guide shows that you respect the time of the developers managing and developing this space. In return, they will reciprocate that respect in addressing your issue, assessing changes, and helping you finalize your pull requests. This is the only way we can produce anything of value.
 
 We take our [Code of Conduct](https://virtualcoffee.io/code-of-conduct/) very seriously, and all contributors must abide by it. Let’s treat each other with respect and remember we are all people who care and are trying. With that said, if you believe someone has violated the Code of Conduct, please fill out our [CoC Violation Form](https://virtualcoffee.io/report-coc-violation/), which you can do anonymously.
 
@@ -32,7 +32,7 @@ We really want to make space for all developers to feel comfortable and supporte
   - [Making a Github Account](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#making-a-github-account)
   - [Discussions](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#discussions)
   - [Working with Issues](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#working-with-issues)
-  - [Install and Run](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#run-and-install)
+  - [Local development](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#local-development)
   - [Making Pull Requests](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#creating-a-pull-request)
   - [Awaiting Review](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#awaiting-review)
   - [Suggested Changes](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#suggested-changes)
@@ -67,7 +67,7 @@ For example, if you want to ask “Should we do…” or “How do I do…”, y
 
 Github uses a feature called _issues_. Issues are essentially a way to highlight bugs, features, problems, or any sort of suggestion or action you wish to happen on a github hosted project (you can find a more comprehensive explanation [here](https://guides.github.com/features/issues/)).
 
-We highly recommend looking at the existing repository issues to find a good open issue to start with. We always try to keep them populated with some beginner friendly issues that anyone can attempt to solve. 
+We highly recommend looking at the existing repository issues to find a good open issue to start with. We always try to keep them populated with some beginner friendly issues that anyone can attempt to solve.
 
 If you find an issue you would like to work on, comment on the issue and a maintainer will respond and/or assign it to you. It can't be assigned to you unless you've commented on the issue.
 
@@ -117,7 +117,6 @@ If the PR looks good, a maintainer will typically give feedback and merge the re
 We may ask for changes to be made before a PR can be merged, either using [suggested changes](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/incorporating-feedback-in-your-pull-request) or pull request comments. You can apply suggested changes directly through the UI. You can make any other changes in your fork, then commit them to your branch.
 
 As you update your PR and apply changes, mark each conversation as [resolved](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/commenting-on-a-pull-request#resolving-conversations).
-
 
 ## Tips and Gotchas
 

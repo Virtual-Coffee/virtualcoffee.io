@@ -6,7 +6,6 @@ That issue can be linked to the pull request by using the side panel in the Gith
 
 To link a pull request to an issue to show that a fix is in progress and to automatically close the issue when someone merges the pull request, type the keyword "Closes" followed by a reference to the issue. For example, Closes #404 or Closes Virtual-Coffee/virtualcoffee.io/issues/404. -->
 
-
 ## Description
 
 <!--- A pull request description describes what constitutes the Pull Request and what changes you have made to the code.
@@ -29,6 +28,4 @@ A good "Why" section should explain the reasoning behind any changes. -->
 
 ## Code of Conduct
 
- By submitting this pull request, you agree to follow our [Code of Conduct](https://virtualcoffee.io/code-of-conduct/)
-
-
+By submitting this pull request, you agree to follow our [Code of Conduct](https://virtualcoffee.io/code-of-conduct/)

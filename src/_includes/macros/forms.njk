@@ -1,62 +1,47 @@
 {% macro netlifyForm(action='',name='') %}
-  <form action="{{action}}" method="POST" netlify="true" name="{{name}}">
-  {{ caller() }}
-  </form>
-{% endmacro %}
+<form action="{{action}}" method="POST" netlify="true" name="{{name}}">
+	{{ caller() }}
+</form>
+{% endmacro %} {% macro formSubmit(text="Submit") %}
+<div class="text-right">
+	<button type="submit" class="btn btn-primary btn-lg">Submit</button>
+</div>
+{% endmacro %} {% macro codeOfConduct() %}
+<fieldset>
+	<p class="lead">
+		Just a reminder that all talks need to adhere to our
+		<a href="/code-of-conduct" target="_blank" rel="noopener noreferrer"
+			>Code of Conduct</a
+		>.
+	</p>
 
-{% macro formSubmit(text="Submit") %}
-  <div class="text-right">
-    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-  </div>
-{% endmacro %}
-
-{% macro codeOfConduct() %}
-  <fieldset>
-    <p class="lead">Just a reminder that all talks need to adhere to our <a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">Code of Conduct</a>.</p>
-
-    <label class="form-group form-check">
-      <input type="checkbox" name="agree" class="form-check-input" required value="agree">
-      <span class="form-check-label">I've read the Code of Conduct and understand my responsibilities as a member of the Virtual Coffee community</span>
-    </label>
-  </fieldset>
-{% endmacro %}
-{#
-{% macro fieldGroup(inputId='', labelText='', descText='', descId='') %}
-  <div class="form-group">
-    <label for="{{inputId}}">{{labelText}}</label>
-    {{ caller() }}
-    <small id="nameHelp" class="form-text text-muted">Required</small>
-  </div>
-{% endmacro %}
-
-{% macro text(inputId='', inputName='', labelText='', descText='', type='text', required=false, inputClass='', inputAttributes=[]) %}
-  {% set descId='desc'~inputId %}
-
-  {% call fieldGroup(
-    inputId=inputId,
-    labelText=labelText,
-    descText=descText,
-    descId=descId
-    )
-  %}
-    <input
-          type="{{type}}"
-          class="form-control {{inputClass}}"
-          id="{{inputId}}"
-          name="{{inputName ? inputName : inputId}}"
-          {% if descText %}
-          aria-describedby="{{descId}}"
-          {% endif %}
-          {% if required %}
-          required
-          {% endif %}
-          {% if inputAttributes|length %}
-            inputAttributes|join(' ')
-          {% endif %}
-        />
-  {% endcall %}
-
-
-
-
-{% endmacro %} #}
+	<label class="form-group form-check">
+		<input
+			type="checkbox"
+			name="agree"
+			class="form-check-input"
+			required
+			value="agree"
+		/>
+		<span class="form-check-label"
+			>I've read the Code of Conduct and understand my responsibilities as a
+			member of the Virtual Coffee community</span
+		>
+	</label>
+</fieldset>
+{% endmacro %} {# {% macro fieldGroup(inputId='', labelText='', descText='',
+descId='') %}
+<div class="form-group">
+	<label for="{{inputId}}">{{labelText}}</label>
+	{{ caller() }}
+	<small id="nameHelp" class="form-text text-muted">Required</small>
+</div>
+{% endmacro %} {% macro text(inputId='', inputName='', labelText='',
+descText='', type='text', required=false, inputClass='', inputAttributes=[]) %}
+{% set descId='desc'~inputId %} {% call fieldGroup( inputId=inputId,
+labelText=labelText, descText=descText, descId=descId ) %} <input
+type="{{type}}" class="form-control {{inputClass}}" id="{{inputId}}"
+name="{{inputName ? inputName : inputId}}" {% if descText %}
+aria-describedby="{{descId}}" {% endif %} {% if required %} required {% endif %}
+{% if inputAttributes|length %} inputAttributes|join(' ') {% endif %} /> {%
+endcall %} {% endmacro %} #}
