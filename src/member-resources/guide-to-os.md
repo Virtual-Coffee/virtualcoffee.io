@@ -33,6 +33,20 @@ order: 1
 
 - based on maintainers checklist, but reoriented toward helping contributors evaluate a repository
 
+## Best practices for maintainers
+
+- building community
+- avoiding burnout
+- communicating with contributors
+- managing expectations
+
+
+## Best practices for contributors
+
+- observing repository conventions
+- communicating with maintainers
+- view of work
+
 ## Guide to Hacktoberfest
 
 - VCHI and Hacktoberfest sites.
