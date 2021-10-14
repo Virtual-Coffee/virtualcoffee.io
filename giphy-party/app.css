@@ -1,0 +1,26 @@
+body { 
+    background: darkslateblue;
+    font-size: 80%;
+}
+
+.form.container {
+   width: 75%;
+}
+
+.hero {
+    display: grid;
+    justify-content: center;
+    padding: 1.2rem;
+    color: honeydew;
+}
+
+input {
+    padding: 10px;
+}
+
+img {
+    margin: 35px 35px;
+}
+
+
+
