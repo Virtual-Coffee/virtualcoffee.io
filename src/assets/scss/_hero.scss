@@ -1,5 +1,5 @@
 .hero {
-	z-index: 1031;
+	z-index: $zindex-fixed + 1;
 	position: relative;
 	background: #fff;
 

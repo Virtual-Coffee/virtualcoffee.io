@@ -16,15 +16,19 @@ module.exports = {
 	//
 	// can take  one of each type except website - you can add as many `website` accounts as you wish
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
-		// { type: 'dev', username: 'yourUserName' },
+		{ type: 'linkedin', username: 'nerando-johnson' },
+		{ type: 'dev', username: 'nerajno' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
+		{ type: 'twitter', username: 'Nerajno' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+		{
+			type: 'website',
+			url: 'https://developingdvlpr.com/',
+			title: ' Nerando Johnson - Portfolio Page',
+		},
 	],
 };

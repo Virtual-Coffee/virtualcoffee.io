@@ -42,6 +42,7 @@ async function cacheWithEmpty(slug, url, duration = '5d') {
 // /:podcast_id/:episode_id/transcript(.format)
 module.exports = {
 	eleventyComputed: {
+		layout: (data) => data.layout || 'layouts/podcast.njk',
 		metadata: (data) => {
 			if (data.podcast) {
 				try {
@@ -112,8 +113,6 @@ module.exports = {
 						);
 
 						if (response && response.segments) {
-							const date = new Date(0);
-
 							return response.segments.reduce((arr, segment) => {
 								if (
 									arr.length &&
@@ -128,6 +127,7 @@ module.exports = {
 										},
 									];
 								} else {
+									const date = new Date(0);
 									date.setSeconds(segment.startTime);
 
 									return [
