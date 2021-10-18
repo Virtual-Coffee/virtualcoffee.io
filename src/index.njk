@@ -185,12 +185,11 @@ eleventyNavigation:
 			<li data-id="{{supporter.id}}">
 				<a
 					href="{{supporter.websiteUrl or supporter.url}}"
-					title="{{supporter.name or supporter.login}}"
 					class="sponsors-logo"
 				>
 					<img
 						src="{{supporter.avatarUrl_80}}"
-						alt="{{supporter.name or supporter.login}} logo"
+						alt="{{supporter.name or support.logo}}"
 						width="240"
 						height="240"
 						loading="lazy"
@@ -227,7 +226,7 @@ eleventyNavigation:
 				>
 					<img
 						src="{{supporter.avatarUrl_80}}"
-						alt="{{supporter.name or supporter.login}} profile image"
+						alt="{{supporter.name or supporter.login}}"
 						width="80"
 						height="80"
 						loading="lazy"
@@ -247,6 +246,7 @@ eleventyNavigation:
 							clip-rule="evenodd"
 							stroke-linejoin="round"
 							stroke-miterlimit="2"
+							aria-hidden="true"
 						>
 							<path
 								d="M 20 65 A 45 45 0 1 1 110 65 A 45 45 0 1 1 20 65"
