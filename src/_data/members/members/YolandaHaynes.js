@@ -16,15 +16,15 @@ module.exports = {
 	//
 	// can take  one of each type except website - you can add as many `website` accounts as you wish
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
+		{ type: 'linkedin', username: 'yolanda-haynes' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
+		{ type: 'twitter', username: '_YolandaHaynes' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
-		// { type: 'polywork', username: 'yourUserName' },
+		{ type: 'polywork', username: 'yhaynes' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+		{ type: 'website', url: 'https://www.yhaynes.com/', title: 'Portfolio' },
 	],
 };
