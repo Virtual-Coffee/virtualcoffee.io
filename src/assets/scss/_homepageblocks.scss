@@ -1,66 +1,78 @@
 .homepageblocks {
-  display: grid;
+	display: grid;
 
-  @include media-breakpoint-up(md) {
-    gap: 0 2em;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto;
-    grid-auto-flow: column;
-  }
+	@include media-breakpoint-up(md) {
+		gap: 0 2em;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: auto auto auto;
+		grid-auto-flow: column;
+	}
 
-  .homepageblocks + & {
-    margin-top: 2em;
-  }
+	.homepageblocks + & {
+		margin-top: 2em;
+	}
+}
+
+.homepageblock-title {
+	a {
+		color: $pink;
+
+		&:hover {
+			color: $pinkDarker;
+		}
+	}
 }
 
 .homepageblock-hero {
-  display: flex;
-  align-items: flex-end;
-  margin: 1em 0;
+	display: flex;
+	align-items: flex-end;
+	margin: 1em 0;
 
-  @include media-breakpoint-up(md) {
-    margin: 0 0 1em;
-  }
+	@include media-breakpoint-up(md) {
+		margin: 0 0 1em;
+	}
 
-  svg {
-    width: 50%;
-  }
+	svg {
+		width: 50%;
+	}
 }
 
 .smallhomepageblocks {
-  display: grid;
-  gap: 1em;
-  padding: 1em;
-  background: $pink;
+	display: grid;
+	gap: 1em;
+	padding: 1em;
+	background-image: $gradient-primary;
 
-  @include media-breakpoint-up(sm) {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
+	@include media-breakpoint-up(sm) {
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	}
 
-  @include media-breakpoint-up(lg) {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
+	@include media-breakpoint-up(lg) {
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	}
 
-  @include media-breakpoint-up(xl) {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
+	@include media-breakpoint-up(xl) {
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	}
 }
 
 .smallhomepageblocks-item {
-  display: flex;
-  min-height: 65px;
-  align-items: center;
-  transition: outline 0.15s cubic-bezier(0.46, 0.03, 0.52, 0.96);
-  background: #fff;
-  padding: 0.5em;
-  font-size: 1.1rem;
+	display: flex;
+	min-height: 65px;
+	align-items: center;
+	transition: outline 0.15s cubic-bezier(0.46, 0.03, 0.52, 0.96);
+	background: #fff;
+	padding: 0.5em;
+	font-size: 1.1rem;
+	color: $pinkDarker;
 
-  &:hover {
-    text-decoration: none;
-    outline: #a6d8d4 5px solid;
-  }
+	&:hover {
+		text-decoration: none;
+		outline: #a6d8d4 5px solid;
+		color: $pinkDarker;
+	}
 
-  svg {
-    fill: currentColor;
-  }
+	svg {
+		fill: currentColor;
+	}
 }

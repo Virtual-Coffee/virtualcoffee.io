@@ -3,6 +3,8 @@ layout: layouts/default.njk
 title: Virtual Coffee Community Events
 description: See our upcoming events!
 hero: 'svg/undraw_conference_call_b0w6.svg'
+heroHeader: 'Virtual Coffee Events'
+heroSubheader: Please join us at one of our events!
 tags:
   - topnav
 homePageBlocks:
@@ -14,40 +16,43 @@ eleventyNavigation:
   order: 3
 ---
 
-<div class="py-4">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-sm-4">
-        {% include "svg/undraw_conference_call_b0w6.svg" %}
-      </div>
-      <div class="col-sm-8">
-        <h1 class="display-4">Virtual Coffee Events</h1>
-        <p class="lead ">Please join us at one of our events!</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 <div class="bg-light py-5">
-  <div class="container-xl">
-    <h2>Upcoming Events</h2>
-    <div class="mb-3">
-      Register for and view all of our upcoming events <a href="https://meetingplace.io/virtual-coffee" target="_blank" rel="noopener noreferrer">on Meetingplace.io</a>.
-    </div>
+	<div class="container-xl">
+		<h2>Upcoming Events</h2>
+		<div class="mb-3">
+			Register for and view all of our upcoming events
+			<a
+				href="https://meetingplace.io/virtual-coffee"
+				target="_blank"
+				rel="noopener noreferrer"
+				>on Meetingplace.io</a
+			>.
+		</div>
 
-    {% for event in events | head(20) %}
+		{% for event in events | head(20) %}
 
-    <div class="card mb-4">
-      <a href="{{ event.url }}" class="card-header" target="_blank" rel="noopener noreferrer">{{ event.start_time | dateForDisplay }}</a>
-      <div class="card-body">
-        <h5 class="card-title">{{event.name}}</h5>
-        {% if event.description %}
-        <p class="card-text">{{ event.description | striptags(true) }}</p>
-        {% endif %}
-        <a href="{{ event.url }}" class="btn-sm btn btn-secondary" target="_blank" rel="noopener noreferrer">Details and RSVP</a>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
+		<div class="card mb-4">
+			<a
+				href="{{ event.url }}"
+				class="card-header"
+				target="_blank"
+				rel="noopener noreferrer"
+				>{{ event.start_time | dateForDisplay }}</a
+			>
+			<div class="card-body">
+				<h5 class="card-title">{{event.name}}</h5>
+				{% if event.description %}
+				<p class="card-text">{{ event.description | striptags(true) }}</p>
+				{% endif %}
+				<a
+					href="{{ event.url }}"
+					class="btn-sm btn btn-secondary"
+					target="_blank"
+					rel="noopener noreferrer"
+					>Details and RSVP</a
+				>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
 </div>

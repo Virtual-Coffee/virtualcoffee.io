@@ -9,6 +9,8 @@ homePageBlocks:
   key: Our Members
   order: 2
 hero: 'svg/undraw_team_spirit_hrr4.svg'
+heroHeader: Virtual Coffee Members
+heroSubheader: A community is only as awesome as its members!
 eleventyNavigation:
   key: Members
   order: 2
@@ -16,33 +18,16 @@ eleventyNavigation:
 
 {% from "macros/members.njk" import membercards %}
 
-<div class="py-4">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-sm-4">
-        {% include "svg/undraw_team_spirit_hrr4.svg" %}
-      </div>
-      <div class="col-sm-8">
-        <h1 class="display-4">Virtual Coffee Members</h1>
-        <p class="lead ">A community is only as awesome as its members!</p>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div class="bg-light py-5">
-  <div class="container-xl">
-    <h2 class="mb-sm-3 mb-md-4 display-4">Leadership Team</h2>
-    <h3 class="mb-sm-3 mb-md-3">Our Founders</h3>
-    {{ membercards(founders) }}
-    <h3 class="mb-sm-3 mb-md-3">Community Engagement</h3>
-    {{ membercards(communityEngagement) }}
+	<div class="container-xl">
+		<h2 class="mb-sm-3 mb-md-4 display-5">Core Team</h2>
+		{{ membercards(members.memberData.core) }}
 
-    <h2 class="mb-sm-3 mb-md-5 display-4">Our Members</h2>
-    {{ membercards(members) }}
-    <div class="member-footer">
-      <h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
-      {% include "svg/undraw_celebration_0jvk.svg" %}
-    </div>
-  </div>
+		<h2 class="mb-sm-3 mb-md-5 display-5">Our Members</h2>
+		{{ membercards(members.memberData.members) }}
+		<div class="member-footer">
+			<h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
+			{% include "svg/undraw_celebration_0jvk.svg" %}
+		</div>
+	</div>
 </div>
