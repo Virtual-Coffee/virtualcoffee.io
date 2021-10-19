@@ -125,9 +125,25 @@ ul {
 }
 
 .resources-section .prose h2 {
-	// make this display h2s
-	border-style: solid;
-	border-width: thick;
+	font-size: 3rem;
+	font-weight: 900;
+	line-height: 1.2;
+	margin-bottom: 1rem;
+}
+
+.resources-section .prose h3 {
+	margin: 1.5rem 0.5rem 1.5rem 0rem;
+	font-size: 2rem;
+}
+
+.resources-section .prose h4 {
+	margin: 1.5rem 0.5rem 1rem 0rem;
+	font-weight: 500;
+	font-size: 1.25rem;
+}
+
+.resources-section .prose h5 {
+	font-size: 1rem;
 }
 
 .podcastplayer {
