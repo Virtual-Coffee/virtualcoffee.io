@@ -154,42 +154,36 @@ eleventyNavigation:
 		</p>
 
 		<ul class="sponsors">
-			<li>
-				<a
-					href="https://www.decentology.com/"
-					title="Decentology"
-					class="sponsors-logo"
-				>
+			<a href="https://www.decentology.com/" title="Decentology">
+				<li>
 					<img
 						src="{{'/assets/images/sponsors/decentology-logo.png' | buildImgixUrl({w:80})}}"
 						srcset="{{'/assets/images/sponsors/decentology-logo.png' | buildImgixSrcSet([80, 160, 240, 480, 720])}}"
-						alt="Decentology logo"
+						alt=""
 						width="240"
 						height="240"
 						loading="lazy"
 						decoding="async"
 						sizes="(min-width: 915px) 240px, 24vw"
+						class="sponsors-logo"
 					/>
-				</a>
-				<div class="sponsors-body">
-					<h4><a href="https://www.decentology.com/">Decentology</a></h4>
-					<p>
-						Decentology's mission is to empower developers to build awesome
-						decentralized apps
-					</p>
-				</div>
-			</li>
+					<div class="sponsors-body">
+						<h3>Decentology</h3>
+						<p>
+							Decentology's mission is to empower developers to build awesome
+							decentralized apps
+						</p>
+					</div>
+				</li>
+			</a>
 
 			{% for tier in sponsors.logoSponsors %} {% for supporter in tier.sponsors
 			%}
-			<li data-id="{{supporter.id}}">
-				<a
-					href="{{supporter.websiteUrl or supporter.url}}"
-					class="sponsors-logo"
-				>
+			<a href="{{supporter.websiteUrl or supporter.url}}">
+				<li data-id="{{supporter.id}}">
 					<img
 						src="{{supporter.avatarUrl_80}}"
-						alt="{{supporter.name or supporter.login}}"
+						alt=""
 						width="240"
 						height="240"
 						loading="lazy"
@@ -202,18 +196,15 @@ eleventyNavigation:
 							{{supporter.avatarUrl_480}} 480w,
 							{{supporter.avatarUrl_720}} 720w
 						"
+						class="sponsors-logo"
 					/>
-				</a>
-				<div class="sponsors-body">
-					<h4>
-						<a href="{{supporter.websiteUrl or supporter.url}}"
-							>{{supporter.name}}</a
-						>
-					</h4>
-					{% if supporter.descriptionHTML %} {{supporter.descriptionHTML |
-					safe}} {% endif %}
-				</div>
-			</li>
+					<div class="sponsors-body">
+						<h3>{{supporter.name}}</h3>
+						{% if supporter.descriptionHTML %} {{supporter.descriptionHTML |
+						safe}} {% endif %}
+					</div>
+				</li>
+			</a>
 			{% endfor %} {% endfor %}
 		</ul>
 
