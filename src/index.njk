@@ -154,8 +154,8 @@ eleventyNavigation:
 		</p>
 
 		<ul class="sponsors">
-			<a href="https://www.decentology.com/" title="Decentology">
-				<li>
+			<li>
+				<a href="https://www.decentology.com/" title="Decentology">
 					<img
 						src="{{'/assets/images/sponsors/decentology-logo.png' | buildImgixUrl({w:80})}}"
 						srcset="{{'/assets/images/sponsors/decentology-logo.png' | buildImgixSrcSet([80, 160, 240, 480, 720])}}"
@@ -165,7 +165,6 @@ eleventyNavigation:
 						loading="lazy"
 						decoding="async"
 						sizes="(min-width: 915px) 240px, 24vw"
-						class="sponsors-logo"
 					/>
 					<div class="sponsors-body">
 						<h3>Decentology</h3>
@@ -174,13 +173,12 @@ eleventyNavigation:
 							decentralized apps
 						</p>
 					</div>
-				</li>
-			</a>
-
+				</a>
+			</li>
 			{% for tier in sponsors.logoSponsors %} {% for supporter in tier.sponsors
 			%}
-			<a href="{{supporter.websiteUrl or supporter.url}}">
-				<li data-id="{{supporter.id}}">
+			<li data-id="{{supporter.id}}">
+				<a href="{{supporter.websiteUrl or supporter.url}}">
 					<img
 						src="{{supporter.avatarUrl_80}}"
 						alt=""
@@ -196,15 +194,14 @@ eleventyNavigation:
 							{{supporter.avatarUrl_480}} 480w,
 							{{supporter.avatarUrl_720}} 720w
 						"
-						class="sponsors-logo"
 					/>
 					<div class="sponsors-body">
 						<h3>{{supporter.name}}</h3>
 						{% if supporter.descriptionHTML %} {{supporter.descriptionHTML |
 						safe}} {% endif %}
 					</div>
-				</li>
-			</a>
+				</a>
+			</li>
 			{% endfor %} {% endfor %}
 		</ul>
 
