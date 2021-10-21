@@ -35,10 +35,32 @@ order: 1
 
 ## Best practices for maintainers
 
-- building community
-- avoiding burnout
-- communicating with contributors
-- managing expectations
+### building community
+
+
+
+### avoiding burnout
+
+Maintaining an open source project can be a lot of work, and many people do it on the side as well as their "day job". It is important not to be mindful of the risk of burnout and take steps to keep the work at a manageable level.
+
+Good steps to take include:
+
+- Figure out a reasonable time frame for responding to issues and pull requests, and include it in your documentation. If you are an individual maintaining a repository in your spare time it's totally okay to say a week.
+- If you are maintaining a company repository, state your working hours in the documentation and make it clear that you won't respond outside of office hours. Make sure you stick to this.
+- 
+
+### communicating with contributors
+
+Communication is key to running a successful open source project. Establish conventions for communications early on and make sure these are clearly documented. Many projects communicate via issues and pull requests, while some use external platforms such as Slack channels, a forum, IRC channels or email lists. All are valid ways to communicate, the important thing is to figure out what is most appropriate for your project. If you are unsure what is best and have no reason not to, using issues and pull requests is a solid choice. If you are maintaining a company project that is open to external contributors, care should be taken to coordinate internal and external communication so that team members and outside contributors are on the same page.
+
+Regardless of the tools used to communicate, there are certain things to keep in mind to keep communication effective and respectful, especially in a international online space.
+
+- Your repository should have a Code of Conduct, and all communication should follow the Code of Conduct.
+- Messages should be kept short and simple. It is often best to keep to 'one message, one topic', although there may be times when this not possible, for example if you need to respond to several points in another message, or you are going to be unavailable for a time and need to communicate several points at once. If you need to discuss several points in one message, put each point in a separate paragraph.
+- Disagreement and debate are healthy, but it is important to keep the conversation respectful. Criticize the ideas people express, but don't criticize the person directly.
+- Low context communication works best in international, cross-cultural spaces. Meanings should be explicit in the words you use, specific cultural references, cliches and sayings might not be understood by people from different cultures.
+
+### managing expectations
 
 
 ## Best practices for contributors
@@ -76,12 +98,32 @@ You should approach open source work with the same professionalism as you would 
 ## Guide to Hacktoberfest
 
 - VCHI and Hacktoberfest sites.
-- How to guides to get the most out of Hacktoberfest for
-  - Contributors
-  - Maintainers
-  - Event organizers
-  - Companies
 
+Getting the most out of Hacktoberfest as a
+
+### Contributor
+
+- Ensure you follow the Hacktoberfest rules to earn your official swag.
+- Maximize your opportunities to earn swag. In addition to the official Hacktoberfest swag, many companies and organizations give away their own swag to contributors during Hacktoberfest, so watch out for this.
+- Many opportunities to earn additional swag come with criteria, so study these carefully.
+- 
+### Maintainer
+
+- Make sure you add the Hacktoberfest label to your repository to ensure pull requests count toward Hacktoberfest. This also helps potential contributors find your repository.
+- If you want to limit attention but still allow your contributors pull requests to count, you can alternatively add 'hacktoberfest-accepted' to individual pull requests.
+- Promote your repository during Hacktoberfest on social media using the #Hacktoberfest hashtag and watch out for posts and threads collecting projects.
+- 
+### Event organizer
+
+- List your event on the official site so people can find out about it.
+- Promote your event on social media using the #Hacktoberfest hashtag.
+### Company
+
+There are many ways companies can use Hacktoberfest. Some ideas include:
+
+- Running an internal Hacktoberfest initiative for employees. This could involve encouraging employees to contribute to external open source projects, or engaging more employees in internal ones. Companies could offer swag or prizes to employees who successfully complete the challenge.
+- Offering company swag to external contributors to company repositories. This can be a great way to increase engagement from the wider community with company open source repositories.
+- 
 ## How to use Git, Github and Gitlab
 
 - Git
