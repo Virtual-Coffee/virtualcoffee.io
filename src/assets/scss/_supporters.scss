@@ -4,7 +4,7 @@
 	margin: 4em 0;
 	max-width: 900px;
 
-	li {
+	li > a {
 		margin-bottom: 4em;
 
 		@include media-breakpoint-up(sm) {
@@ -17,21 +17,19 @@
 
 	img {
 		width: 100%;
-		height: 100%;
+		height: auto;
 		max-width: 250px;
+		align-self: flex-start;
 	}
 }
 
 .sponsors-body {
 	padding: 1em 0;
+	color: $body-color;
 
-	h4 a {
+	h3 {
 		color: $pink;
 	}
-}
-
-.sponsors-logo {
-	align-self: flex-start;
 }
 
 @keyframes rotator {
