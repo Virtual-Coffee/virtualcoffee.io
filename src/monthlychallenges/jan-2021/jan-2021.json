@@ -1,55 +1,55 @@
 {
-  "challengedata": [
-    {
-      "name": "Bekah",
-      "resources": [
-        {
-          "title": "Heydisco: How does machine learning work?",
-          "resourceLink": "https://www.heydisco.com/",
-          "description": "A high-level overview of how machine learning works. It's a good resource for beginners. It breaks down concepts into really easy to understand pieces.",
-          "price": "I got it on sale in November, and I couldn't find current pricing"
-        },
-        {
-          "title": "Deep Medicine: How Artificial Intelligence Can Make Healthcare Human again",
-          "resourceLink": "https://www.goodreads.com/en/book/show/40915762-deep-medicine",
-          "description": "This is another overview of Deep Learning, but focuses on use cases for the Healthcare Field. It gave a fascinating overview of a lot of different ideas, what's being developed now, what we can expect in the future.",
-          "price": "Free! I borrowed the audiobook from my library."
-        }
-      ]
-    },
-    {
-      "name": "Kirk",
-      "resources": [
-        {
-          "title": "Understanding TypeScript - 2021 Edition",
-          "resourceLink": "https://www.udemy.com/course/understanding-typescript/learn/lecture/16999320#overview",
-          "description": "A lovely introduction to the typescript language, with lots of focus on practical usage and configuration.",
-          "price": "I got it on sale for $12.00 USD. I think it's normally $99.00 but udemy has very frequent sales."
-        },
-        {
-          "title": "React: The Complete Guide",
-          "resourceLink": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/learn/lecture/8091064#overview",
-          "description": "From the same presenter as the Typescript course. A very solid introduction to React. Clear presentation. Lots of code examples.",
-          "price": "I got it on sale for $12.00 USD. I think it's normally $129.00 but udemy almost always has sales going on."
-        }
-      ]
-    },
-    {
-      "name": "Dominic",
-      "resources": [
-        {
-          "title": "A Complete Beginners Guide to React: Hooks Edition",
-          "resourceLink": "https://dev.to/aspittel/a-complete-beginner-s-guide-to-react-hooks-edition-1bi0",
-          "description": "An extremely accessible introduction to React that will get you making something real in no time at all.",
-          "price": "Free!"
-        },
-        {
-          "title": "React 16 Lifecycle Methods: How and When to Use Them",
-          "resourceLink": "https://blog.bitsrc.io/react-16-lifecycle-methods-how-and-when-to-use-them-f4ad31fb2282",
-          "description": "A comprehensive guide to Lifecycle Methods in React 16",
-          "price": "Free!"
-        }
-      ]
-    }
-  ]
+	"challengedata": [
+		{
+			"name": "Bekah",
+			"resources": [
+				{
+					"title": "Heydisco: How does machine learning work?",
+					"resourceLink": "https://www.heydisco.com/",
+					"description": "A high-level overview of how machine learning works. It's a good resource for beginners. It breaks down concepts into really easy to understand pieces.",
+					"price": "I got it on sale in November, and I couldn't find current pricing"
+				},
+				{
+					"title": "Deep Medicine: How Artificial Intelligence Can Make Healthcare Human again",
+					"resourceLink": "https://www.goodreads.com/en/book/show/40915762-deep-medicine",
+					"description": "This is another overview of Deep Learning, but focuses on use cases for the Healthcare Field. It gave a fascinating overview of a lot of different ideas, what's being developed now, what we can expect in the future.",
+					"price": "Free! I borrowed the audiobook from my library."
+				}
+			]
+		},
+		{
+			"name": "Kirk",
+			"resources": [
+				{
+					"title": "Understanding TypeScript - 2021 Edition",
+					"resourceLink": "https://www.udemy.com/course/understanding-typescript/learn/lecture/16999320#overview",
+					"description": "A lovely introduction to the typescript language, with lots of focus on practical usage and configuration.",
+					"price": "I got it on sale for $12.00 USD. I think it's normally $99.00 but udemy has very frequent sales."
+				},
+				{
+					"title": "React: The Complete Guide",
+					"resourceLink": "https://www.udemy.com/course/react-the-complete-guide-incl-redux/learn/lecture/8091064#overview",
+					"description": "From the same presenter as the Typescript course. A very solid introduction to React. Clear presentation. Lots of code examples.",
+					"price": "I got it on sale for $12.00 USD. I think it's normally $129.00 but udemy almost always has sales going on."
+				}
+			]
+		},
+		{
+			"name": "Dominic",
+			"resources": [
+				{
+					"title": "A Complete Beginners Guide to React: Hooks Edition",
+					"resourceLink": "https://dev.to/aspittel/a-complete-beginner-s-guide-to-react-hooks-edition-1bi0",
+					"description": "An extremely accessible introduction to React that will get you making something real in no time at all.",
+					"price": "Free!"
+				},
+				{
+					"title": "React 16 Lifecycle Methods: How and When to Use Them",
+					"resourceLink": "https://blog.bitsrc.io/react-16-lifecycle-methods-how-and-when-to-use-them-f4ad31fb2282",
+					"description": "A comprehensive guide to Lifecycle Methods in React 16",
+					"price": "Free!"
+				}
+			]
+		}
+	]
 }

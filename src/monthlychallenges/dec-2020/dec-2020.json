@@ -1,144 +1,87 @@
 {
-  "challengedata": [
-    {
-      "theme": "We built the first version of this page!",
-      "participants": [
-        "Dan",
-        "Vic"
-      ]
-    },
-    {
-      "theme": "We worked on setting up my account in Forem locally and Dominic used the Ruby console for the first time.",
-      "participants": [
-        "Nick",
-        "Dominic"
-      ]
-    },
-    {
-      "theme": "Javascript class refactoring",
-      "participants": [
-        "Nick",
-        "Colleen"
-      ]
-    },
-    {
-      "theme": "JavaScript - We messed around with form validation & the debugger method",
-      "participants": [
-        "Mike",
-        "Laura"
-      ]
-    },
-    {
-      "theme": "We worked on Belle's practice front-end project, connecting with a remote API and displaying data.",
-      "participants": [
-        "Courtney",
-        "Belle"
-      ]
-    },
-    {
-      "theme": "We worked on Belle's practice front-end project, connecting with a remote API and displaying data.",
-      "participants": [
-        "Courtney",
-        "Belle"
-      ]
-    },
-    {
-      "theme": "We worked on the CSS styling of Belle's recipe database site.",
-      "participants": [
-        "Courtney",
-        "Belle"
-      ]
-    },
-    {
-      "theme": "We worked on the CSS styling of Belle's recipe database site.",
-      "participants": [
-        "Courtney",
-        "Belle"
-      ]
-    },
-    {
-      "theme": "Working on Netlify and DNS to get luciacerche.dev live!",
-      "participants": [
-        "Lucia",
-        "Dan"
-      ]
-    },
-    {
-      "theme": "React/JS integrations for Simple File Upload",
-      "participants": [
-        "Colleen",
-        "Dan"
-      ]
-    },
-    {
-      "theme": "virtualcoffee.io /uses page!",
-      "participants": [
-        "Lucia",
-        "Dan"
-      ]
-    },
-    {
-      "theme": "Worked on methology for converting Quarto to 3d render.",
-      "participants": [
-        "Dominic",
-        "Kirk"
-      ]
-    },
-    {
-      "theme": "Worked on Advent of Code problem one.",
-      "participants": [
-        "Sihem",
-        "Marie",
-        "Kirk"
-      ]
-    },
-    {
-      "theme": "We firmed up the concept and plans for the Positivity Toolbox screen in Bekah's Postpartum Wellness app.",
-      "participants": [
-        "Bekah",
-        "Dominic"
-      ]
-    },
-    {
-      "theme": "Advent of Code, Day 9, Part 1 in JavaScript (first half of double session)",
-      "participants": [
-        "Courtney", 
-        "Karen"
-      ]
-    },
-    {
-      "theme": "Advent of Code, Day 9, Part 1 in JavaScript (second half of double session)",
-      "participants": [
-        "Courtney", 
-        "Karen"
-      ]
-    },
-    {
-      "theme": "Worked on Forem issue",
-      "participants": [
-        "Nick",
-        "Dominic"
-      ]
-    },
-    {
-      "theme": "We began rebuilding Meg's Code Talks app using Ruby on Rails with a Docker setup.",
-      "participants": [
-        "Mike",
-        "Meg",
-        "Ana",
-        "Aurelie V.",
-        "Christopher M. J.",
-        "Ghameerah"
-      ]
-    },
-    {
-      "theme": "We reviewed Dominic's progress on the Positivity Toolbox screen for Bekah's Postpartum Wellness app and cleared up an error.",
-      "participants": [
-        "Bekah",
-        "Dominic"
-      ]
-    }
-  ]
+	"challengedata": [
+		{
+			"theme": "We built the first version of this page!",
+			"participants": ["Dan", "Vic"]
+		},
+		{
+			"theme": "We worked on setting up my account in Forem locally and Dominic used the Ruby console for the first time.",
+			"participants": ["Nick", "Dominic"]
+		},
+		{
+			"theme": "Javascript class refactoring",
+			"participants": ["Nick", "Colleen"]
+		},
+		{
+			"theme": "JavaScript - We messed around with form validation & the debugger method",
+			"participants": ["Mike", "Laura"]
+		},
+		{
+			"theme": "We worked on Belle's practice front-end project, connecting with a remote API and displaying data.",
+			"participants": ["Courtney", "Belle"]
+		},
+		{
+			"theme": "We worked on Belle's practice front-end project, connecting with a remote API and displaying data.",
+			"participants": ["Courtney", "Belle"]
+		},
+		{
+			"theme": "We worked on the CSS styling of Belle's recipe database site.",
+			"participants": ["Courtney", "Belle"]
+		},
+		{
+			"theme": "We worked on the CSS styling of Belle's recipe database site.",
+			"participants": ["Courtney", "Belle"]
+		},
+		{
+			"theme": "Working on Netlify and DNS to get luciacerche.dev live!",
+			"participants": ["Lucia", "Dan"]
+		},
+		{
+			"theme": "React/JS integrations for Simple File Upload",
+			"participants": ["Colleen", "Dan"]
+		},
+		{
+			"theme": "virtualcoffee.io /uses page!",
+			"participants": ["Lucia", "Dan"]
+		},
+		{
+			"theme": "Worked on methology for converting Quarto to 3d render.",
+			"participants": ["Dominic", "Kirk"]
+		},
+		{
+			"theme": "Worked on Advent of Code problem one.",
+			"participants": ["Sihem", "Marie", "Kirk"]
+		},
+		{
+			"theme": "We firmed up the concept and plans for the Positivity Toolbox screen in Bekah's Postpartum Wellness app.",
+			"participants": ["Bekah", "Dominic"]
+		},
+		{
+			"theme": "Advent of Code, Day 9, Part 1 in JavaScript (first half of double session)",
+			"participants": ["Courtney", "Karen"]
+		},
+		{
+			"theme": "Advent of Code, Day 9, Part 1 in JavaScript (second half of double session)",
+			"participants": ["Courtney", "Karen"]
+		},
+		{
+			"theme": "Worked on Forem issue",
+			"participants": ["Nick", "Dominic"]
+		},
+		{
+			"theme": "We began rebuilding Meg's Code Talks app using Ruby on Rails with a Docker setup.",
+			"participants": [
+				"Mike",
+				"Meg",
+				"Ana",
+				"Aurelie V.",
+				"Christopher M. J.",
+				"Ghameerah"
+			]
+		},
+		{
+			"theme": "We reviewed Dominic's progress on the Positivity Toolbox screen for Bekah's Postpartum Wellness app and cleared up an error.",
+			"participants": ["Bekah", "Dominic"]
+		}
+	]
 }
-
-    
