@@ -84,7 +84,7 @@ ul {
 	}
 }
 
-.prose {
+.container-simple {
 	@include media-breakpoint-up(sm) {
 		max-width: map-get($container-max-widths, lg);
 		margin-left: auto;
