@@ -18,7 +18,7 @@ eleventyNavigation:
 
 {% textContainer 'light'%}
 
-## Virtual Coffee Member Resources {.display-4 .mb-5}
+## Virtual Coffee Member Resources
 
 {{ collections.memberresources | eleventyNavigation: "VcResources" | displayNavigationList }}
 

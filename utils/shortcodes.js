@@ -2,7 +2,7 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addPairedShortcode(
 		'textContainer',
 		function (content, background = 'white', showBackToTopLink = true) {
-			return `<div class="bg-${background} py-5"><div class="container">
+			return `<div class="bg-${background} py-5"><div class="container prose">
 
 ${content}
 ${

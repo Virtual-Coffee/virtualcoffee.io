@@ -9,7 +9,7 @@ podcast:
   id: 9355176
   intro: |
     <p>This week on the podcast, we have Todd Libby talking about his work making the web equal and accessible for everyone. He drops a ton of resources (check the show notes!) tips on how to get started, and talks about how he's continually learning on the job.</p>
-  card: /assets/images/podcast/0402-todd-episode.png
+  card: /assets/images/podcast/0402-todd-episode.jpg
   guests:
     - name: Todd Libby
       headshot: '/assets/images/podcast/0402-todd.jpg'

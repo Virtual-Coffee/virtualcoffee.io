@@ -22,7 +22,7 @@ ${toc}
 
 ---
 
-## Important things to know {.display-4 .mb-5}
+## Important things to know
 
 There is not one good way to write issues. But there are things we want to avoid that either will discredit what we want or need, or won't help the person who will try to solve the issue.
 
@@ -47,7 +47,7 @@ A suggested solution can be a good thing, especially to help the contributors wh
 
 {% textContainer %}
 
-## How to write an issue? {.display-4 .mb-5}
+## How to write an issue?
 
 Remember, there isn't one way to do it. We're going to walk you through how to create an issue, and reference the Virtual Coffee repository as an example.
 
