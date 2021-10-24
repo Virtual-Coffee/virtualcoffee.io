@@ -4,11 +4,15 @@
 
 	<div class="membercard" id="member_{{member.github}}">
 		<div class="membercard-img">
-			<img src="{{member.avatarUrl}}" alt="" />
+			<img src="{{member.avatarUrl}}" alt="{{member.name}} profile image" />
 		</div>
 
 		<div class="membercard-header">
-			<h3 class="membercard-name">{{member.name}}</h3>
+			<h5 class="membercard-name">
+				<a href="{{member.mainUrl}}" target="_blank" rel="noopener noreferrer"
+					>{{member.name}}</a
+				>
+			</h5>
 
 			{% if member.teams|length %}
 			<div class="membercard-teams">

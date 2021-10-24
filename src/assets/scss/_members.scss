@@ -92,8 +92,9 @@
 .membercard-name {
 	// grid-area: name;
 	margin: 0;
-	color: $pink;
-	font-size: 1.25rem;
+	a {
+		color: $pink;
+	}
 }
 
 .membercard-social {
