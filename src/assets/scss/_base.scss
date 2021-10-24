@@ -88,6 +88,115 @@ ul {
 	}
 }
 
+.container-simple {
+	@include media-breakpoint-up(sm) {
+		max-width: map-get($container-max-widths, lg);
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+.prose h1 {
+	text-align: center;
+}
+
+.prose h1 > small::before {
+	content: '\a';
+	white-space: pre;
+}
+
+.prose h2 {
+	margin: 2rem 0 0.5rem 0;
+}
+
+.prose h3 {
+	font-size: 1.5rem;
+	font-weight: 600;
+	margin: 1.5rem 0 0.5rem 0;
+}
+
+.prose h4 {
+	font-weight: 600;
+}
+
+// when wrapper is present, apply margin to wrapper and remove from heading
+.prose .header-anchor-wrapper-h2 {
+	// apply directly to margin-top/bottom, to not overwrite margin-left
+	margin-top: 2rem;
+	margin-bottom: 0.5rem;
+
+	// zero-out margin on heading inside wrapper
+	h2 {
+		margin: 0;
+	}
+}
+
+.prose .header-anchor-wrapper-h3 {
+	margin-top: 1.5rem;
+	margin-bottom: 0.5rem;
+
+	h3 {
+		margin: 0;
+	}
+}
+
+.prose ul {
+	margin-block-start: 1em;
+	padding-inline-start: 2rem;
+}
+
+.prose li > ul {
+	margin-top: 0;
+}
+
+.resources-section .prose h2 {
+	font-size: 3rem;
+	font-weight: 900;
+	line-height: 1.2;
+	margin-bottom: 1rem;
+}
+
+.resources-section .prose h3 {
+	margin: 1.5rem 0 1.5rem 0;
+	font-size: 2rem;
+}
+
+.resources-section .prose h4 {
+	margin: 1.5rem 0 1rem 0;
+	font-weight: 500;
+	font-size: 1.25rem;
+}
+
+.resources-section .prose h5 {
+	font-size: 1rem;
+}
+
+.resources-section .prose .header-anchor-wrapper-h2 {
+	margin-bottom: 1rem;
+
+	h2 {
+		margin: 0;
+	}
+}
+
+.resources-section .prose .header-anchor-wrapper-h3 {
+	margin-top: 1.5rem;
+	margin-bottom: 1.5rem;
+
+	h3 {
+		margin: 0;
+	}
+}
+
+.resources-section .prose .header-anchor-wrapper-h4 {
+	margin-top: 1.5rem;
+	margin-bottom: 1rem;
+
+	h4 {
+		margin: 0;
+	}
+}
+
 .podcastplayer {
 	min-height: 200px;
 }
