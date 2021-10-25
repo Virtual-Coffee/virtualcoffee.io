@@ -2,12 +2,16 @@ html {
 	font-size: 18px;
 }
 
+a:focus {
+	outline: 3px solid var(--purple);
+}
+
 img,
 svg {
 	max-width: 100%;
 }
 
-h5 {
+h3 {
 	font-weight: 500;
 }
 
