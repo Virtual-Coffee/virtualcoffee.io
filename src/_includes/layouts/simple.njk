@@ -24,4 +24,6 @@ layout: layouts/base.njk
 	{% endif %}
 </div>
 {% endif %}
-<div class="container bodycopy py-5">{{ content | safe }}</div>
+<div class="container bodycopy py-5">
+	<main id="maincontent">{{ content | safe }}</main>
+</div>
