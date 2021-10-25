@@ -16,7 +16,7 @@ eleventyNavigation:
 
 {% textContainer 'light'%}
 
-## What is this document for? {.display-5 .mb-5}
+## What is this document for?
 
 {% leadText %}
 
@@ -28,15 +28,13 @@ This also doubles as our very own guide for Virtual Coffee-endorsed Open Source 
 {% endtextContainer %}
 {% textContainer 'white' %}
 
----
-
 <h2>Table of Contents</h2>
 
 ${toc}
 
 ---
 
-## Name, Description, Tags {.display-4 .mb-5}
+## Name, Description, Tags
 
 We'll start with the natural beginning for evaluating an OSS project: The descriptive fields that GitHub provides.
 
@@ -52,7 +50,7 @@ Also, if you're looking to particpate in [Hacktoberfest](https://hacktoberfest.d
 
 ---
 
-## Docs, Docs, Docs, {.display-4 .mb-5}
+## Docs, Docs, Docs,
 
 At the end of the day, all we know of a project before we start it is what we say and what the maintainer tells us. Having good documentation is the best indicator that a project is well maintained, well supported, and has a healthy and active community. There are a plethora of materials a repo can utilize to provide context to potential contributors, but the docs that matters most are:
 
@@ -108,7 +106,7 @@ These are templates that provide a guide for potential contributors on make issu
 
 ---
 
-## Beginner Friendliness {.display-4 .mb-5}
+## Beginner Friendliness
 
 Ultimately, if you're looking for a repository/project that is beginner friendly, they should have some indication in the documentation and processes that highlights that.
 
@@ -120,13 +118,13 @@ _Note that everyone has a slightly different defintion of "beginner friendly", s
 
 ---
 
-## Final Thoughts {.display-4 .mb-5}
+## Final Thoughts
 
 There are _many_ other things that can help make a repository feel more welcoming, like demos, video guides, etc., but this document is meant to address the **minimum** requirements. When Virtual Coffee determines the projects we highlight and recommend to our members, these are the things we look for and why. Hopefully, it can serve as a guide to anyone who finds this document.
 
 ---
 
-## The Official Checklist {.display-4 .mb-5}
+## The Official Checklist
 
 Here's the checklist in plain form based on the guide above. It isn't necessary for a project in the wild to have _all_ of these things, but it should have most of them.
 
@@ -146,7 +144,7 @@ Here's the checklist in plain form based on the guide above. It isn't necessary 
 
 ---
 
-## Additional Resources {.display-4 .mb-5}
+## Additional Resources
 
 - [The Guide to Building Open Source Communities](https://opensource.guide/building-community/)
 - [Introduction to Open Source](https://www.digitalocean.com/community/tutorial_series/an-introduction-to-open-source)

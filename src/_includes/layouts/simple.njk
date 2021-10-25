@@ -17,13 +17,11 @@ layout: layouts/base.njk
 	</div>
 </div>
 {% elif heroHeader %}
-<div class="container bodycopy pt-5">
+<div class="container container-simple prose pt-5">
 	<h1 class="display-4">{{heroHeader}}</h1>
 	{% if heroSubheader is defined %}
 	<p class="lead">{{heroSubheader}}</p>
 	{% endif %}
 </div>
 {% endif %}
-<div class="container bodycopy py-5">
-	<main id="maincontent">{{ content | safe }}</main>
-</div>
+<div class="container container-simple prose py-5">{{ content | safe }}</div>

@@ -32,7 +32,7 @@ You can report your experience to our Maintainers at hello@virtualcoffee.io or a
 
 {% textContainer 'white' %}
 
-## Our Slack Channels {.display-4 .mb-5}
+## Our Slack Channels
 
 ### #accessibility
 
