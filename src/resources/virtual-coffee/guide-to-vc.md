@@ -16,7 +16,7 @@ eleventyNavigation:
 
 {% textContainer 'light'%}
 
-## Welcome to Virtual Coffee! 👋 {.display-4 .mb-5}
+## Welcome to Virtual Coffee! 👋
 
 {% leadText %}
 
@@ -52,7 +52,7 @@ You can report your experience to our Maintainers at hello@virtualcoffee.io or a
 
 {% textContainer 'white' %}
 
-## What To Expect In Virtual Coffee {.display-4 .mb-5}
+## What To Expect In Virtual Coffee
 
 ### Coffees (Zoom Meetings)
 
@@ -181,7 +181,7 @@ Yes! We do participate in [Digital Ocean's HacktoberFest](https://hacktoberfest.
 
 {% textContainer 'light' %}
 
-## Giving Back To The Community {.display-4 .mb-5}
+## Giving Back To The Community
 
 ### Volunteering At Virtual Coffee
 
@@ -207,7 +207,7 @@ Our members volunteer their time and support for Virtual Coffee to run. [Sponsor
 
 {% textContainer 'white' %}
 
-## Keeping Up With Virtual Coffee {.display-4 .mb-5}
+## Keeping Up With Virtual Coffee
 
 ### [Virtual Coffee Podcast](/podcast/)
 

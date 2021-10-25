@@ -18,7 +18,7 @@ eleventyNavigation:
 
 {% textContainer 'light'%}
 
-## Open Source Resources {.display-4 .mb-5}
+## Open Source Resources
 
 {{ collections.memberresources | eleventyNavigation: "OSS" | displayNavigationList }}
 
