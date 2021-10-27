@@ -2,7 +2,7 @@
 title: 'Jennifer Konikowski - Hot Takes on Being a Woman in Tech'
 description: 'Season Four, Episode Three of the Virtual Coffee Podcast'
 tags: podcast
-date: 2021-10-12
+date: 2021-10-19
 podcast:
   season: 4
   episode: 3
