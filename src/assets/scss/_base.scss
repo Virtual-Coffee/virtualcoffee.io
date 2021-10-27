@@ -29,6 +29,38 @@ h3 {
 	color: transparent;
 }
 
+/* Skip to content link */
+
+.text-assistive {
+	-webkit-clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+	clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+	box-sizing: border-box;
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	color: #ffffff;
+}
+
+.text-assistive.display-at-top-on-focus {
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+.text-assistive.display-at-top-on-focus:focus {
+	-webkit-clip-path: none;
+	clip-path: none;
+	z-index: 9999;
+	height: 70px;
+	line-height: 70px;
+	background: linear-gradient(to right bottom, #d9376e, #da6f36);
+	font-size: 1.2rem;
+	text-decoration: none;
+	color: #ffffff;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+	text-align: center;
+}
+
 body {
 	margin-top: 6rem;
 

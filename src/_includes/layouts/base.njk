@@ -68,6 +68,9 @@ metadata.title %} {% set pageDescription = description or metadata.description
 		#} {{headAdditions | safe if headAdditions is defined}}
 	</head>
 	<body {% if bodyClass %}class="{{ bodyClass }}" {% endif %} id="top">
+		<a href="#maincontent" class="text-assistive display-at-top-on-focus"
+			>Skip to main content.</a
+		>
 		<nav class="navbar navbar-expand-lg navbar-dark fixed-top w-100">
 			<a class="navbar-brand" href="/" aria-label="Virtual Coffee">
 				{% include "svg/virtual-coffee-full-w.svg" %} {# {% include
