@@ -6,15 +6,16 @@ module.exports = {
 	// you can override that data here, as well as provide some additional account links below
 	//
 	// name - if not defined here, will default to your Name on github if defined, if not, then your username
-	// name: 'Your Name',
+	name: 'Álvaro Sánchez Taboada',
 	//
 	// mainUrl: the url your name links to on the members page. defaults to your github profile
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// bio - accepts markdown. Please keep your bio to a reasonable length, refer to
 	// [members page](https://virtualcoffee.io/members/) for examples
-	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
-	//
+	bio: `junior front-end, bass player, learning, 
+	 communicating and bike riding.`,
+
 	// can take  one of each type except website - you can add as many `website` accounts as you wish
 	accounts: [
 		{ type: 'linkedin', username: 'taboada7' },
