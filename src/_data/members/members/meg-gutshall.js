@@ -6,7 +6,7 @@ module.exports = {
 	// you can override that data here, as well as provide some additional account links below
 	//
 	// name - if not defined here, will default to your Name on github if defined, if not, then your username
-	// name: 'Your Name',
+	name: 'Meg Gutshall',
 	//
 	// mainUrl: the url your name links to on the members page. defaults to your github profile
 	// mainUrl: 'https://virtualcoffee.io',
@@ -16,15 +16,15 @@ module.exports = {
 	//
 	// can take  one of each type except website - you can add as many `website` accounts as you wish
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
-		// { type: 'dev', username: 'yourUserName' },
+		{ type: 'linkedin', username: 'meghan-gutshall' },
+		{ type: 'dev', username: 'meg_gutshall' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
-		// { type: 'twitch', username: 'yourUserName' },
-		// { type: 'youtube', channelId: 'yourChannelId' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' }
+		{ type: 'twitter', username: 'meg_gutshall' },
+		{ type: 'twitch', username: 'meg_gutshall' },
+		{ type: 'youtube', channelId: 'UCUFzGA_o3MixAj6awfWvzBQ' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+		{ type: 'website', url: 'https://meghangutshall.com/blog/', title: 'My Digital Garden' },
 	],
 };
