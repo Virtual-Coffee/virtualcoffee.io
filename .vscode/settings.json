@@ -1,0 +1,22 @@
+{
+	"files.associations": {
+		"*.html": "html",
+		"*.njk": "html",
+		"*.js": "javascript"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[nunjucks]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	}
+}
