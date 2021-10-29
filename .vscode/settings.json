@@ -10,11 +10,13 @@
 	"[javascript]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
-	// JSON with Comments
 	"[jsonc]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[nunjucks]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	}
 }
