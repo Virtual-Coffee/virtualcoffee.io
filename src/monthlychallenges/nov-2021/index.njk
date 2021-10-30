@@ -1,0 +1,151 @@
+---
+title: 'Monthly Challenge for November, 2021: 50k words!'
+description: 'November challenge -> Blogging: we all work together to hit 50,000 words.'
+layout: layouts/simple.njk
+date: 2021-11-01
+tags: monthlychallenges
+---
+
+
+<h1><small>Monthly Challenge for November 2021:</small> Let's write 50k words together!</h1>
+
+<p class="lead">
+	This month we're working together to blog 50,000 words! Based off the <a href="https://nanowrimo.org/">NanWriMo (National Novel
+	Writing Month) Challenge</a>, we'll be doing the tech take on writing and working together towards the goal while posting
+	on our own blogs.
+</p>
+
+<p class="lead">Get those blog posts up!</p>
+
+<h2>
+	Current status: {{totals.totalCount | toLocaleString}} out of 50,000 words
+</h2>
+
+<div class="progress my-4" style="height: 3em">
+	<div
+		class="progress-bar progress-bar progress-bar-striped"
+		role="progressbar"
+		style="width: {{(totals.totalCount/50000)*100}}%"
+		aria-valuenow="totals.totalCount"
+		aria-valuemin="0"
+		aria-valuemax="50000"
+	>
+		{{totals.totalCount | toLocaleString}} Words
+	</div>
+</div>
+
+<h2 class="mt-5">Our Posts:</h2>
+
+{% for person in sortedList %}
+
+<h3><a href="{{person.blogLink}}">{{person.name}}</a></h3>
+<ul>
+	{% for post in person.posts %}
+	<li>
+		<a href="{{post.url}}">{{post.title}}</a>
+		<code>({{post.count | toLocaleString}} words)</code>
+	</li>
+	{% endfor %}
+</ul>
+{% endfor %}
+
+<h2 class="mt-5">Totals:</h2>
+
+<table class="table mt-5" style="max-width: 600px">
+	<thead class="thead-dark">
+		<th scope="col">Member Totals</th>
+		<th scope="col" class="text-right">Posts</th>
+		<th scope="col" class="text-right">Total Words</th>
+	</thead>
+	<tbody>
+		{% for person in totals.list %}
+		<tr>
+			<td>{{person.name}}</td>
+			<td class="text-right">{{person.posts | toLocaleString}}</td>
+			<td class="text-right">{{person.total | toLocaleString}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+	<tfoot>
+		<tr>
+			<th scope="col">Total</th>
+			<th scope="col" class="text-right">
+				{{totals.totalPosts | toLocaleString}}
+			</th>
+			<th scope="col" class="text-right">
+				{{totals.totalCount | toLocaleString}} words
+			</th>
+		</tr>
+	</tfoot>
+</table>
+
+
+<h2>How to Participate</h2>
+
+<h4>Add your blog to our challenge page!</h4>
+<p>
+	To add your blog to the challenge tally, you'll need to create a PR for [issue #465](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/465)
+</p>
+
+<h4>What if I don't know what to write about?</h4>
+<p>
+	We've got you covered. We hope to continually update [this discussion](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/458) throughout the month, but here are some suggestions to get you started: </p>
+    <ul>
+        <li>Hot takes! What gets you passionate? Start there and see what happens.</li>
+        <li>What did you learn this week? One of the best ways to teach is by writing about something you just learned!</li>
+        <li>Best Practices. What are some guidelines you've learned that can help developers create best practices?</li>
+        <li>Compare and Contast. Have you learned a new language or new approach? How does that differ from what you've done in the past?</li>
+        How to deal with imposter syndrome as a developer?
+<li>How deal with burnout when applying for your first developer job?</li>
+<li>What did you learn through your first developer interview?</li>
+What did you wish you knew before starting your first developer job?</li>
+<li>What was your experience like during the first few months of your junior developer job?</li>
+<li>How did you overcome the fear of building in public? What tips do you have for developers who want to start building in public?</li>
+<li>How to push through with learning how to code when learning was difficult at times?</li>
+<li>How to start a freelancing career?</li>
+<li>Write about a function or a method --> What it does, when you should use it, and why</li>
+<li>A time you successfully troubleshooted (troubleshot?) an error</li> --> This can be super helpful for those who copy/paste an error message</li>
+<li>A simple script in your terminal</li>
+<li>A customization that saves you time/frustration in your daily workflow</li>
+<li>Keep a journal of your coding journey and then pull topics from it. </li><li>Keep a brag board of your successes, or a Time I learned log. Then write about one of your favorites.</li>
+<li>A meta post like how did you chose where you blog, other options your were considering before where you're currently set up. Why are you blogging? How was the set up process? Features/topics/platforms you're thinking to incorporate in the future.</li>
+</p>
+
+<p>
+	A very special thanks goes out to [Daniel Anderson](https://github.com/danieljanderson), [Meg Gutshall](https://github.com/meg-gutshall),[Jessica Wilkins](https://github.com/jdwilkin4), [Chris Jarvis](https://github.com/ClJarvis), and [Sadie Jay](https://github.com/sadiejay) for helping to compose this list! 
+</p>
+
+<p>And remember, we're always here to help ❤️</p>
+
+<h4>Completing the Challenge!</h4>
+<p>
+	Once you've completed the challenge, post a link to your issue in slack or to
+	your open source repository
+	<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/321"
+		>in our discussion</a
+	>.
+</p>
+
+<h2>Resources</h2>
+<ul>
+	<li>
+		The issue guide can be found pinned in our slack #monthly-challenge channel
+		and our maintainers checklist can be found
+		<a
+			href="https://virtualcoffee.io/member-resources/oss-maintainer-checklist/"
+			>here</a
+		>
+		as part of our Member Resources section on our site
+	</li>
+	<li>
+		<a
+			href="https://github.com/tkshill/Template/wiki/A-Starter-Guide-to-Open-Source-Project-Maintenance"
+			>A Starter Guide to Open Source Project Maintenance</a
+		>
+	</li>
+	<li>
+		<a href="https://hacktoberfest.digitalocean.com/faq/">
+			Hacktoberfest FAQs
+		</a>
+	</li>
+</ul>
