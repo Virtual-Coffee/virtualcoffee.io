@@ -1,14 +1,47 @@
-const Airtable = require('airtable');
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-	'appJStQemmYeoRcox',
-);
+async function fetchRecords() {
+	if (process.env.AIRTABLE_API_KEY) {
+		const Airtable = require('airtable');
+		const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+			'appJStQemmYeoRcox',
+		);
+
+		const result = await base('Member Articles').select().all();
+
+		return result.map((r) => r.fields);
+	}
+
+	return [
+		{
+			id: 'recGDimb5snYUS0fc',
+			fields: {
+				GitHubUsername: 'BekahHW',
+				Title: "Hot Take: Saying 'In the Spirit of Hacktoberfest' is Gatekeepy",
+				Url: 'https://dev.to/bekahhw/hot-take-saying-in-the-spirit-of-hacktoberfest-is-gatekeepy-57n2',
+				'Member Name': 'BekahHW',
+				'Word Count': 911,
+				'Date Published': '2021-11-01',
+				TwitterUsername: 'bekahhw',
+			},
+			createdTime: '2021-11-01T16:19:16.000Z',
+		},
+		{
+			id: 'rec2h9stGXAce8a6X',
+			fields: {
+				GitHubUsername: 'tkshill',
+				Title: 'A Most Magic TicTacToe solution with React and TS',
+				Url: 'https://dev.to/kirkcodes/a-most-magic-tictactoe-solution-with-react-and-ts-4pje',
+				'Member Name': 'Kirk Shillingford',
+				'Word Count': 2000,
+				'Date Published': '2021-11-02',
+				TwitterUsername: 'KirkCodes',
+			},
+			createdTime: '2021-11-02T18:25:38.000Z',
+		},
+	].map((r) => r.fields);
+}
 
 module.exports = async function () {
-	// const { challengedata } = require('./nov-2021.json');
-
-	const result = await base('Member Articles').select().all();
-
-	const tableRows = result.map((r) => r.fields);
+	const tableRows = await fetchRecords();
 
 	const totalCount = tableRows.reduce((total, row) => {
 		return total + row['Word Count'];
