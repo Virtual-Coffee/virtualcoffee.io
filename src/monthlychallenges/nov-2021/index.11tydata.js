@@ -1,25 +1,93 @@
-module.exports = function () {
-	const totals = [];
-	let totalCount = 0;
-	let totalPosts = 0;
-	const { challengedata } = require('./nov-2021.json');
+async function fetchRecords() {
+	if (process.env.AIRTABLE_API_KEY) {
+		const Airtable = require('airtable');
+		const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+			'appJStQemmYeoRcox',
+		);
 
-	challengedata.forEach(function (person) {
-		const p = {
-			name: person.name,
-			posts: person.posts.length,
-			total: person.posts.reduce((total, post) => total + post.count, 0),
-		};
+		const result = await base('Member Articles').select().all();
 
-		totalCount = totalCount + p.total;
-		totalPosts = totalPosts + p.posts;
-		totals.push(p);
-	});
+		return result.map((r) => r.fields);
+	}
+
+	return [
+		{
+			id: 'recGDimb5snYUS0fc',
+			fields: {
+				GitHubUsername: 'BekahHW',
+				Title: "Hot Take: Saying 'In the Spirit of Hacktoberfest' is Gatekeepy",
+				Url: 'https://dev.to/bekahhw/hot-take-saying-in-the-spirit-of-hacktoberfest-is-gatekeepy-57n2',
+				'Member Name': 'BekahHW',
+				'Word Count': 911,
+				'Date Published': '2021-11-01',
+				TwitterUsername: 'bekahhw',
+			},
+			createdTime: '2021-11-01T16:19:16.000Z',
+		},
+		{
+			id: 'rec2h9stGXAce8a6X',
+			fields: {
+				GitHubUsername: 'tkshill',
+				Title: 'A Most Magic TicTacToe solution with React and TS',
+				Url: 'https://dev.to/kirkcodes/a-most-magic-tictactoe-solution-with-react-and-ts-4pje',
+				'Member Name': 'Kirk Shillingford',
+				'Word Count': 2000,
+				'Date Published': '2021-11-02',
+				TwitterUsername: 'KirkCodes',
+			},
+			createdTime: '2021-11-02T18:25:38.000Z',
+		},
+	].map((r) => r.fields);
+}
+
+module.exports = async function () {
+	const tableRows = await fetchRecords();
+
+	const totalCount = tableRows.reduce((total, row) => {
+		return total + row['Word Count'];
+	}, 0);
+
+	const totalPosts = tableRows.length;
+
+	const sortedList = Object.values(
+		tableRows.reduce((obj, row) => {
+			const post = {
+				title: row['Title'],
+				url: row['Url'],
+				count: row['Word Count'],
+			};
+
+			if (!obj[row['Member Name']]) {
+				return {
+					...obj,
+					[row['Member Name']]: {
+						name: row['Member Name'],
+						posts: [post],
+					},
+				};
+			} else {
+				return {
+					...obj,
+					[row['Member Name']]: {
+						...obj[row['Member Name']],
+						posts: [...obj[row['Member Name']].posts, post],
+					},
+				};
+			}
+		}, {}),
+	).sort((a, b) => a.name.localeCompare(b.name));
 
 	return {
-		sortedList: challengedata.sort((a, b) => a.name.localeCompare(b.name)),
+		sortedList,
+		list: tableRows,
 		totals: {
-			list: totals.sort((a, b) => b.total - a.total),
+			list: sortedList
+				.map((person) => ({
+					name: person.name,
+					posts: person.posts.length,
+					total: person.posts.reduce((total, post) => total + post.count, 0),
+				}))
+				.sort((a, b) => b.total - a.total),
 			totalCount,
 			totalPosts,
 		},
