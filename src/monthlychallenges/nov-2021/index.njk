@@ -21,7 +21,9 @@ tags: monthlychallenges
 
 <p class="lead">Get those blog posts up!</p>
 
-<h2>Current status: 0 out of 50,000 words</h2>
+<h2>
+	Current status: {{totals.totalCount | toLocaleString}} out of 50,000 words
+</h2>
 
 <div class="progress my-4" style="height: 3em">
 	<div
@@ -32,18 +34,61 @@ tags: monthlychallenges
 		aria-valuemin="0"
 		aria-valuemax="50000"
 	>
-		0 Words
+		{{totals.totalCount | toLocaleString}} Words
 	</div>
 </div>
 
 <h2 class="mt-5">Our Posts:</h2>
-<p>Coming soon with our finished posts!</p>
+
+{% for person in sortedList %}
+
+<h3>{{person.name}}</h3>
+<ul>
+	{% for post in person.posts %}
+	<li>
+		<a href="{{post.url}}">{{post.title}}</a>
+		<code>({{post.count | toLocaleString}} words)</code>
+	</li>
+	{% endfor %}
+</ul>
+{% endfor %}
+
+<h2 class="mt-5">Totals:</h2>
+
+<table class="table mt-5" style="max-width: 600px">
+	<thead class="thead-dark">
+		<th scope="col">Member Totals</th>
+		<th scope="col" class="text-right">Posts</th>
+		<th scope="col" class="text-right">Total Words</th>
+	</thead>
+	<tbody>
+		{% for person in totals.list %}
+		<tr>
+			<td>{{person.name}}</td>
+			<td class="text-right">{{person.posts | toLocaleString}}</td>
+			<td class="text-right">{{person.total | toLocaleString}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+	<tfoot>
+		<tr>
+			<th scope="col">Total</th>
+			<th scope="col" class="text-right">
+				{{totals.totalPosts | toLocaleString}}
+			</th>
+			<th scope="col" class="text-right">
+				{{totals.totalCount | toLocaleString}} words
+			</th>
+		</tr>
+	</tfoot>
+</table>
 
 <h2>How to Participate</h2>
 
 <p>
-	More details are coming soon about how to submit your blog posts to our
-	challenge! Stay tuned.
+	Once you've written and published your content, sign in to the
+	<a href="https://members.virtualcoffee.io/">VC Members section</a> and follow
+	links to the November Monthly Challenge!
 </p>
 
 <h4>What if I don't know what to write about?</h4>
