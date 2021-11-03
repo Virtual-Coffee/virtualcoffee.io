@@ -21,7 +21,7 @@ module.exports = {
 		{ type: 'codenewbie', username: 'colabottles' },
 		{ type: 'twitter', username: 'toddlibby' },
 		{ type: 'twitch', username: 'toddlibby' },
-		{ type: 'youtube', channelId: 'FrontEndNerdery' }, // or { type: 'youtube', customUrl: 'https://www.youtube.com/c/FrontEndNerdery' }
+		{ type: 'youtube', customUrl: 'https://www.youtube.com/c/FrontEndNerdery' },
 		{ type: 'polywork', username: 'colabottles' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
