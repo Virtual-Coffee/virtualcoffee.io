@@ -16,14 +16,18 @@ module.exports = {
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
 		// { type: 'linkedin', username: 'yourlinkedinUserName' },
-		// { type: 'dev', username: 'yourUserName' },
+		{ type: 'dev', username: 'mikerogers0' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
+		{ type: 'twitter', username: 'MikeRogers0' },
 		// { type: 'twitch', username: 'yourUserName' },
-		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
+		{ type: 'youtube', customUrl: 'https://www.youtube.com/c/MikeRogers0' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+		{
+			type: 'website',
+			url: 'https://mikerogers.io/',
+			title: 'Ruby Developer | Mike Rogers',
+		},
 	],
 };
