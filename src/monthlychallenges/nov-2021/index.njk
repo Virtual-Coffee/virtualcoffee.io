@@ -41,8 +41,14 @@ tags: monthlychallenges
 <h2 class="mt-5">Our Posts:</h2>
 
 {% for person in sortedList %}
+<div class="header-anchor-wrapper header-anchor-wrapper-h3">
+	<h3 id="{{ person.name | slugify }}" tabindex="-1">{{ person.name }}</h3>
+	<a class="header-anchor" href="#{{person.name | slugify}}"
+		><span class="sr-only">Permalink to {{person.name}}'s posts</span>
+		<span aria-hidden="true">#</span></a
+	>
+</div>
 
-<h3>{{person.name}}</h3>
 <ul>
 	{% for post in person.posts %}
 	<li>
