@@ -252,16 +252,23 @@ ul {
 	font-size: 1.1em;
 	opacity: 0;
 	transition: opacity 0.2s ease-in-out;
+	display: inline-block;
+	text-align: center;
+
+	@media (any-hover: none) {
+		opacity: 0.75;
+	}
 }
 
 .header-anchor-wrapper {
 	position: relative;
 	display: grid;
-	grid-template-columns: 1em 1fr;
+	grid-template-columns: 1.5em 1fr;
+	margin-left: -1.5em;
 	align-items: baseline;
-	margin-left: -1em;
 
-	&:hover .header-anchor {
+	&:hover .header-anchor,
+	&:focus-within .header-anchor {
 		opacity: 1;
 	}
 }
