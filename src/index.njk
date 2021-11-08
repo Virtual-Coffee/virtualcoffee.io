@@ -8,6 +8,9 @@ eleventyNavigation:
 <div class="hero">
 	<div class="container pt-5 pb-5 pt-sm-6">
 		<h1>{% include "svg/virtual-coffee-full-copy.svg" %}</h1>
+		{% from "macros/svg.njk" import undrawSvg %}
+		<h1>{{undrawSvg(src='virtual-coffee-full-copy.svg', svTitle='Morris', svClass='Morris')}}<h1>
+
 		<h2 class="pt-5">
 			<span>An intimate community for all devs,</span>
 			<span
