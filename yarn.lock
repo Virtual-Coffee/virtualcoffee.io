@@ -1056,13 +1056,6 @@
     "path-type" "^4.0.0"
     "yaml" "^1.10.0"
 
-"cross-env@^7.0.3":
-  "integrity" "sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw=="
-  "resolved" "https://registry.npmjs.org/cross-env/-/cross-env-7.0.3.tgz"
-  "version" "7.0.3"
-  dependencies:
-    "cross-spawn" "^7.0.1"
-
 "cross-fetch@^3.0.6":
   "integrity" "sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ=="
   "resolved" "https://registry.npmjs.org/cross-fetch/-/cross-fetch-3.1.4.tgz"
@@ -1070,7 +1063,7 @@
   dependencies:
     "node-fetch" "2.6.1"
 
-"cross-spawn@^7.0.1", "cross-spawn@^7.0.3":
+"cross-spawn@^7.0.3":
   "integrity" "sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w=="
   "resolved" "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz"
   "version" "7.0.3"
