@@ -98,6 +98,10 @@ yarn build-preview
 
 If you'd like to see a preview of the production build, use this command to build the site and start up a server at http://localhost:9000. To see any subsequent changes, you can leave this server running, but you'll have to run `yarn build` again in another console tab.
 
+### PWA and Templates using Forms
+
+The site can be installed as a Progressive Web Application (PWA), which includes strategic caching of resources.  Certain pages such as those including forms and destination pages for forms should not be cached. A list of these is supplied to the `pluginPWA` plugin in our `.eleventy.js` file. If you add any such form files for form destination files in development, they should probably be added to this list.
+
 ### Heads Up
 
 If you have problems in VS Code related to `.njk` files, you may need to [reconfigure your language settings](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/176) after working with this repo.

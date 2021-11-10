@@ -14,7 +14,16 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addPlugin(pluginSyntaxHighlight);
 	eleventyConfig.addPlugin(pluginNavigation);
 	eleventyConfig.addPlugin(pluginPWA, {
-		globIgnores: ['**/*(thank)*/index.html']
+		globIgnores:[
+			'forms/lightning-talk-submissions/index.html',
+			'forms/lightning-talk-submissions-thanks/index.html',
+			'lunch-and-learn-idea/index.html',
+			'lunch-and-learn-idea-thanks/index.html',
+			'report-coc-violation/index.html',
+			'report-coc-violation/thanks/index.html',
+			'membership/*/index.html',
+			'membership-thankyou/index.html',
+		]
 	});
 
 	require('./utils/imgix')(eleventyConfig);
