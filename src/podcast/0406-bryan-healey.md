@@ -1,5 +1,5 @@
 ---
-title: 'Bryan Healey - Creating welcoming spaces in dev communities'
+title: 'Bryan Healey - The Entrepreneurial Journey of a Startup Founder'
 description: 'Season Four, Episode Six of the Virtual Coffee Podcast'
 tags: podcast
 date: 2021-11-09
