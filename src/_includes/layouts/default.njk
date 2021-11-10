@@ -23,4 +23,5 @@ layout: layouts/base.njk
 	<p class="lead">{{heroSubheader}}</p>
 	{% endif %}
 </div>
-{% endif %} {{ content | safe }}
+{% endif %}
+<main id="maincontent">{{ content | safe }}</main>

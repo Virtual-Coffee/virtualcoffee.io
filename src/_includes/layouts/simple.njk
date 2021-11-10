@@ -24,4 +24,6 @@ layout: layouts/base.njk
 	{% endif %}
 </div>
 {% endif %}
-<div class="container container-simple prose py-5">{{ content | safe }}</div>
+<main id="maincontent" class="container container-simple prose py-5">
+	{{ content | safe }}
+</main>
