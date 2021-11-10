@@ -2,7 +2,7 @@
 title: 'Bryan Healey - The Entrepreneurial Journey of a Startup Founder'
 description: 'Season Four, Episode Six of the Virtual Coffee Podcast'
 tags: podcast
-date: 2021-11-09
+date: 2021-11-10
 podcast:
   season: 4
   episode: 6
