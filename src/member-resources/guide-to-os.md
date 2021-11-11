@@ -126,7 +126,39 @@ There are many ways companies can use Hacktoberfest. Some ideas include:
 - 
 ## How to use Git, Github and Gitlab
 
-- Git
+### Git
+
+Basic Git workflows:
+
+Cloning a repository:
+
+To clone a repository, you can run `git clone <Repo>` where the Repo is the URL of the repository. This will set up a copy of the repository on your local computer, with the remote repository you cloned from as the `origin` remote.
+
+Adding another remote:
+
+You will normally clone a forked version of the repository, but you may want to add the original version as a remote as well so you can pull other people's changes into your local repository. This remote is conventionally called `upstream` and can be added using `git remote add upstream <Repo>` where Repo is the URL of the original repository.
+
+Synchronizing changes:
+
+When new changes are merged into the original repository, you should pull them into your local copy. If you have set your `upstream` repository, this can be done using `git pull upstream main`. Some repositories use a name other than `main` for their main branch, in which case you replace `main` with the name it uses. You can pull the main branch directly into your working branch.
+
+When you have made changes on your local machine and you want to submit them via a pull request, you first need to push your changes to your fork using `git push origin your-branch-name`.
+
+Advanced Git workflows:
+
+Collaborating with someone on a contribution and synchronizing your work:
+
+Sometimes you may want to work with someone else on a contribution, and both work on your local machine, but submit the work as a single pull request. This is not very common, but if you do find yourself needing to do this, this workflow works:
+
+Assuming that Alice and Bob both have a fork of the project they want to contribute to:
+
+1) Alice adds Bob's fork as a remote on her local repository using `git remote add bob <Bob's Repo URL>`.
+2) Bob adds Alice's fork as a remote on his local repository using `git remote add alice <Alice's Repo URL>`.
+3) Alice can now pull changes pushed by Bob using `git pull bob branch-name`.
+4) Bob can now pull changes pushed by Alice using `git pull alice branch-name`.
+5) Either Alice or Bob can submit the pull request once they have all the work on their fork of the project.
+6) Each commit will automatically contain either Alice or Bob's name, so each person's contributions can be identified.
+
 - Github
 - Gitlab <!-- I would need help here since I have no experience with Gitlab -->
 
