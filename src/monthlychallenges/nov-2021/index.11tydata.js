@@ -77,7 +77,13 @@ module.exports = async function () {
 		}, {}),
 	).sort((a, b) => a.name.localeCompare(b.name));
 
+	const goals = [20000, 50000, 100000, 150000, 200000];
+	const completedGoals = goals.filter((g) => g <= totalCount);
+	const currentGoal = goals.find((g) => g > totalCount);
+
 	return {
+		completedGoals,
+		currentGoal,
 		sortedList,
 		list: tableRows,
 		totals: {
