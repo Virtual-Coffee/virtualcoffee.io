@@ -1,7 +1,6 @@
-<svg id="b292e128-983c-4a50-89eb-5eccde426ab3" data-name="Layer 1"
-  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 885.6192 579.76496"
-	class={{svgStyleClass}}>
-	<title>{{svgTitle}}</title>
+<svg role="img" id="b292e128-983c-4a50-89eb-5eccde426ab3" data-name="Layer 1"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 885.6192 579.76496" aria-labelledby="undrawOnlineVideoSvgTitle">
+	<title id="undrawOnlineVideoSvgTitle">{{svgTitle if svgTitle is defined else "UndrawOnlineVideo"}}</title>
   <rect x="0.26069" y="0.34611" width="610.53198" height="391.01184" fill="#e6e6e6"/>
   <rect x="17.71871" y="49.38875" width="575.61593" height="318.83691" fill="#fff"/>
   <rect width="610.53198" height="25.93763" fill="#d9376e"/>

@@ -1,7 +1,7 @@
-<svg id="271e5882-3c8d-41ed-8a0a-1cb2b4d0cbc1" data-name="Layer 1"
+<svg role="img" id="271e5882-3c8d-41ed-8a0a-1cb2b4d0cbc1" data-name="Layer 1"
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1137.68 859.71"
-	class={{svgStyleClass}}>
+  xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1137.68 859.71" aria-labelledby="undrawTeamSpiritSvgTitle"
+	>
   <defs>
     <linearGradient id="1d1d90cb-e8d6-4c10-b901-192027040f7e" x1="512.79" y1="730.45" x2="512.79" y2="139.36" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="gray" stop-opacity="0.25"/>
@@ -13,7 +13,7 @@
     <linearGradient id="cb632b7f-b2f8-40b2-b1bc-4aa48a1a2180" x1="479.8" y1="818.68" x2="479.8" y2="229.88" gradientTransform="matrix(-1, 0, 0, 1, 828.87, 0)" xlink:href="#1d1d90cb-e8d6-4c10-b901-192027040f7e"/>
     <linearGradient id="9b8149d4-8e0d-43dc-bd85-6bf0bb4ef8aa" x1="561.7" y1="875.44" x2="561.7" y2="737.82" xlink:href="#1d1d90cb-e8d6-4c10-b901-192027040f7e"/>
   </defs>
-  <title>{{svgTitle}}</title>
+  <title id="undrawTeamSpiritSvgTitle">{{svgTitle if svgTitle is defined else "UndrawTeamSpirit"}}</title>
   <path d="M43.44,426.65c18,70.15,56.11,130.79,116.34,160.18C285,647.92,567.23,616.41,777.9,580.25c109-18.71,204.74-70.3,274.33-143Z" transform="translate(-31.16 -20.14)" fill="#d9376e" opacity="0.1"/>
   <path d="M1148.21,96.46H1032.62c-5.5,0-10-4.1-10-9.11s4.49-9.11,10-9.11h20c-5.5,0-10-4.1-10-9.11s4.49-9.1,10-9.1h-14.27c-5.5,0-10-4.1-10-9.11s4.49-9.11,10-9.11h60.33c-13.39-5.68-29-9.71-47.06-11.82-164.51-19.27-223.25-6.53-244,6.58a242.11,242.11,0,0,1-84.55,33.79C621.57,89.45,431.75,112.42,259.7,63,174.19,38.45,110.64,80,72.54,149.31H1168.28c-1.43-20.16-5.71-38.78-13.57-55.07A10.48,10.48,0,0,1,1148.21,96.46Z" transform="translate(-31.16 -20.14)" fill="#d9376e" opacity="0.1"/>
   <path d="M33.63,280.23a423.94,423.94,0,0,0,4.49,122.39L1053,436.46a433.15,433.15,0,0,0,70.51-98ZM435,367.54h-20c5.49,0,10,4.1,10,9.11s-4.5,9.1-10,9.1H299.46c-5.49,0-10-4.09-10-9.1s4.5-9.11,10-9.11h20c-5.49,0-10-4.1-10-9.11s4.5-9.11,10-9.11H305.17c-5.49,0-10-4.09-10-9.1s4.5-9.11,10-9.11H420.76c5.5,0,10,4.1,10,9.11s-4.49,9.1-10,9.1H435c5.5,0,10,4.1,10,9.11S440.53,367.54,435,367.54Z" transform="translate(-31.16 -20.14)" fill="#d9376e" opacity="0.1"/>

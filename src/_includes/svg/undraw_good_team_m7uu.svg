@@ -1,7 +1,6 @@
-<svg id="b32a285a-6b04-4396-8e15-f52ff515c3cb" data-name="Layer 1"
-  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1115.91385 832.5636"
-	class={{svgStyleClass}}>
-  <title>{{svgTitle}}</title>
+<svg role="img" id="b32a285a-6b04-4396-8e15-f52ff515c3cb" data-name="Layer 1"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1115.91385 832.5636" aria-labelledby="undrawGoodTeaSvgTitle">
+  <title id="undrawGoodTeaSvgTitle">{{svgTitle if svgTitle is defined else "UndrawGoodTea"}}</title>
   <line x1="389.95692" y1="255.2818" x2="533.95692" y2="255.2818" fill="none" stroke="#3f3d56" stroke-miterlimit="10" stroke-width="2"/>
   <ellipse cx="248.8673" cy="443.49824" rx="39.5" ry="12.40027" transform="translate(-296.29734 483.90373) rotate(-69.08217)" fill="#2f2e41"/>
   <path d="M1153.37778,543.01392c15.6657,116.58889-5.66624,233.30465-114.16871,278.75349S805.90441,816.10117,760.45558,707.5987s61.78473-173.424,114.16871-278.75349C981.00055,214.95244,1104.72832,180.94968,1153.37778,543.01392Z" transform="translate(-42.04308 -33.7182)" fill="#f2f2f2"/>

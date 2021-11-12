@@ -2,10 +2,9 @@
   viewBox="0 0 999.028 144.347"
   xmlns="http://www.w3.org/2000/svg"
   role="img"
-  aria-labelledby="herologo"
-	class={{svgStyleClass}}
+  aria-labelledby="herologoSvgTitle"
 >
-  <title id="herologo">{{svgTitle}}</title>
+  <title id="herologoSvgTitle">{{svgTitle if svgTitle is defined else "HeroLogo"}}</title>
   <defs>
     <linearGradient id="myGradient" gradientUnits="userSpaceOnUse" y1="0%" x2="100%" x1="25%" y2="100%">
       <stop offset="0%"  stop-color="#d9376e" />
