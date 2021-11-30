@@ -1,5 +1,2 @@
-{% macro undrawSvg(src, svTitle, svClass) %}
-{% set svgTitle = svTitle %}
-{% set svgStyleClass = svClass %}
-{% include "svg/" + src ignore missing %}
-{% endmacro %}
+{% macro svg(src, svgTitle) %} {% include "svg/" + src ignore missing %} {%
+endmacro %}
