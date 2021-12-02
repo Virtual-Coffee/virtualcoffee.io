@@ -9,7 +9,7 @@ podcast:
   episode: 9
   id: 9650635
   intro: |
-    <p>In this final episode of season 4 of the podcast, Bekah and Dan bring back special guest and community maintainer, Kirk Shillingford to retro our Virtual Coffee Hacktoberfest Initiative, talk about our monthly challenges and our excitement of going into year 2 of the challenges, and we even throw in some <strike>amazing</strike> awful jokes at the end.</p>
+    <p>In this final episode of season 4 of the podcast, Bekah and Dan bring back special guest and community maintainer, Kirk Shillingford to retro our Virtual Coffee Hacktoberfest Initiative, talk about our monthly challenges and our excitement of going into year 2 of the challenges, and we even throw in some amazing and/or awful jokes at the end.</p>
   card: /assets/images/podcast/0409-episode.png
   guests:
     - name: Kirk Shillingford
