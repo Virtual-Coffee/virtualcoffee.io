@@ -1,2 +1,2 @@
-{% macro svg(src, svgTitle) %} {% include "svg/" + src ignore missing %} {%
-endmacro %}
+{% macro svg(src, svgTitle, ariaHidden=false) %} {% include src ignore missing
+%} {% endmacro %}
