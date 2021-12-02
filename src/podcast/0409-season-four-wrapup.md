@@ -1,5 +1,6 @@
 ---
-title: 'Season 4 Wrap Up - Reviewing and celebrating the Virtual Coffee Community'
+title: 'Season 4 Wrap Up - Reviewing the year
+and celebrating our community'
 description: 'Season Four, Episode Nine of the Virtual Coffee Podcast'
 tags: podcast
 date: 2021-12-02
