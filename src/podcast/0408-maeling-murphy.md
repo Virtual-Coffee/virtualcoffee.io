@@ -38,7 +38,9 @@ This week Bekah and Dan sat down with Dr. Maeling Murphy, a software engineer wh
 - [Homeschool journal](https://homeschool-journal.herokuapp.com/)
 - [Github](https://github.com/maelingmurphy)
 - [Learning Path log](https://github.com/maelingmurphy/My-Learning-Path/blob/main/log.md)
-- [Karen's Notion for job searches](https://www.notion.so/Frontend-Developer-Learning-Guide-39e189f4a49b4fcb9a6304ebf1f327a9)
+- [Karen's Notion for job searches](https://www.notion.so/templates/job-applications)
+- [Karen's Job Application Details Spreadsheet](https://docs.google.com/spreadsheets/d/1ZP0u5MjRiCOaYWuLoRTYr4BvB91M76ZCjkCYPuSePJc/edit?usp=sharing)
+- [Frank's Notetaking System](https://www.notion.so/Thomas-Frank-s-Note-Taking-System-67924a5a25934f0fbe2f154cffcd8f97)
 - [KeyValues: Find engineering teams that share your values](https://www.keyvalues.com/)
 - [Dan's Pinboard bookmarks](https://pinboard.in/u:danieltott)
 - [Forem](https://github.com/forem/forem) - Open source project that Nick Taylor helps maintain
