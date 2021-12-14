@@ -1,23 +1,23 @@
 $enable-responsive-font-sizes: true;
 
 $container-max-widths: (
-  sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1200px,
+	sm: 540px,
+	md: 720px,
+	lg: 960px,
+	xl: 1200px,
 );
 
 $spacer: 1rem;
 $spacers: (
-  6: (
-    $spacer * 6,
-  ),
-  7: (
-    $spacer * 9,
-  ),
-  8: (
-    $spacer * 12,
-  ),
+	6: (
+		$spacer * 6,
+	),
+	7: (
+		$spacer * 9,
+	),
+	8: (
+		$spacer * 12,
+	),
 );
 
 $white: #fff;
@@ -54,22 +54,22 @@ $code-color: $blackCoral;
 
 $form-group-margin-bottom: 2rem;
 
-$hr-margin-y: $spacer * 2;
+$hr-margin-y: $spacer * 3;
 
 $grid-breakpoints: (
-  xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px,
-  xxl: 1875px,
+	xs: 0,
+	sm: 576px,
+	md: 768px,
+	lg: 992px,
+	xl: 1200px,
+	xxl: 1875px,
 );
 
 $grid-gutter-width: 60px;
 
 $font-family-sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-  'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-  'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+	'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+	'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 $font-family-base: 'Inter var', $font-family-sans-serif;
 
 $headings-font-weight: 700;

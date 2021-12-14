@@ -19,17 +19,15 @@ eleventyNavigation:
 {% from "macros/members.njk" import membercards %}
 
 <div class="bg-light py-5">
-  <div class="container-xl">
+	<div class="container-xl">
+		<h2 class="mb-sm-3 mb-md-4 display-5">Core Team</h2>
+		{{ membercards(members.memberData.core) }}
 
-    <h2 class="mb-sm-3 mb-md-4 display-5">Core Team</h2>
-    {{ membercards(members.core, members.memberData) }}
-    <hr>
-
-    <h2 class="mb-sm-3 mb-md-5 display-5">Our Members</h2>
-    {{ membercards(members.members | sort, members.memberData) }}
-    <div class="member-footer">
-      <h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
-      {% include "svg/undraw_celebration_0jvk.svg" %}
-    </div>
-  </div>
+		<h2 class="mb-sm-3 mb-md-5 display-5">Our Members</h2>
+		{{ membercards(members.memberData.members) }}
+		<div class="member-footer">
+			<h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
+			{% include "svg/undraw_celebration_0jvk.svg" %}
+		</div>
+	</div>
 </div>

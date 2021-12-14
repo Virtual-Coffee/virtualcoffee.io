@@ -1,0 +1,30 @@
+---
+title: 'Virtual Coffee Member Resources'
+description: 'A collection of resources for Virtual Coffee members'
+layout: layouts/default.njk
+hero: 'svg/undraw_folder_39kl.svg'
+heroHeader: Member Resources
+heroSubheader: A collection of resources for Virtual Coffee members
+tags:
+  - memberresources
+  - topnav
+homePageBlocks:
+  type: large
+  key: Member Resources
+  order: 2
+  collectionKey: memberresourcesIndex
+eleventyNavigation:
+  key: Resources
+  excerpt: A collection of resources for Virtual Coffee members
+  order: 7
+---
+
+<div class="bg-white py-5">
+	<div class="container-xl">
+		<h2 class="display-5">Resource Available:</h2>
+
+		{# {% displayPostList collections.memberresources %} #} {# {% assign
+		navPages = collections.memberresources %} #} {{ collections.memberresources
+		| eleventyNavigation("Resources") | displayNavigationList | safe }}
+	</div>
+</div>

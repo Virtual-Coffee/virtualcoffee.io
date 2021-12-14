@@ -1,0 +1,86 @@
+name: 📖 Content Change
+description: The content on the site needs updated or fixed.
+labels: ['Status: Needs Triage', 'Type: Content']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Thank you for taking the time to fill out this content change issue!
+
+        ![Update that content!](https://media.giphy.com/media/iFU36VwXUd2O43gdcr/giphy.gif)
+
+        **Please note:** If this is a question or you're not sure about something, please consider using [our discussion board](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions) to ask a question or get some help!
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the change you're considering.
+      options:
+        - label: I have searched the existing issues
+          required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type of Change
+      description: What type of content change is this?
+      options:
+        - Typo
+        - Edit/Clarification on existing content
+        - New section on existing page
+        - Brand new page
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: URL of existing page
+      description: If this is a change on an existing page, paste the url here
+      placeholder: 'https://virtualcoffee.io/...'
+  - type: textarea
+    id: context-for-change
+    attributes:
+      label: Context for content change
+      description: Explain here the conditions which led you to write this issue.
+      placeholder: 'For example: I noticed there was no section on member resources for tech interviews.'
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: Explain what solution and solution criteria looks like
+      placeholder: 'For example: Adding a subsection to member resources that has links to common questions and answers'
+    validations:
+      required: false
+  - type: textarea
+    id: resources
+    attributes:
+      label: Resources that can help
+      description: |
+        Include any documents, images, tutorials, etc that can provide context.
+
+        Tip: You can attach images or log files by clicking this area to highlight it and then dragging files in.
+      placeholder: |
+        For example:
+        - Here are a list of resources for interviewing.
+        - Here is an infographic on the process.
+    validations:
+      required: false
+  - type: textarea
+    id: collaborators
+    attributes:
+      label: Collaborators
+      description: |
+        Include anyone who may be relevant to the discussion by mentioning them via their github user name.
+      placeholder: |
+        For example:
+        `@tkshill` do you have any thoughts here?
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://virtualcoffee.io/code-of-conduct/)
+      options:
+        - label: I've read the Code of Conduct and understand my responsibilities as a member of the Virtual Coffee community
+          required: true
