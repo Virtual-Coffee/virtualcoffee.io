@@ -150,27 +150,6 @@ eleventyNavigation:
 			</p>
 
 			<ul class="sponsors">
-				<li>
-					<a href="https://www.decentology.com/" title="Decentology">
-						<img
-							src="{{'/assets/images/sponsors/decentology-logo.png' | buildImgixUrl({w:80})}}"
-							srcset="{{'/assets/images/sponsors/decentology-logo.png' | buildImgixSrcSet([80, 160, 240, 480, 720])}}"
-							alt=""
-							width="240"
-							height="240"
-							loading="lazy"
-							decoding="async"
-							sizes="(min-width: 915px) 240px, 24vw"
-						/>
-						<div class="sponsors-body">
-							<h3 class="h4">Decentology</h3>
-							<p>
-								Decentology's mission is to empower developers to build awesome
-								decentralized apps
-							</p>
-						</div>
-					</a>
-				</li>
 				{% for tier in sponsors.logoSponsors %} {% for supporter in
 				tier.sponsors %}
 				<li data-id="{{supporter.id}}">
