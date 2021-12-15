@@ -89,10 +89,22 @@ metadata.title %} {% set pageDescription = description or metadata.description
 				class="collapse navbar-collapse justify-content-end mt-2 mt-lg-0"
 				id="navbarNav"
 			>
-				{{ collections.topnav | eleventyNavigation | eleventyNavigationToHtml({
-				listClass: "navbar-nav", listItemClass: "nav-item", activeListItemClass:
-				"active", anchorClass: "nav-link", activeKey: eleventyNavigation.key })
-				| safe }}
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link" href="/#about">About</a></li>
+					<li class="nav-item">
+						<a class="nav-link" href="/events">Events</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/podcast">Podcast</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/resources">Resources</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="https://store.virtualcoffee.io/">Store</a>
+					</li>
+				</ul>
+
 				<ul class="navbar-nav">
 					<li class="nav-item d-flex justify-content-end">
 						<a
