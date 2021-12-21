@@ -11,7 +11,7 @@ module.exports = {
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
+	bio: `Full-Stack Dev with a passion for Vue, 3D printing, and espresso!`,
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
