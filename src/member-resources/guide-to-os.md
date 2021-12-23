@@ -203,4 +203,19 @@ There are a number of different models for governance of open source projects:
 
 ## Open sourcing an existing project
 
-- Guide
+If you want to open source your project and encourage contributions from the community, you should follow our [Maintainers Checklist](todo).
+
+If you simply want to open source your project so that other people can freely use the fruits of your labor, you don't have to do everything on the Maintainers Checklist.
+
+It is a good idea to follow the following from the Maintainers Checklist, but you don't have to follow all of them for your project to be a valid open source project:
+
+- ✅ It should have a relevant name.
+- ✅ It should have a clear description that tells you what the project does and what it's for.
+- ✅ It should have relevant tags highlighting its scope/stack/field etc.
+- ✅ It should have a README. The README should link to or describe:
+  - Project purpose and context
+  - Installation instructions
+- ✅ A valid OSS license (Essential. Period. Your project is not open source if you don't have a valid OSS license.)
+- ✅ Issue templates if you are open to feedback or feature requests from users
+- ✅ A Code of Conduct: Even if you are not expecting contributions you may still get public activity on your repo, for example on issues, and a Code of Conduct helps you to set boundaries and keep conversations respectful.
+
