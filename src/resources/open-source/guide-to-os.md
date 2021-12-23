@@ -1,12 +1,17 @@
 ---
-layout: layouts/default.njk
-title: Virtual Coffee's Guide to Open Source
-description: A user guide for current members to get the most out of Virtual Coffee.
-hero: 'svg/undraw_product_teardown_elol.svg'
+layout: layouts/resources.njk
+title: Guide to Open Source
+description: A Virtual Coffee guide to all things Open Source!
+hero: 'svg/undraw_To_do_list_re_9nt7.svg'
 heroHeader: 'Guide to Open Source'
-heroSubheader: A guide to help contributors, maintainers and event organizers understand and get the most out of open source.
+heroSubheader: 'A Virtual Coffee guide to all things Open Source!'
 tags: memberresources
-order: 1
+eleventyNavigation:
+  key: GuideToOpenSource
+  title: Guide to Open Source
+  excerpt: A Virtual Coffee guide to all things Open Source!
+  parent: OSS
+  order: 3
 ---
 
 {% textContainer %}
@@ -15,11 +20,15 @@ order: 1
 
 {% leadText %}
 
-
-
-{% endLeadText %}
+{% endleadText %}
 
 {% endtextContainer %}
+
+{% textContainer 'white' %}
+
+<h2>Table of Contents</h2>
+
+${toc}
 
 ## Guide to writing issues
 
@@ -37,8 +46,6 @@ order: 1
 
 ### building community
 
-
-
 ### avoiding burnout
 
 Maintaining an open source project can be a lot of work, and many people do it on the side as well as their "day job". It is important not to be mindful of the risk of burnout and take steps to keep the work at a manageable level.
@@ -47,7 +54,7 @@ Good steps to take include:
 
 - Figure out a reasonable time frame for responding to issues and pull requests, and include it in your documentation. If you are an individual maintaining a repository in your spare time it's totally okay to say a week.
 - If you are maintaining a company repository, state your working hours in the documentation and make it clear that you won't respond outside of office hours. Make sure you stick to this.
-- 
+-
 
 ### communicating with contributors
 
@@ -62,7 +69,6 @@ Regardless of the tools used to communicate, there are certain things to keep in
 
 ### managing expectations
 
-
 ## Best practices for contributors
 
 ### observing repository conventions
@@ -74,12 +80,12 @@ Most repositories will have certain conventions that you are expected to follow.
 - Branch naming conventions
 - Git workflows
 
-
 ### The work process
 
 Most projects expect some form of discussion before a pull request is made. Expectations vary from project to project and can normally be found in the Readme or Contributing Guide.
 
 Commonly, you should expect to either work on an existing issue, or to make a new issue and await guidance from a maintainer before starting work. Many projects make use of labels such as `ready for dev` `not ready for dev` `will not do` to help you work out what issues you can work on. Unless the documentation says otherwise, you should normally comment on an issue that you would like to work on and ask to be assigned to it, and only start work when you have been assigned. This helps to avoid duplication of work and ensure that expectations are aligned. Unless the repository explicitly states that it accepts unsolicited pull requests, or you have good reason to believe your contribution will be accepted (perhaps you know the maintainer personally and they have said it is okay), you should not make unsolicited pull request to a project.
+
 ### communicating with maintainers
 
 Communication is key to working on open source. Most projects have conventions surrounding communication, and these should always be followed. Many projects primarily communicate via comments on issues or pull requests. Some projects have external groups such as Slack channels, a forum, IRC channels or email lists that where communication takes place and work is coordinated. If the project uses these there should be information about this on the Readme or Contributing Guide. If there is no specific information about where to communicate, you can probably assume that communication can take place via issues and pull requests.
@@ -106,24 +112,28 @@ Getting the most out of Hacktoberfest as a
 - Ensure you follow the Hacktoberfest rules to earn your official swag.
 - Maximize your opportunities to earn swag. In addition to the official Hacktoberfest swag, many companies and organizations give away their own swag to contributors during Hacktoberfest, so watch out for this.
 - Many opportunities to earn additional swag come with criteria, so study these carefully.
-- 
+-
+
 ### Maintainer
 
 - Make sure you add the Hacktoberfest label to your repository to ensure pull requests count toward Hacktoberfest. This also helps potential contributors find your repository.
 - If you want to limit attention but still allow your contributors pull requests to count, you can alternatively add 'hacktoberfest-accepted' to individual pull requests.
 - Promote your repository during Hacktoberfest on social media using the #Hacktoberfest hashtag and watch out for posts and threads collecting projects.
-- 
+-
+
 ### Event organizer
 
 - List your event on the official site so people can find out about it.
 - Promote your event on social media using the #Hacktoberfest hashtag.
+
 ### Company
 
 There are many ways companies can use Hacktoberfest. Some ideas include:
 
 - Running an internal Hacktoberfest initiative for employees. This could involve encouraging employees to contribute to external open source projects, or engaging more employees in internal ones. Companies could offer swag or prizes to employees who successfully complete the challenge.
 - Offering company swag to external contributors to company repositories. This can be a great way to increase engagement from the wider community with company open source repositories.
-- 
+-
+
 ## How to use Git, Github and Gitlab
 
 ### Git
@@ -152,19 +162,19 @@ Sometimes you may want to work with someone else on a contribution, and both wor
 
 Assuming that Alice and Bob both have a fork of the project they want to contribute to:
 
-1) Alice adds Bob's fork as a remote on her local repository using `git remote add bob <Bob's Repo URL>`.
-2) Bob adds Alice's fork as a remote on his local repository using `git remote add alice <Alice's Repo URL>`.
-3) Alice can now pull changes pushed by Bob using `git pull bob branch-name`.
-4) Bob can now pull changes pushed by Alice using `git pull alice branch-name`.
-5) Either Alice or Bob can submit the pull request once they have all the work on their fork of the project.
-6) Each commit will automatically contain either Alice or Bob's name, so each person's contributions can be identified.
+1. Alice adds Bob's fork as a remote on her local repository using `git remote add bob <Bob's Repo URL>`.
+2. Bob adds Alice's fork as a remote on his local repository using `git remote add alice <Alice's Repo URL>`.
+3. Alice can now pull changes pushed by Bob using `git pull bob branch-name`.
+4. Bob can now pull changes pushed by Alice using `git pull alice branch-name`.
+5. Either Alice or Bob can submit the pull request once they have all the work on their fork of the project.
+6. Each commit will automatically contain either Alice or Bob's name, so each person's contributions can be identified.
 
 - Github
 - Gitlab <!-- I would need help here since I have no experience with Gitlab -->
 
 ## What is open source
 
-Open source is defined by a number of cultural and legal factors. 
+Open source is defined by a number of cultural and legal factors.
 
 Code is generally made freely available, both in the sense that it is accessible for public view, and that it is distributed under a copyright license that permits reuse, modification and redistribution. There are a variety of different licenses in common use, some of which grant almost complete freedom, including to incorporate code into commercial, closed-source projects, while others may be more restrictive, for example by requiring that projects the code is incorporated into are themselves released under the same license. The boundary between open source and closed source can be a matter of debate, with some projects released under licenses that are not universally accepted as open source.
 
@@ -193,7 +203,7 @@ There are a number of different models for governance of open source projects:
 - Some projects are governed by various non-profit organizational structures, which will commonly have at least an agreed upon set of rules for decision making. Larger projects may be run by incorporated organizations with a formal constitution and official positions, along with a member or committee structure to administer the organization and make decisions.
 - Projects backed by a single company will typically be governed by the internal procedures of the company, although a few may have a legally separate organization allowing for community involvement or ownership of the project.
 - Projects such as programming languages or platform standards will often be governed by a foundation with corporate or individual members who have an interest in the project and who appoint a core team or committee that administers the organization and makes decisions.
-- In the blockchain and cryptocurrency space Distributed Autonomous Organizations (DAOs) are emerging as a popular choice. While the details differ from project to project, these will typically feature a governance token on a blockchain that can be transferred and/or bought and sold, whose holders are allowed to vote on proposals. 
+- In the blockchain and cryptocurrency space Distributed Autonomous Organizations (DAOs) are emerging as a popular choice. While the details differ from project to project, these will typically feature a governance token on a blockchain that can be transferred and/or bought and sold, whose holders are allowed to vote on proposals.
 
 ### Decision making
 
@@ -219,3 +229,4 @@ It is a good idea to follow the following from the Maintainers Checklist, but yo
 - ✅ Issue templates if you are open to feedback or feature requests from users
 - ✅ A Code of Conduct: Even if you are not expecting contributions you may still get public activity on your repo, for example on issues, and a Code of Conduct helps you to set boundaries and keep conversations respectful.
 
+{% endtextContainer %}
