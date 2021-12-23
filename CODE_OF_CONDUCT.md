@@ -6,8 +6,6 @@ homePageBlocks:
   type: small
   key: Code of Conduct
   order: 1
-tags:
-  - topnav
 hero: 'svg/undraw_loving_story_0j59.svg'
 eleventyNavigation:
   key: Code of Conduct
