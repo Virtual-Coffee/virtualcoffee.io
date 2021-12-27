@@ -138,7 +138,7 @@ There are many ways companies can use Hacktoberfest. Some ideas include:
 
 ### Git
 
-Basic Git workflows:
+#### Basic Git workflows:
 
 Cloning a repository:
 
@@ -154,7 +154,7 @@ When new changes are merged into the original repository, you should pull them i
 
 When you have made changes on your local machine and you want to submit them via a pull request, you first need to push your changes to your fork using `git push origin your-branch-name`.
 
-Advanced Git workflows:
+#### Advanced Git workflows:
 
 Collaborating with someone on a contribution and synchronizing your work:
 
@@ -169,7 +169,47 @@ Assuming that Alice and Bob both have a fork of the project they want to contrib
 5. Either Alice or Bob can submit the pull request once they have all the work on their fork of the project.
 6. Each commit will automatically contain either Alice or Bob's name, so each person's contributions can be identified.
 
-- Github
+### Github
+
+What is Github? Github is a platform for hosting, sharing and collaborating on Git repositories. Gitlab and Bitbucket are to other similar platforms.
+
+You can interact with Github through the web GUI on [github.com](https://github.com). If you prefer working with the command line, there is also a [Github CLI](https://cli.github.com).
+
+#### Getting the most out of your Github profile:
+
+You can make basic customizations of your profile in your settings, adding website and Twitter links, a short bio and customizing your pinned repositories to showcase the work you most want the world to see. But to really customize your profile you need to create a repository in your account with the same name as your Github username and pop in a Readme. The contents of that Readme file, in Github-flavored markdown, will be rendered on your profile page. There are all kinds of cool integrations you can add to this readme to do awesome things on your profile. These two articles: [Creating a Killer GitHub Profile README, by Braydon Coyer](https://daily.dev/blog/creating-a-killer-github-profile-readme-part-1) and [How to Create Beautiful GitHub Profil Readme.md, by Indrajeet Nikam](https://fullyunderstood.com/how-to-create-beautiful-github-profile-readmemd/) will hopefully give you some inspiration.
+
+#### Basic Github workflows:
+
+Forking a repository:
+
+If you want to contribute to an open source project, the first step is normally to fork the repository to your own Github profile. This means you create a copy of the repository in your profile so that you can make changes without having to push commits directly to the project repository. The steps to do so are:
+
+1. Click on the fork button on the repository page.
+2. You will probably be asked where you want to fork the repository to. Unless you are forking on behalf of an organization, you should click on your personal profile name.
+3. Github will then fork the repository to your profile. You can then work with this forked repository going forward.
+
+Cloning a repository to your local computer:
+
+Although you can edit files directly within the Github UI, if you are changing the code you will normally want to clone it to your local computer and work in your favorite IDE. To do this you will need to clone the repository. To do this, click on the green `Code` button on your forked version of the repository. You will then see a dialog with options to clone via HTTPS, SSH or Github CLI. The HTTPS and SSH (Used if you authenticate with Github via SSH, see section below) tabs provide you with the repository URL to insert into the `git clone` command from the Git section above. If you use Github CLI you can simply copy the command and run it in your terminal.
+
+Authenticating with Github:
+
+If you want to work locally with Github repositories, you will need to authenticate your local git with Github (You don't need to do this to simply clone a public repository via HTTPS). You can either use a Personal Access Toke to authenticate over HTTPS ([Instructions here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#https)) or by using SSH public/private keypairs ([Instructions here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#ssh)).
+
+Fetching upstream changes:
+
+When contributing to a project, you need to keep your fork up to date with the original, generally known as the upstream repository. You can do this using the Synchronizing Changes Git workflow outlined above, or you can use the `Fetch upstream` button on your fork. This will allow you to either automatically fetch the changes, or choose to compare them first before merging.
+
+Making a pull request:
+
+Once you have done some work on a project and you have your changes in your forked version of the repository, you can now submit the changes to the upstream repository by making a pull request. This allows the maintainers to review your work, make comments and request any necessary changes, and if they are happy, merge your changes into the project codebase. Before making a pull request you should make sure to fetch any upstream changes. The steps to make a pull request are:
+
+1. Either navigate to `Pull Requests` on the upstream repository and click the green `New pull request` button or on you forked repository, select the branch you'd like to submit, click on `contribute` and then `Open pull request`. If you have recently pushed changes to Github, you should also see a banner at the top of the page with a `Compare and pull request` button you can click on.
+2. You will then get taken to the Open pull request form, where you can create a description of your pull request. Here you should check out the project's Contributing guidelines and follow any conventions described. Many projects will have a pull request template to help you get it right.
+3. Once you are ready, click `Create pull request`. Congratulations, you have made your pull request 🎉.
+4. If a maintainer requests changes you can make the requested changes and push new commits to the same branch and they will automatically be added to the pull request.
+
 - Gitlab <!-- I would need help here since I have no experience with Gitlab -->
 
 ## What is open source
