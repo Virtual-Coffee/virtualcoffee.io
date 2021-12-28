@@ -117,6 +117,12 @@ If you are a coffee lover, this is definitely a channel for you because it’s a
 
 ---
 
+### #community-questions
+
+Have questions about Virtual Coffee? What we do? Tools we use? Drop them here for the community to answer!
+
+---
+
 ### #consulting-and-freelancing
 
 This channel is to discuss business aspects of consulting and get support on client issues.
@@ -143,9 +149,21 @@ Do you know some non-VC-affiliated tech events and want to share them with us? T
 
 ---
 
+### #fandom
+
+The floodgates are open to discuss any and all of our beloved fandoms. Manga/Anime, Marvel, tv shows, comics, etc. As always the Code of Conduct applies. No NSFW content.
+
+---
+
 ### #food
 
 Feel like you want to share delicious foods that you know, your instagram-like (or not) food pics, or ask and share recipes? We welcome all foodies here!
+
+---
+
+### #foreign-languages-and-culture
+
+This channel covers any and all languages, including English. In addition, use this as a space to share different aspects of your various cultures, like regional holidays, family traditions, anything you find interesting or fun!
 
 ---
 
@@ -243,9 +261,9 @@ External job postings are not vetted by Virtual Coffee maintainers.
 
 ---
 
-### #just-javascript
+### #learning-together
 
-A channel to support, co-learning, and chat about the “Just JavaScript” course.
+A channel to support, co-learning, and chat about topics we want to learn together.
 
 ---
 
@@ -264,14 +282,6 @@ Anything about machine learning, statistics, and linguistics is happening in thi
 ### #making-stuff
 
 A place to share things you make! Hobbies, crafts, costumes, woodworking, or anything else IRL!
-
----
-
-### #manga-anime
-
-This is the place where nerds unite! The perfect channel to discuss your favourite manga, anime, etc.
-
-Please use the #spoiler tag when starting threads about new releases, chapters, etc. We remain respectful and kind here. No NSFW content.
 
 ---
 
@@ -349,12 +359,6 @@ A channel for members in the European region.
 
 ---
 
-### #spanish
-
-Are you a Spanish speaker or learning Spanish? Come here to talk and practice your Spanish language skills!
-
----
-
 ### #sportsball
 
 Do you like football, soccer, basketball, or any other sportsball? This channel is dedicated to you, sportsball fans!
@@ -386,6 +390,12 @@ This channel is for announcements and discussion of both official Virtual Coffee
 #### 📌 Pinned in this channel: {.h5}
 
 - Lunch & Learn Submission Form
+
+---
+
+### #web3
+
+Discussing and learning about web3 and the changes coming to the internet from blockchain technology. Topics can include: Crypto/NFT's, DAO's, Decentralized Technology, Non Crypto Blockchain use cases.
 
 ---
 
