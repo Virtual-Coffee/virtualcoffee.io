@@ -40,7 +40,7 @@ If you are a contributor, this checklist is a handy tool for evaluating how well
 
 If you are a maintainer looking to open an open source project to contributions, this checklist will help you to get your repository into a good state to start receiving external contributions.
 
-Here's the checklist. For more detailed explanation of these points, check out the [Maintainers Checklist](oss-maintainer-checklist.md) It isn't necessary for a project in the wild to have _all_ of these things, but it should have most of them.
+Here's the checklist. For more detailed explanation of these points, check out the [Maintainers Checklist](../oss-maintainer-checklist/) It isn't necessary for a project in the wild to have _all_ of these things, but it should have most of them.
 
 - ✅ It should have a relevant name.
 - ✅ It should have a clear description that tells you what the project does and what it's for.
@@ -139,7 +139,7 @@ You should approach open source work with the same professionalism as you would 
 
 ## Guide to Hacktoberfest
 
-- VCHI and Hacktoberfest sites.
+Check out the official [Hacktoberfest](https://hacktoberfest.digitalocean.com/) site and our own [Virtual Coffee Hacktoberfest Initiative](https://hacktoberfest.virtualcoffee.io)
 
 Getting the most out of Hacktoberfest as a:
 
