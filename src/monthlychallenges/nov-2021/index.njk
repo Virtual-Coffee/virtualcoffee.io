@@ -21,18 +21,35 @@ tags: monthlychallenges
 
 <p class="lead">Get those blog posts up!</p>
 
+{% if completedGoals.length %}
+
+<h2><small>Current status:</small></h2>
+
+<ul>
+	{% for goal in completedGoals %}
+	<li class="lead">{{goal | toLocaleString}} goal completed!!!</li>
+	{% endfor %}
+</ul>
+
+<div class="h3">
+	Stretch Goal {{completedGoals.length}}: {{totals.totalCount | toLocaleString}}
+	out of {{currentGoal | toLocaleString}} words
+</div>
+{% else %}
 <h2>
-	Current status: {{totals.totalCount | toLocaleString}} out of 50,000 words
+	Current status: {{totals.totalCount | toLocaleString}} out of {{currentGoal |
+	toLocaleString}} words
 </h2>
+{% endif %}
 
 <div class="progress my-4" style="height: 3em">
 	<div
 		class="progress-bar progress-bar progress-bar-striped"
 		role="progressbar"
-		style="width: {{(totals.totalCount/50000)*100}}%"
+		style="width: {{(totals.totalCount/currentGoal)*100}}%"
 		aria-valuenow="totals.totalCount"
 		aria-valuemin="0"
-		aria-valuemax="50000"
+		aria-valuemax="{{currentGoal}}"
 	>
 		{{totals.totalCount | toLocaleString}} Words
 	</div>

@@ -2,6 +2,7 @@
 
 name: Netlify Build
 on:
+  workflow_dispatch:
   schedule:
     # Run at 0815 daily
     - cron: '15 8 * * *'
