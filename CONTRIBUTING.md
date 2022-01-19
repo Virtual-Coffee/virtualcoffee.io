@@ -25,7 +25,7 @@ We really want to make space for all developers to feel comfortable and supporte
 
 # Table of Contents
 
-- [Contrubutors Guide](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#contributors-guide)
+- [Contributors Guide](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#contributors-guide)
 - [Getting Started](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#getting-started)
 - [What type of contributions are desired](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#what-type-of-contributions-are-desired)
 - [The Basics](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#the-basics)
