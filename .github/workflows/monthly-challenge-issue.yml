@@ -1,0 +1,34 @@
+name: Monthly Challenge Issue
+on:
+  schedule:
+    # run on the 20th of the month
+    - cron: '* * 20 * *'
+
+jobs:
+  create_issue:
+    name: Create monthly challenge issue
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Create monthly challenge issue
+        uses: imjohnbo/issue-bot@3daae12aa54d38685d7ff8459fc8a2aee8cea98b
+        with:
+          labels: 'Team: Monthly Challenge'
+          title: 'Add New Monthly Challenge'
+          body: |
+            ## Issue Context
+            *Add New Challenge to the Site*
+
+            You can use [June 2021](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/src/monthlychallenges/june-2021/index.njk) as kind of a template
+
+            ## Steps
+            - [ ] Add folder src > monthlychallenges > {MONTH}-2022
+            - [ ] Add index.njk to the file
+            - [ ] Create a PR that uses `closes #{number of this issue}`
+            - [ ] Request @BekahHW to review PR once ready.
+
+          pinned: false
+          close-previous: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
