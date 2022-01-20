@@ -2,7 +2,7 @@ name: Monthly Challenge Issue
 on:
   schedule:
     # run on the 20th of the month
-    - cron: '00 12 20 * *'
+    - cron: '0 0 20 * *'
 
 jobs:
   create_issue:
