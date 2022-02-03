@@ -151,7 +151,7 @@ Do you know some non-VC-affiliated tech events and want to share them with us? T
 
 ### #fandom
 
-The floodgates are open to discuss any and all of our beloved fandoms. Manga/Anime, Marvel, tv shows, comics, etc. As always the Code of Conduct applies. No NSFW content.
+The floodgates are open to discuss any and all of our beloved fandoms. Manga/Anime, Marvel, TV shows, comics, etc. As always the Code of Conduct applies. No NSFW content.
 
 ---
 
@@ -238,6 +238,12 @@ Do you have any questions about your code? Or do you need someone to help you by
 ### #humor
 
 Share those memes, jokes, and laughter with us here! This channel is for humor that embraces the Virtual Coffee COC, like 999%.
+
+---
+
+### #i-love-pets
+
+A place for pet parents and pet lovers to hang out. Share those cute pets pictures here!
 
 ---
 
@@ -390,6 +396,12 @@ This channel is for announcements and discussion of both official Virtual Coffee
 #### 📌 Pinned in this channel: {.h5}
 
 - Lunch & Learn Submission Form
+
+---
+
+### #vue-crew
+
+Discussing and learning everything about VueJS.
 
 ---
 
