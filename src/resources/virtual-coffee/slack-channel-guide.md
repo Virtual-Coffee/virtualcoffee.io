@@ -61,8 +61,8 @@ Make sure to check it out regularly so you won’t miss out on our events!
 #### 📌 Pinned in this channel: {.h5}
 
 - Link to Virtual Coffee Teams Volunteer Form
-- Link to Virtual Coffee’s Code Of Conduct
-- Link to Report Form Code Of Conduct
+- Link to Virtual Coffee’s Code of Conduct
+- Link to Report Form Code of Conduct
 
 ---
 
@@ -84,10 +84,7 @@ If you love reading, this channel is what you’re looking for. The channel for 
 
 There are weekly discussion questions, a reading schedule, and a live group discussion at the end of the book going on in this channel.
 
-#### 📌 Pinned in this channel: {.h5}
-
-- Book(s) of the month
-- Reading schedule
+Head over to the channel's description for the book's of the month and the reading schedule.
 
 ---
 
@@ -105,10 +102,6 @@ Are you doing Exercism, CodeWars, LeetCode, or another code challenge?
 
 This channel is the perfect place to flex your skills, or ask for help!
 
-#### 📌 Pinned in this channel: {.h5}
-
-- Link to Virtual Coffee team on Exercism
-
 ---
 
 ### #coffee
@@ -119,7 +112,9 @@ If you are a coffee lover, this is definitely a channel for you because it’s a
 
 ### #community-questions
 
-Have questions about Virtual Coffee? What we do? Tools we use? Drop them here for the community to answer!
+Have questions about Virtual Coffee? What we do? What we're up to? Tools we use and/or how to utilize them?
+Or you have some ideas for the community that you would share?
+Drop them here for the community to answer!
 
 ---
 
@@ -181,17 +176,18 @@ Want to game with other VC'ers? Look no further! It can be anything from a fun w
 
 ### #general
 
-A place to post anything in general.
+A place to post anything related to tech in general and extensions of Virtual Coffee's conversations.
 
 #### 🔁 Regular posts in this channel: {.h5}
 
-- Notes from Coffees
+- Notes from weekly coffees
 - Wednesday’s midweek check-in
 - Friday’s gratitude
 
 #### 📌 Pinned in this channel: {.h5}
 
-- Link to [Virtual Coffee’s repo issue #13](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/13) on GitHub to add yourself as a member of Virtual Coffee on our site.
+- Link to Lunch & Learn Talk Submission Form.
+- Link to Virtual Coffee’s repo issue #13 on GitHub to add yourself as a member of Virtual Coffee on our site.
 
 ---
 
@@ -227,7 +223,10 @@ It’s a safe place to let out anything heavy that bothers you and/or ask for su
 
 ### #help-and-pairing
 
-Do you have any questions about your code? Or do you need someone to help you by pairing? You can ask for it on this channel.
+Do you have any questions about your code? Or do you need someone to help you by pairing? You can ask for it here!
+
+This channel is not limited to throw questions or ask help around code.
+You can also ask for resources, ask opinions about your project, ask help to fill surveys, or any other help related to tech.
 
 #### 📌 Pinned in this channel: {.h5}
 
@@ -237,7 +236,7 @@ Do you have any questions about your code? Or do you need someone to help you by
 
 ### #humor
 
-Share those memes, jokes, and laughter with us here! This channel is for humor that embraces the Virtual Coffee COC, like 999%.
+Share those memes, jokes, and laughter with us here! This channel is for humor that embraces the Virtual Coffee's Code of Conduct, like 999%.
 
 ---
 
@@ -325,7 +324,7 @@ A place to discuss ways to create, contribute to, and maintain open-source proje
 
 #### 📌 Pinned in this channel: {.h5}
 
-Link to Virtual Coffee issues on GitHub
+- Link to Virtual Coffee issues on GitHub
 
 ---
 
@@ -355,7 +354,12 @@ A space that is dedicated to discussing anything about politics.
 
 ### #random
 
-You have something to share, but you don’t find any channel that is suitable for your post? Drop it in this channel!
+Do you want to share something that's completely random?
+Or maybe you want to share or ask something, but you're not sure where to drop it?
+You can always drop it in this channel!
+
+We do encourage you to use this channel whenever you are not sure where to post your thread.
+Our maintainers and/or one of our members will repost it to the suitable channel(s) for more exposure.
 
 ---
 
@@ -395,7 +399,7 @@ This channel is for announcements and discussion of both official Virtual Coffee
 
 #### 📌 Pinned in this channel: {.h5}
 
-- Lunch & Learn Submission Form
+- Lunch & Learn Talk Submission Form
 
 ---
 
