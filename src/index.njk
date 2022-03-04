@@ -116,9 +116,9 @@ eleventyNavigation:
 				<ul class="postlist">
 					{% for event in events | head(5) %}
 					<li class="postlist-item">
-						<a class="postlist-title" href="{{event.url}}">{{event.name}}</a>
+						{{event.title}}
 						<p class="postlist-description">
-							<strong>{{ event.start_time | dateForDisplay }}</strong>
+							<strong>{{ event.startDateLocalized | dateForDisplay }}</strong>
 						</p>
 					</li>
 					{% endfor %}

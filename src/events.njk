@@ -20,37 +20,26 @@ eleventyNavigation:
 	<div class="container-xl">
 		<h2>Upcoming Events</h2>
 		<div class="mb-3">
-			Register for and view all of our upcoming events
-			<a
-				href="https://meetingplace.io/virtual-coffee"
-				target="_blank"
-				rel="noopener noreferrer"
-				>on Meetingplace.io</a
-			>.
+			<p>
+				<strong
+					>As we move into our third year, we’ve paused new members joining our
+					coffee chats as we support our current community and make plans for
+					the future. We hope to see you all soon &#x1f496;</strong
+				>
+			</p>
 		</div>
 
 		{% for event in events | head(20) %}
 
 		<div class="card mb-4">
-			<a
-				href="{{ event.url }}"
-				class="card-header"
-				target="_blank"
-				rel="noopener noreferrer"
-				>{{ event.start_time | dateForDisplay }}</a
-			>
+			<div class="card-header">
+				{{ event.startDateLocalized | dateForDisplay('EEEE, fff') }}
+			</div>
 			<div class="card-body">
-				<h5 class="card-title">{{event.name}}</h5>
-				{% if event.description %}
-				<p class="card-text">{{ event.description | striptags(true) }}</p>
+				<h5 class="card-title">{{event.title}}</h5>
+				{% if event.eventCalendarDescription %}
+				<p class="card-text">{{ event.eventCalendarDescription | safe }}</p>
 				{% endif %}
-				<a
-					href="{{ event.url }}"
-					class="btn-sm btn btn-secondary"
-					target="_blank"
-					rel="noopener noreferrer"
-					>Details and RSVP</a
-				>
 			</div>
 		</div>
 		{% endfor %}
