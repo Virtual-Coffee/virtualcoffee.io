@@ -43,10 +43,10 @@ module.exports = async function () {
 		},
 	});
 
-	console.log('Fetching events');
-
 	const rangeStart = DateTime.now().toISO();
 	const rangeEnd = DateTime.now().plus({ days: 30 }).toISO();
+
+	console.log('Fetching events', rangeStart, rangeEnd);
 
 	try {
 		const calendarsResponse = await graphQLClient.request(calendarsQuery);
