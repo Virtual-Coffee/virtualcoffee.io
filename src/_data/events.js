@@ -43,8 +43,8 @@ module.exports = async function () {
 		},
 	});
 
-	const rangeStart = DateTime.now().toISO();
-	const rangeEnd = DateTime.now().plus({ days: 30 }).toISO();
+	const rangeStart = DateTime.now().set({ hour: 0 }).toISO();
+	const rangeEnd = DateTime.now().set({ hour: 0 }).plus({ days: 30 }).toISO();
 
 	console.log('Fetching events', rangeStart, rangeEnd);
 
