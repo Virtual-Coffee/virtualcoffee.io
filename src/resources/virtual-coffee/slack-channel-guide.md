@@ -61,8 +61,8 @@ Make sure to check it out regularly so you won’t miss out on our events!
 #### 📌 Pinned in this channel: {.h5}
 
 - Link to Virtual Coffee Teams Volunteer Form
-- Link to Virtual Coffee’s Code Of Conduct
-- Link to Report Form Code Of Conduct
+- Link to Virtual Coffee’s Code of Conduct
+- Link to Report Form Code of Conduct
 
 ---
 
@@ -84,10 +84,7 @@ If you love reading, this channel is what you’re looking for. The channel for 
 
 There are weekly discussion questions, a reading schedule, and a live group discussion at the end of the book going on in this channel.
 
-#### 📌 Pinned in this channel: {.h5}
-
-- Book(s) of the month
-- Reading schedule
+Head over to the channel's description for the book's of the month and the reading schedule.
 
 ---
 
@@ -105,15 +102,19 @@ Are you doing Exercism, CodeWars, LeetCode, or another code challenge?
 
 This channel is the perfect place to flex your skills, or ask for help!
 
-#### 📌 Pinned in this channel: {.h5}
-
-- Link to Virtual Coffee team on Exercism
-
 ---
 
 ### #coffee
 
 If you are a coffee lover, this is definitely a channel for you because it’s all about COFFEES! Beans, beans, beans, the magical fruit!
+
+---
+
+### #community-questions
+
+Have questions about Virtual Coffee? What we do? What we're up to? Tools we use and/or how to utilize them?
+Or you have some ideas for the community that you would share?
+Drop them here for the community to answer!
 
 ---
 
@@ -143,9 +144,21 @@ Do you know some non-VC-affiliated tech events and want to share them with us? T
 
 ---
 
+### #fandom
+
+The floodgates are open to discuss any and all of our beloved fandoms. Manga/Anime, Marvel, TV shows, comics, etc. As always the Code of Conduct applies. No NSFW content.
+
+---
+
 ### #food
 
 Feel like you want to share delicious foods that you know, your instagram-like (or not) food pics, or ask and share recipes? We welcome all foodies here!
+
+---
+
+### #foreign-languages-and-culture
+
+This channel covers any and all languages, including English. In addition, use this as a space to share different aspects of your various cultures, like regional holidays, family traditions, anything you find interesting or fun!
 
 ---
 
@@ -163,17 +176,18 @@ Want to game with other VC'ers? Look no further! It can be anything from a fun w
 
 ### #general
 
-A place to post anything in general.
+A place to post anything related to tech in general and extensions of Virtual Coffee's conversations.
 
 #### 🔁 Regular posts in this channel: {.h5}
 
-- Notes from Coffees
+- Notes from weekly coffees
 - Wednesday’s midweek check-in
 - Friday’s gratitude
 
 #### 📌 Pinned in this channel: {.h5}
 
-- Link to [Virtual Coffee’s repo issue #13](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/13) on GitHub to add yourself as a member of Virtual Coffee on our site.
+- Link to Lunch & Learn Talk Submission Form.
+- Link to Virtual Coffee’s repo issue #13 on GitHub to add yourself as a member of Virtual Coffee on our site.
 
 ---
 
@@ -209,7 +223,10 @@ It’s a safe place to let out anything heavy that bothers you and/or ask for su
 
 ### #help-and-pairing
 
-Do you have any questions about your code? Or do you need someone to help you by pairing? You can ask for it on this channel.
+Do you have any questions about your code? Or do you need someone to help you by pairing? You can ask for it here!
+
+This channel is not limited to throw questions or ask help around code.
+You can also ask for resources, ask opinions about your project, ask help to fill surveys, or any other help related to tech.
 
 #### 📌 Pinned in this channel: {.h5}
 
@@ -219,7 +236,13 @@ Do you have any questions about your code? Or do you need someone to help you by
 
 ### #humor
 
-Share those memes, jokes, and laughter with us here! This channel is for humor that embraces the Virtual Coffee COC, like 999%.
+Share those memes, jokes, and laughter with us here! This channel is for humor that embraces the Virtual Coffee's Code of Conduct, like 999%.
+
+---
+
+### #i-love-pets
+
+A place for pet parents and pet lovers to hang out. Share those cute pets pictures here!
 
 ---
 
@@ -243,9 +266,9 @@ External job postings are not vetted by Virtual Coffee maintainers.
 
 ---
 
-### #just-javascript
+### #learning-together
 
-A channel to support, co-learning, and chat about the “Just JavaScript” course.
+A channel to support, co-learning, and chat about topics we want to learn together.
 
 ---
 
@@ -264,14 +287,6 @@ Anything about machine learning, statistics, and linguistics is happening in thi
 ### #making-stuff
 
 A place to share things you make! Hobbies, crafts, costumes, woodworking, or anything else IRL!
-
----
-
-### #manga-anime
-
-This is the place where nerds unite! The perfect channel to discuss your favourite manga, anime, etc.
-
-Please use the #spoiler tag when starting threads about new releases, chapters, etc. We remain respectful and kind here. No NSFW content.
 
 ---
 
@@ -309,7 +324,7 @@ A place to discuss ways to create, contribute to, and maintain open-source proje
 
 #### 📌 Pinned in this channel: {.h5}
 
-Link to Virtual Coffee issues on GitHub
+- Link to Virtual Coffee issues on GitHub
 
 ---
 
@@ -339,19 +354,18 @@ A space that is dedicated to discussing anything about politics.
 
 ### #random
 
-You have something to share, but you don’t find any channel that is suitable for your post? Drop it in this channel!
+Do you want to share something that's completely random?
+Or maybe you want to share or ask something, but you're not sure where to drop it?
+You can always drop it in this channel!
+
+We do encourage you to use this channel whenever you are not sure where to post your thread.
+Our maintainers and/or one of our members will repost it to the suitable channel(s) for more exposure.
 
 ---
 
 ### #region-europe
 
 A channel for members in the European region.
-
----
-
-### #spanish
-
-Are you a Spanish speaker or learning Spanish? Come here to talk and practice your Spanish language skills!
 
 ---
 
@@ -385,7 +399,19 @@ This channel is for announcements and discussion of both official Virtual Coffee
 
 #### 📌 Pinned in this channel: {.h5}
 
-- Lunch & Learn Submission Form
+- Lunch & Learn Talk Submission Form
+
+---
+
+### #vue-crew
+
+Discussing and learning everything about VueJS.
+
+---
+
+### #web3
+
+Discussing and learning about web3 and the changes coming to the internet from blockchain technology. Topics can include: Crypto/NFT's, DAO's, Decentralized Technology, Non Crypto Blockchain use cases.
 
 ---
 

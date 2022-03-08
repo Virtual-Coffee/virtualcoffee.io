@@ -1,9 +1,9 @@
 require('dotenv').config();
-const { DateTime } = require('luxon');
 const fs = require('fs');
 const pluginRss = require('@11ty/eleventy-plugin-rss');
 const pluginSyntaxHighlight = require('@11ty/eleventy-plugin-syntaxhighlight');
 const pluginNavigation = require('@11ty/eleventy-navigation');
+const pluginPWA = require('eleventy-plugin-pwa');
 const markdownIt = require('markdown-it');
 const markdownItAnchor = require('markdown-it-anchor');
 
@@ -12,6 +12,18 @@ module.exports = function (eleventyConfig) {
 	eleventyConfig.addPlugin(pluginRss);
 	eleventyConfig.addPlugin(pluginSyntaxHighlight);
 	eleventyConfig.addPlugin(pluginNavigation);
+	eleventyConfig.addPlugin(pluginPWA, {
+		globIgnores: [
+			'forms/lightning-talk-submissions/index.html',
+			'forms/lightning-talk-submissions-thanks/index.html',
+			'lunch-and-learn-idea/index.html',
+			'lunch-and-learn-idea-thanks/index.html',
+			'report-coc-violation/index.html',
+			'report-coc-violation/thanks/index.html',
+			'membership/*/index.html',
+			'membership-thankyou/index.html',
+		],
+	});
 
 	require('./utils/imgix')(eleventyConfig);
 	require('./utils/shortcodes')(eleventyConfig);
