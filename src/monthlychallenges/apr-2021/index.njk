@@ -6,13 +6,16 @@ date: 2021-04-01
 tags: monthlychallenges
 ---
 
+{% from "macros/svg.njk" import svg %}
 <div class="alert alert-success">
 	This monthly challenge is complete. Congratulations! Please join us for the
 	<a href="/monthlychallenges/">next challenge</a>!
 </div>
 
 <div class="row align-items-center">
-	<div class="col-sm-4">{% include "svg/undraw_Appreciation.svg" %}</div>
+	<div class="col-sm-4">
+		{{svg(src='svg/undraw_Appreciation.svg', ariaHidden=true)}}
+	</div>
 	<div class="col-sm-8">
 		<h1 class="display-4">Virtual Coffee</h1>
 		<p class="lead">Celebrating a year of community!</p>

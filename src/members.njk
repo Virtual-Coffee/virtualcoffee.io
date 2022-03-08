@@ -14,7 +14,8 @@ eleventyNavigation:
   order: 2
 ---
 
-{% from "macros/members.njk" import membercards %}
+{% from "macros/svg.njk" import svg %} {% from "macros/members.njk" import
+membercards %}
 
 <div class="bg-light py-5">
 	<div class="container-xl">
@@ -25,7 +26,7 @@ eleventyNavigation:
 		{{ membercards(members.memberData.members) }}
 		<div class="member-footer">
 			<h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
-			{% include "svg/undraw_celebration_0jvk.svg" %}
+			{{svg(src='svg/undraw_celebration_0jvk.svg', ariaHidden=true)}}
 		</div>
 	</div>
 </div>
