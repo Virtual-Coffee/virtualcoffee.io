@@ -100,7 +100,7 @@ If you'd like to see a preview of the production build, use this command to buil
 
 ### PWA and Templates using Forms
 
-The site can be installed as a Progressive Web Application (PWA), which includes strategic caching of resources.  Certain pages such as those including forms and destination pages for forms should not be cached. A list of these is supplied to the `pluginPWA` plugin in our `.eleventy.js` file. If you add any such form files for form destination files in development, they should probably be added to this list.
+The site can be installed as a Progressive Web Application (PWA), which includes strategic caching of resources. Certain pages such as those including forms and destination pages for forms should not be cached. A list of these is supplied to the `pluginPWA` plugin in our `.eleventy.js` file. If you add any such form files for form destination files in development, they should probably be added to this list.
 
 ### Heads Up
 

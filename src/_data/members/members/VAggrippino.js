@@ -24,6 +24,10 @@ module.exports = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://www.aggrippino.com/', title: 'Vince Aggrippino - Coding and Web Technologies' },
+		{
+			type: 'website',
+			url: 'https://www.aggrippino.com/',
+			title: 'Vince Aggrippino - Coding and Web Technologies',
+		},
 	],
 };

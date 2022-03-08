@@ -5,9 +5,14 @@ eleventyNavigation:
   order: 1
 ---
 
+{% from "macros/svg.njk" import svg %}
+
 <div class="hero">
 	<div class="container pt-5 pb-5 pt-sm-6">
-		<h1>{% include "svg/virtual-coffee-full-copy.svg" %}</h1>
+		<h1>
+			{{svg(src='svg/virtual-coffee-full-copy.svg', svgTitle='Virtual Coffee')}}
+		</h1>
+
 		<h2 class="pt-5">
 			<span>An intimate community for all devs,</span>
 			<span
@@ -38,7 +43,7 @@ eleventyNavigation:
 		<h2 class="text-center mb-5">What we're up to</h2>
 		<div class="homepageblocks">
 			<div id="about" class="homepageblock-hero">
-				{% include 'svg/undraw_celebration_0jvk.svg' %}
+				{{svg(src='svg/undraw_celebration_0jvk.svg', ariaHidden=true)}}
 			</div>
 
 			<h3 class="text-secondary homepageblock-title">
@@ -102,7 +107,9 @@ eleventyNavigation:
 			</div>
 
 			{% for pageBlock in collections.homePageBlocksLarge %}
-			<div class="homepageblock-hero">{% include (pageBlock.data.hero) %}</div>
+			<div class="homepageblock-hero">
+				{{svg(src=pageBlock.data.hero, ariaHidden=true)}}
+			</div>
 
 			<h3 class="text-secondary homepageblock-title">
 				<a href="{{pageBlock.url}}">{{pageBlock.data.homePageBlocks.key}}</a>

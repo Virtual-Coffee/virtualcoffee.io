@@ -1,6 +1,12 @@
 <svg id="ef85285a-d43b-4d94-bb8b-61c01752607d" data-name="Layer 1"
-  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1031.79 709.36133">
-  <title>group_hangout</title>
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1031.79 709.36133" {% if ariaHidden %}
+  aria-hidden="true"
+  {% else %}
+  role="img"
+  aria-labelledby="undrawGroupHangoutSvgTitle"
+  {% endif %}
+>
+  {% if not ariaHidden %}<title id="undrawGroupHangoutSvgTitle">{{svgTitle if svgTitle is defined else "UndrawGroupHangout"}}</title>{% endif %}
   <polygon points="850.5 632.986 851.5 656.986 851.5 677.986 877.5 677.986 877.5 632.986 850.5 632.986" fill="#ffb9b9"/>
   <polygon points="993.5 610.986 994.5 634.986 994.5 655.986 1020.5 655.986 1015.5 606.986 993.5 610.986" fill="#ffb9b9"/>
   <polygon points="967.5 221.986 959.5 284.986 933.5 359.986 921.5 316.986 936.5 289.986 933.5 232.986 967.5 221.986" fill="#ffb9b9"/>

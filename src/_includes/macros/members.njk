@@ -1,4 +1,4 @@
-{% macro membercards(data) %}
+{% from "macros/svg.njk" import svg %} {% macro membercards(data) %}
 <div class="membercards">
 	{% for member in data %} {% if member %}
 
@@ -39,7 +39,7 @@
 				title="{{item.title}}"
 				target="_blank"
 				rel="noopener noreferrer"
-				>{% include "svg/" + item.type + ".svg" %}</a
+				>{{svg(src="svg/" + item.type + ".svg")}}</a
 			>
 
 			{% endfor %}
