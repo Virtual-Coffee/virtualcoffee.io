@@ -107,7 +107,9 @@ eleventyNavigation:
 			</div>
 
 			{% for pageBlock in collections.homePageBlocksLarge %}
-			<div class="homepageblock-hero">{% include (pageBlock.data.hero) %}</div>
+			<div class="homepageblock-hero">
+				{{svg(src=pageBlock.data.hero, ariaHidden=true)}}
+			</div>
 
 			<h3 class="text-secondary homepageblock-title">
 				<a href="{{pageBlock.url}}">{{pageBlock.data.homePageBlocks.key}}</a>
