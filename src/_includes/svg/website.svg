@@ -1,4 +1,4 @@
-<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" {% if ariaHidden %}
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" {% if ariaHidden %}
   aria-hidden="true"
   {% else %}
   role="img"

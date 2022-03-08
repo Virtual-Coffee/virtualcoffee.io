@@ -1,4 +1,4 @@
-<svg role="img" id="e4bbe722-77af-4dff-9d23-13f94132c30a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 921.71991 653.40956" {% if ariaHidden %}
+<svg id="e4bbe722-77af-4dff-9d23-13f94132c30a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 921.71991 653.40956" {% if ariaHidden %}
   aria-hidden="true"
   {% else %}
   role="img"
