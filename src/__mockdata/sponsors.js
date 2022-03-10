@@ -1,4 +1,4 @@
-var faker = require('faker');
+var faker = require('@faker-js/faker');
 
 module.exports = {
 	organization: {
