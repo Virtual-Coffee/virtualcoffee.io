@@ -1,0 +1,107 @@
+$enable-responsive-font-sizes: true;
+
+$container-max-widths: (
+	sm: 540px,
+	md: 720px,
+	lg: 960px,
+	xl: 1200px,
+);
+
+$spacer: 1rem;
+$spacers: (
+	6: (
+		$spacer * 6,
+	),
+	7: (
+		$spacer * 9,
+	),
+	8: (
+		$spacer * 12,
+	),
+);
+
+$white: #fff;
+$gray-200: #eff0f3;
+$gray-900: #0d0d0d;
+$gray-800: #2a2a2a;
+$gray-700: #313d3e;
+$black: #000;
+
+$blue: #376ed9;
+$pink: #d9376e;
+$anotherBlue: #355074;
+$pinkDarker: #7e0029;
+$red: #dc3545;
+$orange: #da6f36;
+$blackCoral: #3d5467;
+$green: #6ed937;
+$purple: #3f3d56;
+$primary: $pink;
+$secondary: $blackCoral;
+$alert-color-level: 12;
+
+$gradient-primary: linear-gradient(to right bottom, $pink, $orange);
+
+$link-color: $blue;
+
+$body-bg: $white;
+$body-color: $gray-800;
+// $headings-color: $gray-900;
+
+$code-color: $blackCoral;
+
+// $card-height: 100%;
+
+$form-group-margin-bottom: 2rem;
+
+$hr-margin-y: $spacer * 3;
+
+$grid-breakpoints: (
+	xs: 0,
+	sm: 576px,
+	md: 768px,
+	lg: 992px,
+	xl: 1200px,
+	xxl: 1875px,
+);
+
+$grid-gutter-width: 60px;
+
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+	'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+	'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+$font-family-base: 'Inter var', $font-family-sans-serif;
+
+$headings-font-weight: 700;
+
+$display1-weight: 900;
+$display2-weight: 900;
+$display3-weight: 900;
+$display4-weight: 900;
+$display5-weight: 900;
+
+// html { font-family: 'Inter', sans-serif; }
+// @supports (font-variation-settings: normal) {
+//   html { font-family: 'Inter var', sans-serif; }
+// }
+
+$navbar-padding-y: 0.75rem;
+$navbar-dark-color: rgba($white, 0.9);
+$navbar-dark-hover-color: $white;
+$navbar-dark-active-color: $white;
+$navbar-dark-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-dark-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+$navbar-dark-toggler-border-color: $white;
+
+$navbar-light-color: rgba($black, 0.85);
+$navbar-light-hover-color: rgba($black, 1);
+$navbar-light-active-color: rgba($black, 1);
+$navbar-light-disabled-color: rgba($black, 0.3);
+$navbar-light-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-light-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+$navbar-light-toggler-border-color: rgba($black, 0.85);
+
+$navbar-light-brand-color: $navbar-light-active-color;
+$navbar-light-brand-hover-color: $navbar-light-active-color;
+
+$navbar-toggler-padding-y: 0.25rem;
+$navbar-toggler-padding-x: 0.5rem;
+$navbar-toggler-font-size: 1rem;

@@ -1,21 +1,12 @@
 [build]
-  command = "remix build"
-  functions = "netlify/functions"
-  publish = "public"
+  publish = "_site"
+  command = "yarn build"
 
 [dev]
-  command = "remix watch"
-  port = 9000
-
-[[headers]]
-  for = "/build/*"
-  [headers.values]
-    "Cache-Control" = "public, max-age=31536000, s-maxage=31536000"
-
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/server"
-  status = 200
+  publish = "_site"
+  command = "yarn start"
+  framework = "#custom"
+  targetPort = 9000
 
 [[redirects]]
   from = "/sponsorship"

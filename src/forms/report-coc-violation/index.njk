@@ -1,0 +1,127 @@
+---
+layout: layouts/default.njk
+title: Report a Code of Conduct Violation
+description: If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.
+permalink: '/report-coc-violation/'
+---
+
+{% from "macros/forms.njk" import netlifyForm %}
+
+<div class="py-5">
+	<div class="container bodycopy">
+		<h1>Report a Code of Conduct Violation</h1>
+		<div class="lead mb-5">
+			<p>
+				If you have experienced or witnessed violations to Virtual Coffee's
+				<a href="/code-of-conduct">Code of Conduct</a>, we need to know about
+				it.
+			</p>
+			<p>
+				Your privacy and security will be respected, but if you wish to remain
+				anonymous, we will still accept and review your report.
+			</p>
+		</div>
+		{% call netlifyForm('/report-coc-violation/thanks/', 'coc-violation') %}
+
+		<fieldset>
+			<div class="form-group">
+				<label for="formName">Your Name</label>
+				<input
+					type="text"
+					class="form-control"
+					id="formName"
+					name="name"
+					aria-describedby="nameHelp"
+				/>
+				<small id="nameHelp" class="form-text text-muted"
+					>Optional, skip if you wish to remain anonymous</small
+				>
+			</div>
+			<div class="form-group">
+				<label for="formEmail">Email</label>
+				<input
+					type="email"
+					class="form-control"
+					id="formEmail"
+					name="email"
+					aria-describedby="emailHelp"
+				/>
+				<small id="emailHelp" class="form-text text-muted"
+					>Optional, skip if you wish to remain anonymous</small
+				>
+			</div>
+			<div class="form-group">
+				<label for="reporteeName">Slack name of member you're reporting</label>
+				<input
+					type="text"
+					class="form-control"
+					id="reporteeName"
+					name="reporteeName"
+					required
+					aria-describedby="reporteeNameHelp"
+				/>
+				<small id="reporteeNameHelp" class="form-text text-muted"
+					>Required</small
+				>
+			</div>
+			<div class="form-group">
+				<label for="timeLocation">Approximate time/location</label>
+				<input
+					type="text"
+					class="form-control"
+					id="timeLocation"
+					name="timeLocation"
+					required
+					aria-describedby="timeLocationHelp"
+				/>
+				<small id="timeLocationHelp" class="form-text text-muted"
+					>Required</small
+				>
+			</div>
+			<div class="form-group">
+				<label for="description">Description of the event:</label>
+				<textarea
+					class="form-control"
+					required
+					id="description"
+					name="description"
+					rows="3"
+					aria-describedby="descriptionHelp"
+				></textarea>
+				<small id="descriptionHelp" class="form-text text-muted"
+					>Required</small
+				>
+			</div>
+			<div class="form-group">
+				<label for="anyoneElseInvolved"
+					>Was anyone else involved in this event?</label
+				>
+				<textarea
+					class="form-control"
+					id="anyoneElseInvolved"
+					name="anyoneElseInvolved"
+					rows="3"
+				></textarea>
+			</div>
+
+			<div class="form-group">
+				<label for="uploadedFiles">Screenshot or any other file:</label>
+				<input
+					type="file"
+					class="form-control"
+					id="uploadedFiles"
+					name="uploadedFiles"
+					aria-describedby="uploadedFilesHelp"
+				/>
+			</div>
+		</fieldset>
+
+		<div class="text-right">
+			<button type="submit" class="btn btn-primary btn-lg">
+				Submit Report
+			</button>
+		</div>
+
+		{% endcall %}
+	</div>
+</div>

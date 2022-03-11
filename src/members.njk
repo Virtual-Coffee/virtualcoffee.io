@@ -1,0 +1,32 @@
+---
+layout: layouts/default.njk
+title: Virtual Coffee Members
+description: Meet our amazing members!
+homePageBlocks:
+  type: small
+  key: Our Members
+  order: 2
+hero: 'svg/undraw_team_spirit_hrr4.svg'
+heroHeader: Virtual Coffee Members
+heroSubheader: A community is only as awesome as its members!
+eleventyNavigation:
+  key: Members
+  order: 2
+---
+
+{% from "macros/svg.njk" import svg %} {% from "macros/members.njk" import
+membercards %}
+
+<div class="bg-light py-5">
+	<div class="container-xl">
+		<h2 class="mb-sm-3 mb-md-4 display-5">Core Team</h2>
+		{{ membercards(members.memberData.core) }}
+
+		<h2 class="mb-sm-3 mb-md-5 display-5">Our Members</h2>
+		{{ membercards(members.memberData.members) }}
+		<div class="member-footer">
+			<h2 class="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
+			{{svg(src='svg/undraw_celebration_0jvk.svg', ariaHidden=true)}}
+		</div>
+	</div>
+</div>

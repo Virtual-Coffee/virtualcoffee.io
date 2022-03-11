@@ -8,10 +8,5 @@ node_modules
 /.env
 /.cache
 
-
-
-/netlify/functions/server/index.js
-/public/build
-
 # Local Netlify folder
 .netlify

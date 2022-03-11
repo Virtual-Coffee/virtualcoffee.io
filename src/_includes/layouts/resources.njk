@@ -1,0 +1,28 @@
+---
+layout: layouts/default.njk
+---
+
+{% if eleventyNavigation.parent %}
+<div class="py-4">
+	<div class="container">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				{% set breadcrumbs = collections.memberresources |
+				eleventyNavigationBreadcrumb(eleventyNavigation.key) %} {% for item in
+				breadcrumbs %}
+				<li class="breadcrumb-item">
+					<a href="{{item.url}}">{{item.title if item.title else item.key}}</a>
+				</li>
+				{% endfor %}
+				<li class="breadcrumb-item active" aria-current="page">
+					{{eleventyNavigation.title if eleventyNavigation.title else
+					eleventyNavigation.key}}
+				</li>
+			</ol>
+		</nav>
+	</div>
+</div>
+
+{% endif %}
+
+<div class="resources-section">{{ content | safe }}</div>

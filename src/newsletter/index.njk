@@ -1,0 +1,38 @@
+---
+layout: layouts/simple.njk
+title: Virtual Coffee Newsletter
+description: 'Sign up for the Virtual Coffee Newsletter'
+homePageBlocks:
+  type: large
+  key: Virtual Coffee Newsletter
+  order: 4
+  collectionKey: newsletters
+  linkText: 'See more Newsletter Issues'
+hero: 'svg/undraw_arrived_f58d.svg'
+heroHeader: 'Virtual Coffee Newsletter'
+eleventyNavigation:
+  key: Newsletter
+  order: 5
+---
+
+<p class="lead">
+	Keep up to date with all things Virtual Coffee with our monthly Newsletter!
+</p>
+<p>
+	Since January 2021, our monthly newsletter includes upcoming Virtual Coffee
+	events, interesting things our members are doing, job postings we've seen, and
+	lots more. Sign up below to join in the fun!
+</p>
+
+<hr />
+
+<div class="row">
+	<div class="col-sm">
+		<h2>Recent Issues:</h2>
+		{% displayPostList collections.newsletters | reverse %}
+	</div>
+	<div class="col-sm">
+		{% from "macros/newslettersub.njk" import newsletterSubscribeForm %}
+		{{newsletterSubscribeForm(header='Subscribe:')}}
+	</div>
+</div>

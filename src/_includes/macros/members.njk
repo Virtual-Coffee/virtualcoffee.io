@@ -1,0 +1,50 @@
+{% from "macros/svg.njk" import svg %} {% macro membercards(data) %}
+<div class="membercards">
+	{% for member in data %} {% if member %}
+
+	<div class="membercard" id="member_{{member.github}}">
+		<div class="membercard-img">
+			<img src="{{member.avatarUrl}}" alt="" />
+		</div>
+
+		<div class="membercard-header">
+			<h3 class="membercard-name">{{member.name}}</h3>
+
+			{% if member.teams|length %}
+			<div class="membercard-teams">
+				{% for team in member.teams %}
+				<span class="badge badge-secondary">{{team}}</span>
+				{% endfor %}
+			</div>
+			{% endif %}
+		</div>
+
+		<div class="membercard-bd">
+			{% if member.bio %}
+			<div class="text-muted">{{member.bio | safe}}</div>
+			{% endif %} {% if member.mainUrl %}
+			<div class="text-truncate">
+				<a href="{{member.mainUrl}}" target="_blank" rel="noopener noreferrer"
+					>{{member.mainUrl | replace('https://','') |
+					replace('http://','')}}</a
+				>
+			</div>
+			{% endif %}
+		</div>
+		<div class="membercard-social">
+			{% for item in member.accounts %}
+			<a
+				href="{{item.url}}"
+				class="membercard-icon"
+				title="{{item.title}}"
+				target="_blank"
+				rel="noopener noreferrer"
+				>{{svg(src="svg/" + item.type + ".svg")}}</a
+			>
+
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %} {% endfor %}
+</div>
+{% endmacro %}
