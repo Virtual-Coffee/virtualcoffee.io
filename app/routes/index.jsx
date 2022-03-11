@@ -1,18 +1,20 @@
-// import { Link } from 'remix';
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
 import UndrawCelebration from '~/svg/UndrawCelebration';
 import getSponsors from '~/data/sponsors';
-import { json, useLoaderData } from 'remix';
+import { json, Link, useLoaderData } from 'remix';
+import { getEvents } from '~/data/events';
+import { dateForDisplay } from '~/utils/date';
 
 export const loader = async () => {
 	const sponsors = await getSponsors();
-	return json(sponsors);
+	const events = await getEvents({
+		limit: 5,
+	});
+	return json({ sponsors, events });
 };
 
 export default function Index() {
-	const sponsors = useLoaderData();
-
-	console.log(sponsors);
+	const { sponsors, events } = useLoaderData();
 
 	return (
 		<>
@@ -131,6 +133,30 @@ export default function Index() {
 										Stay up to date and join in the fun!
 									</p>
 								</li>
+							</ul>
+						</div>
+
+						<div id="about" className="homepageblock-hero">
+							<UndrawCelebration ariaHidden />
+						</div>
+
+						<h3 className="text-secondary homepageblock-title">
+							<Link to="/events">Community Events</Link>
+						</h3>
+
+						<div className="homepageblock-body">
+							<p className="lead">See our upcoming events!</p>
+							<ul className="postlist">
+								{events.map((event) => (
+									<li key={event.startDateLocalized} className="postlist-item">
+										<div>{event.title}</div>
+										<p className="postlist-description">
+											<strong>
+												{dateForDisplay(event.startDateLocalized)}
+											</strong>
+										</p>
+									</li>
+								))}
 							</ul>
 						</div>
 
