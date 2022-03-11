@@ -20,7 +20,9 @@
 		"build": "remix build",
 		"dev": "cross-env NODE_ENV=development netlify dev",
 		"postinstall": "remix setup node",
-		"start": "cross-env NODE_ENV=production netlify dev"
+		"start": "cross-env NODE_ENV=production netlify dev",
+		"sass:dev": "sass --load-path=node_modules --watch styles/:app/styles",
+		"sass:build": "sass --load-path=node_modules styles/:app/styles/"
 	},
 	"dependencies": {
 		"@netlify/functions": "^0.10.0",
