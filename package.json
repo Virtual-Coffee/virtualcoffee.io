@@ -17,7 +17,7 @@
 		"preinstall": "npx only-allow yarn",
 		"prepare": "husky install",
 		"format": "npx prettier --write --ignore-unknown \"**/*\"",
-		"build": "remix build",
+		"build": "sass:build && remix build",
 		"dev": "cross-env NODE_ENV=development netlify dev",
 		"postinstall": "remix setup node",
 		"start": "cross-env NODE_ENV=production netlify dev",
