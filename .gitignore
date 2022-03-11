@@ -15,4 +15,3 @@ node_modules
 
 # Local Netlify folder
 .netlify
-/app/styles
