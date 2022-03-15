@@ -1142,14 +1142,14 @@ export default function UndrawTeamSpirit({
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M540.61,823.91s3,2.94,6.29.84"
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M564,786.55s20-3.08,29.38,16.6a24,24,0,0,1-1.77,24.19c-3.11,4.39-7.7,7.66-14.07,5C563.34,826.51,564,786.55,564,786.55Z"
@@ -1192,14 +1192,14 @@ export default function UndrawTeamSpirit({
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M584.8,823.91s-3,2.94-6.3.84"
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M553.2,842.91c.53-.1,10.5-4.41,20.78,0Z"
@@ -1221,14 +1221,14 @@ export default function UndrawTeamSpirit({
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M518.28,857s1.33,5.56,6.37,1.42"
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M605.42,846.9h0c-.4,5.54-1.47,14.43-1.47,14.43s-4.45.54-11.33,1.16a5.81,5.81,0,0,1,0-1.16c.94-6.77.63-12,5-13.22C601.72,847,603.81,846.59,605.42,846.9Z"
@@ -1245,14 +1245,14 @@ export default function UndrawTeamSpirit({
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M609.54,857s-1.34,5.56-6.38,1.42"
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M551.5,864.2c-4.06-.09-8-.3-11.65-.66l-3.63-12.22a7.93,7.93,0,0,1-.33-2.23,7.78,7.78,0,0,1,15.55-.05C551.48,853.8,551.52,859.83,551.5,864.2Z"
@@ -1269,14 +1269,14 @@ export default function UndrawTeamSpirit({
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M540,867.56s-2.94,1-2.94,3.69"
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M591.71,849.09a7.91,7.91,0,0,1-.32,2.23L588,862.89c-3.58.29-7.6.57-11.85.81,0-4.32,0-10.07.07-14.66a7.77,7.77,0,0,1,15.54.05Z"
@@ -1293,14 +1293,14 @@ export default function UndrawTeamSpirit({
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M587.63,867.56s2.94,1,2.94,3.69"
 				transform="translate(-31.16 -20.14)"
 				fill="none"
 				stroke="#3f2b3b"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M560.82,782.77s-14.81-.47-15.28,11,23.14,6.61,23.14,6.61,9.92-1.33,8.19-8.3S571.53,783.4,560.82,782.77Z"

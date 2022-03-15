@@ -599,8 +599,8 @@ export default function UndrawSuperThankYou({
 				transform="translate(-142.33 -25.61)"
 				fill="none"
 				stroke="#535461"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<path
 				d="M824.36,712.2c0,4.63-8.37,18-8.37,18s-8.38-13.41-8.38-18a8.38,8.38,0,0,1,16.75,0Z"

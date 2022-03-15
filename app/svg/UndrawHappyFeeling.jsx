@@ -55,8 +55,8 @@ export default function UndrawHappyFeeling({ ariaHidden, title }) {
 					transform="translate(-228.29785 -73.43313)"
 					fill="none"
 					stroke="#2f2e41"
-					stroke-miterlimit="10"
-					stroke-width="2"
+					strokeMiterlimit="10"
+					strokeWidth="2"
 				/>
 				<ellipse
 					cx="928.13292"
@@ -74,8 +74,8 @@ export default function UndrawHappyFeeling({ ariaHidden, title }) {
 					y2="307.04377"
 					fill="none"
 					stroke="#2f2e41"
-					stroke-miterlimit="10"
-					stroke-width="2"
+					strokeMiterlimit="10"
+					strokeWidth="2"
 				/>
 			</g>
 			<path
@@ -93,8 +93,8 @@ export default function UndrawHappyFeeling({ ariaHidden, title }) {
 				transform="translate(-228.29785 -73.43313)"
 				fill="none"
 				stroke="#2f2e41"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<line
 				x1="602.51563"
@@ -103,8 +103,8 @@ export default function UndrawHappyFeeling({ ariaHidden, title }) {
 				y2="436.25297"
 				fill="none"
 				stroke="#2f2e41"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<ellipse
 				cx="943.46642"
@@ -130,8 +130,8 @@ export default function UndrawHappyFeeling({ ariaHidden, title }) {
 				transform="translate(-228.29785 -73.43313)"
 				fill="none"
 				stroke="#2f2e41"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<ellipse
 				cx="834.95809"
@@ -149,8 +149,8 @@ export default function UndrawHappyFeeling({ ariaHidden, title }) {
 				y2="440.8851"
 				fill="none"
 				stroke="#2f2e41"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<g opacity="0.8">
 				<path
@@ -168,8 +168,8 @@ export default function UndrawHappyFeeling({ ariaHidden, title }) {
 					transform="translate(-228.29785 -73.43313)"
 					fill="none"
 					stroke="#2f2e41"
-					stroke-miterlimit="10"
-					stroke-width="2"
+					strokeMiterlimit="10"
+					strokeWidth="2"
 				/>
 				<ellipse
 					cx="450.21956"

@@ -314,8 +314,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 				transform="translate(-6 -52.33)"
 				fill="none"
 				stroke="#2f2e41"
-				stroke-miterlimit="10"
-				stroke-width="4"
+				strokeMiterlimit="10"
+				strokeWidth="4"
 			/>
 			<circle cx="1092.72" cy="471.38" r="28" fill="#2f2e41" />
 			<circle cx="1142.21" cy="518.05" r="28" fill="#2f2e41" />
@@ -326,8 +326,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 				transform="translate(-6 -52.33)"
 				fill="none"
 				stroke="#2f2e41"
-				stroke-miterlimit="10"
-				stroke-width="4"
+				strokeMiterlimit="10"
+				strokeWidth="4"
 			/>
 			<circle cx="825.72" cy="415.38" r="28" fill="#2f2e41" />
 			<circle cx="875.21" cy="462.05" r="28" fill="#2f2e41" />
@@ -338,8 +338,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 				transform="translate(-6 -52.33)"
 				fill="none"
 				stroke="#3f3d56"
-				stroke-miterlimit="10"
-				stroke-width="4"
+				strokeMiterlimit="10"
+				strokeWidth="4"
 			/>
 			<circle cx="401.12" cy="466.08" r="11.81" fill="#3f3d56" />
 			<circle cx="411.73" cy="492.74" r="11.81" fill="#3f3d56" />

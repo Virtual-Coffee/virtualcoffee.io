@@ -156,32 +156,32 @@ export default function UndrawVersionControl({
 					y2="290.49"
 					fill="none"
 					stroke="#3f3d56"
-					stroke-miterlimit="10"
-					stroke-width="3"
+					strokeMiterlimit="10"
+					strokeWidth="3"
 				/>
 				<path
 					d="M466.46,393.83s29.89,4.15,14.41-27.92,42-26,42-26"
 					transform="translate(-80.89 -103.35)"
 					fill="none"
 					stroke="#3f3d56"
-					stroke-miterlimit="10"
-					stroke-width="3"
+					strokeMiterlimit="10"
+					strokeWidth="3"
 				/>
 				<path
 					d="M665.53,393.83s29.89-4.14,14.41,27.93,42,26,42,26"
 					transform="translate(-80.89 -103.35)"
 					fill="none"
 					stroke="#3f3d56"
-					stroke-miterlimit="10"
-					stroke-width="3"
+					strokeMiterlimit="10"
+					strokeWidth="3"
 				/>
 				<path
 					d="M952.16,393.83s-29.9-4.14-14.41,27.93-42,26-42,26"
 					transform="translate(-80.89 -103.35)"
 					fill="none"
 					stroke="#3f3d56"
-					stroke-miterlimit="10"
-					stroke-width="3"
+					strokeMiterlimit="10"
+					strokeWidth="3"
 				/>
 				<line
 					x1="814.86"
@@ -190,8 +190,8 @@ export default function UndrawVersionControl({
 					y2="344.4"
 					fill="none"
 					stroke="#3f3d56"
-					stroke-miterlimit="10"
-					stroke-width="3"
+					strokeMiterlimit="10"
+					strokeWidth="3"
 				/>
 				<circle cx="330.04" cy="290.49" r="18.25" fill="#d9376e" />
 				<circle cx="442.29" cy="236.3" r="18.25" fill="#3acc6c" />

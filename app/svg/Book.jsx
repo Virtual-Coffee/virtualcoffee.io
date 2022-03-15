@@ -4,7 +4,7 @@ export default function Book({ ariaHidden, title = 'Book' }) {
 			width="1em"
 			height="1em"
 			viewBox="0 0 16 16"
-			class="bi bi-book"
+			className="bi bi-book"
 			fill="currentColor"
 			xmlns="http://www.w3.org/2000/svg"
 			{...(ariaHidden

@@ -24,8 +24,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 				y2="255.2818"
 				fill="none"
 				stroke="#3f3d56"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<ellipse
 				cx="248.8673"
@@ -98,8 +98,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 				points="49.464 361.025 491.957 361.025 560.56 394.447 669.866 447.699 741.334 313.887 943.574 313.887"
 				fill="none"
 				stroke="#3f3d56"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<circle cx="222.81141" cy="375.02535" r="13.68536" fill="#d9376e" />
 			<circle cx="350.54143" cy="361.02535" r="13.68536" fill="#d9376e" />
@@ -112,8 +112,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 				r="14.75556"
 				fill="none"
 				stroke="#3f3d56"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<ellipse cx="170" cy="809.4364" rx="170" ry="23.12721" fill="#3f3d56" />
 			<circle cx="160.80455" cy="696.4364" r="79" fill="#2f2e41" />
@@ -167,8 +167,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 				height="64.16129"
 				fill="none"
 				stroke="#3f3d56"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<rect x="226.60342" y="199" width="36" height="36" fill="#ff6584" />
 			<rect
@@ -178,8 +178,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 				height="36"
 				fill="none"
 				stroke="#3f3d56"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<circle cx="906.05209" cy="189.47009" r="79" fill="#2f2e41" />
 			<rect
@@ -249,8 +249,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 				y2="169"
 				fill="none"
 				stroke="#3f3d56"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<circle cx="669.60342" cy="68" r="68" fill="#ff6584" />
 			<ellipse
@@ -273,8 +273,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 				y2="713.31328"
 				fill="#3f3d56"
 				stroke="#3f3d56"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<circle cx="759.73934" cy="713.31328" r="10.52282" fill="#3f3d56" />
 			<path

@@ -62,8 +62,8 @@ export default function UndrawWalkInTheCity({
 				transform="translate(-122.5 -109.75)"
 				fill="none"
 				stroke="#535461"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<path
 				d="M980.07,687.7c-7.12,3.67-14.58,6.84-21.94,10-27.19,11.48-54.79,23.06-84,27C819.27,732,762.66,712,708.76,724.48c-45.15,10.42-82.49,42.35-126.6,56.57-20.51,6.61-41.85,9.2-63.38,9.2H516q-4-.05-7.94-.2c-21.83-.82-43.75-4.05-65.15-8.18-67.57-13-136.34-36.83-188-80.7C405.33,673.69,715.18,631.51,980.07,687.7Z"
@@ -233,15 +233,15 @@ export default function UndrawWalkInTheCity({
 				transform="translate(-122.5 -109.75)"
 				fill="none"
 				stroke="#535461"
-				stroke-miterlimit="10"
+				strokeMiterlimit="10"
 			/>
 			<path
 				d="M242.23,712.63s-24.67-83.76,4.63-145.41c12.3-25.87,16.38-54.92,10.7-83a222.5,222.5,0,0,0-11.75-39"
 				transform="translate(-122.5 -109.75)"
 				fill="none"
 				stroke="#535461"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<path
 				d="M264,406.31c0,10.27-18.59,40-18.59,40s-18.59-29.77-18.59-40a18.59,18.59,0,1,1,37.17,0Z"
@@ -318,8 +318,8 @@ export default function UndrawWalkInTheCity({
 				transform="translate(-122.5 -109.75)"
 				fill="none"
 				stroke="#535461"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<path
 				d="M1034.09,384.68c0,10.27-18.59,40-18.59,40s-18.59-29.77-18.59-40a18.59,18.59,0,1,1,37.17,0Z"
@@ -361,8 +361,8 @@ export default function UndrawWalkInTheCity({
 				transform="translate(-122.5 -109.75)"
 				fill="none"
 				stroke="#535461"
-				stroke-miterlimit="10"
-				stroke-width="2"
+				strokeMiterlimit="10"
+				strokeWidth="2"
 			/>
 			<path
 				d="M912.72,518.23c0,5.52-10,21.51-10,21.51s-10-16-10-21.51a10,10,0,0,1,20,0Z"

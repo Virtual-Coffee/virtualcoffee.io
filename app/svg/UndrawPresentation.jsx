@@ -199,9 +199,9 @@ export default function UndrawPresentation({
 				y2="218.93303"
 				fill="none"
 				stroke="#fff"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-dasharray="0 4"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				strokeDasharray="0 4"
 			/>
 			<line
 				x1="178.19128"
@@ -210,8 +210,8 @@ export default function UndrawPresentation({
 				y2="228.21787"
 				fill="none"
 				stroke="#fff"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 			/>
 			<line
 				x1="217.39393"
@@ -220,8 +220,8 @@ export default function UndrawPresentation({
 				y2="92.04024"
 				fill="none"
 				stroke="#fff"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 				opacity="0.3"
 			/>
 			<line
@@ -231,8 +231,8 @@ export default function UndrawPresentation({
 				y2="122.98971"
 				fill="none"
 				stroke="#fff"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 				opacity="0.3"
 			/>
 			<line
@@ -242,8 +242,8 @@ export default function UndrawPresentation({
 				y2="153.93917"
 				fill="none"
 				stroke="#fff"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 				opacity="0.3"
 			/>
 			<line
@@ -253,8 +253,8 @@ export default function UndrawPresentation({
 				y2="184.88863"
 				fill="none"
 				stroke="#fff"
-				stroke-linecap="round"
-				stroke-linejoin="round"
+				strokeLinecap="round"
+				strokeLinejoin="round"
 				opacity="0.3"
 			/>
 			<path
