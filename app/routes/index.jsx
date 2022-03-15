@@ -6,6 +6,7 @@ import { getEvents } from '~/data/events';
 import { dateForDisplay } from '~/util/date';
 import { getEpisodes } from '~/data/podcast';
 import HomePageBlock from '~/components/HomePageBlock';
+import PostList from '~/components/PostList';
 
 export const loader = async () => {
 	const sponsors = await getSponsors();
@@ -15,6 +16,44 @@ export const loader = async () => {
 	const podcastEpisodes = await getEpisodes();
 	return json({ sponsors, events, podcastEpisodes });
 };
+
+const homePageLinks = [
+	{
+		url: '/about/',
+		title: 'About Virtual Coffee',
+		description: `Our Mission, Core Values, History, and more.`,
+	},
+	{
+		url: '/code-of-conduct/',
+		title: 'Code of Conduct',
+		description: `In order to create a welcoming and inclusive community, we ask our members to abide by our Code of Conduct.`,
+	},
+	{
+		url: '/members/',
+		title: 'Our Members',
+		description: `Meet our amazing members!`,
+	},
+	{
+		url: 'https://store.virtualcoffee.io/',
+		title: 'Merch Store',
+		description: `Support Virtual Coffee and show your love ❤️`,
+	},
+	{
+		url: 'https://github.com/Virtual-Coffee/',
+		title: 'VC GitHub',
+		description: `Join our Open Source efforts!`,
+	},
+	{
+		url: 'https://youtube.com/c/virtualcoffeeio',
+		title: 'VC Videos',
+		description: `Recordings of Virtual Coffee Events and Live Streams.`,
+	},
+	{
+		url: 'https://twitter.com/VirtualCoffeeIO',
+		title: 'VC Twitter',
+		description: `Stay up to date and join in the fun!`,
+	},
+];
 
 export default function Index() {
 	const { sponsors, events, podcastEpisodes } = useLoaderData();
@@ -63,77 +102,7 @@ export default function Index() {
 							title="All Things Virtual Coffee"
 							subtitle="Links and Goodies!"
 						>
-							<ul className="postlist">
-								<li className="postlist-item">
-									<a className="postlist-title" href="/about/">
-										About Virtual Coffee
-									</a>
-									<p className="postlist-description">
-										Our Mission, Core Values, History, and more.
-									</p>
-								</li>
-								<li className="postlist-item">
-									<a className="postlist-title" href="/code-of-conduct/">
-										Code of Conduct
-									</a>
-									<p className="postlist-description">
-										In order to create a welcoming and inclusive community, we
-										ask our members to abide by our Code of Conduct.
-									</p>
-								</li>
-								<li className="postlist-item">
-									<a className="postlist-title" href="/members/">
-										Our Members
-									</a>
-									<p className="postlist-description">
-										Meet our amazing members!
-									</p>
-								</li>
-								<li className="postlist-item">
-									<a
-										className="postlist-title"
-										href="https://store.virtualcoffee.io/"
-									>
-										Merch Store
-									</a>
-									<p className="postlist-description">
-										Support Virtual Coffee and show your love ❤️
-									</p>
-								</li>
-								<li className="postlist-item">
-									<a
-										className="postlist-title"
-										href="https://github.com/Virtual-Coffee/"
-									>
-										VC GitHub
-									</a>
-									<p className="postlist-description">
-										Join our Open Source efforts!
-									</p>
-								</li>
-								<li className="postlist-item">
-									<a
-										className="postlist-title"
-										href="https://youtube.com/c/virtualcoffeeio"
-									>
-										VC Videos
-									</a>
-									<p className="postlist-description">
-										Recordings of Virtual Coffee Events and Live Streams.
-									</p>
-								</li>
-								<li className="postlist-item">
-									<a
-										className="postlist-title"
-										href="https://twitter.com/VirtualCoffeeIO"
-									>
-										VC Twitter
-									</a>
-									<p className="postlist-description">
-										Stay up to date and join in the fun!
-									</p>
-								</li>
-							</ul>
+							<PostList items={homePageLinks} />
 						</HomePageBlock>
 
 						<HomePageBlock
@@ -144,18 +113,14 @@ export default function Index() {
 							linkTo="/events"
 							footer="See more Community Events"
 						>
-							<ul className="postlist">
-								{events.map((event) => (
-									<li key={event.startDateLocalized} className="postlist-item">
-										<div>{event.title}</div>
-										<p className="postlist-description">
-											<strong>
-												{dateForDisplay(event.startDateLocalized)}
-											</strong>
-										</p>
-									</li>
-								))}
-							</ul>
+							<PostList
+								items={events.map((event) => ({
+									title: event.title,
+									description: (
+										<strong>{dateForDisplay(event.startDateLocalized)}</strong>
+									),
+								}))}
+							/>
 						</HomePageBlock>
 					</div>
 					<div className="homepageblocks">
@@ -167,21 +132,15 @@ export default function Index() {
 							linkTo="/podcast"
 							footer="See more Podcast episodes"
 						>
-							<ul className="postlist">
-								{podcastEpisodes.map((episode) => (
-									<li key={episode.id} className="postlist-item">
-										<Link
-											className="postlist-title"
-											to={`/podcast/${episode.slug}`}
-										>
-											{episode.title}
-										</Link>
-										<p className="postlist-description">
-											{episode.metaDescription}
-										</p>
-									</li>
-								))}
-							</ul>
+							<PostList
+								items={podcastEpisodes.map(
+									({ title, metaDescription: description, url }) => ({
+										title,
+										description,
+										url,
+									}),
+								)}
+							/>
 						</HomePageBlock>
 					</div>
 				</div>
