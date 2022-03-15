@@ -15,7 +15,7 @@ export const links = () => {
 };
 
 export function meta() {
-	return { title: 'New Remix App' };
+	return { title: 'Virtual Coffee IO' };
 }
 
 export default function App() {
@@ -29,7 +29,7 @@ export default function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body className={location.pathname === '/' && 'vc-home'}>
+			<body className={location.pathname === '/' ? 'vc-home' : ''}>
 				<a
 					href="#maincontent"
 					className={`text-assistive display-at-top-on-focus`}
