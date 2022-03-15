@@ -54,9 +54,7 @@ export default function PodcastsIndex() {
 
 				<div className="text-muted">Latest Episode:</div>
 				<h3>
-					<Link to={`/podcast/${latestEpisode.slug}`}>
-						{latestEpisode.title}
-					</Link>
+					<Link to={latestEpisode.url}>{latestEpisode.title}</Link>
 				</h3>
 
 				<div className="mt-4 podcastplayer">
@@ -76,10 +74,10 @@ export default function PodcastsIndex() {
 
 					<PostList
 						items={podcastEpisodes.map(
-							({ title, metaDescription: description, slug }) => ({
+							({ title, metaDescription: description, url }) => ({
 								title,
 								description,
-								url: `/podcast/${slug}`,
+								url,
 							}),
 						)}
 					/>
