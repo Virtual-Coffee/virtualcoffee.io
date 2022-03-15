@@ -3,18 +3,21 @@ import UndrawCelebration from '~/svg/UndrawCelebration';
 import getSponsors from '~/data/sponsors';
 import { json, Link, useLoaderData } from 'remix';
 import { getEvents } from '~/data/events';
-import { dateForDisplay } from '~/utils/date';
+import { dateForDisplay } from '~/util/date';
+import { getEpisodes } from '~/data/podcast';
+import HomePageBlock from '~/components/HomePageBlock';
 
 export const loader = async () => {
 	const sponsors = await getSponsors();
 	const events = await getEvents({
 		limit: 5,
 	});
-	return json({ sponsors, events });
+	const podcastEpisodes = await getEpisodes();
+	return json({ sponsors, events, podcastEpisodes });
 };
 
 export default function Index() {
-	const { sponsors, events } = useLoaderData();
+	const { sponsors, events, podcastEpisodes } = useLoaderData();
 
 	return (
 		<>
@@ -54,15 +57,12 @@ export default function Index() {
 				<div className="container-lg py-5">
 					<h2 className="text-center mb-5">What we're up to</h2>
 					<div className="homepageblocks">
-						<div id="about" className="homepageblock-hero">
-							<UndrawCelebration ariaHidden />
-						</div>
-
-						<h3 className="text-secondary homepageblock-title">
-							All Things Virtual Coffee
-						</h3>
-						<div className="homepageblock-body">
-							<p className="lead">Links and Goodies!</p>
+						<HomePageBlock
+							Hero={UndrawCelebration}
+							id="about"
+							title="All Things Virtual Coffee"
+							subtitle="Links and Goodies!"
+						>
 							<ul className="postlist">
 								<li className="postlist-item">
 									<a className="postlist-title" href="/about/">
@@ -134,18 +134,16 @@ export default function Index() {
 									</p>
 								</li>
 							</ul>
-						</div>
+						</HomePageBlock>
 
-						<div id="about" className="homepageblock-hero">
-							<UndrawCelebration ariaHidden />
-						</div>
-
-						<h3 className="text-secondary homepageblock-title">
-							<Link to="/events">Community Events</Link>
-						</h3>
-
-						<div className="homepageblock-body">
-							<p className="lead">See our upcoming events!</p>
+						<HomePageBlock
+							Hero={UndrawCelebration}
+							id="about"
+							title="Community Events"
+							subtitle="See our upcoming events!"
+							linkTo="/events"
+							footer="See more Community Events"
+						>
 							<ul className="postlist">
 								{events.map((event) => (
 									<li key={event.startDateLocalized} className="postlist-item">
@@ -158,43 +156,33 @@ export default function Index() {
 									</li>
 								))}
 							</ul>
-						</div>
-
-						{/* {% for pageBlock in collections.homePageBlocksLarge %}
-    <div className="homepageblock-hero">
-      {{svg(src=pageBlock.data.hero, ariaHidden=true)}}
-    </div>
-
-    <h3 className="text-secondary homepageblock-title">
-      <a href="{{pageBlock.url}}">{{pageBlock.data.homePageBlocks.key}}</a>
-    </h3>
-    <div className="homepageblock-body">
-      <p className="lead">{{pageBlock.data.description}}</p>
-      {% if pageBlock.data.homePageBlocks.collectionKey %} {% displayPostList
-      collections[(pageBlock.data.homePageBlocks.collectionKey)] | reverse |
-      head(5) %} {% elseif pageBlock.fileSlug == 'events' %} {# Special
-      handling for events TODO: find a better way to deal with this #}
-      <ul className="postlist">
-        {% for event in events | head(5) %}
-        <li className="postlist-item">
-          {{event.title}}
-          <p className="postlist-description">
-            <strong>{{ event.startDateLocalized | dateForDisplay }}</strong>
-          </p>
-        </li>
-        {% endfor %}
-      </ul>
-      {% endif %} {% if pageBlock.data.homePageBlocks.linkText %} {% set
-      linkText = pageBlock.data.homePageBlocks.linkText %} {% else %} {% set
-      linkText = "See more " + pageBlock.data.homePageBlocks.key %} {% endif
-      %}
-      <p className="homepageblock-body-foot text-muted font-italic">
-        <a href="{{pageBlock.url}}">{{linkText}}</a>
-      </p>
-    </div>
-    {% if loop.index % 2 == 1 and not loop.last %}
-  </div>
-  <div className="homepageblocks">{% endif %} {% endfor %}</div> */}
+						</HomePageBlock>
+					</div>
+					<div className="homepageblocks">
+						<HomePageBlock
+							Hero={UndrawCelebration}
+							id="about"
+							title="Virtual Coffee Podcast"
+							subtitle="Conversations with members of the community"
+							linkTo="/podcast"
+							footer="See more Podcast episodes"
+						>
+							<ul className="postlist">
+								{podcastEpisodes.map((episode) => (
+									<li key={episode.id} className="postlist-item">
+										<Link
+											className="postlist-title"
+											to={`/podcast/${episode.slug}`}
+										>
+											{episode.title}
+										</Link>
+										<p className="postlist-description">
+											{episode.metaDescription}
+										</p>
+									</li>
+								))}
+							</ul>
+						</HomePageBlock>
 					</div>
 				</div>
 				<div className="bg-light">
