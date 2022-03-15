@@ -1,5 +1,4 @@
 import { GraphQLClient, gql } from 'graphql-request';
-import { DateTime } from 'luxon';
 
 if (process.env.NETLIFY_DEV) {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
@@ -9,7 +8,7 @@ export const buzzsproutPodcastId = '1558601';
 
 const episodeQuery = gql`
 	query getEpisode($slug: String!) {
-		entries(section: "podcast", slug: [$slug]) {
+		entry(section: "podcast", slug: [$slug]) {
 			title
 			... on podcast_default_Entry {
 				id
@@ -83,7 +82,10 @@ export async function getEpisodes({ limit = 5 } = {}) {
 		// return response.slice(0, 10);
 
 		// console.log(eventsResponse);
-		return episodesResponse.entries;
+		return episodesResponse.entries.map((entry) => ({
+			...entry,
+			url: `/podcast/${entry.slug}`,
+		}));
 	} catch (e) {
 		console.error(e);
 		return [];
@@ -105,7 +107,12 @@ export async function getEpisode({ slug } = {}) {
 		// return response.slice(0, 10);
 
 		// console.log(eventsResponse);
-		return episodesResponse.entries[0];
+		return episodesResponse.entry
+			? {
+					...episodesResponse.entry,
+					url: `/podcast/${episodesResponse.entry.slug}`,
+			  }
+			: null;
 	} catch (e) {
 		console.error(e);
 		return [];
