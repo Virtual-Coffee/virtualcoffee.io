@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLoaderData, Link, json } from 'remix';
-import Default from '~/components/layouts/Default';
+import DefaultLayout from '~/components/layouts/DefaultLayout';
 import PodcastSubscribe from '~/components/PodcastSubscribe';
 import PostList from '~/components/PostList';
 import { getEpisodes, getPlayerSrc } from '~/data/podcast';
@@ -37,7 +37,10 @@ export default function PodcastsIndex() {
 	}, [latestEpisodePlayerSrc]);
 
 	return (
-		<Default heroHeader="Virtual Coffee Podcast" Hero={UndrawWalkInTheCity}>
+		<DefaultLayout
+			heroHeader="Virtual Coffee Podcast"
+			Hero={UndrawWalkInTheCity}
+		>
 			<div className="container bodycopy py-5">
 				<p className="lead">
 					This is the Virtual Coffee Podcast, where we interview members of the
@@ -83,6 +86,6 @@ export default function PodcastsIndex() {
 					/>
 				</div>
 			</div>
-		</Default>
+		</DefaultLayout>
 	);
 }
