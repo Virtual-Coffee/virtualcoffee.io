@@ -1,4 +1,10 @@
-export function Default({ Hero, heroHeader, heroSubheader, children }) {
+import * as Svgs from '~/svg';
+
+export default function Default({ Hero, heroHeader, heroSubheader, children }) {
+	if (typeof Hero === 'string') {
+		Hero = Svgs[Hero];
+	}
+
 	return (
 		<>
 			{Hero && heroHeader ? (
