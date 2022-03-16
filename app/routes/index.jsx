@@ -1,4 +1,4 @@
-import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
+import { VirtualCoffeeFullBanner } from '~/svg';
 import UndrawCelebration from '~/svg/UndrawCelebration';
 import getSponsors from '~/data/sponsors';
 import { json, Link, useLoaderData } from 'remix';
