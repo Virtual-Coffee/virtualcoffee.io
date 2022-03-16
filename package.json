@@ -47,6 +47,7 @@
 		"rehype-autolink-headings": "^6.1.1",
 		"rehype-highlight": "^5.0.2",
 		"rehype-slug": "^5.0.1",
+		"remark-attr": "^0.11.1",
 		"remix": "^1.2.3",
 		"sanitize-html": "^2.7.0"
 	},
