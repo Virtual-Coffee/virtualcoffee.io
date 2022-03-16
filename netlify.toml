@@ -7,6 +7,9 @@
   command = "remix watch"
   port = 9000
 
+[functions.server]
+  included_files = ["app/routes/**/*.mdx"]
+
 [[headers]]
   for = "/build/*"
   [headers.values]

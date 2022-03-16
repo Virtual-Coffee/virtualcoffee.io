@@ -1,6 +1,9 @@
 import { Link } from 'remix';
 
 export default function PostList({ items }) {
+	if (!items) {
+		return null;
+	}
 	return (
 		<ul className="postlist">
 			{items.map((item) => {
@@ -16,6 +19,7 @@ export default function PostList({ items }) {
 						{item.description && (
 							<p className="postlist-description">{item.description}</p>
 						)}
+						{item.children && <PostList items={item.children} />}
 					</li>
 				);
 			})}
