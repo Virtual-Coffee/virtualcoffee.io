@@ -1,4 +1,4 @@
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 const markdownIt = require('markdown-it');
 let markdownLibrary = markdownIt({
 	html: false,

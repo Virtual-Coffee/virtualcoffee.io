@@ -12,7 +12,7 @@ module.exports = {
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
 	bio: `Husband, Father, Front-End Web Developer who has a passion for web development. Looking to network with other like minded enthusiasts. )`,
-	
+
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
 		{ type: 'linkedin', username: 'jason-evans-26a19a192' },

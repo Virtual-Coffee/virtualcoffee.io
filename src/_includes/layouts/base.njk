@@ -1,6 +1,6 @@
-{% set pageUrl = page.url | qualifiedUrl %} {% set pageTitle = title or
-metadata.title %} {% set pageDescription = description or metadata.description
-%}
+{% from "macros/svg.njk" import svg %} {% set pageUrl = page.url | qualifiedUrl
+%} {% set pageTitle = title or metadata.title %} {% set pageDescription =
+description or metadata.description %}
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -73,8 +73,7 @@ metadata.title %} {% set pageDescription = description or metadata.description
 		>
 		<nav class="navbar navbar-expand-lg navbar-dark fixed-top w-100">
 			<a class="navbar-brand" href="/" aria-label="Virtual Coffee">
-				{% include "svg/virtual-coffee-full-w.svg" %} {# {% include
-				"svg/vc-logo-mug.svg" %} #}
+				{{svg(src='svg/virtual-coffee-full-w.svg', svgTitle='Virtual Coffee')}}
 			</a>
 			<button
 				class="navbar-toggler"

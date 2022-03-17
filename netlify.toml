@@ -9,6 +9,12 @@
   targetPort = 9000
 
 [[redirects]]
+  from = "/sponsorship"
+  to = "https://github.com/sponsors/Virtual-Coffee"
+  status = 302
+  force = true
+
+[[redirects]]
   from = "/membership"
   to = "/"
   status = 301

@@ -16,15 +16,15 @@ module.exports = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-    { type: 'linkedin', username: 'lsparlin' },
+		{ type: 'linkedin', username: 'lsparlin' },
 		{ type: 'dev', username: 'lsparlin' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-    { type: 'twitter', username: 'lsparlin_dev' },
+		{ type: 'twitter', username: 'lsparlin_dev' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		{ type: 'polywork', username: 'lsparlin' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-    { type: 'website', url: 'https://lsparlin.dev' },
+		{ type: 'website', url: 'https://lsparlin.dev' },
 	],
 };

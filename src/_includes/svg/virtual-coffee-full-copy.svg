@@ -1,10 +1,14 @@
 <svg
   viewBox="0 0 999.028 144.347"
   xmlns="http://www.w3.org/2000/svg"
+  {% if ariaHidden %}
+  aria-hidden="true"
+  {% else %}
   role="img"
-  aria-labelledby="herologo"
+  aria-labelledby="herologoSvgTitle"
+  {% endif %}
 >
-  <title id="herologo">Virtual Coffee</title>
+  {% if not ariaHidden %}<title id="herologoSvgTitle">{{svgTitle if svgTitle is defined else "Virtual Coffee"}}</title>{% endif %}
   <defs>
     <linearGradient id="myGradient" gradientUnits="userSpaceOnUse" y1="0%" x2="100%" x1="25%" y2="100%">
       <stop offset="0%"  stop-color="#d9376e" />
