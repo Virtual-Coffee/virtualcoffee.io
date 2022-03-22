@@ -124,10 +124,18 @@ metadata:
 			{% endif %}
 			<hr />
 			<p>
+				{% if podcast.season == 4 %}
 				<em
-					>The Virtual Coffee Podcast is produced by Dan Ott and Bekah Hawrot
-					Weigel and edited by Andy Bonjour at GoodDay Communications.</em
+					>This episode of the Virtual Coffee Podcast was produced by Dan Ott
+					and Bekah Hawrot Weigel and edited by Andy Bonjour at GoodDay
+					Communications.</em
 				>
+				{% else %}
+				<em
+					>This episode of the Virtual Coffee Podcast was produced by Dan Ott
+					and Bekah Hawrot Weigel and edited by Dan Ott.</em
+				>
+				{% endif %}
 			</p>
 		</div>
 	</div>
