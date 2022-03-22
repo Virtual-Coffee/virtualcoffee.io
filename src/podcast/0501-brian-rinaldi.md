@@ -36,6 +36,6 @@ This week Bekah and Dan sat down with Brian Rinaldi, a Developer Experience Engi
 
 ---
 
-### Epside Sponsor
+### Episode Sponsor
 
 Attend and host virtual events for developers at [Codementor Events](https://codementor.io/events)!
