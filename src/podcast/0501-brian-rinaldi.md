@@ -33,3 +33,9 @@ This week Bekah and Dan sat down with Brian Rinaldia Developer Experience Engine
 - [CFE.dev](https://CFE.dev)
 - [TheJam.dev](https://thejam.dev)
 - [The Jamstack Book](https://www.manning.com/books/the-jamstack-book)
+
+---
+
+### Epside Sponsor
+
+Attend and host virtual events for developers at [Codementor Events](https://codementor.io/events)!
