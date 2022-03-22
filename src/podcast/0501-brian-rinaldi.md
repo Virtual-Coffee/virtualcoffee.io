@@ -25,7 +25,7 @@ podcast:
         </ul>
 ---
 
-This week Bekah and Dan sat down with Brian Rinaldia Developer Experience Engineer at LaunchDarkly with over 20 years of experience as a developer for the web, about how Developer Relationships has changed over the years and why need not just remote community experiences but also in-person opportunities. We talk about the value of different types of communities and how each is necessary to support developers.
+This week Bekah and Dan sat down with Brian Rinaldi, a Developer Experience Engineer at LaunchDarkly with over 20 years of experience as a developer for the web, about how Developer Relationships has changed over the years and why need not just remote community experiences but also in-person opportunities. We talk about the value of different types of communities and how each is necessary to support developers.
 
 ### Links
 
