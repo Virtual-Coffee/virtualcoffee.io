@@ -13,7 +13,7 @@ podcast:
   guests:
     - name: Brian Rinaldi
       headshot: '/assets/images/podcast/0501-brian.jpg'
-      headshotAlt: 'Brian Rinaldi profile photo'
+      headshotAlt: "Brian Rinaldi's profile photo"
       bio: |
         <p>Brian Rinaldi is a Developer Experience Engineer at LaunchDarkly with over 20 years experience as a developer for the web. Brian is actively involved in the community running developer meetups via CFE.dev and Orlando Devs. He's the editor of the Jamstacked newsletter and co-author of The Jamstack Book from Manning.</p>
 
