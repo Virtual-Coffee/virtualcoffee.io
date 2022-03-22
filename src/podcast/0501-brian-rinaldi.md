@@ -1,46 +1,34 @@
 ---
-title: 'Maeling Murphy - Transitioning to tech, and taking notes along the way'
-description: 'Season Four, Episode Eight of the Virtual Coffee Podcast'
+title: 'Brian Rinaldi - Developer Advocacy and Fostering Community'
+description: 'Season Five, Episode One of the Virtual Coffee Podcast'
 tags: podcast
-date: 2021-11-23
+date: 2022-03-22
 podcast:
-  season: 4
-  episode: 8
-  id: 9600325
+  season: 5
+  episode: 1
+  id: 10297519
   intro: |
-    <p>In today's episode, Dan and Bekah talk to Maeling Murphy about her journey from Material Science and Engineering to Software Engineering, including her personal documentation of her tech journey, work culture, and the big surprises when starting her job.</p>
-  card: /assets/images/podcast/0408-maeling-episode.jpg
+    <p>In today's episode, Dan and Bekah talk to Brian Rinaldi about doing DevRel (Developer Relations) right and playing to your team's strengths. We also talk about the importance of connection and why we–as developers–need to support each other.</p>
+  card: /assets/images/podcast/0501-brian-episode.jpg
   guests:
-    - name: Maeling Murphy
-      headshot: '/assets/images/podcast/0408-maeling.jpg'
-      headshotAlt: "Maeling Murphy's profile photo"
+    - name: Brian Rinaldi
+      headshot: '/assets/images/podcast/0501-brian.jpg'
+      headshotAlt: "Brian Rinaldi's profile photo"
       bio: |
-        <p>Dr. Maeling Murphy is a software engineer who recently transitioned into tech, coming from an 8+ year entrepreneurial journey as a digital content creator and as a Ph.D. research scientist in Materials Science & Engineering.
-
-        <p>Maeling identifies as a multi-passionate creative soul, finding expression through gardening, programming, brush-lettering and other mediums that cross her path.
-
-        <p>She lets her love for exploration, learning and sharing with others lead her in all aspects of life and is enjoying this journey with her husband and son.</p>
+        <p>Brian Rinaldi is a Developer Experience Engineer at LaunchDarkly with over 20 years experience as a developer for the web. Brian is actively involved in the community running developer meetups via CFE.dev and Orlando Devs. He's the editor of the Jamstacked newsletter and co-author of The Jamstack Book from Manning.</p>
 
         <ul>
-          <li><a href="https://github.com/maelingmurphy">maelingmurphy</a> on GitHub</li>
-          <li><a href="https://twitter.com/maelingcodes">@maelingcodes on Twitter</a></li>
-          <li><a href="https://www.linkedin.com/in/maeling-murphy">@maeling-murphy on LinkedIn</a></li>
+          <li><a href="http://remotesynthesis.com">remotesynthesis.com</a></li>
+          <li><a href="https://github.com/remotesynth">remotesynth</a> on GitHub</li>
+          <li><a href="https://twitter.com/remotesynth">@remotesynth on Twitter</a></li>
+          <li><a href="https://www.linkedin.com/in/brianrinaldi">@brianrinaldi on LinkedIn</a></li>
         </ul>
 ---
 
-This week Bekah and Dan sat down with Dr. Maeling Murphy, a software engineer who recently transitioned into tech. Maeling shared the importance of connecting with potential employers to see if they would fit her values, how contributing to open source projects can help prepare you for your first job, and the value of developing the connection to community and being able to grow alongside others. Oh, and did we mention we talked a lot about Notion? She takes us through her notetaking journey and answers all our questions about finding the right approach.
+This week Bekah and Dan sat down with Brian Rinaldia Developer Experience Engineer at LaunchDarkly with over 20 years of experience as a developer for the web, about how Developer Relationships has changed over the years and why need not just remote community experiences but also in-person opportunities. We talk about the value of different types of communities and how each is necessary to support developers.
 
 ### Links
 
-- [Harvard's CS50](https://cs50.harvard.edu/)
-- [100 days of code](https://www.100daysofcode.com/)
-- [Virtual Coffee Demo Monthly Challenge ](https://virtualcoffee.io/monthlychallenges/july-2021/)
-- [Homeschool journal](https://homeschool-journal.herokuapp.com/)
-- [Github](https://github.com/maelingmurphy)
-- [Learning Path log](https://github.com/maelingmurphy/My-Learning-Path/blob/main/log.md)
-- [Karen's Notion for job searches](https://www.notion.so/templates/job-applications)
-- [Karen's Job Application Details Spreadsheet](https://docs.google.com/spreadsheets/d/1ZP0u5MjRiCOaYWuLoRTYr4BvB91M76ZCjkCYPuSePJc/edit?usp=sharing)
-- [Frank's Notetaking System](https://www.notion.so/Thomas-Frank-s-Note-Taking-System-67924a5a25934f0fbe2f154cffcd8f97)
-- [KeyValues: Find engineering teams that share your values](https://www.keyvalues.com/)
-- [Dan's Pinboard bookmarks](https://pinboard.in/u:danieltott)
-- [Forem](https://github.com/forem/forem) - Open source project that Nick Taylor helps maintain
+- [CFE.dev](https://CFE.dev)
+- [TheJam.dev](https://thejam.dev)
+- [The Jamstack Book](https://www.manning.com/books/the-jamstack-book)
