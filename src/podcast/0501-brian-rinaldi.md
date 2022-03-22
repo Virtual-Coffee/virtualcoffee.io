@@ -8,7 +8,7 @@ podcast:
   episode: 1
   id: 10297519
   intro: |
-    <p>In today's episode, Dan and Bekah talk to Brian Rinaldi about doing DevRel (Developer Relations) right and playing to your team's strengths. We also talk about the importance of connection and why we–as developers–need to support each other.</p>
+    <p>In today's episode, Dan and Bekah talk to Brian Rinaldi about doing DevRel (Developer Relations) right and playing to your team's strengths. We also talk about the importance of connection and why we as developers need to support each other.</p>
   card: /assets/images/podcast/0501-brian-episode.jpg
   guests:
     - name: Brian Rinaldi
