@@ -12,28 +12,12 @@ export const loader = async () => {
 	return json({ events });
 };
 
-export const meta = {
-	title: 'Virtual Coffee Community Events',
-	description: 'See our upcoming events!',
-};
-
-//   ---
-// layout: layouts/default.njk
-// title: Virtual Coffee Community Events
-// description: See our upcoming events!
-// hero: 'svg/undraw_conference_call_b0w6.svg'
-// heroHeader: 'Virtual Coffee Events'
-// heroSubheader: Please join us at one of our events!
-// tags:
-//   - topnav
-// homePageBlocks:
-//   type: large
-//   key: Community Events
-//   order: 1
-// eleventyNavigation:
-//   key: Events
-//   order: 3
-// ---
+export function meta() {
+	return {
+		title: 'Virtual Coffee Community Events',
+		description: 'See our upcoming events!',
+	};
+}
 
 export default function EventsIndex() {
 	const { events } = useLoaderData();
