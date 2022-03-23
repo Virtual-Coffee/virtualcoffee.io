@@ -131,6 +131,15 @@ ul {
 		margin-left: auto;
 		margin-right: auto;
 	}
+
+	> .pt-5.bg-white {
+		padding-top: 0 !important;
+	}
+
+	.container {
+		padding-left: 0;
+		padding-right: 0;
+	}
 }
 
 .prose h1 {
