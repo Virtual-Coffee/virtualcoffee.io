@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { json, Outlet, useLoaderData, useMatches } from 'remix';
+import { useMatches } from 'remix';
 
 import * as Svgs from '~/svg';
 
@@ -16,14 +16,33 @@ function useHeroData({ Hero, heroHeader, heroSubheader }) {
 			firstMeta = matches.find((match) => !!match.data?.meta)?.data.meta;
 		}
 
-		return {
-			heroHeader: heroHeader || firstHero?.heroHeader || firstMeta?.title,
-
-			heroSubheader:
-				heroSubheader || firstHero?.heroSubheader || firstMeta?.description,
-
+		const returnObject = {
 			Hero: Hero || firstHero?.Hero,
 		};
+
+		// allow for setting to ''
+		if (typeof heroHeader !== 'undefined') {
+			returnObject.heroHeader = heroHeader;
+		}
+		// allow for setting to ''
+		else if (firstHero && typeof firstHero.heroHeader !== 'undefined') {
+			returnObject.heroHeader = firstHero.heroHeader;
+		} else {
+			returnObject.heroHeader = firstMeta?.title;
+		}
+
+		// allow for setting to ''
+		if (typeof heroSubheader !== 'undefined') {
+			returnObject.heroSubheader = heroSubheader;
+		}
+		// allow for setting to ''
+		else if (firstHero && typeof firstHero.heroSubheader !== 'undefined') {
+			returnObject.heroSubheader = firstHero.heroSubheader;
+		} else {
+			returnObject.heroSubheader = firstMeta?.description;
+		}
+
+		return returnObject;
 	}, [Hero, heroHeader, heroSubheader, matches]);
 }
 
