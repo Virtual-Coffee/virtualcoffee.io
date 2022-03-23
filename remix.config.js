@@ -112,13 +112,14 @@ module.exports = {
 	mdx: async (filename) => {
 		const remarkToc = await createRemarkToc();
 
-		const [rehypeHighlight, rehypeSlug, rehypeAutolinkHeadings] =
+		const [rehypeHighlight, rehypeSlug, rehypeAutolinkHeadings, hastscript] =
 			await Promise.all([
 				import('rehype-highlight').then((mod) => mod.default),
 				// import('@jsdevtools/rehype-toc').then((mod) => mod.default),
 				// import('remark-toc').then((mod) => mod.default),
 				import('rehype-slug').then((mod) => mod.default),
 				import('rehype-autolink-headings').then((mod) => mod.default),
+				import('hastscript').then((mod) => mod.h),
 			]);
 
 		return {
@@ -133,7 +134,24 @@ module.exports = {
 			],
 			rehypePlugins: [
 				rehypeSlug,
-				rehypeAutolinkHeadings,
+				[
+					rehypeAutolinkHeadings,
+					{
+						behavior: 'after',
+						properties: { class: 'header-anchor' },
+						content: (node) => {
+							return [
+								hastscript('span.sr-only', 'Permalink to “', toString(node)),
+								hastscript('span', { ariaHidden: 'true' }, '#'),
+							];
+						},
+						group: (node) => {
+							return hastscript(
+								`.header-anchor-wrapper.header-anchor-wrapper-${node.tagName}`,
+							);
+						},
+					},
+				],
 				// [
 				// 	rehypeToc,
 				// 	{
