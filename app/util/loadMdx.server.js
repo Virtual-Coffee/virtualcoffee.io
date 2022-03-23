@@ -2,7 +2,7 @@ import { readdirSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import fm from 'front-matter';
 
-export function loadMdxDirectory({ baseDirectory }) {
+export function loadMdxDirectory({ baseDirectory, includeChildren = true }) {
 	const basePath = join(process.cwd(), 'app', 'routes', baseDirectory);
 	const dirEntries = readdirSync(basePath, { withFileTypes: true });
 	const dirs = dirEntries.filter((entry) => entry.isDirectory());
@@ -14,19 +14,23 @@ export function loadMdxDirectory({ baseDirectory }) {
 				slug: join(baseDirectory, dir.name, 'index'),
 			});
 
-			const children = readdirSync(join(basePath, dir.name), {
-				withFileTypes: true,
-			})
-				.filter((e) => {
-					return e.isFile() && e.name !== 'index.mdx';
+			let children = null;
+
+			if (includeChildren) {
+				children = readdirSync(join(basePath, dir.name), {
+					withFileTypes: true,
 				})
-				.map((e) =>
-					loadMdxRouteFileAttributes({
-						slug: join(baseDirectory, dir.name, e.name.replace('.mdx', '')),
-					}),
-				)
-				.filter(Boolean)
-				.sort((a, b) => a.order - b.order);
+					.filter((e) => {
+						return e.isFile() && e.name !== 'index.mdx';
+					})
+					.map((e) =>
+						loadMdxRouteFileAttributes({
+							slug: join(baseDirectory, dir.name, e.name.replace('.mdx', '')),
+						}),
+					)
+					.filter(Boolean)
+					.sort((a, b) => a.order - b.order);
+			}
 
 			return {
 				...index,

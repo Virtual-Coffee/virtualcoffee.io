@@ -26,3 +26,14 @@ export default function PostList({ items }) {
 		</ul>
 	);
 }
+
+export function formatFileListItemsForPostList(items) {
+	return items
+		? items.map((item) => ({
+				title: item.meta.title,
+				description: item.meta.description,
+				url: `/${item.slug}`,
+				children: formatFileListItemsForPostList(item.children),
+		  }))
+		: null;
+}

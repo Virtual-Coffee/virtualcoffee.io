@@ -1,12 +1,16 @@
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
 import UndrawCelebration from '~/svg/UndrawCelebration';
+import UndrawFolder from '~/svg/UndrawFolder';
 import getSponsors from '~/data/sponsors';
 import { json, Link, useLoaderData } from 'remix';
 import { getEvents } from '~/data/events';
 import { dateForDisplay } from '~/util/date';
 import { getEpisodes } from '~/data/podcast';
 import HomePageBlock from '~/components/HomePageBlock';
-import PostList from '~/components/PostList';
+import PostList, {
+	formatFileListItemsForPostList,
+} from '~/components/PostList';
+import { loadMdxDirectory } from '~/util/loadMdx.server';
 
 export const loader = async () => {
 	const sponsors = await getSponsors();
@@ -14,7 +18,13 @@ export const loader = async () => {
 		limit: 5,
 	});
 	const podcastEpisodes = await getEpisodes();
-	return json({ sponsors, events, podcastEpisodes });
+
+	const resources = loadMdxDirectory({
+		baseDirectory: 'resources',
+		includeChildren: false,
+	});
+
+	return json({ sponsors, events, podcastEpisodes, resources });
 };
 
 const homePageLinks = [
@@ -56,7 +66,7 @@ const homePageLinks = [
 ];
 
 export default function Index() {
-	const { sponsors, events, podcastEpisodes } = useLoaderData();
+	const { sponsors, events, podcastEpisodes, resources } = useLoaderData();
 
 	return (
 		<>
@@ -124,6 +134,16 @@ export default function Index() {
 						</HomePageBlock>
 					</div>
 					<div className="homepageblocks">
+						<HomePageBlock
+							Hero={UndrawFolder}
+							id="resources"
+							title="Member Resources"
+							subtitle="A collection of resources for Virtual Coffee members"
+							linkTo="/resources"
+							footer="See more Member Resources"
+						>
+							<PostList items={formatFileListItemsForPostList(resources)} />
+						</HomePageBlock>
 						<HomePageBlock
 							Hero={UndrawCelebration}
 							id="about"
