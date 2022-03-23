@@ -2,6 +2,7 @@ import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
 import UndrawCelebration from '~/svg/UndrawCelebration';
 import UndrawFolder from '~/svg/UndrawFolder';
 import UndrawArrived from '~/svg/UndrawArrived';
+import UndrawGoodTeam from '~/svg/UndrawGoodTeam';
 import getSponsors from '~/data/sponsors';
 import { json, Link, useLoaderData } from 'remix';
 import { getEvents } from '~/data/events';
@@ -13,6 +14,7 @@ import PostList, {
 } from '~/components/PostList';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '../data/newsletters';
+import getChallenges from '../data/monthlyChallenges';
 
 export const loader = async () => {
 	const sponsors = await getSponsors();
@@ -27,8 +29,16 @@ export const loader = async () => {
 	});
 
 	const newsletters = await getNewsletters(5);
+	const challenges = await getChallenges(5);
 
-	return json({ sponsors, events, podcastEpisodes, resources, newsletters });
+	return json({
+		sponsors,
+		events,
+		podcastEpisodes,
+		resources,
+		newsletters,
+		challenges,
+	});
 };
 
 const homePageLinks = [
@@ -70,8 +80,14 @@ const homePageLinks = [
 ];
 
 export default function Index() {
-	const { sponsors, events, podcastEpisodes, resources, newsletters } =
-		useLoaderData();
+	const {
+		sponsors,
+		events,
+		podcastEpisodes,
+		resources,
+		newsletters,
+		challenges,
+	} = useLoaderData();
 
 	return (
 		<>
@@ -178,6 +194,16 @@ export default function Index() {
 							footer="See more Newsletter Issues"
 						>
 							<PostList items={newsletters} />
+						</HomePageBlock>
+						<HomePageBlock
+							Hero={UndrawGoodTeam}
+							id="challenges"
+							title="Monthly Challenges"
+							subtitle="Every month, we create a challenge for our Virtual Coffee members to complete together"
+							linkTo="/monthlychallenges"
+							footer="See more Challenges"
+						>
+							<PostList items={challenges} />
 						</HomePageBlock>
 					</div>
 				</div>
