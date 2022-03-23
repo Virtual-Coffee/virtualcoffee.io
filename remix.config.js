@@ -129,6 +129,7 @@ module.exports = {
 					{
 						tight: true,
 						parents: ['root', 'mdxJsxFlowElement'],
+						maxDepth: 3,
 					},
 				],
 			],
@@ -150,6 +151,7 @@ module.exports = {
 								`.header-anchor-wrapper.header-anchor-wrapper-${node.tagName}`,
 							);
 						},
+						test: ['h2', 'h3'],
 					},
 				],
 				// [
