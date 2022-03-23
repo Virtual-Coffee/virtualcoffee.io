@@ -6,9 +6,7 @@ export default function DefaultLayout({
 	heroSubheader,
 	children,
 }) {
-	if (typeof Hero === 'string') {
-		Hero = Svgs[Hero];
-	}
+	const HeroComponent = typeof Hero === 'string' ? Svgs[Hero] : Hero;
 
 	return (
 		<>
@@ -17,7 +15,7 @@ export default function DefaultLayout({
 					<div className="container">
 						<div className="row align-items-center">
 							<div className="col-sm-4">
-								<Hero ariaHidden />
+								<HeroComponent ariaHidden />
 							</div>
 							<div className="col-sm-8">
 								<h1 className="display-4">{heroHeader}</h1>
