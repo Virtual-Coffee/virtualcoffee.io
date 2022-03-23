@@ -1,5 +1,6 @@
 import { GraphQLClient, gql } from 'graphql-request';
 import { DateTime } from 'luxon';
+import { sanitizeHtml } from '~/util/sanitizeCmsData';
 
 const calendarsQuery = gql`
 	query getCalendars {
@@ -59,7 +60,10 @@ export async function getEvents({ limit }) {
 		// return response.slice(0, 10);
 
 		// console.log(eventsResponse);
-		return eventsResponse.solspace_calendar.events;
+		return eventsResponse.solspace_calendar.events.map((event) => ({
+			...event,
+			eventCalendarDescription: sanitizeHtml(event.eventCalendarDescription),
+		}));
 	} catch (e) {
 		console.error(e);
 		return [];

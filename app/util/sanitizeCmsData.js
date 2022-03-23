@@ -1,4 +1,4 @@
-import sanitizeHtml from 'sanitize-html';
+import sanitize from 'sanitize-html';
 
 export default function sanitizeCmsData(data) {
 	if (Array.isArray(data)) {
@@ -8,7 +8,7 @@ export default function sanitizeCmsData(data) {
 			if (key === 'renderHtml') {
 				return {
 					...obj,
-					sanitizedHtml: sanitizeHtml(data[key], sanitizeOptions),
+					sanitizedHtml: sanitize(data[key], sanitizeOptions),
 				};
 			} else {
 				return {
@@ -20,6 +20,10 @@ export default function sanitizeCmsData(data) {
 	} else {
 		return data;
 	}
+}
+
+export function sanitizeHtml(html) {
+	return sanitize(html, sanitizeOptions);
 }
 
 const sanitizeOptions = {
