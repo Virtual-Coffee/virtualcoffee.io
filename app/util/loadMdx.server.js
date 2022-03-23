@@ -3,51 +3,58 @@ import { join } from 'path';
 import fm from 'front-matter';
 
 export function loadMdxDirectory({ baseDirectory }) {
-	const podcastBasePath = join(process.cwd(), 'app', 'routes', baseDirectory);
-	const dirEntries = readdirSync(podcastBasePath, { withFileTypes: true });
+	const basePath = join(process.cwd(), 'app', 'routes', baseDirectory);
+	const dirEntries = readdirSync(basePath, { withFileTypes: true });
 	const dirs = dirEntries.filter((entry) => entry.isDirectory());
 	const files = dirEntries.filter((entry) => entry.isFile());
 
-	const directoryDirectory = dirs.reduce((collection, dir) => {
-		return {
-			...collection,
-			[join(baseDirectory, dir.name)]: readdirSync(
-				join(podcastBasePath, dir.name),
-				{
-					withFileTypes: true,
-				},
-			)
-				.filter((e) => e.isFile())
+	try {
+		const directories = dirs.map((dir) => {
+			const index = loadMdxRouteFileAttributes({
+				slug: join(baseDirectory, dir.name, 'index'),
+			});
+
+			const children = readdirSync(join(basePath, dir.name), {
+				withFileTypes: true,
+			})
+				.filter((e) => {
+					return e.isFile() && e.name !== 'index.mdx';
+				})
 				.map((e) =>
 					loadMdxRouteFileAttributes({
 						slug: join(baseDirectory, dir.name, e.name.replace('.mdx', '')),
 					}),
 				)
 				.filter(Boolean)
-				.sort((a, b) => b.order - a.order),
-		};
-	}, {});
+				.sort((a, b) => a.order - b.order);
 
-	const entries = files.map((entry) => {
-		if (entry.name === 'index.jsx') {
-			return null;
-		}
-
-		console.log({ name: entry.name });
-
-		const attributes = loadMdxRouteFileAttributes({
-			slug: join(baseDirectory, entry.name.replace('.mdx', '')),
+			return {
+				...index,
+				children,
+			};
 		});
 
-		return {
-			...attributes,
-			children: directoryDirectory[attributes.slug] || null,
-		};
-	});
+		const entries = files.map((entry) => {
+			if (entry.name === 'index.jsx' || entry.name === 'index.mdx') {
+				return null;
+			}
 
-	console.log({ directoryDirectory, entries });
+			const attributes = loadMdxRouteFileAttributes({
+				slug: join(baseDirectory, entry.name.replace('.mdx', '')),
+			});
 
-	return entries.filter(Boolean).sort((a, b) => b.order - a.order);
+			return {
+				...attributes,
+			};
+		});
+
+		return [...entries, ...directories]
+			.filter(Boolean)
+			.sort((a, b) => a.order - b.order);
+	} catch (error) {
+		console.log(error);
+		return [];
+	}
 }
 
 export function loadMdxRouteFileAttributes({ slug }) {
@@ -92,6 +99,6 @@ export function loadMdxRouteFileAttributes({ slug }) {
 
 	return {
 		...attributes,
-		slug,
+		slug: slug.replace(/\/index$/g, ''),
 	};
 }

@@ -2,21 +2,22 @@ import { useOutletContext } from 'remix';
 import PostList from '../PostList';
 
 function findBase(files, subDirectory) {
-	for (let i = 0; i < files.length; i++) {
-		const file = files[i];
+	const filtered = files
+		.filter((file) => file.slug.startsWith(subDirectory))
+		.map((file) => ({
+			...file,
+			children: file.children ? findBase(file.children, subDirectory) : null,
+		}));
 
-		if (file.slug === subDirectory) {
-			return file.children;
-		} else if (
-			file.slug.startsWith(subDirectory) &&
-			file.children &&
-			file.children.length
-		) {
-			return findBase(file.children, subDirectory);
-		}
+	if (
+		filtered.length === 1 &&
+		filtered[0].slug === subDirectory &&
+		filtered[0].children
+	) {
+		return filtered[0].children;
 	}
 
-	return files;
+	return filtered;
 }
 
 function formatPostListItems(items) {
@@ -32,8 +33,6 @@ function formatPostListItems(items) {
 
 export default function FileIndex({ subDirectory }) {
 	const allFiles = useOutletContext();
-
-	console.log({ allFiles });
 
 	const result = subDirectory ? findBase(allFiles, subDirectory) : allFiles;
 	return <PostList items={formatPostListItems(result)} />;
