@@ -15,21 +15,18 @@ export async function loader({ request }) {
 
 	return json({
 		allFiles,
-		title: attributes.meta.title,
-		description: attributes.meta.description,
-		Hero: attributes.Hero,
-		heroHeader: attributes.heroHeader || attributes.meta.title,
-		heroSubheader: attributes.heroSubheader || attributes.meta.description,
+		meta: attributes.meta,
+		hero: attributes.hero,
 	});
 }
 
 export default function ResourcesTemplate() {
-	const { allFiles, Hero, heroHeader, heroSubheader } = useLoaderData();
+	const { allFiles } = useLoaderData();
 
 	// console.log('running', { Hero, heroHeader, heroSubheader });
 
 	return (
-		<DefaultLayout {...{ Hero, heroHeader, heroSubheader }}>
+		<DefaultLayout>
 			<div className="resources-section">
 				<Outlet context={allFiles} />
 			</div>
