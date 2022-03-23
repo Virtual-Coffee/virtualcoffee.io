@@ -25,8 +25,8 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 					y2="99"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop offset="0" stop-color="#d9376e" />
-					<stop offset="1" stop-color="#3f3d56" />
+					<stop offset="0" stopColor="#d9376e" />
+					<stop offset="1" stopColor="#3f3d56" />
 				</linearGradient>
 				<linearGradient
 					id="a09f8209-a7b7-4999-9a81-8afbf160c3ae"
@@ -37,9 +37,9 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 					gradientTransform="translate(168)"
 					gradientUnits="userSpaceOnUse"
 				>
-					<stop offset="0" stop-color="gray" stop-opacity="0.25" />
-					<stop offset="0.54" stop-color="gray" stop-opacity="0.12" />
-					<stop offset="1" stop-color="gray" stop-opacity="0.1" />
+					<stop offset="0" stopColor="gray" stopOpacity="0.25" />
+					<stop offset="0.54" stopColor="gray" stopOpacity="0.12" />
+					<stop offset="1" stopColor="gray" stopOpacity="0.1" />
 				</linearGradient>
 			</defs>
 			<path
