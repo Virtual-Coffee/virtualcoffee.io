@@ -16,7 +16,6 @@ export default function Nav() {
 				aria-expanded={isOpen ? 'true' : 'false'}
 				aria-label="Toggle navigation"
 				onClick={() => {
-					console.log('clicking', isOpen);
 					setIsOpen((isOpen) => !isOpen);
 				}}
 			>
