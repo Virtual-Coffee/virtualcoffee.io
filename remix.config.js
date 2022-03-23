@@ -112,19 +112,17 @@ module.exports = {
 	mdx: async (filename) => {
 		const remarkToc = await createRemarkToc();
 
-		const [rehypeHighlight, rehypeSlug, rehypeAutolinkHeadings, remarkAttr] =
+		const [rehypeHighlight, rehypeSlug, rehypeAutolinkHeadings] =
 			await Promise.all([
 				import('rehype-highlight').then((mod) => mod.default),
 				// import('@jsdevtools/rehype-toc').then((mod) => mod.default),
 				// import('remark-toc').then((mod) => mod.default),
 				import('rehype-slug').then((mod) => mod.default),
 				import('rehype-autolink-headings').then((mod) => mod.default),
-				import('remark-attr').then((mod) => mod.default),
 			]);
 
 		return {
 			remarkPlugins: [
-				remarkAttr,
 				[
 					remarkToc,
 					{
