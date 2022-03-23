@@ -8,8 +8,20 @@ export function loadMdxDirectory({ baseDirectory, includeChildren = true }) {
 	const dirs = dirEntries.filter((entry) => entry.isDirectory());
 	const files = dirEntries.filter((entry) => entry.isFile());
 
+	// Our directories look like this:
+	// ├── resources
+	// │   ├── article1.mdx
+	// │   ├── article2.mdx
+	// │   ├── index.mdx
+	// │   └── category
+	// │      ├── article3.mdx
+	// │      └── index.mdx
+	// We'd like to output a nested array, where the main index file contains a children array with
+	// article1, article2, and category/index. category/index will then contain a children array with
+	// article3
 	try {
 		const directories = dirs.map((dir) => {
+			// find the index file and load up it's attributes
 			const index = loadMdxRouteFileAttributes({
 				slug: join(baseDirectory, dir.name, 'index'),
 			});
@@ -17,6 +29,7 @@ export function loadMdxDirectory({ baseDirectory, includeChildren = true }) {
 			let children = null;
 
 			if (includeChildren) {
+				// read all of the files in the directory (and filter out index)
 				children = readdirSync(join(basePath, dir.name), {
 					withFileTypes: true,
 				})
