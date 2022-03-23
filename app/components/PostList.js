@@ -6,9 +6,9 @@ export default function PostList({ items }) {
 	}
 	return (
 		<ul className="postlist">
-			{items.map((item) => {
+			{items.map((item, key) => {
 				return (
-					<li className="postlist-item" key={item.title}>
+					<li className="postlist-item" key={key}>
 						{item.url ? (
 							<Link className="postlist-title" to={item.url}>
 								{item.title}
