@@ -1,6 +1,7 @@
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
 import UndrawCelebration from '~/svg/UndrawCelebration';
 import UndrawFolder from '~/svg/UndrawFolder';
+import UndrawArrived from '~/svg/UndrawArrived';
 import getSponsors from '~/data/sponsors';
 import { json, Link, useLoaderData } from 'remix';
 import { getEvents } from '~/data/events';
@@ -11,6 +12,7 @@ import PostList, {
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
+import getNewsletters from '../data/newsletters';
 
 export const loader = async () => {
 	const sponsors = await getSponsors();
@@ -24,7 +26,9 @@ export const loader = async () => {
 		includeChildren: false,
 	});
 
-	return json({ sponsors, events, podcastEpisodes, resources });
+	const newsletters = await getNewsletters(5);
+
+	return json({ sponsors, events, podcastEpisodes, resources, newsletters });
 };
 
 const homePageLinks = [
@@ -66,7 +70,8 @@ const homePageLinks = [
 ];
 
 export default function Index() {
-	const { sponsors, events, podcastEpisodes, resources } = useLoaderData();
+	const { sponsors, events, podcastEpisodes, resources, newsletters } =
+		useLoaderData();
 
 	return (
 		<>
@@ -161,6 +166,18 @@ export default function Index() {
 									}),
 								)}
 							/>
+						</HomePageBlock>
+					</div>
+					<div className="homepageblocks">
+						<HomePageBlock
+							Hero={UndrawArrived}
+							id="newsletters"
+							title="Virtual Coffee Newsletter"
+							subtitle="Sign up for the Virtual Coffee Newsletter"
+							linkTo="/newsletter"
+							footer="See more Newsletter Issues"
+						>
+							<PostList items={newsletters} />
 						</HomePageBlock>
 					</div>
 				</div>
