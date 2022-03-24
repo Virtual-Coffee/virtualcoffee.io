@@ -80,7 +80,7 @@ export default function PodcastsIndex() {
 							({ title, metaDescription: description, url }) => ({
 								title,
 								description,
-								url,
+								to: url,
 							}),
 						)}
 					/>

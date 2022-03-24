@@ -6,7 +6,7 @@ function getChallengeData(challange) {
 	return {
 		title: challange.handleData.listTitle || challange.handleData.meta.title,
 		description: challange.handleData.meta.description,
-		url: `/monthlychallenges/${challange.slug}`,
+		to: `/monthlychallenges/${challange.slug}`,
 	};
 }
 

@@ -43,37 +43,37 @@ export const loader = async () => {
 
 const homePageLinks = [
 	{
-		url: '/about/',
+		to: '/about/',
 		title: 'About Virtual Coffee',
 		description: `Our Mission, Core Values, History, and more.`,
 	},
 	{
-		url: '/code-of-conduct/',
+		to: '/code-of-conduct/',
 		title: 'Code of Conduct',
 		description: `In order to create a welcoming and inclusive community, we ask our members to abide by our Code of Conduct.`,
 	},
 	{
-		url: '/members/',
+		to: '/members/',
 		title: 'Our Members',
 		description: `Meet our amazing members!`,
 	},
 	{
-		url: 'https://store.virtualcoffee.io/',
+		href: 'https://store.virtualcoffee.io/',
 		title: 'Merch Store',
 		description: `Support Virtual Coffee and show your love ❤️`,
 	},
 	{
-		url: 'https://github.com/Virtual-Coffee/',
+		href: 'https://github.com/Virtual-Coffee/',
 		title: 'VC GitHub',
 		description: `Join our Open Source efforts!`,
 	},
 	{
-		url: 'https://youtube.com/c/virtualcoffeeio',
+		href: 'https://youtube.com/c/virtualcoffeeio',
 		title: 'VC Videos',
 		description: `Recordings of Virtual Coffee Events and Live Streams.`,
 	},
 	{
-		url: 'https://twitter.com/VirtualCoffeeIO',
+		href: 'https://twitter.com/VirtualCoffeeIO',
 		title: 'VC Twitter',
 		description: `Stay up to date and join in the fun!`,
 	},
@@ -178,7 +178,7 @@ export default function Index() {
 									({ title, metaDescription: description, url }) => ({
 										title,
 										description,
-										url,
+										to: url,
 									}),
 								)}
 							/>

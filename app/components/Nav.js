@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'remix';
 import VirtualCoffeeFull from '../svg/VirtualCoffeeFull';
 
 export default function Nav() {
@@ -6,9 +7,9 @@ export default function Nav() {
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark fixed-top w-100">
-			<a className="navbar-brand" href="/" aria-label="Virtual Coffee">
+			<Link className="navbar-brand" to="/" aria-label="Virtual Coffee">
 				<VirtualCoffeeFull title="Virtual Coffee" />
-			</a>
+			</Link>
 			<button
 				className="navbar-toggler"
 				type="button"
@@ -29,24 +30,24 @@ export default function Nav() {
 			>
 				<ul className="navbar-nav">
 					<li className="nav-item">
-						<a className="nav-link" href="/about">
+						<Link className="nav-link" to="/about">
 							About
-						</a>
+						</Link>
 					</li>
 					<li className="nav-item">
-						<a className="nav-link" href="/events">
+						<Link className="nav-link" to="/events">
 							Events
-						</a>
+						</Link>
 					</li>
 					<li className="nav-item">
-						<a className="nav-link" href="/podcast">
+						<Link className="nav-link" to="/podcast">
 							Podcast
-						</a>
+						</Link>
 					</li>
 					<li className="nav-item">
-						<a className="nav-link" href="/resources">
+						<Link className="nav-link" to="/resources">
 							Resources
-						</a>
+						</Link>
 					</li>
 					<li className="nav-item">
 						<a className="nav-link" href="https://store.virtualcoffee.io/">

@@ -6,7 +6,7 @@ function getIssueData(issue) {
 	return {
 		title: issue.handleData.listTitle || issue.handleData.meta.title,
 		description: issue.handleData.meta.description,
-		url: `/newsletter/issues/${issue.slug}`,
+		to: `/newsletter/issues/${issue.slug}`,
 	};
 }
 
