@@ -11,8 +11,11 @@ import Nav from './components/Nav';
 import styles from './styles/main.css';
 import { useLocation } from 'react-router-dom';
 import { qualifiedUrl } from '~/util/url.server';
+import { removeTrailingSlash } from '~/util/http';
 
-export async function loader() {
+export async function loader({ request }) {
+	removeTrailingSlash(request);
+
 	const fullUrl = qualifiedUrl();
 
 	return json({ fullUrl });
