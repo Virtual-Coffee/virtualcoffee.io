@@ -20,6 +20,8 @@ eleventyNavigation:
 
 {% leadText %}
 
+This document is Part 1 of Virtual Coffee's four-part Guide to Open Source, focusing on an overview of the open source ecosystem, what it is and how it is governed and funded.
+
 {% endleadText %}
 
 {% endtextContainer %}

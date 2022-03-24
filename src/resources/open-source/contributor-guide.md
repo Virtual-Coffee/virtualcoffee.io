@@ -20,6 +20,8 @@ eleventyNavigation:
 
 {% leadText %}
 
+This document is Part 3 of Virtual Coffee's four-part Guide to Open Source, outlining useful information for you open source contributing journey.
+
 {% endleadText %}
 
 {% endtextContainer %}
