@@ -19,10 +19,8 @@ import getChallenges from '../data/monthlyChallenges';
 const cacheControl = 'max-age=300, stale-while-revalidate=18000';
 // const cacheControl = 'max-age=60';
 
-export function headers() {
-	return {
-		'Cache-Control': cacheControl,
-	};
+export function headers({ loaderHeaders }) {
+	return { 'cache-control': loaderHeaders.get('cache-control') };
 }
 
 export const loader = async () => {
@@ -50,6 +48,7 @@ export const loader = async () => {
 			challenges,
 		},
 		{
+			status: 200,
 			headers: {
 				'Cache-Control': cacheControl,
 			},
