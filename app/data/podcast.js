@@ -1,9 +1,5 @@
 import { GraphQLClient, gql } from 'graphql-request';
 
-if (process.env.NETLIFY_DEV) {
-	process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
-}
-
 export const buzzsproutPodcastId = '1558601';
 
 const episodeQuery = gql`
@@ -12,6 +8,7 @@ const episodeQuery = gql`
 			title
 			... on podcast_default_Entry {
 				id
+				metaDescription
 				podcastEpisode
 				podcastBuzzsproutId
 				podcastPublishDate
@@ -43,7 +40,8 @@ const episodeQuery = gql`
 					}
 				}
 				podcastEpisodeCard {
-					url
+					w_250: url(width: 250)
+					w_1200: url(width: 1200)
 				}
 			}
 		}
@@ -164,4 +162,12 @@ export async function getTranscript({ id }) {
 
 export function getPlayerSrc({ id }) {
 	return `https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}.js?container_id=buzzsprout-player-${id}&player=small`;
+}
+
+export function getPlayerUrl({ id }) {
+	return `https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}?client_source=twitter_card&amp;player_type=full_screen`;
+}
+
+export function getPlayerStreamUrl({ id }) {
+	return `https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}.mp3?blob_id=${id}&client_source=twitter_card`;
 }
