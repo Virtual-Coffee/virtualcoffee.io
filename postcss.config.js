@@ -19,6 +19,7 @@ module.exports = {
 				'./app/**/*.mdx',
 				'./app/**/*.svg',
 			],
+			dynamicAttributes: ['class', 'title', 'href', 'role', 'type'],
 		}),
 	],
 };
