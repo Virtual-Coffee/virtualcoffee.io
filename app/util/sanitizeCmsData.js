@@ -1,6 +1,5 @@
-import sanitize from 'sanitize-html';
-
-export default function sanitizeCmsData(data) {
+async function sanitizeCmsData(data) {
+	const sanitize = await import('sanitize-html').then((mod) => mod.default);
 	if (Array.isArray(data)) {
 		return data.map((o) => sanitizeCmsData(o));
 	} else if (typeof data === 'object') {
@@ -22,9 +21,15 @@ export default function sanitizeCmsData(data) {
 	}
 }
 
-export function sanitizeHtml(html) {
+async function sanitizeHtml(html) {
+	const sanitize = await import('sanitize-html').then((mod) => mod.default);
 	return sanitize(html, sanitizeOptions);
 }
+
+module.exports = {
+	default: sanitizeCmsData,
+	sanitizeHtml,
+};
 
 const sanitizeOptions = {
 	allowedTags: [

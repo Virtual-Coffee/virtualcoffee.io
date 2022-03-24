@@ -60,10 +60,17 @@ export async function getEvents({ limit }) {
 		// return response.slice(0, 10);
 
 		// console.log(eventsResponse);
-		return eventsResponse.solspace_calendar.events.map((event) => ({
-			...event,
-			eventCalendarDescription: sanitizeHtml(event.eventCalendarDescription),
-		}));
+		return await Promise.all(
+			eventsResponse.solspace_calendar.events.map(async (event) => {
+				const sanitizedDescription = await sanitizeHtml(
+					event.eventCalendarDescription,
+				);
+				return {
+					...event,
+					eventCalendarDescription: sanitizedDescription,
+				};
+			}),
+		);
 	} catch (e) {
 		console.error(e);
 		return [];

@@ -148,7 +148,7 @@ module.exports = {
 			}
 
 			if (!data.bio) {
-				data.bio = sanitizeHtml(github.bioHTML);
+				data.bio = await sanitizeHtml(github.bioHTML);
 			} else {
 				data.bio = await parseMarkdown(data.bio);
 			}

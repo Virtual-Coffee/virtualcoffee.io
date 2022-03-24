@@ -15,9 +15,9 @@ export const loader = async ({ params }) => {
 	const transcript = await getTranscript({ id: episode.podcastBuzzsproutId });
 
 	const playerSrc = getPlayerSrc({ id: episode.podcastBuzzsproutId });
-
+	const sanitizedEpisode = await sanitizeCmsData(episode);
 	return json({
-		episode: sanitizeCmsData(episode),
+		episode: sanitizedEpisode,
 		transcript,
 		playerSrc,
 	});
