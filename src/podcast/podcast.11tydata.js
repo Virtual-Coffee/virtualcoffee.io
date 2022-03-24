@@ -54,6 +54,10 @@ module.exports = {
 								...data.metadata.tags,
 								'twitter:player': `https://www.buzzsprout.com/${podID}/${id}?client_source=twitter_card&amp;player_type=full_screen`,
 								'twitter:player:stream': `https://www.buzzsprout.com/${podID}/${id}.mp3?blob_id=${id}&client_source=twitter_card`,
+								'og:title': data.title,
+								'og:description': data.description,
+								'twitter:title': data.title,
+								'twitter:description': data.description,
 								'og:image': useImgix
 									? imgixClient.buildURL(card, {
 											w: 250,

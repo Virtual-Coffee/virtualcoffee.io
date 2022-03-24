@@ -19,7 +19,7 @@ podcast:
         <p>Software Developer, and Community Maintainer at Virtual Coffee.</p>
         <ul>
           <li><a href="https://twitter.com/KirkCodes">@KirkCodes</a> on Twitter</li>
-          <li><a href="https://twitter.com/tkshill">@tkshill</a> on GitHub</li>
+          <li><a href="https://github.com/tkshill">@tkshill</a> on GitHub</li>
         </ul>
     - name: Bekah Hawrot Weigel
       headshot: '/assets/images/podcast/0209-bekah.jpg'
