@@ -112,15 +112,21 @@ module.exports = {
 	mdx: async (filename) => {
 		const remarkToc = await createRemarkToc();
 
-		const [rehypeHighlight, rehypeSlug, rehypeAutolinkHeadings, hastscript] =
-			await Promise.all([
-				import('rehype-highlight').then((mod) => mod.default),
-				// import('@jsdevtools/rehype-toc').then((mod) => mod.default),
-				// import('remark-toc').then((mod) => mod.default),
-				import('rehype-slug').then((mod) => mod.default),
-				import('rehype-autolink-headings').then((mod) => mod.default),
-				import('hastscript').then((mod) => mod.h),
-			]);
+		const [
+			rehypeHighlight,
+			rehypeSlug,
+			rehypeAutolinkHeadings,
+			hastscript,
+			toString,
+		] = await Promise.all([
+			import('rehype-highlight').then((mod) => mod.default),
+			// import('@jsdevtools/rehype-toc').then((mod) => mod.default),
+			// import('remark-toc').then((mod) => mod.default),
+			import('rehype-slug').then((mod) => mod.default),
+			import('rehype-autolink-headings').then((mod) => mod.default),
+			import('hastscript').then((mod) => mod.h),
+			import('hast-util-to-string').then((mod) => mod.toString),
+		]);
 
 		return {
 			remarkPlugins: [
@@ -142,7 +148,7 @@ module.exports = {
 						properties: { class: 'header-anchor' },
 						content: (node) => {
 							return [
-								hastscript('span.sr-only', 'Permalink to “', toString(node)),
+								hastscript('span.sr-only', `Permalink to “${toString(node)}”`),
 								hastscript('span', { ariaHidden: 'true' }, '#'),
 							];
 						},
