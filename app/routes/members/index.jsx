@@ -3,8 +3,13 @@ import DefaultLayout from '~/components/layouts/DefaultLayout';
 import MemberCards from '~/components/MemberCards';
 import UndrawCelebration from '~/svg/UndrawCelebration';
 import { loadUserData } from '~/data/members';
+import generatedMemberData from '~/_generatedData/members.json';
 
 export const loader = async () => {
+	if (generatedMemberData) {
+		return json(generatedMemberData);
+	}
+
 	const members = await loadUserData();
 
 	return json(members);
