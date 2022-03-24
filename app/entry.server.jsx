@@ -1,6 +1,10 @@
 import { renderToString } from 'react-dom/server';
 import { RemixServer } from 'remix';
 
+if (process.env.NETLIFY_DEV) {
+	process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+}
+
 export default function handleRequest(
 	request,
 	responseStatusCode,
