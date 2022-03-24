@@ -30,13 +30,21 @@ export const loader = async ({ params }) => {
 
 export function meta({ data: { episode, playerUrl, playerStreamUrl } }) {
 	const cardImage = episode.podcastEpisodeCard && episode.podcastEpisodeCard[0];
+
+	const title = episode.title;
+	const description = episode.metaDescription;
+
 	return {
-		title: episode.title,
-		description: episode.metaDescription,
+		title: title,
+		description: description,
 		'fb:app_id': '1345357125835406',
 		'og:type': 'video.episode',
 		'og:image:width': 250,
 		'og:image:height': 250,
+		'og:title': title,
+		'og:description': description,
+		'twitter:title': title,
+		'twitter:description': description,
 		'twitter:card': 'player',
 		'twitter:site': '@VirtualCoffeeIO',
 		'twitter:player:width': '500',

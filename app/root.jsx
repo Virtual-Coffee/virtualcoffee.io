@@ -55,13 +55,19 @@ export function links() {
 }
 
 export function meta({ data: { fullUrl } }) {
+	const title = 'Virtual Coffee IO';
+	const description = 'An intimate community for all devs, optimized for you';
 	return {
-		title: 'Virtual Coffee IO',
-		description: 'An intimate community for all devs, optimized for you',
+		title: title,
+		description: description,
 		charSet: 'utf-8',
 		viewport: 'width=device-width,initial-scale=1',
 		'og:type': 'website',
 		'og:image': `${fullUrl}/assets/images/vc-social-card.png`,
+		'og:title': title,
+		'og:description': description,
+		'twitter:title': title,
+		'twitter:description': description,
 		'twitter:card': 'summary_large_image',
 		'twitter:image': `${fullUrl}/assets/images/vc-social-card.png`,
 		'msapplication-TileColor': '#d9376e',
