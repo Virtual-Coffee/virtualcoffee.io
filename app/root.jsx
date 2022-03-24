@@ -5,17 +5,69 @@ import {
 	Outlet,
 	Scripts,
 	ScrollRestoration,
+	json,
 } from 'remix';
 import Nav from './components/Nav';
 import styles from './styles/main.css';
 import { useLocation } from 'react-router-dom';
+import { qualifiedUrl } from '~/util/url.server';
 
-export const links = () => {
-	return [{ rel: 'stylesheet', href: styles }];
-};
+export async function loader() {
+	const fullUrl = qualifiedUrl();
 
-export function meta() {
-	return { title: 'Virtual Coffee IO' };
+	return json({ fullUrl });
+}
+
+export function links() {
+	return [
+		{ rel: 'stylesheet', href: styles },
+		{
+			rel: 'apple-touch-icon',
+			sizes: '180x180',
+			href: '/assets/favicon/apple-touch-icon.png',
+		},
+		{
+			rel: 'icon',
+			type: 'image/png',
+			sizes: '32x32',
+			href: '/assets/favicon/favicon-32x32.png',
+		},
+		{
+			rel: 'icon',
+			type: 'image/png',
+			sizes: '16x16',
+			href: '/assets/favicon/favicon-16x16.png',
+		},
+		{
+			rel: 'manifest',
+			href: '/assets/favicon/site.webmanifest',
+		},
+		{
+			rel: 'mask-icon',
+			href: '/assets/favicon/safari-pinned-tab.svg',
+			color: '#d9376e',
+		},
+		{
+			rel: 'shortcut icon',
+			href: '/assets/favicon/favicon.ico',
+		},
+	];
+}
+
+export function meta({ data: { fullUrl } }) {
+	return {
+		title: 'Virtual Coffee IO',
+		description: 'An intimate community for all devs, optimized for you',
+		charSet: 'utf-8',
+		viewport: 'width=device-width,initial-scale=1',
+		'og:type': 'website',
+		'og:image': `${fullUrl}/assets/images/vc-social-card.png`,
+		'twitter:card': 'summary_large_image',
+		'twitter:image': `${fullUrl}/assets/images/vc-social-card.png`,
+		'msapplication-TileColor': '#d9376e',
+		'msapplication-config': '/assets/favicon/browserconfig.xml',
+		'theme-color': '#ffffff',
+	};
 }
 
 export default function App() {
@@ -24,38 +76,6 @@ export default function App() {
 	return (
 		<html lang="en">
 			<head>
-				<meta charSet="utf-8" />
-				<meta name="viewport" content="width=device-width,initial-scale=1" />
-				<link
-					rel="apple-touch-icon"
-					sizes="180x180"
-					href="/assets/favicon/apple-touch-icon.png"
-				/>
-				<link
-					rel="icon"
-					type="image/png"
-					sizes="32x32"
-					href="/assets/favicon/favicon-32x32.png"
-				/>
-				<link
-					rel="icon"
-					type="image/png"
-					sizes="16x16"
-					href="/assets/favicon/favicon-16x16.png"
-				/>
-				<link rel="manifest" href="/assets/favicon/site.webmanifest" />
-				<link
-					rel="mask-icon"
-					href="/assets/favicon/safari-pinned-tab.svg"
-					color="#d9376e"
-				/>
-				<link rel="shortcut icon" href="/assets/favicon/favicon.ico" />
-				<meta name="msapplication-TileColor" content="#d9376e" />
-				<meta
-					name="msapplication-config"
-					content="/assets/favicon/browserconfig.xml"
-				/>
-				<meta name="theme-color" content="#ffffff" />
 				<Meta />
 				<Links />
 			</head>

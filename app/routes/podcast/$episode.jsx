@@ -2,26 +2,56 @@ import { useEffect, Fragment } from 'react';
 import { json, useLoaderData } from 'remix';
 import DisplayHtml from '~/components/DisplayHtml';
 import PodcastSubscribe from '~/components/PodcastSubscribe';
-import { getEpisode, getTranscript, getPlayerSrc } from '~/data/podcast';
+import {
+	getEpisode,
+	getTranscript,
+	getPlayerSrc,
+	getPlayerUrl,
+	getPlayerStreamUrl,
+} from '~/data/podcast';
 import { dateForDisplay } from '~/util/date';
-import sanitizeCmsData from '~/util/sanitizeCmsData';
+import { sanitizeCmsData } from '~/util/sanitizeCmsData';
 
 export const loader = async ({ params }) => {
 	console.log(`loading data for ${params.episode}`);
 	const episode = await getEpisode({ slug: params.episode });
 
-	// console.log(JSON.stringify(episode, null, 2));
-
 	const transcript = await getTranscript({ id: episode.podcastBuzzsproutId });
 
-	const playerSrc = getPlayerSrc({ id: episode.podcastBuzzsproutId });
 	const sanitizedEpisode = await sanitizeCmsData(episode);
 	return json({
 		episode: sanitizedEpisode,
 		transcript,
-		playerSrc,
+		playerSrc: getPlayerSrc({ id: episode.podcastBuzzsproutId }),
+		playerUrl: getPlayerUrl(episode.podcastBuzzsproutId),
+		playerStreamUrl: getPlayerStreamUrl(episode.podcastBuzzsproutId),
 	});
 };
+
+export function meta({ data: { episode, playerUrl, playerStreamUrl } }) {
+	const cardImage = episode.podcastEpisodeCard && episode.podcastEpisodeCard[0];
+	return {
+		title: episode.title,
+		description: episode.metaDescription,
+		'fb:app_id': '1345357125835406',
+		'og:type': 'video.episode',
+		'og:image:width': 250,
+		'og:image:height': 250,
+		'twitter:card': 'player',
+		'twitter:site': '@VirtualCoffeeIO',
+		'twitter:player:width': '500',
+		'twitter:player:height': '210',
+		'twitter:player:stream:content_type': 'audio/mp3',
+		'twitter:player': playerUrl,
+		'twitter:player:stream': playerStreamUrl,
+		...(cardImage
+			? {
+					'og:image': cardImage.w_250,
+					'twitter:image': cardImage.w_1200,
+			  }
+			: {}),
+	};
+}
 
 export default function PostSlug() {
 	const { episode, transcript, playerSrc } = useLoaderData();
