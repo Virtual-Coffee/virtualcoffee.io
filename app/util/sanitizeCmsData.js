@@ -1,24 +1,29 @@
 async function sanitizeCmsData(data) {
 	const sanitize = await import('sanitize-html').then((mod) => mod.default);
-	if (Array.isArray(data)) {
-		return data.map((o) => sanitizeCmsData(o));
-	} else if (typeof data === 'object') {
-		return Object.keys(data).reduce((obj, key) => {
-			if (key === 'renderHtml') {
-				return {
-					...obj,
-					sanitizedHtml: sanitize(data[key], sanitizeOptions),
-				};
-			} else {
-				return {
-					...obj,
-					[key]: sanitizeCmsData(data[key]),
-				};
-			}
-		}, {});
-	} else {
-		return data;
+
+	function sanitizeInternal(data) {
+		if (Array.isArray(data)) {
+			return data.map((o) => sanitizeInternal(o));
+		} else if (typeof data === 'object') {
+			return Object.keys(data).reduce((obj, key) => {
+				if (key === 'renderHtml') {
+					return {
+						...obj,
+						sanitizedHtml: sanitize(data[key], sanitizeOptions),
+					};
+				} else {
+					return {
+						...obj,
+						[key]: sanitizeInternal(data[key]),
+					};
+				}
+			}, {});
+		} else {
+			return data;
+		}
 	}
+
+	return sanitizeInternal(data);
 }
 
 async function sanitizeHtml(html) {
@@ -27,7 +32,7 @@ async function sanitizeHtml(html) {
 }
 
 module.exports = {
-	default: sanitizeCmsData,
+	sanitizeCmsData,
 	sanitizeHtml,
 };
 
