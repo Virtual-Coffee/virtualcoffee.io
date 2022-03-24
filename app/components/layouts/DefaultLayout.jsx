@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useMatches } from 'remix';
-
 import * as Svgs from '~/svg';
 
 function useHeroData({ Hero, heroHeader, heroSubheader }) {

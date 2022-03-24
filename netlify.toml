@@ -8,7 +8,7 @@
   port = 9000
 
 [functions.server]
-  included_files = ["app/routes/**/*.mdx"]
+  included_files = ["app/routes/**/*.mdx", "app/data/members/core/*.js", "app/data/members/members/*.js"]
 
 [[headers]]
   for = "/build/*"
