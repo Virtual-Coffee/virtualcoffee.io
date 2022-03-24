@@ -22,11 +22,9 @@ export default function MemberCards({ data }) {
 								{member.teams?.length > 0 && (
 									<div className="membercard-teams">
 										{member.teams.map((team) => (
-											<>
-												<span key={team} className="badge badge-secondary">
-													{team}
-												</span>{' '}
-											</>
+											<span key={team} className="badge badge-secondary">
+												{team}
+											</span>
 										))}
 									</div>
 								)}

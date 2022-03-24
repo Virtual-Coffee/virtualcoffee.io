@@ -110,7 +110,9 @@
 }
 
 .membercard-teams {
-	// grid-area: teams;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25em;
 }
 
 .membercard-icon {
