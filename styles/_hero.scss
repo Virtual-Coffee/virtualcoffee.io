@@ -23,10 +23,6 @@
 		strong {
 			font-weight: 900;
 		}
-
-		@include media-breakpoint-down(xs) {
-			// font-size: 22px;
-		}
 	}
 
 	.container {

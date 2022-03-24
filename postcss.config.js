@@ -12,16 +12,13 @@ module.exports = {
 			safe: true,
 		}), // minify the result
 
-		// require('@fullhuman/postcss-purgecss')({
-		//   content: [
-		//     './utils/**/*.js',
-		//     './.eleventy.js',
-		//     './src/**/*.njk',
-		//     './src/**/*.md',
-		//     './src/**/*.html',
-		//     './src/**/*.liquid',
-		//     './src/**/*.js',
-		//   ],
-		// })
+		require('@fullhuman/postcss-purgecss')({
+			content: [
+				'./app/**/*.js',
+				'./app/**/*.jsx',
+				'./app/**/*.mdx',
+				'./app/**/*.svg',
+			],
+		}),
 	],
 };
