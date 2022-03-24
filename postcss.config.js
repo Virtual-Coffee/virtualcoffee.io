@@ -18,6 +18,7 @@ module.exports = {
 				'./app/**/*.jsx',
 				'./app/**/*.mdx',
 				'./app/**/*.svg',
+				'./remix.config.js',
 			],
 			dynamicAttributes: ['class', 'title', 'href', 'role', 'type'],
 		}),
