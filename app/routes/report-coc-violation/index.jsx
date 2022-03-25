@@ -1,4 +1,11 @@
-import { json, redirect, Form, useLoaderData } from 'remix';
+import {
+	json,
+	redirect,
+	Form,
+	useLoaderData,
+	unstable_createFileUploadHandler,
+	unstable_parseMultipartFormData,
+} from 'remix';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { qualifiedUrl } from '~/util/url.server';
 
@@ -16,8 +23,13 @@ export function meta({ data: { meta } }) {
 }
 
 export async function action({ request }) {
+	const uploadHandler = unstable_createFileUploadHandler({
+		maxFileSize: 5_000_000,
+		file: ({ filename }) => filename,
+	});
+
 	// netlify-forms
-	const body = await request.formData();
+	const body = await unstable_parseMultipartFormData(request, uploadHandler);
 
 	const response = await fetch(qualifiedUrl('/netlify-forms'), {
 		method: 'POST',
