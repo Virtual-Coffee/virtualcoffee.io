@@ -7,63 +7,19 @@
 		<form netlify="true" name="coc-violation">
 			<input type="hidden" name="form-name" value="coc-violation" />
 
-			<input
-				type="text"
-				className="form-control"
-				id="formName"
-				name="name"
-				aria-describedby="nameHelp"
-			/>
+			<input type="text" name="name" />
 
-			<input
-				type="email"
-				className="form-control"
-				id="formEmail"
-				name="email"
-				aria-describedby="emailHelp"
-			/>
+			<input type="email" name="email" />
 
-			<input
-				type="text"
-				className="form-control"
-				id="reporteeName"
-				name="reporteeName"
-				required
-				aria-describedby="reporteeNameHelp"
-			/>
+			<input type="text" name="reporteeName" />
 
-			<input
-				type="text"
-				className="form-control"
-				id="timeLocation"
-				name="timeLocation"
-				required
-				aria-describedby="timeLocationHelp"
-			/>
+			<input type="text" name="timeLocation" />
 
-			<textarea
-				className="form-control"
-				required
-				id="description"
-				name="description"
-				rows="3"
-				aria-describedby="descriptionHelp"
-			></textarea>
+			<textarea name="description" rows="3"></textarea>
 
-			<textarea
-				className="form-control"
-				id="anyoneElseInvolved"
-				name="anyoneElseInvolved"
-				rows="3"
-			></textarea>
+			<textarea name="anyoneElseInvolved" rows="3"></textarea>
 
-			<input
-				type="file"
-				className="form-control"
-				id="uploadedFiles"
-				name="uploadedFiles"
-				aria-describedby="uploadedFilesHelp"
-			/>
+			<input type="file" name="uploadedFiles" />
 		</form>
 	</body>
 </html>

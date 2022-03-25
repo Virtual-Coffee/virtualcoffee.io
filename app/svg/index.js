@@ -8,6 +8,7 @@ export { default as Medium } from './Medium';
 export { default as Polywork } from './Polywork';
 export { default as Twitch } from './Twitch';
 export { default as Twitter } from './Twitter';
+export { default as Undraw404 } from './Undraw404';
 export { default as UndrawAddUser } from './UndrawAddUser';
 export { default as UndrawAppreciation } from './UndrawAppreciation';
 export { default as UndrawArrived } from './UndrawArrived';
