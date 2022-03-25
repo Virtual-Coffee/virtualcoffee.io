@@ -1,6 +1,6 @@
 export function qualifiedUrl(path = '') {
 	if (!process.env.NETLIFY) {
-		return path;
+		return process.env.URL ? process.env.URL + path : path;
 	}
 
 	const baseUrl =

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+	</head>
+	<body>
+		<form netlify="true" name="coc-violation">
+			<input type="hidden" name="form-name" value="coc-violation" />
+
+			<input
+				type="text"
+				className="form-control"
+				id="formName"
+				name="name"
+				aria-describedby="nameHelp"
+			/>
+
+			<input
+				type="email"
+				className="form-control"
+				id="formEmail"
+				name="email"
+				aria-describedby="emailHelp"
+			/>
+
+			<input
+				type="text"
+				className="form-control"
+				id="reporteeName"
+				name="reporteeName"
+				required
+				aria-describedby="reporteeNameHelp"
+			/>
+
+			<input
+				type="text"
+				className="form-control"
+				id="timeLocation"
+				name="timeLocation"
+				required
+				aria-describedby="timeLocationHelp"
+			/>
+
+			<textarea
+				className="form-control"
+				required
+				id="description"
+				name="description"
+				rows="3"
+				aria-describedby="descriptionHelp"
+			></textarea>
+
+			<textarea
+				className="form-control"
+				id="anyoneElseInvolved"
+				name="anyoneElseInvolved"
+				rows="3"
+			></textarea>
+
+			<input
+				type="file"
+				className="form-control"
+				id="uploadedFiles"
+				name="uploadedFiles"
+				aria-describedby="uploadedFilesHelp"
+			/>
+		</form>
+	</body>
+</html>

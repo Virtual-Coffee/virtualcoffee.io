@@ -16,6 +16,11 @@
     "Cache-Control" = "public, max-age=31536000, s-maxage=31536000"
 
 [[redirects]]
+  from = "/netlify-forms"
+  to = "/"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/.netlify/functions/server"
   status = 200
