@@ -45,44 +45,63 @@ function useHeroData({ Hero, heroHeader, heroSubheader }) {
 	}, [Hero, heroHeader, heroSubheader, matches]);
 }
 
-export default function DefaultLayout({
-	Hero,
-	heroHeader,
-	heroSubheader,
-	simple = false,
-	children,
-}) {
+export function HeroHead({ Hero, heroHeader, heroSubheader, simple }) {
 	const heroData = useHeroData({ Hero, heroHeader, heroSubheader });
 
 	const HeroComponent =
 		typeof heroData.Hero === 'string' ? Svgs[heroData.Hero] : heroData.Hero;
 
-	return (
-		<>
-			{HeroComponent && heroData.heroHeader ? (
-				<div className="py-4">
-					<div className="container">
-						<div className="row align-items-center">
-							<div className="col-sm-4">
-								<HeroComponent ariaHidden />
-							</div>
-							<div className="col-sm-8">
-								<h1 className="display-4">{heroData.heroHeader}</h1>
-								{heroData.heroSubheader && (
-									<p className="lead">{heroData.heroSubheader}</p>
-								)}
-							</div>
+	if (HeroComponent && heroData.heroHeader) {
+		return (
+			<div className="py-4">
+				<div className="container">
+					<div className="row align-items-center">
+						<div className="col-sm-4">
+							<HeroComponent ariaHidden />
+						</div>
+						<div className="col-sm-8">
+							<h1 className="display-4">{heroData.heroHeader}</h1>
+							{heroData.heroSubheader && (
+								<p className="lead">{heroData.heroSubheader}</p>
+							)}
 						</div>
 					</div>
 				</div>
-			) : heroData.heroHeader ? (
-				<div className={`container pt-5${simple ? ' container-simple' : ''}`}>
-					<h1 className="display-4">{heroData.heroHeader}</h1>
-					{heroData.heroSubheader && (
-						<p className="lead">{heroData.heroSubheader}</p>
-					)}
-				</div>
-			) : null}
+			</div>
+		);
+	}
+	if (heroData.heroHeader) {
+		return (
+			<div className={`container pt-5${simple ? ' container-simple' : ''}`}>
+				<h1 className="display-4">{heroData.heroHeader}</h1>
+				{heroData.heroSubheader && (
+					<p className="lead">{heroData.heroSubheader}</p>
+				)}
+			</div>
+		);
+	}
+
+	return null;
+}
+
+export default function DefaultLayout({
+	Hero,
+	heroHeader,
+	heroSubheader,
+	simple = false,
+	showHero = true,
+	children,
+}) {
+	return (
+		<>
+			{showHero && (
+				<HeroHead
+					Hero={Hero}
+					heroHeader={heroHeader}
+					heroSubheader={heroSubheader}
+					simple={simple}
+				/>
+			)}
 			<main
 				id="maincontent"
 				className={simple ? 'container container-simple prose py-5' : ''}

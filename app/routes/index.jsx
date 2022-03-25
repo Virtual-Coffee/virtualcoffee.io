@@ -56,7 +56,7 @@ export const loader = async () => {
 	);
 };
 
-const homePageLinks = [
+export const homePageLinks = [
 	{
 		to: '/about/',
 		title: 'About Virtual Coffee',

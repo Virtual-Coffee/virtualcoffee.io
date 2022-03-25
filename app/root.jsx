@@ -1,17 +1,73 @@
-import {
-	Links,
-	LiveReload,
-	Meta,
-	Outlet,
-	Scripts,
-	ScrollRestoration,
-	json,
-} from 'remix';
-import Nav from './components/Nav';
+import { Outlet, json, useCatch, useMatches } from 'remix';
+
 import styles from './styles/main.css';
-import { useLocation } from 'react-router-dom';
 import { qualifiedUrl } from '~/util/url.server';
 import { removeTrailingSlash } from '~/util/http';
+import DefaultLayout from '~/components/layouts/DefaultLayout';
+import PostList from '~/components/PostList';
+import Root from '~/components/Root';
+import { homePageLinks } from '~/routes/index';
+import { useLocation } from 'react-router-dom';
+
+export function CatchBoundary(props) {
+	const location = useLocation();
+	console.log(location);
+
+	return (
+		<Root>
+			<DefaultLayout
+				Hero="Undraw404"
+				heroHeader="Page Not Found"
+				heroSubheader="We weren't able to find that content."
+				simple
+			>
+				<p className="lead">
+					Perhaps we can interest you some of the other awesome things going on
+					here at Virtual Coffee:
+				</p>
+
+				<PostList
+					items={[
+						{
+							to: '/about/',
+							title: 'Community Events',
+							description: 'See our upcoming events!',
+						},
+						{
+							title: 'Member Resources',
+							description:
+								'A collection of resources for Virtual Coffee members',
+							to: '/resources',
+						},
+						{
+							title: 'Virtual Coffee Podcast',
+							description: 'Conversations with members of the community',
+							to: '/podcast',
+						},
+						{
+							title: 'Virtual Coffee Newsletter',
+							description: 'Sign up for the Virtual Coffee Newsletter',
+							to: '/newsletter',
+						},
+						...homePageLinks,
+					]}
+				/>
+
+				<hr />
+
+				<p className="lead">
+					If you want to let us know about this broken link,{' '}
+					<a
+						href={`https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new?title=Broken+link:+${location.pathname}&body=This+link+resulted+in+a+404:+https://virtualcoffee.io${location.pathname}&labels=bug`}
+					>
+						please open an issue on GitHub
+					</a>
+					.
+				</p>
+			</DefaultLayout>
+		</Root>
+	);
+}
 
 export async function loader({ request }) {
 	removeTrailingSlash(request);
@@ -57,7 +113,7 @@ export function links() {
 	];
 }
 
-export function meta({ data: { fullUrl } }) {
+export function meta({ data: { fullUrl } = {} }) {
 	const title = 'Virtual Coffee IO';
 	const description = 'An intimate community for all devs, optimized for you';
 	return {
@@ -76,67 +132,9 @@ export function meta({ data: { fullUrl } }) {
 }
 
 export default function App() {
-	const location = useLocation();
-
 	return (
-		<html lang="en">
-			<head>
-				<Meta />
-				<Links />
-			</head>
-			<body className={location.pathname === '/' ? 'vc-home' : ''}>
-				<a
-					href="#maincontent"
-					className={`text-assistive display-at-top-on-focus`}
-				>
-					Skip to main content.
-				</a>
-				<Nav />
-				<Outlet />
-
-				<footer
-					className="
-				py-5
-				text-center text-muted
-				bg-white
-				border-top border-secondary
-				main-footer
-			"
-				>
-					<ul>
-						<li>&copy; {new Date().getFullYear()} Virtual Coffee</li>
-						<li>
-							<a href="mailto:hello@virtualcoffee.io">Contact Us</a>
-						</li>
-						{/* <li>
-					<a
-						href="https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/{{ page.inputPath }}"
-						>Edit this page</a
-					>
-				</li> */}
-						<li>
-							<a href="/uses">Uses</a>
-						</li>
-						<li className="py-0">
-							<a
-								href="https://www.netlify.com"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<img
-									src="https://www.netlify.com/img/global/badges/netlify-dark.svg"
-									alt="Deploys by Netlify"
-									loading="lazy"
-								/>
-							</a>
-						</li>
-					</ul>
-				</footer>
-
-				<ScrollRestoration />
-				<Scripts />
-				<LiveReload />
-			</body>
-		</html>
+		<Root>
+			<Outlet />
+		</Root>
 	);
 }
