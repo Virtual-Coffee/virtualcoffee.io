@@ -62,7 +62,7 @@ export function HeroHead({ Hero, heroHeader, heroSubheader, simple }) {
 						<div className="col-sm-8">
 							<h1 className="display-4">{heroData.heroHeader}</h1>
 							{heroData.heroSubheader && (
-								<p className="lead">{heroData.heroSubheader}</p>
+								<div className="lead">{heroData.heroSubheader}</div>
 							)}
 						</div>
 					</div>
