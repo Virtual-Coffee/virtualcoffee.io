@@ -56,7 +56,13 @@ export default function CocForm() {
 				</>
 			}
 		>
-			<Form method="POST" reloadDocument encType="multipart/form-data">
+			<form
+				action="/netlify-forms"
+				method="POST"
+				encType="multipart/form-data"
+				name="coc-violation"
+				data-netlify="true"
+			>
 				<input type="hidden" name="form-name" value="coc-violation" />
 				<fieldset>
 					<div className="form-group">
@@ -158,7 +164,7 @@ export default function CocForm() {
 						Submit Report
 					</button>
 				</div>
-			</Form>
+			</form>
 		</DefaultLayout>
 	);
 }
