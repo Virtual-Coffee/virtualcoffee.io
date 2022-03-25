@@ -1,13 +1,5 @@
-import {
-	json,
-	redirect,
-	Form,
-	useLoaderData,
-	unstable_createFileUploadHandler,
-	unstable_parseMultipartFormData,
-} from 'remix';
+import { json, useLoaderData } from 'remix';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
-import { qualifiedUrl } from '~/util/url.server';
 
 export async function loader() {
 	return json({
@@ -22,24 +14,32 @@ export function meta({ data: { meta } }) {
 	return meta;
 }
 
-export async function action({ request }) {
-	const uploadHandler = unstable_createFileUploadHandler({
-		maxFileSize: 5_000_000,
-		file: ({ filename }) => filename,
-	});
+// export async function action({ request }) {
+// 	const uploadHandler = unstable_createFileUploadHandler({
+// 		maxFileSize: 5_000_000,
+// 		file: ({ filename }) => filename,
+// 	});
 
-	// netlify-forms
-	const body = await unstable_parseMultipartFormData(request, uploadHandler);
+// 	// netlify-forms
+// 	const body = await unstable_parseMultipartFormData(request, uploadHandler);
 
-	const response = await fetch(qualifiedUrl('/netlify-forms'), {
-		method: 'POST',
-		body,
-	}).then((res) => res.text());
+// 	const response = await fetch(qualifiedUrl('/netlify-forms'), {
+// 		method: 'POST',
+// 		body,
+// 	}).then((res) => res.text());
 
-	console.log({ response });
+// 	console.log({ response });
 
-	return redirect(`/report-coc-violation/thanks`);
-}
+// 	return redirect(`/report-coc-violation/thanks`);
+// }
+
+//
+// NOTE:
+//
+// unstable_parseMultipartFormData is not currently working with netlify forms. So, we're bypassing remix
+// entirely and just POSTing directly to the server (combined with a redirect in netlify.toml
+//
+//
 
 export default function CocForm() {
 	const { meta } = useLoaderData();
@@ -57,7 +57,7 @@ export default function CocForm() {
 			}
 		>
 			<form
-				action="/netlify-forms"
+				action="/report-coc-violation-success"
 				method="POST"
 				encType="multipart/form-data"
 				name="coc-violation"

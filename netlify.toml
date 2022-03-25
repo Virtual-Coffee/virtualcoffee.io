@@ -21,6 +21,11 @@
   status = 200
 
 [[redirects]]
+  from = "/report-coc-violation-success"
+  to = "/"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/.netlify/functions/server"
   status = 200
