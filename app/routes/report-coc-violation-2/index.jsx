@@ -3,7 +3,7 @@ import {
 	redirect,
 	Form,
 	useLoaderData,
-	unstable_createFileUploadHandler,
+	unstable_createMemoryUploadHandler,
 	unstable_parseMultipartFormData,
 } from 'remix';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
@@ -23,7 +23,7 @@ export function meta({ data: { meta } }) {
 }
 
 export async function action({ request }) {
-	const uploadHandler = unstable_createFileUploadHandler({
+	const uploadHandler = unstable_createMemoryUploadHandler({
 		maxFileSize: 5_000_000,
 		file: ({ filename }) => filename,
 	});
