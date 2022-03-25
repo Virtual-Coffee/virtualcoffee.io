@@ -44,7 +44,7 @@ export default function CocForm() {
 				</>
 			}
 		>
-			<Form method="POST" reloadDocument>
+			<Form method="POST" reloadDocument enctype="multipart/form-data">
 				<input type="hidden" name="form-name" value="coc-violation" />
 				<fieldset>
 					<div className="form-group">
