@@ -4,7 +4,7 @@ import UndrawFolder from '~/svg/UndrawFolder';
 import UndrawArrived from '~/svg/UndrawArrived';
 import UndrawGoodTeam from '~/svg/UndrawGoodTeam';
 import getSponsors from '~/data/sponsors';
-import { json, Link, useLoaderData } from 'remix';
+import { json, useLoaderData } from 'remix';
 import { getEvents } from '~/data/events';
 import { dateForDisplay } from '~/util/date';
 import { getEpisodes } from '~/data/podcast';

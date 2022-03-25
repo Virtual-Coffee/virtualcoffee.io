@@ -1,4 +1,4 @@
-import { Outlet, json, useCatch, useMatches } from 'remix';
+import { Outlet, json } from 'remix';
 
 import styles from './styles/main.css';
 import { qualifiedUrl } from '~/util/url.server';
@@ -11,7 +11,6 @@ import { useLocation } from 'react-router-dom';
 
 export function CatchBoundary(props) {
 	const location = useLocation();
-	console.log(location);
 
 	return (
 		<Root>
