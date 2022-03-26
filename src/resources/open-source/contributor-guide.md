@@ -32,6 +32,19 @@ This document is Part 3 of Virtual Coffee's four-part Guide to Open Source, outl
 
 ${toc}
 
+## Repository checklist
+
+If you are a contributor, this checklist is a handy tool for evaluating how well set up to receive contributions a project is.
+
+- ✅ It should have a README. The README should link to or describe:
+  - Project purpose and context
+  - Installation instructions
+- ✅ Contributions/Contributing guide:
+  - What is the recommended process for making issues/submitting pull requests
+  - How to communicate with maintainers.
+- ✅ A valid open source license. It is not advised to work on a project without that doesn't have a license, or is not using a standard open source license. For resources about licenses, check out the [License](../maintainer-guide/#the-license) section of our Maintainer Guide.
+- ✅ A Code of Conduct.
+
 ## Guide to writing issues
 
 ### Important things to know
