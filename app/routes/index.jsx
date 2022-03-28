@@ -16,7 +16,7 @@ import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '../data/newsletters';
 import getChallenges from '../data/monthlyChallenges/getChallenges';
 
-const cacheControl = 'max-age=300, stale-while-revalidate=18000';
+const cacheControl = 'max-age=1800, stale-while-revalidate=604800';
 // const cacheControl = 'max-age=60';
 
 export function headers({ loaderHeaders }) {
