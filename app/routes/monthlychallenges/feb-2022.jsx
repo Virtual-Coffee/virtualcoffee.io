@@ -1,19 +1,18 @@
 export const handle = {
+	listTitle: 'February, 2022: Pairing!',
 	meta: {
 		title: 'Monthly Theme & Challenge for February, 2022: Pairing!',
 		description:
 			'February challenge -> Pair up and complete five pomodoro sessions with other community members.',
 	},
-	listTitle: 'February, 2022: Pairing!',
+	hero: {
+		heroHeader: '',
+	},
 };
 
 export const meta = () => {
 	return handle.meta;
 };
-// layout: layouts/simple.njk
-// date: 2022-02-01
-// tags: monthlychallenges
-// ---
 
 export default function Challenge() {
 	return (
@@ -35,7 +34,7 @@ export default function Challenge() {
 				of your sessions, report back to the #monthly-challenge channel in slack
 				and let us know how you did and what you worked on! We’ll track how many
 				pomodoro sessions we hit. Before you start, take a look at Martin
-				Fowler’s article
+				Fowler’s article{' '}
 				<a
 					href="https://martinfowler.com/articles/on-pair-programming.html"
 					target="_blank"
@@ -105,7 +104,7 @@ export default function Challenge() {
 			</ul>
 			<p>
 				If you'd like to recommend a resource for pair programming, you can add
-				them to
+				them to{' '}
 				<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/516">
 					this discussion
 				</a>
@@ -121,7 +120,7 @@ export default function Challenge() {
 			</p>
 			<p>
 				We have #learning-together channel in slack if you're looking for a
-				study buddy, or you can create your own
+				study buddy, or you can create your own{' '}
 				<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/493">
 					cohort
 				</a>

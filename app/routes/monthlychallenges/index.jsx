@@ -1,7 +1,7 @@
 import { json, useLoaderData } from 'remix';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import PostList from '~/components/PostList';
-import getChallenges from '~/data/monthlyChallenges';
+import getChallenges from '~/data/monthlyChallenges/getChallenges';
 
 // ---
 // title: 'Virtual Coffee Monthly Challenges'
@@ -66,10 +66,10 @@ export default function Index() {
 					<p>
 						These challenges are available to all Virtual Coffee members and the
 						goal is to support developers of all stages in their coding journey.
-						To become a member of Virtual Coffee, all you need to do is
-						<a href="/events"> attend a Tuesday or Thursday Coffee</a> and
-						submit the form you'll receive at coffee. After you submit the form,
-						you will receive an invitation to join the slack group where you can
+						To become a member of Virtual Coffee, all you need to do is{' '}
+						<a href="/events">attend a Tuesday or Thursday Coffee</a> and submit
+						the form you'll receive at coffee. After you submit the form, you
+						will receive an invitation to join the slack group where you can
 						share your progress on the challenges and ask questions.
 					</p>
 				</div>

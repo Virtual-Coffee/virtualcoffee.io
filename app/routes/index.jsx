@@ -14,7 +14,7 @@ import PostList, {
 } from '~/components/PostList';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '../data/newsletters';
-import getChallenges from '../data/monthlyChallenges';
+import getChallenges from '../data/monthlyChallenges/getChallenges';
 
 const cacheControl = 'max-age=300, stale-while-revalidate=18000';
 // const cacheControl = 'max-age=60';
