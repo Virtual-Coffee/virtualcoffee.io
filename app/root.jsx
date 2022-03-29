@@ -12,8 +12,10 @@ import { useLocation } from 'react-router-dom';
 const cacheControl = 'max-age=60, stale-while-revalidate=604800';
 // const cacheControl = 'max-age=60';
 
-export function headers() {
-	return { 'cache-control': cacheControl };
+export function headers({ loaderHeaders }) {
+	return {
+		'cache-control': loaderHeaders.get('cache-control') || cacheControl,
+	};
 }
 
 export function CatchBoundary(props) {
