@@ -19,10 +19,6 @@ import getChallenges from '../data/monthlyChallenges/getChallenges';
 const cacheControl = 'max-age=1800, stale-while-revalidate=604800';
 // const cacheControl = 'max-age=60';
 
-export function headers({ loaderHeaders }) {
-	return { 'cache-control': loaderHeaders.get('cache-control') };
-}
-
 export const loader = async () => {
 	const sponsors = await getSponsors();
 	const events = await getEvents({
@@ -35,8 +31,8 @@ export const loader = async () => {
 		includeChildren: false,
 	});
 
-	const newsletters = await getNewsletters(5);
-	const challenges = await getChallenges(5);
+	const newsletters = await getNewsletters({ limit: 5 });
+	const challenges = await getChallenges({ limit: 5 });
 
 	return json(
 		{
