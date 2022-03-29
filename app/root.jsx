@@ -9,12 +9,11 @@ import Root from '~/components/Root';
 import { homePageLinks } from '~/routes/index';
 import { useLocation } from 'react-router-dom';
 
-const cacheControl = 'max-age=60, stale-while-revalidate=604800';
 // const cacheControl = 'max-age=60';
 
-export function headers({ loaderHeaders }) {
+export function headers() {
 	return {
-		'cache-control': loaderHeaders.get('cache-control') || cacheControl,
+		'cache-control': 'max-age=60, stale-while-revalidate=604800',
 	};
 }
 
