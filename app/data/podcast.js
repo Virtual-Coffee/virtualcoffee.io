@@ -66,6 +66,14 @@ const episodesQuery = gql`
 `;
 
 export async function getEpisodes({ limit = 5 } = {}) {
+	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
+		const fakeData = await import('./mocks/podcast');
+		return fakeData.getEpisodes({ limit }).map((entry) => ({
+			...entry,
+			url: `/podcast/${entry.slug}`,
+		}));
+	}
+
 	const graphQLClient = new GraphQLClient(`${process.env.CMS_URL}/api`, {
 		headers: {
 			Authorization: `bearer ${process.env.CMS_TOKEN}`,
@@ -91,6 +99,15 @@ export async function getEpisodes({ limit = 5 } = {}) {
 }
 
 export async function getEpisode({ slug } = {}) {
+	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
+		const fakeData = await import('./mocks/podcast');
+		const episode = fakeData.getEpisode({ slug });
+		return {
+			...episode,
+			url: `/podcast/${episode.slug}`,
+		};
+	}
+
 	const graphQLClient = new GraphQLClient(`${process.env.CMS_URL}/api`, {
 		headers: {
 			Authorization: `bearer ${process.env.CMS_TOKEN}`,

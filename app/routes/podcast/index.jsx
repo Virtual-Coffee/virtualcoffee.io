@@ -7,7 +7,7 @@ import { getEpisodes, getPlayerSrc } from '~/data/podcast';
 import UndrawWalkInTheCity from '~/svg/UndrawWalkInTheCity';
 
 export const loader = async () => {
-	const podcastEpisodes = await getEpisodes({ limit: 100 });
+	const podcastEpisodes = await getEpisodes({ limit: 99 });
 
 	const latestEpisode = podcastEpisodes[0];
 	const latestEpisodePlayerSrc = getPlayerSrc({
