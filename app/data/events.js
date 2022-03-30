@@ -36,14 +36,19 @@ function createEventsQuery(calendars) {
 }
 
 export async function getEvents({ limit }) {
+	const rangeStart = DateTime.now().set({ hour: 0 }).toISO();
+	const rangeEnd = DateTime.now().set({ hour: 0 }).plus({ days: 30 }).toISO();
+
+	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
+		const fakeData = await import('./mocks/events');
+		return fakeData.createEventsData({ limit, rangeEnd, rangeStart });
+	}
+
 	const graphQLClient = new GraphQLClient(`${process.env.CMS_URL}/api`, {
 		headers: {
 			Authorization: `bearer ${process.env.CMS_TOKEN}`,
 		},
 	});
-
-	const rangeStart = DateTime.now().set({ hour: 0 }).toISO();
-	const rangeEnd = DateTime.now().set({ hour: 0 }).plus({ days: 30 }).toISO();
 
 	console.log('Fetching events', rangeStart, rangeEnd);
 
