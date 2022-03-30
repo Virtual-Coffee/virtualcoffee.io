@@ -18,6 +18,8 @@ See you there!
 
 # Working on the site:
 
+This site is built using [Remix](https://remix.run/).
+
 ## Local Development
 
 Steps to run the site locally for development or curiosity
@@ -36,7 +38,7 @@ cd virtualcoffee.io
 
 ### 3. Install dependencies
 
-This repo requires `node` and `yarn` to get started.
+This repo requires `node`, `yarn`, and the [Netlify CLI](https://www.netlify.com/products/dev/) to get started.
 
 #### Installing `node`:
 
@@ -54,7 +56,23 @@ npm install -g yarn
 
 Read more about `yarn` [on their docs site](https://yarnpkg.com/getting-started/install).
 
-Once you have `yarn` installed, you're ready to install the local dependencies! Run the following command:
+#### Installing the Netlify CLI
+
+The [Netlify CLI](https://docs.netlify.com/cli/get-started) allows users to run a local version of the Netlify environment for local development. You can even [share your locally-running app with other people on the internet](https://docs.netlify.com/cli/get-started/#share-a-live-development-server)!!
+
+To install:
+
+```sh
+npm i -g netlify-cli
+```
+
+If you have previously installed the Netlify CLI, you should update it to the latest version:
+
+```sh
+npm i -g netlify-cli@latest
+```
+
+Once you have `node`, `yarn`, and the Netlify CLI installed, you're ready to install the local dependencies! Run the following command:
 
 ```shell
 yarn
@@ -65,12 +83,12 @@ At this point you're ready to roll! The following commands are available:
 ### `yarn start`
 
 ```shell
-yarn start
+yarn dev
 ```
 
 This is the only command you need to do normal local development.
 
-Starts a local server and watches the `src` directory for changes. Use this to preview local development.
+Starts a local server and watches your source files for changes. Use this to preview local development.
 
 Once you run this command, a local server is running at http://localhost:9000! Any changes you make to the src folder should also re-build the site and re-load your browser.
 
@@ -89,19 +107,3 @@ yarn build
 ```
 
 Builds a production-ready version of the site. This is what Netlify uses to build our site.
-
-### `yarn build-preview`
-
-```shell
-yarn build-preview
-```
-
-If you'd like to see a preview of the production build, use this command to build the site and start up a server at http://localhost:9000. To see any subsequent changes, you can leave this server running, but you'll have to run `yarn build` again in another console tab.
-
-### PWA and Templates using Forms
-
-The site can be installed as a Progressive Web Application (PWA), which includes strategic caching of resources. Certain pages such as those including forms and destination pages for forms should not be cached. A list of these is supplied to the `pluginPWA` plugin in our `.eleventy.js` file. If you add any such form files for form destination files in development, they should probably be added to this list.
-
-### Heads Up
-
-If you have problems in VS Code related to `.njk` files, you may need to [reconfigure your language settings](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/176) after working with this repo.

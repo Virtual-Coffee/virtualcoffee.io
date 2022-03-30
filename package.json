@@ -9,7 +9,7 @@
 		"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/issues"
 	},
 	"engines": {
-		"node": ">=14"
+		"node": ">=16"
 	},
 	"homepage": "https://github.com/Virtual-Coffee/virtualcoffee.io#readme",
 	"sideEffects": false,
