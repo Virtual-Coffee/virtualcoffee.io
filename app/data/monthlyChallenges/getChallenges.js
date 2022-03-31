@@ -1,3 +1,5 @@
+import { handle as apr2022 } from '../../routes/monthlychallenges/apr-2022';
+import { handle as mar2022 } from '../../routes/monthlychallenges/mar-2022';
 import { handle as feb2022 } from '../../routes/monthlychallenges/feb-2022';
 import { handle as jan2022 } from '../../routes/monthlychallenges/jan-2022';
 
@@ -18,6 +20,8 @@ import { handle as dec2020 } from '../../routes/monthlychallenges/dec-2020';
 import { handle as nov2020 } from '../../routes/monthlychallenges/nov-2020';
 
 const challenges = [
+	{ handleData: apr2022, slug: 'apr-2022' },
+	{ handleData: mar2022, slug: 'mar-2022' },
 	{ handleData: feb2022, slug: 'feb-2022' },
 	{ handleData: jan2022, slug: 'jan-2022' },
 
