@@ -43,6 +43,12 @@
   force = true
 
   [[redirects]]
+  from = "/membership/*"
+  to = "/"
+  status = 301
+  force = true
+
+  [[redirects]]
   from = "/brownbag-idea"
   to = "/lunch-and-learn-idea"
   status = 301
