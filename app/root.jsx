@@ -13,7 +13,7 @@ import { useLocation } from 'react-router-dom';
 
 export function headers() {
 	return {
-		'cache-control': 'max-age=60, stale-while-revalidate=604800',
+		'Cache-Control': 'max-age=60, stale-while-revalidate=604800',
 	};
 }
 
