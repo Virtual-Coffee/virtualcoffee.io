@@ -158,7 +158,7 @@ export default function Challenge() {
 					<a href="https://flowcv.io/">FlowCV: free resume builder</a>
 				</li>
 				<li>
-					A list of
+					A list of{' '}
 					<a href="https://linktr.ee/iandouglas736">
 						Ian Douglas's Interview Resources
 					</a>
