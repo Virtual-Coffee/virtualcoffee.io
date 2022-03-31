@@ -20,6 +20,15 @@ export const meta = () => {
 export default function Challenge() {
 	return (
 		<>
+			<h1>
+				<small>Monthly Challenge for April, 2022:</small> Get job ready!
+				Resumes, Portfolios, Cover Letters, and Elevator Pitch
+			</h1>
+			<p className="lead">
+				It is never a bad thing to keep your job packet updated, and we're going
+				to challenge you to do it, whether or not you're actively applying to
+				jobs.
+			</p>
 			<p className="lead">
 				During this month, we'll work on creating, revising, or updating your
 				job packet materials and that elevator pitch that might get you in the
