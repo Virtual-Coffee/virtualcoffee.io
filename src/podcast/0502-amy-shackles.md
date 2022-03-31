@@ -31,5 +31,5 @@ This week Bekah and Dan sat down with Amy Shackles, a Senior Software Engineer a
 ### Links
 
 - [amyshackles.com](https://amyshackles.com)
-- [Amy's regular expression parser](https://github.com/AmyShackles/regular_expression_parser)
+- [Amy's regular expression parser](https://github.com/AmyShackles/regex_parser)
 - [MDN article on regular expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions)
