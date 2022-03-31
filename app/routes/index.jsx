@@ -21,7 +21,7 @@ const cacheControl = 'max-age=1800, stale-while-revalidate=604800';
 
 export function headers() {
 	return {
-		'Cache-Control': 'max-age=60, stale-while-revalidate=604800',
+		'Cache-Control': 'max-age=60, s-maxage=300, stale-while-revalidate=604800',
 	};
 }
 
