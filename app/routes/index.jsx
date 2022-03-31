@@ -19,6 +19,12 @@ import getChallenges from '../data/monthlyChallenges/getChallenges';
 const cacheControl = 'max-age=1800, stale-while-revalidate=604800';
 // const cacheControl = 'max-age=60';
 
+export function headers() {
+	return {
+		'Cache-Control': 'max-age=60, stale-while-revalidate=604800',
+	};
+}
+
 export const loader = async () => {
 	const sponsors = await getSponsors();
 	const events = await getEvents({
