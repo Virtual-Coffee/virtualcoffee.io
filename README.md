@@ -72,6 +72,16 @@ If you have previously installed the Netlify CLI, you should update it to the la
 npm i -g netlify-cli@latest
 ```
 
+#### Setting up your .env
+
+Use the following command to create a local `.env` file. Then open the new file (`.env`) and adjust any settings that are needed.
+
+```shell
+cp .env.example .env
+```
+
+#### Installing package dependencies
+
 Once you have `node`, `yarn`, and the Netlify CLI installed, you're ready to install the local dependencies! Run the following command:
 
 ```shell
@@ -80,7 +90,7 @@ yarn
 
 At this point you're ready to roll! The following commands are available:
 
-### `yarn start`
+### `yarn dev`
 
 ```shell
 yarn dev
@@ -92,7 +102,7 @@ Starts a local server and watches your source files for changes. Use this to pre
 
 Once you run this command, a local server is running at http://localhost:9000! Any changes you make to the src folder should also re-build the site and re-load your browser.
 
-You should see 'Waiting...' below, which means the watcher is waiting to build your awesome changes!
+You should see something like 'Server now ready on http://localhost:9000' below, which means the watcher is waiting to build your awesome changes!
 
 Use ctrl-c to quit the server when you're done.
 
@@ -107,3 +117,11 @@ yarn build
 ```
 
 Builds a production-ready version of the site. This is what Netlify uses to build our site.
+
+## Loading data
+
+A lot of the data loaded on the site is from APIs that require private keys or tokens. Unfortunately we can't publish these or distribute them too widely.
+
+All of the data points have mock data that is used if the required API key isn't present, so contributors should be able to make UX-related changes without needing them.
+
+If you'd like to work on a feature that requires an API key, please reach out to a maintainer and we can probably get that going.
