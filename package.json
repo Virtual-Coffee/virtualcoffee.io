@@ -24,12 +24,11 @@
 		"build:css": "postcss .tmp/styles/**/*.css --base .tmp/styles --dir app/styles --env production",
 		"build:remix": "cross-env NODE_ENV=production remix build",
 		"dev": "yarn build:sass && yarn build:css && concurrently \"yarn dev:sass\" \"yarn dev:css\" \"yarn dev:remix\"",
-		"dev:data": "node ./build/index.js",
 		"dev:sass": "sass --load-path=node_modules --watch styles/:.tmp/styles",
 		"dev:css": "postcss .tmp/styles/**/*.css --base .tmp/styles --dir app/styles -w",
 		"dev:remix": "cross-env NODE_ENV=development netlify dev",
 		"postinstall": "remix setup node",
-		"start": "cross-env NODE_ENV=production netlify dev"
+		"start": "yarn dev"
 	},
 	"dependencies": {
 		"@faker-js/faker": "^6.0.0",
