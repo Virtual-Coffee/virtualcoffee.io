@@ -26,15 +26,9 @@
   status = 200
 
 [[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/server"
-  status = 200
-
-[[redirects]]
   from = "/sponsorship"
   to = "https://github.com/sponsors/Virtual-Coffee"
   status = 302
-  force = true
 
 [[redirects]]
   from = "/membership"
@@ -42,51 +36,49 @@
   status = 301
   force = true
 
-  [[redirects]]
+[[redirects]]
   from = "/membership/*"
   to = "/"
   status = 301
   force = true
 
-  [[redirects]]
+[[redirects]]
   from = "/brownbag-idea"
   to = "/lunch-and-learn-idea"
   status = 301
   force = true
 
-  [[redirects]]
+[[redirects]]
   from = "/brownbag-idea-thanks"
   to = "/lunch-and-learn-idea-thanks"
   status = 301
   force = true
 
-
-
-  [[redirects]]
+[[redirects]]
   from = "/member-resources"
   to = "/resources"
   status = 301
   force = true
 
-  [[redirects]]
+[[redirects]]
   from = "/member-resources/oss-maintainer-checklist"
   to = "/resources/open-source/oss-maintainer-checklist"
   status = 301
   force = true
 
-  [[redirects]]
+[[redirects]]
   from = "/member-resources/oss-writing-issues"
   to = "/resources/open-source/oss-writing-issues"
   status = 301
   force = true
 
-  [[redirects]]
+[[redirects]]
   from = "/member-resources/guide-to-vc"
   to = "/resources/virtual-coffee/guide-to-vc"
   status = 301
   force = true
 
-  [[redirects]]
+[[redirects]]
   from = "/member-resources/join-virtual-coffee"
   to = "/resources/virtual-coffee/join-virtual-coffee"
   status = 301
@@ -97,3 +89,8 @@
   to = "/resources/virtual-coffee/slack-channel-guide"
   status = 301
   force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
