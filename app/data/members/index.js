@@ -1,5 +1,5 @@
 const { GraphQLClient, gql } = require('graphql-request');
-const { resolve } = require('path');
+const { resolve, join } = require('path');
 const requireDir = require('require-dir');
 const teamsData = require('./teams.json');
 const mockMemberData = require('../mocks/memberData');
@@ -88,7 +88,7 @@ async function getMemberGithubData(data) {
 }
 
 function loadDirectory(path) {
-	const dict = requireDir(resolve('app', 'data', 'members', path), {
+	const dict = requireDir(join(process.cwd(), 'app', 'data', 'members', path), {
 		filter: function (fullPath) {
 			return !fullPath.match(/members\/_/g);
 		},
