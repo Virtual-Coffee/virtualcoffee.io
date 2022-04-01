@@ -8,3 +8,14 @@ export function removeTrailingSlash(request) {
 		});
 	}
 }
+
+export const cacheControlValues = {
+	// 60 seconds on the browser, 5 minutes in the CDN, loading an old one and refetching is ok for 7 days
+	standard: `max-age=60, s-maxage=${60 * 5}, stale-while-revalidate=${
+		60 * 60 * 24 * 7
+	}`,
+	long: `max-age=${60 * 60 * 24 * 7}, s-maxage=${
+		60 * 60 * 24 * 7
+	}, stale-while-revalidate=${60 * 60 * 24 * 7 * 52}`,
+	none: 'no-cache',
+};
