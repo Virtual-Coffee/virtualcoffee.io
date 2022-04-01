@@ -1,21 +1,6 @@
 import { json, useLoaderData } from 'remix';
-import DefaultLayout from '~/components/layouts/DefaultLayout';
 import PostList from '~/components/PostList';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
-
-// ---
-// title: 'Virtual Coffee Monthly Challenges'
-// description: 'Every month, we create a challenge for our Virtual Coffee members to complete together'
-// layout: layouts/default.njk
-// hero: 'svg/undraw_good_team_m7uu.svg'
-// heroHeader: Virtual Coffee Monthly Challenges
-// heroSubheader: Every month, we create a challenge for our Virtual Coffee members to complete together
-// homePageBlocks:
-//   type: large
-//   key: Monthly Challenges
-//   order: 5
-//   collectionKey: monthlychallenges
-// ---
 
 export async function loader() {
 	const challenges = await getChallenges();
