@@ -6,7 +6,7 @@ import { qualifiedUrl } from '~/util/url.server';
 
 export const loader = async () => {
 	const response = await fetch(
-		qualifiedUrl(`/.netlify/functions/members`),
+		qualifiedUrl(`/.netlify/functions/data-members`),
 	).then((res) => res.json());
 
 	return json(response);
