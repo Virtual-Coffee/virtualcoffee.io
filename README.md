@@ -187,7 +187,7 @@ When you add a new issue, **make sure to add it to the index**. Here's how:
 - `import` the new issue
 - Add the new issue to the `newsletters` array.
 
-So, if you have created `
+So, if you have created `app/routes/newsletter/issues/2022-03.jsx`:
 
 ```diff
 + import { handle as issue202203 } from '~/routes/newsletter/issues/2022-03';
@@ -210,6 +210,8 @@ When you add a new challenge, **make sure to add it to the index**. Here's how:
 - Open `app/data/monthlyChallenges/getChallenges.js`
 - `import` the new challenge
 - Add the new challenge to the `challenges` array.
+
+So, if you have created `app/routes/monthlychallenges/apr-2022.jsx`:
 
 ```diff
 + import { handle as apr2022 } from '~/routes/monthlychallenges/apr-2022';
