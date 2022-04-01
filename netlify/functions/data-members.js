@@ -2,7 +2,7 @@ const { builder } = require('@netlify/functions');
 const { GraphQLClient, gql } = require('graphql-request');
 const { resolve, join } = require('path');
 const requireDir = require('require-dir');
-const teamsData = require('../../app/data/members/teams.json');
+const teamsData = require('../../members/teams.json');
 const mockMemberData = require('../../app/data/mocks/memberData');
 const { sanitizeHtml } = require('../../app/util/sanitizeCmsData');
 
@@ -121,7 +121,7 @@ async function getMemberGithubData(data) {
 }
 
 function loadDirectory(path) {
-	const dict = requireDir(join(process.cwd(), 'app', 'data', 'members', path), {
+	const dict = requireDir(join(process.cwd(), 'members', path), {
 		filter: function (fullPath) {
 			return !fullPath.match(/members\/_/g);
 		},
