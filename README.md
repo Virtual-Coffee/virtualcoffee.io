@@ -23,9 +23,9 @@ This site is built using [Remix](https://remix.run/).
 ## Table of Contents:
 
 - [Local Development Setup](#local-development-setup)
-- [Build Commands](build-commands)
-- [Loading data](loading-data)
-- [Adding content](adding-content)
+- [Commands](#commands)
+- [Loading data](#loading-data)
+- [Adding content](#adding-content)
 
 ## Local Development Setup
 
@@ -95,7 +95,17 @@ Once you have `node`, `yarn`, and the Netlify CLI installed, you're ready to ins
 yarn
 ```
 
-At this point you're ready to roll! The following commands are available:
+At this point you're ready to roll! Run the following command to get rolling!
+
+```shell
+yarn dev
+```
+
+Read more about what `yarn dev` does in the following section.
+
+## Commands
+
+The following commands are available for your use. Most of the time you'll only ever need `yarn dev`.
 
 ### `yarn dev`
 
@@ -113,9 +123,11 @@ You should see something like 'Server now ready on http://localhost:9000' below,
 
 Use ctrl-c to quit the server when you're done.
 
-## Build Commands
+`yarn dev` actually runs three sub commands, which can be run independently if you wish:
 
-The following commands are for building production-ready versions of the site. If you're interested in seeing what they look like on your machine, feel free to run them! But they are not needed for normal local development.
+- `yarn dev:sass` - compiles sass styles found in `./styles`. When in dev mode will re-run when a file is changed. The files are compiled to the `./tmp` directory to be processed by the next step.
+- `yarn dev:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
+- `yarn dev:remix` - starts up the local Netlify dev environment and starts the Remix server.
 
 ### `yarn build`
 
@@ -124,6 +136,29 @@ yarn build
 ```
 
 Builds a production-ready version of the site. This is what Netlify uses to build our site.
+
+`yarn build` actually runs four sub commands, which can be run independently if you wish:
+
+- `yarn build:data` - runs some custom scripts to build out data that we don't need to load over the wire. This will probably be removed in the near future in favor of [On Demand Builders](https://docs.netlify.com/configure-builds/on-demand-builders/)
+- `yarn build:sass` - compiles sass styles found in `./styles`. The files are compiled to the `./tmp` directory to be processed by the next step.
+- `yarn build:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
+- `yarn build:remix` - compiles everything needed to run the site for production.
+
+### `yarn format`
+
+```shell
+yarn format
+```
+
+Runs [Prettier](https://prettier.io/) on all of our files. This happens automatically via [husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged), so there's usually no need to run this manually.
+
+### `yarn lint`
+
+```shell
+yarn lint
+```
+
+Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. This happens automatically at build time.
 
 ## Loading data
 
