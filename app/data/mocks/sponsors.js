@@ -1,6 +1,6 @@
-import { faker } from '@faker-js/faker';
+const { faker } = require('@faker-js/faker');
 
-const data = {
+module.exports = {
 	organization: {
 		sponsorshipsAsMaintainer: {
 			nodes: [
@@ -564,5 +564,3 @@ const data = {
 		},
 	},
 };
-
-export default data;
