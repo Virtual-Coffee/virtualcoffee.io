@@ -2,14 +2,12 @@ import { json, useLoaderData } from 'remix';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import MemberCards from '~/components/MemberCards';
 import UndrawCelebration from '~/svg/UndrawCelebration';
-import { qualifiedUrl } from '~/util/url.server';
+import getMembers from '~/data/members';
 
 export const loader = async () => {
-	const response = await fetch(
-		qualifiedUrl(`/.netlify/functions/data-members`),
-	).then((res) => res.json());
+	const members = await getMembers();
 
-	return json(response);
+	return json(members);
 };
 
 export function meta() {
