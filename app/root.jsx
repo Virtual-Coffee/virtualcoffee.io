@@ -9,14 +9,6 @@ import Root from '~/components/Root';
 import { homePageLinks } from '~/routes/index';
 import { useLocation } from 'react-router-dom';
 
-// const cacheControl = 'max-age=60';
-
-export function headers() {
-	return {
-		'Cache-Control': 'max-age=60, stale-while-revalidate=604800',
-	};
-}
-
 export function CatchBoundary(props) {
 	const location = useLocation();
 
