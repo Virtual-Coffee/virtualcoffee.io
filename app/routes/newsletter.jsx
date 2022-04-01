@@ -1,7 +1,7 @@
 import { json, Outlet, useLoaderData, useMatches } from 'remix';
 
 import DefaultLayout from '~/components/layouts/DefaultLayout';
-import NewsletterSubscribe from '../components/NewslettterSubscribe';
+import NewsletterSubscribe from '~/components/NewslettterSubscribe';
 
 // export async function loader({ request }) {
 

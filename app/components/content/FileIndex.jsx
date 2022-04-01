@@ -1,5 +1,7 @@
 import { useOutletContext } from 'remix';
-import PostList, { formatFileListItemsForPostList } from '../PostList';
+import PostList, {
+	formatFileListItemsForPostList,
+} from '~/components/PostList';
 
 function findBase(files, subDirectory) {
 	const filtered = files

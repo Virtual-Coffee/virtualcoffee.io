@@ -1,7 +1,7 @@
 import { json, useLoaderData } from 'remix';
-import NewsletterSubscribe from '../../components/NewslettterSubscribe';
-import PostList from '../../components/PostList';
-import getNewsletters from '../../data/newsletters';
+import NewsletterSubscribe from '~/components/NewslettterSubscribe';
+import PostList from '~/components/PostList';
+import getNewsletters from '~/data/newsletters';
 
 export const handle = {
 	meta: {

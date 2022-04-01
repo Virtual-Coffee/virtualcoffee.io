@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'remix';
-import VirtualCoffeeFull from '../svg/VirtualCoffeeFull';
+import VirtualCoffeeFull from '~/svg/VirtualCoffeeFull';
 
 export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);

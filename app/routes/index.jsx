@@ -13,8 +13,8 @@ import PostList, {
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
-import getNewsletters from '../data/newsletters';
-import getChallenges from '../data/monthlyChallenges/getChallenges';
+import getNewsletters from '~/data/newsletters';
+import getChallenges from '~/data/monthlyChallenges/getChallenges';
 
 export async function loader() {
 	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
