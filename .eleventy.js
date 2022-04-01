@@ -20,8 +20,6 @@ module.exports = function (eleventyConfig) {
 			'lunch-and-learn-idea-thanks/index.html',
 			'report-coc-violation/index.html',
 			'report-coc-violation/thanks/index.html',
-			'membership/*/index.html',
-			'membership-thankyou/index.html',
 		],
 	});
 
