@@ -16,46 +16,32 @@ import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '../data/newsletters';
 import getChallenges from '../data/monthlyChallenges/getChallenges';
 
-const cacheControl = 'max-age=1800, stale-while-revalidate=604800';
-// const cacheControl = 'max-age=60';
-
-export function headers() {
-	return {
-		'Cache-Control': 'max-age=60, s-maxage=300, stale-while-revalidate=604800',
-	};
-}
-
 export const loader = async () => {
-	const sponsors = await getSponsors();
-	const events = await getEvents({
-		limit: 5,
-	});
-	const podcastEpisodes = await getEpisodes();
+	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
+		await Promise.all([
+			getSponsors(),
+			getEvents({
+				limit: 5,
+			}),
+			getEpisodes(),
+
+			getNewsletters({ limit: 5 }),
+			getChallenges({ limit: 5 }),
+		]);
 
 	const resources = loadMdxDirectory({
 		baseDirectory: 'resources',
 		includeChildren: false,
 	});
 
-	const newsletters = await getNewsletters({ limit: 5 });
-	const challenges = await getChallenges({ limit: 5 });
-
-	return json(
-		{
-			sponsors,
-			events,
-			podcastEpisodes,
-			resources,
-			newsletters,
-			challenges,
-		},
-		{
-			status: 200,
-			headers: {
-				'Cache-Control': cacheControl,
-			},
-		},
-	);
+	return json({
+		sponsors,
+		events,
+		podcastEpisodes,
+		resources,
+		newsletters,
+		challenges,
+	});
 };
 
 export const homePageLinks = [
