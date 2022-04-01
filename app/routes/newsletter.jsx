@@ -1,4 +1,4 @@
-import { json, Outlet, useLoaderData, useMatches } from 'remix';
+import { Outlet, useMatches } from 'remix';
 
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import NewsletterSubscribe from '~/components/NewslettterSubscribe';
