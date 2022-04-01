@@ -4,13 +4,13 @@ import DisplayHtml from '~/components/DisplayHtml';
 import { getEvents } from '~/data/events';
 import { dateForDisplay } from '~/util/date';
 
-export const loader = async () => {
+export async function loader() {
 	const events = await getEvents({
 		limit: 20,
 	});
 
 	return json({ events });
-};
+}
 
 export function meta() {
 	return {

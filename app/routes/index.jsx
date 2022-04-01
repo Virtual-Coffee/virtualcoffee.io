@@ -16,7 +16,7 @@ import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '../data/newsletters';
 import getChallenges from '../data/monthlyChallenges/getChallenges';
 
-export const loader = async () => {
+export async function loader() {
 	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
 		await Promise.all([
 			getSponsors(),
@@ -42,7 +42,7 @@ export const loader = async () => {
 		newsletters,
 		challenges,
 	});
-};
+}
 
 export const homePageLinks = [
 	{
