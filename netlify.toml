@@ -10,6 +10,9 @@
 [functions.server]
   included_files = ["app/routes/**/*.mdx", "app/data/members/**/*.{js,json}"]
 
+[functions.members]
+  included_files = ["app/data/members/**/*.{js,json}"]
+
 [[headers]]
   for = "/build/*"
   [headers.values]
