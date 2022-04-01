@@ -148,7 +148,7 @@ export default function Challenge() {
 			</p>
 
 			<h2>Virtual Coffee Approved Repositories!</h2>
-			<ul style="list-style-type: none">
+			<ul style={{ listStyleType: 'none' }}>
 				<li>
 					<h3>
 						<a href="https://github.com/Virtual-Coffee/virtualcoffee.io">
