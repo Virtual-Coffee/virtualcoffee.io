@@ -137,9 +137,8 @@ yarn build
 
 Builds a production-ready version of the site. This is what Netlify uses to build our site.
 
-`yarn build` actually runs four sub commands, which can be run independently if you wish:
+`yarn build` actually runs three sub commands, which can be run independently if you wish:
 
-- `yarn build:data` - runs some custom scripts to build out data that we don't need to load over the wire. This will probably be removed in the near future in favor of [On Demand Builders](https://docs.netlify.com/configure-builds/on-demand-builders/)
 - `yarn build:sass` - compiles sass styles found in `./styles`. The files are compiled to the `./tmp` directory to be processed by the next step.
 - `yarn build:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
 - `yarn build:remix` - compiles everything needed to run the site for production.
