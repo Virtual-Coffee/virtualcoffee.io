@@ -107,6 +107,11 @@ module.exports = {
 	serverDependenciesToBundle: [
 		'@sindresorhus/slugify',
 		'@sindresorhus/transliterate',
+		'unified',
+		'remark-parse',
+		'remark-rehype',
+		'rehype-sanitize',
+		'rehype-stringify',
 	],
 	// appDirectory: "app",
 	// assetsBuildDirectory: "public/build",
