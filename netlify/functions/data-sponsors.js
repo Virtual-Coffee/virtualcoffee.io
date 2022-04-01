@@ -2,6 +2,11 @@ const { builder } = require('@netlify/functions');
 const { GraphQLClient, gql } = require('graphql-request');
 const mockData = require('../../app/data/mocks/sponsors');
 
+// This file is an On-Demand Builder
+// It allows us to cache third-party data for a specified amount of time
+// Any deploys will clear the cache
+// Read more here: https://docs.netlify.com/configure-builds/on-demand-builders/
+
 async function handler(event, context) {
 	const sponsorData = await getSponsors();
 

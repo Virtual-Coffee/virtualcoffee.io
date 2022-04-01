@@ -6,6 +6,11 @@ const teamsData = require('../../members/teams.json');
 const mockMemberData = require('../../app/data/mocks/memberData');
 const { sanitizeHtml } = require('../../app/util/sanitizeCmsData');
 
+// This file is an On-Demand Builder
+// It allows us to cache third-party data for a specified amount of time
+// Any deploys will clear the cache
+// Read more here: https://docs.netlify.com/configure-builds/on-demand-builders/
+
 async function handler(event, context) {
 	const userData = await loadUserData();
 
