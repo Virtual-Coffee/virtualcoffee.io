@@ -10,7 +10,7 @@
 [functions.server]
   included_files = ["app/routes/**/*.mdx", "app/data/members/**/*.{js,json}"]
 
-[functions.data-members]
+[functions."data-members"]
   external_node_modules = ["unified", "remark-parse", "remark-rehype", "rehype-sanitize", "rehype-stringify"]
   included_files = ["app/data/members/**/*.{js,json}"]
 
