@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 
-# [![Virtual Coffee](src/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
+# [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
 
 Virtual Coffee is a laid-back conversation with developers twice a week. It's the conversation that keeps going in slack. It's the online events that support developers at all stages of the journey. It's the place where you go to make friends who all just happen to be in tech.
 
@@ -20,7 +20,14 @@ See you there!
 
 This site is built using [Remix](https://remix.run/).
 
-## Local Development
+## Table of Contents:
+
+- [Local Development Setup](#local-development-setup)
+- [Build Commands](build-commands)
+- [Loading data](loading-data)
+- [Adding content](adding-content)
+
+## Local Development Setup
 
 Steps to run the site locally for development or curiosity
 
