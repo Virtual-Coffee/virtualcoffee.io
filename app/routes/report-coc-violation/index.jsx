@@ -39,6 +39,7 @@ export function meta({ data: { meta } }) {
 // unstable_parseMultipartFormData is not currently working with netlify forms. So, we're bypassing remix
 // entirely and just POSTing directly to the server (combined with a redirect in netlify.toml
 // This is only a problem for forms with file upload - regular netlify files work great with action()
+// https://github.com/remix-run/remix/issues/2476
 //
 //
 
