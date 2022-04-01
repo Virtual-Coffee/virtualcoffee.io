@@ -125,3 +125,59 @@ A lot of the data loaded on the site is from APIs that require private keys or t
 All of the data points have mock data that is used if the required API key isn't present, so contributors should be able to make UX-related changes without needing them.
 
 If you'd like to work on a feature that requires an API key, please reach out to a maintainer and we can probably get that going.
+
+## Adding content
+
+### Resources
+
+Our [VC Resources](https://virtualcoffee.io/resources) are creating using [MDX](https://mdxjs.com/). MDX is basically a combination of Markdown and React.
+
+Any files added to `app/routes/resources` will be automatically loaded and added to the appropriate index page.
+
+A good way to start adding a new page would be to copy one of the existing pages, then edit the details and content.
+
+### Newsletters
+
+The newsletters (for now) are simply `jsx` files, and can be found in `app/routes/newsletter/issues`.
+
+When you add a new issue, **make sure to add it to the index**. Here's how:
+
+- Open `app/data/newsletters.js`
+- `import` the new issue
+- Add the new issue to the `newsletters` array.
+
+So, if you have created `
+
+```diff
++ import { handle as issue202203 } from '~/routes/newsletter/issues/2022-03';
+import { handle as issue202202 } from '~/routes/newsletter/issues/2022-02';
+import { handle as issue202201 } from '~/routes/newsletter/issues/2022-01';
+
+const newsletters = [
++ 	{ handleData: issue202203, slug: '2022-03' },
+	{ handleData: issue202202, slug: '2022-02' },
+	{ handleData: issue202201, slug: '2022-01' },
+];
+```
+
+### Monthly Challenges
+
+The monthly challenges (for now) are simply `jsx` files, and can be found in `app/routes/monthlychallenges`.
+
+When you add a new challenge, **make sure to add it to the index**. Here's how:
+
+- Open `app/data/monthlyChallenges/getChallenges.js`
+- `import` the new challenge
+- Add the new challenge to the `challenges` array.
+
+```diff
++ import { handle as apr2022 } from '~/routes/monthlychallenges/apr-2022';
+import { handle as mar2022 } from '~/routes/monthlychallenges/mar-2022';
+import { handle as feb2022 } from '~/routes/monthlychallenges/feb-2022';
+
+const challenges = [
++ 	{ handleData: apr2022, slug: 'apr-2022' },
+	{ handleData: mar2022, slug: 'mar-2022' },
+	{ handleData: feb2022, slug: 'feb-2022' },
+];
+```
