@@ -11,8 +11,6 @@ export async function loader({ request }) {
 
 	const allFiles = loadMdxDirectory({ baseDirectory: 'resources' });
 
-	// console.log(allFiles);
-
 	return json({
 		allFiles,
 		meta: attributes.meta,
@@ -22,8 +20,6 @@ export async function loader({ request }) {
 
 export default function ResourcesTemplate() {
 	const { allFiles } = useLoaderData();
-
-	// console.log('running', { Hero, heroHeader, heroSubheader });
 
 	return (
 		<DefaultLayout>
