@@ -3,7 +3,7 @@ layout: layouts/resources.njk
 title: Guide To Asking Questions About Your Code
 description: A guide for our members to ask questions about code.
 hero: 'svg/undraw_questions_re_1fy7.svg'
-heroHeader: 'About Virtual Coffee'
+heroHeader: 'Asking Questions About Your Code'
 heroSubheader: A guide for our members to ask questions about code.
 tags: memberresources
 eleventyNavigation:
