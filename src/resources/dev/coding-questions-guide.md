@@ -120,7 +120,7 @@ You can drop those Virtual Coffee’s related questions here for the community t
 **#random**
 If you are still unsure where to ask questions, you can ask them here. Some members will crosspost your question to the appropriate channel for better exposure.
 
-Do check our complete list of channels in the [Slack channel guide](/member-resources/slack-channel-guide).
+Do check our complete list of channels in the [Slack channel guide](/resources/virtual-coffee/slack-channel-guide/).
 
 ### GitHub
 
