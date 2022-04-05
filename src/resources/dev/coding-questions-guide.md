@@ -133,12 +133,27 @@ Do check out our [discussion board on GitHub](https://github.com/Virtual-Coffee/
 
 ## How To Utilize Slack For Asking Questions
 
-- Unless you are a maintainer, you want to avoid using `@here` or `@channel`.
+- Unless you are a maintainer or granted permission by a maintainer, you want to avoid using `@here` or `@channel`.
   Using these tags will notify everyone in the channel. It might be an afternoon at your time, but it is midnight in some parts of the world. And we want to respect our members. We are a very active community. Someone will answer you as soon as possible.
 - When you are answering questions, make sure to reply in the thread.
   By keeping one topic in one thread, we can prevent confusion.
 - Use a single backtick (`) to share technical jargon or a one-line code in a sentence.
+  For example:
+
+  ```text
+  Can I skip the `h2` to `h3`?
+  ```
+
 - Use triple backtick (```) to share a code block and keep a clean format.
+  For example:
+
+  ````
+  ```
+  function greetings() {
+    console.log("Hello there!");
+  }
+  ```
+  ````
 
 {% endtextContainer %}
 
