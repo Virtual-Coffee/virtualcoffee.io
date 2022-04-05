@@ -42,7 +42,7 @@ ${toc}
 
 {% leadText %}
 
-You need to attend one of [Coffees (Zoom Meetings)](</member-resources/guide-to-vc/#coffees-(zoom-meetings)>) on **Tuesday at 9:00 AM ET** or **Thursday at 12:00 PM ET** that last an hour.
+You need to attend one of [Coffees (Zoom Meetings)](</resources/virtual-coffee/guide-to-vc/#coffees-(zoom-meetings)>) on **Tuesday at 9:00 AM ET** or **Thursday at 12:00 PM ET** that last an hour.
 
 {% endleadText %}
 
@@ -66,7 +66,7 @@ You can introduce yourself in this channel. We would love to know who you are, w
 ### What is going on in Coffees?
 
 We’re getting to know other members, old and new, through casual conversations on Zoom. We prioritize empathy, encouraging everyone to participate in the ways that are most comfortable to them, and learning together.
-Check out our [Guide To Virtual Coffee](/member-resources/guide-to-vc/) for more details.
+Check out our [Guide To Virtual Coffee](/resources/virtual-coffee/guide-to-vc/) for more details.
 
 ---
 
@@ -97,7 +97,7 @@ Absolutely! If you’re into online communities, and enjoy conversations around 
 ### What will I get when I join Virtual Coffee?
 
 You can participate in our [events](/events), have access to our slack, get support and help as you need, mentorship, and most of all, FRIENDSHIPS!
-Feel free to take a glimpse of [what’s going on in Virtual Coffee](/member-resources/guide-to-vc/#what-to-expect-in-virtual-coffee) to get some more insights.
+Feel free to take a glimpse of [what’s going on in Virtual Coffee](/resources/virtual-coffee/guide-to-vc/#what-to-expect-in-virtual-coffee) to get some more insights.
 
 ---
 
