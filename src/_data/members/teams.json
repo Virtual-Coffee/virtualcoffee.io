@@ -51,7 +51,10 @@
 			"YolandaHaynes"
 		]
 	},
-	{ "name": "Monthly Challenge Team Lead", "members": ["aurelieverrot"] },
+	{
+		"name": "Monthly Challenge Team Lead",
+		"members": ["aurelieverrot", "Andrew-Bush"]
+	},
 	{ "name": "Documentation Team Lead", "members": ["adiati98"] },
 	{
 		"name": "VC Advisor",
