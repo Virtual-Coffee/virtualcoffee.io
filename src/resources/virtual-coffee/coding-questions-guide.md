@@ -91,40 +91,49 @@ You can report your experience to our Maintainers at hello@virtualcoffee.io or a
 
 ### Slack
 
-**#help-and-pairing**
+#### #help-and-pairing
+
 Ask questions about your code or ask other members' help for pairing in this channel.
 
 You can also ask for resources, ask opinions about your project, ask for help to fill surveys, or any other support related to tech.
 
-**#front-end**
+#### #front-end
+
 This channel is about everything front-end and asks questions if you have problems with your front-end-related codes.
 
-**#accessibility**
+#### #accessibility
+
 This channel is for questions, comments, tips, and answers about a11y for accessibility.
 
-**#code-challenges**
+#### #code-challenges
+
 Stuck on an algorithm? This is the place for you.
 
-**#tech-interview-study-group**
+#### #tech-interview-study-group
+
 You can always drop your questions about job searching and job interviews to this channel. This group also has a weekly meeting to discuss and learn everything about tech interviews together.
 
-**#job-hunt**
+#### #job-hunt
+
 This channel is to post any job postings. But, you can also drop your questions regarding job searching on this channel.
 
-**#community-questions**
+#### #community-questions
+
 Do you have questions about Virtual Coffee? What do we do? What are we up to? Tools we use and how to utilize them?
 Or do you have some ideas for the community that you would share?
 
 You can drop those Virtual Coffee’s related questions here for the community to answer.
 
-**#random**
+#### #random
+
 If you are still unsure where to ask questions, you can ask them here. Some members will crosspost your question to the appropriate channel for better exposure.
 
 Do check our complete list of channels in the [Slack channel guide](/resources/virtual-coffee/slack-channel-guide/).
 
 ### GitHub
 
-**Discussion board**
+#### Discussion board
+
 Do check out our [discussion board on GitHub](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions)! 😄 You can use it whenever you have questions or want to throw ideas around Virtual Coffee or anything else.
 
 {% endtextContainer %}
