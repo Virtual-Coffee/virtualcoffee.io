@@ -16,7 +16,7 @@ eleventyNavigation:
 
 {% textContainer 'light'%}
 
-## Hi friends 👋
+<h2>Hi friends 👋</h2>
 
 {% leadText %}
 
@@ -28,7 +28,7 @@ We provide this guide for you to ask for help effectively in Virtual Coffee. If 
 
 ---
 
-## Table of Contents
+<h2>Table of Contents</h2>
 
 ${toc}
 
