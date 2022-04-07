@@ -10,8 +10,8 @@ eleventyNavigation:
   key: GuideToAskQuestions
   title: Guide To Asking Questions About Your Code
   excerpt: A guide for our members to ask questions about code.
-  parent: DevResources
-  order: 3
+  parent: VcResources
+  order: 4
 ---
 
 {% textContainer 'light'%}
