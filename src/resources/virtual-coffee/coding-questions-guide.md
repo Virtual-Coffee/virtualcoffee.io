@@ -170,7 +170,7 @@ Do check out our [discussion board on GitHub](https://github.com/Virtual-Coffee/
 
 Special thanks to [David Alpert](https://github.com/davidalpert), [Jonathan Yeong](https://github.com/jonathanyeong), [Dan Ott](https://github.com/danieltott), [Abbey Perini](https://github.com/abbeyperini), [Mark Noonan](https://github.com/marktnoonan), [Travis Martin](https://github.com/LincolnFleet), and [Claire Martinez](https://github.com/Claire) for throwing ideas and making this guide possible! 💙
 
-**Resources**:
+### Additional Resources
 
 - [How to be great at asking coding questions](https://medium.com/@gordon_zhu/how-to-be-great-at-asking-questions-e37be04d0603)
 - [Stack Overflow Question Checklist](https://codeblog.jonskeet.uk/2012/11/24/stack-overflow-question-checklist/)
