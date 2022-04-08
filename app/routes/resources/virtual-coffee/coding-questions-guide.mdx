@@ -1,36 +1,32 @@
 ---
-layout: layouts/resources.njk
-title: Guide To Asking Questions About Your Code
-description: A guide for our members to ask questions about code.
-hero: 'svg/undraw_questions_re_1fy7.svg'
-heroHeader: 'Asking Questions About Your Code'
-heroSubheader: A guide for our members to ask questions about code.
-tags: memberresources
-eleventyNavigation:
-  key: GuideToAskQuestions
+meta:
   title: Guide To Asking Questions About Your Code
-  excerpt: A guide for our members to ask questions about code.
-  parent: VcResources
-  order: 4
+  description: A guide for our members to ask questions about code.
+hero:
+  Hero: UndrawQuestions
+order: 4
 ---
 
-{% textContainer 'light'%}
+import LeadText from '~/components/content/LeadText';
+import TextContainer from '~/components/content/TextContainer';
 
-<h2>Hi friends 👋</h2>
+<TextContainer background="light" showBackToTopLink={false}>
 
-{% leadText %}
+## Hi friends 👋
+
+<LeadText>
 
 Everybody runs into problems during development that can be frustrating and seem impossible to debug. The most important thing is: _if you need help, ask for help_.
 
 We provide this guide for you to ask for help effectively in Virtual Coffee. If you're still unsure how to ask for help: _ask anyway_. We've all been there.
 
-{% endleadText %}
+</LeadText>
 
----
+</TextContainer>
 
-<h2>Table of Contents</h2>
+## Table of Contents
 
-${toc}
+<TextContainer background="light" showBackToTopLink={false}>
 
 ---
 
@@ -46,9 +42,9 @@ _We take our Code of Conduct seriously._ You can find [a copy of it](/code-of-co
 
 You can report your experience to our Maintainers at hello@virtualcoffee.io or anonymously at [virtualcoffee.io/report-coc-violation](https://virtualcoffee.io/report-coc-violation).
 
-{% endtextContainer %}
+</TextContainer>
 
-{% textContainer 'white' %}
+<TextContainer>
 
 ## How To Ask Questions
 
@@ -83,9 +79,9 @@ You can report your experience to our Maintainers at hello@virtualcoffee.io or a
 - Describe what you have tried to fix the problem. It's okay if you don't know where to start, but share whatever you have already tried/ruled out.
 - Read through your question. You want to ensure that your question makes sense and you've included all information needed for other members to help you.
 
-{% endtextContainer %}
+</TextContainer>
 
-{% textContainer 'light' %}
+<TextContainer background="light">
 
 ## Where to drop questions?
 
@@ -136,9 +132,9 @@ Do check our complete list of channels in the [Slack channel guide](/resources/v
 
 Do check out our [discussion board on GitHub](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions)! 😄 You can use it whenever you have questions or want to throw ideas around Virtual Coffee or anything else.
 
-{% endtextContainer %}
+</TextContainer>
 
-{% textContainer 'white' %}
+<TextContainer>
 
 ## How To Utilize Slack For Asking Questions
 
@@ -164,9 +160,9 @@ Do check out our [discussion board on GitHub](https://github.com/Virtual-Coffee/
   ```
   ````
 
-{% endtextContainer %}
+</TextContainer>
 
-{% textContainer 'light' %}
+<TextContainer background="light">
 
 Special thanks to [David Alpert](https://github.com/davidalpert), [Jonathan Yeong](https://github.com/jonathanyeong), [Dan Ott](https://github.com/danieltott), [Abbey Perini](https://github.com/abbeyperini), [Mark Noonan](https://github.com/marktnoonan), [Travis Martin](https://github.com/LincolnFleet), and [Claire Martinez](https://github.com/Claire) for throwing ideas and making this guide possible! 💙
 
@@ -176,4 +172,4 @@ Special thanks to [David Alpert](https://github.com/davidalpert), [Jonathan Yeon
 - [Stack Overflow Question Checklist](https://codeblog.jonskeet.uk/2012/11/24/stack-overflow-question-checklist/)
 - [How do I ask a good question?](https://stackoverflow.com/help/how-to-ask)
 
-{% endtextContainer %}
+</TextContainer>
