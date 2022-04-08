@@ -1,36 +1,31 @@
 ---
-layout: layouts/resources.njk
-title: About Open Source
-description: A general Virtual Coffee guide to all things Open Source!
-hero: 'svg/undraw_To_do_list_re_9nt7.svg'
-heroHeader: 'Guide to Open Source'
-heroSubheader: 'A general Virtual Coffee guide to all things Open Source!'
-tags: memberresources
-eleventyNavigation:
-  key: AboutOpenSource
+meta:
   title: About Open Source
-  excerpt: A general Virtual Coffee guide to all things Open Source!
-  parent: OSS
-  order: 1
+  description: 'A general Virtual Coffee guide to all things Open Source!'
+tags: [memberresources]
+hero:
+  Hero: UndrawToDoList
+order: 5
 ---
 
-{% textContainer %}
+import LeadText from '~/components/content/LeadText';
+import TextContainer from '~/components/content/TextContainer';
+
+<TextContainer showBackToTopLink={false}>
 
 # What is this document for?
 
-{% leadText %}
+<LeadText>
 
 This document is Part 1 of Virtual Coffee's four-part Guide to Open Source, focusing on an overview of the open source ecosystem, what it is and how it is governed and funded.
 
-{% endleadText %}
+</LeadText>
 
-{% endtextContainer %}
+</TextContainer>
 
-{% textContainer 'white' %}
+## Table of Contents
 
-<h2>Table of Contents</h2>
-
-${toc}
+<TextContainer background="light">
 
 ## What is open source?
 
@@ -67,6 +62,6 @@ There are a number of different models for governance of open source projects:
 
 ### How to use open source to build your resume / building your career with open source
 
-<!-- I would like some input on what to include in this section -->
+{/* I would like some input on what to include in this section */}
 
-{% endtextContainer %}
+</TextContainer>

@@ -1,36 +1,31 @@
 ---
-layout: layouts/resources.njk
-title: Maintainer Guide
-description: A Virtual Coffee guide to maintaining Open Source projects.
-hero: 'svg/undraw_To_do_list_re_9nt7.svg'
-heroHeader: 'Maintainer Guide'
-heroSubheader: 'A Virtual Coffee guide to maintaining Open Source projects.'
-tags: memberresources
-eleventyNavigation:
-  key: MaintainerGuide
+meta:
   title: Maintainer Guide
-  excerpt: A Virtual Coffee guide to maintaining Open Source projects.
-  parent: OSS
-  order: 4
+  description: 'A Virtual Coffee guide to maintaining Open Source projects.'
+tags: [memberresources]
+hero:
+  Hero: UndrawToDoList
+order: 9
 ---
 
-{% textContainer %}
+import LeadText from '~/components/content/LeadText';
+import TextContainer from '~/components/content/TextContainer';
+
+<TextContainer showBackToTopLink={false}>
 
 # What is this document for?
 
-{% leadText %}
+<LeadText>
 
 This document is Part 4 of Virtual Coffee's four-part Guide to Open Source, outlining useful information for you open source maintaining journey.
 
-{% endleadText %}
+</LeadText>
 
-{% endtextContainer %}
+</TextContainer>
 
-{% textContainer 'white' %}
+## Table of Contents
 
-<h2>Table of Contents</h2>
-
-${toc}
+<TextContainer background="light">
 
 ## Best practices for maintainers
 
@@ -208,4 +203,4 @@ It is a good idea to follow the following from the Repository Checklist above, b
 - [The Guide to Building Open Source Communities](https://opensource.guide/building-community/)
 - [Introduction to Open Source](https://www.digitalocean.com/community/tutorial_series/an-introduction-to-open-source)
 
-{% endtextContainer %}
+</TextContainer>

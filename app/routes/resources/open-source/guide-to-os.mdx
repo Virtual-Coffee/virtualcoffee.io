@@ -1,34 +1,29 @@
 ---
-layout: layouts/resources.njk
-title: Guide to Open Source
-description: A Virtual Coffee guide to all things Open Source!
-hero: 'svg/undraw_To_do_list_re_9nt7.svg'
-heroHeader: 'Guide to Open Source'
-heroSubheader: 'A Virtual Coffee guide to all things Open Source!'
-tags: memberresources
-eleventyNavigation:
-  key: GuideToOpenSource
+meta:
   title: Guide to Open Source
-  excerpt: A Virtual Coffee guide to all things Open Source!
-  parent: OSS
-  order: 3
+  description: 'A Virtual Coffee guide to all things Open Source!'
+tags: [memberresources]
+hero:
+  Hero: UndrawToDoList
+order: 8
 ---
 
-{% textContainer %}
+import LeadText from '~/components/content/LeadText';
+import TextContainer from '~/components/content/TextContainer';
+
+<TextContainer showBackToTopLink={false}>
 
 # What is this document for?
 
-{% leadText %}
+<LeadText>
 
-{% endleadText %}
+</LeadText>
 
-{% endtextContainer %}
+</TextContainer>
 
-{% textContainer 'white' %}
+## Table of Contents
 
-<h2>Table of Contents</h2>
-
-${toc}
+<TextContainer background="light">
 
 ## Guide to writing issues
 
@@ -245,7 +240,7 @@ Once you have done some work on a project and you have your changes in your fork
 
 ## Gitlab
 
-<!-- I would need help here since I have no experience with Gitlab -->
+{/* I would need help here since I have no experience with Gitlab */}
 
 ## What is open source
 
@@ -282,7 +277,7 @@ There are a number of different models for governance of open source projects:
 
 ## How to use open source to build your resume / building your career with open source
 
-<!-- I would like some input on what to include in this section -->
+{/* I would like some input on what to include in this section */}
 
 ## Open sourcing an existing project
 
@@ -302,4 +297,4 @@ It is a good idea to follow the following from the Maintainers Checklist, but yo
 - ✅ Issue templates if you are open to feedback or feature requests from users
 - ✅ A Code of Conduct: Even if you are not expecting contributions you may still get public activity on your repo, for example on issues, and a Code of Conduct helps you to set boundaries and keep conversations respectful.
 
-{% endtextContainer %}
+</TextContainer>

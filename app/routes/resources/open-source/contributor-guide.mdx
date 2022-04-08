@@ -1,36 +1,31 @@
 ---
-layout: layouts/resources.njk
-title: Contributor Guide
-description: A Virtual Coffee guide to contributing to Open Source!
-hero: 'svg/undraw_To_do_list_re_9nt7.svg'
-heroHeader: 'Contributor Guide'
-heroSubheader: 'A Virtual Coffee guide to contributing to Open Source!'
-tags: memberresources
-eleventyNavigation:
-  key: ContributorGuide
+meta:
   title: Contributor Guide
-  excerpt: A Virtual Coffee guide to contributing to Open Source!
-  parent: OSS
-  order: 3
+  description: 'A Virtual Coffee guide to contributing to Open Source!'
+tags: [memberresources]
+hero:
+  Hero: UndrawToDoList
+order: 6
 ---
 
-{% textContainer %}
+import LeadText from '~/components/content/LeadText';
+import TextContainer from '~/components/content/TextContainer';
+
+<TextContainer showBackToTopLink={false}>
 
 # What is this document for?
 
-{% leadText %}
+<LeadText>
 
 This document is Part 3 of Virtual Coffee's four-part Guide to Open Source, outlining useful information for you open source contributing journey.
 
-{% endleadText %}
+</LeadText>
 
-{% endtextContainer %}
+</TextContainer>
 
-{% textContainer 'white' %}
+## Table of Contents
 
-<h2>Table of Contents</h2>
-
-${toc}
+<TextContainer background="light">
 
 ## Repository checklist
 
@@ -133,4 +128,4 @@ Regardless of the tools used to communicate, there are certain things to keep in
 
 You should approach open source work with the same professionalism as you would work for an employer, but remember that you are doing this in your spare time and that self-care is important. This means that you should take care over things such as code style, documentation, testing and such like just as you would your work for an employer, but it is okay if you cannot work at a fast pace. If timescales come up in open-source contributions, try to set reasonable expectations from the beginning. Otherwise, time should be taken to be fairly relaxed; for non-trivial issues it should not be expected that you complete the work to a given timescale.
 
-{% endtextContainer %}
+</TextContainer>

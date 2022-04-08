@@ -1,36 +1,31 @@
 ---
-layout: layouts/resources.njk
-title: Git & Github 101
-description: A Virtual Coffee guide to using Git and Github, oriented toward open source.
-hero: 'svg/undraw_To_do_list_re_9nt7.svg'
-heroHeader: 'Guide to Open Source'
-heroSubheader: 'A Virtual Coffee guide to using Git and Github, oriented toward open source.'
-tags: memberresources
-eleventyNavigation:
-  key: GitGithub
+meta:
   title: Git & Github 101
-  excerpt: A Virtual Coffee guide to using Git and Github, oriented toward open source.
-  parent: OSS
-  order: 2
+  description: 'A Virtual Coffee guide to using Git and Github, oriented toward open source.'
+tags: [memberresources]
+hero:
+  Hero: UndrawToDoList
+order: 7
 ---
 
-{% textContainer %}
+import LeadText from '~/components/content/LeadText';
+import TextContainer from '~/components/content/TextContainer';
+
+<TextContainer showBackToTopLink={false}>
 
 # What is this document for?
 
-{% leadText %}
+<LeadText>
 
 This document is Part 2 of Virtual Coffee's four-part Guide to Open Source. It aims to offer an overview of some of the most useful Git and Github workflows that you might use when contributing to Open Source.
 
-{% endleadText %}
+</LeadText>
 
-{% endtextContainer %}
+</TextContainer>
 
-{% textContainer 'white' %}
+## Table of Contents
 
-<h2>Table of Contents</h2>
-
-${toc}
+<TextContainer background="light">
 
 ## Using Git
 
@@ -112,4 +107,4 @@ Once you have done some work on a project and you have your changes in your fork
 3. Once you are ready, click `Create pull request`. Congratulations, you have made your pull request 🎉.
 4. If a maintainer requests changes you can make the requested changes and push new commits to the same branch and they will automatically be added to the pull request.
 
-{% endtextContainer %}
+</TextContainer>
