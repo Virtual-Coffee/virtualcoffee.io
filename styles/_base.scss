@@ -20,6 +20,14 @@ h3 {
 	font-weight: 500;
 }
 
+.bg-light.py-5 + .bg-light.py-5 {
+	padding-top: 0 !important;
+}
+
+.bg-white.py-5 + .bg-white.py-5 {
+	padding-top: 0 !important;
+}
+
 .btn-primary {
 	background-image: $gradient-primary;
 }
