@@ -1,7 +1,91 @@
 [
-	{ "name": "Org Maintainer", "members": ["bekahhw", "danieltott"] },
 	{
 		"name": "Community Maintainer",
-		"members": ["bekahhw", "saramccombs", "tkshill"]
+		"members": ["BekahHW", "tkshill", "saramccombs"]
+	},
+	{ "name": "Org Maintainer", "members": ["danieltott", "BekahHW"] },
+	{
+		"name": "Room Leader",
+		"members": [
+			"abbeyperini",
+			"AlexVCS",
+			"andreamartz",
+			"aurelieverrot",
+			"BogDAAAMN",
+			"davidalpert",
+			"glenmccallumcan",
+			"jdwilkin4",
+			"juliaseid",
+			"mrsantons",
+			"marktnoonan",
+			"meg-gutshall",
+			"nickytonline",
+			"jamesrascal",
+			"shiftyp",
+			"SuzeShardlow",
+			"teezzan",
+			"tomcudd",
+			"LincolnFleet",
+			"needcaffeine"
+		]
+	},
+	{
+		"name": "Notetaker",
+		"members": [
+			"andreamartz",
+			"aurelieverrot",
+			"davidalpert",
+			"aureliefomum",
+			"glenmccallumcan",
+			"jdwilkin4",
+			"mrsantons",
+			"meg-gutshall",
+			"nickytonline",
+			"Rafi993",
+			"jamesrascal",
+			"shiftyp",
+			"teezzan",
+			"tomcudd",
+			"LincolnFleet",
+			"needcaffeine",
+			"YolandaHaynes"
+		]
+	},
+	{
+		"name": "Monthly Challenge Team Lead",
+		"members": ["aurelieverrot", "Andrew-Bush"]
+	},
+	{ "name": "Documentation Team Lead", "members": ["adiati98"] },
+	{
+		"name": "VC Advisor",
+		"members": [
+			"adiati98",
+			"davidalpert",
+			"jdwilkin4",
+			"meg-gutshall",
+			"nickytonline",
+			"SuzeShardlow",
+			"tomcudd",
+			"LincolnFleet",
+			"rhdeck"
+		]
+	},
+	{ "name": "AV Team Lead", "members": ["BogDAAAMN"] },
+	{
+		"name": "Coffee Table Host",
+		"members": [
+			"juliaseid",
+			"mrsantons",
+			"meg-gutshall",
+			"LincolnFleet",
+			"rhdeck",
+			"kldickenson"
+		]
+	},
+	{ "name": "VC Host", "members": ["meg-gutshall", "nickytonline"] },
+	{ "name": "VC MC", "members": ["meg-gutshall"] },
+	{
+		"name": "Monthly Challenge Team",
+		"members": ["dominicduffin1", "redapy", "lsparlin"]
 	}
 ]
