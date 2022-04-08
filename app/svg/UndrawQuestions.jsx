@@ -3,7 +3,7 @@ export default function UndrawIllustration({ ariaHidden, title }) {
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 844.67538 595.26155"
-			xmlns:xlink="http://www.w3.org/1999/xlink"
+			xmlnsXlink="http://www.w3.org/1999/xlink"
 			{...(ariaHidden
 				? {
 						'aria-hidden': 'true',
