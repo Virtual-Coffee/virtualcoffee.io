@@ -41,3 +41,5 @@ export { default as VirtualCoffeeFull } from './VirtualCoffeeFull';
 export { default as VirtualCoffeeFullBanner } from './VirtualCoffeeFullBanner';
 export { default as Website } from './Website';
 export { default as YouTube } from './YouTube';
+
+export { default as UndrawQuestions } from './UndrawQuestions';
