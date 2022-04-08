@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 
-# [![Virtual Coffee](src/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
+# [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
 
 Virtual Coffee is a laid-back conversation with developers twice a week. It's the conversation that keeps going in slack. It's the online events that support developers at all stages of the journey. It's the place where you go to make friends who all just happen to be in tech.
 
@@ -18,7 +18,16 @@ See you there!
 
 # Working on the site:
 
-## Local Development
+This site is built using [Remix](https://remix.run/).
+
+## Table of Contents:
+
+- [Local Development Setup](#local-development-setup)
+- [Commands](#commands)
+- [Loading data](#loading-data)
+- [Adding content](#adding-content)
+
+## Local Development Setup
 
 Steps to run the site locally for development or curiosity
 
@@ -36,7 +45,7 @@ cd virtualcoffee.io
 
 ### 3. Install dependencies
 
-This repo requires `node` and `yarn` to get started.
+This repo requires `node`, `yarn`, and the [Netlify CLI](https://www.netlify.com/products/dev/) to get started.
 
 #### Installing `node`:
 
@@ -54,33 +63,71 @@ npm install -g yarn
 
 Read more about `yarn` [on their docs site](https://yarnpkg.com/getting-started/install).
 
-Once you have `yarn` installed, you're ready to install the local dependencies! Run the following command:
+#### Installing the Netlify CLI
+
+The [Netlify CLI](https://docs.netlify.com/cli/get-started) allows users to run a local version of the Netlify environment for local development. You can even [share your locally-running app with other people on the internet](https://docs.netlify.com/cli/get-started/#share-a-live-development-server)!!
+
+To install:
+
+```sh
+npm i -g netlify-cli
+```
+
+If you have previously installed the Netlify CLI, you should update it to the latest version:
+
+```sh
+npm i -g netlify-cli@latest
+```
+
+#### Setting up your .env
+
+Use the following command to create a local `.env` file. Then open the new file (`.env`) and adjust any settings that are needed.
+
+```shell
+cp .env.example .env
+```
+
+#### Installing package dependencies
+
+Once you have `node`, `yarn`, and the Netlify CLI installed, you're ready to install the local dependencies! Run the following command:
 
 ```shell
 yarn
 ```
 
-At this point you're ready to roll! The following commands are available:
-
-### `yarn start`
+At this point you're ready to roll! Run the following command to get rolling!
 
 ```shell
-yarn start
+yarn dev
+```
+
+Read more about what `yarn dev` does in the following section.
+
+## Commands
+
+The following commands are available for your use. Most of the time you'll only ever need `yarn dev`.
+
+### `yarn dev`
+
+```shell
+yarn dev
 ```
 
 This is the only command you need to do normal local development.
 
-Starts a local server and watches the `src` directory for changes. Use this to preview local development.
+Starts a local server and watches your source files for changes. Use this to preview local development.
 
 Once you run this command, a local server is running at http://localhost:9000! Any changes you make to the src folder should also re-build the site and re-load your browser.
 
-You should see 'Waiting...' below, which means the watcher is waiting to build your awesome changes!
+You should see something like 'Server now ready on http://localhost:9000' below, which means the watcher is waiting to build your awesome changes!
 
 Use ctrl-c to quit the server when you're done.
 
-## Build Commands
+`yarn dev` actually runs three sub commands, which can be run independently if you wish:
 
-The following commands are for building production-ready versions of the site. If you're interested in seeing what they look like on your machine, feel free to run them! But they are not needed for normal local development.
+- `yarn dev:sass` - compiles sass styles found in `./styles`. When in dev mode will re-run when a file is changed. The files are compiled to the `./tmp` directory to be processed by the next step.
+- `yarn dev:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
+- `yarn dev:remix` - starts up the local Netlify dev environment and starts the Remix server.
 
 ### `yarn build`
 
@@ -90,18 +137,90 @@ yarn build
 
 Builds a production-ready version of the site. This is what Netlify uses to build our site.
 
-### `yarn build-preview`
+`yarn build` actually runs three sub commands, which can be run independently if you wish:
+
+- `yarn build:sass` - compiles sass styles found in `./styles`. The files are compiled to the `./tmp` directory to be processed by the next step.
+- `yarn build:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
+- `yarn build:remix` - compiles everything needed to run the site for production.
+
+### `yarn format`
 
 ```shell
-yarn build-preview
+yarn format
 ```
 
-If you'd like to see a preview of the production build, use this command to build the site and start up a server at http://localhost:9000. To see any subsequent changes, you can leave this server running, but you'll have to run `yarn build` again in another console tab.
+Runs [Prettier](https://prettier.io/) on all of our files. This happens automatically via [husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged), so there's usually no need to run this manually.
 
-### PWA and Templates using Forms
+### `yarn lint`
 
-The site can be installed as a Progressive Web Application (PWA), which includes strategic caching of resources. Certain pages such as those including forms and destination pages for forms should not be cached. A list of these is supplied to the `pluginPWA` plugin in our `.eleventy.js` file. If you add any such form files for form destination files in development, they should probably be added to this list.
+```shell
+yarn lint
+```
 
-### Heads Up
+Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. This happens automatically at build time.
 
-If you have problems in VS Code related to `.njk` files, you may need to [reconfigure your language settings](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/176) after working with this repo.
+## Loading data
+
+A lot of the data loaded on the site is from APIs that require private keys or tokens. Unfortunately we can't publish these or distribute them too widely.
+
+All of the data points have mock data that is used if the required API key isn't present, so contributors should be able to make UX-related changes without needing them.
+
+If you'd like to work on a feature that requires an API key, please reach out to a maintainer and we can probably get that going.
+
+## Adding content
+
+### Resources
+
+Our [VC Resources](https://virtualcoffee.io/resources) are creating using [MDX](https://mdxjs.com/). MDX is basically a combination of Markdown and React.
+
+Any files added to `app/routes/resources` will be automatically loaded and added to the appropriate index page.
+
+A good way to start adding a new page would be to copy one of the existing pages, then edit the details and content.
+
+### Newsletters
+
+The newsletters (for now) are simply `jsx` files, and can be found in `app/routes/newsletter/issues`.
+
+When you add a new issue, **make sure to add it to the index**. Here's how:
+
+- Open `app/data/newsletters.js`
+- `import` the new issue
+- Add the new issue to the `newsletters` array.
+
+So, if you have created `app/routes/newsletter/issues/2022-03.jsx`:
+
+```diff
++ import { handle as issue202203 } from '~/routes/newsletter/issues/2022-03';
+import { handle as issue202202 } from '~/routes/newsletter/issues/2022-02';
+import { handle as issue202201 } from '~/routes/newsletter/issues/2022-01';
+
+const newsletters = [
++ 	{ handleData: issue202203, slug: '2022-03' },
+	{ handleData: issue202202, slug: '2022-02' },
+	{ handleData: issue202201, slug: '2022-01' },
+];
+```
+
+### Monthly Challenges
+
+The monthly challenges (for now) are simply `jsx` files, and can be found in `app/routes/monthlychallenges`.
+
+When you add a new challenge, **make sure to add it to the index**. Here's how:
+
+- Open `app/data/monthlyChallenges/getChallenges.js`
+- `import` the new challenge
+- Add the new challenge to the `challenges` array.
+
+So, if you have created `app/routes/monthlychallenges/apr-2022.jsx`:
+
+```diff
++ import { handle as apr2022 } from '~/routes/monthlychallenges/apr-2022';
+import { handle as mar2022 } from '~/routes/monthlychallenges/mar-2022';
+import { handle as feb2022 } from '~/routes/monthlychallenges/feb-2022';
+
+const challenges = [
++ 	{ handleData: apr2022, slug: 'apr-2022' },
+	{ handleData: mar2022, slug: 'mar-2022' },
+	{ handleData: feb2022, slug: 'feb-2022' },
+];
+```

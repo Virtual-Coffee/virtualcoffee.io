@@ -1,0 +1,31 @@
+.hero {
+	z-index: $zindex-fixed + 1;
+	position: relative;
+	background: #fff;
+
+	h2 {
+		font-weight: 300;
+
+		span {
+			@media (min-width: 510px) {
+				display: block;
+			}
+
+			@include media-breakpoint-up(md) {
+				display: inline-block;
+			}
+		}
+
+		@include media-breakpoint-up(sm) {
+			text-align: center;
+		}
+
+		strong {
+			font-weight: 900;
+		}
+	}
+
+	.container {
+		max-width: 960px;
+	}
+}
