@@ -31,7 +31,7 @@ export default function Challenge() {
 			<p className="lead">
 				This month, we have two tracks. Maintainers will be reviewing their open
 				source repos with{' '}
-				<a href="https://virtualcoffee.io/member-resources/oss-maintainer-checklist/">
+				<a href="https://virtualcoffee.io/resources/open-source/oss-maintainer-checklist/">
 					our checklist
 				</a>
 				to make sure their projects are ready for Hacktoberfest contributions,
@@ -64,7 +64,7 @@ export default function Challenge() {
 				Hacktoberfest. Your repository should have a clear path for
 				communication, a good explanation of how to run the project, and clear
 				issues.{' '}
-				<a href="https://virtualcoffee.io/member-resources/oss-maintainer-checklist/">
+				<a href="https://virtualcoffee.io/resources/open-source/oss-maintainer-checklist/">
 					Our guide
 				</a>
 				will help you to not only prepare your project, but to be added to the
@@ -147,7 +147,7 @@ export default function Challenge() {
 				<li>
 					The issue guide can be found pinned in our slack #monthly-challenge
 					channel and our maintainers checklist can be found{' '}
-					<a href="https://virtualcoffee.io/member-resources/oss-maintainer-checklist/">
+					<a href="https://virtualcoffee.io/resources/open-source/oss-maintainer-checklist/">
 						here
 					</a>
 					as part of our Member Resources section on our site
