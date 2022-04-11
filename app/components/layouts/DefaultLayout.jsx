@@ -54,7 +54,11 @@ export function HeroHead({ Hero, heroHeader, heroSubheader, simple }) {
 				<div className="container">
 					<div className="row align-items-center">
 						<div className="col-sm-4">
-							<UndrawIllustration filename={heroData.Hero} />
+							<UndrawIllustration
+								loading="eager"
+								style={{ width: '100%' }}
+								filename={heroData.Hero}
+							/>
 						</div>
 						<div className="col-sm-8">
 							<h1 className="display-4">{heroData.heroHeader}</h1>
