@@ -1,44 +1,74 @@
-const svgs = {
-	UndrawCelebration: {
-		aspectRatio: '949.8 / 661.52',
-	},
+const svgAspectRatios = {
+	UndrawAddUser: '691.33587 / 489.02997',
 
-	UndrawWalkInTheCity: {
-		aspectRatio: '955 / 680.5',
-	},
+	UndrawAppreciation: '924 / 458.12749',
 
-	UndrawConferenceCall: {
-		aspectRatio: '817.21528 / 523.62072',
-	},
+	UndrawArrived: '1034 / 823.8434',
 
-	UndrawFolder: {
-		aspectRatio: '929.54484 / 793.07015',
-	},
+	UndrawAudioPlayer: '757.964 / 743.732',
 
-	UndrawArrived: {
-		aspectRatio: '1034 / 823.8434',
-	},
+	UndrawCelebration: '949.8 / 661.52',
 
-	UndrawGoodTeam: {
-		aspectRatio: '1115.91385 / 832.5636',
-	},
+	UndrawCodeThinking: '1082.43901 / 449.88124',
+
+	UndrawConferenceCall: '817.21528 / 523.62072',
+
+	UndrawDreamer: '1188 / 795.33',
+
+	UndrawFeedback: '1048 / 786.03763',
+
+	UndrawFixingBugs: '690 / 448.7592',
+
+	UndrawFolder: '929.54484 / 793.07015',
+
+	UndrawGoodTeam: '1115.91385 / 832.5636',
+
+	UndrawGroupHangout: '1031.79 / 709.36133',
+
+	UndrawGrowthAnalytics: '1028 / 739',
+
+	UndrawHackerMindset: '921.71991 / 653.40956',
+
+	UndrawHappyFeeling: '743.40429 / 753.13373',
+
+	UndrawHappyWomenDay: '1106 / 783.42853',
+
+	UndrawJoin: '808 / 607.0183',
+
+	UndrawLovingStory: '1126.86988 / 713',
+
+	UndrawOnlineVideo: '885.6192 / 579.76496',
+
+	UndrawPresentation: '928.76643 / 735.63906',
+
+	UndrawProductTeardown: '929.68 / 818.68',
+
+	UndrawProudCoder: '887.87284 / 569.68008',
+
+	UndrawQuickChat: '863.91732 / 364.20537',
+
+	UndrawSuperThankYou: '915.35 / 848.79',
+
+	UndrawTeamSpirit: '1137.68 / 859.71',
+
+	UndrawToDoList: '848.67538 / 469.44265',
+
+	UndrawVersionControl: '1038.23 / 693.31',
+
+	UndrawWalkInTheCity: '955 / 680.5',
 };
 
-export default function LazyIcon({ filename, className }) {
-	const { aspectRatio } = svgs[filename];
+export default function LazySvg({ filename, style = {}, ...props }) {
+	const aspectRatio = svgAspectRatios[filename];
 
 	return (
-		<div
-			style={{
-				aspectRatio,
-			}}
-			className={className}
-		>
-			<img
-				style={{ aspectRatio }}
-				src={`/assets/svg/${filename}.svg`}
-				loading="lazy"
-			/>
-		</div>
+		<img
+			style={{ aspectRatio, ...style }}
+			src={`/assets/svg/${filename}.svg`}
+			loading="lazy"
+			aria-hidden="true"
+			alt=""
+			{...props}
+		/>
 	);
 }
