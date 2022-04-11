@@ -29,10 +29,14 @@ export async function loader() {
 			measure(async () => getChallenges({ limit: 5 }), 'challenges'),
 		]);
 
-	const resources = loadMdxDirectory({
-		baseDirectory: 'resources',
-		includeChildren: false,
-	});
+	const resources = await measure(
+		() =>
+			loadMdxDirectory({
+				baseDirectory: 'resources',
+				includeChildren: false,
+			}),
+		'resources',
+	);
 
 	return json({
 		sponsors,
