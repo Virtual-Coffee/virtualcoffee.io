@@ -48,11 +48,7 @@ export default function LazyIcon({ filename, className }) {
 			}}
 			className={className}
 		>
-			{isClient ? (
-				<Suspense fallback={null}>
-					<Icon />
-				</Suspense>
-			) : null}
+			<img src={`/assets/svg/${filename}.svg`} loading="lazy" />
 		</div>
 	);
 }
