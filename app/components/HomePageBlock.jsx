@@ -1,5 +1,4 @@
 import { Link } from 'remix';
-import * as Svgs from '~/svg';
 import LazyIcon from '~/svg/lazy';
 
 export default function HomePageBlock({
