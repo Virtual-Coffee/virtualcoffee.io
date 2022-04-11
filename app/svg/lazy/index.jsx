@@ -1,4 +1,6 @@
 const svgAspectRatios = {
+	Undraw404: '860.13137 / 571.14799',
+
 	UndrawAddUser: '691.33587 / 489.02997',
 
 	UndrawAppreciation: '924 / 458.12749',
