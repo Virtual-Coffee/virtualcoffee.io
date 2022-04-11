@@ -38,7 +38,7 @@ export default function MemberCards({ data }) {
 								{member.mainUrl && (
 									<div className="text-truncate">
 										<a
-											href="{member.mainUrl}"
+											href={member.mainUrl}
 											target="_blank"
 											rel="noopener noreferrer"
 										>
