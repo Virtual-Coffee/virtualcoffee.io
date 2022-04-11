@@ -67,7 +67,7 @@ const episodesQuery = gql`
 
 export async function getEpisodes({ limit = 5 } = {}) {
 	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
-		const fakeData = await import('./mocks/podcast');
+		const fakeData = await import('./mocks/podcast.server');
 		return fakeData.getEpisodes({ limit }).map((entry) => ({
 			...entry,
 			url: `/podcast/${entry.slug}`,
@@ -100,7 +100,7 @@ export async function getEpisodes({ limit = 5 } = {}) {
 
 export async function getEpisode({ slug } = {}) {
 	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
-		const fakeData = await import('./mocks/podcast');
+		const fakeData = await import('./mocks/podcast.server');
 		const episode = fakeData.getEpisode({ slug });
 		return {
 			...episode,
