@@ -31,9 +31,22 @@
 	@include media-breakpoint-up(md) {
 		margin: 0 0 1em;
 	}
+}
+
+.homepageblock-hero-svg {
+	margin: 0 auto;
+	width: 75%;
 
 	svg {
+		width: 100%;
+	}
+
+	@include media-breakpoint-up(sm) {
 		width: 50%;
+	}
+
+	@include media-breakpoint-up(md) {
+		margin: 0;
 	}
 }
 

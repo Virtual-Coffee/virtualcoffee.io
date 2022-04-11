@@ -1,3 +1,4 @@
+import React, { Suspense } from 'react';
 import {
 	UndrawWalkInTheCity,
 	UndrawConferenceCall,
@@ -86,6 +87,10 @@ export const homePageLinks = [
 	},
 ];
 
+const UndrawCelebrationLazy = React.lazy(() =>
+	import('~/svg/UndrawCelebration'),
+);
+
 export default function Index() {
 	const {
 		sponsors,
@@ -135,7 +140,7 @@ export default function Index() {
 					<h2 className="text-center mb-5">What we're up to</h2>
 					<div className="homepageblocks">
 						<HomePageBlock
-							Hero={UndrawCelebration}
+							Hero="UndrawCelebration"
 							id="about"
 							title="All Things Virtual Coffee"
 							subtitle="Links and Goodies!"
@@ -144,7 +149,7 @@ export default function Index() {
 						</HomePageBlock>
 
 						<HomePageBlock
-							Hero={UndrawConferenceCall}
+							Hero="UndrawConferenceCall"
 							id="about"
 							title="Community Events"
 							subtitle="See our upcoming events!"
@@ -163,7 +168,7 @@ export default function Index() {
 					</div>
 					<div className="homepageblocks">
 						<HomePageBlock
-							Hero={UndrawFolder}
+							Hero="UndrawFolder"
 							id="resources"
 							title="Member Resources"
 							subtitle="A collection of resources for Virtual Coffee members"
@@ -173,7 +178,7 @@ export default function Index() {
 							<PostList items={formatFileListItemsForPostList(resources)} />
 						</HomePageBlock>
 						<HomePageBlock
-							Hero={UndrawWalkInTheCity}
+							Hero="UndrawWalkInTheCity"
 							id="about"
 							title="Virtual Coffee Podcast"
 							subtitle="Conversations with members of the community"
@@ -193,7 +198,7 @@ export default function Index() {
 					</div>
 					<div className="homepageblocks">
 						<HomePageBlock
-							Hero={UndrawArrived}
+							Hero="UndrawArrived"
 							id="newsletters"
 							title="Virtual Coffee Newsletter"
 							subtitle="Sign up for the Virtual Coffee Newsletter"
@@ -203,7 +208,7 @@ export default function Index() {
 							<PostList items={newsletters} />
 						</HomePageBlock>
 						<HomePageBlock
-							Hero={UndrawGoodTeam}
+							Hero="UndrawGoodTeam"
 							id="challenges"
 							title="Monthly Challenges"
 							subtitle="Every month, we create a challenge for our Virtual Coffee members to complete together"

@@ -1,4 +1,6 @@
 import { Link } from 'remix';
+import * as Svgs from '~/svg';
+import LazyIcon from '~/svg/lazy';
 
 export default function HomePageBlock({
 	id,
@@ -14,7 +16,7 @@ export default function HomePageBlock({
 	return (
 		<>
 			<div className="homepageblock-hero" {...(id ? { id } : {})}>
-				{Hero && <Hero ariaHidden />}
+				<LazyIcon className="homepageblock-hero-svg" filename={Hero} />
 			</div>
 
 			<h3 className="text-secondary homepageblock-title">{titleInner}</h3>
