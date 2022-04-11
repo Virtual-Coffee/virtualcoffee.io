@@ -1,3 +1,5 @@
+const { performance } = require('perf_hooks');
+
 export default async function measure(fn, name) {
 	console.log(`fetching ${name}`);
 	const start = performance.now();
