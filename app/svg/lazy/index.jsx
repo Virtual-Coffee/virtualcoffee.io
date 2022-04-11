@@ -47,6 +47,8 @@ const svgAspectRatios = {
 
 	UndrawProudCoder: '887.87284 / 569.68008',
 
+	UndrawProudCoder: '844.67538 / 595.26155',
+
 	UndrawQuickChat: '863.91732 / 364.20537',
 
 	UndrawSuperThankYou: '915.35 / 848.79',
