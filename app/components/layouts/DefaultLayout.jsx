@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useMatches } from 'remix';
-import LazyIcon from '~/svg/lazy';
+import UndrawIllustration from '~/components/UndrawIllustration';
 
 function useHeroData({ Hero, heroHeader, heroSubheader }) {
 	const matches = useMatches().reverse();
@@ -54,7 +54,7 @@ export function HeroHead({ Hero, heroHeader, heroSubheader, simple }) {
 				<div className="container">
 					<div className="row align-items-center">
 						<div className="col-sm-4">
-							<LazyIcon filename={heroData.Hero} />
+							<UndrawIllustration filename={heroData.Hero} />
 						</div>
 						<div className="col-sm-8">
 							<h1 className="display-4">{heroData.heroHeader}</h1>

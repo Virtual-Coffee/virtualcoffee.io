@@ -47,7 +47,7 @@ const svgAspectRatios = {
 
 	UndrawProudCoder: '887.87284 / 569.68008',
 
-	UndrawProudCoder: '844.67538 / 595.26155',
+	UndrawQuestions: '844.67538 / 595.26155',
 
 	UndrawQuickChat: '863.91732 / 364.20537',
 
@@ -62,7 +62,7 @@ const svgAspectRatios = {
 	UndrawWalkInTheCity: '955 / 680.5',
 };
 
-export default function LazySvg({ filename, style = {}, ...props }) {
+export default function UndrawIllustration({ filename, style = {}, ...props }) {
 	const aspectRatio = svgAspectRatios[filename];
 
 	return (
