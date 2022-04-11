@@ -1,7 +1,33 @@
 import DisplayHtml from '~/components/DisplayHtml';
-import * as Icons from '~/svg';
+import {
+	GitHub,
+	LinkedIn,
+	Dev,
+	Codenewbie,
+	Twitter,
+	Twitch,
+	Polywork,
+	Medium,
+	HashNode,
+	YouTube,
+	Website,
+} from '~/svg';
 
 export default function MemberCards({ data }) {
+	const Icons = {
+		GitHub,
+		LinkedIn,
+		Dev,
+		Codenewbie,
+		Twitter,
+		Twitch,
+		Polywork,
+		Medium,
+		HashNode,
+		YouTube,
+		Website,
+	};
+
 	return (
 		<>
 			<div className="membercards">
