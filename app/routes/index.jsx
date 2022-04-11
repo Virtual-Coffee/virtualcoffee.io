@@ -86,10 +86,6 @@ export const homePageLinks = [
 	},
 ];
 
-const UndrawCelebrationLazy = React.lazy(() =>
-	import('~/svg/UndrawCelebration'),
-);
-
 export default function Index() {
 	const {
 		sponsors,
