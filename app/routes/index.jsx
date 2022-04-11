@@ -1,8 +1,12 @@
-import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
-import UndrawCelebration from '~/svg/UndrawCelebration';
-import UndrawFolder from '~/svg/UndrawFolder';
-import UndrawArrived from '~/svg/UndrawArrived';
-import UndrawGoodTeam from '~/svg/UndrawGoodTeam';
+import {
+	UndrawWalkInTheCity,
+	UndrawConferenceCall,
+	VirtualCoffeeFullBanner,
+	UndrawCelebration,
+	UndrawFolder,
+	UndrawArrived,
+	UndrawGoodTeam,
+} from '~/svg';
 import getSponsors from '~/data/sponsors';
 import { json, useLoaderData } from 'remix';
 import { getEvents } from '~/data/events';
@@ -140,7 +144,7 @@ export default function Index() {
 						</HomePageBlock>
 
 						<HomePageBlock
-							Hero={UndrawCelebration}
+							Hero={UndrawConferenceCall}
 							id="about"
 							title="Community Events"
 							subtitle="See our upcoming events!"
@@ -169,7 +173,7 @@ export default function Index() {
 							<PostList items={formatFileListItemsForPostList(resources)} />
 						</HomePageBlock>
 						<HomePageBlock
-							Hero={UndrawCelebration}
+							Hero={UndrawWalkInTheCity}
 							id="about"
 							title="Virtual Coffee Podcast"
 							subtitle="Conversations with members of the community"
