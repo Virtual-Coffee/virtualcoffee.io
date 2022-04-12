@@ -11,32 +11,23 @@ import PostList, {
 import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '~/data/newsletters';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
-import measure from '~/util/measure.server';
 
 export async function loader() {
 	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
 		await Promise.all([
-			measure(async () => getSponsors(), 'sponsors'),
-			measure(
-				async () =>
-					getEvents({
-						limit: 5,
-					}),
-				'events',
-			),
-			measure(async () => getEpisodes(), 'episodes'),
-			measure(async () => getNewsletters({ limit: 5 }), 'newsletters'),
-			measure(async () => getChallenges({ limit: 5 }), 'challenges'),
+			getSponsors(),
+			getEvents({
+				limit: 5,
+			}),
+			getEpisodes(),
+			getNewsletters({ limit: 5 }),
+			getChallenges({ limit: 5 }),
 		]);
 
-	const resources = await measure(
-		() =>
-			loadMdxDirectory({
-				baseDirectory: 'resources',
-				includeChildren: false,
-			}),
-		'resources',
-	);
+	const resources = loadMdxDirectory({
+		baseDirectory: 'resources',
+		includeChildren: false,
+	});
 
 	return json({
 		sponsors,
