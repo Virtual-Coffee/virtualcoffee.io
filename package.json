@@ -27,7 +27,8 @@
 		"dev:css": "postcss .tmp/styles/**/*.css --base .tmp/styles --dir app/styles -w",
 		"dev:remix": "cross-env NODE_ENV=development netlify dev",
 		"postinstall": "remix setup node",
-		"start": "yarn dev"
+		"start": "yarn dev",
+		"analyze": "source-map-explorer 'public/build/**/*.js'"
 	},
 	"dependencies": {
 		"@faker-js/faker": "^6.1.1",
@@ -83,7 +84,8 @@
 		"postcss": "^8.4.12",
 		"postcss-cli": "^9.1.0",
 		"prettier": "2.6.1",
-		"sass": "^1.49.10"
+		"sass": "^1.49.10",
+		"source-map-explorer": "^2.5.2"
 	},
 	"main": "index.js",
 	"lint-staged": {

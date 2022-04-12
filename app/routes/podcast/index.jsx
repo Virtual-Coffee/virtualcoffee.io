@@ -4,7 +4,6 @@ import DefaultLayout from '~/components/layouts/DefaultLayout';
 import PodcastSubscribe from '~/components/PodcastSubscribe';
 import PostList from '~/components/PostList';
 import { getEpisodes, getPlayerSrc } from '~/data/podcast';
-import UndrawWalkInTheCity from '~/svg/UndrawWalkInTheCity';
 
 export const loader = async () => {
 	const podcastEpisodes = await getEpisodes({ limit: 99 });
@@ -39,7 +38,7 @@ export default function PodcastsIndex() {
 	return (
 		<DefaultLayout
 			heroHeader="Virtual Coffee Podcast"
-			Hero={UndrawWalkInTheCity}
+			Hero="UndrawWalkInTheCity"
 		>
 			<div className="container bodycopy py-5">
 				<p className="lead">

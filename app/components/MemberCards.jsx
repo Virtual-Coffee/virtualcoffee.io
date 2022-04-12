@@ -1,7 +1,32 @@
 import DisplayHtml from '~/components/DisplayHtml';
-import * as Icons from '~/svg';
+
+import GitHub from '~/svg/GitHub';
+import LinkedIn from '~/svg/LinkedIn';
+import Dev from '~/svg/Dev';
+import Codenewbie from '~/svg/Codenewbie';
+import Twitter from '~/svg/Twitter';
+import Twitch from '~/svg/Twitch';
+import Polywork from '~/svg/Polywork';
+import Medium from '~/svg/Medium';
+import HashNode from '~/svg/HashNode';
+import YouTube from '~/svg/YouTube';
+import Website from '~/svg/Website';
 
 export default function MemberCards({ data }) {
+	const Icons = {
+		GitHub,
+		LinkedIn,
+		Dev,
+		Codenewbie,
+		Twitter,
+		Twitch,
+		Polywork,
+		Medium,
+		HashNode,
+		YouTube,
+		Website,
+	};
+
 	return (
 		<>
 			<div className="membercards">

@@ -1,4 +1,4 @@
-import UndrawAppreciation from '~/svg/UndrawAppreciation';
+import UndrawIllustration from '~/components/UndrawIllustration';
 
 export const handle = {
 	listTitle: 'April, 2021: Community Kindness!',
@@ -27,7 +27,7 @@ export default function Challenge() {
 
 			<div className="row align-items-center">
 				<div className="col-sm-4">
-					<UndrawAppreciation />
+					<UndrawIllustration filename="UndrawAppreciation" />
 				</div>
 				<div className="col-sm-8">
 					<h1 className="display-4">Virtual Coffee</h1>

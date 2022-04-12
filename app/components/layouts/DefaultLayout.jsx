@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useMatches } from 'remix';
-import * as Svgs from '~/svg';
+import UndrawIllustration from '~/components/UndrawIllustration';
 
 function useHeroData({ Hero, heroHeader, heroSubheader }) {
 	const matches = useMatches().reverse();
@@ -48,16 +48,17 @@ function useHeroData({ Hero, heroHeader, heroSubheader }) {
 export function HeroHead({ Hero, heroHeader, heroSubheader, simple }) {
 	const heroData = useHeroData({ Hero, heroHeader, heroSubheader });
 
-	const HeroComponent =
-		typeof heroData.Hero === 'string' ? Svgs[heroData.Hero] : heroData.Hero;
-
-	if (HeroComponent && heroData.heroHeader) {
+	if (heroData.Hero && heroData.heroHeader) {
 		return (
 			<div className="py-4">
 				<div className="container">
 					<div className="row align-items-center">
 						<div className="col-sm-4">
-							<HeroComponent ariaHidden />
+							<UndrawIllustration
+								loading="eager"
+								style={{ width: '100%' }}
+								filename={heroData.Hero}
+							/>
 						</div>
 						<div className="col-sm-8">
 							<h1 className="display-4">{heroData.heroHeader}</h1>
