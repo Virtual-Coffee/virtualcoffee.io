@@ -4,6 +4,8 @@ import {
 	loadMdxRouteFileAttributes,
 } from '~/util/loadMdx.server';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
+import { useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function trimString(s, c) {
 	if (c === ']') c = '\\]';
@@ -12,7 +14,7 @@ function trimString(s, c) {
 	return s.replace(new RegExp('^[' + c + ']+|[' + c + ']+$', 'g'), '');
 }
 
-function findBreadcrumbs(slug, files) {
+function findBreadcrumbs(files, slug) {
 	return files
 		.reduce((list, file) => {
 			if (trimString(file.slug, '/') === trimString(slug, '/')) {
@@ -20,7 +22,7 @@ function findBreadcrumbs(slug, files) {
 			}
 
 			if (file.children) {
-				const childrenResult = findBreadcrumbs(slug, file.children);
+				const childrenResult = findBreadcrumbs(file.children, slug);
 				if (childrenResult.length) {
 					return [...list, file, ...childrenResult];
 				}
@@ -32,31 +34,58 @@ function findBreadcrumbs(slug, files) {
 		.filter(Boolean);
 }
 
+function findCurrentFile(files, pathname) {
+	const trimmedPathname = trimString(pathname, '/');
+
+	let foundFile;
+
+	for (let i = 0; i < files.length; i++) {
+		if (!foundFile) {
+			const file = files[i];
+
+			if (trimString(file.slug) === trimmedPathname) {
+				foundFile = file;
+			} else if (file.children) {
+				foundFile = findCurrentFile(file.children, pathname);
+			}
+		}
+	}
+
+	return foundFile;
+}
+
 export async function loader({ request }) {
 	const slug = new URL(request.url).pathname;
 	const attributes = loadMdxRouteFileAttributes({ slug });
 
 	const allFiles = loadMdxDirectory({ baseDirectory: 'resources' });
 
-	// console.log(allFiles);
-	const breadCrumbs = findBreadcrumbs(slug, allFiles);
-
 	return json({
 		allFiles,
 		meta: attributes.meta,
 		hero: attributes.hero,
-		breadCrumbs,
 	});
 }
 
 export default function ResourcesTemplate() {
-	const { allFiles, breadCrumbs } = useLoaderData();
+	const { allFiles, meta, hero } = useLoaderData();
+	const location = useLocation();
+	const layoutProps = useMemo(() => {
+		const currentFile = findCurrentFile(allFiles, location.pathname);
+		return {
+			Hero: currentFile?.hero?.Hero,
+			heroHeader: currentFile?.hero?.heroHeader || currentFile?.meta?.title,
+			heroSubheader:
+				currentFile?.hero?.heroSubheader || currentFile?.meta?.description,
+		};
+	}, [location.pathname, allFiles]);
 
-	const matches = useMatches();
-	// console.log(matches);
+	const breadCrumbs = useMemo(() => {
+		return findBreadcrumbs(allFiles, location.pathname);
+	}, [location.pathname, allFiles]);
 
 	return (
-		<DefaultLayout>
+		<DefaultLayout {...layoutProps}>
 			<div className="resources-section">
 				<div className="py-4">
 					<div className="container">
