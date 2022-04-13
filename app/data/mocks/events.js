@@ -5,7 +5,6 @@ export function createEventsData({ limit = 15, rangeStart, rangeEnd }) {
 	const dates = faker.date.betweens(rangeStart, rangeEnd, limit);
 
 	return dates.map((date) => {
-		console.log(typeof date);
 		const startDate = DateTime.fromJSDate(date);
 
 		return {

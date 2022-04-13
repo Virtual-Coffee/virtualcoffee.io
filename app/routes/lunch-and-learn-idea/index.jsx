@@ -25,8 +25,6 @@ export async function action({ request }) {
 		body,
 	}).then((res) => res.text());
 
-	console.log({ response });
-
 	return redirect(`/lunch-and-learn-idea/thanks`);
 }
 
