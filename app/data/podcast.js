@@ -65,6 +65,23 @@ const episodesQuery = gql`
 	}
 `;
 
+export function getEpisodeQueryParams(request) {
+	const url = new URL(request.url);
+
+	const sp = new URLSearchParams();
+	const craftPreview = url.searchParams.get('x-craft-preview');
+	if (craftPreview) {
+		sp.set('x-craft-preview', craftPreview);
+	}
+
+	const token = url.searchParams.get('token');
+	if (token) {
+		sp.set('token', token);
+	}
+
+	return sp.toString();
+}
+
 export async function getEpisodes({ limit = 5 } = {}) {
 	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
 		const fakeData = await import('./mocks/podcast.server');
@@ -98,7 +115,7 @@ export async function getEpisodes({ limit = 5 } = {}) {
 	}
 }
 
-export async function getEpisode({ slug } = {}) {
+export async function getEpisode({ slug, queryParams = '' } = {}) {
 	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
 		const fakeData = await import('./mocks/podcast.server');
 		const episode = fakeData.getEpisode({ slug });
@@ -108,11 +125,14 @@ export async function getEpisode({ slug } = {}) {
 		};
 	}
 
-	const graphQLClient = new GraphQLClient(`${process.env.CMS_URL}/api`, {
-		headers: {
-			Authorization: `bearer ${process.env.CMS_TOKEN}`,
+	const graphQLClient = new GraphQLClient(
+		`${process.env.CMS_URL}/api?${queryParams || ''}`,
+		{
+			headers: {
+				Authorization: `bearer ${process.env.CMS_TOKEN}`,
+			},
 		},
-	});
+	);
 
 	try {
 		const episodesResponse = await graphQLClient.request(episodeQuery, {
