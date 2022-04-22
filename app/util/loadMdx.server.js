@@ -33,14 +33,29 @@ export function loadMdxDirectory({ baseDirectory, includeChildren = true }) {
 				children = readdirSync(join(basePath, dir.name), {
 					withFileTypes: true,
 				})
-					.filter((e) => {
-						return e.isFile() && e.name !== 'index.mdx';
+					.filter((e) => e.name !== 'index.mdx')
+					.map((e) => {
+						if (e.isFile()) {
+							return loadMdxRouteFileAttributes({
+								slug: join(baseDirectory, dir.name, e.name.replace('.mdx', '')),
+							});
+						}
+						if (e.isDirectory()) {
+							const dirIndex = loadMdxRouteFileAttributes({
+								slug: join(baseDirectory, dir.name, e.name, 'index'),
+							});
+
+							if (dirIndex) {
+								return {
+									...dirIndex,
+									children: loadMdxDirectory({
+										baseDirectory: join(baseDirectory, dir.name, e.name),
+									}),
+								};
+							}
+						}
+						return null;
 					})
-					.map((e) =>
-						loadMdxRouteFileAttributes({
-							slug: join(baseDirectory, dir.name, e.name.replace('.mdx', '')),
-						}),
-					)
 					.filter(Boolean)
 					.sort((a, b) => a.order - b.order);
 			}
