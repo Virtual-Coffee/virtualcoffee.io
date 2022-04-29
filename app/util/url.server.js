@@ -10,3 +10,12 @@ export function qualifiedUrl(path = '') {
 
 	return baseUrl ? baseUrl + path : path;
 }
+
+export function qualifiedUrlInfo() {
+	return {
+		NETLIFY: process.env.NETLIFY,
+		URL: process.env.URL,
+		DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL,
+		CONTEXT: process.env.CONTEXT,
+	};
+}

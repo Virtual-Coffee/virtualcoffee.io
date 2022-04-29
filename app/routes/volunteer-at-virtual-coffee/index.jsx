@@ -1,13 +1,13 @@
 import { json, redirect, Form, useLoaderData, Link } from 'remix';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { Submit, CodeOfConduct } from '~/components/forms';
-import { qualifiedUrl } from '~/util/url.server';
+import { qualifiedUrl, qualifiedUrlInfo } from '~/util/url.server';
 import LeadText from '~/components/content/LeadText';
 import { useEffect } from 'react';
 
 export async function loader() {
 	return json({
-		url: qualifiedUrl('/netlify-forms'),
+		url: qualifiedUrlInfo(),
 		meta: {
 			title: 'Volunteer at Virtual Coffee',
 			description: `Part of Virtual Coffee's mission is to make safe, supportive spaces for pursuing leadership and roles in community building. We currently have a few initiatives where we'd love to have more volunteers in helping make this community great!`,
