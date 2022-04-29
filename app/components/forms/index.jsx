@@ -12,7 +12,8 @@ export function CodeOfConduct() {
 	return (
 		<fieldset>
 			<p className="lead">
-				Just a reminder that all talks need to adhere to our{' '}
+				Just a reminder that all talks, events, group meetings, and other
+				activities need to adhere to our{' '}
 				<a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">
 					Code of Conduct
 				</a>

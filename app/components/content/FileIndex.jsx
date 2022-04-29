@@ -52,8 +52,6 @@ function findBase(files, subDirectory) {
 		return list;
 	}, []);
 
-	console.log(filtered);
-
 	const filteredx = files
 		.filter((file) => {
 			const slugSplit = file.slug.split('/');
