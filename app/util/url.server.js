@@ -1,4 +1,11 @@
 export function qualifiedUrl(path = '') {
+	console.log({
+		NETLIFY: process.env.NETLIFY,
+		URL: process.env.URL,
+		DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL,
+		CONTEXT: process.env.CONTEXT,
+	});
+
 	if (!process.env.NETLIFY) {
 		return process.env.URL ? process.env.URL + path : path;
 	}
