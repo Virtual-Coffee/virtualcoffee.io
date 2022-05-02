@@ -1,4 +1,5 @@
-import { json, redirect, Form, Link, useLoaderData } from 'remix';
+import { json, redirect } from '@remix-run/node';
+import { Form, Link, useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { Submit, CodeOfConduct } from '~/components/forms';
 import { qualifiedUrl } from '~/util/url.server';

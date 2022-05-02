@@ -1,4 +1,5 @@
-import { json, useLoaderData } from 'remix';
+import { json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import DisplayHtml from '~/components/DisplayHtml';
 import { getEvents } from '~/data/events';

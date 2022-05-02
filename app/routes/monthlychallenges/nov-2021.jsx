@@ -1,4 +1,5 @@
-import { json, useLoaderData } from 'remix';
+import { json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import { getChallengeData } from '~/data/monthlyChallenges/nov-2021';
 import { Fragment } from 'react';
 

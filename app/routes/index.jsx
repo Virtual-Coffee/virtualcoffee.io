@@ -1,6 +1,7 @@
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
 import getSponsors from '~/data/sponsors';
-import { json, useLoaderData } from 'remix';
+import { json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import { getEvents } from '~/data/events';
 import { dateForDisplay } from '~/util/date';
 import { getEpisodes } from '~/data/podcast';

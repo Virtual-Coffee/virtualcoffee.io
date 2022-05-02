@@ -1,4 +1,5 @@
-import { json, useLoaderData } from 'remix';
+import { json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import PostList from '~/components/PostList';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
 

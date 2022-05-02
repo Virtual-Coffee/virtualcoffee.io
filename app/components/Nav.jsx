@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'remix';
+import { Link } from '@remix-run/react';
 import VirtualCoffeeFull from '~/svg/VirtualCoffeeFull';
 
 export default function Nav() {

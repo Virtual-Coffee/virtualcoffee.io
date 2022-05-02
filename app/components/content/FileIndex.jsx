@@ -1,4 +1,4 @@
-import { useOutletContext } from 'remix';
+import { useOutletContext } from '@remix-run/react';
 import PostList, {
 	formatFileListItemsForPostList,
 } from '~/components/PostList';

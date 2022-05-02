@@ -1,4 +1,5 @@
-import { json, Outlet, useLoaderData, useMatches, Link } from 'remix';
+import { json } from '@remix-run/node';
+import { Link, Outlet, useLoaderData, useMatches } from '@remix-run/react';
 import {
 	loadMdxDirectory,
 	loadMdxRouteFileAttributes,
@@ -43,7 +44,7 @@ function findCurrentFile(files, pathname) {
 		if (!foundFile) {
 			const file = files[i];
 
-			if (trimString(file.slug) === trimmedPathname) {
+			if (trimString(file.slug, '/') === trimmedPathname) {
 				foundFile = file;
 			} else if (file.children) {
 				foundFile = findCurrentFile(file.children, pathname);
@@ -70,8 +71,8 @@ export async function loader({ request }) {
 export default function ResourcesTemplate() {
 	const { allFiles, meta, hero } = useLoaderData();
 	const location = useLocation();
+	const currentFile = findCurrentFile(allFiles, location.pathname);
 	const layoutProps = useMemo(() => {
-		const currentFile = findCurrentFile(allFiles, location.pathname);
 		return {
 			Hero: currentFile?.hero?.Hero,
 			heroHeader: currentFile?.hero?.heroHeader || currentFile?.meta?.title,

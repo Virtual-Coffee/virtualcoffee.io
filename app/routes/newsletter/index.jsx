@@ -1,4 +1,5 @@
-import { json, useLoaderData } from 'remix';
+import { json } from '@remix-run/node';
+import { useLoaderData } from '@remix-run/react';
 import NewsletterSubscribe from '~/components/NewslettterSubscribe';
 import PostList from '~/components/PostList';
 import getNewsletters from '~/data/newsletters';

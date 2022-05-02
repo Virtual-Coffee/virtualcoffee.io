@@ -1,4 +1,4 @@
-import { json } from 'remix';
+import { json } from '@remix-run/node';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 
 export async function loader() {

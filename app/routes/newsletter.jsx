@@ -1,4 +1,4 @@
-import { Outlet, useMatches } from 'remix';
+import { Outlet, useMatches } from '@remix-run/react';
 
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import NewsletterSubscribe from '~/components/NewslettterSubscribe';
