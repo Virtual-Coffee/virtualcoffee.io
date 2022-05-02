@@ -5,6 +5,10 @@ const { join } = require('path');
 
 require('dotenv').config();
 
+// Netlify functions do not get access to the built-in build-time environment variables. In general
+// this is a useful security feature, but we do need to know about some environment stuff to make
+// fully-qualified urls.
+
 function main() {
 	const buildUrls = {
 		NETLIFY: process.env.NETLIFY,

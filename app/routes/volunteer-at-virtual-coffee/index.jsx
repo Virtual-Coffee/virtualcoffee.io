@@ -1,13 +1,11 @@
-import { json, redirect, Form, useLoaderData, Link } from 'remix';
+import { json, redirect, Form, Link } from 'remix';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { Submit, CodeOfConduct } from '~/components/forms';
-import { qualifiedUrl, qualifiedUrlInfo } from '~/util/url.server';
+import { qualifiedUrl } from '~/util/url.server';
 import LeadText from '~/components/content/LeadText';
-import { useEffect } from 'react';
 
 export async function loader() {
 	return json({
-		url: qualifiedUrlInfo(),
 		meta: {
 			title: 'Volunteer at Virtual Coffee',
 			description: `Part of Virtual Coffee's mission is to make safe, supportive spaces for pursuing leadership and roles in community building. We currently have a few initiatives where we'd love to have more volunteers in helping make this community great!`,
@@ -32,10 +30,6 @@ export async function action({ request }) {
 }
 
 export default function VolunteerForm() {
-	const { url } = useLoaderData();
-	useEffect(() => {
-		console.log({ url });
-	}, []);
 	return (
 		<DefaultLayout
 			simple
