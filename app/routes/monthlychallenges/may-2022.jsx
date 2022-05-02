@@ -7,7 +7,7 @@ export const handle = {
 		description:
 			'May challenge -> Heading strong into year three! This month, we are focusing on what make this community special: Kindness',
 	},
-	date: '2022-04-02',
+	date: '2022-05-02',
 	hero: {
 		heroHeader: '',
 	},
