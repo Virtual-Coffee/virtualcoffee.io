@@ -1,9 +1,14 @@
+import buildUrls from '../_generatedData/buildUrls.json';
+
 export function qualifiedUrl(path = '') {
 	console.log({
-		NETLIFY: process.env.NETLIFY,
-		URL: process.env.URL,
-		DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL,
-		CONTEXT: process.env.CONTEXT,
+		process: {
+			NETLIFY: process.env.NETLIFY,
+			URL: process.env.URL,
+			DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL,
+			CONTEXT: process.env.CONTEXT,
+		},
+		include: buildUrls,
 	});
 
 	if (!process.env.NETLIFY) {
