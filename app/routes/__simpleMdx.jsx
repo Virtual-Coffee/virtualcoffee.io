@@ -1,4 +1,5 @@
-import { json, Outlet } from 'remix';
+import { json } from '@remix-run/node';
+import { Outlet } from '@remix-run/react';
 import { loadMdxRouteFileAttributes } from '~/util/loadMdx.server';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 

@@ -26,7 +26,6 @@
 		"dev:sass": "sass --load-path=node_modules --watch styles/:.tmp/styles",
 		"dev:css": "postcss .tmp/styles/**/*.css --base .tmp/styles --dir app/styles -w",
 		"dev:remix": "cross-env NODE_ENV=development netlify dev",
-		"postinstall": "remix setup node",
 		"start": "yarn dev",
 		"analyze": "source-map-explorer 'public/build/**/*.js'"
 	},
@@ -35,6 +34,7 @@
 		"@imgix/js-core": "^3.1.3",
 		"@netlify/functions": "^1.0.0",
 		"@remix-run/netlify": "^1.4.3",
+		"@remix-run/node": "^1.4.3",
 		"@remix-run/react": "^1.4.3",
 		"@sindresorhus/slugify": "^2.1.0",
 		"airtable": "^0.11.3",
@@ -61,7 +61,6 @@
 		"remark-attr": "^0.11.1",
 		"remark-parse": "^10.0.1",
 		"remark-rehype": "^10.1.0",
-		"remix": "^1.4.3",
 		"require-dir": "^1.2.0",
 		"sanitize-html": "^2.7.0",
 		"unified": "^10.1.2"

@@ -662,7 +662,7 @@
   dependencies:
     "@remix-run/node" "1.4.3"
 
-"@remix-run/node@1.4.3":
+"@remix-run/node@1.4.3", "@remix-run/node@^1.4.3":
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/@remix-run/node/-/node-1.4.3.tgz#73d1ade20df0f17e331fa4c0c980c56db1387e6e"
   integrity sha512-2x3BQ2qrA1v4Viu+GYMNMxxflnT5QcyOsPNCNvLjLm4o1pODHxYmp+2TEcZRgDqSTXgA7PNYlsEgG0BN/T33QA==
@@ -6524,11 +6524,6 @@ remark-rehype@^9.0.0:
     "@types/mdast" "^3.0.0"
     mdast-util-to-hast "^11.0.0"
     unified "^10.0.0"
-
-remix@^1.4.3:
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/remix/-/remix-1.4.3.tgz#5c671ce4876989d579ff8738accb0a01ef688407"
-  integrity sha512-2MG6y6IrfE9//mm41urKFYZNKfMOnrglSBCmMB1XyvcSQiXrHpOmuMITm7H5LujHwNlqU8REOWpKe/LQABUVHg==
 
 repeat-element@^1.1.2:
   version "1.1.4"

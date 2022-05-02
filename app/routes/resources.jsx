@@ -1,4 +1,5 @@
-import { json, Outlet, useLoaderData, useMatches, Link } from 'remix';
+import { json } from '@remix-run/node';
+import { Link, Outlet, useLoaderData, useMatches } from '@remix-run/react';
 import {
 	loadMdxDirectory,
 	loadMdxRouteFileAttributes,
