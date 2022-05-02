@@ -4,6 +4,17 @@
 		"baseUrl": ".",
 		"paths": {
 			"~/*": ["./app/*"]
-		}
-	}
+		},
+		"forceConsistentCasingInFileNames": true,
+		"target": "es2019",
+		"lib": ["DOM", "DOM.Iterable", "ES2019"],
+		"allowJs": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"isolatedModules": true,
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"noEmit": true
+	},
+	"include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"]
 }
