@@ -60,6 +60,10 @@ const svgAspectRatios = {
 	UndrawVersionControl: '1038.23 / 693.31',
 
 	UndrawWalkInTheCity: '955 / 680.5',
+
+	UndrawPowerful: '928.52587 / 635.2126',
+
+	UndrawConversation: '842 / 842.79999',
 };
 
 export default function UndrawIllustration({ filename, style = {}, ...props }) {

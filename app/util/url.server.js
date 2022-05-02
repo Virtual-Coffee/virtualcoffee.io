@@ -1,12 +1,15 @@
+import buildUrls from '../_generatedData/buildUrls.json';
+
+// buildUrls is created in scripts/buildUrls.js at build-time
 export function qualifiedUrl(path = '') {
-	if (!process.env.NETLIFY) {
-		return process.env.URL ? process.env.URL + path : path;
+	if (!buildUrls.NETLIFY) {
+		return buildUrls.URL ? buildUrls.URL + path : path;
 	}
 
 	const baseUrl =
-		process.env.CONTEXT === 'production'
-			? process.env.URL
-			: process.env.DEPLOY_PRIME_URL;
+		buildUrls.CONTEXT === 'production'
+			? buildUrls.URL
+			: buildUrls.DEPLOY_PRIME_URL;
 
 	return baseUrl ? baseUrl + path : path;
 }
