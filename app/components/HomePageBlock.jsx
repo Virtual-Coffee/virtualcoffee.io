@@ -1,4 +1,5 @@
 import { Link } from 'remix';
+import UndrawIllustration from '~/components/UndrawIllustration';
 
 export default function HomePageBlock({
 	id,
@@ -14,7 +15,10 @@ export default function HomePageBlock({
 	return (
 		<>
 			<div className="homepageblock-hero" {...(id ? { id } : {})}>
-				{Hero && <Hero ariaHidden />}
+				<UndrawIllustration
+					className="homepageblock-hero-svg"
+					filename={Hero}
+				/>
 			</div>
 
 			<h3 className="text-secondary homepageblock-title">{titleInner}</h3>

@@ -13,6 +13,9 @@ async function handler(event, context) {
 	return {
 		statusCode: 200,
 		ttl: 60 * 24, // in seconds
+		headers: {
+			'Content-Type': 'application/json',
+		},
 		body: JSON.stringify(sponsorData),
 	};
 }

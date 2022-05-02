@@ -1,5 +1,4 @@
 import { Outlet, json } from 'remix';
-
 import styles from './styles/main.css';
 import { qualifiedUrl } from '~/util/url.server';
 import { removeTrailingSlash } from '~/util/http';

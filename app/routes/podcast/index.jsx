@@ -4,7 +4,14 @@ import DefaultLayout from '~/components/layouts/DefaultLayout';
 import PodcastSubscribe from '~/components/PodcastSubscribe';
 import PostList from '~/components/PostList';
 import { getEpisodes, getPlayerSrc } from '~/data/podcast';
-import UndrawWalkInTheCity from '~/svg/UndrawWalkInTheCity';
+
+export function meta() {
+	return {
+		title: 'Virtual Coffee Podcast',
+		description:
+			'This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories, who they are, how they found Virtual Coffee, and how that influences their lives as developers.',
+	};
+}
 
 export const loader = async () => {
 	const podcastEpisodes = await getEpisodes({ limit: 99 });
@@ -39,7 +46,7 @@ export default function PodcastsIndex() {
 	return (
 		<DefaultLayout
 			heroHeader="Virtual Coffee Podcast"
-			Hero={UndrawWalkInTheCity}
+			Hero="UndrawWalkInTheCity"
 		>
 			<div className="container bodycopy py-5">
 				<p className="lead">

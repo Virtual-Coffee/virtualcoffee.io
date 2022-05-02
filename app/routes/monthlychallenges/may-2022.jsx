@@ -1,13 +1,13 @@
 import UndrawIllustration from '~/components/UndrawIllustration';
 
 export const handle = {
-	listTitle: 'April, 2021: Community Kindness!',
+	listTitle: 'May, 2022: Community Kindness!',
 	meta: {
-		title: 'Monthly Theme & Challenge for April, 2021: Community Kindness!',
+		title: 'Monthly Theme & Challenge for May, 2022: Community Kindness!',
 		description:
-			'April challenge -> Celebrating one year of Virtual Coffee by focusing on what make this community special: Kindness',
+			'May challenge -> Heading strong into year three! This month, we are focusing on what make this community special: Kindness',
 	},
-	date: '2021-04-01',
+	date: '2022-05-02',
 	hero: {
 		heroHeader: '',
 	},
@@ -20,28 +20,22 @@ export const meta = () => {
 export default function Challenge() {
 	return (
 		<>
-			<div className="alert alert-success">
-				This monthly challenge is complete. Congratulations! Please join us for
-				the <a href="/monthlychallenges/">next challenge</a>!
-			</div>
-
 			<div className="row align-items-center">
 				<div className="col-sm-4">
 					<UndrawIllustration filename="UndrawAppreciation" />
 				</div>
 				<div className="col-sm-8">
 					<h1 className="display-4">Virtual Coffee</h1>
-					<p className="lead">Celebrating a year of community!</p>
+					<p className="lead">Celebrating our Community as we move into our third year!</p>
 				</div>
 			</div>
 
 			<h1>
-				<small>Monthly Challenge for April, 2021:</small> Community Kindness!
+				<small>Monthly Challenge for May, 2022:</small> Community Kindness!
 			</h1>
 
 			<p className="lead">
-				We've made it through 100 Coffees, and we're celebrating a full year of
-				Virtual Coffee! This month, let's celebrate one of the things that makes
+				It's amazing to realize that we've made it through more than 200 Coffees and more than two years of Virtual Coffee! As we work hard to make sure this community continues to be the special and close-knit group that it has been during that time, let's celebrate one of the things that continually makes
 				this community so special: Kindness.
 			</p>
 
@@ -52,7 +46,7 @@ export default function Challenge() {
 
 			<h2>Theme</h2>
 			<p>
-				Community Kindness: Celebrating 100+ Coffees, and a year of Virtual
+				Community Kindness: Celebrating our Community and continuing Virtual
 				Coffee Kindness
 			</p>
 
@@ -64,17 +58,18 @@ export default function Challenge() {
 			</p>
 			<ul>
 				<li>
-					Use #Thanks in slack this month to acknowledge another community
-					member's contributions or kindness.
+					Use the #gratitude channel in slack to thank someone in the community you're grateful for.
 				</li>
 				<li>
-					Reach out to a new member or member you haven't seen in a while.
+					Reach out to a member you haven't seen in a while.
 				</li>
 				<li>
 					Highlight your office hours or consider holding a group mentoring
 					session.
 				</li>
 				<li>Share your tips for a skill others struggle with #SkillShare</li>
+				<li>Give honest and constructive feedback.</li>
+                <li>Use another social media platform, like Twitter, to offer gratitude, support, or kindness for a community member.</li>
 				<li>Give honest and constructive feedback.</li>
 			</ul>
 			<p>

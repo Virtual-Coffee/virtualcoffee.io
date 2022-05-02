@@ -1,7 +1,7 @@
 import { json, useLoaderData } from 'remix';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import MemberCards from '~/components/MemberCards';
-import UndrawCelebration from '~/svg/UndrawCelebration';
+import UndrawIllustration from '~/components/UndrawIllustration';
 import getMembers from '~/data/members';
 
 export const loader = async () => {
@@ -36,7 +36,7 @@ export default function EventsIndex() {
 					<MemberCards data={members} />
 					<div className="member-footer">
 						<h2 className="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
-						<UndrawCelebration />
+						<UndrawIllustration filename="UndrawCelebration" />
 					</div>
 				</div>
 			</div>

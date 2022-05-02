@@ -24,7 +24,6 @@ export async function loader() {
 
 export default function Index() {
 	const { issues } = useLoaderData();
-	console.log(issues);
 
 	return (
 		<>

@@ -8,13 +8,18 @@ import {
 	getPlayerSrc,
 	getPlayerUrl,
 	getPlayerStreamUrl,
+	getEpisodeQueryParams,
 } from '~/data/podcast';
 import { dateForDisplay } from '~/util/date';
 import { sanitizeCmsData } from '~/util/sanitizeCmsData';
 
-export const loader = async ({ params }) => {
+export const loader = async ({ params, request }) => {
 	console.log(`loading data for ${params.episode}`);
-	const episode = await getEpisode({ slug: params.episode });
+
+	const episode = await getEpisode({
+		slug: params.episode,
+		queryParams: getEpisodeQueryParams(request),
+	});
 
 	const transcript = await getTranscript({ id: episode.podcastBuzzsproutId });
 
