@@ -45,6 +45,7 @@
 		"airtable": "^0.11.3",
 		"autoprefixer": "^10.4.4",
 		"bootstrap": "^4.6.0",
+		"calendar-link": "^2.1.1",
 		"concurrently": "^7.0.0",
 		"cross-env": "^7.0.3",
 		"cssnano": "^5.1.7",
