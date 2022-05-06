@@ -4,12 +4,12 @@ import DefaultLayout from '~/components/layouts/DefaultLayout';
 import DisplayHtml from '~/components/DisplayHtml';
 import { getEvents } from '~/data/events';
 import { dateForDisplay } from '~/util/date';
+import { ics } from 'calendar-link';
 
 export async function loader() {
 	const events = await getEvents({
 		limit: 20,
 	});
-
 	return json({ events });
 }
 
@@ -22,7 +22,6 @@ export function meta() {
 
 export default function EventsIndex() {
 	const { events } = useLoaderData();
-
 	return (
 		<DefaultLayout
 			Hero="UndrawConferenceCall"
@@ -44,8 +43,23 @@ export default function EventsIndex() {
 
 					{events.map((event) => (
 						<div className="card mb-4" key={event.startDateLocalized}>
-							<div className="card-header">
-								{dateForDisplay(event.startDateLocalized, 'EEEE, fff')}
+							<div className="card-header py-2 d-flex justify-content-between flex-row">
+								<time
+									className="d-block my-auto"
+									dateTime={event.startDateLocalized}
+								>
+									{dateForDisplay(event.startDateLocalized, 'EEEE, fff')}
+								</time>
+								<a
+									href={ics({
+										title: event.title,
+										start: event.startDateLocalized,
+										end: event.endDateLocalized,
+									})}
+									className="d-block btn btn-primary"
+								>
+									Add to Calendar
+								</a>
 							</div>
 							<div className="card-body">
 								<h5 className="card-title">{event.title}</h5>
