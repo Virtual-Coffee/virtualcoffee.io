@@ -49,7 +49,18 @@ When you have made changes on your local machine and you want to submit them via
 
 Collaborating with someone on a contribution and synchronizing your work:
 
-Sometimes you may want to work with someone else on a contribution, and both work on your local machine, but submit the work as a single pull request. This is not very common, but if you do find yourself needing to do this, this workflow works:
+The following workflows are useful when collaborating with another person in Open Source
+
+#### Workflow for checking out someone elses branch on your local machine:
+
+Assuming that Alice and Bob both have a fork of the project, and Alice wants to check out Bob's branch:
+
+1. Alice adds Bob's fork as a remote on her local repository using `git remote add bob <Bob's Repo URL>`.
+2. Alice fetches Bob's branches using `git fetch bob`.
+3. Alice can now check out Bob's branch using `git checkout bobs-branch-name`.
+4. Alice can now pull changes pushed by Bob using `git pull bob bobs-branch-name`.
+
+#### Workflow for collaborating on a shared branch between two different forks:
 
 Assuming that Alice and Bob both have a fork of the project they want to contribute to:
 
