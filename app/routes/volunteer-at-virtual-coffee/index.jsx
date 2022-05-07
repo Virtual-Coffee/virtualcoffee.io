@@ -1,14 +1,19 @@
 import { json, redirect } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, Link, useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { Submit, CodeOfConduct } from '~/components/forms';
 import { qualifiedUrl } from '~/util/url.server';
+import LeadText from '~/components/content/LeadText';
 
-export async function loader() {
+export async function loader({ request }) {
+	const url = new URL(request.url);
+	const position = url.searchParams.get('position');
+
 	return json({
+		position,
 		meta: {
-			title: 'Lunch & Learn Talk Submission Form',
-			description: `We can't wait to hear your talk!`,
+			title: 'Volunteer at Virtual Coffee',
+			description: `Part of Virtual Coffee's mission is to make safe, supportive spaces for pursuing leadership and roles in community building. We currently have a few initiatives where we'd love to have more volunteers in helping make this community great!`,
 		},
 	});
 }
@@ -26,30 +31,36 @@ export async function action({ request }) {
 		body,
 	}).then((res) => res.text());
 
-	return redirect(`/lunch-and-learn-idea/thanks`);
+	return redirect(`/volunteer-at-virtual-coffee/thanks`);
 }
 
-export default function CocForm() {
+export default function VolunteerForm() {
+	const { position } = useLoaderData();
 	return (
 		<DefaultLayout
 			simple
-			Hero="UndrawPresentation"
-			heroHeader="Virtual Coffee: Lunch &amp; Learns"
-			heroSubheader="Submit your idea for a VC Lunch &amp; Learn!"
+			Hero="UndrawPowerful"
+			heroHeader="Volunteer at Virtual Coffee"
+			heroSubheader="Give back to this amazing community!"
 		>
-			<div className="lead mb-5">
+			<LeadText>
 				<p>
-					Lunch &amp; Learn talks are usually hour-long sessions on one topic.
-					It can be a traditional conference-style talk, panel discussion,
-					question and answer, or a combination.
+					Part of Virtual Coffee's mission is to make safe, supportive spaces
+					for pursuing leadership and roles in community building. We currently
+					have a few initiatives where we'd love to have more volunteers in
+					helping make this community great!
 				</p>
-			</div>
+				<p>
+					To read more and to see some roles available, read our{' '}
+					<Link to="/resources/virtual-coffee/get-involved/paths-to-leadership">
+						Paths to Leadership &amp; Roles guide
+					</Link>
+					.
+				</p>
+			</LeadText>
+
 			<Form method="POST" reloadDocument>
-				<input
-					type="hidden"
-					name="form-name"
-					value="lunch-and-learn-submissions"
-				/>
+				<input type="hidden" name="form-name" value="volunteer-form" />
 				<fieldset>
 					<legend>Your Information:</legend>
 					<p className="text-muted">
@@ -85,50 +96,29 @@ export default function CocForm() {
 					</div>
 				</fieldset>
 				<fieldset>
-					<legend>Your Lunch & Learn Idea:</legend>
+					<legend>Role Details:</legend>
 					<div className="form-group">
-						<label htmlFor="topicTitle">Title of the Lunch & Learn</label>
+						<label htmlFor="position">Name of Role/Position</label>
 						<input
 							type="text"
 							className="form-control"
-							id="topicTitle"
-							name="topicTitle"
+							id="position"
+							name="position"
+							defaultValue={position || ''}
 							required
 						/>
 					</div>
 					<div className="form-group">
-						<label htmlFor="topicIdea">
-							Description we can share on the event page.
+						<label htmlFor="description">
+							Any details or thoughts you may have
 						</label>
 						<textarea
 							className="form-control"
 							required
-							id="topicIdea"
-							name="topicIdea"
+							id="description"
+							name="description"
 							rows="3"
 						></textarea>
-					</div>
-					<div className="form-group">
-						<label htmlFor="format">
-							What is the format of your talk (question and answer,
-							conference-style, etc.) and will you have slides?
-						</label>
-						<input
-							type="text"
-							className="form-control"
-							id="format"
-							name="format"
-						/>
-					</div>
-					<div className="form-group">
-						<label htmlFor="date-time">What date and time works for you?</label>
-						<input
-							type="text"
-							className="form-control"
-							id="date-time"
-							name="date-time"
-							required
-						/>
 					</div>
 				</fieldset>
 

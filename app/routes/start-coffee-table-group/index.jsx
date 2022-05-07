@@ -1,14 +1,15 @@
 import { json, redirect } from '@remix-run/node';
-import { Form, useLoaderData } from '@remix-run/react';
+import { Form, Link, useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { Submit, CodeOfConduct } from '~/components/forms';
 import { qualifiedUrl } from '~/util/url.server';
+import LeadText from '~/components/content/LeadText';
 
 export async function loader() {
 	return json({
 		meta: {
-			title: 'Lunch & Learn Talk Submission Form',
-			description: `We can't wait to hear your talk!`,
+			title: 'Start a Coffee Table Group',
+			description: `Submit your idea for a new Coffee Table Group at Virtual Coffee`,
 		},
 	});
 }
@@ -26,29 +27,39 @@ export async function action({ request }) {
 		body,
 	}).then((res) => res.text());
 
-	return redirect(`/lunch-and-learn-idea/thanks`);
+	return redirect(`/start-coffee-table-group/thanks`);
 }
 
-export default function CocForm() {
+export default function VolunteerForm() {
 	return (
 		<DefaultLayout
 			simple
-			Hero="UndrawPresentation"
-			heroHeader="Virtual Coffee: Lunch &amp; Learns"
-			heroSubheader="Submit your idea for a VC Lunch &amp; Learn!"
+			Hero="UndrawConversation"
+			heroHeader="Start a Coffee Table Group"
+			heroSubheader="Submit your idea for a new Coffee Table Group at Virtual Coffee!"
 		>
-			<div className="lead mb-5">
+			<LeadText>
 				<p>
-					Lunch &amp; Learn talks are usually hour-long sessions on one topic.
-					It can be a traditional conference-style talk, panel discussion,
-					question and answer, or a combination.
+					Our Coffee Table Groups have been one of the most popular and valuable
+					features for members of our community. Coffee Table Groups are small,
+					special interest groups created and run by members. They can involve
+					Zoom meetings, async slack hangouts, or anything else that the members
+					would like to do.
 				</p>
-			</div>
+				<p>
+					To read more about Coffee Table Groups, read our{' '}
+					<Link to="/resources/virtual-coffee/get-involved/coffee-table-groups">
+						Coffee Table Groups guide
+					</Link>
+					.
+				</p>
+			</LeadText>
+
 			<Form method="POST" reloadDocument>
 				<input
 					type="hidden"
 					name="form-name"
-					value="lunch-and-learn-submissions"
+					value="start-coffee-table-group"
 				/>
 				<fieldset>
 					<legend>Your Information:</legend>
@@ -85,50 +96,30 @@ export default function CocForm() {
 					</div>
 				</fieldset>
 				<fieldset>
-					<legend>Your Lunch & Learn Idea:</legend>
+					<legend>Group Details:</legend>
 					<div className="form-group">
-						<label htmlFor="topicTitle">Title of the Lunch & Learn</label>
+						<label htmlFor="group_name">Name of the Coffee Table Group</label>
 						<input
 							type="text"
 							className="form-control"
-							id="topicTitle"
-							name="topicTitle"
+							id="group_name"
+							name="group_name"
 							required
 						/>
 					</div>
 					<div className="form-group">
-						<label htmlFor="topicIdea">
-							Description we can share on the event page.
-						</label>
+						<label htmlFor="description">Group Description</label>
 						<textarea
 							className="form-control"
 							required
-							id="topicIdea"
-							name="topicIdea"
+							id="description"
+							name="description"
 							rows="3"
+							aria-describedby="descriptionHelp"
 						></textarea>
-					</div>
-					<div className="form-group">
-						<label htmlFor="format">
-							What is the format of your talk (question and answer,
-							conference-style, etc.) and will you have slides?
-						</label>
-						<input
-							type="text"
-							className="form-control"
-							id="format"
-							name="format"
-						/>
-					</div>
-					<div className="form-group">
-						<label htmlFor="date-time">What date and time works for you?</label>
-						<input
-							type="text"
-							className="form-control"
-							id="date-time"
-							name="date-time"
-							required
-						/>
+						<small id="descriptionHelp" className="form-text text-muted">
+							Tell us all about your group idea!
+						</small>
 					</div>
 				</fieldset>
 

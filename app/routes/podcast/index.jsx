@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useLoaderData, Link, json } from 'remix';
+import { json } from '@remix-run/node';
+import { Link, useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import PodcastSubscribe from '~/components/PodcastSubscribe';
 import PostList from '~/components/PostList';
