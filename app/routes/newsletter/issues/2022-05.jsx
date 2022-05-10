@@ -15,14 +15,6 @@ export const meta = () => {
 export default function Issue() {
 	return (
 		<>
-			<h1>Virtual Coffee Newsletter, May 2022</h1>
-			<p className="lead text-muted">
-				Virtual Coffee is focusing on Community Kindness and the future in May
-				💝
-			</p>
-
-			<hr />
-
 			<h2>Hey friends!</h2>
 
 			<p className="lead">
