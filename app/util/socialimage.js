@@ -74,7 +74,7 @@ export default function createSocialImage({ title, subtitle }) {
 		markx: 0,
 		marky: 0,
 		blend64: '/assets/images/virtual-coffee-mug-gray-white.png',
-		blendx: 50,
+		blendx: 60,
 		blendalign: 'middle',
 		blendw: 250,
 		blendh: 250,
