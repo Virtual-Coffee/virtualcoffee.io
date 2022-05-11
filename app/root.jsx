@@ -8,6 +8,7 @@ import PostList from '~/components/PostList';
 import Root from '~/components/Root';
 import { homePageLinks } from '~/routes/index';
 import { useLocation } from 'react-router-dom';
+import createSocialImage from './util/socialimage';
 
 export function CatchBoundary(props) {
 	const location = useLocation();
@@ -121,9 +122,9 @@ export function meta({ data: { fullUrl } = {} }) {
 		charSet: 'utf-8',
 		viewport: 'width=device-width,initial-scale=1',
 		'og:type': 'website',
-		'og:image': `${fullUrl}/assets/images/vc-social-card.png`,
+		'og:image': createSocialImage({ title, subtitle: description }),
 		'twitter:card': 'summary_large_image',
-		'twitter:image': `${fullUrl}/assets/images/vc-social-card.png`,
+		'twitter:image': createSocialImage({ title, subtitle: description }),
 		'msapplication-TileColor': '#d9376e',
 		'msapplication-config': '/assets/favicon/browserconfig.xml',
 		'theme-color': '#ffffff',
