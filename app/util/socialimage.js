@@ -12,7 +12,7 @@ export default function createSocialImage({ title, subtitle }) {
 
 	const header = client2.buildURL('~text', {
 		txtlead: -20,
-		txtsize: 56,
+		txtsize: 68,
 		w: 800,
 		txtcolor: 'ffffff',
 		txtfont64: 'Avenir Next Condensed Heavy',
@@ -25,7 +25,7 @@ export default function createSocialImage({ title, subtitle }) {
 
 	const subheader = client2.buildURL('~text', {
 		txtlead: -10,
-		txtsize: 34,
+		txtsize: 42,
 		w: 800,
 		txtcolor: 'ffffff',
 		txtfont64: 'Avenir Next Medium',
@@ -67,21 +67,40 @@ export default function createSocialImage({ title, subtitle }) {
 		blendy: 299,
 	});
 
-	return client.buildURL('/assets/images/share-card-background-6.png', {
+	const logolayer = client.buildURL('/assets/images/1x1.png', {
 		w: 1200,
 		h: 628,
+		fit: 'crop',
 		mark64: textlayer,
 		markx: 0,
 		marky: 0,
-		blend64: '/assets/images/virtual-coffee-mug-gray-white.png',
-		blendx: 60,
-		blendalign: 'middle',
-		blendw: 250,
-		blendh: 250,
-		blendfit: 'max',
+		blend64: '/assets/images/virtual-coffee-io-full-t.png',
 		blendmode: 'normal',
-
-		// border: '10,99ffffff',
-		border: '10,66000000',
+		blendalign: 'bottom,right',
+		blendpad: 20,
+		blendw: 400,
 	});
+
+	const full = client.buildURL(
+		'/assets/images/share-card-background-blank.png',
+		{
+			w: 1200,
+			h: 628,
+			mark64: logolayer,
+			markx: 0,
+			marky: 0,
+			blend64: '/assets/images/virtual-coffee-mug-gray-white.png',
+			blendx: 60,
+			blendalign: 'middle',
+			blendw: 250,
+			blendh: 250,
+			blendfit: 'max',
+			blendmode: 'normal',
+
+			// border: '10,99ffffff',
+			border: '10,66000000',
+		},
+	);
+
+	return full;
 }
