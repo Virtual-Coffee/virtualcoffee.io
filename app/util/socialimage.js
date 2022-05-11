@@ -12,8 +12,8 @@ export default function createSocialImage({ title, subtitle }) {
 
 	const header = client2.buildURL('~text', {
 		txtlead: -20,
-		txtsize: 74,
-		w: 1100,
+		txtsize: 56,
+		w: 800,
 		txtcolor: 'ffffff',
 		txtfont64: 'Avenir Next Condensed Heavy',
 		txt64: title,
@@ -25,8 +25,8 @@ export default function createSocialImage({ title, subtitle }) {
 
 	const subheader = client2.buildURL('~text', {
 		txtlead: -10,
-		txtsize: 42,
-		w: 1100,
+		txtsize: 34,
+		w: 800,
 		txtcolor: 'ffffff',
 		txtfont64: 'Avenir Next Medium',
 		txt64: subtitle,
@@ -35,19 +35,52 @@ export default function createSocialImage({ title, subtitle }) {
 		// bg: 'f00',
 	});
 
+	const headerContainer = client.buildURL('/assets/images/1x1.png', {
+		w: 800,
+		h: 314,
+		fit: 'crop',
+		mark64: header,
+		markalign: 'left,bottom',
+		markh: 264,
+		markfit: 'max',
+		// bg: '00f',
+	});
+
+	const subheaderContainer = client.buildURL('/assets/images/1x1.png', {
+		w: 800,
+		h: 314,
+		fit: 'crop',
+		mark64: subheader,
+		markalign: 'left,top',
+	});
+
+	const textlayer = client.buildURL('/assets/images/1x1.png', {
+		w: 1200,
+		h: 628,
+		fit: 'crop',
+		mark64: headerContainer,
+		markx: 340,
+		marky: 15,
+		blend64: subheaderContainer,
+		blendmode: 'normal',
+		blendx: 340,
+		blendy: 299,
+	});
+
 	return client.buildURL('/assets/images/share-card-background-6.png', {
 		w: 1200,
 		h: 628,
-		mark64: header,
-		markx: 50,
-		markalign: 'bottom',
-		markh: 203,
-		markpad: 375,
-		markfit: 'max',
-		blend64: subheader,
-		blendmode: 'normal',
+		mark64: textlayer,
+		markx: 0,
+		marky: 0,
+		blend64: '/assets/images/virtual-coffee-mug-gray-white.png',
 		blendx: 50,
-		blendy: 243,
+		blendalign: 'middle',
+		blendw: 250,
+		blendh: 250,
+		blendfit: 'max',
+		blendmode: 'normal',
+
 		// border: '10,99ffffff',
 		border: '10,66000000',
 	});
