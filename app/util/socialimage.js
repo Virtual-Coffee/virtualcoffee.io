@@ -47,7 +47,7 @@ export default function createSocialImage({ title, subtitle }) {
 		mask64: mask1,
 	});
 
-	client.buildURL('/assets/images/share-card-background-3.png', {
+	return client.buildURL('/assets/images/share-card-background-3.png', {
 		w: 1200,
 		h: 628,
 		mark64: masked,

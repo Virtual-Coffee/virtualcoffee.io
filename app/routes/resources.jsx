@@ -7,6 +7,7 @@ import {
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
+import createSocialImage from '../util/socialimage';
 
 function trimString(s, c) {
 	if (c === ']') c = '\\]';
@@ -66,6 +67,25 @@ export async function loader({ request }) {
 		meta: attributes.meta,
 		hero: attributes.hero,
 	});
+}
+
+export function meta({ data }) {
+	console.log(
+		createSocialImage({
+			title: data.meta.title,
+			subtitle: data.meta.description,
+		}),
+	);
+	return {
+		'og:image': createSocialImage({
+			title: data.meta.title,
+			subtitle: data.meta.description,
+		}),
+		'twitter:image': createSocialImage({
+			title: data.meta.title,
+			subtitle: data.meta.description,
+		}),
+	};
 }
 
 export default function ResourcesTemplate() {
