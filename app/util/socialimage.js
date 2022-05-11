@@ -37,7 +37,7 @@ export default function createSocialImage({ title, subtitle }) {
 		mark64: header,
 		markx: 15,
 		markalign: 'bottom',
-		markh: 230,
+		// markh: 230,
 		markpad: 383,
 	});
 
