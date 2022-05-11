@@ -18,21 +18,24 @@ export default function createSocialImage({ title, subtitle }) {
 		txtfont64: 'Avenir Next Condensed Heavy',
 		txt64: title,
 		minh: 203,
-		// h: 230,
+		txtshad: 2,
+		// h: 203,
 		// bg: 'ff0',
 	});
 
 	const subheader = client2.buildURL('~text', {
 		txtlead: -10,
-		txtsize: 38,
+		txtsize: 42,
 		w: 1100,
-		txtcolor: '202020',
-		txtfont64: 'Avenir Next Regular',
+		txtcolor: 'ffffff',
+		txtfont64: 'Avenir Next Medium',
 		txt64: subtitle,
+		txtshad: 3,
+
 		// bg: 'f00',
 	});
 
-	const mask1 = client.buildURL('/assets/images/black.png', {
+	return client.buildURL('/assets/images/share-card-background-6.png', {
 		w: 1200,
 		h: 628,
 		mark64: header,
@@ -41,23 +44,11 @@ export default function createSocialImage({ title, subtitle }) {
 		markh: 203,
 		markpad: 375,
 		markfit: 'max',
-	});
-
-	const masked = client.buildURL('/assets/images/textmask.png', {
-		w: 1200,
-		h: 628,
-		mask64: mask1,
-	});
-
-	return client.buildURL('/assets/images/share-card-background-5.png', {
-		w: 1200,
-		h: 628,
-		mark64: masked,
-		markx: 0,
-		marky: 0,
 		blend64: subheader,
 		blendmode: 'normal',
 		blendx: 50,
 		blendy: 243,
+		// border: '10,99ffffff',
+		border: '10,66000000',
 	});
 }
