@@ -67,21 +67,7 @@ export default function createSocialImage({ title, subtitle, hero }) {
 		blendy: 299,
 	});
 
-	const logolayer = client.buildURL('/assets/images/1x1.png', {
-		w: 1200,
-		h: 628,
-		fit: 'crop',
-		mark: textlayer,
-		markx: 0,
-		marky: 0,
-		blend: '/assets/images/virtual-coffee-full-2.png',
-		blendmode: 'normal',
-		blendalign: 'bottom,right',
-		blendpad: 20,
-		blendw: 400,
-	});
-
-	let heroLayer = '/assets/images/virtual-coffee-mug-gray-white.png';
+	let heroAttrs = {};
 
 	if (hero) {
 		const imagelayerBase = client.buildURL(hero, {
@@ -89,41 +75,34 @@ export default function createSocialImage({ title, subtitle, hero }) {
 			h: 250,
 			fit: 'fill',
 			fill: 'solid',
-			fillcolor: 'fff',
-			bg: 'fff',
 			pad: 20,
 		});
 
-		heroLayer = client.buildURL('/assets/images/1x1.png', {
-			w: 250,
-			h: 250,
-			fit: 'crop',
+		heroAttrs = {
 			blend: imagelayerBase,
-			blendmode: 'normal',
-			blendx: 0,
-			blendy: 0,
-			mask: 'ellipse',
-		});
-	}
-
-	const full = client.buildURL(
-		'/assets/images/share-card-background-blank.png',
-		{
-			w: 1200,
-			h: 628,
-			mark64: logolayer,
-			markx: 0,
-			marky: 0,
-			blend64: heroLayer,
 			blendx: 60,
 			blendalign: 'middle',
 			blendw: 250,
 			blendh: 250,
 			blendfit: 'max',
 			blendmode: 'normal',
+		};
+	}
+
+	const full = client.buildURL(
+		hero
+			? '/assets/images/share-card-background-hero.png'
+			: '/assets/images/share-card-background-mug.png',
+		{
+			w: 1200,
+			h: 628,
+			mark: textlayer,
+			markx: 0,
+			marky: 0,
+			border: '10,66000000',
+			...heroAttrs,
 
 			// border: '10,99ffffff',
-			border: '10,66000000',
 		},
 	);
 
