@@ -70,22 +70,27 @@ export async function loader({ request }) {
 }
 
 export function meta({ data }) {
-	console.log(
-		createSocialImage({
-			title: data.meta.title,
-			subtitle: data.meta.description,
-		}),
-	);
-	return {
-		'og:image': createSocialImage({
-			title: data.meta.title,
-			subtitle: data.meta.description,
-		}),
-		'twitter:image': createSocialImage({
-			title: data.meta.title,
-			subtitle: data.meta.description,
-		}),
-	};
+	try {
+		console.log(
+			createSocialImage({
+				title: data.meta.title,
+				subtitle: data.meta.description,
+			}),
+		);
+		return {
+			'og:image': createSocialImage({
+				title: data.meta.title,
+				subtitle: data.meta.description,
+			}),
+			'twitter:image': createSocialImage({
+				title: data.meta.title,
+				subtitle: data.meta.description,
+			}),
+		};
+	} catch (error) {
+		console.log(error);
+		return {};
+	}
 }
 
 export default function ResourcesTemplate() {
