@@ -1,7 +1,7 @@
 ---
 meta:
   title: Git & Github 101
-  description: 'A Virtual Coffee guide to using Git and Github, oriented toward open source.'
+  description: 'A guide to using Git and Github.'
 tags: [memberresources]
 hero:
   Hero: UndrawToDoList
@@ -31,29 +31,29 @@ This document is Part 2 of Virtual Coffee's four-part Guide to Open Source. It a
 
 ## Using Git
 
-### Basic Git workflows:
+### Basic Git workflows
 
-Cloning a repository:
+#### Cloning a repository
 
 To clone a repository, you can run `git clone <Repo>` where the Repo is the URL of the repository. This will set up a copy of the repository on your local computer, with the remote repository you cloned from as the `origin` remote.
 
-Adding another remote:
+#### Adding another remote
 
 You will normally clone a forked version of the repository, but you may want to add the original version as a remote as well so you can pull other people's changes into your local repository. This remote is conventionally called `upstream` and can be added using `git remote add upstream <Repo>` where Repo is the URL of the original repository.
 
-Synchronizing changes:
+#### Synchronizing changes
 
 When new changes are merged into the original repository, you should pull them into your local copy. If you have set your `upstream` repository, this can be done using `git pull upstream main`. Some repositories use a name other than `main` for their main branch, in which case you replace `main` with the name it uses. You can pull the main branch directly into your working branch.
 
 When you have made changes on your local machine and you want to submit them via a pull request, you first need to push your changes to your fork using `git push origin your-branch-name`.
 
-### Advanced Git workflows:
+### Advanced Git workflows
 
 Collaborating with someone on a contribution and synchronizing your work:
 
 The following workflows are useful when collaborating with another person in Open Source
 
-#### Workflow for checking out someone elses branch on your local machine:
+#### Workflow for checking out someone elses branch on your local machine
 
 Assuming that Alice and Bob both have a fork of the project, and Alice wants to check out Bob's branch:
 
@@ -62,7 +62,7 @@ Assuming that Alice and Bob both have a fork of the project, and Alice wants to 
 3. Alice can now check out Bob's branch using `git checkout bobs-branch-name`.
 4. Alice can now pull changes pushed by Bob using `git pull bob bobs-branch-name`.
 
-#### Workflow for collaborating on a shared branch between two different forks:
+#### Workflow for collaborating on a shared branch between two different forks
 
 Assuming that Alice and Bob both have a fork of the project they want to contribute to:
 
@@ -85,13 +85,13 @@ What is Github? Github is a platform for hosting, sharing and collaborating on G
 
 You can interact with Github through the web GUI on [github.com](https://github.com). If you prefer working with the command line, there is also a [Github CLI](https://cli.github.com).
 
-### Getting the most out of your Github profile:
+### Getting the most out of your Github profile
 
 You can make basic customizations of your profile in your settings, add a website and Twitter links, a short bio and customize your pinned repositories to showcase the work you most want the world to see. But to really customize your profile you need to create a repository in your account with the same name as your Github username and pop in a Readme. The contents of that Readme file, in Github-flavored markdown, will be rendered on your profile page. There are all kinds of cool integrations you can add to this readme to do awesome things on your profile. These two articles: [Creating a Killer GitHub Profile README, by Braydon Coyer](https://daily.dev/blog/creating-a-killer-github-profile-readme-part-1) and [How to Create Beautiful GitHub Profil Readme.md, by Indrajeet Nikam](https://fullyunderstood.com/how-to-create-beautiful-github-profile-readmemd/) will hopefully give you some inspiration.
 
 ### Basic Github workflows:
 
-Forking a repository:
+#### Forking a repository:
 
 If you want to contribute to an open source project, the first step is normally to fork the repository to your own Github profile. This means you create a copy of the repository in your profile so that you can make changes without having to push commits directly to the project repository. The steps to do so are:
 
@@ -99,19 +99,19 @@ If you want to contribute to an open source project, the first step is normally 
 2. You will probably be asked where you want to fork the repository to. Unless you are forking on behalf of an organization, you should click on your personal profile name.
 3. Github will then fork the repository to your profile. You can then work with this forked repository going forward.
 
-Cloning a repository to your local computer:
+#### Cloning a repository to your local computer
 
 Although you can edit files directly within the Github UI, if you are changing the code you will normally want to clone it to your local computer and work in your favorite IDE. To do this you will need to clone the repository. To do this, click on the green `Code` button on your forked version of the repository. You will then see a dialog with options to clone via HTTPS, SSH or Github CLI. The HTTPS and SSH (Used if you authenticate with Github via SSH, see section below) tabs provide you with the repository URL to insert into the `git clone` command from the Git section above. If you use Github CLI you can simply copy the command and run it in your terminal.
 
-Authenticating with Github:
+#### Authenticating with Github
 
-If you want to work locally with Github repositories, you will need to authenticate your local git with Github (You don't need to do this to simply clone a public repository via HTTPS). You can either use a Personal Access Toke to authenticate over HTTPS ([Instructions here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#https)) or by using SSH public/private keypairs ([Instructions here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#ssh)).
+If you want to work locally with Github repositories, you will need to authenticate your local git with Github (You don't need to do this to simply clone a public repository via HTTPS). You can either use a Personal Access Token to authenticate over HTTPS ([Instructions here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#https)) or by using SSH public/private keypairs ([Instructions here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#ssh)).
 
-Fetching upstream changes:
+#### Fetching upstream changes
 
 When contributing to a project, you need to keep your fork up to date with the original, generally known as the upstream repository. You can do this using the Synchronizing Changes Git workflow outlined above, or you can use the `Fetch upstream` button on your fork. This will allow you to either automatically fetch the changes, or choose to compare them first before merging.
 
-Making a pull request:
+#### Making a pull request
 
 Once you have done some work on a project and you have your changes in your forked version of the repository, you can now submit the changes to the upstream repository by making a pull request. This allows the maintainers to review your work, make comments and request any necessary changes, and if they are happy, merge your changes into the project codebase. Before making a pull request you should make sure to fetch any upstream changes. The steps to make a pull request are:
 

@@ -1,7 +1,7 @@
 ---
 meta:
   title: Maintainer Guide
-  description: 'A Virtual Coffee guide to maintaining Open Source projects.'
+  description: 'A guide to maintaining Open Source projects.'
 tags: [memberresources]
 hero:
   Hero: UndrawToDoList
@@ -29,56 +29,7 @@ This document is Part 4 of Virtual Coffee's four-part Guide to Open Source, outl
 
 ---
 
-## Best practices for maintainers
-
-### Communicating with contributors
-
-Communication is key to running a successful open source project. Establish conventions for communications early on and make sure these are clearly documented. Many projects communicate via issues and pull requests, while some use external platforms such as Slack channels, a forum, IRC channels or email lists. All are valid ways to communicate, the important thing is to figure out what is most appropriate for your project. If you are unsure what is best and have no reason not to, using issues and pull requests is a solid choice. If you are maintaining a company project that is open to external contributors, care should be taken to coordinate internal and external communication so that outside contributors don't miss out on important updates communicated internally.
-
-Regardless of the tools used to communicate, there are certain things to keep in mind to keep communication effective and respectful, especially in a international online space.
-
-- Your repository should have a Code of Conduct, and all communication should follow the Code of Conduct.
-- Messages should be kept short and simple. It is often best to keep to 'one message, one topic', although there may be times when this not possible, for example if you need to respond to several points in another message, or you are going to be unavailable for a time and need to communicate several points at once. If you need to discuss several points in one message, put each point in a separate paragraph.
-- Disagreement and debate are healthy, but it is important to keep the conversation respectful. Criticize the ideas people express, but don't criticize the person directly.
-- Low context communication works best in international, cross-cultural spaces. Meanings should be explicit in the words you use, specific cultural references, cliches and sayings might not be understood by people from different cultures.
-
-### Managing expectations
-
-To ensure the smooth running of a project with external contributors, it is important to effectively manage expectations both of maintainers and contributors.
-
-Maintainers can help ensure that their expectations of contributors are clear by:
-
-- Breaking down tasks that are to be opened to external contributors into small, well-defined chunks.
-- Ensuring that any preferences for code style, branch names, git workflows, etc are clearly communicated in the contributing guide or readme.
-
-Maintainers can help ensure that they meet the expectations of contributors by:
-
-- Clearly communicating what support the maintainers can provide, if any (e.g. pair programming, answering questions).
-- Clearly communicating maintainer availability and expected timescales for reviewing pull requests.
-
-### Building community
-
-Having a strong community around an open source project can be crucial to the project's success. A effective community around an open source project will help the maintainers handle support, spread the word and bring new users and contributors to the project and gives an opportunity for maintainers to get feedback and new ideas to help the project fulfil the needs and aspirations of users.
-
-Building a community takes effort, and this effort should be seen as equally important as the technical development effort. It is about both tools that enable community building and about making and nurturing connections with and between people, which no tool can do on its own.
-
-Things that will help build a community include:
-
-- A place for discussion to happen. For smaller projects where the community is focused on project questions and development discussions, this could just be Github issues. For larger projects or if you want to build a community in a broader sense, a separate venue such as a Slack or Discord community or forum will probably work better.
-- A Code of Conduct to set boundaries for interaction and keep the community a welcoming space for everyone.
-- Community documentation explaining how the community works and where to go for what. For example, here at Virtual Coffee we have our [Member Resources](https://virtualcoffee.io/resources/virtual-coffee/) page.
-- Leading with empathy and kindness, and welcoming new people and helping them find their way in the community. Joining a new community where you don't know the people can be an intimidating experience, and you can go a long way to ease the journey.
-
-### Avoiding burnout
-
-Maintaining an open source project can be a lot of work, and many people do it on the side as well as their "day job". It is important not to be mindful of the risk of burnout and take steps to keep the work at a manageable level.
-
-Good steps to take include:
-
-- Figure out a reasonable time frame for responding to issues and pull requests, and include it in your documentation. If you are an individual maintaining a repository in your spare time it's totally okay to say a week.
-- If you are maintaining a company repository, state your working hours in the documentation and make it clear that you won't respond outside of office hours. Make sure you stick to this.
-
-### Repository Checklist
+## Repository Checklist
 
 If you are a maintainer looking to open an open source project to contributions, this checklist will help you to get your repository into a good state to start receiving external contributions.
 
@@ -98,11 +49,15 @@ Here's the checklist. For more detailed explanation of these points, check out [
 - ✅ A Code of Conduct
 - ✅ Issue and Pull request templates
 
+### Open sourcing a project without expecting contributions
+
+If you simply want to open source your project so that other people can freely use the fruits of your labor, you don't have to do everything on the Maintainers Checklist.
+
+For example, you probably won't need issue and pull request templates or a contributing guide. A Code of Conduct is still recommended since even if you are not expecting contributions you may still get public activity on your repo, for example on issues, and a Code of Conduct helps you to set boundaries and keep conversations respectful.
+
 ## Preparing a project for Open Source contributions
 
-This section is a short and simple guide to help you prepare your GitHub repository to accept open source contributions. We highlight key areas and considerations to help you evaluate whether or not your open source project is ready for contributions.
-
-This also doubles as our very own guide for Virtual Coffee-endorsed Open Source projects.
+There are _many_ other things that can help make a repository feel more welcoming, like demos, video guides, etc., but this document is meant to address the **minimum** requirements, highlighting key areas and considerations to help you evaluate whether or not your open source project is ready for contributions. When Virtual Coffee determines the projects we highlight and recommend to our members, these are the things we look for and why. Hopefully, it can serve as a guide to anyone who finds this document.
 
 ### Name, Description, Tags
 
@@ -180,25 +135,56 @@ Ultimately, if you're looking to mae your repository/project beginner friendly, 
 
 _Note that everyone has a slightly different definition of "beginner friendly", so the experience may vary in different repositories, and this is okay._
 
-### Final Thoughts
 
-There are _many_ other things that can help make a repository feel more welcoming, like demos, video guides, etc., but this document is meant to address the **minimum** requirements. When Virtual Coffee determines the projects we highlight and recommend to our members, these are the things we look for and why. Hopefully, it can serve as a guide to anyone who finds this document.
+## Best practices for maintainers
 
-### Open sourcing a project without expecting contributions
+### Communicating with contributors
 
-If you simply want to open source your project so that other people can freely use the fruits of your labor, you don't have to do everything on the Maintainers Checklist.
+Communication is key to running a successful open source project. Establish conventions for communications early on and make sure these are clearly documented. Many projects communicate via issues and pull requests, while some use external platforms such as Slack channels, a forum, IRC channels or email lists. All are valid ways to communicate, the important thing is to figure out what is most appropriate for your project. If you are unsure what is best and have no reason not to, using issues and pull requests is a solid choice. If you are maintaining a company project that is open to external contributors, care should be taken to coordinate internal and external communication so that outside contributors don't miss out on important updates communicated internally.
 
-It is a good idea to follow the following from the Repository Checklist above, but you don't have to follow _all_ of them for your project to be a valid open source project:
+Regardless of the tools used to communicate, there are certain things to keep in mind to keep communication effective and respectful, especially in a international online space.
 
-- ✅ It should have a relevant name.
-- ✅ It should have a clear description that tells you what the project does and what it's for.
-- ✅ It should have relevant tags highlighting its scope/stack/field etc.
-- ✅ It should have a README. The README should link to or describe:
-  - Project purpose and context
-  - Installation instructions
-- ✅ A valid OSS license (Essential. Period. Your project is not open source if you don't have a valid OSS license.)
-- ✅ Issue templates if you are open to feedback or feature requests from users
-- ✅ A Code of Conduct: Even if you are not expecting contributions you may still get public activity on your repo, for example on issues, and a Code of Conduct helps you to set boundaries and keep conversations respectful.
+- Your repository should have a Code of Conduct, and all communication should follow the Code of Conduct.
+- Messages should be kept short and simple. It is often best to keep to 'one message, one topic', although there may be times when this not possible, for example if you need to respond to several points in another message, or you are going to be unavailable for a time and need to communicate several points at once. If you need to discuss several points in one message, put each point in a separate paragraph.
+- Disagreement and debate are healthy, but it is important to keep the conversation respectful. Criticize the ideas people express, but don't criticize the person directly.
+- Low context communication works best in international, cross-cultural spaces. Meanings should be explicit in the words you use, specific cultural references, cliches and sayings might not be understood by people from different cultures.
+
+### Managing expectations
+
+To ensure the smooth running of a project with external contributors, it is important to effectively manage expectations both of maintainers and contributors.
+
+Maintainers can help ensure that their expectations of contributors are clear by:
+
+- Breaking down tasks that are to be opened to external contributors into small, well-defined chunks.
+- Ensuring that any preferences for code style, branch names, git workflows, etc are clearly communicated in the contributing guide or readme.
+
+Maintainers can help ensure that they meet the expectations of contributors by:
+
+- Clearly communicating what support the maintainers can provide, if any (e.g. pair programming, answering questions).
+- Clearly communicating maintainer availability and expected timescales for reviewing pull requests.
+
+### Building community
+
+Having a strong community around an open source project can be crucial to the project's success. A effective community around an open source project will help the maintainers handle support, spread the word and bring new users and contributors to the project and gives an opportunity for maintainers to get feedback and new ideas to help the project fulfil the needs and aspirations of users.
+
+Building a community takes effort, and this effort should be seen as equally important as the technical development effort. It is about both tools that enable community building and about making and nurturing connections with and between people, which no tool can do on its own.
+
+Things that will help build a community include:
+
+- A place for discussion to happen. For smaller projects where the community is focused on project questions and development discussions, this could just be Github issues. For larger projects or if you want to build a community in a broader sense, a separate venue such as a Slack or Discord community or forum will probably work better.
+- A Code of Conduct to set boundaries for interaction and keep the community a welcoming space for everyone.
+- Community documentation explaining how the community works and where to go for what. For example, here at Virtual Coffee we have our [Member Resources](https://virtualcoffee.io/resources/virtual-coffee/) page.
+- Leading with empathy and kindness, and welcoming new people and helping them find their way in the community. Joining a new community where you don't know the people can be an intimidating experience, and you can go a long way to ease the journey.
+
+### Avoiding burnout
+
+Maintaining an open source project can be a lot of work, and many people do it on the side as well as their "day job". It is important not to be mindful of the risk of burnout and take steps to keep the work at a manageable level.
+
+Good steps to take include:
+
+- Figure out a reasonable time frame for responding to issues and pull requests, and include it in your documentation. If you are an individual maintaining a repository in your spare time it's totally okay to say a week.
+- If you are maintaining a company repository, state your working hours in the documentation and make it clear that you won't respond outside of office hours. Make sure you stick to this.
+
 
 ## Additional Resources
 
