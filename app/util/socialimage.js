@@ -16,7 +16,7 @@ export default function createSocialImage({ title, subtitle, hero }) {
 		w: 800,
 		txtcolor: 'ffffff',
 		txtfont: 'Avenir Next Condensed Heavy',
-		txt: title,
+		txt64: title,
 		minh: 203,
 		txtshad: 2,
 		// h: 203,
@@ -29,7 +29,7 @@ export default function createSocialImage({ title, subtitle, hero }) {
 		w: 800,
 		txtcolor: 'ffffff',
 		txtfont: 'Avenir Next Medium',
-		txt: subtitle,
+		txt64: subtitle,
 		txtshad: 3,
 
 		// bg: 'f00',
