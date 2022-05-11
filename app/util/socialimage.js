@@ -74,7 +74,7 @@ export default function createSocialImage({ title, subtitle, hero }) {
 		mark: textlayer,
 		markx: 0,
 		marky: 0,
-		blend: '/assets/images/virtual-coffee-io-full-t.png',
+		blend: '/assets/images/virtual-coffee-full-2.png',
 		blendmode: 'normal',
 		blendalign: 'bottom,right',
 		blendpad: 20,
