@@ -1,6 +1,6 @@
 import ImgixClient from '@imgix/js-core';
 
-export default function createSocialImage({ title, subtitle }) {
+export default function createSocialImage({ title, subtitle, hero }) {
 	const client = new ImgixClient({
 		domain: 'virtualcoffee.imgix.net',
 		// secureURLToken: '<SECURE TOKEN>',
@@ -15,8 +15,8 @@ export default function createSocialImage({ title, subtitle }) {
 		txtsize: 68,
 		w: 800,
 		txtcolor: 'ffffff',
-		txtfont64: 'Avenir Next Condensed Heavy',
-		txt64: title,
+		txtfont: 'Avenir Next Condensed Heavy',
+		txt: title,
 		minh: 203,
 		txtshad: 2,
 		// h: 203,
@@ -28,8 +28,8 @@ export default function createSocialImage({ title, subtitle }) {
 		txtsize: 42,
 		w: 800,
 		txtcolor: 'ffffff',
-		txtfont64: 'Avenir Next Medium',
-		txt64: subtitle,
+		txtfont: 'Avenir Next Medium',
+		txt: subtitle,
 		txtshad: 3,
 
 		// bg: 'f00',
@@ -39,7 +39,7 @@ export default function createSocialImage({ title, subtitle }) {
 		w: 800,
 		h: 314,
 		fit: 'crop',
-		mark64: header,
+		mark: header,
 		markalign: 'left,bottom',
 		markh: 264,
 		markfit: 'max',
@@ -50,7 +50,7 @@ export default function createSocialImage({ title, subtitle }) {
 		w: 800,
 		h: 314,
 		fit: 'crop',
-		mark64: subheader,
+		mark: subheader,
 		markalign: 'left,top',
 	});
 
@@ -58,10 +58,10 @@ export default function createSocialImage({ title, subtitle }) {
 		w: 1200,
 		h: 628,
 		fit: 'crop',
-		mark64: headerContainer,
+		mark: headerContainer,
 		markx: 340,
 		marky: 15,
-		blend64: subheaderContainer,
+		blend: subheaderContainer,
 		blendmode: 'normal',
 		blendx: 340,
 		blendy: 299,
@@ -71,15 +71,40 @@ export default function createSocialImage({ title, subtitle }) {
 		w: 1200,
 		h: 628,
 		fit: 'crop',
-		mark64: textlayer,
+		mark: textlayer,
 		markx: 0,
 		marky: 0,
-		blend64: '/assets/images/virtual-coffee-io-full-t.png',
+		blend: '/assets/images/virtual-coffee-io-full-t.png',
 		blendmode: 'normal',
 		blendalign: 'bottom,right',
 		blendpad: 20,
 		blendw: 400,
 	});
+
+	let heroLayer = '/assets/images/virtual-coffee-mug-gray-white.png';
+
+	if (hero) {
+		const imagelayerBase = client.buildURL(hero, {
+			w: 250,
+			h: 250,
+			fit: 'fill',
+			fill: 'solid',
+			fillcolor: 'fff',
+			bg: 'fff',
+			pad: 20,
+		});
+
+		heroLayer = client.buildURL('/assets/images/1x1.png', {
+			w: 250,
+			h: 250,
+			fit: 'crop',
+			blend: imagelayerBase,
+			blendmode: 'normal',
+			blendx: 0,
+			blendy: 0,
+			mask: 'ellipse',
+		});
+	}
 
 	const full = client.buildURL(
 		'/assets/images/share-card-background-blank.png',
@@ -89,7 +114,7 @@ export default function createSocialImage({ title, subtitle }) {
 			mark64: logolayer,
 			markx: 0,
 			marky: 0,
-			blend64: '/assets/images/virtual-coffee-mug-gray-white.png',
+			blend64: heroLayer,
 			blendx: 60,
 			blendalign: 'middle',
 			blendw: 250,
