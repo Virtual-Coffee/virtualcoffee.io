@@ -75,7 +75,7 @@ export default function createSocialImage({ title, subtitle, hero }) {
 			h: 250,
 			fit: 'fill',
 			fill: 'solid',
-			pad: 20,
+			pad: 30,
 		});
 
 		heroAttrs = {
