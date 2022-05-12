@@ -1,3 +1,6 @@
+import { json } from '@remix-run/node';
+import { createMetaData } from '~/util/createMetaData.server';
+
 export const handle = {
 	listTitle:
 		'April, 2022: Get job ready! Resumes, Portfolios, Cover Letters, and Elevator Pitch',
@@ -13,9 +16,16 @@ export const handle = {
 	},
 };
 
-export const meta = () => {
-	return handle.meta;
-};
+export async function loader() {
+	const { title, description } = handle.meta;
+	return json({
+		meta: createMetaData({ title, description }),
+	});
+}
+
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
+}
 
 export default function Challenge() {
 	return (

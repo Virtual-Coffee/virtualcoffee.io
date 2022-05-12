@@ -2,11 +2,7 @@ import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import PostList from '~/components/PostList';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
-
-export async function loader() {
-	const challenges = await getChallenges();
-	return json({ challenges });
-}
+import { createMetaData } from '~/util/createMetaData.server';
 
 export const handle = {
 	meta: {
@@ -19,8 +15,20 @@ export const handle = {
 	},
 };
 
-export function meta() {
-	return handle.meta;
+export async function loader() {
+	const {
+		meta: { title, description },
+		hero: { Hero },
+	} = handle;
+	const challenges = await getChallenges();
+	return json({
+		challenges,
+		meta: createMetaData({ title, description, Hero }),
+	});
+}
+
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
 }
 
 export default function Index() {

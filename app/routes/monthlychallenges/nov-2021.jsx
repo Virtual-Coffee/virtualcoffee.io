@@ -1,3 +1,5 @@
+import { createMetaData } from '~/util/createMetaData.server';
+
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getChallengeData } from '~/data/monthlyChallenges/nov-2021';
@@ -16,14 +18,15 @@ export const handle = {
 	},
 };
 
-export const meta = () => {
-	return handle.meta;
-};
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
+}
 
 export async function loader() {
+	const { title, description } = handle.meta;
 	const data = await getChallengeData();
 
-	return json(data);
+	return json({ ...data, meta: createMetaData({ title, description }) });
 }
 
 export default function Challenge() {
