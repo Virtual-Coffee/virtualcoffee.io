@@ -8,6 +8,7 @@ import PostList from '~/components/PostList';
 import Root from '~/components/Root';
 import { homePageLinks } from '~/routes/index';
 import { useLocation } from 'react-router-dom';
+import { createMetaData } from '~/util/createMetaData.server';
 
 export function CatchBoundary(props) {
 	const location = useLocation();
@@ -73,7 +74,13 @@ export async function loader({ request }) {
 
 	const fullUrl = qualifiedUrl();
 
-	return json({ fullUrl });
+	return json({
+		fullUrl,
+		meta: createMetaData({
+			title: 'Virtual Coffee IO',
+			description: 'An intimate community for all devs, optimized for you',
+		}),
+	});
 }
 
 export function links() {
@@ -112,18 +119,15 @@ export function links() {
 	];
 }
 
-export function meta({ data: { fullUrl } = {} }) {
+export function meta({ data: { meta } = {} } = {}) {
 	const title = 'Virtual Coffee IO';
 	const description = 'An intimate community for all devs, optimized for you';
 	return {
-		title: title,
-		description: description,
+		...meta,
 		charSet: 'utf-8',
 		viewport: 'width=device-width,initial-scale=1',
 		'og:type': 'website',
-		'og:image': `${fullUrl}/assets/images/vc-social-card.png`,
 		'twitter:card': 'summary_large_image',
-		'twitter:image': `${fullUrl}/assets/images/vc-social-card.png`,
 		'msapplication-TileColor': '#d9376e',
 		'msapplication-config': '/assets/favicon/browserconfig.xml',
 		'theme-color': '#ffffff',
