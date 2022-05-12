@@ -7,7 +7,7 @@ import {
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import createSocialImage from '../util/socialimage';
+import { createMetaData } from '~/util/createMetaData.server';
 
 function trimString(s, c) {
 	if (c === ']') c = '\\]';
@@ -64,33 +64,19 @@ export async function loader({ request }) {
 
 	return json({
 		allFiles,
-		meta: attributes.meta,
+		meta: {
+			...attributes.meta,
+			...createMetaData({
+				...attributes.meta,
+				Hero: attributes?.hero?.Hero,
+			}),
+		},
 		hero: attributes.hero,
 	});
 }
 
-export function meta({ data }) {
-	try {
-		console.log(
-			createSocialImage({
-				title: data.meta.title,
-				subtitle: data.meta.description,
-			}),
-		);
-		return {
-			'og:image': createSocialImage({
-				title: data.meta.title,
-				subtitle: data.meta.description,
-			}),
-			'twitter:image': createSocialImage({
-				title: data.meta.title,
-				subtitle: data.meta.description,
-			}),
-		};
-	} catch (error) {
-		console.log(error);
-		return {};
-	}
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
 }
 
 export default function ResourcesTemplate() {

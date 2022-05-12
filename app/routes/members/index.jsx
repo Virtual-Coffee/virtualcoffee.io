@@ -4,18 +4,22 @@ import DefaultLayout from '~/components/layouts/DefaultLayout';
 import MemberCards from '~/components/MemberCards';
 import UndrawIllustration from '~/components/UndrawIllustration';
 import getMembers from '~/data/members';
+import { createMetaData } from '~/util/createMetaData.server';
 
 export const loader = async () => {
 	const members = await getMembers();
 
-	return json(members);
-};
-
-export function meta() {
-	return {
+	const meta = createMetaData({
 		title: 'Virtual Coffee Members',
 		description: 'Meet our amazing members!',
-	};
+		Hero: 'UndrawTeamSpirit',
+	});
+
+	return json({ ...members, meta });
+};
+
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
 }
 
 export default function EventsIndex() {
