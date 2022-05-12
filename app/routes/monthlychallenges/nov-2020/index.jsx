@@ -1,3 +1,5 @@
+import { createMetaData } from '~/util/createMetaData.server';
+
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import challengeJson from './nov-2020.json';
@@ -16,12 +18,13 @@ export const handle = {
 	},
 };
 
-export const meta = () => {
-	return handle.meta;
-};
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
+}
 
 export function loader() {
 	const { challengedata } = challengeJson;
+	const { title, description } = handle.meta;
 
 	const totals = [];
 	let totalCount = 0;
@@ -40,6 +43,7 @@ export function loader() {
 	});
 
 	return json({
+		meta: createMetaData({ title, description }),
 		sortedList: challengedata.sort((a, b) => a.name.localeCompare(b.name)),
 		totals: {
 			list: totals.sort((a, b) => b.total - a.total),

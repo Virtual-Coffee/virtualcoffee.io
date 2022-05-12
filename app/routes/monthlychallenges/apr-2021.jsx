@@ -1,4 +1,6 @@
 import UndrawIllustration from '~/components/UndrawIllustration';
+import { json } from '@remix-run/node';
+import { createMetaData } from '~/util/createMetaData.server';
 
 export const handle = {
 	listTitle: 'April, 2021: Community Kindness!',
@@ -13,9 +15,14 @@ export const handle = {
 	},
 };
 
-export const meta = () => {
-	return handle.meta;
-};
+export async function loader() {
+	const { title, description } = handle.meta;
+	return json({ meta: createMetaData({ title, description }) });
+}
+
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
+}
 
 export default function Challenge() {
 	return (
