@@ -24,11 +24,6 @@ export function meta({ data: { meta } = {} } = {}) {
 export default function Issue() {
 	return (
 		<>
-			<h1>Virtual Coffee Newsletter, April 2022</h1>
-			<p className="lead text-muted">Getting ready to roll into year three!</p>
-
-			<hr />
-
 			<h2>Hey friends!</h2>
 
 			<p className="lead">
