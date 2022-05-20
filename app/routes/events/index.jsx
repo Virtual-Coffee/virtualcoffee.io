@@ -55,11 +55,7 @@ export default function EventsIndex() {
 									{dateForDisplay(event.startDateLocalized, 'EEEE, fff')}
 								</time>
 								<a
-									href={ics({
-										title: event.title,
-										start: event.startDateLocalized,
-										end: event.endDateLocalized,
-									})}
+									href={event.eventCalendarLink}
 									className="d-block btn btn-primary"
 								>
 									Add to Calendar
