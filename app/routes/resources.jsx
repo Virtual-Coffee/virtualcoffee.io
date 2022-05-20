@@ -7,6 +7,7 @@ import {
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
+import { createMetaData } from '~/util/createMetaData.server';
 
 function trimString(s, c) {
 	if (c === ']') c = '\\]';
@@ -63,9 +64,19 @@ export async function loader({ request }) {
 
 	return json({
 		allFiles,
-		meta: attributes.meta,
+		meta: {
+			...attributes.meta,
+			...createMetaData({
+				...attributes.meta,
+				Hero: attributes?.hero?.Hero,
+			}),
+		},
 		hero: attributes.hero,
 	});
+}
+
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
 }
 
 export default function ResourcesTemplate() {

@@ -1,3 +1,4 @@
+import { createMetaData } from '~/util/createMetaData.server';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import NewsletterSubscribe from '~/components/NewslettterSubscribe';
@@ -14,13 +15,17 @@ export const handle = {
 	},
 };
 
-export const meta = () => {
-	return handle.meta;
-};
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
+}
 
 export async function loader() {
+	const { title, description } = handle.meta;
 	const issues = await getNewsletters();
-	return json({ issues });
+	return json({
+		issues,
+		meta: createMetaData({ title, description, Hero: handle.hero.Hero }),
+	});
 }
 
 export default function Index() {

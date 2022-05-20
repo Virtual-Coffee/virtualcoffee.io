@@ -1,3 +1,4 @@
+import { handle as issue202205 } from '~/routes/newsletter/issues/2022-05';
 import { handle as issue202204 } from '~/routes/newsletter/issues/2022-04';
 import { handle as issue202203 } from '~/routes/newsletter/issues/2022-03';
 import { handle as issue202202 } from '~/routes/newsletter/issues/2022-02';
@@ -17,6 +18,7 @@ import { handle as issue202102 } from '~/routes/newsletter/issues/2021-02';
 import { handle as issue202101 } from '~/routes/newsletter/issues/2021-01';
 
 const newsletters = [
+	{ handleData: issue202205, slug: '2022-05' },
 	{ handleData: issue202204, slug: '2022-04' },
 	{ handleData: issue202203, slug: '2022-03' },
 	{ handleData: issue202202, slug: '2022-02' },

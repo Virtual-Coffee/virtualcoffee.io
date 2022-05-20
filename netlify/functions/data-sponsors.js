@@ -105,14 +105,18 @@ async function getSponsors() {
 
 	let response;
 
-	try {
-		// do some expensive operation here, this is simplified for brevity
-		response = await graphQLClient.request(query);
-	} catch (error) {
-		console.log(error);
-		console.log('Error loading github sponsors, using fake data instead');
-
+	if (!token) {
 		response = mockData;
+	} else {
+		try {
+			// do some expensive operation here, this is simplified for brevity
+			response = await graphQLClient.request(query);
+		} catch (error) {
+			console.log(error);
+			console.log('Error loading github sponsors, using fake data instead');
+
+			response = mockData;
+		}
 	}
 
 	const tiers = response.organization.sponsorsListing.tiers.nodes.map(

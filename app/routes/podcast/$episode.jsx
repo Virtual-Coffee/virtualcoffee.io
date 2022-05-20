@@ -143,6 +143,8 @@ export default function PostSlug() {
 					})}
 				</div>
 				<div className="col-md-7 col-lg-8 order-md-1">
+					<h3>Show Notes:</h3>
+
 					<DisplayHtml html={episode.podcastShowNotes} />
 
 					<hr />

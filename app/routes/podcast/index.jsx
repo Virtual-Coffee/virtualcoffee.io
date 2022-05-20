@@ -5,13 +5,10 @@ import DefaultLayout from '~/components/layouts/DefaultLayout';
 import PodcastSubscribe from '~/components/PodcastSubscribe';
 import PostList from '~/components/PostList';
 import { getEpisodes, getPlayerSrc } from '~/data/podcast';
+import { createMetaData } from '~/util/createMetaData.server';
 
-export function meta() {
-	return {
-		title: 'Virtual Coffee Podcast',
-		description:
-			'This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories, who they are, how they found Virtual Coffee, and how that influences their lives as developers.',
-	};
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
 }
 
 export const loader = async () => {
@@ -22,7 +19,17 @@ export const loader = async () => {
 		id: latestEpisode.podcastBuzzsproutId,
 	});
 
-	return json({ podcastEpisodes, latestEpisode, latestEpisodePlayerSrc });
+	return json({
+		meta: createMetaData({
+			title: 'Virtual Coffee Podcast',
+			description:
+				'This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories as developers.',
+			Hero: 'UndrawWalkInTheCity',
+		}),
+		podcastEpisodes,
+		latestEpisode,
+		latestEpisodePlayerSrc,
+	});
 };
 
 export default function PodcastsIndex() {

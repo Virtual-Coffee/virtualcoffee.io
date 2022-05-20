@@ -1,17 +1,18 @@
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
+import { createMetaData } from '~/util/createMetaData.server';
 
 export async function loader() {
 	return json({
-		meta: {
+		meta: createMetaData({
 			title: 'Report a Code of Conduct Violation',
 			description: `If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.`,
-		},
+		}),
 	});
 }
 
-export function meta({ data: { meta } }) {
+export function meta({ data: { meta } = {} } = {}) {
 	return meta;
 }
 

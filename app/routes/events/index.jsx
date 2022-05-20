@@ -4,20 +4,24 @@ import DefaultLayout from '~/components/layouts/DefaultLayout';
 import DisplayHtml from '~/components/DisplayHtml';
 import { getEvents } from '~/data/events';
 import { dateForDisplay } from '~/util/date';
-import { ics } from 'calendar-link';
+import { createMetaData } from '~/util/createMetaData.server';
 
 export async function loader() {
 	const events = await getEvents({
 		limit: 20,
 	});
-	return json({ events });
-}
 
-export function meta() {
-	return {
+	const meta = createMetaData({
 		title: 'Virtual Coffee Community Events',
 		description: 'See our upcoming events!',
-	};
+		Hero: 'UndrawConferenceCall',
+	});
+
+	return json({ events, meta });
+}
+
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
 }
 
 export default function EventsIndex() {

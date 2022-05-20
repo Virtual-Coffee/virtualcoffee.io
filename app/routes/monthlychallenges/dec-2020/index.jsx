@@ -1,4 +1,6 @@
 import { json } from '@remix-run/node';
+import { createMetaData } from '~/util/createMetaData.server';
+
 import { useLoaderData } from '@remix-run/react';
 import challengeJson from './dec-2020.json';
 
@@ -15,9 +17,9 @@ export const handle = {
 	},
 };
 
-export const meta = () => {
-	return handle.meta;
-};
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
+}
 
 export function loader() {
 	const { challengedata } = challengeJson;
@@ -34,9 +36,12 @@ export function loader() {
 		});
 	});
 
+	const { title, description } = handle.meta;
+
 	return json({
 		list: challengedata,
 		totals,
+		meta: createMetaData({ title, description }),
 	});
 }
 

@@ -1,11 +1,18 @@
 import DefaultLayout from '~/components/layouts/DefaultLayout';
+import { createMetaData } from '~/util/createMetaData.server';
 
-export function meta() {
-	return {
-		title: 'Report received',
-		description:
-			"If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.",
-	};
+export async function loader() {
+	return json({
+		meta: createMetaData({
+			title: 'Report received',
+			description:
+				"If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.",
+		}),
+	});
+}
+
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
 }
 
 export default function Form() {
