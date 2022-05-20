@@ -6,6 +6,7 @@
 [dev]
   command = "remix watch"
   port = 9000
+  autoLaunch = false
 
 [functions.server]
   included_files = ["app/routes/**/*.mdx"]
