@@ -11,6 +11,7 @@ export function createEventsData({ limit = 15, rangeStart, rangeEnd }) {
 			title: faker.lorem.sentence(7),
 			start: startDate.toString(),
 			end: startDate.plus({ hours: 1 }),
+			description: faker.lorem.paragraph(),
 		});
 
 		return {
