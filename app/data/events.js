@@ -75,6 +75,7 @@ export async function getEvents({ limit }) {
 					title: event.title,
 					start: event.startDateLocalized,
 					end: event.endDateLocalized,
+					description: sanitizedDescription,
 				});
 				return {
 					...event,
