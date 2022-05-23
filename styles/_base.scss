@@ -36,6 +36,10 @@ h3 {
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
 }
 
+.btn.btn-link {
+	text-shadow: none;
+}
+
 .gradient-text-primary {
 	background-clip: text;
 	background-image: $gradient-primary;
