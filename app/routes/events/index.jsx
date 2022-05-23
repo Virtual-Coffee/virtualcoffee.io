@@ -56,7 +56,8 @@ export default function EventsIndex() {
 								</time>
 								<a
 									href={event.eventCalendarLink}
-									className="d-block btn btn-primary"
+									className="btn btn-link btn-sm"
+									download
 								>
 									Add to Calendar
 								</a>
