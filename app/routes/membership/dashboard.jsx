@@ -5,7 +5,7 @@ import { authenticator } from '~/auth/auth.server';
 export async function loader({ request }) {
 	let user = await authenticator.isAuthenticated(request);
 	if (user) {
-		console.log({ user });
+		console.log({ user: user?.authenticate?.user });
 	} else {
 		console.log('no user');
 	}
