@@ -21,7 +21,6 @@ export default class Api {
 	}
 
 	login = async (email, password) => {
-		console.log(this.client);
 		const query = gql`
 			mutation Authenticate($email: String!, $password: String!) {
 				authenticate(email: $email, password: $password) {
@@ -31,13 +30,91 @@ export default class Api {
 					refreshTokenExpiresAt
 					user {
 						id
-						fullName
+						email
+						enabled
+						status
+						... on User {
+							userYourName
+						}
 					}
 				}
 			}
 		`;
 		try {
 			const response = await this.client.request(query, { email, password });
+			console.log({ response });
+			return response;
+		} catch (error) {
+			throw new CmsError('Unable to log in user.');
+		}
+	};
+
+	register = async (
+		email,
+		password,
+		userYourName,
+		userPronouns,
+		userGithubusername,
+		userLinks,
+		userHowDidYouHearAboutUs,
+		userWhereAreYouInYourCodingJourney,
+		userCodeInterests,
+		userHopingVirtualCoffee,
+	) => {
+		const query = gql`
+			mutation Register(
+				$email: String!
+				$password: String!
+				$userYourName: String!
+				$userPronouns: String
+				$userGithubusername: String
+				$userLinks: String
+				$userHowDidYouHearAboutUs: String
+				$userWhereAreYouInYourCodingJourney: String
+				$userCodeInterests: String
+				$userHopingVirtualCoffee: String
+			) {
+				register(
+					email: $email
+					password: $password
+					userYourName: $userYourName
+					userPronouns: $userPronouns
+					userGithubusername: $userGithubusername
+					userLinks: $userLinks
+					userHowDidYouHearAboutUs: $userHowDidYouHearAboutUs
+					userWhereAreYouInYourCodingJourney: $userWhereAreYouInYourCodingJourney
+					userCodeInterests: $userCodeInterests
+					userHopingVirtualCoffee: $userHopingVirtualCoffee
+				) {
+					jwt
+					jwtExpiresAt
+					refreshToken
+					refreshTokenExpiresAt
+					user {
+						id
+						email
+						status
+						enabled
+						... on User {
+							userYourName
+						}
+					}
+				}
+			}
+		`;
+		try {
+			const response = await this.client.request(query, {
+				email,
+				password,
+				userYourName,
+				userPronouns,
+				userGithubusername,
+				userLinks,
+				userHowDidYouHearAboutUs,
+				userWhereAreYouInYourCodingJourney,
+				userCodeInterests,
+				userHopingVirtualCoffee,
+			});
 			console.log({ response });
 			return response;
 		} catch (error) {
