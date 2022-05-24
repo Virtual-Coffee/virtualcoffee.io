@@ -1,7 +1,3 @@
-// const { remarkMdxFrontmatter } = require('remark-mdx-frontmatter');
-
-// import { toc } from 'mdast-util-toc';
-
 /**
  * Plugin to generate a Table of Contents (TOC).
  * Created from https://github.com/remarkjs/remark-toc
