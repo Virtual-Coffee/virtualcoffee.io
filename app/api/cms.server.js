@@ -45,11 +45,12 @@ export default class Api {
 			console.log({ response });
 			return response;
 		} catch (error) {
+			console.log(error);
 			throw new CmsError('Unable to log in user.');
 		}
 	};
 
-	register = async (
+	register = async ({
 		email,
 		password,
 		userYourName,
@@ -60,7 +61,7 @@ export default class Api {
 		userWhereAreYouInYourCodingJourney,
 		userCodeInterests,
 		userHopingVirtualCoffee,
-	) => {
+	}) => {
 		const query = gql`
 			mutation Register(
 				$email: String!
@@ -68,19 +69,17 @@ export default class Api {
 				$userYourName: String!
 				$userPronouns: String
 				$userGithubusername: String
-				$userLinks: String
 				$userHowDidYouHearAboutUs: String
 				$userWhereAreYouInYourCodingJourney: String
 				$userCodeInterests: String
 				$userHopingVirtualCoffee: String
 			) {
-				register(
+				registerPendingMembers(
 					email: $email
 					password: $password
 					userYourName: $userYourName
 					userPronouns: $userPronouns
 					userGithubusername: $userGithubusername
-					userLinks: $userLinks
 					userHowDidYouHearAboutUs: $userHowDidYouHearAboutUs
 					userWhereAreYouInYourCodingJourney: $userWhereAreYouInYourCodingJourney
 					userCodeInterests: $userCodeInterests
@@ -118,7 +117,17 @@ export default class Api {
 			console.log({ response });
 			return response;
 		} catch (error) {
-			throw new CmsError('Unable to log in user.');
+			if (error?.response?.errors && error.response.errors.length) {
+				throw new CmsError(
+					`Unable to register user: ${error.response.errors
+						.map((e) => e.message)
+						.join(',')}`,
+					{
+						errors: error.response.errors,
+					},
+				);
+			}
+			throw new CmsError('Unable to register user.');
 		}
 	};
 }
