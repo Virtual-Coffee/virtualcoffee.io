@@ -26,7 +26,6 @@ export function meta({ data: { meta } = {} } = {}) {
 
 export default function EventsIndex() {
 	const { events } = useLoaderData();
-
 	return (
 		<DefaultLayout
 			Hero="UndrawConferenceCall"
@@ -48,8 +47,14 @@ export default function EventsIndex() {
 
 					{events.map((event) => (
 						<div className="card mb-4" key={event.startDateLocalized}>
-							<div className="card-header">
-								{dateForDisplay(event.startDateLocalized, 'EEEE, fff')}
+							<div className="card-header py-2 d-flex justify-content-between align-items-center flex-row flex-wrap">
+								<time dateTime={event.startDateLocalized}>
+									{dateForDisplay(event.startDateLocalized, 'EEEE, fff')}
+								</time>
+
+								<a href={event.eventCalendarLink} download>
+									<small> Add to Calendar</small>
+								</a>
 							</div>
 							<div className="card-body">
 								<h5 className="card-title">{event.title}</h5>
