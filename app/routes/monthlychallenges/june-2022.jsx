@@ -36,8 +36,12 @@ export default function Challenge() {
 				We're challenging you to both give and accept feedback from others.
 			</p>
 			<hr />
+
 			<h2>Theme</h2>
 			<p>Giving Meaningful and Empathetic Feedback</p>
+
+			<h2>Goal</h2>
+			<p>Provide feedback four times</p>
 
 			<h3>Who can participate?</h3>
 			<p>
@@ -55,60 +59,35 @@ export default function Challenge() {
 				process.
 			</p>
 
-			<p>
-				For this month , we're asking members to both ask for feedback and to
-				give feedback to others. It could be on a blog post, an idea, a coding
-				project, a talk, or whatever you could use feedback on.
-			</p>
-
-			<p>
-				And to go along with our monthly theme, let's also collect resources on
-				how to give good feedback and post them in the #articles-and-resources
-				channel. Don't worry, we've got it started with a list at the bottom of
-				this page.
-			</p>
-
 			<h3>How it works</h3>
 			<p>
-				If you want to take a more structured approach, join the challenge in
-				the #monthly-challenge channel!
+				For this month's challenge we both need people asking for feedback and
+				people giving feedback! If you need feedback on content or code, please
+				post in the #monthly-challenge channel. It could be on a blog post, an
+				idea, a coding project/PR, a talk, an interview, or whatever you could
+				use feedback on.
 			</p>
 
-			<p>
-				For the challenge, we're asking you to provide feedback four times this
-				month. For each week, we'll highlight a different opportunity for
-				feedback--but don't let that limit you! Check out the themed weeks and
-				post your content in the #monthly-challenge channel. When you've
-				finished providing feedback, let's keep track of who and what you
-				provided feedback for.
-			</p>
+			<h6>Places where you can give feedback:</h6>
 			<ul>
-				<li>
-					Week 1: Code Feedback - What code are you working on, or do you have
-					sitting in a repo that you'd like someone to look at?
-				</li>
-				<li>
-					Week 2: Blog posts and Writing- Do you have some writing that needs
-					proofreading? Do you have a concept that you've worked on, but isn't
-					quite where you want it but you can't figure out why? Need some
-					feedback on a ReadMe or other technical document?
-				</li>
-				<li>
-					Week 3: Talks and Videos- Are you practicing a talk or have an idea
-					for one? Did you make a video and you want some feedback before you
-					post?
-				</li>
-				<li>
-					Week 4: Wildcard- Did you miss one of the weeks or have you made
-					updates? Do you have something that doesn't quite fit? This week is
-					for anything you need feedback on.
-				</li>
-
-				<li>And remember, we're always here to help ❤️</li>
+				<li>accountabilibuddies group</li>
+				<li>VC-toastmasters</li>
+				<li>#help-and-pairing</li>
+				<li>#co-working-room</li>
 			</ul>
+			<p>
+				We’ll do async check-ins every week. Once you've hit 4 feedback
+				sessions, reply to the check in with ✅
+			</p>
 
-			<h3>Resources</h3>
+			<h3>Resources & Events</h3>
 			<ul>
+				<li>Lunch & Learns:</li>
+				<li>
+					Accountabilibuddies (Every Wednesday 7PM ET, and every Thursday 9AM
+					ET)
+				</li>
+				<li>VC-toastmasters </li>
 				<li>
 					<a href="https://iamdeveloper.com/posts/how-i-review-pull-requests-44nl/">
 						Nick Taylor: How I Review Pull Requests
