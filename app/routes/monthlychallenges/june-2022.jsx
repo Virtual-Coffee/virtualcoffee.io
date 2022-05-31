@@ -68,7 +68,7 @@ export default function Challenge() {
 				use feedback on.
 			</p>
 
-			<h6>Places where you can give feedback:</h6>
+			<h4>Places where you can give feedback:</h4>
 			<ul>
 				<li>accountabilibuddies group</li>
 				<li>VC-toastmasters</li>
