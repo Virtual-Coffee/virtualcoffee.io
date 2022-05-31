@@ -84,8 +84,8 @@ export default function Challenge() {
 			<ul>
 				<li>Lunch & Learns:</li>
 				<li>
-					Accountabilibuddies (Every Wednesday 7PM ET, and every Thursday 9AM
-					ET)
+					Accountabilibuddies: Every Tuesday 7PM-9PM ET, and every Thursday 9AM-11:30AM ET
+					ET
 				</li>
 				<li>VC-toastmasters </li>
 				<li>
