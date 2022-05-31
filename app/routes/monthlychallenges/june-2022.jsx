@@ -29,7 +29,7 @@ export default function Challenge() {
 	return (
 		<>
 			<h1>
-				<small>Monthly Theme for June, 2022:</small> Feedback
+				<small>Monthly Challenge for June, 2022:</small> Feedback
 			</h1>
 
 			<p className="lead">
