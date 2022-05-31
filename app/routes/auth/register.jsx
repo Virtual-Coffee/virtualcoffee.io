@@ -228,17 +228,10 @@ export let action = async ({ request }) => {
 		// caught error is a response and return it or throw it again
 		if (error instanceof Response) {
 			console.log('is response', error);
-			return json({
-				error: {
-					message: error.message,
-				},
-			});
+			return error;
 		}
 		if (error instanceof AuthorizationError) {
 			console.log('is AuthorizationError');
-
-			console.log(error.data);
-			console.log(error.errors);
 
 			return json({
 				error: {
