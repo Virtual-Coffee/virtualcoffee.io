@@ -70,10 +70,10 @@ export default function Challenge() {
 
 			<h4>Places where you can give feedback:</h4>
 			<ul>
-				<li>accountabilibuddies group</li>
-				<li>VC-toastmasters</li>
-				<li>#help-and-pairing</li>
-				<li>#co-working-room</li>
+				<li>Accountabilibuddies Group</li>
+				<li>VC-Toastmasters Group</li>
+				<li>#help-and-pairing channel</li>
+				<li>#co-working-room channel</li>
 			</ul>
 			<p>
 				We’ll do async check-ins every week. Once you've hit 4 feedback
@@ -82,12 +82,11 @@ export default function Challenge() {
 
 			<h3>Resources & Events</h3>
 			<ul>
-				<li>Lunch & Learns:</li>
 				<li>
 					Accountabilibuddies: Every Tuesday 7PM-9PM ET, and every Thursday 9AM-11:30AM ET
 					ET
 				</li>
-				<li>VC-toastmasters </li>
+				<li>VC-toastmasters: June 6th 12pm ET and June 20th 12pm ET </li>
 				<li>
 					<a href="https://iamdeveloper.com/posts/how-i-review-pull-requests-44nl/">
 						Nick Taylor: How I Review Pull Requests
