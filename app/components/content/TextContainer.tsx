@@ -1,10 +1,16 @@
-import PropTypes from 'prop-types';
+type TextContainerProps = {
+	children?: React.ReactNode;
+	background: 'white' | 'light';
+	showBackToTopLink: boolean;
+};
+
+// <TextContainer >dffs</TextContainer>
 
 export default function TextContainer({
 	children,
 	background,
 	showBackToTopLink,
-}) {
+}: TextContainerProps) {
 	return (
 		<div className={`bg-${background} py-5`}>
 			<div className="container prose">
@@ -20,12 +26,9 @@ export default function TextContainer({
 	);
 }
 
-TextContainer.defaultProps = {
+const defaultProps: TextContainerProps = {
 	background: 'white',
 	showBackToTopLink: true,
 };
 
-TextContainer.propTypes = {
-	background: PropTypes.oneOf(['white', 'light']),
-	showBackToTopLink: PropTypes.bool,
-};
+TextContainer.defaultProps = defaultProps;
