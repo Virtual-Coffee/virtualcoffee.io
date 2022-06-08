@@ -4,8 +4,6 @@ type TextContainerProps = {
 	showBackToTopLink: boolean;
 };
 
-// <TextContainer >dffs</TextContainer>
-
 export default function TextContainer({
 	children,
 	background,
