@@ -35,11 +35,11 @@ This document is Part 2 of Virtual Coffee's four-part Guide to Open Source. It a
 
 #### Cloning a repository
 
-To clone a repository, you can run `git clone <Repo>` where the Repo is the URL of the repository. This will set up a copy of the repository on your local computer, with the remote repository you cloned from as the `origin` remote.
+If you have a repositroy on Github or another code sharing platform or on a server somewhere, you clone it. To do this, you can run `git clone <Repo>` where the Repo is the URL of the repository. This will set up a copy of the repository on your local computer, with the remote repository you cloned from as the `origin` remote. Remember cloning is different from forking, for an explanation of forking, see the Github section below.
 
 #### Adding another remote
 
-You will normally clone a forked version of the repository, but you may want to add the original version as a remote as well so you can pull other people's changes into your local repository. This remote is conventionally called `upstream` and can be added using `git remote add upstream <Repo>` where Repo is the URL of the original repository.
+When working on open source, you will normally clone a forked version of the repository, but you may want to add the original version as a remote as well so you can pull other people's changes into your local repository. This remote is conventionally called `upstream` and can be added using `git remote add upstream <Repo>` where Repo is the URL of the original repository.
 
 #### Synchronizing changes
 
@@ -55,25 +55,25 @@ The following workflows are useful when collaborating with another person in Ope
 
 #### Workflow for checking out someone elses branch on your local machine
 
-Assuming that Alice and Bob both have a fork of the project, and Alice wants to check out Bob's branch:
+Let's assume that you and your teammate, Alice, forked a project repository and you want to go to Alice's branch in your local machine.
 
-1. Alice adds Bob's fork as a remote on her local repository using `git remote add bob <Bob's Repo URL>`.
-2. Alice fetches Bob's branches using `git fetch bob`.
-3. Alice can now check out Bob's branch using `git checkout bobs-branch-name`.
-4. Alice can now pull changes pushed by Bob using `git pull bob bobs-branch-name`.
+1. You add Alice's fork as a remote on your local repository using `git remote add alice <Alice's Repo URL>`.
+2. You fetch Alice's branches using `git fetch alice`.
+3. You can now go to Alice's branch using `git checkout alices-branch-name`.
+4. You can now pull changes pushed by Alice using `git pull alice alices-branch-name`.
 
 #### Workflow for collaborating on a shared branch between two different forks
 
-Assuming that Alice and Bob both have a fork of the project they want to contribute to:
+Let's assume that you and another teemmate, Bob, both have a fork of a project and want to collaborate on a contribution using one branch:
 
-1. Alice adds Bob's fork as a remote on her local repository using `git remote add bob <Bob's Repo URL>`.
-2. Bob adds Alice's fork as a remote on his local repository using `git remote add alice <Alice's Repo URL>`.
-3. Alice can now pull changes pushed by Bob using `git pull bob branch-name`.
-4. Bob can now pull changes pushed by Alice using `git pull alice branch-name`.
-5. Either Alice or Bob can submit the pull request once they have all the work on their fork of the project.
-6. Each commit will automatically contain either Alice or Bob's name, so each person's contributions can be identified.
+1. You adds Bob's fork as a remote on your local repository using `git remote add bob <Bob's Repo URL>`.
+2. Bob adds your fork as a remote on his local repository using `git remote add your-name <Alice's Repo URL>`.
+3. You can now pull changes pushed by Bob using `git pull bob branch-name`.
+4. Bob can now pull changes pushed by You using `git pull your-name branch-name`.
+5. Either you or Bob can submit the pull request once they have all the work on their fork of the project.
+6. Each commit will automatically contain either your or Bob's name, so each person's contributions can be identified.
 
-`git fetch` can be used to fetch branches from someone elses remote, for example Bob run `git fetch alice` in the above scenario to fetch all Alice's branches.
+`git fetch` can be used to fetch branches from someone elses remote, for example Bob can run `git fetch your-name` in the above scenario to fetch all your branches.
 
 Once branches have been fetched, they can then be checked out locally using `git checkout` in the same way as checking out a local branch.
 
