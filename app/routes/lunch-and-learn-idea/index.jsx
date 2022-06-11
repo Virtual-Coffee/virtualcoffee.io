@@ -3,13 +3,15 @@ import { Form, useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { Submit, CodeOfConduct } from '~/components/forms';
 import { qualifiedUrl } from '~/util/url.server';
+import { createMetaData } from '~/util/createMetaData.server';
 
 export async function loader() {
 	return json({
-		meta: {
+		meta: createMetaData({
 			title: 'Lunch & Learn Talk Submission Form',
 			description: `We can't wait to hear your talk!`,
-		},
+			Hero: 'UndrawPresentation',
+		}),
 	});
 }
 

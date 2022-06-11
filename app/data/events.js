@@ -1,6 +1,7 @@
 import { GraphQLClient, gql } from 'graphql-request';
 import { DateTime } from 'luxon';
 import { sanitizeHtml } from '~/util/sanitizeCmsData';
+import { ics } from 'calendar-link';
 
 const calendarsQuery = gql`
 	query getCalendars {
@@ -70,9 +71,16 @@ export async function getEvents({ limit }) {
 				const sanitizedDescription = await sanitizeHtml(
 					event.eventCalendarDescription,
 				);
+				const calendarLink = await ics({
+					title: event.title,
+					start: event.startDateLocalized,
+					end: event.endDateLocalized,
+					description: sanitizedDescription,
+				});
 				return {
 					...event,
 					eventCalendarDescription: sanitizedDescription,
+					eventCalendarLink: calendarLink,
 				};
 			}),
 		);

@@ -1,3 +1,6 @@
+import { json } from '@remix-run/node';
+import { createMetaData } from '~/util/createMetaData.server';
+
 export const handle = {
 	listTitle: 'February, 2022: Pairing!',
 	meta: {
@@ -10,9 +13,16 @@ export const handle = {
 	},
 };
 
-export const meta = () => {
-	return handle.meta;
-};
+export async function loader() {
+	const { title, description } = handle.meta;
+	return json({
+		meta: createMetaData({ title, description }),
+	});
+}
+
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
+}
 
 export default function Challenge() {
 	return (

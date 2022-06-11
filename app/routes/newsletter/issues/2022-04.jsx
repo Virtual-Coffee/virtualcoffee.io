@@ -1,3 +1,6 @@
+import { json } from '@remix-run/node';
+import { createMetaData } from '~/util/createMetaData.server';
+
 export const handle = {
 	meta: {
 		title: 'Virtual Coffee Newsletter, April 2022',
@@ -7,18 +10,20 @@ export const handle = {
 	listTitle: 'April 2022',
 };
 
-export const meta = () => {
-	return handle.meta;
-};
+export async function loader() {
+	const { title, description } = handle.meta;
+	return json({
+		meta: createMetaData({ title, description }),
+	});
+}
+
+export function meta({ data: { meta } = {} } = {}) {
+	return meta;
+}
 
 export default function Issue() {
 	return (
 		<>
-			<h1>Virtual Coffee Newsletter, April 2022</h1>
-			<p className="lead text-muted">Getting ready to roll into year three!</p>
-
-			<hr />
-
 			<h2>Hey friends!</h2>
 
 			<p className="lead">

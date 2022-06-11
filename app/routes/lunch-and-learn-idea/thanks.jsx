@@ -1,12 +1,14 @@
 import { json } from '@remix-run/node';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
+import { createMetaData } from '~/util/createMetaData.server';
 
 export async function loader() {
 	return json({
-		meta: {
+		meta: createMetaData({
 			title: 'Lunch & Learn Idea Received!',
 			description: `We can't wait to hear your talk!`,
-		},
+			Hero: 'UndrawPresentation',
+		}),
 	});
 }
 

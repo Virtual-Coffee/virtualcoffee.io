@@ -4,6 +4,7 @@ import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { Submit, CodeOfConduct } from '~/components/forms';
 import { qualifiedUrl } from '~/util/url.server';
 import LeadText from '~/components/content/LeadText';
+import { createMetaData } from '~/util/createMetaData.server';
 
 export async function loader({ request }) {
 	const url = new URL(request.url);
@@ -11,10 +12,11 @@ export async function loader({ request }) {
 
 	return json({
 		position,
-		meta: {
+		meta: createMetaData({
 			title: 'Volunteer at Virtual Coffee',
 			description: `Part of Virtual Coffee's mission is to make safe, supportive spaces for pursuing leadership and roles in community building. We currently have a few initiatives where we'd love to have more volunteers in helping make this community great!`,
-		},
+			Hero: 'UndrawPowerful',
+		}),
 	});
 }
 
