@@ -54,7 +54,9 @@ export async function getEvents({ limit }) {
 	console.log('Fetching events', rangeStart, rangeEnd);
 
 	try {
+		console.log('requesting calendars');
 		const calendarsResponse = await graphQLClient.request(calendarsQuery);
+		console.log('requesting events');
 		const eventsResponse = await graphQLClient.request(
 			createEventsQuery(calendarsResponse),
 			{
@@ -64,7 +66,7 @@ export async function getEvents({ limit }) {
 			},
 		);
 		// return response.slice(0, 10);
-
+		console.log('parsing events');
 		// console.log(eventsResponse);
 		return await Promise.all(
 			eventsResponse.solspace_calendar.events.map(async (event) => {
