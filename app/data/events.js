@@ -2,27 +2,26 @@ import { GraphQLClient, gql } from 'graphql-request';
 import { DateTime } from 'luxon';
 import { sanitizeHtml } from '~/util/sanitizeCmsData';
 import { ics } from 'calendar-link';
+import axios from 'axios';
 
-const calendarsQuery = gql`
-	query getCalendars {
+const calendarsQuery = `query getCalendars {
 		solspace_calendar {
 			calendars {
 				handle
 			}
 		}
-	}
-`;
+	}`;
 
-function createEventsQuery(calendars) {
-	return gql`
-	query getEvents($rangeStart: String!, $rangeEnd: String!, $limit: Int) {
+function createEventsQuery(calendars, rangeStart, rangeEnd, limit) {
+	return `
+	query getEvents {
 		solspace_calendar {
-			events(rangeStart: $rangeStart, rangeEnd: $rangeEnd, limit: $limit) {
+			events(rangeStart: "${rangeStart}", rangeEnd: "${rangeEnd}", limit: ${limit}) {
 				id
 				title
 				startDateLocalized
 				endDateLocalized
-				${calendars.solspace_calendar.calendars.map(
+				${calendars.map(
 					({ handle }) => `
 				... on ${handle}_Event {
 					eventCalendarDescription
@@ -45,31 +44,71 @@ export async function getEvents({ limit }) {
 		return fakeData.createEventsData({ limit, rangeEnd, rangeStart });
 	}
 
-	const graphQLClient = new GraphQLClient(`${process.env.CMS_URL}/api`, {
-		headers: {
-			Authorization: `bearer ${process.env.CMS_TOKEN}`,
-		},
+	const instance = axios.create({
+		baseURL: `${process.env.CMS_URL}/api`,
 	});
+
+	// const graphQLClient = new GraphQLClient(`${process.env.CMS_URL}/api`, {
+	// 	headers: {
+	// 		Authorization: `bearer ${process.env.CMS_TOKEN}`,
+	// 	},
+	// });
 
 	console.log('Fetching events', rangeStart, rangeEnd);
 
 	try {
 		console.log('requesting calendars');
-		const calendarsResponse = await graphQLClient.request(calendarsQuery);
-		console.log('requesting events');
-		const eventsResponse = await graphQLClient.request(
-			createEventsQuery(calendarsResponse),
-			{
+		const calendarsResponse = await axios.request({
+			method: 'POST',
+			data: `query getCalendars {
+					solspace_calendar {
+						calendars {
+							handle
+						}
+					}
+				}`,
+
+			url: `${process.env.CMS_URL}/api`,
+			timeout: 4000,
+			headers: {
+				Authorization: `bearer ${process.env.CMS_TOKEN}`,
+				'content-type': 'application/graphql',
+			},
+		});
+
+		console.log(
+			createEventsQuery(
+				calendarsResponse.data.data.solspace_calendar.calendars,
 				rangeStart,
 				rangeEnd,
 				limit,
-			},
+			),
 		);
+
+		console.log('requesting events');
+		const eventsResponse = await axios.request({
+			method: 'POST',
+			data: createEventsQuery(
+				calendarsResponse.data.data.solspace_calendar.calendars,
+				rangeStart,
+				rangeEnd,
+				limit,
+			),
+			url: `${process.env.CMS_URL}/api`,
+			timeout: 4000,
+			headers: {
+				Authorization: `bearer ${process.env.CMS_TOKEN}`,
+				'content-type': 'application/graphql',
+			},
+		});
+
+		console.log(eventsResponse.data);
+
 		// return response.slice(0, 10);
 		console.log('parsing events');
 		// console.log(eventsResponse);
 		return await Promise.all(
-			eventsResponse.solspace_calendar.events.map(async (event) => {
+			eventsResponse.data.data.solspace_calendar.events.map(async (event) => {
 				const sanitizedDescription = await sanitizeHtml(
 					event.eventCalendarDescription,
 				);
