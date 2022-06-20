@@ -1,9 +1,11 @@
 [
 	{
 		"name": "Community Maintainer",
-		"members": ["BekahHW", "tkshill", "saramccombs"]
+		"members": ["BekahHW", "tkshill"]
 	},
 	{ "name": "Org Maintainer", "members": ["danieltott", "BekahHW"] },
+	{ "name": "Lunch & Learn Coordinator", "members": ["shelleymcq"] },
+	{ "name": "Coffee Table Groups Coordinator", "members": ["abbeyperini"] },
 	{
 		"name": "Room Leader",
 		"members": [
@@ -50,7 +52,9 @@
 			"tomcudd",
 			"LincolnFleet",
 			"needcaffeine",
-			"YolandaHaynes"
+			"YolandaHaynes",
+			"SNikhill",
+			"CuriousCurmudgeon"
 		]
 	},
 	{
@@ -69,7 +73,8 @@
 			"SuzeShardlow",
 			"tomcudd",
 			"LincolnFleet",
-			"rhdeck"
+			"rhdeck",
+			"saramccombs"
 		]
 	},
 	{ "name": "AV Team Lead", "members": ["BogDAAAMN"] },
@@ -88,7 +93,7 @@
 		"name": "VC Host",
 		"members": ["meg-gutshall", "nickytonline", "SuzeShardlow"]
 	},
-	{ "name": "VC MC", "members": ["meg-gutshall"] },
+	{ "name": "VC MC", "members": ["meg-gutshall", "SuzeShardlow"] },
 	{
 		"name": "Monthly Challenge Team",
 		"members": ["dominicduffin1", "redapy", "lsparlin"]
