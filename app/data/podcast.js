@@ -132,7 +132,6 @@ export async function getEpisode({ slug, queryParams = '' } = {}) {
 		});
 
 		console.log('finished:');
-		console.log(JSON.stringify(episodesResponse, null, 2));
 
 		// return response.slice(0, 10);
 
