@@ -28,7 +28,8 @@
 			"teezzan",
 			"tomcudd",
 			"LincolnFleet",
-			"needcaffeine"
+			"needcaffeine",
+			"saramccombs"
 		]
 	},
 	{
@@ -91,9 +92,12 @@
 	},
 	{
 		"name": "VC Host",
-		"members": ["meg-gutshall", "nickytonline", "SuzeShardlow"]
+		"members": ["meg-gutshall", "nickytonline", "SuzeShardlow", "saramccombs"]
 	},
-	{ "name": "VC MC", "members": ["meg-gutshall", "SuzeShardlow"] },
+	{
+		"name": "VC MC",
+		"members": ["meg-gutshall", "SuzeShardlow", "saramccombs"]
+	},
 	{
 		"name": "Monthly Challenge Team",
 		"members": ["dominicduffin1", "redapy", "lsparlin"]
