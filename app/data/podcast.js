@@ -27,21 +27,12 @@ const episodeQuery = gql`
 							renderHtml
 						}
 						headshot {
-							w_1352: url(width: 1352)
-							w_1032: url(width: 1032)
-							w_1026: url(width: 1026)
-							w_704: url(width: 704)
-							w_676: url(width: 676)
-							w_516: url(width: 516)
-							w_513: url(width: 513)
-							w_352: url(width: 352)
-							w_338: url(width: 338)
+							path
 						}
 					}
 				}
 				podcastEpisodeCard {
-					w_250: url(width: 250)
-					w_1200: url(width: 1200)
+					path
 				}
 			}
 		}
@@ -135,9 +126,12 @@ export async function getEpisode({ slug, queryParams = '' } = {}) {
 	);
 
 	try {
+		console.log('requesting');
 		const episodesResponse = await graphQLClient.request(episodeQuery, {
 			slug,
 		});
+
+		console.log('finished:');
 
 		// return response.slice(0, 10);
 
