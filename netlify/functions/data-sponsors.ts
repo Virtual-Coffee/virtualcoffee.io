@@ -39,12 +39,10 @@ export const handler = builder(handlerFn);
 // todo: does this work???
 // export { handler };
 
-const sponsorOverrides: Record<
-	string,
-	Partial<
-		typeof mockData['organization']['sponsorshipsAsMaintainer']['nodes'][number]['sponsorEntity']
-	>
-> = {
+type SponsorEntity =
+	typeof mockData.organization.sponsorshipsAsMaintainer.nodes[number]['sponsorEntity'];
+
+const sponsorOverrides: Record<string, Partial<SponsorEntity>> = {
 	MDEyOk9yZ2FuaXphdGlvbjcxNDc2MTY2: {
 		avatarUrl_80: '/assets/images/sponsors/whimser.png',
 		avatarUrl_160: '/assets/images/sponsors/whimser.png',
