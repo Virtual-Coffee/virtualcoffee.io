@@ -178,3 +178,5 @@ async function getSponsors() {
 
 	return returnVal;
 }
+
+export type SponsorsResponse = Awaited<ReturnType<typeof getSponsors>>;
