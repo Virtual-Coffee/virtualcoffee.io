@@ -121,6 +121,11 @@ Once you run this command, a local server is running at http://localhost:9000! A
 
 You should see something like 'Server now ready on http://localhost:9000' below, which means the watcher is waiting to build your awesome changes!
 
+**Note:**
+Depending on the speed of your computer, you can get a `TimeoutError - Task timed out after 10.00 seconds` message when the localhost renders on the browser.
+
+So if you are contributing to updating our newsletter or monthly challenges, after you see the notification of `Server now ready on http://localhost:9000`, go to your browser. Then add the path of `http://localhost:9000/newsletter` to preview the newsletter or `http://localhost:9000/monthlychallenges` to preview the monthly challenges page.
+
 Use ctrl-c to quit the server when you're done.
 
 `yarn dev` actually runs three sub commands, which can be run independently if you wish:
