@@ -964,6 +964,11 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
+"@types/require-dir@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@types/require-dir/-/require-dir-1.0.2.tgz#7621bb144e79c85a4856c71843b0adc5e15165d0"
+  integrity sha512-fdADQ5mVP1M7Wt7y+WGCjkN6eY8D3T6kPVb58RWOQOD1EIcnrA5oXKRf9DwwCtSS6zkVPkA6/Cxvc1WG7qTIHQ==
+
 "@types/responselike@*", "@types/responselike@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/responselike/-/responselike-1.0.0.tgz#251f4fe7d154d2bad125abe1b429b23afd262e29"
