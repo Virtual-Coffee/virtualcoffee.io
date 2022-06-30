@@ -4,13 +4,13 @@ import { sanitizeHtml } from '~/util/sanitizeCmsData';
 import { ics } from 'calendar-link';
 import axios from 'axios';
 
-const calendarsQuery = `query getCalendars {
-		solspace_calendar {
-			calendars {
-				handle
-			}
-		}
-	}`;
+// const calendarsQuery = `query getCalendars {
+// 		solspace_calendar {
+// 			calendars {
+// 				handle
+// 			}
+// 		}
+// 	}`;
 
 function createEventsQuery(calendars, rangeStart, rangeEnd, limit) {
 	return `
@@ -19,8 +19,8 @@ function createEventsQuery(calendars, rangeStart, rangeEnd, limit) {
 			events(rangeStart: "${rangeStart}", rangeEnd: "${rangeEnd}", limit: ${limit}) {
 				id
 				title
-				startDateLocalized
-				endDateLocalized
+				startDate
+				endDate
 				${calendars.map(
 					({ handle }) => `
 				... on ${handle}_Event {
@@ -36,17 +36,21 @@ function createEventsQuery(calendars, rangeStart, rangeEnd, limit) {
 }
 
 export async function getEvents({ limit }) {
-	const rangeStart = DateTime.now().set({ hour: 0 }).toISO();
-	const rangeEnd = DateTime.now().set({ hour: 0 }).plus({ days: 30 }).toISO();
+	const rangeStart = DateTime.now().toUTC().set({ hour: 0 }).toISO();
+	const rangeEnd = DateTime.now()
+		.toUTC()
+		.set({ hour: 0 })
+		.plus({ days: 30 })
+		.toISO();
 
 	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
 		const fakeData = await import('./mocks/events');
 		return fakeData.createEventsData({ limit, rangeEnd, rangeStart });
 	}
 
-	const instance = axios.create({
-		baseURL: `${process.env.CMS_URL}/api`,
-	});
+	// const instance = axios.create({
+	// 	baseURL: `${process.env.CMS_URL}/api`,
+	// });
 
 	// const graphQLClient = new GraphQLClient(`${process.env.CMS_URL}/api`, {
 	// 	headers: {
@@ -114,8 +118,8 @@ export async function getEvents({ limit }) {
 				);
 				const calendarLink = await ics({
 					title: event.title,
-					start: event.startDateLocalized,
-					end: event.endDateLocalized,
+					start: event.startDate,
+					end: event.endDate,
 					description: sanitizedDescription,
 				});
 				return {
