@@ -147,7 +147,9 @@ export default function Index() {
 								items={events.map((event) => ({
 									title: event.title,
 									description: (
-										<strong>{dateForDisplay(event.startDate)}</strong>
+										<strong suppressHydrationWarning={true}>
+											{dateForDisplay(event.startDate)}
+										</strong>
 									),
 								}))}
 							/>

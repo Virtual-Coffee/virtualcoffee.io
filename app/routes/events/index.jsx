@@ -47,7 +47,10 @@ export default function EventsIndex() {
 					{events.map((event) => (
 						<div className="card mb-4" key={event.startDate}>
 							<div className="card-header py-2 d-flex justify-content-between align-items-center flex-row flex-wrap">
-								<time dateTime={event.startDate}>
+								<time
+									dateTime={event.startDate}
+									suppressHydrationWarning={true}
+								>
 									{dateForDisplay(event.startDate, 'EEEE, fff')}
 								</time>
 
