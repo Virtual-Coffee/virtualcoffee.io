@@ -9,16 +9,16 @@ export function createEventsData({ limit = 15, rangeStart, rangeEnd }) {
 		const startDate = DateTime.fromJSDate(date);
 		const calendarLink = ics({
 			title: faker.lorem.sentence(7),
-			start: startDate.toString(),
-			end: startDate.plus({ hours: 1 }),
+			start: startDate.toUTC().toString(),
+			end: startDate.toUTC().plus({ hours: 1 }).toString(),
 			description: faker.lorem.paragraph(),
 		});
 
 		return {
 			id: faker.datatype.uuid(),
 			title: faker.lorem.sentence(7),
-			startDateLocalized: startDate.toString(),
-			endDateLocalized: startDate.plus({ hours: 1 }),
+			startDate: startDate.toUTC().toString(),
+			endDate: startDate.toUTC().plus({ hours: 1 }).toString(),
 			eventCalendarDescription: `<p>${faker.lorem.paragraph()}</p>`,
 			eventCalendarLink: calendarLink,
 		};
