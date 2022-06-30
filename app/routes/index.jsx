@@ -147,7 +147,7 @@ export default function Index() {
 								items={events.map((event) => ({
 									title: event.title,
 									description: (
-										<strong>{dateForDisplay(event.startDateLocalized)}</strong>
+										<strong>{dateForDisplay(event.startDate)}</strong>
 									),
 								}))}
 							/>

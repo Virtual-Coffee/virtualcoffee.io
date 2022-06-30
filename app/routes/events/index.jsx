@@ -16,7 +16,6 @@ export async function loader() {
 		description: 'See our upcoming events!',
 		Hero: 'UndrawConferenceCall',
 	});
-
 	return json({ events, meta });
 }
 
@@ -46,10 +45,10 @@ export default function EventsIndex() {
 					</div>
 
 					{events.map((event) => (
-						<div className="card mb-4" key={event.startDateLocalized}>
+						<div className="card mb-4" key={event.startDate}>
 							<div className="card-header py-2 d-flex justify-content-between align-items-center flex-row flex-wrap">
-								<time dateTime={event.startDateLocalized}>
-									{dateForDisplay(event.startDateLocalized, 'EEEE, fff')}
+								<time dateTime={event.startDate}>
+									{dateForDisplay(event.startDate, 'EEEE, fff')}
 								</time>
 
 								<a href={event.eventCalendarLink} download>
