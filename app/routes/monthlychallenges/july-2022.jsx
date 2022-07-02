@@ -28,11 +28,6 @@ export function meta({ data: { meta } = {} } = {}) {
 export default function Challenge() {
 	return (
 		<>
-			<div className="alert alert-success">
-				This monthly challenge is complete. Congratulations! Please join us for
-				the <a href="/monthlychallenges/">next challenge</a>!
-			</div>
-
 			<h1>
 				<small>Monthly Challenge for July, 2022:</small> Let's build in public,
 				starting with Daily Standup!
@@ -64,19 +59,17 @@ export default function Challenge() {
 				in other areas of your life, we want to hear about it. We encourage all
 				members to participate. This challenge can be done alone or in a group.
 			</p>
-
-			<h3>How it works</h3>
-
 			<h4>Getting Started</h4>
-			<li>
-				Define and set goals: decide what you want to share, define what is the
-				scope and the result you want to reach at the end of the month.
-			</li>
-			<li>
-				Start working: once your demo project is defined you can start
-				considering your demo plans. Share and celebrate your progress!
-			</li>
-
+			<ul>
+				<li>
+					Define and set goals: decide what you want to share, define what is
+					the scope and the result you want to reach at the end of the month.
+				</li>
+				<li>
+					Start working: once your demo project is defined you can start
+					considering your demo plans. Share and celebrate your progress!
+				</li>
+			</ul>
 			<h4>Making Progess</h4>
 			<p>
 				Share your progress in the #monthly-challenge channel in Slack. We have
@@ -112,65 +105,74 @@ export default function Challenge() {
 				Accountabilibuddies groups. Asking for help is part of the process.
 			</p>
 			<h3>To Complete the Challenge</h3>
-			<li>Participate in 15 standups;</li>
-			<li>Create a plan for progress;</li>
-			<li>Demo in public either live or with a recording.</li>
+			<ul>
+				<li>Participate in 15 standups;</li>
+				<li>Create a plan for progress;</li>
+				<li>Demo in public either live or with a recording.</li>
+			</ul>
 			<h3>Demo Day</h3>
 			<p>There will be two ways for participants to demo their projects:</p>
-			<li>
-				Synchronously - A Zoom meetup will be held for members who wish to demo
-				their project to the VC community. You will need to register by the end
-				of week 3 with the monthly challenge team.
-			</li>
-			<li>
-				Asynchronously - You will be able to share your pre-recorded demos on
-				the #monthly-challenge Slack channel, using{' '}
-				<a href="https://www.loom.com/">Loom</a> for example (check{' '}
-				<a href="https://www.loom.com/share/8e56d17338b04037ac83bea40556b03c">
-					this example
-				</a>
-				).
-			</li>
+			<ul>
+				<li>
+					Synchronously - A Zoom meetup will be held for members who wish to
+					demo their project to the VC community. You will need to register by
+					the end of week 3 with the monthly challenge team.
+				</li>
+				<li>
+					Asynchronously - You will be able to share your pre-recorded demos on
+					the #monthly-challenge Slack channel, using{' '}
+					<a href="https://www.loom.com/">Loom</a> for example (check{' '}
+					<a href="https://www.loom.com/share/8e56d17338b04037ac83bea40556b03c">
+						this example
+					</a>
+					).
+				</li>
+			</ul>
 			<p>And remember, we're always here to help ❤️</p>
 			<h3>Tips for Demoing</h3>
 			<p>Before you start:</p>
-			<li>Test the exact workflow(s) you are planning to demo</li>
-			<li>Prepare all the environments you need for the demo</li>
-			<li>Close potential distractions such as Slack or email programs</li>
-			<li>Test your mic and camera</li>
-			<li>Prepare some notes about what you want to say during the demo</li>
-			<li>
-				If you are demoing synchronously, make sure you have a good internet
-				connection
-			</li>
-			<li>
-				If you are on a larger screen, make sure that code is large enough, and
-				visuals zoomed enough, to be easy to read on smaller screens
-			</li>
-			<li>
-				Check out this{' '}
-				<a href="https://www.loom.com/share/e01d8a5d90f043439c21dd8cb7dd7ab8">
-					demo
-				</a>{' '}
-				of one of our members preparing for a demo
-			</li>
+			<ul>
+				<li>Test the exact workflow(s) you are planning to demo</li>
+				<li>Prepare all the environments you need for the demo</li>
+				<li>Close potential distractions such as Slack or email programs</li>
+				<li>Test your mic and camera</li>
+				<li>Prepare some notes about what you want to say during the demo</li>
+				<li>
+					If you are demoing synchronously, make sure you have a good internet
+					connection
+				</li>
+				<li>
+					If you are on a larger screen, make sure that code is large enough,
+					and visuals zoomed enough, to be easy to read on smaller screens
+				</li>
+				<li>
+					Check out this{' '}
+					<a href="https://www.loom.com/share/e01d8a5d90f043439c21dd8cb7dd7ab8">
+						demo
+					</a>{' '}
+					of one of our members preparing for a demo
+				</li>
+			</ul>
+
 			<h3>Resources</h3>
-			<li>
-				<a href="https://www.atlassian.com/agile/scrum/sprint-reviews">
-					Agile Sprint Reviews: Three steps for better sprint reviews with your
-					agile team.
-				</a>
-			</li>
-			<li>
-				<a href="https://www.goodrequest.com/blog/how-to-prepare-for-a-demo-or-presentation-of-a-software-project">
-					How to prepare a demo
-				</a>
-			</li>
-			<li>
-				<a href="https://dev.acquia.com/blog/how-to-give-a-great-agilescrum-sprint-demo/09/08/2018/19771">
-					How to give a great Agile sprint demo
-				</a>
-			</li>
+			<ul>
+				<li>
+					<a href="https://www.atlassian.com/agile/scrum/sprint-reviews">
+						Agile Sprint Reviews: Three steps for better sprint reviews with
+						your agile team.
+					</a>
+				</li>
+				<li>
+					<a href="https://www.goodrequest.com/blog/how-to-prepare-for-a-demo-or-presentation-of-a-software-project">
+						How to prepare a demo
+					</a>
+				</li>
+				<li>
+					<a href="https://dev.acquia.com/blog/how-to-give-a-great-agilescrum-sprint-demo/09/08/2018/19771">
+						How to give a great Agile sprint demo
+					</a>
+				</li>
+			</ul>
 		</>
 	);
 }
