@@ -2,7 +2,7 @@ import { builder, Handler } from '@netlify/functions';
 import { GraphQLClient, gql } from 'graphql-request';
 import { resolve, join } from 'path';
 import requireDir from 'require-dir';
-import teamsData from '../../members/teams.json';
+import teamsData from '../../members/teams';
 import mockMemberData from '../../app/data/mocks/memberData';
 import { sanitizeHtml } from '../../app/util/sanitizeCmsData';
 
@@ -192,21 +192,26 @@ function loadDirectory(path: string) {
 		});
 }
 
-const allTeamNames = teamsData.map((team) => team.name);
+// const allTeamNames = teamsData.map((team) => team.name) as const;
+
+type TeamsDict = Record<string, (keyof typeof teamsData)[]>;
 
 async function loadUserData() {
 	const core = loadDirectory('core');
 	const members = loadDirectory('members');
 
-	const teamsDict: Record<typeof allTeamNames[number], string[]> = {};
+	const teamsDict = {} as TeamsDict;
 
-	teamsData.forEach((team) => {
-		team.members.forEach((member) => {
+	const teamNames = Object.keys(teamsData) as (keyof typeof teamsData)[];
+
+	teamNames.forEach((teamName) => {
+		const team = teamsData[teamName];
+		team.forEach((member) => {
 			const lcMember = member.toLowerCase();
 			if (teamsDict[lcMember]) {
-				teamsDict[lcMember].push(team.name);
+				teamsDict[lcMember].push(teamName);
 			} else {
-				teamsDict[lcMember] = [team.name];
+				teamsDict[lcMember] = [teamName];
 			}
 		});
 	});
