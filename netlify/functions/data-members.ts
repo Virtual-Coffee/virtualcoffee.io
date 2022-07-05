@@ -85,6 +85,7 @@ async function parseMarkdown(markdown: string) {
 	return String(file);
 }
 
+// TODO: DAN AND KIRK DO THIS NEXT
 async function getMemberGithubData(data) {
 	let headers = {
 		Accept: 'application/vnd.github.v3+json',
