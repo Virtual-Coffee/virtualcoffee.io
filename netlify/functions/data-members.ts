@@ -194,7 +194,8 @@ function loadDirectory(path: string) {
 
 // const allTeamNames = teamsData.map((team) => team.name) as const;
 
-type TeamsDict = Record<string, (keyof typeof teamsData)[]>;
+type TeamName = keyof typeof teamsData;
+type TeamsDict = Record<string, TeamName[]>;
 
 async function loadUserData() {
 	const core = loadDirectory('core');
@@ -202,11 +203,10 @@ async function loadUserData() {
 
 	const teamsDict = {} as TeamsDict;
 
-	const teamNames = Object.keys(teamsData) as (keyof typeof teamsData)[];
+	const teamNames = Object.keys(teamsData) as TeamName[];
 
 	teamNames.forEach((teamName) => {
-		const team = teamsData[teamName];
-		team.forEach((member) => {
+		teamsData[teamName].forEach((member) => {
 			const lcMember = member.toLowerCase();
 			if (teamsDict[lcMember]) {
 				teamsDict[lcMember].push(teamName);
