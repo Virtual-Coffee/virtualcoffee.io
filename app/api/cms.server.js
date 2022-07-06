@@ -103,6 +103,7 @@ export default class Api {
 					jwtExpiresAt
 					refreshToken
 					refreshTokenExpiresAt
+					schema
 					user {
 						id
 						email
@@ -137,6 +138,7 @@ export default class Api {
 					jwtExpiresAt
 					refreshToken
 					refreshTokenExpiresAt
+					schema
 					user {
 						id
 						email
