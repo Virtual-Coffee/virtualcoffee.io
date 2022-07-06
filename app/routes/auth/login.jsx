@@ -6,13 +6,11 @@ import {
 	redirect,
 } from '@remix-run/node';
 import { authenticator } from '~/auth/auth.server';
-import { sessionStorage } from '~/auth/session.server';
 import { AuthorizationError } from 'remix-auth';
 
 function LogInForm({ error }) {
 	return (
 		<Form method="post">
-			<div>yo</div>
 			{error && (
 				<div className="alert alert-danger">
 					<p>{error}</p>
@@ -42,49 +40,53 @@ export function CatchBoundary() {
 // names we are going to use in the strategy
 export default function Screen() {
 	const actionData = useActionData();
-	console.log({ actionData });
+	console.log({ t: actionData });
 
-	return <LogInForm error={actionData?.error} />;
+	return <LogInForm error={actionData?.message} />;
 }
 
 // Second, we need to export an action function, here we will use the
 // `authenticator.authenticate method`
 export let action = async ({ request }) => {
-	await authenticator.isAuthenticated(request, {
-		successRedirect: '/membership/dashboard',
-	});
-	let session = await getSession(request.headers.get('cookie'));
-	let error = session.get(authenticator.sessionErrorKey);
-	return json({ error });
+	// return await authenticator.isAuthenticated(request, {
+	// 	successRedirect: '/membership/dashboard',
+	// 	failureRedirect: '/auth/login',
+	// });
+	// console.log({ hello: sessionStorage.getSession });
+	// let session = await sessionStorage.getSession(request.headers.get('cookie'));
+	// console.log({ session });
+	// let error = session.get(authenticator.sessionErrorKey);
+	// console.log({ error });
+	// return json({ error });
 
 	// we call the method with the name of the strategy we want to use and the
 	// request object, optionally we pass an object with the URLs we want the user
 	// to be redirected to after a success or a failure
-	// try {
-	// 	return await authenticator.authenticate('user-pass', request, {
-	// 		successRedirect: '/membership/dashboard',
-	// 	});
-	// } catch (error) {
-	// 	// Because redirects work by throwing a Response, you need to check if the
-	// 	// caught error is a response and return it or throw it again
-	// 	if (error instanceof Response) {
-	// 		console.log('is response', error);
-	// 		return error;
-	// 	}
-	// 	if (error instanceof AuthorizationError) {
-	// 		console.log('is auth error');
-	// 		console.log(error);
-	// 		console.log({
-	// 			message: error.message,
-	// 			data: error.data,
-	// 		});
-	// 		return json({ error: error.message });
-	// 		// here the error is related to the authentication process
-	// 	}
-	// 	// here the error is a generic error that another reason may throw
-	// 	console.log('is generic error');
-	// 	return json({ error: 'There was a server error.' });
-	// }
+
+	try {
+		return await authenticator.authenticate('user-pass', request, {
+			successRedirect: '/membership/dashboard',
+		});
+	} catch (error) {
+		// Because redirects work by throwing a Response, you need to check if the
+		// caught error is a response and return it or throw it again
+		if (error instanceof Response) {
+			return error;
+		}
+		if (error instanceof AuthorizationError) {
+			console.log('is auth error');
+			console.log(error);
+			console.log({
+				message: error.message,
+				data: error.data,
+			});
+			return json({ message: error.message });
+			// here the error is related to the authentication process
+		}
+		// here the error is a generic error that another reason may throw
+		console.log('is generic error');
+		return json({ message: 'There was a server error.' });
+	}
 };
 
 // Finally, we can export a loader function where we check if the user is

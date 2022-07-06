@@ -20,6 +20,81 @@ export default class Api {
 		}
 	}
 
+	activateUser = async ({ code, id }) => {
+		const query = gql`
+			mutation ActivateUser($code: String!, $id: String!) {
+				activateUser(code: $code, id: $id)
+			}
+		`;
+		try {
+			const response = await this.client.request(query, { code, id });
+			console.log({ response });
+			return response;
+		} catch (error) {
+			console.log(error);
+			const msg =
+				error.response?.errors?.[0]?.message || 'Unable to activate user.';
+			throw new CmsError(msg, {
+				errors: error.response?.errors,
+			});
+		}
+	};
+
+	resendActivation = async ({ email }) => {
+		const query = gql`
+			mutation ResendActivation($email: String!) {
+				resendActivation(email: $email)
+			}
+		`;
+		try {
+			const response = await this.client.request(query, { email });
+			console.log({ response });
+			return response;
+		} catch (error) {
+			const msg = error.response?.errors?.[0]?.message || 'Server error.';
+			throw new CmsError(msg, {
+				errors: error.response?.errors,
+			});
+		}
+	};
+
+	forgottenPassword = async ({ email }) => {
+		const query = gql`
+			mutation ForgottenPassword($email: String!) {
+				forgottenPassword(email: $email)
+			}
+		`;
+		try {
+			const response = await this.client.request(query, { email });
+			console.log({ response });
+			return response;
+		} catch (error) {
+			const msg = error.response?.errors?.[0]?.message || 'Server Error.';
+			throw new CmsError(msg, {
+				errors: error.response?.errors,
+			});
+		}
+	};
+
+	setPassword = async ({ password, code, id }) => {
+		const query = gql`
+			mutation SetPassword($password: String!, $code: String!, $id: String!) {
+				setPassword(password: $password, code: $code, id: $id)
+			}
+		`;
+		try {
+			const response = await this.client.request(query, { code, id, password });
+			console.log({ response });
+			return response;
+		} catch (error) {
+			const msg =
+				error.response?.errors?.[0]?.message || 'Unable to save password.';
+			throw new CmsError(msg, {
+				errors: error.response?.errors,
+			});
+		}
+	};
+
 	login = async (email, password) => {
 		const query = gql`
 			mutation Authenticate($email: String!, $password: String!) {
@@ -45,8 +120,11 @@ export default class Api {
 			console.log({ response });
 			return response;
 		} catch (error) {
-			console.log(error);
-			throw new CmsError('Unable to log in user.');
+			const msg =
+				error.response?.errors?.[0]?.message || 'Unable to log in user.';
+			throw new CmsError(msg, {
+				errors: error.response?.errors,
+			});
 		}
 	};
 

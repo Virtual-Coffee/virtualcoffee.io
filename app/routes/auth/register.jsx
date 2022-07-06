@@ -8,11 +8,11 @@ import {
 import { authenticator } from '~/auth/auth.server';
 import { sessionStorage } from '~/auth/session.server';
 import { AuthorizationError } from 'remix-auth';
-import Api from '~/api/cms.server';
+import Api, { CmsError } from '~/api/cms.server';
 
 function SignUpForm({ errorMessage }) {
 	return (
-		<Form method="post">
+		<Form method="post" reloadDocument>
 			{errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 			<div className="py-5">
 				<div className="container">
@@ -159,7 +159,7 @@ function SignUpForm({ errorMessage }) {
 						</fieldset>
 
 						<p className="lead">
-							Please take a moment to read our
+							Please take a moment to read our{' '}
 							<a
 								href="/code-of-conduct"
 								target="_blank"
@@ -210,7 +210,7 @@ export default function Screen() {
 	const actionData = useActionData();
 	console.log({ actionData });
 
-	return <SignUpForm errorMessage={actionData?.error?.message} />;
+	return <SignUpForm errorMessage={actionData?.message} />;
 }
 
 // Second, we need to export an action function, here we will use the
@@ -220,33 +220,45 @@ export let action = async ({ request }) => {
 	// request object, optionally we pass an object with the URLs we want the user
 	// to be redirected to after a success or a failure
 	try {
-		return await authenticator.authenticate('user-register', request, {
-			successRedirect: '/membership/dashboard',
-		});
+		const form = await request.formData();
+
+		const api = new Api();
+
+		const values = {
+			email: form.get('email'),
+			password: form.get('password'),
+			userYourName: form.get('userYourName'),
+			userPronouns: form.get('userPronouns'),
+			userGithubusername: form.get('userGithubusername'),
+			userHowDidYouHearAboutUs: form.get('userHowDidYouHearAboutUs'),
+			userWhereAreYouInYourCodingJourney: form.get(
+				'userWhereAreYouInYourCodingJourney',
+			),
+			userCodeInterests: form.get('userCodeInterests'),
+			userHopingVirtualCoffee: form.get('userHopingVirtualCoffee'),
+		};
+
+		// console.log({ values });
+
+		const response = await api.register(values);
+		console.log({ user: response.registerPendingMembers.user });
+
+		return redirect(`/auth/register-success`);
 	} catch (error) {
 		// Because redirects work by throwing a Response, you need to check if the
 		// caught error is a response and return it or throw it again
-		if (error instanceof Response) {
-			console.log('is response', error);
-			return error;
-		}
-		if (error instanceof AuthorizationError) {
-			console.log('is AuthorizationError');
-
+		if (error instanceof CmsError) {
+			console.log('is CmsError', error);
 			return json({
-				error: {
-					message: error.message,
-				},
+				message: error.message,
+				errors: error.data,
 			});
-			// here the error is related to the authentication process
 		}
 
 		// here the error is a generic error that another reason may throw
-		console.log('is generic error');
+		console.log('is generic error', error);
 		return json({
-			error: {
-				message: 'There was a server error.',
-			},
+			message: 'There was a server error.',
 		});
 	}
 };
