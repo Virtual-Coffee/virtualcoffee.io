@@ -95,6 +95,40 @@ export default class Api {
 		}
 	};
 
+	refreshToken = async ({ refreshToken }) => {
+		const query = gql`
+			mutation RefreshToken($refreshToken: String!) {
+				refreshToken(refreshToken: $refreshToken) {
+					jwt
+					jwtExpiresAt
+					refreshToken
+					refreshTokenExpiresAt
+					user {
+						id
+						email
+						enabled
+						status
+						... on User {
+							userYourName
+						}
+					}
+				}
+			}
+		`;
+		try {
+			const response = await this.client.request(query, { refreshToken });
+			console.log({ response });
+			return response;
+		} catch (error) {
+			const msg =
+				error.response?.errors?.[0]?.message ||
+				'Unable to refresh user session.';
+			throw new CmsError(msg, {
+				errors: error.response?.errors,
+			});
+		}
+	};
+
 	login = async (email, password) => {
 		const query = gql`
 			mutation Authenticate($email: String!, $password: String!) {

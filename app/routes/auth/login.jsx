@@ -1,19 +1,20 @@
-import { Form, useActionData, useCatch } from '@remix-run/react';
-import {
-	ActionFunction,
-	json,
-	LoaderFunction,
-	redirect,
-} from '@remix-run/node';
+import { Form, useActionData, useCatch, Link } from '@remix-run/react';
+import { json } from '@remix-run/node';
 import { authenticator } from '~/auth/auth.server';
 import { AuthorizationError } from 'remix-auth';
 
 function LogInForm({ error }) {
 	return (
-		<Form method="post">
+		<Form method="post" reloadDocument>
+			<legend>Log In</legend>
 			{error && (
 				<div className="alert alert-danger">
 					<p>{error}</p>
+					{error === 'Please activate your account before logging in' && (
+						<p>
+							<Link to="/auth/resend-activation">Resend Activation Email</Link>
+						</p>
+					)}
 				</div>
 			)}
 			<input type="email" name="email" required />
@@ -23,7 +24,7 @@ function LogInForm({ error }) {
 				autoComplete="current-password"
 				required
 			/>
-			<button>Sign In</button>
+			<button>Log In</button>
 		</Form>
 	);
 }
@@ -45,20 +46,7 @@ export default function Screen() {
 	return <LogInForm error={actionData?.message} />;
 }
 
-// Second, we need to export an action function, here we will use the
-// `authenticator.authenticate method`
 export let action = async ({ request }) => {
-	// return await authenticator.isAuthenticated(request, {
-	// 	successRedirect: '/membership/dashboard',
-	// 	failureRedirect: '/auth/login',
-	// });
-	// console.log({ hello: sessionStorage.getSession });
-	// let session = await sessionStorage.getSession(request.headers.get('cookie'));
-	// console.log({ session });
-	// let error = session.get(authenticator.sessionErrorKey);
-	// console.log({ error });
-	// return json({ error });
-
 	// we call the method with the name of the strategy we want to use and the
 	// request object, optionally we pass an object with the URLs we want the user
 	// to be redirected to after a success or a failure

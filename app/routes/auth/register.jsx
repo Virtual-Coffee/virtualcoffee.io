@@ -13,6 +13,7 @@ import Api, { CmsError } from '~/api/cms.server';
 function SignUpForm({ errorMessage }) {
 	return (
 		<Form method="post" reloadDocument>
+			<legend>Join Virtual Coffee</legend>
 			{errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 			<div className="py-5">
 				<div className="container">
@@ -213,12 +214,7 @@ export default function Screen() {
 	return <SignUpForm errorMessage={actionData?.message} />;
 }
 
-// Second, we need to export an action function, here we will use the
-// `authenticator.authenticate method`
 export let action = async ({ request }) => {
-	// we call the method with the name of the strategy we want to use and the
-	// request object, optionally we pass an object with the URLs we want the user
-	// to be redirected to after a success or a failure
 	try {
 		const form = await request.formData();
 
