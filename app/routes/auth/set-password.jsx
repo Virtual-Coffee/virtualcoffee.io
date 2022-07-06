@@ -7,7 +7,7 @@ import {
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import { authenticator } from '~/auth/auth.server';
-import Api, { CmsError } from '~/api/cms.server';
+import { CmsAuth, CmsError } from '~/api/cms.server';
 import { redirect } from '@remix-run/node';
 
 export function CatchBoundary() {
@@ -66,7 +66,7 @@ export let action = async ({ request }) => {
 			return redirect('/auth/login');
 		}
 
-		const api = new Api();
+		const api = new CmsAuth();
 
 		const values = {
 			password: form.get('password'),

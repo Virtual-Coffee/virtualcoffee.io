@@ -8,7 +8,7 @@ import {
 import { authenticator } from '~/auth/auth.server';
 import { sessionStorage } from '~/auth/session.server';
 import { AuthorizationError } from 'remix-auth';
-import Api, { CmsError } from '~/api/cms.server';
+import { CmsAuth, CmsError } from '~/api/cms.server';
 
 export function CatchBoundary() {
 	const caught = useCatch();
@@ -65,7 +65,7 @@ export let loader = async ({ request }) => {
 		return redirect('/auth/login');
 	}
 
-	const api = new Api();
+	const api = new CmsAuth();
 
 	// console.log({ values });
 

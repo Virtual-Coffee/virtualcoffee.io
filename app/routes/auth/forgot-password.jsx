@@ -2,7 +2,7 @@ import { Form, useActionData, useCatch } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import { authenticator } from '~/auth/auth.server';
 import { AuthorizationError } from 'remix-auth';
-import Api, { CmsError } from '~/api/cms.server';
+import { CmsAuth, CmsError } from '~/api/cms.server';
 
 export function CatchBoundary() {
 	const caught = useCatch();
@@ -42,7 +42,7 @@ export let action = async ({ request }) => {
 	try {
 		const form = await request.formData();
 
-		const api = new Api();
+		const api = new CmsAuth();
 
 		const values = {
 			email: form.get('email'),

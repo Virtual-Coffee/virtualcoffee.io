@@ -2,7 +2,7 @@ import { Authenticator, AuthorizationError, Strategy } from 'remix-auth';
 import { sessionStorage } from '~/auth/session.server';
 import { FormStrategy } from 'remix-auth-form';
 import { SessionStorage } from '@remix-run/server-runtime';
-import Api from '~/api/cms.server';
+import { CmsAuth } from '~/api/cms.server';
 import { redirect } from '@remix-run/node';
 
 // Create an instance of the authenticator, pass a generic with what
@@ -15,7 +15,7 @@ export let authenticator = new Authenticator(sessionStorage, {
 // Tell the Authenticator to use the form strategy
 authenticator.use(
 	new FormStrategy(async ({ form }) => {
-		const api = new Api();
+		const api = new CmsAuth();
 
 		let email = form.get('email');
 		let password = form.get('password');
@@ -55,7 +55,7 @@ export async function authenticate(request, headers = new Headers()) {
 	} catch (error) {
 		// check if the eror is an AuthorizationError
 		if (error instanceof AuthorizationError) {
-			const api = new Api();
+			const api = new CmsAuth();
 
 			console.log('currentsession', session.get(authenticator.sessionKey));
 

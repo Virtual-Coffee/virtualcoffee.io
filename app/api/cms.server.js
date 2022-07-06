@@ -7,7 +7,7 @@ export class CmsError extends Error {
 	}
 }
 
-export default class Api {
+export class CmsAuth {
 	constructor() {
 		if (!process.env.CMS_URL || !process.env.CMS_TOKEN) {
 			this.client = null;
