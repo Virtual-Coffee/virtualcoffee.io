@@ -13,6 +13,7 @@ import {
 } from '~/data/podcast';
 import { dateForDisplay } from '~/util/date';
 import { sanitizeCmsData } from '~/util/sanitizeCmsData';
+import createCmsImage from '~/util/cmsimage';
 
 export const loader = async ({ params, request }) => {
 	console.log(`loading data for ${params.episode}`);
@@ -60,8 +61,20 @@ export function meta({ data: { episode, playerUrl, playerStreamUrl } }) {
 		'twitter:player:stream': playerStreamUrl,
 		...(cardImage
 			? {
-					'og:image': cardImage.w_250,
-					'twitter:image': cardImage.w_1200,
+					'og:image': createCmsImage({
+						path: cardImage.path,
+						folder: 'podcast',
+						settings: {
+							w: 250,
+						},
+					}),
+					'twitter:image': createCmsImage({
+						path: cardImage.path,
+						folder: 'podcast',
+						settings: {
+							w: 1200,
+						},
+					}),
 			  }
 			: {}),
 	};
@@ -125,9 +138,69 @@ export default function PostSlug() {
 											<img
 												alt=""
 												className="card-img-top"
-												src={headshot.w_258}
+												src={createCmsImage({
+													path: headshot.path,
+													folder: 'podcast',
+													settings: {
+														w: 258,
+													},
+												})}
 												sizes="(min-width: 1200px) 338px, (min-width: 992px) 258px, (min-width: 768px) calc((100vw - 150px) * (5 / 12)), (min-width: 576px) calc((100vw - 60px) / 3), calc(100vw - 60px)"
-												srcSet={`${headshot.w_1352} 1352w, ${headshot.w_1032} 1032w, ${headshot.w_1026} 1026w, ${headshot.w_704} 704w, ${headshot.w_676} 676w, ${headshot.w_516} 516w, ${headshot.w_513} 513w, ${headshot.w_352} 352w, ${headshot.w_338} 338w`}
+												srcSet={`${createCmsImage({
+													path: headshot.path,
+													folder: 'podcast',
+													settings: {
+														w: 1352,
+													},
+												})} 1352w, ${createCmsImage({
+													path: headshot.path,
+													folder: 'podcast',
+													settings: {
+														w: 1032,
+													},
+												})} 1032w, ${createCmsImage({
+													path: headshot.path,
+													folder: 'podcast',
+													settings: {
+														w: 1026,
+													},
+												})} 1026w, ${createCmsImage({
+													path: headshot.path,
+													folder: 'podcast',
+													settings: {
+														w: 704,
+													},
+												})} 704w, ${createCmsImage({
+													path: headshot.path,
+													folder: 'podcast',
+													settings: {
+														w: 676,
+													},
+												})} 676w, ${createCmsImage({
+													path: headshot.path,
+													folder: 'podcast',
+													settings: {
+														w: 516,
+													},
+												})} 516w, ${createCmsImage({
+													path: headshot.path,
+													folder: 'podcast',
+													settings: {
+														w: 513,
+													},
+												})} 513w, ${createCmsImage({
+													path: headshot.path,
+													folder: 'podcast',
+													settings: {
+														w: 352,
+													},
+												})} 352w, ${createCmsImage({
+													path: headshot.path,
+													folder: 'podcast',
+													settings: {
+														w: 338,
+													},
+												})} 338w`}
 											/>
 										)}
 									</div>
