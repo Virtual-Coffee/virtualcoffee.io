@@ -1,10 +1,10 @@
 import { Outlet } from '@remix-run/react';
-import Root from '~/components/Root';
+import AppRoot from '~/components/AppRoot';
 
 export default function App() {
 	return (
-		<Root>
+		<AppRoot>
 			<Outlet />
-		</Root>
+		</AppRoot>
 	);
 }
