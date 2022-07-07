@@ -4,6 +4,7 @@ import { Link, useLoaderData } from '@remix-run/react';
 import { authenticate } from '~/auth/auth.server';
 import { CmsActions } from '~/api/cms.server';
 import { DateTime } from 'luxon';
+import DefaultLayout from '~/components/layouts/DefaultLayout';
 
 type CalendarVisibility = 'membersOnly' | 'pendingMembers' | 'public';
 type EventVisibility = CalendarVisibility | 'default';
@@ -187,5 +188,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export default function Screen() {
 	const loaderData: EventLoaderData = useLoaderData();
 	console.log({ loaderData });
-	return <div>yo</div>;
+	return (
+		<DefaultLayout simple showHero={false}>
+			<div>{loaderData.message}</div>
+		</DefaultLayout>
+	);
 }

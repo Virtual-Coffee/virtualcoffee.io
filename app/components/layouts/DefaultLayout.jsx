@@ -86,9 +86,9 @@ export function HeroHead({ Hero, heroHeader, heroSubheader, simple }) {
 }
 
 export default function DefaultLayout({
-	Hero,
-	heroHeader,
-	heroSubheader,
+	Hero = null,
+	heroHeader = null,
+	heroSubheader = null,
 	simple = false,
 	showHero = true,
 	children,
