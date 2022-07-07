@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node';
 import { Outlet } from '@remix-run/react';
-import styles from './styles/main.css';
+import styles from '../styles/main.css';
 import { qualifiedUrl } from '~/util/url.server';
 import { removeTrailingSlash } from '~/util/http';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
@@ -10,7 +10,7 @@ import { homePageLinks } from '~/routes/index';
 import { useLocation } from 'react-router-dom';
 import { createMetaData } from '~/util/createMetaData.server';
 
-export function CatchBoundary(props) {
+export function CatchBoundary() {
 	const location = useLocation();
 
 	return (
@@ -135,5 +135,9 @@ export function meta({ data: { meta } = {} } = {}) {
 }
 
 export default function App() {
-	return <Outlet />;
+	return (
+		<Root>
+			<Outlet />
+		</Root>
+	);
 }

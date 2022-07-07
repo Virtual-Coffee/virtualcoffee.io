@@ -83,8 +83,8 @@ export default function Challenge() {
 			<h3>Resources & Events</h3>
 			<ul>
 				<li>
-					Accountabilibuddies: Every Tuesday 7PM-9PM ET, and every Thursday 9AM-11:30AM ET
-					ET
+					Accountabilibuddies: Every Tuesday 7PM-9PM ET, and every Thursday
+					9AM-11:30AM ET ET
 				</li>
 				<li>VC-toastmasters: June 6th 12pm ET and June 20th 12pm ET </li>
 				<li>
