@@ -25,7 +25,7 @@ authenticator.use(
 		// the type of this user must match the type you pass to the Authenticator
 		// the strategy will automatically inherit the type if you instantiate
 		// directly inside the `use` method
-		console.log({ response });
+		// console.log({ response });
 
 		return response.authenticate;
 	}),
@@ -43,7 +43,7 @@ export async function authenticate(request, headers = new Headers()) {
 		// if not defiend, redirect to login
 		if (!user) throw redirect('/login');
 
-		console.log({ oldUser: user });
+		// console.log({ oldUser: user });
 
 		// if expired throw an error
 		if (new Date(user.jwtExpiresAt) < new Date()) {
@@ -57,14 +57,14 @@ export async function authenticate(request, headers = new Headers()) {
 		if (error instanceof AuthorizationError) {
 			const api = new CmsAuth();
 
-			console.log('currentsession', session.get(authenticator.sessionKey));
+			// console.log('currentsession', session.get(authenticator.sessionKey));
 
 			// refresh the token somehow using the strategy and the refresh token
 			let response = await api.refreshToken({
 				refreshToken: session.get(authenticator.sessionKey).refreshToken,
 			});
 
-			console.log({ refreshedresponse: response });
+			// console.log({ refreshedresponse: response });
 
 			let user = response.refreshToken;
 
