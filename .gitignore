@@ -17,3 +17,4 @@ node_modules
 .netlify
 /app/styles
 /.tmp
+/app/tailwind.css
