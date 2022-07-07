@@ -266,6 +266,33 @@ export class CmsActions {
 		this.client.setHeader('Authorization', `JWT ${user.jwt}`);
 	}
 
+	async getCalendarEntryByCalendarId({ id }) {
+		const query = gql`
+			query GetUpcomingEvent($id: [QueryArgument]) {
+				entry(calendar: $id, section: "calendars") {
+					... on calendars_default_Entry {
+						id
+						title
+						calendarVisibility
+					}
+				}
+			}
+		`;
+
+		const response = await this.client.request(query, {
+			id,
+		});
+
+		if (!response?.entry) {
+			throw new CmsError(
+				'There was an error fetching the calendar entry.',
+				response,
+			);
+		}
+
+		return response.entry;
+	}
+
 	async getEventByUid({ uid }) {
 		// event gets one event. if it is a recurring event, it will get the first one in the range.
 		const query = gql`
@@ -282,17 +309,40 @@ export class CmsActions {
 						rangeEnd: $rangeEnd
 					) {
 						id
+						uid
+						calendarId
 						title
 						rrule
-						startDate
 						startDateLocalized
+						endDateLocalized
+						... on coffees_Event {
+							eventVisibility
+							eventJoinLink
+							eventLink
+							eventCalendarDescription
+						}
+						... on virtualCoffeeEvents_Event {
+							eventVisibility
+							eventJoinLink
+							eventLink
+							eventCalendarDescription
+						}
 					}
 				}
 			}
 		`;
 
-		const rangeStart = DateTime.now().toISO();
-		const rangeEnd = DateTime.now().plus({ days: 30 }).toISO();
+		//
+		const rangeStart = DateTime.now().minus({ hours: 12 }).toISO();
+		const rangeEnd = DateTime.now().plus({ hours: 12 }).toISO();
+
+		console.log(
+			JSON.stringify({
+				uid,
+				rangeStart,
+				rangeEnd,
+			}),
+		);
 
 		const response = await this.client.request(query, {
 			uid,
@@ -300,7 +350,7 @@ export class CmsActions {
 			rangeEnd,
 		});
 
-		if (!response?.solspace_calendar?.event) {
+		if (!response?.solspace_calendar) {
 			throw new CmsError('There was an error fetching the event.', response);
 		}
 
