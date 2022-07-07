@@ -1,4 +1,6 @@
 import { GraphQLClient, gql } from 'graphql-request';
+import { authenticate } from '~/auth/auth.server';
+import { DateTime } from 'luxon';
 
 export class CmsError extends Error {
 	constructor(message, data) {
@@ -244,4 +246,64 @@ export class CmsAuth {
 			throw new CmsError('Unable to register user.');
 		}
 	};
+}
+
+export class CmsActions {
+	constructor() {
+		if (!process.env.CMS_URL || !process.env.CMS_TOKEN) {
+			this.client = null;
+		} else {
+			this.client = new GraphQLClient(`${process.env.CMS_URL}/api`, {
+				headers: {
+					Authorization: `bearer ${process.env.CMS_TOKEN}`,
+				},
+			});
+		}
+	}
+
+	async authenticate(request) {
+		let user = await authenticate(request);
+		this.client.setHeader('Authorization', `JWT ${user.jwt}`);
+	}
+
+	async getEventByUid({ uid }) {
+		// event gets one event. if it is a recurring event, it will get the first one in the range.
+		const query = gql`
+			query GetUpcomingEvent(
+				$rangeStart: String!
+				$rangeEnd: String!
+				$uid: [String]
+			) {
+				solspace_calendar {
+					event(
+						uid: $uid
+						loadOccurrences: true
+						rangeStart: $rangeStart
+						rangeEnd: $rangeEnd
+					) {
+						id
+						title
+						rrule
+						startDate
+						startDateLocalized
+					}
+				}
+			}
+		`;
+
+		const rangeStart = DateTime.now().toISO();
+		const rangeEnd = DateTime.now().plus({ days: 30 }).toISO();
+
+		const response = await this.client.request(query, {
+			uid,
+			rangeStart,
+			rangeEnd,
+		});
+
+		if (!response?.solspace_calendar?.event) {
+			throw new CmsError('There was an error fetching the event.', response);
+		}
+
+		return response.solspace_calendar.event;
+	}
 }
