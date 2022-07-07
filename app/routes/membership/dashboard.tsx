@@ -5,6 +5,7 @@ import { authenticate } from '~/auth/auth.server';
 
 export const loader: LoaderFunction = async ({ request }) => {
 	await authenticate(request);
+	return null;
 };
 
 export default function Page() {
