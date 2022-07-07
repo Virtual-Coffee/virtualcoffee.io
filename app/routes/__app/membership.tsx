@@ -18,12 +18,5 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function Page() {
-	return (
-		<DefaultLayout simple showHero={false}>
-			<div>
-				<Link to="/auth/logout">Log Out</Link>
-			</div>
-			<Outlet />
-		</DefaultLayout>
-	);
+	return <Outlet />;
 }

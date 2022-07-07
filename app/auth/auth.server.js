@@ -1,7 +1,6 @@
-import { Authenticator, AuthorizationError, Strategy } from 'remix-auth';
+import { Authenticator, AuthorizationError } from 'remix-auth';
 import { sessionStorage } from '~/auth/session.server';
 import { FormStrategy } from 'remix-auth-form';
-import { SessionStorage } from '@remix-run/server-runtime';
 import { CmsAuth } from '~/api/cms.server';
 import { redirect } from '@remix-run/node';
 
