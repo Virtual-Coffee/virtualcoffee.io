@@ -6,7 +6,7 @@ import { removeTrailingSlash } from '~/util/http';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import PostList from '~/components/PostList';
 import Root from '~/components/Root';
-import { homePageLinks } from '~/routes/index';
+import { homePageLinks } from '~/routes/__frontend/index';
 import { useLocation } from 'react-router-dom';
 import { createMetaData } from '~/util/createMetaData.server';
 

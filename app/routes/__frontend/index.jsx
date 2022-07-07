@@ -26,7 +26,7 @@ export async function loader() {
 		]);
 
 	const resources = loadMdxDirectory({
-		baseDirectory: 'resources',
+		baseDirectory: '__frontend/resources',
 		includeChildren: false,
 	});
 

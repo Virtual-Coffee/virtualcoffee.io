@@ -9,7 +9,9 @@ export default function ChallengesLayout() {
 	// console.log('running', { Hero, heroHeader, heroSubheader });
 
 	return (
-		<DefaultLayout simple={routeId !== 'routes/monthlychallenges/index'}>
+		<DefaultLayout
+			simple={routeId !== 'routes/__frontend/monthlychallenges/index'}
+		>
 			<Outlet />
 		</DefaultLayout>
 	);

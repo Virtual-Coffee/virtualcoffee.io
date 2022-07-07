@@ -17,7 +17,7 @@ export default function ResourcesTemplate() {
 	return (
 		<DefaultLayout simple={true}>
 			<Outlet />
-			{routeId !== 'routes/newsletter/index' && (
+			{routeId !== 'routes/__frontend/newsletter/index' && (
 				<>
 					<hr />
 					<NewsletterSubscribe />

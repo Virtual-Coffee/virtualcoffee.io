@@ -8,7 +8,7 @@ export async function loader({ request }) {
 	const slug = new URL(request.url).pathname;
 
 	const attributes = loadMdxRouteFileAttributes({
-		slug: `/__simpleMdx${slug}`,
+		slug: `/__frontend/__simpleMdx${slug}`,
 	});
 
 	return json({

@@ -58,9 +58,11 @@ function findCurrentFile(files, pathname) {
 
 export async function loader({ request }) {
 	const slug = new URL(request.url).pathname;
-	const attributes = loadMdxRouteFileAttributes({ slug });
+	const attributes = loadMdxRouteFileAttributes({
+		slug: `/__frontend/${slug}`,
+	});
 
-	const allFiles = loadMdxDirectory({ baseDirectory: 'resources' });
+	const allFiles = loadMdxDirectory({ baseDirectory: '__frontend/resources' });
 
 	return json({
 		allFiles,
