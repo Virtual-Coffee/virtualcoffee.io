@@ -293,7 +293,27 @@ export class CmsActions {
 		return response.entry;
 	}
 
+	async getCalendarHandles() {
+		const query = `query getCalendars {
+			solspace_calendar {
+				calendars {
+					handle
+				}
+			}
+		}`;
+
+		const response = await this.client.request(query);
+
+		if (!response?.solspace_calendar?.calendars?.length) {
+			throw new CmsError('There was an error fetching the event.', response);
+		}
+
+		return response.solspace_calendar.calendars.map((c) => c.handle);
+	}
+
 	async getEventByUid({ uid }) {
+		const calendarHandles = await this.getCalendarHandles();
+
 		// event gets one event. if it is a recurring event, it will get the first one in the range.
 		const query = gql`
 			query GetUpcomingEvent(
@@ -315,18 +335,15 @@ export class CmsActions {
 						rrule
 						startDateLocalized
 						endDateLocalized
-						... on coffees_Event {
+						${calendarHandles.map(
+							(handle) => `
+						... on ${handle}_Event {
 							eventVisibility
 							eventJoinLink
 							eventLink
 							eventCalendarDescription
-						}
-						... on virtualCoffeeEvents_Event {
-							eventVisibility
-							eventJoinLink
-							eventLink
-							eventCalendarDescription
-						}
+						}`,
+						)}
 					}
 				}
 			}
