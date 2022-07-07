@@ -41,7 +41,16 @@ export async function authenticate(request, headers = new Headers()) {
 		let user = session.get(authenticator.sessionKey);
 
 		// if not defiend, redirect to login
-		if (!user) throw redirect('/login');
+		if (!user) {
+			const url = new URL(request.url);
+			const search = url.search;
+
+			throw redirect(
+				`/auth/login?redirectOnSuccess=${encodeURIComponent(
+					url.pathname + (search.length > 1 ? search : ''),
+				)}`,
+			);
+		}
 
 		// console.log({ oldUser: user });
 

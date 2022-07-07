@@ -1,11 +1,23 @@
-import { Form, useActionData, useCatch, Link } from '@remix-run/react';
+import {
+	Form,
+	useActionData,
+	useCatch,
+	Link,
+	useLoaderData,
+} from '@remix-run/react';
 import { json } from '@remix-run/node';
 import { authenticator } from '~/auth/auth.server';
 import { AuthorizationError } from 'remix-auth';
 
-function LogInForm({ error }) {
+function LogInForm({ error, redirectOnSuccess }) {
 	return (
-		<Form method="post" reloadDocument>
+		<Form
+			method="post"
+			reloadDocument
+			action={`/auth/login${
+				redirectOnSuccess ? '?redirectOnSuccess=' + redirectOnSuccess : ''
+			}`}
+		>
 			<legend>Log In</legend>
 			{error && (
 				<div className="alert alert-danger">
@@ -16,6 +28,11 @@ function LogInForm({ error }) {
 						</p>
 					)}
 				</div>
+			)}
+			{redirectOnSuccess && (
+				<>
+					<div>Please log in to see this content.</div>
+				</>
 			)}
 			<input type="email" name="email" required />
 			<input
@@ -40,10 +57,16 @@ export function CatchBoundary() {
 // First we create our UI with the form doing a POST and the inputs with the
 // names we are going to use in the strategy
 export default function Screen() {
+	const { redirectOnSuccess } = useLoaderData();
 	const actionData = useActionData();
 	console.log({ t: actionData });
 
-	return <LogInForm error={actionData?.message} />;
+	return (
+		<LogInForm
+			error={actionData?.message}
+			redirectOnSuccess={redirectOnSuccess}
+		/>
+	);
 }
 
 export let action = async ({ request }) => {
@@ -51,9 +74,12 @@ export let action = async ({ request }) => {
 	// request object, optionally we pass an object with the URLs we want the user
 	// to be redirected to after a success or a failure
 
+	const url = new URL(request.url);
+	const redirectOnSuccess = url.searchParams.get('redirectOnSuccess');
+
 	try {
 		return await authenticator.authenticate('user-pass', request, {
-			successRedirect: '/membership/dashboard',
+			successRedirect: redirectOnSuccess || '/membership/dashboard',
 		});
 	} catch (error) {
 		// Because redirects work by throwing a Response, you need to check if the
@@ -73,6 +99,7 @@ export let action = async ({ request }) => {
 		}
 		// here the error is a generic error that another reason may throw
 		console.log('is generic error');
+		console.log(error);
 		return json({ message: 'There was a server error.' });
 	}
 };
@@ -82,7 +109,14 @@ export let action = async ({ request }) => {
 // dashboard if it is or return null if it's not
 export let loader = async ({ request }) => {
 	// If the user is already authenticated redirect to /dashboard directly
-	return await authenticator.isAuthenticated(request, {
+	await authenticator.isAuthenticated(request, {
 		successRedirect: '/membership/dashboard',
+	});
+
+	const url = new URL(request.url);
+	const redirectOnSuccess = url.searchParams.get('redirectOnSuccess');
+
+	return json({
+		redirectOnSuccess,
 	});
 };
