@@ -103,7 +103,7 @@ export let action = async ({ request }) => {
 // dashboard if it is or return null if it's not
 export let loader = async ({ request }) => {
 	await authenticator.isAuthenticated(request, {
-		successRedirect: '/membership/dashboard',
+		successRedirect: '/membership',
 	});
 
 	const url = new URL(request.url);

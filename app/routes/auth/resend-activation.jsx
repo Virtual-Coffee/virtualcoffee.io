@@ -78,6 +78,6 @@ export let action = async ({ request }) => {
 export let loader = async ({ request }) => {
 	// If the user is already authenticated redirect to /dashboard directly
 	return await authenticator.isAuthenticated(request, {
-		successRedirect: '/membership/dashboard',
+		successRedirect: '/membership',
 	});
 };

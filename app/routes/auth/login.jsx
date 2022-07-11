@@ -158,7 +158,7 @@ export let action = async ({ request }) => {
 
 	try {
 		return await authenticator.authenticate('user-pass', request, {
-			successRedirect: redirectOnSuccess || '/membership/dashboard',
+			successRedirect: redirectOnSuccess || '/membership',
 		});
 	} catch (error) {
 		// Because redirects work by throwing a Response, you need to check if the
@@ -191,7 +191,7 @@ export let loader = async ({ request }) => {
 	const user = await getUser(request);
 
 	if (user) {
-		return redirect('/membership/dashboard');
+		return redirect('/membership');
 	}
 
 	const url = new URL(request.url);
