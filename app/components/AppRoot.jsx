@@ -12,6 +12,7 @@ import {
 	UserCircleIcon,
 } from '@heroicons/react/outline';
 import { Link } from '@remix-run/react';
+import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
 
 const navigation = [
 	{ name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -40,7 +41,7 @@ const User = ({ user }) => {
 					<p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
 						{user.userYourName || user.email}
 					</p>
-					<p className="text-xs font-medium text-indigo-600 group-hover:text-indigo-900">
+					<p className="text-xs font-medium text-sky-600 group-hover:text-sky-900">
 						View profile
 					</p>
 				</div>
@@ -48,7 +49,7 @@ const User = ({ user }) => {
 			<div>
 				<Link
 					to="/auth/logout"
-					className="text-xs text-indigo-600 hover:text-indigo-900"
+					className="text-xs text-sky-600 hover:text-sky-900"
 				>
 					Sign Out
 				</Link>
@@ -117,10 +118,9 @@ export default function AppRoot({ children, user }) {
 									</Transition.Child>
 									<div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
 										<div className="flex-shrink-0 flex items-center px-4">
-											<img
+											<VirtualCoffeeFullBanner
+												title="Virtual Coffee"
 												className="h-8 w-auto"
-												src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-												alt="Workflow"
 											/>
 										</div>
 										<nav className="mt-5 px-2 space-y-1">
@@ -165,10 +165,9 @@ export default function AppRoot({ children, user }) {
 					<div className="flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white">
 						<div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
 							<div className="flex items-center flex-shrink-0 px-4">
-								<img
+								<VirtualCoffeeFullBanner
+									title="Virtual Coffee"
 									className="h-8 w-auto"
-									src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-									alt="Workflow"
 								/>
 							</div>
 							<nav className="mt-5 flex-1 px-2 bg-white space-y-1">
@@ -204,7 +203,7 @@ export default function AppRoot({ children, user }) {
 					<div className="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-white">
 						<button
 							type="button"
-							className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+							className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500"
 							onClick={() => setSidebarOpen(true)}
 						>
 							<span className="sr-only">Open sidebar</span>
