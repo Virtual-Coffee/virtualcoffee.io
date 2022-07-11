@@ -1,6 +1,7 @@
 export default function VirtualCoffeeFullBanner({
 	ariaHidden,
 	title = 'Virtual Coffee',
+	...rest
 }) {
 	return (
 		<svg
@@ -14,6 +15,7 @@ export default function VirtualCoffeeFullBanner({
 						role: 'img',
 						'aria-labelledby': 'navlogoBannerSvgTitle',
 				  })}
+			{...rest}
 		>
 			{!ariaHidden && <title id="navlogoBannerSvgTitle">{title}</title>}
 			<defs>
