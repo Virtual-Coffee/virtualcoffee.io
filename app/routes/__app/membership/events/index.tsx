@@ -169,6 +169,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 			month,
 			day,
 			view,
+			weekStart,
+			weekEnd,
 		},
 	});
 };
@@ -201,6 +203,8 @@ export default function Page() {
 			view: CalendarView;
 			month: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 			day: number;
+			weekStart: string;
+			weekEnd: string;
 		};
 	} = useLoaderData();
 
@@ -211,7 +215,7 @@ export default function Page() {
 		day: settings.day,
 	});
 
-	console.log({ weeklyEvents });
+	console.log({ weekNumber: calDate.weekNumber });
 
 	return (
 		<>
@@ -623,10 +627,26 @@ export default function Page() {
 						<>
 							<div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6">
 								<h2 className="text-lg font-semibold text-gray-900">
-									Upcoming events
+									{DateTime.fromISO(settings.weekStart).toLocaleString({
+										month: 'short',
+										day: 'numeric',
+									})}{' '}
+									-{' '}
+									{DateTime.fromISO(settings.weekEnd).toLocaleString({
+										month: 'short',
+										day: 'numeric',
+									})}
 								</h2>
 								<div className="lg:grid lg:grid-cols-12 lg:gap-x-16">
 									<div className="mt-10 text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 lg:mt-9 xl:col-start-9">
+										<div className="flex items-center text-gray-900">
+											<div className="flex-auto font-semibold">
+												{calDate.toLocaleString({
+													month: 'long',
+													year: 'numeric',
+												})}
+											</div>
+										</div>
 										<div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500">
 											<div>S</div>
 											<div>M</div>
@@ -656,7 +676,9 @@ export default function Page() {
 																: day.isCurrentMonth
 																? 'bg-white'
 																: 'bg-gray-50',
-															day.isToday && 'font-semibold',
+															day.events.length
+																? 'font-bold'
+																: day.isToday && 'font-semibold',
 															day.isCurrentMonth &&
 																!day.isToday &&
 																'text-gray-900',
