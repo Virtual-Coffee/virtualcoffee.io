@@ -14,7 +14,10 @@ export const loader = async ({ request }) => {
 	return json({});
 };
 
-export const links = () => [{ rel: 'stylesheet', href: styles }];
+export const links = () => [
+	{ rel: 'stylesheet', href: styles },
+	{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
+];
 
 export default function App() {
 	const { user } = useLoaderData();

@@ -1,7 +1,10 @@
 import { Outlet } from '@remix-run/react';
 import styles from '~/tailwind.css';
 
-export const links = () => [{ rel: 'stylesheet', href: styles }];
+export const links = () => [
+	{ rel: 'stylesheet', href: styles },
+	{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
+];
 
 export default function SimpleLayout() {
 	return (
