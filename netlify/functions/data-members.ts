@@ -11,6 +11,10 @@ import { sanitizeHtml } from '../../app/util/sanitizeCmsData';
 // Any deploys will clear the cache
 // Read more here: https://docs.netlify.com/configure-builds/on-demand-builders/
 
+function nonNullable<T>(value: T): value is NonNullable<T> {
+	return value !== null && value !== undefined;
+}
+
 type Website = `http${'s' | ''}://${string}`;
 
 type Account =
@@ -310,10 +314,6 @@ async function loadUserData() {
 			];
 		}
 
-		function nonNullable<T>(value: T): value is NonNullable<T> {
-			return value !== null && value !== undefined;
-		}
-
 		// TODO: Dan and kirk fix this
 		returnObject.accounts = data.accounts
 			.map((account): FixedUpUserAccount | null => {
@@ -451,10 +451,10 @@ async function loadUserData() {
 				}
 			})
 			.filter(nonNullable);
-		// .filter(Boolean)
 
 		return returnObject;
 	};
+	// https://github.com/Virtual-Coffee/virtualcoffee.io/pull/586/commits/97fd4757ae3db5f9fd2b0c1cad117fe8211fcc16
 
 	const filteredCore = await Promise.all(core.map(fixupData));
 	const filteredMembers = await Promise.all(members.map(fixupData));
