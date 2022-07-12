@@ -293,14 +293,17 @@ export class CmsActions {
 		return response.entry;
 	}
 
-	async getCalendarHandles() {
+	async getCalendars() {
 		const query = `query getCalendars {
 			solspace_calendar {
 				calendars {
 					handle
+					name
+					icsHash
 				}
 			}
-		}`;
+		}
+		`;
 
 		const response = await this.client.request(query);
 
@@ -308,7 +311,17 @@ export class CmsActions {
 			throw new CmsError('There was an error fetching the event.', response);
 		}
 
-		return response.solspace_calendar.calendars.map((c) => c.handle);
+		return response.solspace_calendar.calendars;
+	}
+
+	async getCalendarHandles() {
+		const calendars = await this.getCalendars();
+
+		if (!calendars?.length) {
+			throw new CmsError('There was an error fetching the event.', response);
+		}
+
+		return calendars.map((c) => c.handle);
 	}
 
 	async getEventByUid({ uid }) {
