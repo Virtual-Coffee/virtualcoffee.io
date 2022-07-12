@@ -218,14 +218,16 @@ function loadDirectory(path: string) {
 type TeamName = keyof typeof teamsData;
 type TeamsDict = Record<string, TeamName[]>;
 
-type TrueFixedUpUserObject = Omit<MemberObject, 'accounts'> & {
+type FixedUpUserAccount = Account & {
+	Icon: string;
+	url: Website;
+	title: string;
+};
+
+type FixedUpUser = Omit<MemberObject, 'accounts'> & {
 	avatarUrl?: GithubSearchUser['avatarUrl'];
 	teams?: TeamName[];
-	accounts: (Account & {
-		Icon: string;
-		url: Website;
-		title: string;
-	})[];
+	accounts: FixedUpUserAccount[];
 };
 
 async function loadUserData() {
@@ -257,7 +259,7 @@ async function loadUserData() {
 			return null;
 		}
 
-		const returnObject: TrueFixedUpUserObject = {
+		const returnObject: FixedUpUser = {
 			...data,
 			accounts: [],
 		};
@@ -314,7 +316,7 @@ async function loadUserData() {
 
 		// TODO: Dan and kirk fix this
 		returnObject.accounts = data.accounts
-			.map((account) => {
+			.map((account): FixedUpUserAccount | null => {
 				switch (account.type) {
 					case 'github':
 						if (!account.username) {
