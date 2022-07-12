@@ -1,5 +1,5 @@
 import { Outlet, useLoaderData } from '@remix-run/react';
-import AppRoot from '~/components/AppRoot';
+import AppRoot from '~/components/layouts/AppRoot';
 import { authenticate } from '~/auth/auth.server';
 import styles from '~/tailwind.css';
 import { json } from '@remix-run/node';

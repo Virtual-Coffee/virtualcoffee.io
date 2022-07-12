@@ -2,7 +2,7 @@ import styles from '../styles/main.css';
 import { Outlet } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import PostList from '~/components/PostList';
-import Root from '~/components/Root';
+import Root from '~/components/layouts/Root';
 import { homePageLinks } from '~/routes/__frontend/index';
 
 export function links() {
