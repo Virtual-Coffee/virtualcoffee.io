@@ -29,7 +29,7 @@ function LogInForm({ error, redirectOnSuccess }) {
 						className="space-y-6"
 						method="post"
 						reloadDocument
-						action={`/auth/login${
+						action={`/login${
 							redirectOnSuccess ? '?redirectOnSuccess=' + redirectOnSuccess : ''
 						}`}
 					>
@@ -38,9 +38,7 @@ function LogInForm({ error, redirectOnSuccess }) {
 								<p>{error}</p>
 								{error === 'Please activate your account before logging in' && (
 									<p>
-										<Link to="/auth/resend-activation">
-											Resend Activation Email
-										</Link>
+										<Link to="/resend-activation">Resend Activation Email</Link>
 									</p>
 								)}
 							</Alert>
@@ -102,7 +100,7 @@ function LogInForm({ error, redirectOnSuccess }) {
 
 							<div className="text-sm">
 								<Link
-									to="/auth/forgot-password"
+									to="/forgot-password"
 									className="font-medium text-sky-600 hover:text-sky-500"
 								>
 									Forgot your password?

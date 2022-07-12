@@ -239,7 +239,7 @@ export let action = async ({ request }) => {
 		const response = await api.register(values);
 		console.log({ user: response.registerPendingMembers.user });
 
-		return redirect(`/auth/register-success`);
+		return redirect(`/register-success`);
 	} catch (error) {
 		// Because redirects work by throwing a Response, you need to check if the
 		// caught error is a response and return it or throw it again

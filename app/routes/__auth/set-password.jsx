@@ -29,7 +29,7 @@ export default function Screen() {
 			<div className="alert alert-success">
 				<p>{actionData.successMessage}</p>
 				<p>
-					<Link to="/auth/login">Log In</Link>
+					<Link to="/login">Log In</Link>
 				</p>
 			</div>
 		);
@@ -37,7 +37,7 @@ export default function Screen() {
 
 	return (
 		<Form
-			action={`/auth/set-password?id=${id}&code=${code}`}
+			action={`/set-password?id=${id}&code=${code}`}
 			method="post"
 			reloadDocument
 		>
@@ -63,7 +63,7 @@ export let action = async ({ request }) => {
 		const id = url.searchParams.get('id');
 
 		if (!code || !id) {
-			return redirect('/auth/login');
+			return redirect('/login');
 		}
 
 		const api = new CmsAuth();

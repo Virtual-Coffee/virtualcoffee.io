@@ -65,7 +65,7 @@ export async function authenticate(
 			if (redirectOnFail) {
 				console.log('THROWING');
 				throw redirect(
-					`/auth/login?redirectOnSuccess=${encodeURIComponent(
+					`/login?redirectOnSuccess=${encodeURIComponent(
 						url.pathname + (search.length > 1 ? search : ''),
 					)}`,
 				);

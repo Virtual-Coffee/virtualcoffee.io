@@ -44,7 +44,7 @@ export default function Screen() {
 		<div>
 			<div>Thank you, you are now activated!</div>
 			<div>
-				<Link to="/auth/login">Log In</Link>
+				<Link to="/login">Log In</Link>
 			</div>
 		</div>
 	);
@@ -62,7 +62,7 @@ export let loader = async ({ request }) => {
 	const id = url.searchParams.get('id');
 
 	if (!code || !id) {
-		return redirect('/auth/login');
+		return redirect('/login');
 	}
 
 	const api = new CmsAuth();

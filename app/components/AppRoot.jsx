@@ -44,10 +44,7 @@ const User = ({ user }) => {
 				</div>
 			</Link>
 			<div>
-				<Link
-					to="/auth/logout"
-					className="text-xs text-sky-600 hover:text-sky-900"
-				>
+				<Link to="/logout" className="text-xs text-sky-600 hover:text-sky-900">
 					Sign Out
 				</Link>
 			</div>
