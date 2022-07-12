@@ -1,5 +1,5 @@
 export default function VirtualCoffeeFullBanner({
-	ariaHidden,
+	ariaHidden = false,
 	title = 'Virtual Coffee',
 	...rest
 }) {

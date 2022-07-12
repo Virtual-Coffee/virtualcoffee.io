@@ -43,14 +43,16 @@ export default function Alert({
 	title,
 	children,
 	type = 'warning',
+	className = '',
 }: {
 	title: React.ReactNode;
 	children?: React.ReactNode;
 	type: AlertTypes;
+	className?: String;
 }) {
 	const Icon = config[type].Icon;
 	return (
-		<div className={`rounded-md p-4 ${config[type].body}`}>
+		<div className={`rounded-md p-4 ${config[type].body} ${className}`}>
 			<div className="flex">
 				<div className="flex-shrink-0">
 					<Icon className={`h-5 w-5 ${config[type].icon}`} aria-hidden="true" />
