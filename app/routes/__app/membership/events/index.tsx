@@ -5,6 +5,7 @@ import { authenticate } from '~/auth/auth.server';
 import { CmsActions } from '~/api/cms.server';
 import type { Event } from '~/api/cms.server';
 import PageHeader from '~/components/app/PageHeader';
+import DisplayHtml from '~/components/DisplayHtml';
 import { Fragment } from 'react';
 import {
 	CalendarIcon,
@@ -282,7 +283,7 @@ export default function Page() {
 										type="button"
 										className="flex items-center rounded-md border border-gray-300 bg-white py-2 pl-3 pr-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
 									>
-										Month view
+										{settings.view === 'month' ? 'Month view' : 'Week View'}
 										<ChevronDownIcon
 											className="ml-2 h-5 w-5 text-gray-400"
 											aria-hidden="true"
@@ -695,9 +696,15 @@ export default function Page() {
 													className="relative flex space-x-6 py-6 xl:static"
 												>
 													<div className="flex-auto">
-														<h3 className="pr-10 font-semibold text-gray-900 xl:pr-0">
+														<h3 className="text-lg pr-10 font-semibold text-gray-900 xl:pr-0">
 															{event.title}
 														</h3>
+														{event.eventCalendarDescription && (
+															<DisplayHtml
+																html={event.eventCalendarDescription}
+																className="text-gray-500"
+															/>
+														)}
 														<dl className="mt-2 flex flex-col text-gray-500 xl:flex-row">
 															<div className="flex items-start space-x-3">
 																<dt className="mt-0.5">
