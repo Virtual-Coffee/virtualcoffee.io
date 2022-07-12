@@ -9,7 +9,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 	let user = await authenticate(request);
 	if (user) {
 		// console.log({ user: user?.authenticate?.user });
-		console.log({ user });
+		// console.log({ user });
 	} else {
 		console.log('no user');
 	}

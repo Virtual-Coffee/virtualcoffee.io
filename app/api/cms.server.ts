@@ -388,19 +388,7 @@ export class CmsActions {
 		return calendars.map((c) => c.handle);
 	}
 
-	async getEventByUid({ uid }: { uid: string }): Promise<{
-		id: string;
-		uid: string;
-		calendarId: string;
-		title: string;
-		rrule?: string;
-		startDateLocalized: string;
-		endDateLocalized: string;
-		eventVisibility: EventVisibility;
-		eventJoinLink?: string;
-		eventLink?: string;
-		eventCalendarDescription?: string;
-	}> {
+	async getEventByUid({ uid }: { uid: string }): Promise<Event> {
 		const calendarHandles = await this.getAllCalendarHandles();
 
 		// event gets one event. if it is a recurring event, it will get the first one in the range.
@@ -461,5 +449,82 @@ export class CmsActions {
 		}
 
 		return response.solspace_calendar.event;
+	}
+
+	async getEventsInRange({
+		rangeStart: specifiedRangeStart,
+		rangeEnd: specifiedRangeEnd,
+		calendars,
+		limit,
+	}: {
+		rangeStart?: string;
+		rangeEnd?: string;
+		calendars?: string[];
+		limit?: number;
+	}): Promise<Event[]> {
+		let calendarHandles = calendars || (await this.getAllCalendarHandles());
+
+		// event gets one event. if it is a recurring event, it will get the first one in the range.
+		const query = gql`
+			query GetUpcomingEvents(
+				$rangeStart: String!
+				$rangeEnd: String!
+				$limit:Int
+			) {
+				solspace_calendar {
+					events(
+						loadOccurrences: true
+						rangeStart: $rangeStart
+						rangeEnd: $rangeEnd
+						limit: $limit
+					) {
+						id
+						uid
+						calendarId
+						title
+						rrule
+						startDateLocalized
+						endDateLocalized
+						${calendarHandles.map(
+							(handle) => `
+						... on ${handle}_Event {
+							eventVisibility
+							eventJoinLink
+							eventLink
+							eventCalendarDescription
+						}`,
+						)}
+					}
+				}
+			}
+		`;
+
+		console.log(query);
+
+		//
+		const rangeStart =
+			specifiedRangeStart || DateTime.now().set({ hour: 0 }).toISO();
+		const rangeEnd =
+			specifiedRangeEnd ||
+			DateTime.now().set({ hour: 0 }).plus({ days: 30 }).toISO();
+
+		console.log(
+			JSON.stringify({
+				rangeStart,
+				rangeEnd,
+			}),
+		);
+
+		const response = await this.client.request(query, {
+			limit,
+			rangeStart,
+			rangeEnd,
+		});
+
+		if (!response?.solspace_calendar) {
+			throw new CmsError('There was an error fetching events.', response);
+		}
+
+		return response.solspace_calendar.events;
 	}
 }
