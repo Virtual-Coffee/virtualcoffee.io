@@ -39,11 +39,7 @@ export async function getUser(request) {
 	let session = await sessionStorage.getSession(request.headers.get('Cookie'));
 	let user = session.get(authenticator.sessionKey);
 
-	if (
-		!user ||
-		new Date(user.jwtExpiresAt) < new Date() ||
-		new Date(user.refreshTokenExpiresAt) < new Date()
-	) {
+	if (!user || new Date(user.refreshTokenExpiresAt) < new Date()) {
 		return null;
 	}
 	return user;
@@ -53,6 +49,7 @@ export async function authenticate(
 	request,
 	{ headers = new Headers(), redirectOnFail = true } = {},
 ) {
+	let session = await sessionStorage.getSession(request.headers.get('Cookie'));
 	try {
 		// get the auth data from the session
 		let user = await getUser(request);
