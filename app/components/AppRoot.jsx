@@ -2,12 +2,8 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import {
 	CalendarIcon,
-	ChartBarIcon,
-	FolderIcon,
 	HomeIcon,
-	InboxIcon,
 	MenuIcon,
-	UsersIcon,
 	XIcon,
 	UserCircleIcon,
 } from '@heroicons/react/outline';
@@ -15,12 +11,13 @@ import { Link } from '@remix-run/react';
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
 
 const navigation = [
-	{ name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-	{ name: 'Team', href: '#', icon: UsersIcon, current: false },
-	{ name: 'Projects', href: '#', icon: FolderIcon, current: false },
-	{ name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-	{ name: 'Documents', href: '#', icon: InboxIcon, current: false },
-	{ name: 'Reports', href: '#', icon: ChartBarIcon, current: false },
+	{ name: 'Dashboard', to: '/membership', icon: HomeIcon, current: true },
+	{
+		name: 'Events',
+		to: '/membership/events',
+		icon: CalendarIcon,
+		current: false,
+	},
 ];
 
 function classNames(...classes) {
@@ -125,9 +122,9 @@ export default function AppRoot({ children, user }) {
 										</div>
 										<nav className="mt-5 px-2 space-y-1">
 											{navigation.map((item) => (
-												<a
+												<Link
 													key={item.name}
-													href={item.href}
+													to={item.to}
 													className={classNames(
 														item.current
 															? 'bg-gray-100 text-gray-900'
@@ -145,7 +142,7 @@ export default function AppRoot({ children, user }) {
 														aria-hidden="true"
 													/>
 													{item.name}
-												</a>
+												</Link>
 											))}
 										</nav>
 									</div>
@@ -172,9 +169,9 @@ export default function AppRoot({ children, user }) {
 							</div>
 							<nav className="mt-5 flex-1 px-2 bg-white space-y-1">
 								{navigation.map((item) => (
-									<a
+									<Link
 										key={item.name}
-										href={item.href}
+										to={item.to}
 										className={classNames(
 											item.current
 												? 'bg-gray-100 text-gray-900'
@@ -192,7 +189,7 @@ export default function AppRoot({ children, user }) {
 											aria-hidden="true"
 										/>
 										{item.name}
-									</a>
+									</Link>
 								))}
 							</nav>
 						</div>
