@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/outline';
 import { Link } from '@remix-run/react';
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
+import classNames from 'classnames';
 
 const navigation = [
 	{ name: 'Dashboard', to: '/membership', icon: HomeIcon, current: true },
@@ -19,10 +20,6 @@ const navigation = [
 		current: false,
 	},
 ];
-
-function classNames(...classes) {
-	return classes.filter(Boolean).join(' ');
-}
 
 const User = ({ user }) => {
 	return (
