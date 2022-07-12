@@ -3,16 +3,18 @@ import { authenticate } from '~/auth/auth.server';
 import { DateTime } from 'luxon';
 
 export class CmsError extends Error {
-	constructor(message, data) {
+	data: any;
+	constructor(message: string, data?: any) {
 		super(message);
 		this.data = data;
 	}
 }
 
 export class CmsAuth {
+	client: GraphQLClient;
 	constructor() {
 		if (!process.env.CMS_URL || !process.env.CMS_TOKEN) {
-			this.client = null;
+			throw new CmsError('Missing API credentials');
 		} else {
 			this.client = new GraphQLClient(`${process.env.CMS_URL}/api`, {
 				headers: {
@@ -22,7 +24,19 @@ export class CmsAuth {
 		}
 	}
 
-	activateUser = async ({ code, id }) => {
+	handleRequestError(error: any, errorMessage: string = 'There was an error') {
+		console.log(error);
+		// @ts-ignore
+		const msg =
+			// @ts-ignore
+			error.response?.errors?.[0]?.message || errorMessage;
+		throw new CmsError(msg, {
+			// @ts-ignore
+			errors: error.response?.errors,
+		});
+	}
+
+	activateUser = async ({ code, id }: { code: string; id: string }) => {
 		const query = gql`
 			mutation ActivateUser($code: String!, $id: String!) {
 				activateUser(code: $code, id: $id)
@@ -33,16 +47,11 @@ export class CmsAuth {
 			console.log({ response });
 			return response;
 		} catch (error) {
-			console.log(error);
-			const msg =
-				error.response?.errors?.[0]?.message || 'Unable to activate user.';
-			throw new CmsError(msg, {
-				errors: error.response?.errors,
-			});
+			this.handleRequestError(error, 'Unable to activate user.');
 		}
 	};
 
-	resendActivation = async ({ email }) => {
+	resendActivation = async ({ email }: { email: string }) => {
 		const query = gql`
 			mutation ResendActivation($email: String!) {
 				resendActivation(email: $email)
@@ -53,14 +62,11 @@ export class CmsAuth {
 			console.log({ response });
 			return response;
 		} catch (error) {
-			const msg = error.response?.errors?.[0]?.message || 'Server error.';
-			throw new CmsError(msg, {
-				errors: error.response?.errors,
-			});
+			this.handleRequestError(error);
 		}
 	};
 
-	forgottenPassword = async ({ email }) => {
+	forgottenPassword = async ({ email }: { email: string }) => {
 		const query = gql`
 			mutation ForgottenPassword($email: String!) {
 				forgottenPassword(email: $email)
@@ -71,14 +77,19 @@ export class CmsAuth {
 			console.log({ response });
 			return response;
 		} catch (error) {
-			const msg = error.response?.errors?.[0]?.message || 'Server Error.';
-			throw new CmsError(msg, {
-				errors: error.response?.errors,
-			});
+			this.handleRequestError(error);
 		}
 	};
 
-	setPassword = async ({ password, code, id }) => {
+	setPassword = async ({
+		password,
+		code,
+		id,
+	}: {
+		password: string;
+		code: string;
+		id: string;
+	}) => {
 		const query = gql`
 			mutation SetPassword($password: String!, $code: String!, $id: String!) {
 				setPassword(password: $password, code: $code, id: $id)
@@ -89,15 +100,11 @@ export class CmsAuth {
 			console.log({ response });
 			return response;
 		} catch (error) {
-			const msg =
-				error.response?.errors?.[0]?.message || 'Unable to save password.';
-			throw new CmsError(msg, {
-				errors: error.response?.errors,
-			});
+			this.handleRequestError(error, 'Unable to save password.');
 		}
 	};
 
-	refreshToken = async ({ refreshToken }) => {
+	refreshToken = async ({ refreshToken }: { refreshToken: string }) => {
 		const query = gql`
 			mutation RefreshToken($refreshToken: String!) {
 				refreshToken(refreshToken: $refreshToken) {
@@ -123,16 +130,11 @@ export class CmsAuth {
 			console.log({ response });
 			return response;
 		} catch (error) {
-			const msg =
-				error.response?.errors?.[0]?.message ||
-				'Unable to refresh user session.';
-			throw new CmsError(msg, {
-				errors: error.response?.errors,
-			});
+			this.handleRequestError(error, 'Unable to refresh user session.');
 		}
 	};
 
-	login = async (email, password) => {
+	login = async (email: string, password: string) => {
 		const query = gql`
 			mutation Authenticate($email: String!, $password: String!) {
 				authenticate(email: $email, password: $password) {
@@ -158,11 +160,7 @@ export class CmsAuth {
 			console.log({ response });
 			return response;
 		} catch (error) {
-			const msg =
-				error.response?.errors?.[0]?.message || 'Unable to log in user.';
-			throw new CmsError(msg, {
-				errors: error.response?.errors,
-			});
+			this.handleRequestError(error, 'Unable to log in user.');
 		}
 	};
 
@@ -177,6 +175,17 @@ export class CmsAuth {
 		userWhereAreYouInYourCodingJourney,
 		userCodeInterests,
 		userHopingVirtualCoffee,
+	}: {
+		email: string;
+		password: string;
+		userYourName: string;
+		userPronouns?: string;
+		userGithubusername?: string;
+		userLinks?: string;
+		userHowDidYouHearAboutUs?: string;
+		userWhereAreYouInYourCodingJourney?: string;
+		userCodeInterests?: string;
+		userHopingVirtualCoffee?: string;
 	}) => {
 		const query = gql`
 			mutation Register(
@@ -233,12 +242,16 @@ export class CmsAuth {
 			console.log({ response });
 			return response;
 		} catch (error) {
+			// @ts-ignore
 			if (error?.response?.errors && error.response.errors.length) {
 				throw new CmsError(
+					// @ts-ignore
 					`Unable to register user: ${error.response.errors
+						// @ts-ignore
 						.map((e) => e.message)
 						.join(',')}`,
 					{
+						// @ts-ignore
 						errors: error.response.errors,
 					},
 				);
@@ -248,10 +261,51 @@ export class CmsAuth {
 	};
 }
 
+export type CalendarVisibility = 'membersOnly' | 'pendingMembers' | 'public';
+export type EventVisibility = CalendarVisibility | 'default';
+
+export type Event = {
+	id: string;
+	uid: string;
+	title: string;
+	rrule?: string;
+	calendarId: string | number;
+	startDateLocalized: string;
+	endDateLocalized: string;
+	eventVisibility?: EventVisibility;
+	eventJoinLink?: string;
+	eventLink?: string;
+	eventCalendarDescription?: string;
+};
+
+export type SafeEvent = Omit<Event, 'eventJoinLink' | 'eventLink'>;
+
+export type Calendar = {
+	id: number;
+	title: string;
+	calendarVisibility: CalendarVisibility;
+};
+
+export type User = {
+	jwt: string;
+	jwtExpiresAt: number;
+	refreshToken: string;
+	refreshTokenExpiresAt: number;
+	schema: 'Pending Members Schema' | 'Full Members Schema';
+	user: {
+		id: string | number;
+		email: string;
+		enabled: boolean;
+		status: string;
+		userYourName?: string;
+	};
+};
+
 export class CmsActions {
+	client: GraphQLClient;
 	constructor() {
 		if (!process.env.CMS_URL || !process.env.CMS_TOKEN) {
-			this.client = null;
+			throw new CmsError('Missing API credentials');
 		} else {
 			this.client = new GraphQLClient(`${process.env.CMS_URL}/api`, {
 				headers: {
@@ -261,12 +315,16 @@ export class CmsActions {
 		}
 	}
 
-	async authenticate(request) {
+	async authenticate(request: Request) {
 		let user = await authenticate(request);
 		this.client.setHeader('Authorization', `JWT ${user.jwt}`);
 	}
 
-	async getCalendarEntryByCalendarId({ id }) {
+	async getCalendarEntryByCalendarId({ id }: { id: string | number }): Promise<{
+		id: number;
+		title: string;
+		calendarVisibility: CalendarVisibility;
+	}> {
 		const query = gql`
 			query GetUpcomingEvent($id: [QueryArgument]) {
 				entry(calendar: $id, section: "calendars") {
@@ -293,7 +351,13 @@ export class CmsActions {
 		return response.entry;
 	}
 
-	async getCalendars() {
+	async getCalendars(): Promise<
+		{
+			handle: string;
+			name: string;
+			icsHash: string;
+		}[]
+	> {
 		const query = `query getCalendars {
 			solspace_calendar {
 				calendars {
@@ -314,17 +378,29 @@ export class CmsActions {
 		return response.solspace_calendar.calendars;
 	}
 
-	async getCalendarHandles() {
+	async getCalendarHandles(): Promise<string[]> {
 		const calendars = await this.getCalendars();
 
 		if (!calendars?.length) {
-			throw new CmsError('There was an error fetching the event.', response);
+			throw new CmsError('There was an error fetching the event.');
 		}
 
 		return calendars.map((c) => c.handle);
 	}
 
-	async getEventByUid({ uid }) {
+	async getEventByUid({ uid }: { uid: string }): Promise<{
+		id: string;
+		uid: string;
+		calendarId: string;
+		title: string;
+		rrule?: string;
+		startDateLocalized: string;
+		endDateLocalized: string;
+		eventVisibility: EventVisibility;
+		eventJoinLink?: string;
+		eventLink?: string;
+		eventCalendarDescription?: string;
+	}> {
 		const calendarHandles = await this.getCalendarHandles();
 
 		// event gets one event. if it is a recurring event, it will get the first one in the range.
