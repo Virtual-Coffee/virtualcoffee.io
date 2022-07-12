@@ -3,50 +3,12 @@ import type { LoaderFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { authenticate } from '~/auth/auth.server';
 import { CmsActions } from '~/api/cms.server';
+import type { Event, SafeEvent, Calendar, User } from '~/api/cms.server';
 import { DateTime } from 'luxon';
-import DefaultLayout from '~/components/layouts/DefaultLayout';
+import SingleTask from '~/components/layouts/SingleTask';
+import Alert from '~/components/app/Alert';
 
-type CalendarVisibility = 'membersOnly' | 'pendingMembers' | 'public';
-type EventVisibility = CalendarVisibility | 'default';
-
-type Event = {
-	id: string;
-	uid: string;
-	title: string;
-	rrule?: string;
-	calendarId: string | number;
-	startDateLocalized: string;
-	endDateLocalized: string;
-	eventVisibility?: EventVisibility;
-	eventJoinLink?: string;
-	eventLink?: string;
-	eventCalendarDescription?: string;
-};
-
-type SafeEvent = Omit<Event, 'eventJoinLink' | 'eventLink'>;
-
-type Calendar = {
-	id: number;
-	title: string;
-	calendarVisibility: CalendarVisibility;
-};
-
-type User = {
-	jwt: string;
-	jwtExpiresAt: number;
-	refreshToken: string;
-	refreshTokenExpiresAt: number;
-	schema: 'Pending Members Schema' | 'Full Members Schema';
-	user: {
-		id: string | number;
-		email: string;
-		enabled: boolean;
-		status: string;
-		userYourName?: string;
-	};
-};
-
-type EventLoaderData = {
+export type EventLoaderData = {
 	message: string;
 	event?: SafeEvent;
 	type: 'error' | 'timing' | 'permissions' | 'noLink';
@@ -55,6 +17,14 @@ type EventLoaderData = {
 export const loader: LoaderFunction = async ({ request, params }) => {
 	let api = new CmsActions();
 	let returnJson: EventLoaderData | null = null;
+
+	if (!params.eventUid) {
+		returnJson = {
+			type: 'error',
+			message: 'Event not found. Please check your event link and try again.',
+		};
+		return json(returnJson);
+	}
 
 	try {
 		const event: Event = await api.getEventByUid({ uid: params.eventUid });
@@ -189,8 +159,14 @@ export default function Screen() {
 	const loaderData: EventLoaderData = useLoaderData();
 	console.log({ loaderData });
 	return (
-		<DefaultLayout simple showHero={false}>
-			<div>{loaderData.message}</div>
-		</DefaultLayout>
+		<SingleTask>
+			<Alert
+				type={loaderData.type === 'timing' ? 'info' : 'warning'}
+				title="There was an error joining this event:"
+				className="-my-8 -mx-4 sm:-mx-10"
+			>
+				<div>{loaderData.message}</div>
+			</Alert>
+		</SingleTask>
 	);
 }
