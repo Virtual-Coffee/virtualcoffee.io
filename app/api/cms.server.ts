@@ -378,7 +378,7 @@ export class CmsActions {
 		return response.solspace_calendar.calendars;
 	}
 
-	async getCalendarHandles(): Promise<string[]> {
+	async getAllCalendarHandles(): Promise<string[]> {
 		const calendars = await this.getCalendars();
 
 		if (!calendars?.length) {
@@ -401,7 +401,7 @@ export class CmsActions {
 		eventLink?: string;
 		eventCalendarDescription?: string;
 	}> {
-		const calendarHandles = await this.getCalendarHandles();
+		const calendarHandles = await this.getAllCalendarHandles();
 
 		// event gets one event. if it is a recurring event, it will get the first one in the range.
 		const query = gql`
