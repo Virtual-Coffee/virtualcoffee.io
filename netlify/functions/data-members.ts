@@ -23,7 +23,8 @@ type Account =
 				| 'twitch'
 				| 'polywork'
 				| 'medium'
-				| 'hashnode';
+				| 'hashnode'
+				| 'github';
 			username: string;
 	  }
 	| {
@@ -43,7 +44,7 @@ type Account =
 type MemberObject = {
 	github: string;
 	name?: string;
-	mainUrl?: string;
+	mainUrl?: Website;
 	bio?: string;
 	accounts?: Account[];
 };
@@ -88,7 +89,7 @@ async function parseMarkdown(markdown: string) {
 type GithubSearchUser = {
 	login: string;
 	id: string | number;
-	url: string;
+	url: Website;
 	avatarUrl: string;
 	name?: string;
 	company?: string;
@@ -97,11 +98,14 @@ type GithubSearchUser = {
 	bio?: string;
 	bioHTML?: string;
 	twitterUsername?: string;
-	websiteUrl?: string;
+	websiteUrl?: Website;
 };
 
-// TODO: DAN AND KIRK DO THIS NEXT
-async function getMemberGithubData(data: MemberObject[]) {
+type GithubSearchUserLookup = Record<string, GithubSearchUser>;
+
+async function getMemberGithubData(
+	data: MemberObject[],
+): Promise<GithubSearchUserLookup> {
 	const token = process.env.GITHUB_TOKEN;
 
 	if (!token) {
@@ -144,7 +148,7 @@ async function getMemberGithubData(data: MemberObject[]) {
 		`;
 
 		const queries: string[] = [];
-		const githubData: Record<string, GithubSearchUser> = {};
+		const githubData: GithubSearchUserLookup = {};
 
 		let i,
 			j,
@@ -214,6 +218,16 @@ function loadDirectory(path: string) {
 type TeamName = keyof typeof teamsData;
 type TeamsDict = Record<string, TeamName[]>;
 
+type TrueFixedUpUserObject = Omit<MemberObject, 'accounts'> & {
+	avatarUrl?: GithubSearchUser['avatarUrl'];
+	teams?: TeamName[];
+	accounts: (Account & {
+		Icon: string;
+		url: Website;
+		title: string;
+	})[];
+};
+
 async function loadUserData() {
 	const core = loadDirectory('core');
 	const members = loadDirectory('members');
@@ -235,7 +249,7 @@ async function loadUserData() {
 
 	const githubData = await getMemberGithubData([...core, ...members]);
 
-	const fixupData = async (data) => {
+	const fixupData = async (data: MemberObject) => {
 		const github = githubData[data.github.toLowerCase()];
 
 		if (!github) {
@@ -243,28 +257,33 @@ async function loadUserData() {
 			return null;
 		}
 
-		data.avatarUrl = github.avatarUrl;
+		const returnObject: TrueFixedUpUserObject = {
+			...data,
+			accounts: [],
+		};
 
-		data.teams = teamsDict[data.github.toLowerCase()] || [];
+		returnObject.avatarUrl = github.avatarUrl;
 
-		if (!data.name) {
-			data.name = github.name || github.login;
+		returnObject.teams = teamsDict[data.github.toLowerCase()] || [];
+
+		if (!returnObject.name) {
+			returnObject.name = github.name || github.login;
 		}
 
-		if (!data.bio) {
-			data.bio = await sanitizeHtml(github.bioHTML);
+		if (!returnObject.bio) {
+			returnObject.bio = await sanitizeHtml(github.bioHTML);
 		} else {
-			data.bio = await parseMarkdown(data.bio);
+			returnObject.bio = await parseMarkdown(returnObject.bio);
 		}
 
-		if (!data.mainUrl) {
+		if (!returnObject.mainUrl) {
 			if (github.websiteUrl) {
-				data.mainUrl =
+				returnObject.mainUrl =
 					github.websiteUrl.slice(0, 4) !== 'http'
 						? `https://${github.websiteUrl}`
 						: github.websiteUrl;
 			} else {
-				data.mainUrl = github.url;
+				returnObject.mainUrl = github.url;
 			}
 		}
 
@@ -289,133 +308,150 @@ async function loadUserData() {
 			];
 		}
 
-		data.accounts = data.accounts
+		function nonNullable<T>(value: T): value is NonNullable<T> {
+			return value !== null && value !== undefined;
+		}
+
+		// TODO: Dan and kirk fix this
+		returnObject.accounts = data.accounts
 			.map((account) => {
 				switch (account.type) {
 					case 'github':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'GitHub',
 							url: `https://github.com/${account.username}`,
-							title: `${data.name} on GitHub`,
+							title: `${returnObject.name} on GitHub`,
 						};
 
 					case 'linkedin':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'LinkedIn',
 							url: `https://www.linkedin.com/in/${account.username}`,
-							title: `${data.name} on LinkedIn`,
+							title: `${returnObject.name} on LinkedIn`,
 						};
 
 					case 'dev':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Dev',
 							url: `https://dev.to/${account.username}`,
-							title: `${data.name} on DEV.to`,
+							title: `${returnObject.name} on DEV.to`,
 						};
 
 					case 'codenewbie':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Codenewbie',
 							url: `https://community.codenewbie.org/${account.username}`,
-							title: `${data.name} on CodeNewbie Community`,
+							title: `${returnObject.name} on CodeNewbie Community`,
 						};
 
 					case 'twitter':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Twitter',
 							url: `https://twitter.com/${account.username}`,
-							title: `${data.name} on Twitter`,
+							title: `${returnObject.name} on Twitter`,
 						};
 
 					case 'twitch':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Twitch',
 							url: `https://www.twitch.tv/${account.username}`,
-							title: `${data.name} on Twitch`,
+							title: `${returnObject.name} on Twitch`,
 						};
 
 					case 'polywork':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Polywork',
 							url: `https://polywork.com/${account.username}`,
-							title: `${data.name} on Polywork`,
+							title: `${returnObject.name} on Polywork`,
 						};
 
 					case 'medium':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Medium',
 							url: `https://medium.com/@${account.username}`,
-							title: `${data.name} on Medium`,
+							title: `${returnObject.name} on Medium`,
 						};
 
 					case 'hashnode':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'HashNode',
 							url: `https://hashnode.com/@${account.username}`,
-							title: `${data.name} on HashNode`,
+							title: `${returnObject.name} on HashNode`,
 						};
 
 					case 'youtube':
-						if (!account.channelId && !account.customUrl) {
-							return {};
+						if ('channelId' in account && !!account.channelId) {
+							return {
+								...account,
+								Icon: 'YouTube',
+								url: `https://www.youtube.com/channel/${account.channelId}`,
+								title: `${returnObject.name} on YouTube`,
+							};
 						}
-						return {
-							...account,
-							Icon: 'YouTube',
-							url: account.customUrl
-								? account.customUrl
-								: `https://www.youtube.com/channel/${account.channelId}`,
-							title: `${data.name} on YouTube`,
-						};
 
-					default:
+						if ('customUrl' in account && !!account.customUrl) {
+							return {
+								...account,
+								Icon: 'YouTube',
+								url: account.customUrl,
+								title: `${returnObject.name} on YouTube`,
+							};
+						}
+
+						return null;
+
+					case 'website':
 						return {
 							...account,
 							Icon: 'Website',
 							type: 'website',
 							title: account.title || account.url,
 						};
+
+					default:
+						return null;
 				}
 			})
-			.filter((account) => !!account.url);
+			.filter(nonNullable);
+		// .filter(Boolean)
 
-		return data;
+		return returnObject;
 	};
 
 	const filteredCore = await Promise.all(core.map(fixupData));
