@@ -85,19 +85,33 @@ async function parseMarkdown(markdown: string) {
 	return String(file);
 }
 
-// TODO: DAN AND KIRK DO THIS NEXT
-async function getMemberGithubData(data) {
-	let headers = {
-		Accept: 'application/vnd.github.v3+json',
-	};
+type GithubSearchUser = {
+	login: string;
+	id: string | number;
+	url: string;
+	avatarUrl: string;
+	name?: string;
+	company?: string;
+	location?: string;
+	isHireable?: boolean;
+	bio?: string;
+	bioHTML?: string;
+	twitterUsername?: string;
+	websiteUrl?: string;
+};
 
+// TODO: DAN AND KIRK DO THIS NEXT
+async function getMemberGithubData(data: MemberObject[]) {
 	const token = process.env.GITHUB_TOKEN;
 
-	if (token) {
-		headers.Authorization = 'bearer ' + token;
-	} else {
+	if (!token) {
 		return mockMemberData(data);
 	}
+
+	let headers = {
+		Accept: 'application/vnd.github.v3+json',
+		Authorization: 'bearer ' + token,
+	};
 
 	try {
 		console.log('Fetching member data...');
@@ -129,8 +143,8 @@ async function getMemberGithubData(data) {
 			}
 		`;
 
-		const queries = [];
-		const githubData = {};
+		const queries: string[] = [];
+		const githubData: Record<string, GithubSearchUser> = {};
 
 		let i,
 			j,
@@ -151,7 +165,7 @@ async function getMemberGithubData(data) {
 				searchQuery: queries[i],
 			});
 
-			response.search.nodes.forEach((user) => {
+			response.search.nodes.forEach((user: GithubSearchUser) => {
 				githubData[user.login.toLowerCase()] = {
 					...user,
 				};
@@ -160,7 +174,9 @@ async function getMemberGithubData(data) {
 
 		return githubData;
 	} catch (error) {
-		console.log(error.message);
+		if (error instanceof Error) {
+			console.log(error.message);
+		}
 		console.log('Error loading github member data, using fake data instead');
 		return mockMemberData(data);
 	}
