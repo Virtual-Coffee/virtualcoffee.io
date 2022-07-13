@@ -16,67 +16,10 @@ import {
 	ChevronDownIcon,
 	ClockIcon,
 } from '@heroicons/react/solid';
-import { Menu, Transition } from '@headlessui/react';
+import { Menu, Transition, Popover } from '@headlessui/react';
+
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
-
-const meetings = [
-	{
-		id: 1,
-		date: 'January 10th, 2022',
-		time: '5:00 PM',
-		datetime: '2022-01-10T17:00',
-		name: 'Leslie Alexander',
-		imageUrl:
-			'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-		location: 'Starbucks',
-	},
-	// More meetings...
-];
-const days = [
-	{ date: '2021-12-27' },
-	{ date: '2021-12-28' },
-	{ date: '2021-12-29' },
-	{ date: '2021-12-30' },
-	{ date: '2021-12-31' },
-	{ date: '2022-01-01', isCurrentMonth: true },
-	{ date: '2022-01-02', isCurrentMonth: true },
-	{ date: '2022-01-03', isCurrentMonth: true },
-	{ date: '2022-01-04', isCurrentMonth: true },
-	{ date: '2022-01-05', isCurrentMonth: true },
-	{ date: '2022-01-06', isCurrentMonth: true },
-	{ date: '2022-01-07', isCurrentMonth: true },
-	{ date: '2022-01-08', isCurrentMonth: true },
-	{ date: '2022-01-09', isCurrentMonth: true },
-	{ date: '2022-01-10', isCurrentMonth: true },
-	{ date: '2022-01-11', isCurrentMonth: true },
-	{ date: '2022-01-12', isCurrentMonth: true, isToday: true },
-	{ date: '2022-01-13', isCurrentMonth: true },
-	{ date: '2022-01-14', isCurrentMonth: true },
-	{ date: '2022-01-15', isCurrentMonth: true },
-	{ date: '2022-01-16', isCurrentMonth: true },
-	{ date: '2022-01-17', isCurrentMonth: true },
-	{ date: '2022-01-18', isCurrentMonth: true },
-	{ date: '2022-01-19', isCurrentMonth: true },
-	{ date: '2022-01-20', isCurrentMonth: true },
-	{ date: '2022-01-21', isCurrentMonth: true },
-	{ date: '2022-01-22', isCurrentMonth: true, isSelected: true },
-	{ date: '2022-01-23', isCurrentMonth: true },
-	{ date: '2022-01-24', isCurrentMonth: true },
-	{ date: '2022-01-25', isCurrentMonth: true },
-	{ date: '2022-01-26', isCurrentMonth: true },
-	{ date: '2022-01-27', isCurrentMonth: true },
-	{ date: '2022-01-28', isCurrentMonth: true },
-	{ date: '2022-01-29', isCurrentMonth: true },
-	{ date: '2022-01-30', isCurrentMonth: true },
-	{ date: '2022-01-31', isCurrentMonth: true },
-	{ date: '2022-02-01' },
-	{ date: '2022-02-02' },
-	{ date: '2022-02-03' },
-	{ date: '2022-02-04' },
-	{ date: '2022-02-05' },
-	{ date: '2022-02-06' },
-];
 
 type CalendarDate = {
 	date: string;
@@ -483,7 +426,7 @@ export default function Page() {
 														day.isCurrentMonth
 															? 'bg-white'
 															: 'bg-gray-50 text-gray-500',
-														'relative py-2 px-3',
+														'relative py-2 px-3 z-0',
 													)}
 												>
 													<time
@@ -499,25 +442,49 @@ export default function Page() {
 													{day.events.length > 0 && (
 														<ol className="mt-2">
 															{day.events.map((event) => (
-																<li key={event.id}>
-																	<button className="group flex max-w-full">
-																		<p className="flex-auto truncate font-medium text-gray-900 group-hover:text-sky-600">
-																			{event.title}
-																		</p>
-																		<time
-																			dateTime={event.startDateLocalized}
-																			className="ml-3 hidden flex-none text-gray-500 group-hover:text-sky-600 2xl:block"
-																		>
-																			{DateTime.fromISO(
-																				event.startDateLocalized,
-																			).toLocaleString({
-																				hour: 'numeric',
-																				minute: '2-digit',
-																				timeZoneName: 'short',
-																			})}
-																		</time>
-																	</button>
-																</li>
+																<Popover key={event.id} as="li">
+																	{({ open }) => (
+																		<>
+																			<Popover.Button className="group flex max-w-full">
+																				<p className="flex-auto truncate font-medium text-gray-900 group-hover:text-sky-600">
+																					{event.title}
+																				</p>
+																				<time
+																					dateTime={event.startDateLocalized}
+																					className="ml-3 hidden flex-none text-gray-500 group-hover:text-sky-600 2xl:block"
+																				>
+																					{DateTime.fromISO(
+																						event.startDateLocalized,
+																					).toLocaleString({
+																						hour: 'numeric',
+																						minute: '2-digit',
+																						timeZoneName: 'short',
+																					})}
+																				</time>
+																			</Popover.Button>
+																			<Transition
+																				show={open}
+																				enter="transition duration-100 ease-out"
+																				enterFrom="transform scale-95 opacity-0"
+																				enterTo="transform scale-100 opacity-100"
+																				leave="transition duration-75 ease-out"
+																				leaveFrom="transform scale-100 opacity-100"
+																				leaveTo="transform scale-95 opacity-0"
+																			>
+																				<Popover.Panel
+																					static
+																					className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl"
+																				>
+																					<div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+																						<div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
+																							hello
+																						</div>
+																					</div>
+																				</Popover.Panel>
+																			</Transition>
+																		</>
+																	)}
+																</Popover>
 															))}
 														</ol>
 													)}
@@ -688,8 +655,8 @@ export default function Page() {
 															day.isToday && 'text-sky-600',
 															dayIdx === 0 && 'rounded-tl-lg',
 															dayIdx === 6 && 'rounded-tr-lg',
-															dayIdx === days.length - 7 && 'rounded-bl-lg',
-															dayIdx === days.length - 1 && 'rounded-br-lg',
+															dayIdx === dates.length - 7 && 'rounded-bl-lg',
+															dayIdx === dates.length - 1 && 'rounded-br-lg',
 														)}
 													>
 														<time
