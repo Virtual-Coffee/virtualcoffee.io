@@ -1,4 +1,4 @@
-import { Outlet, useLoaderData } from '@remix-run/react';
+import { Outlet, useLoaderData, useMatches } from '@remix-run/react';
 import AppRoot from '~/components/layouts/AppRoot';
 import { authenticate } from '~/auth/auth.server';
 import styles from '~/tailwind.css';
@@ -20,9 +20,14 @@ export const links = () => [
 ];
 
 export default function App() {
+	const matches = useMatches();
+
+	const title = matches.reverse().find((match) => !!match.data.meta)?.data
+		.meta.title;
+
 	const { user } = useLoaderData();
 	return (
-		<AppRoot user={user}>
+		<AppRoot user={user} title={title}>
 			<Outlet />
 		</AppRoot>
 	);
