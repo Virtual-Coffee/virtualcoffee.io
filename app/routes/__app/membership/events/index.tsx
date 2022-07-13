@@ -21,6 +21,8 @@ import { Menu, Transition, Popover } from '@headlessui/react';
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
 
+export { metaFromData as meta } from '~/util/remixHelpers';
+
 type CalendarDate = {
 	date: string;
 	isCurrentMonth: boolean;

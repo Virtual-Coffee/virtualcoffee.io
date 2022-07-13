@@ -22,8 +22,10 @@ export const links = () => [
 export default function App() {
 	const matches = useMatches();
 
-	const title = matches.reverse().find((match) => !!match.data.meta)?.data
+	const metaTitle = matches.reverse().find((match) => !!match.data.meta)?.data
 		.meta.title;
+
+	const title = metaTitle ? `${metaTitle} - VC Member Center` : '';
 
 	const { user } = useLoaderData();
 	return (
