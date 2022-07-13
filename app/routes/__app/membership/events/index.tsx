@@ -104,6 +104,9 @@ export const loader: LoaderFunction = async ({ request }) => {
 	});
 
 	return json({
+		meta: {
+			title: 'Events',
+		},
 		calendars,
 		weeklyEvents,
 		dates,
@@ -162,7 +165,6 @@ export default function Page() {
 
 	return (
 		<>
-			<PageHeader title="Events" />
 			<div className="lg:h-0 lg:min-h-[768px]">
 				<div className="lg:flex lg:h-full lg:flex-col">
 					<header className="relative z-20 flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none">
@@ -592,7 +594,7 @@ export default function Page() {
 						</>
 					) : (
 						<>
-							<div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-6">
+							<div className="w-full max-w-7xl mx-auto px-6 py-6">
 								<h2 className="text-lg font-semibold text-gray-900">
 									{DateTime.fromISO(settings.weekStart).toLocaleString({
 										month: 'short',
