@@ -499,7 +499,7 @@ export class CmsActions {
 			}
 		`;
 
-		console.log(query);
+		// console.log(query);
 
 		//
 		const rangeStart =
