@@ -278,7 +278,7 @@ export type Event = {
 	eventCalendarDescription?: string;
 };
 
-export type SafeEvent = Omit<Event, 'eventJoinLink' | 'eventLink'>;
+export type SafeEvent = Omit<Event, 'eventJoinLink'>;
 
 export type Calendar = {
 	id: number;
@@ -299,6 +299,12 @@ export type User = {
 		status: string;
 		userYourName?: string;
 	};
+};
+
+export type EventLoaderData = {
+	message?: string;
+	event?: SafeEvent;
+	type: 'error' | 'timing' | 'permissions' | 'noLink' | 'success';
 };
 
 export class CmsActions {
@@ -526,5 +532,130 @@ export class CmsActions {
 		}
 
 		return response.solspace_calendar.events;
+	}
+
+	async getEventJoinLink(event: Event, request: Request) {
+		let returnJson: EventLoaderData | null = null;
+
+		if (!event) {
+			returnJson = {
+				type: 'error',
+				message: 'Event not found. Please check your event link and try again.',
+			};
+			return returnJson;
+		}
+
+		const safeEvent: SafeEvent = {
+			id: event.id,
+			uid: event.uid,
+			title: event.title,
+			rrule: event.rrule,
+			calendarId: event.calendarId,
+			startDateLocalized: event.startDateLocalized,
+			endDateLocalized: event.endDateLocalized,
+			eventVisibility: event.eventVisibility,
+			eventCalendarDescription: event.eventCalendarDescription,
+			eventLink: event.eventLink,
+		};
+
+		// check timing
+		const now = DateTime.now();
+		const startTime = DateTime.fromISO(event.startDateLocalized).setZone(
+			'America/New_York',
+		);
+		const endTime = DateTime.fromISO(event.endDateLocalized).setZone(
+			'America/New_York',
+		);
+
+		if (now < startTime.minus({ minutes: 10 })) {
+			returnJson = {
+				type: 'timing',
+				message: `The event hasn't started yet!`,
+				event: safeEvent,
+			};
+			return returnJson;
+		}
+
+		if (now > endTime.plus({ hours: 2 })) {
+			returnJson = {
+				type: 'timing',
+				message: `This event has already ended.`,
+				event: safeEvent,
+			};
+			return returnJson;
+		}
+
+		// check visibility
+
+		let visibility = event.eventVisibility;
+
+		if (!visibility || visibility === 'default') {
+			// we need to get the parent calendar and check it's visibility
+			const calendar: Calendar = await this.getCalendarEntryByCalendarId({
+				id: event.calendarId,
+			});
+
+			if (!calendar) {
+				return {
+					message:
+						'Calendar not found. Please check your event link and try again.',
+				} as EventLoaderData;
+			}
+
+			visibility = calendar.calendarVisibility;
+		}
+
+		if (visibility === 'public') {
+			if (event.eventJoinLink) {
+				returnJson = {
+					type: 'success',
+					event: safeEvent,
+				};
+				return returnJson;
+			}
+
+			returnJson = {
+				type: 'noLink',
+				message: `This event has no link.`,
+				event: safeEvent,
+			};
+			return returnJson;
+		}
+
+		// if it's not public, then authenticate
+
+		let user: User = await authenticate(request);
+		console.log(user.user);
+
+		if (user) {
+			if (
+				visibility === 'membersOnly' &&
+				user.schema !== 'Full Members Schema'
+			) {
+				returnJson = {
+					type: 'permissions',
+					message: `This event is for members only.`,
+					event: safeEvent,
+				};
+				return returnJson;
+			}
+
+			if (event.eventJoinLink) {
+				returnJson = {
+					type: 'success',
+					event: safeEvent,
+				};
+				return returnJson;
+			}
+
+			returnJson = {
+				type: 'noLink',
+				message: `This event has no link.`,
+				event: safeEvent,
+			};
+			return returnJson;
+		}
+
+		throw new CmsError('There was an error checking this event.');
 	}
 }

@@ -3,7 +3,7 @@ import type { LoaderFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { authenticate } from '~/auth/auth.server';
 import { CmsActions } from '~/api/cms.server';
-import type { Event } from '~/api/cms.server';
+import type { Event, EventLoaderData } from '~/api/cms.server';
 import PageHeader from '~/components/app/PageHeader';
 import DisplayHtml from '~/components/DisplayHtml';
 import { Fragment } from 'react';
@@ -20,6 +20,7 @@ import { Menu, Transition, Popover } from '@headlessui/react';
 
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
+import { Button } from '~/components/app/Button';
 
 export { metaFromData as meta } from '~/util/remixHelpers';
 
@@ -29,7 +30,7 @@ type CalendarDate = {
 	isCurrentWeek: boolean;
 	isToday: boolean;
 	isSelected?: boolean;
-	events: Event[];
+	events: (Event & { isCurrent?: boolean })[];
 };
 
 type CalendarView = 'month' | 'week';
@@ -53,13 +54,27 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 	const day = isNaN(dayParam) ? new Date().getDate() : dayParam;
 
-	const weekStart = DateTime.now()
-		.set({ month, day, hour: 0, minute: 0, second: 0 })
-		.set({ weekday: 0 });
-	const weekEnd = weekStart.plus({ days: 6 });
+	const weekStart = DateTime.now().set({
+		month,
+		day,
+		hour: 0,
+		minute: 0,
+		second: 0,
+	});
+	const weekEnd = weekStart.plus({ days: 6 }).set({
+		hour: 23,
+		minute: 59,
+		second: 59,
+	});
 
 	// first day of the month
-	let loopDate: DateTime = DateTime.now().set({ month, day: 1 });
+	let loopDate: DateTime = DateTime.now().set({
+		month,
+		day: 1,
+		hour: 0,
+		minute: 0,
+		second: 0,
+	});
 
 	// find the first sunday before that
 	while (loopDate.weekday !== 7) {
@@ -72,23 +87,38 @@ export const loader: LoaderFunction = async ({ request }) => {
 		rangeEnd: loopDate.plus({ days: 42 }).toISO(),
 	});
 
+	const eventsWithCheck = await Promise.all(
+		events.map(async (event) => {
+			if (
+				DateTime.fromISO(event.startDateLocalized).hasSame(
+					DateTime.now(),
+					'day',
+				)
+			) {
+				const jl = await api.getEventJoinLink(event, request);
+				return { ...event, isCurrent: jl.type === 'success' };
+			}
+
+			return { ...event, isCurrent: false };
+		}),
+	);
+
 	let dates: CalendarDate[] = [];
 	for (let i = 0; i < 42; i++) {
+		let dateEvents = eventsWithCheck.filter((event) => {
+			return loopDate.hasSame(
+				DateTime.fromISO(event.startDateLocalized),
+				'day',
+			);
+		});
+
 		const dateObj = {
 			date: loopDate.toISO(),
 			isCurrentMonth: loopDate.month === month,
-			isCurrentWeek: loopDate.hasSame(
-				loopDate.weekday === 7 ? weekStart : weekStart.plus({ weeks: 1 }),
-				'week',
-			),
+			isCurrentWeek: loopDate >= weekStart && loopDate <= weekEnd,
 			isToday: loopDate.hasSame(DateTime.now(), 'day'),
 			isSelected: loopDate.day === day && loopDate.month === month,
-			events: events.filter((event) => {
-				return loopDate.hasSame(
-					DateTime.fromISO(event.startDateLocalized),
-					'day',
-				);
-			}),
+			events: dateEvents,
 		};
 
 		dates = [...dates, dateObj];
@@ -98,7 +128,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 	const selectedDate = dates.find((day) => day.isSelected);
 
-	const weeklyEvents = events.filter((event) => {
+	const weeklyEvents = eventsWithCheck.filter((event) => {
 		return (
 			DateTime.fromISO(event.startDateLocalized) >= weekStart &&
 			DateTime.fromISO(event.endDateLocalized) <= weekEnd
@@ -143,7 +173,7 @@ export default function Page() {
 		selectedDate,
 		settings,
 	}: {
-		weeklyEvents: Event[];
+		weeklyEvents: (Event & { isCurrent?: boolean })[];
 		calendars: InstanceType<typeof CmsActions>['getCalendars'];
 		dates: CalendarDate[];
 		selectedDate: CalendarDate;
@@ -162,8 +192,6 @@ export default function Page() {
 		month: settings.month,
 		day: settings.day,
 	});
-
-	console.log({ weekNumber: calDate.weekNumber });
 
 	return (
 		<>
@@ -678,7 +706,7 @@ export default function Page() {
 											})}
 										</div>
 									</div>
-									<ol className="mt-4 divide-y divide-gray-100 text-sm leading-6 lg:col-span-7 xl:col-span-8">
+									<ol className="mt-4 divide-y divide-white text-sm leading-6 lg:col-span-7 xl:col-span-8">
 										{weeklyEvents.map((event) => {
 											const eventDate = DateTime.fromISO(
 												event.startDateLocalized,
@@ -686,12 +714,31 @@ export default function Page() {
 											return (
 												<li
 													key={event.id}
-													className="relative flex space-x-6 py-6 xl:static"
+													className={classNames(
+														'relative flex space-x-6  py-3 xl:static',
+														event.isCurrent
+															? 'bg-white px-3 -mx-3 rounded outline outline-blue-500 my-6'
+															: 'my-3',
+													)}
 												>
 													<div className="flex-auto">
-														<h3 className="text-lg pr-10 font-semibold text-gray-900 xl:pr-0">
-															{event.title}
-														</h3>
+														<div className="flex gap-4 justify-between items-center">
+															<h3 className="text-lg pr-10 font-semibold text-gray-900 xl:pr-0">
+																{event.title} {event.isCurrent ? 'yess' : 'no'}
+															</h3>
+
+															<div>
+																{event.isCurrent && (
+																	<Button
+																		as="a"
+																		href={event.eventLink}
+																		className="mb-4"
+																	>
+																		Join Now
+																	</Button>
+																)}
+															</div>
+														</div>
 														{event.eventCalendarDescription && (
 															<DisplayHtml
 																html={event.eventCalendarDescription}
@@ -720,16 +767,6 @@ export default function Page() {
 																		})}
 																	</time>
 																</dd>
-															</div>
-															<div className="mt-2 flex items-start space-x-3 xl:mt-0 xl:ml-3.5 xl:border-l xl:border-gray-400 xl:border-opacity-50 xl:pl-3.5">
-																<dt className="mt-0.5">
-																	<span className="sr-only">Location</span>
-																	<LocationMarkerIcon
-																		className="h-5 w-5 text-gray-400"
-																		aria-hidden="true"
-																	/>
-																</dt>
-																<dd>TBD</dd>
 															</div>
 														</dl>
 													</div>

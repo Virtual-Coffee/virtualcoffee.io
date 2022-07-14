@@ -3,16 +3,16 @@ import type { LoaderFunction } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { authenticate } from '~/auth/auth.server';
 import { CmsActions } from '~/api/cms.server';
-import type { Event, SafeEvent, Calendar, User } from '~/api/cms.server';
+import type {
+	Event,
+	SafeEvent,
+	Calendar,
+	User,
+	EventLoaderData,
+} from '~/api/cms.server';
 import { DateTime } from 'luxon';
 import SingleTask from '~/components/layouts/SingleTask';
 import Alert from '~/components/app/Alert';
-
-export type EventLoaderData = {
-	message: string;
-	event?: SafeEvent;
-	type: 'error' | 'timing' | 'permissions' | 'noLink';
-};
 
 export const loader: LoaderFunction = async ({ request, params }) => {
 	let api = new CmsActions();
@@ -29,117 +29,13 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 	try {
 		const event: Event = await api.getEventByUid({ uid: params.eventUid });
 
-		if (!event) {
-			returnJson = {
-				type: 'error',
-				message: 'Event not found. Please check your event link and try again.',
-			};
-			return json(returnJson);
+		const eventCheck = await api.getEventJoinLink(event, request);
+
+		if (eventCheck.type === 'success') {
+			return redirect(event.eventJoinLink as string);
 		}
 
-		const safeEvent = {
-			id: event.id,
-			uid: event.uid,
-			title: event.title,
-			rrule: event.rrule,
-			calendarId: event.calendarId,
-			startDateLocalized: event.startDateLocalized,
-			endDateLocalized: event.endDateLocalized,
-			eventVisibility: event.eventVisibility,
-			eventCalendarDescription: event.eventCalendarDescription,
-		};
-
-		// check timing
-		const now = DateTime.now();
-		const startTime = DateTime.fromISO(event.startDateLocalized).setZone(
-			'America/New_York',
-		);
-		const endTime = DateTime.fromISO(event.endDateLocalized).setZone(
-			'America/New_York',
-		);
-
-		if (now < startTime.minus({ minutes: 10 })) {
-			returnJson = {
-				type: 'timing',
-				message: `The event hasn't started yet!`,
-				event: safeEvent,
-			};
-			return json(returnJson);
-		}
-
-		if (now > endTime.plus({ hours: 2 })) {
-			returnJson = {
-				type: 'timing',
-				message: `This event has already ended.`,
-				event: safeEvent,
-			};
-			return json(returnJson);
-		}
-
-		// check visibility
-
-		let visibility = event.eventVisibility;
-
-		if (!visibility || visibility === 'default') {
-			// we need to get the parent calendar and check it's visibility
-			const calendar: Calendar = await api.getCalendarEntryByCalendarId({
-				id: event.calendarId,
-			});
-
-			if (!calendar) {
-				return json({
-					message:
-						'Calendar not found. Please check your event link and try again.',
-				});
-			}
-
-			visibility = calendar.calendarVisibility;
-		}
-
-		if (visibility === 'public') {
-			if (event.eventJoinLink) {
-				return redirect(event.eventJoinLink);
-			}
-
-			returnJson = {
-				type: 'noLink',
-				message: `This event has no link.`,
-				event: safeEvent,
-			};
-			return json(returnJson);
-		}
-
-		// if it's not public, then authenticate
-
-		let user: User = await authenticate(request);
-		console.log(user.user);
-
-		if (user) {
-			if (
-				visibility === 'membersOnly' &&
-				user.schema !== 'Full Members Schema'
-			) {
-				returnJson = {
-					type: 'permissions',
-					message: `This event is for members only.`,
-					event: safeEvent,
-				};
-				return json(returnJson);
-			}
-
-			if (event.eventJoinLink) {
-				return redirect(event.eventJoinLink);
-			}
-
-			returnJson = {
-				type: 'noLink',
-				message: `This event has no link.`,
-				event: safeEvent,
-			};
-			return json(returnJson);
-		}
-
-		throw new Error('Something went wrong');
+		return json(eventCheck);
 	} catch (error) {
 		if (error instanceof Response) {
 			return error;
