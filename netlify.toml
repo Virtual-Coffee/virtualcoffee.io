@@ -102,6 +102,12 @@
   status = 200
 
 [[redirects]]
+  from = "/join-slack"
+  query = { code = ":code"}
+  to = "/.netlify/functions/join-slack"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/.netlify/functions/server"
   status = 200
