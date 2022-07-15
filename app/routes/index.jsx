@@ -3,16 +3,15 @@ import getSponsors from '~/data/sponsors';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getEvents } from '~/data/events';
-import { dateForDisplay } from '~/util/date';
 import { getEpisodes } from '~/data/podcast';
 import HomePageBlock from '~/components/HomePageBlock';
 import PostList, {
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
+import DateTime from '~/components/content/DateTime';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '~/data/newsletters';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
-
 export async function loader() {
 	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
 		await Promise.all([
@@ -144,19 +143,16 @@ export default function Index() {
 							footer="See more Community Events"
 						>
 							<PostList
-								items={events.map((event) => ({
-									title: event.title,
-									description: (
-										<strong>
-											<time
-												dateTime={event.eventStartUTC}
-												suppressHydrationWarning={true}
-											>
-												{dateForDisplay(event.eventStartUTC)}
-											</time>
-										</strong>
-									),
-								}))}
+								items={events.map((event) => {
+									return {
+										title: event.title,
+										description: (
+											<strong>
+												<DateTime date={event.eventStartUTC} />
+											</strong>
+										),
+									};
+								})}
 							/>
 						</HomePageBlock>
 					</div>
