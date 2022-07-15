@@ -149,10 +149,10 @@ export default function Index() {
 									description: (
 										<strong>
 											<time
-												dateTime={event.startDate}
+												dateTime={event.eventStartUTC}
 												suppressHydrationWarning={true}
 											>
-												{dateForDisplay(event.startDate)}
+												{dateForDisplay(event.eventStartUTC)}
 											</time>
 										</strong>
 									),

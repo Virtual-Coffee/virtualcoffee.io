@@ -19,8 +19,8 @@ function createEventsQuery(calendars, rangeStart, rangeEnd, limit) {
 			events(rangeStart: "${rangeStart}", rangeEnd: "${rangeEnd}", limit: ${limit}) {
 				id
 				title
-				startDate
-				endDate
+				startDateLocalized
+				endDateLocalized
 				${calendars.map(
 					({ handle }) => `
 				... on ${handle}_Event {
@@ -118,12 +118,18 @@ export async function getEvents({ limit }) {
 				);
 				const calendarLink = await ics({
 					title: event.title,
-					start: event.startDate,
-					end: event.endDate,
+					start: event.startDateLocalized,
+					end: event.endDateLocalized,
 					description: sanitizedDescription,
 				});
 				return {
 					...event,
+					eventStartUTC: DateTime.fromISO(event.startDateLocalized)
+						.toUTC()
+						.toString(),
+					eventEndUTC: DateTime.fromISO(event.endDateLocalized)
+						.toUTC()
+						.toString(),
 					eventCalendarDescription: sanitizedDescription,
 					eventCalendarLink: calendarLink,
 				};
