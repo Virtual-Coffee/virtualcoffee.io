@@ -18,7 +18,7 @@ exports.handler = async function (event, context) {
 		statusCode: 302,
 		headers: {
 			Location:
-				code === 'tuesday'
+				day === 'tuesday'
 					? process.env.ZOOM_TUESDAYS
 					: process.env.ZOOM_THURSDAYS,
 		},
