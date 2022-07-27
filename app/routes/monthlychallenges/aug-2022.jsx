@@ -2,10 +2,10 @@ import { json } from '@remix-run/node';
 import { createMetaData } from '~/util/createMetaData.server';
 
 export const handle = {
-	listTitle: 'August, 2022: Healthy Habits for Healthy Devs',
+	listTitle: 'August, 2022: Healthy Habits for Happy Devs',
 	meta: {
 		title:
-			'Monthly Theme & Challenge for August, 2022: Healthy Habits for Healthy Devs',
+			'Monthly Theme & Challenge for August, 2022: Healthy Habits for Happy Devs',
 		description:
 			'August challenge -> This month challenge is all about nourish our body, mind and spirit and give a step forward to become a healthier dev',
 	},
@@ -36,7 +36,7 @@ export default function Challenge() {
 
 			<h1>
 				<small>Monthly Challenge for August, 2022:</small> Healthy Habits for
-				Healthy Devs.
+				Happy Devs.
 			</h1>
 
 			<p className="lead">
@@ -49,7 +49,7 @@ export default function Challenge() {
 			<hr />
 
 			<h2>Theme</h2>
-			<p>Healthy Habits for Healthy Devs</p>
+			<p>Healthy Habits for Happy Devs</p>
 
 			<h2>Goals</h2>
 			<p>To end the month with:</p>
@@ -93,7 +93,7 @@ export default function Challenge() {
 				</li>
 				<li>
 					Share your progress and celebrate every step. The goal here is to take
-					baby steps. And remember that building a healthy habits is a process
+					baby steps. And remember that building a healthy habit is a process
 					and that missing a day is part of the process.
 				</li>
 			</ul>
