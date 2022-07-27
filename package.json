@@ -44,6 +44,7 @@
 		"@sindresorhus/slugify": "^2.1.0",
 		"airtable": "^0.11.4",
 		"autoprefixer": "^10.4.7",
+		"axios": "^0.27.2",
 		"bootstrap": "^4.6.0",
 		"calendar-link": "^2.2.0",
 		"concurrently": "^7.2.1",
