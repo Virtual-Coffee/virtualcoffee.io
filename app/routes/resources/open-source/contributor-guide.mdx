@@ -13,11 +13,9 @@ import TextContainer from '~/components/content/TextContainer';
 
 <TextContainer showBackToTopLink={false}>
 
-# What is this document for?
-
 <LeadText>
 
-This document is Part 3 of Virtual Coffee's four-part Guide to Open Source, outlining useful information for you open source contributing journey.
+This section outlines helpful information for you to contribute to an open source project.
 
 </LeadText>
 
@@ -31,78 +29,107 @@ This document is Part 3 of Virtual Coffee's four-part Guide to Open Source, outl
 
 ## Repository checklist
 
-If you are a contributor, this checklist is a handy tool for evaluating how well set up to receive contributions a project is.
+If you are a contributor, this checklist is a handy tool for evaluating how well set up a project is to receive contributions.
 
-- ✅ It should have a README. The README should link to or describe:
-  - Project purpose and context
-  - Installation instructions
-- ✅ Contributions/Contributing guide:
-  - What is the recommended process for making issues/submitting pull requests
-  - How to communicate with maintainers.
-- ✅ A valid open source license. It is not advised to work on a project without that doesn't have a license, or is not using a standard open source license. For resources about licenses, check out the [License](../maintainer-guide/#the-license) section of our Maintainer Guide.
-- ✅ A Code of Conduct.
+✅ **It should have a README file.** <br />
+The README should link to or describe:
+
+- Project purpose and context
+- Installation instructions
+
+✅ **Contributions/Contributing guide.** <br />
+This guide is usually written in the CONTRIBUTIONS/CONTRIBUTING markdown file. It consists of:
+
+- The recommended process for making issues/submitting pull requests.
+- Ways to communicate with the maintainers.
+
+You might find the contributing guide in the README file if there is no CONTRIBUTIONS/CONTRIBUTING file.
+
+✅ **A valid open source license.** <br />
+It is not advised to work on a project that doesn't have a license or is not using a standard open source license. Check out [The License](/resources/open-source/maintainer-guide/#the-license) section of our Maintainer Guide for resources about licenses.
+
+✅ **A Code of Conduct (also known as COC).**
 
 ## Guide to writing issues
 
-### Important things to know
-
-There is not one good way to write issues. But there are things we want to avoid that either will discredit what we want or need, or won't help the person who will try to solve the issue.
+There is no such best way to write issues. But there are things we want to avoid that either will discredit what we want or need or won't help the person trying to solve the issue.
 
 Some important things to remember:
 
-- **Provide facts.** An issue needs facts, which can include pictures, metrics, and more. It is easier to explain than just using words.
-- **Describe the issue.** Follow any templates provided by the organization and/or asking yourself: What, Where, When, How and Why.
-- **Don't solve the issue.** You are not expected to solve the issue. It happens of course, but it's important that the issue is clearly describes so that anyone can understand it without being in your head. 🙂
+- **Provide information** <br />
+  An issue needs information which can include pictures, metrics, and more. It makes the information more precise than just using words.
+- **Describe the issue** <br />
+  Follow any templates provided by the organization and/or asking yourself: What, Where, When, How and Why. The issue must be clearly described so that anyone can understand it without being in your head. 🙂
+- **Don't solve the issue** <br />
+  You are not expected to solve the issue. If you want to solve the issue, tell the maintainer in the comment that you want to do it and let them assign it to you.
 
-A suggested solution can be a good thing, especially to help the contributors who have less experience. When you're writing issues on a repository that isn't your own, you might not have all of the context to provide the best solution. This is why, although suggestions are appreciated, the maintainers have the final say in the solution and/or approach to the issue.
+A suggested solution can be a good thing, especially to help the contributors who have less experience. When you're writing issues on a repository that isn't your own, you might not have all of the contexts to provide the best solution. Therefore, the maintainers always have the final say in the solution or approach to the issue.
 
-### Tips Before Writing an Issue
+### Tips before writing an issue
 
-- Check the repository's ReadMe and Contributing guide (if they have one) to learn about how the maintainers expect communication and issues to be created. For example, some repositories require you to start a discussion before making an issue.
-- Check current issues and closed issues to make sure no one has already written the issue you're going to write.
-- If the organization has discussions enabled, check to see if it's been mentioned there as well.
-- Check the Code of Conduct (commonly abbreviated as "COC") to make sure you participate in a way that's consistent with the organization's guidelines. Absence of a COC is unfortunate but doesn't mean people should be rude or disrespectful, even if the issue is _super frustrating_.
+- Check the repository's README and CONTRIBUTING guide (if they have one) to learn how maintainers expect communication and how to create an issue. For example, some repositories require you to start a discussion before making an issue.
+- Check current and closed issues to ensure no one has already written the issue you're going to write.
+- If the organization has discussions enabled, check if the issue has also been mentioned there.
+- Check the Code of Conduct (COC) to ensure you participate in a way that's consistent with the organization's guidelines. The absence of a COC is unfortunate, but it doesn't mean people should be rude or disrespectful, even if the issue is _super frustrating_.
 
-### How to write an issue?
+### How to create an issue
 
-Remember, there isn't one way to do it. We're going to walk you through how to create an issue, and reference the Virtual Coffee repository as an example.
+We'll walk you through how to create an issue and reference the Virtual Coffee repository as an example.
 
-1. Go to a repository. Let's check out [Virtual Coffee repository](https://github.com/Virtual-Coffee/virtualcoffee.io/)
-2. Navigate to the [Issue Tab](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/)
-3. Check is if there is an [available template](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new/choose). You can find this by clicking the New Issue button on a repository.
-   - In repos that are used to get a lot of traffic and issues, there is often an automatic template that appears when you create the issue. In that case, follow exactly the steps and requirements.
-4. If there are no specific rules, here is a list of what's good to share in different types of issues:
+1. Go to [Virtual Coffee repository](https://github.com/Virtual-Coffee/virtualcoffee.io/).
+2. Navigate to the [Issue Tab](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/).
+3. Click the "New Issue" button and check if there is an [available template](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new/choose).
+4. Click on the issue category button that fits your needs, then follow all the steps and requirements.
 
-#### Bug Issue
+### How to write an issue
 
-- Screenshots of the issue is in the UI, logs if it's a performance issue, or anything that proves the existence of the problem.
-- **Your setup:** type of device and OS version, type of browser and version, any kind of setup that can help reproducing the problem.
-- **Description:** Add the steps to reproduce the bug/behavior. Some things to consider:
-  - what you think the correct behavior _should_ be.
-  - the current behavior and how it differs.
-  - the conditions required to produce the bug. For example, the buttons you clicked, the request you've made, etc.
-- If you think of a solution to solve the problem, you can suggest something. Remember that your solution may not be the best solution for that specific issue/technology/repo...
-- Links to any issue or discussion that relates to this issue.
+Remember, there isn't one best way to write an issue. When there are no specific templates provided, here is a list of what's good to share in different types of issues:
 
-#### Feature Issue
+#### 🐞 Bug Issue
 
-- **A Title:** Clear enough to identify in few words what the problem is about.
-- **Context for the issue:** Describe the feature request.
-- **Proposed Solution:** What do you think the solution should be and why? If you don't have a suggestion, that's fine too!
-- **Alternatives Considered:** If you have thought about other solutions, what have you thought about and why did you think they weren't the best solution to the request?
-- **Links:** Any issue or discussion that relates to this issue.
+Include this information in the issue:
 
-#### Documentation Change
+- **Title** <br />
+  Clear enough to identify what the problem is about.
+- **Screenshots** <br />
+  The screenshots of the UI, logs, if it's a performance issue, or anything that proves the problem exists.
+- **Your setup** <br />
+  The device and OS version, type of browser and version that you use, and any other setup that can help reproduce the problem.
+- **Description** <br />
+  Add the steps to reproduce the bug/behavior. Some things to consider:
+  - What you think the correct behavior _should_ be?
+  - The current behavior and how it differs.
+  - The conditions required to produce the bug. For example, the buttons or the link you click, etc.
+- **Solution** <br />
+  If you think of a solution to solve the problem, you can suggest something. However, the maintainer would be the final decision-maker.
+- **Links** <br />
+  Any issue or discussion that relates to this problem, if any.
 
-- A title that is clear enough to identify in few words what the problem is about.
-- Context for the issue: Describe the documentation request. For example, "I noticed an unclear explanation of how to install the software. I encountered an some issues myself."
-- Proposed Solution: What do you think the solution should be and why? If you don't have a suggestion, that's fine too!
+#### 🌱 Feature Issue
+
+- **Title** <br />
+  Clear enough to identify what feature you want to add or see.
+- **Description** <br />
+  Describe why you wish to request the feature.
+- **Proposed Solution** <br />
+  What do you think the solution should be and why? If you don't have a suggestion, that's fine too!
+- **Links** <br />
+  Any issue or discussion related to this request, if any.
+
+#### 📄 Documentation Issue
+
+- **Title** <br />
+  Clear enough to identify what the problem is about.
+- **Description** <br />
+  Describe why you request the documentation change. For example, "I noticed an unclear explanation of how to install the software in the installation section."
+- **Proposed Solution** <br />
+  What do you think the solution should be and why? If you don't have a suggestion, that's fine too!
 
 ## Best practices for contributors
 
 ### Observing repository conventions
 
-Most repositories will have certain conventions that you are expected to follow. These will differ from project to project, and can normally be found in the Readme or Contributing Guide. The areas covered will vary, but common things to look out for include:
+Most repositories will have certain conventions that you need to follow. These will differ from project to project. You can usually find them in the README or CONTRIBUTING file. The areas covered will vary, but there are common things to look out for:
 
 - Code style guides
 - General conventions for communicating
@@ -111,23 +138,29 @@ Most repositories will have certain conventions that you are expected to follow.
 
 ### The work process
 
-Most projects expect some form of discussion before a pull request is made. Expectations vary from project to project and can normally be found in the Readme or Contributing Guide.
+Most projects expect some form of discussion before making a pull request. Expectations vary from project to project, and you can usually find them in the README or CONTRIBUTING file.
 
-Commonly, you should expect to either work on an existing issue, or to make a new issue and await approval from a maintainer before starting work. Many projects make use of labels such as `ready for dev`, `not ready for dev`, `will not do`, to help you work out what issues you can work on. Unless the documentation says otherwise, you should normally comment on an issue that you would like to work on and ask to be assigned to it, and only start work when you have been assigned. This helps to avoid duplication of work and ensures that expectations are aligned. Unless the repository explicitly states that it accepts unsolicited pull requests, or you have good reason to believe your contribution will be accepted (perhaps you know the maintainer personally and they have said it is okay), you should not make unsolicited pull request to a project.
+Many projects use labels such as `bug`, `documentation`, `help wanted`, `ready for dev` and many more to help you determine what issues you can work on.
+
+Unless the documentation says otherwise, you should typically comment on an issue that you would like to work on. Ask the maintainer to assign you to it, and only start working on it when they give it to you. It helps to avoid duplication of work and ensures that expectations are aligned. Unless the repository explicitly states that it accepts unsolicited pull requests, you should not take the initiative to make a pull request to a project.
 
 ### Communicating with maintainers
 
-Communication is key to working on open source. Most projects have conventions surrounding communication, and these should always be followed. Many projects primarily communicate via comments on issues or pull requests. Some projects have external groups such as Slack channels, a forum, IRC channels or email lists that where communication takes place and work is coordinated. If the project uses these there should be information about this on the Readme or Contributing Guide. If there is no specific information about where to communicate, you can probably assume that communication can take place via issues and pull requests.
+Communication is key to working on open source. Most projects have communication conventions, and contributors should always follow these rules. Many projects primarily communicate via comments on issues or pull requests. Some projects have external groups such as Slack channels, a forum, IRC channels, or email lists where communication takes place, and work is coordinated. If the project uses these, there should be information on the README or CONTRIBUTING file. If there is no specific information about where to communicate, you can probably assume that communication can take place via issues and pull requests.
 
 Regardless of the tools used to communicate, there are certain things to keep in mind to keep communication effective and respectful, especially in a international online space.
 
-- Always follow the Code of Conduct. Yes, always, even if you disagree with its contents or think it restricts your freedom of speech. The community agreed on these rules to govern the space, and as an entrant to the community you have a responsibility to follow these rules.
-- Messages should be kept short and simple. It is often best to keep to 'one message, one topic', although there may be times when this not possible, for example if you need to respond to several points in another message, or you are going to be unavailable for a time and need to communicate several points at once. If you need to discuss several points in one message, put each point in a separate paragraph.
-- Disagreement and debate are healthy, but it is important to keep the conversation respectful. Criticize the ideas people express, but don't criticize the person directly.
-- Low context communication works best in international, cross-cultural spaces. Meanings should be explicit in the words you use, specific cultural references, cliches and sayings might not be understood by people from different cultures.
+- **Always follow the Code of Conduct.** <br />
+  Yes, always, even if you disagree with its contents or think it restricts your freedom of speech. The community agreed on these rules to govern the space. As an entrant to the community, you must follow these rules.
+- **Messages should be kept short and simple.** <br />
+  It is often best to keep to 'one message, one topic'. However, there may be times when this is not possible. For example, if you will be unavailable for some time and need to respond to several points. If you need to discuss several topics in one message, put each in a separate paragraph.
+- **Disagreement and debate are healthy, but it is important to keep the conversation respectful.** <br />
+  You could criticize the ideas people express, but don't criticize the person directly.
+- **Low-context communication works best in international, cross-cultural spaces.** <br />
+  Meanings should be explicit in the words you use. People from different cultures might not understand specific cultural references, cliches, and sayings.
 
-### View of work
+### Self-care
 
-You should approach open source work with the same professionalism as you would work for an employer, but remember that you are doing this in your spare time and that self-care is important. This means that you should take care over things such as code style, documentation, testing and such like just as you would your work for an employer, but it is okay if you cannot work at a fast pace. If timescales come up in open-source contributions, try to set reasonable expectations from the beginning. Otherwise, time should be taken to be fairly relaxed; for non-trivial issues it should not be expected that you complete the work to a given timescale.
+It would be best if you approached open source work with the same professionalism as you would work for an employer. But remember, you are doing this in your spare time, and self-care is essential. It means that you should take care of things such as code style, documentation, and testing, just as you would your work for an employer, but it is okay if you cannot work at a fast pace. If timescales come up in open source contributions, try to set reasonable expectations from the beginning. Otherwise, take a reasonably relaxed time to work on things. For non-trivial issues, you should not be expected to complete the work to a given timescale.
 
 </TextContainer>
