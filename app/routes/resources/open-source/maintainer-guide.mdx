@@ -13,11 +13,9 @@ import TextContainer from '~/components/content/TextContainer';
 
 <TextContainer showBackToTopLink={false}>
 
-# What is this document for?
-
 <LeadText>
 
-This document is Part 4 of Virtual Coffee's four-part Guide to Open Source, outlining useful information for you open source maintaining journey.
+This section outlines helpful information for your journey as an open source project's maintainer.
 
 </LeadText>
 
@@ -25,164 +23,193 @@ This document is Part 4 of Virtual Coffee's four-part Guide to Open Source, outl
 
 ## Table of Contents
 
-<TextContainer background="light">
+<TextContainer>
 
 ---
 
 ## Repository Checklist
 
-If you are a maintainer looking to open an open source project to contributions, this checklist will help you to get your repository into a good state to start receiving external contributions.
+Suppose you are a maintainer looking to open an open source project for contributions. In that case, this checklist will help you to get your repository into a good state to start receiving external contributions.
 
-Here's the checklist. For more detailed explanation of these points, check out [this section below](../maintainer-guide/#preparing-a-project-for-open-source-contributions). It isn't necessary for a project in the wild to have _all_ of these things, but it should have most of them.
+Here's the checklist. For more detailed explanation of these points, check out [this section](/resources/open-source/maintainer-guide/#preparing-a-project-for-open-source-contributions). It isn't necessary for a project in the wild to have _all_ of these things, but it should have most of them.
 
-- ✅ It should have a relevant name.
-- ✅ It should have a clear description that tells you what the project does and what it's for.
-- ✅ It should have relevant tags highlighting its scope/stack/field etc.
-- ✅ Also, if participating in [Hacktoberfest](https://hacktoberfest.digitalocean.com/), the `hacktoberfest` topic should be placed in the project description, or the `hacktoberfest-accepted` label added to accepted pull requests
-- ✅ It should have a README. The README should link to or describe:
-  - Project purpose and context
-  - Installation instructions
-- ✅ Contributions/Contributing guide:
-  - What is the recommended process for making issues/submitting pull requests
-  - How to communicate with maintainers.
-- ✅ A valid OSS license (Essential. Period. The project is not open source if it doesn't have a valid OSS license.)
-- ✅ A Code of Conduct
-- ✅ Issue and Pull request templates
+✅ **It should have a relevant name.**
 
-### Open sourcing a project without expecting contributions
+✅ **It should have a description.** <br />
+The description should clearly describes what the project does and is for. <br />
+If your project is participating in [Hacktoberfest](https://hacktoberfest.digitalocean.com/), you should also write the Hacktoberfest topic here. Or you can add the `hacktoberfest-accepted` label to the accepted pull requests.
 
-If you simply want to open source your project so that other people can freely use the fruits of your labor, you don't have to do everything on the Checklist.
+✅ **It should have relevant tags.** <br />
+These tags should highlight its scope, stack, field, etc.
 
-For example, you probably won't need issue and pull request templates or a contributing guide. A Code of Conduct is still recommended since even if you are not expecting contributions you may still get public activity on your repo, for example on issues, and a Code of Conduct helps you to set boundaries and keep conversations respectful.
+✅ **It should have a README file.** <br />
+The README should link to or describe:
+
+- Project purpose and context
+- Installation instructions
+
+✅ **A CONTRIBUTIONS/CONTRIBUTING markdown file.** <br />
+It provides contribution guide and consist of:
+
+- The recommended process for making issues/submitting pull requests.
+- Ways to communicate with the maintainers.
+
+✅ **A valid open source license.** <br />
+License is **essential**. A project is not an open source if it doesn't have a valid open source license.
+
+✅ **A Code of Conduct (COC).**
+
+✅ **Issue and Pull request templates.**
+
+---
 
 ## Preparing a project for Open Source contributions
 
-There are _many_ other things that can help make a repository feel more welcoming, like demos, video guides, etc., but this document is meant to address the **minimum** requirements, highlighting key areas and considerations to help you evaluate whether or not your open source project is ready for contributions. When Virtual Coffee determines the projects we highlight and recommend to our members, these are the things we look for and why. Hopefully, it can serve as a guide to anyone who finds this document.
+<LeadText>
+
+This section addresses the **minimum** requirements, highlighting key areas and considerations to help you evaluate whether or not your open source project is ready for contributions. When Virtual Coffee determines the projects we highlight and recommend to our members, these are the things we look for and why. Hopefully, it can serve as a guide to anyone who finds this document.
+
+</LeadText>
 
 ### Name, Description, Tags
 
-We'll start with the natural beginning for evaluating an OSS project: The descriptive fields that GitHub provides.
+We'll start with the natural beginning for evaluating an open source project: The descriptive fields that GitHub provides.
 
 - It should have a relevant name.
-- It should have a clear description that tells what the project does and what it's for.
-- It should have relevant tags highlighting its scope/stack/field etc.
+- It should have a description that clearly describes what the project does and is for.
+- It should have relevant tags highlighting its scope, stack, field, etc.
 
-These are first and most straightforward way GitHub uses to recommend your content to potential contributors.
+These are the first and most straightforward ways GitHub uses to recommend your content to potential contributors.
 
-Also, if you're looking to participate in [Hacktoberfest](https://hacktoberfest.digitalocean.com/), adding the `Hacktoberfest` tag to your repo description is one especially important way to indicate that.
+If you want your open source project to participate in [Hacktoberfest](https://hacktoberfest.digitalocean.com/), adding the `hacktoberfest` tag to your repo description is one essential way to indicate that.
+
+An example of a good name, description, and tag:
 
 ![A good open source description](https://user-images.githubusercontent.com/13292886/132138464-242c7d64-8b64-4595-b045-8bf028638b43.png)
 
----
+### Documentation
 
----
+Good documentation is the best indicator that a project is well maintained, well supported, and has a healthy and active community. There are a plethora of materials a repo can utilize to provide context to potential contributors, but the docs that matter most are:
 
-At the end of the day, all we know of a project before we start it is what we say and what the maintainer tells us. Having good documentation is the best indicator that a project is well maintained, well supported, and has a healthy and active community. There are a plethora of materials a repo can utilize to provide context to potential contributors, but the docs that matters most are:
+#### The README
 
-### The README
+README is the face of your repo. It's the first thing anyone sees, after maybe the name and description, and it's the nexus for all content, links, docs, and other project associations. A project without a README is probably not ready to accept contributions. Some basic things you should include in your README are:
 
-This is the face of your repo. It's the first thing anyone sees, after maybe the name and description, and it's the nexus for all content, links, docs, and other project associations. A project without a README is probably not ready for accepting contributions. Some basic things you should include in your README are:
+- A more detailed description of the project than the description field in GitHub.
+- How to install/run your application or a link to the document that explains it.
+- A link to the Code of Conduct.
+- Project status, roadmap, and other pertinent details for those interested in using or contributing to the project.
 
-- A more detailed description of the project than the description field in GitHub;
-- How to install/run your application or a link to the document that explains it;
-- A link to the Code of Conduct;
-- Project status, roadmap, and any other pertinent details for those interested in using or contributing to the app.
+🔎 Example: [Virtual Coffee's README](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/README.md)
 
-🔎 Here is [VirtualCoffee.io's current README](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/README.md)
+#### The Code of Conduct
 
-### The Code of Conduct
+The Code of Conduct (COC) is an excellent indicator of a healthy contributor's environment. There are many Code of Conduct styles online, and many projects use one of the standard templates. But it's always worth looking at a project's Code of Conduct before starting any contribution work. Not every open source project may necessarily have one. Some maintainers opt to describe appropriate behavior in the README file.
 
-The code of conduct (often referred to as the **COC**) is an excellent indicator of healthy contributor's environment. There are many Code of Conduct styles online and many projects use one of the standard templates (which is fine). But it's always worth taking a look at a project's Code of Conduct before starting any contribution work. Not every OSS project may necessarily have one though; some maintainers opt to simply describe appropriate behavior in the README.
+🔎 Example: [Virtual Coffee's Code of Conduct](https://github.com/Virtual-Coffee/.github/blob/main/CODE_OF_CONDUCT.md)
 
-🔎 Here is [VirtualCoffee.io's current org Code of Conduct](https://github.com/Virtual-Coffee/.github/blob/main/CODE_OF_CONDUCT.md)
+#### The Contributing Guide
 
-### The Contributing Guide
+Last but certainly not least, there should be some discussion of how to contribute to the project. Some people write these instructions directly in the README, which _can_ be alright. Still, we prefer an explicit document that highlights:
 
-Last but certainly not least, there should be some discussion of how to contribute to the project. Some folks write these instructions directly in the README which _can_ be alright, but we prefer an explicit document that highlights:
+- How to install and run the application. The more detailed, the better.
+- The recommended process for making issues/submitting pull requests.
+- What to do if you feel like somebody is violating the Code of Conduct?
+- How to communicate with maintainers? How often should you expect interactions/reviews, and through what mediums?
 
-- How to install and run the application, the more detailed the better;
-- What is the recommended process for making issues/submitting pull requests;
-- What to do if you feel like somebody is violating the Code of Conduct;
-- How to communicate with maintainers? How often should you expect interactions/reviews and through what mediums.
+🔎 Example: [Virtual Coffee's Contributing Guide](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md)
 
-🔎 Here is [VirtualCoffee.io's current Contributing Guide](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md)
+#### The License
 
-### The License
+Many [popular and vetted open source licenses](https://opensource.org/licenses) make it easy and safe for people to contribute to a particular project. Unless you are a lawyer or have access to one, it is advised to use one of these.
 
-There are many [popular and vetted open source licenses](https://opensource.org/licenses) that make it easy and safe for people to contribute to a particular project. Unless you are a lawyer, or have access to one, it is advised to use one of these.
-
-🔎 Here is [VirtualCoffee.io's current License](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/LICENSE.txt)
+🔎 Example: [Virtual Coffee's open source license](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/LICENSE.txt)
 
 ### Issue and Pull Request templates
 
-These are templates that provide a guide for potential contributors on make issue and pull requests respectively to the project. They remove a lot of burden from the maintainer and the contributor one trying to guess the appropriate procedure for these contributions.
+These templates guide potential contributors on making issues and pull requests to the project. They remove a lot of burden from the maintainer and the contributor from guessing the appropriate procedure for these contributions.
 
 ![Templates](https://user-images.githubusercontent.com/13292886/132138524-0a38d35c-305e-4804-ba36-e7adfa73e09d.png)
 
-🔎 Here are [VirtualCoffee.io's current Issue Templates](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/.github/ISSUE_TEMPLATE), and [here is what users see](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new/choose) when submitting a new issue.
-
----
-
----
+🔎 Example: [Virtual Coffee's issue templates](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/.github/ISSUE_TEMPLATE), and [this is what users see](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new/choose) when submitting a new issue.
 
 ### Beginner Friendliness
 
-Ultimately, if you're looking to make your repository/project beginner friendly, you should have some indication in the documentation and processes that highlights that.
+Ultimately, suppose you want to make your repository/project beginner friendly. In that case, you should have some indication in the documentation and processes that highlight that.
 
-- Call to action - Some repositories say "contributions welcome/beginner friendly" in the README or have tags on issues like, `just for beginners`. Either way, there should be some indication that you do want someone to help.
-- Healthy interactions with contributors - unless a project is brand new, it likely has some history of contributions from other people. Looking at those interactions and how the maintainers work with contributors is a great way for contributors to get the "vibe" of the project. How often do maintainers respond? How do they respond? Are people appreciated for their work? If your intention is to make your repository/project beginner friendly, bear this in mind.
-- Clear tagging system in issues. The easier it is to navigate the project issues and resources, the more friendly it is for new contributors.
+- **Call to action.** <br />
+  Some repositories say "contributions welcome/beginner friendly" in the README or have tags on issues for beginners. Either way, there should be some indication that you do want someone to help.
+- **Healthy interactions with contributors.** <br />
+  Unless a project is brand new, it likely has some history of contributions from others. Looking at those interactions and how the maintainers work with contributors is a great way for contributors to get the "vibe" of the project. How often do maintainers respond? How do they respond? Are people appreciated for their work? If you intend to make your repository/project beginner friendly, bear this in mind.
+- **Clear tagging system in issues.** <br />
+  The easier it is to navigate the project issues and resources, the more friendly it is for new contributors.
 
-_Note that everyone has a slightly different definition of "beginner friendly", so the experience may vary in different repositories, and this is okay._
+_Note that everyone has a slightly different definition of "beginner friendly", so the experience may vary in different repositories, which is okay._
+
+### Open sourcing a project without expecting contributions
+
+If you want to open source your project so that other people can freely use the fruits of your labor, you don't have to do everything on the checklist.
+
+For example, you probably won't need issue and pull request templates or a contributing guide. A Code of Conduct, however, is still recommended. Even if you are not expecting contributions, you may still get public activity on your repo, for example, on issues. It helps you set boundaries and keep conversations respectful.
+
+---
 
 ## Best practices for maintainers
 
-### Communicating with contributors
+### Communication with contributors
 
-Communication is key to running a successful open source project. Establish conventions for communications early on and make sure these are clearly documented. Many projects communicate via issues and pull requests, while some use external platforms such as Slack channels, a forum, IRC channels or email lists. All are valid ways to communicate, the important thing is to figure out what is most appropriate for your project. If you are unsure what is best and have no reason not to, using issues and pull requests is a solid choice. If you are maintaining a company project that is open to external contributors, care should be taken to coordinate internal and external communication so that outside contributors don't miss out on important updates communicated internally.
+Communication is key to running a successful open source project. Establish conventions for communications early on and make sure these are well documented. Many projects communicate via issues and pull requests. Some use external platforms such as Slack, a forum, IRC, or email lists. All are good ways to communicate. The important thing is to figure out what is most appropriate for your project. Using issues and pull requests is a solid choice if you are unsure what is best.
 
-Regardless of the tools used to communicate, there are certain things to keep in mind to keep communication effective and respectful, especially in a international online space.
+Suppose you are maintaining a company project that is open to external contributors. In that case, you need to coordinate internal and external communication so that outside contributors don't miss out on essential updates communicated internally.
 
-- Your repository should have a Code of Conduct, and all communication should follow the Code of Conduct.
-- Messages should be kept short and simple. It is often best to keep to 'one message, one topic', although there may be times when this not possible, for example if you need to respond to several points in another message, or you are going to be unavailable for a time and need to communicate several points at once. If you need to discuss several points in one message, put each point in a separate paragraph.
-- Disagreement and debate are healthy, but it is important to keep the conversation respectful. Criticize the ideas people express, but don't criticize the person directly.
-- Low context communication works best in international, cross-cultural spaces. Meanings should be explicit in the words you use, specific cultural references, cliches and sayings might not be understood by people from different cultures.
+Regardless of the tools used to communicate, there are certain things to keep in mind to keep communication effective and respectful, especially in an international online space.
+
+- **Have a Code of Conduct** <br />
+  All communication should follow the Code of Conduct.
+- **Messages should be kept short and simple.** <br />
+  It is often best to keep to 'one message, one topic'. However, there may be times when this is not possible. For example, if you will be unavailable for some time and need to respond to several points. If you need to discuss several topics in one message, put each in a separate paragraph.
+- **Disagreement and debate are healthy, but it is important to keep the conversation respectful.** <br />
+  You could criticize the ideas people express, but don't criticize the person directly.
+- **Low-context communication works best in international, cross-cultural spaces.** <br />
+  Meanings should be explicit in the words you use. People from different cultures might not understand specific cultural references, cliches, and sayings.
 
 ### Managing expectations
 
-To ensure the smooth running of a project with external contributors, it is important to effectively manage expectations both of maintainers and contributors.
+It is important to effectively manage both maintainers and contributors' expectations to ensure a project's smooth running with external contributors.
 
-Maintainers can help ensure that their expectations of contributors are clear by:
+Here are several things that maintainers can do to help manage the expectations:
 
-- Breaking down tasks that are to be opened to external contributors into small, well-defined chunks.
-- Ensuring that any preferences for code style, branch names, git workflows, etc are clearly communicated in the contributing guide or readme.
-
-Maintainers can help ensure that they meet the expectations of contributors by:
-
-- Clearly communicating what support the maintainers can provide, if any (e.g. pair programming, answering questions).
-- Clearly communicating maintainer availability and expected timescales for reviewing pull requests.
+- Breaking down tasks for external contributors into small, well-defined chunks.
+- Ensuring that any preferences for code style, branch names, git workflows, etc., are well explained in the contributing guide or README.
+- Communicating what support you can provide for contributors if any (e.g., pair programming, answering questions, etc.).
+- Communicating the availability and expected timescales for reviewing pull requests.
 
 ### Building community
 
-Having a strong community around an open source project can be crucial to the project's success. An effective community around an open source project will help the maintainers handle support, spread the word and bring new users and contributors to the project and gives an opportunity for maintainers to get feedback and new ideas to help the project fulfil the needs and aspirations of users.
+A strong community around an open source project can be crucial to the project's success. An active community around an open source project will help the maintainers handle support, spread the word, and bring new users and contributors to the project. They also allow maintainers to get feedback and new ideas to help the project fulfill the needs and aspirations of users.
 
-Building a community takes effort, and this effort should be seen as equally important as the technical development effort. It is about both tools that enable community building and about making and nurturing connections with and between people, which no tool can do on its own.
+Building a community takes effort and is equally important as the technical development effort. It is about both tools enabling community building and making and nurturing connections with and between people.
 
-Things that will help build a community include:
+Things that will help build community:
 
-- A place for discussion to happen. For smaller projects where the community is focused on project questions and development discussions, this could just be Github issues. For larger projects or if you want to build a community in a broader sense, a separate venue such as a Slack or Discord community or forum will probably work better.
-- A Code of Conduct to set boundaries for interaction and keep the community a welcoming space for everyone.
-- Community documentation explaining how the community works and where to go for what. For example, here at Virtual Coffee we have our [Member Resources](https://virtualcoffee.io/resources/virtual-coffee/) page.
-- Leading with empathy and kindness, and welcoming new people and helping them find their way in the community. Joining a new community where you don't know the people can be an intimidating experience, and you can go a long way to ease the journey.
+- **A place for discussion to happen.** <br />
+  It could be GitHub issues for smaller projects where the community focuses on project questions and development discussions. For larger projects or if you want to build a community in a broader sense, a separate venue such as a Slack or Discord community or forum will probably work better.
+- **A Code of Conduct** <br />
+  It sets boundaries for interaction and keeps the community a welcoming space for everyone.
+- **Community documentation.** <br />
+  It explains how the community works and where to search for things related to the community. For example, here at Virtual Coffee, we have our [Member Resources](https://virtualcoffee.io/resources/virtual-coffee/) page.
+- **Leading with empathy and kindness, welcoming new people, and helping them find their way in the community.** <br />
+  Joining a new community where you don't know the people can be an intimidating experience, and you can go a long way to ease the journey.
 
 ### Avoiding burnout
 
-Maintaining an open source project can be a lot of work, and many people do it on the side as well as their "day job". It is important to be mindful of the risk of burnout and take steps to keep the work at a manageable level.
+Maintaining an open source project can be a lot of work, and many people do it simultaneously with their "day job". It is essential to be mindful of the risk of burnout and take steps to keep the work at a manageable level.
 
-Good steps to take include:
+Figure out a reasonable time frame for responding to issues and pull requests, and include it in your documentation. If you are an individual maintaining a repository in your spare time, it's okay to say a week.
 
-- Figure out a reasonable time frame for responding to issues and pull requests, and include it in your documentation. If you are an individual maintaining a repository in your spare time it's totally okay to say a week.
-- If you are maintaining a company repository, state your working hours in the documentation and make it clear that you won't respond outside of office hours. Make sure you stick to this.
+If you are maintaining a company repository, state your working hours in the documentation and clarify that you won't respond outside of office hours. Make sure you stick to this.
+
+---
 
 ## Additional Resources
 
