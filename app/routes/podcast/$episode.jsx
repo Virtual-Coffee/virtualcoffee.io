@@ -289,7 +289,11 @@ export default function PostSlug() {
 					<p>
 						<em>
 							The Virtual Coffee Podcast is produced by Dan Ott and Bekah Hawrot
-							Weigel and edited by Andy Bonjour at GoodDay Communications.
+							Weigel and edited by{' '}
+							{parseInt(episode.podcastSeason) === 4
+								? 'Andy Bonjour at GoodDay Communications'
+								: 'Dan Ott'}
+							.
 						</em>
 					</p>
 				</div>
