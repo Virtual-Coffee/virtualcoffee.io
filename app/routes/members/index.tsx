@@ -3,11 +3,11 @@ import { useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import MemberCards from '~/components/MemberCards';
 import UndrawIllustration from '~/components/UndrawIllustration';
-import getMembers from '~/data/members';
+import getMembers, { MembersResponse } from '~/data/members';
 import { createMetaData } from '~/util/createMetaData.server';
 
 export const loader = async () => {
-	const members = await getMembers();
+	const members: MembersResponse = await getMembers();
 
 	const meta = createMetaData({
 		title: 'Virtual Coffee Members',
@@ -23,7 +23,7 @@ export function meta({ data: { meta } = {} } = {}) {
 }
 
 export default function EventsIndex() {
-	const { core, members } = useLoaderData();
+	const { core, members, x } = useLoaderData();
 
 	return (
 		<DefaultLayout

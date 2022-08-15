@@ -1,13 +1,26 @@
-const { builder } = require('@netlify/functions');
-const { GraphQLClient, gql } = require('graphql-request');
-const mockData = require('../../app/data/mocks/sponsors');
+import { builder, Handler } from '@netlify/functions';
+import { GraphQLClient, gql } from 'graphql-request';
+import mockData from '../../app/data/mocks/sponsors';
 
 // This file is an On-Demand Builder
 // It allows us to cache third-party data for a specified amount of time
 // Any deploys will clear the cache
 // Read more here: https://docs.netlify.com/configure-builds/on-demand-builders/
 
-async function handler(event, context) {
+const handlerFn: Handler = async (event) => {
+	if (event.httpMethod !== 'GET') {
+		return {
+			statusCode: 405,
+			ttl: 0, // in seconds
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				error: 'Method not allowed.',
+			}),
+		};
+	}
+
 	const sponsorData = await getSponsors();
 
 	return {
@@ -18,11 +31,14 @@ async function handler(event, context) {
 		},
 		body: JSON.stringify(sponsorData),
 	};
-}
+};
 
-exports.handler = builder(handler);
+export const handler = builder(handlerFn);
 
-const sponsorOverrides = {
+type SponsorEntity =
+	typeof mockData.organization.sponsorshipsAsMaintainer.nodes[number]['sponsorEntity'];
+
+const sponsorOverrides: Record<string, Partial<SponsorEntity>> = {
 	MDEyOk9yZ2FuaXphdGlvbjcxNDc2MTY2: {
 		avatarUrl_80: '/assets/images/sponsors/whimser.png',
 		avatarUrl_160: '/assets/images/sponsors/whimser.png',
@@ -89,7 +105,8 @@ const query = gql`
 
 async function getSponsors() {
 	// async function main() {
-	let headers = {
+
+	let headers: HeadersInit = {
 		Accept: 'application/vnd.github.v3+json',
 	};
 
@@ -103,7 +120,7 @@ async function getSponsors() {
 		headers,
 	});
 
-	let response;
+	let response: typeof mockData;
 
 	if (!token) {
 		response = mockData;
@@ -157,3 +174,5 @@ async function getSponsors() {
 
 	return returnVal;
 }
+
+export type SponsorsResponse = Awaited<ReturnType<typeof getSponsors>>;
