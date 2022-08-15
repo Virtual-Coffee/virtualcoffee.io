@@ -1,6 +1,6 @@
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
-import type { LoaderFunction } from '@remix-run/node';
-import getSponsors, { SponsorsResponse } from '~/data/sponsors';
+import type { LoaderArgs } from '@remix-run/node';
+import getSponsors from '~/data/sponsors';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getEvents } from '~/data/events';
@@ -14,16 +14,7 @@ import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '~/data/newsletters';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
 
-interface LoaderData {
-	sponsors: SponsorsResponse;
-	events: any;
-	podcastEpisodes: any;
-	resources: any;
-	newsletters: any;
-	challenges: any;
-}
-
-export const loader: LoaderFunction = async () => {
+export async function loader(args: LoaderArgs) {
 	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
 		await Promise.all([
 			getSponsors(),
@@ -40,7 +31,7 @@ export const loader: LoaderFunction = async () => {
 		includeChildren: false,
 	});
 
-	return json<LoaderData>({
+	return json({
 		sponsors,
 		events,
 		podcastEpisodes,
@@ -48,7 +39,7 @@ export const loader: LoaderFunction = async () => {
 		newsletters,
 		challenges,
 	});
-};
+}
 
 export const homePageLinks = [
 	{
@@ -96,7 +87,7 @@ export default function Index() {
 		resources,
 		newsletters,
 		challenges,
-	} = useLoaderData<LoaderData>();
+	} = useLoaderData<typeof loader>();
 
 	return (
 		<>
