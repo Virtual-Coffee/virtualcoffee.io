@@ -85,18 +85,36 @@ async function parseMarkdown(markdown: string) {
 	return String(file);
 }
 
-async function getMemberGithubData(data) {
-	let headers = {
-		Accept: 'application/vnd.github.v3+json',
-	};
+type GithubSearchUser = {
+	login: string;
+	id: string | number;
+	url: Website;
+	avatarUrl: string;
+	name?: string;
+	company?: string;
+	location?: string;
+	isHireable?: boolean;
+	bio?: string;
+	bioHTML?: string;
+	twitterUsername?: string;
+	websiteUrl?: Website;
+};
 
+type GithubSearchUserLookup = Record<string, GithubSearchUser>;
+
+async function getMemberGithubData(
+	data: MemberObject[],
+): Promise<GithubSearchUserLookup> {
 	const token = process.env.GITHUB_TOKEN;
 
-	if (token) {
-		headers.Authorization = 'bearer ' + token;
-	} else {
+	if (!token) {
 		return mockMemberData(data);
 	}
+
+	let headers = {
+		Accept: 'application/vnd.github.v3+json',
+		Authorization: 'bearer ' + token,
+	};
 
 	try {
 		console.log('Fetching member data...');
@@ -128,8 +146,8 @@ async function getMemberGithubData(data) {
 			}
 		`;
 
-		const queries = [];
-		const githubData = {};
+		const queries: string[] = [];
+		const githubData: GithubSearchUserLookup = {};
 
 		let i,
 			j,
@@ -150,7 +168,7 @@ async function getMemberGithubData(data) {
 				searchQuery: queries[i],
 			});
 
-			response.search.nodes.forEach((user) => {
+			response.search.nodes.forEach((user: GithubSearchUser) => {
 				githubData[user.login.toLowerCase()] = {
 					...user,
 				};
@@ -159,7 +177,9 @@ async function getMemberGithubData(data) {
 
 		return githubData;
 	} catch (error) {
-		console.log(error.message);
+		if (error instanceof Error) {
+			console.log(error.message);
+		}
 		console.log('Error loading github member data, using fake data instead');
 		return mockMemberData(data);
 	}
@@ -200,20 +220,22 @@ async function loadUserData() {
 
 	const teamsDict: Record<typeof allTeamNames[number], string[]> = {};
 
-	teamsData.forEach((team) => {
-		team.members.forEach((member) => {
+	const teamNames = Object.keys(teamsData) as TeamName[];
+
+	teamNames.forEach((teamName) => {
+		teamsData[teamName].forEach((member) => {
 			const lcMember = member.toLowerCase();
 			if (teamsDict[lcMember]) {
-				teamsDict[lcMember].push(team.name);
+				teamsDict[lcMember].push(teamName);
 			} else {
-				teamsDict[lcMember] = [team.name];
+				teamsDict[lcMember] = [teamName];
 			}
 		});
 	});
 
 	const githubData = await getMemberGithubData([...core, ...members]);
 
-	const fixupData = async (data) => {
+	const fixupData = async (data: MemberObject) => {
 		const github = githubData[data.github.toLowerCase()];
 
 		if (!github) {
@@ -229,20 +251,20 @@ async function loadUserData() {
 			data.name = github.name || github.login;
 		}
 
-		if (!data.bio) {
-			data.bio = await sanitizeHtml(github.bioHTML);
+		if (!returnObject.bio) {
+			returnObject.bio = await sanitizeHtml(github.bioHTML);
 		} else {
-			data.bio = await parseMarkdown(data.bio);
+			returnObject.bio = await parseMarkdown(returnObject.bio);
 		}
 
-		if (!data.mainUrl) {
+		if (!returnObject.mainUrl) {
 			if (github.websiteUrl) {
-				data.mainUrl =
+				returnObject.mainUrl =
 					github.websiteUrl.slice(0, 4) !== 'http'
 						? `https://${github.websiteUrl}`
 						: github.websiteUrl;
 			} else {
-				data.mainUrl = github.url;
+				returnObject.mainUrl = github.url;
 			}
 		}
 
@@ -267,134 +289,146 @@ async function loadUserData() {
 			];
 		}
 
-		data.accounts = data.accounts
-			.map((account) => {
+		returnObject.accounts = data.accounts
+			.map((account): FixedUpUserAccount | null => {
 				switch (account.type) {
 					case 'github':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'GitHub',
 							url: `https://github.com/${account.username}`,
-							title: `${data.name} on GitHub`,
+							title: `${returnObject.name} on GitHub`,
 						};
 
 					case 'linkedin':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'LinkedIn',
 							url: `https://www.linkedin.com/in/${account.username}`,
-							title: `${data.name} on LinkedIn`,
+							title: `${returnObject.name} on LinkedIn`,
 						};
 
 					case 'dev':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Dev',
 							url: `https://dev.to/${account.username}`,
-							title: `${data.name} on DEV.to`,
+							title: `${returnObject.name} on DEV.to`,
 						};
 
 					case 'codenewbie':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Codenewbie',
 							url: `https://community.codenewbie.org/${account.username}`,
-							title: `${data.name} on CodeNewbie Community`,
+							title: `${returnObject.name} on CodeNewbie Community`,
 						};
 
 					case 'twitter':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Twitter',
 							url: `https://twitter.com/${account.username}`,
-							title: `${data.name} on Twitter`,
+							title: `${returnObject.name} on Twitter`,
 						};
 
 					case 'twitch':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Twitch',
 							url: `https://www.twitch.tv/${account.username}`,
-							title: `${data.name} on Twitch`,
+							title: `${returnObject.name} on Twitch`,
 						};
 
 					case 'polywork':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Polywork',
 							url: `https://polywork.com/${account.username}`,
-							title: `${data.name} on Polywork`,
+							title: `${returnObject.name} on Polywork`,
 						};
 
 					case 'medium':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Medium',
 							url: `https://medium.com/@${account.username}`,
-							title: `${data.name} on Medium`,
+							title: `${returnObject.name} on Medium`,
 						};
 
 					case 'hashnode':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'HashNode',
 							url: `https://hashnode.com/@${account.username}`,
-							title: `${data.name} on HashNode`,
+							title: `${returnObject.name} on HashNode`,
 						};
 
 					case 'youtube':
-						if (!account.channelId && !account.customUrl) {
-							return {};
+						if ('channelId' in account && !!account.channelId) {
+							return {
+								...account,
+								Icon: 'YouTube',
+								url: `https://www.youtube.com/channel/${account.channelId}`,
+								title: `${returnObject.name} on YouTube`,
+							};
 						}
-						return {
-							...account,
-							Icon: 'YouTube',
-							url: account.customUrl
-								? account.customUrl
-								: `https://www.youtube.com/channel/${account.channelId}`,
-							title: `${data.name} on YouTube`,
-						};
 
-					default:
+						if ('customUrl' in account && !!account.customUrl) {
+							return {
+								...account,
+								Icon: 'YouTube',
+								url: account.customUrl,
+								title: `${returnObject.name} on YouTube`,
+							};
+						}
+
+						return null;
+
+					case 'website':
 						return {
 							...account,
 							Icon: 'Website',
 							type: 'website',
 							title: account.title || account.url,
 						};
+
+					default:
+						return null;
 				}
 			})
-			.filter((account) => !!account.url);
+			.filter(nonNullable);
 
-		return data;
+		return returnObject;
 	};
+	// https://github.com/Virtual-Coffee/virtualcoffee.io/pull/586/commits/97fd4757ae3db5f9fd2b0c1cad117fe8211fcc16
 
 	const filteredCore = await Promise.all(core.map(fixupData));
 	const filteredMembers = await Promise.all(members.map(fixupData));

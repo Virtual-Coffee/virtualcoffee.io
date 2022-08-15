@@ -42,7 +42,10 @@ export const handler = builder(handlerFn);
 type SponsorEntity =
 	typeof mockData.organization.sponsorshipsAsMaintainer.nodes[number]['sponsorEntity'];
 
-const sponsorOverrides: Record<string, Partial<SponsorEntity>> = {
+type SponsorEntity =
+	typeof mockData.organization.sponsorshipsAsMaintainer.nodes[number]['sponsorEntity'];
+
+const sponsorOverrides: Record<string, Partial<SponsorEntity>>: Record<string, Partial<SponsorEntity>> = {
 	MDEyOk9yZ2FuaXphdGlvbjcxNDc2MTY2: {
 		avatarUrl_80: '/assets/images/sponsors/whimser.png',
 		avatarUrl_160: '/assets/images/sponsors/whimser.png',
