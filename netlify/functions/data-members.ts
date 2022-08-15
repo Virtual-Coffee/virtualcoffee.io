@@ -314,7 +314,6 @@ async function loadUserData() {
 			];
 		}
 
-		// TODO: Dan and kirk fix this
 		returnObject.accounts = data.accounts
 			.map((account): FixedUpUserAccount | null => {
 				switch (account.type) {

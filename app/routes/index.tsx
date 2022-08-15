@@ -23,7 +23,6 @@ interface LoaderData {
 	challenges: any;
 }
 
-// TODO - typescript let dan do what he wants
 export const loader: LoaderFunction = async () => {
 	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
 		await Promise.all([

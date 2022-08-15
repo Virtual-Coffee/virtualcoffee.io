@@ -8,7 +8,6 @@ import mockData from '../../app/data/mocks/sponsors';
 // Read more here: https://docs.netlify.com/configure-builds/on-demand-builders/
 
 const handlerFn: Handler = async (event) => {
-	// todo: DOES THIS WORK with builder????
 	if (event.httpMethod !== 'GET') {
 		return {
 			statusCode: 405,
@@ -35,9 +34,6 @@ const handlerFn: Handler = async (event) => {
 };
 
 export const handler = builder(handlerFn);
-
-// todo: does this work???
-// export { handler };
 
 type SponsorEntity =
 	typeof mockData.organization.sponsorshipsAsMaintainer.nodes[number]['sponsorEntity'];
