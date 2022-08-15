@@ -1,5 +1,6 @@
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
-import getSponsors from '~/data/sponsors';
+import type { LoaderFunction } from '@remix-run/node';
+import getSponsors, { SponsorsResponse } from '~/data/sponsors';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getEvents } from '~/data/events';
@@ -13,7 +14,16 @@ import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '~/data/newsletters';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
 
-export async function loader() {
+interface LoaderData {
+	sponsors: SponsorsResponse;
+	events: any;
+	podcastEpisodes: any;
+	resources: any;
+	newsletters: any;
+	challenges: any;
+}
+
+export const loader: LoaderFunction = async () => {
 	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
 		await Promise.all([
 			getSponsors(),
@@ -30,7 +40,7 @@ export async function loader() {
 		includeChildren: false,
 	});
 
-	return json({
+	return json<LoaderData>({
 		sponsors,
 		events,
 		podcastEpisodes,
@@ -38,7 +48,7 @@ export async function loader() {
 		newsletters,
 		challenges,
 	});
-}
+};
 
 export const homePageLinks = [
 	{
@@ -86,13 +96,14 @@ export default function Index() {
 		resources,
 		newsletters,
 		challenges,
-	} = useLoaderData();
+	} = useLoaderData<LoaderData>();
 
 	return (
 		<>
 			<div className="hero">
 				<div className="container pt-5 pb-5 pt-sm-6">
 					<h1>
+						{/* @ts-ignore */}
 						<VirtualCoffeeFullBanner />
 					</h1>
 
@@ -126,6 +137,7 @@ export default function Index() {
 				<div className="container-lg py-5">
 					<h2 className="text-center mb-5">What we're up to</h2>
 					<div className="homepageblocks">
+						{/* @ts-ignore */}
 						<HomePageBlock
 							Hero="UndrawCelebration"
 							id="about"
@@ -144,7 +156,7 @@ export default function Index() {
 							footer="See more Community Events"
 						>
 							<PostList
-								items={events.map((event) => ({
+								items={events.map((event: any) => ({
 									title: event.title,
 									description: (
 										<strong>{dateForDisplay(event.startDateLocalized)}</strong>
@@ -174,7 +186,15 @@ export default function Index() {
 						>
 							<PostList
 								items={podcastEpisodes.map(
-									({ title, metaDescription: description, url }) => ({
+									({
+										title,
+										metaDescription: description,
+										url,
+									}: {
+										title: any;
+										metaDescription: any;
+										url: any;
+									}) => ({
 										title,
 										description,
 										to: url,

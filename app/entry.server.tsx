@@ -1,16 +1,17 @@
+import type { EntryContext } from '@remix-run/node';
 import { renderToString } from 'react-dom/server';
 import { RemixServer } from '@remix-run/react';
 import { cacheControlValues } from './util/http';
 
 if (process.env.NETLIFY_DEV) {
-	process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+	process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 }
 
 export default function handleRequest(
-	request,
-	responseStatusCode,
-	responseHeaders,
-	remixContext,
+	request: Request,
+	responseStatusCode: number,
+	responseHeaders: Headers,
+	remixContext: EntryContext,
 ) {
 	const markup = renderToString(
 		<RemixServer context={remixContext} url={request.url} />,
@@ -31,9 +32,9 @@ export default function handleRequest(
 }
 
 export function handleDataRequest(
-	response,
+	response: Response,
 	// same args that get passed to the action or loader that was called
-	{ request, params, context },
+	// { request, params, context },
 ) {
 	// this may change in the future, but for now, default to caching all data requests.
 	// this can be overwritten in any loader by setting a Cache-Control header

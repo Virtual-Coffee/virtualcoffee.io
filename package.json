@@ -32,7 +32,7 @@
 		"**/*": "prettier --write --ignore-unknown"
 	},
 	"dependencies": {
-		"@faker-js/faker": "^6.1.1",
+		"@faker-js/faker": "^7.4.0",
 		"@fullhuman/postcss-purgecss": "^4.0.3",
 		"@imgix/js-core": "^3.6.0",
 		"@netlify/functions": "^1.0.0",
@@ -59,14 +59,14 @@
 		"hastscript": "^7.0.2",
 		"husky": "^7.0.2",
 		"lint-staged": "^11.2.0",
-		"luxon": "^2.4.0",
-		"markdown-it": "^12.3.2",
+		"luxon": "^3.0.1",
+		"markdown-it": "^13.0.1",
 		"mdast-util-toc": "^6.1.0",
 		"node-fetch": "^3.2.4",
 		"only-allow": "^1.0.0",
 		"postcss": "^8.4.14",
-		"postcss-cli": "^9.1.0",
-		"prettier": "2.6.2",
+		"postcss-cli": "^10.0.0",
+		"prettier": "^2.6.2",
 		"prop-types": "^15.8.1",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
@@ -85,7 +85,11 @@
 		"unified": "^10.1.2"
 	},
 	"devDependencies": {
-		"source-map-explorer": "^2.5.2"
+		"@types/react": "^17.0.45",
+		"@types/react-dom": "^17.0.17",
+		"@types/require-dir": "^1.0.2",
+		"source-map-explorer": "^2.5.2",
+		"typescript": "^4.6.4"
 	},
 	"engines": {
 		"node": ">=14"
