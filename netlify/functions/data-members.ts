@@ -3,8 +3,9 @@ import { GraphQLClient, gql } from 'graphql-request';
 import { resolve, join } from 'path';
 import requireDir from 'require-dir';
 import teamsData from '../../members/teams';
-import mockMemberData from '../../app/data/mocks/memberData';
-import { sanitizeHtml } from '../../app/util/sanitizeCmsData';
+import mockMemberData from '~/data/mocks/memberData';
+import { sanitizeHtml } from '~/util/sanitizeCmsData';
+import type { Website, Account, MemberObject } from '../../members/types';
 
 // This file is an On-Demand Builder
 // It allows us to cache third-party data for a specified amount of time
@@ -14,44 +15,6 @@ import { sanitizeHtml } from '../../app/util/sanitizeCmsData';
 function nonNullable<T>(value: T): value is NonNullable<T> {
 	return value !== null && value !== undefined;
 }
-
-type Website = `http${'s' | ''}://${string}`;
-
-type Account =
-	| {
-			type:
-				| 'linkedin'
-				| 'dev'
-				| 'codenewbie'
-				| 'twitter'
-				| 'twitch'
-				| 'polywork'
-				| 'medium'
-				| 'hashnode'
-				| 'github';
-			username: string;
-	  }
-	| {
-			type: 'youtube';
-			channelId: string;
-	  }
-	| {
-			type: 'youtube';
-			customUrl: Website;
-	  }
-	| {
-			type: 'website';
-			url: Website;
-			title: string;
-	  };
-
-type MemberObject = {
-	github: string;
-	name?: string;
-	mainUrl?: Website;
-	bio?: string;
-	accounts?: Account[];
-};
 
 const handlerFn: Handler = async (event) => {
 	const userData = await loadUserData();
