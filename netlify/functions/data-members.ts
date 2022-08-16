@@ -29,7 +29,9 @@ const handlerFn: Handler = async (event) => {
 	};
 };
 
-exports.handler = builder(handlerFn);
+const handler = builder(handlerFn);
+
+export { handler };
 
 async function parseMarkdown(markdown: string) {
 	const [unified, remarkParse, remarkRehype, rehypeSanitize, rehypeStringify] =
