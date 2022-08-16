@@ -1,7 +1,7 @@
 import { builder, Handler } from '@netlify/functions';
 import { GraphQLClient, gql } from 'graphql-request';
-import { resolve, join } from 'path';
-import requireDir from 'require-dir';
+import { join } from 'path';
+import importDir from 'directory-import';
 import teamsData from '../../members/teams';
 import mockMemberData from '~/data/mocks/memberData';
 import { sanitizeHtml } from '~/util/sanitizeCmsData';
@@ -29,7 +29,9 @@ const handlerFn: Handler = async (event) => {
 	};
 };
 
-exports.handler = builder(handlerFn);
+const handler = builder(handlerFn);
+
+export { handler };
 
 async function parseMarkdown(markdown: string) {
 	const [unified, remarkParse, remarkRehype, rehypeSanitize, rehypeStringify] =
@@ -154,30 +156,25 @@ async function getMemberGithubData(
 }
 
 function loadDirectory(path: string) {
-	const dict: Record<string, MemberObject> = requireDir(
-		join(process.cwd(), 'members', path),
-		{
-			filter: function (fullPath: string) {
-				return !fullPath.match(/members\/_/g);
-			},
-		},
-	);
+	const dict: Record<string, MemberObject> = importDir({
+		directoryPath: join(process.cwd(), 'members', path),
+	});
 
-	return Object.keys(dict)
-		.map((key) => dict[key])
-		.sort(function (a, b) {
-			var nameA = a.github.toLowerCase(); // ignore upper and lowercase
-			var nameB = b.github.toLowerCase(); // ignore upper and lowercase
-			if (nameA < nameB) {
-				return -1;
-			}
-			if (nameA > nameB) {
-				return 1;
-			}
+	const list = Object.keys(dict).map((key) => dict[key]);
 
-			// names must be equal
-			return 0;
-		});
+	return list.sort(function (a, b) {
+		var nameA = a.github.toLowerCase(); // ignore upper and lowercase
+		var nameB = b.github.toLowerCase(); // ignore upper and lowercase
+		if (nameA < nameB) {
+			return -1;
+		}
+		if (nameA > nameB) {
+			return 1;
+		}
+
+		// names must be equal
+		return 0;
+	});
 }
 
 // const allTeamNames = teamsData.map((team) => team.name) as const;
