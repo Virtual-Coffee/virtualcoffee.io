@@ -11,7 +11,7 @@ import HomePageBlock from '~/components/HomePageBlock';
 import PostList, {
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
-import DateTime from '~/components/content/DateTime';
+import { dateForDisplay } from '~/util/date';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '~/data/newsletters';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
@@ -159,11 +159,14 @@ export default function Index() {
 						>
 							<PostList
 								items={events.map((event) => {
+									const eventTime = event.startDateLocalized;
 									return {
 										title: event.title,
 										description: (
 											<strong>
-												<DateTime date={event.eventStartUTC} />
+												<time suppressHydrationWarning dateTime={eventTime}>
+													{dateForDisplay(eventTime)}
+												</time>
 											</strong>
 										),
 									};
