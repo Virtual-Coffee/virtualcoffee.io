@@ -5,11 +5,15 @@ import DisplayHtml from '~/components/DisplayHtml';
 import { getEvents } from '~/data/events';
 import { dateForDisplay } from '~/util/date';
 import { createMetaData } from '~/util/createMetaData.server';
+import getSponsors from '~/data/sponsors';
 
 export async function loader() {
-	const events = await getEvents({
-		limit: 20,
-	});
+	const [events, sponsors] = await Promise.all([
+		getEvents({
+			limit: 20,
+		}),
+		getSponsors(),
+	]);
 
 	const meta = createMetaData({
 		title: 'Virtual Coffee Community Events',
@@ -17,7 +21,7 @@ export async function loader() {
 		Hero: 'UndrawConferenceCall',
 	});
 
-	return json({ events, meta });
+	return json({ events, meta, sponsors });
 }
 
 export function meta({ data: { meta } = {} } = {}) {
@@ -25,7 +29,11 @@ export function meta({ data: { meta } = {} } = {}) {
 }
 
 export default function EventsIndex() {
-	const { events } = useLoaderData();
+	const { events, sponsors } = useLoaderData();
+	const eventsSponsors = sponsors.logoSponsors.filter(
+		(tier) => tier.monthlyPriceInDollars > 150,
+	);
+
 	return (
 		<DefaultLayout
 			Hero="UndrawConferenceCall"
@@ -44,6 +52,52 @@ export default function EventsIndex() {
 							</strong>
 						</p>
 					</div>
+
+					{eventsSponsors.length > 0 && (
+						<div className="sponsors">
+							<h3>
+								<small>Virtual Coffee events are proudly sponsored by:</small>
+							</h3>
+							<ul className="sponsors-list">
+								{eventsSponsors.map((tier) =>
+									tier.sponsors.map((supporter) => (
+										<li key={supporter.id} data-id={supporter.id}>
+											<a href={supporter.websiteUrl || supporter.url}>
+												<img
+													src={supporter.avatarUrl_80}
+													alt=""
+													width="240"
+													height="240"
+													loading="lazy"
+													decoding="async"
+													sizes="(min-width: 915px) 240px, 24vw"
+													srcSet={`
+              ${supporter.avatarUrl_80}   80w,
+              ${supporter.avatarUrl_160} 160w,
+              ${supporter.avatarUrl_240} 240w,
+              ${supporter.avatarUrl_480} 480w,
+              ${supporter.avatarUrl_720} 720w`}
+												/>
+												<div className="sponsors-body">
+													<h3 className="h4">{supporter.name}</h3>
+													{supporter.descriptionHTML && (
+														<div
+															dangerouslySetInnerHTML={{
+																__html: supporter.descriptionHTML,
+															}}
+														/>
+													)}
+												</div>
+											</a>
+										</li>
+									)),
+								)}
+							</ul>
+							<div className="text-right text-muted">
+								<a href="/sponsorship">Sponsor Virtual Coffee</a>
+							</div>
+						</div>
+					)}
 
 					{events.map((event) => (
 						<div className="card mb-4" key={event.startDateLocalized}>
