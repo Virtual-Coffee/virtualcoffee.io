@@ -127,9 +127,9 @@ Use ctrl-c to quit the server when you're done.
 
 **Note:**
 
-Depending on the speed of your computer, you can get a `TimeoutError - Task timed out after 10.00 seconds` message when the localhost renders on the browser.
+Depending on the speed of your computer, you can get a `TimeoutError - Task timed out after 10.00 seconds` message when the localhost renders the home page (http://localhost:9000) on the browser.
 
-So if you are contributing to updating our newsletter or monthly challenges, after you see the notification of `Server now ready on http://localhost:9000`, go to your browser. Then add the path of `http://localhost:9000/newsletter` to preview the newsletter or `http://localhost:9000/monthlychallenges` to preview the monthly challenges page.
+If the feature you are working on is not on the home page (like the newsletter or monthly challenges for example), you may still be able to load the page you need: after you see the notification of `Server now ready on http://localhost:9000`, go to your browser. Then add the path of the page you need (like `http://localhost:9000/newsletter` for the newsletter or `http://localhost:9000/monthlychallenges` for the monthly challenges page) to see the page you need.
 
 ---
 
