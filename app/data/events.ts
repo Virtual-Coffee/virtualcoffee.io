@@ -1,4 +1,4 @@
-import { GraphQLClient, gql } from 'graphql-request';
+// import { GraphQLClient gql } from 'graphql-request';
 import { DateTime } from 'luxon';
 import { sanitizeHtml } from '~/util/sanitizeCmsData';
 import { ics } from 'calendar-link';
@@ -12,7 +12,42 @@ import axios from 'axios';
 // 		}
 // 	}`;
 
-function createEventsQuery(calendars, rangeStart, rangeEnd, limit) {
+/**
+ * Defining the interface for the SolspaceCalendar object.
+ * @link https://docs.solspace.com/craft/calendar/v3/developer/graphql.html#calendar-interface
+ */
+interface SolspaceCalendar {
+	id: number;
+	uid: string;
+	name: string;
+	handle: string;
+	description: string;
+	color: string;
+	lighterColor: string;
+	darkerColor: string;
+	icsHash: string;
+	allowRepeatingEvents: boolean;
+}
+interface SolspaceEventResponse {
+	id: number | string;
+	title: string;
+	startDateLocalized: string;
+	endDateLocalized: string;
+	eventCalendarDescription: string;
+}
+export interface EventItem extends SolspaceEventResponse {
+	eventStartUTC: string;
+	eventEndUTC: string;
+	eventCalendarLink: string;
+}
+export interface EventsResponse extends Array<EventItem> {}
+
+function createEventsQuery(
+	calendars: SolspaceCalendar[],
+	rangeStart: string,
+	rangeEnd: string,
+	limit: number,
+) {
 	return `
 	query getEvents {
 		solspace_calendar {
@@ -35,7 +70,11 @@ function createEventsQuery(calendars, rangeStart, rangeEnd, limit) {
 `;
 }
 
-export async function getEvents({ limit }) {
+export async function getEvents({
+	limit,
+}: {
+	limit: number;
+}): Promise<EventsResponse> {
 	const rangeStart = DateTime.now().toUTC().set({ hour: 0 }).toISO();
 	const rangeEnd = DateTime.now()
 		.toUTC()
@@ -112,28 +151,30 @@ export async function getEvents({ limit }) {
 		console.log('parsing events');
 		// console.log(eventsResponse);
 		return await Promise.all(
-			eventsResponse.data.data.solspace_calendar.events.map(async (event) => {
-				const sanitizedDescription = await sanitizeHtml(
-					event.eventCalendarDescription,
-				);
-				const calendarLink = await ics({
-					title: event.title,
-					start: event.startDateLocalized,
-					end: event.endDateLocalized,
-					description: sanitizedDescription,
-				});
-				return {
-					...event,
-					eventStartUTC: DateTime.fromISO(event.startDateLocalized)
-						.toUTC()
-						.toString(),
-					eventEndUTC: DateTime.fromISO(event.endDateLocalized)
-						.toUTC()
-						.toString(),
-					eventCalendarDescription: sanitizedDescription,
-					eventCalendarLink: calendarLink,
-				};
-			}),
+			eventsResponse.data.data.solspace_calendar.events.map(
+				async (event: SolspaceEventResponse) => {
+					const sanitizedDescription = await sanitizeHtml(
+						event.eventCalendarDescription,
+					);
+					const calendarLink = await ics({
+						title: event.title,
+						start: event.startDateLocalized,
+						end: event.endDateLocalized,
+						description: sanitizedDescription,
+					});
+					return {
+						...event,
+						eventStartUTC: DateTime.fromISO(event.startDateLocalized)
+							.toUTC()
+							.toString(),
+						eventEndUTC: DateTime.fromISO(event.endDateLocalized)
+							.toUTC()
+							.toString(),
+						eventCalendarDescription: sanitizedDescription,
+						eventCalendarLink: calendarLink,
+					};
+				},
+			),
 		);
 	} catch (e) {
 		console.error(e);

@@ -1,9 +1,11 @@
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
 import type { LoaderFunction } from '@remix-run/node';
-import getSponsors, { SponsorsResponse } from '~/data/sponsors';
+import getSponsors from '~/data/sponsors';
+import type { SponsorsResponse } from '~/data/sponsors';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getEvents } from '~/data/events';
+import type { EventsResponse } from '~/data/events';
 import { getEpisodes } from '~/data/podcast';
 import HomePageBlock from '~/components/HomePageBlock';
 import PostList, {
@@ -16,7 +18,7 @@ import getChallenges from '~/data/monthlyChallenges/getChallenges';
 
 interface LoaderData {
 	sponsors: SponsorsResponse;
-	events: any;
+	events: EventsResponse;
 	podcastEpisodes: any;
 	resources: any;
 	newsletters: any;
