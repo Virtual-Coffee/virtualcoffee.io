@@ -1,22 +1,24 @@
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
 import type { LoaderFunction } from '@remix-run/node';
-import getSponsors, { SponsorsResponse } from '~/data/sponsors';
+import getSponsors from '~/data/sponsors';
+import type { SponsorsResponse } from '~/data/sponsors';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getEvents } from '~/data/events';
-import { dateForDisplay } from '~/util/date';
+import type { EventsResponse } from '~/data/events';
 import { getEpisodes } from '~/data/podcast';
 import HomePageBlock from '~/components/HomePageBlock';
 import PostList, {
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
+import DateTime from '~/components/content/DateTime';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '~/data/newsletters';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
 
 interface LoaderData {
 	sponsors: SponsorsResponse;
-	events: any;
+	events: EventsResponse;
 	podcastEpisodes: any;
 	resources: any;
 	newsletters: any;
@@ -156,12 +158,16 @@ export default function Index() {
 							footer="See more Community Events"
 						>
 							<PostList
-								items={events.map((event: any) => ({
-									title: event.title,
-									description: (
-										<strong>{dateForDisplay(event.startDateLocalized)}</strong>
-									),
-								}))}
+								items={events.map((event) => {
+									return {
+										title: event.title,
+										description: (
+											<strong>
+												<DateTime date={event.eventStartUTC} />
+											</strong>
+										),
+									};
+								})}
 							/>
 						</HomePageBlock>
 					</div>
