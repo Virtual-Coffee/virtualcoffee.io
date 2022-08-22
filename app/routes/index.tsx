@@ -42,7 +42,7 @@ export const loader: LoaderFunction = async () => {
 		includeChildren: false,
 	});
 
-	return json<LoaderData>({
+	return json({
 		sponsors,
 		events,
 		podcastEpisodes,
@@ -50,7 +50,7 @@ export const loader: LoaderFunction = async () => {
 		newsletters,
 		challenges,
 	});
-};
+}
 
 export const homePageLinks = [
 	{
@@ -98,7 +98,7 @@ export default function Index() {
 		resources,
 		newsletters,
 		challenges,
-	} = useLoaderData<LoaderData>();
+	} = useLoaderData<typeof loader>();
 
 	return (
 		<>
