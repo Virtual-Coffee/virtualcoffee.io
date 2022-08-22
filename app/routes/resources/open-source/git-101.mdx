@@ -1,0 +1,336 @@
+---
+meta:
+  title: Git & GitHub 101
+  description: 'A guide to using Git and GitHub.'
+tags: [memberresources]
+hero:
+  Hero: UndrawSoftwareEngineer
+order: 2
+---
+
+import LeadText from '~/components/content/LeadText';
+import TextContainer from '~/components/content/TextContainer';
+
+<TextContainer showBackToTopLink={false}>
+
+<LeadText>
+
+This article provides an overview of Git and GitHub and the workflows you might use when contributing to open source.
+
+</LeadText>
+
+</TextContainer>
+
+## Table of Contents
+
+<TextContainer>
+
+---
+
+## Definitions
+
+### What is Git?
+
+We like this Git definition from [Amazon Web Services](https://aws.amazon.com/devops/source-control/git/):
+
+> Git is a distributed, open-source version control system (VCS) that enables you to store code, track revision history, merge code changes, and revert to earlier code version when needed.
+
+### What is GitHub?
+
+Like GitLab and Bitbucket, GitHub is a platform for hosting, sharing, and collaborating on Git repositories. <br />
+You can interact with GitHub through the web GUI on [their website](https://github.com), and there is also a [GitHub CLI](https://cli.github.com) if you prefer working with the command line.
+
+---
+
+## Basic workflows to contribute to open source using Git and GitHub
+
+### Forking a repository
+
+Suppose you want to contribute to an open source project. In that case, the first step is to fork the repository to your own GitHub account.
+Most open sources do not allow you to make and push changes directly in their repository. That's why you want to fork the repository.
+
+Forking means you create a copy of the repository in your GitHub account to make changes without having to push commits directly to the project's original repository.
+
+The steps to do so are:
+
+1. Click the "Fork" button on the project's repository page on GitHub.
+2. GitHub will redirect you to the "Create a new fork" page. Click the "Create fork" button.
+
+By convention, this forked repository is called the `origin` repository.
+
+### Authenticating with GitHub
+
+Suppose you work for the first time with GitHub locally. In that case, you want to know about authenticating your local Git with GitHub before starting cloning a repository.
+
+You must provide your email and credential whenever you clone a repository, commit and push changes, or do other Git activities related to GitHub locally.
+That is a way for GitHub to authenticate you as the user.
+But you can set up your credentials locally, so you don't have to input them every time you do a Git activity.
+
+There are three ways to clone a repository:
+
+<dl>
+	<dt>
+		[HTTPS](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#https)
+	</dt>
+	<dd>
+		HTTPS is the most common one to use. You must create a [Personal Access
+		Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+		to enter when GitHub prompts your password.
+	</dd>
+	<dt>
+		[SSH (Secure
+		Shell)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#ssh)
+	</dt>
+	<dd>
+		SSH provides an encrypted way to exchange information safely. You can [read
+		here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+		to generate a new SSH key on GitHub.
+	</dd>
+	<dt>[GitHub CLI](https://cli.github.com)</dt>
+	<dd>
+		If you use GitHub CLI, you can simply copy and run the command in your
+		terminal.
+	</dd>
+</dl>
+
+### Cloning a repository
+
+When you want to start working on a change, you want to clone the project's repository after you fork it. That way, you can work on it in the local environment.
+
+To do this:
+
+1. Go to your forked repository page on GitHub and click the green "Code" button.
+2. Then you can choose how you want to clone it. Through HTTPS, SSH, or GitHub CLI. For this example, we will use HTTPS.
+3. Copy the URL.
+4. In your terminal, run:
+
+   ```bash
+   git clone repo-url
+   ```
+
+   Change the `repo-url` to the copied URL of the forked repository. <br />
+   Running this command will set up a copy of the repository on your local computer for you to work with.
+
+### Adding an `upstream` remote repository
+
+Even though you've cloned the forked repository, you may also want to add the original repository as one of your remote repositories.
+This original repository is conventionally called `upstream`. By doing this, you can pull other people's changes into your local repository whenever you need.
+
+To add an `upstream` repository, run this command:
+
+```bash
+git remote add upstream repo-url
+```
+
+Change the `repo-url` with the URL of the original repository.
+
+### Check the added remote repositories
+
+Now you have the `origin` and `upstream` as your remote repositories. You can check if they've been appropriately added by running this command:
+
+```bash
+git remote -v
+```
+
+Running this command will give you a list of your remote repositories.
+
+### Create a new branch
+
+Now you're ready to work on the changes. Always ensure that you work on changes in a new branch and not directly in the `main` or `master` branch.
+And this new branch is what you will later push to the remote repository.
+
+To create a new branch, run this command in your terminal:
+
+```bash
+git checkout -b new-branch-name
+```
+
+Change `new-branch-name` to whatever you want.
+
+### Add and commit changes
+
+Say that you've finished making changes, and now you're ready to push your changes to GitHub.
+
+#### Add changes
+
+Run `git add .` if you want to add all your changes to the Git staging area.
+
+Or run `git add path` if you want to stage a specific directory or file. <br />
+Change `path` to the path of the file that you want to add.
+
+#### Commit changes
+
+Now you can 'save' your changes by committing with this command:
+
+```bash
+git commit -m "message"
+```
+
+Change `message` into a short description of what changes you've made. For example:
+
+```bash
+git commit -m "Add a header to the homepage"
+```
+
+You can check if your changes have been added or committed by running the `git status` command in your terminal.
+This command will let you know the status of your working git.
+
+### Fetching `upstream` changes
+
+Sometimes, someone works in the same file as you, and maybe, they already pushed their changes while you were working on yours locally.
+So you always want to ensure that your fork is up to date with the `upstream` repository.
+
+1. Go to your forked repository on GitHub.
+2. Click the "Fetch upstream" button under the green "Code" button.
+3. If the button is inactive, then the repository has no changes. But when the button is green with "Update branch" stated, you want to click it.
+
+Now your fork has the same update as the `upstream` repository.
+
+### Synchronizing changes locally
+
+Now that your `origin` repository is in sync with the `upstream`, you want to synchronize these changes on your local as well, so when you push the changes, you already have the most updated content.
+
+You want to fetch and merge the latest update into your working branch.
+In your terminal, make sure that you're in your working branch. Then run:
+
+```bash
+git pull origin working-branch-name
+```
+
+That command will pull the updates from the `working-branch-name` branch from the `origin` repo and merge them into your local working branch.
+
+In this step, you might need to solve some conflicts if any.
+
+### Push changes
+
+You have already added and committed your changes and fetching and synchronizing updates. Now you can push your changes to the remote repository.
+Remember that you will push these changes to the `origin` repository.
+
+To do so, run this command in your terminal:
+
+```bash
+git push origin branch-name
+```
+
+Change the `branch-name` to your working branch name.
+
+### Making a pull request
+
+Once you have pushed your changes to the `origin` repository, you can submit the changes to the `upstream` repository by making a pull request.
+
+Creating a pull request allows the maintainers to review your work, comment, and request any necessary changes. They will then decide to merge your changes into the project codebase or otherwise.
+
+The steps to make a pull request:
+
+1. Go to the `upstream` repository at GitHub and click the green "New pull request" button. If you have recently pushed changes to GitHub, you should see a banner at the top of the page with a "Compare and pull request" button that you can click on.
+2. You will then get taken to the "Open pull request" form, where you can create a description of your pull request. Here you should check out the project's Contributing guidelines and follow any conventions described. Many projects provide a pull request template within the form to help you get it right.
+3. Once you are ready, click the "Create pull request" button.
+
+Congratulations! You have made your pull request 🎉!
+
+If a maintainer requests changes, you can make the requested changes and push new commits to the same branch. They will automatically be added to the pull request.
+
+---
+
+## Advanced Git and GitHub workflows
+
+<LeadText>
+
+The following workflows are helpful when collaborating with another person in open source.
+
+</LeadText>
+
+### Asynchronous collaborating on a shared branch between two different forks
+
+Let's assume you and your teammate, Alice, forked a project repository. You will collaborate on the same issue in the same file asynchronously. Each of you will do the same steps.
+
+In this example, we will walk you through your point of view.
+
+#### Add a remote repository
+
+Add Alice's fork as a remote on your local repository by running this command in your terminal:
+
+```bash
+git remote add alice repo-url
+```
+
+Change `repo-url` to the URL of Alice's fork. <br />
+We use `alice` as the name of the remote repository as an example because we add Alice's fork as one of our remote repositories. But you can name this anything you want.
+
+#### Fetch branches
+
+Fetch Alice's branches by running this command:
+
+```bash
+git fetch alice
+```
+
+#### Go to the target branch
+
+```bash
+git checkout branch-name
+```
+
+Change `branch-name` to the target branch name at Alice's fork.
+
+#### Pull the changes
+
+Pull the changes pushed by Alice with this command:
+
+```bash
+git pull alice branch-name
+```
+
+Now you have the updated branch version, with the changes from your teammate.
+
+Either you or Alice can submit the pull request once you both have all the work done.
+Each commit will automatically contain either your or Alice's name. So, both of your contributions are identified.
+
+### Synchronous collaboration
+
+Say sometimes you work synchronously with Alice on the same issue. All steps are the same as the asynchronous collaboration above. But in sync collaboration, you might want to [include them in your commit message](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors) so you can commit together.
+
+```bash
+git commit -m  "Add new feature
+>
+>
+Co-authored-by: Alice <alice@email.com>"
+```
+
+**Notes**:
+
+- Because you are the one who commits the changes, you don't need to include your name in the commit message.
+- Always give two empty spaces before writing the line "Co-authored-by".
+- Do not close the commit message with double quotes (") before you add the "Co-authored-by:".
+- Close the commit message with double quotes (") at the last line of "Co-authored-by:".
+- Use the email address that is associated with your teammate's GitHub account.
+
+---
+
+## ⭐ Getting the most out of your GitHub profile
+
+Do you know that you can customize your GitHub profile? You can add a short bio, website, social media links and customize your pinned repositories to showcase the work you most want the world to see. It would be like a mini portfolio of your own!
+
+![An example profile page](https://ams03pap002files.storage.live.com/y4mRCWqe-HFTvjsstwwqyHWhS3sithntcM0bpqad2-S6_2dMCx982CrqDnV9bxVSWrdbFRDNpcqdnte5FqHahDqB4tcxDb8xFVg4l2nMT_4X7pFQ4fm80S1gFaaqh9hy5cNH8hZ8xHE1Tj9XtzhpKE6eMiFnGFR6OqeRXfxNECArhp2ZQoOAngWRPXpqJm7KVid?width=821&height=907&cropmode=none)
+
+### How does it work?
+
+To customize your profile, you need to create a repository in your account with the same name as your GitHub username and pop in a README. The contents of that README file will get rendered on your profile page. You can add all kinds of cool integrations to this README to do awesome things on your profile.
+
+These articles can give you some inspiration:
+
+- [Creating a Killer GitHub Profile README — Braydon Coyer](https://daily.dev/blog/creating-a-killer-github-profile-readme-part-1)
+- [How to create beautiful Github profile README.md — Indrajeet Nikam](https://fullyunderstood.com/how-to-create-beautiful-github-profile-readmemd/)
+
+---
+
+## 💡 Resources to learn Git and GitHub
+
+- [GitHub Learning Lab](https://lab.github.com/)
+- [GitHub Docs](https://docs.github.com/en/get-started/quickstart/git-and-github-learning-resources)
+- [TwilioQuest — FOREST OF OPEN SOURCE](https://www.twilio.com/quest/learn/open-source)
+- [How To Use GitHub For Project Collaboration — Based on Agile Method — Ayu Adiati](https://adiati.com/how-to-use-github-for-project-collaboration-based-on-agile-method)
+
+Check out [our discussions board](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/529) if you know of resources we should add to this section! We'd love to hear from you!
+
+</TextContainer>

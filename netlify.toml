@@ -99,6 +99,18 @@
   force = true
 
 [[redirects]]
+  from = "/resources/open-source/oss-writing-issues"
+  to = "/resources/open-source/contributor-guide#guide-to-writing-issues"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/open-source/oss-maintainer-checklist"
+  to = "/resources/open-source/maintainer-guide"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/join-coffee"
   query = {day = ":day", code = ":code"}
   to = "/.netlify/functions/join-coffee"
