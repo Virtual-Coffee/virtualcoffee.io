@@ -39,12 +39,15 @@ type SponsorEntity =
 	typeof mockData.organization.sponsorshipsAsMaintainer.nodes[number]['sponsorEntity'];
 
 const sponsorOverrides: Record<string, Partial<SponsorEntity>> = {
-	MDEyOk9yZ2FuaXphdGlvbjcxNDc2MTY2: {
-		avatarUrl_80: '/assets/images/sponsors/whimser.png',
-		avatarUrl_160: '/assets/images/sponsors/whimser.png',
-		avatarUrl_240: '/assets/images/sponsors/whimser.png',
-		avatarUrl_480: '/assets/images/sponsors/whimser.png',
-		avatarUrl_720: '/assets/images/sponsors/whimser.png',
+	MDQ6VXNlcjgwOTIzMTQ4: {
+		websiteUrl: 'https://www.commonroom.io/',
+		name: 'Common Room',
+		descriptionHTML: 'Activate the power of your community. Grow together.',
+		avatarUrl_80: '/assets/sponsors/commonroom.svg',
+		avatarUrl_160: '/assets/sponsors/commonroom.svg',
+		avatarUrl_240: '/assets/sponsors/commonroom.svg',
+		avatarUrl_480: '/assets/sponsors/commonroom.svg',
+		avatarUrl_720: '/assets/sponsors/commonroom.svg',
 	},
 };
 
