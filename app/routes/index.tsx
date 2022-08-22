@@ -233,41 +233,43 @@ export default function Index() {
 							on GitHub.
 						</p>
 
-						<ul className="sponsors">
-							{sponsors.logoSponsors.map((tier) =>
-								tier.sponsors.map((supporter) => (
-									<li key={supporter.id} data-id={supporter.id}>
-										<a href={supporter.websiteUrl || supporter.url}>
-											<img
-												src={supporter.avatarUrl_80}
-												alt=""
-												width="240"
-												height="240"
-												loading="lazy"
-												decoding="async"
-												sizes="(min-width: 915px) 240px, 24vw"
-												srcSet={`
+						<div className="sponsors">
+							<ul className="sponsors-list">
+								{sponsors.logoSponsors.map((tier) =>
+									tier.sponsors.map((supporter) => (
+										<li key={supporter.id} data-id={supporter.id}>
+											<a href={supporter.websiteUrl || supporter.url}>
+												<img
+													src={supporter.avatarUrl_80}
+													alt=""
+													width="240"
+													height="240"
+													loading="lazy"
+													decoding="async"
+													sizes="(min-width: 915px) 240px, 24vw"
+													srcSet={`
               ${supporter.avatarUrl_80}   80w,
               ${supporter.avatarUrl_160} 160w,
               ${supporter.avatarUrl_240} 240w,
               ${supporter.avatarUrl_480} 480w,
               ${supporter.avatarUrl_720} 720w`}
-											/>
-											<div className="sponsors-body">
-												<h3 className="h4">{supporter.name}</h3>
-												{supporter.descriptionHTML && (
-													<div
-														dangerouslySetInnerHTML={{
-															__html: supporter.descriptionHTML,
-														}}
-													/>
-												)}
-											</div>
-										</a>
-									</li>
-								)),
-							)}
-						</ul>
+												/>
+												<div className="sponsors-body">
+													<h3 className="h4">{supporter.name}</h3>
+													{supporter.descriptionHTML && (
+														<div
+															dangerouslySetInnerHTML={{
+																__html: supporter.descriptionHTML,
+															}}
+														/>
+													)}
+												</div>
+											</a>
+										</li>
+									)),
+								)}
+							</ul>
+						</div>
 
 						<ul className="supporters my-6">
 							{sponsors.supporters.map((tier) =>
