@@ -17,8 +17,6 @@ export function createEventsData({ limit = 15, rangeStart, rangeEnd }) {
 		return {
 			id: faker.datatype.uuid(),
 			title: faker.lorem.sentence(7),
-			eventStartUTC: startDate.toUTC().toString(),
-			eventEndUTC: startDate.toUTC().plus({ hours: 1 }).toString(),
 			startDateLocalized: startDate.toUTC().toString(),
 			endDateLocalized: startDate.toUTC().plus({ hours: 1 }).toString(),
 			eventCalendarDescription: `<p>${faker.lorem.paragraph()}</p>`,

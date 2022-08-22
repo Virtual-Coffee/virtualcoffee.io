@@ -36,8 +36,6 @@ interface SolspaceEventResponse {
 	eventCalendarDescription: string;
 }
 export interface EventItem extends SolspaceEventResponse {
-	eventStartUTC: string;
-	eventEndUTC: string;
 	eventCalendarLink: string;
 }
 export interface EventsResponse extends Array<EventItem> {}
@@ -164,12 +162,6 @@ export async function getEvents({
 					});
 					return {
 						...event,
-						eventStartUTC: DateTime.fromISO(event.startDateLocalized)
-							.toUTC()
-							.toString(),
-						eventEndUTC: DateTime.fromISO(event.endDateLocalized)
-							.toUTC()
-							.toString(),
 						eventCalendarDescription: sanitizedDescription,
 						eventCalendarLink: calendarLink,
 					};
