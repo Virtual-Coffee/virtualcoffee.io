@@ -156,7 +156,7 @@ async function getMemberGithubData(
 }
 
 function loadDirectory(path: string) {
-	const dict: Record<string, MemberObject> = importDir({
+	const dict = importDir<MemberObject>({
 		directoryPath: join(process.cwd(), 'members', path),
 	});
 
