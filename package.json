@@ -85,6 +85,7 @@
 		"unified": "^10.1.2"
 	},
 	"devDependencies": {
+		"@types/luxon": "^3.0.0",
 		"@types/react": "^17.0.45",
 		"@types/react-dom": "^17.0.17",
 		"@types/require-dir": "^1.0.2",
