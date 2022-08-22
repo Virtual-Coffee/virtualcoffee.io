@@ -7,9 +7,9 @@
 	li > a {
 		margin-bottom: 4em;
 
-		@include media-breakpoint-up(sm) {
+		@include media-breakpoint-up(md) {
 			display: grid;
-			grid-template-columns: min(24vw, 240px) 1fr;
+			grid-template-columns: min(24vw, 400px) 1fr;
 			gap: 2em;
 			align-items: center;
 		}
@@ -18,8 +18,7 @@
 	img {
 		width: 100%;
 		height: auto;
-		max-width: 250px;
-		align-self: flex-start;
+		max-width: 400px;
 	}
 }
 
