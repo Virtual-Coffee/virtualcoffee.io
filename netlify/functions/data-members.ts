@@ -1,17 +1,54 @@
-const { builder } = require('@netlify/functions');
-const { GraphQLClient, gql } = require('graphql-request');
-const { resolve, join } = require('path');
-const requireDir = require('require-dir');
-const teamsData = require('../../members/teams.json');
-const mockMemberData = require('../../app/data/mocks/memberData');
-const { sanitizeHtml } = require('../../app/util/sanitizeCmsData');
+import { builder, Handler } from '@netlify/functions';
+import { GraphQLClient, gql } from 'graphql-request';
+import { resolve, join } from 'path';
+import requireDir from 'require-dir';
+import teamsData from '../../members/teams.json';
+import mockMemberData from '../../app/data/mocks/memberData';
+import { sanitizeHtml } from '../../app/util/sanitizeCmsData';
 
 // This file is an On-Demand Builder
 // It allows us to cache third-party data for a specified amount of time
 // Any deploys will clear the cache
 // Read more here: https://docs.netlify.com/configure-builds/on-demand-builders/
 
-async function handler(event, context) {
+type Website = `http${'s' | ''}://${string}`;
+
+type Account =
+	| {
+			type:
+				| 'linkedin'
+				| 'dev'
+				| 'codenewbie'
+				| 'twitter'
+				| 'twitch'
+				| 'polywork'
+				| 'medium'
+				| 'hashnode';
+			username: string;
+	  }
+	| {
+			type: 'youtube';
+			channelId: string;
+	  }
+	| {
+			type: 'youtube';
+			customUrl: Website;
+	  }
+	| {
+			type: 'website';
+			url: Website;
+			title: string;
+	  };
+
+type MemberObject = {
+	github: string;
+	name?: string;
+	mainUrl?: string;
+	bio?: string;
+	accounts?: Account[];
+};
+
+const handlerFn: Handler = async (event) => {
 	const userData = await loadUserData();
 
 	return {
@@ -22,11 +59,11 @@ async function handler(event, context) {
 		},
 		body: JSON.stringify(userData),
 	};
-}
+};
 
-exports.handler = builder(handler);
+exports.handler = builder(handlerFn);
 
-async function parseMarkdown(markdown) {
+async function parseMarkdown(markdown: string) {
 	const [unified, remarkParse, remarkRehype, rehypeSanitize, rehypeStringify] =
 		await Promise.all([
 			import('unified').then((mod) => mod.unified),
@@ -128,12 +165,15 @@ async function getMemberGithubData(data) {
 	}
 }
 
-function loadDirectory(path) {
-	const dict = requireDir(join(process.cwd(), 'members', path), {
-		filter: function (fullPath) {
-			return !fullPath.match(/members\/_/g);
+function loadDirectory(path: string) {
+	const dict: Record<string, MemberObject> = requireDir(
+		join(process.cwd(), 'members', path),
+		{
+			filter: function (fullPath: string) {
+				return !fullPath.match(/members\/_/g);
+			},
 		},
-	});
+	);
 
 	return Object.keys(dict)
 		.map((key) => dict[key])
@@ -152,11 +192,13 @@ function loadDirectory(path) {
 		});
 }
 
+const allTeamNames = teamsData.map((team) => team.name);
+
 async function loadUserData() {
 	const core = loadDirectory('core');
 	const members = loadDirectory('members');
 
-	const teamsDict = {};
+	const teamsDict: Record<typeof allTeamNames[number], string[]> = {};
 
 	teamsData.forEach((team) => {
 		team.members.forEach((member) => {
