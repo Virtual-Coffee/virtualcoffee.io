@@ -1,20 +1,31 @@
 import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
-import type { LoaderArgs } from '@remix-run/node';
+import type { LoaderFunction } from '@remix-run/node';
 import getSponsors from '~/data/sponsors';
+import type { SponsorsResponse } from '~/data/sponsors';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getEvents } from '~/data/events';
-import { dateForDisplay } from '~/util/date';
+import type { EventsResponse } from '~/data/events';
 import { getEpisodes } from '~/data/podcast';
 import HomePageBlock from '~/components/HomePageBlock';
 import PostList, {
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
+import { dateForDisplay } from '~/util/date';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '~/data/newsletters';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
 
-export async function loader(args: LoaderArgs) {
+interface LoaderData {
+	sponsors: SponsorsResponse;
+	events: EventsResponse;
+	podcastEpisodes: any;
+	resources: any;
+	newsletters: any;
+	challenges: any;
+}
+
+export const loader: LoaderFunction = async () => {
 	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
 		await Promise.all([
 			getSponsors(),
@@ -39,7 +50,7 @@ export async function loader(args: LoaderArgs) {
 		newsletters,
 		challenges,
 	});
-}
+};
 
 export const homePageLinks = [
 	{
@@ -147,12 +158,19 @@ export default function Index() {
 							footer="See more Community Events"
 						>
 							<PostList
-								items={events.map((event: any) => ({
-									title: event.title,
-									description: (
-										<strong>{dateForDisplay(event.startDateLocalized)}</strong>
-									),
-								}))}
+								items={events.map((event) => {
+									const eventTime = event.startDateLocalized;
+									return {
+										title: event.title,
+										description: (
+											<strong>
+												<time suppressHydrationWarning dateTime={eventTime}>
+													{dateForDisplay(eventTime)}
+												</time>
+											</strong>
+										),
+									};
+								})}
 							/>
 						</HomePageBlock>
 					</div>
