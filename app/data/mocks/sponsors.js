@@ -15,6 +15,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -33,6 +35,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -51,6 +55,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/matthew-${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: null,
 					},
 					tier: {
@@ -69,6 +75,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -87,6 +95,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -105,6 +115,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -123,6 +135,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: null,
 					},
 					tier: {
@@ -141,6 +155,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -159,6 +175,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -177,6 +195,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: null,
 					},
 					tier: {
@@ -195,6 +215,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -213,6 +235,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -231,6 +255,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -249,6 +275,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/eclectic-${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -267,6 +295,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -285,6 +315,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -303,6 +335,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -321,6 +355,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -339,6 +375,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -357,6 +395,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -375,6 +415,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -393,6 +435,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -411,6 +455,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: null,
 					},
 					tier: {
@@ -429,6 +475,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -467,6 +515,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: null,
 					},
 					tier: {

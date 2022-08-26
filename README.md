@@ -123,6 +123,16 @@ You should see something like 'Server now ready on http://localhost:9000' below,
 
 Use ctrl-c to quit the server when you're done.
 
+---
+
+**Note:**
+
+Depending on the speed of your computer, you can get a `TimeoutError - Task timed out after 10.00 seconds` message when the localhost renders the home page (http://localhost:9000) on the browser.
+
+If the feature you are working on is not on the home page (like the newsletter or monthly challenges for example), you may still be able to load the page you need: after you see the notification of `Server now ready on http://localhost:9000`, go to your browser. Then add the path of the page you need (like `http://localhost:9000/newsletter` for the newsletter or `http://localhost:9000/monthlychallenges` for the monthly challenges page) to see the page you need.
+
+---
+
 `yarn dev` actually runs three sub commands, which can be run independently if you wish:
 
 - `yarn dev:sass` - compiles sass styles found in `./styles`. When in dev mode will re-run when a file is changed. The files are compiled to the `./tmp` directory to be processed by the next step.

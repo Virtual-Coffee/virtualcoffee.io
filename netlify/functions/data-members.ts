@@ -1,17 +1,22 @@
-const { builder } = require('@netlify/functions');
-const { GraphQLClient, gql } = require('graphql-request');
-const { resolve, join } = require('path');
-const requireDir = require('require-dir');
-const teamsData = require('../../members/teams.json');
-const mockMemberData = require('../../app/data/mocks/memberData');
-const { sanitizeHtml } = require('../../app/util/sanitizeCmsData');
+import { builder, Handler } from '@netlify/functions';
+import { GraphQLClient, gql } from 'graphql-request';
+import { join } from 'path';
+import importDir from 'directory-import';
+import teamsData from '../../members/teams';
+import mockMemberData from '~/data/mocks/memberData';
+import { sanitizeHtml } from '~/util/sanitizeCmsData';
+import type { Website, Account, MemberObject } from '../../members/types';
 
 // This file is an On-Demand Builder
 // It allows us to cache third-party data for a specified amount of time
 // Any deploys will clear the cache
 // Read more here: https://docs.netlify.com/configure-builds/on-demand-builders/
 
-async function handler(event, context) {
+function nonNullable<T>(value: T): value is NonNullable<T> {
+	return value !== null && value !== undefined;
+}
+
+const handlerFn: Handler = async (event) => {
 	const userData = await loadUserData();
 
 	return {
@@ -22,11 +27,13 @@ async function handler(event, context) {
 		},
 		body: JSON.stringify(userData),
 	};
-}
+};
 
-exports.handler = builder(handler);
+const handler = builder(handlerFn);
 
-async function parseMarkdown(markdown) {
+export { handler };
+
+async function parseMarkdown(markdown: string) {
 	const [unified, remarkParse, remarkRehype, rehypeSanitize, rehypeStringify] =
 		await Promise.all([
 			import('unified').then((mod) => mod.unified),
@@ -48,18 +55,36 @@ async function parseMarkdown(markdown) {
 	return String(file);
 }
 
-async function getMemberGithubData(data) {
-	let headers = {
-		Accept: 'application/vnd.github.v3+json',
-	};
+type GithubSearchUser = {
+	login: string;
+	id: string | number;
+	url: Website;
+	avatarUrl: string;
+	name?: string;
+	company?: string;
+	location?: string;
+	isHireable?: boolean;
+	bio?: string;
+	bioHTML?: string;
+	twitterUsername?: string;
+	websiteUrl?: Website;
+};
 
+type GithubSearchUserLookup = Record<string, GithubSearchUser>;
+
+async function getMemberGithubData(
+	data: MemberObject[],
+): Promise<GithubSearchUserLookup> {
 	const token = process.env.GITHUB_TOKEN;
 
-	if (token) {
-		headers.Authorization = 'bearer ' + token;
-	} else {
+	if (!token) {
 		return mockMemberData(data);
 	}
+
+	let headers = {
+		Accept: 'application/vnd.github.v3+json',
+		Authorization: 'bearer ' + token,
+	};
 
 	try {
 		console.log('Fetching member data...');
@@ -91,8 +116,8 @@ async function getMemberGithubData(data) {
 			}
 		`;
 
-		const queries = [];
-		const githubData = {};
+		const queries: string[] = [];
+		const githubData: GithubSearchUserLookup = {};
 
 		let i,
 			j,
@@ -113,7 +138,7 @@ async function getMemberGithubData(data) {
 				searchQuery: queries[i],
 			});
 
-			response.search.nodes.forEach((user) => {
+			response.search.nodes.forEach((user: GithubSearchUser) => {
 				githubData[user.login.toLowerCase()] = {
 					...user,
 				};
@@ -122,56 +147,75 @@ async function getMemberGithubData(data) {
 
 		return githubData;
 	} catch (error) {
-		console.log(error.message);
+		if (error instanceof Error) {
+			console.log(error.message);
+		}
 		console.log('Error loading github member data, using fake data instead');
 		return mockMemberData(data);
 	}
 }
 
-function loadDirectory(path) {
-	const dict = requireDir(join(process.cwd(), 'members', path), {
-		filter: function (fullPath) {
-			return !fullPath.match(/members\/_/g);
-		},
+function loadDirectory(path: string) {
+	const dict = importDir<MemberObject>({
+		directoryPath: join(process.cwd(), 'members', path),
 	});
 
-	return Object.keys(dict)
-		.map((key) => dict[key])
-		.sort(function (a, b) {
-			var nameA = a.github.toLowerCase(); // ignore upper and lowercase
-			var nameB = b.github.toLowerCase(); // ignore upper and lowercase
-			if (nameA < nameB) {
-				return -1;
-			}
-			if (nameA > nameB) {
-				return 1;
-			}
+	const list = Object.keys(dict).map((key) => dict[key]);
 
-			// names must be equal
-			return 0;
-		});
+	return list.sort(function (a, b) {
+		var nameA = a.github.toLowerCase(); // ignore upper and lowercase
+		var nameB = b.github.toLowerCase(); // ignore upper and lowercase
+		if (nameA < nameB) {
+			return -1;
+		}
+		if (nameA > nameB) {
+			return 1;
+		}
+
+		// names must be equal
+		return 0;
+	});
 }
+
+// const allTeamNames = teamsData.map((team) => team.name) as const;
+
+type TeamName = keyof typeof teamsData;
+type TeamsDict = Record<string, TeamName[]>;
+
+type FixedUpUserAccount = Account & {
+	Icon: string;
+	url: Website;
+	title: string;
+};
+
+type FixedUpUser = Omit<MemberObject, 'accounts'> & {
+	avatarUrl?: GithubSearchUser['avatarUrl'];
+	teams?: TeamName[];
+	accounts: FixedUpUserAccount[];
+};
 
 async function loadUserData() {
 	const core = loadDirectory('core');
 	const members = loadDirectory('members');
 
-	const teamsDict = {};
+	const teamsDict = {} as TeamsDict;
 
-	teamsData.forEach((team) => {
-		team.members.forEach((member) => {
+	const teamNames = Object.keys(teamsData) as TeamName[];
+
+	teamNames.forEach((teamName) => {
+		teamsData[teamName].forEach((member) => {
 			const lcMember = member.toLowerCase();
 			if (teamsDict[lcMember]) {
-				teamsDict[lcMember].push(team.name);
+				teamsDict[lcMember].push(teamName);
 			} else {
-				teamsDict[lcMember] = [team.name];
+				teamsDict[lcMember] = [teamName];
 			}
 		});
 	});
 
 	const githubData = await getMemberGithubData([...core, ...members]);
 
-	const fixupData = async (data) => {
+	const fixupData = async (data: MemberObject) => {
 		const github = githubData[data.github.toLowerCase()];
 
 		if (!github) {
@@ -179,28 +223,33 @@ async function loadUserData() {
 			return null;
 		}
 
-		data.avatarUrl = github.avatarUrl;
+		const returnObject: FixedUpUser = {
+			...data,
+			accounts: [],
+		};
 
-		data.teams = teamsDict[data.github.toLowerCase()] || [];
+		returnObject.avatarUrl = github.avatarUrl;
 
-		if (!data.name) {
-			data.name = github.name || github.login;
+		returnObject.teams = teamsDict[data.github.toLowerCase()] || [];
+
+		if (!returnObject.name) {
+			returnObject.name = github.name || github.login;
 		}
 
-		if (!data.bio) {
-			data.bio = await sanitizeHtml(github.bioHTML);
+		if (!returnObject.bio) {
+			returnObject.bio = await sanitizeHtml(github.bioHTML);
 		} else {
-			data.bio = await parseMarkdown(data.bio);
+			returnObject.bio = await parseMarkdown(returnObject.bio);
 		}
 
-		if (!data.mainUrl) {
+		if (!returnObject.mainUrl) {
 			if (github.websiteUrl) {
-				data.mainUrl =
+				returnObject.mainUrl =
 					github.websiteUrl.slice(0, 4) !== 'http'
 						? `https://${github.websiteUrl}`
 						: github.websiteUrl;
 			} else {
-				data.mainUrl = github.url;
+				returnObject.mainUrl = github.url;
 			}
 		}
 
@@ -225,134 +274,146 @@ async function loadUserData() {
 			];
 		}
 
-		data.accounts = data.accounts
-			.map((account) => {
+		returnObject.accounts = data.accounts
+			.map((account): FixedUpUserAccount | null => {
 				switch (account.type) {
 					case 'github':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'GitHub',
 							url: `https://github.com/${account.username}`,
-							title: `${data.name} on GitHub`,
+							title: `${returnObject.name} on GitHub`,
 						};
 
 					case 'linkedin':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'LinkedIn',
 							url: `https://www.linkedin.com/in/${account.username}`,
-							title: `${data.name} on LinkedIn`,
+							title: `${returnObject.name} on LinkedIn`,
 						};
 
 					case 'dev':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Dev',
 							url: `https://dev.to/${account.username}`,
-							title: `${data.name} on DEV.to`,
+							title: `${returnObject.name} on DEV.to`,
 						};
 
 					case 'codenewbie':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Codenewbie',
 							url: `https://community.codenewbie.org/${account.username}`,
-							title: `${data.name} on CodeNewbie Community`,
+							title: `${returnObject.name} on CodeNewbie Community`,
 						};
 
 					case 'twitter':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Twitter',
 							url: `https://twitter.com/${account.username}`,
-							title: `${data.name} on Twitter`,
+							title: `${returnObject.name} on Twitter`,
 						};
 
 					case 'twitch':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Twitch',
 							url: `https://www.twitch.tv/${account.username}`,
-							title: `${data.name} on Twitch`,
+							title: `${returnObject.name} on Twitch`,
 						};
 
 					case 'polywork':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Polywork',
 							url: `https://polywork.com/${account.username}`,
-							title: `${data.name} on Polywork`,
+							title: `${returnObject.name} on Polywork`,
 						};
 
 					case 'medium':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'Medium',
 							url: `https://medium.com/@${account.username}`,
-							title: `${data.name} on Medium`,
+							title: `${returnObject.name} on Medium`,
 						};
 
 					case 'hashnode':
 						if (!account.username) {
-							return {};
+							return null;
 						}
 						return {
 							...account,
 							Icon: 'HashNode',
 							url: `https://hashnode.com/@${account.username}`,
-							title: `${data.name} on HashNode`,
+							title: `${returnObject.name} on HashNode`,
 						};
 
 					case 'youtube':
-						if (!account.channelId && !account.customUrl) {
-							return {};
+						if ('channelId' in account && !!account.channelId) {
+							return {
+								...account,
+								Icon: 'YouTube',
+								url: `https://www.youtube.com/channel/${account.channelId}`,
+								title: `${returnObject.name} on YouTube`,
+							};
 						}
-						return {
-							...account,
-							Icon: 'YouTube',
-							url: account.customUrl
-								? account.customUrl
-								: `https://www.youtube.com/channel/${account.channelId}`,
-							title: `${data.name} on YouTube`,
-						};
 
-					default:
+						if ('customUrl' in account && !!account.customUrl) {
+							return {
+								...account,
+								Icon: 'YouTube',
+								url: account.customUrl,
+								title: `${returnObject.name} on YouTube`,
+							};
+						}
+
+						return null;
+
+					case 'website':
 						return {
 							...account,
 							Icon: 'Website',
 							type: 'website',
 							title: account.title || account.url,
 						};
+
+					default:
+						return null;
 				}
 			})
-			.filter((account) => !!account.url);
+			.filter(nonNullable);
 
-		return data;
+		return returnObject;
 	};
+	// https://github.com/Virtual-Coffee/virtualcoffee.io/pull/586/commits/97fd4757ae3db5f9fd2b0c1cad117fe8211fcc16
 
 	const filteredCore = await Promise.all(core.map(fixupData));
 	const filteredMembers = await Promise.all(members.map(fixupData));
