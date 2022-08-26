@@ -41,7 +41,7 @@ export interface EventItem extends SolspaceEventResponse {
 export interface EventsResponse extends Array<EventItem> {}
 
 function createEventsQuery(
-	calendars: SolspaceCalendar[],
+	calendars: Pick<SolspaceCalendar, 'handle'>[],
 	rangeStart: string,
 	rangeEnd: string,
 	limit: number,
@@ -99,7 +99,13 @@ export async function getEvents({
 
 	try {
 		console.log('requesting calendars');
-		const calendarsResponse = await axios.request({
+		const calendarsResponse = await axios.request<{
+			data: {
+				solspace_calendar: {
+					calendars: Pick<SolspaceCalendar, 'handle'>[];
+				};
+			};
+		}>({
 			method: 'POST',
 			data: `query getCalendars {
 					solspace_calendar {
