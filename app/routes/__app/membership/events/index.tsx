@@ -1,5 +1,5 @@
 import { json } from '@remix-run/node';
-import type { LoaderFunction } from '@remix-run/node';
+import type { LoaderArgs } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { authenticate } from '~/auth/auth.server';
 import { CmsActions } from '~/api/cms.server';
@@ -35,7 +35,7 @@ type CalendarDate = {
 
 type CalendarView = 'month' | 'week';
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderArgs) => {
 	await authenticate(request);
 
 	let api = new CmsActions();
@@ -48,7 +48,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 	let monthParam = parseInt(url.searchParams.get('month') || '');
 	let dayParam = parseInt(url.searchParams.get('day') || '');
-	let view = url.searchParams.get('view') || 'month';
+	let view: CalendarView =
+		url.searchParams.get('view') === 'week' ? 'week' : 'month';
 
 	const month = isNaN(monthParam) ? currentMonth : monthParam;
 
@@ -166,25 +167,8 @@ export function getCalendarUrl({
 }
 
 export default function Page() {
-	const {
-		calendars,
-		weeklyEvents,
-		dates,
-		selectedDate,
-		settings,
-	}: {
-		weeklyEvents: (Event & { isCurrent?: boolean })[];
-		calendars: InstanceType<typeof CmsActions>['getCalendars'];
-		dates: CalendarDate[];
-		selectedDate: CalendarDate;
-		settings: {
-			view: CalendarView;
-			month: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-			day: number;
-			weekStart: string;
-			weekEnd: string;
-		};
-	} = useLoaderData();
+	const { calendars, weeklyEvents, dates, selectedDate, settings } =
+		useLoaderData<typeof loader>();
 
 	const today = DateTime.now();
 
@@ -581,7 +565,7 @@ export default function Page() {
 									</div>
 								</div>
 							</div>
-							{selectedDate?.events.length > 0 && (
+							{selectedDate && selectedDate?.events.length > 0 && (
 								<div className="py-10 px-4 sm:px-6 lg:hidden">
 									<ol className="divide-y divide-gray-100 overflow-hidden rounded-lg bg-white text-sm shadow ring-1 ring-black ring-opacity-5">
 										{selectedDate.events.map((event) => (
