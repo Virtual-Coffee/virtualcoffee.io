@@ -2,7 +2,15 @@ import { faker } from '@faker-js/faker';
 import { DateTime } from 'luxon';
 import { ics } from 'calendar-link';
 
-export function createEventsData({ limit = 15, rangeStart, rangeEnd }) {
+export function createEventsData({
+	limit = 15,
+	rangeStart,
+	rangeEnd,
+}: {
+	limit: number;
+	rangeStart: string;
+	rangeEnd: string;
+}) {
 	const dates = faker.date.betweens(rangeStart, rangeEnd, limit);
 
 	return dates.map((date) => {
