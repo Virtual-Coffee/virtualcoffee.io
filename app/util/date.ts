@@ -70,20 +70,23 @@ type FormatToken =
 	| 'X'
 	| 'x';
 
+type AtLeastOneFormatTokenString = `${string}${FormatToken}${string}`;
+
+export type FormattedDate = string;
+
 export function dateForDisplay(
 	dateString: string | Date,
-	format: FormatToken = 'fff',
+	format: AtLeastOneFormatTokenString = 'fff',
 	opts: DateTimeFormatOptions = {},
-): string {
+): FormattedDate {
 	const resolvedOptions = {
 		...opts,
 	};
-	if (typeof dateString === 'string') {
-		return DateTime.fromISO(dateString)
-			.setZone('America/New_York')
-			.toFormat(format, resolvedOptions);
-	}
-	return DateTime.fromISO(dateString.toISOString())
+
+	const isoDateString =
+		typeof dateString === 'string' ? dateString : dateString.toISOString();
+
+	return DateTime.fromISO(isoDateString)
 		.setZone('America/New_York')
-		.toFormat(format, resolvedOptions);
+		.toFormat(format, resolvedOptions) as FormattedDate;
 }
