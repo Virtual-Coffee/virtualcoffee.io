@@ -50,7 +50,7 @@ export const loader: LoaderFunction = async () => {
 		newsletters,
 		challenges,
 	});
-}
+};
 
 export const homePageLinks = [
 	{
