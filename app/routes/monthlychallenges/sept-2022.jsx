@@ -81,15 +81,19 @@ export default function Challenge() {
 
 			<h2>Contributors</h2>
 			<p>
-				The first step in becoming a good contributor is being able to navigate
-				an open source repository and understand the time and effort maintainers
-				put in to making sure their projects are welcoming to contributors.
-				Writing an issue ensures that you have an understanding of the
-				communication process, you've done the work to make sure that the same
-				issue doesn't exist, and you've clearly described the need for the issue
-				and have provided any information or screenshots necessary to help
-				others to understand how to navigate the issue. Remember, you don't have
-				to have the solution, just to be able to clearly explain the issue.
+				The first step in becoming a good contributor is navigating an open
+				source repository and understanding the time and effort maintainers put
+				into ensuring their projects are welcoming to contributors. As we move
+				into Hacktoberfest season, we can support maintainers in their efforts
+				to onboard new contributors. To complete this monthly challenge, find an
+				open source repository you'd like to contribute to and evaluate it based
+				on our{' '}
+				<a href="https://virtualcoffee.io/resources/open-source/maintainer-guide#repository-checklist">
+					repository checklist
+				</a>
+				. If it doesn't meet our checklist requirements, add an issue or
+				multiple issues asking the maintainers to update the repository based on
+				your feedback.
 			</p>
 
 			<h2>How to Participate</h2>
@@ -143,13 +147,23 @@ export default function Challenge() {
 
 			<h4>Completing the Challenge!</h4>
 			<p>
-				Once you've completed the challenge, post a link to your issue in slack
-				or to your open source repository{' '}
-				<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/321">
-					in our discussion
+				To complete this challenge, you need to post to our{' '}
+				<a href="https://github.com/orgs/Virtual-Coffee/discussions/624">
+					Hacktoberfest 2022 discussion
 				</a>
-				.
+				. There are two ways to complete this challenge:
 			</p>
+			<ol>
+				<li>
+					If the repository hasn't met the checklist requirements, post the
+					repository and a link to the issue/issues you've added to prepare the
+					repository for Hacktoberfest under the heading ## Needs Updated.
+				</li>
+				<li>
+					If the repository does meet the checklist requirements, post the
+					repository in the discussion under the heading ## VC-Verified.
+				</li>
+			</ol>
 
 			<h2>Resources</h2>
 			<ul>
