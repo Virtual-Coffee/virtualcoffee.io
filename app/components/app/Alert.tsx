@@ -1,10 +1,10 @@
 /* This example requires Tailwind CSS v2.0+ */
 import {
-	ExclamationIcon,
+	ExclamationCircleIcon,
 	CheckCircleIcon,
 	XCircleIcon,
 	InformationCircleIcon,
-} from '@heroicons/react/solid';
+} from '@heroicons/react/24/outline';
 
 export type AlertTypes = 'warning' | 'danger' | 'success' | 'info';
 
@@ -14,7 +14,7 @@ const config = {
 		icon: 'text-yellow-400',
 		title: 'text-yellow-800',
 		content: 'text-yellow-700',
-		Icon: ExclamationIcon,
+		Icon: ExclamationCircleIcon,
 	},
 	danger: {
 		body: 'bg-red-50',
