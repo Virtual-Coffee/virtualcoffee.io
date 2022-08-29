@@ -28,7 +28,7 @@
 		"dev:css": "postcss .tmp/styles/**/*.css --base .tmp/styles --dir app/styles -w",
 		"dev:remix": "cross-env NODE_ENV=development netlify dev",
 		"generate:tailwind": "npx tailwindcss -o ./app/tailwind.css",
-		"start": "yarn dev",
+		"start": "cross-env NODE_ENV=production netlify dev",
 		"analyze": "source-map-explorer 'public/build/**/*.js'"
 	},
 	"lint-staged": {

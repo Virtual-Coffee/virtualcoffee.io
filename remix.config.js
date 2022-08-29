@@ -98,7 +98,10 @@ async function createRemarkToc() {
  */
 module.exports = {
 	serverBuildTarget: 'netlify',
-	server: './server.js',
+	server:
+		process.env.NETLIFY || process.env.NETLIFY_LOCAL
+			? './server.js'
+			: undefined,
 	ignoredRouteFiles: ['**/.*', '**/*.json'],
 	serverDependenciesToBundle: [
 		'@sindresorhus/slugify',
