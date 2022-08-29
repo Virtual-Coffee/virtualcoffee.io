@@ -1,38 +1,3 @@
-import type { ComponentType, ComponentProps } from 'react';
-import type { Argument as ClassnamesArgument } from 'classnames/dedupe';
-
-export interface BasicComponent {
-	/**
-	 * Classnames argument ([link](https://github.com/JedWatson/classnames))
-	 */
-	classNames?: ClassnamesArgument;
-	/**
-	 * Basic classname string
-	 */
-	className?: string;
-}
-
-export type Theme<ThemeType> = {
-	web: ThemeType;
-	rn: ThemeType;
-	shared: ThemeType;
-};
-
-export type Target = 'web' | 'rn';
-
-export type OptionalBooleanReactProp = null | boolean | undefined;
-
-export type HeroIconComponent = ComponentType<ComponentProps<'svg'>>;
-
-export type ClassNamesFn<PropsType, ClassNamesType> = (
-	target: Target,
-	a: PropsType,
-) => ClassNamesType;
-
-export type WithRef<T extends React.ElementType> = {
-	passedRef?: PolymorphicRef<T>;
-};
-
 // support for polymorphic components using {as=...}
 // Source https://www.benmvp.com/blog/forwarding-refs-polymorphic-react-component-typescript/
 
