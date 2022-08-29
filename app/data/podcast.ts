@@ -161,10 +161,11 @@ export async function getEpisode({
 
 	try {
 		console.log('requesting');
-		const episodesResponse: { entry: PodcastEpisode } =
-			await graphQLClient.request(episodeQuery, {
-				slug,
-			});
+		const episodesResponse = await graphQLClient.request<{
+			entry: PodcastEpisode;
+		}>(episodeQuery, {
+			slug,
+		});
 		console.log('finished:');
 
 		// return response.slice(0, 10);
@@ -198,7 +199,7 @@ export async function getTranscript({
 	id,
 }: Partial<PodcastEpisode>): Promise<Transcript | null> {
 	try {
-		const response = await fetch(
+		const response: { segments: TranscriptSegment[] } = await fetch(
 			`https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}/transcript.json`,
 		).then((res) => res.json());
 
