@@ -6,23 +6,26 @@ import { CmsActions } from '~/api/cms.server';
 import type { Event, EventLoaderData } from '~/api/cms.server';
 import PageHeader from '~/components/app/PageHeader';
 import DisplayHtml from '~/components/DisplayHtml';
-import { Fragment } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import {
 	CalendarIcon,
 	ChevronLeftIcon,
 	ChevronRightIcon,
-	DotsHorizontalIcon,
-	LocationMarkerIcon,
+	EllipsisHorizontalIcon,
+	MapPinIcon,
 	ChevronDownIcon,
 	ClockIcon,
-} from '@heroicons/react/solid';
+} from '@heroicons/react/24/outline';
 import { Menu, Transition, Popover } from '@headlessui/react';
 
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
 import { Button } from '~/components/app/Button';
+import { PolymorphicComponentPropsWithRef } from '~/util/types';
 
 export { metaFromData as meta } from '~/util/remixHelpers';
+
+type EventsWithCheck = Event & { isCurrent: boolean };
 
 type CalendarDate = {
 	date: string;
@@ -30,7 +33,7 @@ type CalendarDate = {
 	isCurrentWeek: boolean;
 	isToday: boolean;
 	isSelected?: boolean;
-	events: (Event & { isCurrent?: boolean })[];
+	events: EventsWithCheck[];
 };
 
 type CalendarView = 'month' | 'week';
@@ -68,6 +71,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 		second: 59,
 	});
 
+	console.log({ weekStart, weekEnd });
+
 	// first day of the month
 	let loopDate: DateTime = DateTime.now().set({
 		month,
@@ -88,7 +93,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 		rangeEnd: loopDate.plus({ days: 42 }).toISO(),
 	});
 
-	const eventsWithCheck = await Promise.all(
+	const eventsWithCheck: EventsWithCheck[] = await Promise.all(
 		events.map(async (event) => {
 			if (
 				DateTime.fromISO(event.startDateLocalized).hasSame(
@@ -154,6 +159,218 @@ export const loader = async ({ request }: LoaderArgs) => {
 	});
 };
 
+export function MonthDay({
+	day,
+	isActive,
+	setActiveDate,
+}: {
+	day: CalendarDate;
+	isActive?: boolean;
+	setActiveDate: React.Dispatch<
+		React.SetStateAction<CalendarDate['date'] | undefined>
+	>;
+}) {
+	const dayDate = new Date(day.date);
+
+	const setDate = useCallback(() => {
+		setActiveDate(day.date);
+	}, []);
+
+	return (
+		<div
+			className={classNames(
+				day.isCurrentMonth ? 'bg-white' : 'bg-gray-50 text-gray-500',
+				'relative py-2 px-3',
+				isActive ? 'z-10' : 'z-0',
+			)}
+		>
+			<time
+				dateTime={day.date}
+				className={
+					day.isToday
+						? 'flex h-6 w-6 items-center justify-center rounded-full bg-sky-600 font-semibold text-white'
+						: undefined
+				}
+			>
+				{dayDate.getDate()}
+			</time>
+			{day.events.length > 0 && (
+				<ol className="mt-2">
+					{day.events.map((event) => (
+						<Popover key={event.id} as="li">
+							{({ open }) => (
+								<>
+									<Popover.Button
+										className="group flex max-w-full"
+										onClick={setDate}
+									>
+										<p className="flex-auto truncate font-medium text-gray-900 group-hover:text-sky-600">
+											{event.title}
+										</p>
+										<time
+											dateTime={event.startDateLocalized}
+											className="ml-3 hidden flex-none text-gray-500 group-hover:text-sky-600 2xl:block"
+										>
+											{DateTime.fromISO(
+												event.startDateLocalized,
+											).toLocaleString({
+												hour: 'numeric',
+												minute: '2-digit',
+												timeZoneName: 'short',
+											})}
+										</time>
+									</Popover.Button>
+									<Transition
+										show={open}
+										enter="transition duration-100 ease-out"
+										enterFrom="transform scale-95 opacity-0"
+										enterTo="transform scale-100 opacity-100"
+										leave="transition duration-75 ease-out"
+										leaveFrom="transform scale-100 opacity-100"
+										leaveTo="transform scale-95 opacity-0"
+									>
+										<Popover.Panel
+											static
+											className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl"
+										>
+											<div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+												<div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
+													<DateDetails event={event} />
+												</div>
+											</div>
+										</Popover.Panel>
+									</Transition>
+								</>
+							)}
+						</Popover>
+					))}
+				</ol>
+			)}
+		</div>
+	);
+}
+
+type DateDetailsProps<C extends React.ElementType> =
+	PolymorphicComponentPropsWithRef<
+		C,
+		{
+			event: EventsWithCheck;
+		}
+	>;
+
+const DateDetails = <T extends React.ElementType = 'div'>({
+	event,
+	as,
+}: DateDetailsProps<T>) => {
+	const Component = as || 'div';
+	const eventDate = DateTime.fromISO(event.startDateLocalized);
+	return (
+		<Component
+			className={classNames(
+				'relative flex gap-6 py-3 xl:static',
+				event.isCurrent
+					? 'bg-white px-3 -mx-3 rounded outline outline-blue-500 my-6'
+					: 'my-3',
+			)}
+		>
+			<div className="flex-auto">
+				<div className="flex gap-4 justify-between items-center">
+					<h3 className="text-lg pr-10 font-semibold text-gray-900 xl:pr-0">
+						{event.title} {event.isCurrent ? 'yess' : 'no'}
+					</h3>
+
+					<div>
+						{event.isCurrent && (
+							<Button as="a" href={event.eventLink} className="mb-4">
+								Join Now
+							</Button>
+						)}
+					</div>
+				</div>
+				{event.eventCalendarDescription && (
+					<DisplayHtml
+						html={event.eventCalendarDescription}
+						className="text-gray-500"
+					/>
+				)}
+				<dl className="mt-2 flex flex-col text-gray-500 xl:flex-row">
+					<div className="flex items-start space-x-3">
+						<dt className="mt-0.5">
+							<span className="sr-only">Date</span>
+							<CalendarIcon
+								className="h-5 w-5 text-gray-400"
+								aria-hidden="true"
+							/>
+						</dt>
+						<dd>
+							<time dateTime={event.startDateLocalized}>
+								{eventDate.toLocaleString(DateTime.DATE_MED)} at{' '}
+								{eventDate.toLocaleString({
+									...DateTime.TIME_SIMPLE,
+
+									timeZoneName: 'short',
+								})}
+							</time>
+						</dd>
+					</div>
+				</dl>
+			</div>
+			<Menu
+				as="div"
+				className="absolute top-6 right-0 xl:relative xl:top-auto xl:right-auto xl:self-center"
+			>
+				<div>
+					<Menu.Button className="-m-2 flex items-center rounded-full p-2 text-gray-500 hover:text-gray-600">
+						<span className="sr-only">Open options</span>
+						<EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
+					</Menu.Button>
+				</div>
+
+				<Transition
+					as={Fragment}
+					enter="transition ease-out duration-100"
+					enterFrom="transform opacity-0 scale-95"
+					enterTo="transform opacity-100 scale-100"
+					leave="transition ease-in duration-75"
+					leaveFrom="transform opacity-100 scale-100"
+					leaveTo="transform opacity-0 scale-95"
+				>
+					<Menu.Items className="focus:outline-none absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+						<div className="py-1">
+							<Menu.Item>
+								{({ active }) => (
+									<a
+										href="#"
+										className={classNames(
+											active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+											'block px-4 py-2 text-sm',
+										)}
+									>
+										Edit
+									</a>
+								)}
+							</Menu.Item>
+							<Menu.Item>
+								{({ active }) => (
+									<a
+										href="#"
+										className={classNames(
+											active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+											'block px-4 py-2 text-sm',
+										)}
+									>
+										Cancel
+									</a>
+								)}
+							</Menu.Item>
+						</div>
+					</Menu.Items>
+				</Transition>
+			</Menu>
+		</Component>
+	);
+};
+
 export function getCalendarUrl({
 	day,
 	month,
@@ -176,6 +393,10 @@ export default function Page() {
 		month: settings.month,
 		day: settings.day,
 	});
+
+	const [activeDate, setActiveDate] = useState<
+		CalendarDate['date'] | undefined
+	>();
 
 	return (
 		<>
@@ -310,7 +531,10 @@ export default function Page() {
 							<Menu as="div" className="relative ml-6 md:hidden">
 								<Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
 									<span className="sr-only">Open menu</span>
-									<DotsHorizontalIcon className="h-5 w-5" aria-hidden="true" />
+									<EllipsisHorizontalIcon
+										className="h-5 w-5"
+										aria-hidden="true"
+									/>
 								</Menu.Button>
 
 								<Transition
@@ -433,80 +657,14 @@ export default function Page() {
 								</div>
 								<div className="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
 									<div className="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
-										{dates.map((day) => {
-											const dayDate = new Date(day.date);
-											return (
-												<div
-													key={day.date}
-													className={classNames(
-														day.isCurrentMonth
-															? 'bg-white'
-															: 'bg-gray-50 text-gray-500',
-														'relative py-2 px-3 z-0',
-													)}
-												>
-													<time
-														dateTime={day.date}
-														className={
-															day.isToday
-																? 'flex h-6 w-6 items-center justify-center rounded-full bg-sky-600 font-semibold text-white'
-																: undefined
-														}
-													>
-														{dayDate.getDate()}
-													</time>
-													{day.events.length > 0 && (
-														<ol className="mt-2">
-															{day.events.map((event) => (
-																<Popover key={event.id} as="li">
-																	{({ open }) => (
-																		<>
-																			<Popover.Button className="group flex max-w-full">
-																				<p className="flex-auto truncate font-medium text-gray-900 group-hover:text-sky-600">
-																					{event.title}
-																				</p>
-																				<time
-																					dateTime={event.startDateLocalized}
-																					className="ml-3 hidden flex-none text-gray-500 group-hover:text-sky-600 2xl:block"
-																				>
-																					{DateTime.fromISO(
-																						event.startDateLocalized,
-																					).toLocaleString({
-																						hour: 'numeric',
-																						minute: '2-digit',
-																						timeZoneName: 'short',
-																					})}
-																				</time>
-																			</Popover.Button>
-																			<Transition
-																				show={open}
-																				enter="transition duration-100 ease-out"
-																				enterFrom="transform scale-95 opacity-0"
-																				enterTo="transform scale-100 opacity-100"
-																				leave="transition duration-75 ease-out"
-																				leaveFrom="transform scale-100 opacity-100"
-																				leaveTo="transform scale-95 opacity-0"
-																			>
-																				<Popover.Panel
-																					static
-																					className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl"
-																				>
-																					<div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-																						<div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
-																							hello
-																						</div>
-																					</div>
-																				</Popover.Panel>
-																			</Transition>
-																		</>
-																	)}
-																</Popover>
-															))}
-														</ol>
-													)}
-												</div>
-											);
-										})}
+										{dates.map((day) => (
+											<MonthDay
+												key={day.date}
+												day={day}
+												setActiveDate={setActiveDate}
+												isActive={day.date === activeDate}
+											/>
+										))}
 									</div>
 									<div className="isolate grid w-full grid-cols-7 grid-rows-6 gap-px lg:hidden">
 										{dates.map((day) => {
@@ -692,128 +850,8 @@ export default function Page() {
 									</div>
 									<ol className="mt-4 divide-y divide-white text-sm leading-6 lg:col-span-7 xl:col-span-8">
 										{weeklyEvents.map((event) => {
-											const eventDate = DateTime.fromISO(
-												event.startDateLocalized,
-											);
 											return (
-												<li
-													key={event.id}
-													className={classNames(
-														'relative flex space-x-6  py-3 xl:static',
-														event.isCurrent
-															? 'bg-white px-3 -mx-3 rounded outline outline-blue-500 my-6'
-															: 'my-3',
-													)}
-												>
-													<div className="flex-auto">
-														<div className="flex gap-4 justify-between items-center">
-															<h3 className="text-lg pr-10 font-semibold text-gray-900 xl:pr-0">
-																{event.title} {event.isCurrent ? 'yess' : 'no'}
-															</h3>
-
-															<div>
-																{event.isCurrent && (
-																	<Button
-																		as="a"
-																		href={event.eventLink}
-																		className="mb-4"
-																	>
-																		Join Now
-																	</Button>
-																)}
-															</div>
-														</div>
-														{event.eventCalendarDescription && (
-															<DisplayHtml
-																html={event.eventCalendarDescription}
-																className="text-gray-500"
-															/>
-														)}
-														<dl className="mt-2 flex flex-col text-gray-500 xl:flex-row">
-															<div className="flex items-start space-x-3">
-																<dt className="mt-0.5">
-																	<span className="sr-only">Date</span>
-																	<CalendarIcon
-																		className="h-5 w-5 text-gray-400"
-																		aria-hidden="true"
-																	/>
-																</dt>
-																<dd>
-																	<time dateTime={event.startDateLocalized}>
-																		{eventDate.toLocaleString(
-																			DateTime.DATE_MED,
-																		)}{' '}
-																		at{' '}
-																		{eventDate.toLocaleString({
-																			...DateTime.TIME_SIMPLE,
-
-																			timeZoneName: 'short',
-																		})}
-																	</time>
-																</dd>
-															</div>
-														</dl>
-													</div>
-													<Menu
-														as="div"
-														className="absolute top-6 right-0 xl:relative xl:top-auto xl:right-auto xl:self-center"
-													>
-														<div>
-															<Menu.Button className="-m-2 flex items-center rounded-full p-2 text-gray-500 hover:text-gray-600">
-																<span className="sr-only">Open options</span>
-																<DotsHorizontalIcon
-																	className="h-5 w-5"
-																	aria-hidden="true"
-																/>
-															</Menu.Button>
-														</div>
-
-														<Transition
-															as={Fragment}
-															enter="transition ease-out duration-100"
-															enterFrom="transform opacity-0 scale-95"
-															enterTo="transform opacity-100 scale-100"
-															leave="transition ease-in duration-75"
-															leaveFrom="transform opacity-100 scale-100"
-															leaveTo="transform opacity-0 scale-95"
-														>
-															<Menu.Items className="focus:outline-none absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-																<div className="py-1">
-																	<Menu.Item>
-																		{({ active }) => (
-																			<a
-																				href="#"
-																				className={classNames(
-																					active
-																						? 'bg-gray-100 text-gray-900'
-																						: 'text-gray-700',
-																					'block px-4 py-2 text-sm',
-																				)}
-																			>
-																				Edit
-																			</a>
-																		)}
-																	</Menu.Item>
-																	<Menu.Item>
-																		{({ active }) => (
-																			<a
-																				href="#"
-																				className={classNames(
-																					active
-																						? 'bg-gray-100 text-gray-900'
-																						: 'text-gray-700',
-																					'block px-4 py-2 text-sm',
-																				)}
-																			>
-																				Cancel
-																			</a>
-																		)}
-																	</Menu.Item>
-																</div>
-															</Menu.Items>
-														</Transition>
-													</Menu>
-												</li>
+												<DateDetails as="li" event={event} key={event.id} />
 											);
 										})}
 									</ol>
