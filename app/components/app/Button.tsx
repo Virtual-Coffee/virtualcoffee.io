@@ -4,7 +4,7 @@ import type { PolymorphicComponentPropsWithRef } from '~/util/types';
 import { forwardRefFromComponent } from '~/util/remixHelpers';
 
 const colors = {
-	primary: 'text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500',
+	primary: 'text-white bg-sky-600 hover:bg-sky-700 focus:ring-sky-500',
 };
 
 const sizes = {
