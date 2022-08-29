@@ -93,6 +93,7 @@
 		"require-dir": "^1.2.0",
 		"sanitize-html": "^2.7.0",
 		"sass": "^1.52.1",
+		"tiny-invariant": "^1.2.0",
 		"unified": "^10.1.2"
 	},
 	"devDependencies": {
