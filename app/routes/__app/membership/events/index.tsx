@@ -233,8 +233,15 @@ export function MonthDay({
 											static
 											className="absolute left-1/2 z-10 mt-3 w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl"
 										>
-											<div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-												<div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
+											<div
+												className={classNames(
+													'overflow-hidden rounded-lg shadow-lg',
+													event.isCurrent
+														? 'ring-8 ring-sky-600 ring-opacity-100'
+														: 'ring-1 ring-black ring-opacity-5',
+												)}
+											>
+												<div className="relative bg-white p-7">
 													<DateDetails event={event} />
 												</div>
 											</div>
@@ -265,14 +272,7 @@ const DateDetails = <T extends React.ElementType = 'div'>({
 	const Component = as || 'div';
 	const eventDate = DateTime.fromISO(event.startDateLocalized);
 	return (
-		<Component
-			className={classNames(
-				'relative flex gap-6 py-3 xl:static',
-				event.isCurrent
-					? 'bg-white px-3 -mx-3 rounded outline outline-blue-500 my-6'
-					: 'my-3',
-			)}
-		>
+		<Component className={classNames('relative flex gap-6 py-3 xl:static')}>
 			<div className="flex-auto">
 				<div className="flex gap-4 justify-between items-center">
 					<h3 className="text-lg pr-10 font-semibold text-gray-900 xl:pr-0">
@@ -851,7 +851,16 @@ export default function Page() {
 									<ol className="mt-4 divide-y divide-white text-sm leading-6 lg:col-span-7 xl:col-span-8">
 										{weeklyEvents.map((event) => {
 											return (
-												<DateDetails as="li" event={event} key={event.id} />
+												<DateDetails
+													as="li"
+													event={event}
+													key={event.id}
+													className={
+														event.isCurrent
+															? 'bg-white px-3 -mx-3 rounded outline outline-blue-500 my-6'
+															: 'my-3'
+													}
+												/>
 											);
 										})}
 									</ol>
