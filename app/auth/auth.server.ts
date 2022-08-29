@@ -2,11 +2,13 @@ import { Authenticator, AuthorizationError } from 'remix-auth';
 import { sessionStorage } from '~/auth/session.server';
 import { FormStrategy } from 'remix-auth-form';
 import { CmsAuth } from '~/api/cms.server';
+import type { User } from '~/api/cms.server';
 import { redirect } from '@remix-run/node';
+import invariant from 'tiny-invariant';
 
 // Create an instance of the authenticator, pass a generic with what
 // strategies will return and will store in the session
-export let authenticator = new Authenticator(sessionStorage, {
+export let authenticator = new Authenticator<User>(sessionStorage, {
 	sessionErrorKey: 'my-error-key',
 	// throwOnError: true,
 });
@@ -19,6 +21,12 @@ authenticator.use(
 		let email = form.get('email');
 		let password = form.get('password');
 
+		invariant(typeof email === 'string', 'email must be a string');
+		invariant(email && email.length > 0, 'email must not be empty');
+
+		invariant(typeof password === 'string', 'password must be a string');
+		invariant(password.length > 0, 'password must not be empty');
+
 		// try {
 		let response = await api.login(email, password);
 		// the type of this user must match the type you pass to the Authenticator
@@ -26,7 +34,7 @@ authenticator.use(
 		// directly inside the `use` method
 		// console.log({ response });
 
-		console.log(response);
+		// console.log(response);
 
 		return response.authenticate;
 	}),
@@ -35,7 +43,7 @@ authenticator.use(
 	'user-pass',
 );
 
-export async function getUser(request) {
+export async function getUser(request: Request) {
 	let session = await sessionStorage.getSession(request.headers.get('Cookie'));
 	let user = session.get(authenticator.sessionKey);
 
@@ -46,7 +54,7 @@ export async function getUser(request) {
 }
 
 export async function authenticate(
-	request,
+	request: Request,
 	{ headers = new Headers(), redirectOnFail = true } = {},
 ) {
 	let session = await sessionStorage.getSession(request.headers.get('Cookie'));
@@ -77,40 +85,69 @@ export async function authenticate(
 
 		// if expired throw an error
 		if (new Date(user.jwtExpiresAt) < new Date()) {
+			console.log('expired');
 			throw new AuthorizationError('Expired');
 		}
 
 		// return the user data
 		return user;
 	} catch (error) {
+		console.log('in catch state');
 		// check if the eror is an AuthorizationError
 		if (error instanceof AuthorizationError) {
+			console.log('is AuthorizationError');
 			const api = new CmsAuth();
 
 			// console.log('currentsession', session.get(authenticator.sessionKey));
+			let response;
+			try {
+				// refresh the token somehow using the strategy and the refresh token
+				response = await api.refreshToken({
+					refreshToken: session.get(authenticator.sessionKey).refreshToken,
+				});
 
-			// refresh the token somehow using the strategy and the refresh token
-			let response = await api.refreshToken({
-				refreshToken: session.get(authenticator.sessionKey).refreshToken,
-			});
+				console.log({ refreshedresponse: response });
 
-			// console.log({ refreshedresponse: response });
+				let user = response.refreshToken;
 
-			let user = response.refreshToken;
+				// update the user data on the sessino
+				session.set(authenticator.sessionKey, user);
 
-			// update the user data on the sessino
-			session.set(authenticator.sessionKey, user);
+				// commit the session and append the Set-Cookie header
+				headers.append(
+					'Set-Cookie',
+					await sessionStorage.commitSession(session),
+				);
 
-			// commit the session and append the Set-Cookie header
-			headers.append('Set-Cookie', await sessionStorage.commitSession(session));
+				// redirect to the same URL if the request was a GET
+				if (request.method.toLowerCase() === 'get') {
+					console.log('redirecting to same url');
+					throw redirect(request.url, { headers });
+				}
 
-			// redirect to the same URL if the request was a GET
-			if (request.method.toLowerCase() === 'get') {
-				throw redirect(request.url, { headers });
+				// return the user so you can use it in a POST
+				return user;
+			} catch (error) {
+				if (redirectOnFail) {
+					const url = new URL(request.url);
+					const search = url.search;
+					console.log('THROWING ABC');
+
+					session.set(authenticator.sessionKey, null);
+
+					headers.append(
+						'Set-Cookie',
+						await sessionStorage.commitSession(session),
+					);
+
+					throw redirect(
+						`/login?redirectOnSuccess=${encodeURIComponent(
+							url.pathname + (search.length > 1 ? search : ''),
+						)}`,
+						{ headers },
+					);
+				}
 			}
-
-			// return the user so you can use it in a POST
-			return user;
 		}
 		// throw again any unexpected error
 		throw error;
