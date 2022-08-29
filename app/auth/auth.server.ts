@@ -8,40 +8,67 @@ import invariant from 'tiny-invariant';
 
 // Create an instance of the authenticator, pass a generic with what
 // strategies will return and will store in the session
-export let authenticator = new Authenticator<User>(sessionStorage, {
-	sessionErrorKey: 'my-error-key',
-	// throwOnError: true,
-});
 
-// Tell the Authenticator to use the form strategy
-authenticator.use(
-	new FormStrategy(async ({ form }) => {
-		const api = new CmsAuth();
+function configAuthenticator(authenticator: Authenticator<User>) {
+	// Tell the Authenticator to use the form strategy
+	authenticator.use(
+		new FormStrategy(async ({ form }) => {
+			console.log('inside form strategy');
+			const api = new CmsAuth();
 
-		let email = form.get('email');
-		let password = form.get('password');
+			let email = form.get('email');
+			let password = form.get('password');
 
-		invariant(typeof email === 'string', 'email must be a string');
-		invariant(email && email.length > 0, 'email must not be empty');
+			invariant(typeof email === 'string', 'email must be a string');
+			invariant(email && email.length > 0, 'email must not be empty');
 
-		invariant(typeof password === 'string', 'password must be a string');
-		invariant(password.length > 0, 'password must not be empty');
+			invariant(typeof password === 'string', 'password must be a string');
+			invariant(password.length > 0, 'password must not be empty');
 
-		// try {
-		let response = await api.login(email, password);
-		// the type of this user must match the type you pass to the Authenticator
-		// the strategy will automatically inherit the type if you instantiate
-		// directly inside the `use` method
-		// console.log({ response });
+			// try {
+			let response = await api.login(email, password);
+			// the type of this user must match the type you pass to the Authenticator
+			// the strategy will automatically inherit the type if you instantiate
+			// directly inside the `use` method
+			// console.log({ response });
 
-		// console.log(response);
+			// console.log(response);
 
-		return response.authenticate;
-	}),
-	// each strategy has a name and can be changed to use another one
-	// same strategy multiple times, especially useful for the OAuth2 strategy.
-	'user-pass',
-);
+			return response.authenticate;
+		}),
+		// each strategy has a name and can be changed to use another one
+		// same strategy multiple times, especially useful for the OAuth2 strategy.
+		'user-pass',
+	);
+}
+
+let authenticator: InstanceType<typeof Authenticator<User>>;
+
+declare global {
+	var __authenticator: typeof authenticator | null;
+}
+
+// this is needed because in development we don't want to restart
+// the server with every change, but we want to make sure we don't
+// create a new connection to the DB with every change either.
+if (process.env.NODE_ENV === 'production') {
+	authenticator = new Authenticator<User>(sessionStorage, {
+		sessionErrorKey: 'my-error-key',
+		// throwOnError: true,
+	});
+	configAuthenticator(authenticator);
+} else {
+	if (!global.__authenticator) {
+		global.__authenticator = new Authenticator<User>(sessionStorage, {
+			sessionErrorKey: 'my-error-key',
+			// throwOnError: true,
+		});
+		configAuthenticator(global.__authenticator);
+	}
+	authenticator = global.__authenticator;
+}
+
+export { authenticator };
 
 export async function getUser(request: Request) {
 	let session = await sessionStorage.getSession(request.headers.get('Cookie'));
@@ -60,6 +87,8 @@ export async function authenticate(
 	let session = await sessionStorage.getSession(request.headers.get('Cookie'));
 	try {
 		// get the auth data from the session
+
+		console.log('checking user!');
 		let user = await getUser(request);
 
 		// if not defiend or expired, redirect to login
@@ -89,6 +118,7 @@ export async function authenticate(
 			throw new AuthorizationError('Expired');
 		}
 
+		console.log('returning user!');
 		// return the user data
 		return user;
 	} catch (error) {
