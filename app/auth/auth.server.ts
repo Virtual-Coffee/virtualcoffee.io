@@ -26,7 +26,9 @@ function configAuthenticator(authenticator: Authenticator<User>) {
 			invariant(password.length > 0, 'password must not be empty');
 
 			// try {
+			console.log('logging in');
 			let response = await api.login(email, password);
+			console.log('logged in');
 			// the type of this user must match the type you pass to the Authenticator
 			// the strategy will automatically inherit the type if you instantiate
 			// directly inside the `use` method
@@ -101,11 +103,13 @@ export async function authenticate(
 
 			if (redirectOnFail) {
 				console.log('THROWING');
-				throw redirect(
-					`/login?redirectOnSuccess=${encodeURIComponent(
-						url.pathname + (search.length > 1 ? search : ''),
-					)}`,
-				);
+				if (url.pathname !== '/login') {
+					throw redirect(
+						`/login?redirectOnSuccess=${encodeURIComponent(
+							url.pathname + (search.length > 1 ? search : ''),
+						)}`,
+					);
+				}
 			}
 			return null;
 		}

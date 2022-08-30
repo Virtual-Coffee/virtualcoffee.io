@@ -44,7 +44,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 	let api = new CmsActions();
 	await api.authenticate(request);
 
-	const calendars = await api.getCalendars();
+	// const calendars = await api.getCalendars();
 
 	const url = new URL(request.url);
 	const currentMonth = new Date().getMonth() + 1;
@@ -91,7 +91,14 @@ export const loader = async ({ request }: LoaderArgs) => {
 	const events = await api.getEventsInRange({
 		rangeStart: loopDate.toISO(),
 		rangeEnd: loopDate.plus({ days: 42 }).toISO(),
+		// calendars: calendars.map((c) => c.handle),
 	});
+
+	// return json({
+	// 	meta: {
+	// 		title: 'Events',
+	// 	},
+	// });
 
 	const eventsWithCheck: EventsWithCheck[] = await Promise.all(
 		events.map(async (event) => {
@@ -145,7 +152,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 		meta: {
 			title: 'Events',
 		},
-		calendars,
 		weeklyEvents,
 		dates,
 		selectedDate,
@@ -390,7 +396,11 @@ export function getCalendarUrl({
 }
 
 export default function Page() {
-	const { calendars, weeklyEvents, dates, selectedDate, settings } =
+	return <div>Hello!</div>;
+}
+
+function Page2() {
+	const { weeklyEvents, dates, selectedDate, settings } =
 		useLoaderData<typeof loader>();
 
 	const today = DateTime.now();

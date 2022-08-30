@@ -622,40 +622,47 @@ export class CmsActions {
 			return returnJson;
 		}
 
+		returnJson = {
+			type: 'permissions',
+			message: `This event is for members only.`,
+			event: safeEvent,
+		};
+		return returnJson;
+
 		// if it's not public, then authenticate
 
-		let user: User = await authenticate(request);
-		console.log(user.user);
+		// let user: User = await authenticate(request);
+		// console.log(user.user);
 
-		if (user) {
-			if (
-				visibility === 'membersOnly' &&
-				user.schema !== 'Full Members Schema'
-			) {
-				returnJson = {
-					type: 'permissions',
-					message: `This event is for members only.`,
-					event: safeEvent,
-				};
-				return returnJson;
-			}
+		// if (user) {
+		// 	if (
+		// 		visibility === 'membersOnly' &&
+		// 		user.schema !== 'Full Members Schema'
+		// 	) {
+		// 		returnJson = {
+		// 			type: 'permissions',
+		// 			message: `This event is for members only.`,
+		// 			event: safeEvent,
+		// 		};
+		// 		return returnJson;
+		// 	}
 
-			if (event.eventJoinLink) {
-				returnJson = {
-					type: 'success',
-					event: safeEvent,
-				};
-				return returnJson;
-			}
+		// 	if (event.eventJoinLink) {
+		// 		returnJson = {
+		// 			type: 'success',
+		// 			event: safeEvent,
+		// 		};
+		// 		return returnJson;
+		// 	}
 
-			returnJson = {
-				type: 'noLink',
-				message: `This event has no link.`,
-				event: safeEvent,
-			};
-			return returnJson;
-		}
+		// 	returnJson = {
+		// 		type: 'noLink',
+		// 		message: `This event has no link.`,
+		// 		event: safeEvent,
+		// 	};
+		// 	return returnJson;
+		// }
 
-		throw new CmsError('There was an error checking this event.');
+		// throw new CmsError('There was an error checking this event.');
 	}
 }
