@@ -15,6 +15,8 @@ function configAuthenticator(authenticator: Authenticator<User>) {
 		new FormStrategy(async ({ form }) => {
 			console.log('inside form strategy');
 			const api = new CmsAuth();
+			console.log('api initialized');
+			console.log(api.client);
 
 			let email = form.get('email');
 			let password = form.get('password');
