@@ -281,7 +281,13 @@ const DateDetails = <T extends React.ElementType = 'div'>({
 
 					<div>
 						{event.isCurrent && (
-							<Button as="a" href={event.eventLink} className="mb-4">
+							<Button
+								as="a"
+								href={event.eventLink}
+								className="mb-4"
+								target="_blank"
+								rel="nofollow"
+							>
 								Join Now
 							</Button>
 						)}
