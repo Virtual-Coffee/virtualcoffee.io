@@ -97,7 +97,18 @@ export interface PodcastEpisode {
 	podcastEpisodeCard?: Array<{ path: string }>;
 	url?: string;
 }
-type PodcastEpisodes = Partial<PodcastEpisode>[];
+// type PodcastEpisodes = Partial<PodcastEpisode>[];
+type PodcastEpisodes = Pick<
+	PodcastEpisode,
+	| 'title'
+	| 'slug'
+	| 'id'
+	| 'metaDescription'
+	| 'podcastEpisode'
+	| 'podcastSeason'
+	| 'podcastPublishDate'
+	| 'podcastBuzzsproutId'
+>[];
 type PodcastEpisodeResponse = {
 	entries: PodcastEpisode[];
 };
@@ -120,8 +131,8 @@ export async function getEpisodes({
 	});
 
 	try {
-		const episodesResponse: PodcastEpisodeResponse =
-			await graphQLClient.request(episodesQuery, {
+		const episodesResponse =
+			await graphQLClient.request<PodcastEpisodeResponse>(episodesQuery, {
 				limit,
 			});
 		return episodesResponse.entries.map((entry) => ({
@@ -140,7 +151,7 @@ export async function getEpisode({
 }: {
 	slug: PodcastEpisode['slug'];
 	queryParams?: any;
-}): Promise<PodcastEpisode | null | undefined> {
+}): Promise<PodcastEpisode | null> {
 	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
 		const fakeData = await import('./mocks/podcast.server');
 		const episode = fakeData.getEpisode({ slug });
@@ -170,7 +181,7 @@ export async function getEpisode({
 
 		// return response.slice(0, 10);
 		if (!episodesResponse.entry) {
-			return null;
+			throw new Error('No episode found');
 		}
 
 		return {
@@ -179,6 +190,7 @@ export async function getEpisode({
 		};
 	} catch (e) {
 		console.error(e);
+		return null;
 	}
 }
 
