@@ -17,11 +17,17 @@ import { sanitizeCmsData } from '~/util/sanitizeCmsData';
 import createCmsImage from '~/util/cmsimage';
 import type { PodcastEpisode } from '~/data/podcast';
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+interface EpisodeLoaderArgs extends LoaderArgs {
+	params: {
+		episode: string;
+	};
+}
+
+export const loader = async ({ params, request }: EpisodeLoaderArgs) => {
 	console.log(`loading data for ${params.episode}`);
 
 	const episode = await getEpisode({
-		slug: params.episode!,
+		slug: params.episode,
 		queryParams: getEpisodeQueryParams(request),
 	});
 	if (!episode) {
