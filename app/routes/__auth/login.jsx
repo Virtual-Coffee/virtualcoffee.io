@@ -1,10 +1,4 @@
-import {
-	Form,
-	useActionData,
-	useCatch,
-	Link,
-	useLoaderData,
-} from '@remix-run/react';
+import { Form, useActionData, useCatch, Link } from '@remix-run/react';
 import { json, redirect } from '@remix-run/node';
 import { authenticator, getUser } from '~/auth/auth.server';
 import { AuthorizationError } from 'remix-auth';
@@ -121,9 +115,9 @@ export function CatchBoundary() {
 // First we create our UI with the form doing a POST and the inputs with the
 // names we are going to use in the strategy
 export default function Screen() {
-	const { redirectOnSuccess } = useLoaderData();
+	// const { redirectOnSuccess } = useLoaderData();
+	const redirectOnSuccess = null;
 	const actionData = useActionData();
-	console.log({ t: actionData });
 
 	return (
 		<LogInForm
@@ -153,12 +147,6 @@ export let action = async ({ request }) => {
 			return error;
 		}
 		if (error instanceof AuthorizationError) {
-			console.log('is auth error');
-			console.log(error);
-			console.log({
-				message: error.message,
-				data: error.data,
-			});
 			return json({ message: error.message });
 			// here the error is related to the authentication process
 		}
@@ -173,18 +161,10 @@ export let action = async ({ request }) => {
 // authenticated with `authenticator.isAuthenticated` and redirect to the
 // dashboard if it is or return null if it's not
 export let loader = async ({ request }) => {
-	console.log('inside loader');
-	// If the user is already authenticated redirect to /dashboard directly
-	const user = await getUser(request);
-
-	if (user) {
-		return redirect('/membership');
-	}
-
 	const url = new URL(request.url);
 	const redirectOnSuccess = url.searchParams.get('redirectOnSuccess');
 
-	return json({
-		redirectOnSuccess,
+	return await authenticator.isAuthenticated(request, {
+		successRedirect: redirectOnSuccess || '/membership',
 	});
 };
