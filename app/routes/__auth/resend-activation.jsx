@@ -2,7 +2,8 @@ import { Form, useActionData, useCatch } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import { authenticator } from '~/auth/auth.server';
 import { AuthorizationError } from 'remix-auth';
-import { CmsAuth, CmsError } from '~/api/cms.server';
+import { CmsAuth } from '~/api/cmsauth.server';
+import { CmsError } from '~/api/util';
 
 export function CatchBoundary() {
 	const caught = useCatch();

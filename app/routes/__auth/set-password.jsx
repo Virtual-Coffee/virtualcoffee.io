@@ -7,7 +7,8 @@ import {
 } from '@remix-run/react';
 import { json } from '@remix-run/node';
 import { authenticator } from '~/auth/auth.server';
-import { CmsAuth, CmsError } from '~/api/cms.server';
+import { CmsAuth } from '~/api/cmsauth.server';
+import { CmsError } from '~/api/util';
 import { redirect } from '@remix-run/node';
 
 export function CatchBoundary() {
