@@ -113,9 +113,9 @@ module.exports = {
 		'rehype-stringify',
 	],
 	appDirectory: 'app',
-	// assetsBuildDirectory: 'public/build',
-	// serverBuildPath: 'netlify/functions/server/index.js',
-	// publicPath: '/build/',
+	assetsBuildDirectory: 'public/build',
+	serverBuildPath: 'netlify/functions/server/index.js',
+	publicPath: '/build/',
 	devServerPort: 8002,
 	mdx: async (filename) => {
 		const remarkToc = await createRemarkToc();
