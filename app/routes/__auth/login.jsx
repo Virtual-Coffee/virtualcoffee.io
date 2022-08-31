@@ -128,7 +128,6 @@ export default function Screen() {
 }
 
 export let action = async ({ request }) => {
-	console.log('inside action');
 	// we call the method with the name of the strategy we want to use and the
 	// request object, optionally we pass an object with the URLs we want the user
 	// to be redirected to after a success or a failure
