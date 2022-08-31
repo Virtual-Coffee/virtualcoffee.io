@@ -3,8 +3,7 @@ import type { LoaderArgs } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { authenticate } from '~/auth/auth.server';
 import { CmsActions } from '~/api/cms.server';
-import type { Event, EventLoaderData } from '~/api/cms.server';
-import PageHeader from '~/components/app/PageHeader';
+import type { Event } from '~/api/types';
 import DisplayHtml from '~/components/DisplayHtml';
 import { Fragment, useCallback, useState } from 'react';
 import {
@@ -12,7 +11,6 @@ import {
 	ChevronLeftIcon,
 	ChevronRightIcon,
 	EllipsisHorizontalIcon,
-	MapPinIcon,
 	ChevronDownIcon,
 	ClockIcon,
 } from '@heroicons/react/24/outline';
@@ -70,8 +68,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 		minute: 59,
 		second: 59,
 	});
-
-	console.log({ weekStart, weekEnd });
 
 	// first day of the month
 	let loopDate: DateTime = DateTime.now().set({
@@ -395,11 +391,11 @@ export function getCalendarUrl({
 	return `/membership/events?day=${day}&month=${month}&view=${view}`;
 }
 
-export default function Page() {
-	return <div>Hello!</div>;
-}
+// export default function Page() {
+// 	return <div>Hello!</div>;
+// }
 
-function Page2() {
+export default function Page() {
 	const { weeklyEvents, dates, selectedDate, settings } =
 		useLoaderData<typeof loader>();
 
