@@ -278,7 +278,7 @@ const DateDetails = <T extends React.ElementType = 'div'>({
 			<div className="flex-auto">
 				<div className="flex gap-4 justify-between items-center">
 					<h3 className="text-lg pr-10 font-semibold text-gray-900 xl:pr-0">
-						{event.title} {event.isCurrent ? 'yess' : 'no'}
+						{event.title}
 					</h3>
 
 					<div>
