@@ -8,8 +8,8 @@
   port = 9000
   autoLaunch = false
 
-[functions]
-  node_bundler = "esbuild"
+# [functions]
+#   node_bundler = "esbuild"
 
 [functions.server]
   included_files = ["app/routes/**/*.mdx"]
