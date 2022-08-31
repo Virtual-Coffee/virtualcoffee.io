@@ -4,7 +4,6 @@ import { DateTime } from 'luxon';
 import { CmsError } from '~/api/util';
 import type {
 	CalendarVisibility,
-	EventVisibility,
 	Event,
 	SafeEvent,
 	Calendar,
@@ -144,14 +143,6 @@ export class CmsActions {
 		const rangeStart = DateTime.now().minus({ hours: 12 }).toISO();
 		const rangeEnd = DateTime.now().plus({ hours: 12 }).toISO();
 
-		console.log(
-			JSON.stringify({
-				uid,
-				rangeStart,
-				rangeEnd,
-			}),
-		);
-
 		const response = await this.client.request(query, {
 			uid,
 			rangeStart,
@@ -213,21 +204,12 @@ export class CmsActions {
 			}
 		`;
 
-		// console.log(query);
-
 		//
 		const rangeStart =
 			specifiedRangeStart || DateTime.now().set({ hour: 0 }).toISO();
 		const rangeEnd =
 			specifiedRangeEnd ||
 			DateTime.now().set({ hour: 0 }).plus({ days: 30 }).toISO();
-
-		console.log(
-			JSON.stringify({
-				rangeStart,
-				rangeEnd,
-			}),
-		);
 
 		const response = await this.client.request(query, {
 			limit,
@@ -331,9 +313,7 @@ export class CmsActions {
 		}
 
 		// if it's not public, then authenticate
-
 		let user: User = await getUser(request);
-		// console.log(user.user);
 
 		if (user) {
 			if (

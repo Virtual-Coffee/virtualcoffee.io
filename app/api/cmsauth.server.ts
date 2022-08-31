@@ -35,7 +35,6 @@ export class CmsAuth {
 		`;
 		try {
 			const response = await this.client.request(query, { code, id });
-			console.log({ response });
 			return response;
 		} catch (error) {
 			this.handleRequestError(error, 'Unable to activate user.');
@@ -50,7 +49,6 @@ export class CmsAuth {
 		`;
 		try {
 			const response = await this.client.request(query, { email });
-			console.log({ response });
 			return response;
 		} catch (error) {
 			this.handleRequestError(error);
@@ -65,7 +63,6 @@ export class CmsAuth {
 		`;
 		try {
 			const response = await this.client.request(query, { email });
-			console.log({ response });
 			return response;
 		} catch (error) {
 			this.handleRequestError(error);
@@ -88,7 +85,6 @@ export class CmsAuth {
 		`;
 		try {
 			const response = await this.client.request(query, { code, id, password });
-			console.log({ response });
 			return response;
 		} catch (error) {
 			this.handleRequestError(error, 'Unable to save password.');
@@ -118,7 +114,6 @@ export class CmsAuth {
 		`;
 		try {
 			const response = await this.client.request(query, { refreshToken });
-			console.log({ response });
 			return response;
 		} catch (error) {
 			this.handleRequestError(error, 'Unable to refresh user session.');
@@ -147,9 +142,7 @@ export class CmsAuth {
 			}
 		`;
 		try {
-			console.log('logging in');
 			const response = await this.client.request(query, { email, password });
-			console.log({ response });
 			return response;
 		} catch (error) {
 			this.handleRequestError(error, 'Unable to log in user.');
@@ -231,7 +224,6 @@ export class CmsAuth {
 				userCodeInterests,
 				userHopingVirtualCoffee,
 			});
-			console.log({ response });
 			return response;
 		} catch (error) {
 			// @ts-ignore
