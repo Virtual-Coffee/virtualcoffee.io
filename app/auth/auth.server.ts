@@ -1,8 +1,8 @@
 import { Authenticator, AuthorizationError } from 'remix-auth';
 import { sessionStorage } from '~/auth/session.server';
 import { FormStrategy } from 'remix-auth-form';
-import { CmsAuth } from '~/api/cms.server';
-import type { User } from '~/api/cms.server';
+import { CmsAuth } from '~/api/cmsauth.server';
+import type { User } from '~/api/types';
 import { redirect } from '@remix-run/node';
 import invariant from 'tiny-invariant';
 
@@ -13,10 +13,7 @@ function configAuthenticator(authenticator: Authenticator<User>) {
 	// Tell the Authenticator to use the form strategy
 	authenticator.use(
 		new FormStrategy(async ({ form }) => {
-			console.log('inside form strategy');
 			const api = new CmsAuth();
-			console.log('api initialized');
-			console.log(api.client);
 
 			let email = form.get('email');
 			let password = form.get('password');
@@ -28,16 +25,12 @@ function configAuthenticator(authenticator: Authenticator<User>) {
 			invariant(password.length > 0, 'password must not be empty');
 
 			// try {
-			console.log('logging in');
-			let response = await api.login(email, password);
-			console.log('logged in');
+
+			const response = await api.login(email, password);
+
 			// the type of this user must match the type you pass to the Authenticator
 			// the strategy will automatically inherit the type if you instantiate
 			// directly inside the `use` method
-			// console.log({ response });
-
-			// console.log(response);
-
 			return response.authenticate;
 		}),
 		// each strategy has a name and can be changed to use another one
@@ -91,8 +84,6 @@ export async function authenticate(
 	let session = await sessionStorage.getSession(request.headers.get('Cookie'));
 	try {
 		// get the auth data from the session
-
-		console.log('checking user!');
 		let user = await getUser(request);
 
 		// if not defiend or expired, redirect to login
@@ -100,11 +91,7 @@ export async function authenticate(
 			const url = new URL(request.url);
 			const search = url.search;
 
-			console.log('no user found');
-			console.log(redirectOnFail);
-
 			if (redirectOnFail) {
-				console.log('THROWING');
 				if (url.pathname !== '/login') {
 					throw redirect(
 						`/login?redirectOnSuccess=${encodeURIComponent(
@@ -116,74 +103,40 @@ export async function authenticate(
 			return null;
 		}
 
-		// console.log({ oldUser: user });
-
 		// if expired throw an error
 		if (new Date(user.jwtExpiresAt) < new Date()) {
-			console.log('expired');
 			throw new AuthorizationError('Expired');
 		}
 
-		console.log('returning user!');
 		// return the user data
 		return user;
 	} catch (error) {
-		console.log('in catch state');
 		// check if the eror is an AuthorizationError
 		if (error instanceof AuthorizationError) {
-			console.log('is AuthorizationError');
 			const api = new CmsAuth();
 
-			// console.log('currentsession', session.get(authenticator.sessionKey));
 			let response;
-			try {
-				// refresh the token somehow using the strategy and the refresh token
-				response = await api.refreshToken({
-					refreshToken: session.get(authenticator.sessionKey).refreshToken,
-				});
 
-				console.log({ refreshedresponse: response });
+			// refresh the token somehow using the strategy and the refresh token
+			response = await api.refreshToken({
+				refreshToken: session.get(authenticator.sessionKey).refreshToken,
+			});
 
-				let user = response.refreshToken;
+			let user = response.refreshToken;
 
-				// update the user data on the sessino
-				session.set(authenticator.sessionKey, user);
+			// update the user data on the sessino
+			session.set(authenticator.sessionKey, user);
 
-				// commit the session and append the Set-Cookie header
-				headers.append(
-					'Set-Cookie',
-					await sessionStorage.commitSession(session),
-				);
+			// commit the session and append the Set-Cookie header
+			headers.append('Set-Cookie', await sessionStorage.commitSession(session));
 
-				// redirect to the same URL if the request was a GET
-				if (request.method.toLowerCase() === 'get') {
-					console.log('redirecting to same url');
-					throw redirect(request.url, { headers });
-				}
-
-				// return the user so you can use it in a POST
-				return user;
-			} catch (error) {
-				if (redirectOnFail) {
-					const url = new URL(request.url);
-					const search = url.search;
-					console.log('THROWING ABC');
-
-					session.set(authenticator.sessionKey, null);
-
-					headers.append(
-						'Set-Cookie',
-						await sessionStorage.commitSession(session),
-					);
-
-					throw redirect(
-						`/login?redirectOnSuccess=${encodeURIComponent(
-							url.pathname + (search.length > 1 ? search : ''),
-						)}`,
-						{ headers },
-					);
-				}
+			// redirect to the same URL if the request was a GET
+			if (request.method.toLowerCase() === 'get') {
+				throw redirect(request.url, { headers });
 			}
+
+			// return the user so you can use it in a POST
+			return user;
 		}
 		// throw again any unexpected error
 		throw error;
