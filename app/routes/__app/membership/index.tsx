@@ -4,8 +4,7 @@ import { Link } from '@remix-run/react';
 import { authenticate } from '~/auth/auth.server';
 
 export const loader: LoaderFunction = async ({ request }) => {
-	const user = await authenticate(request);
-	// console.log({ user });
+	await authenticate(request);
 	return null;
 };
 
