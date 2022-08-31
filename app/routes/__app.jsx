@@ -1,17 +1,13 @@
 import { Outlet, useLoaderData, useMatches } from '@remix-run/react';
 import AppRoot from '~/components/layouts/AppRoot';
-import { authenticate } from '~/auth/auth.server';
 import styles from '~/tailwind.css';
 import { json } from '@remix-run/node';
+import { getUser } from '~/auth/auth.server';
 
 export const loader = async ({ request }) => {
-	let user = await authenticate(request);
-	if (user) {
-		// console.log({ user: user?.authenticate?.user });
-		return json({ user: user.user });
-	}
+	const user = await getUser(request);
 
-	return json({});
+	return json({ user: user ? user.user : null });
 };
 
 export const links = () => [
