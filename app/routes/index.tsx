@@ -4,17 +4,17 @@ import getSponsors from '~/data/sponsors';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getEvents } from '~/data/events';
-import { dateForDisplay } from '~/util/date';
 import { getEpisodes } from '~/data/podcast';
 import HomePageBlock from '~/components/HomePageBlock';
 import PostList, {
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
+import { dateForDisplay } from '~/util/date';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '~/data/newsletters';
 import getChallenges from '~/data/monthlyChallenges/getChallenges';
 
-export async function loader(args: LoaderArgs) {
+export const loader = async (args: LoaderArgs) => {
 	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
 		await Promise.all([
 			getSponsors(),
@@ -39,7 +39,7 @@ export async function loader(args: LoaderArgs) {
 		newsletters,
 		challenges,
 	});
-}
+};
 
 export const homePageLinks = [
 	{
@@ -147,12 +147,19 @@ export default function Index() {
 							footer="See more Community Events"
 						>
 							<PostList
-								items={events.map((event: any) => ({
-									title: event.title,
-									description: (
-										<strong>{dateForDisplay(event.startDateLocalized)}</strong>
-									),
-								}))}
+								items={events.map((event) => {
+									const eventTime = event.startDateLocalized;
+									return {
+										title: event.title,
+										description: (
+											<strong>
+												<time suppressHydrationWarning dateTime={eventTime}>
+													{dateForDisplay(eventTime)}
+												</time>
+											</strong>
+										),
+									};
+								})}
 							/>
 						</HomePageBlock>
 					</div>
