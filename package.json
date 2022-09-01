@@ -63,7 +63,6 @@
 		"luxon": "^3.0.1",
 		"markdown-it": "^13.0.1",
 		"mdast-util-toc": "^6.1.0",
-		"netlify-cli": "^11.5.0",
 		"node-fetch": "^3.2.4",
 		"only-allow": "^1.0.0",
 		"postcss": "^8.4.14",
