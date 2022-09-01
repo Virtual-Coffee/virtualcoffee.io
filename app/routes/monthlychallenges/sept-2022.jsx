@@ -118,6 +118,65 @@ export default function Challenge() {
 				</li>
 			</ol>
 
+			<p>Repositories should have:</p>
+
+			<h6>Documentation</h6>
+
+			<ul>
+				<li>A README file</li>
+				<li>A Contributing Guide</li>
+				<li>A valid Open Source license</li>
+				<li>A Code of Conduct</li>
+			</ul>
+
+			<a href="https://virtualcoffee.io/resources/open-source/maintainer-guide#documentation">
+				Documentation Resource
+			</a>
+
+			<ul>
+				<li>
+					<a href="https://virtualcoffee.io/resources/open-source/maintainer-guide#issue-and-pull-request-templates">
+						Issue and Pull Request templates
+					</a>
+				</li>
+				<li> Clear instructions on how to build / start the project</li>
+				<li>There should be at least one commit in the last year</li>
+			</ul>
+
+			<h5>Beginner-friendly</h5>
+
+			<ul>
+				<li>
+					There should be a clear{' '}
+					<a href="https://github.com/tkshill/Template/wiki/A-Starter-Guide-to-Open-Source-Project-Maintenance#labels">
+						tagging system{' '}
+					</a>
+					for issues
+				</li>
+				<li>
+					The project should have a history of healthy interactions with
+					contributors. Resources:
+					<br />
+					<ul>
+						<li>
+							<a href="https://virtualcoffee.io/resources/open-source/maintainer-guide#beginner-friendliness">
+								Beginner Friendliness
+							</a>
+						</li>
+						<li>
+							<a href="https://virtualcoffee.io/resources/open-source/maintainer-guide#communication-with-contributors">
+								Communication with Contributors
+							</a>
+						</li>
+						<li>
+							<a href="https://github.com/tkshill/Template/wiki/A-Starter-Guide-to-Open-Source-Project-Maintenance#good-communication">
+								Good Communication
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+
 			<h4>How do I share my progress?</h4>
 			<p>
 				Share your progress in the #monthly-challenge channel in Slack. While no
@@ -145,7 +204,7 @@ export default function Challenge() {
 			</p>
 			<p>And remember, we're always here to help ❤️</p>
 
-			<h4>Completing the Challenge!</h4>
+			<h4>Completing the challenge!</h4>
 			<p>
 				To complete this challenge, you need to post to our{' '}
 				<a href="https://github.com/orgs/Virtual-Coffee/discussions/624">
