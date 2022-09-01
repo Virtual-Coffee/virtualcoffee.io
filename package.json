@@ -83,8 +83,7 @@
 		"remark-rehype": "^10.1.0",
 		"sanitize-html": "^2.7.0",
 		"sass": "^1.52.1",
-		"unified": "^10.1.2",
-		"yarn": "^1.22.19"
+		"unified": "^10.1.2"
 	},
 	"devDependencies": {
 		"@types/luxon": "^3.0.0",
