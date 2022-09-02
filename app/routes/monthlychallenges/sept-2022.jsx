@@ -38,9 +38,11 @@ export default function Challenge() {
 			<p className="lead">
 				This month, we have two tracks. Maintainers will be reviewing their open
 				source repos with{' '}
-				<a href="https://virtualcoffee.io/resources/open-source/oss-maintainer-checklist/">
+				<Link
+					to={`/resources/open-source/maintainer-guide#repository-checklist`}
+				>
 					our checklist
-				</a>{' '}
+				</Link>{' '}
 				to make sure their projects are ready for Hacktoberfest contributions,
 				and our contributors will be looking at their favorite repos, evaluating
 				them based on the guide, and writing good issues as needed to fulfill
