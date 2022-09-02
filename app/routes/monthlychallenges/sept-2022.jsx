@@ -1,4 +1,6 @@
 import { json } from '@remix-run/node';
+import { Link } from '@remix-run/react';
+import LeadText from '~/components/content/LeadText';
 import { createMetaData } from '~/util/createMetaData.server';
 
 export const handle = {
@@ -40,8 +42,9 @@ export default function Challenge() {
 					our checklist
 				</a>{' '}
 				to make sure their projects are ready for Hacktoberfest contributions,
-				and our contributors will be looking at their favorite repos, evaluating them based on the guide, and writing
-				good issues as needed to fulfill the criteria.
+				and our contributors will be looking at their favorite repos, evaluating
+				them based on the guide, and writing good issues as needed to fulfill
+				the criteria.
 			</p>
 
 			<p>
@@ -51,7 +54,7 @@ export default function Challenge() {
 			<hr />
 
 			<h2>Theme</h2>
-			<p>Get open source ready!</p>
+			<p>Get ready for open source!</p>
 
 			<h2>Challenge</h2>
 			<p>
@@ -59,8 +62,10 @@ export default function Challenge() {
 				complete the checklist before the end of September.
 			</p>
 			<p>
-				<strong>Contributors</strong>: Following the guide, evaluate an open-source project to VC-verify it as a good project to contribute to. If the repository doesn't meet our standards, create and submit
-				good issues to suggest updates.
+				<strong>Contributors</strong>: Following the guide, evaluate an
+				open-source project to VC-verify it as a good project to contribute to.
+				If the repository doesn't meet our standards, create and submit good
+				issues to suggest updates.
 			</p>
 
 			<h2>Maintainers</h2>
@@ -70,9 +75,11 @@ export default function Challenge() {
 				Hacktoberfest. Your repository should have a clear path for
 				communication, a good explanation of how to run the project, and clear
 				issues.{' '}
-				<a href="https://virtualcoffee.io/resources/open-source/oss-maintainer-checklist/">
+				<Link
+					to={`/resources/open-source/maintainer-guide#repository-checklist`}
+				>
 					Our guide
-				</a>{' '}
+				</Link>{' '}
 				will help you to not only prepare your project, but to be added to the
 				list of Virtual Coffee endorsed projects for our Hacktoberfest
 				Initiative.
@@ -87,9 +94,11 @@ export default function Challenge() {
 				to onboard new contributors. To complete this monthly challenge, find an
 				open source repository you'd like to contribute to and evaluate it based
 				on our{' '}
-				<a href="https://virtualcoffee.io/resources/open-source/maintainer-guide#repository-checklist">
+				<Link
+					to={`/resources/open-source/maintainer-guide#repository-checklist`}
+				>
 					repository checklist
-				</a>
+				</Link>
 				. If it doesn't meet our checklist requirements, add an issue or
 				multiple issues asking the maintainers to update the repository based on
 				your feedback.
@@ -97,7 +106,32 @@ export default function Challenge() {
 
 			<h2>How to Participate</h2>
 
-			<h4>Weekly check-ins</h4>
+			<LeadText>
+				<p>
+					Take a look at our{' '}
+					<Link
+						to={`/resources/open-source/maintainer-guide#repository-checklist`}
+					>
+						Repository Checklist
+					</Link>
+					. This guide contains all of the things we look for in a good
+					open-source project.
+				</p>
+			</LeadText>
+
+			<ul>
+				<li>
+					If you are participating in this month's challenge as a contributor,
+					consider these items as you look at some possible open-source
+					repositories to contribute to.
+				</li>
+				<li>
+					If you are participating as an open-source maintainer, use this
+					checklist as a guide to get your repository ready for contributions.
+				</li>
+			</ul>
+
+			<h3>Weekly check-ins</h3>
 			<p>
 				Are you making progress? Every Monday of the month, set your goals for
 				the week and let's check-in on Fridays in slack.
@@ -117,66 +151,7 @@ export default function Challenge() {
 				</li>
 			</ol>
 
-			<p>Repositories should have:</p>
-
-			<h6>Documentation</h6>
-
-			<ul>
-				<li>A README file</li>
-				<li>A Contributing Guide</li>
-				<li>A valid Open Source license</li>
-				<li>A Code of Conduct</li>
-			</ul>
-
-			<a href="https://virtualcoffee.io/resources/open-source/maintainer-guide#documentation">
-				Documentation Resource
-			</a>
-
-			<ul>
-				<li>
-					<a href="https://virtualcoffee.io/resources/open-source/maintainer-guide#issue-and-pull-request-templates">
-						Issue and Pull Request templates
-					</a>
-				</li>
-				<li> Clear instructions on how to build / start the project</li>
-				<li>There should be at least one commit in the last year</li>
-			</ul>
-
-			<h5>Beginner-friendly</h5>
-
-			<ul>
-				<li>
-					There should be a clear{' '}
-					<a href="https://github.com/tkshill/Template/wiki/A-Starter-Guide-to-Open-Source-Project-Maintenance#labels">
-						tagging system{' '}
-					</a>
-					for issues
-				</li>
-				<li>
-					We like to see a history of healthy interactions with
-					contributors. Resources:
-					<br />
-					<ul>
-						<li>
-							<a href="https://virtualcoffee.io/resources/open-source/maintainer-guide#beginner-friendliness">
-								Beginner Friendliness
-							</a>
-						</li>
-						<li>
-							<a href="https://virtualcoffee.io/resources/open-source/maintainer-guide#communication-with-contributors">
-								Communication with Contributors
-							</a>
-						</li>
-						<li>
-							<a href="https://github.com/tkshill/Template/wiki/A-Starter-Guide-to-Open-Source-Project-Maintenance#good-communication">
-								Good Communication
-							</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
-
-			<h4>How do I share my progress?</h4>
+			<h3>How do I share my progress?</h3>
 			<p>
 				Share your progress in the #monthly-challenge channel in Slack. While no
 				other platform is imposed, it can be a good idea to also share on social
@@ -195,7 +170,7 @@ export default function Challenge() {
 				</i>
 			</p>
 
-			<h4>What if I need help?</h4>
+			<h3>What if I need help?</h3>
 			<p>
 				You can ask a question in the #help-and-pairing VC channel, ask for
 				ideas in the #open-source channel, or join the VC co-working room.
@@ -203,7 +178,7 @@ export default function Challenge() {
 			</p>
 			<p>And remember, we're always here to help ❤️</p>
 
-			<h4>Completing the challenge!</h4>
+			<h3>Completing the challenge!</h3>
 			<p>
 				To complete this challenge, you need to post to our{' '}
 				<a href="https://github.com/orgs/Virtual-Coffee/discussions/624">
@@ -219,7 +194,11 @@ export default function Challenge() {
 				</li>
 				<li>
 					If the repository does meet the checklist requirements, post the
-					repository in the [discussion Hacktoberfest 2022 - Repositories we ❤️](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/624). If you've verified they're participating in Hacktoberfest, add a note to your post and any additional information you feel is helpful for contributors.
+					repository in the [discussion Hacktoberfest 2022 - Repositories we
+					❤️](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/624).
+					If you've verified they're participating in Hacktoberfest, add a note
+					to your post and any additional information you feel is helpful for
+					contributors.
 				</li>
 			</ol>
 
@@ -227,11 +206,13 @@ export default function Challenge() {
 			<ul>
 				<li>
 					The issue guide can be found pinned in our slack #monthly-challenge
-					channel and our maintainers checklist can be found{' '}
-					<a href="https://virtualcoffee.io/resources/open-source/oss-maintainer-checklist/">
-						here
-					</a>{' '}
-					as part of our Member Resources section on our site
+					channel and{' '}
+					<Link
+						to={`/resources/open-source/maintainer-guide#repository-checklist`}
+					>
+						our maintainers checklist
+					</Link>{' '}
+					can be found as part of our Member Resources section on our site
 				</li>
 				<li>
 					<a href="https://github.com/tkshill/Template/wiki/A-Starter-Guide-to-Open-Source-Project-Maintenance">
