@@ -196,8 +196,8 @@ export default function Challenge() {
 				</li>
 				<li>
 					If the repository does meet the checklist requirements, post the
-					repository in the [discussion Hacktoberfest 2022 - Repositories we
-					❤️](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/624).
+					repository in the <a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/624">discussion Hacktoberfest 2022 - Repositories we
+					❤️</a>.
 					If you've verified they're participating in Hacktoberfest, add a note
 					to your post and any additional information you feel is helpful for
 					contributors.
