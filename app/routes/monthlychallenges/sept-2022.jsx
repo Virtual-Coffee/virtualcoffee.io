@@ -45,8 +45,7 @@ export default function Challenge() {
 			</p>
 
 			<p>
-				<strong>Challenge Team Leads & Facilitators</strong>: Aurelie Verrot &
-				Andrew Bush
+				<strong>Challenge Team Leads & Facilitators</strong>: BekahHW & Dan Ott
 			</p>
 
 			<hr />
