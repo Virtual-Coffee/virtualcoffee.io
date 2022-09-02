@@ -40,8 +40,8 @@ export default function Challenge() {
 					our checklist
 				</a>{' '}
 				to make sure their projects are ready for Hacktoberfest contributions,
-				and our contributors will be looking at their favorite repos and writing
-				good issues as needed.
+				and our contributors will be looking at their favorite repos, evaluating them based on the guide, and writing
+				good issues as needed to fulfill the criteria.
 			</p>
 
 			<p>
@@ -59,8 +59,8 @@ export default function Challenge() {
 				complete the checklist before the end of September.
 			</p>
 			<p>
-				<strong>Contributors</strong>: Following the guide, create and submit a
-				good issue to one of your favorite open source repos.
+				<strong>Contributors</strong>: Following the guide, evaluate an open-source project to VC-verify it as a good project to contribute to. If the repository doesn't meet our standards, create and submit
+				good issues to suggest updates.
 			</p>
 
 			<h2>Maintainers</h2>
@@ -153,7 +153,7 @@ export default function Challenge() {
 					for issues
 				</li>
 				<li>
-					The project should have a history of healthy interactions with
+					We like to see a history of healthy interactions with
 					contributors. Resources:
 					<br />
 					<ul>
@@ -219,7 +219,7 @@ export default function Challenge() {
 				</li>
 				<li>
 					If the repository does meet the checklist requirements, post the
-					repository in the discussion under the heading ## VC-Verified.
+					repository in the [discussion Hacktoberfest 2022 - Repositories we ❤️](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/624). If you've verified they're participating in Hacktoberfest, add a note to your post and any additional information you feel is helpful for contributors.
 				</li>
 			</ol>
 
