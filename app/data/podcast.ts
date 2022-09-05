@@ -94,8 +94,8 @@ export interface PodcastEpisode {
 		guestBio: { renderHtml: string };
 		headshot: Array<{ path: string }>;
 	}>;
-	podcastEpisodeCard?: Array<{ path: string }>;
-	url?: string;
+	podcastEpisodeCard: Array<{ path: string }>;
+	url: string;
 }
 // type PodcastEpisodes = Partial<PodcastEpisode>[];
 type PodcastEpisodes = Pick<
@@ -108,6 +108,7 @@ type PodcastEpisodes = Pick<
 	| 'podcastSeason'
 	| 'podcastPublishDate'
 	| 'podcastBuzzsproutId'
+	| 'url'
 >[];
 type PodcastEpisodeResponse = {
 	entries: PodcastEpisode[];
