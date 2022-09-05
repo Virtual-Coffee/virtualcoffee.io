@@ -36,7 +36,7 @@ export const loader = async ({ params, request }: EpisodeLoaderArgs) => {
 	}
 	const transcript = await getTranscript({ id: episode.podcastBuzzsproutId });
 
-	const sanitizedEpisode = await sanitizeCmsData(episode);
+	const sanitizedEpisode = sanitizeCmsData(episode);
 	return json({
 		episode: sanitizedEpisode,
 		transcript,

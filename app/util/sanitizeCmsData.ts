@@ -2,14 +2,18 @@ import sanitize from 'sanitize-html';
 
 interface DirtyData {
 	[key: string]: any;
-	sanitizedHtml?: string;
 }
-type SanitizeData = DirtyData | DirtyData[];
+type SanitizedData<T> = T & {
+	sanitizedHtml: string;
+};
+type DataToSanitize = DirtyData | DirtyData[];
 
-export async function sanitizeCmsData<T>(data: T): Promise<T> {
+export function sanitizeCmsData<T>(data: T): SanitizedData<T> {
 	// const sanitize = await import('sanitize-html').then((mod) => mod.default);
 
-	function sanitizeInternal(data: DirtyData | DirtyData[]): T | SanitizeData {
+	function sanitizeInternal(
+		data: DirtyData | DirtyData[],
+	): SanitizedData<T> | DataToSanitize {
 		if (Array.isArray(data)) {
 			return data.map((o) => sanitizeInternal(o));
 		} else if (typeof data === 'object') {
@@ -17,7 +21,7 @@ export async function sanitizeCmsData<T>(data: T): Promise<T> {
 				if (key === 'renderHtml') {
 					return {
 						...obj,
-						sanitizedHtml: sanitize(data[key], { ...sanitizeOptions }),
+						sanitizedHtml: sanitize(data[key], sanitizeOptions),
 					};
 				} else {
 					return {
@@ -31,7 +35,7 @@ export async function sanitizeCmsData<T>(data: T): Promise<T> {
 		}
 	}
 
-	return sanitizeInternal(data) as T;
+	return sanitizeInternal(data) as SanitizedData<T>;
 }
 
 export async function sanitizeHtml(html: string) {
@@ -39,7 +43,7 @@ export async function sanitizeHtml(html: string) {
 	return sanitize(html, sanitizeOptions);
 }
 
-const sanitizeOptions = {
+const sanitizeOptions: sanitize.IOptions = {
 	allowedTags: [
 		'a',
 		'img',
