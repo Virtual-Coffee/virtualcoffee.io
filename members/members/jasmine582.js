@@ -17,7 +17,7 @@ module.exports = {
 	accounts: [
 		{
 			type: 'linkedin',
-			username: 'https://www.linkedin.com/in/jasminereesedeveloper',
+			username: 'jasminereesedeveloper',
 		},
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
