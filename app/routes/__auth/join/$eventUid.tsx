@@ -1,16 +1,8 @@
 import { json, redirect } from '@remix-run/node';
 import type { LoaderFunction } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
-import { authenticate } from '~/auth/auth.server';
+import { useLoaderData } from '@remix-run/react';
 import { CmsActions } from '~/api/cms.server';
-import type {
-	Event,
-	SafeEvent,
-	Calendar,
-	User,
-	EventLoaderData,
-} from '~/api/cms.server';
-import { DateTime } from 'luxon';
+import type { Event, EventLoaderData } from '~/api/types';
 import SingleTask from '~/components/layouts/SingleTask';
 import Alert from '~/components/app/Alert';
 

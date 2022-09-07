@@ -5,3 +5,5 @@ export class CmsError extends Error {
 		this.data = data;
 	}
 }
+
+export type CmsErrors = Error | InstanceType<typeof CmsError>;
