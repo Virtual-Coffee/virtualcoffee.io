@@ -1,13 +1,20 @@
 import { Form, useActionData, useCatch, Link } from '@remix-run/react';
-import { json, redirect } from '@remix-run/node';
-import { authenticator, getUser } from '~/auth/auth.server';
+import { json } from '@remix-run/node';
+import type { ActionArgs, LoaderArgs, TypedResponse } from '@remix-run/node';
+import { authenticator } from '~/auth/auth.server';
 import { AuthorizationError } from 'remix-auth';
 import SingleTask from '~/components/layouts/SingleTask';
 import Alert from '~/components/app/Alert';
 import { Button } from '~/components/app/Button';
 import { TextInput } from '~/components/app/Forms';
 
-function LogInForm({ error, redirectOnSuccess }) {
+function LogInForm({
+	error,
+	redirectOnSuccess,
+}: {
+	error?: string;
+	redirectOnSuccess?: string | null;
+}) {
 	return (
 		<SingleTask title="Sign in to your account">
 			<Form
@@ -79,22 +86,9 @@ export function CatchBoundary() {
 	return <LogInForm error={caught.data} />;
 }
 
-// First we create our UI with the form doing a POST and the inputs with the
-// names we are going to use in the strategy
-export default function Screen() {
-	// const { redirectOnSuccess } = useLoaderData();
-	const redirectOnSuccess = null;
-	const actionData = useActionData();
-
-	return (
-		<LogInForm
-			error={actionData?.message}
-			redirectOnSuccess={redirectOnSuccess}
-		/>
-	);
-}
-
-export let action = async ({ request }) => {
+export let action = async ({
+	request,
+}: ActionArgs): Promise<TypedResponse<{ message: string }>> => {
 	// we call the method with the name of the strategy we want to use and the
 	// request object, optionally we pass an object with the URLs we want the user
 	// to be redirected to after a success or a failure
@@ -103,9 +97,10 @@ export let action = async ({ request }) => {
 	const redirectOnSuccess = url.searchParams.get('redirectOnSuccess');
 
 	try {
-		return await authenticator.authenticate('user-pass', request, {
+		await authenticator.authenticate('user-pass', request, {
 			successRedirect: redirectOnSuccess || '/membership',
 		});
+		throw new Error('Unknown error');
 	} catch (error) {
 		// Because redirects work by throwing a Response, you need to check if the
 		// caught error is a response and return it or throw it again
@@ -126,7 +121,7 @@ export let action = async ({ request }) => {
 // Finally, we can export a loader function where we check if the user is
 // authenticated with `authenticator.isAuthenticated` and redirect to the
 // dashboard if it is or return null if it's not
-export let loader = async ({ request }) => {
+export let loader = async ({ request }: LoaderArgs) => {
 	const url = new URL(request.url);
 	const redirectOnSuccess = url.searchParams.get('redirectOnSuccess');
 
@@ -134,3 +129,18 @@ export let loader = async ({ request }) => {
 		successRedirect: redirectOnSuccess || '/membership',
 	});
 };
+
+// First we create our UI with the form doing a POST and the inputs with the
+// names we are going to use in the strategy
+export default function Screen() {
+	// const { redirectOnSuccess } = useLoaderData();
+	const redirectOnSuccess = null;
+	const actionData = useActionData<typeof action>();
+
+	return (
+		<LogInForm
+			error={actionData?.message}
+			redirectOnSuccess={redirectOnSuccess}
+		/>
+	);
+}
