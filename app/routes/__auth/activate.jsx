@@ -1,37 +1,30 @@
-import { Form, Link, useLoaderData, useCatch } from '@remix-run/react';
-import {
-	ActionFunction,
-	json,
-	LoaderFunction,
-	redirect,
-} from '@remix-run/node';
-import { authenticator } from '~/auth/auth.server';
-import { sessionStorage } from '~/auth/session.server';
-import { AuthorizationError } from 'remix-auth';
+import { Link, useLoaderData, useCatch } from '@remix-run/react';
+import { json, redirect } from '@remix-run/node';
 import { CmsAuth } from '~/api/cmsauth.server';
-import { CmsError } from '~/api/util';
+import SingleTask from '~/components/layouts/SingleTask';
+import Alert from '~/components/app/Alert';
 
 export function CatchBoundary() {
 	const caught = useCatch();
 
 	console.log({ caught });
 
-	return <div>Some error</div>;
+	return (
+		<SingleTask title="Activate Account">
+			<Alert title="There was an error activating your account." type="danger">
+				<p>Please try again.</p>
+			</Alert>
+		</SingleTask>
+	);
 }
+
 export function ErrorBoundary({ error }) {
 	return (
-		<div className="py-5">
-			<div className="container">
-				<div className="bodycopy">
-					<div className="alert alert-danger">
-						<div>
-							<strong>There was an error activating your account:</strong>
-						</div>
-						<div>{error.message || 'Server error.'}</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		<SingleTask title="Activate Account">
+			<Alert title="There was an error activating your account:" type="danger">
+				{error.message || 'Server error.'}
+			</Alert>
+		</SingleTask>
 	);
 }
 
@@ -42,12 +35,13 @@ export default function Screen() {
 	console.log({ loaderData });
 
 	return (
-		<div>
-			<div>Thank you, you are now activated!</div>
-			<div>
-				<Link to="/login">Log In</Link>
-			</div>
-		</div>
+		<SingleTask title="Activate Account">
+			<Alert type="success" title="Account Activated!">
+				<div>
+					<Link to="/login">Log In</Link>
+				</div>
+			</Alert>
+		</SingleTask>
 	);
 }
 

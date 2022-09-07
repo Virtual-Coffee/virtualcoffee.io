@@ -9,34 +9,16 @@ import Alert from '~/components/app/Alert';
 import { Button } from '~/components/app/Button';
 import { TextInput } from '~/components/app/Forms';
 
-export function CatchBoundary() {
-	const caught = useCatch();
-
-	console.log({ caught });
-
-	return <div>Some error.</div>;
-}
-
-// First we create our UI with the form doing a POST and the inputs with the
-// names we are going to use in the strategy
-export default function Screen() {
-	const actionData = useActionData();
-
-	if (actionData?.successMessage) {
-		return (
-			<div className="alert alert-success">{actionData.successMessage}</div>
-		);
-	}
-
+function ForgotPassword({ errorMessage }) {
 	return (
 		<SingleTask title="Reset Password">
 			<Form method="post" reloadDocument className="space-y-6">
-				{actionData?.message && (
+				{errorMessage && (
 					<Alert
 						title="There was an error resetting your password."
 						type="danger"
 					>
-						<p>{actionData?.message}</p>
+						<p>{errorMessage}</p>
 					</Alert>
 				)}
 
@@ -50,6 +32,36 @@ export default function Screen() {
 			</Form>
 		</SingleTask>
 	);
+}
+
+export function CatchBoundary() {
+	const caught = useCatch();
+
+	console.log({ caught });
+
+	return (
+		<SingleTask title="Reset Password">
+			<Alert title="There was an error resetting your password." type="danger">
+				<p>Please try again.</p>
+			</Alert>
+		</SingleTask>
+	);
+}
+
+export default function Screen() {
+	const actionData = useActionData();
+
+	if (actionData?.successMessage) {
+		return (
+			<SingleTask title="Reset Password">
+				<Alert title="Password Reset" type="success">
+					{actionData.successMessage}
+				</Alert>
+			</SingleTask>
+		);
+	}
+
+	return <ForgotPassword errorMessage={actionData?.message} />;
 }
 
 export let action = async ({ request }) => {

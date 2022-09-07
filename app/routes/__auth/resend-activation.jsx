@@ -4,13 +4,51 @@ import { authenticator } from '~/auth/auth.server';
 import { AuthorizationError } from 'remix-auth';
 import { CmsAuth } from '~/api/cmsauth.server';
 import { CmsError } from '~/api/util';
+import SingleTask from '~/components/layouts/SingleTask';
+import Alert from '~/components/app/Alert';
+import { Button } from '~/components/app/Button';
+import { TextInput } from '~/components/app/Forms';
+
+function ResendActivation({ errorMessage }) {
+	return (
+		<SingleTask title="Resend Activation">
+			<Form method="post" reloadDocument className="space-y-6">
+				{errorMessage && (
+					<Alert
+						title="There was an error resending your activation email."
+						type="danger"
+					>
+						<p>{errorMessage}</p>
+					</Alert>
+				)}
+
+				<TextInput label="Email Address" type="email" name="email" required />
+
+				<div>
+					<Button type="submit" fullWidth>
+						Resend Activation
+					</Button>
+				</div>
+			</Form>
+		</SingleTask>
+	);
+}
 
 export function CatchBoundary() {
 	const caught = useCatch();
 
 	console.log({ caught });
 
-	return <div>Some error.</div>;
+	return (
+		<SingleTask title="Resend Activation">
+			<Alert
+				title="There was an error resending your activation email."
+				type="danger"
+			>
+				<p>Please try again.</p>
+			</Alert>
+		</SingleTask>
+	);
 }
 
 // First we create our UI with the form doing a POST and the inputs with the
@@ -20,23 +58,15 @@ export default function Screen() {
 
 	if (actionData?.successMessage) {
 		return (
-			<div className="alert alert-success">{actionData.successMessage}</div>
+			<SingleTask title="Resend Activation">
+				<Alert title="Activation Email Sent" type="success">
+					{actionData.successMessage}
+				</Alert>
+			</SingleTask>
 		);
 	}
 
-	return (
-		<Form method="post" reloadDocument>
-			<legend>Resend Activation</legend>
-			{actionData?.message && (
-				<div className="alert alert-danger">
-					<p>{actionData?.message}</p>
-				</div>
-			)}
-			<input type="email" name="email" required />
-
-			<button>Resend Activation</button>
-		</Form>
-	);
+	return <ResendActivation errorMessage={actionData?.message} />;
 }
 
 export let action = async ({ request }) => {

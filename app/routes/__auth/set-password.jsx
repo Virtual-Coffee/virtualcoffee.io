@@ -10,13 +10,23 @@ import { authenticator } from '~/auth/auth.server';
 import { CmsAuth } from '~/api/cmsauth.server';
 import { CmsError } from '~/api/util';
 import { redirect } from '@remix-run/node';
+import SingleTask from '~/components/layouts/SingleTask';
+import Alert from '~/components/app/Alert';
+import { Button } from '~/components/app/Button';
+import { TextInput } from '~/components/app/Forms';
 
 export function CatchBoundary() {
 	const caught = useCatch();
 
 	console.log({ caught });
 
-	return <div>Some error.</div>;
+	return (
+		<SingleTask title="Set Password">
+			<Alert title="There was an error resetting your password." type="danger">
+				<p>Please try again.</p>
+			</Alert>
+		</SingleTask>
+	);
 }
 
 // First we create our UI with the form doing a POST and the inputs with the
@@ -27,31 +37,44 @@ export default function Screen() {
 
 	if (actionData?.successMessage) {
 		return (
-			<div className="alert alert-success">
-				<p>{actionData.successMessage}</p>
-				<p>
-					<Link to="/login">Log In</Link>
-				</p>
-			</div>
+			<SingleTask title="Set Password">
+				<Alert type="success" title="Password Set!">
+					<p>{actionData.successMessage}</p>
+					<p>
+						<Link to="/login">Log In</Link>
+					</p>
+				</Alert>
+			</SingleTask>
 		);
 	}
 
 	return (
-		<Form
-			action={`/set-password?id=${id}&code=${code}`}
-			method="post"
-			reloadDocument
-		>
-			<legend>Reset Password</legend>
-			{actionData?.message && (
-				<div className="alert alert-danger">
-					<p>{actionData?.message}</p>
+		<SingleTask title="Set Password">
+			<Form
+				action={`/set-password?id=${id}&code=${code}`}
+				method="post"
+				reloadDocument
+				className="space-y-6"
+			>
+				{actionData?.message && (
+					<Alert
+						title="There was an error resetting your password."
+						type="danger"
+					>
+						<p>{actionData?.message}</p>
+					</Alert>
+				)}
+				<TextInput
+					label="New Password"
+					type="password"
+					name="password"
+					required
+				/>
+				<div>
+					<Button type="submit">Set Password</Button>
 				</div>
-			)}
-			<input type="password" name="password" required />
-
-			<button>Reset Password</button>
-		</Form>
+			</Form>
+		</SingleTask>
 	);
 }
 
