@@ -4,6 +4,10 @@ import { authenticator } from '~/auth/auth.server';
 import { AuthorizationError } from 'remix-auth';
 import { CmsAuth } from '~/api/cmsauth.server';
 import { CmsError } from '~/api/util';
+import SingleTask from '~/components/layouts/SingleTask';
+import Alert from '~/components/app/Alert';
+import { Button } from '~/components/app/Button';
+import { TextInput } from '~/components/app/Forms';
 
 export function CatchBoundary() {
 	const caught = useCatch();
@@ -25,17 +29,26 @@ export default function Screen() {
 	}
 
 	return (
-		<Form method="post" reloadDocument>
-			<legend>Reset Password</legend>
-			{actionData?.message && (
-				<div className="alert alert-danger">
-					<p>{actionData?.message}</p>
-				</div>
-			)}
-			<input type="email" name="email" required />
+		<SingleTask title="Reset Password">
+			<Form method="post" reloadDocument className="space-y-6">
+				{actionData?.message && (
+					<Alert
+						title="There was an error resetting your password."
+						type="danger"
+					>
+						<p>{actionData?.message}</p>
+					</Alert>
+				)}
 
-			<button>Reset Password</button>
-		</Form>
+				<TextInput label="Email Address" type="email" name="email" required />
+
+				<div>
+					<Button type="submit" fullWidth>
+						Reset Password
+					</Button>
+				</div>
+			</Form>
+		</SingleTask>
 	);
 }
 
