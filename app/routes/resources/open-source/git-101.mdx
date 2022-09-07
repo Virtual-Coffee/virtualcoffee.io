@@ -88,8 +88,7 @@ There are three ways to clone a repository:
 	</dd>
 	<dt>[GitHub CLI](https://cli.github.com)</dt>
 	<dd>
-		If you use GitHub CLI, you can simply copy and run the command in your
-		terminal.
+		If you use GitHub CLI, you can copy and run the command in your terminal.
 	</dd>
 </dl>
 
@@ -100,7 +99,7 @@ When you want to start working on a change, you want to clone the project's repo
 To do this:
 
 1. Go to your forked repository page on GitHub and click the green "Code" button.
-2. Then you can choose how you want to clone it. Through HTTPS, SSH, or GitHub CLI. For this example, we will use HTTPS.
+2. Then, you can choose how you want to clone it. Through HTTPS, SSH, or GitHub CLI. For this example, we will use HTTPS.
 3. Copy the URL.
 4. In your terminal, run:
 
@@ -149,61 +148,103 @@ Change `new-branch-name` to whatever you want.
 
 ### Add and commit changes
 
-Say that you've finished making changes, and now you're ready to push your changes to GitHub.
+Say that you've finished making changes, and now you're ready to push your changes to GitHub. You first need to add and commit your changes.
 
 #### Add changes
 
-Run `git add .` if you want to add all your changes to the Git staging area.
+Run `git add .` to add all new and modified files to the Git staging area.
 
-Or run `git add path` if you want to stage a specific directory or file. <br />
-Change `path` to the path of the file that you want to add.
+Or run `git add path` if you want to add a specific directory or file. <br />
+Change `path` to the path of the file that you want to add. For example:
+
+```bash
+git add styles/header.css
+```
 
 #### Commit changes
 
 Now you can 'save' your changes by committing with this command:
 
 ```bash
-git commit -m "message"
+git commit -m "Your message"
 ```
 
-Change `message` into a short description of what changes you've made. For example:
+Change `Your message` into a short description of what changes you've made. For example:
 
 ```bash
 git commit -m "Add a header to the homepage"
 ```
+
+#### `git status`
 
 You can check if your changes have been added or committed by running the `git status` command in your terminal.
 This command will let you know the status of your working git.
 
 ### Fetching `upstream` changes
 
-Sometimes, someone works in the same file as you, and maybe, they already pushed their changes while you were working on yours locally.
+Sometimes, someone works in the same file as you. And maybe, that person already pushed their changes and got their pull request merged into the `main` branch on the `upstream` repository while you are working on yours locally.
 So you always want to ensure that your fork is up to date with the `upstream` repository.
 
 1. Go to your forked repository on GitHub.
-2. Click the "Fetch upstream" button under the green "Code" button.
-3. If the button is inactive, then the repository has no changes. But when the button is green with "Update branch" stated, you want to click it.
+2. Click the "Sync fork" button under the green "Code" button.
+3. If the buttons are inactive, the repository has no changes. In that case, you can [push your changes](/resources/open-source/git-101#push-changes) and [make a pull request](/resources/open-source/git-101#making-a-pull-request). <br />
+   But when the button is green with "Update branch" stated, you want to click it.
 
 Now your fork has the same update as the `upstream` repository.
 
 ### Synchronizing changes locally
 
-Now that your `origin` repository is in sync with the `upstream`, you want to synchronize these changes on your local as well, so when you push the changes, you already have the most updated content.
+Now that your `origin` repository is in sync with the `upstream`, you want to synchronize these changes on your local as well. That way, you already have the most updated content when you push your changes.
 
 You want to fetch and merge the latest update into your working branch.
 In your terminal, make sure that you're in your working branch. Then run:
 
 ```bash
-git pull origin working-branch-name
+git pull origin main
 ```
 
-That command will pull the updates from the `working-branch-name` branch from the `origin` repo and merge them into your local working branch.
+Change `main` to `master` if the repository uses `master` as the name of its default branch. <br />
+The command fetches the updated `main` branch from the `origin` repo and merges that branch into your local working branch.
 
-In this step, you might need to solve some conflicts if any.
+In this step, you might first need to resolve some conflicts, if any.
+
+### Resolve conflicts
+
+It's common to encounter git conflicts when contributing to open source.
+Conflicts usually occur when changes are on the same line(s), in the same file(s), from 2 different branches.
+
+Say you forget or haven't fetched the `upstream` and synchronized it with the `origin` and local repositories before pushing your changes.
+When you're about to create a pull request on GitHub, you will get notified about the conflicts, if any.
+
+There are two ways to resolve conflicts:
+
+1. Directly on GitHub
+
+   You will get a notification prompt that your branch has conflicts that must be resolved. <br />
+   Click on the "Resolve conflict" button to fix the conflicts.
+
+   ![conflict-github.JPG](https://cdn.hashnode.com/res/hashnode/image/upload/v1646421795534/cuEiIEKgT.JPG)
+
+   However, the best way is to resolve them in your local environment.
+
+2. In the local environment
+
+   - Do all the steps in [Fetching `upstream` changes](/resources/open-source/git-101#fetching-upstream-changes) and [Synchronizing changes locally](/resources/open-source/git-101#synchronizing-changes-locally).<br />  
+     Then you will see this in your text editor:
+
+     ![git conflict.jpg](https://cdn.hashnode.com/res/hashnode/image/upload/v1662321487768/YXuwvPrzz.jpg)
+
+   - Select one of the options: - Accept Current Change — when you _only_ want to keep your change.
+     - Accept Incoming Change — when you _only_ want to keep the incoming change.
+     - Accept Both Changes — when you want to keep both your and the incoming changes.
+
+After resolving the conflicts, if necessary, you can fix and adjust the codes. Then [add and commit the changes](/resources/open-source/git-101#add-and-commit-changes).
+
+_Credit: [How To Use GitHub For Project Collaboration — Based on Agile Method — Ayu Adiati](https://adiati.com/how-to-use-github-for-project-collaboration-based-on-agile-method)_
 
 ### Push changes
 
-You have already added and committed your changes and fetching and synchronizing updates. Now you can push your changes to the remote repository.
+You have already fetched and synchronized updates and added and committed the changes. Now you can push your changes to the remote repository.
 Remember that you will push these changes to the `origin` repository.
 
 To do so, run this command in your terminal:
@@ -288,7 +329,7 @@ Each commit will automatically contain either your or Alice's name. So, both of 
 
 ### Synchronous collaboration
 
-Say sometimes you work synchronously with Alice on the same issue. All steps are the same as the asynchronous collaboration above. But in sync collaboration, you might want to [include them in your commit message](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors) so you can commit together.
+Say sometimes you work synchronously with Alice on the same issue. All steps are the same as the asynchronous collaboration above. But in sync collaboration, you might want to [include them in your commit message](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors), so you can commit together.
 
 ```bash
 git commit -m  "Add new feature
@@ -303,7 +344,7 @@ Co-authored-by: Alice <alice@email.com>"
 - Always give two empty spaces before writing the line "Co-authored-by".
 - Do not close the commit message with double quotes (") before you add the "Co-authored-by:".
 - Close the commit message with double quotes (") at the last line of "Co-authored-by:".
-- Use the email address that is associated with your teammate's GitHub account.
+- Use the email address associated with your teammate's GitHub account.
 
 ---
 
@@ -329,7 +370,6 @@ These articles can give you some inspiration:
 - [GitHub Learning Lab](https://lab.github.com/)
 - [GitHub Docs](https://docs.github.com/en/get-started/quickstart/git-and-github-learning-resources)
 - [TwilioQuest — FOREST OF OPEN SOURCE](https://www.twilio.com/quest/learn/open-source)
-- [How To Use GitHub For Project Collaboration — Based on Agile Method — Ayu Adiati](https://adiati.com/how-to-use-github-for-project-collaboration-based-on-agile-method)
 
 Check out [our discussions board](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/529) if you know of resources we should add to this section! We'd love to hear from you!
 
