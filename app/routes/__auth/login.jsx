@@ -4,6 +4,8 @@ import { authenticator, getUser } from '~/auth/auth.server';
 import { AuthorizationError } from 'remix-auth';
 import SingleTask from '~/components/layouts/SingleTask';
 import Alert from '~/components/app/Alert';
+import { Button } from '~/components/app/Button';
+import { TextInput } from '~/components/app/Forms';
 
 function LogInForm({ error, redirectOnSuccess }) {
 	return (
@@ -30,57 +32,25 @@ function LogInForm({ error, redirectOnSuccess }) {
 					<Alert type="info" title="Please log in to see this content." />
 				)}
 
-				<div>
-					<label
-						htmlFor="email"
-						className="block text-sm font-medium text-gray-700"
-					>
-						Email address
-					</label>
-					<div className="mt-1">
-						<input
-							id="email"
-							name="email"
-							type="email"
-							autoComplete="email"
-							required
-							className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
-						/>
-					</div>
-				</div>
+				<TextInput
+					label="Email address"
+					id="email"
+					name="email"
+					type="email"
+					autoComplete="email"
+					required
+				/>
 
-				<div>
-					<label
-						htmlFor="password"
-						className="block text-sm font-medium text-gray-700"
-					>
-						Password
-					</label>
-					<div className="mt-1">
-						<input
-							id="password"
-							name="password"
-							type="password"
-							autoComplete="current-password"
-							required
-							className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
-						/>
-					</div>
-				</div>
+				<TextInput
+					label="Password"
+					id="password"
+					name="password"
+					type="password"
+					autoComplete="current-password"
+					required
+				/>
 
 				<div className="flex items-center justify-end">
-					{/* <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-sky-600 focus:ring-sky-500 border-gray-300 rounded"
-                  />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                    Remember me
-                  </label>
-                </div> */}
-
 					<div className="text-sm">
 						<Link
 							to="/forgot-password"
@@ -92,12 +62,9 @@ function LogInForm({ error, redirectOnSuccess }) {
 				</div>
 
 				<div>
-					<button
-						type="submit"
-						className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
-					>
-						Sign in
-					</button>
+					<Button type="submit" fullWidth>
+						Sign In
+					</Button>
 				</div>
 			</Form>
 		</SingleTask>
