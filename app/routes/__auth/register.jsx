@@ -10,191 +10,143 @@ import { sessionStorage } from '~/auth/session.server';
 import { AuthorizationError } from 'remix-auth';
 import { CmsAuth } from '~/api/cmsauth.server';
 import { CmsError } from '~/api/util';
+import SingleTask from '~/components/layouts/SingleTask';
+import Alert from '~/components/app/Alert';
+import { Button } from '~/components/app/Button';
+import { TextInput, FieldSet, TextAreaInput } from '~/components/app/Forms';
+import LeadText from '~/components/content/LeadText';
 
 function SignUpForm({ errorMessage }) {
 	return (
-		<Form method="post" reloadDocument>
-			<legend>Join Virtual Coffee</legend>
-			{errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-			<div className="py-5">
-				<div className="container">
-					<div className="bodycopy">
-						<div className="lead mb-5">
-							<p>
-								Virtual coffee is, and always will be, a genuine community of
-								people who value and prioritize supporting one another. We
-								absolutely love the closeness of this community and know its one
-								of the many things that sets us apart.
-							</p>
-							<p>
-								We strongly value getting to see each other every
-								Tuesday/Thursday and at the many other events we host. Everyone
-								here is amazing and we want to continue to be able to support
-								your needs and personal growth. In order to support you as a
-								community member, we'd love to know a little bit more about you.
-							</p>
-						</div>
+		<SingleTask title="Join Virtual Coffee" wide>
+			<Form method="post" reloadDocument className="space-y-6">
+				{errorMessage && <Alert type="danger">{errorMessage}</Alert>}
+				<div className="prose prose-lg">
+					<p>
+						Virtual coffee is, and always will be, a genuine community of people
+						who value and prioritize supporting one another. We absolutely love
+						the closeness of this community and know its one of the many things
+						that sets us apart.
+					</p>
+					<p>
+						We strongly value getting to see each other every Tuesday/Thursday
+						and at the many other events we host. Everyone here is amazing and
+						we want to continue to be able to support your needs and personal
+						growth. In order to support you as a community member, we'd love to
+						know a little bit more about you.
+					</p>
+					<h2>Tell us about yourself!</h2>
+				</div>
 
-						<input type="hidden" name="formID" value="{{id}}" />
-						<h2>Tell us about yourself!</h2>
-						<fieldset>
-							<legend>Required Information:</legend>
-							<p className="text-muted">
-								Just a couple quick pieces of info that we'll need:
-							</p>
-							<div className="form-group">
-								<label htmlFor="formName">Your Name</label>
-								<input
-									type="text"
-									className="form-control"
-									id="formName"
-									name="userYourName"
-									aria-describedby="nameHelp"
-									required
-								/>
-								<small id="nameHelp" className="form-text text-muted">
-									Required
-								</small>
-							</div>
-							<div className="form-group">
-								<label htmlFor="formEmail">Email</label>
-								<input
-									type="email"
-									className="form-control"
-									id="formEmail"
-									name="email"
-									aria-describedby="emailHelp"
-									required
-								/>
-								<small id="emailHelp" className="form-text text-muted">
-									Required. We'll never share your email with anyone else.
-								</small>
-							</div>
-							<div className="form-group">
-								<label htmlFor="formPassword">Set a Password</label>
-								<input
-									type="password"
-									className="form-control"
-									id="formPassword"
-									name="password"
-									required
-								/>
-							</div>
-						</fieldset>
-						<fieldset>
-							<legend>Tell us some more (if you want)!</legend>
-							<div className="form-group">
-								<label htmlFor="pronouns">Your preferred pronouns</label>
-								<input
-									type="text"
-									className="form-control"
-									id="pronouns"
-									name="userPronouns"
-								/>
-							</div>
-							<div className="form-group">
-								<label htmlFor="githubUsername">
-									Your GitHub username (if you have one)
-								</label>
-								<div className="input-group mb-3">
-									<div className="input-group-prepend">
-										<span
-											className="input-group-text"
-											id="githubUsername-addon"
-										>
-											https://github.com/
-										</span>
-									</div>
-									<input
-										type="text"
-										className="form-control"
-										id="githubUsername"
-										name="userGithubusername"
-										aria-describedby="githubUsername-addon"
-									/>
-								</div>
-							</div>
-							<div className="form-group">
-								<label htmlFor="howDidYouHearAboutUs">
-									How did you hear about Virtual Coffee?
-								</label>
-								<textarea
-									className="form-control"
-									id="howDidYouHearAboutUs"
-									name="userHowDidYouHearAboutUs"
-									rows="3"
-								></textarea>
-							</div>
-							<div className="form-group">
-								<label htmlFor="journey">
-									Where are you in your coding journey?
-								</label>
-								<textarea
-									className="form-control"
-									id="journey"
-									name="userWhereAreYouInYourCodingJourney"
-									rows="3"
-								></textarea>
-							</div>
-							<div className="form-group">
-								<label htmlFor="codeInterests">
-									What sorts of code-related things are you interested in?
-								</label>
-								<textarea
-									className="form-control"
-									id="codeInterests"
-									name="userCodeInterests"
-									rows="3"
-								></textarea>
-							</div>
-							<div className="form-group">
-								<label htmlFor="virtualCoffee">
-									What are you hoping to get out of joining Virtual Coffee?
-								</label>
-								<textarea
-									className="form-control"
-									id="virtualCoffee"
-									name="userHopingVirtualCoffee"
-									rows="3"
-								></textarea>
-							</div>
-						</fieldset>
+				<input type="hidden" name="formID" value="{{id}}" />
+				<FieldSet
+					legend="Required Information"
+					legendDesc="Just a couple quick pieces of info that we'll need:"
+				>
+					<TextInput
+						label="Your Name"
+						id="formName"
+						help="Required."
+						type="text"
+						required
+					/>
 
-						<p className="lead">
-							Please take a moment to read our{' '}
-							<a
-								href="/code-of-conduct"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Code of Conduct
-							</a>
-							.
-						</p>
+					<TextInput
+						label="Email"
+						id="formEmail"
+						help="Required. We'll never share your email with anyone else."
+						type="email"
+						autoComplete="email"
+						required
+					/>
 
-						<label className="form-group form-check">
-							<input
-								type="checkbox"
-								name="agree"
-								className="form-check-input"
-								required
-								value="agree"
-							/>
-							<span className="form-check-label">
-								I've read the Code of Conduct and understand my responsibilities
-								as a member of the Virtual Coffee community
-							</span>
+					<TextInput
+						label="Set a Password"
+						id="password"
+						type="password"
+						autoComplete="current-password"
+						required
+					/>
+				</FieldSet>
+				<FieldSet legend="Tell us some more (if you want)!">
+					<TextInput
+						label="Your preferred pronouns"
+						id="userPronouns"
+						type="text"
+					/>
+
+					<TextInput
+						label="Your GitHub username"
+						help="(if you have one)"
+						id="userGithubusername"
+						type="text"
+						leftAddOn="https://github.com/"
+					/>
+
+					<TextAreaInput
+						label="How did you hear about Virtual Coffee?"
+						name="userHowDidYouHearAboutUs"
+						rows="3"
+					/>
+
+					<TextAreaInput
+						label="Where are you in your coding journey?"
+						name="userWhereAreYouInYourCodingJourney"
+						rows="3"
+					/>
+
+					<TextAreaInput
+						label="What sorts of code-related things are you interested in?"
+						name="userCodeInterests"
+						rows="3"
+					/>
+
+					<TextAreaInput
+						label="What are you hoping to get out of joining Virtual Coffee?"
+						name="userHopingVirtualCoffee"
+						rows="3"
+					/>
+				</FieldSet>
+
+				<div className="prose prose-lg">
+					<p>
+						Please take a moment to read our{' '}
+						<a
+							href="/code-of-conduct"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Code of Conduct
+						</a>
+						.
+					</p>
+				</div>
+
+				<div class="relative flex items-start">
+					<div class="flex h-5 items-center">
+						<input
+							required
+							id="agree"
+							name="agree"
+							type="checkbox"
+							class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+						/>
+					</div>
+					<div class="ml-3 text-sm">
+						<label for="comments" class="font-medium text-gray-700">
+							I've read the Code of Conduct and understand my responsibilities
+							as a member of the Virtual Coffee community
 						</label>
-
-						<div className="text-right">
-							<button type="submit" className="btn btn-primary btn-lg">
-								Submit
-							</button>
-						</div>
 					</div>
 				</div>
-			</div>
-		</Form>
+
+				<div className="text-right">
+					<Button type="submit" color="primary">
+						Submit
+					</Button>
+				</div>
+			</Form>
+		</SingleTask>
 	);
 }
 
@@ -203,7 +155,7 @@ export function CatchBoundary() {
 
 	console.log({ caught });
 
-	return <SignUpForm errorMessage={caught.data} />;
+	return <SignUpForm errorMessage="There was an unknown error." />;
 }
 
 // First we create our UI with the form doing a POST and the inputs with the
