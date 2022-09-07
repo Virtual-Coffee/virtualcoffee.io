@@ -16,7 +16,7 @@ const sizes = {
 };
 
 const base =
-	'inline-flex items-center  border border-transparent shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2';
+	'inline-flex justify-center items-center border border-transparent shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2';
 
 export type ButtonProps<C extends React.ElementType> =
 	PolymorphicComponentPropsWithRef<
@@ -24,6 +24,7 @@ export type ButtonProps<C extends React.ElementType> =
 		{
 			size?: keyof typeof sizes;
 			color?: keyof typeof colors;
+			fullWidth?: boolean;
 		}
 	>;
 
@@ -32,6 +33,7 @@ const ButtonComponent = <T extends React.ElementType = 'button'>({
 	className,
 	size = 'md',
 	color = 'primary',
+	fullWidth,
 	children,
 	...rest
 }: ButtonProps<T>): React.ReactElement => {
@@ -39,7 +41,13 @@ const ButtonComponent = <T extends React.ElementType = 'button'>({
 
 	return (
 		<Component
-			className={classNames(base, sizes[size], colors[color], className)}
+			className={classNames(
+				base,
+				sizes[size],
+				colors[color],
+				fullWidth && 'w-full',
+				className,
+			)}
 			{...rest}
 		>
 			{children}
