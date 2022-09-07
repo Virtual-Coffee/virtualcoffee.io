@@ -8,7 +8,7 @@ export function getEpisodes({ limit = 5 }) {
 	return new Array(limit).fill(null).map((_, i) => {
 		const episode = limit - i;
 		const season = 1;
-		const name = faker.name.findName();
+		const name = faker.name.fullName();
 
 		return {
 			title: `${name} - ${faker.lorem.words(4)}`,
@@ -27,7 +27,7 @@ export function getEpisodes({ limit = 5 }) {
 
 export function getEpisode({ slug }) {
 	const today = DateTime.now();
-	const name = faker.name.findName();
+	const name = faker.name.fullName();
 	const season = parseInt(slug.slice(0, 2));
 	const episode = parseInt(slug.slice(2, 4));
 
