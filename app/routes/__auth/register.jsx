@@ -1,4 +1,4 @@
-import { Form, useActionData, useCatch } from '@remix-run/react';
+import { Form, Link, useActionData, useCatch } from '@remix-run/react';
 import {
 	ActionFunction,
 	json,
@@ -20,7 +20,29 @@ function SignUpForm({ errorMessage }) {
 	return (
 		<SingleTask title="Join Virtual Coffee" wide>
 			<Form method="post" reloadDocument className="space-y-6">
-				{errorMessage && <Alert type="danger">{errorMessage}</Alert>}
+				{errorMessage && (
+					<Alert type="danger" title="There was an issue registering you.">
+						<p>{errorMessage}</p>
+						{errorMessage.includes('has already been taken.') && (
+							<>
+								<p>
+									Try{' '}
+									<Link to="/login" className="font-semibold underline">
+										logging in
+									</Link>{' '}
+									instead, or{' '}
+									<Link
+										to="/forgot-password"
+										className="font-semibold underline"
+									>
+										resetting your password
+									</Link>{' '}
+									if you've forgotten it.
+								</p>
+							</>
+						)}
+					</Alert>
+				)}
 				<div className="prose prose-lg">
 					<p>
 						Virtual coffee is, and always will be, a genuine community of people
@@ -45,7 +67,7 @@ function SignUpForm({ errorMessage }) {
 				>
 					<TextInput
 						label="Your Name"
-						id="formName"
+						id="userYourName"
 						help="Required."
 						type="text"
 						required
@@ -53,7 +75,7 @@ function SignUpForm({ errorMessage }) {
 
 					<TextInput
 						label="Email"
-						id="formEmail"
+						id="email"
 						help="Required. We'll never share your email with anyone else."
 						type="email"
 						autoComplete="email"
@@ -122,18 +144,18 @@ function SignUpForm({ errorMessage }) {
 					</p>
 				</div>
 
-				<div class="relative flex items-start">
-					<div class="flex h-5 items-center">
+				<div className="relative flex items-start">
+					<div className="flex h-5 items-center">
 						<input
 							required
 							id="agree"
 							name="agree"
 							type="checkbox"
-							class="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+							className="h-4 w-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
 						/>
 					</div>
-					<div class="ml-3 text-sm">
-						<label for="comments" class="font-medium text-gray-700">
+					<div className="ml-3 text-sm">
+						<label htmlFor="agree" className="font-medium text-gray-700">
 							I've read the Code of Conduct and understand my responsibilities
 							as a member of the Virtual Coffee community
 						</label>
@@ -161,13 +183,34 @@ export function CatchBoundary() {
 // First we create our UI with the form doing a POST and the inputs with the
 // names we are going to use in the strategy
 export default function Screen() {
-	const actionData = useActionData();
-	console.log({ actionData });
+	// return <SignUpForm errorMessage={actionData?.message} />;
+	return (
+		<SingleTask title="Join Virtual Coffee" wide>
+			<div className="prose prose-lg">
+				<h2>✨ Coming Soon ✨</h2>
+				<p>
+					As we move into the third year of Virtual Coffee, the maintainers—with
+					the help of a team of invested community members—have decided to pause
+					the new membership while we work on finding the best ways to support
+					our existing community and define what the new year will look like for
+					us all.
+				</p>
 
-	return <SignUpForm errorMessage={actionData?.message} />;
+				<p>
+					<a href="https://twitter.com/VirtualCoffeeIO">Follow us on Twitter</a>{' '}
+					for the latest update while the new membership is paused.
+				</p>
+
+				<p>
+					You can find out more about our community and what we offer in our{' '}
+					<Link to="/resources/virtual-coffee">Member Resources section</Link>.
+				</p>
+			</div>
+		</SingleTask>
+	);
 }
 
-export let action = async ({ request }) => {
+export let xaction = async ({ request }) => {
 	try {
 		const form = await request.formData();
 
@@ -215,7 +258,7 @@ export let action = async ({ request }) => {
 // Finally, we can export a loader function where we check if the user is
 // authenticated with `authenticator.isAuthenticated` and redirect to the
 // dashboard if it is or return null if it's not
-export let loader = async ({ request }) => {
+export let xloader = async ({ request }) => {
 	// If the user is already authenticated redirect to /dashboard directly
 	return await authenticator.isAuthenticated(request, {
 		successRedirect: '/membership',
