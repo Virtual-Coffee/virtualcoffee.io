@@ -4,7 +4,7 @@ import {
 	CheckCircleIcon,
 	XCircleIcon,
 	InformationCircleIcon,
-} from '@heroicons/react/24/outline';
+} from '@heroicons/react/24/solid';
 
 export type AlertTypes = 'warning' | 'danger' | 'success' | 'info';
 
@@ -62,7 +62,7 @@ export default function Alert({
 						{title}
 					</h3>
 					{children && (
-						<div className={`mt-2 text-sm ${config[type].content}`}>
+						<div className={`mt-2 text-sm ${config[type].content} space-y-2`}>
 							{children}
 						</div>
 					)}
