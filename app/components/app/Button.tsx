@@ -39,6 +39,7 @@ const ButtonComponent = <T extends React.ElementType = 'button'>({
 	color = 'primary',
 	fullWidth,
 	children,
+	passedRef,
 	...rest
 }: ButtonProps<T>): React.ReactElement => {
 	const Component = as || 'button';
@@ -52,6 +53,7 @@ const ButtonComponent = <T extends React.ElementType = 'button'>({
 				fullWidth && 'w-full',
 				className,
 			)}
+			ref={passedRef}
 			{...rest}
 		>
 			{children}
