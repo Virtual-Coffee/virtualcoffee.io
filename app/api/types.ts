@@ -13,6 +13,7 @@ export type Event = {
 	eventJoinLink?: string;
 	eventLink?: string;
 	eventCalendarDescription?: string;
+	eventIcsLink?: string;
 };
 
 export type SafeEvent = Omit<Event, 'eventJoinLink'>;

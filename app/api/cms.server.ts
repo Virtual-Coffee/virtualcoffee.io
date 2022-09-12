@@ -10,6 +10,17 @@ import type {
 	User,
 	EventLoaderData,
 } from './types';
+import { ics } from 'calendar-link';
+import { sanitizeHtml } from '~/util/sanitizeCmsData';
+
+export function getIcsLink(event: Event) {
+	return ics({
+		title: event.title,
+		start: event.startDateLocalized,
+		end: event.endDateLocalized,
+		description: event.eventCalendarDescription,
+	});
+}
 
 export class CmsActions {
 	client: GraphQLClient;
@@ -23,6 +34,14 @@ export class CmsActions {
 				},
 			});
 		}
+	}
+
+	async enhanceEvent(event: Event): Promise<Event> {
+		event.eventCalendarDescription = await sanitizeHtml(
+			event.eventCalendarDescription,
+		);
+
+		return { ...event, eventIcsLink: getIcsLink(event) };
 	}
 
 	async authenticate(request: Request) {
@@ -153,7 +172,7 @@ export class CmsActions {
 			throw new CmsError('There was an error fetching the event.', response);
 		}
 
-		return response.solspace_calendar.event;
+		return await this.enhanceEvent(response.solspace_calendar.event);
 	}
 
 	async getEventsInRange({
@@ -221,7 +240,9 @@ export class CmsActions {
 			throw new CmsError('There was an error fetching events.', response);
 		}
 
-		return response.solspace_calendar.events;
+		return await Promise.all(
+			response.solspace_calendar.events.map(this.enhanceEvent),
+		);
 	}
 
 	async getEventJoinLink(event: Event, request: Request) {
