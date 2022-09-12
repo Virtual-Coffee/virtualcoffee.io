@@ -166,7 +166,7 @@ export default function Page() {
 			</ol>
 
 			<div className="mt-4 text-right">
-				<Link className="text-sky-700 underline" to="/events">
+				<Link className="text-sky-700 underline" to="/membership/events">
 					See details and more events
 				</Link>
 			</div>
