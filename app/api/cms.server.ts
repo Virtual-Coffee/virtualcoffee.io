@@ -88,6 +88,7 @@ export class CmsActions {
 			handle: string;
 			name: string;
 			icsHash: string;
+			id: number | string;
 		}[]
 	> {
 		const query = `query getCalendars {
@@ -96,6 +97,7 @@ export class CmsActions {
 					handle
 					name
 					icsHash
+					id
 				}
 			}
 		}
@@ -104,10 +106,38 @@ export class CmsActions {
 		const response = await this.client.request(query);
 
 		if (!response?.solspace_calendar?.calendars?.length) {
-			throw new CmsError('There was an error fetching the event.', response);
+			throw new CmsError('There was an error fetching calendars.', response);
 		}
 
 		return response.solspace_calendar.calendars;
+	}
+
+	async getCalendar(handle: string): Promise<{
+		handle: string;
+		name: string;
+		icsHash: string;
+		id: number | string;
+	}> {
+		const query = gql`
+			query getCalendars($handle: [String]) {
+				solspace_calendar {
+					calendar(handle: $handle) {
+						handle
+						name
+						icsHash
+						id
+					}
+				}
+			}
+		`;
+
+		const response = await this.client.request(query);
+
+		if (!response?.solspace_calendar?.calendar) {
+			throw new CmsError('There was an error fetching the calendar.', response);
+		}
+
+		return response.solspace_calendar.calendar;
 	}
 
 	async getAllCalendarHandles(): Promise<string[]> {
