@@ -62,9 +62,3 @@ export function forwardRefFromComponent<
 		},
 	) => ReturnType<typeof render>;
 }
-
-// as React.ComponentType<
-//     Omit<React.ComponentProps<TComponent>, 'passedRef'> & {
-//       ref?: React.ComponentProps<TComponent>['passedRef'];
-//     }
-//   >;
