@@ -3,18 +3,17 @@ import type { LoaderArgs } from '@remix-run/node';
 import { Link, useLoaderData } from '@remix-run/react';
 import { authenticate } from '~/auth/auth.server';
 import { CmsActions } from '~/api/cms.server';
-
-import DisplayHtml from '~/components/DisplayHtml';
 import { Fragment, useCallback, useState } from 'react';
 import {
 	CalendarIcon,
 	ChevronLeftIcon,
 	ChevronRightIcon,
+	ChevronUpIcon,
 	EllipsisHorizontalIcon,
 	ChevronDownIcon,
 	ClockIcon,
 } from '@heroicons/react/24/outline';
-import { Menu, Transition, Popover } from '@headlessui/react';
+import { Menu, Transition, Popover, Disclosure } from '@headlessui/react';
 
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
@@ -43,7 +42,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 	let api = new CmsActions();
 	await api.authenticate(request);
 
-	// const calendars = await api.getCalendars();
+	const calendars = await api.getCalendars();
 
 	const url = new URL(request.url);
 	const currentMonth = new Date().getMonth() + 1;
@@ -149,6 +148,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 		meta: {
 			title: 'Events',
 		},
+		calendars,
 		weeklyEvents,
 		dates,
 		selectedDate,
@@ -277,7 +277,7 @@ export function getCalendarUrl({
 // }
 
 export default function Page() {
-	const { weeklyEvents, dates, selectedDate, settings } =
+	const { weeklyEvents, dates, selectedDate, settings, calendars } =
 		useLoaderData<typeof loader>();
 
 	const today = DateTime.now();
@@ -295,7 +295,7 @@ export default function Page() {
 		<>
 			<div className="lg:h-0 lg:min-h-[768px]">
 				<div className="lg:flex lg:h-full lg:flex-col">
-					<header className="relative z-20 flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none">
+					<header className="relative z-20 flex items-center justify-between border-b border-gray-200 py-4 lg:flex-none">
 						<h1 className="text-lg font-semibold text-gray-900">
 							<time dateTime={calDate.toFormat('y-MM')}>
 								{calDate.toLocaleString({
@@ -522,6 +522,57 @@ export default function Page() {
 							</Menu>
 						</div>
 					</header>
+					<Disclosure>
+						{({ open }) => (
+							<>
+								<div className="py-4 text-right">
+									<Disclosure.Button as={Button} color="white">
+										<span>Calendars</span>
+										<ChevronUpIcon
+											className={`${
+												open ? 'rotate-180 transform' : ''
+											} h-5 w-5 ml-2 text-gray-400`}
+										/>
+									</Disclosure.Button>
+								</div>
+
+								<Disclosure.Panel className="p-4 bg-white">
+									<h2 className="text-lg font-semibold text-gray-900">
+										Calendars
+									</h2>
+									<ul role="list" className="divide-y divide-gray-200">
+										{calendars.map((calendar) => (
+											<li
+												key={calendar.id}
+												className="py-4 flex items-center space-x-4"
+											>
+												{/* <div className="flex-shrink-0">
+                  	checkbox
+                	</div> */}
+												<div className="min-w-0 flex-1">
+													<p className="truncate text-sm font-medium text-gray-900">
+														{calendar.name}
+													</p>
+												</div>
+												<div>
+													<Button
+														size="xs"
+														color="black"
+														as="a"
+														href={`/membership/events/calendar-subscribe/${calendar.handle}`}
+														target="_blank"
+														rel="nofollow"
+													>
+														Subscribe (iCal link)
+													</Button>
+												</div>
+											</li>
+										))}
+									</ul>
+								</Disclosure.Panel>
+							</>
+						)}
+					</Disclosure>
 					{settings.view === 'month' ? (
 						<>
 							<div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
