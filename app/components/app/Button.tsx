@@ -5,6 +5,10 @@ import { forwardRefFromComponent } from '~/util/remixHelpers';
 
 const colors = {
 	primary: 'text-white bg-sky-600 hover:bg-sky-700 focus:ring-sky-500',
+	white:
+		'border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-sky-500',
+	black:
+		'border-transparent bg-gray-800 text-white hover:bg-gray-900 focus:ring-gray-900',
 };
 
 const sizes = {
