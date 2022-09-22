@@ -1,5 +1,5 @@
 import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import DisplayHtml from '~/components/DisplayHtml';
 import { getEvents } from '~/data/events';
@@ -43,13 +43,11 @@ export default function EventsIndex() {
 			<div className="bg-light py-5">
 				<div className="container-xl">
 					<h2>Upcoming Events</h2>
-					<div className="mb-3">
+					<div className="mb-3 lead">
 						<p>
-							<strong>
-								As we move into our third year, we’ve paused new members joining
-								our coffee chats as we support our current community and make
-								plans for the future. We hope to see you all soon &#x1f496;
-							</strong>
+							Most of our events are members-only. If you'd like to join one of
+							these events, please consider{' '}
+							<Link to="/join">joining Virtual Coffee!</Link>
 						</p>
 					</div>
 

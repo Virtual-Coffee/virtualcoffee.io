@@ -39,14 +39,14 @@ export default function Join() {
 						to have everyone as a part of Virtual Coffee, but we prioritize the
 						intimacy and closeness of the group. Our community is currently
 						accepting members on a limited basis. As new membership becomes
-						available, we'll reach out to those on the wait list to join.
+						available, we'll reach out to those on the waitlist to join.
 					</p>
 					<div className="mt-5 text-center">
 						<a
 							href="https://airtable.com/shrWOl22B5iKYADub"
 							className="btn btn-primary btn-lg"
 						>
-							Join the Wait List
+							Join the Waitlist
 						</a>
 					</div>
 				</div>
