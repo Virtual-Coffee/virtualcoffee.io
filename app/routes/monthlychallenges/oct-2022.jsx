@@ -2,13 +2,13 @@ import { json } from '@remix-run/node';
 import { createMetaData } from '~/util/createMetaData.server';
 
 export const handle = {
-	listTitle: 'June, 2021: Build in Public',
+	listTitle: 'October, 2022: HacktoberFest!',
 	meta: {
-		title: 'Monthly Theme & Challenge for June, 2021: Build in Public',
+		title: 'Monthly Theme & Challenge for October, 2022: HacktoberFest!',
 		description:
-			'June challenge -> Working on building a habit to build in public, show our growth, and be proud of our progress',
+			'October challenge -> Participate to Hacktoberfest! This month, our members will participate to the DigitalOcean HacktoberFest by being maintainers, contributors, or mentors.',
 	},
-	date: '2021-06-01',
+	date: '2022-10-01',
 	hero: {
 		heroHeader: '',
 	},
@@ -28,80 +28,127 @@ export function meta({ data: { meta } = {} } = {}) {
 export default function Challenge() {
 	return (
 		<>
-			<div className="alert alert-success">
-				This monthly challenge is complete. Congratulations! Please join us for
-				the <a href="/monthlychallenges/">next challenge</a>!
-			</div>
-
 			<h1>
-				<small>Monthly Challenge for June, 2021:</small> Let's build in public,
-				starting with Daily Standup!
+				<small>Monthly Challenge for October 2022:</small> It's Hacktoberfest!
+				Participate in open source, learn, and have fun!
 			</h1>
 
 			<p className="lead">
-				During this month, let's learn to communicate what we're working on,
-				show our development, and be confident and proud of any progress made.
+				This month we have three tracks: maintainers will provide issues labeled
+				for Hacktoberfest, contributors will solve issues, and mentors will help
+				contributors and maintainers be successful.
+			</p>
+
+			<p>
+				<strong>Challenge Team Leads & Facilitators:</strong> BekahHW & Dan Ott
 			</p>
 
 			<hr />
 
 			<h2>Theme</h2>
-			<p>Let's build in public, starting with Daily Standup!</p>
+			<p>The 2022 Hacktoberfest!</p>
 
-			<h2>Goals</h2>
-			<p>To end the month with:</p>
-			<ul>
-				<li>A habit of talking about the things we're working on.</li>
-				<li>A plan for continuing progress.</li>
-				<li>Feeling more comfortable sharing.</li>
-				<li>Accountability!</li>
-			</ul>
+			<h2>Challenge</h2>
 
-			<h3>Who can participate?</h3>
+			<strong>Maintainers</strong>
 			<p>
-				Virtual Coffee's goal is to support all developers, no matter where they
-				are in their coding journey. This challenge is opened to non-coding
-				projects as well. So if you want to talk about the projects you're doing
-				in other areas of your life, we want to hear about it. We encourage all
-				members to participate. This challenge can be done alone or in a group.
+				They provide issues labeled Hacktoberfest on their repository(ies),
+				review the PRs for these issues, and validate and merge following the
+				rules of the contest. They also answer the contributors' questions.
 			</p>
 
-			<h3>How it works</h3>
+			<strong>Contributors</strong>
 			<p>
-				Share your progress in the #monthly-challenge channel in Slack. We have
-				a slack reminder everyday, but feel free to post when you can. Some of
-				our monthly-challenge team will also be holding video check-ins, so be
-				on the lookout for those announcements!
+				They find issues labeled Hacktoberfest they want to solve. The goal of
+				the contest is to have 4 PRs validated during the month of October.
 			</p>
 
+			<strong>Mentors</strong>
 			<p>
-				While no other platform is imposed, it can be a good idea to also share
-				on social media for more reach but only if you are comfortable to do so
-				(Twitter using -or not- the hashtag #buildinpublic, a personal blog, a
-				post on DEV.to, etc.).
+				They will be paired with a mentee (contributor or maintainer). They
+				provide support either on Slack, during a 1:1, a pairing session, or
+				whatever works best for the team!
+			</p>
+
+			<h2>How to Participate</h2>
+			<h4>Before starting</h4>
+
+			<ol>
+				<li>
+					<strong>Contributors</strong>: Make sure to sign up on the{' '}
+					<a href="https://hacktoberfest.com/">
+						Hacktoberfest official website
+					</a>
+					, get in contact with your mentor if you requested one, and check out
+					issues on sites with the Hacktoberfest label.
+					<br />
+					If you've signed up to the VC Hacktoberfest Initiative, you can access
+					to your dashboard{' '}
+					<a href="https://hacktoberfest.virtualcoffee.io/">here</a>.
+				</li>
+
+				<li>
+					<strong>Mentors</strong>: Make sure you include "Hacktoberfest" as a
+					label in your project's topics section (found in "About" on your
+					repository). This is how you opt-in to Hacktoberfest.
+				</li>
+			</ol>
+
+			<h4>Weekly check-ins</h4>
+			<p>
+				Let's start the week with an async check-in. What are your goals for
+				Hacktoberfest for the week? What support do you need? Do you plan on
+				spending time in the Hacktoberfest co-working room, talking to your
+				mentor, answering questions as a maintainer?
+			</p>
+			<p>
+				Every Friday of the month, you come to our synchronous check-in, share
+				your progress, ask questions, and find help and support. We'll post more
+				information in the #open-source Slack channel.
+			</p>
+			<p>
+				Can't come to the check-in? No problem. We'll have an async check-in as
+				well!
+			</p>
+
+			<h4>How do I share my progress?</h4>
+			<p>
+				Share your progress in the #open-source channel in Slack. We want to
+				know when you get those Pull Requests (PRs) in so we can celebrate along
+				with you! And if you need support, we'll be there to help you too. While
+				no other platform is imposed, it can be a good idea to also share on
+				social media for more reach but only if you are comfortable doing so.
+				You can share on Twitter using -or not- the hashtag #VCMonthlyChallenge,
+				a personal blog, a post on <a href="https://dev.to/">DEV.to</a>, you get
+				the idea!
 			</p>
 
 			<p>
 				Sharing every time some work is added is a good idea, small progress is
-				still progress. You don't need to write a detailed blog post: a 140
-				characters Tweet can be enough! For example: "Today I added some
-				styling. I used Bootstrap and implemented some cards to display the
-				users in the home page".
+				still progress. No need to write a detailed blog post; a 140 character
+				Tweet can be enough. For example:{' '}
+				<i>Today I submitted my first PR for Hacktoberfest.</i>
 			</p>
 
-			<h3>What if I need help?</h3>
+			<h4>What if I need help?</h4>
 			<p>
-				You can ask a question in the #help-and-pairing VC channel, get 1:1 help
-				during Office Hours (check #office-hours channel), join the VC
-				co-working room, or ask at a coffee! Asking for help is part of the
-				process.
+				You can ask a question in the #help-and-pairing VC channel, ask for
+				ideas in the #open-source channel, or join the Hacktoberfest VC
+				co-working room. Asking for help is part of the process!
 			</p>
 
-			<p>
-				If you want to take on the challenge, see if you can participate in 15
-				standups and create a plan for progress next month!
-			</p>
 			<p>And remember, we're always here to help ❤️</p>
+
+			<h4>Completing the Challenge!</h4>
+			<p>
+				Any kind of participation in Hacktoberfest counts as you completing the
+				VC October challenge.
+			</p>
+			<p>
+				Remember, VC is here to support you during Hacktoberfest but is not an
+				official partner of the event. To get the Hacktoberfest swag, you need
+				to have four (4) pull requests accepted.
+			</p>
 		</>
 	);
 }
