@@ -149,6 +149,174 @@ export default function Challenge() {
 				official partner of the event. To get the Hacktoberfest swag, you need
 				to have four (4) pull requests accepted.
 			</p>
+
+			<h2>Virtual Coffee Approved Repositories!</h2>
+			<ul style={{ listStyleType: 'none' }}>
+				<li>
+					<h3>
+						<a href="https://github.com/Virtual-Coffee/virtualcoffee.io">
+							Virtual Coffee
+						</a>
+					</h3>
+					<p>Our very own site!</p>
+					<p>
+						<strong>Maintainer</strong>: Virtual Coffee Maintainers
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/weareinreach/InReach">InReach</a>
+					</h3>
+					<p>
+						InReach is the world’s first tech platform matching LGBTQ+ people
+						with safe, verified resources.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: InReach
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/ClJarvis/Hello_There">Hello There</a>
+					</h3>
+					<p>
+						An alternative greeting for learning a new language. Here is a list
+						of how to say "Hello There" in several Languages.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: Chris Jarvis
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/stepzen-dev/examples">Stepzen Nuxt</a>
+					</h3>
+					<p>
+						<strong>Maintainer</strong>: Lucia Cerchie
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/freeCodeCamp/Developer_Quiz_Site">
+							freeCodeCamp Developer Quiz
+						</a>
+					</h3>
+					<p>
+						This is a quiz site filled with over 600+ questions on programming.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: freeCodeCamp
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/deepgram/python-sdk">
+							Deepgram Python SDK
+						</a>
+					</h3>
+					<p>
+						Official Python SDK for Deepgram's automated speech recognition
+						APIs.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: deepgram
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/deepgram/deepgram-node-sdk">
+							Deepgram Node.js SDK
+						</a>
+					</h3>
+					<p>
+						Official JavaScript SDK for Deepgram's automated speech recognition
+						APIs.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: deepgram
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/deepgram/deepgram-dotnet-sdk">
+							Deepgram .NET SDK
+						</a>
+					</h3>
+					<p>.NET SDK for Deepgram's automated speech recognition APIs.</p>
+					<p>
+						<strong>Maintainer</strong>: deepgram
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/novuhq/novu">novu</a>
+					</h3>
+					<p>
+						The open-source notifications infrastructure. A fully-featured
+						microservice to send SMS, E-mail, Slack and Push notifications.
+						Embeddable notification center for React with real-time updates,
+						content management, and much more...
+					</p>
+					<p>
+						<strong>Maintainer</strong>: novuhq
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/strapi/strapi">strapi</a>
+					</h3>
+					<p>
+						Strapi is the leading open-source headless CMS. It’s 100%
+						JavaScript, fully customizable and developer-first.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: strapi
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/ToolJet/Tooljet">ToolJet</a>
+					</h3>
+					<p>
+						Extensible low-code framework for building business applications.
+						Connect to databases, cloud storages, GraphQL, API endpoints,
+						Airtable, etc and build apps using drag and drop application
+						builder. Built using JavaScript/TypeScript.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: ToolJet
+					</p>
+				</li>
+			</ul>
+
+			<h2>Resources</h2>
+			<ul>
+				<li>
+					<a href="https://www.iamdeveloper.com/pages/talks/#heading-getting-the-most-out-of-open-source">
+						Getting the Most Out of Open Source
+					</a>
+				</li>
+				<li>
+					<a href="https://www.iamdeveloper.com/pages/talks/#heading-words-matter:-conventional-comments">
+						Words Matter: Conventional Comments
+					</a>
+				</li>
+				<li>
+					<a href="https://www.freecodecamp.org/news/writing-good-commit-messages-a-practical-guide/">
+						Writing Good Commit Messages, a Practical guide
+					</a>
+				</li>
+				<li>
+					<a href="https://dev.to/mishmanners/series/13860">
+						GitHub like a Boss Series
+					</a>
+				</li>
+				<li>
+					<a href="https://www.youtube.com/watch?v=0mjJS1Y8wrI">
+						Hacktoberfest Tutorial
+					</a>
+				</li>
+			</ul>
 		</>
 	);
 }
