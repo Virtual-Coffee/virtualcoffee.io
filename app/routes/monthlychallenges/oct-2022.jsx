@@ -189,10 +189,16 @@ export default function Challenge() {
 				</li>
 				<li>
 					<h3>
-						<a href="https://github.com/stepzen-dev/examples">Stepzen Nuxt</a>
+						<a href="https://github.com/stepzen-dev/examples">
+							StepZen examples
+						</a>
 					</h3>
 					<p>
-						<strong>Maintainer</strong>: Lucia Cerchie
+						Quickstart examples of different tooling and stacks in combination
+						with StepZen.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: StepZen
 					</p>
 				</li>
 				<li>
