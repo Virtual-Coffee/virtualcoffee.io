@@ -1,6 +1,7 @@
 export default function VirtualCoffeeFull({
 	ariaHidden,
 	title = 'Virtual Coffee',
+	...rest
 }) {
 	return (
 		<svg
@@ -14,6 +15,7 @@ export default function VirtualCoffeeFull({
 						role: 'img',
 						'aria-labelledby': 'navlogoSvgTitle',
 				  })}
+			{...rest}
 		>
 			{!ariaHidden && <title id="navlogoSvgTitle">{title}</title>}
 

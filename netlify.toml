@@ -8,8 +8,8 @@
   port = 9000
   autoLaunch = false
 
-[functions]
-  node_bundler = "esbuild"
+# [functions]
+#   node_bundler = "esbuild"
 
 [functions.server]
   included_files = ["app/routes/**/*.mdx"]
@@ -37,18 +37,6 @@
   from = "/sponsorship"
   to = "https://github.com/sponsors/Virtual-Coffee"
   status = 302
-
-[[redirects]]
-  from = "/membership"
-  to = "/"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/membership/*"
-  to = "/"
-  status = 301
-  force = true
 
 [[redirects]]
   from = "/brownbag-idea"
