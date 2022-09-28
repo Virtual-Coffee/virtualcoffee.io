@@ -1,5 +1,7 @@
 import { json } from '@remix-run/node';
 import { createMetaData } from '~/util/createMetaData.server';
+import { useLoaderData } from '@remix-run/react';
+import { getChallengeData } from '~/data/monthlyChallenges/oct-2022';
 
 export const handle = {
 	listTitle: 'October, 2022: Hacktoberfest!',
@@ -16,7 +18,11 @@ export const handle = {
 
 export async function loader() {
 	const { title, description } = handle.meta;
+
+	const repos = await getChallengeData();
+
 	return json({
+		repos,
 		meta: createMetaData({ title, description }),
 	});
 }
@@ -26,6 +32,8 @@ export function meta({ data: { meta } = {} } = {}) {
 }
 
 export default function Challenge() {
+	const { repos } = useLoaderData();
+
 	return (
 		<>
 			<h1>
@@ -104,7 +112,7 @@ export default function Challenge() {
 			<p>
 				Every Friday of the month, you come to our synchronous check-in, share
 				your progress, ask questions, and find help and support. We'll post more
-				information in the #open-source Slack channel.
+				information in the <code>#open-source</code> Slack channel.
 			</p>
 			<p>
 				Can't come to the check-in? No problem. We'll have an async check-in as
@@ -113,14 +121,14 @@ export default function Challenge() {
 
 			<h4>How do I share my progress?</h4>
 			<p>
-				Share your progress in the #open-source channel in Slack. We want to
-				know when you get those Pull Requests (PRs) in so we can celebrate along
-				with you! And if you need support, we'll be there to help you too. While
-				no other platform is imposed, it can be a good idea to also share on
-				social media for more reach but only if you are comfortable doing so.
-				You can share on Twitter using -or not- the hashtag #VCMonthlyChallenge,
-				a personal blog, a post on <a href="https://dev.to/">DEV.to</a>, you get
-				the idea!
+				Share your progress in the <code>#open-source</code> channel in Slack.
+				We want to know when you get those Pull Requests (PRs) in so we can
+				celebrate along with you! And if you need support, we'll be there to
+				help you too. While no other platform is imposed, it can be a good idea
+				to also share on social media for more reach but only if you are
+				comfortable doing so. You can share on Twitter using -or not- the
+				hashtag <code>#VCMonthlyChallenge</code>, a personal blog, a post on{' '}
+				<a href="https://dev.to/">DEV.to</a>, you get the idea!
 			</p>
 
 			<p>
@@ -132,9 +140,10 @@ export default function Challenge() {
 
 			<h4>What if I need help?</h4>
 			<p>
-				You can ask a question in the #help-and-pairing VC channel, ask for
-				ideas in the #open-source channel, or join the Hacktoberfest VC
-				co-working room. Asking for help is part of the process!
+				You can ask a question in the <code>#help-and-pairing</code> VC channel,
+				ask for ideas in the <code>#open-source</code> channel, or join the
+				Hacktoberfest VC co-working room. Asking for help is part of the
+				process!
 			</p>
 
 			<p>And remember, we're always here to help ❤️</p>
@@ -151,148 +160,18 @@ export default function Challenge() {
 			</p>
 
 			<h2>Virtual Coffee Approved Repositories!</h2>
-			<ul style={{ listStyleType: 'none' }}>
-				<li>
-					<h3>
-						<a href="https://github.com/Virtual-Coffee/virtualcoffee.io">
-							Virtual Coffee
-						</a>
-					</h3>
-					<p>Our very own site!</p>
-					<p>
-						<strong>Maintainer</strong>: Virtual Coffee Maintainers
-					</p>
-				</li>
-				<li>
-					<h3>
-						<a href="https://github.com/weareinreach/InReach">InReach</a>
-					</h3>
-					<p>
-						InReach is the world’s first tech platform matching LGBTQ+ people
-						with safe, verified resources.
-					</p>
-					<p>
-						<strong>Maintainer</strong>: InReach
-					</p>
-				</li>
-				<li>
-					<h3>
-						<a href="https://github.com/ClJarvis/Hello_There">Hello There</a>
-					</h3>
-					<p>
-						An alternative greeting for learning a new language. Here is a list
-						of how to say "Hello There" in several Languages.
-					</p>
-					<p>
-						<strong>Maintainer</strong>: Chris Jarvis
-					</p>
-				</li>
-				<li>
-					<h3>
-						<a href="https://github.com/stepzen-dev/examples">
-							StepZen examples
-						</a>
-					</h3>
-					<p>
-						Quickstart examples of different tooling and stacks in combination
-						with StepZen.
-					</p>
-					<p>
-						<strong>Maintainer</strong>: StepZen
-					</p>
-				</li>
-				<li>
-					<h3>
-						<a href="https://github.com/freeCodeCamp/Developer_Quiz_Site">
-							freeCodeCamp Developer Quiz
-						</a>
-					</h3>
-					<p>
-						This is a quiz site filled with over 600+ questions on programming.
-					</p>
-					<p>
-						<strong>Maintainer</strong>: freeCodeCamp
-					</p>
-				</li>
-				<li>
-					<h3>
-						<a href="https://github.com/deepgram/python-sdk">
-							Deepgram Python SDK
-						</a>
-					</h3>
-					<p>
-						Official Python SDK for Deepgram's automated speech recognition
-						APIs.
-					</p>
-					<p>
-						<strong>Maintainer</strong>: deepgram
-					</p>
-				</li>
-				<li>
-					<h3>
-						<a href="https://github.com/deepgram/deepgram-node-sdk">
-							Deepgram Node.js SDK
-						</a>
-					</h3>
-					<p>
-						Official JavaScript SDK for Deepgram's automated speech recognition
-						APIs.
-					</p>
-					<p>
-						<strong>Maintainer</strong>: deepgram
-					</p>
-				</li>
-				<li>
-					<h3>
-						<a href="https://github.com/deepgram/deepgram-dotnet-sdk">
-							Deepgram .NET SDK
-						</a>
-					</h3>
-					<p>.NET SDK for Deepgram's automated speech recognition APIs.</p>
-					<p>
-						<strong>Maintainer</strong>: deepgram
-					</p>
-				</li>
-				<li>
-					<h3>
-						<a href="https://github.com/novuhq/novu">novu</a>
-					</h3>
-					<p>
-						The open-source notifications infrastructure. A fully-featured
-						microservice to send SMS, E-mail, Slack and Push notifications.
-						Embeddable notification center for React with real-time updates,
-						content management, and much more...
-					</p>
-					<p>
-						<strong>Maintainer</strong>: novuhq
-					</p>
-				</li>
-				<li>
-					<h3>
-						<a href="https://github.com/strapi/strapi">strapi</a>
-					</h3>
-					<p>
-						Strapi is the leading open-source headless CMS. It’s 100%
-						JavaScript, fully customizable and developer-first.
-					</p>
-					<p>
-						<strong>Maintainer</strong>: strapi
-					</p>
-				</li>
-				<li>
-					<h3>
-						<a href="https://github.com/ToolJet/Tooljet">ToolJet</a>
-					</h3>
-					<p>
-						Extensible low-code framework for building business applications.
-						Connect to databases, cloud storages, GraphQL, API endpoints,
-						Airtable, etc and build apps using drag and drop application
-						builder. Built using JavaScript/TypeScript.
-					</p>
-					<p>
-						<strong>Maintainer</strong>: ToolJet
-					</p>
-				</li>
+			<ul className="list-unstyled">
+				{repos.map((repo) => (
+					<li key={repo.RepoUrl}>
+						<h3>
+							<a href={repo.RepoUrl}>{repo.RepoName}</a>
+						</h3>
+						<p>{repo.Description}</p>
+						<p>
+							<strong>Maintainer</strong>: {repo.Maintainer}
+						</p>
+					</li>
+				))}
 			</ul>
 
 			<h2>Resources</h2>
