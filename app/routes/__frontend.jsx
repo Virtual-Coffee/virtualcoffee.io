@@ -4,6 +4,7 @@ import DefaultLayout from '~/components/layouts/DefaultLayout';
 import PostList from '~/components/PostList';
 import Root from '~/components/layouts/Root';
 import { homePageLinks } from '~/routes/__frontend/index';
+import { useLocation } from 'react-router-dom';
 
 export function links() {
 	return [{ rel: 'stylesheet', href: styles }];
