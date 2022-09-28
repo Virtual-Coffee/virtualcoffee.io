@@ -1,7 +1,19 @@
-async function sanitizeCmsData(data) {
-	const sanitize = await import('sanitize-html').then((mod) => mod.default);
+import sanitize from 'sanitize-html';
 
-	function sanitizeInternal(data) {
+interface DirtyData {
+	[key: string]: any;
+}
+type SanitizedData<T> = T & {
+	sanitizedHtml: string;
+};
+type DataToSanitize = DirtyData | DirtyData[];
+
+export function sanitizeCmsData<T>(data: T): SanitizedData<T> {
+	// const sanitize = await import('sanitize-html').then((mod) => mod.default);
+
+	function sanitizeInternal(
+		data: DirtyData | DirtyData[],
+	): SanitizedData<T> | DataToSanitize {
 		if (Array.isArray(data)) {
 			return data.map((o) => sanitizeInternal(o));
 		} else if (typeof data === 'object') {
@@ -23,20 +35,15 @@ async function sanitizeCmsData(data) {
 		}
 	}
 
-	return sanitizeInternal(data);
+	return sanitizeInternal(data) as SanitizedData<T>;
 }
 
-async function sanitizeHtml(html) {
-	const sanitize = await import('sanitize-html').then((mod) => mod.default);
+export async function sanitizeHtml(html: string) {
+	// const sanitize = await import('sanitize-html').then((mod) => mod.default);
 	return sanitize(html, sanitizeOptions);
 }
 
-module.exports = {
-	sanitizeCmsData,
-	sanitizeHtml,
-};
-
-const sanitizeOptions = {
+const sanitizeOptions: sanitize.IOptions = {
 	allowedTags: [
 		'a',
 		'img',
@@ -112,7 +119,7 @@ const sanitizeOptions = {
 		'thead',
 		'tr',
 	],
-	disallowedTagsMode: 'discard',
+	// disallowedTagsMode: 'discard',
 	allowedAttributes: {
 		a: ['href', 'name', 'target'],
 		// We don't currently allow img itself by default, but

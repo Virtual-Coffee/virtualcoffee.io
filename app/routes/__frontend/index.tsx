@@ -43,6 +43,11 @@ export const loader = async (args: LoaderArgs) => {
 
 export const homePageLinks = [
 	{
+		to: '/join',
+		title: 'Join Virtual Coffee',
+		description: 'Learn how to join our community',
+	},
+	{
 		to: '/about/',
 		title: 'About Virtual Coffee',
 		description: `Our Mission, Core Values, History, and more.`,

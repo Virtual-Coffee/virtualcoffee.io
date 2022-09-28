@@ -10,20 +10,7 @@ order: 1
 
 import LeadText from '~/components/content/LeadText';
 import TextContainer from '~/components/content/TextContainer';
-
-<TextContainer background="light" showBackToTopLink={false}>
-
-## Hi there! 👋
-
-<LeadText>
-
-As we move into the third year of Virtual Coffee, the maintainers—with the help of a team of invested community members—have decided to pause the new membership while we work on finding the best ways to support our existing community and define what the new year will look like for us all.
-
-Follow us on [Twitter](https://twitter.com/VirtualCoffeeIO) for the latest update while the new membership is paused.
-
-</LeadText>
-
-</TextContainer>
+import { Link } from '@remix-run/react';
 
 ## Table of Contents
 
@@ -35,33 +22,44 @@ Follow us on [Twitter](https://twitter.com/VirtualCoffeeIO) for the latest updat
 
 ### How can I join Virtual Coffee?
 
-#### 1. Attend one of our Coffees (Zoom Meetings)
+#### 1. Join the Waiting List or Receive an Invite
 
 <LeadText>
 
-You need to attend one of [Coffees (Zoom Meetings)](</resources/virtual-coffee/guide-to-vc/#coffees-(zoom-meetings)>) on **Tuesday at 9:00 AM ET** or **Thursday at 12:00 PM ET** that last an hour.
+We our now accepting new members on a limited basis!
+
+</LeadText>
+
+If you are interested in joining Virtual Coffee, you can <Link to="/join">join the waiting list</Link> or receive an invite from a current member.
+
+Once we've accepted you and added to our membership, you will receive an email with links to our Coffees.
+
+#### 2. Attend one of our Coffees (Zoom Meetings)
+
+<LeadText>
+
+You need to attend one of our <Link to="/resources/virtual-coffee/guide-to-vc#coffees-zoom-meetings">Coffees (Zoom Meetings)</Link> on **Tuesday at 9:00 AM ET** or **Thursday at 12:00 PM ET** that last an hour.
 
 </LeadText>
 
 We absolutely love the closeness of this community and know it’s one of the many things that sets us apart. This closeness starts with those coffees.
+
 We would also like to give you the experience of Virtual Coffee in person before we move to Slack group.
 
-#### 2. Complete the registration form 😊
+#### 3. Now you’re a full member! Welcome! 👋
 
-Our MC will drop the link of the New Member Form together with the [Code of Conduct](/code-of-conduct/) and other links during the intro of Coffee. The New Member Form will be dropped again at the end of the session.
+Once you join one of our Coffees, be sure to tell your room leader that you're a new member.
 
-Grab the form, fill it in, and submit it. Then, you will be given access to our Slack group.
+After the Coffee is over, you'll receive an email with a link to our Slack group and more information.
 
-#### 3. So now you’re in our Slack! Welcome! 👋
-
-You can introduce yourself in this channel. We would love to know who you are, where you are in your tech journey, and what you enjoy outside of tech!
+You can introduce yourself in the `#welcome` channel and join our members-only events. We would love to know who you are, where you are in your tech journey, and what you enjoy outside of tech!
 
 ---
 
 ### What is going on in Coffees?
 
 We’re getting to know other members, old and new, through casual conversations on Zoom. We prioritize empathy, encouraging everyone to participate in the ways that are most comfortable to them, and learning together.
-Check out our [Guide To Virtual Coffee](/resources/virtual-coffee/guide-to-vc/) for more details.
+Check out our <Link to="/resources/virtual-coffee/guide-to-vc/">Guide To Virtual Coffee</Link> for more details.
 
 ---
 
@@ -91,8 +89,8 @@ Absolutely! If you’re into online communities, and enjoy conversations around 
 
 ### What will I get when I join Virtual Coffee?
 
-You can participate in our [events](/events), have access to our slack, get support and help as you need, mentorship, and most of all, FRIENDSHIPS!
-Feel free to take a glimpse of [what’s going on in Virtual Coffee](/resources/virtual-coffee/guide-to-vc/#what-to-expect-in-virtual-coffee) to get some more insights.
+You can participate in our <Link to="/events">events</Link>, have access to our slack, get support and help as you need, mentorship, and most of all, FRIENDSHIPS!
+Feel free to take a glimpse of <Link to="/resources/virtual-coffee/guide-to-vc#what-to-expect-in-virtual-coffee">what’s going on in Virtual Coffee</Link> to get some more insights.
 
 ---
 

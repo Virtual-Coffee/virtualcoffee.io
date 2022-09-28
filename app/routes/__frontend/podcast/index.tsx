@@ -7,7 +7,19 @@ import PostList from '~/components/PostList';
 import { getEpisodes, getPlayerSrc } from '~/data/podcast';
 import { createMetaData } from '~/util/createMetaData.server';
 
-export function meta({ data: { meta } = {} } = {}) {
+type PageMetadata = {
+	data: {
+		meta: {
+			title: string;
+			description: string;
+			Hero: string;
+			hero: string;
+		};
+	};
+};
+
+export function meta({ data }: PageMetadata) {
+	const { meta } = data;
 	return meta;
 }
 
@@ -16,7 +28,7 @@ export const loader = async () => {
 
 	const latestEpisode = podcastEpisodes[0];
 	const latestEpisodePlayerSrc = getPlayerSrc({
-		id: latestEpisode.podcastBuzzsproutId,
+		id: latestEpisode.podcastBuzzsproutId!,
 	});
 
 	return json({
@@ -25,6 +37,7 @@ export const loader = async () => {
 			description:
 				'This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories as developers.',
 			Hero: 'UndrawWalkInTheCity',
+			hero: 'UndrawWalkInTheCity',
 		}),
 		podcastEpisodes,
 		latestEpisode,
@@ -34,7 +47,7 @@ export const loader = async () => {
 
 export default function PodcastsIndex() {
 	const { podcastEpisodes, latestEpisode, latestEpisodePlayerSrc } =
-		useLoaderData();
+		useLoaderData<typeof loader>();
 
 	useEffect(() => {
 		if (latestEpisodePlayerSrc && document) {
@@ -55,6 +68,7 @@ export default function PodcastsIndex() {
 		<DefaultLayout
 			heroHeader="Virtual Coffee Podcast"
 			Hero="UndrawWalkInTheCity"
+			heroSubheader=""
 		>
 			<div className="container bodycopy py-5">
 				<p className="lead">
@@ -72,7 +86,7 @@ export default function PodcastsIndex() {
 
 				<div className="text-muted">Latest Episode:</div>
 				<h3>
-					<Link to={latestEpisode.url}>{latestEpisode.title}</Link>
+					<Link to={latestEpisode.url!}>{latestEpisode.title}</Link>
 				</h3>
 
 				<div className="mt-4 podcastplayer">

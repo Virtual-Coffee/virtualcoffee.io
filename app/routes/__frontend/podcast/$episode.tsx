@@ -1,6 +1,7 @@
 import { useEffect, Fragment } from 'react';
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
+import type { LoaderArgs } from '@remix-run/node';
 import DisplayHtml from '~/components/DisplayHtml';
 import PodcastSubscribe from '~/components/PodcastSubscribe';
 import {
@@ -14,28 +15,48 @@ import {
 import { dateForDisplay } from '~/util/date';
 import { sanitizeCmsData } from '~/util/sanitizeCmsData';
 import createCmsImage from '~/util/cmsimage';
+import type { PodcastEpisode } from '~/data/podcast';
 
-export const loader = async ({ params, request }) => {
+interface EpisodeLoaderArgs extends LoaderArgs {
+	params: {
+		episode: string;
+	};
+}
+
+export const loader = async ({ params, request }: EpisodeLoaderArgs) => {
 	console.log(`loading data for ${params.episode}`);
 
 	const episode = await getEpisode({
 		slug: params.episode,
 		queryParams: getEpisodeQueryParams(request),
 	});
-
+	if (!episode) {
+		console.error(`Episode not found - ${params.episode}`);
+		throw new Response('Episode not Found', { status: 404 });
+	}
 	const transcript = await getTranscript({ id: episode.podcastBuzzsproutId });
 
-	const sanitizedEpisode = await sanitizeCmsData(episode);
+	const sanitizedEpisode = sanitizeCmsData(episode);
 	return json({
 		episode: sanitizedEpisode,
 		transcript,
 		playerSrc: getPlayerSrc({ id: episode.podcastBuzzsproutId }),
-		playerUrl: getPlayerUrl(episode.podcastBuzzsproutId),
-		playerStreamUrl: getPlayerStreamUrl(episode.podcastBuzzsproutId),
+		playerUrl: getPlayerUrl({ id: episode.podcastBuzzsproutId }),
+		playerStreamUrl: getPlayerStreamUrl({ id: episode.podcastBuzzsproutId }),
 	});
 };
 
-export function meta({ data: { episode, playerUrl, playerStreamUrl } }) {
+type PageMetadata = {
+	data: {
+		episode: PodcastEpisode;
+		playerUrl: string;
+		playerStreamUrl: string;
+	};
+};
+
+export function meta({ data }: PageMetadata) {
+	if (!data) return;
+	const { episode, playerUrl, playerStreamUrl } = data;
 	const cardImage = episode.podcastEpisodeCard && episode.podcastEpisodeCard[0];
 
 	const title = episode.title;
@@ -81,7 +102,7 @@ export function meta({ data: { episode, playerUrl, playerStreamUrl } }) {
 }
 
 export default function PostSlug() {
-	const { episode, transcript, playerSrc } = useLoaderData();
+	const { episode, transcript, playerSrc } = useLoaderData<typeof loader>();
 
 	useEffect(() => {
 		if (playerSrc && document) {
@@ -290,7 +311,7 @@ export default function PostSlug() {
 						<em>
 							The Virtual Coffee Podcast is produced by Dan Ott and Bekah Hawrot
 							Weigel and edited by{' '}
-							{parseInt(episode.podcastSeason) === 4
+							{episode.podcastSeason === 4
 								? 'Andy Bonjour at GoodDay Communications'
 								: 'Dan Ott'}
 							.
