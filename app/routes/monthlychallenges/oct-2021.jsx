@@ -2,11 +2,11 @@ import { json } from '@remix-run/node';
 import { createMetaData } from '~/util/createMetaData.server';
 
 export const handle = {
-	listTitle: 'October, 2021: HacktoberFest!',
+	listTitle: 'October, 2021: Hacktoberfest!',
 	meta: {
-		title: 'Monthly Theme & Challenge for October, 2021: HacktoberFest!',
+		title: 'Monthly Theme & Challenge for October, 2021: Hacktoberfest!',
 		description:
-			'October challenge -> Participate to Hacktoberfest! This month, our members will participate to the DigitalOcean HacktoberFest by being maintainers, contributors, or mentors.',
+			'October challenge -> Participate to Hacktoberfest! This month, our members will participate to the DigitalOcean Hacktoberfest by being maintainers, contributors, or mentors.',
 	},
 	date: '2021-10-01',
 	hero: {
