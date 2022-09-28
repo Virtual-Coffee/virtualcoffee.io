@@ -1,6 +1,6 @@
 import { GraphQLClient, gql } from 'graphql-request';
 
-export const buzzsproutPodcastId = '1558601';
+export const buzzsproutPodcastId = '1558601' as const;
 
 const episodeQuery = gql`
 	query getEpisode($slug: String!) {
@@ -56,7 +56,7 @@ const episodesQuery = gql`
 	}
 `;
 
-export function getEpisodeQueryParams(request) {
+export function getEpisodeQueryParams(request: Request) {
 	const url = new URL(request.url);
 
 	const sp = new URLSearchParams();
@@ -73,7 +73,50 @@ export function getEpisodeQueryParams(request) {
 	return sp.toString();
 }
 
-export async function getEpisodes({ limit = 5 } = {}) {
+export interface PodcastEpisode {
+	title: string;
+	slug: string;
+	id: string;
+	metaDescription: string;
+	podcastEpisode: number;
+	podcastSeason: number;
+	podcastPublishDate: string;
+	podcastBuzzsproutId: string;
+	podcastShortDescription: {
+		renderHtml: string;
+	};
+	podcastShowNotes: {
+		renderHtml: string;
+	};
+	podcastGuests: Array<{
+		id: number | string;
+		guestName: string;
+		guestBio: { renderHtml: string };
+		headshot: Array<{ path: string }>;
+	}>;
+	podcastEpisodeCard: Array<{ path: string }>;
+	url: string;
+}
+// type PodcastEpisodes = Partial<PodcastEpisode>[];
+type PodcastEpisodes = Pick<
+	PodcastEpisode,
+	| 'title'
+	| 'slug'
+	| 'id'
+	| 'metaDescription'
+	| 'podcastEpisode'
+	| 'podcastSeason'
+	| 'podcastPublishDate'
+	| 'podcastBuzzsproutId'
+	| 'url'
+>[];
+type PodcastEpisodeResponse = {
+	entries: PodcastEpisode[];
+};
+
+export async function getEpisodes({
+	limit = 5,
+}: { limit?: number } = {}): Promise<PodcastEpisodes> {
 	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
 		const fakeData = await import('./mocks/podcast.server');
 		return fakeData.getEpisodes({ limit }).map((entry) => ({
@@ -89,13 +132,10 @@ export async function getEpisodes({ limit = 5 } = {}) {
 	});
 
 	try {
-		const episodesResponse = await graphQLClient.request(episodesQuery, {
-			limit,
-		});
-
-		// return response.slice(0, 10);
-
-		// console.log(eventsResponse);
+		const episodesResponse =
+			await graphQLClient.request<PodcastEpisodeResponse>(episodesQuery, {
+				limit,
+			});
 		return episodesResponse.entries.map((entry) => ({
 			...entry,
 			url: `/podcast/${entry.slug}`,
@@ -106,7 +146,13 @@ export async function getEpisodes({ limit = 5 } = {}) {
 	}
 }
 
-export async function getEpisode({ slug, queryParams = '' } = {}) {
+export async function getEpisode({
+	slug,
+	queryParams = '',
+}: {
+	slug: PodcastEpisode['slug'];
+	queryParams?: any;
+}): Promise<PodcastEpisode | null> {
 	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
 		const fakeData = await import('./mocks/podcast.server');
 		const episode = fakeData.getEpisode({ slug });
@@ -127,78 +173,97 @@ export async function getEpisode({ slug, queryParams = '' } = {}) {
 
 	try {
 		console.log('requesting');
-		const episodesResponse = await graphQLClient.request(episodeQuery, {
+		const episodesResponse = await graphQLClient.request<{
+			entry: PodcastEpisode;
+		}>(episodeQuery, {
 			slug,
 		});
-
 		console.log('finished:');
 
 		// return response.slice(0, 10);
+		if (!episodesResponse.entry) {
+			throw new Error('No episode found');
+		}
 
-		// console.log(eventsResponse);
-		return episodesResponse.entry
-			? {
-					...episodesResponse.entry,
-					url: `/podcast/${episodesResponse.entry.slug}`,
-			  }
-			: null;
+		return {
+			...episodesResponse.entry,
+			url: `/podcast/${episodesResponse.entry.slug}`,
+		};
 	} catch (e) {
 		console.error(e);
-		return [];
+		return null;
 	}
 }
 
-export async function getTranscript({ id }) {
+type TranscriptSegment = {
+	speaker: string;
+	startTime: number;
+	endTime: number;
+	body: string;
+};
+type TranscriptItem = {
+	name: string;
+	text: string;
+	timestamp: string;
+};
+type Transcript = Array<TranscriptItem>;
+
+export async function getTranscript({
+	id,
+}: Partial<PodcastEpisode>): Promise<Transcript | null> {
 	try {
-		const response = await fetch(
+		const response: { segments: TranscriptSegment[] } = await fetch(
 			`https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}/transcript.json`,
 		).then((res) => res.json());
 
 		if (response && response.segments) {
-			return response.segments.reduce((arr, segment) => {
-				if (arr.length && arr[arr.length - 1].name === segment.speaker) {
-					const cur = arr.pop();
-					return [
-						...arr,
-						{
-							...cur,
-							text: cur.text + ' ' + segment.body,
-						},
-					];
-				} else {
-					const date = new Date(0);
-					date.setSeconds(segment.startTime);
+			return response.segments.reduce(
+				(arr: Transcript, segment: TranscriptSegment) => {
+					if (arr.length && arr[arr.length - 1].name === segment.speaker) {
+						const cur: TranscriptItem | undefined = arr.pop();
+						if (typeof cur === 'undefined') return [...arr];
+						return [
+							...arr,
+							{
+								...cur,
+								text: cur.text + ' ' + segment.body,
+							},
+						];
+					} else {
+						const date = new Date(0);
+						date.setSeconds(segment.startTime);
 
-					return [
-						...arr,
-						{
-							name: segment.speaker,
-							text: segment.body,
-							timestamp: date.toISOString().substr(14, 5),
-						},
-					];
-				}
-			}, []);
+						return [
+							...arr,
+							{
+								name: segment.speaker,
+								text: segment.body,
+								timestamp: date.toISOString().substr(14, 5),
+							},
+						];
+					}
+				},
+				[],
+			);
 		}
 
 		console.log('no response.segments');
-		console.log(response);
 
 		return null;
 	} catch (error) {
-		console.log(`Error loading transcript ${id}`, error);
+		console.error(`Error loading transcript ${id}`, error);
 		return null;
 	}
 }
 
-export function getPlayerSrc({ id }) {
+export function getPlayerSrc({ id }: Pick<PodcastEpisode, 'id'>) {
 	return `https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}.js?container_id=buzzsprout-player-${id}&player=small`;
 }
 
-export function getPlayerUrl({ id }) {
+export function getPlayerUrl({ id }: Pick<PodcastEpisode, 'id'>) {
 	return `https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}?client_source=twitter_card&amp;player_type=full_screen`;
 }
 
-export function getPlayerStreamUrl({ id }) {
+export function getPlayerStreamUrl({ id }: Pick<PodcastEpisode, 'id'>) {
 	return `https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}.mp3?blob_id=${id}&client_source=twitter_card`;
 }
