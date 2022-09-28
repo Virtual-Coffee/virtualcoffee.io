@@ -1,73 +1,15 @@
 import { json } from '@remix-run/node';
-import { Outlet } from '@remix-run/react';
-import styles from './styles/main.css';
+import {
+	Outlet,
+	Links,
+	Meta,
+	Scripts,
+	ScrollRestoration,
+} from '@remix-run/react';
 import { qualifiedUrl } from '~/util/url.server';
 import { removeTrailingSlash } from '~/util/http';
-import DefaultLayout from '~/components/layouts/DefaultLayout';
-import PostList from '~/components/PostList';
-import Root from '~/components/Root';
-import { homePageLinks } from '~/routes/index';
 import { useLocation } from 'react-router-dom';
 import { createMetaData } from '~/util/createMetaData.server';
-
-export function CatchBoundary(props) {
-	const location = useLocation();
-
-	return (
-		<Root>
-			<DefaultLayout
-				Hero="Undraw404"
-				heroHeader="Page Not Found"
-				heroSubheader="We weren't able to find that content."
-				simple
-			>
-				<p className="lead">
-					Perhaps we can interest you some of the other awesome things going on
-					here at Virtual Coffee:
-				</p>
-
-				<PostList
-					items={[
-						{
-							to: '/about/',
-							title: 'Community Events',
-							description: 'See our upcoming events!',
-						},
-						{
-							title: 'Member Resources',
-							description:
-								'A collection of resources for Virtual Coffee members',
-							to: '/resources',
-						},
-						{
-							title: 'Virtual Coffee Podcast',
-							description: 'Conversations with members of the community',
-							to: '/podcast',
-						},
-						{
-							title: 'Virtual Coffee Newsletter',
-							description: 'Sign up for the Virtual Coffee Newsletter',
-							to: '/newsletter',
-						},
-						...homePageLinks,
-					]}
-				/>
-
-				<hr />
-
-				<p className="lead">
-					If you want to let us know about this broken link,{' '}
-					<a
-						href={`https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new?title=Broken+link:+${location.pathname}&body=This+link+resulted+in+a+404:+https://virtualcoffee.io${location.pathname}&labels=bug`}
-					>
-						please open an issue on GitHub
-					</a>
-					.
-				</p>
-			</DefaultLayout>
-		</Root>
-	);
-}
 
 export async function loader({ request }) {
 	removeTrailingSlash(request);
@@ -85,7 +27,6 @@ export async function loader({ request }) {
 
 export function links() {
 	return [
-		{ rel: 'stylesheet', href: styles },
 		{
 			rel: 'apple-touch-icon',
 			sizes: '180x180',
@@ -134,10 +75,64 @@ export function meta({ data: { meta } = {} } = {}) {
 	};
 }
 
+export const LiveReload =
+	process.env.NODE_ENV !== 'development'
+		? () => null
+		: function LiveReload({
+				port = Number(process.env.REMIX_DEV_SERVER_WS_PORT || 8002),
+				nonce = undefined,
+		  }) {
+				let js = String.raw;
+				return (
+					<script
+						nonce={nonce}
+						suppressHydrationWarning
+						dangerouslySetInnerHTML={{
+							__html: js`
+							(() => {
+                  let protocol = location.protocol === "https:" ? "wss:" : "ws:";
+                  let host = location.hostname;
+                  let socketPath = protocol + "//" + host + ":" + ${String(
+										port,
+									)} + "/socket";
+                  let ws = new WebSocket(socketPath);
+                  ws.onmessage = (message) => {
+                    let event = JSON.parse(message.data);
+                    if (event.type === "LOG") {
+                      console.log(event.message);
+                    }
+                    if (event.type === "RELOAD") {
+                      console.log("💿 Reloading window ...");
+                      window.location.reload();
+                    }
+                  };
+
+                  ws.onerror = (error) => {
+                    console.log("Remix dev asset server web socket error:");
+                    console.error(error);
+                  };
+                })();
+              `,
+						}}
+					/>
+				);
+		  };
+
 export default function App() {
+	const location = useLocation();
+
 	return (
-		<Root>
-			<Outlet />
-		</Root>
+		<html lang="en" className="h-full bg-gray-100">
+			<head>
+				<Meta />
+				<Links />
+			</head>
+			<body className={`h-full ${location.pathname === '/' ? 'vc-home' : ''}`}>
+				<Outlet />
+				<ScrollRestoration />
+				<Scripts />
+				<LiveReload />
+			</body>
+		</html>
 	);
 }

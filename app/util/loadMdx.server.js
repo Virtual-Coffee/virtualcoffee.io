@@ -128,9 +128,8 @@ export function loadMdxRouteFileAttributes({ slug }) {
 	});
 
 	const { attributes } = fm(fileContents);
-
 	return {
 		...attributes,
-		slug: slug.replace(/\/index$/g, ''),
+		slug: slug.replace(/\/index$/g, '').replace(/^__frontend\//g, ''),
 	};
 }

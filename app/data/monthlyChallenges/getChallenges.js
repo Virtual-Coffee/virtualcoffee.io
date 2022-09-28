@@ -1,28 +1,27 @@
-import { handle as sept2022 } from '~/routes/monthlychallenges/sept-2022';
-import { handle as aug2022 } from '~/routes/monthlychallenges/aug-2022';
-import { handle as july2022 } from '~/routes/monthlychallenges/july-2022';
-import { handle as june2022 } from '~/routes/monthlychallenges/june-2022';
-import { handle as may2022 } from '~/routes/monthlychallenges/may-2022';
-import { handle as apr2022 } from '~/routes/monthlychallenges/apr-2022';
-import { handle as mar2022 } from '~/routes/monthlychallenges/mar-2022';
-import { handle as feb2022 } from '~/routes/monthlychallenges/feb-2022';
-import { handle as jan2022 } from '~/routes/monthlychallenges/jan-2022';
+import { handle as sept2022 } from '~/routes/__frontend/monthlychallenges/sept-2022';
+import { handle as aug2022 } from '~/routes/__frontend/monthlychallenges/aug-2022';
+import { handle as july2022 } from '~/routes/__frontend/monthlychallenges/july-2022';
+import { handle as june2022 } from '~/routes/__frontend/monthlychallenges/june-2022';
+import { handle as may2022 } from '~/routes/__frontend/monthlychallenges/may-2022';
+import { handle as apr2022 } from '~/routes/__frontend/monthlychallenges/apr-2022';
+import { handle as mar2022 } from '~/routes/__frontend/monthlychallenges/mar-2022';
+import { handle as feb2022 } from '~/routes/__frontend/monthlychallenges/feb-2022';
+import { handle as jan2022 } from '~/routes/__frontend/monthlychallenges/jan-2022';
+import { handle as dec2021 } from '~/routes/__frontend/monthlychallenges/dec-2021';
+import { handle as nov2021 } from '~/routes/__frontend/monthlychallenges/nov-2021';
+import { handle as oct2021 } from '~/routes/__frontend/monthlychallenges/oct-2021';
+import { handle as sept2021 } from '~/routes/__frontend/monthlychallenges/sept-2021';
+import { handle as aug2021 } from '~/routes/__frontend/monthlychallenges/aug-2021';
+import { handle as july2021 } from '~/routes/__frontend/monthlychallenges/july-2021';
+import { handle as june2021 } from '~/routes/__frontend/monthlychallenges/june-2021';
+import { handle as may2021 } from '~/routes/__frontend/monthlychallenges/may-2021';
+import { handle as apr2021 } from '~/routes/__frontend/monthlychallenges/apr-2021';
+import { handle as mar2021 } from '~/routes/__frontend/monthlychallenges/mar-2021';
+import { handle as feb2021 } from '~/routes/__frontend/monthlychallenges/feb-2021';
+import { handle as jan2021 } from '~/routes/__frontend/monthlychallenges/jan-2021';
 
-import { handle as dec2021 } from '~/routes/monthlychallenges/dec-2021';
-import { handle as nov2021 } from '~/routes/monthlychallenges/nov-2021';
-import { handle as oct2021 } from '~/routes/monthlychallenges/oct-2021';
-import { handle as sept2021 } from '~/routes/monthlychallenges/sept-2021';
-import { handle as aug2021 } from '~/routes/monthlychallenges/aug-2021';
-import { handle as july2021 } from '~/routes/monthlychallenges/july-2021';
-import { handle as june2021 } from '~/routes/monthlychallenges/june-2021';
-import { handle as may2021 } from '~/routes/monthlychallenges/may-2021';
-import { handle as apr2021 } from '~/routes/monthlychallenges/apr-2021';
-import { handle as mar2021 } from '~/routes/monthlychallenges/mar-2021';
-import { handle as feb2021 } from '~/routes/monthlychallenges/feb-2021';
-import { handle as jan2021 } from '~/routes/monthlychallenges/jan-2021';
-
-import { handle as dec2020 } from '~/routes/monthlychallenges/dec-2020';
-import { handle as nov2020 } from '~/routes/monthlychallenges/nov-2020';
+import { handle as dec2020 } from '~/routes/__frontend/monthlychallenges/dec-2020';
+import { handle as nov2020 } from '~/routes/__frontend/monthlychallenges/nov-2020';
 
 const challenges = [
 	{ handleData: sept2022, slug: 'sept-2022' },

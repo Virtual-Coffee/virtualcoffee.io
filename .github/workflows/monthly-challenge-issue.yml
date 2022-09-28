@@ -20,7 +20,7 @@ jobs:
             ## Issue Context
             *Add New Challenge to the Site*
 
-            You can use [June 2021](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/app/routes/monthlychallenges/june-2021.jsx) as kind of a template
+            You can use [June 2021](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/app/routes/__frontend/monthlychallenges/june-2021.jsx) as kind of a template
 
             ## Steps
             - [ ] Follow the instructions for [creating monthly challenge pages](https://github.com/Virtual-Coffee/virtualcoffee.io/#monthly-challenges)

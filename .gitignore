@@ -10,10 +10,11 @@ node_modules
 
 
 
-/netlify/functions/server/index.js
+/netlify/functions/server
 /public/build
 
 # Local Netlify folder
 .netlify
 /app/styles
 /.tmp
+/app/tailwind.css

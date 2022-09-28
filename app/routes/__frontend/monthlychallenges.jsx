@@ -1,13 +1,7 @@
 import { Outlet, useMatches } from '@remix-run/react';
-
 import DefaultLayout from '~/components/layouts/DefaultLayout';
-import NewsletterSubscribe from '~/components/NewslettterSubscribe';
 
-// export async function loader({ request }) {
-
-// }
-
-export default function ResourcesTemplate() {
+export default function ChallengesLayout() {
 	const routeId = useMatches().slice(-1)[0].id;
 
 	// const { allFiles, Hero, heroHeader, heroSubheader } = useLoaderData();
@@ -15,14 +9,10 @@ export default function ResourcesTemplate() {
 	// console.log('running', { Hero, heroHeader, heroSubheader });
 
 	return (
-		<DefaultLayout simple={true}>
+		<DefaultLayout
+			simple={routeId !== 'routes/__frontend/monthlychallenges/index'}
+		>
 			<Outlet />
-			{routeId !== 'routes/newsletter/index' && (
-				<>
-					<hr />
-					<NewsletterSubscribe />
-				</>
-			)}
 		</DefaultLayout>
 	);
 }

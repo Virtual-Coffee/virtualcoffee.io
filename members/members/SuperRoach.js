@@ -23,6 +23,10 @@ module.exports = {
 		{ type: 'polywork', username: 'superroach' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://brettjamesonline.com/', title: 'Personal Website' },
+		{
+			type: 'website',
+			url: 'https://brettjamesonline.com/',
+			title: 'Personal Website',
+		},
 	],
 };
