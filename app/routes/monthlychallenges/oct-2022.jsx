@@ -96,9 +96,9 @@ export default function Challenge() {
 				</li>
 
 				<li>
-					<strong>Mentors</strong>: Make sure you include "Hacktoberfest" as a
+					<strong>Maintainers</strong>: Make sure you include "Hacktoberfest" as a
 					label in your project's topics section (found in "About" on your
-					repository). This is how you opt-in to Hacktoberfest.
+					repository) or on the issues you want to be addressed during October. This is how you opt-in to Hacktoberfest.
 				</li>
 			</ol>
 
@@ -121,7 +121,7 @@ export default function Challenge() {
 
 			<h4>How do I share my progress?</h4>
 			<p>
-				Share your progress in the <code>#open-source</code> channel in Slack.
+				Share your progress in the <code>#hacktoberfest</code> channel in Slack.
 				We want to know when you get those Pull Requests (PRs) in so we can
 				celebrate along with you! And if you need support, we'll be there to
 				help you too. While no other platform is imposed, it can be a good idea
@@ -201,6 +201,21 @@ export default function Challenge() {
 						Hacktoberfest Tutorial
 					</a>
 				</li>
+					<li>
+					<a href="https://virtualcoffee.io/podcast/chad-stewart-oss-and-techishiring">
+						Podcast with Chad Stewart: OSS and #TechIsHiring
+					</a>
+				</li>
+					<li>
+					<a href="https://www.youtube.com/watch?v=A8iI2jlsqfs&t=64s">
+Hacktoberfest and Open Sauced</a>
+				</li>
+							<li>
+					<a href="https://hot.opensauced.pizza/">
+Open Sauced</a>
+				</li>
+				
+				
 			</ul>
 		</>
 	);
