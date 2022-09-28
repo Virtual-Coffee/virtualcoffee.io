@@ -28,7 +28,7 @@ export function CatchBoundary(props) {
 				<PostList
 					items={[
 						{
-							to: '/about/',
+							to: '/events',
 							title: 'Community Events',
 							description: 'See our upcoming events!',
 						},

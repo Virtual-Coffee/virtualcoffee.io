@@ -48,27 +48,27 @@ export const homePageLinks = [
 		description: 'Learn how to join our community',
 	},
 	{
-		to: '/about/',
+		to: '/about',
 		title: 'About Virtual Coffee',
 		description: `Our Mission, Core Values, History, and more.`,
 	},
 	{
-		to: '/code-of-conduct/',
+		to: '/code-of-conduct',
 		title: 'Code of Conduct',
 		description: `In order to create a welcoming and inclusive community, we ask our members to abide by our Code of Conduct.`,
 	},
 	{
-		to: '/members/',
+		to: '/members',
 		title: 'Our Members',
 		description: `Meet our amazing members!`,
 	},
 	{
-		href: 'https://store.virtualcoffee.io/',
+		href: 'https://store.virtualcoffee.io',
 		title: 'Merch Store',
 		description: `Support Virtual Coffee and show your love ❤️`,
 	},
 	{
-		href: 'https://github.com/Virtual-Coffee/',
+		href: 'https://github.com/Virtual-Coffee',
 		title: 'VC GitHub',
 		description: `Join our Open Source efforts!`,
 	},
