@@ -6,7 +6,7 @@ module.exports = {
 			nodes: [
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -15,6 +15,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -24,7 +26,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -33,6 +35,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -42,7 +46,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -51,6 +55,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/matthew-${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: null,
 					},
 					tier: {
@@ -60,7 +66,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -69,6 +75,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -78,7 +86,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -87,6 +95,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -96,7 +106,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -105,6 +115,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -114,7 +126,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -123,6 +135,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: null,
 					},
 					tier: {
@@ -132,7 +146,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -141,6 +155,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -150,7 +166,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -159,6 +175,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -168,7 +186,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -177,6 +195,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: null,
 					},
 					tier: {
@@ -186,7 +206,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -195,6 +215,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -204,7 +226,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -213,6 +235,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -222,7 +246,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -231,6 +255,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -240,7 +266,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -249,6 +275,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/eclectic-${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -258,7 +286,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -267,6 +295,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -276,7 +306,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -285,6 +315,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -294,7 +326,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -303,6 +335,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -312,7 +346,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -321,6 +355,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -330,7 +366,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -339,6 +375,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -348,7 +386,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -357,6 +395,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -366,7 +406,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -375,6 +415,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -384,7 +426,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -393,6 +435,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -402,7 +446,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -411,6 +455,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: null,
 					},
 					tier: {
@@ -420,7 +466,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -429,6 +475,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: faker.internet.url(),
 					},
 					tier: {
@@ -438,7 +486,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -458,7 +506,7 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.findName(),
+						name: faker.name.fullName(),
 						login: faker.internet.userName(),
 						id: faker.datatype.uuid(),
 						avatarUrl_80: faker.image.avatar(),
@@ -467,6 +515,8 @@ module.exports = {
 						avatarUrl_480: faker.image.avatar(),
 						avatarUrl_720: faker.image.avatar(),
 						url: `https://github.com/${faker.internet.userName}`,
+						description: faker.lorem.sentences(),
+						descriptionHTML: `<div>${faker.lorem.sentences()}</div>`,
 						websiteUrl: null,
 					},
 					tier: {

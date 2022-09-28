@@ -20,11 +20,18 @@ module.exports = {
 		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'raeplusplus' },
 		{ type: 'twitch', username: 'raeplusplus' },
-		// { type: 'youtube', channelId: 'yourChannelId' }, OR 
-		{ type: 'youtube', customUrl: 'https://www.youtube.com/channel/UC-FknvQZklUcLAfSNrRbzhw' },
+		// { type: 'youtube', channelId: 'yourChannelId' }, OR
+		{
+			type: 'youtube',
+			customUrl: 'https://www.youtube.com/channel/UC-FknvQZklUcLAfSNrRbzhw',
+		},
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://raeshellerose.netlify.app', title: 'Portfolio' },
+		{
+			type: 'website',
+			url: 'https://raeshellerose.netlify.app',
+			title: 'Portfolio',
+		},
 	],
 };

@@ -123,6 +123,16 @@ You should see something like 'Server now ready on http://localhost:9000' below,
 
 Use ctrl-c to quit the server when you're done.
 
+---
+
+**Note:**
+
+Depending on the speed of your computer, you can get a `TimeoutError - Task timed out after 10.00 seconds` message when the localhost renders the home page (http://localhost:9000) on the browser.
+
+If the feature you are working on is not on the home page (like the newsletter or monthly challenges for example), you may still be able to load the page you need: after you see the notification of `Server now ready on http://localhost:9000`, go to your browser. Then add the path of the page you need (like `http://localhost:9000/newsletter` for the newsletter or `http://localhost:9000/monthlychallenges` for the monthly challenges page) to see the page you need.
+
+---
+
 `yarn dev` actually runs three sub commands, which can be run independently if you wish:
 
 - `yarn dev:sass` - compiles sass styles found in `./styles`. When in dev mode will re-run when a file is changed. The files are compiled to the `./tmp` directory to be processed by the next step.
@@ -173,13 +183,13 @@ If you'd like to work on a feature that requires an API key, please reach out to
 
 Our [VC Resources](https://virtualcoffee.io/resources) are creating using [MDX](https://mdxjs.com/). MDX is basically a combination of Markdown and React.
 
-Any files added to `app/routes/resources` will be automatically loaded and added to the appropriate index page.
+Any files added to `app/routes/__frontend/resources` will be automatically loaded and added to the appropriate index page.
 
 A good way to start adding a new page would be to copy one of the existing pages, then edit the details and content.
 
 ### Newsletters
 
-The newsletters (for now) are simply `jsx` files, and can be found in `app/routes/newsletter/issues`.
+The newsletters (for now) are simply `jsx` files, and can be found in `app/routes/__frontend/newsletter/issues`.
 
 When you add a new issue, **make sure to add it to the index**. Here's how:
 
@@ -187,12 +197,12 @@ When you add a new issue, **make sure to add it to the index**. Here's how:
 - `import` the new issue
 - Add the new issue to the `newsletters` array.
 
-So, if you have created `app/routes/newsletter/issues/2022-03.jsx`:
+So, if you have created `app/routes/__frontend/newsletter/issues/2022-03.jsx`:
 
 ```diff
-+ import { handle as issue202203 } from '~/routes/newsletter/issues/2022-03';
-import { handle as issue202202 } from '~/routes/newsletter/issues/2022-02';
-import { handle as issue202201 } from '~/routes/newsletter/issues/2022-01';
++ import { handle as issue202203 } from '~/routes/__frontend/newsletter/issues/2022-03';
+import { handle as issue202202 } from '~/routes/__frontend/newsletter/issues/2022-02';
+import { handle as issue202201 } from '~/routes/__frontend/newsletter/issues/2022-01';
 
 const newsletters = [
 + 	{ handleData: issue202203, slug: '2022-03' },
@@ -203,7 +213,7 @@ const newsletters = [
 
 ### Monthly Challenges
 
-The monthly challenges (for now) are simply `jsx` files, and can be found in `app/routes/monthlychallenges`.
+The monthly challenges (for now) are simply `jsx` files, and can be found in `app/routes/__frontend/monthlychallenges`.
 
 When you add a new challenge, **make sure to add it to the index**. Here's how:
 
@@ -211,12 +221,12 @@ When you add a new challenge, **make sure to add it to the index**. Here's how:
 - `import` the new challenge
 - Add the new challenge to the `challenges` array.
 
-So, if you have created `app/routes/monthlychallenges/apr-2022.jsx`:
+So, if you have created `app/routes/__frontend/monthlychallenges/apr-2022.jsx`:
 
 ```diff
-+ import { handle as apr2022 } from '~/routes/monthlychallenges/apr-2022';
-import { handle as mar2022 } from '~/routes/monthlychallenges/mar-2022';
-import { handle as feb2022 } from '~/routes/monthlychallenges/feb-2022';
++ import { handle as apr2022 } from '~/routes/__frontend/monthlychallenges/apr-2022';
+import { handle as mar2022 } from '~/routes/__frontend/monthlychallenges/mar-2022';
+import { handle as feb2022 } from '~/routes/__frontend/monthlychallenges/feb-2022';
 
 const challenges = [
 + 	{ handleData: apr2022, slug: 'apr-2022' },

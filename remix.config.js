@@ -1,7 +1,3 @@
-// const { remarkMdxFrontmatter } = require('remark-mdx-frontmatter');
-
-// import { toc } from 'mdast-util-toc';
-
 /**
  * Plugin to generate a Table of Contents (TOC).
  * Created from https://github.com/remarkjs/remark-toc
@@ -102,7 +98,10 @@ async function createRemarkToc() {
  */
 module.exports = {
 	serverBuildTarget: 'netlify',
-	server: './server.js',
+	server:
+		process.env.NETLIFY || process.env.NETLIFY_LOCAL
+			? './server.js'
+			: undefined,
 	ignoredRouteFiles: ['**/.*', '**/*.json'],
 	serverDependenciesToBundle: [
 		'@sindresorhus/slugify',
@@ -113,11 +112,11 @@ module.exports = {
 		'rehype-sanitize',
 		'rehype-stringify',
 	],
-	// appDirectory: "app",
-	// assetsBuildDirectory: "public/build",
-	// serverBuildPath: "netlify/functions/server/index.js",
-	// publicPath: "/build/",
-	// devServerPort: 8002
+	appDirectory: 'app',
+	assetsBuildDirectory: 'public/build',
+	serverBuildPath: 'netlify/functions/server/index.js',
+	publicPath: '/build/',
+	devServerPort: 8002,
 	mdx: async (filename) => {
 		const remarkToc = await createRemarkToc();
 

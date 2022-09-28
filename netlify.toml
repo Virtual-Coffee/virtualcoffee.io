@@ -8,6 +8,9 @@
   port = 9000
   autoLaunch = false
 
+# [functions]
+#   node_bundler = "esbuild"
+
 [functions.server]
   included_files = ["app/routes/**/*.mdx"]
 
@@ -34,18 +37,6 @@
   from = "/sponsorship"
   to = "https://github.com/sponsors/Virtual-Coffee"
   status = 302
-
-[[redirects]]
-  from = "/membership"
-  to = "/"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/membership/*"
-  to = "/"
-  status = 301
-  force = true
 
 [[redirects]]
   from = "/brownbag-idea"
@@ -94,6 +85,30 @@
   to = "/resources/virtual-coffee/slack-channel-guide"
   status = 301
   force = true
+
+[[redirects]]
+  from = "/resources/open-source/oss-writing-issues"
+  to = "/resources/open-source/contributor-guide#guide-to-writing-issues"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/open-source/oss-maintainer-checklist"
+  to = "/resources/open-source/maintainer-guide"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/join-coffee"
+  query = {day = ":day", code = ":code"}
+  to = "/.netlify/functions/join-coffee"
+  status = 200
+
+[[redirects]]
+  from = "/join-slack"
+  query = { code = ":code"}
+  to = "/.netlify/functions/join-slack"
+  status = 200
 
 [[redirects]]
   from = "/*"
