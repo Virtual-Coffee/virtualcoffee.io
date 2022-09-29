@@ -1,4 +1,5 @@
-import { builder, Handler } from '@netlify/functions';
+import { builder } from '@netlify/functions';
+import type { Handler } from '@netlify/functions';
 import { GraphQLClient, gql } from 'graphql-request';
 import { join } from 'path';
 import importDir from 'directory-import';
