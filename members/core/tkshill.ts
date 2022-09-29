@@ -1,6 +1,8 @@
-module.exports = {
+import type { MemberObject } from '../types';
+
+export const tkshill: MemberObject = {
 	// GitHub username (required)
-	github: 'bekahhw',
+	github: 'tkshill',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
@@ -15,18 +17,15 @@ module.exports = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'bekah-hawrot-weigel' },
-		{ type: 'dev', username: 'bekahhw' },
-		{ type: 'codenewbie', username: 'bekahhw' },
-		{ type: 'twitter', username: 'bekahhw' },
-		{ type: 'twitch', username: 'bekahhw' },
+		// { type: 'linkedin', username: 'yourlinkedinUserName' },
+		// { type: 'dev', username: 'yourUserName' },
+		// { type: 'codenewbie', username: 'yourUserName' },
+		// { type: 'twitter', username: 'yourUserName' },
+		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'bekahhw' },
+		// { type: 'polywork', username: 'yourUserName' },
+		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://bekahhw.github.io',
-			title: `Code. Community. Feelings. It's all here`,
-		},
+		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 };
