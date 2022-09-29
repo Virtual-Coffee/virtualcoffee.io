@@ -1,6 +1,16 @@
 import createSocialImage from '~/util/socialimage';
 
-export function createMetaData({ title, description, hero: heroPath, Hero }) {
+export function createMetaData({
+	title,
+	description,
+	hero: heroPath,
+	Hero,
+}: {
+	title?: string;
+	description?: string;
+	hero?: string;
+	Hero?: string;
+}) {
 	// `/assets/svg/${attributes.hero.Hero}.svg`
 	const hero = heroPath || Hero ? `/assets/svg/${Hero}.svg` : null;
 
