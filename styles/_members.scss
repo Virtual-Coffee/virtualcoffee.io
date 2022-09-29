@@ -4,7 +4,7 @@
 	grid-template-columns: 1fr;
 	margin-bottom: map-get($spacers, 5);
 
-	@include media-breakpoint-up(md) {
+	@include media-breakpoint-up(lg) {
 		grid-template-columns: 1fr 1fr;
 		gap: map-get($spacers, 5);
 	}
@@ -29,17 +29,13 @@
 		grid-template-columns: 1fr 3fr 3.25rem;
 	}
 
-	@include media-breakpoint-up(md) {
-		grid-template-columns: 1fr 2fr 3.25rem;
+	@include media-breakpoint-up(lg) {
+		grid-template-columns: 1fr 2fr 3.75rem;
 
 		&:nth-last-child(2):nth-child(odd) {
 			border-bottom: none;
 			padding-bottom: 0;
 		}
-	}
-
-	@include media-breakpoint-up(lg) {
-		grid-template-columns: 1fr 2fr 3.75rem;
 	}
 }
 
@@ -51,24 +47,21 @@
 	@include media-breakpoint-up(sm) {
 		grid-column: 2;
 	}
-
-	@include media-breakpoint-only(md) {
-		grid-column: 1 / span 2;
-	}
 }
 
 .membercard-img {
 	@include media-breakpoint-up(sm) {
 		grid-row: 1 / span 2;
 	}
-	@include media-breakpoint-only(md) {
-		grid-row: 1;
-	}
 
 	img {
 		filter: drop-shadow(0 0.125rem 0.25rem rgba(0, 0, 0, 0.2));
 		border-radius: $border-radius-sm;
 	}
+}
+
+.membercard-badges {
+	margin-top: 0.5em;
 }
 
 .membercard-header {
