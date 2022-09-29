@@ -3,7 +3,8 @@ import { useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import MemberCards from '~/components/MemberCards';
 import UndrawIllustration from '~/components/UndrawIllustration';
-import getMembers, { MembersResponse } from '~/data/members';
+import getMembers from '~/data/members';
+import type { MembersResponse } from '~/data/members';
 import { createMetaData } from '~/util/createMetaData.server';
 
 export const loader = async () => {
@@ -23,7 +24,7 @@ export function meta({ data: { meta } = {} } = {}) {
 }
 
 export default function EventsIndex() {
-	const { core, members, x } = useLoaderData();
+	const { core, members } = useLoaderData();
 
 	return (
 		<DefaultLayout
