@@ -12,6 +12,8 @@ import HashNode from '~/svg/HashNode';
 import YouTube from '~/svg/YouTube';
 import Website from '~/svg/Website';
 
+import * as Badges from '~/svg/badges';
+
 export default function MemberCards({ data }) {
 	const Icons = {
 		GitHub,
@@ -39,6 +41,17 @@ export default function MemberCards({ data }) {
 						>
 							<div className="membercard-img">
 								<img src={member.avatarUrl} alt="" />
+								{member.badges && (
+									<div className="membercard-badges">
+										{member.badges.map((badge) => {
+											const Badge = Badges[badge];
+											if (Badge) {
+												return <Badge key={badge} />;
+											}
+											return null;
+										})}
+									</div>
+								)}
 							</div>
 
 							<div className="membercard-header">
@@ -74,6 +87,7 @@ export default function MemberCards({ data }) {
 									</div>
 								)}
 							</div>
+
 							<div className="membercard-social">
 								{member.accounts.map((item, i) => {
 									if (!item.Icon || !Icons[item.Icon]) {

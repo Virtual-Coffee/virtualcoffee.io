@@ -28,10 +28,13 @@ export type Account =
 			title: string;
 	  };
 
+export type Badge = 'Hacktoberfest2022';
+
 export type MemberObject = {
 	github: string;
 	name?: string;
 	mainUrl?: Website;
 	bio?: string;
 	accounts?: Account[];
+	badges?: Badge[];
 };
