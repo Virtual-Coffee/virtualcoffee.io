@@ -29,6 +29,9 @@ export type Account =
 	  };
 
 export type Badge = 'Hacktoberfest2022';
+export type Flare = {
+	profileMask?: string;
+};
 
 export type MemberObject = {
 	github: string;
@@ -37,4 +40,5 @@ export type MemberObject = {
 	bio?: string;
 	accounts?: Account[];
 	badges?: Badge[];
+	flare?: Flare;
 };

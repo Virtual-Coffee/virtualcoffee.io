@@ -40,7 +40,17 @@ export default function MemberCards({ data }) {
 							id={`member_${member.github}`}
 						>
 							<div className="membercard-img">
-								<img src={member.avatarUrl} alt="" />
+								<div className="membercard-img-w">
+									<img
+										src={member.avatarUrl}
+										alt=""
+										style={
+											member.flare?.profileMask
+												? { clipPath: member.flare.profileMask }
+												: {}
+										}
+									/>
+								</div>
 								{member.badges && (
 									<div className="membercard-badges">
 										{member.badges.map((badge) => {

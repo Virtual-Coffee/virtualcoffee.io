@@ -1,4 +1,5 @@
 import type { MemberObject } from '../types';
+import { profileMasks } from '../flare';
 
 export const danieltott: MemberObject = {
 	// GitHub username (required)
@@ -30,4 +31,7 @@ export const danieltott: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
+	flare: {
+		profileMask: profileMasks.triangle,
+	},
 };

@@ -54,8 +54,10 @@
 		grid-row: 1 / span 2;
 	}
 
-	img {
+	.membercard-img-w {
 		filter: drop-shadow(0 0.125rem 0.25rem rgba(0, 0, 0, 0.2));
+	}
+	img {
 		border-radius: $border-radius-sm;
 	}
 }
