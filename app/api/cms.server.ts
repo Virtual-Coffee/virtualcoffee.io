@@ -38,7 +38,7 @@ export class CmsActions {
 
 	async enhanceEvent(event: Event): Promise<Event> {
 		event.eventCalendarDescription = await sanitizeHtml(
-			event.eventCalendarDescription,
+			event.eventCalendarDescription || '',
 		);
 
 		return { ...event, eventIcsLink: getIcsLink(event) };
@@ -131,7 +131,7 @@ export class CmsActions {
 			}
 		`;
 
-		const response = await this.client.request(query);
+		const response = await this.client.request(query, { handle });
 
 		if (!response?.solspace_calendar?.calendar) {
 			throw new CmsError('There was an error fetching the calendar.', response);
