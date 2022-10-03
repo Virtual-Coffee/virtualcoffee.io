@@ -32,6 +32,6 @@ export const danieltott: MemberObject = {
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	flare: {
-		profileMask: profileMasks.triangle,
+		// profileMask: profileMasks.star,
 	},
 };
