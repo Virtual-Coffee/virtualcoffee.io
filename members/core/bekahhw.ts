@@ -45,4 +45,5 @@ export const bekahhw: MemberObject = {
 			title: `Code. Community. Feelings. It's all here`,
 		},
 	],
+	badges: [],
 };

@@ -47,4 +47,5 @@ export const tamihughes: MemberObject = {
 			title: 'Personal Portfolio',
 		},
 	],
+	badges: [],
 };

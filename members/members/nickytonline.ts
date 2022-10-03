@@ -46,4 +46,5 @@ export const nickytonline: MemberObject = {
 			title: 'Just Some Dev',
 		},
 	],
+	badges: [],
 };

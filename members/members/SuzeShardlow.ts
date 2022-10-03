@@ -43,4 +43,5 @@ export const SuzeShardlow: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://suze.dev', title: 'suze.dev' },
 	],
+	badges: [],
 };

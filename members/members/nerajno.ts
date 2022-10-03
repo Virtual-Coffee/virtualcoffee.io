@@ -46,4 +46,5 @@ export const nerajno: MemberObject = {
 			title: ' Nerando Johnson - Portfolio Page',
 		},
 	],
+	badges: [],
 };

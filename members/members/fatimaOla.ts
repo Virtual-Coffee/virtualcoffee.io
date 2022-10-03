@@ -43,4 +43,5 @@ export const fatimaOla: MemberObject = {
 		{ type: 'hashnode', username: 'fatima-ola' },
 		//{ type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
+	badges: [],
 };

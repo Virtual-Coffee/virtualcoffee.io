@@ -46,4 +46,5 @@ export const andreamartz: MemberObject = {
 			title: "Andrea's Portfolio",
 		},
 	],
+	badges: [],
 };

@@ -50,4 +50,5 @@ export const raeshelleRose: MemberObject = {
 			title: 'Portfolio',
 		},
 	],
+	badges: [],
 };

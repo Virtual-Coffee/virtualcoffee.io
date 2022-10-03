@@ -42,4 +42,5 @@ export const brandonbrown4792: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
+	badges: [],
 };

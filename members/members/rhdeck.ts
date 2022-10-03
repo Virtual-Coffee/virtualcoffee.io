@@ -46,4 +46,5 @@ export const rhdeck: MemberObject = {
 			title: 'Statechange Consulting',
 		},
 	],
+	badges: [],
 };

@@ -43,4 +43,5 @@ export const toddlibby: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://toddl.dev', title: 'Todd Libby' },
 	],
+	badges: [],
 };

@@ -46,4 +46,5 @@ export const mikerogers0: MemberObject = {
 			title: 'Ruby Developer | Mike Rogers',
 		},
 	],
+	badges: [],
 };

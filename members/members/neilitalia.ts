@@ -46,4 +46,5 @@ export const neilitalia: MemberObject = {
 			title: 'Personal Website and Portfolio',
 		},
 	],
+	badges: [],
 };

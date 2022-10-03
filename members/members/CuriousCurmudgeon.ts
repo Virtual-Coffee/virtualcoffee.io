@@ -43,4 +43,5 @@ export const CuriousCurmudgeon: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://brianmeeker.me/', title: 'Musings' },
 	],
+	badges: [],
 };

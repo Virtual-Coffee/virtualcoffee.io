@@ -42,4 +42,5 @@ export const teezzan: MemberObject = {
 		{ type: 'hashnode', username: 'TaiwoHY' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
+	badges: [],
 };

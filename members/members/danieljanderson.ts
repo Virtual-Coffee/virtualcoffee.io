@@ -46,4 +46,5 @@ export const danieljanderson: MemberObject = {
 			title: 'Portfolio',
 		},
 	],
+	badges: [],
 };

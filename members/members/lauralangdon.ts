@@ -42,4 +42,5 @@ export const lauralangdon: MemberObject = {
 		// { type: 'hashnode', username: 'g0g0gadget' },
 		// { type: 'website', url: 'https://lauralangdon.io', title: 'LauraLangdon.io' },
 	],
+	badges: [],
 };

@@ -42,4 +42,5 @@ export const YolandaHaynes: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://www.yhaynes.com/', title: 'Portfolio' },
 	],
+	badges: [],
 };

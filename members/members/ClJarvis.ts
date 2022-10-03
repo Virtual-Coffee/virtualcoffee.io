@@ -46,4 +46,5 @@ export const ClJarvis: MemberObject = {
 			title: 'Portfolio',
 		},
 	],
+	badges: [],
 };

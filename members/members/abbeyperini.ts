@@ -42,4 +42,5 @@ export const abbeyperini: MemberObject = {
 		{ type: 'hashnode', username: 'abbeyperini' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
+	badges: [],
 };

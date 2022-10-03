@@ -46,4 +46,5 @@ export const mccurcio: MemberObject = {
 			title: 'Matthew Curcio',
 		},
 	],
+	badges: [],
 };

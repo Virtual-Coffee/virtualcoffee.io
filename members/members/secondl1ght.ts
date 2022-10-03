@@ -42,4 +42,5 @@ export const secondl1ght: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://contra.com/secondl1ght', title: 'Contra' },
 	],
+	badges: [],
 };

@@ -45,4 +45,5 @@ export const SuperRoach: MemberObject = {
 			title: 'Personal Website',
 		},
 	],
+	badges: [],
 };

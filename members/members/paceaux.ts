@@ -15,4 +15,5 @@ export const paceaux: MemberObject = {
 		{ type: 'twitter', username: 'paceaux' },
 		{ type: 'website', url: 'https://frankmtaylor.com/', title: 'Portfolio' },
 	],
+	badges: [],
 };

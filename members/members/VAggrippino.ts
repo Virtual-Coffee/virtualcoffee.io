@@ -46,4 +46,5 @@ export const VAggrippino: MemberObject = {
 			title: 'Vince Aggrippino - Coding and Web Technologies',
 		},
 	],
+	badges: [],
 };
