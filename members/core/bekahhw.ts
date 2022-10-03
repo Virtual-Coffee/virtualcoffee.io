@@ -1,5 +1,5 @@
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
+import { profileMasks } from '../flare';
 
 export const bekahhw: MemberObject = {
 	// GitHub username (required)
@@ -26,18 +26,19 @@ export const bekahhw: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		// profileMask: profileMasks.triangle,
+		profileMask: profileMasks.circle,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
 		{ type: 'linkedin', username: 'bekah-hawrot-weigel' },
 		{ type: 'dev', username: 'bekahhw' },
-		{ type: 'codenewbie', username: 'bekahhw' },
+		// { type: 'codenewbie', username: 'bekahhw' },
 		{ type: 'twitter', username: 'bekahhw' },
 		{ type: 'twitch', username: 'bekahhw' },
-		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'bekahhw' },
+		{ type: 'youtube', channelId: 'UCyQMaTyYIcq4npG26u6Z2Fg' },
+		//  { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
+		// { type: 'polywork', username: 'bekahhw' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{
 			type: 'website',
@@ -45,5 +46,5 @@ export const bekahhw: MemberObject = {
 			title: `Code. Community. Feelings. It's all here`,
 		},
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022'],
 };
