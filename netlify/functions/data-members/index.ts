@@ -159,8 +159,6 @@ async function getMemberGithubData(
 function loadDirectory(
 	memberList: Record<string, MemberObject>,
 ): MemberObject[] {
-	console.log(memberList);
-
 	const list = Object.keys(memberList).map((key) => memberList[key]);
 
 	return list.sort(function (a, b) {
