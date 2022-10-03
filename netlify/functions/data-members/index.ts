@@ -1,12 +1,12 @@
 import { builder } from '@netlify/functions';
 import type { Handler } from '@netlify/functions';
 import { GraphQLClient, gql } from 'graphql-request';
-import teamsData from '../../members/teams';
+import teamsData from '../../../members/teams';
 import mockMemberData from '~/data/mocks/memberData';
 import { sanitizeHtml } from '~/util/sanitizeCmsData';
-import type { Website, Account, MemberObject } from '../../members/types';
-import * as coreMembers from '../../members/core';
-import * as membersMembers from '../../members/members';
+import type { Website, Account, MemberObject } from '../../../members/types';
+import * as coreMembers from './core';
+import * as membersMembers from './members';
 
 // This file is an On-Demand Builder
 // It allows us to cache third-party data for a specified amount of time
