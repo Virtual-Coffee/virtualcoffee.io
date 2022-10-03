@@ -11,6 +11,7 @@
 	"author": "Virtual Coffee <hello@virtualcoffee.io> (https://virtualcoffee.io/)",
 	"sideEffects": false,
 	"main": "index.js",
+	"packageManager": "yarn@1.22.19",
 	"scripts": {
 		"preinstall": "npx only-allow yarn",
 		"prepare": "husky install",
