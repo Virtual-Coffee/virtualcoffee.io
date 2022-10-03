@@ -1,4 +1,5 @@
 import type { MemberObject } from '../types';
+import { profileMasks } from '../flare';
 
 export const _EXAMPLE: MemberObject = {
 	// GitHub username (required)
@@ -14,6 +15,17 @@ export const _EXAMPLE: MemberObject = {
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
 	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
+	//
+	// flare - If you want to add a flare to your profile, you can do so here.
+	// So far  all we have is a profile mask, which makes your profile picture a different shape from the default square.
+	// Leave this out if you prefer the default square.
+	// You can choose from the following profile masks:
+	// profileMasks.bubble, profileMasks.circle, profileMasks.diamond, profileMasks.hexagon,
+	// profileMasks.pentagon, profileMasks.rhombus, profileMasks.square, profileMasks.star, profileMasks.triangle
+	flare: {
+		// example:
+		// profileMask: profileMasks.triangle,
+	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
