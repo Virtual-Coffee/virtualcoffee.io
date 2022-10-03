@@ -1,11 +1,12 @@
-import { builder, Handler } from '@netlify/functions';
+import { builder } from '@netlify/functions';
+import type { Handler } from '@netlify/functions';
 import { GraphQLClient, gql } from 'graphql-request';
-import { join } from 'path';
-import importDir from 'directory-import';
 import teamsData from '../../members/teams';
 import mockMemberData from '~/data/mocks/memberData';
 import { sanitizeHtml } from '~/util/sanitizeCmsData';
 import type { Website, Account, MemberObject } from '../../members/types';
+import * as coreMembers from '../../members/core';
+import * as membersMembers from '../../members/members';
 
 // This file is an On-Demand Builder
 // It allows us to cache third-party data for a specified amount of time
@@ -155,12 +156,12 @@ async function getMemberGithubData(
 	}
 }
 
-function loadDirectory(path: string) {
-	const dict = importDir<MemberObject>({
-		directoryPath: join(process.cwd(), 'members', path),
-	});
+function loadDirectory(
+	memberList: Record<string, MemberObject>,
+): MemberObject[] {
+	console.log(memberList);
 
-	const list = Object.keys(dict).map((key) => dict[key]);
+	const list = Object.keys(memberList).map((key) => memberList[key]);
 
 	return list.sort(function (a, b) {
 		var nameA = a.github.toLowerCase(); // ignore upper and lowercase
@@ -195,8 +196,8 @@ type FixedUpUser = Omit<MemberObject, 'accounts'> & {
 };
 
 async function loadUserData() {
-	const core = loadDirectory('core');
-	const members = loadDirectory('members');
+	const core = loadDirectory(coreMembers);
+	const members = loadDirectory(membersMembers);
 
 	const teamsDict = {} as TeamsDict;
 
@@ -219,7 +220,6 @@ async function loadUserData() {
 		const github = githubData[data.github.toLowerCase()];
 
 		if (!github) {
-			console.log(`no github for ${data.github}`);
 			return null;
 		}
 
@@ -237,7 +237,7 @@ async function loadUserData() {
 		}
 
 		if (!returnObject.bio) {
-			returnObject.bio = await sanitizeHtml(github.bioHTML);
+			returnObject.bio = await sanitizeHtml(github.bioHTML || '');
 		} else {
 			returnObject.bio = await parseMarkdown(returnObject.bio);
 		}
