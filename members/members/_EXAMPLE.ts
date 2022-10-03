@@ -22,6 +22,7 @@ export const _EXAMPLE: MemberObject = {
 	// You can choose from the following profile masks:
 	// profileMasks.bubble, profileMasks.circle, profileMasks.diamond, profileMasks.hexagon,
 	// profileMasks.pentagon, profileMasks.rhombus, profileMasks.square, profileMasks.star, profileMasks.triangle
+	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
 		// profileMask: profileMasks.triangle,
