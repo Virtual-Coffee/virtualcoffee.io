@@ -20,8 +20,8 @@ export const _EXAMPLE: MemberObject = {
 	// So far  all we have is a profile mask, which makes your profile picture a different shape from the default square.
 	// Leave this out if you prefer the default square.
 	// You can choose from the following profile masks:
-	// profileMasks.bubble, profileMasks.circle, profileMasks.diamond, profileMasks.hexagon,
-	// profileMasks.pentagon, profileMasks.rhombus, profileMasks.square, profileMasks.star, profileMasks.triangle
+	// profileMasks.octogon, profileMasks.hexagon, profileMasks.triangle,
+	// profileMasks.circle, profileMasks.rabbet, profileMasks.star
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
