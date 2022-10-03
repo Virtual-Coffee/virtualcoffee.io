@@ -1,4 +1,5 @@
 import type { MemberObject } from '../types';
+// import { profileMasks } from '../flare';
 
 export const sadiejay: MemberObject = {
 	// GitHub username (required)
@@ -28,6 +29,19 @@ export const sadiejay: MemberObject = {
 	// - 🔲 Building up and launching my portfolio with JS, SQL, Python projects
 	// - 🔲 Securing freelance, contract or part-time work
 	// - 🔲 Remote jobs only please!`,
+	//
+	// flare - If you want to add a flare to your profile, you can do so here.
+	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
+	// So far  all we have is a profile mask, which makes your profile picture a different shape from the default square.
+	// Leave this out if you prefer the default square.
+	// You can choose from the following profile masks:
+	// profileMasks.octogon, profileMasks.hexagon, profileMasks.triangle,
+	// profileMasks.circle, profileMasks.rabbet, profileMasks.star
+	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
+	flare: {
+		// example:
+		// profileMask: profileMasks.triangle,
+	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [

@@ -1,5 +1,5 @@
 import type { MemberObject } from '../types';
-import { profileMasks } from '../flare';
+// import { profileMasks } from '../flare';
 
 export const _EXAMPLE: MemberObject = {
 	// GitHub username (required)
@@ -17,6 +17,7 @@ export const _EXAMPLE: MemberObject = {
 	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
+	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
 	// So far  all we have is a profile mask, which makes your profile picture a different shape from the default square.
 	// Leave this out if you prefer the default square.
 	// You can choose from the following profile masks:
