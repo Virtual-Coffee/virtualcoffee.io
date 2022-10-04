@@ -1,8 +1,9 @@
 import { qualifiedUrl } from '~/util/url.server';
+import type { MemberList } from '../../members/types';
 
 export interface MembersResponse {
-	core: [];
-	members: [];
+	core: MemberList;
+	members: MemberList;
 }
 
 export default async function getMembers(): Promise<MembersResponse> {

@@ -4,7 +4,15 @@ import { GraphQLClient, gql } from 'graphql-request';
 import teamsData from '../../../members/teams';
 import mockMemberData from '~/data/mocks/memberData';
 import { sanitizeHtml } from '~/util/sanitizeCmsData';
-import type { Website, Account, MemberObject } from '../../../members/types';
+import type {
+	FixedUpUser,
+	MemberObject,
+	GithubSearchUser,
+	GithubSearchUserLookup,
+	TeamName,
+	TeamsDict,
+	FixedUpUserAccount,
+} from '../../../members/types';
 import * as coreMembers from './core';
 import * as membersMembers from './members';
 
@@ -55,23 +63,6 @@ async function parseMarkdown(markdown: string) {
 
 	return String(file);
 }
-
-type GithubSearchUser = {
-	login: string;
-	id: string | number;
-	url: Website;
-	avatarUrl: string;
-	name?: string;
-	company?: string;
-	location?: string;
-	isHireable?: boolean;
-	bio?: string;
-	bioHTML?: string;
-	twitterUsername?: string;
-	websiteUrl?: Website;
-};
-
-type GithubSearchUserLookup = Record<string, GithubSearchUser>;
 
 async function getMemberGithubData(
 	data: MemberObject[],
@@ -177,21 +168,6 @@ function loadDirectory(
 }
 
 // const allTeamNames = teamsData.map((team) => team.name) as const;
-
-type TeamName = keyof typeof teamsData;
-type TeamsDict = Record<string, TeamName[]>;
-
-type FixedUpUserAccount = Account & {
-	Icon: string;
-	url: Website;
-	title: string;
-};
-
-type FixedUpUser = Omit<MemberObject, 'accounts'> & {
-	avatarUrl?: GithubSearchUser['avatarUrl'];
-	teams?: TeamName[];
-	accounts: FixedUpUserAccount[];
-};
 
 async function loadUserData() {
 	const core = loadDirectory(coreMembers);

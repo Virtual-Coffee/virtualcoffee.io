@@ -6,9 +6,10 @@ import UndrawIllustration from '~/components/UndrawIllustration';
 import getMembers from '~/data/members';
 import type { MembersResponse } from '~/data/members';
 import { createMetaData } from '~/util/createMetaData.server';
+import type { LoaderArgs } from '@remix-run/node';
 
-export const loader = async () => {
-	const members: MembersResponse = await getMembers();
+export const loader = async (args: LoaderArgs) => {
+	const { core, members }: MembersResponse = await getMembers();
 
 	const meta = createMetaData({
 		title: 'Virtual Coffee Members',
@@ -16,7 +17,7 @@ export const loader = async () => {
 		Hero: 'UndrawTeamSpirit',
 	});
 
-	return json({ ...members, meta });
+	return json({ core, members, meta });
 };
 
 export function meta({ data: { meta } = {} } = {}) {
@@ -24,7 +25,7 @@ export function meta({ data: { meta } = {} } = {}) {
 }
 
 export default function EventsIndex() {
-	const { core, members } = useLoaderData();
+	const { core, members } = useLoaderData<typeof loader>();
 
 	return (
 		<DefaultLayout
