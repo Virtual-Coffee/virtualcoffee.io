@@ -46,5 +46,5 @@ export const muckitymuck: MemberObject = {
 			title: 'Personal Website and Portfolio',
 		},
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022'],
 };
