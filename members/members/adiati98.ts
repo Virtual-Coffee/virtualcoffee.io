@@ -1,5 +1,5 @@
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
+import { profileMasks } from '../flare';
 
 export const adiati98: MemberObject = {
 	// GitHub username (required)
@@ -30,6 +30,7 @@ export const adiati98: MemberObject = {
 	flare: {
 		// example:
 		// profileMask: profileMasks.triangle,
+		profileMask: profileMasks.circle,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
@@ -42,8 +43,8 @@ export const adiati98: MemberObject = {
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		{ type: 'polywork', username: 'adiatiayu' },
 		// { type: 'medium', username: 'yourUserName' },
-		{ type: 'hashnode', username: 'ayuadiati' },
+		{ type: 'hashnode', username: 'adiatiayu' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022'],
 };
