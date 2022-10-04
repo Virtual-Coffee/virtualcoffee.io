@@ -1,3 +1,5 @@
+import { Link } from '@remix-run/react';
+
 export const handle = {
 	meta: {
 		title: 'Virtual Coffee Newsletter, October 2022',
@@ -50,9 +52,7 @@ export default function Issue() {
 			<h3 className="font-italic">September Recap</h3>
 			<p>
 				Monthly challenge -&gt;{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/sept-2022">
-					Hacktoberfest Prep!
-				</a>
+				<Link to="/monthlychallenges/sept-2022">Hacktoberfest Prep!</Link>
 			</p>
 			<p>
 				We spent September getting ready for Hacktoberfest contributions. Some
@@ -64,11 +64,7 @@ export default function Issue() {
 			</p>
 
 			<h3 className="mb-3 font-italic">
-				October ->{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/oct-2022">
-					Hacktober
-				</a>
-				!
+				October -> <Link to="/monthlychallenges/oct-2022">Hacktober</Link>!
 			</h3>
 			<p>
 				<a href="https://hacktoberfest.virtualcoffee.io/">
@@ -156,7 +152,7 @@ export default function Issue() {
 				time of this publication. Please check the official VC #announcements
 				Slack channel, or other noted channels, for any updates and links to
 				event rooms. For the full list of events, check out{' '}
-				<a href="https://virtualcoffee.io/events">our events page</a>.
+				<Link to="/events">our events page</Link>.
 			</p>
 
 			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
@@ -166,9 +162,9 @@ export default function Issue() {
 				All of our active volunteers have an invite to send out to someone
 				interested in joining Virtual Coffee. If you're interested in joining
 				the volunteer team, check out some the roles{' '}
-				<a href="https://virtualcoffee.io/resources/virtual-coffee/get-involved/paths-to-leadership">
+				<Link to="/resources/virtual-coffee/get-involved/paths-to-leadership">
 					here
-				</a>
+				</Link>
 				!
 			</p>
 
@@ -182,19 +178,19 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/chad-stewart-oss-and-techishiring">
+					<Link to="/podcast/chad-stewart-oss-and-techishiring">
 						Chad Stewart — OSS and #TechisHiring
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/julia-seidman-embracing-the-careen-over-the-career">
+					<Link to="/podcast/julia-seidman-embracing-the-careen-over-the-career">
 						Julia Seidman — Embracing the Careen Over the Career
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/ryan-kahn-building-better-teams">
+					<Link to="/podcast/ryan-kahn-building-better-teams">
 						Ryan Kahn — Building Better Teams
-					</a>
+					</Link>
 				</li>
 			</ul>
 
