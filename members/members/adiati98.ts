@@ -46,5 +46,5 @@ export const adiati98: MemberObject = {
 		{ type: 'hashnode', username: 'adiatiayu' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: [Hacktoberfest2022],
+	badges: ['Hacktoberfest2022'],
 };
