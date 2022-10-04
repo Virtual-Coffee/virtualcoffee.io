@@ -1,8 +1,10 @@
+import type { IconProps } from 'members/types';
+
 export default function VirtualCoffeeFull({
 	ariaHidden,
 	title = 'Virtual Coffee',
 	...rest
-}) {
+}: IconProps): JSX.Element {
 	return (
 		<svg
 			viewBox="0 0 999.028 144.347"

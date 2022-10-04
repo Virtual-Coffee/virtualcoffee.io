@@ -1,4 +1,9 @@
-export default function Website({ ariaHidden, title = 'Website' }) {
+import type { IconProps } from 'members/types';
+
+export default function Website({
+	ariaHidden,
+	title = 'Website',
+}: IconProps): JSX.Element {
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"

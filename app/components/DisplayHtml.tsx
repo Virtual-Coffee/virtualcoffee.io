@@ -1,7 +1,9 @@
 interface DisplayHtmlProps {
-	html: {
-		[k: string]: string;
-	};
+	html:
+		| {
+				[k: string]: string;
+		  }
+		| string;
 	[k: string]: any;
 }
 
@@ -14,7 +16,7 @@ export default function DisplayHtml({
 	return (
 		<Component
 			dangerouslySetInnerHTML={{
-				__html: html?.sanitizedHtml || html,
+				__html: typeof html === 'string' ? html : html.sanitizedHtml || '',
 			}}
 			{...props}
 		/>

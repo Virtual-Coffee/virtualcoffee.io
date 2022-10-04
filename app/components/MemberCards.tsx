@@ -11,10 +11,11 @@ import Medium from '~/svg/Medium';
 import HashNode from '~/svg/HashNode';
 import YouTube from '~/svg/YouTube';
 import Website from '~/svg/Website';
+import type { MemberList } from 'members/types';
 
 import * as Badges from '~/svg/badges';
 
-export default function MemberCards({ data }) {
+export default function MemberCards({ data }: { data: MemberList }) {
 	const Icons = {
 		GitHub,
 		LinkedIn,
@@ -33,7 +34,7 @@ export default function MemberCards({ data }) {
 		<>
 			<div className="membercards">
 				{data.map((member) => {
-					return (
+					return !member ? null : (
 						<div
 							key={member.github}
 							className="membercard"
@@ -67,7 +68,7 @@ export default function MemberCards({ data }) {
 							<div className="membercard-header">
 								<h3 className="membercard-name">{member.name}</h3>
 
-								{member.teams?.length > 0 && (
+								{member?.teams && member.teams.length > 0 && (
 									<div className="membercard-teams">
 										{member.teams.map((team) => (
 											<span key={team} className="badge badge-secondary">

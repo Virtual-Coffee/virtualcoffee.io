@@ -1,4 +1,6 @@
-export default function YouTube({ ariaHidden, title }) {
+import type { IconProps } from 'members/types';
+
+export default function YouTube({ ariaHidden, title }: IconProps): JSX.Element {
 	return (
 		<svg
 			viewBox="0 0 24 24"
