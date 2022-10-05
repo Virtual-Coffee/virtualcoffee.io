@@ -1,4 +1,5 @@
 import Nav from '~/components/Nav';
+import { Link } from '@remix-run/react';
 
 export default function Root({ children }) {
 	return (
@@ -18,6 +19,9 @@ export default function Root({ children }) {
 					<li>
 						<a href="mailto:hello@virtualcoffee.io">Contact Us</a>
 					</li>
+					<li>
+						<Link to="/code-of-conduct">Code of Conduct</Link>
+					</li>
 					{/* <li>
       <a
         href="https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/{{ page.inputPath }}"
@@ -25,7 +29,7 @@ export default function Root({ children }) {
       >
     </li> */}
 					<li>
-						<a href="/uses">Uses</a>
+						<Link to="/uses">Uses</Link>
 					</li>
 					<li className="py-0">
 						<a
