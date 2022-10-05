@@ -1,4 +1,8 @@
-export default function Book({ ariaHidden, title = 'Book' }) {
+import type { IconProps } from 'members/types';
+export default function Book({
+	ariaHidden,
+	title = 'Book',
+}: IconProps): JSX.Element {
 	return (
 		<svg
 			width="1em"

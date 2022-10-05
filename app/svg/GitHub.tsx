@@ -1,4 +1,6 @@
-export default function GitHub({ ariaHidden, title }) {
+import type { IconProps } from 'members/types';
+
+export default function GitHub({ ariaHidden, title }: IconProps): JSX.Element {
 	return (
 		<svg
 			viewBox="0 0 24 24"

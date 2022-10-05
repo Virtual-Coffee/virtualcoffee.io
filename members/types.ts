@@ -65,8 +65,25 @@ export type GithubSearchUserLookup = Record<string, GithubSearchUser>;
 export type TeamName = keyof typeof teamsData;
 export type TeamsDict = Record<string, TeamName[]>;
 
+export type Icons =
+	| 'GitHub'
+	| 'LinkedIn'
+	| 'Dev'
+	| 'Codenewbie'
+	| 'Twitter'
+	| 'Twitch'
+	| 'Polywork'
+	| 'Medium'
+	| 'HashNode'
+	| 'YouTube'
+	| 'Website';
+
+export type IconProps = {
+	ariaHidden?: boolean;
+	title?: string;
+};
 export type FixedUpUserAccount = Account & {
-	Icon: string;
+	Icon: Icons;
 	url: Website;
 	title: string;
 };
