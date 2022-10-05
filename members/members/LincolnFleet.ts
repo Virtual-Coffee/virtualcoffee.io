@@ -1,6 +1,5 @@
-import { profileMasks } from 'members/flare';
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
+import { profileMasks } from '../flare';
 
 export const LincolnFleet: MemberObject = {
 	// GitHub username (required)
