@@ -1,7 +1,7 @@
 interface DisplayHtmlProps {
 	html:
 		| {
-				[k: string]: string;
+				sanitizedHtml: string;
 		  }
 		| string;
 	[k: string]: any;
