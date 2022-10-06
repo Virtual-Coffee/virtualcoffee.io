@@ -14,6 +14,7 @@ const teams = {
 		'davidalpert',
 		'glenmccallumcan',
 		'jdwilkin4',
+		'JoeKarow',
 		'juliaseid',
 		'mrsantons',
 		'marktnoonan',
