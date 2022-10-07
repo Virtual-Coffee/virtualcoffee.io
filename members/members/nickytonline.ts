@@ -46,5 +46,5 @@ export const nickytonline: MemberObject = {
 			title: 'Just Some Dev',
 		},
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022'],
 };
