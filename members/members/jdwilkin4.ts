@@ -46,5 +46,5 @@ export const jdwilkin4: MemberObject = {
 			title: 'freeCodeCamp News Author Profile',
 		},
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022'],
 };
