@@ -32,7 +32,7 @@ export const jdwilkin4: MemberObject = {
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
 		{ type: 'linkedin', username: 'jessica-wilkins-developer' },
-		// { type: 'dev', username: 'yourUserName' },
+		{ type: 'dev', username: 'codergirl1991' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'codergirl1991' },
 		// { type: 'twitch', username: 'yourUserName' },
