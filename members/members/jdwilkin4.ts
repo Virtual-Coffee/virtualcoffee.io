@@ -1,5 +1,5 @@
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
+import { profileMasks } from '../flare';
 
 export const jdwilkin4: MemberObject = {
 	// GitHub username (required)
@@ -26,13 +26,13 @@ export const jdwilkin4: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		// profileMask: profileMasks.triangle,
+		profileMask: profileMasks.circle,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
 		{ type: 'linkedin', username: 'jessica-wilkins-developer' },
-		// { type: 'dev', username: 'yourUserName' },
+		{ type: 'dev', username: 'codergirl1991' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'codergirl1991' },
 		// { type: 'twitch', username: 'yourUserName' },
@@ -46,5 +46,5 @@ export const jdwilkin4: MemberObject = {
 			title: 'freeCodeCamp News Author Profile',
 		},
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022'],
 };
