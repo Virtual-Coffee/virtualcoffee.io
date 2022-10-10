@@ -1,7 +1,7 @@
 ---
 name: Typescript Conversion
 about: Maintainers only - listing files to convert to TypeScript
-title: Convert x to TypeScript
+title: Convert `x` to TypeScript
 labels: 'Issue for Full Member, Tech: Typescript, Type: enhancement'
 assignees: ''
 
@@ -25,3 +25,4 @@ Virtual Coffee is reserving all open issues for Virtual Coffee members for the m
 
 
 ### Blockers
+- _None_
