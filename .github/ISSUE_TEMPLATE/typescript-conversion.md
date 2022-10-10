@@ -1,7 +1,7 @@
 ---
 name: Typescript Conversion
 about: Maintainers only - listing files to convert to TypeScript
-title: ''
+title: Convert x to TypeScript
 labels: 'Issue for Full Member, Tech: Typescript, Type: enhancement'
 assignees: ''
 
