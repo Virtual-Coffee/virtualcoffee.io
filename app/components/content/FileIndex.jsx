@@ -52,21 +52,6 @@ function findBase(files, subDirectory) {
 		return list;
 	}, []);
 
-	const filteredx = files
-		.filter((file) => {
-			const slugSplit = file.slug.split('/');
-			let matches = true;
-			for (let i = 0; i < slugSplit.length; i++) {
-				matches = slugSplit[i] === subDirectorySplit[i];
-			}
-
-			return matches;
-		})
-		.map((file) => ({
-			...file,
-			children: file.children ? findBase(file.children, subDirectory) : null,
-		}));
-
 	if (
 		filtered.length === 1 &&
 		filtered[0].slug === subDirectory &&

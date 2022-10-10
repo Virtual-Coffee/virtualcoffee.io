@@ -4,7 +4,7 @@ import Root from '~/components/layouts/Root';
 import { homePageLinks } from '~/routes/__frontend/index';
 import { useLocation } from 'react-router-dom';
 
-export function CatchBoundary(props) {
+export function CatchBoundary() {
 	const location = useLocation();
 
 	return (
