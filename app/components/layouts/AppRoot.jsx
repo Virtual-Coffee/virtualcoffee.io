@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import {
 	CalendarIcon,
@@ -6,10 +6,8 @@ import {
 	Bars3Icon,
 	XMarkIcon,
 	UserCircleIcon,
-	BellIcon,
 } from '@heroicons/react/24/outline';
 import { Link } from '@remix-run/react';
-import VirtualCoffeeFullBanner from '~/svg/VirtualCoffeeFullBanner';
 import classNames from 'classnames';
 
 const navigation = [
