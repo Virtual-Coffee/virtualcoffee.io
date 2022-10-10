@@ -1,7 +1,7 @@
 import Nav from '~/components/Nav';
 import { Link } from '@remix-run/react';
 
-export default function Root({ children }) {
+export default function Root({ children }: { children: React.ReactNode }) {
 	return (
 		<>
 			<a
