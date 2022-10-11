@@ -31,18 +31,33 @@ export const thegrumpyenby: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		 { type: 'linkedin', username: 'kaiandiekatschthaler' },
+		{ type: 'linkedin', username: 'kaiandiekatschthaler' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		 { type: 'twitter', username: 'thegrumpyenby' },
-		 { type: 'twitch', username: 'thegrumpyenby' },
-		 { type: 'youtube', customUrl: 'https://www.youtube.com/channel/UCrshCSQSg36GA0Ebdgw1E7A' },
-		 { type: 'polywork', username: 'thegrumpyenby' },
+		{ type: 'twitter', username: 'thegrumpyenby' },
+		{ type: 'twitch', username: 'thegrumpyenby' },
+		{
+			type: 'youtube',
+			customUrl: 'https://www.youtube.com/channel/UCrshCSQSg36GA0Ebdgw1E7A',
+		},
+		{ type: 'polywork', username: 'thegrumpyenby' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		 { type: 'website', url: 'https://www.katschthaler.com', title: 'Portfolio Website' },
-     { type: 'website', url: 'https://kai.grumpyduck.dev', title: 'Online Résumé' },
-     { type: 'website', url: 'https://taboolarasa.org', title: 'Taboola Rasa Website' },
+		{
+			type: 'website',
+			url: 'https://www.katschthaler.com',
+			title: 'Portfolio Website',
+		},
+		{
+			type: 'website',
+			url: 'https://kai.grumpyduck.dev',
+			title: 'Online Résumé',
+		},
+		{
+			type: 'website',
+			url: 'https://taboolarasa.org',
+			title: 'Taboola Rasa Website',
+		},
 	],
 	badges: [],
 };
