@@ -46,5 +46,5 @@ export const megGutshall: MemberObject = {
 			title: 'My Digital Garden',
 		},
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022'],
 };
