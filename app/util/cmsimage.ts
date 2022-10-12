@@ -2,11 +2,15 @@ import ImgixClient from '@imgix/js-core';
 
 /**
  * It takes a path and folder and returns a URL to an image on Imgix
- * @arg {CreateCmsImageProps} - path, folder, and (optional) settings
- * @prop {string} `path` - the image file name
- * @prop {string} `folder` - the preceding directory/directories before the file name
- * @prop {object} [`settings`={}] - any other {@link https://docs.imgix.com/apis/rendering rendering options} for the Imgix library
- * @returns A URL to the image
+ * @returns A URL to the Imgix image
+ * @example
+ * ```typescript
+ * const result = createCmsImage({
+ * 				path: 'sample.png',
+ * 				folder: 'wicker-baskets'})
+ * console.log(result)
+ * // => "https://example.imgix.net/wicker-baskets/sample.png?[...misc Imgix params]"
+ * ```
  */
 export default function createCmsImage({
 	path,
@@ -23,14 +27,15 @@ export default function createCmsImage({
 	});
 }
 
-/**
- * Properties for the `createCmsImage` function
- * @property {string} `path` - the image file name
- * @property {string} `folder` - the preceding directory/directories before the file name
- * @property {object} [`settings`={}] - any other {@link https://docs.imgix.com/apis/rendering rendering options} for the Imgix library
- */
 type CreateCmsImageProps = {
+	/** The image file name */
 	path: string;
+	/** The preceding directory/directories before the file name */
 	folder: string;
+	/** Any other {@link https://docs.imgix.com/apis/rendering rendering options} for the Imgix library
+	 * @defaultValue `{}`
+	 */
 	settings?: Record<string, any>;
 };
+
+createCmsImage({ path: '', folder: '', settings: {} });
