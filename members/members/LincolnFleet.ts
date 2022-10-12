@@ -27,7 +27,7 @@ export const LincolnFleet: MemberObject = {
 	flare: {
 		// example:
 		// profileMask: profileMasks.triangle,
-        profileMask: profileMasks.hexagon,
+		profileMask: profileMasks.hexagon,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
