@@ -24,7 +24,7 @@ import { handle as jan2021 } from '~/routes/__frontend/monthlychallenges/jan-202
 import { handle as dec2020 } from '~/routes/__frontend/monthlychallenges/dec-2020';
 import { handle as nov2020 } from '~/routes/__frontend/monthlychallenges/nov-2020';
 
-const challenges = [
+const challenges: Challenge[] = [
 	{ handleData: oct2022, slug: 'oct-2022' },
 	{ handleData: sept2022, slug: 'sept-2022' },
 	{ handleData: aug2022, slug: 'aug-2022' },
@@ -53,7 +53,7 @@ const challenges = [
 	{ handleData: nov2020, slug: 'nov-2020' },
 ];
 
-function getChallengeData(challenge: Challenge) {
+function getChallengeData(challenge: Challenge): MonthlyChallengeData {
 	return {
 		title: challenge.handleData.listTitle || challenge.handleData.meta.title,
 		description: challenge.handleData.meta.description,
@@ -61,16 +61,18 @@ function getChallengeData(challenge: Challenge) {
 	};
 }
 
-export default async function getChallenges({ limit = 0 } = {}) {
+export default async function getChallenges({ limit = 0 } = {}): Promise<
+	MonthlyChallengeData[]
+> {
 	return challenges.slice(0, limit).map((issue) => getChallengeData(issue));
 }
 
 type Challenge = {
-	handleData: MonthlyChallengeData;
+	handleData: MonthlyChallengeHandle;
 	slug: string;
 };
 
-type MonthlyChallengeData = {
+type MonthlyChallengeHandle = {
 	listTitle: string;
 	meta: {
 		title: string;
@@ -79,4 +81,10 @@ type MonthlyChallengeData = {
 	hero: {
 		heroHeader: string;
 	};
+};
+
+type MonthlyChallengeData = {
+	title: string;
+	description: string;
+	to: string;
 };
