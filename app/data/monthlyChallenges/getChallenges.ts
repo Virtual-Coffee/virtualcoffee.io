@@ -69,22 +69,29 @@ export default async function getChallenges({ limit = 0 } = {}): Promise<
 
 type Challenge = {
 	handleData: MonthlyChallengeHandle;
+	/** Part of a URL that identifies a particular page of Monthly challenges*/
 	slug: string;
 };
 
 type MonthlyChallengeHandle = {
+	/** The title of Monthly challenge */
 	listTitle: string;
+	/** Meta is data that describes and gives information about particular Monthly challenge. */
 	meta: {
 		title: string;
 		description: string;
 	};
+	/** Hero is typically a prominent image, slider, text or similar element that has pride of place at the top of your homepage layout and possibly subsequent pages.*/
 	hero: {
 		heroHeader: string;
 	};
 };
 
 type MonthlyChallengeData = {
+	/** The title of Monthly challenge */
 	title: string;
+	/** The description for Monthly challenge*/
 	description: string;
+	/** URL for Monthly challenge*/
 	to: string;
 };
