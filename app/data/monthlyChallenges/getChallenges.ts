@@ -53,14 +53,30 @@ const challenges = [
 	{ handleData: nov2020, slug: 'nov-2020' },
 ];
 
-function getChallengeData(challange) {
+function getChallengeData(challenge: Challenge) {
 	return {
-		title: challange.handleData.listTitle || challange.handleData.meta.title,
-		description: challange.handleData.meta.description,
-		to: `/monthlychallenges/${challange.slug}`,
+		title: challenge.handleData.listTitle || challenge.handleData.meta.title,
+		description: challenge.handleData.meta.description,
+		to: `/monthlychallenges/${challenge.slug}`,
 	};
 }
 
-export default async function getChallenges({ limit } = {}) {
+export default async function getChallenges({ limit = 0 } = {}) {
 	return challenges.slice(0, limit).map((issue) => getChallengeData(issue));
 }
+
+type Challenge = {
+	handleData: MonthlyChallengeData;
+	slug: string;
+};
+
+type MonthlyChallengeData = {
+	listTitle: string;
+	meta: {
+		title: string;
+		description: string;
+	};
+	hero: {
+		heroHeader: string;
+	};
+};
