@@ -82,9 +82,22 @@ If you feel like there's a contribution you would like to make that isn't repres
 
 If you feel like you have an issue that doesn't match those categories though, go ahead and ignore the templates and create an issue the old fashioned way.
 
-## Local development
+## Setting Up Local Environment To Work On Issues
 
-Follow the steps for local development [in our README](README.md#local-development)
+> ⚠️ **Heads up!** If you'd like to work on issues, please make sure you **create a new branch and work in this branch** to avoid pushing your changes directly into the `main` branch.
+
+- Follow the steps for local development [in our README](README.md#local-development).
+- Create a new branch by typing this command on the terminal:
+
+  ```bash
+  git checkout -b branch-name
+  ```
+
+  Change the `branch-name` to whatever you want. For example:
+
+  ```bash
+  git checkout -b alice-add-footer
+  ```
 
 ## Creating a Pull Request
 
