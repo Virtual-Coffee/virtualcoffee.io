@@ -12,13 +12,15 @@ So come with a question or a topic to discuss, ask for feedback on your portfoli
 
 Our mission is to form community, allow room for growth and mentorship at all levels, and to provide a safe space for everyone interested in tech.
 
-Please take a moment to read our [Code of Conduct](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/master/CODE_OF_CONDUCT.md)
+Please take a moment to read our [Code of Conduct](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/master/CODE_OF_CONDUCT.md).
 
 See you there!
 
 # Working on the site:
 
-This site is built using [Remix](https://remix.run/).
+- This site is built using [Remix](https://remix.run/).
+- Check out our [CONTRIBUTING](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md) guideline to make contributions.
+- If you're new to open source, check out our [Git & GitHub 101](https://virtualcoffee.io/resources/open-source/git-101) and [Contributor Guide](https://virtualcoffee.io/resources/open-source/contributor-guide) resources.
 
 ## Table of Contents:
 
@@ -129,7 +131,7 @@ Use ctrl-c to quit the server when you're done.
 
 Depending on the speed of your computer, you can get a `TimeoutError - Task timed out after 10.00 seconds` message when the localhost renders the home page (http://localhost:9000) on the browser.
 
-If the feature you are working on is not on the home page (like the newsletter or monthly challenges for example), you may still be able to load the page you need: after you see the notification of `Server now ready on http://localhost:9000`, go to your browser. Then add the path of the page you need (like `http://localhost:9000/newsletter` for the newsletter or `http://localhost:9000/monthlychallenges` for the monthly challenges page) to see the page you need.
+If the feature you are working on is not on the home page (the newsletter or monthly challenges page, for example), you may still be able to load the page you need. After you see the notification of `Server now ready on http://localhost:9000`, go to your browser. Then add the path of the page you need (like `http://localhost:9000/newsletter` for the newsletter or `http://localhost:9000/monthlychallenges` for the monthly challenges page) to see the page.
 
 ---
 
