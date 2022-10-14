@@ -1,7 +1,11 @@
 import { Link } from '@remix-run/react';
 
+/*
+PostListItem is each resource under a section of content on the homepage.
+*/
 type PostListItem = {
 	href?: string;
+	/* If using to, this represents a link to another part of the app*/
 	to?: string;
 	title: string;
 	description?: string;
@@ -13,6 +17,7 @@ type TitleProps = {
 } & Pick<PostListItem, 'href' | 'to'>;
 
 export function PostListItemTitle({ item }: { item: PostListItem }) {
+	/* Component type changes based on whether a link exists */
 	let Component: React.ElementType = 'div';
 	const props: TitleProps = {
 		className: 'postlist-title',
