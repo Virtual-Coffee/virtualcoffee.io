@@ -1,5 +1,5 @@
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
+import { profileMasks } from '../flare';
 
 export const dominicduffin1: MemberObject = {
 	// GitHub username (required)
@@ -26,7 +26,7 @@ export const dominicduffin1: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		// profileMask: profileMasks.triangle,
+		profileMask: profileMasks.hexagon,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
