@@ -32,15 +32,19 @@ export const dominicduffin1: MemberObject = {
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
 		// { type: 'linkedin', username: 'yourlinkedinUserName' },
-		// { type: 'dev', username: 'yourUserName' },
+		{ type: 'dev', username: 'dominicduffin1' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
+		{ type: 'twitter', username: 'DominicDuffin1' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
+		{ type: 'polywork', username: 'dominic' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+		{
+			type: 'website',
+			url: 'https://dominicduffin.uk',
+			title: "Dominic Duffin's site",
+		},
 	],
 	badges: ['Hacktoberfest2022'],
 };
