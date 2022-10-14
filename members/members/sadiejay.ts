@@ -1,5 +1,6 @@
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
+import { profileMasks } from '../flare';
+import { Hacktoberfest2022 } from '~/svg/badges';
 
 export const sadiejay: MemberObject = {
 	// GitHub username (required)
