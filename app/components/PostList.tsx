@@ -8,7 +8,7 @@ type PostListItem = {
 	/* If using to, this represents a link to another part of the app*/
 	to?: string;
 	title: string;
-	description?: string;
+	description?: string | JSX.Element;
 	children?: PostListItem[] | null;
 };
 
@@ -36,7 +36,7 @@ export function PostListItemTitle({ item }: { item: PostListItem }) {
 	return <Component {...props}>{item.title}</Component>;
 }
 
-export default function PostList({ items }: { items?: PostListItem[] }) {
+export default function PostList({ items }: { items: PostListItem[] | null }) {
 	if (!items) {
 		return null;
 	}
