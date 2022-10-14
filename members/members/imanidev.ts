@@ -42,5 +42,5 @@ export const imanidev: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ['Hacktoberfest 2022'],
+	badges: ['Hacktoberfest2022'],
 };
