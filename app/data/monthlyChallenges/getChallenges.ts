@@ -61,9 +61,9 @@ function getChallengeData(challenge: Challenge): MonthlyChallengeData {
 	};
 }
 
-export default async function getChallenges({ limit = 0 } = {}): Promise<
-	MonthlyChallengeData[]
-> {
+export default async function getChallenges({
+	limit,
+}: { limit?: number } = {}): Promise<MonthlyChallengeData[]> {
 	return challenges.slice(0, limit).map((issue) => getChallengeData(issue));
 }
 
