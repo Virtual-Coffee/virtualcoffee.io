@@ -24,7 +24,7 @@ import { handle as jan2021 } from '~/routes/__frontend/monthlychallenges/jan-202
 import { handle as dec2020 } from '~/routes/__frontend/monthlychallenges/dec-2020';
 import { handle as nov2020 } from '~/routes/__frontend/monthlychallenges/nov-2020';
 
-const challenges = [
+const challenges: Challenge[] = [
 	{ handleData: oct2022, slug: 'oct-2022' },
 	{ handleData: sept2022, slug: 'sept-2022' },
 	{ handleData: aug2022, slug: 'aug-2022' },
@@ -53,14 +53,45 @@ const challenges = [
 	{ handleData: nov2020, slug: 'nov-2020' },
 ];
 
-function getChallengeData(challange) {
+function getChallengeData(challenge: Challenge): MonthlyChallengeData {
 	return {
-		title: challange.handleData.listTitle || challange.handleData.meta.title,
-		description: challange.handleData.meta.description,
-		to: `/monthlychallenges/${challange.slug}`,
+		title: challenge.handleData.listTitle || challenge.handleData.meta.title,
+		description: challenge.handleData.meta.description,
+		to: `/monthlychallenges/${challenge.slug}`,
 	};
 }
 
-export default async function getChallenges({ limit } = {}) {
+export default async function getChallenges({ limit = 0 } = {}): Promise<
+	MonthlyChallengeData[]
+> {
 	return challenges.slice(0, limit).map((issue) => getChallengeData(issue));
 }
+
+type Challenge = {
+	handleData: MonthlyChallengeHandle;
+	/** Part of a URL that identifies a particular page of Monthly challenges*/
+	slug: string;
+};
+
+type MonthlyChallengeHandle = {
+	/** The title of Monthly challenge */
+	listTitle: string;
+	/** Meta is data that describes and gives information about particular Monthly challenge. */
+	meta: {
+		title: string;
+		description: string;
+	};
+	/** Hero is typically a prominent image, slider, text or similar element that has pride of place at the top of your homepage layout and possibly subsequent pages.*/
+	hero: {
+		heroHeader: string;
+	};
+};
+
+type MonthlyChallengeData = {
+	/** The title of Monthly challenge */
+	title: string;
+	/** The description for Monthly challenge*/
+	description: string;
+	/** URL for Monthly challenge*/
+	to: string;
+};
