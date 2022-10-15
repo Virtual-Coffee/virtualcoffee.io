@@ -1,4 +1,4 @@
-name: Formatting PR with Prettier
+name: Format
 on:
   pull_request:
     branches: [main]
