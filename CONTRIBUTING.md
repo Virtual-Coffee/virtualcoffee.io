@@ -23,7 +23,7 @@ We try not to take anything for granted, but in case we miss something, please r
 
 We really want to make space for all developers to feel comfortable and supported while contributing, and documentation like this provide a valuable resource for them to use.
 
-# Table of Contents
+## Table of Contents
 
 - [Contributors Guide](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#contributors-guide)
 - [Getting Started](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#getting-started)
@@ -41,29 +41,29 @@ We really want to make space for all developers to feel comfortable and supporte
 - [Reporting A Bug](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#reporting-a-bug)
 - [Labelling conventions](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#labelling-conventions)
 
-# What Type of Contributions We're Looking For
+## What Type of Contributions We're Looking For
 
 This is an open source project, and we love to receive contributions from our community — you! There are many ways to contribute, from writing tutorials or blog posts, improving the documentation, submitting bug reports and feature requests, or writing code which can be incorporated into the application codebase itself.
 
-# Asking To Pair
+## Asking To Pair
 
 This is a beginner friendly repo. Contributors can request a pairing (Zoom/Google Hangouts) to pair with a maintainer on tackling an issue, submitting a Pull Request, etc. If you want to do it for a pre-existing issue, simply indicate so in a comment under that issue. If not, you may open a new Question issue and request a pairing. Please understand that this is a volunteer effort; maintainers may not always be available for pairing.
 
-# The Basics
+## The Basics
 
-## Setting Up A Github Account
+### Setting Up A Github Account
 
 We're going to assume you know what [GitHub](https://www.howtogeek.com/180167/htg-explains-what-is-github-and-what-do-geeks-use-it-for/) is (otherwise, how would you be reading this?).
 
 If you haven't made a GitHub account as yet, [make one](https://github.com) now. It's free!
 
-## Discussions
+### Discussions
 
 For questions, comments, or other discussion topics that don’t have a clear action, please use the [discussion board](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions).
 
 For example, if you want to ask “Should we do…” or “How do I do…”, you’ll start in the discussion board. This allows a whole-group conversation, and we can integrate the answer into documentation or issues as necessary.
 
-## Working With Issues
+### Working With Issues
 
 GitHub uses a feature called _issues_. Issues are essentially a way to highlight bugs, features, problems, or any sort of suggestion or action you wish to happen on a GitHub hosted project (you can find a more comprehensive explanation [here](https://guides.github.com/features/issues/)).
 
@@ -82,7 +82,7 @@ If you feel like there's a contribution you would like to make that isn't repres
 
 If you feel like you have an issue that doesn't match those categories though, go ahead and ignore the templates and create an issue the old fashioned way.
 
-## Setting Up Local Environment To Work On Issues
+### Setting Up Local Environment To Work On Issues
 
 > ⚠️ **Heads up!** If you'd like to work on issues, please make sure you **create a new branch and work in this branch** to avoid pushing your changes directly into the `main` branch.
 
@@ -99,7 +99,7 @@ If you feel like you have an issue that doesn't match those categories though, g
   git checkout -b alice-add-footer
   ```
 
-## Creating A Pull Request
+### Creating A Pull Request
 
 > ⚠️ **Heads up!** If you'd like to make a Pull Request, please make sure you've created an issue (or a discussion board post) first, and **that you've been assigned to the issue**. This allows the maintainer team to provide guidance and prioritize tasks — otherwise you may run the risk of spending time on something that doesn't end up getting accepted for various reasons.
 
@@ -113,7 +113,7 @@ Once you've been assigned the issue, you have two options.
 
 **Note:** The guide referenced above uses _master_ as the naming convention for the default branch in all its repos. In this project, _main_ is the default branch name. When following the instructions in the guide, simply replace _master_ with _main_ wherever it appears and it should proceed as normal. [This guide from Scott Hanselman](https://www.hanselman.com/blog/EasilyRenameYourGitDefaultBranchFromMasterToMain.aspx) can help you transition with your own personal repos from master to main, and explains the methodology as to why you should.
 
-## Awaiting Review
+### Awaiting Review
 
 Once you've submitted your Pull Request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all, of course, we ask for patience if you don't see a response immediately. Sometimes it takes about a day for someone's schedule to clear up to have the sit to properly review incoming Pull Requests. We'd rather not rush a response after someone has put time and effort into submitting it. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your Pull Request reminding of its status.
 
@@ -125,13 +125,13 @@ The purpose of reviews is to create the best experience we can for our contribut
 
 If the Pull Request looks good, a maintainer will typically give feedback and merge the request immediately, otherwise they'll let you know what questions they have or what needs to change before your work can be accepted. Once it is, you'll see your changes on the main branch and VOILA, open source contribution complete!
 
-## Suggested Changes
+### Suggested Changes
 
 We may ask for changes to be made before a Pull Request can be merged, either using [suggested changes](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/incorporating-feedback-in-your-pull-request) or Pull Request comments. You can apply suggested changes directly through the UI. You can make any other changes in your fork, then commit them to your branch.
 
 As you update your Pull Request and apply changes, mark each conversation as [resolved](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/commenting-on-a-pull-request#resolving-conversations).
 
-## Tips and Gotchas
+### Tips and Gotchas
 
 This section is just little notes and bits of info that can smooth over some of the bumps and hiccups that can come along with contributing.
 
@@ -141,7 +141,7 @@ This section is just little notes and bits of info that can smooth over some of 
 
 That's all for now. If you feel like anything is missing from this document that you wish were included, let us know. Or hey, open up a fresh issue and take a shot at helping us make it better!
 
-# Reporting A Bug
+## Reporting A Bug
 
 We have a bug report template already created for your use. Just select it when opening up an issue on GitHub and follow the headers to formulate your issue.
 
@@ -151,7 +151,7 @@ When filing an issue, make sure to answer these three questions:
 - What did you expect to see?
 - What did you see instead?
 
-# Labelling Conventions
+## Labelling Conventions
 
 This repository has three basic types of labels:
 
