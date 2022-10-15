@@ -27,7 +27,7 @@ export const sadiejay: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		profileMask: profileMasks.rabbet,
+		profileMask: profileMasks.octogon,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
