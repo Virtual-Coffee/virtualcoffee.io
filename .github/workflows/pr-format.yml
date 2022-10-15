@@ -1,11 +1,8 @@
+name: Formatting PR with Prettier
 on:
-  push:
-    branches:
-      - main
   pull_request_target:
-    types: [opened, synchronize, reopened]
-
-name: Format
+    branches:
+      - 'main'
 
 jobs:
   format:
