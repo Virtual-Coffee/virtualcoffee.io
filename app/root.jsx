@@ -5,10 +5,10 @@ import {
 	Meta,
 	Scripts,
 	ScrollRestoration,
-	useMatches,
 } from '@remix-run/react';
 import { qualifiedUrl } from '~/util/url.server';
 import { removeTrailingSlash } from '~/util/http';
+import { useLocation } from 'react-router-dom';
 import { createMetaData } from '~/util/createMetaData.server';
 
 export async function loader({ request }) {
@@ -119,8 +119,7 @@ export const LiveReload =
 		  };
 
 export default function App() {
-	const matches = useMatches();
-	const pathname = matches[matches.length - 1]?.pathname || '';
+	const location = useLocation();
 
 	return (
 		<html lang="en" className="h-full bg-gray-100">
@@ -128,7 +127,7 @@ export default function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body className={`h-full ${pathname === '/' ? 'vc-home' : ''}`}>
+			<body className={`h-full ${location.pathname === '/' ? 'vc-home' : ''}`}>
 				<Outlet />
 				<ScrollRestoration />
 				<Scripts />
