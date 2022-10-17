@@ -4,8 +4,9 @@ import { Link } from '@remix-run/react';
 PostListItem is each resource under a section of content on the homepage.
 */
 type PostListItem = {
+	/* To linking to another site, set the `href` property to the url. */
 	href?: string;
-	/* If using to, this represents a link to another part of the app*/
+	/* If linking to an internal page, use the `to` property. */
 	to?: string;
 	title: string;
 	description?: string | JSX.Element;
