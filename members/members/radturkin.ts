@@ -40,7 +40,11 @@ export const radturkin: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://radturkin.netlify.app/', title: 'rads portfolio' },
+		{
+			type: 'website',
+			url: 'https://radturkin.netlify.app/',
+			title: 'rads portfolio',
+		},
 	],
 	badges: [],
 };
