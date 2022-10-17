@@ -1,14 +1,13 @@
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
 
-export const megGutshall: MemberObject = {
+export const carmenkolohe: MemberObject = {
 	// GitHub username (required)
-	github: 'meg-gutshall',
+	github: 'carmenkolohe',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	name: 'Meg Gutshall',
+	// name: 'Your Name',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
@@ -31,20 +30,16 @@ export const megGutshall: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'meghan-gutshall' },
-		{ type: 'dev', username: 'meg_gutshall' },
+		// { type: 'linkedin', username: 'yourlinkedinUserName' },
+		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'meg_gutshall' },
-		{ type: 'twitch', username: 'meg_gutshall' },
-		{ type: 'youtube', channelId: 'UCUFzGA_o3MixAj6awfWvzBQ' },
+		{ type: 'twitter', username: 'carmenkolohe' },
+		// { type: 'twitch', username: 'yourUserName' },
+		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://meghangutshall.com/blog/',
-			title: 'My Digital Garden',
-		},
+		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: ['Hacktoberfest2022'],
 };

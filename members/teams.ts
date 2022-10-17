@@ -52,6 +52,7 @@ const teams = {
 		'YolandaHaynes',
 		'SNikhill',
 		'CuriousCurmudgeon',
+		'sadiejay',
 	],
 
 	'Monthly Challenge Team Lead': ['aurelieverrot', 'Andrew-Bush'],
