@@ -1,12 +1,17 @@
 import { json } from '@remix-run/node';
-import { Link, Outlet, useLoaderData, useMatches } from '@remix-run/react';
+import {
+	Link,
+	Outlet,
+	useLoaderData,
+	useMatches,
+	useLocation,
+} from '@remix-run/react';
 import {
 	loadMdxDirectory,
 	loadMdxRouteFileAttributes,
 } from '~/util/loadMdx.server';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
 import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
 import { createMetaData } from '~/util/createMetaData.server';
 
 function trimString(s, c) {
