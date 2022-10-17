@@ -10,6 +10,7 @@ import {
 import { qualifiedUrl } from '~/util/url.server';
 import { removeTrailingSlash } from '~/util/http';
 import { createMetaData } from '~/util/createMetaData.server';
+import buildUrls from '~/_generatedData/buildUrls.json';
 
 export async function loader({ request }) {
 	removeTrailingSlash(request);
@@ -126,6 +127,13 @@ export default function App() {
 			<head>
 				<Meta />
 				<Links />
+				{buildUrls.NETLIFY && buildUrls.CONTEXT === 'production' && (
+					<script
+						defer
+						data-domain="virtualcoffee.io"
+						src="https://plausible.io/js/plausible.js"
+					/>
+				)}
 			</head>
 			<body className={`h-full ${location.pathname === '/' ? 'vc-home' : ''}`}>
 				<Outlet />
