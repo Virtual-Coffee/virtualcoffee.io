@@ -5,10 +5,10 @@ import {
 	Meta,
 	Scripts,
 	ScrollRestoration,
+	useLocation,
 } from '@remix-run/react';
 import { qualifiedUrl } from '~/util/url.server';
 import { removeTrailingSlash } from '~/util/http';
-import { useLocation } from 'react-router-dom';
 import { createMetaData } from '~/util/createMetaData.server';
 
 export async function loader({ request }) {
