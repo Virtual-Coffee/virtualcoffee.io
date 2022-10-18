@@ -1,9 +1,9 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-export const _EXAMPLE: MemberObject = {
+export const AisheIbrahim: MemberObject = {
 	// GitHub username (required)
-	github: 'adnerdable',
+	github: 'AisheIbrahim',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
