@@ -76,7 +76,7 @@ export default function UndrawIllustration({
 	filename,
 	style = {},
 	...props
-}: UndrawIllustrationProps) {
+}: UndrawIllustrationProps): React.ReactElement<'img'> {
 	const aspectRatio = svgAspectRatios[filename];
 
 	return (
