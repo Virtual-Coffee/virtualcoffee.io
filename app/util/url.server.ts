@@ -7,16 +7,7 @@ type BuildUrls = {
 	DEPLOY_PRIME_URL?: string;
 };
 
-const validateUrls = (input: BuildUrls) => {
-	return {
-		URL: input.URL,
-		NETLIFY: input.NETLIFY ?? null,
-		CONTEXT: input.CONTEXT ?? null,
-		DEPLOY_PRIME_URL: input.DEPLOY_PRIME_URL ?? null,
-	};
-};
-
-const buildUrlsObject = validateUrls(buildUrls);
+const buildUrlsObject: BuildUrls = buildUrls;
 
 // buildUrls is created in scripts/buildUrls.js at build-time
 export function qualifiedUrl(path = '') {
