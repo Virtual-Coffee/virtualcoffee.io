@@ -43,5 +43,5 @@ export const lsparlin: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://lsparlin.dev' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022'],
 };
