@@ -1,9 +1,14 @@
 import { useOutletContext } from '@remix-run/react';
 import PostList, {
+	FileListItem,
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
 
-function findBase(files, subDirectory) {
+type FileIndexProps = {
+	subDirectory?: string;
+};
+
+function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
 	const subDirectorySplit = subDirectory.split('/');
 
 	const filtered = files.reduce((list, file) => {
@@ -32,7 +37,7 @@ function findBase(files, subDirectory) {
 					children: file.children
 						? findBase(file.children, subDirectory)
 						: null,
-				},
+				} as FileListItem,
 			];
 		}
 
@@ -45,12 +50,12 @@ function findBase(files, subDirectory) {
 					children: file.children
 						? findBase(file.children, subDirectory)
 						: null,
-				},
+				} as FileListItem,
 			];
 		}
 
 		return list;
-	}, []);
+	}, [] as FileListItem[]);
 
 	if (
 		filtered.length === 1 &&
@@ -63,8 +68,8 @@ function findBase(files, subDirectory) {
 	return filtered;
 }
 
-export default function FileIndex({ subDirectory }) {
-	const allFiles = useOutletContext();
+export default function FileIndex({ subDirectory }: FileIndexProps) {
+	const allFiles = useOutletContext() as FileListItem[];
 
 	const result = subDirectory ? findBase(allFiles, subDirectory) : allFiles;
 	return <PostList items={formatFileListItemsForPostList(result)} />;

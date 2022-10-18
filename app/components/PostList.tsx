@@ -58,7 +58,7 @@ export default function PostList({ items }: { items: PostListItem[] | null }) {
 	);
 }
 
-type FileListItem = {
+export type FileListItem = {
 	meta: {
 		title: string;
 		description: string;
