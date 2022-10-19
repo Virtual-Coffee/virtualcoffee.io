@@ -66,9 +66,14 @@ const svgAspectRatios = {
 	UndrawConversation: '842 / 842.79999',
 };
 
+/**
+ * The name of an Undraw illustration.
+ */
+export type UndrawIllustrationName = keyof typeof svgAspectRatios;
+
 type UndrawIllustrationProps = {
 	/** Filename of svg file found in [`public/assets/svg`](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/public/assets/svg) */
-	filename: keyof typeof svgAspectRatios;
+	filename: UndrawIllustrationName;
 	style?: React.CSSProperties;
 } & React.ImgHTMLAttributes<HTMLImageElement>;
 

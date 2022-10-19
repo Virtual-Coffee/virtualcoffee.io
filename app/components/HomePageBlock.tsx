@@ -1,6 +1,21 @@
 import { Link } from '@remix-run/react';
-import UndrawIllustration from '~/components/UndrawIllustration';
+import UndrawIllustration, {
+	UndrawIllustrationName,
+} from '~/components/UndrawIllustration';
 
+type HomePageBlockProps = {
+	id: string;
+	title: string;
+	subtitle: string;
+	Hero: UndrawIllustrationName;
+	linkTo?: string;
+	footer?: string;
+	children: React.ReactNode;
+};
+
+/**
+ * A reactive block of content on the Home page.
+ */
 export default function HomePageBlock({
 	id,
 	title,
@@ -9,7 +24,7 @@ export default function HomePageBlock({
 	linkTo,
 	children,
 	footer,
-}) {
+}: HomePageBlockProps) {
 	const titleInner = linkTo ? <Link to={linkTo}>{title}</Link> : title;
 
 	return (
