@@ -1,6 +1,22 @@
 import ImgixClient from '@imgix/js-core';
 
-export default function createSocialImage({ title, subtitle, hero }) {
+/**
+ * It takes a title, subtitle and hero image and generates a social image URL
+ * @returns {string} The URL to the Imgix social image
+ * @example
+ * ```typescript
+ * createSocialImage({
+ * 	title: 'Monthly Theme & Challenge for October, 2022: Hacktoberfest!',
+ * 	subtitle: 'Participate in Hacktoberfest this month!!',
+ * 	hero: '/assets/svg/{imageName}.svg'
+ * })
+ * ```
+ */
+export default function createSocialImage({
+	title,
+	subtitle,
+	hero,
+}: SocialImageProps) {
 	const client = new ImgixClient({
 		domain: 'virtualcoffee.imgix.net',
 		// secureURLToken: '<SECURE TOKEN>',
@@ -108,3 +124,9 @@ export default function createSocialImage({ title, subtitle, hero }) {
 
 	return full;
 }
+
+type SocialImageProps = {
+	title?: string;
+	subtitle?: string;
+	hero?: string;
+};
