@@ -64,11 +64,11 @@ export type FileListItem = {
 		description: string;
 	};
 	slug: string;
-	children: FileListItem[];
+	children?: FileListItem[];
 };
 
 export function formatFileListItemsForPostList(
-	items: FileListItem[],
+	items?: FileListItem[],
 ): PostListItem[] | null {
 	return items
 		? items.map(

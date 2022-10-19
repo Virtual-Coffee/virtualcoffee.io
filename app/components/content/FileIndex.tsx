@@ -1,8 +1,8 @@
 import { useOutletContext } from '@remix-run/react';
 import PostList, {
-	FileListItem,
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
+import type { FileListItem } from '~/components/PostList';
 
 type FileIndexProps = {
 	subDirectory?: string;
@@ -31,27 +31,24 @@ function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
 			subDirectory === file.slug
 		) {
 			// it's a match
-			return [
-				{
-					...file,
-					children: file.children
-						? findBase(file.children, subDirectory)
-						: null,
-				} as FileListItem,
-			];
+			const singleFileResult: FileListItem = {
+				...file,
+				children: file.children
+					? findBase(file.children, subDirectory)
+					: undefined,
+			};
+			return [singleFileResult];
 		}
 
 		// else we're digging deeper into our matched files children
 		if (file.slug.startsWith(subDirectory)) {
-			return [
-				...list,
-				{
-					...file,
-					children: file.children
-						? findBase(file.children, subDirectory)
-						: null,
-				} as FileListItem,
-			];
+			const lastFile: FileListItem = {
+				...file,
+				children: file.children
+					? findBase(file.children, subDirectory)
+					: undefined,
+			};
+			return [...list, lastFile];
 		}
 
 		return list;
@@ -69,7 +66,7 @@ function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
 }
 
 export default function FileIndex({ subDirectory }: FileIndexProps) {
-	const allFiles = useOutletContext() as FileListItem[];
+	const allFiles: FileListItem[] = useOutletContext();
 
 	const result = subDirectory ? findBase(allFiles, subDirectory) : allFiles;
 	return <PostList items={formatFileListItemsForPostList(result)} />;
