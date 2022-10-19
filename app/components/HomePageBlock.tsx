@@ -1,10 +1,9 @@
 import { Link } from '@remix-run/react';
-import UndrawIllustration, {
-	UndrawIllustrationName,
-} from '~/components/UndrawIllustration';
+import UndrawIllustration from '~/components/UndrawIllustration';
+import type { UndrawIllustrationName } from '~/components/UndrawIllustration';
 
 type HomePageBlockProps = {
-	id: string;
+	id?: string;
 	title: string;
 	subtitle: string;
 	Hero: UndrawIllustrationName;
