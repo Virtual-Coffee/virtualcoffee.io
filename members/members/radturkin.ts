@@ -46,5 +46,5 @@ export const radturkin: MemberObject = {
 			title: 'rads portfolio',
 		},
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022'],
 };
