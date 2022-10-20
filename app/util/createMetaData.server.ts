@@ -12,7 +12,7 @@ export function createMetaData({
 	Hero?: string;
 }) {
 	// `/assets/svg/${attributes.hero.Hero}.svg`
-	const hero = heroPath || Hero ? `/assets/svg/${Hero}.svg` : null;
+	const hero = heroPath || Hero ? `/assets/svg/${Hero}.svg` : undefined;
 
 	return {
 		title,
