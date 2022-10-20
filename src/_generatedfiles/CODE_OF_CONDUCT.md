@@ -90,9 +90,9 @@ The moderator is responsible for clarifying and enforcing our standards of accep
 
 While Virtual Coffee is an open and welcoming community, citation of other's comments in a public forum must have the prior permission of the contributor(s).
 
-## Reporting Code of Conduct Violations
+## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the Moderator responsible for enforcement at hello@virtualcoffee.io or anonymously at [our CoC violation form](https://virtualcoffee.io/report-coc-violation). All complaints will be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the Moderator responsible for enforcement at hello@virtualcoffee.io or anonymously at https://virtualcoffee.io/report-coc-violation. All complaints will be reviewed and investigated promptly and fairly.
 
 The Moderator is obligated to respect the privacy and security of the reporter of any incident.
 
