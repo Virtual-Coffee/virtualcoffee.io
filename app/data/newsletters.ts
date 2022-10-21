@@ -47,7 +47,29 @@ const newsletters = [
 	{ handleData: issue202101, slug: '2021-01' },
 ];
 
-function getIssueData(issue) {
+type NewsletterIssue = {
+	/**
+	 * handleData is based on the data from [newsletter issues](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/app/routes/__frontend/newsletter/issues)
+	 */
+	handleData: {
+		meta: {
+			/** Title of the newsletter's issue */
+			title: string;
+			/** Description of the newsletter's issue */
+			description?: string;
+		};
+		/** Date of the newsletter's issue */
+		date: string;
+		/** Title on the list of newsletters
+		 * @see [VC newsletter page](https://virtualcoffee.io/newsletter)
+		 */
+		listTitle: string;
+	};
+	/** Part of URL that indentifies the month of the newsletter */
+	slug: string;
+};
+
+function getIssueData(issue: NewsletterIssue) {
 	return {
 		title: issue.handleData.listTitle || issue.handleData.meta.title,
 		description: issue.handleData.meta.description,
@@ -55,6 +77,12 @@ function getIssueData(issue) {
 	};
 }
 
-export default async function getNewsletters({ limit } = {}) {
+type NewsletterListOptions = { limit?: number };
+
+export default async function getNewsletters(
+	newsletterOptions: NewsletterListOptions = {},
+) {
+	const { limit } = newsletterOptions;
+
 	return newsletters.slice(0, limit).map((issue) => getIssueData(issue));
 }
