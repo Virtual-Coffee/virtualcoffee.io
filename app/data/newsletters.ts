@@ -48,14 +48,24 @@ const newsletters = [
 ];
 
 type NewsletterIssue = {
+	/**
+	 * handleData is based on the data from:
+	 * \app\routes\__frontend\newsletter\issues
+	 */
 	handleData: {
-		listTitle: string;
-		date: string;
 		meta: {
+			/** Title of the newsletter's issue */
 			title: string;
+			/** Description of the newsletter's issue */
 			description?: string;
 		};
+		/** Date of the newsletter's issue */
+		date: string;
+		/** Title on the list of newsletters
+		 * @see {@link https://virtualcoffee.io/newsletter} */
+		listTitle: string;
 	};
+	/** Part of URL that indentifies the month of the newsletter */
 	slug: string;
 };
 
