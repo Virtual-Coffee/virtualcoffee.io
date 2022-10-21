@@ -47,7 +47,19 @@ const newsletters = [
 	{ handleData: issue202101, slug: '2021-01' },
 ];
 
-function getIssueData(issue) {
+type NewsletterIssue = {
+	handleData: {
+		listTitle: string;
+		date: string;
+		meta: {
+			title: string;
+			description?: string;
+		};
+	};
+	slug: string;
+};
+
+function getIssueData(issue: NewsletterIssue) {
 	return {
 		title: issue.handleData.listTitle || issue.handleData.meta.title,
 		description: issue.handleData.meta.description,
@@ -55,6 +67,12 @@ function getIssueData(issue) {
 	};
 }
 
-export default async function getNewsletters({ limit } = {}) {
+type NewsletterListOptions = { limit?: number };
+
+export default async function getNewsletters(
+	newsletterOptions: NewsletterListOptions = {},
+) {
+	const { limit } = newsletterOptions;
+
 	return newsletters.slice(0, limit).map((issue) => getIssueData(issue));
 }
