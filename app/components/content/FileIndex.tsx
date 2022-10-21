@@ -2,11 +2,16 @@ import { useOutletContext } from '@remix-run/react';
 import PostList, {
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
+import type { FileListItem } from '~/components/PostList';
 
-function findBase(files, subDirectory) {
+type FileIndexProps = {
+	subDirectory?: string;
+};
+
+function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
 	const subDirectorySplit = subDirectory.split('/');
 
-	const filtered = files.reduce((list, file) => {
+	const filtered = files.reduce<FileListItem[]>((list, file) => {
 		const slugSplit = file.slug.split('/');
 
 		if (slugSplit.length < subDirectorySplit.length) {
@@ -26,27 +31,24 @@ function findBase(files, subDirectory) {
 			subDirectory === file.slug
 		) {
 			// it's a match
-			return [
-				{
-					...file,
-					children: file.children
-						? findBase(file.children, subDirectory)
-						: null,
-				},
-			];
+			const singleFileResult: FileListItem = {
+				...file,
+				children: file.children
+					? findBase(file.children, subDirectory)
+					: undefined,
+			};
+			return [singleFileResult];
 		}
 
 		// else we're digging deeper into our matched files children
 		if (file.slug.startsWith(subDirectory)) {
-			return [
-				...list,
-				{
-					...file,
-					children: file.children
-						? findBase(file.children, subDirectory)
-						: null,
-				},
-			];
+			const lastFile: FileListItem = {
+				...file,
+				children: file.children
+					? findBase(file.children, subDirectory)
+					: undefined,
+			};
+			return [...list, lastFile];
 		}
 
 		return list;
@@ -63,8 +65,8 @@ function findBase(files, subDirectory) {
 	return filtered;
 }
 
-export default function FileIndex({ subDirectory }) {
-	const allFiles = useOutletContext();
+export default function FileIndex({ subDirectory }: FileIndexProps) {
+	const allFiles: FileListItem[] = useOutletContext();
 
 	const result = subDirectory ? findBase(allFiles, subDirectory) : allFiles;
 	return <PostList items={formatFileListItemsForPostList(result)} />;

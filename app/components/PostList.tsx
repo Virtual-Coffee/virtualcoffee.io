@@ -58,17 +58,17 @@ export default function PostList({ items }: { items: PostListItem[] | null }) {
 	);
 }
 
-type FileListItem = {
+export type FileListItem = {
 	meta: {
 		title: string;
 		description: string;
 	};
 	slug: string;
-	children: FileListItem[];
+	children?: FileListItem[];
 };
 
 export function formatFileListItemsForPostList(
-	items: FileListItem[],
+	items?: FileListItem[],
 ): PostListItem[] | null {
 	return items
 		? items.map(
