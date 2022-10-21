@@ -63,7 +63,7 @@ type NewsletterIssue = {
 		/** Title on the list of newsletters
 		 * @see [VC newsletter page](https://virtualcoffee.io/newsletter)
 		 */
-		listTitle: string;
+		listTitle?: string;
 	};
 	/** Part of URL that indentifies the month of the newsletter */
 	slug: string;
