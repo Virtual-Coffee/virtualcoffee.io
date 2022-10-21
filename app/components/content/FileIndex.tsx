@@ -11,7 +11,7 @@ type FileIndexProps = {
 function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
 	const subDirectorySplit = subDirectory.split('/');
 
-	const filtered = files.reduce((list, file) => {
+	const filtered = files.reduce<FileListItem[]>((list, file) => {
 		const slugSplit = file.slug.split('/');
 
 		if (slugSplit.length < subDirectorySplit.length) {
@@ -52,7 +52,7 @@ function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
 		}
 
 		return list;
-	}, [] as FileListItem[]);
+	}, []);
 
 	if (
 		filtered.length === 1 &&
