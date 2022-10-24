@@ -131,8 +131,9 @@ export default function App() {
 					<script
 						defer
 						data-domain="virtualcoffee.io"
-						src="https://plausible.io/js/plausible.js"
-					/>
+						data-api="/plausible/api/event"
+						src="/plausible/js/script.js"
+					></script>
 				)}
 			</head>
 			<body className={`h-full ${location.pathname === '/' ? 'vc-home' : ''}`}>

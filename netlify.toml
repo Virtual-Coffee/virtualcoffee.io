@@ -111,6 +111,16 @@
   status = 200
 
 [[redirects]]
+  from = "/plausible/js/script.js"
+  to = "https://plausible.io/js/script.js"
+  status = 200
+
+[[redirects]]
+  from = "/plausible/api/event"
+  to = "https://plausible.io/api/event"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/.netlify/functions/server"
   status = 200
