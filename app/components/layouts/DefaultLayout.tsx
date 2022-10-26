@@ -1,21 +1,22 @@
 import { useMemo } from 'react';
 import { useMatches } from '@remix-run/react';
+import type { UndrawIllustrationName } from '~/components/UndrawIllustration';
 import UndrawIllustration from '~/components/UndrawIllustration';
 
-function useHeroData({ Hero, heroHeader, heroSubheader }) {
+function useHeroData({ Hero, heroHeader, heroSubheader }: HeroData) {
 	const matches = useMatches().reverse();
 	return useMemo(() => {
-		let firstHero = matches.find((match) => !!match.handle?.hero)?.handle.hero;
+		let firstHero = matches.find((match) => !!match.handle?.hero)?.handle?.hero;
 		if (!firstHero) {
 			firstHero = matches.find((match) => !!match.data?.hero)?.data.hero;
 		}
 
-		let firstMeta = matches.find((match) => !!match.handle?.meta)?.handle.meta;
+		let firstMeta = matches.find((match) => !!match.handle?.meta)?.handle?.meta;
 		if (!firstMeta) {
 			firstMeta = matches.find((match) => !!match.data?.meta)?.data.meta;
 		}
 
-		const returnObject = {
+		const returnObject: HeroData = {
 			Hero: Hero || firstHero?.Hero,
 		};
 
@@ -45,7 +46,12 @@ function useHeroData({ Hero, heroHeader, heroSubheader }) {
 	}, [Hero, heroHeader, heroSubheader, matches]);
 }
 
-export function HeroHead({ Hero, heroHeader, heroSubheader, simple }) {
+export function HeroHead({
+	Hero,
+	heroHeader,
+	heroSubheader,
+	simple,
+}: HeroDataProps) {
 	const heroData = useHeroData({ Hero, heroHeader, heroSubheader });
 
 	if (heroData.Hero && heroData.heroHeader) {
@@ -92,7 +98,7 @@ export default function DefaultLayout({
 	simple = false,
 	showHero = true,
 	children,
-}) {
+}: HeroDataProps) {
 	return (
 		<>
 			{showHero && (
@@ -112,3 +118,18 @@ export default function DefaultLayout({
 		</>
 	);
 }
+
+type HeroDataProps = {
+	Hero: UndrawIllustrationName;
+	heroHeader: String;
+	heroSubheader: string;
+	simple?: Boolean;
+	showHero?: Boolean;
+	children?: React.ReactNode;
+};
+
+type HeroData = {
+	Hero: UndrawIllustrationName;
+	heroHeader?: String;
+	heroSubheader?: string;
+};
