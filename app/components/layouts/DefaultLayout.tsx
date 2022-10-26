@@ -51,7 +51,7 @@ export function HeroHead({
 	heroHeader,
 	heroSubheader,
 	simple,
-}: HeroDataProps) {
+}: DefaultLayoutProps) {
 	const heroData = useHeroData({ Hero, heroHeader, heroSubheader });
 
 	if (heroData.Hero && heroData.heroHeader) {
@@ -98,7 +98,7 @@ export default function DefaultLayout({
 	simple = false,
 	showHero = true,
 	children,
-}: HeroDataProps) {
+}: DefaultLayoutProps) {
 	return (
 		<>
 			{showHero && (
@@ -119,12 +119,18 @@ export default function DefaultLayout({
 	);
 }
 
-type HeroDataProps = {
+type DefaultLayoutProps = {
+	/** This is the name of the illustration you want to use. */
 	Hero: UndrawIllustrationName;
+	/** The header text for the hero section */
 	heroHeader: String;
+	/** This is the subheader that will be displayed under the heroHeader. */
 	heroSubheader: string;
+	/** If true, the hero will be a simple hero with no background image. */
 	simple?: Boolean;
+	/** This is a boolean that determines whether or not the hero component is shown. */
 	showHero?: Boolean;
+	/** This is the content that will be rendered inside the HeroData component. */
 	children?: React.ReactNode;
 };
 
