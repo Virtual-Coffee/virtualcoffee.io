@@ -1,3 +1,5 @@
+import type { NewsletterHandle } from '~/types';
+
 import { handle as issue202210 } from '~/routes/__frontend/newsletter/issues/2022-10';
 import { handle as issue202209 } from '~/routes/__frontend/newsletter/issues/2022-09';
 import { handle as issue202208 } from '~/routes/__frontend/newsletter/issues/2022-08';
@@ -21,7 +23,16 @@ import { handle as issue202103 } from '~/routes/__frontend/newsletter/issues/202
 import { handle as issue202102 } from '~/routes/__frontend/newsletter/issues/2021-02';
 import { handle as issue202101 } from '~/routes/__frontend/newsletter/issues/2021-01';
 
-const newsletters = [
+type NewsletterIssue = {
+	/**
+	 * handleData is based on the data from [newsletter issues](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/app/routes/__frontend/newsletter/issues)
+	 */
+	handleData: NewsletterHandle;
+	/** Part of URL that indentifies the month of the newsletter */
+	slug: string;
+};
+
+const newsletters: NewsletterIssue[] = [
 	{ handleData: issue202210, slug: '2022-10' },
 	{ handleData: issue202209, slug: '2022-09' },
 	{ handleData: issue202208, slug: '2022-08' },
@@ -46,28 +57,6 @@ const newsletters = [
 	{ handleData: issue202102, slug: '2021-02' },
 	{ handleData: issue202101, slug: '2021-01' },
 ];
-
-type NewsletterIssue = {
-	/**
-	 * handleData is based on the data from [newsletter issues](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/app/routes/__frontend/newsletter/issues)
-	 */
-	handleData: {
-		meta: {
-			/** Title of the newsletter's issue */
-			title: string;
-			/** Description of the newsletter's issue */
-			description?: string;
-		};
-		/** Date of the newsletter's issue */
-		date: string;
-		/** Title on the list of newsletters
-		 * @see [VC newsletter page](https://virtualcoffee.io/newsletter)
-		 */
-		listTitle?: string;
-	};
-	/** Part of URL that indentifies the month of the newsletter */
-	slug: string;
-};
 
 function getIssueData(issue: NewsletterIssue) {
 	return {
