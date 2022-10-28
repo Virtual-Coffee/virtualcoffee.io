@@ -1,4 +1,7 @@
-export const handle = {
+import type { MetaFunction } from '@remix-run/node';
+import type { NewsletterHandle } from '~/types';
+
+export const handle: NewsletterHandle = {
 	meta: {
 		title: 'Virtual Coffee Newsletter, May 2022',
 		description:
@@ -8,7 +11,7 @@ export const handle = {
 	listTitle: 'May 2022',
 };
 
-export const meta = () => {
+export const meta: MetaFunction = () => {
 	return handle.meta;
 };
 
