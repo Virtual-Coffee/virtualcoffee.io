@@ -1,6 +1,10 @@
-import { redirect } from '@remix-run/node';
+import { redirect, type Request } from '@remix-run/node';
 
-export function removeTrailingSlash(request) {
+/**
+ * If the URL ends with a slash, redirect to the same URL without the slash
+ * @param request - The request object.
+ */
+export function removeTrailingSlash(request: Request) {
 	const url = new URL(request.url);
 	if (url.pathname.endsWith('/') && url.pathname !== '/') {
 		throw redirect(url.pathname.slice(0, -1), {
