@@ -47,6 +47,19 @@ const getAspectRatio = (file: string) => {
 	const { height, width } = imageSize(file);
 	return { width, height };
 };
+const getSVGnames = (files: string[]) => {
+	const svgItems: string[] = [];
+	for (let file of files) {
+		if (file.indexOf('/svg/') >= 0) {
+			const fileName = file.substring(
+				file.lastIndexOf('/svg/') + 5,
+				file.lastIndexOf('.'),
+			);
+			svgItems.push(fileName);
+		}
+	}
+	return svgItems;
+};
 
 const generateAspectDefFile = async (dir: string) => {
 	let ratioMap: Map<string, string> = new Map();
@@ -57,13 +70,26 @@ const generateAspectDefFile = async (dir: string) => {
 		ratioMap.set(filename, `${width} / ${height}`);
 	}
 	const ratioObj = Object.fromEntries(ratioMap);
+
+	const svgFiles = getSVGnames(files);
+	const svgFilesType = svgFiles.reduce((prev, curr) => {
+		if (!prev) {
+			return `'${curr}'`;
+		} else {
+			return `${prev} | '${curr}'`;
+		}
+	}, '');
 	fs.writeFileSync(
 		outputFile,
 		`export const aspectRatios = ${JSON.stringify(
 			ratioObj,
 			null,
 			2,
-		)} as Record<string, string>`,
+		)} as Record<string, string>;\n\nexport type SVGFiles = ${svgFilesType}
+		`,
+	);
+	console.info(
+		`Asset aspect ratios generated: ${files.length}.\nItems in SVGItems type for UndrawIllustration: ${svgFiles.length}`,
 	);
 };
 
