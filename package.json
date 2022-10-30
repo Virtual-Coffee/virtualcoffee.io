@@ -18,6 +18,7 @@
 		"format": "npx prettier --write --ignore-unknown \"**/*\"",
 		"lint": "eslint ./app/**/*.{js,jsx}",
 		"build": "run-s build:*",
+		"build:aspectRatios": "tsx scripts/aspectRatios.mts",
 		"build:tailwind": "yarn generate:tailwind --minify",
 		"build:data": "node scripts/buildUrls.js",
 		"build:members": "node scripts/loadMemberFiles.js",
@@ -104,11 +105,15 @@
 		"@types/luxon": "^3.0.0",
 		"@types/react": "^18.0.17",
 		"@types/react-dom": "^18.0.6",
+		"@types/recursive-readdir": "^2.2.1",
 		"@types/require-dir": "^1.0.2",
 		"@types/sanitize-html": "^2.6.2",
+		"image-size": "^1.0.2",
 		"prettier": "^2.6.2",
+		"recursive-readdir": "^2.2.3",
 		"source-map-explorer": "^2.5.2",
 		"tailwindcss": "^3.1.5",
+		"tsx": "^3.11.0",
 		"typescript": "^4.6.4"
 	},
 	"engines": {
