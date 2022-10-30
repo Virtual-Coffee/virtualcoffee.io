@@ -1,3 +1,5 @@
+import { aspectRatios } from '~/_generatedData/aspectRatios';
+
 const svgAspectRatios = {
 	Undraw404: '860.13137 / 571.14799',
 
@@ -82,12 +84,13 @@ export default function UndrawIllustration({
 	style = {},
 	...props
 }: UndrawIllustrationProps): React.ReactElement<'img'> {
-	const aspectRatio = svgAspectRatios[filename];
+	const path = `/assets/svg/${filename}.svg`;
+	const aspectRatio = aspectRatios[path];
 
 	return (
 		<img
 			style={{ aspectRatio, ...style }}
-			src={`/assets/svg/${filename}.svg`}
+			src={path}
 			loading="lazy"
 			aria-hidden="true"
 			alt=""
