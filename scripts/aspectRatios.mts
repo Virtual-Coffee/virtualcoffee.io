@@ -53,7 +53,7 @@ const generateAspectDefFile = async (dir: string) => {
 	const files = await getFiles(dir);
 	for (let file of files) {
 		const { height, width } = getAspectRatio(file);
-		const filename = file.substring(file.lastIndexOf('public/') + 7);
+		const filename = `/${file.substring(file.lastIndexOf('public/') + 7)}`;
 		ratioMap.set(filename, `${width} / ${height}`);
 	}
 	const ratioObj = Object.fromEntries(ratioMap);
