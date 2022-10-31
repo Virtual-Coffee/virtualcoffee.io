@@ -11,8 +11,9 @@ import { qualifiedUrl } from '~/util/url.server';
 import { removeTrailingSlash } from '~/util/http';
 import { createMetaData } from '~/util/createMetaData.server';
 import buildUrls from '~/_generatedData/buildUrls.json';
+import type { LoaderArgs } from '@remix-run/node';
 
-export async function loader({ request }) {
+export async function loader({ request }: LoaderArgs) {
 	removeTrailingSlash(request);
 
 	const fullUrl = qualifiedUrl();
@@ -61,9 +62,16 @@ export function links() {
 	];
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	const title = 'Virtual Coffee IO';
-	const description = 'An intimate community for all devs, optimized for you';
+/**
+ * Type to define meta object
+ */
+type MetaData = {
+	data: {
+		meta: object;
+	};
+};
+export function meta({ data }: MetaData) {
+	const { meta } = data;
 	return {
 		...meta,
 		charSet: 'utf-8',
@@ -127,6 +135,7 @@ export default function App() {
 			<head>
 				<Meta />
 				<Links />
+				{/* @ts-ignore */}
 				{buildUrls.NETLIFY && buildUrls.CONTEXT === 'production' && (
 					<script
 						defer
