@@ -1,4 +1,7 @@
-export default function PodcastSubscribe({ className = '', ...props }) {
+export default function PodcastSubscribe({
+	className = '',
+	...props
+}: React.HTMLAttributes<HTMLDivElement>): React.ReactElement<'div'> {
 	return (
 		<div className={`podcastSubscribe ${className}`} {...props}>
 			<a
