@@ -11,8 +11,9 @@ export const loader = async ({ request }) => {
 };
 
 export const links = () => [
-	{ rel: 'stylesheet', href: styles },
+	{ rel: 'preconnect', href: 'https://rsms.me/' },
 	{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
+	{ rel: 'stylesheet', href: styles },
 ];
 
 export default function App() {
