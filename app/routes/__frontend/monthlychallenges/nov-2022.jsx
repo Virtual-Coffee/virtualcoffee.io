@@ -1,16 +1,14 @@
 import { createMetaData } from '~/util/createMetaData.server';
-
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import { getChallengeData } from '~/data/monthlyChallenges/nov-2022';
-import { Fragment } from 'react';
 
 export const handle = {
 	listTitle: 'November, 2022: 100k words!',
 	meta: {
 		title: 'Monthly Theme & Challenge for November, 2022: 100k words!',
 		description:
-			'November challenge -> Blogging: we all work together to hit 50,000 words.',
+			'November challenge -> Blogging: we all work together to hit 100,000 words.',
 	},
 	date: '2022-11-01',
 	hero: {
@@ -18,20 +16,24 @@ export const handle = {
 	},
 };
 
+export async function loader() {
+	const { title, description } = handle.meta;
+
+	const blog = await getChallengeData();
+
+	return json({
+		...blog,
+		meta: createMetaData({ title, description }),
+	});
+}
+
 export function meta({ data: { meta } = {} } = {}) {
 	return meta;
 }
 
-export async function loader() {
-	const { title, description } = handle.meta;
-	const data = await getChallengeData();
-
-	return json({ ...data, meta: createMetaData({ title, description }) });
-}
-
 export default function Challenge() {
-	const { completedGoals, currentGoal, sortedList, list, totals } =
-		useLoaderData();
+	// const { completedGoals, currentGoal, sortedList, list, totals } =
+	// 	useLoaderData();
 
 	return (
 		<>
@@ -46,12 +48,17 @@ export default function Challenge() {
 					NaNoWriMo (National Novel Writing Month) Challenge
 				</a>
 				, we'll be doing the tech take on writing and working together towards
-				the goal while posting on our own blogs.
+				the goal while posting on our own blogs. And since{' '}
+				<a href="https://virtualcoffee.io/monthlychallenges/nov-2021">
+					we hit over 125,000 words last year
+				</a>
+				, we're going to start this year's challenge big with a goal of 100k
+				words.
 			</p>
 
 			<p className="lead">Get those blog posts up!</p>
 
-			{completedGoals.length ? (
+			{/* {completedGoals.length ? (
 				<>
 					<h2>
 						<small>Current status:</small>
@@ -152,7 +159,7 @@ export default function Challenge() {
 						</th>
 					</tr>
 				</tfoot>
-			</table>
+			</table> */}
 
 			<h2>How to Participate</h2>
 
