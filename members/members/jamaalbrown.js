@@ -14,14 +14,14 @@ module.exports = {
 	mainUrl: 'https://jamaalbrown.me',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	 bio: `Full-stack software engineer with a passion for learning. Coffee and tea enthusiast as well!`,
+	bio: `Full-stack software engineer with a passion for learning. Coffee and tea enthusiast as well!`,
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		 { type: 'linkedin', username: 'jamaal-brown-34531067' },
+		{ type: 'linkedin', username: 'jamaal-brown-34531067' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		 { type: 'twitter', username: 'jamaalbro90' },
+		{ type: 'twitter', username: 'jamaalbro90' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
