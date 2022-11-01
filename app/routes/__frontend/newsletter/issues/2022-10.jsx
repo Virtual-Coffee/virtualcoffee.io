@@ -64,7 +64,7 @@ export default function Issue() {
 			</p>
 
 			<h3 className="mb-3 font-italic">
-				October -> <Link to="/monthlychallenges/oct-2022">Hacktober</Link>!
+				October -{'>'} <Link to="/monthlychallenges/oct-2022">Hacktober</Link>!
 			</h3>
 			<p>
 				<a href="https://hacktoberfest.virtualcoffee.io/">
