@@ -56,7 +56,10 @@ export default function Challenge() {
 				words.
 			</p>
 
-			<p className="lead">Get those blog posts up!</p>
+			{/* <p className="lead">Get those blog posts up!</p> */}
+			<p className="lead">
+				We'll have directions on how to submit your blog posts soon!
+			</p>
 
 			{/* {completedGoals.length ? (
 				<>
@@ -184,16 +187,20 @@ export default function Challenge() {
 			</p>
 
 			<p>
-				This year we're embracing an "official topic" as well as general topics.
-				We recently added a Developer Health section to our site. We'd love to
-				feature our members' blog posts on the topic.
+				This year we're embracing an <strong>official topic</strong> as well as
+				general topics. We recently added a{' '}
+				<a href="https://virtualcoffee.io/resources/developer-health">
+					Developer Health
+				</a>{' '}
+				section to our site. We'd love to feature our members' blog posts on the
+				topic.
 			</p>
 			<h3>What if I'm not confident about my writing?</h3>
 			<p>
 				We all start somewhere, and the more you practice, the better you'll
 				get. We have volunteers who are willing to proofread and give you
 				feedback on your writing. Just put a link to your blog post draft in the
-				<code>#monthly-challenge</code> channel and ask for the help you need.
+				<code> #monthly-challenge</code> channel and ask for the help you need.
 			</p>
 
 			<h3>What if I don't know what to write about?</h3>
