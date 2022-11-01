@@ -1,7 +1,7 @@
 import { createMetaData } from '~/util/createMetaData.server';
-import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
-import { getChallengeData } from '~/data/monthlyChallenges/nov-2022';
+// import { json } from '@remix-run/node';
+// import { useLoaderData } from '@remix-run/react';
+// import { getChallengeData } from '~/data/monthlyChallenges/nov-2022';
 
 export const handle = {
 	listTitle: 'November, 2022: 100k words!',
@@ -16,16 +16,16 @@ export const handle = {
 	},
 };
 
-export async function loader() {
-	const { title, description } = handle.meta;
+// export async function loader() {
+// 	const { title, description } = handle.meta;
 
-	const blog = await getChallengeData();
+// 	const blog = await getChallengeData();
 
-	return json({
-		...blog,
-		meta: createMetaData({ title, description }),
-	});
-}
+// 	return json({
+// 		...blog,
+// 		meta: createMetaData({ title, description }),
+// 	});
+// }
 
 export function meta({ data: { meta } = {} } = {}) {
 	return meta;
@@ -163,11 +163,11 @@ export default function Challenge() {
 
 			<h2>How to Participate</h2>
 
-			<p>
+			{/* <p>
 				Once you've written and published your content, sign in to the{' '}
 				<a href="https://members.virtualcoffee.io/"> VC Members section</a> and
 				follow links to the November Monthly Challenge!
-			</p>
+			</p> */}
 
 			<h3>What kind of content counts towards the challenge?</h3>
 
