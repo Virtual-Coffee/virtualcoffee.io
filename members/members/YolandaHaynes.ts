@@ -1,5 +1,5 @@
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
+import { profileMasks } from '../flare';
 
 export const YolandaHaynes: MemberObject = {
 	// GitHub username (required)
@@ -27,20 +27,21 @@ export const YolandaHaynes: MemberObject = {
 	flare: {
 		// example:
 		// profileMask: profileMasks.triangle,
+		profileMask: profileMasks.rabbet,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
 		{ type: 'linkedin', username: 'yolanda-haynes' },
-		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
+		{ type: 'dev', username: 'yhaynes' },
+		{ type: 'codenewbie', username: 'yhaynes' },
 		{ type: 'twitter', username: '_YolandaHaynes' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		{ type: 'polywork', username: 'yhaynes' },
 		// { type: 'medium', username: 'yourUserName' },
-		// { type: 'hashnode', username: 'yourUserName' },
+		{ type: 'hashnode', username: 'yhaynes' },
 		{ type: 'website', url: 'https://www.yhaynes.com/', title: 'Portfolio' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022'],
 };
