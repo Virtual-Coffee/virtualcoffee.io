@@ -190,11 +190,10 @@ export default function Challenge() {
 			</p>
 			<h3>What if I'm not confident about my writing?</h3>
 			<p>
-				{' '}
 				We all start somewhere, and the more you practice, the better you'll
 				get. We have volunteers who are willing to proofread and give you
 				feedback on your writing. Just put a link to your blog post draft in the
-				#monthly-challenge channel and ask for the help you need.
+				<code>#monthly-challenge</code> channel and ask for the help you need.
 			</p>
 
 			<h3>What if I don't know what to write about?</h3>
@@ -203,7 +202,7 @@ export default function Challenge() {
 				<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/711">
 					this discussion
 				</a>{' '}
-				and
+				and{' '}
 				<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/458">
 					this discussion
 				</a>
@@ -269,7 +268,7 @@ export default function Challenge() {
 			</ul>
 
 			<p>
-				A very special thanks goes out to
+				A very special thanks goes out to{' '}
 				<a href="https://github.com/jdwilkin4">Jessica Wilkins</a> and{' '}
 				<a href="https://github.com/Cerchie">Lucia Cerchie</a> for helping to
 				compose this list!
