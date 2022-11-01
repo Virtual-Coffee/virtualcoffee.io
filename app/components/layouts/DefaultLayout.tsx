@@ -51,7 +51,10 @@ export function HeroHead({
 	heroHeader,
 	heroSubheader,
 	simple,
-}: DefaultLayoutProps) {
+}: Pick<
+	DefaultLayoutProps,
+	'Hero' | 'heroHeader' | 'heroSubheader' | 'simple'
+>) {
 	const heroData = useHeroData({ Hero, heroHeader, heroSubheader });
 
 	if (heroData.Hero && heroData.heroHeader) {
