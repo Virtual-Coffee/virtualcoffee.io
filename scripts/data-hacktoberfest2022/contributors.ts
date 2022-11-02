@@ -76,23 +76,12 @@ const vchiMentors = [
 ];
 
 const vchiMaintainers = [
-	'dominicduffin1',
 	'ClJarvis',
 	'JesseRWeigel',
 	'nickytonline',
 	'jdwilkin4',
 	'danieltott',
 	'BekahHW',
-];
-
-const vchiMaintainerRepos = [
-	'Virtual-Coffee/virtualcoffee.io',
-	'ClJarvis/Hello_There',
-	'nickytonline/connect-four',
-	'freeCodeCamp/Developer_Quiz_Site',
-	'BekahHW/postpartum-wellness-app',
-	'JesseRWeigel/battlemath',
-	'JesseRWeigel/voice-to-text-notes',
 ];
 
 async function getContributions(data: string[]): Promise<any> {
@@ -300,12 +289,9 @@ async function getContributions(data: string[]): Promise<any> {
 				return true;
 			}
 		}
-		const contributions = response
-			.filter(isNonError)
-			.filter((user) => user.stats.totalPullRequests > 0)
-			.sort((a, b) => {
-				return b.stats.totalPullRequests - a.stats.totalPullRequests;
-			});
+		const contributions = response.filter(isNonError).sort((a, b) => {
+			return b.stats.totalPullRequests - a.stats.totalPullRequests;
+		});
 
 		contributions.forEach((user) => {
 			console.log(
@@ -323,23 +309,27 @@ async function getContributions(data: string[]): Promise<any> {
 			return a.toLowerCase().localeCompare(b.toLowerCase());
 		});
 
+		const contributorsWithPRs = contributions.filter(
+			(contributor) => contributor.stats.totalPullRequests > 0,
+		);
+
 		const results = {
 			contributions,
 			stats: {
-				totalContributors: contributions.length,
-				totalPullRequests: contributions.reduce(
+				totalContributors: contributorsWithPRs.length,
+				totalPullRequests: contributorsWithPRs.reduce(
 					(total, contributor) => total + contributor.stats.totalPullRequests,
 					0,
 				),
-				totalAdditions: contributions.reduce(
+				totalAdditions: contributorsWithPRs.reduce(
 					(total, contributor) => total + contributor.stats.totalAdditions,
 					0,
 				),
-				totalDeletions: contributions.reduce(
+				totalDeletions: contributorsWithPRs.reduce(
 					(total, contributor) => total + contributor.stats.totalDeletions,
 					0,
 				),
-				totalChangedFiles: contributions.reduce(
+				totalChangedFiles: contributorsWithPRs.reduce(
 					(total, contributor) => total + contributor.stats.totalChangedFiles,
 					0,
 				),
@@ -369,223 +359,8 @@ async function getContributions(data: string[]): Promise<any> {
 	}
 }
 
-async function getMaintainerContributions(data: string[]): Promise<any> {
-	const token = process.env.GITHUB_TOKEN;
-
-	if (!token) {
-		return null;
-	}
-
-	let headers = {
-		Accept: 'application/vnd.github.v3+json',
-		Authorization: 'bearer ' + token,
-	};
-
-	try {
-		console.log('Fetching member data...');
-
-		const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
-			headers,
-		});
-
-		const query = gql`
-			query ($cursor: String, $name: String!, $owner: String!) {
-				repository(name: $name, owner: $owner) {
-					pullRequests(
-						first: 100
-						orderBy: { field: CREATED_AT, direction: DESC }
-						after: $cursor
-					) {
-						pageInfo {
-							hasNextPage
-							endCursor
-						}
-						nodes {
-							author {
-								login
-							}
-							title
-							mergedAt
-							url
-							deletions
-							additions
-							changedFiles
-							state
-							createdAt
-							bodyText
-						}
-					}
-				}
-			}
-		`;
-		type RepoResponse = {
-			repository: {
-				pullRequests: {
-					pageInfo: {
-						hasNextPage: boolean;
-						endCursor: string;
-					};
-					nodes: {
-						author: {
-							login: string;
-						};
-						title: string;
-						mergedAt: string | null;
-						url: string;
-						deletions: number;
-						additions: number;
-						changedFiles: number;
-						state: string;
-						createdAt: string;
-						bodyText: string;
-					}[];
-				};
-			};
-		};
-
-		const response = await Promise.all(
-			data.map(async (repo) => {
-				const [owner, name] = repo.split('/');
-
-				const prs: RepoResponse['repository']['pullRequests']['nodes'] = [];
-				let cursor: string | undefined = undefined;
-				let hasNextPage = true;
-
-				while (hasNextPage) {
-					console.log(`fetching page ${cursor} for ${repo}`);
-					const rs: RepoResponse = await graphQLClient.request<RepoResponse>(
-						query,
-						{
-							owner,
-							name,
-							cursor,
-						},
-					);
-
-					const repository = rs.repository;
-
-					prs.push(...repository.pullRequests.nodes);
-
-					if (repository.pullRequests.pageInfo.hasNextPage) {
-						const lastRepo =
-							repository.pullRequests.nodes[
-								repository.pullRequests.nodes.length - 1
-							];
-						if (
-							new Date(lastRepo.createdAt) >=
-								new Date('2022-10-01T00:00:00Z') &&
-							new Date(lastRepo.createdAt) <= new Date('2022-10-31T23:59:59Z')
-						) {
-							console.log('lastRepo', lastRepo.createdAt);
-							cursor = repository.pullRequests.pageInfo.endCursor;
-						} else {
-							hasNextPage = false;
-						}
-					} else {
-						hasNextPage = false;
-					}
-				}
-
-				const pullRequests = prs.filter((pr) => {
-					const created = new Date(pr.createdAt);
-
-					// Only include PRs created in October 2022
-					if (
-						created < new Date('2022-10-01T00:00:00Z') ||
-						created > new Date('2022-10-31T23:59:59Z')
-					) {
-						return false;
-					}
-					return true;
-				});
-
-				if (repo === 'Virtual-Coffee/virtualcoffee.io') {
-					const memberFilePulls = pullRequests.filter((pr) => {
-						return pr.bodyText.includes('#13') || pr.bodyText.includes('#643');
-					});
-
-					const nonMemberFilePulls = pullRequests.filter((pr) => {
-						return !(
-							pr.bodyText.includes('#13') || pr.bodyText.includes('#643')
-						);
-					});
-					const totalMemberFilePullRequests = memberFilePulls.length;
-					const totalNonMemberFilePullRequests = nonMemberFilePulls.length;
-
-					console.log({
-						totalMemberFilePullRequests,
-						totalNonMemberFilePullRequests,
-					});
-				}
-
-				const uniqueContributors = [
-					...new Set(pullRequests.map((pr) => pr.author.login)),
-				]
-					.map((login) => {
-						return {
-							login,
-							totalPrs: pullRequests.filter((pr) => pr.author.login === login)
-								.length,
-						};
-					})
-					.sort((a, b) => {
-						return b.totalPrs - a.totalPrs;
-					});
-
-				const results = {
-					repo,
-					pullRequests,
-					stats: {
-						totalPullRequests: pullRequests.length,
-						totalUniqueContributors: uniqueContributors.length,
-						uniqueContributors,
-					},
-				};
-
-				console.log(repo, results.stats);
-				return results;
-			}),
-		);
-
-		const results = {
-			repositories: response,
-			stats: {
-				totalPullRequests: response.reduce((acc, repo) => {
-					return acc + repo.stats.totalPullRequests;
-				}, 0), // Total number of pull requests
-				totalUniqueContributors: response.reduce((acc, repo) => {
-					return acc + repo.stats.totalUniqueContributors;
-				}, 0),
-			},
-		};
-
-		fs.writeFileSync(
-			join(
-				process.cwd(),
-				'app',
-				'_generatedData',
-				'hacktoberfest2022',
-				'mainainerRepos.json',
-			),
-			JSON.stringify(results, null, 2),
-		);
-
-		// return githubData;
-	} catch (error) {
-		if (error instanceof Error) {
-			console.log(error.message);
-		}
-		console.log('Error loading github member data, using fake data instead');
-		return null;
-	}
-}
-
 const allContribs = Array.from(
 	new Set([...vchiContributors, ...vchiMaintainers, ...vchiMentors]),
 );
-// console.log('total', allContribs.length);
+
 getContributions(allContribs);
-
-getMaintainerContributions(vchiMaintainerRepos);
-
-// getContributions(['danieltott']);
