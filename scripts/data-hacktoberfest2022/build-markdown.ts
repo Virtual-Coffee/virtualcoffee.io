@@ -2,21 +2,10 @@ import fs from 'fs';
 import { join } from 'path';
 import contributors from '../../app/_generatedData/hacktoberfest2022/contributors.json';
 
-// const contributors = JSON.parse(fs.readFileSync(join(
-//   process.cwd(),
-//   'app',
-//   '_generatedData',
-//   'hacktoberfest2022',
-//   'contributors.json',
-// ), 'utf8'));
-
-// const maintainers = JSON.parse(fs.readFileSync(join(
-//   process.cwd(),
-//   'app',
-//   '_generatedData',
-//   'hacktoberfest2022',
-//   'contributors.json',
-// ), 'utf8'));
+/**
+ * Build a nice markdown summary from the generated data re: Hacktoberfest 2022
+ * to run, `npx tsx scripts/data-hacktoberfest2022/build-markdown.ts`
+ */
 
 const markdown = contributors.contributions
 	.filter((contribution) => contribution.stats.totalPullRequests > 0)

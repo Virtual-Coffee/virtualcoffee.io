@@ -7,7 +7,7 @@ dotenv.config();
 
 /**
  * Collect a bunch of data re: Hacktoberfest 2022
- * to run, `npx tsx scripts/data-hacktoberfest2022.ts`
+ * to run, `npx tsx scripts/data-hacktoberfest2022/maintainer-repos.ts`
  */
 
 const vchiMentors = [
