@@ -579,7 +579,7 @@ const allContribs = Array.from(
 	new Set([...vchiContributors, ...vchiMaintainers, ...vchiMentors]),
 );
 // console.log('total', allContribs.length);
-// getContributions(allContribs);
+getContributions(allContribs);
 
 getMaintainerContributions(vchiMaintainerRepos);
 
