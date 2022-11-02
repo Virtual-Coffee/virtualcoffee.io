@@ -1,8 +1,4 @@
 {
-	"stats": {
-		"totalPullRequests": 631,
-		"totalUniqueContributors": 255
-	},
 	"repositories": [
 		{
 			"repo": "Virtual-Coffee/virtualcoffee.io",
@@ -82,12 +78,12 @@
 						"login": "aishwarya-mali"
 					},
 					"title": "convert DefaultLayout to tsx",
-					"mergedAt": null,
+					"mergedAt": "2022-11-01T18:58:02Z",
 					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/731",
-					"deletions": 7,
-					"additions": 37,
-					"changedFiles": 2,
-					"state": "OPEN",
+					"deletions": 29,
+					"additions": 64,
+					"changedFiles": 4,
+					"state": "MERGED",
 					"createdAt": "2022-10-26T07:47:55Z",
 					"bodyText": "Linked Issue\nCloses #686\n\nDescription\n\nDefaultLayout.jsx to Typescript\nAdd types where required\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
 				},
@@ -502,12 +498,12 @@
 						"login": "chaos986"
 					},
 					"title": "Added new page for Developer Health resources.  Starting with \"Burnout\"",
-					"mergedAt": null,
+					"mergedAt": "2022-11-01T18:41:12Z",
 					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/685",
 					"deletions": 0,
 					"additions": 67,
 					"changedFiles": 1,
-					"state": "OPEN",
+					"state": "MERGED",
 					"createdAt": "2022-10-10T20:27:01Z",
 					"bodyText": "Linked Issue\n#673\n\nDescription\nI made a new page and pasted in text from slack and videos from YouTube.\nI am still new to Markdown and React.\nI previewed nothing.\nThis could break prod.\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
 				},
@@ -9934,6 +9930,203 @@
 					}
 				]
 			}
+		},
+		{
+			"repo": "deepgram-devs/dg-translation-chrome-ext",
+			"pullRequests": [
+				{
+					"author": {
+						"login": "meg-gutshall"
+					},
+					"title": "Add punctuation feature",
+					"mergedAt": "2022-10-31T14:19:31Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/23",
+					"deletions": 1,
+					"additions": 1,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-29T01:40:49Z",
+					"bodyText": "Summary\nProposed changes\nCloses #21 – Add punctuation feature for readability\nTypes of changes\nWhat types of changes does your code introduce to the Vonage for Visual Studio Code extension?\n\n Bugfix (non-breaking change which fixes an issue)\n New feature (non-breaking change which adds functionality)\n Breaking change (fix or feature that would cause existing functionality to not work as expected)\n Documentation update or tests (if none of the other choices apply)\n\nChecklist\n\n I have read the CONTRIBUTING doc\n I have tested my changes in the development environment\n I have added necessary documentation (if appropriate)\n Any dependent changes have been merged and published in downstream modules"
+				},
+				{
+					"author": {
+						"login": "abuna1985"
+					},
+					"title": "Add a Feature Request Form",
+					"mergedAt": "2022-10-28T16:45:32Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/22",
+					"deletions": 24,
+					"additions": 53,
+					"changedFiles": 2,
+					"state": "MERGED",
+					"createdAt": "2022-10-28T16:22:32Z",
+					"bodyText": "Proposed changes\nI removed feature_request.md and created feature_request.yml. Added the questions from the .md to the .yml file. I used bug_request.yml as a guide.\n\nTypes of changes\nWhat types of changes does your code introduce to the Vonage for Visual Studio Code extension?\nPut an x in the boxes that apply\n\n Bugfix (non-breaking change which fixes an issue)\n New feature (non-breaking change which adds functionality)\n Breaking change (fix or feature that would cause existing functionality to not work as expected)\n Documentation update or tests (if none of the other choices apply)\n\nChecklist\nPut an x in the boxes that apply. You can also fill these out after creating the PR. If you're unsure about any of them, don't hesitate to ask. We're here to help! This is simply a reminder of what we are going to look for before merging your code.\n\n I have read the CONTRIBUTING doc\n I have added necessary documentation (if appropriate)\n Any dependent changes have been merged and published in downstream modules\n\nFurther comments\nFixes #20"
+				},
+				{
+					"author": {
+						"login": "arndom"
+					},
+					"title": "Feature: Add clear transcript functionality",
+					"mergedAt": "2022-10-25T17:52:02Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/19",
+					"deletions": 1,
+					"additions": 14,
+					"changedFiles": 2,
+					"state": "MERGED",
+					"createdAt": "2022-10-24T11:36:05Z",
+					"bodyText": "Proposed changes\n\nAdded a button to clear transcription\nResolves #4\n\nTypes of changes\n\n Bugfix (non-breaking change which fixes an issue)\n New feature (non-breaking change which adds functionality)\n Breaking change (fix or feature that would cause existing functionality to not work as expected)\n Documentation update or tests (if none of the other choices apply)\n\nChecklist\n\n I have read the CONTRIBUTING doc\n I have added necessary documentation (if appropriate)\n Any dependent changes have been merged and published in downstream modules"
+				},
+				{
+					"author": {
+						"login": "arndom"
+					},
+					"title": "Fix content file load error",
+					"mergedAt": "2022-10-21T13:44:25Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/18",
+					"deletions": 6,
+					"additions": 11,
+					"changedFiles": 3,
+					"state": "MERGED",
+					"createdAt": "2022-10-21T13:38:57Z",
+					"bodyText": "Proposed changes\nFix content-script.ts load error\nTypes of changes\n\n Bugfix (non-breaking change which fixes an issue)\n New feature (non-breaking change which adds functionality)\n Breaking change (fix or feature that would cause existing functionality to not work as expected)\n Documentation update or tests (if none of the other choices apply)\n\nChecklist\n\n I have read the CONTRIBUTING doc\n I have added necessary documentation (if appropriate)\n Any dependent changes have been merged and published in downstream modules"
+				},
+				{
+					"author": {
+						"login": "BekahHW"
+					},
+					"title": "change file to yml",
+					"mergedAt": "2022-10-14T20:44:50Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/17",
+					"deletions": 0,
+					"additions": 0,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-14T20:44:35Z",
+					"bodyText": "Proposed changes\nUpdate templates to forms"
+				},
+				{
+					"author": {
+						"login": "BekahHW"
+					},
+					"title": "Update bug report to form",
+					"mergedAt": "2022-10-14T20:38:43Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/16",
+					"deletions": 45,
+					"additions": 93,
+					"changedFiles": 2,
+					"state": "MERGED",
+					"createdAt": "2022-10-14T20:36:59Z",
+					"bodyText": "Proposed changes\nDescribe the big picture of your changes here to communicate to the maintainers why we should accept this pull request. If it fixes a bug or resolves a feature request, be sure to link to that issue.\nTypes of changes\nWhat types of changes does your code introduce to the Vonage for Visual Studio Code extension?\nPut an x in the boxes that apply\n\n Bugfix (non-breaking change which fixes an issue)\n New feature (non-breaking change which adds functionality)\n Breaking change (fix or feature that would cause existing functionality to not work as expected)\n Documentation update or tests (if none of the other choices apply)\n\nChecklist\nPut an x in the boxes that apply. You can also fill these out after creating the PR. If you're unsure about any of them, don't hesitate to ask. We're here to help! This is simply a reminder of what we are going to look for before merging your code.\n\n I have read the CONTRIBUTING doc\n I have added necessary documentation (if appropriate)\n Any dependent changes have been merged and published in downstream modules\n\nFurther comments\nIf this is a relatively large or complex change, kick off the discussion by explaining why you chose the solution you did and what alternatives you considered, etc..."
+				},
+				{
+					"author": {
+						"login": "BekahHW"
+					},
+					"title": "Add options page",
+					"mergedAt": "2022-10-13T14:43:42Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/14",
+					"deletions": 0,
+					"additions": 26,
+					"changedFiles": 2,
+					"state": "MERGED",
+					"createdAt": "2022-10-13T14:43:35Z",
+					"bodyText": "Proposed changes\nDescribe the big picture of your changes here to communicate to the maintainers why we should accept this pull request. If it fixes a bug or resolves a feature request, be sure to link to that issue.\nTypes of changes\nWhat types of changes does your code introduce to the Vonage for Visual Studio Code extension?\nPut an x in the boxes that apply\n\n Bugfix (non-breaking change which fixes an issue)\n New feature (non-breaking change which adds functionality)\n Breaking change (fix or feature that would cause existing functionality to not work as expected)\n Documentation update or tests (if none of the other choices apply)\n\nChecklist\nPut an x in the boxes that apply. You can also fill these out after creating the PR. If you're unsure about any of them, don't hesitate to ask. We're here to help! This is simply a reminder of what we are going to look for before merging your code.\n\n I have read the CONTRIBUTING doc\n Lint and unit tests pass locally with my changes\n I have added tests that prove my fix is effective or that my feature works\n I have added necessary documentation (if appropriate)\n Any dependent changes have been merged and published in downstream modules\n\nFurther comments\nIf this is a relatively large or complex change, kick off the discussion by explaining why you chose the solution you did and what alternatives you considered, etc..."
+				},
+				{
+					"author": {
+						"login": "aishwarya-mali"
+					},
+					"title": "add toggle for API Key",
+					"mergedAt": "2022-10-13T13:51:24Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/13",
+					"deletions": 4,
+					"additions": 21,
+					"changedFiles": 2,
+					"state": "MERGED",
+					"createdAt": "2022-10-13T13:39:21Z",
+					"bodyText": "Proposed changes\nCloses #8\nPR is to add toggle for API Key Visibility\nTypes of changes\nWhat types of changes does your code introduce to the Vonage for Visual Studio Code extension?\nPut an x in the boxes that apply\n\n Bugfix (non-breaking change which fixes an issue)\n New feature (non-breaking change which adds functionality)\n Breaking change (fix or feature that would cause existing functionality to not work as expected)\n Documentation update or tests (if none of the other choices apply)\n\nChecklist\nPut an x in the boxes that apply. You can also fill these out after creating the PR. If you're unsure about any of them, don't hesitate to ask. We're here to help! This is simply a reminder of what we are going to look for before merging your code.\n\n I have read the CONTRIBUTING doc\n Lint and unit tests pass locally with my changes\n I have added tests that prove my fix is effective or that my feature works\n I have added necessary documentation (if appropriate)\n Any dependent changes have been merged and published in downstream modules\n\nFurther comments\nIf this is a relatively large or complex change, kick off the discussion by explaining why you chose the solution you did and what alternatives you considered, etc..."
+				},
+				{
+					"author": {
+						"login": "BekahHW"
+					},
+					"title": "Add types for chrome and update with some types",
+					"mergedAt": "2022-10-12T15:17:31Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/11",
+					"deletions": 2769,
+					"additions": 2616,
+					"changedFiles": 3,
+					"state": "MERGED",
+					"createdAt": "2022-10-12T15:16:28Z",
+					"bodyText": "Added chrome types package\nUpdate popup.ts with some types"
+				},
+				{
+					"author": {
+						"login": "rmirville"
+					},
+					"title": "Add font size, spacing styles to popup",
+					"mergedAt": "2022-10-11T14:44:53Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/9",
+					"deletions": 6,
+					"additions": 49,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-11T01:03:05Z",
+					"bodyText": "Summary\nThis PR resolves Issue #2 (Add Styling to popup) by setting uniform font-size, line-height, spacing and alignment styles.\n\nApproach\n\nAdded wrapper elements around controls to allow for flexbox alignment.\nPrioritized single-class css rules to provide low, flat selector specificity."
+				},
+				{
+					"author": {
+						"login": "nickytonline"
+					},
+					"title": "chore: removed node_modules from git",
+					"mergedAt": "2022-10-09T23:50:01Z",
+					"url": "https://github.com/deepgram-devs/dg-translation-chrome-ext/pull/7",
+					"deletions": 540019,
+					"additions": 0,
+					"changedFiles": 3263,
+					"state": "MERGED",
+					"createdAt": "2022-10-09T23:33:08Z",
+					"bodyText": "Description\nRemoves node_modules from git.\nRelated Documents & Issues\nCloses #6"
+				}
+			],
+			"stats": {
+				"totalPullRequests": 11,
+				"totalUniqueContributors": 7,
+				"uniqueContributors": [
+					{
+						"login": "BekahHW",
+						"totalPrs": 4
+					},
+					{
+						"login": "arndom",
+						"totalPrs": 2
+					},
+					{
+						"login": "meg-gutshall",
+						"totalPrs": 1
+					},
+					{
+						"login": "abuna1985",
+						"totalPrs": 1
+					},
+					{
+						"login": "aishwarya-mali",
+						"totalPrs": 1
+					},
+					{
+						"login": "rmirville",
+						"totalPrs": 1
+					},
+					{
+						"login": "nickytonline",
+						"totalPrs": 1
+					}
+				]
+			}
 		}
-	]
+	],
+	"stats": {
+		"totalPullRequests": 642,
+		"totalUniqueContributors": 262
+	}
 }

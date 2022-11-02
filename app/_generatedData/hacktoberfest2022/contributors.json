@@ -1,52 +1,11 @@
 {
-	"stats": {
-		"totalContributors": 36,
-		"totalPullRequests": 132,
-		"totalAdditions": 64978,
-		"totalDeletions": 559937,
-		"totalChangedFiles": 3718,
-		"uniqueRepos": [
-			"AccessibleForAll/AccessibleWebDev",
-			"ankitpareek0141/Favorite-OTT-characters",
-			"BekahHW/postpartum-wellness-app",
-			"ClJarvis/Hello_There",
-			"codethesaurus/docs",
-			"connor-baer/action-sync-branch",
-			"crescentpartha/CheatSheets-for-Developers",
-			"davejane25/Calculators",
-			"davidalpert/go-git-mob",
-			"deepgram-devs/deepgram-go-sdk",
-			"deepgram-devs/dg-translation-chrome-ext",
-			"do-community/cloud_haiku",
-			"dsasaank-369/Pokemon",
-			"freeCodeCamp/Developer_Quiz_Site",
-			"IBM/carbon-ui-builder",
-			"jcubic/lips",
-			"JesseRWeigel/battlemath",
-			"mgreiler/se-unlocked",
-			"nickytonline/connect-four",
-			"Spyware007/Animating-Buttons",
-			"t3-oss/create-t3-app",
-			"thecyberworld/thecyberhub.org",
-			"thisdot/diverse-speakers",
-			"thisdot/framework.dev",
-			"thisdot/tech-conferences",
-			"thisdot/tech-dev-tooling",
-			"thisdot/tech-newsletters",
-			"Virtual-Coffee/podcast-transcripts",
-			"Virtual-Coffee/virtualcoffee.io",
-			"webdev-20/shorti-url-shortener",
-			"withfig/autocomplete"
-		],
-		"totalUniqueRepos": 31
-	},
 	"contributions": [
 		{
 			"login": "aishwarya-mali",
 			"pullRequests": [
 				{
 					"title": "convert DefaultLayout to tsx",
-					"mergedAt": null,
+					"mergedAt": "2022-11-01T18:58:02Z",
 					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/731",
 					"baseRepository": {
 						"name": "virtualcoffee.io",
@@ -97,10 +56,10 @@
 							]
 						}
 					},
-					"deletions": 7,
-					"additions": 37,
-					"changedFiles": 2,
-					"state": "OPEN",
+					"deletions": 29,
+					"additions": 64,
+					"changedFiles": 4,
+					"state": "MERGED",
 					"createdAt": "2022-10-26T07:47:55Z"
 				},
 				{
@@ -456,11 +415,6 @@
 									"topic": {
 										"name": "typescript"
 									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
 								}
 							]
 						}
@@ -562,9 +516,9 @@
 			],
 			"stats": {
 				"totalPullRequests": 10,
-				"totalAdditions": 619,
-				"totalDeletions": 169,
-				"totalChangedFiles": 29,
+				"totalAdditions": 646,
+				"totalDeletions": 191,
+				"totalChangedFiles": 31,
 				"totalUniqueRepos": 7,
 				"uniqueRepos": [
 					"Virtual-Coffee/virtualcoffee.io",
@@ -1485,6 +1439,234 @@
 			}
 		},
 		{
+			"login": "ClJarvis",
+			"pullRequests": [
+				{
+					"title": "Best practices",
+					"mergedAt": "2022-10-31T23:50:42Z",
+					"url": "https://github.com/codethesaurus/docs/pull/37",
+					"baseRepository": {
+						"name": "docs",
+						"nameWithOwner": "codethesaurus/docs",
+						"url": "https://github.com/codethesaurus/docs",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "hacktoberfest"
+									}
+								},
+								{
+									"topic": {
+										"name": "hacktoberfest2020"
+									}
+								},
+								{
+									"topic": {
+										"name": "mkdocs"
+									}
+								},
+								{
+									"topic": {
+										"name": "programming-languages"
+									}
+								},
+								{
+									"topic": {
+										"name": "hacktoberfest2021"
+									}
+								},
+								{
+									"topic": {
+										"name": "hacktoberfest2022"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 0,
+					"additions": 24,
+					"changedFiles": 2,
+					"state": "MERGED",
+					"createdAt": "2022-10-28T15:35:22Z"
+				},
+				{
+					"title": "added magnolia JS",
+					"mergedAt": "2022-10-18T20:40:29Z",
+					"url": "https://github.com/thisdot/tech-conferences/pull/34",
+					"baseRepository": {
+						"name": "tech-conferences",
+						"nameWithOwner": "thisdot/tech-conferences",
+						"url": "https://github.com/thisdot/tech-conferences",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "beginner-friendly"
+									}
+								},
+								{
+									"topic": {
+										"name": "conferences"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 0,
+					"additions": 7,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-18T16:00:30Z"
+				},
+				{
+					"title": "Season2epi9",
+					"mergedAt": null,
+					"url": "https://github.com/Virtual-Coffee/podcast-transcripts/pull/82",
+					"baseRepository": {
+						"name": "podcast-transcripts",
+						"nameWithOwner": "Virtual-Coffee/podcast-transcripts",
+						"url": "https://github.com/Virtual-Coffee/podcast-transcripts",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "hacktoberfest"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 1561,
+					"additions": 1662,
+					"changedFiles": 1,
+					"state": "OPEN",
+					"createdAt": "2022-10-11T20:43:25Z"
+				},
+				{
+					"title": "update transcript for 4_2",
+					"mergedAt": "2022-10-12T18:40:59Z",
+					"url": "https://github.com/Virtual-Coffee/podcast-transcripts/pull/78",
+					"baseRepository": {
+						"name": "podcast-transcripts",
+						"nameWithOwner": "Virtual-Coffee/podcast-transcripts",
+						"url": "https://github.com/Virtual-Coffee/podcast-transcripts",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "hacktoberfest"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 1298,
+					"additions": 1386,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-10T00:01:34Z"
+				},
+				{
+					"title": "wrote a hiaku in markdown",
+					"mergedAt": "2022-10-15T14:00:38Z",
+					"url": "https://github.com/do-community/cloud_haiku/pull/2233",
+					"baseRepository": {
+						"name": "cloud_haiku",
+						"nameWithOwner": "do-community/cloud_haiku",
+						"url": "https://github.com/do-community/cloud_haiku",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "hacktoberfest"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 0,
+					"additions": 10,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-06T23:07:22Z"
+				},
+				{
+					"title": "I added my badge and flare to profile.",
+					"mergedAt": "2022-10-03T19:05:46Z",
+					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/648",
+					"baseRepository": {
+						"name": "virtualcoffee.io",
+						"nameWithOwner": "Virtual-Coffee/virtualcoffee.io",
+						"url": "https://github.com/Virtual-Coffee/virtualcoffee.io",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "tech"
+									}
+								},
+								{
+									"topic": {
+										"name": "coffee"
+									}
+								},
+								{
+									"topic": {
+										"name": "community"
+									}
+								},
+								{
+									"topic": {
+										"name": "learn"
+									}
+								},
+								{
+									"topic": {
+										"name": "mentorship"
+									}
+								},
+								{
+									"topic": {
+										"name": "junior-developers"
+									}
+								},
+								{
+									"topic": {
+										"name": "hacktoberfest"
+									}
+								},
+								{
+									"topic": {
+										"name": "remix"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 3,
+					"additions": 3,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-03T17:54:17Z"
+				}
+			],
+			"stats": {
+				"totalPullRequests": 6,
+				"totalAdditions": 3092,
+				"totalDeletions": 2862,
+				"totalChangedFiles": 7,
+				"totalUniqueRepos": 5,
+				"uniqueRepos": [
+					"codethesaurus/docs",
+					"thisdot/tech-conferences",
+					"Virtual-Coffee/podcast-transcripts",
+					"do-community/cloud_haiku",
+					"Virtual-Coffee/virtualcoffee.io"
+				]
+			}
+		},
+		{
 			"login": "davidalpert",
 			"pullRequests": [
 				{
@@ -1782,322 +1964,6 @@
 					"davidalpert/go-git-mob",
 					"deepgram-devs/deepgram-go-sdk",
 					"withfig/autocomplete"
-				]
-			}
-		},
-		{
-			"login": "jdwilkin4",
-			"pullRequests": [
-				{
-					"title": "docs: adding content submission guidelines",
-					"mergedAt": "2022-10-31T14:53:42Z",
-					"url": "https://github.com/thisdot/framework.dev/pull/378",
-					"baseRepository": {
-						"name": "framework.dev",
-						"nameWithOwner": "thisdot/framework.dev",
-						"url": "https://github.com/thisdot/framework.dev",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "angular"
-									}
-								},
-								{
-									"topic": {
-										"name": "astro"
-									}
-								},
-								{
-									"topic": {
-										"name": "react"
-									}
-								},
-								{
-									"topic": {
-										"name": "vanilla-extract"
-									}
-								},
-								{
-									"topic": {
-										"name": "vue"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 13,
-					"additions": 36,
-					"changedFiles": 1,
-					"state": "MERGED",
-					"createdAt": "2022-10-31T14:44:31Z"
-				},
-				{
-					"title": "feat: adding this dot content to all framework sites",
-					"mergedAt": "2022-10-27T22:18:44Z",
-					"url": "https://github.com/thisdot/framework.dev/pull/353",
-					"baseRepository": {
-						"name": "framework.dev",
-						"nameWithOwner": "thisdot/framework.dev",
-						"url": "https://github.com/thisdot/framework.dev",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "angular"
-									}
-								},
-								{
-									"topic": {
-										"name": "astro"
-									}
-								},
-								{
-									"topic": {
-										"name": "react"
-									}
-								},
-								{
-									"topic": {
-										"name": "vanilla-extract"
-									}
-								},
-								{
-									"topic": {
-										"name": "vue"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 38,
-					"additions": 212,
-					"changedFiles": 10,
-					"state": "MERGED",
-					"createdAt": "2022-10-27T15:33:49Z"
-				},
-				{
-					"title": "feat: adding dropdown for communities",
-					"mergedAt": "2022-10-25T15:25:01Z",
-					"url": "https://github.com/thisdot/framework.dev/pull/335",
-					"baseRepository": {
-						"name": "framework.dev",
-						"nameWithOwner": "thisdot/framework.dev",
-						"url": "https://github.com/thisdot/framework.dev",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "angular"
-									}
-								},
-								{
-									"topic": {
-										"name": "astro"
-									}
-								},
-								{
-									"topic": {
-										"name": "react"
-									}
-								},
-								{
-									"topic": {
-										"name": "vanilla-extract"
-									}
-								},
-								{
-									"topic": {
-										"name": "vue"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 95,
-					"additions": 1134,
-					"changedFiles": 5,
-					"state": "MERGED",
-					"createdAt": "2022-10-24T15:00:47Z"
-				},
-				{
-					"title": "chore: updating github action for prettier formatting",
-					"mergedAt": null,
-					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/709",
-					"baseRepository": {
-						"name": "virtualcoffee.io",
-						"nameWithOwner": "Virtual-Coffee/virtualcoffee.io",
-						"url": "https://github.com/Virtual-Coffee/virtualcoffee.io",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "tech"
-									}
-								},
-								{
-									"topic": {
-										"name": "coffee"
-									}
-								},
-								{
-									"topic": {
-										"name": "community"
-									}
-								},
-								{
-									"topic": {
-										"name": "learn"
-									}
-								},
-								{
-									"topic": {
-										"name": "mentorship"
-									}
-								},
-								{
-									"topic": {
-										"name": "junior-developers"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "remix"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 11,
-					"additions": 13,
-					"changedFiles": 1,
-					"state": "OPEN",
-					"createdAt": "2022-10-15T04:39:47Z"
-				},
-				{
-					"title": "docs: adding a section in the README for codesandbox development ",
-					"mergedAt": "2022-10-13T10:20:28Z",
-					"url": "https://github.com/nickytonline/connect-four/pull/43",
-					"baseRepository": {
-						"name": "connect-four",
-						"nameWithOwner": "nickytonline/connect-four",
-						"url": "https://github.com/nickytonline/connect-four",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "typescript"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "svelte"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 0,
-					"additions": 26,
-					"changedFiles": 6,
-					"state": "MERGED",
-					"createdAt": "2022-10-13T03:57:46Z"
-				},
-				{
-					"title": "updating jdwilkin4 member profile and adding hacktoberfest badge",
-					"mergedAt": "2022-10-10T13:01:21Z",
-					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/676",
-					"baseRepository": {
-						"name": "virtualcoffee.io",
-						"nameWithOwner": "Virtual-Coffee/virtualcoffee.io",
-						"url": "https://github.com/Virtual-Coffee/virtualcoffee.io",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "tech"
-									}
-								},
-								{
-									"topic": {
-										"name": "coffee"
-									}
-								},
-								{
-									"topic": {
-										"name": "community"
-									}
-								},
-								{
-									"topic": {
-										"name": "learn"
-									}
-								},
-								{
-									"topic": {
-										"name": "mentorship"
-									}
-								},
-								{
-									"topic": {
-										"name": "junior-developers"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "remix"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 4,
-					"additions": 4,
-					"changedFiles": 1,
-					"state": "MERGED",
-					"createdAt": "2022-10-09T07:30:52Z"
-				}
-			],
-			"stats": {
-				"totalPullRequests": 6,
-				"totalAdditions": 1425,
-				"totalDeletions": 161,
-				"totalChangedFiles": 24,
-				"totalUniqueRepos": 3,
-				"uniqueRepos": [
-					"thisdot/framework.dev",
-					"Virtual-Coffee/virtualcoffee.io",
-					"nickytonline/connect-four"
 				]
 			}
 		},
@@ -2763,215 +2629,6 @@
 			}
 		},
 		{
-			"login": "ClJarvis",
-			"pullRequests": [
-				{
-					"title": "Best practices",
-					"mergedAt": "2022-10-31T23:50:42Z",
-					"url": "https://github.com/codethesaurus/docs/pull/37",
-					"baseRepository": {
-						"name": "docs",
-						"nameWithOwner": "codethesaurus/docs",
-						"url": "https://github.com/codethesaurus/docs",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest2020"
-									}
-								},
-								{
-									"topic": {
-										"name": "mkdocs"
-									}
-								},
-								{
-									"topic": {
-										"name": "programming-languages"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest2021"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest2022"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 0,
-					"additions": 24,
-					"changedFiles": 2,
-					"state": "MERGED",
-					"createdAt": "2022-10-28T15:35:22Z"
-				},
-				{
-					"title": "added magnolia JS",
-					"mergedAt": "2022-10-18T20:40:29Z",
-					"url": "https://github.com/thisdot/tech-conferences/pull/34",
-					"baseRepository": {
-						"name": "tech-conferences",
-						"nameWithOwner": "thisdot/tech-conferences",
-						"url": "https://github.com/thisdot/tech-conferences",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "beginner-friendly"
-									}
-								},
-								{
-									"topic": {
-										"name": "conferences"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 0,
-					"additions": 7,
-					"changedFiles": 1,
-					"state": "MERGED",
-					"createdAt": "2022-10-18T16:00:30Z"
-				},
-				{
-					"title": "update transcript for 4_2",
-					"mergedAt": "2022-10-12T18:40:59Z",
-					"url": "https://github.com/Virtual-Coffee/podcast-transcripts/pull/78",
-					"baseRepository": {
-						"name": "podcast-transcripts",
-						"nameWithOwner": "Virtual-Coffee/podcast-transcripts",
-						"url": "https://github.com/Virtual-Coffee/podcast-transcripts",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 1298,
-					"additions": 1386,
-					"changedFiles": 1,
-					"state": "MERGED",
-					"createdAt": "2022-10-10T00:01:34Z"
-				},
-				{
-					"title": "wrote a hiaku in markdown",
-					"mergedAt": "2022-10-15T14:00:38Z",
-					"url": "https://github.com/do-community/cloud_haiku/pull/2233",
-					"baseRepository": {
-						"name": "cloud_haiku",
-						"nameWithOwner": "do-community/cloud_haiku",
-						"url": "https://github.com/do-community/cloud_haiku",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 0,
-					"additions": 10,
-					"changedFiles": 1,
-					"state": "MERGED",
-					"createdAt": "2022-10-06T23:07:22Z"
-				},
-				{
-					"title": "I added my badge and flare to profile.",
-					"mergedAt": "2022-10-03T19:05:46Z",
-					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/648",
-					"baseRepository": {
-						"name": "virtualcoffee.io",
-						"nameWithOwner": "Virtual-Coffee/virtualcoffee.io",
-						"url": "https://github.com/Virtual-Coffee/virtualcoffee.io",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "tech"
-									}
-								},
-								{
-									"topic": {
-										"name": "coffee"
-									}
-								},
-								{
-									"topic": {
-										"name": "community"
-									}
-								},
-								{
-									"topic": {
-										"name": "learn"
-									}
-								},
-								{
-									"topic": {
-										"name": "mentorship"
-									}
-								},
-								{
-									"topic": {
-										"name": "junior-developers"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "remix"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 3,
-					"additions": 3,
-					"changedFiles": 1,
-					"state": "MERGED",
-					"createdAt": "2022-10-03T17:54:17Z"
-				}
-			],
-			"stats": {
-				"totalPullRequests": 5,
-				"totalAdditions": 1430,
-				"totalDeletions": 1301,
-				"totalChangedFiles": 6,
-				"totalUniqueRepos": 5,
-				"uniqueRepos": [
-					"codethesaurus/docs",
-					"thisdot/tech-conferences",
-					"Virtual-Coffee/podcast-transcripts",
-					"do-community/cloud_haiku",
-					"Virtual-Coffee/virtualcoffee.io"
-				]
-			}
-		},
-		{
 			"login": "carmenkolohe",
 			"pullRequests": [
 				{
@@ -3150,11 +2807,6 @@
 									"topic": {
 										"name": "typescript"
 									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
 								}
 							]
 						}
@@ -3236,164 +2888,6 @@
 					"nickytonline/connect-four",
 					"freeCodeCamp/Developer_Quiz_Site"
 				]
-			}
-		},
-		{
-			"login": "klezi10",
-			"pullRequests": [
-				{
-					"title": "Husky Precommit",
-					"mergedAt": "2022-10-03T13:15:44Z",
-					"url": "https://github.com/webdev-20/shorti-url-shortener/pull/41",
-					"baseRepository": {
-						"name": "shorti-url-shortener",
-						"nameWithOwner": "webdev-20/shorti-url-shortener",
-						"url": "https://github.com/webdev-20/shorti-url-shortener",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest-accepted"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 5,
-					"additions": 407,
-					"changedFiles": 5,
-					"state": "MERGED",
-					"createdAt": "2022-10-02T15:54:44Z"
-				},
-				{
-					"title": "Added Navbar",
-					"mergedAt": "2022-10-02T13:41:36Z",
-					"url": "https://github.com/webdev-20/shorti-url-shortener/pull/35",
-					"baseRepository": {
-						"name": "shorti-url-shortener",
-						"nameWithOwner": "webdev-20/shorti-url-shortener",
-						"url": "https://github.com/webdev-20/shorti-url-shortener",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest-accepted"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 10,
-					"additions": 115,
-					"changedFiles": 7,
-					"state": "MERGED",
-					"createdAt": "2022-10-02T12:58:52Z"
-				},
-				{
-					"title": "Added component to enter URL",
-					"mergedAt": "2022-10-02T10:30:48Z",
-					"url": "https://github.com/webdev-20/shorti-url-shortener/pull/29",
-					"baseRepository": {
-						"name": "shorti-url-shortener",
-						"nameWithOwner": "webdev-20/shorti-url-shortener",
-						"url": "https://github.com/webdev-20/shorti-url-shortener",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest-accepted"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 99,
-					"additions": 75,
-					"changedFiles": 5,
-					"state": "MERGED",
-					"createdAt": "2022-10-02T07:18:59Z"
-				},
-				{
-					"title": "Added myself as a contributor to the project",
-					"mergedAt": "2022-10-01T10:21:55Z",
-					"url": "https://github.com/webdev-20/shorti-url-shortener/pull/26",
-					"baseRepository": {
-						"name": "shorti-url-shortener",
-						"nameWithOwner": "webdev-20/shorti-url-shortener",
-						"url": "https://github.com/webdev-20/shorti-url-shortener",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest-accepted"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 2,
-					"additions": 2,
-					"changedFiles": 1,
-					"state": "MERGED",
-					"createdAt": "2022-10-01T08:39:29Z"
-				},
-				{
-					"title": "added footer skeleton",
-					"mergedAt": "2022-10-01T08:20:55Z",
-					"url": "https://github.com/webdev-20/shorti-url-shortener/pull/24",
-					"baseRepository": {
-						"name": "shorti-url-shortener",
-						"nameWithOwner": "webdev-20/shorti-url-shortener",
-						"url": "https://github.com/webdev-20/shorti-url-shortener",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest-accepted"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 0,
-					"additions": 37,
-					"changedFiles": 3,
-					"state": "MERGED",
-					"createdAt": "2022-10-01T05:47:03Z"
-				}
-			],
-			"stats": {
-				"totalPullRequests": 5,
-				"totalAdditions": 636,
-				"totalDeletions": 116,
-				"totalChangedFiles": 21,
-				"totalUniqueRepos": 1,
-				"uniqueRepos": ["webdev-20/shorti-url-shortener"]
 			}
 		},
 		{
@@ -4618,11 +4112,6 @@
 									"topic": {
 										"name": "typescript"
 									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
 								}
 							]
 						}
@@ -4656,11 +4145,6 @@
 								{
 									"topic": {
 										"name": "typescript"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
 									}
 								}
 							]
@@ -4701,11 +4185,6 @@
 							"nodes": [
 								{
 									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
 										"name": "beginner-friendly"
 									}
 								},
@@ -4733,11 +4212,6 @@
 						"url": "https://github.com/thisdot/tech-conferences",
 						"repositoryTopics": {
 							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
 								{
 									"topic": {
 										"name": "beginner-friendly"
@@ -5375,11 +4849,6 @@
 							"nodes": [
 								{
 									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
 										"name": "beginner-friendly"
 									}
 								},
@@ -5414,11 +4883,6 @@
 								},
 								{
 									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
 										"name": "newsletters"
 									}
 								}
@@ -5441,11 +4905,6 @@
 						"url": "https://github.com/thisdot/tech-dev-tooling",
 						"repositoryTopics": {
 							"nodes": [
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
 								{
 									"topic": {
 										"name": "dev-tools"
@@ -5493,11 +4952,6 @@
 								{
 									"topic": {
 										"name": "speaker"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
 									}
 								}
 							]
@@ -6081,6 +5535,259 @@
 			}
 		},
 		{
+			"login": "jdwilkin4",
+			"pullRequests": [
+				{
+					"title": "chore: updating github action for prettier formatting",
+					"mergedAt": null,
+					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/709",
+					"baseRepository": {
+						"name": "virtualcoffee.io",
+						"nameWithOwner": "Virtual-Coffee/virtualcoffee.io",
+						"url": "https://github.com/Virtual-Coffee/virtualcoffee.io",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "tech"
+									}
+								},
+								{
+									"topic": {
+										"name": "coffee"
+									}
+								},
+								{
+									"topic": {
+										"name": "community"
+									}
+								},
+								{
+									"topic": {
+										"name": "learn"
+									}
+								},
+								{
+									"topic": {
+										"name": "mentorship"
+									}
+								},
+								{
+									"topic": {
+										"name": "junior-developers"
+									}
+								},
+								{
+									"topic": {
+										"name": "hacktoberfest"
+									}
+								},
+								{
+									"topic": {
+										"name": "remix"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 11,
+					"additions": 13,
+					"changedFiles": 1,
+					"state": "OPEN",
+					"createdAt": "2022-10-15T04:39:47Z"
+				},
+				{
+					"title": "docs: adding a section in the README for codesandbox development ",
+					"mergedAt": "2022-10-13T10:20:28Z",
+					"url": "https://github.com/nickytonline/connect-four/pull/43",
+					"baseRepository": {
+						"name": "connect-four",
+						"nameWithOwner": "nickytonline/connect-four",
+						"url": "https://github.com/nickytonline/connect-four",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "typescript"
+									}
+								},
+								{
+									"topic": {
+										"name": "hacktoberfest"
+									}
+								},
+								{
+									"topic": {
+										"name": "svelte"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 0,
+					"additions": 26,
+					"changedFiles": 6,
+					"state": "MERGED",
+					"createdAt": "2022-10-13T03:57:46Z"
+				},
+				{
+					"title": "updating jdwilkin4 member profile and adding hacktoberfest badge",
+					"mergedAt": "2022-10-10T13:01:21Z",
+					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/676",
+					"baseRepository": {
+						"name": "virtualcoffee.io",
+						"nameWithOwner": "Virtual-Coffee/virtualcoffee.io",
+						"url": "https://github.com/Virtual-Coffee/virtualcoffee.io",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "tech"
+									}
+								},
+								{
+									"topic": {
+										"name": "coffee"
+									}
+								},
+								{
+									"topic": {
+										"name": "community"
+									}
+								},
+								{
+									"topic": {
+										"name": "learn"
+									}
+								},
+								{
+									"topic": {
+										"name": "mentorship"
+									}
+								},
+								{
+									"topic": {
+										"name": "junior-developers"
+									}
+								},
+								{
+									"topic": {
+										"name": "hacktoberfest"
+									}
+								},
+								{
+									"topic": {
+										"name": "remix"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 4,
+					"additions": 4,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-09T07:30:52Z"
+				}
+			],
+			"stats": {
+				"totalPullRequests": 3,
+				"totalAdditions": 43,
+				"totalDeletions": 15,
+				"totalChangedFiles": 8,
+				"totalUniqueRepos": 2,
+				"uniqueRepos": [
+					"Virtual-Coffee/virtualcoffee.io",
+					"nickytonline/connect-four"
+				]
+			}
+		},
+		{
+			"login": "klezi10",
+			"pullRequests": [
+				{
+					"title": "Added component to enter URL",
+					"mergedAt": "2022-10-02T10:30:48Z",
+					"url": "https://github.com/webdev-20/shorti-url-shortener/pull/29",
+					"baseRepository": {
+						"name": "shorti-url-shortener",
+						"nameWithOwner": "webdev-20/shorti-url-shortener",
+						"url": "https://github.com/webdev-20/shorti-url-shortener",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "reactjs"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 99,
+					"additions": 75,
+					"changedFiles": 5,
+					"state": "MERGED",
+					"createdAt": "2022-10-02T07:18:59Z"
+				},
+				{
+					"title": "Added myself as a contributor to the project",
+					"mergedAt": "2022-10-01T10:21:55Z",
+					"url": "https://github.com/webdev-20/shorti-url-shortener/pull/26",
+					"baseRepository": {
+						"name": "shorti-url-shortener",
+						"nameWithOwner": "webdev-20/shorti-url-shortener",
+						"url": "https://github.com/webdev-20/shorti-url-shortener",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "reactjs"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 2,
+					"additions": 2,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-01T08:39:29Z"
+				},
+				{
+					"title": "added footer skeleton",
+					"mergedAt": "2022-10-01T08:20:55Z",
+					"url": "https://github.com/webdev-20/shorti-url-shortener/pull/24",
+					"baseRepository": {
+						"name": "shorti-url-shortener",
+						"nameWithOwner": "webdev-20/shorti-url-shortener",
+						"url": "https://github.com/webdev-20/shorti-url-shortener",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "reactjs"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 0,
+					"additions": 37,
+					"changedFiles": 3,
+					"state": "MERGED",
+					"createdAt": "2022-10-01T05:47:03Z"
+				}
+			],
+			"stats": {
+				"totalPullRequests": 3,
+				"totalAdditions": 114,
+				"totalDeletions": 101,
+				"totalChangedFiles": 9,
+				"totalUniqueRepos": 1,
+				"uniqueRepos": ["webdev-20/shorti-url-shortener"]
+			}
+		},
+		{
 			"login": "dominicduffin1",
 			"pullRequests": [
 				{
@@ -6212,6 +5919,137 @@
 					"BekahHW/postpartum-wellness-app",
 					"Virtual-Coffee/virtualcoffee.io"
 				]
+			}
+		},
+		{
+			"login": "chaos986",
+			"pullRequests": [
+				{
+					"title": "Added new page for Developer Health resources.  Starting with \"Burnout\"",
+					"mergedAt": "2022-11-01T18:41:12Z",
+					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/685",
+					"baseRepository": {
+						"name": "virtualcoffee.io",
+						"nameWithOwner": "Virtual-Coffee/virtualcoffee.io",
+						"url": "https://github.com/Virtual-Coffee/virtualcoffee.io",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "tech"
+									}
+								},
+								{
+									"topic": {
+										"name": "coffee"
+									}
+								},
+								{
+									"topic": {
+										"name": "community"
+									}
+								},
+								{
+									"topic": {
+										"name": "learn"
+									}
+								},
+								{
+									"topic": {
+										"name": "mentorship"
+									}
+								},
+								{
+									"topic": {
+										"name": "junior-developers"
+									}
+								},
+								{
+									"topic": {
+										"name": "hacktoberfest"
+									}
+								},
+								{
+									"topic": {
+										"name": "remix"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 0,
+					"additions": 67,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-10T20:27:01Z"
+				},
+				{
+					"title": "edited member profile",
+					"mergedAt": "2022-10-10T13:02:04Z",
+					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/675",
+					"baseRepository": {
+						"name": "virtualcoffee.io",
+						"nameWithOwner": "Virtual-Coffee/virtualcoffee.io",
+						"url": "https://github.com/Virtual-Coffee/virtualcoffee.io",
+						"repositoryTopics": {
+							"nodes": [
+								{
+									"topic": {
+										"name": "tech"
+									}
+								},
+								{
+									"topic": {
+										"name": "coffee"
+									}
+								},
+								{
+									"topic": {
+										"name": "community"
+									}
+								},
+								{
+									"topic": {
+										"name": "learn"
+									}
+								},
+								{
+									"topic": {
+										"name": "mentorship"
+									}
+								},
+								{
+									"topic": {
+										"name": "junior-developers"
+									}
+								},
+								{
+									"topic": {
+										"name": "hacktoberfest"
+									}
+								},
+								{
+									"topic": {
+										"name": "remix"
+									}
+								}
+							]
+						}
+					},
+					"deletions": 8,
+					"additions": 10,
+					"changedFiles": 1,
+					"state": "MERGED",
+					"createdAt": "2022-10-08T18:35:01Z"
+				}
+			],
+			"stats": {
+				"totalPullRequests": 2,
+				"totalAdditions": 77,
+				"totalDeletions": 8,
+				"totalChangedFiles": 2,
+				"totalUniqueRepos": 1,
+				"uniqueRepos": ["Virtual-Coffee/virtualcoffee.io"]
 			}
 		},
 		{
@@ -6765,78 +6603,6 @@
 			}
 		},
 		{
-			"login": "chaos986",
-			"pullRequests": [
-				{
-					"title": "edited member profile",
-					"mergedAt": "2022-10-10T13:02:04Z",
-					"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/675",
-					"baseRepository": {
-						"name": "virtualcoffee.io",
-						"nameWithOwner": "Virtual-Coffee/virtualcoffee.io",
-						"url": "https://github.com/Virtual-Coffee/virtualcoffee.io",
-						"repositoryTopics": {
-							"nodes": [
-								{
-									"topic": {
-										"name": "tech"
-									}
-								},
-								{
-									"topic": {
-										"name": "coffee"
-									}
-								},
-								{
-									"topic": {
-										"name": "community"
-									}
-								},
-								{
-									"topic": {
-										"name": "learn"
-									}
-								},
-								{
-									"topic": {
-										"name": "mentorship"
-									}
-								},
-								{
-									"topic": {
-										"name": "junior-developers"
-									}
-								},
-								{
-									"topic": {
-										"name": "hacktoberfest"
-									}
-								},
-								{
-									"topic": {
-										"name": "remix"
-									}
-								}
-							]
-						}
-					},
-					"deletions": 8,
-					"additions": 10,
-					"changedFiles": 1,
-					"state": "MERGED",
-					"createdAt": "2022-10-08T18:35:01Z"
-				}
-			],
-			"stats": {
-				"totalPullRequests": 1,
-				"totalAdditions": 10,
-				"totalDeletions": 8,
-				"totalChangedFiles": 1,
-				"totalUniqueRepos": 1,
-				"uniqueRepos": ["Virtual-Coffee/virtualcoffee.io"]
-			}
-		},
-		{
 			"login": "CodingatTiffanys",
 			"pullRequests": [
 				{
@@ -7329,6 +7095,238 @@
 				"totalUniqueRepos": 1,
 				"uniqueRepos": ["jcubic/lips"]
 			}
+		},
+		{
+			"login": "shelleymcq",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "BogDAAAMN",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "martin-creator",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "stef-codes",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "barbaralaw",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "grassfinn",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "jaenwawe",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "keaglin",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "niklasfyi",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "meggo15",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "AmyShackles",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "itmilos",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "CuriousCurmudgeon",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "BYUDigger",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "tkshill",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
+		},
+		{
+			"login": "MingJae92",
+			"pullRequests": [],
+			"stats": {
+				"totalPullRequests": 0,
+				"totalAdditions": 0,
+				"totalDeletions": 0,
+				"totalChangedFiles": 0,
+				"totalUniqueRepos": 0,
+				"uniqueRepos": []
+			}
 		}
-	]
+	],
+	"stats": {
+		"totalContributors": 36,
+		"totalPullRequests": 129,
+		"totalAdditions": 64830,
+		"totalDeletions": 561359,
+		"totalChangedFiles": 3694,
+		"uniqueRepos": [
+			"AccessibleForAll/AccessibleWebDev",
+			"ankitpareek0141/Favorite-OTT-characters",
+			"BekahHW/postpartum-wellness-app",
+			"ClJarvis/Hello_There",
+			"codethesaurus/docs",
+			"connor-baer/action-sync-branch",
+			"crescentpartha/CheatSheets-for-Developers",
+			"davejane25/Calculators",
+			"davidalpert/go-git-mob",
+			"deepgram-devs/deepgram-go-sdk",
+			"deepgram-devs/dg-translation-chrome-ext",
+			"do-community/cloud_haiku",
+			"dsasaank-369/Pokemon",
+			"freeCodeCamp/Developer_Quiz_Site",
+			"IBM/carbon-ui-builder",
+			"jcubic/lips",
+			"JesseRWeigel/battlemath",
+			"mgreiler/se-unlocked",
+			"nickytonline/connect-four",
+			"Spyware007/Animating-Buttons",
+			"t3-oss/create-t3-app",
+			"thecyberworld/thecyberhub.org",
+			"thisdot/diverse-speakers",
+			"thisdot/tech-conferences",
+			"thisdot/tech-dev-tooling",
+			"thisdot/tech-newsletters",
+			"Virtual-Coffee/podcast-transcripts",
+			"Virtual-Coffee/virtualcoffee.io",
+			"webdev-20/shorti-url-shortener",
+			"withfig/autocomplete"
+		],
+		"totalUniqueRepos": 30
+	}
 }
