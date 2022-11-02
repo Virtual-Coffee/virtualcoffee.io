@@ -1,5 +1,5 @@
-### [aishwarya-mali](https://github.com/aishwarya-mali)
 
+### [aishwarya-mali](https://github.com/aishwarya-mali)
 - Total pull requests: **10**
 - Total changed files: **31**
 - Total additions: **646**
@@ -24,7 +24,6 @@
   - [[FOTTC] added information of Niklaus Mikaelson](https://github.com/ankitpareek0141/Favorite-OTT-characters/pull/45) - 2 files changed
 
 ### [adiati98](https://github.com/adiati98)
-
 - Total pull requests: **9**
 - Total changed files: **12**
 - Total additions: **6547**
@@ -44,7 +43,6 @@
   - [Improve episode transcription Season 5 Special Kirk Day (5_999.srt)](https://github.com/Virtual-Coffee/podcast-transcripts/pull/79) - 1 files changed
 
 ### [danieltott](https://github.com/danieltott)
-
 - Total pull requests: **7**
 - Total changed files: **151**
 - Total additions: **1862**
@@ -61,7 +59,6 @@
   - [Feature/autoload members](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/642) - 133 files changed
 
 ### [ClJarvis](https://github.com/ClJarvis)
-
 - Total pull requests: **6**
 - Total changed files: **7**
 - Total additions: **3092**
@@ -80,7 +77,6 @@
   - [I added my badge and flare to profile.](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/648) - 1 files changed
 
 ### [davidalpert](https://github.com/davidalpert)
-
 - Total pull requests: **6**
 - Total changed files: **15**
 - Total additions: **576**
@@ -97,7 +93,6 @@
   - [feat(csdx): add generator](https://github.com/withfig/autocomplete/pull/1582) - 1 files changed
 
 ### [BekahHW](https://github.com/BekahHW)
-
 - Total pull requests: **6**
 - Total changed files: **13**
 - Total additions: **3587**
@@ -113,7 +108,6 @@
   - [Update profile with Hacktoberfest badge](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/647) - 1 files changed
 
 ### [sadiejay](https://github.com/sadiejay)
-
 - Total pull requests: **5**
 - Total changed files: **8**
 - Total additions: **218**
@@ -128,7 +122,6 @@
   - [Adds issue forms](https://github.com/IBM/carbon-ui-builder/pull/176) - 3 files changed
 
 ### [carmenkolohe](https://github.com/carmenkolohe)
-
 - Total pull requests: **5**
 - Total changed files: **6**
 - Total additions: **120**
@@ -144,7 +137,6 @@
   - [add 3 more questions to accessibility quiz](https://github.com/freeCodeCamp/Developer_Quiz_Site/pull/432) - 1 files changed
 
 ### [JesseRWeigel](https://github.com/JesseRWeigel)
-
 - Total pull requests: **5**
 - Total changed files: **26**
 - Total additions: **193**
@@ -159,7 +151,6 @@
   - [add hacktoberfest2022 badge](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/659) - 1 files changed
 
 ### [annakimdev](https://github.com/annakimdev)
-
 - Total pull requests: **4**
 - Total changed files: **7**
 - Total additions: **152**
@@ -175,7 +166,6 @@
   - [Closes #11](https://github.com/ClJarvis/Hello_There/pull/12) - 1 files changed
 
 ### [muckitymuck](https://github.com/muckitymuck)
-
 - Total pull requests: **4**
 - Total changed files: **4**
 - Total additions: **56**
@@ -189,7 +179,6 @@
   - [personal info Andrew Goldstein (muckitymuck.ts)](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/664) - 1 files changed
 
 ### [YolandaHaynes](https://github.com/YolandaHaynes)
-
 - Total pull requests: **4**
 - Total changed files: **29**
 - Total additions: **38911**
@@ -203,7 +192,6 @@
   - [updated profile for hacktoberfest2022](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/732) - 1 files changed
 
 ### [pedaars](https://github.com/pedaars)
-
 - Total pull requests: **4**
 - Total changed files: **6**
 - Total additions: **9**
@@ -218,7 +206,6 @@
   - [Updated pedaars.ts to add additional info and hacktoberfest 2022 badge](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/662) - 1 files changed
 
 ### [raykotab](https://github.com/raykotab)
-
 - Total pull requests: **4**
 - Total changed files: **5**
 - Total additions: **35**
@@ -233,7 +220,6 @@
   - [new question about now() function for SQL quiz](https://github.com/freeCodeCamp/Developer_Quiz_Site/pull/151) - 1 files changed
 
 ### [meg-gutshall](https://github.com/meg-gutshall)
-
 - Total pull requests: **4**
 - Total changed files: **8**
 - Total additions: **185**
@@ -248,7 +234,6 @@
   - [Add Hacktoberfest 2022 badge](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/695) - 1 files changed
 
 ### [JoeKarow](https://github.com/JoeKarow)
-
 - Total pull requests: **4**
 - Total changed files: **8**
 - Total additions: **5263**
@@ -263,7 +248,6 @@
   - [Update runner to node16](https://github.com/connor-baer/action-sync-branch/pull/90) - 1 files changed
 
 ### [lsparlin](https://github.com/lsparlin)
-
 - Total pull requests: **4**
 - Total changed files: **7**
 - Total additions: **74**
@@ -276,7 +260,6 @@
   - [lsparlin add Hacktoberfest2022 badge](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/722) - 1 files changed
 
 ### [Nerajno](https://github.com/Nerajno)
-
 - Total pull requests: **4**
 - Total changed files: **5**
 - Total additions: **149**
@@ -285,14 +268,13 @@
 - **[thisdot/tech-conferences](https://github.com/thisdot/tech-conferences)**
   - [Added KCDC, Ran it through Grammarly](https://github.com/thisdot/tech-conferences/pull/43) - 1 files changed
 - **[thisdot/tech-newsletters](https://github.com/thisdot/tech-newsletters)**
-  - [ Added guidance counselor 2.0 newsletter and ran it through Grammarly](https://github.com/thisdot/tech-newsletters/pull/41) - 2 files changed
+  - [ Added guidance counselor 2.0 newsletter and  ran it through Grammarly](https://github.com/thisdot/tech-newsletters/pull/41) - 2 files changed
 - **[thisdot/tech-dev-tooling](https://github.com/thisdot/tech-dev-tooling)**
   - [Added Sentry to the list and fixed grammatical errors](https://github.com/thisdot/tech-dev-tooling/pull/48) - 1 files changed
 - **[thisdot/diverse-speakers](https://github.com/thisdot/diverse-speakers)**
   - [Alphabetized Names & Added mine](https://github.com/thisdot/diverse-speakers/pull/6) - 1 files changed
 
 ### [abuna1985](https://github.com/abuna1985)
-
 - Total pull requests: **4**
 - Total changed files: **5**
 - Total additions: **210**
@@ -307,7 +289,6 @@
   - [Added flare, social links, and Hacktoberfest badge to member Adam Abundis](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/727) - 1 files changed
 
 ### [nickytonline](https://github.com/nickytonline)
-
 - Total pull requests: **4**
 - Total changed files: **3293**
 - Total additions: **1925**
@@ -322,7 +303,6 @@
   - [chore: added my Hacktoberfest 2022 to my profile](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/672) - 1 files changed
 
 ### [jdwilkin4](https://github.com/jdwilkin4)
-
 - Total pull requests: **3**
 - Total changed files: **8**
 - Total additions: **43**
@@ -335,7 +315,6 @@
   - [docs: adding a section in the README for codesandbox development ](https://github.com/nickytonline/connect-four/pull/43) - 6 files changed
 
 ### [klezi10](https://github.com/klezi10)
-
 - Total pull requests: **3**
 - Total changed files: **9**
 - Total additions: **114**
@@ -347,7 +326,6 @@
   - [added footer skeleton](https://github.com/webdev-20/shorti-url-shortener/pull/24) - 3 files changed
 
 ### [dominicduffin1](https://github.com/dominicduffin1)
-
 - Total pull requests: **2**
 - Total changed files: **6**
 - Total additions: **129**
@@ -359,18 +337,16 @@
   - [Update member profile for Dominic Duffin](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/706) - 1 files changed
 
 ### [chaos986](https://github.com/chaos986)
-
 - Total pull requests: **2**
 - Total changed files: **2**
 - Total additions: **77**
 - Total deletions: **8**
 - Unique repos: **1**
 - **[Virtual-Coffee/virtualcoffee.io](https://github.com/Virtual-Coffee/virtualcoffee.io)**
-  - [Added new page for Developer Health resources. Starting with "Burnout"](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/685) - 1 files changed
+  - [Added new page for Developer Health resources.  Starting with "Burnout"](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/685) - 1 files changed
   - [edited member profile](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/675) - 1 files changed
 
 ### [rmirville](https://github.com/rmirville)
-
 - Total pull requests: **2**
 - Total changed files: **2**
 - Total additions: **94**
@@ -382,7 +358,6 @@
   - [feat: Add Raynald to members](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/661) - 1 files changed
 
 ### [DavidRod1865](https://github.com/DavidRod1865)
-
 - Total pull requests: **2**
 - Total changed files: **2**
 - Total additions: **48**
@@ -394,7 +369,6 @@
   - [Import wip to links template](https://github.com/AccessibleForAll/AccessibleWebDev/pull/124) - 1 files changed
 
 ### [radturkin](https://github.com/radturkin)
-
 - Total pull requests: **2**
 - Total changed files: **2**
 - Total additions: **47**
@@ -405,7 +379,6 @@
   - [Add Rad to members](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/714) - 1 files changed
 
 ### [Narigo](https://github.com/Narigo)
-
 - Total pull requests: **2**
 - Total changed files: **6**
 - Total additions: **143**
@@ -417,7 +390,6 @@
   - [Add onclick handler to update game state](https://github.com/nickytonline/connect-four/pull/18) - 4 files changed
 
 ### [LincolnFleet](https://github.com/LincolnFleet)
-
 - Total pull requests: **1**
 - Total changed files: **1**
 - Total additions: **4**
@@ -427,7 +399,6 @@
   - [Add badge and data for LincolnFleet [Travis Martin]](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/665) - 1 files changed
 
 ### [CodingatTiffanys](https://github.com/CodingatTiffanys)
-
 - Total pull requests: **1**
 - Total changed files: **1**
 - Total additions: **46**
@@ -437,7 +408,6 @@
   - [add tiffany pena to members](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/671) - 1 files changed
 
 ### [jocrah](https://github.com/jocrah)
-
 - Total pull requests: **1**
 - Total changed files: **2**
 - Total additions: **23**
@@ -447,7 +417,6 @@
   - [feat: add Coin component](https://github.com/nickytonline/connect-four/pull/31) - 2 files changed
 
 ### [AlexVCS](https://github.com/AlexVCS)
-
 - Total pull requests: **1**
 - Total changed files: **1**
 - Total additions: **1**
@@ -457,7 +426,6 @@
   - [added the Hacktoberfest 2022 badge :)](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/667) - 1 files changed
 
 ### [ridonky](https://github.com/ridonky)
-
 - Total pull requests: **1**
 - Total changed files: **1**
 - Total additions: **46**
@@ -467,7 +435,6 @@
   - [added member page for lauren perini](https://github.com/Virtual-Coffee/virtualcoffee.io/pull/650) - 1 files changed
 
 ### [teezzan](https://github.com/teezzan)
-
 - Total pull requests: **1**
 - Total changed files: **3**
 - Total additions: **126**
@@ -477,17 +444,15 @@
   - [Fix: co-authors not cleared from message template (`.gitmessage`) on switch from mob to solo](https://github.com/davidalpert/go-git-mob/pull/89) - 3 files changed
 
 ### [CodeKage25](https://github.com/CodeKage25)
-
 - Total pull requests: **1**
 - Total changed files: **1**
 - Total additions: **11**
 - Total deletions: **1**
 - Unique repos: **1**
 - **[nickytonline/connect-four](https://github.com/nickytonline/connect-four)**
-  - [Added a documentation referencing to Wikipedia about the connect game](https://github.com/nickytonline/connect-four/pull/61) - 1 files changed
+  - [Added a documentation referencing to Wikipedia  about the connect game](https://github.com/nickytonline/connect-four/pull/61) - 1 files changed
 
 ### [SteviBee](https://github.com/SteviBee)
-
 - Total pull requests: **1**
 - Total changed files: **1**
 - Total additions: **68**
