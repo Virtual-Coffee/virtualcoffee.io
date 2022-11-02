@@ -5,6 +5,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+/**
+ * Collect a bunch of data re: Hacktoberfest 2022
+ * to run, `npx tsx scripts/data-hacktoberfest2022.ts`
+ */
+
 const vchiContributors = [
 	'dominicduffin1',
 	'annakimdev',
