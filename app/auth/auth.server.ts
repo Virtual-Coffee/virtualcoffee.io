@@ -82,15 +82,14 @@ export async function authenticate(
 	{ headers = new Headers(), redirectOnFail = true } = {},
 ) {
 	let session = await sessionStorage.getSession(request.headers.get('Cookie'));
+	const url = new URL(request.url);
+	const search = url.search;
 	try {
 		// get the auth data from the session
 		let user = await getUser(request);
 
 		// if not defiend or expired, redirect to login
 		if (!user) {
-			const url = new URL(request.url);
-			const search = url.search;
-
 			if (redirectOnFail) {
 				if (url.pathname !== '/login') {
 					throw redirect(
@@ -117,26 +116,54 @@ export async function authenticate(
 
 			let response;
 
-			// refresh the token somehow using the strategy and the refresh token
-			response = await api.refreshToken({
-				refreshToken: session.get(authenticator.sessionKey).refreshToken,
-			});
+			try {
+				console.log('refreshing token');
+				// refresh the token somehow using the strategy and the refresh token
+				response = await api.refreshToken({
+					refreshToken: session.get(authenticator.sessionKey).refreshToken,
+				});
 
-			let user = response.refreshToken;
+				let user = response.refreshToken;
 
-			// update the user data on the sessino
-			session.set(authenticator.sessionKey, user);
+				// update the user data on the sessino
+				session.set(authenticator.sessionKey, user);
 
-			// commit the session and append the Set-Cookie header
-			headers.append('Set-Cookie', await sessionStorage.commitSession(session));
+				// commit the session and append the Set-Cookie header
+				headers.append(
+					'Set-Cookie',
+					await sessionStorage.commitSession(session),
+				);
 
-			// redirect to the same URL if the request was a GET
-			if (request.method.toLowerCase() === 'get') {
-				throw redirect(request.url, { headers });
+				// redirect to the same URL if the request was a GET
+				if (request.method.toLowerCase() === 'get') {
+					throw redirect(request.url, { headers });
+				}
+
+				// return the user so you can use it in a POST
+				return user;
+			} catch (error) {
+				console.warn(error);
+
+				session.unset(authenticator.sessionKey);
+				// commit the session and append the Set-Cookie header
+				headers.append(
+					'Set-Cookie',
+					await sessionStorage.commitSession(session),
+				);
+
+				if (redirectOnFail) {
+					if (url.pathname !== '/login') {
+						throw redirect(
+							`/login?redirectOnSuccess=${encodeURIComponent(
+								url.pathname + (search.length > 1 ? search : ''),
+							)}`,
+							{ headers },
+						);
+					}
+				}
+
+				return null;
 			}
-
-			// return the user so you can use it in a POST
-			return user;
 		}
 		// throw again any unexpected error
 		throw error;
