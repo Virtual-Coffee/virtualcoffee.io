@@ -145,6 +145,8 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
 	},
 );
 
+TextInput.displayName = 'TextInput';
+
 export type TextAreaInputProps = {
 	id: string;
 	label: React.ReactNode;
@@ -180,3 +182,5 @@ export const TextAreaInput = React.forwardRef<
 		</FieldGroup>
 	);
 });
+
+TextAreaInput.displayName = 'TextAreaInput';
