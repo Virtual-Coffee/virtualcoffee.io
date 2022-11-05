@@ -6,17 +6,24 @@ import {
 	Bars3Icon,
 	XMarkIcon,
 	UserCircleIcon,
+	CodeBracketSquareIcon,
 } from '@heroicons/react/24/outline';
-import { Link } from '@remix-run/react';
+import { Link, NavLink } from '@remix-run/react';
 import classNames from 'classnames';
 
 const navigation = [
-	{ name: 'VC Home', to: '/' },
-	{ name: 'Dashboard', to: '/membership', icon: HomeIcon },
+	{ name: 'VC Home', to: '/', end: true },
+	{ name: 'Dashboard', to: '/membership', icon: HomeIcon, end: true },
 	{
 		name: 'Events',
 		to: '/membership/events',
 		icon: CalendarIcon,
+		current: false,
+	},
+	{
+		name: 'Monthly Challenges',
+		to: '/membership/monthly-challenges',
+		icon: CodeBracketSquareIcon,
 		current: false,
 	},
 ];
@@ -46,19 +53,24 @@ export default function AppRoot({ children, user, title }) {
 									<div className="hidden md:block">
 										<div className="ml-10 flex items-baseline space-x-4">
 											{navigation.map((item) => (
-												<Link
+												<NavLink
 													key={item.name}
 													to={item.to}
-													className={classNames(
-														item.current
-															? 'bg-gray-900 text-white'
-															: 'text-white hover:bg-gray-700 hover:bg-opacity-75',
-														'px-3 py-2 rounded-md text-sm font-medium',
-													)}
-													aria-current={item.current ? 'page' : undefined}
+													end={!!item.end}
+													className={({ isActive }) =>
+														classNames(
+															isActive
+																? 'bg-gray-900 text-white'
+																: 'text-white hover:bg-gray-700 hover:bg-opacity-75',
+															'px-3 py-2 rounded-md text-sm font-medium',
+														)
+													}
+													aria-current={({ isActive }) =>
+														isActive ? 'page' : undefined
+													}
 												>
 													{item.name}
-												</Link>
+												</NavLink>
 											))}
 										</div>
 									</div>
@@ -133,15 +145,20 @@ export default function AppRoot({ children, user, title }) {
 									{navigation.map((item) => (
 										<Disclosure.Button
 											key={item.name}
-											as={Link}
+											as={NavLink}
+											end={!!item.end}
 											to={item.to}
-											className={classNames(
-												item.current
-													? 'bg-gray-900 text-white'
-													: 'text-white hover:bg-gray-700 hover:bg-opacity-75',
-												'block px-3 py-2 rounded-md text-base font-medium',
-											)}
-											aria-current={item.current ? 'page' : undefined}
+											className={({ isActive }) =>
+												classNames(
+													isActive
+														? 'bg-gray-900 text-white'
+														: 'text-white hover:bg-gray-700 hover:bg-opacity-75',
+													'block px-3 py-2 rounded-md text-base font-medium',
+												)
+											}
+											aria-current={({ isActive }) =>
+												isActive ? 'page' : undefined
+											}
 										>
 											{item.name}
 										</Disclosure.Button>
