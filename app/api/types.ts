@@ -44,3 +44,13 @@ export type EventLoaderData = {
 	event?: SafeEvent;
 	type: 'error' | 'timing' | 'permissions' | 'noLink' | 'success';
 };
+
+export type NovemberChallengeEntry = {
+	title: string;
+	shortDescriptionMarkDown: string;
+	id: number | string;
+	urlValue: string;
+	wordCount: number;
+	topics: string;
+	date: string;
+};
