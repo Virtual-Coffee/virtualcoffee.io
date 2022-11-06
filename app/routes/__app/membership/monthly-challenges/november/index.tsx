@@ -1,4 +1,9 @@
-import { CalendarIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
+import {
+	PlusIcon,
+	CalendarIcon,
+	ChevronRightIcon,
+} from '@heroicons/react/20/solid';
+import { DocumentPlusIcon } from '@heroicons/react/24/solid';
 import { json } from '@remix-run/node';
 import type { LoaderArgs } from '@remix-run/node';
 import { Link, useLoaderData, Outlet } from '@remix-run/react';
@@ -7,7 +12,6 @@ import { CmsActions } from '~/api/cms.server';
 
 import SectionHeader from '~/components/app/SectionHeader';
 import { Button } from '~/components/app/Button';
-import { useEffect } from 'react';
 
 export { metaFromData as meta } from '~/util/remixHelpers';
 
@@ -41,9 +45,27 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function Page() {
 	const { posts, totalWordCount } = useLoaderData<typeof loader>();
-	useEffect(() => {
-		console.log(posts);
-	}, [posts]);
+
+	if (posts.length === 0) {
+		return (
+			<div className="my-8 mx-auto bg-white max-w-md rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+				<DocumentPlusIcon className="mx-auto h-12 w-12 text-gray-400" />
+
+				<h3 className="mt-2 text-sm font-medium text-gray-900">
+					No posts yet!
+				</h3>
+				<p className="mt-1 text-sm text-gray-500">
+					Get started by creating a new post.
+				</p>
+				<div className="mt-6">
+					<Button size="lg" as={Link} to="new">
+						<PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+						New Post
+					</Button>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="mt-8">
@@ -58,7 +80,7 @@ export default function Page() {
 					</>
 				}
 				actions={
-					<Button as={Link} to="/membership/monthly-challenges/november/new">
+					<Button as={Link} to="new">
 						New Post
 					</Button>
 				}
