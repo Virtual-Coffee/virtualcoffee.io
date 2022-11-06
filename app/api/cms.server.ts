@@ -431,13 +431,18 @@ export class CmsActions {
 		return response.entries;
 	}
 
-	async getNovemberChallengeEntries({
-		authorId,
-		orderBy,
-	}: {
-		authorId?: number | string;
-		orderBy?: string;
-	}) {
+	async getNovemberChallengeEntries(
+		{
+			authorId,
+			orderBy,
+		}: {
+			authorId?: number | string;
+			orderBy?: string;
+		} = {
+			authorId: undefined,
+			orderBy: undefined,
+		},
+	) {
 		const query = `query getNovemberChallengeEntries($authorId: [QueryArgument], $orderBy:String = "dateCreated DESC") {
 			entries(
 				section: "mcWritingChallengeSubmissions"
@@ -452,6 +457,12 @@ export class CmsActions {
 					wordCount
 					topics
 					date @formatDateTime (format: "Y-m-d")
+					author {
+						... on User {
+							id
+							userYourName
+						}
+					}
 				}
 			}
 		}
@@ -462,7 +473,9 @@ export class CmsActions {
 			entries: NovemberChallengeEntry[];
 		}>(query, { authorId, orderBy });
 
-		if (!response?.entries?.length) {
+		console.log(response);
+
+		if (!response?.entries) {
 			throw new CmsError(
 				'There was an error fetching challenge entries.',
 				response,
@@ -485,6 +498,12 @@ export class CmsActions {
 					wordCount
 					topics
 					date @formatDateTime (format: "Y-m-d")
+					author {
+						... on User {
+							id
+							userYourName
+						}
+					}
 				}
 			}
 		}
@@ -534,6 +553,12 @@ export class CmsActions {
 				date @formatDateTime (format: "Y-m-d")
 				urlValue
 				wordCount
+				author {
+					... on User {
+						id
+						userYourName
+					}
+				}
 			}
 		}
 
