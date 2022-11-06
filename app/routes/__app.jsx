@@ -7,7 +7,7 @@ import { getUser } from '~/auth/auth.server';
 export const loader = async ({ request }) => {
 	const user = await getUser(request);
 
-	return json({ user: user ? user.user : null });
+	return json({ user });
 };
 
 export const links = () => [
