@@ -24,12 +24,17 @@ export type Calendar = {
 	calendarVisibility: CalendarVisibility;
 };
 
+export enum UserSchema {
+	FullMembersSchema = 'Full Members Schema',
+	PendingMembersSchema = 'Pending Members Schema',
+}
+
 export type User = {
 	jwt: string;
 	jwtExpiresAt: number;
 	refreshToken: string;
 	refreshTokenExpiresAt: number;
-	schema: 'Pending Members Schema' | 'Full Members Schema';
+	schema: UserSchema;
 	user: {
 		id: string | number;
 		email: string;
