@@ -50,6 +50,11 @@ export type EventLoaderData = {
 	type: 'error' | 'timing' | 'permissions' | 'noLink' | 'success';
 };
 
+export type NovemberChallengeEntryAuthor = Pick<
+	User['user'],
+	'id' | 'userYourName'
+>;
+
 export type NovemberChallengeEntry = {
 	title: string;
 	shortDescriptionMarkDown: string;
@@ -58,4 +63,5 @@ export type NovemberChallengeEntry = {
 	wordCount: number;
 	topics: string;
 	date: string;
+	author: NovemberChallengeEntryAuthor;
 };
