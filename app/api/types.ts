@@ -29,19 +29,30 @@ export enum UserSchema {
 	PendingMembersSchema = 'Pending Members Schema',
 }
 
+export type UserProfile = {
+	id: string | number;
+	email: string;
+	enabled: boolean;
+	status: string;
+	trashed: boolean;
+	userPronouns?: string;
+	userTwitterUserName?: string;
+	userGithubusername?: string;
+	userAllowSocialSharing?: boolean;
+	userPreferredTimeZone?: string;
+	userYourName?: string;
+};
+
 export type User = {
 	jwt: string;
 	jwtExpiresAt: number;
 	refreshToken: string;
 	refreshTokenExpiresAt: number;
 	schema: UserSchema;
-	user: {
-		id: string | number;
-		email: string;
-		enabled: boolean;
-		status: string;
-		userYourName?: string;
-	};
+	user: Pick<
+		UserProfile,
+		'id' | 'email' | 'enabled' | 'status' | 'userYourName'
+	>;
 };
 
 export type EventLoaderData = {

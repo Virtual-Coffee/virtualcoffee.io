@@ -1,5 +1,6 @@
 // app/services/session.server.ts
 import { createCookieSessionStorage } from '@remix-run/node';
+import { MessageCode, SessionFlash } from './types';
 
 function configSessionStorage() {
 	return createCookieSessionStorage({
@@ -34,3 +35,52 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export { sessionStorage };
+
+export const createFlashCookie = async (
+	request: Request,
+	{ message, messageCode, data }: SessionFlash = {
+		message: '',
+		messageCode: MessageCode.message,
+	},
+) => {
+	const session = await sessionStorage.getSession(
+		request.headers.get('Cookie'),
+	);
+
+	session.flash(
+		'sessionFlash',
+		JSON.stringify({
+			message,
+			messageCode,
+			data,
+		}),
+	);
+
+	return await sessionStorage.commitSession(session);
+};
+
+export const readFlashCookie = async (request: Request) => {
+	const session = await sessionStorage.getSession(
+		request.headers.get('Cookie'),
+	);
+	const sessionFlashString: string | undefined = session.get('sessionFlash');
+
+	if (sessionFlashString) {
+		try {
+			const sessionFlash: SessionFlash = JSON.parse(sessionFlashString);
+
+			return {
+				cookie: await sessionStorage.commitSession(session),
+				sessionFlash,
+			};
+		} catch (error) {
+			console.warn('Error parsing session flash cookie', error);
+
+			return {
+				cookie: await sessionStorage.commitSession(session),
+				sessionFlash: null,
+			};
+		}
+	}
+	return null;
+};

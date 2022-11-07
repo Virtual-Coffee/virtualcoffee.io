@@ -10,6 +10,7 @@ import type {
 	User,
 	EventLoaderData,
 	NovemberChallengeEntry,
+	UserProfile,
 } from './types';
 import { ics } from 'calendar-link';
 import { sanitizeHtml } from '~/util/sanitizeCmsData';
@@ -576,5 +577,51 @@ export class CmsActions {
 		}
 
 		return response.save_mcWritingChallengeSubmissions_default_Entry;
+	}
+
+	async getUserProfile({
+		id,
+		email,
+	}: {
+		id?: number | string;
+		email?: string;
+	}) {
+		const query = `query getMemberProfile($email: [String], $id: [QueryArgument]) {
+			user(email: $email, id: $id) {
+				... on User {
+					id
+					email
+					enabled
+					status
+					trashed
+					userPronouns
+					userTwitterUserName
+					userGithubusername
+					userAllowSocialSharing
+					userPreferredTimeZone
+					userYourName
+				}
+			}
+		}
+		`;
+
+		const response = await this.client.request<{
+			user: UserProfile;
+		}>(query, { id, email });
+
+		if (typeof response.user === 'undefined') {
+			throw new CmsError('There was an error fetching user profile.', response);
+		}
+
+		if (
+			!response.user ||
+			!response.user.enabled ||
+			response.user.trashed ||
+			response.user.status !== 'active'
+		) {
+			return null;
+		}
+
+		return response.user;
 	}
 }
