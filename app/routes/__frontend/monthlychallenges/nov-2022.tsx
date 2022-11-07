@@ -33,31 +33,31 @@ export const headers = {
 
 const goals = [
 	{
-		title: '100k words',
+		title: '100k',
 		value: 100000,
 	},
 	{
-		title: '150k words',
+		title: '150k',
 		value: 150000,
 	},
 	{
-		title: '200k words',
+		title: '200k',
 		value: 200000,
 	},
 	{
-		title: '250k words',
+		title: '250k',
 		value: 250000,
 	},
 	{
-		title: '300k words',
+		title: '300k',
 		value: 300000,
 	},
 	{
-		title: '350k words',
+		title: '350k',
 		value: 350000,
 	},
 	{
-		title: '400k words',
+		title: '400k',
 		value: 400000,
 	},
 ];
