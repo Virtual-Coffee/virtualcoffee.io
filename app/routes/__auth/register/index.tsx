@@ -1,18 +1,17 @@
 import { Link } from '@remix-run/react';
 import SingleTask from '~/components/layouts/SingleTask';
 import { Button } from '~/components/app/Button';
-import { json } from '@remix-run/node';
 
+import { json } from '@remix-run/node';
 export { metaFromData as meta } from '~/util/remixHelpers';
 
-export async function loader() {
-	return json({
+export const loader = () =>
+	json({
 		meta: {
 			title: 'Register for a Virtual Coffee Account',
 			description: `Create your Virtual Coffee Account`,
 		},
 	});
-}
 
 export default function Screen() {
 	return (

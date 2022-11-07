@@ -2,6 +2,9 @@ import React from 'react';
 import type { PolymorphicRef } from './types';
 import type { MetaFunction } from '@remix-run/node';
 
+/**
+ * Exports a meta function that can be used to set meta data from loader data
+ */
 export const metaFromData: MetaFunction = ({ data }) => {
 	if (data.meta) {
 		return data.meta;

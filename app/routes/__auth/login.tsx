@@ -15,6 +15,7 @@ import { Button } from '~/components/app/Button';
 import { TextInput } from '~/components/app/Forms';
 import { readFlashCookie } from '~/auth/session.server';
 import { MessageCode, type SessionFlash } from '~/auth/types';
+export { metaFromData as meta } from '~/util/remixHelpers';
 
 function LogInForm({
 	sessionFlash,
@@ -167,10 +168,15 @@ export let loader = async ({ request }: LoaderArgs) => {
 
 	const sessionFlashCheck = await readFlashCookie(request);
 
+	const meta = {
+		title: 'Log In',
+		description: ``,
+	};
+
 	if (sessionFlashCheck) {
 		if (sessionFlashCheck.sessionFlash) {
 			return json(
-				{ sessionFlash: sessionFlashCheck.sessionFlash },
+				{ sessionFlash: sessionFlashCheck.sessionFlash, meta },
 				{
 					headers: {
 						// only necessary with cookieSessionStorage
@@ -190,7 +196,7 @@ export let loader = async ({ request }: LoaderArgs) => {
 			);
 		}
 	}
-	return json({ sessionFlash: null });
+	return json({ sessionFlash: null, meta });
 };
 
 // First we create our UI with the form doing a POST and the inputs with the

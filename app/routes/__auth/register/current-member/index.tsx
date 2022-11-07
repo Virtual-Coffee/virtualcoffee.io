@@ -13,6 +13,16 @@ import {
 import { createFlashCookie } from '~/auth/session.server';
 import { MessageCode, type SlackUser } from '~/auth/types';
 
+export { metaFromData as meta } from '~/util/remixHelpers';
+
+export const loader = () =>
+	json({
+		meta: {
+			title: 'Sign in to your account',
+			description: ``,
+		},
+	});
+
 function CurrentMemberForm({ error }: { error?: string }) {
 	return (
 		<SingleTask title="Sign in to your account">

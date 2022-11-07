@@ -1,4 +1,14 @@
 import SingleTask from '~/components/layouts/SingleTask';
+import { json } from '@remix-run/node';
+export { metaFromData as meta } from '~/util/remixHelpers';
+
+export const loader = () =>
+	json({
+		meta: {
+			title: 'Registration successful - check your email',
+			description: ``,
+		},
+	});
 
 export default function Screen() {
 	return (

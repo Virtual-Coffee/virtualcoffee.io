@@ -6,6 +6,8 @@ import Alert from '~/components/app/Alert';
 import type { CmsErrors } from '~/api/util';
 import { Button } from '~/components/app/Button';
 
+export { metaFromData as meta } from '~/util/remixHelpers';
+
 export function CatchBoundary() {
 	const caught = useCatch();
 
@@ -46,7 +48,13 @@ export let loader = async ({ request }: LoaderArgs) => {
 	const response = await api.activateUser({ code, id });
 	console.log({ response });
 
-	return json(response);
+	return json({
+		response,
+		meta: {
+			title: 'Account activated.',
+			description: ``,
+		},
+	});
 };
 
 export default function Screen() {

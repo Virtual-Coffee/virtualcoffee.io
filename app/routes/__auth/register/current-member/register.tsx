@@ -21,6 +21,7 @@ import { TextInput, FieldSet } from '~/components/app/Forms';
 import { MessageCode, type SlackUser } from '~/auth/types';
 import { readFlashCookie } from '~/auth/session.server';
 import type { RegisterExistingUserActionData } from '~/api/types';
+export { metaFromData as meta } from '~/util/remixHelpers';
 
 export const RegisterForm = ({
 	initialValues,
@@ -42,7 +43,7 @@ export const RegisterForm = ({
 	};
 
 	return (
-		<SingleTask title="Join Virtual Coffee" wide>
+		<SingleTask title="Confirm your details" wide>
 			<Form method="post" reloadDocument className="space-y-6">
 				{formError && (
 					<Alert title="Form Error" type="danger">
@@ -247,7 +248,13 @@ export let loader = async ({ request }: LoaderArgs) => {
 				MessageCode.RegisterSlackUserFound
 		) {
 			return json(
-				{ slackUser: sessionFlashCheck.sessionFlash.data.slackUser },
+				{
+					slackUser: sessionFlashCheck.sessionFlash.data.slackUser,
+					meta: {
+						title: 'Confirm your details',
+						description: ``,
+					},
+				},
 				{
 					headers: {
 						// only necessary with cookieSessionStorage
