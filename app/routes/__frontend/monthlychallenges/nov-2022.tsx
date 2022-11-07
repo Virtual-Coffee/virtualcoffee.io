@@ -63,7 +63,7 @@ const goals = [
 ];
 
 export async function loader(_: LoaderArgs) {
-	const { title, description } = handle.meta;
+	const { title } = handle.meta;
 
 	let api = new CmsActions();
 
@@ -106,6 +106,10 @@ export async function loader(_: LoaderArgs) {
 	const completedGoals = goals.filter((goal) => goal.value <= totalWordCount);
 
 	// const blog = await getChallengeData();
+
+	const description = `Current status: ${totalWordCount.toLocaleString()} out of ${
+		currentGoal?.title
+	} words`;
 
 	return json(
 		{
