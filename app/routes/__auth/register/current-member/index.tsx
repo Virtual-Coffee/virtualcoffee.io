@@ -1,4 +1,4 @@
-import { Form, useActionData, useCatch } from '@remix-run/react';
+import { Link, Form, useActionData, useCatch } from '@remix-run/react';
 import { json, redirect } from '@remix-run/node';
 import type { ActionArgs } from '@remix-run/node';
 import { CmsActions } from '~/api/cms.server';
@@ -26,7 +26,24 @@ export const loader = () =>
 function CurrentMemberForm({ error }: { error?: string }) {
 	return (
 		<SingleTask title="Sign in to your account">
-			<Form className="space-y-6" method="post">
+			<Alert type="info" title="Heads up!">
+				<p>
+					If you already have an account on the{' '}
+					<a href="https://members.virtualcoffee.io" className="underline">
+						CMS Admin
+					</a>
+					, guess what? You already have an account!
+				</p>
+				<p>
+					If this is the case, go ahead and{' '}
+					<Link to="/login" className="underline">
+						Log In
+					</Link>
+					.
+				</p>
+				<p>Otherwise, go ahead and enter your email below.</p>
+			</Alert>
+			<Form className="space-y-6 mt-8" method="post">
 				{error && (
 					<Alert title="There was an error signing you in." type="danger">
 						<p>{error}</p>
