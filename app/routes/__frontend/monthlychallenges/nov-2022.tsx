@@ -87,7 +87,7 @@ export async function loader(_: LoaderArgs) {
 		if (!author) {
 			authorsWithPosts.push({
 				...post.author,
-				slug: slugify(post.author.userYourName || ''),
+				slug: slugify(post.author.userYourName || post.author.fullName || ''),
 				totalPosts: 1,
 				totalWordCount: post.wordCount,
 				posts: [post],
@@ -209,11 +209,12 @@ export default function Challenge() {
 						<Fragment key={i}>
 							<div className="header-anchor-wrapper header-anchor-wrapper-h3">
 								<h3 id={`${author.id}`} tabIndex={-1}>
-									{author.userYourName}
+									{author.userYourName || author.fullName}
 								</h3>
 								<a className="header-anchor" href={`#${author.slug}`}>
 									<span className="sr-only">
-										Permalink to {author.userYourName}'s posts
+										Permalink to {author.userYourName || author.fullName}'s
+										posts
 									</span>
 									<span aria-hidden="true">#</span>
 								</a>
@@ -247,7 +248,7 @@ export default function Challenge() {
 						<tbody>
 							{authorsWithPosts.map((author, i) => (
 								<tr key={i}>
-									<td>{author.userYourName}</td>
+									<td>{author.userYourName || author.fullName}</td>
 									<td className="text-right">
 										{author.totalPosts.toLocaleString()}
 									</td>

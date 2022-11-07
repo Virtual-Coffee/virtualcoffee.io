@@ -35,6 +35,7 @@ export type UserProfile = {
 	enabled: boolean;
 	status: string;
 	trashed: boolean;
+	fullName?: string;
 	userPronouns?: string;
 	userTwitterUserName?: string;
 	userGithubusername?: string;
@@ -68,8 +69,8 @@ export type ActionData<ErrorsType, FieldsType = ErrorsType> = {
 };
 
 export type NovemberChallengeEntryAuthor = Pick<
-	User['user'],
-	'id' | 'userYourName'
+	UserProfile,
+	'id' | 'userYourName' | 'fullName'
 >;
 
 export type NovemberChallengeEntry = {
