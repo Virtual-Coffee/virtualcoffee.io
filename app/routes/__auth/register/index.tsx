@@ -4,7 +4,7 @@ import { Button } from '~/components/app/Button';
 
 export default function Screen() {
 	return (
-		<SingleTask title="Register for Virtual Coffee" wide>
+		<SingleTask title="Register for a Virtual Coffee Account" wide>
 			<div className="flex flex-row gap-4 justify-between items-center">
 				<Button size="xl" as={Link} to="/join" color="primary">
 					I'd like to Join Virtual Coffee
