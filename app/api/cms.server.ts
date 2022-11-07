@@ -425,7 +425,7 @@ export class CmsActions {
 
 		const response = await this.client.request(query);
 
-		if (!response?.entries?.length) {
+		if (!response?.entries) {
 			throw new CmsError('There was an error fetching challenges.', response);
 		}
 
