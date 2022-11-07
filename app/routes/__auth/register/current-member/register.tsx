@@ -215,8 +215,7 @@ export let action = async ({ request }: ActionArgs) => {
 
 		// console.log({ values });
 
-		const response = await api.register(fields);
-		console.log({ user: response.registerPendingMembers.user });
+		await api.registerExistingUser(fields);
 
 		return redirect(`/register/current-member/register-success`);
 	} catch (error) {

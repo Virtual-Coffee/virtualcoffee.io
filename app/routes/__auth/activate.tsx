@@ -4,6 +4,7 @@ import { CmsAuth } from '~/api/cmsauth.server';
 import SingleTask from '~/components/layouts/SingleTask';
 import Alert from '~/components/app/Alert';
 import type { CmsErrors } from '~/api/util';
+import { Button } from '~/components/app/Button';
 
 export function CatchBoundary() {
 	const caught = useCatch();
@@ -63,8 +64,10 @@ export default function Screen() {
 	return (
 		<SingleTask title="Activate Account">
 			<Alert type="success" title="Account Activated!">
-				<div>
-					<Link to="/login">Log In</Link>
+				<div className="flex justify-end">
+					<Button as={Link} to="/login">
+						Log In
+					</Button>
 				</div>
 			</Alert>
 		</SingleTask>

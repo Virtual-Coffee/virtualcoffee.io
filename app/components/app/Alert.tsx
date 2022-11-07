@@ -57,7 +57,7 @@ export default function Alert({
 				<div className="flex-shrink-0">
 					<Icon className={`h-5 w-5 ${config[type].icon}`} aria-hidden="true" />
 				</div>
-				<div className="ml-3">
+				<div className="ml-3 flex-1">
 					<h3 className={`text-sm font-medium ${config[type].title}`}>
 						{title}
 					</h3>
