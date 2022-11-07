@@ -31,7 +31,7 @@ const navigation = [
 ];
 
 const userNavigation = [
-	{ name: 'Your Profile', to: `/membership/profile` },
+	// { name: 'Your Profile', to: `/membership/profile` },
 	// { name: 'Settings', to: '#' },
 	{ name: 'Sign out', to: `/logout` },
 ];
