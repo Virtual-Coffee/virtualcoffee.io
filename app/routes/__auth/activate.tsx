@@ -1,5 +1,5 @@
 import { Link, useLoaderData, useCatch } from '@remix-run/react';
-import { json, LoaderArgs, redirect } from '@remix-run/node';
+import { json, type LoaderArgs, redirect } from '@remix-run/node';
 import { CmsAuth } from '~/api/cmsauth.server';
 import SingleTask from '~/components/layouts/SingleTask';
 import Alert from '~/components/app/Alert';
@@ -30,13 +30,7 @@ export function ErrorBoundary({ error }: { error: CmsErrors }) {
 	);
 }
 
-// Second, we need to export an action function, here we will use the
-// `authenticator.authenticate method`
 export let loader = async ({ request }: LoaderArgs) => {
-	// we call the method with the name of the strategy we want to use and the
-	// request object, optionally we pass an object with the URLs we want the user
-	// to be redirected to after a success or a failure
-	// try {
 	const url = new URL(request.url);
 	const code = url.searchParams.get('code');
 	const id = url.searchParams.get('id');
@@ -55,8 +49,6 @@ export let loader = async ({ request }: LoaderArgs) => {
 	return json(response);
 };
 
-// First we create our UI with the form doing a POST and the inputs with the
-// names we are going to use in the strategy
 export default function Screen() {
 	const loaderData = useLoaderData<typeof loader>();
 	console.log({ loaderData });

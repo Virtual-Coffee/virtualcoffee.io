@@ -54,10 +54,6 @@ export function CatchBoundary() {
 const badRequest = (message: string) => json({ message }, { status: 400 });
 
 export let action = async ({ request }: ActionArgs) => {
-	// we call the method with the name of the strategy we want to use and the
-	// request object, optionally we pass an object with the URLs we want the user
-	// to be redirected to after a success or a failure
-
 	try {
 		const form = await request.formData();
 
@@ -140,24 +136,10 @@ export let action = async ({ request }: ActionArgs) => {
 		// here the error is a generic error that another reason may throw
 		console.log('is generic error');
 		console.log(error);
-		return json({ message: 'There was a server error.' });
+		return badRequest('There was an error looking up your email address');
 	}
 };
 
-// Finally, we can export a loader function where we check if the user is
-// authenticated with `authenticator.isAuthenticated` and redirect to the
-// dashboard if it is or return null if it's not
-// export let loader = async ({ request }: LoaderArgs) => {
-// 	const url = new URL(request.url);
-// 	const redirectOnSuccess = url.searchParams.get('redirectOnSuccess');
-
-// 	return await authenticator.isAuthenticated(request, {
-// 		successRedirect: redirectOnSuccess || '/membership',
-// 	});
-// };
-
-// First we create our UI with the form doing a POST and the inputs with the
-// names we are going to use in the strategy
 export default function Screen() {
 	const actionData = useActionData<typeof action>() as unknown as
 		| { slackUser: SlackUser }
