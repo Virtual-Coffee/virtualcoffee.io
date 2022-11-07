@@ -9,9 +9,12 @@ import type {
 	Calendar,
 	User,
 	EventLoaderData,
+	NovemberChallengeEntry,
+	UserProfile,
 } from './types';
 import { ics } from 'calendar-link';
 import { sanitizeHtml } from '~/util/sanitizeCmsData';
+import invariant from 'tiny-invariant';
 
 export function getIcsLink(event: Event) {
 	return ics({
@@ -24,6 +27,7 @@ export function getIcsLink(event: Event) {
 
 export class CmsActions {
 	client: GraphQLClient;
+	user: User | null = null;
 	constructor() {
 		if (!process.env.CMS_URL || !process.env.CMS_TOKEN) {
 			throw new CmsError('Missing API credentials');
@@ -49,6 +53,7 @@ export class CmsActions {
 		if (!user) {
 			throw new CmsError('User not found');
 		}
+		this.user = user;
 		this.client.setHeader('Authorization', `JWT ${user.jwt}`);
 	}
 
@@ -396,5 +401,227 @@ export class CmsActions {
 		}
 
 		throw new CmsError('There was an error checking this event.');
+	}
+
+	async getMonthlyChallenges(): Promise<
+		{
+			title: string;
+			month: string;
+			shortDescription: string;
+			id: number | string;
+		}[]
+	> {
+		const query = `query getMonthlyChallenges {
+			entries(section: "monthlyChallenges") {
+				... on monthlyChallenges_default_Entry {
+					id
+					title
+					month
+					shortDescription
+				}
+			}
+		}
+		`;
+
+		const response = await this.client.request(query);
+
+		if (!response?.entries?.length) {
+			throw new CmsError('There was an error fetching challenges.', response);
+		}
+
+		return response.entries;
+	}
+
+	async getNovemberChallengeEntries(
+		{
+			authorId,
+			orderBy,
+		}: {
+			authorId?: number | string;
+			orderBy?: string;
+		} = {
+			authorId: undefined,
+			orderBy: undefined,
+		},
+	) {
+		const query = `query getNovemberChallengeEntries($authorId: [QueryArgument], $orderBy:String = "dateCreated DESC") {
+			entries(
+				section: "mcWritingChallengeSubmissions"
+				authorId: $authorId
+				orderBy: $orderBy
+			) {
+				... on mcWritingChallengeSubmissions_default_Entry {
+					id
+					shortDescriptionMarkDown
+					title
+					urlValue
+					wordCount
+					topics
+					date @formatDateTime (format: "Y-m-d")
+					author {
+						... on User {
+							id
+							userYourName
+						}
+					}
+				}
+			}
+		}
+
+		`;
+
+		const response = await this.client.request<{
+			entries: NovemberChallengeEntry[];
+		}>(query, { authorId, orderBy });
+
+		console.log(response);
+
+		if (!response?.entries) {
+			throw new CmsError(
+				'There was an error fetching challenge entries.',
+				response,
+			);
+		}
+
+		return response.entries;
+	}
+
+	async getNovemberChallengeEntry({ id }: { id?: number | string }) {
+		const query = `query getNovemberChallengeEntry($id: [QueryArgument]) {
+			entry(
+				id: $id
+			) {
+				... on mcWritingChallengeSubmissions_default_Entry {
+					id
+					shortDescriptionMarkDown
+					title
+					urlValue
+					wordCount
+					topics
+					date @formatDateTime (format: "Y-m-d")
+					author {
+						... on User {
+							id
+							userYourName
+						}
+					}
+				}
+			}
+		}
+
+		`;
+
+		const response = await this.client.request<{
+			entry: NovemberChallengeEntry;
+		}>(query, { id });
+
+		if (!response?.entry) {
+			throw new CmsError(
+				'There was an error fetching challenge entry.',
+				response,
+			);
+		}
+
+		return response.entry;
+	}
+
+	async saveNovemberChallengeEntry(post: {
+		title: string;
+		shortDescriptionMarkDown?: string | null;
+		id?: number | string | null;
+		urlValue: string;
+		wordCount: number;
+		topics?: string | null;
+		date: string;
+	}) {
+		invariant(this.user, 'You must be logged in to save a post.');
+
+		const query = `mutation SaveMcWritingChallengeSubmission($authorId: ID, $wordCount: Number, $urlValue: String, $topics: String, $shortDescriptionMarkDown: String, $date: DateTime, $title:String, $id:ID) {
+			save_mcWritingChallengeSubmissions_default_Entry(
+				id:$id
+				authorId: $authorId
+				wordCount: $wordCount
+				urlValue: $urlValue
+				topics: $topics
+				title: $title
+				shortDescriptionMarkDown: $shortDescriptionMarkDown
+				date: $date
+			) {
+				id
+				title
+				topics
+				shortDescriptionMarkDown
+				date @formatDateTime (format: "Y-m-d")
+				urlValue
+				wordCount
+				author {
+					... on User {
+						id
+						userYourName
+					}
+				}
+			}
+		}
+
+		`;
+
+		const response = await this.client.request<{
+			save_mcWritingChallengeSubmissions_default_Entry: NovemberChallengeEntry;
+		}>(query, {
+			...post,
+			authorId: this.user.user.id,
+		});
+
+		if (!response?.save_mcWritingChallengeSubmissions_default_Entry) {
+			throw new CmsError('There was an error saving entry.', response);
+		}
+
+		return response.save_mcWritingChallengeSubmissions_default_Entry;
+	}
+
+	async getUserProfile({
+		id,
+		email,
+	}: {
+		id?: number | string;
+		email?: string;
+	}) {
+		const query = `query getMemberProfile($email: [String], $id: [QueryArgument]) {
+			user(email: $email, id: $id) {
+				... on User {
+					id
+					email
+					enabled
+					status
+					trashed
+					userPronouns
+					userTwitterUserName
+					userGithubusername
+					userAllowSocialSharing
+					userPreferredTimeZone
+					userYourName
+				}
+			}
+		}
+		`;
+
+		const response = await this.client.request<{
+			user: UserProfile;
+		}>(query, { id, email });
+
+		if (typeof response.user === 'undefined') {
+			throw new CmsError('There was an error fetching user profile.', response);
+		}
+
+		if (
+			!response.user ||
+			!response.user.enabled ||
+			response.user.trashed ||
+			response.user.status !== 'active'
+		) {
+			return null;
+		}
+
+		return response.user;
 	}
 }

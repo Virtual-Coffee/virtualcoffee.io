@@ -51,6 +51,7 @@
 		"@remix-run/serve": "^1.7.0",
 		"@remix-run/server-runtime": "^1.7.0",
 		"@sindresorhus/slugify": "^2.1.0",
+		"@slack/web-api": "^6.7.2",
 		"airtable": "^0.11.4",
 		"autoprefixer": "^10.4.7",
 		"axios": "^0.27.2",

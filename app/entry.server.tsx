@@ -1,4 +1,4 @@
-import type { EntryContext } from '@remix-run/node';
+import type { EntryContext, HandleDataRequestFunction } from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
 import { renderToString } from 'react-dom/server';
 import { cacheControlValues } from './util/http';
@@ -6,6 +6,17 @@ import { cacheControlValues } from './util/http';
 if (process.env.NETLIFY_DEV) {
 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 }
+
+const cacheNoneRoutes = [
+	'/membership',
+	'/activate',
+	'/forgot-password',
+	'/login',
+	'/logout',
+	'/register',
+	'/resend-activation',
+	'/set-password',
+];
 
 export default function handleRequest(
 	request: Request,
@@ -21,8 +32,15 @@ export default function handleRequest(
 
 	// this may change in the future, but for now, default to caching all pages.
 	// this can be overwritten in any page by setting a Cache-Control header
+
 	if (!responseHeaders.get('Cache-Control')) {
-		responseHeaders.set('Cache-Control', cacheControlValues.standard);
+		const url = new URL(request.url);
+
+		if (cacheNoneRoutes.find((route) => url.pathname.startsWith(route))) {
+			responseHeaders.set('Cache-Control', cacheControlValues.none);
+		} else {
+			responseHeaders.set('Cache-Control', cacheControlValues.standard);
+		}
 	}
 
 	return new Response('<!DOCTYPE html>' + markup, {
@@ -31,16 +49,22 @@ export default function handleRequest(
 	});
 }
 
-export function handleDataRequest(
+export const handleDataRequest: HandleDataRequestFunction = (
 	response: Response,
 	// same args that get passed to the action or loader that was called
-	// { request, params, context },
-) {
+	{ request, params, context },
+) => {
 	// this may change in the future, but for now, default to caching all data requests.
 	// this can be overwritten in any loader by setting a Cache-Control header
+	const url = new URL(request.url);
+
 	if (!response.headers.get('Cache-Control')) {
-		response.headers.set('Cache-Control', cacheControlValues.standard);
+		if (cacheNoneRoutes.find((route) => url.pathname.startsWith(route))) {
+			response.headers.set('Cache-Control', cacheControlValues.none);
+		} else {
+			response.headers.set('Cache-Control', cacheControlValues.standard);
+		}
 	}
 
 	return response;
-}
+};

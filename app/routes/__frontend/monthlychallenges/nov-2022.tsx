@@ -1,7 +1,17 @@
+import React, { Fragment } from 'react';
+import slugify from '@sindresorhus/slugify';
 import { createMetaData } from '~/util/createMetaData.server';
 import { json } from '@remix-run/node';
-// import { useLoaderData } from '@remix-run/react';
+import type { LoaderArgs } from '@remix-run/node';
+import { CmsActions } from '~/api/cms.server';
+import type {
+	NovemberChallengeEntryAuthor,
+	NovemberChallengeEntry,
+} from '~/api/types';
+import { useLoaderData } from '@remix-run/react';
 // import { getChallengeData } from '~/data/monthlyChallenges/nov-2022';
+
+export { metaFromData as meta } from '~/util/remixHelpers';
 
 export const handle = {
 	listTitle: 'November, 2022: 100k words!',
@@ -16,24 +26,103 @@ export const handle = {
 	},
 };
 
-export async function loader() {
+const goals = [
+	{
+		title: '100k words',
+		value: 100000,
+	},
+	{
+		title: '150k words',
+		value: 150000,
+	},
+	{
+		title: '200k words',
+		value: 200000,
+	},
+	{
+		title: '250k words',
+		value: 250000,
+	},
+	{
+		title: '300k words',
+		value: 300000,
+	},
+	{
+		title: '350k words',
+		value: 350000,
+	},
+	{
+		title: '400k words',
+		value: 400000,
+	},
+];
+
+export async function loader(_: LoaderArgs) {
 	const { title, description } = handle.meta;
+
+	let api = new CmsActions();
+
+	const posts = await api.getNovemberChallengeEntries();
+
+	let totalWordCount = 0;
+
+	let totalPosts = 0;
+
+	const authorsWithPosts: (NovemberChallengeEntryAuthor & {
+		slug: string;
+		totalPosts: number;
+		totalWordCount: number;
+		posts: NovemberChallengeEntry[];
+	})[] = [];
+
+	posts.forEach((post) => {
+		const author = authorsWithPosts.find(
+			(author) => author.id === post.author.id,
+		);
+		if (!author) {
+			authorsWithPosts.push({
+				...post.author,
+				slug: slugify(post.author.userYourName || ''),
+				totalPosts: 1,
+				totalWordCount: post.wordCount,
+				posts: [post],
+			});
+		} else {
+			author.totalPosts++;
+			author.totalWordCount += post.wordCount;
+			author.posts.push(post);
+		}
+
+		totalWordCount += post.wordCount;
+		totalPosts++;
+	});
+
+	const currentGoal = goals.find((goal) => goal.value > totalWordCount);
+	const completedGoals = goals.filter((goal) => goal.value <= totalWordCount);
 
 	// const blog = await getChallengeData();
 
 	return json({
 		// ...blog,
+		totalWordCount,
+		totalPosts,
+		authorsWithPosts,
+		currentGoal,
+		completedGoals,
 		meta: createMetaData({ title, description }),
 	});
-}
-
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
 }
 
 export default function Challenge() {
 	// const { completedGoals, currentGoal, sortedList, list, totals } =
 	// 	useLoaderData();
+	const {
+		authorsWithPosts,
+		totalWordCount,
+		totalPosts,
+		completedGoals,
+		currentGoal,
+	} = useLoaderData<typeof loader>();
 
 	return (
 		<>
@@ -56,113 +145,120 @@ export default function Challenge() {
 				words.
 			</p>
 
-			{/* <p className="lead">Get those blog posts up!</p> */}
-			<p className="lead">
-				We'll have directions on how to submit your blog posts soon!
-			</p>
+			<p className="lead">Get those blog posts up!</p>
 
-			{/* {completedGoals.length ? (
+			{totalPosts > 0 && (
 				<>
-					<h2>
-						<small>Current status:</small>
-					</h2>
+					{completedGoals.length ? (
+						<>
+							<h2>
+								<small>Current status:</small>
+							</h2>
 
-					<ul>
-						{completedGoals.map((goal, i) => (
-							<li key={i} className="lead">
-								{goal.toLocaleString()} goal completed!!!
-							</li>
-						))}
-					</ul>
+							<ul>
+								{completedGoals.map((goal, i) => (
+									<li key={i} className="lead">
+										{goal.title} goal completed!!!
+									</li>
+								))}
+							</ul>
 
-					<div className="h3">
-						Stretch Goal {completedGoals.length}:{' '}
-						{totals.totalCount.toLocaleString()} out of{' '}
-						{currentGoal.toLocaleString()} words
-					</div>
-				</>
-			) : (
-				<h2>
-					Current status: {totals.totalCount.toLocaleString()} out of{' '}
-					{currentGoal.toLocaleString()} words
-				</h2>
-			)}
+							<div className="h3">
+								Stretch Goal {completedGoals.length}:{' '}
+								{totalWordCount.toLocaleString()} out of{' '}
+								{currentGoal?.value.toLocaleString()} words
+							</div>
+						</>
+					) : (
+						<h2>
+							Current status: {totalWordCount.toLocaleString()} out of{' '}
+							{currentGoal?.title} words
+						</h2>
+					)}
 
-			<div className="progress my-4" style={{ height: '3em' }}>
-				<div
-					className="progress-bar progress-bar progress-bar-striped"
-					role="progressbar"
-					style={{ width: `${(totals.totalCount / currentGoal) * 100}%` }}
-					aria-valuenow={totals.totalCount}
-					aria-valuemin="0"
-					aria-valuemax={currentGoal}
-				>
-					{totals.totalCount.toLocaleString()} Words
-				</div>
-			</div>
-
-			<h2 className="mt-5">Our Posts:</h2>
-
-			{sortedList.map((person, i) => (
-				<Fragment key={i}>
-					<div className="header-anchor-wrapper header-anchor-wrapper-h3">
-						<h3 id={person.slug} tabIndex="-1">
-							{person.name}
-						</h3>
-						<a className="header-anchor" href={`#${person.slug}`}>
-							<span className="sr-only">
-								Permalink to {person.name}'s posts
-							</span>
-							<span aria-hidden="true">#</span>
-						</a>
+					<div className="progress my-4" style={{ height: '3em' }}>
+						<div
+							className="progress-bar progress-bar progress-bar-striped"
+							role="progressbar"
+							style={{
+								width: `${(totalWordCount / (currentGoal?.value || 1)) * 100}%`,
+							}}
+							aria-valuenow={totalWordCount}
+							aria-valuemin={0}
+							aria-valuemax={currentGoal?.value}
+						>
+							{totalWordCount.toLocaleString()} Words
+						</div>
 					</div>
 
-					<ul>
-						{person.posts.map((post, j) => (
-							<li key={j}>
-								<a href={post.url}>{post.title}</a>
-								<code>({post.count.toLocaleString()} words)</code>
-							</li>
-						))}
-					</ul>
-				</Fragment>
-			))}
+					<h2 className="mt-5">Our Posts:</h2>
 
-			<h2 className="mt-5">Totals:</h2>
+					{authorsWithPosts.map((author, i) => (
+						<Fragment key={i}>
+							<div className="header-anchor-wrapper header-anchor-wrapper-h3">
+								<h3 id={`${author.id}`} tabIndex={-1}>
+									{author.userYourName}
+								</h3>
+								<a className="header-anchor" href={`#${author.slug}`}>
+									<span className="sr-only">
+										Permalink to {author.userYourName}'s posts
+									</span>
+									<span aria-hidden="true">#</span>
+								</a>
+							</div>
 
-			<table className="table mt-5" style={{ maxWidth: '600px' }}>
-				<thead className="thead-dark">
-					<tr>
-						<th scope="col">Member Totals</th>
-						<th scope="col" className="text-right">
-							Posts
-						</th>
-						<th scope="col" className="text-right">
-							Total Words
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					{totals.list.map((person, i) => (
-						<tr key={i}>
-							<td>{person.name}</td>
-							<td className="text-right">{person.posts.toLocaleString()}</td>
-							<td className="text-right">{person.total.toLocaleString()}</td>
-						</tr>
+							<ul>
+								{author.posts.map((post, j) => (
+									<li key={j}>
+										<a href={post.urlValue}>{post.title}</a>
+										<code>({post.wordCount.toLocaleString()} words)</code>
+									</li>
+								))}
+							</ul>
+						</Fragment>
 					))}
-				</tbody>
-				<tfoot>
-					<tr>
-						<th scope="col">Total</th>
-						<th scope="col" className="text-right">
-							{totals.totalPosts.toLocaleString()}
-						</th>
-						<th scope="col" className="text-right">
-							{totals.totalCount.toLocaleString()} words
-						</th>
-					</tr>
-				</tfoot>
-			</table> */}
+
+					<h2 className="mt-5">Totals:</h2>
+
+					<table className="table mt-5" style={{ maxWidth: '600px' }}>
+						<thead className="thead-dark">
+							<tr>
+								<th scope="col">Member Totals</th>
+								<th scope="col" className="text-right">
+									Posts
+								</th>
+								<th scope="col" className="text-right">
+									Total Words
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{authorsWithPosts.map((author, i) => (
+								<tr key={i}>
+									<td>{author.userYourName}</td>
+									<td className="text-right">
+										{author.totalPosts.toLocaleString()}
+									</td>
+									<td className="text-right">
+										{author.totalWordCount.toLocaleString()}
+									</td>
+								</tr>
+							))}
+						</tbody>
+						<tfoot>
+							<tr>
+								<th scope="col">Total</th>
+								<th scope="col" className="text-right">
+									{totalPosts.toLocaleString()}
+								</th>
+								<th scope="col" className="text-right">
+									{totalWordCount.toLocaleString()} words
+								</th>
+							</tr>
+						</tfoot>
+					</table>
+				</>
+			)}
 
 			<h2>How to Participate</h2>
 
