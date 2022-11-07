@@ -461,6 +461,7 @@ export class CmsActions {
 					author {
 						... on User {
 							id
+							fullName
 							userYourName
 						}
 					}
