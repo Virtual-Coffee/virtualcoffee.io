@@ -7,30 +7,10 @@ import { CmsActions } from '~/api/cms.server';
 import { TextInput, TextAreaInput, FieldSet } from '~/components/app/Forms';
 import { Button } from '~/components/app/Button';
 import Alert from '~/components/app/Alert';
+import type { NovemberChallengeActionData } from '~/api/types';
 
-export type ActionData = {
-	formError?: string;
-	fieldErrors?: {
-		title: string | undefined;
-		shortDescriptionMarkDown?: string | undefined;
-		id?: string | undefined;
-		urlValue: string | undefined;
-		wordCount: string | undefined;
-		topics?: string | undefined;
-		date: string | undefined;
-	};
-	fields?: {
-		title: string | undefined;
-		shortDescriptionMarkDown?: string | undefined;
-		id?: string | undefined | null;
-		urlValue: string | undefined;
-		wordCount: string | undefined;
-		topics?: string | undefined;
-		date: string | undefined;
-	};
-};
-
-const badRequest = (data: ActionData) => json(data, { status: 400 });
+const badRequest = (data: NovemberChallengeActionData) =>
+	json(data, { status: 400 });
 
 export const action = async ({ request }: ActionArgs) => {
 	const formData = await request.formData();
@@ -118,9 +98,9 @@ export const ChallengeForm = ({
 	fieldErrors,
 	formError,
 }: {
-	initialValues?: ActionData['fields'];
-	fieldErrors?: ActionData['fieldErrors'];
-	formError?: ActionData['formError'];
+	initialValues?: NovemberChallengeActionData['fields'];
+	fieldErrors?: NovemberChallengeActionData['fieldErrors'];
+	formError?: NovemberChallengeActionData['formError'];
 }) => {
 	const transition = useTransition();
 	const isCreating = Boolean(transition.submission);

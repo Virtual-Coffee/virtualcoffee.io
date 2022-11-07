@@ -3,16 +3,10 @@ import classNames from 'classnames';
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import {
-	LinkIcon,
-	PlusIcon,
-	QuestionMarkCircleIcon,
-} from '@heroicons/react/20/solid';
 import { Form } from '@remix-run/react';
 
-const labelClass = 'block text-sm font-medium text-gray-700';
+const labelClass = 'block text-md font-medium text-gray-700';
 const helpClass = 'text-sm leading-6 text-gray-500';
-const errorHelpClass = 'text-sm leading-6 text-red-600';
 
 export function FieldSet({
 	legend,

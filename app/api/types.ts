@@ -61,6 +61,12 @@ export type EventLoaderData = {
 	type: 'error' | 'timing' | 'permissions' | 'noLink' | 'success';
 };
 
+export type ActionData<ErrorsType, FieldsType = ErrorsType> = {
+	formError?: string;
+	fieldErrors?: ErrorsType;
+	fields?: FieldsType;
+};
+
 export type NovemberChallengeEntryAuthor = Pick<
 	User['user'],
 	'id' | 'userYourName'
@@ -68,11 +74,29 @@ export type NovemberChallengeEntryAuthor = Pick<
 
 export type NovemberChallengeEntry = {
 	title: string;
-	shortDescriptionMarkDown: string;
-	id: number | string;
+	shortDescriptionMarkDown?: string;
+	id?: number | string;
 	urlValue: string;
 	wordCount: number;
-	topics: string;
+	topics?: string;
 	date: string;
 	author: NovemberChallengeEntryAuthor;
 };
+
+export type NovemberChallengeActionData = ActionData<{
+	title: string | undefined;
+	shortDescriptionMarkDown?: string | undefined;
+	id?: string | undefined | null;
+	urlValue: string | undefined;
+	wordCount: string | undefined;
+	topics?: string | undefined;
+	date: string | undefined;
+}>;
+
+export type RegisterExistingUserActionData = ActionData<{
+	email: string | undefined;
+	password: string | undefined;
+	userYourName: string | undefined;
+	userPronouns?: string | undefined | null;
+	userSlackId: string | undefined;
+}>;

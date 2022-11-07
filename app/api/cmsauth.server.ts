@@ -164,7 +164,7 @@ export class CmsAuth {
 		email: string;
 		password: string;
 		userYourName: string;
-		userPronouns?: string;
+		userPronouns?: string | null;
 		userGithubusername?: string;
 		userLinks?: string;
 		userHowDidYouHearAboutUs?: string;

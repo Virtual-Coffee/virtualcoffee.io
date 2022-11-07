@@ -11,7 +11,7 @@ import {
 	type UsersLookupByEmailResponse,
 } from '~/api/slack.server';
 import { createFlashCookie } from '~/auth/session.server';
-import { MessageCode } from '~/auth/types';
+import { MessageCode, type SlackUser } from '~/auth/types';
 
 function CurrentMemberForm({ error }: { error?: string }) {
 	return (
@@ -29,6 +29,7 @@ function CurrentMemberForm({ error }: { error?: string }) {
 					name="email"
 					type="email"
 					autoComplete="email"
+					help="Please use the email address you used to sign up for the Virtual Coffee Slack workspace."
 					required
 				/>
 
@@ -51,13 +52,6 @@ export function CatchBoundary() {
 }
 
 const badRequest = (message: string) => json({ message }, { status: 400 });
-
-type SlackUser = {
-	slackId?: string;
-	email: string;
-	userYourName?: string;
-	userPronouns?: string;
-};
 
 export let action = async ({ request }: ActionArgs) => {
 	// we call the method with the name of the strategy we want to use and the
@@ -113,11 +107,19 @@ export let action = async ({ request }: ActionArgs) => {
 				email,
 				userYourName: profile.real_name_normalized,
 				userPronouns: profile.pronouns,
-				slackId: userSlackResponse.user.id,
+				userSlackId: userSlackResponse.user.id,
 			};
 
-			return json({
-				slackUser,
+			return redirect('/register/current-member/register', {
+				headers: {
+					'Set-Cookie': await createFlashCookie(request, {
+						messageCode: MessageCode.RegisterSlackUserFound,
+						message: 'We found your account!',
+						data: {
+							slackUser,
+						},
+					}),
+				},
 			});
 		} catch (error) {
 			// @ts-ignore
