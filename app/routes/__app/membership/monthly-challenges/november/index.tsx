@@ -6,7 +6,7 @@ import {
 import { DocumentPlusIcon } from '@heroicons/react/24/solid';
 import { json } from '@remix-run/node';
 import type { LoaderArgs } from '@remix-run/node';
-import { Link, useLoaderData, Outlet } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import { authenticate } from '~/auth/auth.server';
 import { CmsActions } from '~/api/cms.server';
 
@@ -134,7 +134,6 @@ export default function Page() {
 					</ul>
 				</div>
 			</div>
-			<Outlet />
 		</div>
 	);
 }
