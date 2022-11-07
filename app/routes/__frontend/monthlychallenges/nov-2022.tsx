@@ -9,6 +9,7 @@ import type {
 	NovemberChallengeEntry,
 } from '~/api/types';
 import { useLoaderData } from '@remix-run/react';
+import { cacheControlValues } from '~/util/http';
 // import { getChallengeData } from '~/data/monthlyChallenges/nov-2022';
 
 export { metaFromData as meta } from '~/util/remixHelpers';
@@ -24,6 +25,10 @@ export const handle = {
 	hero: {
 		heroHeader: '',
 	},
+};
+
+export const headers = {
+	'Cache-Control': cacheControlValues.short,
 };
 
 const goals = [
@@ -102,15 +107,22 @@ export async function loader(_: LoaderArgs) {
 
 	// const blog = await getChallengeData();
 
-	return json({
-		// ...blog,
-		totalWordCount,
-		totalPosts,
-		authorsWithPosts,
-		currentGoal,
-		completedGoals,
-		meta: createMetaData({ title, description }),
-	});
+	return json(
+		{
+			// ...blog,
+			totalWordCount,
+			totalPosts,
+			authorsWithPosts,
+			currentGoal,
+			completedGoals,
+			meta: createMetaData({ title, description }),
+		},
+		{
+			headers: {
+				'Cache-Control': cacheControlValues.short,
+			},
+		},
+	);
 }
 
 export default function Challenge() {
