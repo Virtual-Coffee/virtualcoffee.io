@@ -211,8 +211,8 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
 							'px-3',
 							'text-gray-500',
 							'sm:text-sm',
-							'group-[[data-has-error]]-border-red-300',
-							'group-[[data-has-error]]-text-red-900',
+							'group-[[data-has-error]]:border-red-300',
+							'group-[[data-has-error]]:text-red-900',
 						])}
 					>
 						{leftAddOn}
@@ -234,11 +234,11 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
 							'flex-1',
 							'sm:text-sm',
 							'border-gray-300',
-							'group-[[data-has-error]]-border-red-300',
-							'group-[[data-has-error]]-text-red-900',
-							'group-[[data-has-error]]-placeholder-red-300',
-							'group-[[data-has-error]]-focus:border-red-500',
-							'group-[[data-has-error]]-focus:ring-red-500',
+							'group-[[data-has-error]]:border-red-300',
+							'group-[[data-has-error]]:text-red-900',
+							'group-[[data-has-error]]:placeholder-red-300',
+							'group-[[data-has-error]]:focus:border-red-500',
+							'group-[[data-has-error]]:focus:ring-red-500',
 						],
 						!leftAddOn && !rightAddOn && 'rounded-md',
 						leftAddOn && !rightAddOn && 'rounded-none rounded-r-md',
@@ -261,8 +261,8 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
 							'px-3',
 							'text-gray-500',
 							'sm:text-sm',
-							'group-[[data-has-error]]-border-red-300',
-							'group-[[data-has-error]]-text-red-900',
+							'group-[[data-has-error]]:border-red-300',
+							'group-[[data-has-error]]:text-red-900',
 						])}
 					>
 						{rightAddOn}
@@ -311,11 +311,11 @@ export const TextAreaInput = React.forwardRef<
 							'focus:border-sky-500',
 							'focus:ring-sky-500',
 							'sm:text-sm',
-							'group-[[data-has-error]]-border-red-300',
-							'group-[[data-has-error]]-text-red-900',
-							'group-[[data-has-error]]-placeholder-red-300',
-							'group-[[data-has-error]]-focus:border-red-500',
-							'group-[[data-has-error]]-focus:ring-red-500',
+							'group-[[data-has-error]]:border-red-300',
+							'group-[[data-has-error]]:text-red-900',
+							'group-[[data-has-error]]:placeholder-red-300',
+							'group-[[data-has-error]]:focus:border-red-500',
+							'group-[[data-has-error]]:focus:ring-red-500',
 						],
 
 						className,
