@@ -54,7 +54,7 @@
 		"@slack/web-api": "^6.8.0",
 		"airtable": "^0.11.6",
 		"autoprefixer": "^10.4.13",
-		"axios": "^0.27.2",
+		"axios": "^1.2.0",
 		"bootstrap": "^4.6.0",
 		"calendar-link": "^2.4.0",
 		"classnames": "^2.3.1",
