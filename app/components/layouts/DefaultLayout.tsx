@@ -1,21 +1,22 @@
 import { useMemo } from 'react';
 import { useMatches } from '@remix-run/react';
+import type { UndrawIllustrationName } from '~/components/UndrawIllustration';
 import UndrawIllustration from '~/components/UndrawIllustration';
 
-function useHeroData({ Hero, heroHeader, heroSubheader }) {
+function useHeroData({ Hero, heroHeader, heroSubheader }: HeroData) {
 	const matches = useMatches().reverse();
 	return useMemo(() => {
-		let firstHero = matches.find((match) => !!match.handle?.hero)?.handle.hero;
+		let firstHero = matches.find((match) => !!match.handle?.hero)?.handle?.hero;
 		if (!firstHero) {
 			firstHero = matches.find((match) => !!match.data?.hero)?.data.hero;
 		}
 
-		let firstMeta = matches.find((match) => !!match.handle?.meta)?.handle.meta;
+		let firstMeta = matches.find((match) => !!match.handle?.meta)?.handle?.meta;
 		if (!firstMeta) {
 			firstMeta = matches.find((match) => !!match.data?.meta)?.data.meta;
 		}
 
-		const returnObject = {
+		const returnObject: HeroData = {
 			Hero: Hero || firstHero?.Hero,
 		};
 
@@ -45,7 +46,15 @@ function useHeroData({ Hero, heroHeader, heroSubheader }) {
 	}, [Hero, heroHeader, heroSubheader, matches]);
 }
 
-export function HeroHead({ Hero, heroHeader, heroSubheader, simple }) {
+export function HeroHead({
+	Hero,
+	heroHeader,
+	heroSubheader,
+	simple,
+}: Pick<
+	DefaultLayoutProps,
+	'Hero' | 'heroHeader' | 'heroSubheader' | 'simple'
+>) {
 	const heroData = useHeroData({ Hero, heroHeader, heroSubheader });
 
 	if (heroData.Hero && heroData.heroHeader) {
@@ -92,7 +101,7 @@ export default function DefaultLayout({
 	simple = false,
 	showHero = true,
 	children,
-}) {
+}: DefaultLayoutProps) {
 	return (
 		<>
 			{showHero && (
@@ -112,3 +121,24 @@ export default function DefaultLayout({
 		</>
 	);
 }
+
+type DefaultLayoutProps = {
+	/** This is the name of the illustration you want to use. */
+	Hero: UndrawIllustrationName;
+	/** The header text for the hero section */
+	heroHeader: String;
+	/** This is the subheader that will be displayed under the heroHeader. */
+	heroSubheader: string;
+	/** If true, the hero will be a simple hero with no background image. */
+	simple?: Boolean;
+	/** This is a boolean that determines whether or not the hero component is shown. */
+	showHero?: Boolean;
+	/** This is the content that will be rendered inside the HeroData component. */
+	children?: React.ReactNode;
+};
+
+type HeroData = {
+	Hero: UndrawIllustrationName;
+	heroHeader?: String;
+	heroSubheader?: string;
+};

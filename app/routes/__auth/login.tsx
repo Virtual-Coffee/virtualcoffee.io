@@ -1,4 +1,10 @@
-import { Form, useActionData, useCatch, Link } from '@remix-run/react';
+import {
+	Form,
+	useActionData,
+	useCatch,
+	Link,
+	useLoaderData,
+} from '@remix-run/react';
 import { json } from '@remix-run/node';
 import type { ActionArgs, LoaderArgs, TypedResponse } from '@remix-run/node';
 import { authenticator } from '~/auth/auth.server';
@@ -7,14 +13,26 @@ import SingleTask from '~/components/layouts/SingleTask';
 import Alert from '~/components/app/Alert';
 import { Button } from '~/components/app/Button';
 import { TextInput } from '~/components/app/Forms';
+import { readFlashCookie } from '~/auth/session.server';
+import { MessageCode, type SessionFlash } from '~/auth/types';
+export { metaFromData as meta } from '~/util/remixHelpers';
 
 function LogInForm({
+	sessionFlash,
 	error,
 	redirectOnSuccess,
 }: {
+	sessionFlash?: SessionFlash | null;
 	error?: string;
 	redirectOnSuccess?: string | null;
 }) {
+	let defaultEmail;
+	if (
+		sessionFlash &&
+		sessionFlash.messageCode === MessageCode.LoginEmailPrefill
+	) {
+		defaultEmail = sessionFlash.data.email;
+	}
 	return (
 		<SingleTask title="Sign in to your account">
 			<Form
@@ -25,12 +43,29 @@ function LogInForm({
 					redirectOnSuccess ? '?redirectOnSuccess=' + redirectOnSuccess : ''
 				}`}
 			>
+				{sessionFlash &&
+					sessionFlash.messageCode === MessageCode.LoginEmailPrefill && (
+						<Alert title="We found your account!" type="success">
+							<p>
+								Please log in with the same credentials you use to log in to{' '}
+								<a
+									className="underline"
+									href="https://members.virtualcoffee.io"
+								>
+									the CMS
+								</a>
+								.
+							</p>
+						</Alert>
+					)}
 				{error && (
 					<Alert title="There was an error signing you in." type="danger">
 						<p>{error}</p>
 						{error === 'Please activate your account before logging in' && (
 							<p>
-								<Link to="/resend-activation">Resend Activation Email</Link>
+								<Link to="/resend-activation" className="underline">
+									Resend Activation Email
+								</Link>
 							</p>
 						)}
 					</Alert>
@@ -45,6 +80,7 @@ function LogInForm({
 					name="email"
 					type="email"
 					autoComplete="email"
+					defaultValue={defaultEmail}
 					required
 				/>
 
@@ -125,22 +161,52 @@ export let loader = async ({ request }: LoaderArgs) => {
 	const url = new URL(request.url);
 	const redirectOnSuccess = url.searchParams.get('redirectOnSuccess');
 
-	return await authenticator.isAuthenticated(request, {
+	// isAuthenticated throws a redirect if already logged in
+	await authenticator.isAuthenticated(request, {
 		successRedirect: redirectOnSuccess || '/membership',
 	});
+
+	const sessionFlashCheck = await readFlashCookie(request);
+
+	const meta = {
+		title: 'Log In',
+		description: ``,
+	};
+
+	if (sessionFlashCheck) {
+		if (sessionFlashCheck.sessionFlash) {
+			return json(
+				{ sessionFlash: sessionFlashCheck.sessionFlash, meta },
+				{
+					headers: {
+						// only necessary with cookieSessionStorage
+						'Set-Cookie': sessionFlashCheck.cookie,
+					},
+				},
+			);
+		} else {
+			return json(
+				{ sessionFlash: null },
+				{
+					headers: {
+						// only necessary with cookieSessionStorage
+						'Set-Cookie': sessionFlashCheck.cookie,
+					},
+				},
+			);
+		}
+	}
+	return json({ sessionFlash: null, meta });
 };
 
 // First we create our UI with the form doing a POST and the inputs with the
 // names we are going to use in the strategy
 export default function Screen() {
-	// const { redirectOnSuccess } = useLoaderData();
-	const redirectOnSuccess = null;
+	const { sessionFlash } = useLoaderData<typeof loader>() as unknown as {
+		sessionFlash: SessionFlash | null;
+	};
+
 	const actionData = useActionData<typeof action>();
 
-	return (
-		<LogInForm
-			error={actionData?.message}
-			redirectOnSuccess={redirectOnSuccess}
-		/>
-	);
+	return <LogInForm error={actionData?.message} sessionFlash={sessionFlash} />;
 }

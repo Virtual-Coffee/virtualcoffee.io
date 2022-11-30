@@ -41,7 +41,9 @@ export default function Screen() {
 				<Alert type="success" title="Password Set!">
 					<p>{actionData.successMessage}</p>
 					<p>
-						<Link to="/login">Log In</Link>
+						<Button as={Link} to="/login">
+							Log In
+						</Button>
 					</p>
 				</Alert>
 			</SingleTask>

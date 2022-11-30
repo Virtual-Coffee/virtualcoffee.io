@@ -18,8 +18,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 	// const calendars = await api.getCalendars();
 
-	const url = new URL(request.url);
-
 	const month = new Date().getMonth() + 1;
 
 	const day = new Date().getDate();
