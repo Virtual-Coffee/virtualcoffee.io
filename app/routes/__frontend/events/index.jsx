@@ -51,22 +51,33 @@ export default function EventsIndex() {
 						</p>
 					</div>
 
-					<h2>Recorded Events</h2>
-					<div className="mb-3 lead">
+					<hr />
+
+					<h3>Recorded Events</h3>
+					<div className="mb-3">
 						<p>
-							If you can't join our events live, we got you covered! Some of our
-							events, such as Lunch & Learns, are recorded and uploaded to our{' '}
-							<a href="https://www.youtube.com/channel/UCc0579aGEy7jTAgRglR4J0g">
+							If you can't join our events live, we got you covered! You can
+							find our{' '}
+							<a href="https://www.youtube.com/playlist?list=PLh9uT23TA65idCyc_orC85RefgY_-fKsG">
+								Lunch & Learns
+							</a>
+							,{' '}
+							<a href="https://www.youtube.com/playlist?list=PLh9uT23TA65jcPcUKv6e7TIu9lrOwiXP0">
+								Live Streams
+							</a>
+							,{' '}
+							<a href="https://www.youtube.com/playlist?list=PLh9uT23TA65gwNgoeeZ21XWlxLOwxs3Ls">
+								Lightning Talks 2022
+							</a>
+							, and lots more, all on our{' '}
+							<a href="https://www.youtube.com/@VirtualCoffeeIO">
 								YouTube channel
 							</a>
 							.
 						</p>
-						<p>
-							Please be patient if you can't find the events you're looking for.
-							Our volunteers are working their best to process and upload them
-							to our YouTube channel 😊. So remember to check it out!
-						</p>
 					</div>
+
+					<hr />
 
 					{eventsSponsors.length > 0 && (
 						<div className="sponsors">
