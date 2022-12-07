@@ -51,6 +51,23 @@ export default function EventsIndex() {
 						</p>
 					</div>
 
+					<h2>Recorded Events</h2>
+					<div className="mb-3 lead">
+						<p>
+							If you can't join our events live, we got you covered! Some of our
+							events, such as Lunch & Learns, are recorded and uploaded to our{' '}
+							<a href="https://www.youtube.com/channel/UCc0579aGEy7jTAgRglR4J0g">
+								YouTube channel
+							</a>
+							.
+						</p>
+						<p>
+							Please be patient if you can't find the events you're looking for.
+							Our volunteers are working their best to process and upload them
+							to our YouTube channel 😊. So remember to check it out!
+						</p>
+					</div>
+
 					{eventsSponsors.length > 0 && (
 						<div className="sponsors">
 							<h3>
