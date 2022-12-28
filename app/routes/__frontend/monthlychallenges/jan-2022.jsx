@@ -46,9 +46,11 @@ export default function Challenge() {
 			</p>
 			<p>
 				If you're inspired by what you learn and want to share more, we
-				encourage you to give a [Lunch &
-				Learn](https://virtualcoffee.io/lunch-and-learn-idea/) in February or
-				get ready for our Lightning Talks in March!
+				encourage you to give a{' '}
+				<a href="https://virtualcoffee.io/lunch-and-learn-idea/">
+					Lunch & Learn
+				</a>{' '}
+				in February or get ready for our Lightning Talks in March!
 			</p>
 
 			<h2>Goals</h2>
