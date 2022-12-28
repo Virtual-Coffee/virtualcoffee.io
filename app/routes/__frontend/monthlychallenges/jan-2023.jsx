@@ -63,7 +63,7 @@ export default function Challenge() {
 			</p>
 
 			<h2>How It Works</h2>
-			<h3>Set your goals</h3>
+			<h3>Create your plan and set your goal</h3>
 			<p>In the first week, of January you should draft your learning plan:</p>
 			<ul>
 				<li>Define -&gt; What's the topic you'll be learning about?</li>
@@ -82,8 +82,12 @@ export default function Challenge() {
 					.
 				</li>
 				<li>
-					Set goals -&gt; 1h / week, 10h / week? Write an article, a lightning
-					talk, a conference talk? The sky is the limit!
+					Set weekly goal and/or goal for the month -&gt; Will setting weekly
+					goals help you to achieve your ultimate goal for the month? For
+					example, maybe you want to learn for 1h / week, 10h / week or complete
+					1 lesson/day. Maybe your goal involves creation. You may want to write
+					an article, a lightning talk, or a conference talk. The sky is the
+					limit!
 				</li>
 			</ul>
 			<h3>Make Progress</h3>
