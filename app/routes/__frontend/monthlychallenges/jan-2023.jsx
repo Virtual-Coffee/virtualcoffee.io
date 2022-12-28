@@ -74,7 +74,7 @@ export default function Challenge() {
 					channel in slack,{' '}
 					<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/493">
 						these tips
-					</a>
+					</a>{' '}
 					for starting your own cohort, or consider starting a{' '}
 					<a href="https://virtualcoffee.io/resources/virtual-coffee/get-involved/coffee-table-groups">
 						Coffee Table Group
