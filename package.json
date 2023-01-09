@@ -70,7 +70,7 @@
 		"hastscript": "^7.0.2",
 		"husky": "^8.0.2",
 		"lint-staged": "^13.0.4",
-		"luxon": "^3.1.1",
+		"luxon": "^3.2.1",
 		"markdown-it": "^13.0.1",
 		"mdast-util-toc": "^6.1.0",
 		"node-fetch": "^3.3.0",
