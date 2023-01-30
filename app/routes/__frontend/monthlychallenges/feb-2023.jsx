@@ -125,7 +125,7 @@ export default function Challenge() {
 				they work together or get some extra feedback on what you've worked on.
 			</p>
 			<p>
-				At the end of the week, we'll post a form in our `#monthly-challenge`
+				At the end of the month, we'll post a form in our #monthly-challenge
 				slack channel to submit your resume, cover letter, and elevator pitch if
 				you choose-this isn't required. Links to resumes and cover letters will
 				appear on this page, and elevator pitches will go onto our YouTube
