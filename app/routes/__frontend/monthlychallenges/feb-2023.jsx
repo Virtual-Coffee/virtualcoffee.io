@@ -34,6 +34,7 @@ export default function Challenge() {
 				<small>Monthly Challenge for February, 2023:</small> Get job ready!
 				Resumes, Cover Letters, and Elevator Pitch
 			</h1>
+			<h2>Sponsored by: Joe Masilotti</h2>
 			<p className="lead">
 				There's never a bad time to update your job application materials, and
 				this month, we're here to support you!
