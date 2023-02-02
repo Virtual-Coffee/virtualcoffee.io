@@ -1,5 +1,6 @@
 import { json } from '@remix-run/node';
 import { createMetaData } from '~/util/createMetaData.server';
+import logo from './logo.png';
 
 export const handle = {
 	listTitle:
@@ -31,10 +32,11 @@ export default function Challenge() {
 	return (
 		<>
 			<h1>
-				<small>Monthly Challenge for February, 2023:</small> Get job ready!
-				Resumes, Cover Letters, and Elevator Pitch
+				<small className="text-muted">
+					Monthly Challenge for February, 2023:
+				</small>{' '}
+				Get job ready! Resumes, Cover Letters, and Elevator Pitch
 			</h1>
-			<h2>Sponsored by: Joe Masilotti</h2>
 			<p className="lead">
 				There's never a bad time to update your job application materials, and
 				this month, we're here to support you!
@@ -44,6 +46,24 @@ export default function Challenge() {
 				job packet materials and that elevator pitch that might get you in the
 				door. Each week, we'll work on a new piece, starting with the resume.
 			</p>
+			<hr />
+			<p className="text-center">
+				<em>This monthly challenge is sponsored by:</em>
+			</p>
+			<div className="row">
+				<div className="col-sm">
+					<h2>
+						Joe Masilotti, founder of{' '}
+						<a href="https://railsdevs.com/">RailsDevs</a>, the <em>reverse</em>{' '}
+						job board for Ruby on Rails developers
+					</h2>
+				</div>
+				<div className="col-sm">
+					<a href="https://railsdevs.com/">
+						<img src={logo} alt="RailsDevs" />
+					</a>
+				</div>
+			</div>
 			<hr />
 			<h2>Theme</h2>
 			<p>Get job ready! Resumes, Cover Letters, and Elevator Pitch</p>
