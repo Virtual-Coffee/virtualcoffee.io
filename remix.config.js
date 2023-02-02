@@ -102,7 +102,7 @@ module.exports = {
 		process.env.NETLIFY || process.env.NETLIFY_LOCAL
 			? './server.js'
 			: undefined,
-	ignoredRouteFiles: ['**/.*', '**/*.json'],
+	ignoredRouteFiles: ['**/.*', '**/*.json', '**/*.png', '**/*.jpg', '**/*.svg'],
 	serverDependenciesToBundle: [
 		'@sindresorhus/slugify',
 		'@sindresorhus/transliterate',
