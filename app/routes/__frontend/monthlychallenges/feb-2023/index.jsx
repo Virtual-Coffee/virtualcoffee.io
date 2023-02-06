@@ -169,7 +169,7 @@ export default function Challenge() {
 					<a href="https://www.linkedin.com/posts/taylordesseyn_alishah-novin-and-i-are-back-ugcPost-7024141325465714690-BbMS">
 						LinkedIn Livestream
 					</a>{' '}
-					- 1pm ET, Friday February 3, 2023
+					- 1pm ET, Friday February 24, 2023
 				</li>
 			</ul>
 			<h3>Job application materials and resources</h3>
