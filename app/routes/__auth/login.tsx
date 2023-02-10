@@ -96,6 +96,17 @@ function LogInForm({
 				<div className="flex items-center justify-end">
 					<div className="text-sm">
 						<Link
+							to="/register"
+							className="font-medium text-sky-600 hover:text-sky-500"
+						>
+							Register
+						</Link>
+					</div>
+				</div>
+
+				<div className="flex items-center justify-end">
+					<div className="text-sm">
+						<Link
 							to="/forgot-password"
 							className="font-medium text-sky-600 hover:text-sky-500"
 						>
