@@ -5,7 +5,11 @@ function loadMemberFiles(dir) {
 
 	fs.readdirSync(`./members/${dir}`, { withFileTypes: true }).forEach(
 		(file) => {
-			if (file.isFile() && file.name.endsWith('.ts')) {
+			if (
+				file.isFile() &&
+				file.name.endsWith('.ts') &&
+				file.name !== '_EXAMPLE.ts'
+			) {
 				filenames.push(file.name.replace('.ts', ''));
 			}
 		},
