@@ -1,5 +1,9 @@
 import type { NewsletterHandle } from '~/types';
 
+import { handle as issue202302 } from '~/routes/__frontend/newsletter/issues/2023-02';
+import { handle as issue202301 } from '~/routes/__frontend/newsletter/issues/2023-01';
+import { handle as issue202212 } from '~/routes/__frontend/newsletter/issues/2022-12';
+import { handle as issue202211 } from '~/routes/__frontend/newsletter/issues/2022-11';
 import { handle as issue202210 } from '~/routes/__frontend/newsletter/issues/2022-10';
 import { handle as issue202209 } from '~/routes/__frontend/newsletter/issues/2022-09';
 import { handle as issue202208 } from '~/routes/__frontend/newsletter/issues/2022-08';
@@ -33,6 +37,11 @@ type NewsletterIssue = {
 };
 
 const newsletters: NewsletterIssue[] = [
+	{ handleData: issue202302, slug: '2023-02' },
+	{ handleData: issue202301, slug: '2023-01' },
+
+	{ handleData: issue202212, slug: '2022-12' },
+	{ handleData: issue202211, slug: '2022-11' },
 	{ handleData: issue202210, slug: '2022-10' },
 	{ handleData: issue202209, slug: '2022-09' },
 	{ handleData: issue202208, slug: '2022-08' },

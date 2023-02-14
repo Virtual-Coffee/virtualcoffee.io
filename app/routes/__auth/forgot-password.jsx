@@ -8,6 +8,7 @@ import SingleTask from '~/components/layouts/SingleTask';
 import Alert from '~/components/app/Alert';
 import { Button } from '~/components/app/Button';
 import { TextInput } from '~/components/app/Forms';
+export { metaFromData as meta } from '~/util/remixHelpers';
 
 function ForgotPassword({ errorMessage }) {
 	return (
@@ -103,7 +104,14 @@ export let action = async ({ request }) => {
 // dashboard if it is or return null if it's not
 export let loader = async ({ request }) => {
 	// If the user is already authenticated redirect to /dashboard directly
-	return await authenticator.isAuthenticated(request, {
+	await authenticator.isAuthenticated(request, {
 		successRedirect: '/membership',
+	});
+
+	return json({
+		meta: {
+			title: 'Reset password',
+			description: ``,
+		},
 	});
 };

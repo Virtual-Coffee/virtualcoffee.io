@@ -45,6 +45,8 @@ export default function MemberCards({ data }: { data: MemberList }) {
 									<img
 										src={member.avatarUrl}
 										alt=""
+										loading="lazy"
+										decoding="async"
 										style={
 											member.flare?.profileMask
 												? { clipPath: member.flare.profileMask }

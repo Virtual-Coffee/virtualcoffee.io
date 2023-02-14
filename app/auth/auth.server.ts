@@ -80,17 +80,21 @@ export async function getUser(request: Request) {
 export async function authenticate(
 	request: Request,
 	{ headers = new Headers(), redirectOnFail = true } = {},
-) {
+): Promise<User | null> {
+	console.log('AUTHENTICATING');
 	let session = await sessionStorage.getSession(request.headers.get('Cookie'));
+	console.log('SESSION', !!session);
+	const url = new URL(request.url);
+	const search = url.search;
 	try {
+		console.log('GET SESSION', !!session.get(authenticator.sessionKey));
+
 		// get the auth data from the session
 		let user = await getUser(request);
+		console.log('USER', !!user);
 
 		// if not defiend or expired, redirect to login
 		if (!user) {
-			const url = new URL(request.url);
-			const search = url.search;
-
 			if (redirectOnFail) {
 				if (url.pathname !== '/login') {
 					throw redirect(
@@ -105,24 +109,73 @@ export async function authenticate(
 
 		// if expired throw an error
 		if (new Date(user.jwtExpiresAt) < new Date()) {
+			console.log('JWT EXPIRED');
+			console.log(new Date(user.jwtExpiresAt));
+			console.log(new Date());
 			throw new AuthorizationError('Expired');
 		}
 
 		// return the user data
 		return user;
 	} catch (error) {
+		console.log('WE HAVE AN ERROR');
+		console.log(error);
 		// check if the eror is an AuthorizationError
 		if (error instanceof AuthorizationError) {
 			const api = new CmsAuth();
 
 			let response;
 
-			// refresh the token somehow using the strategy and the refresh token
-			response = await api.refreshToken({
-				refreshToken: session.get(authenticator.sessionKey).refreshToken,
-			});
+			console.log('REFRESHING TOKEN');
+
+			if (
+				new Date(session.get(authenticator.sessionKey).refreshTokenExpiresAt) <
+				new Date()
+			) {
+				console.log('REFRESH TOKEN EXPIRED');
+				console.log(
+					new Date(session.get(authenticator.sessionKey).refreshTokenExpiresAt),
+				);
+				console.log(new Date());
+				throw new Error('Refresh token expired');
+			}
+			try {
+				// refresh the token somehow using the strategy and the refresh token
+				response = await api.refreshToken({
+					refreshToken: session.get(authenticator.sessionKey).refreshToken,
+				});
+			} catch (error) {
+				console.log('CAUGHT ERROR');
+				console.warn(error);
+
+				session.unset(authenticator.sessionKey);
+				// commit the session and append the Set-Cookie header
+				headers.append(
+					'Set-Cookie',
+					await sessionStorage.commitSession(session),
+				);
+
+				if (redirectOnFail) {
+					if (url.pathname !== '/login') {
+						throw redirect(
+							`/login?redirectOnSuccess=${encodeURIComponent(
+								url.pathname + (search.length > 1 ? search : ''),
+							)}`,
+							{ headers },
+						);
+					}
+				}
+
+				return null;
+			}
+
+			console.log('REFRESH TOKEN RESPONSE');
+			console.log(response);
 
 			let user = response.refreshToken;
+
+			console.log('REFRESH TOKEN USER');
+			console.log(user);
 
 			// update the user data on the sessino
 			session.set(authenticator.sessionKey, user);

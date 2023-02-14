@@ -5,7 +5,11 @@ import Root from '~/components/layouts/Root';
 export { CatchBoundary } from '~/components/content/NotFoundCatch';
 
 export function links() {
-	return [{ rel: 'stylesheet', href: styles }];
+	return [
+		{ rel: 'preconnect', href: 'https://rsms.me/' },
+		{ rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' },
+		{ rel: 'stylesheet', href: styles },
+	];
 }
 
 export default function App() {

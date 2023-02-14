@@ -6,28 +6,45 @@ import {
 	Bars3Icon,
 	XMarkIcon,
 	UserCircleIcon,
+	CodeBracketSquareIcon,
 } from '@heroicons/react/24/outline';
-import { Link } from '@remix-run/react';
+import { Link, NavLink } from '@remix-run/react';
 import classNames from 'classnames';
+import { UserSchema, type User } from '~/api/types';
 
 const navigation = [
-	{ name: 'VC Home', to: '/' },
-	{ name: 'Dashboard', to: '/membership', icon: HomeIcon },
+	{ name: 'VC Home', to: '/', end: true },
+	{ name: 'Dashboard', to: '/membership', icon: HomeIcon, end: true },
 	{
 		name: 'Events',
 		to: '/membership/events',
 		icon: CalendarIcon,
 		current: false,
 	},
+	{
+		name: 'Monthly Challenges',
+		to: '/membership/monthly-challenges',
+		icon: CodeBracketSquareIcon,
+		current: false,
+		hideFromPending: true,
+	},
 ];
 
 const userNavigation = [
-	{ name: 'Your Profile', to: `/membership/profile` },
+	// { name: 'Your Profile', to: `/membership/profile` },
 	// { name: 'Settings', to: '#' },
 	{ name: 'Sign out', to: `/logout` },
 ];
 
-export default function AppRoot({ children, user, title }) {
+export default function AppRoot({
+	children,
+	user,
+	title,
+}: {
+	children: React.ReactNode;
+	user?: User;
+	title?: string;
+}) {
 	return (
 		<div className="min-h-full">
 			<Disclosure as="nav" className="bg-gray-800 relative z-10">
@@ -45,21 +62,31 @@ export default function AppRoot({ children, user, title }) {
 									</div>
 									<div className="hidden md:block">
 										<div className="ml-10 flex items-baseline space-x-4">
-											{navigation.map((item) => (
-												<Link
-													key={item.name}
-													to={item.to}
-													className={classNames(
-														item.current
-															? 'bg-gray-900 text-white'
-															: 'text-white hover:bg-gray-700 hover:bg-opacity-75',
-														'px-3 py-2 rounded-md text-sm font-medium',
-													)}
-													aria-current={item.current ? 'page' : undefined}
-												>
-													{item.name}
-												</Link>
-											))}
+											{navigation.map((item) => {
+												if (
+													item.hideFromPending &&
+													user?.schema === UserSchema.PendingMembersSchema
+												) {
+													return null;
+												}
+												return (
+													<NavLink
+														key={item.name}
+														to={item.to}
+														end={!!item.end}
+														className={({ isActive }) =>
+															classNames(
+																isActive
+																	? 'bg-gray-900 text-white'
+																	: 'text-white hover:bg-gray-700 hover:bg-opacity-75',
+																'px-3 py-2 rounded-md text-sm font-medium',
+															)
+														}
+													>
+														{item.name}
+													</NavLink>
+												);
+											})}
 										</div>
 									</div>
 								</div>
@@ -88,10 +115,10 @@ export default function AppRoot({ children, user, title }) {
 												>
 													<Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
 														<div className="px-4 py-2 text-sm text-gray-700">
-															{user.userYourName}
+															{user.user.userYourName}
 														</div>
 														<div className="px-4 py-2 text-sm text-gray-700">
-															{user.email}
+															{user.user.email}
 														</div>
 														{userNavigation.map((item) => (
 															<Menu.Item key={item.name}>
@@ -133,15 +160,17 @@ export default function AppRoot({ children, user, title }) {
 									{navigation.map((item) => (
 										<Disclosure.Button
 											key={item.name}
-											as={Link}
+											as={NavLink}
+											end={!!item.end}
 											to={item.to}
-											className={classNames(
-												item.current
-													? 'bg-gray-900 text-white'
-													: 'text-white hover:bg-gray-700 hover:bg-opacity-75',
-												'block px-3 py-2 rounded-md text-base font-medium',
-											)}
-											aria-current={item.current ? 'page' : undefined}
+											className={({ isActive }: { isActive: boolean }) =>
+												classNames(
+													isActive
+														? 'bg-gray-900 text-white'
+														: 'text-white hover:bg-gray-700 hover:bg-opacity-75',
+													'block px-3 py-2 rounded-md text-base font-medium',
+												)
+											}
 										>
 											{item.name}
 										</Disclosure.Button>
@@ -157,10 +186,10 @@ export default function AppRoot({ children, user, title }) {
 										</div>
 										<div className="ml-3">
 											<div className="text-base font-medium text-white">
-												{user.userYourName}
+												{user.user.userYourName}
 											</div>
 											<div className="text-sm font-medium text-gray-300">
-												{user.email}
+												{user.user.email}
 											</div>
 										</div>
 									</div>

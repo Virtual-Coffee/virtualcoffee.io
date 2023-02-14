@@ -164,7 +164,7 @@ export class CmsAuth {
 		email: string;
 		password: string;
 		userYourName: string;
-		userPronouns?: string;
+		userPronouns?: string | null;
 		userGithubusername?: string;
 		userLinks?: string;
 		userHowDidYouHearAboutUs?: string;
@@ -223,6 +223,83 @@ export class CmsAuth {
 				userWhereAreYouInYourCodingJourney,
 				userCodeInterests,
 				userHopingVirtualCoffee,
+			});
+			return response;
+		} catch (error) {
+			// @ts-ignore
+			if (error?.response?.errors && error.response.errors.length) {
+				throw new CmsError(
+					// @ts-ignore
+					`Unable to register user: ${error.response.errors
+						// @ts-ignore
+						.map((e) => e.message)
+						.join(',')}`,
+					{
+						// @ts-ignore
+						errors: error.response.errors,
+					},
+				);
+			}
+			throw new CmsError('Unable to register user.');
+		}
+	};
+
+	registerExistingUser = async ({
+		email,
+		password,
+		userYourName,
+		userPronouns,
+		userGithubusername,
+		userSlackId,
+	}: {
+		email: string;
+		password: string;
+		userYourName: string;
+		userPronouns?: string | null;
+		userGithubusername?: string;
+		userSlackId?: string;
+	}) => {
+		const query = gql`
+			mutation Register(
+				$email: String!
+				$password: String!
+				$userYourName: String!
+				$userPronouns: String
+				$userGithubusername: String
+				$userSlackId: String
+			) {
+				registerFullMembers(
+					email: $email
+					password: $password
+					userYourName: $userYourName
+					userPronouns: $userPronouns
+					userGithubusername: $userGithubusername
+					userSlackId: $userSlackId
+				) {
+					jwt
+					jwtExpiresAt
+					refreshToken
+					refreshTokenExpiresAt
+					user {
+						id
+						email
+						status
+						enabled
+						... on User {
+							userYourName
+						}
+					}
+				}
+			}
+		`;
+		try {
+			const response = await this.client.request(query, {
+				email,
+				password,
+				userYourName,
+				userPronouns,
+				userGithubusername,
+				userSlackId,
 			});
 			return response;
 		} catch (error) {
