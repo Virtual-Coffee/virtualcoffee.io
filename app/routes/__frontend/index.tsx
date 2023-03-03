@@ -254,11 +254,11 @@ export default function Index() {
 												<img
 													src={supporter.avatarUrl_80}
 													alt=""
-													width="240"
-													height="240"
+													width={supporter.avatar_width || 240}
+													height={supporter.avatar_height || 240}
 													loading="lazy"
 													decoding="async"
-													sizes="(min-width: 915px) 240px, 24vw"
+													sizes="(min-width: 768px) 400, calc(100vw - 60px)"
 													srcSet={`
               ${supporter.avatarUrl_80}   80w,
               ${supporter.avatarUrl_160} 160w,
