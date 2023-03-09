@@ -79,7 +79,7 @@ export default function VolunteerForm() {
 							required
 						/>
 						<small id="nameHelp" className="form-text text-muted">
-							Required
+							Required.
 						</small>
 					</div>
 					<div className="form-group">
@@ -94,6 +94,20 @@ export default function VolunteerForm() {
 						/>
 						<small id="emailHelp" className="form-text text-muted">
 							Required. We'll never share your email with anyone else.
+						</small>
+					</div>
+					<div className="form-group">
+						<label htmlFor="formEmail">GitHub User Name</label>
+						<input
+							type="text"
+							className="form-control"
+							id="formEmail"
+							name="githubUsername"
+							aria-describedby="githubHelp"
+							required
+						/>
+						<small id="githubHelp" className="form-text text-muted">
+							Required.
 						</small>
 					</div>
 				</fieldset>
