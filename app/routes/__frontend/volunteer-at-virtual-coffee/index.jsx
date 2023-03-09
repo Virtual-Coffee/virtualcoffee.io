@@ -79,7 +79,7 @@ export default function VolunteerForm() {
 							required
 						/>
 						<small id="nameHelp" className="form-text text-muted">
-							Required
+							Required.
 						</small>
 					</div>
 					<div className="form-group">
