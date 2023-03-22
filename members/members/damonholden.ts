@@ -5,7 +5,7 @@ export const damonholden: MemberObject = {
 	github: 'damonholden',
 	name: 'Damon Holden',
 	mainUrl: 'https://damonholden.com/',
-	bio: `Developer @ BT. Learning. Building. Stand to be wrong`,
+	bio: `Developer @ BT. Learning. Building. Stand to be wrong.`,
 	flare: {
 		profileMask: profileMasks.circle,
 	},
