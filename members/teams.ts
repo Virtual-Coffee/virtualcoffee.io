@@ -1,5 +1,5 @@
 const teams = {
-	'Community Maintainer': ['BekahHW', 'tkshill'],
+	'Community Maintainer': ['BekahHW', 'tkshill', 'juliaseid'],
 
 	'Org Maintainer': ['danieltott', 'BekahHW'],
 	'Lunch & Learn Coordinator': ['shelleymcq'],
