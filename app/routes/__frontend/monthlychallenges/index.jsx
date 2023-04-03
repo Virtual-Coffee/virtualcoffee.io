@@ -182,13 +182,13 @@ export default function Index() {
 						</dt>
 						<dd>
 							As we work hard to make sure this community continues to be the
-							special and close-knit group that it has been during that time,
-							this challenge encourages our members to celebrate one of the
-							things that continually makes this community so special: Kindness.
-							Some of the ways we see this include: practicing gratitude,
-							reaching out to support other members, mentoring, helping, giving
-							honest and constructive feedback, and continuing to make Virtual
-							Coffee a safe and supportive space.
+							special and close-knit group, this challenge encourages our
+							members to celebrate one of the things that continually makes this
+							community so special: Kindness. Some of the ways we see this
+							include: practicing gratitude, reaching out to support other
+							members, mentoring, helping, giving honest and constructive
+							feedback, and continuing to make Virtual Coffee a safe and
+							supportive space.
 						</dd>
 					</dl>
 					<h3>Creating Audio/Visual content</h3>
