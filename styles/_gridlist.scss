@@ -11,6 +11,10 @@
 		margin-bottom: 2rem;
 	}
 
+	h3 {
+		font-size: 1rem;
+	}
+
 	@include media-breakpoint-up(md) {
 		gap: 2em 1em;
 		grid-template-columns: 30% 1fr;

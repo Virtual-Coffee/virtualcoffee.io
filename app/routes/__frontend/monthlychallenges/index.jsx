@@ -72,22 +72,16 @@ export default function Index() {
 								start a small-group that focuses on community learning, focus on
 								a new topic every week, or do a little bit of everything.
 							</p>
-							<h3>Resources from past challenges:</h3>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/jan-2023">
-										January, 2023: Month of Learning!
-									</a>
+									<a href="/monthlychallenges/jan-2023">January, 2023</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/jan-2022">
-										January, 2022: Month of Learning!
-									</a>
+									<a href="/monthlychallenges/jan-2022">January, 2022</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/jan-2021">
-										January, 2021: Month of Learning!
-									</a>
+									<a href="/monthlychallenges/jan-2021">January, 2021</a>
 								</li>
 							</ul>
 						</dd>
@@ -108,24 +102,16 @@ export default function Index() {
 								time to make sure they work together or to get some extra
 								feedback on what you've worked on.{' '}
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/feb-2023">
-										February, 2023: Get job ready! Resumes, Cover Letters, and
-										Elevator Pitch
-									</a>
+									<a href="/monthlychallenges/feb-2023">February, 2023</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/apr-2022">
-										April, 2022: Get job ready! Resumes, Portfolios, Cover
-										Letters, and Elevator Pitch
-									</a>
+									<a href="/monthlychallenges/apr-2022">April, 2022</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/mar-2021">
-										March, 2021: Get job ready! Resumes, Portfolios, Cover
-										Letters, and Elevator Pitch
-									</a>
+									<a href="/monthlychallenges/mar-2021">March, 2021</a>
 								</li>
 							</ul>
 						</dd>
@@ -146,16 +132,13 @@ export default function Index() {
 								working on things that aren't necessarily code specific, or
 								using code to improve other hobbies and outlets.
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/dec-2022">
-										December, 2022: Creative Community Challenge
-									</a>
+									<a href="/monthlychallenges/dec-2022">December, 2022</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/dec-2021">
-										December, 2021: Creative Community Challenge
-									</a>
+									<a href="/monthlychallenges/dec-2021">December, 2021</a>
 								</li>
 							</ul>
 						</dd>
@@ -171,21 +154,16 @@ export default function Index() {
 								working together towards the goal while posting on our own
 								blogs.
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/nov-2022">
-										November, 2022: 100k words!
-									</a>
+									<a href="/monthlychallenges/nov-2022">November, 2022</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/nov-2021">
-										November, 2021: 50k words!
-									</a>
+									<a href="/monthlychallenges/nov-2021">November, 2021</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/nov-2020">
-										November, 2020: 50k words!
-									</a>
+									<a href="/monthlychallenges/nov-2020">November, 2020</a>
 								</li>
 							</ul>
 						</dd>
@@ -201,16 +179,13 @@ export default function Index() {
 								solve issues, and mentors will help contributors and maintainers
 								be successful.
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/oct-2022">
-										October, 2022: Hacktoberfest!
-									</a>
+									<a href="/monthlychallenges/oct-2022">October, 2022</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/oct-2021">
-										October, 2021: Hacktoberfest!
-									</a>
+									<a href="/monthlychallenges/oct-2021">October, 2021</a>
 								</li>
 							</ul>
 						</dd>
@@ -227,16 +202,13 @@ export default function Index() {
 								guide, and writing good issues as needed to fulfill the
 								criteria.
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/sept-2022">
-										September, 2022: Preptember!
-									</a>
+									<a href="/monthlychallenges/sept-2022">September, 2022</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/sept-2021">
-										September, 2021: Preptember!
-									</a>
+									<a href="/monthlychallenges/sept-2021">September, 2021</a>
 								</li>
 							</ul>
 						</dd>
@@ -256,16 +228,13 @@ export default function Index() {
 								For example, could be something like: review the README in 5 of
 								your projects (one every week) or run 2k twice a week.
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/aug-2022">
-										August, 2022: Healthy Habits for Happy Devs
-									</a>
+									<a href="/monthlychallenges/aug-2022">August, 2022</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/aug-2021">
-										August, 2021: Healthy Habits for Healthy Devs
-									</a>
+									<a href="/monthlychallenges/aug-2021">August, 2021</a>
 								</li>
 							</ul>
 						</dd>
@@ -280,22 +249,17 @@ export default function Index() {
 								about the things we're working on, a plan for continuing
 								progress, and creating a demo for the Virtal Coffee community.
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/july-2022">
-										July, 2022: Demo in public!
-									</a>
+									<a href="/monthlychallenges/july-2022">July, 2022</a>
 								</li>
 
 								<li>
-									<a href="/monthlychallenges/july-2021">
-										July, 2021: Demoing in Public
-									</a>
+									<a href="/monthlychallenges/july-2021">July, 2021</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/june-2021">
-										June, 2021: Build in Public
-									</a>
+									<a href="/monthlychallenges/june-2021">June, 2021</a>
 								</li>
 							</ul>
 						</dd>
@@ -315,16 +279,13 @@ export default function Index() {
 								constructive feedback, and continuing to make Virtual Coffee a
 								safe and supportive space.
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/may-2022">
-										May, 2022: Community Kindness!
-									</a>
+									<a href="/monthlychallenges/may-2022">May, 2022</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/apr-2021">
-										April, 2021: Community Kindness!
-									</a>
+									<a href="/monthlychallenges/apr-2021">April, 2021</a>
 								</li>
 							</ul>
 						</dd>
@@ -346,17 +307,13 @@ export default function Index() {
 								through conversations sparked by sharing, and demonstrating your
 								ability to talk through a concept.
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/mar-2022">
-										March, 2022: Creating Audio/Visual content
-									</a>
+									<a href="/monthlychallenges/mar-2022">March, 2022</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/feb-2021">
-										February, 2021: Show your work! Creating Audio Visual
-										content
-									</a>
+									<a href="/monthlychallenges/feb-2021">February, 2021</a>
 								</li>
 							</ul>
 						</dd>
@@ -374,16 +331,13 @@ export default function Index() {
 								pairing are on an open-source issue, a LeetCode problem, or a
 								project they need help on.
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/feb-2022">
-										February, 2022: Pairing!
-									</a>
+									<a href="/monthlychallenges/feb-2022">February, 2022</a>
 								</li>
 								<li>
-									<a href="/monthlychallenges/dec-2020">
-										December, 2020: Pairing!
-									</a>
+									<a href="/monthlychallenges/dec-2020">December, 2020</a>
 								</li>
 							</ul>
 						</dd>
@@ -401,17 +355,14 @@ export default function Index() {
 								honesty, and allow this kind of feedback to be a regular part of
 								our process.
 							</p>
+							<h3>Resources and results from past challenges:</h3>
 							<ul>
 								<li>
-									<a href="/monthlychallenges/june-2022">
-										June, 2022: Giving meaningful and empathetic feedback
-									</a>
+									<a href="/monthlychallenges/june-2022">June, 2022</a>
 								</li>
 
 								<li>
-									<a href="/monthlychallenges/may-2021">
-										May, 2021: Giving meaningful and empathetic feedback
-									</a>
+									<a href="/monthlychallenges/may-2021">May, 2021</a>
 								</li>
 							</ul>
 						</dd>
