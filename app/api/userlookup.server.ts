@@ -1,8 +1,8 @@
 import Airtable from 'airtable';
 
-var base = new Airtable({ apiKey: process.env.POWERFUL_AIRTABLE_KEY }).base(
-	'appGHm8ztVWug6UxH',
-);
+var base = new Airtable({
+	apiKey: process.env.MEMBERSHIP_AIRTABLE_API_KEY,
+}).base('appGHm8ztVWug6UxH');
 
 type Profile = {
 	Name?: string;
