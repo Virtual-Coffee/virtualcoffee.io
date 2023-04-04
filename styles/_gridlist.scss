@@ -1,0 +1,42 @@
+.gridlist {
+	display: grid;
+	list-style: none;
+	padding: 0;
+
+	dt {
+		font-size: 1.2rem;
+		margin-bottom: 0.5rem;
+	}
+	dd {
+		margin-bottom: 2rem;
+	}
+
+	@include media-breakpoint-up(md) {
+		gap: 2em 1em;
+		grid-template-columns: 30% 1fr;
+
+		dd {
+			margin-bottom: 0;
+		}
+	}
+
+	// > li {
+	// 	padding: 1em;
+	// 	background: #fff;
+	// 	border-radius: 8px;
+	// 	box-shadow: inset 0px 0 3px rgba(0, 0, 0, 0.3);
+	// }
+
+	p {
+		margin-bottom: 0.5rem;
+	}
+}
+
+.gridlist-title {
+	font-size: 1.25rem;
+	font-weight: 600;
+}
+
+.gridlist-subtitle {
+	font-style: italic;
+}
