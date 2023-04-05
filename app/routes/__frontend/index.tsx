@@ -12,19 +12,16 @@ import PostList, {
 import { dateForDisplay } from '~/util/date';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
 import getNewsletters from '~/data/newsletters';
-import getChallenges from '~/data/monthlyChallenges/getChallenges';
 
 export const loader = async (args: LoaderArgs) => {
-	const [sponsors, events, podcastEpisodes, newsletters, challenges] =
-		await Promise.all([
-			getSponsors(),
-			getEvents({
-				limit: 5,
-			}),
-			getEpisodes(),
-			getNewsletters({ limit: 5 }),
-			getChallenges({ limit: 5 }),
-		]);
+	const [sponsors, events, podcastEpisodes, newsletters] = await Promise.all([
+		getSponsors(),
+		getEvents({
+			limit: 5,
+		}),
+		getEpisodes(),
+		getNewsletters({ limit: 5 }),
+	]);
 
 	const resources = loadMdxDirectory({
 		baseDirectory: '__frontend/resources',
@@ -37,7 +34,6 @@ export const loader = async (args: LoaderArgs) => {
 		podcastEpisodes,
 		resources,
 		newsletters,
-		challenges,
 	});
 };
 
@@ -63,6 +59,11 @@ export const homePageLinks = [
 		description: `Meet our amazing members!`,
 	},
 	{
+		to: '/monthlychallenges',
+		title: 'Monthly Challenges',
+		description: `Every month, we create a challenge for our Virtual Coffee members to complete together`,
+	},
+	{
 		href: 'https://store.virtualcoffee.io',
 		title: 'Merch Store',
 		description: `Support Virtual Coffee and show your love ❤️`,
@@ -85,14 +86,8 @@ export const homePageLinks = [
 ];
 
 export default function Index() {
-	const {
-		sponsors,
-		events,
-		podcastEpisodes,
-		resources,
-		newsletters,
-		challenges,
-	} = useLoaderData<typeof loader>();
+	const { sponsors, events, podcastEpisodes, resources, newsletters } =
+		useLoaderData<typeof loader>();
 
 	return (
 		<>
@@ -132,17 +127,19 @@ export default function Index() {
 			<main id="maincontent">
 				<div className="container-lg py-5">
 					<h2 className="text-center mb-5">What we're up to</h2>
-					<div className="homepageblocks">
+					<div className="homepageblocks homepageblocks-wide">
 						{/* @ts-ignore */}
 						<HomePageBlock
 							Hero="UndrawCelebration"
 							id="about"
 							title="All Things Virtual Coffee"
 							subtitle="Links and Goodies!"
+							wide
 						>
 							<PostList items={homePageLinks} />
 						</HomePageBlock>
-
+					</div>
+					<div className="homepageblocks">
 						<HomePageBlock
 							Hero="UndrawConferenceCall"
 							id="about"
@@ -167,8 +164,6 @@ export default function Index() {
 								})}
 							/>
 						</HomePageBlock>
-					</div>
-					<div className="homepageblocks">
 						<HomePageBlock
 							Hero="UndrawFolder"
 							id="resources"
@@ -179,6 +174,8 @@ export default function Index() {
 						>
 							<PostList items={formatFileListItemsForPostList(resources)} />
 						</HomePageBlock>
+					</div>
+					<div className="homepageblocks">
 						<HomePageBlock
 							Hero="UndrawWalkInTheCity"
 							id="about"
@@ -205,8 +202,6 @@ export default function Index() {
 								)}
 							/>
 						</HomePageBlock>
-					</div>
-					<div className="homepageblocks">
 						<HomePageBlock
 							Hero="UndrawArrived"
 							id="newsletters"
@@ -216,16 +211,6 @@ export default function Index() {
 							footer="See more Newsletter Issues"
 						>
 							<PostList items={newsletters} />
-						</HomePageBlock>
-						<HomePageBlock
-							Hero="UndrawGoodTeam"
-							id="challenges"
-							title="Monthly Challenges"
-							subtitle="Every month, we create a challenge for our Virtual Coffee members to complete together"
-							linkTo="/monthlychallenges"
-							footer="See more Challenges"
-						>
-							<PostList items={challenges} />
 						</HomePageBlock>
 					</div>
 				</div>
