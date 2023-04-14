@@ -215,24 +215,6 @@ const newsletters = [
 
 ### Monthly Challenges
 
-The monthly challenges (for now) are simply `jsx` files, and can be found in `app/routes/__frontend/monthlychallenges`.
+Every month, our monthly challenge page will need to move the current challenge to the main portion of the list, and add the new challenge to the current challenge section.
 
-When you add a new challenge, **make sure to add it to the index**. Here's how:
-
-- Open `app/data/monthlyChallenges/getChallenges.js`
-- `import` the new challenge
-- Add the new challenge to the `challenges` array.
-
-So, if you have created `app/routes/__frontend/monthlychallenges/apr-2022.jsx`:
-
-```diff
-+ import { handle as apr2022 } from '~/routes/__frontend/monthlychallenges/apr-2022';
-import { handle as mar2022 } from '~/routes/__frontend/monthlychallenges/mar-2022';
-import { handle as feb2022 } from '~/routes/__frontend/monthlychallenges/feb-2022';
-
-const challenges = [
-+ 	{ handleData: apr2022, slug: 'apr-2022' },
-	{ handleData: mar2022, slug: 'mar-2022' },
-	{ handleData: feb2022, slug: 'feb-2022' },
-];
-```
+To make the updates, go to `app/routes/__frontend/monthlychallenges/index.tsx`
