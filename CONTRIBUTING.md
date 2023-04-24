@@ -103,7 +103,7 @@ You can refer to our resource on [how to write an issue](https://virtualcoffee.i
 
 ### Creating A Pull Request
 
-> ⚠️ **Heads up!** If you'd like to make a pull request, please make sure you've created an issue (or a discussion board post) first, and **that you've been assigned to the issue**. This allows the maintainer team to provide guidance and prioritize tasks — otherwise you may run the risk of spending time on something that doesn't end up getting accepted for various reasons.
+> ⚠️ **Heads up!** If you'd like to make a pull request, please make sure you've created an issue (or a discussion board post) first, and **that you've been assigned to the issue,** unless your change is very minor such as fixing a typo. This allows the maintainer team to provide guidance and prioritize tasks — otherwise you may run the risk of spending time on something that doesn't end up getting accepted for various reasons.
 
 We appreciate everyone’s efforts, and want to ensure that our communication is clear and open as much as possible. We strongly encourage communication and clarity before doing work.
 
