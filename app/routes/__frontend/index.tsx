@@ -99,7 +99,7 @@ export default function Index() {
 					</h1>
 
 					<h2 className="pt-5">
-						<span>An intimate community for all devs,</span>{' '}
+						<span>An intimate tech community for all,</span>{' '}
 						<span>
 							optimized for{' '}
 							<strong className="gradient-text-primary">you</strong>

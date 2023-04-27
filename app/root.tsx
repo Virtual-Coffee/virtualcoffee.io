@@ -21,8 +21,9 @@ export async function loader({ request }: LoaderArgs) {
 	return json({
 		fullUrl,
 		meta: createMetaData({
-			title: 'Virtual Coffee IO',
-			description: 'An intimate community for all devs, optimized for you',
+			title:
+				'Virtual Coffee IO - An intimate tech community for all, optimized for you',
+			description: `Virtual Coffee is an intimate tech community where friendships are formed and support is given to people at all stages of their journey. Join our laid-back conversations and online events to connect with like-minded individuals who share your passion for technology.`,
 		}),
 	});
 }
