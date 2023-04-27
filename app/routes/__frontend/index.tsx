@@ -110,10 +110,11 @@ export default function Index() {
 				<div className="container pt-3 pb-5">
 					<div className="bodycopy lead">
 						<p>
-							Virtual Coffee is a laid-back conversation with developers twice a
-							week. It's the conversation that keeps going in slack. It's the
-							online events that support developers at all stages of the
-							journey. It's the place you go to make friends.
+							Virtual Coffee is a tech community where friendships are formed
+							and support is given to people at all stages of their journey.
+							Join our laid-back twice-weekly conversations and our online
+							events to connect with like-minded individuals who share your
+							passion for technology.
 						</p>
 
 						<p>
