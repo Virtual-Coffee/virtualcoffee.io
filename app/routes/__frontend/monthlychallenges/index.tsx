@@ -1,5 +1,6 @@
 import { type MetaFunction, json } from '@remix-run/node';
-import { Fragment } from 'react';
+import { useLoaderData } from '@remix-run/react';
+import { getTotalPairingSessions } from '~/data/monthlyChallenges/pairing-challenge';
 import { createMetaData } from '~/util/createMetaData.server';
 
 export const handle = {
@@ -13,10 +14,12 @@ export const handle = {
 	},
 };
 
-type Challenge = {
+type Challenge<T = any> = {
 	title: string;
 	subtitle: string;
-	description: React.ReactNode;
+	description?: React.ReactNode;
+	loaderData?: () => Promise<T>;
+	renderDescription?: (challengeData: T) => React.ReactNode;
 	links?: { href: string; title: string }[];
 	current?: boolean;
 };
@@ -230,7 +233,6 @@ const challengeList: Challenge[] = [
 	},
 	{
 		title: 'Community Kindness',
-		current: true,
 		subtitle: `Celebrating our Community as we move into a new year of Virtual Coffee!`,
 		description: (
 			<p>
@@ -282,16 +284,38 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Pairing',
 		subtitle: `Pairing is more than just coding with someone else. Pairing is about communication, teaching, learning, positive reinforcements, and growing.`,
-		description: (
-			<p>
-				For this challenge, members are challenged to hit 5 pairing sessions per
-				person, limiting your pairing sessions to one Pomodoro
-				session--twenty-five minute. Some ways to get started pairing are on an
-				open-source issue, a LeetCode problem, or a project they need help on.
-			</p>
-		),
+		renderDescription: (totalSessions: number) => {
+			return (
+				<>
+					<p>
+						For this community challenge, we're trying to hit 30 pairing sessions by the end of the month. Some ways to get started pairing are by working on
+						an open-source issue, a LeetCode problem, or a project you need
+						help on. Check out <a href="https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c">The Power of Pair Programming: Benefits, Types, and Tips</a> for more on why you should pair up with us this May!
+					</p>
+					<p>This challenge is sponsored by <a href="https://tuple.app/">Tuple</a>, the remote pair programming app on macOS and Linux.</p>
+					<h3 className="display-3">
+						Current status: {totalSessions.toLocaleString()} out of 50 pairing
+						sessions
+					</h3>
+
+					<div className="progress my-4" style={{ height: '3em' }}>
+						<div
+							className="progress-bar progress-bar progress-bar-striped"
+							role="progressbar"
+							style={{ width: `${(totalSessions / 50) * 100}%` }}
+							aria-valuenow={totalSessions}
+							aria-valuemin={0}
+							aria-valuemax={50}
+						>
+							{totalSessions.toLocaleString()} Pairing Sessions
+						</div>
+					</div>
+				</>
+			);
+		},
 		links: [
 			{
 				href: '/monthlychallenges/feb-2022',
@@ -302,6 +326,10 @@ const challengeList: Challenge[] = [
 				title: 'December, 2020',
 			},
 		],
+		loaderData: async (): Promise<number> => {
+			const allPairingSesions = await getTotalPairingSessions();
+			return allPairingSesions;
+		},
 	},
 	{
 		title: 'Month of Feedback',
@@ -341,16 +369,31 @@ export async function loader() {
 		meta: { title, description },
 		hero: { Hero },
 	} = handle;
-	return json({
+
+	const returnData = {
+		challengeData: undefined,
 		meta: createMetaData({ title, description, Hero }),
-	});
+	};
+
+	if (currentItem?.loaderData) {
+		const data = await currentItem.loaderData();
+		returnData.challengeData = data;
+	}
+
+	return json(returnData);
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data: { meta } }) => {
 	return meta;
 };
 
-function ChallengeItem({ challenge }: { challenge: Challenge }) {
+function ChallengeItem({
+	challenge,
+	challengeData,
+}: {
+	challenge: Challenge;
+	challengeData: any;
+}) {
 	return (
 		<>
 			<dt className={challenge.current ? 'gridlist-current' : undefined}>
@@ -361,7 +404,10 @@ function ChallengeItem({ challenge }: { challenge: Challenge }) {
 			</dt>
 			<dd className={challenge.current ? 'gridlist-current' : undefined}>
 				<p className="gridlist-subtitle">{challenge.subtitle}</p>
-				<p>{challenge.description}</p>
+				{challenge.description}
+				{challenge.current &&
+					challenge.renderDescription &&
+					challenge.renderDescription(challengeData)}
 				{challenge.links && challenge.links.length > 0 && (
 					<>
 						<h3>Resources and results from past challenges:</h3>
@@ -380,6 +426,7 @@ function ChallengeItem({ challenge }: { challenge: Challenge }) {
 }
 
 export default function Index() {
+	const { challengeData } = useLoaderData();
 	return (
 		<div>
 			<div className="bg-white py-3">
@@ -415,7 +462,11 @@ export default function Index() {
 					<h2 className="display-5">Our challenges:</h2>
 					<dl className="gridlist mt-4">
 						{filteredChallenges.map((challenge) => (
-							<ChallengeItem key={challenge.title} challenge={challenge} />
+							<ChallengeItem
+								key={challenge.title}
+								challenge={challenge}
+								challengeData={challengeData}
+							/>
 						))}
 					</dl>
 				</div>
