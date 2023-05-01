@@ -113,8 +113,8 @@ export default function Index() {
 							Virtual Coffee is a tech community where friendships are formed
 							and support is given to people at all stages of their journey.
 							Join our laid-back twice-weekly conversations and our online
-							events to connect with like-minded individuals who share your
-							passion for technology.
+							events to connect with people who share your passion for
+							technology.
 						</p>
 
 						<p>
