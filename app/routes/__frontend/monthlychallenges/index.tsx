@@ -291,11 +291,9 @@ const challengeList: Challenge[] = [
 			return (
 				<>
 					<p>
-						For this challenge, members are challenged to hit 5 pairing sessions
-						per person, limiting your pairing sessions to one Pomodoro
-						session--twenty-five minute. Some ways to get started pairing are on
-						an open-source issue, a LeetCode problem, or a project they need
-						help on.
+						For this community challenge, we're trying to hit 30 pairing sessions by the end of the month. Some ways to get started pairing are by working on
+						an open-source issue, a LeetCode problem, or a project you need
+						help on. Check out <a href="https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c">The Power of Pair Programming: Benefits, Types, and Tips</a> for more on why you should pair up with us this May!
 					</p>
 					<h3 className="display-3">
 						Current status: {totalSessions.toLocaleString()} out of 50 pairing
