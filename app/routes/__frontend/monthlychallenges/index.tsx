@@ -295,6 +295,7 @@ const challengeList: Challenge[] = [
 						an open-source issue, a LeetCode problem, or a project you need
 						help on. Check out <a href="https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c">The Power of Pair Programming: Benefits, Types, and Tips</a> for more on why you should pair up with us this May!
 					</p>
+					<p>This challenge is sponsored by <a href="https://tuple.app/">Tuple</a>, the remote pair programming app on macOS and Linux.
 					<h3 className="display-3">
 						Current status: {totalSessions.toLocaleString()} out of 50 pairing
 						sessions
