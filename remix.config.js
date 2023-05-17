@@ -97,7 +97,6 @@ async function createRemarkToc() {
  * @type {import('@remix-run/dev').AppConfig}
  */
 module.exports = {
-	serverBuildTarget: 'netlify',
 	server:
 		process.env.NETLIFY || process.env.NETLIFY_LOCAL
 			? './server.js'
@@ -113,11 +112,15 @@ module.exports = {
 		'rehype-stringify',
 		'escape-string-regexp',
 		'node-fetch',
+		'encoding',
 		'airtable',
+		'whatwg-url',
 	],
 	appDirectory: 'app',
 	assetsBuildDirectory: 'public/build',
 	serverBuildPath: 'netlify/functions/server/index.js',
+	serverModuleFormat: 'cjs',
+	serverPlatform: 'node',
 	publicPath: '/build/',
 	devServerPort: 8002,
 	mdx: async (filename) => {
