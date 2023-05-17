@@ -13,8 +13,6 @@
 	"main": "index.js",
 	"packageManager": "yarn@1.22.19",
 	"scripts": {
-		"preinstall": "npx only-allow yarn",
-		"prepare": "husky install",
 		"format": "npx prettier --write --ignore-unknown \"**/*\"",
 		"lint": "eslint ./app/**/*.{js,jsx}",
 		"build": "run-s build:*",
@@ -32,9 +30,6 @@
 		"generate:tailwind": "npx tailwindcss -i ./styles/tailwind-input.css -o ./app/tailwind.css",
 		"start": "cross-env NODE_ENV=production netlify dev",
 		"analyze": "source-map-explorer 'public/build/**/*.js'"
-	},
-	"lint-staged": {
-		"**/*": "prettier --write --ignore-unknown"
 	},
 	"dependencies": {
 		"@faker-js/faker": "^7.4.0",
@@ -68,14 +63,11 @@
 		"graphql-request": "^5.1.0",
 		"hast-util-to-string": "^2.0.0",
 		"hastscript": "^7.2.0",
-		"husky": "^8.0.3",
-		"lint-staged": "^13.1.0",
 		"luxon": "^3.2.1",
 		"markdown-it": "^13.0.1",
 		"mdast-util-toc": "^6.1.0",
 		"node-fetch": "^3.3.0",
 		"npm-run-all": "^4.1.5",
-		"only-allow": "^1.0.0",
 		"postcss": "^8.4.21",
 		"postcss-cli": "^10.1.0",
 		"prop-types": "^15.8.1",
