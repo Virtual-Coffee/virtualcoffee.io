@@ -111,6 +111,7 @@ module.exports = {
 		'remark-rehype',
 		'rehype-sanitize',
 		'rehype-stringify',
+		'escape-string-regexp',
 	],
 	appDirectory: 'app',
 	assetsBuildDirectory: 'public/build',
