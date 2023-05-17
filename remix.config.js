@@ -115,6 +115,8 @@ module.exports = {
 		'encoding',
 		'airtable',
 		'whatwg-url',
+		'tr46',
+		'webidl-conversions',
 	],
 	appDirectory: 'app',
 	assetsBuildDirectory: 'public/build',
