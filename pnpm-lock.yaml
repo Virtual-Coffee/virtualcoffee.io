@@ -21,7 +21,7 @@ dependencies:
     version: 1.6.0
   '@remix-run/dev':
     specifier: ^1.16.1
-    version: 1.16.1(@remix-run/serve@1.16.1)(sass@1.62.1)
+    version: 1.16.1(@remix-run/serve@1.16.1)(encoding@0.1.13)(sass@1.62.1)
   '@remix-run/eslint-config':
     specifier: ^1.16.1
     version: 1.16.1(eslint@8.40.0)(react@18.2.0)(typescript@4.9.5)
@@ -48,7 +48,7 @@ dependencies:
     version: 6.8.1
   airtable:
     specifier: ^0.11.6
-    version: 0.11.6
+    version: 0.11.6(encoding@0.1.13)
   autoprefixer:
     specifier: ^10.4.14
     version: 10.4.14(postcss@8.4.23)
@@ -76,6 +76,9 @@ dependencies:
   dotenv:
     specifier: ^16.0.3
     version: 16.0.3
+  encoding:
+    specifier: ^0.1.13
+    version: 0.1.13
   eslint:
     specifier: ^8.40.0
     version: 8.40.0
@@ -87,7 +90,7 @@ dependencies:
     version: 16.6.0
   graphql-request:
     specifier: ^5.2.0
-    version: 5.2.0(graphql@16.6.0)
+    version: 5.2.0(encoding@0.1.13)(graphql@16.6.0)
   hast-util-to-string:
     specifier: ^2.0.0
     version: 2.0.0
@@ -2134,7 +2137,7 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@remix-run/dev@1.16.1(@remix-run/serve@1.16.1)(sass@1.62.1):
+  /@remix-run/dev@1.16.1(@remix-run/serve@1.16.1)(encoding@0.1.13)(sass@1.62.1):
     resolution: {integrity: sha512-PrCIOa4qkZISW9l2tAX9+KMPSfO9QfMGfBZz6rd79v/GQ9N2bhWgKGWwzWhlGWJoVnnRZT5VRIy6YZsepa52/A==}
     engines: {node: '>=14'}
     hasBin: true
@@ -2178,7 +2181,7 @@ packages:
       lodash.debounce: 4.0.8
       lru-cache: 7.18.3
       minimatch: 9.0.0
-      node-fetch: 2.6.11
+      node-fetch: 2.6.11(encoding@0.1.13)
       ora: 5.4.1
       postcss: 8.4.23
       postcss-discard-duplicates: 5.1.0(postcss@8.4.23)
@@ -2906,7 +2909,7 @@ packages:
     resolution: {integrity: sha512-hCOfMzbFx5IDutmWLAt6MZwOUjIfSM9G9FyVxytmE4Rs/5YDPWQrD/+IR1w+FweD9H2oOZEnv36TmkjhNURBVA==}
     dev: false
 
-  /airtable@0.11.6:
+  /airtable@0.11.6(encoding@0.1.13):
     resolution: {integrity: sha512-Na67L2TO1DflIJ1yOGhQG5ilMfL2beHpsR+NW/jhaYOa4QcoxZOtDFs08cpSd1tBMsLpz5/rrz/VMX/pGL/now==}
     engines: {node: '>=8.0.0'}
     dependencies:
@@ -2914,7 +2917,7 @@ packages:
       abort-controller: 3.0.0
       abortcontroller-polyfill: 1.7.5
       lodash: 4.17.21
-      node-fetch: 2.6.11
+      node-fetch: 2.6.11(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -3669,10 +3672,10 @@ packages:
       cross-spawn: 7.0.3
     dev: false
 
-  /cross-fetch@3.1.6:
+  /cross-fetch@3.1.6(encoding@0.1.13):
     resolution: {integrity: sha512-riRvo06crlE8HiqOwIpQhxwdOk4fOeR7FVM/wXoxchFEqMNUjvbs3bfo4OTgMEMHzppd4DxFBDbyySj8Cv781g==}
     dependencies:
-      node-fetch: 2.6.11
+      node-fetch: 2.6.11(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -4155,6 +4158,12 @@ packages:
   /encodeurl@1.0.2:
     resolution: {integrity: sha512-TPJXq8JqFaVYm2CWmPvnP2Iyo4ZSM7/QKcSmuMLDObfpH5fi7RUGmd/rTDf+rut/saiDiQEeVTNgAmJEdAOx0w==}
     engines: {node: '>= 0.8'}
+    dev: false
+
+  /encoding@0.1.13:
+    resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
+    dependencies:
+      iconv-lite: 0.6.3
     dev: false
 
   /end-of-stream@1.4.4:
@@ -5380,13 +5389,13 @@ packages:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
     dev: false
 
-  /graphql-request@5.2.0(graphql@16.6.0):
+  /graphql-request@5.2.0(encoding@0.1.13)(graphql@16.6.0):
     resolution: {integrity: sha512-pLhKIvnMyBERL0dtFI3medKqWOz/RhHdcgbZ+hMMIb32mEPa5MJSzS4AuXxfI4sRAu6JVVk5tvXuGfCWl9JYWQ==}
     peerDependencies:
       graphql: 14 - 16
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.6.0)
-      cross-fetch: 3.1.6
+      cross-fetch: 3.1.6(encoding@0.1.13)
       extract-files: 9.0.0
       form-data: 3.0.1
       graphql: 16.6.0
@@ -5676,6 +5685,13 @@ packages:
 
   /iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      safer-buffer: 2.1.2
+    dev: false
+
+  /iconv-lite@0.6.3:
+    resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
     dependencies:
       safer-buffer: 2.1.2
@@ -7095,7 +7111,7 @@ packages:
     engines: {node: '>=10.5.0'}
     dev: false
 
-  /node-fetch@2.6.11:
+  /node-fetch@2.6.11(encoding@0.1.13):
     resolution: {integrity: sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
@@ -7104,6 +7120,7 @@ packages:
       encoding:
         optional: true
     dependencies:
+      encoding: 0.1.13
       whatwg-url: 5.0.0
     dev: false
 

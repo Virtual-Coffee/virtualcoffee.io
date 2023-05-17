@@ -61,6 +61,7 @@
 		"cross-env": "^7.0.3",
 		"cssnano": "^5.1.15",
 		"dotenv": "^16.0.3",
+		"encoding": "^0.1.13",
 		"eslint": "^8.40.0",
 		"front-matter": "^4.0.2",
 		"graphql": "^16.6.0",
