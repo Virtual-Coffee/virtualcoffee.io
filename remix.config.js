@@ -113,6 +113,7 @@ module.exports = {
 		'rehype-stringify',
 		'escape-string-regexp',
 		'node-fetch',
+		'airtable',
 	],
 	appDirectory: 'app',
 	assetsBuildDirectory: 'public/build',
