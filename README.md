@@ -68,13 +68,13 @@ The [Netlify CLI](https://docs.netlify.com/cli/get-started) allows users to run 
 To install:
 
 ```sh
-npm i -g netlify-cli
+pnpm add -g netlify-cli
 ```
 
 If you have previously installed the Netlify CLI, you should update it to the latest version:
 
 ```sh
-npm i -g netlify-cli@latest
+pnpm add -g netlify-cli@latest
 ```
 
 #### Setting up your .env
