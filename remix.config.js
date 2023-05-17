@@ -112,6 +112,7 @@ module.exports = {
 		'rehype-sanitize',
 		'rehype-stringify',
 		'escape-string-regexp',
+		'node-fetch',
 	],
 	appDirectory: 'app',
 	assetsBuildDirectory: 'public/build',
