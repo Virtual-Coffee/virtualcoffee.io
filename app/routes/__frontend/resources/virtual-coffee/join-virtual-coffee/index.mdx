@@ -3,7 +3,7 @@ meta:
   title: Join Virtual Coffee
   description: A guide for prospective members to join Virtual Coffee.
 hero:
-  Hero: UndrawBooks
+  Hero: UndrawJoinThumbUp
 tags:
   - memberresources
   - memberresourcesIndex
@@ -13,6 +13,7 @@ order: 1
 import LeadText from '~/components/content/LeadText';
 import TextContainer from '~/components/content/TextContainer';
 import FileIndex from '~/components/content/FileIndex';
+import { Link } from '@remix-run/react';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
@@ -20,10 +21,10 @@ import FileIndex from '~/components/content/FileIndex';
 
 <LeadText>
 
-Our community is currently accepting members on a limited basis. As new membership becomes available, we'll reach out to those on the waitlist to join.
+Our community is currently accepting members on a limited basis. As new membership becomes available, we'll reach out to those on the <Link to="/join">waitlist to join</Link>.
 
 </LeadText>
 
-<FileIndex subDirectory="resources/virtual-coffee/virtual-coffee-handbook" />
+<FileIndex subDirectory="resources/virtual-coffee/join-virtual-coffee" />
 
 </TextContainer>
