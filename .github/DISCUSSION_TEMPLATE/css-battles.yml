@@ -1,0 +1,57 @@
+title: "CSS Battle #<number> – <Problem Name>"
+labels: ["CSS Battles"]
+body:
+  - type: input
+    id: number
+    attributes:
+      label: Problem Number
+      description: The number of the problem being discussed (in digits)
+      placeholder: Problem number
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Problem Name
+      description: The name of the problem being discussed
+      placeholder: Problem name
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        Here is the puzzle: https://cssbattle.dev/play/<number>
+
+        Let's see the solutions!
+  - type: markdown
+    attributes:
+      value: <hr />
+  - type: markdown
+    attributes:
+      value: "## Sharing Your Solutions"
+  - type: markdown
+    attributes:
+      value: |
+        When posting your answers, you can save members from being spoiled by wrapping your code in the following:
+
+            <details>
+            <summary>Description – <strong>score {characters}</strong></summary><br />
+            <!-- Has to be followed by an empty line! -->
+
+            ```html
+            Your CSSBattles.dev code here!
+            ```
+            </details>
+
+        This will result in a nice hidden bit like so:
+
+        <details>
+        <summary>Description – <strong>score {characters}</strong></summary><br />
+        <!-- Has to be followed by an empty line! -->
+
+        ```html
+        Your CSSBattles.dev code here!
+        ```
+        </details>
+
+        Feel free to copy/paste the above code into a comment!
