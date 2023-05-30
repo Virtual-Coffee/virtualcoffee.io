@@ -1,0 +1,48 @@
+title: "CSS Battle #NUMBER – NAME"
+labels: ["CSS Battles"]
+body:
+  - type: input
+    id: link
+    attributes:
+      label: "Link to battle:"
+      description: Replace NUMBER with current battle number      
+      value: |
+       [Lets battle! ⚔️](https://cssbattle.dev/play/NUMBER)
+    validations:
+      required: true
+  - type: markdown
+    attributes: 
+      value: |
+        **That’s all! You can now click the “Start discussion” button.** :smile:
+        **Please note:** Don't change text areas - they need to stay that way to be visible after creating discussion.
+  - type: textarea
+    attributes:
+      label:  "Copy the code block below to format your comment on the discussion thread:"
+      description: Solution template for players
+      value: |
+        ```html
+        <details>
+        <summary>Description – <strong>score {characters}</strong></summary><br />
+        <!-- Has to be followed by an empty line! -->
+
+        <!-- remove + character -->
+        +```html
+        Your CSSBattles.dev code here! ⚔️
+        +```
+
+        </details>
+        ```
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "What others will see:"
+      description: Solution preview
+      value: |
+        This will result in a nice hidden bit like so:<br />
+        <details>
+        <summary>Description – <strong>score {characters}</strong></summary><br />
+        Your CSSBattles.dev code here! ⚔️
+        </details>
+    validations:
+      required: true
