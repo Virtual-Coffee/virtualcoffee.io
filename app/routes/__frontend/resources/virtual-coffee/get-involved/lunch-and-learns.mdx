@@ -1,6 +1,6 @@
 ---
 meta:
-  title: Lunch and Learns
+  title: Lunch & Learns
   description: Share your thoughts and ideas with a small audience of friends!
 hero:
   Hero: UndrawPresentation
@@ -10,8 +10,9 @@ order: 3
 
 import LeadText from '~/components/content/LeadText';
 import TextContainer from '~/components/content/TextContainer';
+import { Link } from '@remix-run/react';
 
-<TextContainer showBackToTopLink={false}>
+<TextContainer background="light" showBackToTopLink={false}>
 
 <LeadText>
 
@@ -29,17 +30,25 @@ Lunch &amp; Learn talks are usually hour-long sessions on one topic. It can be a
 
 ## What is a Lunch &amp; Learn?
 
-Lunch &amp; Learns are a speaking opportunity for anyone in the community. If you have something you want to talk about that the Virtual Coffee Community finds interesting, we have members who are willing to listen and ask questions. You don't have to have given a talk before, you don't have to be an expert--if there even is such a thing--and you don't need to worry about whether or not your talk will be accepted. We're here to support everyone where they are in the speaking experience.
+Lunch &amp; Learn is a speaking opportunity for anyone in the community. If you have something you want to talk about that the Virtual Coffee community finds interesting, we have members willing to listen and ask questions. You don't have to have given a talk before, you don't have to be an expert — if there is such a thing — and you don't need to worry about whether or not your talk will be accepted. We're here to support everyone where they are in the speaking experience.
 
-This is also a great opportunity to connect with other community members as you share what you know. There are different options for speaking that you can check out on our submission form. Our Moderator will be sure to support you and to help you feel comfortable through the process. So if you have questions or needs reach out and ask.
+This is also a great opportunity to connect with other community members as you share what you know. There are different options for speaking that you can check out on our submission form. Our Moderator will support you and help you feel comfortable through the process. So if you have questions or needs, reach out and ask.
+
+</TextContainer>
+
+<TextContainer>
 
 ## Where can I find past Lunch &amp; Learns?
 
 On our [Lunch &amp; Learn YouTube Playlist](https://www.youtube.com/playlist?list=PLh9uT23TA65idCyc_orC85RefgY_-fKsG), of course!
 
+</TextContainer>
+
+<TextContainer>
+
 ## I want to get involved! What's next?
 
-Have an idea you want to share? Submit your idea on our [Lunch &amp; Learn Idea Form](/lunch-and-learn-idea)!
-Already a Virtual Coffee member and want to get involved and support our Lunch &amp; Learns? We're happy to have your help. Fill out [our volunteer form](https://virtualcoffee.io/resources/virtual-coffee/get-involved/paths-to-leadership#department-virtual-coffee-lunch-and-learns) and we'll reach out to you soon!
+Have an idea you want to share? Submit your idea on our <Link to="/lunch-and-learn-idea">Lunch &amp; Learn Idea Form</Link>!
+Already a Virtual Coffee member and want to get involved and support our Lunch &amp; Learns? We're happy to have your help. Fill out <Link to="/resources/virtual-coffee/get-involved/paths-to-leadership#department-virtual-coffee-lunch--learns">our volunteer form</Link>, and we'll reach out to you soon!
 
 </TextContainer>
