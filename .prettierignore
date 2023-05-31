@@ -1,5 +1,7 @@
 # Inheiriting from .gitignore following advice from prettier docs https://prettier.io/docs/en/install.html
 
+*.lock
+
 /.nova
 .DS_Store
 node_modules
