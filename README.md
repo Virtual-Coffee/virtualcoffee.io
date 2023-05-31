@@ -51,30 +51,23 @@ This repo requires `node`, `pnpm`, and the [Netlify CLI](https://www.netlify.com
 
 #### Installing `node`:
 
-The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires `node` version `16`, which is the latest version.
+The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires `node` version `18.16`, which is the latest [LTS version](https://nodejs.dev/en/about/releases/).
 
 If you already have a different version of `node` installed, but don't want to update globally, you can install [a package called `nvm`](https://github.com/nvm-sh/nvm), which will allow you to easily switch `node` versions. Once you have `nvm` installed (or if you already have it installed), you can run `nvm use` in the main directory and it will install the proper version of `node`.
 
 #### Installing `pnpm`:
 
-`pnpm` is a package manager that is used to install the rest of our dependencies. You can install `pnpm` by following their [installation instructions](https://pnpm.io/installation). **Note:** if you are on a mac, you fall under the ["On POSIC Systems"](https://pnpm.io/installation#on-posix-systems) section.
+`pnpm` is a package manager that is used to install the rest of our dependencies.
 
 Read more about `pnpm` [on their docs site](https://pnpm.io/motivation).
 
-#### Installing the Netlify CLI
+The best way to install `pnpm` for this project is by using [Corepack](https://nodejs.org/api/corepack.html), a new feature bundled with Node.
 
-The [Netlify CLI](https://docs.netlify.com/cli/get-started) allows users to run a local version of the Netlify environment for local development. You can even [share your locally-running app with other people on the internet](https://docs.netlify.com/cli/get-started/#share-a-live-development-server)!!
-
-To install:
+Install pnpm via corepack with the following commands:
 
 ```sh
-pnpm add -g netlify-cli
-```
-
-If you have previously installed the Netlify CLI, you should update it to the latest version:
-
-```sh
-pnpm add -g netlify-cli@latest
+corepack enable
+corepack prepare
 ```
 
 #### Setting up your .env

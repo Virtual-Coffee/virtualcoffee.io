@@ -14,7 +14,7 @@
 	"engines": {
 		"node": ">=18.16"
 	},
-	"packageManager": "pnpm@8.5.0",
+	"packageManager": "pnpm@8.6.0",
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
 		"format": "npx prettier --write --ignore-unknown \"**/*\"",
@@ -30,9 +30,9 @@
 		"dev:tailwind": "pnpm generate:tailwind --watch",
 		"dev:sass": "sass --load-path=node_modules --watch styles/:.tmp/styles",
 		"dev:css": "postcss .tmp/styles/**/*.css --base .tmp/styles --dir app/styles -w",
-		"dev:remix": "cross-env NODE_ENV=development netlify dev",
+		"dev:remix": "cross-env NODE_ENV=development pnpm netlify dev",
 		"generate:tailwind": "npx tailwindcss -i ./styles/tailwind-input.css -o ./app/tailwind.css",
-		"start": "cross-env NODE_ENV=production netlify dev",
+		"start": "cross-env NODE_ENV=production pnpm netlify dev",
 		"analyze": "source-map-explorer 'public/build/**/*.js'"
 	},
 	"dependencies": {
@@ -105,6 +105,7 @@
 		"@types/react-dom": "^18.2.4",
 		"@types/require-dir": "^1.0.2",
 		"@types/sanitize-html": "^2.9.0",
+		"netlify-cli": "^15.2.0",
 		"prettier": "^2.8.8",
 		"source-map-explorer": "^2.5.3",
 		"tailwindcss": "^3.3.2",
