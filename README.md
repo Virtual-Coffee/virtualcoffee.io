@@ -47,38 +47,27 @@ cd virtualcoffee.io
 
 ### 3. Install dependencies
 
-This repo requires `node`, `yarn`, and the [Netlify CLI](https://www.netlify.com/products/dev/) to get started.
+This repo requires `node`, `pnpm`, and the [Netlify CLI](https://www.netlify.com/products/dev/) to get started.
 
 #### Installing `node`:
 
-The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires `node` version `16`, which is the latest version.
+The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires `node` version `18.16`, which is the latest [LTS version](https://nodejs.dev/en/about/releases/).
 
 If you already have a different version of `node` installed, but don't want to update globally, you can install [a package called `nvm`](https://github.com/nvm-sh/nvm), which will allow you to easily switch `node` versions. Once you have `nvm` installed (or if you already have it installed), you can run `nvm use` in the main directory and it will install the proper version of `node`.
 
-#### Installing `yarn`:
+#### Installing `pnpm`:
 
-`yarn` is a package manager that is used to install the rest of our dependencies. You can install `yarn` by running the following command:
+`pnpm` is a package manager that is used to install the rest of our dependencies.
 
-```shell
-npm install -g yarn
-```
+Read more about `pnpm` [on their docs site](https://pnpm.io/motivation).
 
-Read more about `yarn` [on their docs site](https://yarnpkg.com/getting-started/install).
+The best way to install `pnpm` for this project is by using [Corepack](https://nodejs.org/api/corepack.html), a new feature bundled with Node.
 
-#### Installing the Netlify CLI
-
-The [Netlify CLI](https://docs.netlify.com/cli/get-started) allows users to run a local version of the Netlify environment for local development. You can even [share your locally-running app with other people on the internet](https://docs.netlify.com/cli/get-started/#share-a-live-development-server)!!
-
-To install:
+Install pnpm via corepack with the following commands:
 
 ```sh
-npm i -g netlify-cli
-```
-
-If you have previously installed the Netlify CLI, you should update it to the latest version:
-
-```sh
-npm i -g netlify-cli@latest
+corepack enable
+corepack prepare
 ```
 
 #### Setting up your .env
@@ -91,28 +80,28 @@ cp .env.example .env
 
 #### Installing package dependencies
 
-Once you have `node`, `yarn`, and the Netlify CLI installed, you're ready to install the local dependencies! Run the following command:
+Once you have `node`, `pnpm`, and the Netlify CLI installed, you're ready to install the local dependencies! Run the following command:
 
 ```shell
-yarn
+pnpm install
 ```
 
 At this point you're ready to roll! Run the following command to get rolling!
 
 ```shell
-yarn dev
+pnpm dev
 ```
 
-Read more about what `yarn dev` does in the following section.
+Read more about what `pnpm dev` does in the following section.
 
 ## Commands
 
-The following commands are available for your use. Most of the time you'll only ever need `yarn dev`.
+The following commands are available for your use. Most of the time you'll only ever need `pnpm dev`.
 
-### `yarn dev`
+### `pnpm dev`
 
 ```shell
-yarn dev
+pnpm dev
 ```
 
 This is the only command you need to do normal local development.
@@ -135,38 +124,38 @@ If the feature you are working on is not on the home page (the newsletter or mon
 
 ---
 
-`yarn dev` actually runs three sub commands, which can be run independently if you wish:
+`pnpm dev` actually runs three sub commands, which can be run independently if you wish:
 
-- `yarn dev:sass` - compiles sass styles found in `./styles`. When in dev mode will re-run when a file is changed. The files are compiled to the `./tmp` directory to be processed by the next step.
-- `yarn dev:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
-- `yarn dev:remix` - starts up the local Netlify dev environment and starts the Remix server.
+- `pnpm dev:sass` - compiles sass styles found in `./styles`. When in dev mode will re-run when a file is changed. The files are compiled to the `./tmp` directory to be processed by the next step.
+- `pnpm dev:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
+- `pnpm dev:remix` - starts up the local Netlify dev environment and starts the Remix server.
 
-### `yarn build`
+### `pnpm build`
 
 ```shell
-yarn build
+pnpm build
 ```
 
 Builds a production-ready version of the site. This is what Netlify uses to build our site.
 
-`yarn build` actually runs three sub commands, which can be run independently if you wish:
+`pnpm build` actually runs three sub commands, which can be run independently if you wish:
 
-- `yarn build:sass` - compiles sass styles found in `./styles`. The files are compiled to the `./tmp` directory to be processed by the next step.
-- `yarn build:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
-- `yarn build:remix` - compiles everything needed to run the site for production.
+- `pnpm build:sass` - compiles sass styles found in `./styles`. The files are compiled to the `./tmp` directory to be processed by the next step.
+- `pnpm build:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
+- `pnpm build:remix` - compiles everything needed to run the site for production.
 
-### `yarn format`
+### `pnpm format`
 
 ```shell
-yarn format
+pnpm format
 ```
 
 Runs [Prettier](https://prettier.io/) on all of our files. This happens automatically via [husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged), so there's usually no need to run this manually.
 
-### `yarn lint`
+### `pnpm lint`
 
 ```shell
-yarn lint
+pnpm lint
 ```
 
 Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. This happens automatically at build time.
