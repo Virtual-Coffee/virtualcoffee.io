@@ -284,7 +284,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Pairing',
 		subtitle: `Pairing is more than just coding with someone else. Pairing is about communication, teaching, learning, positive reinforcements, and growing.`,
 		renderDescription: (totalSessions: number) => {
@@ -355,6 +354,16 @@ const challengeList: Challenge[] = [
 				title: 'May, 2021',
 			},
 		],
+	},
+	{
+		current: true,
+		title: 'Mid-Year Check-In',
+		subtitle: `Reflect. Reevaluate. Grow.`,
+		description: (
+			<p>
+				The Mid-Year Check-In challenge is designed to provide an opportunity for Virtual Coffee members to reflect on their progress, reevaluate goals, and gain clarity on their journey. Let’s pause, assess, and adjust as we reach the halfway point of the year. This challenge aims to encourage personal growth, foster connection within the community, and provide a supportive space for members to share their insights, challenges, and successes.
+			</p>
+		),
 	},
 ];
 
