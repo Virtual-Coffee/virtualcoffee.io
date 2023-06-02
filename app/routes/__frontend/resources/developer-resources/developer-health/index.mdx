@@ -10,12 +10,23 @@ tags:
 order: 3
 ---
 
+import LeadText from '~/components/content/LeadText';
 import TextContainer from '~/components/content/TextContainer';
 import FileIndex from '~/components/content/FileIndex';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
-## Developer Health Resources:
+<LeadText>
+
+As we all know, technology changes so fast. Developers need to catch up with all these new hypes in tech that often result in burnout, stress, or other health problems. This section provides resources for developers to care for themselves to become healthy developers.
+
+</LeadText>
+
+</TextContainer>
+
+<TextContainer showBackToTopLink={false}>
+
+## Guides Available:
 
 <FileIndex subDirectory="resources/developer-health" />
 

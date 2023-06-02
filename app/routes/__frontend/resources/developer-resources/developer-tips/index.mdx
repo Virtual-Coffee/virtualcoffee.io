@@ -10,12 +10,23 @@ tags:
 order: 1
 ---
 
+import LeadText from '~/components/content/LeadText';
 import TextContainer from '~/components/content/TextContainer';
 import FileIndex from '~/components/content/FileIndex';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
-## Developer Tips:
+<LeadText>
+
+This section contains various tips and guides for all developers.
+
+</LeadText>
+
+</TextContainer>
+
+<TextContainer showBackToTopLink={false}>
+
+## Tips Available:
 
 <FileIndex subDirectory="resources/developer-resources/developer-tips" />
 
