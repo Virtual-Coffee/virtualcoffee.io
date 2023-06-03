@@ -46,7 +46,7 @@ body:
       value: |
         This will result in a nice hidden bit like so:<br />
         <details>
-        <summary>Code Source  – <strong>score {character count}</strong></summary>
+        <summary>Code Source  – <strong>score {character count}</strong></summary><br />
         your cssbattles code here!
         </details>
     validations:
