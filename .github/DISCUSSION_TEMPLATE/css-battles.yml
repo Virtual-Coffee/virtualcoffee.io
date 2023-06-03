@@ -1,17 +1,17 @@
-title: "CSS Battle #NUMBER – NAME"
-labels: ["CSS Battles"]
+title: 'CSS Battle #NUMBER – NAME'
+labels: ['CSS Battles']
 body:
   - type: input
     id: link
     attributes:
-      label: "Link to battle:"
-      description: Replace NUMBER with current battle number      
+      label: 'Link to battle:'
+      description: Replace NUMBER with current battle number
       value: |
-       [Lets battle! ⚔️](https://cssbattle.dev/play/NUMBER)
+        [Lets battle! ⚔️](https://cssbattle.dev/play/NUMBER)
     validations:
       required: true
   - type: markdown
-    attributes: 
+    attributes:
       value: |
         **That’s all! You can now click the “Start discussion” button.** :smile:
         > **Please note**
@@ -23,7 +23,7 @@ body:
 
   - type: textarea
     attributes:
-      label:  "Copy the code block below to format your comment on the discussion thread:"
+      label: 'Copy the code block below to format your comment on the discussion thread:'
       description: Solution template for players
       value: |
         ````md
@@ -41,7 +41,7 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: "What others will see:"
+      label: 'What others will see:'
       description: Solution preview
       value: |
         This will result in a nice hidden bit like so:<br />
