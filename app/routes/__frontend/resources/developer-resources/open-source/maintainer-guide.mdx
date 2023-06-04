@@ -1,7 +1,7 @@
 ---
 meta:
   title: Maintainer Guide
-  description: 'A guide to maintaining Open Source projects.'
+  description: A guide to maintaining open source projects.
 tags: [memberresources]
 hero:
   Hero: UndrawOperatingSystem
@@ -10,12 +10,13 @@ order: 4
 
 import LeadText from '~/components/content/LeadText';
 import TextContainer from '~/components/content/TextContainer';
+import { Link } from '@remix-run/react';
 
-<TextContainer showBackToTopLink={false}>
+<TextContainer background="light" showBackToTopLink={false}>
 
 <LeadText>
 
-This section outlines helpful information for your journey as an open source project's maintainer.
+This section outlines helpful information for your journey as an open source project maintainer.
 
 </LeadText>
 
@@ -31,7 +32,7 @@ This section outlines helpful information for your journey as an open source pro
 
 Suppose you are a maintainer looking to open an open source project for contributions. In that case, this checklist will help you to get your repository into a good state to start receiving external contributions.
 
-Here's the checklist. For more detailed explanation of these points, check out [this section](/resources/open-source/maintainer-guide/#preparing-a-project-for-open-source-contributions). It isn't necessary for a project in the wild to have _all_ of these things, but it should have most of them.
+Here's the checklist. For a more detailed explanation of these points, check out <Link to="/resources/developer-resources/open-source/maintainer-guide/#preparing-a-project-for-open-source-contributions">this section</Link>. A project in the wild doesn't need _all_ these things, but it should have most of them.
 
 <dl>
   <dt>✅ It should have a relevant name.</dt>
@@ -40,19 +41,16 @@ Here's the checklist. For more detailed explanation of these points, check out [
   </dd>
   <dt>✅ It should have a description.</dt>
   <dd>
-    The description should clearly describes what the project does and is for.
-
+    The description should clearly describe what the project does and is for. <br />
     If your project is participating in [Hacktoberfest](https://hacktoberfest.digitalocean.com/), you should also write the Hacktoberfest topic here. Or you can add the `hacktoberfest-accepted` label to the accepted pull requests.
-
   </dd>
   <dt>✅ It should have relevant topics.</dt>
   <dd>
-    These topics should highlight its scope, stack, field, etc.
-
+    These topics should highlight their scope, stack, field, etc.
   </dd>
   <dt>✅ It should have a README file.</dt>
   <dd>
-    The README should link to or describe:
+    The README should link to or describe the following:
 
     - Project purpose and context
     - Installation instructions
@@ -60,7 +58,7 @@ Here's the checklist. For more detailed explanation of these points, check out [
   </dd>
   <dt>✅ A CONTRIBUTIONS/CONTRIBUTING markdown file.</dt>
   <dd>
-    It provides contribution guide and consist of:
+    It provides a contribution guide and consists of the following:
 
     - The recommended process for making issues/submitting pull requests.
     - Ways to communicate with the maintainers.
@@ -68,8 +66,7 @@ Here's the checklist. For more detailed explanation of these points, check out [
   </dd>
   <dt>✅ A valid open source license.</dt>
   <dd>
-    A license is **essential**. A project is not an open source if it doesn't have a valid open source license.
-
+    A license is **essential**. A project is not open source if it doesn't have a valid open source license.
   </dd>
   <dt>✅ A Code of Conduct (COC).</dt>
   <dd>
@@ -77,17 +74,19 @@ Here's the checklist. For more detailed explanation of these points, check out [
   </dd>
   <dt>✅ Issue and Pull request templates.</dt>
   <dd>
-    These templates guide potential contributors on making issues and pull requests to the project. They remove a lot of burden from the maintainer and the contributor from guessing the appropriate procedure for these contributions.
+    These templates guide potential contributors in making issues and pull requests to the project. They remove a lot of burden from the maintainer and the contributor from guessing the appropriate procedure for these contributions.
   </dd>
 </dl>
 
----
+</TextContainer>
+
+<TextContainer>
 
 ## Preparing a project for Open Source contributions
 
 <LeadText>
 
-This section addresses the **minimum** requirements, highlighting key areas and considerations to help you evaluate whether or not your open source project is ready for contributions. When Virtual Coffee determines the projects we highlight and recommend to our members, these are the things we look for and why. Hopefully, it can serve as a guide to anyone who finds this document.
+This section addresses the **minimum** requirements, highlighting key areas and considerations to help you evaluate whether or not your open source project is ready for contributions. When Virtual Coffee determines the projects we highlight and recommend to our members, these are the things we look for and why. We hope it can serve as a guide to anyone who finds this document.
 
 </LeadText>
 
@@ -109,11 +108,11 @@ An example of a good name, description, and tag:
 
 ### Documentation
 
-Good documentation is the best indicator that a project is well maintained, well supported, and has a healthy and active community. There are a plethora of materials a repo can utilize to provide context to potential contributors, but the docs that matter most are:
+Good documentation is the best indicator that a project is well maintained, supported, and has a healthy and active community. There are a plethora of materials a repo can utilize to provide context to potential contributors, but the docs that matter most are:
 
 #### The README
 
-README is the face of your repo. It's the first thing anyone sees, after maybe the name and description, and it's the nexus for all content, links, docs, and other project associations. A project without a README is probably not ready to accept contributions. Some basic things you should include in your README are:
+README is the face of your repo. It's the first thing anyone sees after the name and description, and it's the nexus for all content, links, docs, and other project associations. A project with a README is usually ready to accept contributions. Some basic things you should include in your README are:
 
 - A more detailed description of the project than the description field in GitHub.
 - How to install and run your application and provide a link to the document that explains it, if any. The more detailed, the better.
@@ -130,7 +129,7 @@ The Code of Conduct (COC) is an excellent indicator of a healthy contributor's e
 
 #### The Contributing Guide
 
-Last but certainly not least, there should be some discussion of how to contribute to the project. Some people write these instructions directly in the README, which _can_ be alright. Still, we prefer an explicit document that highlights:
+Last but certainly not least, there should be some discussion of how to contribute to the project. Some people write these instructions directly in the README, which _can_ be alright. Still, we prefer an explicit document that highlights the following:
 
 - The recommended process for making issues/submitting pull requests.
 - What to do if you feel like somebody is violating the Code of Conduct?
@@ -146,11 +145,11 @@ Many [popular and vetted open source licenses](https://opensource.org/licenses) 
 
 ### Issue and Pull Request templates
 
-These templates guide potential contributors on making issues and pull requests to the project. They remove a lot of burden from the maintainer and the contributor from guessing the appropriate procedure for these contributions.
+These templates guide potential contributors in making issues and pull requests to the project. They remove a lot of burden from the maintainer and the contributor from guessing the appropriate procedure for these contributions.
 
 ![Templates](https://user-images.githubusercontent.com/13292886/132138524-0a38d35c-305e-4804-ba36-e7adfa73e09d.png)
 
-🔎 Example: [Virtual Coffee's issue templates](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/.github/ISSUE_TEMPLATE), and [this is what users see](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new/choose) when submitting a new issue.
+🔎 Example: These are [Virtual Coffee's issue templates](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/.github/ISSUE_TEMPLATE), and [this is what users see](https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new/choose) when submitting a new issue.
 
 ### Beginner Friendliness
 
@@ -179,23 +178,25 @@ Suppose you want to make your repository/project beginner friendly. In that case
 	</dd>
 </dl>
 
-_Note that everyone has a slightly different definition of "beginner friendly", so the experience may vary in different repositories, which is okay._
+_Everyone has a slightly different definition of "beginner friendly", so the experience may vary in different repositories, which is okay._
 
 ### Open sourcing a project without expecting contributions
 
 If you want to open source your project so that other people can freely use the fruits of your labor, you don't have to do everything on the checklist.
 
-For example, you probably won't need issue and pull request templates or a contributing guide. A Code of Conduct, however, is still recommended. Even if you are not expecting contributions, you may still get public activity on your repo, for example, on issues. It helps you set boundaries and keep conversations respectful.
+For example, you won't need issue and pull request templates or a contributing guide. A Code of Conduct, however, is still recommended. Even if you are not expecting contributions, you may still get public activity on your repo, for example, on issues. It helps you set boundaries and keep conversations respectful.
 
----
+</TextContainer>
+
+<TextContainer>
 
 ## Best practices for maintainers
 
 ### Communication with contributors
 
-Communication is key to running a successful open source project. Establish conventions for communications early on and make sure these are well documented. Many projects communicate via issues and pull requests. Some use external platforms such as Slack, a forum, IRC, or email lists. All are good ways to communicate. The important thing is to figure out what is most appropriate for your project. Using issues and pull requests is a solid choice if you are unsure what is best.
+Communication is key to running a successful open source project. Establish conventions for communications early on and make sure these are well documented. Many projects communicate via issues and pull requests. Some use external platforms such as Slack, a forum, IRC, or email lists. All are good ways to communicate. The important thing is to figure out what is most appropriate for your project. Using issues and pull requests is a solid choice if you still need to determine what is best.
 
-Suppose you are maintaining a company project that is open to external contributors. In that case, you need to coordinate internal and external communication so that outside contributors don't miss out on essential updates communicated internally.
+Suppose you are maintaining a company project that is open to external contributors. In that case, you need to coordinate internal and external communication so that outside contributors can get essential updates communicated internally.
 
 Regardless of the tools used to communicate, there are certain things to keep in mind to keep communication effective and respectful, especially in an international online space.
 
@@ -214,8 +215,7 @@ Regardless of the tools used to communicate, there are certain things to keep in
 		conversation respectful.
 	</dt>
 	<dd>
-		You could criticize the ideas people express, but don't criticize the person
-		directly.
+		You could criticize people's ideas but don't criticize the person directly.
 	</dd>
 	<dt>
 		Low-context communication works best in international, cross-cultural
@@ -230,13 +230,13 @@ Regardless of the tools used to communicate, there are certain things to keep in
 
 ### Managing expectations
 
-It is important to effectively manage both maintainers and contributors' expectations to ensure a project's smooth running with external contributors.
+Managing maintainers' and contributors' expectations effectively is important to ensure a project's smooth running with external contributors.
 
 Here are several things that maintainers can do to help manage the expectations:
 
 - Breaking down tasks for external contributors into small, well-defined chunks.
 - Ensuring that any preferences for code style, branch names, git workflows, etc., are well explained in the contributing guide or README.
-- Communicating what support you can provide for contributors if any (e.g., pair programming, answering questions, etc.).
+- Communicating what support you can provide for contributors, if any (e.g., pair programming, answering questions, etc.).
 - Communicating the availability and expected timescales for reviewing pull requests.
 
 ### Building community
@@ -253,7 +253,7 @@ Things that will help build community:
 		It could be GitHub issues for smaller projects where the community focuses
 		on project questions and development discussions. For larger projects or if
 		you want to build a community in a broader sense, a separate venue such as a
-		Slack or Discord community or forum will probably work better.
+		Slack or Discord community or forum will work better.
 	</dd>
 	<dt>A Code of Conduct</dt>
 	<dd>
@@ -263,8 +263,9 @@ Things that will help build community:
 	<dt>Community documentation.</dt>
 	<dd>
 		It explains how the community works and where to search for things related
-		to the community. For example, here at Virtual Coffee, we have our [Member
-		Resources](https://virtualcoffee.io/resources/virtual-coffee/) page.
+		to the community. For example, we have our{' '}
+		<Link to="/resources/virtual-coffee/">Virtual Coffee Handbook</Link> at
+		Virtual Coffee.
 	</dd>
 	<dt>
 		Leading with empathy and kindness, welcoming new people, and helping them
@@ -278,15 +279,17 @@ Things that will help build community:
 
 ### Avoiding burnout
 
-Maintaining an open source project can be a lot of work, and many people do it simultaneously with their "day job". It is essential to be mindful of the risk of burnout and take steps to keep the work at a manageable level.
+Maintaining an open source project can be a lot of work; many people do it simultaneously with their "day job". It is essential to be mindful of the risk of burnout and take steps to keep the work manageable.
 
-Figure out a reasonable time frame for responding to issues and pull requests, and include it in your documentation. If you are an individual maintaining a repository in your spare time, it's okay to say a week.
+Figure out a reasonable time frame for responding to issues and pull requests, and include it in your documentation. If you are maintaining a personal repository in your spare time, it's okay to say a week.
 
-If you are maintaining a company repository, state your working hours in the documentation and clarify that you won't respond outside of office hours. Make sure you stick to this.
+If you are maintaining a company repository, state your working hours in the documentation and clarify that you will only respond during office hours. Make sure you stick to this.
 
----
+</TextContainer>
 
-## Additional Resources
+<TextContainer>
+
+## Resources
 
 - [The Guide to Building Open Source Communities](https://opensource.guide/building-community/)
 - [Introduction to Open Source](https://www.digitalocean.com/community/tutorial_series/an-introduction-to-open-source)
