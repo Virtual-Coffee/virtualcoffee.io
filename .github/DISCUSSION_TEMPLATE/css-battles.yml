@@ -44,10 +44,14 @@ body:
       label: 'What others will see:'
       description: Solution preview
       value: |
-        This will result in a nice hidden bit like so:<br />
+        This will result in a nice hidden bit like so:
+        
         <details>
-        <summary>Code Source  – <strong>score {character count}</strong></summary><br />
+        <summary>Code Source  – <strong>score {character count}</strong></summary>
+        
+        ```html
         your cssbattles code here!
+        ```
         </details>
     validations:
       required: true
