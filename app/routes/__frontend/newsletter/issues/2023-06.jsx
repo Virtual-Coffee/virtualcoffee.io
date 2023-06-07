@@ -57,9 +57,11 @@ export default function Issue() {
 				<strong>💡Monthly Theme & Challenge</strong>: Pairing!
 			</p>
 			<p>
-				Last month the community was all about [Pair
-				Programming](https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c)!
-				We came together to collaborate on each other's projects, share ideas
+				Last month the community was all about{' '}
+				<a href="https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c">
+					Pair Programming
+				</a>
+				! We came together to collaborate on each other's projects, share ideas
 				and tips, and just celebrate the collaborative aspects of coding.
 				Together as a community, we got over 30 pairing sessions for the month
 				of May. Thank you to everyone who participated.
