@@ -2,11 +2,11 @@ import { Link } from '@remix-run/react';
 
 export const handle = {
 	meta: {
-		title: 'Virtual Coffee Newsletter, May 2023',
-		description: 'Pair Programming in May 💝',
+		title: 'Virtual Coffee Newsletter, June 2023',
+		description: 'Mid-Year Check-In 💝',
 	},
-	date: '2023-05-01',
-	listTitle: 'May 2023',
+	date: '2023-06-01',
+	listTitle: 'June 2023',
 };
 
 export const meta = () => {
@@ -18,8 +18,8 @@ export default function Issue() {
 		<>
 			<h2>Hey friends!</h2>
 			<p className="lead">
-				April was all about sharing the love and May is all about sharing the
-				cursor! We're gonna be pair programming at VC this month!
+				May was all about pair programming and achieving the dream together. Now
+				it's time to do a mid-year check in and do some reflection.
 			</p>
 
 			<hr />
@@ -30,77 +30,65 @@ export default function Issue() {
 			</p>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"As a new member here its obvious! I am grateful for this community
-					and the welcoming spirit of all!"
+					"I'm grateful for meeting David at co-working room this morning."
 				</p>
-				<footer className="blockquote-footer">Matthew</footer>
+				<footer className="blockquote-footer">Ayu</footer>
 			</blockquote>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"Grateful for this community; sometimes looking forward to our chats
-					gets me through the week."
+					"I’m grateful for Dominic taking care of the Twitter chats each week."
 				</p>
-				<footer className="blockquote-footer">Kai</footer>
+				<footer className="blockquote-footer">Bekah</footer>
 			</blockquote>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"I am immensely grateful to the VC maintainers who work tirelessly to
-					ensure its smooth functioning."
+					"Thank you for having me, I learned a LOT, from each and everyone of
+					you, whole lot of food for thoughts. I’m incredibly grateful :)"
 				</p>
-				<footer className="blockquote-footer">Justin</footer>
-			</blockquote>
-			<blockquote className="blockquote">
-				<p className="mb-0">
-					"I'm grateful for Virtual Coffee and the opportunity to give a lunch
-					and learn to my friends this morning."
-				</p>
-				<footer className="blockquote-footer">Jessica</footer>
+				<footer className="blockquote-footer">Piotrek</footer>
 			</blockquote>
 
 			<hr />
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
 
-			<h3 className="font-italic">April Recap</h3>
+			<h3 className="font-italic">May Recap</h3>
 			<p>
-				<strong>💡Monthly Theme & Challenge</strong>: Gratitude!
+				<strong>💡Monthly Theme & Challenge</strong>: Pairing!
 			</p>
 			<p>
-				Last month we really tried to spread the love around, acknowledging all
-				the wonderful people who make this space great! Sometimes we need to
-				remember that the most healing and restorative thing you do for yourself
-				is to share gratitude and support to the people around you! Thank you to
-				all the members who reached out to others and brought more positivity to
-				the space!
+				Last month the community was all about [Pair
+				Programming](https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c)!
+				We came together to collaborate on each other's projects, share ideas
+				and tips, and just celebrate the collaborative aspects of coding.
+				Together as a community, we got over 30 pairing sessions for the month
+				of May. Thank you to everyone who participated.
 			</p>
 
-			<h3 className="font-italic">May Happenings</h3>
+			<h3 className="font-italic">June Happenings</h3>
 			<p>
-				<strong>💡Monthly Theme & Challenge</strong>: Month of Pairing!
+				<strong>💡Monthly Theme & Challenge</strong>: Reflect. Reevaluate. Grow.
 			</p>
 			<p>
-				This month we are{' '}
-				<a href="https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c">
-					Pair Programming
-				</a>
-				! That means we are teaming up with each other all month to write code
-				together. Zoom tuple, Skype, whatever you'd like. Pair programming is a
-				great way to learn from each other and solve problems and we're taking
-				it one step further by seeing if we can get as many pairings as possible
-				as community!
+				The <Link to="/monthlychallenges">Mid-Year Check-In challenge</Link> is
+				designed to provide an opportunity for Virtual Coffee members to reflect
+				on their progress, reevaluate goals, and gain clarity on their journey.
+				Let’s pause, assess, and adjust as we reach the halfway point of the
+				year. This challenge aims to encourage personal growth, foster
+				connection within the community, and provide a supportive space for
+				members to share their insights, challenges, and successes.
 			</p>
 			<p>
-				For this challenge, members are challenged to hit 5 pairing sessions per
-				person. Some ways to get started pairing are on an open-source issue, a
-				LeetCode problem, or a project they need help on.
+				For this challenge, members are challenged to share insights and support
+				each other as we reflect on our journeys.
 			</p>
 
 			<h4 className="mt-4">☕🪑 Coffee Table Events</h4>
 			<ul>
 				<li>Tech Interview Study Group (Mondays at 4:00 PM ET)</li>
 				<li>
-					Accountabilibuddies (Tuesdays at 7:00 PM ET, Thursdays at 9:00 AM ET,
-					and every other Sundays at 1:00 PM ET)
+					Accountabilibuddies (Tuesdays at 7:00 PM ET | Thursdays at 9:00 AM ET
+					| Every other Sundays at 1:00 PM ET)
 				</li>
 				<li>
 					Indie-startup hackers (Every other Wednesday at 12:00 PM ET — see
@@ -108,7 +96,8 @@ export default function Issue() {
 				</li>
 				<li>The Pack Hunt (Tandem Job Hunting) (Wednesdays at 2:00 PM ET)</li>
 				<li>
-					Frontend Friday Folks fighting CSSBattle.dev (Fridays at 2:00 PM ET)
+					Frontend Friday Folks fighting CSSBattle.dev (Fridays at 11:00 AM ET |
+					Saturdays at 12:00 PM ET)
 				</li>
 			</ul>
 
@@ -121,7 +110,9 @@ export default function Issue() {
 					TypeScript Tuesday (Tuesdays at 2:00 PM ET on{' '}
 					<a href="https://www.twitch.tv/virtualcoffeeio">Twitch</a>)
 				</li>
-				<li>Async Twitter Chat (Friday, prompts tweeted out at 9:00 AM ET)</li>
+				<li>
+					Async Twitter Chat (Fridays — prompts tweeted out at 9:00 AM ET)
+				</li>
 			</ul>
 
 			<p>
@@ -146,32 +137,29 @@ export default function Issue() {
 
 			<hr />
 
-			<h2>Member Blogpost Highlights</h2>
+			<h2>Member Content Highlights</h2>
 			<p>
-				<em>Some of our member posts we loved in April!</em>
+				<em>Some of our member contents we loved in May!</em>
 			</p>
+			<h3>Articles</h3>
 			<ul>
 				<li>
-					<a href="https://dev.to/opensauced/managing-community-health-files-and-templates-with-a-github-repository-l8f">
-						Managing Community Health Files and Templates with a GitHub
-						Repository — Bekah Hawrot Weigel
+					<a href="https://dev.to/nerajno/so-this-is-your-1st-tech-conference-volunteeredition-450c">
+						So ... This is Your 1st Tech Conference : #VolunteerEdition —
+						Nerando Johnson
+					</a>
+				</li>
+			</ul>
+			<h3>Videos</h3>
+			<ul>
+				<li>
+					<a href="https://www.youtube.com/watch?v=DAYQZ4vIjSw">
+						How to model NoSQL one-to-one relationships — Michael Jolley
 					</a>
 				</li>
 				<li>
-					<a href="https://www.tigrisdata.com/blog/astro-tigris-integration/">
-						Creating database-driven Astro sites with the Tigris Astro
-						integration — Michael Jolley
-					</a>
-				</li>
-				<li>
-					<a href="https://dev.to/abbeyperini/dark-mode-toggle-and-prefers-color-scheme-4f3m">
-						Dark-Mode Toggle and Prefers Color Scheme — Abbey Perini
-					</a>
-				</li>
-				<li>
-					<a href="https://ramonh.dev/2023/04/20/objective-c-versatility/">
-						How Objective-C Made Me a Versatile Software Engineer — Ramón
-						Huidobro
+					<a href="https://www.youtube.com/watch?v=k0ke-2nYz0M">
+						Build a Full Stack E-commerce website in React — Om
 					</a>
 				</li>
 			</ul>
@@ -182,27 +170,36 @@ export default function Issue() {
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"Decided to try and make a new personal website this morning and
-								succeeded!"
+								"I've accepted a place sponsored by Code First Girls on their
+								Product Management course!"
 							</p>
-							<footer className="blockquote-footer">Mark</footer>
+							<footer className="blockquote-footer">Shan</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"I just got invited to my first ever software dev job
-								interview!!!"
+								"I created a dictionary app using React! This simple project
+								taught me a lot about the fundamentals of React!!!"
 							</p>
-							<footer className="blockquote-footer">Sōme</footer>
-						</blockquote>
-						<blockquote className="blockquote">
-							<p className="mb-0">"I gave my first conference talk!"</p>
-							<footer className="blockquote-footer">Nick</footer>
+							<footer className="blockquote-footer">Imani</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"I start my new job as Developer Experience Lead"
+								"My talk submission for DevRelCon in London got accepted!!"
 							</p>
-							<footer className="blockquote-footer">Bekah</footer>
+							<footer className="blockquote-footer">Kai</footer>
+						</blockquote>
+						<blockquote className="blockquote">
+							<p className="mb-0">
+								"Very Excited! Just completed the Tableau component of a project
+								I've been working on for a few months. The only thing left to do
+								now is to finish organizing the readme and github!"
+							</p>
+							<footer className="blockquote-footer">Justin</footer>
+						</blockquote>
+						<blockquote className="blockquote">
+							<p className="mb-0">
+								Dan Ott had his first PR to the React codebase merged in!
+							</p>
 						</blockquote>
 					</div>
 				</div>
@@ -259,22 +256,14 @@ export default function Issue() {
 					— a Remix Web App for our community created by Dan Ott
 				</li>
 				<li>
-					<a href="https://github.com/AmyShackles/regex_parser">Regex Parser</a>{' '}
-					— a regular expression parser project by Amy Shackles
-				</li>
-				<li>
-					<a href="https://github.com/drone/drone">DRONE</a> — a Continuous
-					Delivery system built on container technology
+					<a href="https://github.com/open-sauced/intro">
+						Intro to Open Source
+					</a>{' '}
+					— an open source course to support new contributors to open source
 				</li>
 				<li>
 					<a href="https://jesscss.github.io/">JESS CSS</a> — a CSS
 					pre-processor that compiles to JavaScript!
-				</li>
-				<li>
-					<a href="https://github.com/BekahHW/postpartum-wellness-app">
-						Postpartum Wellness App
-					</a>{' '}
-					— a React Native App by Bekah HW
 				</li>
 			</ul>
 		</>
