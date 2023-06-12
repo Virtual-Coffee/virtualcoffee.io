@@ -71,43 +71,29 @@ But you can set up your credentials locally, so you don't have to input them whe
 
 There are three ways to clone a repository:
 
-<dl>
-	<dt>
-		[HTTPS](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#https)
-	</dt>
-	<dd>
-		HTTPS is the most common one to use. You must create a [Personal Access
-		Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
-		to enter when GitHub prompts your password.
-	</dd>
-	<dt>
-		[SSH (Secure
-		Shell)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#ssh)
-	</dt>
-	<dd>
-		SSH provides an encrypted way to exchange information safely. You can [read
-		here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
-		to generate a new SSH key on GitHub.
-	</dd>
-	<dt>[GitHub CLI](https://cli.github.com)</dt>
-	<dd>
-		If you use GitHub CLI, you can copy and run the command in your terminal.
-	</dd>
-</dl>
+- **[HTTPS](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#https)** <br />
+  HTTPS is the most common one to use. You must create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to enter when GitHub prompts your password.
+
+- **[SSH (Secure Shell)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#ssh)** <br />
+  SSH provides an encrypted way to exchange information safely. You can [read here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) to generate a new SSH key on GitHub.
+
+- **[GitHub CLI](https://cli.github.com)** <br />
+  If you use GitHub CLI, you can copy and run the command in your terminal.
 
 ### Cloning a repository
 
 When you want to start working on a change, you want to clone the project's repository after you fork it. That way, you can work on it in the local environment.
 
-To do this:
+The steps to clone a repository:
 
-1. Go to your forked repository page on GitHub and click the green "Code" button.
-2. Then, you can choose how you want to clone it — through HTTPS, SSH, or GitHub CLI. For this example, we will use HTTPS.
-3. Copy the URL.
-4. In your terminal, run:
+1. Go to your forked repository on GitHub.
+2. Click the green "Code" button.
+3. Choose how you want to clone it — through HTTPS, SSH, or GitHub CLI. <br /> For this example, we will use HTTPS.
+4. Copy the URL.
+5. In your terminal, run:
 
    ```bash
-   git clone repo-url
+   git clone repo-URL
    ```
 
    Change the `repo-url` to the copied URL of the forked repository. <br />
@@ -236,6 +222,8 @@ There are two ways to resolve conflicts:
      Then you will see this in your text editor:
 
      ![git conflict.jpg](https://cdn.hashnode.com/res/hashnode/image/upload/v1662321487768/YXuwvPrzz.jpg)
+
+     <br />
 
    - Select one of the options:
 
