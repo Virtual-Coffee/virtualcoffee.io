@@ -284,18 +284,26 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Pairing',
 		subtitle: `Pairing is more than just coding with someone else. Pairing is about communication, teaching, learning, positive reinforcements, and growing.`,
 		renderDescription: (totalSessions: number) => {
 			return (
 				<>
 					<p>
-						For this community challenge, we're trying to hit 30 pairing sessions by the end of the month. Some ways to get started pairing are by working on
-						an open-source issue, a LeetCode problem, or a project you need
-						help on. Check out <a href="https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c">The Power of Pair Programming: Benefits, Types, and Tips</a> for more on why you should pair up with us this May!
+						For this community challenge, we're trying to hit 30 pairing
+						sessions by the end of the month. Some ways to get started pairing
+						are by working on an open-source issue, a LeetCode problem, or a
+						project you need help on. Check out{' '}
+						<a href="https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c">
+							The Power of Pair Programming: Benefits, Types, and Tips
+						</a>{' '}
+						for more on why you should pair up with us this May!
 					</p>
-					<p>This challenge is sponsored by <a href="https://tuple.app/">Tuple</a>, the remote pair programming app on macOS and Linux.</p>
+					<p>
+						This challenge is sponsored by{' '}
+						<a href="https://tuple.app/">Tuple</a>, the remote pair programming
+						app on macOS and Linux.
+					</p>
 					<h3 className="display-3">
 						Current status: {totalSessions.toLocaleString()} out of 50 pairing
 						sessions
@@ -355,6 +363,22 @@ const challengeList: Challenge[] = [
 				title: 'May, 2021',
 			},
 		],
+	},
+	{
+		current: true,
+		title: 'Mid-Year Check-In',
+		subtitle: `Reflect. Reevaluate. Grow.`,
+		description: (
+			<p>
+				The Mid-Year Check-In challenge is designed to provide an opportunity
+				for Virtual Coffee members to reflect on their progress, reevaluate
+				goals, and gain clarity on their journey. Let’s pause, assess, and
+				adjust as we reach the halfway point of the year. This challenge aims to
+				encourage personal growth, foster connection within the community, and
+				provide a supportive space for members to share their insights,
+				challenges, and successes.
+			</p>
+		),
 	},
 ];
 
