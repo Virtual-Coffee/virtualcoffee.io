@@ -1,9 +1,9 @@
 ---
 meta:
-  title: Virtual Coffee Handbook
-  description: A collection of guides for current and prospective Virtual Coffee members.
+  title: Join Virtual Coffee
+  description: A guide for prospective members to join Virtual Coffee.
 hero:
-  Hero: UndrawBooks
+  Hero: UndrawJoinThumbUp
 tags:
   - memberresources
   - memberresourcesIndex
@@ -13,12 +13,13 @@ order: 1
 import LeadText from '~/components/content/LeadText';
 import TextContainer from '~/components/content/TextContainer';
 import FileIndex from '~/components/content/FileIndex';
+import { Link } from '@remix-run/react';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
 <LeadText>
 
-To give you the best experience and get the most out of Virtual Coffee, we created the official "Virtual Coffee Handbook"! Refer to this handbook if you have questions or need to know anything about Virtual Coffee.
+Our community is currently accepting members on a limited basis. As new membership becomes available, we'll reach out to those on the <Link to="/join">waitlist to join</Link>.
 
 </LeadText>
 
@@ -28,6 +29,6 @@ To give you the best experience and get the most out of Virtual Coffee, we creat
 
 ## Guides Available:
 
-<FileIndex subDirectory="resources/virtual-coffee" />
+<FileIndex subDirectory="resources/virtual-coffee-handbook/join-virtual-coffee" />
 
 </TextContainer>
