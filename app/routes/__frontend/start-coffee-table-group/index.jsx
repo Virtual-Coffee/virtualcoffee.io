@@ -43,15 +43,19 @@ export default function VolunteerForm() {
 					Our Coffee Table Groups have been one of the most popular and valuable
 					features for members of our community. Coffee Table Groups are small,
 					special interest groups created and run by members. They can involve
-					Zoom meetings, async slack hangouts, or anything else that the members
+					Zoom meetings, async Slack hangouts, or anything else that the members
 					would like to do.
 				</p>
 				<p>
-					To read more about Coffee Table Groups, read our{' '}
-					<Link to="/resources/virtual-coffee/get-involved/coffee-table-groups">
-						Coffee Table Groups guide
-					</Link>
-					.
+					To know more about leading a Coffee Table Group, read our{' '}
+					<Link to="/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups">
+						Leading Coffee Table Groups
+					</Link>{' '}
+					guide. And see the list of our existing Coffee Table Groups at the{' '}
+					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups">
+						Coffee Table Groups
+					</Link>{' '}
+					guide.
 				</p>
 			</LeadText>
 
