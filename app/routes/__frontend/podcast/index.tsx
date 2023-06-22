@@ -72,10 +72,18 @@ export default function PodcastsIndex() {
 		>
 			<div className="container bodycopy py-5">
 				<p className="lead">
-					This is the Virtual Coffee Podcast, where we interview members of the
+					Virtual Coffee is an intimate community for developers at all stages
+					of the journey. In the Virtual Coffee Podcast, hosted by Bekah Hawrot
+					Weigel and Dan Ott, you'll find interviews with members of our
 					community to learn more about their stories, who they are, how they
-					found Virtual Coffee, and how that influences their lives as
-					developers.
+					found Virtual Coffee, and how it has influenced their lives as
+					developers. We want to bring everything that's special about Virtual
+					Coffee, the intimacy and the friendships we&rsquo;ve built, and share
+					that with everyone through the podcast. We&rsquo;re always growing and
+					learning together as a group, and there&rsquo;s something really
+					special about being able to do that knowing that you&rsquo;ll have the
+					full support of the community around you. And that&rsquo;s what this
+					podcast is about too.
 				</p>
 
 				<hr />
