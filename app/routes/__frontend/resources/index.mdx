@@ -1,7 +1,7 @@
 ---
 meta:
-  title: 'Virtual Coffee Resources'
-  description: 'A collection of resources we provide for our members and the public.'
+  title: Virtual Coffee Resources
+  description: A collection of resources we provide for our members and all developers.
 hero:
   Hero: UndrawFolder
   heroHeader: Virtual Coffee Resources
@@ -14,12 +14,13 @@ order: 1
 import LeadText from '~/components/content/LeadText';
 import TextContainer from '~/components/content/TextContainer';
 import FileIndex from '~/components/content/FileIndex';
+import { Link } from '@remix-run/react';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
 <LeadText>
 
-We compile and provide guides and resources as Virtual Coffee community documentation. But we also have resources for developers in general. Feel free to check them out!
+We compile and provide guides and resources for Virtual Coffee's members as community documentation in <Link to="/resources/virtual-coffee-handbook">Virtual Coffee Handbook</Link>. And we also have resources for all developers that live in <Link to="/resources/developer-resources">Developer Resources</Link>. Feel free to check them out!
 
 </LeadText>
 
