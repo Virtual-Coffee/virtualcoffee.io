@@ -6,6 +6,7 @@ import type { FileListItem } from '~/components/PostList';
 
 type FileIndexProps = {
 	subDirectory?: string;
+	levels?: number;
 };
 
 function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
@@ -65,9 +66,9 @@ function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
 	return filtered;
 }
 
-export default function FileIndex({ subDirectory }: FileIndexProps) {
+export default function FileIndex({ subDirectory, levels }: FileIndexProps) {
 	const allFiles: FileListItem[] = useOutletContext();
 
 	const result = subDirectory ? findBase(allFiles, subDirectory) : allFiles;
-	return <PostList items={formatFileListItemsForPostList(result)} />;
+	return <PostList items={formatFileListItemsForPostList(result, levels)} />;
 }
