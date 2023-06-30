@@ -69,17 +69,17 @@ export type FileListItem = {
 
 export function formatFileListItemsForPostList(
 	items?: FileListItem[],
-	levels?: number,
+	depth?: number,
 	curLevel?: number,
 ): PostListItem[] | null {
 	const internalCurLevel: number =
 		typeof curLevel === 'undefined' ? (curLevel = 0) : curLevel;
 
-	if (typeof levels === 'undefined') {
-		levels = Infinity;
+	if (typeof depth === 'undefined') {
+		depth = Infinity;
 	}
 
-	if (!items || internalCurLevel >= levels) {
+	if (!items || internalCurLevel >= depth) {
 		return null;
 	}
 
@@ -90,7 +90,7 @@ export function formatFileListItemsForPostList(
 			to: `/${item.slug}`,
 			children: formatFileListItemsForPostList(
 				item.children,
-				levels,
+				depth,
 				internalCurLevel + 1,
 			),
 		}),
