@@ -219,7 +219,7 @@ const challengeList: Challenge[] = [
 				<p>
 					Learn more about this challenge in
 					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-for-the-build-in-public-the-power-of-daily-standup-and-demo-challenge-35kb">
-						this blog post
+						 this blog post
 					</a>
 					.
 				</p>
