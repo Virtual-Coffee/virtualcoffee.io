@@ -217,7 +217,7 @@ const challengeList: Challenge[] = [
 					creating a demo for the Virtal Coffee community.
 				</p>
 				<p>
-					Learn more about this challenge in
+					Learn more about this challenge in{' '}
 					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-for-the-build-in-public-the-power-of-daily-standup-and-demo-challenge-35kb">
 						this blog post
 					</a>
