@@ -206,14 +206,18 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Build in Public',
 		subtitle: `Communicate what you're working on, show your development, and be confident and proud of any progress made.`,
 		description: (
-			<p>
+			<><p>
 				In this challenge, we're working on creating a habit of talking about
 				the things we're working on, a plan for continuing progress, and
 				creating a demo for the Virtal Coffee community.
-			</p>
+			</p><p>
+					Learn more about this challenge in
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-for-the-build-in-public-the-power-of-daily-standup-and-demo-challenge-35kb">this blog post</a>.
+				</p></>
 		),
 		links: [
 			{
@@ -365,7 +369,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Mid-Year Check-In',
 		subtitle: `Reflect. Reevaluate. Grow.`,
 		description: (
