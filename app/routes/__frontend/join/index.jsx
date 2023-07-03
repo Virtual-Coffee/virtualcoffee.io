@@ -44,7 +44,7 @@ export default function Join() {
 					</p>
 					<p>
 						In the meantime, feel free to check out the{' '}
-						<Link to="/resources/virtual-coffee-handbook/join-virtual-coffee/faq">
+						<Link to="/resources/virtual-coffee-handbook/join-virtual-coffee">
 							FAQ about joining Virtual Coffee
 						</Link>
 						.
