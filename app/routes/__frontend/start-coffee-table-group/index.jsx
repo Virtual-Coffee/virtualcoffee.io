@@ -47,11 +47,11 @@ export default function VolunteerForm() {
 					would like to do.
 				</p>
 				<p>
-					To know more about leading a Coffee Table Group, read our{' '}
+					To learn more about leading a Coffee Table Group, read our{' '}
 					<Link to="/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups">
 						Leading Coffee Table Groups
 					</Link>{' '}
-					guide. And see the list of our existing Coffee Table Groups at the{' '}
+					guide. See the list of our existing Coffee Table Groups in the{' '}
 					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups">
 						Coffee Table Groups
 					</Link>{' '}
