@@ -2,6 +2,15 @@
 	margin: 4em 0;
 }
 
+.sponsors-body {
+	padding: 1em 0;
+	color: $body-color;
+
+	h3 {
+		color: $pink;
+	}
+}
+
 .sponsors-list {
 	list-style: none;
 	padding: 0;
@@ -42,6 +51,7 @@
 	padding: 0;
 	display: grid;
 	gap: 1em;
+	margin: 1em 0;
 
 	> li {
 		display: grid;
@@ -51,8 +61,12 @@
 			display: grid;
 			grid-template-columns: min(24vw, 200px) 1fr;
 			gap: 2em;
-			align-items: center;
+			align-items: flex-start;
 		}
+	}
+
+	.sponsors-body {
+		padding: 0;
 	}
 
 	img {
@@ -62,15 +76,6 @@
 		box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 		border-radius: 4px;
 		background: #fff;
-	}
-}
-
-.sponsors-body {
-	padding: 1em 0;
-	color: $body-color;
-
-	h3 {
-		color: $pink;
 	}
 }
 
