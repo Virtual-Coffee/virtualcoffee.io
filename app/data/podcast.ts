@@ -65,6 +65,20 @@ const episodesQuery = gql`
 				podcastSeason
 				podcastPublishDate
 				podcastBuzzsproutId
+				episodeSponsors {
+					title
+					... on podcastSponsors_default_Entry {
+						sponsorUrl: urlValue
+						sponsorImage: podcastEpisodeCard {
+							path
+							width
+							height
+						}
+						sponsorDescription: podcastShowNotes {
+							renderHtml
+						}
+					}
+				}
 			}
 		}
 	}
@@ -129,6 +143,7 @@ type PodcastEpisodes = Pick<
 	| 'podcastPublishDate'
 	| 'podcastBuzzsproutId'
 	| 'url'
+	| 'episodeSponsors'
 >[];
 type PodcastEpisodeResponse = {
 	entries: PodcastEpisode[];
