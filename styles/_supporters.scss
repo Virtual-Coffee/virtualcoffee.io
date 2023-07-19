@@ -7,6 +7,11 @@
 	padding: 0;
 	max-width: 900px;
 
+	> li {
+		display: grid;
+		gap: 1em;
+	}
+
 	li > a {
 		margin-bottom: 4em;
 
@@ -17,6 +22,34 @@
 		@include media-breakpoint-up(md) {
 			display: grid;
 			grid-template-columns: min(24vw, 400px) 1fr;
+			gap: 2em;
+			align-items: center;
+		}
+	}
+
+	img {
+		width: 100%;
+		height: auto;
+		max-width: 400px;
+		box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+		border-radius: 4px;
+		background: #fff;
+	}
+}
+
+.sponsors-list-sm {
+	list-style: none;
+	padding: 0;
+	display: grid;
+	gap: 1em;
+
+	> li {
+		display: grid;
+		gap: 1em;
+
+		@include media-breakpoint-up(md) {
+			display: grid;
+			grid-template-columns: min(24vw, 200px) 1fr;
 			gap: 2em;
 			align-items: center;
 		}

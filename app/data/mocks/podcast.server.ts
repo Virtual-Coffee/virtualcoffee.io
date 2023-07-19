@@ -60,5 +60,6 @@ export function getEpisode({ slug }: { slug: PodcastEpisode['slug'] }) {
 			},
 		],
 		podcastEpisodeCard: [{ path: 'http://placekitten.com/1200/1200' }],
+		episodeSponsors: [],
 	};
 }

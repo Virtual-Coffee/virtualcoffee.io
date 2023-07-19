@@ -29,13 +29,13 @@ export function sanitizeCmsData<T>(data: T): SanitizedData<T> {
 						[key]: sanitizeInternal(data[key]),
 					};
 				}
-			}, {});
+			}, {}) as SanitizedData<typeof data>;
 		} else {
 			return data;
 		}
 	}
 
-	return sanitizeInternal(data) as SanitizedData<T>;
+	return sanitizeInternal(data as DataToSanitize) as SanitizedData<T>;
 }
 
 export async function sanitizeHtml(html: string) {
