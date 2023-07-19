@@ -155,7 +155,7 @@ export default function PodcastsIndex() {
 										/>
 									</a>
 									<div className="media-body">
-										<span className="h4">
+										<span className="h5">
 											<a href={sponsor.sponsorUrl}>{sponsor.title}</a>
 										</span>
 									</div>
