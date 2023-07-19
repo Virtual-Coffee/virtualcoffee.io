@@ -54,7 +54,7 @@ export default function VolunteerForm() {
 				</p>
 				<p>
 					To read more and to see some roles available, read our{' '}
-					<Link to="/resources/virtual-coffee/get-involved/paths-to-leadership">
+					<Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
 						Paths to Leadership &amp; Roles guide
 					</Link>
 					.
