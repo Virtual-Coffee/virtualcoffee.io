@@ -112,8 +112,8 @@ export default function PodcastsIndex() {
 				</div>
 				{latestEpisode.episodeSponsors.length && (
 					<>
-						<div>
-							<h4 className="h5 text-muted font-italic">
+						<div className="mt-3">
+							<h4 className="h6 text-muted font-italic">
 								<small>This episode is brought to you by:</small>
 							</h4>
 							{latestEpisode.episodeSponsors.map((sponsor) => (
