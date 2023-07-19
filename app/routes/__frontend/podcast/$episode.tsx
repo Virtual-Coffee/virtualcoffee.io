@@ -147,6 +147,78 @@ export default function PostSlug() {
 			<PodcastSubscribe />
 
 			<hr />
+
+			{episode.episodeSponsors.length > 0 && (
+				<>
+					<h3 className="h5">
+						<div className="text-muted font-italic">
+							<small>This episode is brought to you by:</small>
+						</div>
+					</h3>
+					<ul className="sponsors-list-sm">
+						{episode.episodeSponsors.map((sponsor) => (
+							<li key={sponsor.title}>
+								<a href={sponsor.sponsorUrl}>
+									<img
+										src={createCmsImage({
+											path: sponsor.sponsorImage[0].path,
+											folder: 'podcast',
+											settings: {
+												w: 80,
+											},
+										})}
+										className="mr-3"
+										alt=""
+										width={sponsor.sponsorImage[0].width}
+										height={sponsor.sponsorImage[0].height}
+										sizes="(min-width: 768px) 400, calc(100vw - 60px)"
+										srcSet={`${createCmsImage({
+											path: sponsor.sponsorImage[0].path,
+											folder: 'podcast',
+											settings: {
+												w: 80,
+											},
+										})} 80w, ${createCmsImage({
+											path: sponsor.sponsorImage[0].path,
+											folder: 'podcast',
+											settings: {
+												w: 160,
+											},
+										})} 160w, ${createCmsImage({
+											path: sponsor.sponsorImage[0].path,
+											folder: 'podcast',
+											settings: {
+												w: 240,
+											},
+										})} 240w, ${createCmsImage({
+											path: sponsor.sponsorImage[0].path,
+											folder: 'podcast',
+											settings: {
+												w: 480,
+											},
+										})} 480w, ${createCmsImage({
+											path: sponsor.sponsorImage[0].path,
+											folder: 'podcast',
+											settings: {
+												w: 720,
+											},
+										})} 720w`}
+									/>
+								</a>
+
+								<div className="sponsors-body">
+									<h4>
+										<a href={sponsor.sponsorUrl}>{sponsor.title}</a>
+									</h4>
+									<DisplayHtml html={sponsor.sponsorDescription} />
+								</div>
+							</li>
+						))}
+					</ul>
+					<hr />
+				</>
+			)}
+
 			<div className="row">
 				<div className="col-md-5 col-lg-4 order-md-2 pb-4 pb-md-0">
 					{episode.podcastGuests.map((guest) => {
