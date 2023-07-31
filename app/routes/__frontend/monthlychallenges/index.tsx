@@ -181,6 +181,7 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Healthy Habits for Happy Devs',
 		subtitle: `This month's challenge is all about nourishing our bodies, minds, and spirits so that we can become healthier developers.`,
 		description: (
@@ -206,7 +207,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Build in Public',
 		subtitle: `Communicate what you're working on, show your development, and be confident and proud of any progress made.`,
 		description: (
