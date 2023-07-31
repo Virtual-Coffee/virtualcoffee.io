@@ -185,15 +185,24 @@ const challengeList: Challenge[] = [
 		title: 'Healthy Habits for Happy Devs',
 		subtitle: `This month's challenge is all about nourishing our bodies, minds, and spirits so that we can become healthier developers.`,
 		description: (
-			<p>
-				The goal of this challenge is to build a new habit that will make you a
-				healthier dev; this can be mind and body centered (drink, move, read,
-				meditate, rearrange your work station) or code centered (review your
-				README, clean your code, refresh your GitHub repo) or both. Set the goal
-				for yourself this month and define what successfully completing the
-				challenge looks like. For example, could be something like: review the
-				README in 5 of your projects (one every week) or run 2k twice a week.
-			</p>
+			<>
+				<p>
+					The goal of this challenge is to build a new habit that will make you a
+					healthier dev; this can be mind and body centered (drink, move, read,
+					meditate, rearrange your work station) or code centered (review your
+					README, clean your code, refresh your GitHub repo) or both. Set the goal
+					for yourself this month and define what successfully completing the
+					challenge looks like. For example, could be something like: review the
+					README in 5 of your projects (one every week) or run 2k twice a week.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="/">
+						this blog post
+					</a>
+					.
+				</p>
+			</>
 		),
 		links: [
 			{
