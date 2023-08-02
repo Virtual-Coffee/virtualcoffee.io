@@ -169,7 +169,7 @@ export default function Issue() {
 
 			<h2>Member Content Highlights</h2>
 			<p>
-				<em>Some of our member contents we loved in May!</em>
+				<em>Some of our member contents we loved in June!</em>
 			</p>
 			<h3>Articles</h3>
 			<ul>
