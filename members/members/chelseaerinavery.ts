@@ -41,7 +41,11 @@ export const chelseaerinavery: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		{ type: 'medium', username: '@chelseaavery.js' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://chelsea-avery.com/', title: 'Chelsea Avery Website' },
+		{
+			type: 'website',
+			url: 'https://chelsea-avery.com/',
+			title: 'Chelsea Avery Website',
+		},
 	],
 	badges: [],
 };
