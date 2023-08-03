@@ -14,7 +14,7 @@ export const kamalwalia: MemberObject = {
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	 bio: `Full-Stack Engineer | Tech Writer | Mentor | Life Long Learner`,
+	bio: `Full-Stack Engineer | Tech Writer | Mentor | Life Long Learner`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -31,16 +31,16 @@ export const kamalwalia: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		 { type: 'linkedin', username: 'kamalwalia' },
-		 { type: 'dev', username: 'kamalwalia' },
+		{ type: 'linkedin', username: 'kamalwalia' },
+		{ type: 'dev', username: 'kamalwalia' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		 { type: 'twitter', username: '_KamalWalia' },
+		{ type: 'twitter', username: '_KamalWalia' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
-		 { type: 'medium', username: '@kamalwalia' },
-		 { type: 'hashnode', username: '@KamalWalia' },
-		 { type: 'website', url: 'https://kamal-walia.github.io/' },
+		{ type: 'medium', username: '@kamalwalia' },
+		{ type: 'hashnode', username: '@KamalWalia' },
+		{ type: 'website', url: 'https://kamal-walia.github.io/' },
 	],
 	badges: [],
 };
