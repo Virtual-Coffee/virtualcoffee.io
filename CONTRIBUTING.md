@@ -117,7 +117,7 @@ Once you've been assigned the issue, you have two options.
 
 ### Awaiting Review
 
-Once you've submitted your pull request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all, of course, we ask for patience if you don't see a response immediately. Sometimes it takes about a day for someone's schedule to clear up to have the sit to properly review incoming pull requests. We'd rather not rush a response after someone has put time and effort into submitting it. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your pull request reminding of its status.
+Once you've submitted your pull request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all, of course, we ask for your patience if you don't see a response immediately. It can take time for someone's schedule to clear up to have the right conditions to properly review incoming pull requests. We'd rather not rush a response after someone has put time and effort into submitting it. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your pull request reminding of its status.
 
 The purpose of reviews is to create the best experience we can for our contributors.
 
