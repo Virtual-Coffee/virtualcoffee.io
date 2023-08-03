@@ -82,7 +82,7 @@ If you feel like there's a contribution you would like to make that isn't repres
 - ❓ Questions/Ideas/Feedback
 
 If you feel like you have an issue that doesn't match those categories, go ahead and ignore the templates and create an issue the old-fashioned way.
-You can refer to our resource on [how to write an issue](https://virtualcoffee.io/resources/open-source/contributor-guide#how-to-write-an-issue).
+You can refer to our resource on [how to write an issue](https://virtualcoffee.io/resources/developer-resources/open-source/contributor-guide#how-to-write-an-issue).
 
 ### Setting Up Local Environment To Work On Issues
 
