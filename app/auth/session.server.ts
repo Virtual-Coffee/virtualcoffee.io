@@ -1,6 +1,6 @@
 // app/services/session.server.ts
 import { createCookieSessionStorage } from '@remix-run/node';
-import { MessageCode, SessionFlash } from './types';
+import { MessageCode, type SessionFlash } from './types';
 
 function configSessionStorage() {
 	return createCookieSessionStorage({
