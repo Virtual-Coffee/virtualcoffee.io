@@ -17,7 +17,7 @@
 	"packageManager": "pnpm@8.6.11",
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
-		"format": "npx prettier --write --ignore-unknown \"**/*\"",
+		"format": "npx prettier --write --ignore-unknown --list-different \"**/*\"",
 		"lint": "eslint ./app/**/*.{js,jsx}",
 		"build": "run-s build:*",
 		"build:tailwind": "pnpm generate:tailwind --minify",
