@@ -26,6 +26,7 @@
 
 .navbar {
 	background-image: $gradient-primary;
+	z-index: 2000;
 
 	&:focus-within {
 		z-index: $zindex-fixed + 2;
