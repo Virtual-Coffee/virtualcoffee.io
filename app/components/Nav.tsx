@@ -1,13 +1,35 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Link } from '@remix-run/react';
 import VirtualCoffeeFull from '~/svg/VirtualCoffeeFull';
+
+interface NavItemProps {
+	to: string;
+	children: React.ReactNode;
+}
 
 export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
 
+	// This Function toggle the isOpen
+	const handleToggle = useCallback(() => {
+		setIsOpen((open) => !open);
+	}, []);
+
+	// NavItem Component
+	const NavItem = ({ children, to }: NavItemProps) => (
+		<Link onClick={handleToggle} className="nav-link" to={to}>
+			{children}
+		</Link>
+	);
+
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark fixed-top w-100">
-			<Link className="navbar-brand" to="/" aria-label="Virtual Coffee">
+			<Link
+				onClick={handleToggle}
+				className="navbar-brand"
+				to="/"
+				aria-label="Virtual Coffee"
+			>
 				<VirtualCoffeeFull title="Virtual Coffee" />
 			</Link>
 			<button
@@ -16,9 +38,7 @@ export default function Nav() {
 				aria-controls="navbarNav"
 				aria-expanded={isOpen ? 'true' : 'false'}
 				aria-label="Toggle navigation"
-				onClick={() => {
-					setIsOpen((isOpen) => !isOpen);
-				}}
+				onClick={handleToggle}
 			>
 				<span className="navbar-toggler-icon"></span>
 			</button>
@@ -30,27 +50,19 @@ export default function Nav() {
 			>
 				<ul className="navbar-nav">
 					<li className="nav-item">
-						<Link className="nav-link" to="/about">
-							About
-						</Link>
+						<NavItem to="/about">About</NavItem>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" to="/events">
-							Events
-						</Link>
+						<NavItem to="/events">Events</NavItem>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" to="/podcast">
-							Podcast
-						</Link>
+						<NavItem to="/podcast">Podcast</NavItem>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" to="/resources">
-							Resources
-						</Link>
+						<NavItem to="/resources">Resources</NavItem>
 					</li>
 					<li className="nav-item">
-						<a className="nav-link" href="https://store.virtualcoffee.io/">
+						<a href="https://store.virtualcoffee.io/" className="nav-link">
 							Store
 						</a>
 					</li>
