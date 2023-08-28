@@ -63,7 +63,9 @@ const challengeList: Challenge[] = [
 				your job packet materials and that elevator pitch that might get you in
 				the door. Your resume, cover letter, and elevator pitch should work
 				together to tell your story and represent where you are on your career
-				journey; each piece should complement the others. This challenge emphasizes taking time to ensure they work together or get some extra feedback on what you've worked on.
+				journey; each piece should complement the others. This challenge
+				emphasizes taking time to ensure they work together or get some extra
+				feedback on what you've worked on.
 			</p>
 		),
 		links: [
@@ -89,11 +91,12 @@ const challengeList: Challenge[] = [
 			<p>
 				Devs are more than just the code we write. This challenge is all about
 				embracing self-expression. Give back to yourself by indulging in
-				something just for fun. Share the art, music, poetry, sports, games, or other hobbies that spark your joy. We spend so much time grinding
-				away on understanding things in the tech space. Let's make some space
-				for the other parts of ourselves. In this challenge, we encourage folks
-				to spend time working on things that aren't necessarily code-specific
-				or using code to improve other hobbies and outlets.
+				something just for fun. Share the art, music, poetry, sports, games, or
+				other hobbies that spark your joy. We spend so much time grinding away
+				on understanding things in the tech space. Let's make some space for the
+				other parts of ourselves. In this challenge, we encourage folks to spend
+				time working on things that aren't necessarily code-specific or using
+				code to improve other hobbies and outlets.
 			</p>
 		),
 		links: [
@@ -189,7 +192,9 @@ const challengeList: Challenge[] = [
 					read, meditate, rearrange your workstation) or code-centered (review
 					your README, clean your code, refresh your GitHub repo) or both. Set
 					the goal for yourself this month and define what successfully
-					completing the challenge looks like. For example, it could be reviewing the README in 5 of your projects (one every week) or running 2k twice a week.
+					completing the challenge looks like. For example, it could be
+					reviewing the README in 5 of your projects (one every week) or running
+					2k twice a week.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -279,8 +284,8 @@ const challengeList: Challenge[] = [
 				For this challenge, members present their knowledge and showcase their
 				understanding by exploring video and audio mediums for sharing
 				knowledge, highlighting their achievements. They might do that by giving
-				Lunch & Learns, YouTube videos, podcasts, or some other form of audio
-				or video content they created that explores a coding-related
+				Lunch & Learns, YouTube videos, podcasts, or some other form of audio or
+				video content they created that explores a coding-related
 				concept--there's no length requirement. We believe this provides value
 				by solidifying ideas, creating a resource for others, inviting personal
 				growth through conversations sparked by sharing, and demonstrating your
@@ -476,20 +481,23 @@ export default function Index() {
 						grow, and receive support and mentorship. There will be a theme for
 						each month's challenge and weekly goals for the members to work on.
 						Instructions, resources, and additional help for the challenges is
-						provided in the <code>#monthly-challenge</code> channel in Slack. Along with our
-						Maintainers, our Challenge Team Leads plan, organize, and facilitate
-						these challenges.
+						provided in the <code>#monthly-challenge</code> channel in Slack.
+						Along with our Maintainers, our Challenge Team Leads plan, organize,
+						and facilitate these challenges.
 					</p>
 
 					<h2>Who can participate?</h2>
 
 					<p>
-						These challenges are available to all Virtual Coffee members. The goal is to support developers of all stages in their coding journey
+						These challenges are available to all Virtual Coffee members. The
+						goal is to support developers of all stages in their coding journey
 						To become a member of Virtual Coffee, all you need to do is{' '}
-						<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee#coffees-virtual-coffee-weekly-zoom-chats">attend a Tuesday or Thursday Coffee</Link> and submit
-						the form you'll receive at Coffee. After you submit the form, you
-						will receive an invitation to join the Slack group, where you can
-						share your progress on the challenges and ask questions.
+						<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee#coffees-virtual-coffee-weekly-zoom-chats">
+							attend a Tuesday or Thursday Coffee
+						</Link>{' '}
+						and submit the form you'll receive at Coffee. After you submit the
+						form, you will receive an invitation to join the Slack group, where
+						you can share your progress on the challenges and ask questions.
 					</p>
 				</div>
 			</div>
