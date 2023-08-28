@@ -32,7 +32,7 @@ export default function Challenge() {
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges/oct-2021/">next challenge</Link>!
+				the <Link to="/monthlychallenges/oct-2021">next challenge</Link>!
 			</div>
 
 			<h1>
@@ -122,11 +122,12 @@ export default function Challenge() {
 
 			<h3>How do I share my progress?</h3>
 			<p>
-				Share your progress in the #monthly-challenge channel in Slack. While no
-				other platform is imposed, sharing on social media for more reach can be
-				a good idea, but only if you are comfortable doing so. You can share on
-				Twitter using — or not — the hashtag #VCMonthlyChallenge, a personal
-				blog, a post on <a href="https://dev.to/">DEV.to</a>, you get the idea!
+				Share your progress in the <code>#monthly-challenge</code> channel in
+				Slack. While no other platform is imposed, sharing on social media for
+				more reach can be a good idea, but only if you are comfortable doing so.
+				You can share on Twitter using — or not — the hashtag
+				<code>#VCMonthlyChallenge</code>, a personal blog, a post on{' '}
+				<a href="https://dev.to/">DEV.to</a>, you get the idea!
 			</p>
 
 			<p>
@@ -142,9 +143,10 @@ export default function Challenge() {
 
 			<h3>What if I need help?</h3>
 			<p>
-				You can ask questions in the #help-and-pairing channel in Slack, ask for
-				ideas in the #open-source channel, or join the #co-working-room. Asking
-				for help is part of the process!
+				You can ask questions in the <code>#help-and-pairing</code> channel in
+				Slack, ask for ideas in the <code>#open-source</code> channel, or join
+				the
+				<code>#co-working-room</code>. Asking for help is part of the process!
 			</p>
 			<p>And remember, we're always here to help ❤️</p>
 
@@ -161,8 +163,8 @@ export default function Challenge() {
 			<h2>Resources</h2>
 			<ul>
 				<li>
-					The issue guide is pinned in our Slack #monthly-challenge channel, and
-					you can find our maintainers' checklist{' '}
+					The issue guide is pinned in our Slack <code>#monthly-challenge</code>{' '}
+					channel, and you can find our maintainers' checklist{' '}
 					<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 						here
 					</Link>{' '}

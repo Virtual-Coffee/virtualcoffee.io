@@ -107,13 +107,13 @@ export default function Challenge() {
 			<p>
 				Let's start the week with an async check-in. What are your goals for
 				Hacktoberfest for the week? What support do you need? Do you plan on
-				spending time in the #hacktoberfest-co-working-room, talking to your
-				mentor, and answering questions as a maintainer?
+				spending time in the <code>#hacktoberfest-co-working-room</code>,
+				talking to your mentor, and answering questions as a maintainer?
 			</p>
 			<p>
 				Every Friday of the month, you come to our synchronous check-in, share
 				your progress, ask questions, and find help and support. We'll post more
-				information in the #open-source channel in Slack.
+				information in the <code>#open-source</code> channel in Slack.
 			</p>
 			<p>
 				Can't come to the check-in? No problem. We'll have an async check-in as
@@ -122,13 +122,14 @@ export default function Challenge() {
 
 			<h3>How do I share my progress?</h3>
 			<p>
-				Share your progress in the #open-source channel in Slack. We want to
-				know when you get those pull requests (PRs) in so we can celebrate with
-				you! And if you need support, we'll be there to help you, too. While no
-				other platform is imposed, sharing on social media for more reach can be
-				a good idea, but only if you are comfortable doing so. You can share on
-				Twitter using — or not — the hashtag #VCMonthlyChallenge, a personal
-				blog, a post on <a href="https://dev.to/">DEV.to</a>, you get the idea!
+				Share your progress in the <code>#open-source</code> channel in Slack.
+				We want to know when you get those pull requests (PRs) in so we can
+				celebrate with you! And if you need support, we'll be there to help you,
+				too. While no other platform is imposed, sharing on social media for
+				more reach can be a good idea, but only if you are comfortable doing so.
+				You can share on Twitter using — or not — the hashtag
+				<code>#VCMonthlyChallenge</code>, a personal blog, a post on{' '}
+				<a href="https://dev.to/">DEV.to</a>, you get the idea!
 			</p>
 
 			<p>
@@ -140,9 +141,10 @@ export default function Challenge() {
 
 			<h3>What if I need help?</h3>
 			<p>
-				You can ask questions in the #help-and-pairing channel in Slack, ask for
-				ideas in the #open-source channel, or join the
-				#hacktoberfest-co-working-room. Asking for help is part of the process!
+				You can ask questions in the <code>#help-and-pairing</code> channel in
+				Slack, ask for ideas in the <code>#open-source</code> channel, or join
+				the <code>#hacktoberfest-co-working-room</code>. Asking for help is part
+				of the process!
 			</p>
 
 			<p>And remember, we're always here to help ❤️</p>
@@ -155,7 +157,7 @@ export default function Challenge() {
 			<p>
 				Remember, VC is here to support you during Hacktoberfest but is not an
 				official event partner. To get the Hacktoberfest swag, you need to have
-				four (4) pull requests accepted.
+				four (4) pull requests (PRs) accepted.
 			</p>
 
 			<h2>Virtual Coffee Approved Repositories!</h2>
