@@ -1,12 +1,14 @@
 import { json } from '@remix-run/node';
+import { Link } from '@remix-run/react';
+import LeadText from '~/components/content/LeadText';
 import { createMetaData } from '~/util/createMetaData.server';
 
 export const handle = {
-	listTitle: 'September, 2021: Preptember!',
+	listTitle: 'September 2021: Preptember!',
 	meta: {
-		title: 'Monthly Theme & Challenge for September, 2021: Preptember!',
+		title: 'Monthly Theme & Challenge for September 2021: Preptember!',
 		description:
-			'September challenge -> Get ready for Hacktoberfest! This month, our member maintainers will cleanup their repos, and our members getting ready to contribute will be writing good issues.',
+			'September challenge -> Get ready for Hacktoberfest! This month, our member maintainers will clean up their repos, and our members getting ready to contribute will be writing good issues.',
 	},
 	date: '2021-09-01',
 	hero: {
@@ -30,26 +32,26 @@ export default function Challenge() {
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <a href="/monthlychallenges/oct-2021/">next challenge</a>!
+				the <Link to="/monthlychallenges/oct-2021/">next challenge</Link>!
 			</div>
 
 			<h1>
-				<small>Monthly Challenge for September, 2021:</small>
-				Preptember! Get open source ready.
+				<small>Monthly Challenge for September 2021:</small> Preptember! Get
+				open source ready.
 			</h1>
 
-			<p className="lead">
-				This month, we have two tracks. Maintainers will be reviewing their open
-				source repos with{' '}
-				<a href="https://virtualcoffee.io/resources/open-source/oss-maintainer-checklist/">
+			<LeadText>
+				This month, we have two tracks. Our member maintainers will be reviewing
+				their open source repos with{' '}
+				<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 					our checklist
-				</a>
+				</Link>{' '}
 				to make sure their projects are ready for Hacktoberfest contributions,
-				and our contributors will be looking at their favorite repos and writing
-				good issues as needed.
-			</p>
+				and our member contributors will be looking at their favorite repos and
+				writing good issues as needed.
+			</LeadText>
 
-			<p>
+			<p className="mt-3">
 				<strong>Challenge Team Leads & Facilitators</strong>: Aurelie Verrot &
 				Andrew Bush
 			</p>
@@ -58,6 +60,7 @@ export default function Challenge() {
 
 			<h2>Theme</h2>
 			<p>Get open source ready!</p>
+
 			<h2>Challenge</h2>
 			<p>
 				<strong>Maintainers</strong>: Evaluate your open source project and
@@ -67,19 +70,19 @@ export default function Challenge() {
 				<strong>Contributors</strong>: Following the guide, create and submit a
 				good issue to one of your favorite open source repos.
 			</p>
+
 			<h2>Maintainers</h2>
 			<p>
 				Preparing your open source project for contributions is one of the best
-				ways to create a community of contributors that last beyond
+				ways to create a community of contributors that lasts beyond
 				Hacktoberfest. Your repository should have a clear path for
 				communication, a good explanation of how to run the project, and clear
 				issues.{' '}
-				<a href="https://virtualcoffee.io/resources/open-source/oss-maintainer-checklist/">
+				<Link to="/resources/developer-resources/open-source/maintainer-guide">
 					Our guide
-				</a>
-				will help you to not only prepare your project, but to be added to the
-				list of Virtual Coffee endorsed projects for our Hacktoberfest
-				Initiative.
+				</Link>{' '}
+				will help you prepare your project and be added to the list of Virtual
+				Coffee endorsed projects for our Hacktoberfest Initiative.
 			</p>
 
 			<h2>Contributors</h2>
@@ -92,60 +95,63 @@ export default function Challenge() {
 				issue doesn't exist, and you've clearly described the need for the issue
 				and have provided any information or screenshots necessary to help
 				others to understand how to navigate the issue. Remember, you don't have
-				to have the solution, just to be able to clearly explain the issue.
+				to have a solution. You just need to be able to explain the issue
+				clearly.
 			</p>
 
 			<h2>How to Participate</h2>
 
-			<h4>Weekly check-ins</h4>
+			<h3>Weekly check-ins</h3>
 			<p>
-				Are you making progress? Every Monday of the month, set your goals for
-				the week and let's check-in on Fridays in slack.
+				Are you making progress? Every Monday of the month, set your weekly
+				goals and let's check-in on Fridays in Slack.
 			</p>
 			<p>
 				<strong>Example Goals for Week One</strong>
 			</p>
 			<ol>
 				<li>
-					<strong>Maintainers</strong> - Review your README and CONTRIBUTING.md
+					<strong>Maintainers</strong> — Review your README and CONTRIBUTING.md
 					files.
 				</li>
 				<li>
-					<strong>Contributors</strong> - Look through your favorite repos to
+					<strong>Contributors</strong> — Look through your favorite repos to
 					see if there's an issue you could create.
 				</li>
 			</ol>
 
-			<h4>How do I share my progress?</h4>
+			<h3>How do I share my progress?</h3>
 			<p>
 				Share your progress in the #monthly-challenge channel in Slack. While no
-				other platform is imposed, it can be a good idea to also share on social
-				media for more reach but only if you are comfortable to do so (Twitter
-				using -or not- the hashtag #VCMonthlyChallenge, a personal blog, a post
-				on <a href="https://dev.to/">DEV.to</a>, you get the idea)
+				other platform is imposed, sharing on social media for more reach can be
+				a good idea, but only if you are comfortable doing so. You can share on
+				Twitter using — or not — the hashtag #VCMonthlyChallenge, a personal
+				blog, a post on <a href="https://dev.to/">DEV.to</a>, you get the idea!
 			</p>
 
 			<p>
-				Sharing every time some work is added is a good idea, small progress is
-				still progress. No need to write a detailed blog post: a 140 characters
-				Tweet can be enough. For example:
-				<i>
-					Today I updated my README to give instructions on how to run my
+				Sharing every time some work is added is a good idea. Small progress is
+				still progress. There is no need to write a detailed blog post. A
+				140-characters Tweet can be enough. For example, "
+				<em>
+					Today, I updated my README to give instructions on how to run my
 					project.
-				</i>
+				</em>
+				"
 			</p>
-			<h4>What if I need help?</h4>
+
+			<h3>What if I need help?</h3>
 			<p>
-				You can ask a question in the #help-and-pairing VC channel, ask for
-				ideas in the #open-source channel, or join the VC co-working room.
-				Asking for help is part of the process!
+				You can ask questions in the #help-and-pairing channel in Slack, ask for
+				ideas in the #open-source channel, or join the #co-working-room. Asking
+				for help is part of the process!
 			</p>
 			<p>And remember, we're always here to help ❤️</p>
 
-			<h4>Completing the Challenge!</h4>
+			<h3>Completing the Challenge!</h3>
 			<p>
-				Once you've completed the challenge, post a link to your issue in slack
-				or to your open source repository{' '}
+				Once you've completed the challenge, post a link to your issue in Slack
+				or your open source repository{' '}
 				<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/321">
 					in our discussion
 				</a>
@@ -155,12 +161,12 @@ export default function Challenge() {
 			<h2>Resources</h2>
 			<ul>
 				<li>
-					The issue guide can be found pinned in our slack #monthly-challenge
-					channel and our maintainers checklist can be found{' '}
-					<a href="https://virtualcoffee.io/resources/open-source/oss-maintainer-checklist/">
+					The issue guide is pinned in our Slack #monthly-challenge channel, and
+					you can find our maintainers' checklist{' '}
+					<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 						here
-					</a>
-					as part of our Member Resources section on our site
+					</Link>{' '}
+					as part of our Member Resources section on our site.
 				</li>
 				<li>
 					<a href="https://github.com/tkshill/Template/wiki/A-Starter-Guide-to-Open-Source-Project-Maintenance">
@@ -168,8 +174,8 @@ export default function Challenge() {
 					</a>
 				</li>
 				<li>
-					<a href="https://hacktoberfest.digitalocean.com/faq/">
-						Hacktoberfest FAQs
+					<a href="https://hacktoberfest.com/participation/">
+						Hacktoberfest participation
 					</a>
 				</li>
 			</ul>
