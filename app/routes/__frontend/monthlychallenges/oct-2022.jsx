@@ -1,12 +1,13 @@
 import { json } from '@remix-run/node';
 import { createMetaData } from '~/util/createMetaData.server';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import { getChallengeData } from '~/data/monthlyChallenges/oct-2022';
+import LeadText from '~/components/content/LeadText';
 
 export const handle = {
-	listTitle: 'October, 2022: Hacktoberfest!',
+	listTitle: 'October 2022: Hacktoberfest!',
 	meta: {
-		title: 'Monthly Theme & Challenge for October, 2022: Hacktoberfest!',
+		title: 'Monthly Theme & Challenge for October 2022: Hacktoberfest!',
 		description:
 			'October challenge -> Participate to Hacktoberfest! This month, our members will participate to the DigitalOcean Hacktoberfest by being maintainers, contributors, or mentors.',
 	},
@@ -36,18 +37,23 @@ export default function Challenge() {
 
 	return (
 		<>
+			<div className="alert alert-success">
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link to="/monthlychallenges">next challenge</Link>!
+			</div>
+
 			<h1>
 				<small>Monthly Challenge for October 2022:</small> It's Hacktoberfest!
 				Participate in open source, learn, and have fun!
 			</h1>
 
-			<p className="lead">
-				This month we have three tracks: maintainers will provide issues labeled
-				for Hacktoberfest, contributors will solve issues, and mentors will help
-				contributors and maintainers be successful.
-			</p>
+			<LeadText>
+				This month, we have three tracks: maintainers will provide issues
+				labeled for Hacktoberfest, contributors will solve issues, and mentors
+				will help contributors and maintainers be successful.
+			</LeadText>
 
-			<p>
+			<p className="mt-3">
 				<strong>Challenge Team Leads & Facilitators:</strong> BekahHW & Dan Ott
 			</p>
 
@@ -61,25 +67,27 @@ export default function Challenge() {
 			<strong>Maintainers</strong>
 			<p>
 				They provide issues labeled Hacktoberfest on their repository(ies),
-				review the PRs for these issues, and validate and merge following the
-				rules of the contest. They also answer the contributors' questions.
+				review the pull requests (PRs) for these issues, and validate and merge
+				following the rules of the contest. They also answer the contributors'
+				questions.
 			</p>
 
 			<strong>Contributors</strong>
 			<p>
 				They find issues labeled Hacktoberfest they want to solve. The goal of
-				the contest is to have 4 PRs validated during the month of October.
+				the contest is to have four (4) pull requests (PRs) validated during
+				October.
 			</p>
 
 			<strong>Mentors</strong>
 			<p>
-				They will be paired with a mentee (contributor or maintainer). They
+				A mentor will be paired with a mentee (contributor or maintainer). They
 				provide support either on Slack, during a 1:1, a pairing session, or
 				whatever works best for the team!
 			</p>
 
 			<h2>How to Participate</h2>
-			<h4>Before starting</h4>
+			<h3>Before starting</h3>
 
 			<ol>
 				<li>
@@ -87,11 +95,11 @@ export default function Challenge() {
 					<a href="https://hacktoberfest.com/">
 						Hacktoberfest official website
 					</a>
-					, get in contact with your mentor if you requested one, and check out
-					issues on sites with the Hacktoberfest label.
+					, contact your mentor if you request one, and check out issues on
+					sites with the Hacktoberfest label.
 					<br />
-					If you've signed up to the VC Hacktoberfest Initiative, you can access
-					to your dashboard{' '}
+					If you've signed up for the VC Hacktoberfest Initiative, you can
+					access your dashboard{' '}
 					<a href="https://hacktoberfest.virtualcoffee.io/">here</a>.
 				</li>
 
@@ -103,61 +111,61 @@ export default function Challenge() {
 				</li>
 			</ol>
 
-			<h4>Weekly check-ins</h4>
+			<h3>Weekly check-ins</h3>
 			<p>
 				Let's start the week with an async check-in. What are your goals for
 				Hacktoberfest for the week? What support do you need? Do you plan on
-				spending time in the Hacktoberfest co-working room, talking to your
-				mentor, answering questions as a maintainer?
+				spending time in the <code>#hacktoberfest-co-working-room</code>,
+				talking to your mentor, and answering questions as a maintainer?
 			</p>
 			<p>
 				Every Friday of the month, you come to our synchronous check-in, share
 				your progress, ask questions, and find help and support. We'll post more
-				information in the <code>#open-source</code> Slack channel.
+				information in the <code>#open-source</code> channel in Slack.
 			</p>
 			<p>
 				Can't come to the check-in? No problem. We'll have an async check-in as
 				well!
 			</p>
 
-			<h4>How do I share my progress?</h4>
+			<h3>How do I share my progress?</h3>
 			<p>
 				Share your progress in the <code>#hacktoberfest</code> channel in Slack.
-				We want to know when you get those Pull Requests (PRs) in so we can
+				We want to know when you get those pull requests (PRs) in so we can
 				celebrate along with you! And if you need support, we'll be there to
-				help you too. While no other platform is imposed, it can be a good idea
-				to also share on social media for more reach but only if you are
-				comfortable doing so. You can share on Twitter using -or not- the
+				help you, too. While no other platform is imposed, it can be a good idea
+				to also share on social media for more reach, but only if you are
+				comfortable doing so. You can share on Twitter using — or not — the
 				hashtag <code>#VCMonthlyChallenge</code>, a personal blog, a post on{' '}
 				<a href="https://dev.to/">DEV.to</a>, you get the idea!
 			</p>
 
 			<p>
-				Sharing every time some work is added is a good idea, small progress is
-				still progress. No need to write a detailed blog post; a 140 character
-				Tweet can be enough. For example:{' '}
-				<i>Today I submitted my first PR for Hacktoberfest.</i>
+				Sharing every time some work is added is a good idea. Small progress is
+				still progress. There is no need to write a detailed blog post. A
+				140-character Tweet can be enough. For example, "
+				<em>Today, I submitted my first PR for Hacktoberfest.</em>"
 			</p>
 
-			<h4>What if I need help?</h4>
+			<h3>What if I need help?</h3>
 			<p>
-				You can ask a question in the <code>#help-and-pairing</code> VC channel,
-				ask for ideas in the <code>#open-source</code> channel, or join the
-				Hacktoberfest VC co-working room. Asking for help is part of the
-				process!
+				You can ask a question in the <code>#help-and-pairing</code> channel in
+				Slack, ask for ideas in the <code>#open-source</code> channel, or join
+				the <code>#hacktoberfest-co-working-room</code>. Asking for help is part
+				of the process!
 			</p>
 
 			<p>And remember, we're always here to help ❤️</p>
 
-			<h4>Completing the Challenge!</h4>
+			<h3>Completing the Challenge!</h3>
 			<p>
-				Any kind of participation in Hacktoberfest counts as you completing the
-				VC October challenge.
+				Any kind of participation in Hacktoberfest counts as you complete the VC
+				October challenge.
 			</p>
 			<p>
 				Remember, VC is here to support you during Hacktoberfest but is not an
-				official partner of the event. To get the Hacktoberfest swag, you need
-				to have four (4) pull requests accepted.
+				official event partner. To get the Hacktoberfest swag, you need to have
+				four (4) pull requests (PRs) accepted.
 			</p>
 
 			<h2>Virtual Coffee Approved Repositories!</h2>
@@ -178,12 +186,12 @@ export default function Challenge() {
 			<h2>Resources</h2>
 			<ul>
 				<li>
-					<a href="https://www.iamdeveloper.com/pages/talks/#heading-getting-the-most-out-of-open-source">
+					<a href="https://www.nickyt.co/talks/getting-the-most-out-of-open-source-digitalocean-tech-talk/">
 						Getting the Most Out of Open Source
 					</a>
 				</li>
 				<li>
-					<a href="https://www.iamdeveloper.com/pages/talks/#heading-words-matter:-conventional-comments">
+					<a href="https://www.nickyt.co/talks/words-matter--conventional-comments-virtual-coffee-lightning-talks/">
 						Words Matter: Conventional Comments
 					</a>
 				</li>
@@ -209,11 +217,11 @@ export default function Challenge() {
 				</li>
 				<li>
 					<a href="https://www.youtube.com/watch?v=A8iI2jlsqfs&t=64s">
-						Hacktoberfest and Open Sauced
+						Hacktoberfest and OpenSauced
 					</a>
 				</li>
 				<li>
-					<a href="https://hot.opensauced.pizza/">Open Sauced</a>
+					<a href="https://hot.opensauced.pizza/">OpenSauced</a>
 				</li>
 			</ul>
 		</>

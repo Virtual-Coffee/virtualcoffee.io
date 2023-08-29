@@ -1,5 +1,5 @@
 import { type MetaFunction, json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import { Link, useLoaderData } from '@remix-run/react';
 import { getTotalPairingSessions } from '~/data/monthlyChallenges/pairing-challenge';
 import { createMetaData } from '~/util/createMetaData.server';
 
@@ -7,7 +7,7 @@ export const handle = {
 	meta: {
 		title: 'Virtual Coffee Monthly Challenges',
 		description:
-			'Every month, we create a challenge for our Virtual Coffee members to complete together',
+			'Every month, we create a challenge for our Virtual Coffee members to complete together.',
 	},
 	hero: {
 		Hero: 'UndrawGoodTeam',
@@ -30,10 +30,10 @@ const challengeList: Challenge[] = [
 		subtitle: `Time to learn new things!`,
 		description: (
 			<p>
-				The goal this challenge is to learn something new, share what we have
+				The goal of this challenge is to learn something new, share what we have
 				learned, and gather recommendations and resources to share with the
 				community. During this challenge, we work on learning new dev-related
-				things. You might deep-dive into one topic, start a small-group that
+				things. You might deep-dive into one topic, start a small group that
 				focuses on community learning, focus on a new topic every week, or do a
 				little bit of everything.
 			</p>
@@ -55,7 +55,7 @@ const challengeList: Challenge[] = [
 	},
 
 	{
-		title: 'Get job ready',
+		title: 'Get Job Ready',
 		subtitle: `Resumes, Cover Letters, and Elevator Pitch. There's never a bad time to update your job application materials.`,
 		description: (
 			<p>
@@ -64,8 +64,8 @@ const challengeList: Challenge[] = [
 				the door. Your resume, cover letter, and elevator pitch should work
 				together to tell your story and represent where you are on your career
 				journey; each piece should complement the others. This challenge
-				emphasizes taking time to make sure they work together or to get some
-				extra feedback on what you've worked on.
+				emphasizes taking time to ensure they work together or get some extra
+				feedback on what you've worked on.
 			</p>
 		),
 		links: [
@@ -92,11 +92,11 @@ const challengeList: Challenge[] = [
 				Devs are more than just the code we write. This challenge is all about
 				embracing self-expression. Give back to yourself by indulging in
 				something just for fun. Share the art, music, poetry, sports, games, or
-				any other hobbies that spark joy for you. We spend so much time grinding
-				away on understanding things in the tech space. Let's make some space
-				for the other parts of ourselves. In this challenge, we encourage folks
-				to spend time working on things that aren't necessarily code specific,
-				or using code to improve other hobbies and outlets.
+				other hobbies that spark your joy. We spend so much time grinding away
+				on understanding things in the tech space. Let's make some space for the
+				other parts of ourselves. In this challenge, we encourage folks to spend
+				time working on things that aren't necessarily code-specific or using
+				code to improve other hobbies and outlets.
 			</p>
 		),
 		links: [
@@ -140,7 +140,7 @@ const challengeList: Challenge[] = [
 		subtitle: `Participate in open source, learn, and have fun!`,
 		description: (
 			<p>
-				This challenge is always run during October and was our first ever
+				This challenge is always run during October and was our first-ever
 				monthly challenge. We have three tracks: maintainers will provide issues
 				labeled for Hacktoberfest, contributors will solve issues, and mentors
 				will help contributors and maintainers be successful.
@@ -188,12 +188,12 @@ const challengeList: Challenge[] = [
 			<>
 				<p>
 					The goal of this challenge is to build a new habit that will make you
-					a healthier dev; this can be mind and body centered (drink, move,
-					read, meditate, rearrange your work station) or code centered (review
+					a healthier dev; this can be mind and body-centered (drink, move,
+					read, meditate, rearrange your workstation) or code-centered (review
 					your README, clean your code, refresh your GitHub repo) or both. Set
 					the goal for yourself this month and define what successfully
-					completing the challenge looks like. For example, could be something
-					like: review the README in 5 of your projects (one every week) or run
+					completing the challenge looks like. For example, it could be
+					reviewing the README in 5 of your projects (one every week) or running
 					2k twice a week.
 				</p>
 				<p>
@@ -224,7 +224,7 @@ const challengeList: Challenge[] = [
 				<p>
 					In this challenge, we're working on creating a habit of talking about
 					the things we're working on, a plan for continuing progress, and
-					creating a demo for the Virtal Coffee community.
+					creating a demo for the Virtual Coffee community.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -281,11 +281,11 @@ const challengeList: Challenge[] = [
 		subtitle: `Create a community of knowledge sharing and access to learning with AV content.`,
 		description: (
 			<p>
-				For this challenge, members present their knowledge and showcase your
+				For this challenge, members present their knowledge and showcase their
 				understanding by exploring video and audio mediums for sharing
 				knowledge, highlighting their achievements. They might do that by giving
-				lunch-and-learns, youtube videos, podcasts, or some other form of audio
-				or video content they created that explores a coding-related
+				Lunch & Learns, YouTube videos, podcasts, or some other form of audio or
+				video content they created that explores a coding-related
 				concept--there's no length requirement. We believe this provides value
 				by solidifying ideas, creating a resource for others, inviting personal
 				growth through conversations sparked by sharing, and demonstrating your
@@ -481,21 +481,23 @@ export default function Index() {
 						grow, and receive support and mentorship. There will be a theme for
 						each month's challenge and weekly goals for the members to work on.
 						Instructions, resources, and additional help for the challenges is
-						provided in the #monthly-challenge channel in slack. Along with our
-						Maintainers, our Challenge Team Leads plan, organize, and facilitate
-						these challenges.
+						provided in the <code>#monthly-challenge</code> channel in Slack.
+						Along with our Maintainers, our Challenge Team Leads plan, organize,
+						and facilitate these challenges.
 					</p>
 
 					<h2>Who can participate?</h2>
 
 					<p>
-						These challenges are available to all Virtual Coffee members and the
-						goal is to support developers of all stages in their coding journey.
+						These challenges are available to all Virtual Coffee members. The
+						goal is to support developers of all stages in their coding journey
 						To become a member of Virtual Coffee, all you need to do is{' '}
-						<a href="/events">attend a Tuesday or Thursday Coffee</a> and submit
-						the form you'll receive at coffee. After you submit the form, you
-						will receive an invitation to join the slack group where you can
-						share your progress on the challenges and ask questions.
+						<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee#coffees-virtual-coffee-weekly-zoom-chats">
+							attend a Tuesday or Thursday Coffee
+						</Link>{' '}
+						and submit the form you'll receive at Coffee. After you submit the
+						form, you will receive an invitation to join the Slack group, where
+						you can share your progress on the challenges and ask questions.
 					</p>
 				</div>
 			</div>
