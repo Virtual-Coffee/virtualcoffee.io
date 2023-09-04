@@ -158,6 +158,7 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Preptember',
 		subtitle: `Get your open source projects ready!`,
 		description: (
@@ -181,7 +182,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Healthy Habits for Happy Devs',
 		subtitle: `This month's challenge is all about nourishing our bodies, minds, and spirits so that we can become healthier developers.`,
 		description: (
