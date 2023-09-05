@@ -37,9 +37,9 @@ export default function Challenge() {
 
 			<LeadText>
 				This month, we have two tracks. Maintainers will review their
-				open-source repos with{' '}
+				open-source repos with our{' '}
 				<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
-					our checklist
+					repository checklist
 				</Link>{' '}
 				to ensure their projects are ready for Hacktoberfest contributions.
 				Contributors will look at their favorite repos, evaluate them based on
@@ -71,8 +71,11 @@ export default function Challenge() {
 			</p>
 			<ul>
 				<li>
-					Evaluate your open-source project and complete the checklist before
-					the end of September.
+					Evaluate your open-source project and complete{' '}
+					<Link to="/resources/developer-resources/open-source/maintainer-guide">
+						the checklist
+					</Link>{' '}
+					before the end of September.
 				</li>
 				<li>
 					List your open-source project in our{' '}
@@ -94,9 +97,13 @@ export default function Challenge() {
 					.
 				</li>
 				<li>
-					Following the guide, evaluate an open-source project to VC-verify it
-					as a good project to contribute to. If the repository doesn't meet our
-					standards, create and submit good issues to suggest updates.
+					Following{' '}
+					<Link to="/resources/developer-resources/open-source/maintainer-guide">
+						the guide
+					</Link>
+					, evaluate an open-source project to VC-verify it as a good project to
+					contribute to. If the repository doesn't meet our standards, create
+					and submit good issues to suggest updates.
 				</li>
 				<li>
 					List the repository in our{' '}
@@ -158,19 +165,25 @@ export default function Challenge() {
 				</li>
 				<li>
 					If you are participating in this month's challenge as a contributor,
-					consider the items in our repository checklist as you look at some
-					possible open-source repositories to contribute to. If the
-					repositories pass the checklist, add them to the repositories list in
-					the{' '}
+					consider the items in our{' '}
+					<Link to="/resources/developer-resources/open-source/maintainer-guide">
+						repository checklist
+					</Link>{' '}
+					as you look at some possible open-source repositories to contribute
+					to. If the repositories pass the checklist, add them to the
+					repositories list in the{' '}
 					<a href="https://github.com/Virtual-Coffee/vc-preptember">
 						Virtual Coffee Preptember repository
 					</a>
 					.
 				</li>
 				<li>
-					If you are participating as an open-source maintainer, use this
-					checklist as a guide to get your repository ready for contributions.
-					Then add your project repository to the repository list in the{' '}
+					If you are participating as an open-source maintainer, use{' '}
+					<Link to="/resources/developer-resources/open-source/maintainer-guide">
+						our checklist
+					</Link>{' '}
+					as a guide to get your repository ready for contributions. Then add
+					your project repository to the repository list in the{' '}
 					<a href="https://github.com/Virtual-Coffee/vc-preptember">
 						Virtual Coffee Preptember repository
 					</a>
@@ -217,7 +230,7 @@ export default function Challenge() {
 			<h3>What if I need help?</h3>
 			<p>
 				You can ask questions in the <code>#help-and-pairing</code> channel in
-				Slack, ask for ideas in the <code>#open-source channel</code>, or join
+				Slack, ask for ideas in the <code>#open-source</code> channel, or join
 				the <code>#co-working-room</code>. Asking for help is part of the
 				process!
 			</p>
@@ -236,8 +249,11 @@ export default function Challenge() {
 					Add repositories to the repositories list.
 					<ul>
 						<li>
-							If the repository does meet the checklist requirements, post the
-							repository in the{' '}
+							If the repository does meet{' '}
+							<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+								the checklist
+							</Link>{' '}
+							requirements, post the repository in the{' '}
 							<a href="https://github.com/Virtual-Coffee/vc-preptember">
 								Virtual Coffee Preptember repository
 							</a>
@@ -255,11 +271,9 @@ export default function Challenge() {
 			<h2>Resources</h2>
 			<ul>
 				<li>
-					Our{' '}
 					<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
-						repository checklist
+						Virtual Coffee's repository checklist
 					</Link>
-					.
 				</li>
 				<li>
 					<a href="https://github.com/tkshill/Template/wiki/A-Starter-Guide-to-Open-Source-Project-Maintenance">
