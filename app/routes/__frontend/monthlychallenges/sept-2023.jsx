@@ -285,9 +285,10 @@ export default function Challenge() {
 						Hacktoberfest participation
 					</a>
 				</li>
-					<li>
+				<li>
 					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-preptember-2023-monthly-challenge-51d2">
-						Join Virtual Coffee in the Preptember 2023 Monthly Challenge! (Dev Edition)
+						Join Virtual Coffee in the Preptember 2023 Monthly Challenge! (Dev
+						Edition)
 					</a>
 				</li>
 			</ul>
