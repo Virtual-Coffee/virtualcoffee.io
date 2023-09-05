@@ -171,7 +171,7 @@ const challengeList: Challenge[] = [
 			</p>
 		),
 		links: [
-				{
+			{
 				href: '/monthlychallenges/sept-2023',
 				title: 'September, 2023',
 			},
