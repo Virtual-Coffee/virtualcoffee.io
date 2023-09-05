@@ -158,6 +158,7 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Preptember',
 		subtitle: `Get your open source projects ready!`,
 		description: (
@@ -171,6 +172,10 @@ const challengeList: Challenge[] = [
 		),
 		links: [
 			{
+				href: '/monthlychallenges/sept-2023',
+				title: 'September, 2023',
+			},
+			{
 				href: '/monthlychallenges/sept-2022',
 				title: 'September, 2022',
 			},
@@ -181,7 +186,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Healthy Habits for Happy Devs',
 		subtitle: `This month's challenge is all about nourishing our bodies, minds, and spirits so that we can become healthier developers.`,
 		description: (
