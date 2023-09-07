@@ -82,10 +82,10 @@ export default function Issue() {
 				success!
 			</p>
 			<p>
-				<strong>New this year</strong>: We have a repository for you — our
-				members — to practice open source, add yourself as Preptember
-				participant, and to list repositories that pass our repository checklist
-				to be recommended for Hacktoberfest. You can learn more{' '}
+				<strong>New this year</strong>: We have a repository for our members to
+				practice open source, add themselves as Preptember participant, and to
+				list repositories that pass our repository checklist to be recommended
+				for Hacktoberfest. You can learn more{' '}
 				<Link to="/monthlychallenges/sept-2023">here</Link>!
 			</p>
 
