@@ -42,5 +42,4 @@ export const terieyenike: MemberObject = {
 		{ type: 'hashnode', username: 'terieyenike' },
 		{ type: 'website', url: 'https://iamteri.tech', title: 'Portfolio' },
 	],
-	badges: ['Hacktoberfest2022'],
 };
