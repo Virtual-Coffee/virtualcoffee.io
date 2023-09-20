@@ -110,7 +110,7 @@ export default function PodcastsIndex() {
 						</>
 					)}
 				</div>
-				{latestEpisode.episodeSponsors.length && (
+				{!!latestEpisode.episodeSponsors.length && (
 					<>
 						<div className="mt-3">
 							<h4 className="h6 text-muted font-italic">
