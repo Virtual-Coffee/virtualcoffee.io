@@ -172,7 +172,7 @@ If you'd like to work on a feature that requires an API key, please reach out to
 
 ### Resources
 
-Our [VC Resources](https://virtualcoffee.io/resources) are creating using [MDX](https://mdxjs.com/). MDX is basically a combination of Markdown and React.
+Our [VC Resources](https://virtualcoffee.io/resources) are created using [MDX](https://mdxjs.com/). MDX is basically a combination of Markdown and React.
 
 Any files added to `app/routes/__frontend/resources` will be automatically loaded and added to the appropriate index page.
 
