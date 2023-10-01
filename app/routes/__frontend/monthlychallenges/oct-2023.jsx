@@ -127,10 +127,9 @@ export default function Challenge() {
 
 			<h3>How do I share my progress?</h3>
 			<p>
-				Share your progress in the <code>#hacktoberfest</code> channel in Slack.
-				We want to know when you get those pull requests (PRs) in so we can
-				celebrate with you! And if you need support, we'll be there to help you,
-				too.
+				Share your progress in the <code>#hacktoberfest</code> channel in Slack
+				so we can celebrate with you! And if you need support, we'll be there to
+				help you, too.
 			</p>
 			<p>
 				While no other platform is imposed, sharing on social media for more
