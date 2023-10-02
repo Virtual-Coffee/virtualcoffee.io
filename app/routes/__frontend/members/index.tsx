@@ -6,7 +6,7 @@ import UndrawIllustration from '~/components/UndrawIllustration';
 import getMembers from '~/data/members';
 import type { MembersResponse } from '~/data/members';
 import { createMetaData } from '~/util/createMetaData.server';
-import type { LoaderArgs } from '@remix-run/node';
+import type { LoaderArgs, MetaFunction } from '@remix-run/node';
 
 export const loader = async (args: LoaderArgs) => {
 	const { core, members }: MembersResponse = await getMembers();
@@ -20,9 +20,9 @@ export const loader = async (args: LoaderArgs) => {
 	return json({ core, members, meta });
 };
 
-export function meta({ data: { meta } = {} } = {}) {
+export const meta: MetaFunction = ({ data: { meta } = {} }) => {
 	return meta;
-}
+};
 
 export default function EventsIndex() {
 	const { core, members } = useLoaderData<typeof loader>();
