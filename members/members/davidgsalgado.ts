@@ -25,7 +25,7 @@ export const _EXAMPLE: MemberObject = {
 	// profileMasks.circle, profileMasks.rabbet, profileMasks.star
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
-	// 	// example:
+		// 	// example:
 		profileMask: profileMasks.circle,
 	},
 	//
@@ -45,7 +45,7 @@ export const _EXAMPLE: MemberObject = {
 	badges: ['Hacktoberfest2023'],
 
 	location: {
-		longitude: 39.043593455828805, 
+		longitude: 39.043593455828805,
 		latitude: -76.95610354523609,
 		title: 'Maryland, USA',
 	},
