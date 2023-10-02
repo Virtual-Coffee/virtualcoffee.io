@@ -45,7 +45,7 @@ export const jenieg: MemberObject = {
 	badges: ['Hacktoberfest2023'],
 
 	location: {
-		latitute: 46.879681,
+		latitude: 46.879681,
 		longitude: -110.362564,
 		title: 'Montana, USA', // optional
 	},
