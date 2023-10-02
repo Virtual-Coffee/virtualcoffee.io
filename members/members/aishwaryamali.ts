@@ -46,6 +46,6 @@ export const aishwaryamali: MemberObject = {
 	location: {
 		latitude: 18.529102501138226,
 		longitude: 73.85607815269947,
-		title: 'Pune, India'
-	}
+		title: 'Pune, India',
+	},
 };
