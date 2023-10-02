@@ -43,10 +43,10 @@ export const jenieg: MemberObject = {
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: ['Hacktoberfest2023'],
-  
-  location: {
-    latitute: 46.879681,
-    longitude: -110.362564,
-    title: 'Montana, USA', // optional
-  },
+
+	location: {
+		latitute: 46.879681,
+		longitude: -110.362564,
+		title: 'Montana, USA', // optional
+	},
 };
