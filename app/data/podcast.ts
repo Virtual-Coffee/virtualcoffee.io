@@ -8,6 +8,20 @@ const episodeQuery = gql`
 			title
 			... on podcast_default_Entry {
 				id
+				episodeSponsors {
+					title
+					... on podcastSponsors_default_Entry {
+						sponsorUrl: urlValue
+						sponsorImage: podcastEpisodeCard {
+							path
+							width
+							height
+						}
+						sponsorDescription: podcastShowNotes {
+							renderHtml
+						}
+					}
+				}
 				metaDescription
 				podcastEpisode
 				podcastBuzzsproutId
@@ -51,6 +65,20 @@ const episodesQuery = gql`
 				podcastSeason
 				podcastPublishDate
 				podcastBuzzsproutId
+				episodeSponsors {
+					title
+					... on podcastSponsors_default_Entry {
+						sponsorUrl: urlValue
+						sponsorImage: podcastEpisodeCard {
+							path
+							width
+							height
+						}
+						sponsorDescription: podcastShowNotes {
+							renderHtml
+						}
+					}
+				}
 			}
 		}
 	}
@@ -96,6 +124,12 @@ export interface PodcastEpisode {
 	}>;
 	podcastEpisodeCard: Array<{ path: string }>;
 	url: string;
+	episodeSponsors: Array<{
+		title: string;
+		sponsorUrl: string;
+		sponsorImage: Array<{ path: string; width: number; height: number }>;
+		sponsorDescription: { renderHtml: string };
+	}>;
 }
 // type PodcastEpisodes = Partial<PodcastEpisode>[];
 type PodcastEpisodes = Pick<
@@ -109,6 +143,7 @@ type PodcastEpisodes = Pick<
 	| 'podcastPublishDate'
 	| 'podcastBuzzsproutId'
 	| 'url'
+	| 'episodeSponsors'
 >[];
 type PodcastEpisodeResponse = {
 	entries: PodcastEpisode[];
@@ -161,6 +196,8 @@ export async function getEpisode({
 			url: `/podcast/${episode.slug}`,
 		};
 	}
+
+	console.log({ url: `${process.env.CMS_URL}/api` });
 
 	const graphQLClient = new GraphQLClient(
 		`${process.env.CMS_URL}/api?${queryParams || ''}`,

@@ -1,11 +1,11 @@
 import slugify from '@sindresorhus/slugify';
 
 async function fetchRecords() {
-	if (process.env.AIRTABLE_API_KEY) {
+	if (process.env.PUBLIC_AIRTABLE_API_KEY) {
 		const Airtable = require('airtable');
-		const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-			'appJStQemmYeoRcox',
-		);
+		const base = new Airtable({
+			apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
+		}).base('appJStQemmYeoRcox');
 
 		const result = await base('Member Articles').select().all();
 

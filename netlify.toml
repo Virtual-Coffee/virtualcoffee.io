@@ -1,5 +1,5 @@
 [build]
-  command = "yarn build"
+  command = "pnpm build"
   functions = "netlify/functions"
   publish = "public"
 
@@ -15,7 +15,7 @@
   included_files = ["app/routes/**/*.mdx"]
 
 [functions."data-members"]
-  external_node_modules = ["unified", "remark-parse", "remark-rehype", "rehype-sanitize", "rehype-stringify"]
+  external_node_modules = ["shiki"]
   included_files = ["members/**/*.{js,json}"]
 
 [[headers]]

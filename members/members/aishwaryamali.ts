@@ -31,10 +31,10 @@ export const aishwaryamali: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'aishwarya-mali24' },
+		{ type: 'linkedin', username: 'aishwaryamali24' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'aishwarya_m24' },
+		{ type: 'twitter', username: 'aishwaryamali24' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },

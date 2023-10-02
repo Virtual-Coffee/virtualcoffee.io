@@ -107,9 +107,7 @@ export async function loader(_: LoaderArgs) {
 
 	// const blog = await getChallengeData();
 
-	const description = `Current status: ${totalWordCount.toLocaleString()} out of ${
-		currentGoal?.title
-	} words`;
+	const description = `Current status: ${totalWordCount.toLocaleString()} out of ${currentGoal?.title} words`;
 
 	return json(
 		{

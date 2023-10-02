@@ -1,6 +1,12 @@
-import { builder, Handler } from '@netlify/functions';
+import { builder, type Handler } from '@netlify/functions';
 import { GraphQLClient, gql } from 'graphql-request';
 import mockData from '../../app/data/mocks/sponsors';
+import ImgixClient from '@imgix/js-core';
+
+const client = new ImgixClient({
+	domain: 'virtualcoffee.imgix.net',
+	// secureURLToken: '<SECURE TOKEN>',
+});
 
 // This file is an On-Demand Builder
 // It allows us to cache third-party data for a specified amount of time
@@ -36,18 +42,33 @@ const handlerFn: Handler = async (event) => {
 export const handler = builder(handlerFn);
 
 type SponsorEntity =
-	typeof mockData.organization.sponsorshipsAsMaintainer.nodes[number]['sponsorEntity'];
+	(typeof mockData.organization.sponsorshipsAsMaintainer.nodes)[number]['sponsorEntity'] & {
+		avatar_width?: number;
+		avatar_height?: number;
+	};
 
 const sponsorOverrides: Record<string, Partial<SponsorEntity>> = {
-	MDQ6VXNlcjgwOTIzMTQ4: {
-		websiteUrl: 'https://www.commonroom.io/',
-		name: 'Common Room',
-		descriptionHTML: 'Activate the power of your community. Grow together.',
-		avatarUrl_80: '/assets/sponsors/commonroom.svg',
-		avatarUrl_160: '/assets/sponsors/commonroom.svg',
-		avatarUrl_240: '/assets/sponsors/commonroom.svg',
-		avatarUrl_480: '/assets/sponsors/commonroom.svg',
-		avatarUrl_720: '/assets/sponsors/commonroom.svg',
+	MDEyOk9yZ2FuaXphdGlvbjU3NTY4NTk4: {
+		websiteUrl: 'https://opensauced.pizza',
+		name: 'OpenSauced',
+		descriptionHTML: 'Find the best engineers in open-source.',
+		avatar_width: 1280,
+		avatar_height: 720,
+		avatarUrl_80: client.buildURL('/assets/sponsors/open-sauced.png', {
+			w: 80,
+		}),
+		avatarUrl_160: client.buildURL('/assets/sponsors/open-sauced.png', {
+			w: 160,
+		}),
+		avatarUrl_240: client.buildURL('/assets/sponsors/open-sauced.png', {
+			w: 240,
+		}),
+		avatarUrl_480: client.buildURL('/assets/sponsors/open-sauced.png', {
+			w: 480,
+		}),
+		avatarUrl_720: client.buildURL('/assets/sponsors/open-sauced.png', {
+			w: 720,
+		}),
 	},
 };
 

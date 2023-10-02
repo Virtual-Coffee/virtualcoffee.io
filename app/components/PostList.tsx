@@ -69,15 +69,30 @@ export type FileListItem = {
 
 export function formatFileListItemsForPostList(
 	items?: FileListItem[],
+	depth?: number,
+	curLevel?: number,
 ): PostListItem[] | null {
-	return items
-		? items.map(
-				(item): PostListItem => ({
-					title: item.meta.title,
-					description: item.meta.description,
-					to: `/${item.slug}`,
-					children: formatFileListItemsForPostList(item.children),
-				}),
-		  )
-		: null;
+	const internalCurLevel: number =
+		typeof curLevel === 'undefined' ? (curLevel = 0) : curLevel;
+
+	if (typeof depth === 'undefined') {
+		depth = Infinity;
+	}
+
+	if (!items || internalCurLevel >= depth) {
+		return null;
+	}
+
+	return items.map(
+		(item): PostListItem => ({
+			title: item.meta.title,
+			description: item.meta.description,
+			to: `/${item.slug}`,
+			children: formatFileListItemsForPostList(
+				item.children,
+				depth,
+				internalCurLevel + 1,
+			),
+		}),
+	);
 }

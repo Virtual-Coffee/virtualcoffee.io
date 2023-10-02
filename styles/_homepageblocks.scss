@@ -6,6 +6,20 @@
 		grid-template-columns: 1fr 1fr;
 		grid-template-rows: auto auto auto;
 		grid-auto-flow: column;
+
+		&.homepageblocks-wide {
+			grid-template-rows: auto;
+			align-items: center;
+
+			.homepageblock-body {
+				grid-column: 1;
+			}
+
+			.homepageblock-hero-svg {
+				margin: 0 auto;
+				width: 75%;
+			}
+		}
 	}
 
 	.homepageblocks + & {

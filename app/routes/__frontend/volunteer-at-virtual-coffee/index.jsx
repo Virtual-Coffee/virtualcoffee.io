@@ -54,7 +54,7 @@ export default function VolunteerForm() {
 				</p>
 				<p>
 					To read more and to see some roles available, read our{' '}
-					<Link to="/resources/virtual-coffee/get-involved/paths-to-leadership">
+					<Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
 						Paths to Leadership &amp; Roles guide
 					</Link>
 					.
@@ -79,7 +79,7 @@ export default function VolunteerForm() {
 							required
 						/>
 						<small id="nameHelp" className="form-text text-muted">
-							Required
+							Required.
 						</small>
 					</div>
 					<div className="form-group">
@@ -94,6 +94,20 @@ export default function VolunteerForm() {
 						/>
 						<small id="emailHelp" className="form-text text-muted">
 							Required. We'll never share your email with anyone else.
+						</small>
+					</div>
+					<div className="form-group">
+						<label htmlFor="formEmail">GitHub User Name</label>
+						<input
+							type="text"
+							className="form-control"
+							id="formEmail"
+							name="githubUsername"
+							aria-describedby="githubHelp"
+							required
+						/>
+						<small id="githubHelp" className="form-text text-muted">
+							Required.
 						</small>
 					</div>
 				</fieldset>

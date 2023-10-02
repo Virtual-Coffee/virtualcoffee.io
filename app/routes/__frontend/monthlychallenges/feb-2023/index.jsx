@@ -106,7 +106,7 @@ export default function Challenge() {
 				</li>
 			</ul>
 			<h3>
-				We're breaking this challege into two parts, but feel free to focus on
+				We're breaking this challenge into two parts, but feel free to focus on
 				what's most important to you.
 			</h3>
 			<h5>Weeks one and two: Resume and Cover Letter</h5>
@@ -140,7 +140,7 @@ export default function Challenge() {
 			</ul>
 			<h5>Week four: Tying it Together</h5>
 			<p>
-				Your resume, cover letter, and elevator pitch shuld work together to
+				Your resume, cover letter, and elevator pitch should work together to
 				tell your story and represent where you are on your career journey. Each
 				piece should complement the others. This week, take time to make sure
 				they work together or get some extra feedback on what you've worked on.
@@ -163,13 +163,6 @@ export default function Challenge() {
 				<li>
 					Get Job Ready Kickoff! | A Members-Only Event - 12p ET, Friday,
 					February 3, 2023{' '}
-				</li>
-				<li>
-					Taylor Dessyn's live resume review | A{' '}
-					<a href="https://www.linkedin.com/posts/taylordesseyn_alishah-novin-and-i-are-back-ugcPost-7024141325465714690-BbMS">
-						LinkedIn Livestream
-					</a>{' '}
-					- 1pm ET, Friday February 24, 2023
 				</li>
 			</ul>
 			<h3>Job application materials and resources</h3>

@@ -82,7 +82,7 @@ If you feel like there's a contribution you would like to make that isn't repres
 - ❓ Questions/Ideas/Feedback
 
 If you feel like you have an issue that doesn't match those categories, go ahead and ignore the templates and create an issue the old-fashioned way.
-You can refer to our resource on [how to write an issue](https://virtualcoffee.io/resources/open-source/contributor-guide#how-to-write-an-issue).
+You can refer to our resource on [how to write an issue](https://virtualcoffee.io/resources/developer-resources/open-source/contributor-guide#how-to-write-an-issue).
 
 ### Setting Up Local Environment To Work On Issues
 
@@ -103,7 +103,7 @@ You can refer to our resource on [how to write an issue](https://virtualcoffee.i
 
 ### Creating A Pull Request
 
-> ⚠️ **Heads up!** If you'd like to make a pull request, please make sure you've created an issue (or a discussion board post) first, and **that you've been assigned to the issue**. This allows the maintainer team to provide guidance and prioritize tasks — otherwise you may run the risk of spending time on something that doesn't end up getting accepted for various reasons.
+> ⚠️ **Heads up!** If you'd like to make a pull request, please make sure you've created an issue (or a discussion board post) first, and **that you've been assigned to the issue,** unless your change is very minor such as fixing a typo. This allows the maintainer team to provide guidance and prioritize tasks — otherwise you may run the risk of spending time on something that doesn't end up getting accepted for various reasons.
 
 We appreciate everyone’s efforts, and want to ensure that our communication is clear and open as much as possible. We strongly encourage communication and clarity before doing work.
 
@@ -117,7 +117,7 @@ Once you've been assigned the issue, you have two options.
 
 ### Awaiting Review
 
-Once you've submitted your pull request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all, of course, we ask for patience if you don't see a response immediately. Sometimes it takes about a day for someone's schedule to clear up to have the sit to properly review incoming pull requests. We'd rather not rush a response after someone has put time and effort into submitting it. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your pull request reminding of its status.
+Once you've submitted your pull request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all, of course, we ask for your patience if you don't see a response immediately. It can take time for someone's schedule to clear up to have the right conditions to properly review incoming pull requests. We'd rather not rush a response after someone has put time and effort into submitting it. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your pull request reminding of its status.
 
 The purpose of reviews is to create the best experience we can for our contributors.
 

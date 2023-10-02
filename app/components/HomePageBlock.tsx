@@ -10,6 +10,7 @@ type HomePageBlockProps = {
 	linkTo?: string;
 	footer?: string;
 	children: React.ReactNode;
+	wide?: boolean;
 };
 
 /**
@@ -23,6 +24,7 @@ export default function HomePageBlock({
 	linkTo,
 	children,
 	footer,
+	wide,
 }: HomePageBlockProps) {
 	const titleInner = linkTo ? <Link to={linkTo}>{title}</Link> : title;
 
@@ -35,8 +37,13 @@ export default function HomePageBlock({
 				/>
 			</div>
 
-			<h3 className="text-secondary homepageblock-title">{titleInner}</h3>
+			{!wide && (
+				<h3 className="text-secondary homepageblock-title">{titleInner}</h3>
+			)}
 			<div className="homepageblock-body">
+				{wide && (
+					<h3 className="text-secondary homepageblock-title">{titleInner}</h3>
+				)}
 				{subtitle && <p className="lead">{subtitle}</p>}
 				{children}
 				{footer && linkTo && (
