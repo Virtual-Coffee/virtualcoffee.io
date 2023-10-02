@@ -44,10 +44,9 @@ export const _EXAMPLE: MemberObject = {
 	],
 	badges: ['Hacktoberfest2023'],
 
-location:
-{
-longitude: -85.323212,
-latitude: 51.253777,
-title: 'Ontario, Canada',
-},
+	location: {
+		longitude: -85.323212,
+		latitude: 51.253777,
+		title: 'Ontario, Canada',
+	},
 };
