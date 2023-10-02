@@ -35,6 +35,12 @@ export type Flare = {
 	profileMask?: string;
 };
 
+export type Location = {
+	latitute: number;
+	longitude: number;
+	title?: string;
+};
+
 export type MemberObject = {
 	github: string;
 	name?: string;
@@ -43,6 +49,7 @@ export type MemberObject = {
 	accounts?: Account[];
 	badges?: Badge[];
 	flare?: Flare;
+	location?: Location;
 };
 
 export type GithubSearchUser = {
