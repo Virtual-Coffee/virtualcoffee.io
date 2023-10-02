@@ -102,3 +102,5 @@ export type FixedUpUser = Omit<MemberObject, 'accounts'> & {
 };
 
 export type MemberList = (FixedUpUser | null)[];
+
+export type MappableMember = FixedUpUser & { location: Location };
