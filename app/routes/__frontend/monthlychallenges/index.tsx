@@ -143,9 +143,9 @@ const challengeList: Challenge[] = [
 			<>
 				<p>
 					This challenge is always run during October and was our first-ever
-					monthly challenge. We have three tracks: maintainers will provide issues
-					labeled for Hacktoberfest, contributors will solve issues, and mentors
-					will help contributors and maintainers be successful.
+					monthly challenge. We have three tracks: maintainers will provide
+					issues labeled for Hacktoberfest, contributors will solve issues, and
+					mentors will help contributors and maintainers be successful.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -154,7 +154,14 @@ const challengeList: Challenge[] = [
 					</a>
 					.
 				</p>
-				<p>To view all of the details, including a list of VC-approved repositories to contribute to, <Link to="/monthlychallenges/oct-2023">check out the October monthly challenge page</Link>.</p>
+				<p>
+					To view all of the details, including a list of VC-approved
+					repositories to contribute to,{' '}
+					<Link to="/monthlychallenges/oct-2023">
+						check out the October monthly challenge page
+					</Link>
+					.
+				</p>
 			</>
 		),
 		links: [
@@ -178,11 +185,11 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					Maintainers will be reviewing their open source repos with our checklist
-					to make sure their projects are ready for Hacktoberfest contributions,
-					and our contributors will be looking at their favorite repos, evaluating
-					them based on the guide, and writing good issues as needed to fulfill
-					the criteria.
+					Maintainers will be reviewing their open source repos with our
+					checklist to make sure their projects are ready for Hacktoberfest
+					contributions, and our contributors will be looking at their favorite
+					repos, evaluating them based on the guide, and writing good issues as
+					needed to fulfill the criteria.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
