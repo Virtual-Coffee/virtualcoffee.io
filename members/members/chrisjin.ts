@@ -4,7 +4,7 @@ import type { MemberObject } from '../types';
 export const chrisjin: MemberObject = {
 	// GitHub username (required)
 	github: 'IntelliJinceTech',
-	bio: "Full Stack Software Engineer and Product Manager focusing on building purposeful, scalable products.",
+	bio: 'Full Stack Software Engineer and Product Manager focusing on building purposeful, scalable products.',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
@@ -41,12 +41,16 @@ export const chrisjin: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://www.christopherjin.com/', title: 'Portfolio' },
+		{
+			type: 'website',
+			url: 'https://www.christopherjin.com/',
+			title: 'Portfolio',
+		},
 	],
 	badges: ['Hacktoberfest2023'],
 	location: {
 		latitude: 40.82708129129381,
 		longitude: -73.97608283860276,
-		title: "Edgewater, NJ"
-	}
+		title: 'Edgewater, NJ',
+	},
 };
