@@ -42,4 +42,10 @@ export const terieyenike: MemberObject = {
 		{ type: 'hashnode', username: 'terieyenike' },
 		{ type: 'website', url: 'https://iamteri.tech', title: 'Portfolio' },
 	],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	location: {
+		latitude: 6.57712,
+		longitude: 3.36682,
+		title: 'Maryland, Lagos',
+	},
 };
