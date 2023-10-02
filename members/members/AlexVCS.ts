@@ -44,8 +44,8 @@ export const AlexVCS: MemberObject = {
 	],
 	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
 	location: {
-  latitude: 27.664827,
-  longitude: -81.515755,
-  title: 'Florida',
-},
+		latitude: 27.664827,
+		longitude: -81.515755,
+		title: 'Florida',
+	},
 };
