@@ -46,8 +46,8 @@ export const danieltott: MemberObject = {
 	],
 	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
 	location: {
-		latitude: 41.48266891706046, 
+		latitude: 41.48266891706046,
 		longitude: -81.80009779282766,
-		title: 'Lakewood, OH'
-	}
+		title: 'Lakewood, OH',
+	},
 };
