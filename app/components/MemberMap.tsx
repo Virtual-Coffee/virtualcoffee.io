@@ -14,7 +14,7 @@ function Markers({ members }: { members: MemberList }) {
 
 		map.fitBounds(
 			filtered.map((member) => [
-				member.location.latitute,
+				member.location.latitude,
 				member.location.longitude,
 			]),
 		);
@@ -24,11 +24,11 @@ function Markers({ members }: { members: MemberList }) {
 		<>
 			{members.map((member) =>
 				!member ||
-				!member.location?.latitute ||
+				!member.location?.latitude ||
 				!member.location?.longitude ? null : (
 					<Marker
 						key={member.github}
-						position={[member.location?.latitute, member.location?.longitude]}
+						position={[member.location?.latitude, member.location?.longitude]}
 					>
 						<Popup>
 							{member.name}

@@ -36,7 +36,7 @@ export type Flare = {
 };
 
 export type Location = {
-	latitute: number;
+	latitude: number;
 	longitude: number;
 	title?: string;
 };
