@@ -1,15 +1,34 @@
 import { json } from '@remix-run/node';
 import { useLoaderData } from '@remix-run/react';
 import DefaultLayout from '~/components/layouts/DefaultLayout';
-import MemberCards from '~/components/MemberCards';
-import UndrawIllustration from '~/components/UndrawIllustration';
+
 import getMembers from '~/data/members';
 import type { MembersResponse } from '~/data/members';
 import { createMetaData } from '~/util/createMetaData.server';
-import type { LoaderArgs, MetaFunction } from '@remix-run/node';
+import type { LinksFunction, LoaderArgs, MetaFunction } from '@remix-run/node';
+import { type MemberList } from 'members/types';
+
+import { lazy } from 'react';
+import { ClientOnly } from 'remix-utils';
+
+export const links: LinksFunction = () => [
+	{
+		rel: 'stylesheet',
+		href: 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+		crossOrigin: 'anonymous',
+		integrity: 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=',
+	},
+];
+
+let MapLoader = lazy(() => import('~/components/MemberMap'));
 
 export const loader = async (args: LoaderArgs) => {
 	const { core, members }: MembersResponse = await getMembers();
+
+	const membersWithLocation: MemberList = [
+		...core.filter((member) => !!member?.location),
+		...members.filter((member) => !!member?.location),
+	];
 
 	const meta = createMetaData({
 		title: 'Virtual Coffee Members',
@@ -17,7 +36,7 @@ export const loader = async (args: LoaderArgs) => {
 		Hero: 'UndrawTeamSpirit',
 	});
 
-	return json({ core, members, meta });
+	return json({ members: membersWithLocation, meta });
 };
 
 export const meta: MetaFunction = ({ data: { meta } = {} }) => {
@@ -25,7 +44,7 @@ export const meta: MetaFunction = ({ data: { meta } = {} }) => {
 };
 
 export default function EventsIndex() {
-	const { core, members } = useLoaderData<typeof loader>();
+	const { members } = useLoaderData<typeof loader>();
 
 	return (
 		<DefaultLayout
@@ -35,16 +54,7 @@ export default function EventsIndex() {
 		>
 			<div className="bg-light py-5">
 				<div className="container-xl">
-					<h2 className="mb-sm-3 mb-md-4 display-5">Core Team</h2>
-					<MemberCards data={core} />
-					{/* {{ membercards(members.memberData.core) }} */}
-
-					<h2 className="mb-sm-3 mb-md-5 display-5">Our Members</h2>
-					<MemberCards data={members} />
-					<div className="member-footer">
-						<h2 className="mb-sm-3 mb-md-5 display-4">Go Team!</h2>
-						<UndrawIllustration filename="UndrawCelebration" />
-					</div>
+					<ClientOnly>{() => <MapLoader members={members} />}</ClientOnly>
 				</div>
 			</div>
 		</DefaultLayout>
