@@ -48,8 +48,8 @@ export const ClJarvis: MemberObject = {
 	],
 	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
 	location: {
-  latitude: 36.162663,
-  longitude: -86.781601,
-  title: 'Nashville, Tennessee', // optional
-},
+		latitude: 36.162663,
+		longitude: -86.781601,
+		title: 'Nashville, Tennessee', // optional
+	},
 };
