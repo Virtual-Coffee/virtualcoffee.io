@@ -6,7 +6,11 @@ import UndrawIllustration from '~/components/UndrawIllustration';
 import getMembers from '~/data/members';
 import type { MembersResponse } from '~/data/members';
 import { createMetaData } from '~/util/createMetaData.server';
-import type { LoaderArgs, MetaFunction } from '@remix-run/node';
+import type { LoaderArgs, MetaFunction, LinksFunction } from '@remix-run/node';
+import type { MappableMember } from 'members/types';
+
+import { lazy } from 'react';
+import { ClientOnly } from 'remix-utils';
 
 export const loader = async (args: LoaderArgs) => {
 	const { core, members }: MembersResponse = await getMembers();
@@ -17,15 +21,32 @@ export const loader = async (args: LoaderArgs) => {
 		Hero: 'UndrawTeamSpirit',
 	});
 
-	return json({ core, members, meta });
+	const mapMembers = [...core, ...members].filter(
+		(member): member is MappableMember => {
+			return !!(member && member.location);
+		},
+	);
+
+	return json({ core, members, meta, mapMembers });
 };
 
 export const meta: MetaFunction = ({ data: { meta } = {} }) => {
 	return meta;
 };
 
+export const links: LinksFunction = () => [
+	{
+		rel: 'stylesheet',
+		href: 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+		crossOrigin: 'anonymous',
+		integrity: 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=',
+	},
+];
+
+let MapLoader = lazy(() => import('~/components/MemberMap'));
+
 export default function EventsIndex() {
-	const { core, members } = useLoaderData<typeof loader>();
+	const { core, members, mapMembers } = useLoaderData<typeof loader>();
 
 	return (
 		<DefaultLayout
@@ -33,6 +54,22 @@ export default function EventsIndex() {
 			heroHeader="Virtual Coffee Members"
 			heroSubheader="A community is only as awesome as its members!"
 		>
+			<div className="bg-light py-5">
+				<div className="container-xl">
+					<h2 className="mb-sm-3 mb-md-4 display-5">
+						We have members all over the world!
+					</h2>
+				</div>
+				<ClientOnly
+					fallback={
+						<div style={{ aspectRatio: '16/9', minHeight: 400 }}>
+							Loading...
+						</div>
+					}
+				>
+					{() => <MapLoader members={mapMembers} />}
+				</ClientOnly>
+			</div>
 			<div className="bg-light py-5">
 				<div className="container-xl">
 					<h2 className="mb-sm-3 mb-md-4 display-5">Core Team</h2>
