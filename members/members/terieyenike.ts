@@ -41,11 +41,11 @@ export const terieyenike: MemberObject = {
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'terieyenike' },
 		{ type: 'website', url: 'https://iamteri.tech', title: 'Portfolio' },
-		badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
-		location: {
-  		latitude: 6.577120,
-  		longitude: 3.366820,
-  		title: 'Maryland, Lagos', 
-		},
-	],
+  ],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	location: {
+  	latitude: 6.577120,
+  	longitude: 3.366820,
+  	title: 'Maryland, Lagos', 
+	},
 };

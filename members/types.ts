@@ -30,9 +30,15 @@ export type Account =
 			title: string;
 	  };
 
-export type Badge = 'Hacktoberfest2022';
+export type Badge = 'Hacktoberfest2022' | 'Hacktoberfest2023';
 export type Flare = {
 	profileMask?: string;
+};
+
+export type Location = {
+	latitude: number;
+	longitude: number;
+	title?: string;
 };
 
 export type MemberObject = {
@@ -43,6 +49,7 @@ export type MemberObject = {
 	accounts?: Account[];
 	badges?: Badge[];
 	flare?: Flare;
+	location?: Location;
 };
 
 export type GithubSearchUser = {
@@ -95,3 +102,5 @@ export type FixedUpUser = Omit<MemberObject, 'accounts'> & {
 };
 
 export type MemberList = (FixedUpUser | null)[];
+
+export type MappableMember = FixedUpUser & { location: Location };

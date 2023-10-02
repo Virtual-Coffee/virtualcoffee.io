@@ -136,17 +136,39 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Hacktoberfest',
 		subtitle: `Participate in open source, learn, and have fun!`,
 		description: (
-			<p>
-				This challenge is always run during October and was our first-ever
-				monthly challenge. We have three tracks: maintainers will provide issues
-				labeled for Hacktoberfest, contributors will solve issues, and mentors
-				will help contributors and maintainers be successful.
-			</p>
+			<>
+				<p>
+					This challenge is always run during October and was our first-ever
+					monthly challenge. We have three tracks: maintainers will provide
+					issues labeled for Hacktoberfest, contributors will solve issues, and
+					mentors will help contributors and maintainers be successful.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/hacktoberfest-2023-lets-make-positive-impacts-learn-grow-together-in-open-source-52a1">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details, including a list of VC-approved
+					repositories to contribute to,{' '}
+					<Link to="/monthlychallenges/oct-2023">
+						check out the October monthly challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 		links: [
+			{
+				href: '/monthlychallenges/oct-2023',
+				title: 'October, 2023',
+			},
 			{
 				href: '/monthlychallenges/oct-2022',
 				title: 'October, 2022',
@@ -158,17 +180,25 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Preptember',
 		subtitle: `Get your open source projects ready!`,
 		description: (
-			<p>
-				Maintainers will be reviewing their open source repos with our checklist
-				to make sure their projects are ready for Hacktoberfest contributions,
-				and our contributors will be looking at their favorite repos, evaluating
-				them based on the guide, and writing good issues as needed to fulfill
-				the criteria.
-			</p>
+			<>
+				<p>
+					Maintainers will be reviewing their open source repos with our
+					checklist to make sure their projects are ready for Hacktoberfest
+					contributions, and our contributors will be looking at their favorite
+					repos, evaluating them based on the guide, and writing good issues as
+					needed to fulfill the criteria.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-preptember-2023-monthly-challenge-51d2">
+						this blog post
+					</a>
+					.
+				</p>
+			</>
 		),
 		links: [
 			{
