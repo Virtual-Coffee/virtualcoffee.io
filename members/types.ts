@@ -30,7 +30,7 @@ export type Account =
 			title: string;
 	  };
 
-export type Badge = 'Hacktoberfest2022';
+export type Badge = 'Hacktoberfest2022' | 'Hacktoberfest2023';
 export type Flare = {
 	profileMask?: string;
 };
