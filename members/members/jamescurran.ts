@@ -2,7 +2,7 @@ import { Hacktoberfest2023 } from '~/svg/badges';
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-export const _EXAMPLE: MemberObject = {
+export const Jamescurran: MemberObject = {
 	// GitHub username (required)
 	github: 'jamescurran',
 	//
@@ -54,7 +54,7 @@ export const _EXAMPLE: MemberObject = {
 	],
 	badges: ['Hacktoberfest2023'],
 	location: {
-		latitute: 40.220825943631645,
+		latitude: 40.220825943631645,
 		longitude: -74.76004035318527,
 		title: 'Trenton, NJ', // optional
 	},
