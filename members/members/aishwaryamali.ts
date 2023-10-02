@@ -42,5 +42,10 @@ export const aishwaryamali: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ['Hacktoberfest2022'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	location: {
+		latitude: 18.529102501138226,
+		longitude: 73.85607815269947,
+		title: 'Pune, India',
+	},
 };
