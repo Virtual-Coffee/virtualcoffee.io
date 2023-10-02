@@ -154,6 +154,7 @@ const challengeList: Challenge[] = [
 					</a>
 					.
 				</p>
+				<p>To view all of the details, including a list of VC-approved repositories to contribute to, <Link to="/monthlychallenges/oct-2023">check out the October monthly challenge page</Link>.</p>
 			</>
 		),
 		links: [
