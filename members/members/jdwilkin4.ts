@@ -42,9 +42,14 @@ export const jdwilkin4: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		{
 			type: 'website',
-			url: 'https://www.freecodecamp.org/news/author/jessica-wilkins/',
-			title: 'freeCodeCamp News Author Profile',
+			url: 'https://jessicawilkins.dev/',
+			title: 'personal website',
 		},
 	],
-	badges: ['Hacktoberfest2022'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	location: {
+		latitude: 34.052235,
+		longitude: -118.243683,
+		title: 'Los Angeles, California',
+	},
 };
