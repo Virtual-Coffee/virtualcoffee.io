@@ -30,7 +30,7 @@ export const rishabh1S: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		// { type: 'linkedin', username: 'rishabh1s' },
+		{ type: 'linkedin', username: 'rishabh1s' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },
@@ -39,7 +39,7 @@ export const rishabh1S: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://rishabh1s.web.app/', title: 'Title of link' },
+		{ type: 'website', url: 'https://rishabh1s.web.app/', title: 'Title of link' },
 	],
 	badges: [],
 };
