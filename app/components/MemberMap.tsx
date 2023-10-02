@@ -1,19 +1,13 @@
-import type { FixedUpUser, Location, MemberList } from 'members/types';
+import type { MappableMember } from 'members/types';
 import { useEffect } from 'react';
 import { MapContainer, Marker, TileLayer, Popup, useMap } from 'react-leaflet';
 
-function Markers({ members }: { members: MemberList }) {
+function Markers({ members }: { members: MappableMember[] }) {
 	const map = useMap();
 
 	useEffect(() => {
-		const filtered = members.filter(
-			(member): member is FixedUpUser & { location: Location } => {
-				return !!(member && member.location);
-			},
-		);
-
 		map.fitBounds(
-			filtered.map((member) => [
+			members.map((member) => [
 				member.location.latitude,
 				member.location.longitude,
 			]),
@@ -22,38 +16,34 @@ function Markers({ members }: { members: MemberList }) {
 
 	return (
 		<>
-			{members.map((member) =>
-				!member ||
-				!member.location?.latitude ||
-				!member.location?.longitude ? null : (
-					<Marker
-						key={member.github}
-						position={[member.location?.latitude, member.location?.longitude]}
-					>
-						<Popup>
-							{member.name}
-							{member.location?.title && (
-								<>
-									{' - '}
-									{member.location?.title}
-								</>
-							)}
-						</Popup>
-					</Marker>
-				),
-			)}
+			{members.map((member) => (
+				<Marker
+					key={member.github}
+					position={[member.location?.latitude, member.location?.longitude]}
+				>
+					<Popup>
+						{member.name}
+						{member.location?.title && (
+							<>
+								{' - '}
+								{member.location?.title}
+							</>
+						)}
+					</Popup>
+				</Marker>
+			))}
 		</>
 	);
 }
 
-export default function MemberMap({ members }: { members: MemberList }) {
+export default function MemberMap({ members }: { members: MappableMember[] }) {
 	return (
-		<div style={{ height: '50vh', position: 'relative' }}>
+		<div style={{ aspectRatio: '16/6', minHeight: 400, position: 'relative' }}>
 			<MapContainer
 				center={[36.674222, -39.082187]}
 				zoom={1}
 				scrollWheelZoom={false}
-				style={{ height: '50vh', position: 'relative' }}
+				style={{ aspectRatio: '16/6', minHeight: 400, position: 'relative' }}
 			>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
