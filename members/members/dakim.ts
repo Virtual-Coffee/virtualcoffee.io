@@ -3,7 +3,7 @@ import { profileMasks } from '../flare';
 
 export const davidakim: MemberObject = {
 	// GitHub username (required)
-	github: 'davidakim',
+	github: 'david-001',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
