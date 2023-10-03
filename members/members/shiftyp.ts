@@ -32,7 +32,7 @@ export const shiftyp: MemberObject = {
 		latitude: 40.826916, 
 		longitude: -73.954319,
 		title: 'NYC',
-	}
+	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
