@@ -42,5 +42,10 @@ export const Arol15: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 26.011761,
+		longitude: -80.139061,
+		title: 'Hollywood, FL',
+	},
 };
