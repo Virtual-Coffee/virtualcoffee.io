@@ -42,5 +42,10 @@ export const _EXAMPLE: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 40.782864,
+		longitude: -73.965355,
+		title: 'New York, NY',
+	},
 };
