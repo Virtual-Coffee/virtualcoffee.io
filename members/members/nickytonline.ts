@@ -46,4 +46,9 @@ export const nickytonline: MemberObject = {
 		},
 	],
 	badges: ['Hacktoberfest2022'],
+	location: {
+		latitude: 45.50906,
+		longitude: -73.55336,
+		title: 'Montreal, Quebec, Canada',
+	},
 };
