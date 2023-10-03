@@ -14,7 +14,7 @@ export const pedaars: MemberObject = {
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: `Junior Front-End Developer | 1E Limited`,
+	bio: `Mid-level Front End Developer | 1E Limited`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -42,5 +42,10 @@ export const pedaars: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ['Hacktoberfest2022'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	location: {
+		latitude: 51.27726,
+		longitude: 1.08046,
+		title: 'Canterbury, UK', // optional
+	},
 };
