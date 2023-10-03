@@ -41,5 +41,10 @@ export const rishabh1S: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 23.259933,
+		longitude: 77.412613,
+		title: 'Bhopal, MP', 
+	  },
 };
