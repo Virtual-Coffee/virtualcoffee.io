@@ -43,7 +43,7 @@ export default function Challenge() {
 
 			<p className="mt-3">
 				<strong>Challenge Team Leads & Facilitators:</strong> BekahHW, Dan Ott,
-				Ayu Adiati & Dominic Duffin
+				Ayu Adiati, Dominic Duffin & Julia Seidman
 			</p>
 
 			<hr />
@@ -109,20 +109,21 @@ export default function Challenge() {
 				how you opt-in to Hacktoberfest.
 			</p>
 
-			<h3>Weekly async check-ins</h3>
+			<h3>Weekly check-ins</h3>
 			<p>
-				Let's start the week with a check-in. What are your goals for
+				Let's start the week with an async check-in. What are your goals for
 				Hacktoberfest for the week? What support do you need? Do you plan on
 				spending time in the <code>#hacktoberfest-co-working-room</code>,
 				talking to your mentor, or answering questions as a maintainer?
 			</p>
 			<p>
-				Every Friday of the month, we will drop a check-in for you to share your
-				progress, ask questions, and find help and support.
+				Every Friday of the month, we'll have a sync check-in. Join us, share
+				your progress, ask questions, and find help and support. We'll post more
+				information in the <code>#hacktoberfest</code> channel in Slack.
 			</p>
 			<p>
-				We will drop the check-ins in the <code>#hacktoberfest</code> channel on
-				Slack.
+				Can't come to the sync check-in? No problem. We'll also have an async
+				check-in in the <code>#hacktoberfest</code> channel on Slack.
 			</p>
 
 			<h3>How do I share my progress?</h3>
@@ -201,7 +202,7 @@ export default function Challenge() {
 						</a>
 					</h3>
 					<p>
-						Developer Quiz Site is a site filled with over 600+ questions on
+						Developer Quiz Site is a site filled with over 1200+ questions on
 						programming.
 					</p>
 					<p>
@@ -361,8 +362,9 @@ export default function Challenge() {
 						</a>
 					</h3>
 					<p>
-						Elm RPG Session is a sample session generator, ttrpg character
-						builder, and dice roller built with Elm and Lamdera.
+						Elm RPG Session is a sample session generator, table top role
+						playing game (ttrpg) character builder, and dice roller built with
+						Elm and Lamdera.
 					</p>
 					<p>
 						<strong>Maintainer</strong>: Kirk Shillingford
