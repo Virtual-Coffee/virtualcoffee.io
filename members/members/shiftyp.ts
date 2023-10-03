@@ -29,7 +29,7 @@ export const shiftyp: MemberObject = {
 		profileMask: profileMasks.circle,
 	},
 	location: {
-		latitude: 40.826916, 
+		latitude: 40.826916,
 		longitude: -73.954319,
 		title: 'NYC',
 	},
@@ -47,5 +47,5 @@ export const shiftyp: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ["Hacktoberfest2023"],
+	badges: ['Hacktoberfest2023'],
 };
