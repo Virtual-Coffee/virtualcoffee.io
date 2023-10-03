@@ -43,9 +43,9 @@ export const HpatricioH: MemberObject = {
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: ['Hacktoberfest2023'],
-  location: {
-    latitude: 43.593040,
-    longitude: -80.560982,
-    title: 'Elmira, Ontario', // optional
-  },
+	location: {
+		latitude: 43.59304,
+		longitude: -80.560982,
+		title: 'Elmira, Ontario', // optional
+	},
 };
