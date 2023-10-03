@@ -43,9 +43,9 @@ export const anshumanSathua: MemberObject = {
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: ['Hacktoberfest2023'],
-    location: {
-        latitude: 20.968731,
-        longitude: 85.745392,
-        title: 'Odisha, India', 
-      },
+	location: {
+		latitude: 20.968731,
+		longitude: 85.745392,
+		title: 'Odisha, India',
+	},
 };
