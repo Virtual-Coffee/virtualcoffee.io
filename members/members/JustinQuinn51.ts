@@ -11,7 +11,7 @@ export const JustinQuinn51: MemberObject = {
 		{ type: 'website', url: 'https://justinquinn.dev', title: 'Justin Quinn' },
 	],
 	badges: ['Hacktoberfest2023'],
-  location: {
+	location: {
 		latitude: 40.748718,
 		longitude: -73.985352,
 		title: 'New York, NY',
