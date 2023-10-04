@@ -157,9 +157,8 @@ export default function Issue() {
 					Virtual Coffee (Tuesdays at 9:00 AM ET | Thursdays at 12:00 PM ET)
 				</li>
 				<li>
-					Async{' '}
-					<a href="https://twitter.com/VirtualCoffeeIO">X (formerly Twitter)</a>{' '}
-					chat (Fridays — prompts tweeted out at 9:00 AM ET)
+					Async X (formerly Twitter) chat (Fridays — prompts tweeted out at 9:00
+					AM ET)
 				</li>
 			</ul>
 
@@ -178,9 +177,9 @@ export default function Issue() {
 				We're very excited to continue open membership with the support of our
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
-				joining the volunteer team, check out some the roles{' '}
+				joining the volunteer team, check out some of{' '}
 				<Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
-					here
+					our open roles
 				</Link>
 				!
 			</p>
