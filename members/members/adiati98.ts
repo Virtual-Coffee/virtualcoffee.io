@@ -48,8 +48,8 @@ export const adiati98: MemberObject = {
 	],
 	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
 	location: {
-		latitude: 41.6008681,
-		longitude: -87.6069894,
-		title: 'South Holland, Netherlands',
+		latitude: 52.020798,
+		longitude: 4.493784,
+		title: 'Zuid Holland, Netherlands',
 	},
 };
