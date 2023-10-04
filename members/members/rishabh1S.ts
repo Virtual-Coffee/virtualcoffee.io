@@ -1,9 +1,9 @@
 import type { MemberObject } from '../types';
-import { profileMasks } from '../flare';
+// import { profileMasks } from '../flare';
 
 export const rishabh1S: MemberObject = {
 	// GitHub username (required)
-	github: 'yourGitHubUserName',
+	github: 'rishabh1S',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
@@ -25,25 +25,26 @@ export const rishabh1S: MemberObject = {
 	// profileMasks.circle, profileMasks.rabbet, profileMasks.star
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
-		profileMask: profileMasks.triangle,
+		// profileMask: profileMasks.triangle,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
 		{ type: 'linkedin', username: 'rishabh1s' },
-		// { type: 'dev', username: 'yourUserName' },
+		{ type: 'dev', username: 'rishabh1s' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
+		{ type: 'twitter', username: 'Rishabh1xs' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://rishabh1s.web.app/',
-			title: 'Title of link',
-		},
+		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 23.259933,
+		longitude: 77.412613,
+		title: 'Bhopal, MP',
+	},
 };
