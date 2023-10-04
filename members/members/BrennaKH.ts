@@ -46,6 +46,6 @@ export const BrennaKH: MemberObject = {
 	location: {
 		latitude: 34.052235,
 		longitude: -118.243683,
-		title: 'Los Angeles'
+		title: 'Los Angeles',
 	},
 };
