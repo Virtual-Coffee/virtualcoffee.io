@@ -51,5 +51,5 @@ export const bekahhw: MemberObject = {
 		latitude: 40.375059,
 		longitude: -80.947491,
 		title: 'Eastern, Ohio', // optional
-	  },
+	},
 };
