@@ -40,7 +40,11 @@ export const mikestreety: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://hachyderm.io/@mikestreety', title: 'Mastodon' },
+		{
+			type: 'website',
+			url: 'https://hachyderm.io/@mikestreety',
+			title: 'Mastodon',
+		},
 	],
 	badges: ['Hacktoberfest2023'],
 
