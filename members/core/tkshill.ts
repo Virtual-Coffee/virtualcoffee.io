@@ -43,7 +43,7 @@ export const tkshill: MemberObject = {
 	],
 	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
 	location: {
-		latitude: 54.267990,
+		latitude: 54.26799,
 		longitude: -110.730217,
 		title: 'Bonnyville, AB',
 	},
