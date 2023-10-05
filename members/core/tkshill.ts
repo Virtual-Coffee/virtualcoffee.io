@@ -25,8 +25,7 @@ export const tkshill: MemberObject = {
 	// profileMasks.circle, profileMasks.rabbet, profileMasks.star
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
-		// example:
-		// profileMask: profileMasks.triangle,
+		profileMask: profileMasks.star,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
@@ -42,5 +41,10 @@ export const tkshill: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	location: {
+		latitude: 54.267990,
+		longitude: -110.730217,
+		title: 'Bonnyville, AB',
+	},
 };
