@@ -11,7 +11,10 @@ export const michaeljolley: MemberObject = {
 		{ type: 'dev', username: 'michaeljolley' },
 		{ type: 'twitter', username: 'michaeljolley' },
 		{ type: 'twitch', username: 'baldbeardedbuilder' },
-		{ type: 'youtube', customUrl: 'https://www.youtube.com/c/baldbeardedbuilder' },
+		{
+			type: 'youtube',
+			customUrl: 'https://www.youtube.com/c/baldbeardedbuilder',
+		},
 	],
 	badges: ['Hacktoberfest2023'],
 };
