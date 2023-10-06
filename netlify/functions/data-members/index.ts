@@ -371,6 +371,14 @@ async function loadUserData() {
 
 						return null;
 
+					case 'mastodon':
+						return {
+							...account,
+							Icon: 'Mastodon',
+							type: 'mastodon',
+							title: account.title || account.url,
+						};
+
 					case 'website':
 						return {
 							...account,
