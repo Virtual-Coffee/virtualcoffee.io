@@ -45,8 +45,8 @@ export const davidgsalgado: MemberObject = {
 	badges: ['Hacktoberfest2023'],
 
 	location: {
-		longitude: 39.043593455828805,
-		latitude: -76.95610354523609,
+		latitude: 39.043593455828805,
+		longitude: -76.95610354523609,
 		title: 'Maryland, USA',
 	},
 };

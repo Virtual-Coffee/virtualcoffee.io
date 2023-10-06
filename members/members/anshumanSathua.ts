@@ -1,14 +1,14 @@
 import type { MemberObject } from '../types';
-import { profileMasks } from '../flare';
+// import { profileMasks } from '../flare';
 
-export const shiftyp: MemberObject = {
+export const anshumanSathua: MemberObject = {
 	// GitHub username (required)
-	github: 'shiftyp',
+	github: 'anshumanSathua',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	// name: 'Your Name',
+	name: 'Anshuman Sathua',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
@@ -26,20 +26,15 @@ export const shiftyp: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		profileMask: profileMasks.circle,
-	},
-	location: {
-		latitude: 40.826916,
-		longitude: -73.954319,
-		title: 'NYC',
+		// profileMask: profileMasks.triangle,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
+		{ type: 'linkedin', username: 'anshuman-sathua' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
+		{ type: 'twitter', username: 'i_m_anshu_' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
@@ -48,4 +43,9 @@ export const shiftyp: MemberObject = {
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 20.968731,
+		longitude: 85.745392,
+		title: 'Odisha, India',
+	},
 };

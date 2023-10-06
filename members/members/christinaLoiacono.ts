@@ -1,20 +1,20 @@
 import type { MemberObject } from '../types';
 import { profileMasks } from '../flare';
 
-export const shiftyp: MemberObject = {
+export const christina_ml: MemberObject = {
 	// GitHub username (required)
-	github: 'shiftyp',
+	github: 'christina-ml',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	// name: 'Your Name',
+	name: 'Christina Loiacono',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
+	bio: `Full Stack Software Engineer | JavaScript, PERN Stack: React, Node.js, Express, PostgreSQL`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -28,18 +28,13 @@ export const shiftyp: MemberObject = {
 		// example:
 		profileMask: profileMasks.circle,
 	},
-	location: {
-		latitude: 40.826916,
-		longitude: -73.954319,
-		title: 'NYC',
-	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
+		{ type: 'linkedin', username: 'christina-loiacono' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
+		{ type: 'twitter', username: 'cmloiacono' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
@@ -48,4 +43,9 @@ export const shiftyp: MemberObject = {
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 40.782864,
+		longitude: -73.965355,
+		title: 'New York, NY',
+	},
 };

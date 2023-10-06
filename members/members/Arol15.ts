@@ -1,9 +1,9 @@
 import type { MemberObject } from '../types';
-import { profileMasks } from '../flare';
+// import { profileMasks } from '../flare';
 
-export const shiftyp: MemberObject = {
+export const Arol15: MemberObject = {
 	// GitHub username (required)
-	github: 'shiftyp',
+	github: 'Arol15',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
@@ -26,12 +26,7 @@ export const shiftyp: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		profileMask: profileMasks.circle,
-	},
-	location: {
-		latitude: 40.826916,
-		longitude: -73.954319,
-		title: 'NYC',
+		// profileMask: profileMasks.triangle,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
@@ -48,4 +43,9 @@ export const shiftyp: MemberObject = {
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 26.011761,
+		longitude: -80.139061,
+		title: 'Hollywood, FL',
+	},
 };

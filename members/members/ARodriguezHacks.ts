@@ -1,9 +1,9 @@
 import type { MemberObject } from '../types';
 import { profileMasks } from '../flare';
 
-export const shiftyp: MemberObject = {
+export const ARodriguezHacks: MemberObject = {
 	// GitHub username (required)
-	github: 'shiftyp',
+	github: 'ARodriguezHacks',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
@@ -14,7 +14,7 @@ export const shiftyp: MemberObject = {
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
+	bio: `Frontend Engineer & Foreign Language Fanatic | Extroverted introvert | Nerdy for novels, video game music, and community.`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -26,17 +26,12 @@ export const shiftyp: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		profileMask: profileMasks.circle,
-	},
-	location: {
-		latitude: 40.826916,
-		longitude: -73.954319,
-		title: 'NYC',
+		profileMask: profileMasks.rabbet,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
+		{ type: 'linkedin', username: 'angierodriguezdev' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },
@@ -45,7 +40,16 @@ export const shiftyp: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+		{
+			type: 'website',
+			url: 'https://angierodriguez.dev/',
+			title: 'Portfolio Website',
+		},
 	],
 	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 45.633331,
+		longitude: -122.599998,
+		title: 'Vancouver, WA',
+	},
 };
