@@ -24,7 +24,7 @@ function Markers({ members }: { members: MappableMember[] }) {
 					position={[member.location?.latitude, member.location?.longitude]}
 				>
 					<Popup>
-						{member.name}
+						<a href={`#member_${member.github}`}>{member.name}</a>
 						{member.location?.title && (
 							<>
 								{' - '}
