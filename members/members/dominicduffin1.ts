@@ -31,7 +31,7 @@ export const dominicduffin1: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
+		{ type: 'linkedin', username: 'dominic-duffin-a992b0225' },
 		{ type: 'dev', username: 'dominicduffin1' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'DominicDuffin1' },
@@ -46,5 +46,10 @@ export const dominicduffin1: MemberObject = {
 			title: "Dominic Duffin's site",
 		},
 	],
-	badges: ['Hacktoberfest2022'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	location: {
+		latitude: 51.45426791088784,
+		longitude: -2.589359596856158,
+		title: 'West of England, UK',
+	},
 };
