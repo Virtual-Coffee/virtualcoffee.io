@@ -22,6 +22,7 @@ export function getEpisodes({ limit = 5 }) {
 			podcastSeason: season,
 			podcastPublishDate: today.plus({ days: -1 * (i + 1) * 7 }).toString(),
 			podcastBuzzsproutId: '10297519',
+			episodeSponsors: [],
 		};
 	});
 }
@@ -60,5 +61,6 @@ export function getEpisode({ slug }: { slug: PodcastEpisode['slug'] }) {
 			},
 		],
 		podcastEpisodeCard: [{ path: 'http://placekitten.com/1200/1200' }],
+		episodeSponsors: [],
 	};
 }

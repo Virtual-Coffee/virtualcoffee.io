@@ -12,7 +12,7 @@ So come with a question or a topic to discuss, ask for feedback on your portfoli
 
 Our mission is to form community, allow room for growth and mentorship at all levels, and to provide a safe space for everyone interested in tech.
 
-Please take a moment to read our [Code of Conduct](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/master/CODE_OF_CONDUCT.md).
+Please take a moment to read our [Code of Conduct](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CODE_OF_CONDUCT.md).
 
 See you there!
 
@@ -20,7 +20,7 @@ See you there!
 
 - This site is built using [Remix](https://remix.run/).
 - Check out our [CONTRIBUTING](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md) guideline to make contributions.
-- If you're new to open source, check out our [Git & GitHub 101](https://virtualcoffee.io/resources/open-source/git-101) and [Contributor Guide](https://virtualcoffee.io/resources/open-source/contributor-guide) resources.
+- If you're new to open source, check out our [Git & GitHub 101](https://virtualcoffee.io/resources/developer-resources/open-source/git-101) and [Contributor Guide](https://virtualcoffee.io/resources/developer-resources/open-source/contributor-guide) resources.
 
 ## Table of Contents:
 
@@ -172,7 +172,7 @@ If you'd like to work on a feature that requires an API key, please reach out to
 
 ### Resources
 
-Our [VC Resources](https://virtualcoffee.io/resources) are creating using [MDX](https://mdxjs.com/). MDX is basically a combination of Markdown and React.
+Our [VC Resources](https://virtualcoffee.io/resources) are created using [MDX](https://mdxjs.com/). MDX is basically a combination of Markdown and React.
 
 Any files added to `app/routes/__frontend/resources` will be automatically loaded and added to the appropriate index page.
 

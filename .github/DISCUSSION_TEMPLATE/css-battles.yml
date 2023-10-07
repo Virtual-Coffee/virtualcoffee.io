@@ -7,7 +7,7 @@ body:
       label: 'Link to battle:'
       description: Replace NUMBER with current battle number
       value: |
-        [Lets battle! ⚔️](https://cssbattle.dev/play/NUMBER)
+        [Let's battle! ⚔️](https://cssbattle.dev/play/NUMBER)
     validations:
       required: true
   - type: markdown

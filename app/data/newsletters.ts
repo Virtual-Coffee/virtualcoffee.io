@@ -1,3 +1,7 @@
+import { handle as issue202310 } from '~/routes/__frontend/newsletter/issues/2023-10';
+import { handle as issue202309 } from '~/routes/__frontend/newsletter/issues/2023-09';
+import { handle as issue202308 } from '~/routes/__frontend/newsletter/issues/2023-08';
+import { handle as issue202307 } from '~/routes/__frontend/newsletter/issues/2023-07';
 import { handle as issue202306 } from '~/routes/__frontend/newsletter/issues/2023-06';
 import { handle as issue202305 } from '~/routes/__frontend/newsletter/issues/2023-05';
 import { handle as issue202304 } from '~/routes/__frontend/newsletter/issues/2023-04';
@@ -30,6 +34,10 @@ import { handle as issue202102 } from '~/routes/__frontend/newsletter/issues/202
 import { handle as issue202101 } from '~/routes/__frontend/newsletter/issues/2021-01';
 
 const newsletters = [
+	{ handleData: issue202310, slug: '2023-10' },
+	{ handleData: issue202309, slug: '2023-09' },
+	{ handleData: issue202308, slug: '2023-08' },
+	{ handleData: issue202307, slug: '2023-07' },
 	{ handleData: issue202306, slug: '2023-06' },
 	{ handleData: issue202305, slug: '2023-05' },
 	{ handleData: issue202304, slug: '2023-04' },

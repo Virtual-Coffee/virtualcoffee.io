@@ -4,8 +4,7 @@ import { createMetaData } from '~/util/createMetaData.server';
 export const handle = {
 	listTitle: 'December, 2022: Creative Community Challenge',
 	meta: {
-		title: 
-            'Monthly Challenge for December 2022: Creative Community Challenge',
+		title: 'Monthly Challenge for December 2022: Creative Community Challenge',
 		description:
 			"December challenge -> Let's make some space for the other parts of ourselves.",
 	},
@@ -31,7 +30,7 @@ export default function Challenge() {
 		<>
 			<h1>
 				<small>Monthly Challenge for December, 2022:</small> <br />
-                Creative Community Challenge
+				Creative Community Challenge
 			</h1>
 
 			<p className="lead text-center">

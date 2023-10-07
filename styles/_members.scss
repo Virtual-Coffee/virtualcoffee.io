@@ -66,6 +66,9 @@
 
 .membercard-badges {
 	margin-top: 0.5em;
+	display: flex;
+	gap: 0.25em;
+	flex-wrap: wrap;
 }
 
 .membercard-header {

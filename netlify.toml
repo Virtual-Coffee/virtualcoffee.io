@@ -24,6 +24,11 @@
     "Cache-Control" = "public, max-age=31536000, s-maxage=31536000"
 
 [[redirects]]
+  from = "/members/map"
+  to = "/members"
+  status = 301
+
+[[redirects]]
   from = "/netlify-forms"
   to = "/"
   status = 200
