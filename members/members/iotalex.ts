@@ -47,8 +47,8 @@ export const iotalex: MemberObject = {
 		},
 	],
 	///location: {
-		//latitude: ,
-		//longitude: ,
-		//title: , // optional
+	//latitude: ,
+	//longitude: ,
+	//title: , // optional
 	//},
 };
