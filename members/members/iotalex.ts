@@ -40,7 +40,11 @@ export const iotalex: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		 { type: 'website', url: 'https://www.iotalex.com', title: 'www.iotalex.com' },
+		{
+			type: 'website',
+			url: 'https://www.iotalex.com',
+			title: 'www.iotalex.com',
+		},
 	],
 	location: {
 		latitude: 41.256538,
