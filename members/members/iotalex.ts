@@ -8,7 +8,7 @@ export const iotalex: MemberObject = {
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	 name: 'Alexander Batenhorst',
+	name: 'Alexander Batenhorst',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
@@ -42,7 +42,6 @@ export const iotalex: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		 { type: 'website', url: 'https://www.iotalex.com', title: 'www.iotalex.com' },
 	],
-	badges: ['Hacktoberfest2023'],
 	location: {
 		latitude: 41.256538,
 		longitude: -95.934502,
