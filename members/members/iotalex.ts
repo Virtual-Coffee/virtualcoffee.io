@@ -46,9 +46,9 @@ export const iotalex: MemberObject = {
 			title: 'www.iotalex.com',
 		},
 	],
-	location: {
-		latitude: 41.256538,
-		longitude: -95.934502,
-		title: 'Omaha, NE', // optional
-	},
+	///location: {
+		//latitude: ,
+		//longitude: ,
+		//title: , // optional
+	//},
 };
