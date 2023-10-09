@@ -1,5 +1,5 @@
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
+import { profileMasks } from '../flare';
 
 export const raaynaldo: MemberObject = {
 	// GitHub username (required)
@@ -26,7 +26,7 @@ export const raaynaldo: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		// profileMask: profileMasks.triangle,
+		profileMask: profileMasks.circle,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
@@ -46,5 +46,10 @@ export const raaynaldo: MemberObject = {
 			title: 'Leetcode',
 		},
 	],
-	badges: [],
+	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 38.997662,
+		longitude: -77.027023,
+		title: 'Silver Spring, Maryland',
+	},
 };
