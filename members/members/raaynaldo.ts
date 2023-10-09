@@ -46,7 +46,7 @@ export const raaynaldo: MemberObject = {
 			title: 'Leetcode',
 		},
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	badges: ['Hacktoberfest2023'],
 	location: {
 		latitude: 38.997662,
 		longitude: -77.027023,
