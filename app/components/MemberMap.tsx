@@ -1,6 +1,12 @@
 import type { MappableMember } from 'members/types';
 import { useEffect } from 'react';
+import L from 'leaflet';
 import { MapContainer, Marker, TileLayer, Popup, useMap } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
+
+const customIcon = new L.Icon.Default({
+	iconUrl: require('../../public/assets/images/virtual-coffee-mug-circle.svg'),
+});
 
 function Markers({ members }: { members: MappableMember[] }) {
 	const map = useMap();
@@ -22,6 +28,7 @@ function Markers({ members }: { members: MappableMember[] }) {
 				<Marker
 					key={member.github}
 					position={[member.location?.latitude, member.location?.longitude]}
+					icon={customIcon}
 				>
 					<Popup>
 						<a href={`#member_${member.github}`}>{member.name}</a>
@@ -39,11 +46,12 @@ function Markers({ members }: { members: MappableMember[] }) {
 }
 
 export default function MemberMap({ members }: { members: MappableMember[] }) {
+	console.log(members);
 	return (
 		<div style={{ aspectRatio: '16/6', minHeight: 400, position: 'relative' }}>
 			<MapContainer
 				center={[36.674222, -39.082187]}
-				zoom={1}
+				zoom={2}
 				scrollWheelZoom={false}
 				style={{ aspectRatio: '16/6', minHeight: 400, position: 'relative' }}
 			>
@@ -51,7 +59,9 @@ export default function MemberMap({ members }: { members: MappableMember[] }) {
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 				/>
-				<Markers members={members} />
+				<MarkerClusterGroup chunkedLoading>
+					<Markers members={members} />
+				</MarkerClusterGroup>
 			</MapContainer>
 		</div>
 	);
