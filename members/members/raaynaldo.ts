@@ -40,7 +40,11 @@ export const raaynaldo: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		{ type: 'medium', username: 'raaynaldo' },
 		{ type: 'hashnode', username: 'raaynaldo' },
-		{ type: 'website', url: 'https://leetcode.com/teofilus/', title: 'Leetcode' },
+		{
+			type: 'website',
+			url: 'https://leetcode.com/teofilus/',
+			title: 'Leetcode',
+		},
 	],
 	badges: [],
 };
