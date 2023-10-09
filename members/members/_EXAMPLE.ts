@@ -1,6 +1,7 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
+// Change _EXAMPLE to `yourGitHubUserName` and add your info below
 export const _EXAMPLE: MemberObject = {
 	// GitHub username (required)
 	github: 'yourGitHubUserName',
@@ -44,4 +45,11 @@ export const _EXAMPLE: MemberObject = {
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: [],
+	// Add your location to our member map at https://virtualcoffee.io/members (optional)
+	// Feel free to be as specific or vague as you're comfortable with.
+	// location: {
+	// 	latitude: 41.48266891706046,
+	// 	longitude: -81.80009779282766,
+	// 	title: 'Lakewood, OH', // optional
+	// },
 };
