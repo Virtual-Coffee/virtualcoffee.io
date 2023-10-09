@@ -40,16 +40,16 @@ export const funbunch: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ 
-      type: 'website', 
-      url: 'https://bunchofideas.com', 
-      title: 'Bunch of Ideas' 
-    },
+		{
+			type: 'website',
+			url: 'https://bunchofideas.com',
+			title: 'Bunch of Ideas',
+		},
 	],
 	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
-  location: {
-    latitude: 33.959930,
-    longitude: -118.393051,
-    title: 'Los Angeles, CA', // optional
-  },
+	location: {
+		latitude: 33.95993,
+		longitude: -118.393051,
+		title: 'Los Angeles, CA', // optional
+	},
 };
