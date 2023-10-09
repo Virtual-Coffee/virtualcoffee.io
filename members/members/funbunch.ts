@@ -31,7 +31,7 @@ export const funbunch: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-  { type: 'linkedin', username: 'sbunch' },
+		{ type: 'linkedin', username: 'sbunch' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },
@@ -40,7 +40,11 @@ export const funbunch: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://bunchofideas.com', title: 'Bunch of Ideas' },
+		{ 
+      type: 'website', 
+      url: 'https://bunchofideas.com', 
+      title: 'Bunch of Ideas' 
+    },
 	],
 	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
   location: {

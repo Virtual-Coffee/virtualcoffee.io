@@ -40,6 +40,7 @@ export const _EXAMPLE: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
+		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: [],
