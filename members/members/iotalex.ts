@@ -46,9 +46,10 @@ export const iotalex: MemberObject = {
 			title: 'www.iotalex.com',
 		},
 	],
-	///location: {
-	//latitude: ,
-	//longitude: ,
-	//title: , // optional
-	//},
+	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 41.256538,
+		longitude: -95.934502,
+		title: 'Omaha, NE', // optional
+	},
 };
