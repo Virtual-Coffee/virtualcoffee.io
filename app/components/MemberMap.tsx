@@ -3,9 +3,11 @@ import { useEffect } from 'react';
 import L from 'leaflet';
 import { MapContainer, Marker, TileLayer, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
+import 'leaflet/dist/leaflet.css';
 
 const customIcon = new L.Icon.Default({
 	iconUrl: require('../../public/assets/images/virtual-coffee-mug-circle.svg'),
+	iconSize: new L.Point(33, 33, true),
 });
 
 function Markers({ members }: { members: MappableMember[] }) {
@@ -48,11 +50,11 @@ function Markers({ members }: { members: MappableMember[] }) {
 export default function MemberMap({ members }: { members: MappableMember[] }) {
 	console.log(members);
 	return (
-		<div style={{ aspectRatio: '16/6', minHeight: 400, position: 'relative' }}>
+		<div>
 			<MapContainer
 				center={[36.674222, -39.082187]}
-				zoom={2}
-				scrollWheelZoom={false}
+				zoom={1}
+				scrollWheelZoom={true}
 				style={{ aspectRatio: '16/6', minHeight: 400, position: 'relative' }}
 			>
 				<TileLayer
