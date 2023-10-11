@@ -56,7 +56,6 @@ function Markers({ members }: { members: MappableMember[] }) {
 }
 
 export default function MemberMap({ members }: { members: MappableMember[] }) {
-	console.log(members);
 	return (
 		<div>
 			<MapContainer
