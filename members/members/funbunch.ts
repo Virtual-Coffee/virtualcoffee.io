@@ -1,9 +1,9 @@
 import type { MemberObject } from '../types';
 import { profileMasks } from '../flare';
 
-export const dominicduffin1: MemberObject = {
+export const funbunch: MemberObject = {
 	// GitHub username (required)
-	github: 'dominicduffin1',
+	github: 'funbunch',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
@@ -11,10 +11,10 @@ export const dominicduffin1: MemberObject = {
 	// name: 'Your Name',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
-	// mainUrl: 'https://virtualcoffee.io',
+	mainUrl: 'https://bunchofideas.com',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
+	bio: `Software Engineer | MERN | Always learning | Passionate about creating beautiful and engaging User Interfaces`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -26,30 +26,30 @@ export const dominicduffin1: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		profileMask: profileMasks.hexagon,
+		profileMask: profileMasks.circle,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'dominic-duffin-a992b0225' },
-		{ type: 'dev', username: 'dominicduffin1' },
+		{ type: 'linkedin', username: 'sbunch' },
+		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'DominicDuffin1' },
+		// { type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'dominic' },
+		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{
 			type: 'website',
-			url: 'https://dominicduffin.uk',
-			title: "Dominic Duffin's site",
+			url: 'https://bunchofideas.com',
+			title: 'Bunch of Ideas',
 		},
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	badges: ['Hacktoberfest2023'],
 	location: {
-		latitude: 51.45426791088784,
-		longitude: -2.589359596856158,
-		title: 'West of England, UK',
+		latitude: 33.95993,
+		longitude: -118.393051,
+		title: 'Los Angeles, CA', // optional
 	},
 };

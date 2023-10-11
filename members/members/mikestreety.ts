@@ -32,6 +32,7 @@ export const mikestreety: MemberObject = {
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
 		{ type: 'linkedin', username: 'mikestreety' },
+		{ type: 'mastodon', url: 'https://hachyderm.io/@mikestreety' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },
@@ -42,8 +43,8 @@ export const mikestreety: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		{
 			type: 'website',
-			url: 'https://hachyderm.io/@mikestreety',
-			title: 'Mastodon',
+			url: 'https://www.mikestreety.co.uk/',
+			title: 'Mikestreety',
 		},
 	],
 	badges: ['Hacktoberfest2023'],
