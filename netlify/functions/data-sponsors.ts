@@ -70,6 +70,23 @@ const sponsorOverrides: Record<string, Partial<SponsorEntity>> = {
 			w: 720,
 		}),
 	},
+	MDQ6VXNlcjY2Mjc0MzIy: {
+		websiteUrl: 'https://levelupfinancialplanning.com',
+		name: 'LevelUP Financial planning',
+		descriptionHTML: `We're grateful to be sponorsored by LevelUP Financial planning, who understands the importance of finding balance between having an awesome life today, and being confident and excited about your future possibilities. If you want to take your financial confidence to the next level, check out levelupfinancialplanning.com.`,
+		avatar_width: 557,
+		avatar_height: 720,
+		avatarUrl_80:
+			'https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=80',
+		avatarUrl_160:
+			'https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=160',
+		avatarUrl_240:
+			'https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=240',
+		avatarUrl_480:
+			'https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=480',
+		avatarUrl_720:
+			'https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=720',
+	},
 };
 
 const query = gql`
@@ -177,6 +194,8 @@ async function getSponsors() {
 			};
 		},
 	);
+
+	console.log(JSON.stringify(tiers, null, 2));
 
 	const returnVal = {
 		logoSponsors: tiers
