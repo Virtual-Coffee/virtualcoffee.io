@@ -10,6 +10,14 @@ const customIcon = new L.Icon.Default({
 	iconSize: new L.Point(33, 33, true),
 });
 
+const createClusterCustomIcon = function (cluster) {
+	return L.divIcon({
+		html: `<span>${cluster.getChildCount()}</span>`,
+		className: 'custom-marker-cluster',
+		iconSize: L.point(33, 33, true),
+	});
+};
+
 function Markers({ members }: { members: MappableMember[] }) {
 	const map = useMap();
 
@@ -61,7 +69,21 @@ export default function MemberMap({ members }: { members: MappableMember[] }) {
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 				/>
-				<MarkerClusterGroup chunkedLoading>
+				<MarkerClusterGroup
+					chunkedLoading
+					// onClick={(e) => console.log('onClick', e)}
+					iconCreateFunction={createClusterCustomIcon}
+					maxClusterRadius={150}
+					spiderfyOnMaxZoom={true}
+					polygonOptions={{
+						fillColor: '#ffffff',
+						color: '#f00800',
+						weight: 5,
+						opacity: 1,
+						fillOpacity: 0.8,
+					}}
+					showCoverageOnHover={true}
+				>
 					<Markers members={members} />
 				</MarkerClusterGroup>
 			</MapContainer>
