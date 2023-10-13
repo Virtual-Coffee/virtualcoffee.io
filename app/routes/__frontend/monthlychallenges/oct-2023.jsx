@@ -386,7 +386,7 @@ export default function Challenge() {
 				<li>
 					<h3>
 						<a href="https://github.com/AccessibleForAll/AccessibleWebDev">
-							AccessibleWebDev
+							Accessible Web Dev
 						</a>
 					</h3>
 					<p>
