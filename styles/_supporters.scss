@@ -15,6 +15,8 @@
 	list-style: none;
 	padding: 0;
 	max-width: 900px;
+	display: grid;
+	gap: 1em;
 
 	> li {
 		display: grid;

@@ -10,6 +10,7 @@ import Polywork from '~/svg/Polywork';
 import Medium from '~/svg/Medium';
 import HashNode from '~/svg/HashNode';
 import YouTube from '~/svg/YouTube';
+import Mastodon from '~/svg/Mastodon';
 import Website from '~/svg/Website';
 import type { MemberList } from 'members/types';
 
@@ -27,6 +28,7 @@ export default function MemberCards({ data }: { data: MemberList }) {
 		Medium,
 		HashNode,
 		YouTube,
+		Mastodon,
 		Website,
 	};
 
