@@ -1,0 +1,160 @@
+.sponsors {
+	margin: 4em 0;
+}
+
+.sponsors-body {
+	padding: 1em 0;
+	color: $body-color;
+
+	h3 {
+		color: $pink;
+	}
+}
+
+.sponsors-list {
+	list-style: none;
+	padding: 0;
+	max-width: 900px;
+	display: grid;
+	gap: 1em;
+
+	> li {
+		display: grid;
+		gap: 1em;
+	}
+
+	li > a {
+		margin-bottom: 4em;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		@include media-breakpoint-up(md) {
+			display: grid;
+			grid-template-columns: min(24vw, 400px) 1fr;
+			gap: 2em;
+			align-items: center;
+		}
+	}
+
+	img {
+		width: 100%;
+		height: auto;
+		max-width: 400px;
+		box-shadow:
+			0 1px 3px 0 rgb(0 0 0 / 0.1),
+			0 1px 2px -1px rgb(0 0 0 / 0.1);
+		border-radius: 4px;
+		background: #fff;
+	}
+}
+
+.sponsors-list-sm {
+	list-style: none;
+	padding: 0;
+	display: grid;
+	gap: 1em;
+	margin: 1em 0;
+
+	> li {
+		display: grid;
+		gap: 1em;
+
+		@include media-breakpoint-up(md) {
+			display: grid;
+			grid-template-columns: min(24vw, 200px) 1fr;
+			gap: 2em;
+			align-items: flex-start;
+		}
+	}
+
+	.sponsors-body {
+		padding: 0;
+	}
+
+	img {
+		width: 100%;
+		height: auto;
+		max-width: 400px;
+		box-shadow:
+			0 1px 3px 0 rgb(0 0 0 / 0.1),
+			0 1px 2px -1px rgb(0 0 0 / 0.1);
+		border-radius: 4px;
+		background: #fff;
+	}
+}
+
+@keyframes rotator {
+	from {
+		transform: scale(1) rotate(0);
+	}
+
+	to {
+		transform: scale(1) rotate(360deg);
+	}
+}
+
+.supporters {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1em;
+	list-style: none;
+	padding: 0;
+
+	a {
+		display: inline-block;
+		padding: 5px;
+		border-radius: 100px;
+		background: $gradient-primary;
+		color: #fff;
+		position: relative;
+	}
+
+	img {
+		position: relative;
+		z-index: 2;
+		width: 80px;
+		border-radius: 100px;
+	}
+}
+
+.supporters-name {
+	position: absolute;
+	width: 130px;
+	height: 130px;
+	top: -20px;
+	left: -20px;
+	z-index: 1;
+	transform: scale(0);
+	transition: transform cubic-bezier(0.455, 0.03, 0.515, 0.955) 0.2s;
+
+	svg {
+		width: 130px;
+		height: 130px;
+		max-width: 130px;
+
+		font-weight: 500;
+		transform: rotate(0);
+		animation-duration: 3s;
+		animation-name: rotator;
+		animation-iteration-count: infinite;
+		animation-timing-function: linear;
+		animation-play-state: paused;
+	}
+
+	a:hover & {
+		transform: scale(1);
+
+		svg {
+			animation-play-state: running;
+		}
+	}
+}
+
+.supporters-1000 {
+	transform: scale(0.8);
+}
+.supporters-500 {
+	transform: scale(0.7);
+}

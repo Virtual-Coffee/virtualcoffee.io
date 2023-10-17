@@ -1,0 +1,1964 @@
+{
+	"pullRequests": [
+		{
+			"author": {
+				"login": "JoeKarow"
+			},
+			"title": "generate all asset aspect ratios on build",
+			"mergedAt": null,
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/736",
+			"deletions": 195,
+			"additions": 5255,
+			"changedFiles": 5,
+			"state": "OPEN",
+			"createdAt": "2022-10-30T21:50:26Z",
+			"bodyText": "Linked Issue\nCloses #678\nDescription\nBuild script that generates aspect ratio definitions for all images in the public/assets directory. The script will also generate a Union Type of the SVG file names for use in the UndrawIllustration component.\nMethodology Random GIF\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "JoeKarow"
+			},
+			"title": "convert `http.js` to typescript",
+			"mergedAt": "2022-10-31T19:54:36Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/735",
+			"deletions": 2,
+			"additions": 6,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-30T17:59:08Z",
+			"bodyText": "Linked Issue\nCloses #690\nDescription\nConvert https.js to TypeScript\nMethodology Random GIF\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "YolandaHaynes"
+			},
+			"title": "convert app/root from jsx to tsx",
+			"mergedAt": "2022-10-31T19:46:51Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/734",
+			"deletions": 4,
+			"additions": 13,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-29T02:02:42Z",
+			"bodyText": "Closes #729\nDescription\nUpdated the app/root file from jsx to tsx.\nMethodology\nAdded a new type definition in order to have easier readability of the code.\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "YolandaHaynes"
+			},
+			"title": "Adding lazy loading to members page",
+			"mergedAt": "2022-10-28T19:48:54Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/733",
+			"deletions": 0,
+			"additions": 4,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-28T02:16:35Z",
+			"bodyText": "Closes #655\nDescription\nVirtual Coffee member's page is growing rapidly. In order to improve the perforamce of the member's page, loading = \"lazy\" and decoding=\"async\" were added into the <img> tag. Also to keep it uniformed and bit quicker with loading, added width=100% and aspect-ratio:1/1 into the members css section.\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "YolandaHaynes"
+			},
+			"title": "updated profile for hacktoberfest2022",
+			"mergedAt": "2022-10-28T19:42:14Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/732",
+			"deletions": 5,
+			"additions": 6,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-27T19:27:04Z",
+			"bodyText": "#643\nDescription\nUpdating profile for Hacktoberfest2022"
+		},
+		{
+			"author": {
+				"login": "aishwarya-mali"
+			},
+			"title": "convert DefaultLayout to tsx",
+			"mergedAt": null,
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/731",
+			"deletions": 7,
+			"additions": 37,
+			"changedFiles": 2,
+			"state": "OPEN",
+			"createdAt": "2022-10-26T07:47:55Z",
+			"bodyText": "Linked Issue\nCloses #686\n\nDescription\n\nDefaultLayout.jsx to Typescript\nAdd types where required\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "sadiejay"
+			},
+			"title": "Converted `PodcastSubscribe` file to tsx",
+			"mergedAt": "2022-10-31T16:29:17Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/730",
+			"deletions": 1,
+			"additions": 4,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-24T16:41:02Z",
+			"bodyText": "Linked Issue\nCloses #680\nDescription\n\nConverted file from jsx to tsx\nMethodology\nPaired with @danieltott\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Convert `newsletters.js` to TypeScript",
+			"mergedAt": "2022-10-21T13:00:15Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/728",
+			"deletions": 2,
+			"additions": 30,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-21T12:25:59Z",
+			"bodyText": "Linked Issue\nCloses #688\n\nDescription\n\nChange file name from newsletters.js to newsletters.ts\nImplement TypeScript in newsletters.ts\nAdd comments in newsletters.ts\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "abuna1985"
+			},
+			"title": "Added flare, social links, and Hacktoberfest badge to member Adam Abundis",
+			"mergedAt": "2022-10-25T00:55:51Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/727",
+			"deletions": 6,
+			"additions": 6,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-21T03:56:59Z",
+			"bodyText": "Linked Issue\nFixes #643\n\nDescription\nAdd Flare, Social links (LinkedIn, Twitter, Dev), and Hacktoberfest2022 badge to member Adam Abundis\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "lsparlin"
+			},
+			"title": "Typescript conversion: app/component/HomePageBlock",
+			"mergedAt": "2022-10-21T12:45:52Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/725",
+			"deletions": 2,
+			"additions": 21,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-19T15:36:03Z",
+			"bodyText": "Linked Issue\n\ncloses #683\n\n\nDescription\nConvert HomePageBlock component to typescript\n\nAdd Home Page Block prop type\nexport and use UndrawIllustrationName from UndrawIllustration component\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "lsparlin"
+			},
+			"title": "Typescript conversion: app/component/FileIndex",
+			"mergedAt": "2022-10-21T12:55:07Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/724",
+			"deletions": 24,
+			"additions": 26,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T22:21:14Z",
+			"bodyText": "Linked Issue\n\ncloses #684\n\n\nDescription\nMigrate src/component/FileIndex.js to typescript.\nexport FileListItem from PostList for type-checking\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "lsparlin"
+			},
+			"title": "Typescript conversion: app/util/socialimage",
+			"mergedAt": "2022-10-19T12:55:22Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/723",
+			"deletions": 2,
+			"additions": 24,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T19:14:28Z",
+			"bodyText": "Linked Issue\n\ncloses #692\n\n\nDescription\nMigrate app/util/socialimage.js to typescript with signature Prop type.\nAdd jsdoc function documentation\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "lsparlin"
+			},
+			"title": "lsparlin add Hacktoberfest2022 badge",
+			"mergedAt": "2022-10-19T12:33:39Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/722",
+			"deletions": 4,
+			"additions": 3,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T17:40:20Z",
+			"bodyText": "Linked Issue\n#643\n\nDescription\nAdd Hacktoberfest2022 badge to member lsparlin\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "sadiejay"
+			},
+			"title": "Convert ts undrawillustration",
+			"mergedAt": "2022-10-18T17:26:07Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/721",
+			"deletions": 1,
+			"additions": 11,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T17:12:22Z",
+			"bodyText": "Linked Issue\n\nCloses #682\n\nDescription\nAdds type to undrawillustration and changes file type to tsx\nMethodology\nPaired with @danieltott\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "carmenkolohe"
+			},
+			"title": "change to ts file, add url validation",
+			"mergedAt": "2022-10-19T12:45:29Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/720",
+			"deletions": 15,
+			"additions": 24,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T15:50:18Z",
+			"bodyText": "Linked Issue\n\ncloses #693\n\nDescription\nConverted js file to ts file, create type for incoming data, write function to validate object manipulation is done safely.\nMethodology\nMaintain consistency with TS.\nFollow up\nIs there a way to test this?\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "carmenkolohe"
+			},
+			"title": "replace coc text link and enforcement headline",
+			"mergedAt": "2022-10-25T00:56:50Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/719",
+			"deletions": 2,
+			"additions": 2,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T13:16:29Z",
+			"bodyText": "Linked Issue\n\ncloses #703\n\n\nDescription\nReplace the text https://virtualcoffee.io/report-coc-violation with a link to that page and the text \"our CoC violation form\" and headline \"enforcement\" with \"Reporting Code of Conduct Violations\"\n\nMethodology\nImprove finding link to VC's report CoC violation form for folks to find it quickly when needed.\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "AisheIbrahim"
+			},
+			"title": "Members/AisheIbrahim",
+			"mergedAt": "2022-10-19T12:33:13Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/718",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T01:57:41Z",
+			"bodyText": "Linked Issue\n\n#13\n\n\nAdded Aishe Ibrahim Github profile to members page on virtualcoffee.io\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "radturkin"
+			},
+			"title": "rad gets a badge",
+			"mergedAt": "2022-10-19T12:29:08Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/717",
+			"deletions": 1,
+			"additions": 1,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T00:18:24Z",
+			"bodyText": "Linked Issue\n#643\n\nDescription\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Bug/use location",
+			"mergedAt": "2022-10-17T16:32:13Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/716",
+			"deletions": 10,
+			"additions": 14,
+			"changedFiles": 4,
+			"state": "MERGED",
+			"createdAt": "2022-10-17T16:30:09Z",
+			"bodyText": "closes #715\n\nImporting useLocation from react-router-dom has suddenly stopped working. Haven't figured out exactly why yet, but importing from @remix-run/react works fine."
+		},
+		{
+			"author": {
+				"login": "radturkin"
+			},
+			"title": "Add Rad to members",
+			"mergedAt": "2022-10-17T13:23:35Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/714",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-17T01:07:23Z",
+			"bodyText": "Linked Issue\n#13\n\nDescription\nadded rad to members list\n\nMethodology\nrads new in town\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "carmenkolohe"
+			},
+			"title": "add hacktoberfest badge",
+			"mergedAt": "2022-10-17T13:24:39Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/713",
+			"deletions": 0,
+			"additions": 45,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-16T23:58:23Z",
+			"bodyText": "Linked Issue\n#643\n\nDescription\nAdd Hacktoberfest2022 to badges array in member file.\n\nMethodology\nParticipate in Hacktoberfest\n\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "carmenkolohe"
+			},
+			"title": "add carmenkolohe to members",
+			"mergedAt": null,
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/712",
+			"deletions": 0,
+			"additions": 45,
+			"changedFiles": 1,
+			"state": "CLOSED",
+			"createdAt": "2022-10-16T23:44:45Z",
+			"bodyText": "Linked Issue\n#13\n\nDescription\nAdd carmenkolohe to members\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "sadiejay"
+			},
+			"title": "Update member profile for sadiejay",
+			"mergedAt": "2022-10-17T13:26:34Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/710",
+			"deletions": 21,
+			"additions": 13,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-15T04:51:52Z",
+			"bodyText": "Linked Issue\n#643\nDescription\nI've made changes to my member profile including:\n\nadded a profile mask\nadded flare\nadded \"notetaker\" badge\n\nMethodology\nParticipating in Hacktoberfest! :)\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "jdwilkin4"
+			},
+			"title": "chore: updating github action for prettier formatting",
+			"mergedAt": null,
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/709",
+			"deletions": 11,
+			"additions": 13,
+			"changedFiles": 1,
+			"state": "OPEN",
+			"createdAt": "2022-10-15T04:39:47Z",
+			"bodyText": "Linked Issue\n#700\nContext for the PR\nOver a year ago, there was already a pull request to add the formatting for PR\nhttps://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/.github/workflows/pr-format.yml\nBut it doesn't look like this workflow is currently running.\nI checked the last few open PR's and it doesn't look like the formatting action is running.\nI am trying to figure out how to get it working so every time someone creates a PR or makes changes, the format action will run.\ncloses #700"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Fix links on Table of Content in CONTRIBUTING.md",
+			"mergedAt": "2022-10-17T13:28:27Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/708",
+			"deletions": 47,
+			"additions": 49,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-14T23:53:23Z",
+			"bodyText": "Linked Issue\nCloses #707\n\nDescription\nUpdate CONTRIBUTING.md:\n\nFix links on the Table of Content.\nFix typos.\nMinor tweaks.\nFix headings to follow semantic HTML.\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "dominicduffin1"
+			},
+			"title": "Update member profile for Dominic Duffin",
+			"mergedAt": "2022-10-17T13:30:31Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/706",
+			"deletions": 7,
+			"additions": 11,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-14T15:56:36Z",
+			"bodyText": "Linked Issue\n#643\nDescription\nI have added the Hacktoberfest badge to my profile, chosen a mask, and updated my links.\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "imanidev"
+			},
+			"title": "Add Hacktoberfest2022 Badge",
+			"mergedAt": "2022-10-17T13:40:47Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/705",
+			"deletions": 3,
+			"additions": 7,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-14T15:26:37Z",
+			"bodyText": "Linked Issue\n\n#643\n\n\nDescription\nadd Hacktoberfest2022 badge\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Fix challenge bug",
+			"mergedAt": "2022-10-14T14:17:41Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/704",
+			"deletions": 3,
+			"additions": 3,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-14T14:17:35Z",
+			"bodyText": "Fix for a bug I introduced merging in #698 - Remove default of 0 for limit"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Update CONTRIBUTING and README files",
+			"mergedAt": "2022-10-14T14:01:21Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/702",
+			"deletions": 5,
+			"additions": 20,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-13T09:54:54Z",
+			"bodyText": "Linked Issue\nCloses #699\n\nDescription\n\nUpdate CONTRIBUTING.md:\n\nChange the \"Local development\" title to \"Setting Up Local Environment To Work On Issues\" in .\nAdd bullet point with how to create new branch.\n\n\nUpdate README.md:\n\nAdd bullet points to \"Working On The Site\" section with the links to CONTRIBUTING.md and our open source resources on the website.\nMinor tweaks and fix punctuations.\n\n\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "annakimdev"
+			},
+			"title": "add annakimdev as a member per Issue #13 and Hacktoberfest2022 badge #643",
+			"mergedAt": "2022-10-14T13:54:29Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/701",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-13T02:15:16Z",
+			"bodyText": "Linked Issue\nIssue #13\nIssue #643\nDescription\nI created annakimdev.ts to add my profile to the members page.\nI also added Hacktoberfest2022 badge.\nThank you for the clear steps and comments!"
+		},
+		{
+			"author": {
+				"login": "aishwarya-mali"
+			},
+			"title": "Convert getChallenges.js to TypeScript",
+			"mergedAt": "2022-10-14T13:56:11Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/698",
+			"deletions": 6,
+			"additions": 37,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-12T08:41:49Z",
+			"bodyText": "Linked Issue\nCloses #687\n\nDescription\n\nConverted file to TypeScript.\nCreated type for challenge\nInitialized limit with default value\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "BekahHW"
+			},
+			"title": "Feature/convert postlist tsx",
+			"mergedAt": "2022-10-17T14:14:25Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/697",
+			"deletions": 718,
+			"additions": 845,
+			"changedFiles": 4,
+			"state": "MERGED",
+			"createdAt": "2022-10-11T19:40:40Z",
+			"bodyText": "Linked Issue\nCloses #681\nDescription\nListened to everything @danieltott taught me 😄"
+		},
+		{
+			"author": {
+				"login": "imanidev"
+			},
+			"title": "add imanidev to member profile",
+			"mergedAt": "2022-10-11T13:24:33Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/696",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-11T01:48:46Z",
+			"bodyText": "Linked Issue\n#13\n\nDescription\n\nadding imanidev to member profile\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "meg-gutshall"
+			},
+			"title": "Add Hacktoberfest 2022 badge",
+			"mergedAt": "2022-10-11T13:12:18Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/695",
+			"deletions": 1,
+			"additions": 1,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-11T00:30:49Z",
+			"bodyText": "Linked Issue\n#643\nDescription\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "JoeKarow"
+			},
+			"title": "Convert `cmsimage.js` to Typescript",
+			"mergedAt": "2022-10-12T14:51:33Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/694",
+			"deletions": 12,
+			"additions": 41,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-10T21:25:14Z",
+			"bodyText": "Linked Issue\nCloses #689\n\nDescription\n\nConverted file to TypeScript.\nCreated type for input Props.\nImgix's params are quite numerous, so the additional passed params are typed as Record<string, any>\n\n\nMethodology Random GIF\n\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "chaos986"
+			},
+			"title": "Added new page for Developer Health resources.  Starting with \"Burnout\"",
+			"mergedAt": null,
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/685",
+			"deletions": 0,
+			"additions": 42,
+			"changedFiles": 1,
+			"state": "OPEN",
+			"createdAt": "2022-10-10T20:27:01Z",
+			"bodyText": "Linked Issue\n#673\n\nDescription\nI made a new page and pasted in text from slack and videos from YouTube.\nI am still new to Markdown and React.\nI previewed nothing.\nThis could break prod.\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Feature/easy ts fixes",
+			"mergedAt": "2022-10-10T19:44:08Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/679",
+			"deletions": 20,
+			"additions": 24,
+			"changedFiles": 8,
+			"state": "MERGED",
+			"createdAt": "2022-10-10T19:44:03Z",
+			"bodyText": "Doing some cleanup to convert js files to ts that need no code changes."
+		},
+		{
+			"author": {
+				"login": "aishwarya-mali"
+			},
+			"title": "add aishwarya-mali member profile and hacktoberfest badge",
+			"mergedAt": "2022-10-10T13:00:06Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/677",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-10T06:33:10Z",
+			"bodyText": "Linked Issue\n#13\n#643\n\nDescription\n\nadding aishwarya-mali to member profile\nadding hacktoberfest badge\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "jdwilkin4"
+			},
+			"title": "updating jdwilkin4 member profile and adding hacktoberfest badge",
+			"mergedAt": "2022-10-10T13:01:21Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/676",
+			"deletions": 4,
+			"additions": 4,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-09T07:30:52Z",
+			"bodyText": "Linked Issue\n#13\n#643\nDescription\nHere are the changes made to my profile:\n\nadding my devto profile link\nadded circle flare to profile image\nadded hacktoberfest badge\n\nMethodology\nI just felt like adding more of my writing profiles to the site. 😄\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "chaos986"
+			},
+			"title": "edited member profile",
+			"mergedAt": "2022-10-10T13:02:04Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/675",
+			"deletions": 8,
+			"additions": 10,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-08T18:35:01Z",
+			"bodyText": "Linked Issue\n#643\n\nDescription\nAdded Hacktoberfest 2022 badge and made explicit bio information vs pulling from GitHub.\n\nMethodology\nOpen source practice and excuse to hang out with @AmyShackles .\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "DavidRod1865"
+			},
+			"title": "Added David Rodriguez to Member Page and Added Hacktoberfest Flare",
+			"mergedAt": "2022-10-08T01:29:15Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/674",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-08T01:22:04Z",
+			"bodyText": "Link Issues\nIssue #13\nIssue #643\n\nCopied Exmaple.ts and added new member, David Rodriguez, to member page. I have also added \"Hacktoberfest\" flare to David Rodriguez's member page as well.\n\nMethodology\nI needed practice doing Open Source and this was good practice.\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "nickytonline"
+			},
+			"title": "chore: added my Hacktoberfest 2022 to my profile",
+			"mergedAt": "2022-10-10T13:02:23Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/672",
+			"deletions": 1,
+			"additions": 1,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-07T19:31:25Z",
+			"bodyText": "Linked Issue\nRelates to #643\nDescription\nAdded the Hacktoberfest 2022 badge to my profile.\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "CodingatTiffanys"
+			},
+			"title": "add tiffany pena to members",
+			"mergedAt": "2022-10-07T20:25:23Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/671",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-07T15:38:58Z",
+			"bodyText": "Linked Issue\n\n#13\n\nDescription\n\nadd myself, CodingatTiffanys, to the members folder in VC\n\nMethodology\n\nto be listed as a member of VC and also complete any other associated PR's\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "JoeKarow"
+			},
+			"title": "Badge time!",
+			"mergedAt": "2022-10-07T20:23:50Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/670",
+			"deletions": 3,
+			"additions": 4,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-06T02:42:10Z",
+			"bodyText": "Linked Issue\n#643 - The Party Issue\n\nDescription\nHacktobering.\n\nMethodology Random GIF\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "JesseRWeigel"
+			},
+			"title": "docs: fix typos in contributing.md",
+			"mergedAt": "2022-10-05T16:42:48Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/669",
+			"deletions": 7,
+			"additions": 7,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-05T16:39:18Z",
+			"bodyText": "Linked Issue\n\nDescription\nFixed a few typos\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Add Code of Conduct link to the footer",
+			"mergedAt": "2022-10-05T16:57:50Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/668",
+			"deletions": 1,
+			"additions": 5,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-05T07:47:15Z",
+			"bodyText": "Linked Issue\nCloses #653\n\nDescription\n\nAdd Code of Conduct link to the footer.\nAdd and use <Link to> to replace <a href> for internal links.\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "AlexVCS"
+			},
+			"title": "added the Hacktoberfest 2022 badge :)",
+			"mergedAt": "2022-10-05T16:56:56Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/667",
+			"deletions": 1,
+			"additions": 1,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T23:08:14Z",
+			"bodyText": "Linked Issue\n#643\nDescription\nAdded the Hacktoberfest 2022 badge to Alex's member profile.\nMethodology\nBecause 🎃\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "JesseRWeigel"
+			},
+			"title": "refactor(memberCard): convert memberCard and icons to ts. closes #660",
+			"mergedAt": "2022-10-05T17:05:26Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/666",
+			"deletions": 22,
+			"additions": 87,
+			"changedFiles": 17,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T22:22:39Z",
+			"bodyText": "Linked Issue\n#660\n\nDescription\nConvert memberCard.jsx into memberCard.tsx.\nConvert all icon files into tsx.\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "LincolnFleet"
+			},
+			"title": "Add badge and data for LincolnFleet [Travis Martin]",
+			"mergedAt": "2022-10-05T16:55:45Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/665",
+			"deletions": 3,
+			"additions": 4,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T22:07:15Z",
+			"bodyText": "Signed-off-by: Travis Martin travisemerymartin@gmail.com\nLinked Issue\n#643\n\nDescription\nAdd Hacktoberfest badge, linkedin username, and profile mask\n\nMethodology\nFace => keyboard => wiggle wiggle wiggle\n(very slight data changes on members file)\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "muckitymuck"
+			},
+			"title": "personal info Andrew Goldstein (muckitymuck.ts)",
+			"mergedAt": "2022-10-05T16:54:41Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/664",
+			"deletions": 0,
+			"additions": 50,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T21:27:24Z",
+			"bodyText": "Linked Issue\n#643\nDescription\nAdded personal info for Andrew Goldstein (muckitymuck).  new file under Members folder\nMethodology\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "pedaars"
+			},
+			"title": "Bug/#654",
+			"mergedAt": "2022-10-04T20:52:12Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/663",
+			"deletions": 32,
+			"additions": 0,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T20:36:59Z",
+			"bodyText": "Linked Issue\n\ncloses #654\n\nDescription\nRemoved the code of conduct block from coding-questions-guide.mdx and slack-channel-guide.mdx\nMethodology\nThe changes were made as the code of conduct block was accidentally added to these pages and is not required on these pages\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "pedaars"
+			},
+			"title": "Updated pedaars.ts to add additional info and hacktoberfest 2022 badge",
+			"mergedAt": "2022-10-04T20:49:02Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/662",
+			"deletions": 4,
+			"additions": 4,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T20:10:37Z",
+			"bodyText": "Linked Issue\nIssue #643\nDescription\nI updated my profile and added the hactober fest badge\nMethodology\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "rmirville"
+			},
+			"title": "feat: Add Raynald to members",
+			"mergedAt": "2022-10-04T19:54:24Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/661",
+			"deletions": 0,
+			"additions": 45,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T19:09:41Z",
+			"bodyText": "Linked Issues\n\n#13\n#643\n\n\nDescription\nIn today's episode of Virtual Coffee, Raynald makes a guest appearance as a pull-requester! He's vying for a spot on the list of Virtual Coffee members. Will Raynald get to see his face on the community page? Find out, after these review messages!\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "JesseRWeigel"
+			},
+			"title": "add hacktoberfest2022 badge",
+			"mergedAt": "2022-10-04T16:18:06Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/659",
+			"deletions": 1,
+			"additions": 1,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T14:29:42Z",
+			"bodyText": "Added 'Hacktoberfest2022' to badges\nLinked Issue\n#643\n\nDescription\nadd badge\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Add Hacktoberfest 2022 badge to profile",
+			"mergedAt": "2022-10-04T12:53:18Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/658",
+			"deletions": 3,
+			"additions": 4,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T11:06:56Z",
+			"bodyText": "Add flare\nEdit Hashnode's username\n\nLinked Issue\n#643\n\nDescription\n\nAdd Hacktoberfest 2022 badge to Ayu's member profile.\nAdd flare\nEdit Hashnode's username.\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Add October 2022 newsletter to website",
+			"mergedAt": "2022-10-04T19:52:26Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/657",
+			"deletions": 0,
+			"additions": 317,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T09:48:53Z",
+			"bodyText": "Linked Issue\nCloses #644\n\nDescription\n\nAdd the October 2022 newsletter.\nUpdate newsletter.js to add the issue to the index.\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "Narigo"
+			},
+			"title": "Add myself to members page",
+			"mergedAt": "2022-10-04T13:18:47Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/656",
+			"deletions": 0,
+			"additions": 47,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T20:15:08Z",
+			"bodyText": "Linked Issue\nLinks to #13\nDescription\nI've been pushed enough to put myself in here now.\nMethodology\nNeeded some personality on my page, so I added a custom flare.\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Feature/update node",
+			"mergedAt": "2022-10-04T13:18:03Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/651",
+			"deletions": 4,
+			"additions": 5,
+			"changedFiles": 3,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T19:30:47Z",
+			"bodyText": "Update node version in engines and nvm\nUpdate versions in tool-versions\nAdded packageManager to support corepack"
+		},
+		{
+			"author": {
+				"login": "ridonky"
+			},
+			"title": "added member page for lauren perini",
+			"mergedAt": "2022-10-03T18:59:42Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/650",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T18:47:22Z",
+			"bodyText": "Linked Issue\n\nCreated member profile #13\nAdded hacktoberfest badge and some flare #649"
+		},
+		{
+			"author": {
+				"login": "raykotab"
+			},
+			"title": "hacktoberfest badge and flare added",
+			"mergedAt": "2022-10-03T19:03:32Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/649",
+			"deletions": 3,
+			"additions": 3,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T18:25:30Z",
+			"bodyText": "Linked Issue\nbadge and flavour added #643\n\nDescription\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "ClJarvis"
+			},
+			"title": "I added my badge and flare to profile.",
+			"mergedAt": "2022-10-03T19:05:46Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/648",
+			"deletions": 3,
+			"additions": 3,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T17:54:17Z",
+			"bodyText": "Linked Issue\nIssue  #643\n\nDescription\nI added a badge to my profile and added flare.\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "BekahHW"
+			},
+			"title": "Update profile with Hacktoberfest badge",
+			"mergedAt": "2022-10-03T18:09:47Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/647",
+			"deletions": 6,
+			"additions": 7,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T17:50:04Z",
+			"bodyText": "Linked Issue\n\nDescription\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Created my member profile",
+			"mergedAt": "2022-10-03T18:23:15Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/646",
+			"deletions": 3,
+			"additions": 3,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T17:45:38Z",
+			"bodyText": "Linked Issue\n\nAdded member profile #13\nAdded the hacktoberfest badge #643"
+		},
+		{
+			"author": {
+				"login": "thegrumpyenby"
+			},
+			"title": "Add profile for thegrumpyenby",
+			"mergedAt": "2022-10-03T19:04:34Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/645",
+			"deletions": 0,
+			"additions": 48,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T15:35:05Z",
+			"bodyText": "Linked Issue\n#13\n\nDescription\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Feature/autoload members",
+			"mergedAt": "2022-10-03T14:12:18Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/642",
+			"deletions": 142,
+			"additions": 1790,
+			"changedFiles": 133,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T14:10:12Z",
+			"bodyText": "Instead of having members maintain an index, create an ignored file that imports them all at build time."
+		}
+	],
+	"memberFilePulls": [
+		{
+			"author": {
+				"login": "YolandaHaynes"
+			},
+			"title": "updated profile for hacktoberfest2022",
+			"mergedAt": "2022-10-28T19:42:14Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/732",
+			"deletions": 5,
+			"additions": 6,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-27T19:27:04Z",
+			"bodyText": "#643\nDescription\nUpdating profile for Hacktoberfest2022"
+		},
+		{
+			"author": {
+				"login": "abuna1985"
+			},
+			"title": "Added flare, social links, and Hacktoberfest badge to member Adam Abundis",
+			"mergedAt": "2022-10-25T00:55:51Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/727",
+			"deletions": 6,
+			"additions": 6,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-21T03:56:59Z",
+			"bodyText": "Linked Issue\nFixes #643\n\nDescription\nAdd Flare, Social links (LinkedIn, Twitter, Dev), and Hacktoberfest2022 badge to member Adam Abundis\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "lsparlin"
+			},
+			"title": "lsparlin add Hacktoberfest2022 badge",
+			"mergedAt": "2022-10-19T12:33:39Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/722",
+			"deletions": 4,
+			"additions": 3,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T17:40:20Z",
+			"bodyText": "Linked Issue\n#643\n\nDescription\nAdd Hacktoberfest2022 badge to member lsparlin\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "AisheIbrahim"
+			},
+			"title": "Members/AisheIbrahim",
+			"mergedAt": "2022-10-19T12:33:13Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/718",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T01:57:41Z",
+			"bodyText": "Linked Issue\n\n#13\n\n\nAdded Aishe Ibrahim Github profile to members page on virtualcoffee.io\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "radturkin"
+			},
+			"title": "rad gets a badge",
+			"mergedAt": "2022-10-19T12:29:08Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/717",
+			"deletions": 1,
+			"additions": 1,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T00:18:24Z",
+			"bodyText": "Linked Issue\n#643\n\nDescription\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "radturkin"
+			},
+			"title": "Add Rad to members",
+			"mergedAt": "2022-10-17T13:23:35Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/714",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-17T01:07:23Z",
+			"bodyText": "Linked Issue\n#13\n\nDescription\nadded rad to members list\n\nMethodology\nrads new in town\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "carmenkolohe"
+			},
+			"title": "add hacktoberfest badge",
+			"mergedAt": "2022-10-17T13:24:39Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/713",
+			"deletions": 0,
+			"additions": 45,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-16T23:58:23Z",
+			"bodyText": "Linked Issue\n#643\n\nDescription\nAdd Hacktoberfest2022 to badges array in member file.\n\nMethodology\nParticipate in Hacktoberfest\n\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "carmenkolohe"
+			},
+			"title": "add carmenkolohe to members",
+			"mergedAt": null,
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/712",
+			"deletions": 0,
+			"additions": 45,
+			"changedFiles": 1,
+			"state": "CLOSED",
+			"createdAt": "2022-10-16T23:44:45Z",
+			"bodyText": "Linked Issue\n#13\n\nDescription\nAdd carmenkolohe to members\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "sadiejay"
+			},
+			"title": "Update member profile for sadiejay",
+			"mergedAt": "2022-10-17T13:26:34Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/710",
+			"deletions": 21,
+			"additions": 13,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-15T04:51:52Z",
+			"bodyText": "Linked Issue\n#643\nDescription\nI've made changes to my member profile including:\n\nadded a profile mask\nadded flare\nadded \"notetaker\" badge\n\nMethodology\nParticipating in Hacktoberfest! :)\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "dominicduffin1"
+			},
+			"title": "Update member profile for Dominic Duffin",
+			"mergedAt": "2022-10-17T13:30:31Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/706",
+			"deletions": 7,
+			"additions": 11,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-14T15:56:36Z",
+			"bodyText": "Linked Issue\n#643\nDescription\nI have added the Hacktoberfest badge to my profile, chosen a mask, and updated my links.\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "imanidev"
+			},
+			"title": "Add Hacktoberfest2022 Badge",
+			"mergedAt": "2022-10-17T13:40:47Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/705",
+			"deletions": 3,
+			"additions": 7,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-14T15:26:37Z",
+			"bodyText": "Linked Issue\n\n#643\n\n\nDescription\nadd Hacktoberfest2022 badge\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "annakimdev"
+			},
+			"title": "add annakimdev as a member per Issue #13 and Hacktoberfest2022 badge #643",
+			"mergedAt": "2022-10-14T13:54:29Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/701",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-13T02:15:16Z",
+			"bodyText": "Linked Issue\nIssue #13\nIssue #643\nDescription\nI created annakimdev.ts to add my profile to the members page.\nI also added Hacktoberfest2022 badge.\nThank you for the clear steps and comments!"
+		},
+		{
+			"author": {
+				"login": "imanidev"
+			},
+			"title": "add imanidev to member profile",
+			"mergedAt": "2022-10-11T13:24:33Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/696",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-11T01:48:46Z",
+			"bodyText": "Linked Issue\n#13\n\nDescription\n\nadding imanidev to member profile\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "meg-gutshall"
+			},
+			"title": "Add Hacktoberfest 2022 badge",
+			"mergedAt": "2022-10-11T13:12:18Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/695",
+			"deletions": 1,
+			"additions": 1,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-11T00:30:49Z",
+			"bodyText": "Linked Issue\n#643\nDescription\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "aishwarya-mali"
+			},
+			"title": "add aishwarya-mali member profile and hacktoberfest badge",
+			"mergedAt": "2022-10-10T13:00:06Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/677",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-10T06:33:10Z",
+			"bodyText": "Linked Issue\n#13\n#643\n\nDescription\n\nadding aishwarya-mali to member profile\nadding hacktoberfest badge\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "jdwilkin4"
+			},
+			"title": "updating jdwilkin4 member profile and adding hacktoberfest badge",
+			"mergedAt": "2022-10-10T13:01:21Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/676",
+			"deletions": 4,
+			"additions": 4,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-09T07:30:52Z",
+			"bodyText": "Linked Issue\n#13\n#643\nDescription\nHere are the changes made to my profile:\n\nadding my devto profile link\nadded circle flare to profile image\nadded hacktoberfest badge\n\nMethodology\nI just felt like adding more of my writing profiles to the site. 😄\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "chaos986"
+			},
+			"title": "edited member profile",
+			"mergedAt": "2022-10-10T13:02:04Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/675",
+			"deletions": 8,
+			"additions": 10,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-08T18:35:01Z",
+			"bodyText": "Linked Issue\n#643\n\nDescription\nAdded Hacktoberfest 2022 badge and made explicit bio information vs pulling from GitHub.\n\nMethodology\nOpen source practice and excuse to hang out with @AmyShackles .\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "DavidRod1865"
+			},
+			"title": "Added David Rodriguez to Member Page and Added Hacktoberfest Flare",
+			"mergedAt": "2022-10-08T01:29:15Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/674",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-08T01:22:04Z",
+			"bodyText": "Link Issues\nIssue #13\nIssue #643\n\nCopied Exmaple.ts and added new member, David Rodriguez, to member page. I have also added \"Hacktoberfest\" flare to David Rodriguez's member page as well.\n\nMethodology\nI needed practice doing Open Source and this was good practice.\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "nickytonline"
+			},
+			"title": "chore: added my Hacktoberfest 2022 to my profile",
+			"mergedAt": "2022-10-10T13:02:23Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/672",
+			"deletions": 1,
+			"additions": 1,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-07T19:31:25Z",
+			"bodyText": "Linked Issue\nRelates to #643\nDescription\nAdded the Hacktoberfest 2022 badge to my profile.\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "CodingatTiffanys"
+			},
+			"title": "add tiffany pena to members",
+			"mergedAt": "2022-10-07T20:25:23Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/671",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-07T15:38:58Z",
+			"bodyText": "Linked Issue\n\n#13\n\nDescription\n\nadd myself, CodingatTiffanys, to the members folder in VC\n\nMethodology\n\nto be listed as a member of VC and also complete any other associated PR's\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "JoeKarow"
+			},
+			"title": "Badge time!",
+			"mergedAt": "2022-10-07T20:23:50Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/670",
+			"deletions": 3,
+			"additions": 4,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-06T02:42:10Z",
+			"bodyText": "Linked Issue\n#643 - The Party Issue\n\nDescription\nHacktobering.\n\nMethodology Random GIF\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "AlexVCS"
+			},
+			"title": "added the Hacktoberfest 2022 badge :)",
+			"mergedAt": "2022-10-05T16:56:56Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/667",
+			"deletions": 1,
+			"additions": 1,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T23:08:14Z",
+			"bodyText": "Linked Issue\n#643\nDescription\nAdded the Hacktoberfest 2022 badge to Alex's member profile.\nMethodology\nBecause 🎃\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "LincolnFleet"
+			},
+			"title": "Add badge and data for LincolnFleet [Travis Martin]",
+			"mergedAt": "2022-10-05T16:55:45Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/665",
+			"deletions": 3,
+			"additions": 4,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T22:07:15Z",
+			"bodyText": "Signed-off-by: Travis Martin travisemerymartin@gmail.com\nLinked Issue\n#643\n\nDescription\nAdd Hacktoberfest badge, linkedin username, and profile mask\n\nMethodology\nFace => keyboard => wiggle wiggle wiggle\n(very slight data changes on members file)\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "muckitymuck"
+			},
+			"title": "personal info Andrew Goldstein (muckitymuck.ts)",
+			"mergedAt": "2022-10-05T16:54:41Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/664",
+			"deletions": 0,
+			"additions": 50,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T21:27:24Z",
+			"bodyText": "Linked Issue\n#643\nDescription\nAdded personal info for Andrew Goldstein (muckitymuck).  new file under Members folder\nMethodology\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "pedaars"
+			},
+			"title": "Updated pedaars.ts to add additional info and hacktoberfest 2022 badge",
+			"mergedAt": "2022-10-04T20:49:02Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/662",
+			"deletions": 4,
+			"additions": 4,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T20:10:37Z",
+			"bodyText": "Linked Issue\nIssue #643\nDescription\nI updated my profile and added the hactober fest badge\nMethodology\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "rmirville"
+			},
+			"title": "feat: Add Raynald to members",
+			"mergedAt": "2022-10-04T19:54:24Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/661",
+			"deletions": 0,
+			"additions": 45,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T19:09:41Z",
+			"bodyText": "Linked Issues\n\n#13\n#643\n\n\nDescription\nIn today's episode of Virtual Coffee, Raynald makes a guest appearance as a pull-requester! He's vying for a spot on the list of Virtual Coffee members. Will Raynald get to see his face on the community page? Find out, after these review messages!\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "JesseRWeigel"
+			},
+			"title": "add hacktoberfest2022 badge",
+			"mergedAt": "2022-10-04T16:18:06Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/659",
+			"deletions": 1,
+			"additions": 1,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T14:29:42Z",
+			"bodyText": "Added 'Hacktoberfest2022' to badges\nLinked Issue\n#643\n\nDescription\nadd badge\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Add Hacktoberfest 2022 badge to profile",
+			"mergedAt": "2022-10-04T12:53:18Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/658",
+			"deletions": 3,
+			"additions": 4,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T11:06:56Z",
+			"bodyText": "Add flare\nEdit Hashnode's username\n\nLinked Issue\n#643\n\nDescription\n\nAdd Hacktoberfest 2022 badge to Ayu's member profile.\nAdd flare\nEdit Hashnode's username.\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "Narigo"
+			},
+			"title": "Add myself to members page",
+			"mergedAt": "2022-10-04T13:18:47Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/656",
+			"deletions": 0,
+			"additions": 47,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T20:15:08Z",
+			"bodyText": "Linked Issue\nLinks to #13\nDescription\nI've been pushed enough to put myself in here now.\nMethodology\nNeeded some personality on my page, so I added a custom flare.\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "ridonky"
+			},
+			"title": "added member page for lauren perini",
+			"mergedAt": "2022-10-03T18:59:42Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/650",
+			"deletions": 0,
+			"additions": 46,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T18:47:22Z",
+			"bodyText": "Linked Issue\n\nCreated member profile #13\nAdded hacktoberfest badge and some flare #649"
+		},
+		{
+			"author": {
+				"login": "raykotab"
+			},
+			"title": "hacktoberfest badge and flare added",
+			"mergedAt": "2022-10-03T19:03:32Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/649",
+			"deletions": 3,
+			"additions": 3,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T18:25:30Z",
+			"bodyText": "Linked Issue\nbadge and flavour added #643\n\nDescription\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "ClJarvis"
+			},
+			"title": "I added my badge and flare to profile.",
+			"mergedAt": "2022-10-03T19:05:46Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/648",
+			"deletions": 3,
+			"additions": 3,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T17:54:17Z",
+			"bodyText": "Linked Issue\nIssue  #643\n\nDescription\nI added a badge to my profile and added flare.\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Created my member profile",
+			"mergedAt": "2022-10-03T18:23:15Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/646",
+			"deletions": 3,
+			"additions": 3,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T17:45:38Z",
+			"bodyText": "Linked Issue\n\nAdded member profile #13\nAdded the hacktoberfest badge #643"
+		},
+		{
+			"author": {
+				"login": "thegrumpyenby"
+			},
+			"title": "Add profile for thegrumpyenby",
+			"mergedAt": "2022-10-03T19:04:34Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/645",
+			"deletions": 0,
+			"additions": 48,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T15:35:05Z",
+			"bodyText": "Linked Issue\n#13\n\nDescription\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		}
+	],
+	"nonMemberFilePulls": [
+		{
+			"author": {
+				"login": "JoeKarow"
+			},
+			"title": "generate all asset aspect ratios on build",
+			"mergedAt": null,
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/736",
+			"deletions": 195,
+			"additions": 5255,
+			"changedFiles": 5,
+			"state": "OPEN",
+			"createdAt": "2022-10-30T21:50:26Z",
+			"bodyText": "Linked Issue\nCloses #678\nDescription\nBuild script that generates aspect ratio definitions for all images in the public/assets directory. The script will also generate a Union Type of the SVG file names for use in the UndrawIllustration component.\nMethodology Random GIF\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "JoeKarow"
+			},
+			"title": "convert `http.js` to typescript",
+			"mergedAt": "2022-10-31T19:54:36Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/735",
+			"deletions": 2,
+			"additions": 6,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-30T17:59:08Z",
+			"bodyText": "Linked Issue\nCloses #690\nDescription\nConvert https.js to TypeScript\nMethodology Random GIF\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "YolandaHaynes"
+			},
+			"title": "convert app/root from jsx to tsx",
+			"mergedAt": "2022-10-31T19:46:51Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/734",
+			"deletions": 4,
+			"additions": 13,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-29T02:02:42Z",
+			"bodyText": "Closes #729\nDescription\nUpdated the app/root file from jsx to tsx.\nMethodology\nAdded a new type definition in order to have easier readability of the code.\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "YolandaHaynes"
+			},
+			"title": "Adding lazy loading to members page",
+			"mergedAt": "2022-10-28T19:48:54Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/733",
+			"deletions": 0,
+			"additions": 4,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-28T02:16:35Z",
+			"bodyText": "Closes #655\nDescription\nVirtual Coffee member's page is growing rapidly. In order to improve the perforamce of the member's page, loading = \"lazy\" and decoding=\"async\" were added into the <img> tag. Also to keep it uniformed and bit quicker with loading, added width=100% and aspect-ratio:1/1 into the members css section.\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "aishwarya-mali"
+			},
+			"title": "convert DefaultLayout to tsx",
+			"mergedAt": null,
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/731",
+			"deletions": 7,
+			"additions": 37,
+			"changedFiles": 2,
+			"state": "OPEN",
+			"createdAt": "2022-10-26T07:47:55Z",
+			"bodyText": "Linked Issue\nCloses #686\n\nDescription\n\nDefaultLayout.jsx to Typescript\nAdd types where required\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "sadiejay"
+			},
+			"title": "Converted `PodcastSubscribe` file to tsx",
+			"mergedAt": "2022-10-31T16:29:17Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/730",
+			"deletions": 1,
+			"additions": 4,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-24T16:41:02Z",
+			"bodyText": "Linked Issue\nCloses #680\nDescription\n\nConverted file from jsx to tsx\nMethodology\nPaired with @danieltott\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Convert `newsletters.js` to TypeScript",
+			"mergedAt": "2022-10-21T13:00:15Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/728",
+			"deletions": 2,
+			"additions": 30,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-21T12:25:59Z",
+			"bodyText": "Linked Issue\nCloses #688\n\nDescription\n\nChange file name from newsletters.js to newsletters.ts\nImplement TypeScript in newsletters.ts\nAdd comments in newsletters.ts\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "lsparlin"
+			},
+			"title": "Typescript conversion: app/component/HomePageBlock",
+			"mergedAt": "2022-10-21T12:45:52Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/725",
+			"deletions": 2,
+			"additions": 21,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-19T15:36:03Z",
+			"bodyText": "Linked Issue\n\ncloses #683\n\n\nDescription\nConvert HomePageBlock component to typescript\n\nAdd Home Page Block prop type\nexport and use UndrawIllustrationName from UndrawIllustration component\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "lsparlin"
+			},
+			"title": "Typescript conversion: app/component/FileIndex",
+			"mergedAt": "2022-10-21T12:55:07Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/724",
+			"deletions": 24,
+			"additions": 26,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T22:21:14Z",
+			"bodyText": "Linked Issue\n\ncloses #684\n\n\nDescription\nMigrate src/component/FileIndex.js to typescript.\nexport FileListItem from PostList for type-checking\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "lsparlin"
+			},
+			"title": "Typescript conversion: app/util/socialimage",
+			"mergedAt": "2022-10-19T12:55:22Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/723",
+			"deletions": 2,
+			"additions": 24,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T19:14:28Z",
+			"bodyText": "Linked Issue\n\ncloses #692\n\n\nDescription\nMigrate app/util/socialimage.js to typescript with signature Prop type.\nAdd jsdoc function documentation\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "sadiejay"
+			},
+			"title": "Convert ts undrawillustration",
+			"mergedAt": "2022-10-18T17:26:07Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/721",
+			"deletions": 1,
+			"additions": 11,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T17:12:22Z",
+			"bodyText": "Linked Issue\n\nCloses #682\n\nDescription\nAdds type to undrawillustration and changes file type to tsx\nMethodology\nPaired with @danieltott\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "carmenkolohe"
+			},
+			"title": "change to ts file, add url validation",
+			"mergedAt": "2022-10-19T12:45:29Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/720",
+			"deletions": 15,
+			"additions": 24,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T15:50:18Z",
+			"bodyText": "Linked Issue\n\ncloses #693\n\nDescription\nConverted js file to ts file, create type for incoming data, write function to validate object manipulation is done safely.\nMethodology\nMaintain consistency with TS.\nFollow up\nIs there a way to test this?\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "carmenkolohe"
+			},
+			"title": "replace coc text link and enforcement headline",
+			"mergedAt": "2022-10-25T00:56:50Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/719",
+			"deletions": 2,
+			"additions": 2,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-18T13:16:29Z",
+			"bodyText": "Linked Issue\n\ncloses #703\n\n\nDescription\nReplace the text https://virtualcoffee.io/report-coc-violation with a link to that page and the text \"our CoC violation form\" and headline \"enforcement\" with \"Reporting Code of Conduct Violations\"\n\nMethodology\nImprove finding link to VC's report CoC violation form for folks to find it quickly when needed.\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Bug/use location",
+			"mergedAt": "2022-10-17T16:32:13Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/716",
+			"deletions": 10,
+			"additions": 14,
+			"changedFiles": 4,
+			"state": "MERGED",
+			"createdAt": "2022-10-17T16:30:09Z",
+			"bodyText": "closes #715\n\nImporting useLocation from react-router-dom has suddenly stopped working. Haven't figured out exactly why yet, but importing from @remix-run/react works fine."
+		},
+		{
+			"author": {
+				"login": "jdwilkin4"
+			},
+			"title": "chore: updating github action for prettier formatting",
+			"mergedAt": null,
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/709",
+			"deletions": 11,
+			"additions": 13,
+			"changedFiles": 1,
+			"state": "OPEN",
+			"createdAt": "2022-10-15T04:39:47Z",
+			"bodyText": "Linked Issue\n#700\nContext for the PR\nOver a year ago, there was already a pull request to add the formatting for PR\nhttps://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/.github/workflows/pr-format.yml\nBut it doesn't look like this workflow is currently running.\nI checked the last few open PR's and it doesn't look like the formatting action is running.\nI am trying to figure out how to get it working so every time someone creates a PR or makes changes, the format action will run.\ncloses #700"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Fix links on Table of Content in CONTRIBUTING.md",
+			"mergedAt": "2022-10-17T13:28:27Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/708",
+			"deletions": 47,
+			"additions": 49,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-14T23:53:23Z",
+			"bodyText": "Linked Issue\nCloses #707\n\nDescription\nUpdate CONTRIBUTING.md:\n\nFix links on the Table of Content.\nFix typos.\nMinor tweaks.\nFix headings to follow semantic HTML.\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Fix challenge bug",
+			"mergedAt": "2022-10-14T14:17:41Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/704",
+			"deletions": 3,
+			"additions": 3,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-14T14:17:35Z",
+			"bodyText": "Fix for a bug I introduced merging in #698 - Remove default of 0 for limit"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Update CONTRIBUTING and README files",
+			"mergedAt": "2022-10-14T14:01:21Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/702",
+			"deletions": 5,
+			"additions": 20,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-13T09:54:54Z",
+			"bodyText": "Linked Issue\nCloses #699\n\nDescription\n\nUpdate CONTRIBUTING.md:\n\nChange the \"Local development\" title to \"Setting Up Local Environment To Work On Issues\" in .\nAdd bullet point with how to create new branch.\n\n\nUpdate README.md:\n\nAdd bullet points to \"Working On The Site\" section with the links to CONTRIBUTING.md and our open source resources on the website.\nMinor tweaks and fix punctuations.\n\n\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "aishwarya-mali"
+			},
+			"title": "Convert getChallenges.js to TypeScript",
+			"mergedAt": "2022-10-14T13:56:11Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/698",
+			"deletions": 6,
+			"additions": 37,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-12T08:41:49Z",
+			"bodyText": "Linked Issue\nCloses #687\n\nDescription\n\nConverted file to TypeScript.\nCreated type for challenge\nInitialized limit with default value\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "BekahHW"
+			},
+			"title": "Feature/convert postlist tsx",
+			"mergedAt": "2022-10-17T14:14:25Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/697",
+			"deletions": 718,
+			"additions": 845,
+			"changedFiles": 4,
+			"state": "MERGED",
+			"createdAt": "2022-10-11T19:40:40Z",
+			"bodyText": "Linked Issue\nCloses #681\nDescription\nListened to everything @danieltott taught me 😄"
+		},
+		{
+			"author": {
+				"login": "JoeKarow"
+			},
+			"title": "Convert `cmsimage.js` to Typescript",
+			"mergedAt": "2022-10-12T14:51:33Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/694",
+			"deletions": 12,
+			"additions": 41,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-10T21:25:14Z",
+			"bodyText": "Linked Issue\nCloses #689\n\nDescription\n\nConverted file to TypeScript.\nCreated type for input Props.\nImgix's params are quite numerous, so the additional passed params are typed as Record<string, any>\n\n\nMethodology Random GIF\n\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "chaos986"
+			},
+			"title": "Added new page for Developer Health resources.  Starting with \"Burnout\"",
+			"mergedAt": null,
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/685",
+			"deletions": 0,
+			"additions": 42,
+			"changedFiles": 1,
+			"state": "OPEN",
+			"createdAt": "2022-10-10T20:27:01Z",
+			"bodyText": "Linked Issue\n#673\n\nDescription\nI made a new page and pasted in text from slack and videos from YouTube.\nI am still new to Markdown and React.\nI previewed nothing.\nThis could break prod.\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Feature/easy ts fixes",
+			"mergedAt": "2022-10-10T19:44:08Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/679",
+			"deletions": 20,
+			"additions": 24,
+			"changedFiles": 8,
+			"state": "MERGED",
+			"createdAt": "2022-10-10T19:44:03Z",
+			"bodyText": "Doing some cleanup to convert js files to ts that need no code changes."
+		},
+		{
+			"author": {
+				"login": "JesseRWeigel"
+			},
+			"title": "docs: fix typos in contributing.md",
+			"mergedAt": "2022-10-05T16:42:48Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/669",
+			"deletions": 7,
+			"additions": 7,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-05T16:39:18Z",
+			"bodyText": "Linked Issue\n\nDescription\nFixed a few typos\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Add Code of Conduct link to the footer",
+			"mergedAt": "2022-10-05T16:57:50Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/668",
+			"deletions": 1,
+			"additions": 5,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-05T07:47:15Z",
+			"bodyText": "Linked Issue\nCloses #653\n\nDescription\n\nAdd Code of Conduct link to the footer.\nAdd and use <Link to> to replace <a href> for internal links.\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "JesseRWeigel"
+			},
+			"title": "refactor(memberCard): convert memberCard and icons to ts. closes #660",
+			"mergedAt": "2022-10-05T17:05:26Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/666",
+			"deletions": 22,
+			"additions": 87,
+			"changedFiles": 17,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T22:22:39Z",
+			"bodyText": "Linked Issue\n#660\n\nDescription\nConvert memberCard.jsx into memberCard.tsx.\nConvert all icon files into tsx.\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "pedaars"
+			},
+			"title": "Bug/#654",
+			"mergedAt": "2022-10-04T20:52:12Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/663",
+			"deletions": 32,
+			"additions": 0,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T20:36:59Z",
+			"bodyText": "Linked Issue\n\ncloses #654\n\nDescription\nRemoved the code of conduct block from coding-questions-guide.mdx and slack-channel-guide.mdx\nMethodology\nThe changes were made as the code of conduct block was accidentally added to these pages and is not required on these pages\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "adiati98"
+			},
+			"title": "Add October 2022 newsletter to website",
+			"mergedAt": "2022-10-04T19:52:26Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/657",
+			"deletions": 0,
+			"additions": 317,
+			"changedFiles": 2,
+			"state": "MERGED",
+			"createdAt": "2022-10-04T09:48:53Z",
+			"bodyText": "Linked Issue\nCloses #644\n\nDescription\n\nAdd the October 2022 newsletter.\nUpdate newsletter.js to add the issue to the index.\n\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Feature/update node",
+			"mergedAt": "2022-10-04T13:18:03Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/651",
+			"deletions": 4,
+			"additions": 5,
+			"changedFiles": 3,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T19:30:47Z",
+			"bodyText": "Update node version in engines and nvm\nUpdate versions in tool-versions\nAdded packageManager to support corepack"
+		},
+		{
+			"author": {
+				"login": "BekahHW"
+			},
+			"title": "Update profile with Hacktoberfest badge",
+			"mergedAt": "2022-10-03T18:09:47Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/647",
+			"deletions": 6,
+			"additions": 7,
+			"changedFiles": 1,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T17:50:04Z",
+			"bodyText": "Linked Issue\n\nDescription\n\nMethodology\n\nCode of Conduct\n\nBy submitting this pull request, you agree to follow our Code of Conduct"
+		},
+		{
+			"author": {
+				"login": "danieltott"
+			},
+			"title": "Feature/autoload members",
+			"mergedAt": "2022-10-03T14:12:18Z",
+			"url": "https://github.com/Virtual-Coffee/virtualcoffee.io/pull/642",
+			"deletions": 142,
+			"additions": 1790,
+			"changedFiles": 133,
+			"state": "MERGED",
+			"createdAt": "2022-10-03T14:10:12Z",
+			"bodyText": "Instead of having members maintain an index, create an ignored file that imports them all at build time."
+		}
+	],
+	"stats": {
+		"totalPullRequests": 65,
+		"totalMemberFilePullRequests": 34,
+		"totalNonMemberFilePullRequests": 31,
+		"totalUniqueContributors": 32,
+		"uniqueContributors": [
+			{
+				"login": "adiati98",
+				"totalPrs": 6
+			},
+			{
+				"login": "danieltott",
+				"totalPrs": 6
+			},
+			{
+				"login": "JoeKarow",
+				"totalPrs": 4
+			},
+			{
+				"login": "lsparlin",
+				"totalPrs": 4
+			},
+			{
+				"login": "carmenkolohe",
+				"totalPrs": 4
+			},
+			{
+				"login": "YolandaHaynes",
+				"totalPrs": 3
+			},
+			{
+				"login": "aishwarya-mali",
+				"totalPrs": 3
+			},
+			{
+				"login": "sadiejay",
+				"totalPrs": 3
+			},
+			{
+				"login": "JesseRWeigel",
+				"totalPrs": 3
+			},
+			{
+				"login": "radturkin",
+				"totalPrs": 2
+			},
+			{
+				"login": "jdwilkin4",
+				"totalPrs": 2
+			},
+			{
+				"login": "imanidev",
+				"totalPrs": 2
+			},
+			{
+				"login": "BekahHW",
+				"totalPrs": 2
+			},
+			{
+				"login": "chaos986",
+				"totalPrs": 2
+			},
+			{
+				"login": "pedaars",
+				"totalPrs": 2
+			},
+			{
+				"login": "abuna1985",
+				"totalPrs": 1
+			},
+			{
+				"login": "AisheIbrahim",
+				"totalPrs": 1
+			},
+			{
+				"login": "dominicduffin1",
+				"totalPrs": 1
+			},
+			{
+				"login": "annakimdev",
+				"totalPrs": 1
+			},
+			{
+				"login": "meg-gutshall",
+				"totalPrs": 1
+			},
+			{
+				"login": "DavidRod1865",
+				"totalPrs": 1
+			},
+			{
+				"login": "nickytonline",
+				"totalPrs": 1
+			},
+			{
+				"login": "CodingatTiffanys",
+				"totalPrs": 1
+			},
+			{
+				"login": "AlexVCS",
+				"totalPrs": 1
+			},
+			{
+				"login": "LincolnFleet",
+				"totalPrs": 1
+			},
+			{
+				"login": "muckitymuck",
+				"totalPrs": 1
+			},
+			{
+				"login": "rmirville",
+				"totalPrs": 1
+			},
+			{
+				"login": "Narigo",
+				"totalPrs": 1
+			},
+			{
+				"login": "ridonky",
+				"totalPrs": 1
+			},
+			{
+				"login": "raykotab",
+				"totalPrs": 1
+			},
+			{
+				"login": "ClJarvis",
+				"totalPrs": 1
+			},
+			{
+				"login": "thegrumpyenby",
+				"totalPrs": 1
+			}
+		]
+	}
+}

@@ -55,11 +55,11 @@ body:
         examples:
           - **OS**: Mac 11.5.1
           - **Node**: 13.14.0
-          - **yarn**: 1.22.11
+          - **pnpm**: 8.5.0
       value: |
         - OS:
         - Node:
-        - yarn:
+        - pnpm:
       render: markdown
     validations:
       required: false

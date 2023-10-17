@@ -1,5 +1,8 @@
 # Inheiriting from .gitignore following advice from prettier docs https://prettier.io/docs/en/install.html
 
+*.lock
+pnpm-lock.yaml
+
 /.nova
 .DS_Store
 node_modules
@@ -10,5 +13,11 @@ node_modules
 /.env
 /.cache
 
+/netlify/functions/server
+/public/build
+
 # Local Netlify folder
 .netlify
+/app/styles
+/.tmp
+/app/_generatedData

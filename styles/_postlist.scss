@@ -1,0 +1,33 @@
+ul.postlist {
+	padding-left: 0;
+	list-style: none;
+
+	.postlist {
+		margin-left: 1em;
+		margin-top: 1em;
+
+		.postlist-title {
+			font-size: 1.2em;
+		}
+	}
+}
+
+.postlist-item {
+	margin-bottom: 2em;
+}
+
+.postlist-title {
+	font-size: 1.5em;
+}
+
+.homepageblocks {
+	.postlist-item {
+		margin-bottom: 1em;
+		font-size: 0.9em;
+	}
+
+	.postlist-title {
+		font-size: 1em;
+		font-weight: 500;
+	}
+}
