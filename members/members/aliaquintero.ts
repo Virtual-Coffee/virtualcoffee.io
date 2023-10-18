@@ -31,7 +31,6 @@ export const aliaquintero: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-
 		{ type: 'linkedin', username: 'aliaquintero' },
 		{ type: 'dev', username: 'alia' },
 		// { type: 'codenewbie', username: 'yourUserName' },
