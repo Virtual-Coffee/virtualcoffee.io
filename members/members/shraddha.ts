@@ -9,13 +9,13 @@ export const shraddha: MemberObject = {
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	// name: 'Your Name',
+	name: 'Shraddha',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
+	bio: `Full Stack Web Developer | Javascript, Typescript, Python, CSS, React, NodeJS, Headless CMS`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -48,7 +48,7 @@ export const shraddha: MemberObject = {
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
 	location: {
-		latitude: 37.541290,
+		latitude: 37.54129,
 		longitude: -77.434769,
 		title: 'Richmond, VA', // optional
 	},
