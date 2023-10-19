@@ -44,7 +44,7 @@ export const shraddha: MemberObject = {
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
 		{ type: 'website', url: 'https://www.shraddha.tech/', title: 'Portfolio' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2023'],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
 	location: {
