@@ -40,11 +40,11 @@ export const mikerogers0: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://mikerogers.io/',
-			title: 'Ruby Developer | Mike Rogers',
-		},
+		// {
+		// 	type: 'website',
+		// 	url: 'https://mikerogers.io/',
+		// 	title: 'Ruby Developer | Mike Rogers',
+		// },
 	],
 	badges: [],
 };
