@@ -47,9 +47,9 @@ export const megGutshall: MemberObject = {
 		},
 	],
 	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
-  location: {
-    latitude: 39.952583,
-    longitude: -75.165222,
-    title: 'Philadelphia, PA', // optional
-  },
+	location: {
+		latitude: 39.952583,
+		longitude: -75.165222,
+		title: 'Philadelphia, PA', // optional
+	},
 };
