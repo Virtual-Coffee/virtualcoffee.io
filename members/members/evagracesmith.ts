@@ -47,5 +47,5 @@ export const EvaGraceSmith: MemberObject = {
 		latitude: 41.661129,
 		longitude: -91.530167,
 		title: 'Iowa City, Iowa', // optional
-	  },
+	},
 };
