@@ -42,5 +42,10 @@ export const EvaGraceSmith: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 41.661129,
+		longitude: -91.530167,
+		title: 'Iowa City, Iowa', // optional
+	  },
 };
