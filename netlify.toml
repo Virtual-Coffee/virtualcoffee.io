@@ -63,43 +63,127 @@
 
 [[redirects]]
   from = "/member-resources/oss-maintainer-checklist"
-  to = "/resources/open-source/oss-maintainer-checklist"
+  to = "/resources/developer-resources/open-source/maintainer-guide#repository-checklist"
   status = 301
   force = true
 
 [[redirects]]
   from = "/member-resources/oss-writing-issues"
-  to = "/resources/open-source/oss-writing-issues"
+  to = "/resources/developer-resources/open-source/contributor-guide#guide-to-writing-issues"
   status = 301
   force = true
 
 [[redirects]]
   from = "/member-resources/guide-to-vc"
-  to = "/resources/virtual-coffee/guide-to-vc"
+  to = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee"
   status = 301
   force = true
 
 [[redirects]]
   from = "/member-resources/join-virtual-coffee"
-  to = "/resources/virtual-coffee/join-virtual-coffee"
+  to = "/resources/virtual-coffee-handbook/join-virtual-coffee"
   status = 301
   force = true
 
 [[redirects]]
   from = "/member-resources/slack-channel-guide"
-  to = "/resources/virtual-coffee/slack-channel-guide"
+  to = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide"
   status = 301
   force = true
 
 [[redirects]]
   from = "/resources/open-source/oss-writing-issues"
-  to = "/resources/open-source/contributor-guide#guide-to-writing-issues"
+  to = "/resources/developer-resources/open-source/contributor-guide#guide-to-writing-issues"
   status = 301
   force = true
 
 [[redirects]]
   from = "/resources/open-source/oss-maintainer-checklist"
-  to = "/resources/open-source/maintainer-guide"
+  to = "/resources/developer-resources/open-source/maintainer-guide#repository-checklist"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/open-source"
+  to = "/resources/developer-resources/open-source"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/open-source/about-open-source"
+  to = "/resources/developer-resources/open-source/about-open-source"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/open-source/git-101"
+  to = "/resources/developer-resources/open-source/git-101"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/open-source/contributor-guide"
+  to = "/resources/developer-resources/open-source/contributor-guide"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/open-source/maintainer-guide"
+  to = "/resources/developer-resources/open-source/maintainer-guide"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/virtual-coffee"
+  to = "/resources/virtual-coffee-handbook"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/virtual-coffee/get-involved"
+  to = "/resources/virtual-coffee-handbook/get-involved"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/virtual-coffee/get-involved/paths-to-leadership"
+  to = "/resources/virtual-coffee-handbook/get-involved/paths-to-leadership"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/virtual-coffee/get-involved/coffee-table-groups"
+  to = "/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/virtual-coffee/get-involved/lunch-and-learns"
+  to = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee/lunch-and-learns"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/virtual-coffee/join-virtual-coffee"
+  to = "/resources/virtual-coffee-handbook/join-virtual-coffee"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/virtual-coffee/guide-to-vc"
+  to = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/virtual-coffee/slack-channel-guide"
+  to = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/resources/virtual-coffee/coding-questions-guide"
+  to = "/resources/developer-resources/developer-tips/asking-coding-questions"
   status = 301
   force = true
 
