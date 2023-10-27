@@ -1,20 +1,20 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-export const carrollsa: MemberObject = {
+export const aliaquintero: MemberObject = {
 	// GitHub username (required)
-	github: 'carrollsa',
+	github: 'aliaquintero',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	name: 'Steve Carroll',
+	// name: 'Your Name',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: `Former opera singer | board game and coffee lover | bread baker. He/him`,
+	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -31,21 +31,16 @@ export const carrollsa: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'carrollsa' },
-		// { type: 'dev', username: 'yourUserName' },
+		{ type: 'linkedin', username: 'aliaquintero' },
+		{ type: 'dev', username: 'alia' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
-		{ type: 'youtube', channelId: 'UCRHvz8spFBKaaEyn6XNM49Q' },
+		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+		{ type: 'website', url: 'https://aliaquintero.com/', title: 'Portfolio' },
 	],
 	badges: [],
-	location: {
-		latitude: 39.952583,
-		longitude: -75.165222,
-		title: 'Philadelphia, Pennsylvania',
-	},
 };
