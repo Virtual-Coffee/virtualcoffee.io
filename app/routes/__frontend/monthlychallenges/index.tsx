@@ -111,16 +111,30 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Blogging Challenge',
 		subtitle: `A Community Challenge to hit a word count goal for all our tech blogs.`,
 		description: (
-			<p>
-				Based off the NaNoWriMo (National Novel Writing Month) Challenge, this
-				challenge is the tech take on writing and working together towards the
-				goal while posting on our own blogs.
-			</p>
+			<>
+				<p>
+					Based off the NaNoWriMo (National Novel Writing Month) Challenge, this
+					challenge is the tech take on writing and working together towards the
+					goal while posting on our own blogs.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="">
+						this blog post
+					</a>
+					.
+				</p>
+			</>
 		),
 		links: [
+			{
+				href: '/monthlychallenges/nov-2023',
+				title: 'November, 2023',
+			},
 			{
 				href: '/monthlychallenges/nov-2022',
 				title: 'November, 2022',
@@ -136,7 +150,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Hacktoberfest',
 		subtitle: `Participate in open source, learn, and have fun!`,
 		description: (
