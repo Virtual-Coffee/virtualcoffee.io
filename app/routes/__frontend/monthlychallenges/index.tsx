@@ -125,19 +125,15 @@ const challengeList: Challenge[] = [
 					Learn more about this challenge in <a href="">this blog post</a>.
 				</p>
 				<p>
-					To view all of the details{' '}
+					To view all of the details of this year's challenge,{' '}
 					<Link to="/monthlychallenges/nov-2023">
-						check out the November monthly challenge page
+						check out the November 2023 challenge page
 					</Link>
 					.
 				</p>
 			</>
 		),
 		links: [
-			{
-				href: '/monthlychallenges/nov-2023',
-				title: 'November, 2023',
-			},
 			{
 				href: '/monthlychallenges/nov-2022',
 				title: 'November, 2022',
