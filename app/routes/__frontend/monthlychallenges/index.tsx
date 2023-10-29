@@ -128,6 +128,13 @@ const challengeList: Challenge[] = [
 					</a>
 					.
 				</p>
+				<p>
+					To view all of the details{' '}
+					<Link to="/monthlychallenges/nov-2023">
+						check out the November monthly challenge page
+					</Link>
+					.
+				</p>
 			</>
 		),
 		links: [
