@@ -154,6 +154,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/14165788?v=4",
 			"profile": "https://andreamartz.dev/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "MattyMc",
+			"name": "Matt McInnis (he/him)",
+			"avatar_url": "https://avatars.githubusercontent.com/u/1302166?v=4",
+			"profile": "https://github.com/MattyMc",
+			"contributions": ["content", "bug"]
 		}
 	],
 	"contributorsPerLine": 7,

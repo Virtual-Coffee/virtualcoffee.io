@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-21-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -246,6 +246,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://toddl.dev/"><img src="https://avatars.githubusercontent.com/u/40549031?v=4?s=100" width="100px;" alt="Todd Libby"/><br /><sub><b>Todd Libby</b></sub></a><br /><a href="#content-colabottles" title="Content">🖋</a> <a href="#a11y-colabottles" title="Accessibility">️️️️♿️</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/secondl1ght"><img src="https://avatars.githubusercontent.com/u/85003930?v=4?s=100" width="100px;" alt="secondl1ght"/><br /><sub><b>secondl1ght</b></sub></a><br /><a href="#content-secondl1ght" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://andreamartz.dev/"><img src="https://avatars.githubusercontent.com/u/14165788?v=4?s=100" width="100px;" alt="Andrea Martz"/><br /><sub><b>Andrea Martz</b></sub></a><br /><a href="#content-andreamartz" title="Content">🖋</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MattyMc"><img src="https://avatars.githubusercontent.com/u/1302166?v=4?s=100" width="100px;" alt="Matt McInnis (he/him)"/><br /><sub><b>Matt McInnis (he/him)</b></sub></a><br /><a href="#content-MattyMc" title="Content">🖋</a> <a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues?q=author%3AMattyMc" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
   <tfoot>
