@@ -21,7 +21,7 @@
 			"name": "Christine Belzie",
 			"avatar_url": "https://avatars.githubusercontent.com/u/105683440?v=4",
 			"profile": "https://linkfree.eddiehub.io/CBID2",
-			"contributions": ["code"]
+			"contributions": ["code", "tool"]
 		},
 		{
 			"login": "BekahHW",
@@ -1362,5 +1362,6 @@
 		}
 	],
 	"contributorsPerLine": 7,
-	"linkToUsage": true
+	"linkToUsage": true,
+	"commitType": "docs"
 }
