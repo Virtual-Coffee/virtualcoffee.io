@@ -231,6 +231,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/69023218?v=4",
 			"profile": "https://github.com/carmenkolohe",
 			"contributions": ["content"]
+		},
+		{
+			"login": "chaos986",
+			"name": "Michael Honey-Arcement",
+			"avatar_url": "https://avatars.githubusercontent.com/u/1579750?v=4",
+			"profile": "http://https//gwn-ws.com",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,

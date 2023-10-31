@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-32-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-33-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -261,6 +261,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/klezi10"><img src="https://avatars.githubusercontent.com/u/74952593?v=4?s=100" width="100px;" alt="Klesta"/><br /><sub><b>Klesta</b></sub></a><br /><a href="#content-klezi10" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/bogdaaamn"><img src="https://avatars.githubusercontent.com/u/22895284?v=4?s=100" width="100px;" alt="Bogdan Covrig"/><br /><sub><b>Bogdan Covrig</b></sub></a><br /><a href="#content-bogdaaamn" title="Content">🖋</a> <a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues?q=author%3Abogdaaamn" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/carmenkolohe"><img src="https://avatars.githubusercontent.com/u/69023218?v=4?s=100" width="100px;" alt="Carmen"/><br /><sub><b>Carmen</b></sub></a><br /><a href="#content-carmenkolohe" title="Content">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://https//gwn-ws.com"><img src="https://avatars.githubusercontent.com/u/1579750?v=4?s=100" width="100px;" alt="Michael Honey-Arcement"/><br /><sub><b>Michael Honey-Arcement</b></sub></a><br /><a href="#content-chaos986" title="Content">🖋</a></td>
     </tr>
   </tbody>
   <tfoot>
