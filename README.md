@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-28-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-29-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -255,6 +255,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://vicvijayakumar.com/"><img src="https://avatars.githubusercontent.com/u/205796?v=4?s=100" width="100px;" alt="Vic Vijayakumar"/><br /><sub><b>Vic Vijayakumar</b></sub></a><br /><a href="#content-needcaffeine" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.jenkens.dev/"><img src="https://avatars.githubusercontent.com/u/25398021?v=4?s=100" width="100px;" alt="Jen Kennedy"/><br /><sub><b>Jen Kennedy</b></sub></a><br /><a href="#content-jenkens-dev" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://luciacerchie.dev/blog"><img src="https://avatars.githubusercontent.com/u/54046179?v=4?s=100" width="100px;" alt="Lucia Cerchie"/><br /><sub><b>Lucia Cerchie</b></sub></a><br /><a href="#content-Cerchie" title="Content">🖋</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://pedaars.co.uk/"><img src="https://avatars.githubusercontent.com/u/11647950?v=4?s=100" width="100px;" alt="Aaron Pedwell"/><br /><sub><b>Aaron Pedwell</b></sub></a><br /><a href="#content-pedaars" title="Content">🖋</a></td>
     </tr>
   </tbody>
   <tfoot>

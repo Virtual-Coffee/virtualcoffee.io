@@ -203,6 +203,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/54046179?v=4",
 			"profile": "https://luciacerchie.dev/blog",
 			"contributions": ["content"]
+		},
+		{
+			"login": "pedaars",
+			"name": "Aaron Pedwell",
+			"avatar_url": "https://avatars.githubusercontent.com/u/11647950?v=4",
+			"profile": "https://pedaars.co.uk/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
