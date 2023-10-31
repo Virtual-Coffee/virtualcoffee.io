@@ -329,6 +329,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/115164153?v=4",
 			"profile": "https://github.com/EvaGraceSmith",
 			"contributions": ["content"]
+		},
+		{
+			"login": "imanidev",
+			"name": "Imani Roberts",
+			"avatar_url": "https://avatars.githubusercontent.com/u/111655655?v=4",
+			"profile": "https://imani-dev-portfolio.vercel.app/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
