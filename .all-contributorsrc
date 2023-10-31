@@ -77,6 +77,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/43086476?v=4",
 			"profile": "https://github.com/aishwarya-mali",
 			"contributions": ["content"]
+		},
+		{
+			"login": "JoeKarow",
+			"name": "Joe Karow",
+			"avatar_url": "https://avatars.githubusercontent.com/u/58997957?v=4",
+			"profile": "https://joekarow.dev/",
+			"contributions": ["content", "bug"]
 		}
 	],
 	"contributorsPerLine": 7,
