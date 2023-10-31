@@ -287,6 +287,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/46777560?v=4",
 			"profile": "https://vanessapoppe.me/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "abuna1985",
+			"name": "Adam Abundis",
+			"avatar_url": "https://avatars.githubusercontent.com/u/21162229?v=4",
+			"profile": "https://adamabundis.xyz/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
