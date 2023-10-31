@@ -91,6 +91,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/833231?v=4",
 			"profile": "https://nickyt.co/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "lsparlin",
+			"name": "Lewis Sparlin",
+			"avatar_url": "https://avatars.githubusercontent.com/u/1904364?v=4",
+			"profile": "https://lsparlin.dev/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
