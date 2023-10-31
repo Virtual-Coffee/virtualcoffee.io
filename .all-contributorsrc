@@ -49,6 +49,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/37842352?v=4",
 			"profile": "https://meghangutshall.com/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "dominicduffin1",
+			"name": "Dominic Duffin",
+			"avatar_url": "https://avatars.githubusercontent.com/u/26224873?v=4",
+			"profile": "https://dominicduffin.uk/",
+			"contributions": ["content", "bug"]
 		}
 	],
 	"contributorsPerLine": 7,
