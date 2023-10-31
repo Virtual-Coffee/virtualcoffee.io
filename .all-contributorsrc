@@ -308,6 +308,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/58532369?v=4",
 			"profile": "https://caitlinfloyd.com/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "crisbnp",
+			"name": "Cristien Natal",
+			"avatar_url": "https://avatars.githubusercontent.com/u/42753366?v=4",
+			"profile": "https://github.com/crisbnp",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
