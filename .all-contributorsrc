@@ -259,6 +259,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/47927958?v=4",
 			"profile": "http://rebeccakeyphd.com/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "teezzan",
+			"name": "Yusuf Taiwo Hassan",
+			"avatar_url": "https://avatars.githubusercontent.com/u/25867172?v=4",
+			"profile": "https://taiwodevlab.hashnode.dev/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
