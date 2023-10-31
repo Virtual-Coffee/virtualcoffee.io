@@ -385,6 +385,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/18251846?v=4",
 			"profile": "http://www.developindvlpr.com/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "radturkin",
+			"name": "Rad Turkin",
+			"avatar_url": "https://avatars.githubusercontent.com/u/67508317?v=4",
+			"profile": "https://github.com/radturkin",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
