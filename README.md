@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-45-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-46-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -278,6 +278,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://caitlinfloyd.com/"><img src="https://avatars.githubusercontent.com/u/58532369?v=4?s=100" width="100px;" alt="Caitlin Floyd"/><br /><sub><b>Caitlin Floyd</b></sub></a><br /><a href="#content-cafloyd" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/crisbnp"><img src="https://avatars.githubusercontent.com/u/42753366?v=4?s=100" width="100px;" alt="Cristien Natal"/><br /><sub><b>Cristien Natal</b></sub></a><br /><a href="#content-crisbnp" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://danieljanderson.github.io/"><img src="https://avatars.githubusercontent.com/u/30938196?v=4?s=100" width="100px;" alt="Daniel Anderson"/><br /><sub><b>Daniel Anderson</b></sub></a><br /><a href="#content-danieljanderson" title="Content">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/EvaGraceSmith"><img src="https://avatars.githubusercontent.com/u/115164153?v=4?s=100" width="100px;" alt="Eva Grace Smith"/><br /><sub><b>Eva Grace Smith</b></sub></a><br /><a href="#content-EvaGraceSmith" title="Content">🖋</a></td>
     </tr>
   </tbody>
   <tfoot>

@@ -322,6 +322,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/30938196?v=4",
 			"profile": "https://danieljanderson.github.io/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "EvaGraceSmith",
+			"name": "Eva Grace Smith",
+			"avatar_url": "https://avatars.githubusercontent.com/u/115164153?v=4",
+			"profile": "https://github.com/EvaGraceSmith",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
