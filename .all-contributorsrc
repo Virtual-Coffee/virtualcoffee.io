@@ -14,6 +14,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/360261?v=4",
 			"profile": "https://danott.dev/",
 			"contributions": ["code"]
+		},
+		{
+			"login": "CBID2",
+			"name": "Christine Belzie",
+			"avatar_url": "https://avatars.githubusercontent.com/u/105683440?v=4",
+			"profile": "https://linkfree.eddiehub.io/CBID2",
+			"contributions": ["code"]
 		}
 	],
 	"contributorsPerLine": 7,
