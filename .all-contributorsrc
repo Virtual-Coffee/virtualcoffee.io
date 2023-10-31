@@ -210,6 +210,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/11647950?v=4",
 			"profile": "https://pedaars.co.uk/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "klezi10",
+			"name": "Klesta",
+			"avatar_url": "https://avatars.githubusercontent.com/u/74952593?v=4",
+			"profile": "https://github.com/klezi10",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
