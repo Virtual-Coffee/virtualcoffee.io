@@ -28,6 +28,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/34313413?v=4",
 			"profile": "https://bekahhw.github.io/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "adiati98",
+			"name": "Ayu Adiati",
+			"avatar_url": "https://avatars.githubusercontent.com/u/45172775?v=4",
+			"profile": "https://adiati.com/",
+			"contributions": ["content", "bug"]
 		}
 	],
 	"contributorsPerLine": 7,
