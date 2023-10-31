@@ -61,18 +61,21 @@ export default function Challenge() {
 			</h1>
 
 			<LeadText>
-				This month we're working together to blog 100,000 words! Based off the{' '}
-				<a href="https://nanowrimo.org/">
-					NaNoWriMo (National Novel Writing Month) Challenge
-				</a>
-				, we'll be doing the tech take on writing and working together towards
-				the goal while posting on our own blogs. We hit{' '}
-				<Link to="/monthlychallenges/nov-2022">over 100k words last year</Link>,
-				and we're going to start this year's challenge with a goal of 100k
-				words.
+				<p>
+					This month we're working together to blog 100,000 words! Based off the{' '}
+					<a href="https://nanowrimo.org/">
+						NaNoWriMo (National Novel Writing Month) Challenge
+					</a>
+					, we'll be doing the tech take on writing and working together towards
+					the goal while posting on our own blogs. We hit{' '}
+					<Link to="/monthlychallenges/nov-2022">
+						over 100k words last year
+					</Link>
+					, and we're going to start this year's challenge with a goal of 100k
+					words.
+				</p>
+				<p>Get those blog posts up!</p>
 			</LeadText>
-
-			<LeadText>Get those blog posts up!</LeadText>
 
 			{totals.totalPosts > 0 && (
 				<>
@@ -195,7 +198,7 @@ export default function Challenge() {
 				Once you've written and published your content,{' '}
 				<a href="https://airtable.com/app10kd5ewHiLTjxn/shrgRjUFpNjLN1V12">
 					{' '}
-					add your entry{' '}
+					add your entry
 				</a>
 				!
 			</p>
