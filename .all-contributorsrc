@@ -252,6 +252,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/5377285?v=4",
 			"profile": "https://github.com/piotrszymaniec",
 			"contributions": ["content"]
+		},
+		{
+			"login": "rek990",
+			"name": "Rebecca Key",
+			"avatar_url": "https://avatars.githubusercontent.com/u/47927958?v=4",
+			"profile": "http://rebeccakeyphd.com/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
