@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-42-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-43-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -273,6 +273,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://vanessapoppe.me/"><img src="https://avatars.githubusercontent.com/u/46777560?v=4?s=100" width="100px;" alt="Vanessa "/><br /><sub><b>Vanessa </b></sub></a><br /><a href="#content-vanessacor" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://adamabundis.xyz/"><img src="https://avatars.githubusercontent.com/u/21162229?v=4?s=100" width="100px;" alt="Adam Abundis"/><br /><sub><b>Adam Abundis</b></sub></a><br /><a href="#content-abuna1985" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/iotalex"><img src="https://avatars.githubusercontent.com/u/59321539?v=4?s=100" width="100px;" alt="Alexander Batenhorst"/><br /><sub><b>Alexander Batenhorst</b></sub></a><br /><a href="#content-iotalex" title="Content">🖋</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://caitlinfloyd.com/"><img src="https://avatars.githubusercontent.com/u/58532369?v=4?s=100" width="100px;" alt="Caitlin Floyd"/><br /><sub><b>Caitlin Floyd</b></sub></a><br /><a href="#content-cafloyd" title="Content">🖋</a></td>
     </tr>
   </tbody>
   <tfoot>

@@ -301,6 +301,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/59321539?v=4",
 			"profile": "https://github.com/iotalex",
 			"contributions": ["content"]
+		},
+		{
+			"login": "cafloyd",
+			"name": "Caitlin Floyd",
+			"avatar_url": "https://avatars.githubusercontent.com/u/58532369?v=4",
+			"profile": "https://caitlinfloyd.com/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
