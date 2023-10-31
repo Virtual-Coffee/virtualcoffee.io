@@ -105,6 +105,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/85396770?v=4",
 			"profile": "https://github.com/redapy",
 			"contributions": ["content", "bug"]
+		},
+		{
+			"login": "YolandaHaynes",
+			"name": "Yolanda Haynes",
+			"avatar_url": "https://avatars.githubusercontent.com/u/12980710?v=4",
+			"profile": "https://www.yhaynes.com/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,

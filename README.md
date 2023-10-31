@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-14-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -237,6 +237,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://nickyt.co/"><img src="https://avatars.githubusercontent.com/u/833231?v=4?s=100" width="100px;" alt="Nick Taylor"/><br /><sub><b>Nick Taylor</b></sub></a><br /><a href="#content-nickytonline" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://lsparlin.dev/"><img src="https://avatars.githubusercontent.com/u/1904364?v=4?s=100" width="100px;" alt="Lewis Sparlin"/><br /><sub><b>Lewis Sparlin</b></sub></a><br /><a href="#content-lsparlin" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/redapy"><img src="https://avatars.githubusercontent.com/u/85396770?v=4?s=100" width="100px;" alt="Reda Baha"/><br /><sub><b>Reda Baha</b></sub></a><br /><a href="#content-redapy" title="Content">🖋</a> <a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues?q=author%3Aredapy" title="Bug reports">🐛</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.yhaynes.com/"><img src="https://avatars.githubusercontent.com/u/12980710?v=4?s=100" width="100px;" alt="Yolanda Haynes"/><br /><sub><b>Yolanda Haynes</b></sub></a><br /><a href="#content-YolandaHaynes" title="Content">🖋</a></td>
     </tr>
   </tbody>
   <tfoot>
