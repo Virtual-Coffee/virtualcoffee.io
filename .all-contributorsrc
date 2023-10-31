@@ -294,6 +294,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/21162229?v=4",
 			"profile": "https://adamabundis.xyz/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "iotalex",
+			"name": "Alexander Batenhorst",
+			"avatar_url": "https://avatars.githubusercontent.com/u/59321539?v=4",
+			"profile": "https://github.com/iotalex",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
