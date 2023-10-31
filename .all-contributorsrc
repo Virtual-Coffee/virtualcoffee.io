@@ -147,6 +147,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/85003930?v=4",
 			"profile": "https://github.com/secondl1ght",
 			"contributions": ["content"]
+		},
+		{
+			"login": "andreamartz",
+			"name": "Andrea Martz",
+			"avatar_url": "https://avatars.githubusercontent.com/u/14165788?v=4",
+			"profile": "https://andreamartz.dev/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
