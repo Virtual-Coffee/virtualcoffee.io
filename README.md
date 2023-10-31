@@ -221,7 +221,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://danott.dev/"><img src="https://avatars.githubusercontent.com/u/360261?v=4?s=100" width="100px;" alt="Dan Ott"/><br /><sub><b>Dan Ott</b></sub></a><br /><a href="https://github.com/Virtual-Coffee/virtualcoffee.io/commits?author=danieltott" title="Code">💻</a> <a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues?q=author%3Adanieltott" title="Bug reports">🐛</a> <a href="#a11y-danieltott" title="Accessibility">️️️️♿️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://danott.dev/"><img src="https://avatars.githubusercontent.com/u/360261?v=4?s=100" width="100px;" alt="Dan Ott"/><br /><sub><b>Dan Ott</b></sub></a><br /><a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues?q=author%3Adanieltott" title="Bug reports">🐛</a> <a href="#a11y-danieltott" title="Accessibility">️️️️♿️</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://linkfree.eddiehub.io/CBID2"><img src="https://avatars.githubusercontent.com/u/105683440?v=4?s=100" width="100px;" alt="Christine Belzie"/><br /><sub><b>Christine Belzie</b></sub></a><br /><a href="https://github.com/Virtual-Coffee/virtualcoffee.io/commits?author=CBID2" title="Code">💻</a></td>
     </tr>
   </tbody>
