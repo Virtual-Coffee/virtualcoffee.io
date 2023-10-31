@@ -67,7 +67,9 @@ export async function loader(_: LoaderArgs) {
 
 	let api = new CmsActions();
 
-	const posts = await api.getNovemberChallengeEntries();
+	const posts = await api.getNovemberChallengeEntries({
+		year: 2022,
+	});
 
 	let totalWordCount = 0;
 
