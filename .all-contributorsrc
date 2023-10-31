@@ -112,6 +112,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/12980710?v=4",
 			"profile": "https://www.yhaynes.com/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "kldickenson",
+			"name": "Karen Dickenson",
+			"avatar_url": "https://avatars.githubusercontent.com/u/2073648?v=4",
+			"profile": "https://www.linkedin.com/in/kldickenson/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
