@@ -266,6 +266,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/25867172?v=4",
 			"profile": "https://taiwodevlab.hashnode.dev/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "brandonbrown4792",
+			"name": "Brandon Brown",
+			"avatar_url": "https://avatars.githubusercontent.com/u/42486126?v=4",
+			"profile": "https://brandonmichaelbrown.com/",
+			"contributions": ["content", "bug"]
 		}
 	],
 	"contributorsPerLine": 7,
