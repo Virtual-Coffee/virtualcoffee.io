@@ -350,6 +350,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/70559611?v=4",
 			"profile": "https://jasmine582.github.io/jas_develops",
 			"contributions": ["content"]
+		},
+		{
+			"login": "lohityarra",
+			"name": "Lohit Yarra",
+			"avatar_url": "https://avatars.githubusercontent.com/u/43040093?v=4",
+			"profile": "https://github.com/lohityarra",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
