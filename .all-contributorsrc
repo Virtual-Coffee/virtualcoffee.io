@@ -378,6 +378,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/3792749?v=4",
 			"profile": "https://twitter.com/MatthewTFoley",
 			"contributions": ["content"]
+		},
+		{
+			"login": "Nerajno",
+			"name": "Nerando Johnson",
+			"avatar_url": "https://avatars.githubusercontent.com/u/18251846?v=4",
+			"profile": "http://www.developindvlpr.com/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
