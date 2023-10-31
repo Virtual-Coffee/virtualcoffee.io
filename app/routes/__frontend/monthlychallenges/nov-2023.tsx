@@ -1,18 +1,11 @@
-import React, { Fragment } from 'react';
-import slugify from '@sindresorhus/slugify';
+import { Fragment } from 'react';
 import { createMetaData } from '~/util/createMetaData.server';
 import { json } from '@remix-run/node';
 import type { LoaderArgs } from '@remix-run/node';
-import { CmsActions } from '~/api/cms.server';
-import type {
-	NovemberChallengeEntryAuthor,
-	NovemberChallengeEntry,
-} from '~/api/types';
-import { useLoaderData } from '@remix-run/react';
+import { getChallengeData } from '~/data/monthlyChallenges/nov-2023';
+import { useLoaderData, Link } from '@remix-run/react';
 import { cacheControlValues } from '~/util/http';
-import { Link } from '@remix-run/react';
 import LeadText from '~/components/content/LeadText';
-// import { getChallengeData } from '~/data/monthlyChallenges/nov-2023';
 
 export { metaFromData as meta } from '~/util/remixHelpers';
 
@@ -33,92 +26,17 @@ export const headers = {
 	'Cache-Control': cacheControlValues.short,
 };
 
-const goals = [
-	{
-		title: '100k',
-		value: 100000,
-	},
-	{
-		title: '150k',
-		value: 150000,
-	},
-	{
-		title: '200k',
-		value: 200000,
-	},
-	{
-		title: '250k',
-		value: 250000,
-	},
-	{
-		title: '300k',
-		value: 300000,
-	},
-	{
-		title: '350k',
-		value: 350000,
-	},
-	{
-		title: '400k',
-		value: 400000,
-	},
-];
-
 export async function loader(_: LoaderArgs) {
 	const { title } = handle.meta;
 
-	let api = new CmsActions();
+	const data = await getChallengeData();
 
-	const posts = await api.getNovemberChallengeEntries();
-
-	let totalWordCount = 0;
-
-	let totalPosts = 0;
-
-	const authorsWithPosts: (NovemberChallengeEntryAuthor & {
-		slug: string;
-		totalPosts: number;
-		totalWordCount: number;
-		posts: NovemberChallengeEntry[];
-	})[] = [];
-
-	posts.forEach((post) => {
-		const author = authorsWithPosts.find(
-			(author) => author.id === post.author.id,
-		);
-		if (!author) {
-			authorsWithPosts.push({
-				...post.author,
-				slug: slugify(post.author.userYourName || post.author.fullName || ''),
-				totalPosts: 1,
-				totalWordCount: post.wordCount,
-				posts: [post],
-			});
-		} else {
-			author.totalPosts++;
-			author.totalWordCount += post.wordCount;
-			author.posts.push(post);
-		}
-
-		totalWordCount += post.wordCount;
-		totalPosts++;
-	});
-
-	const currentGoal = goals.find((goal) => goal.value > totalWordCount);
-	const completedGoals = goals.filter((goal) => goal.value <= totalWordCount);
-
-	// const blog = await getChallengeData();
-
-	const description = `Current status: ${totalWordCount.toLocaleString()} out of ${currentGoal?.title} words`;
+	const description = `Current status: ${data.totals.totalCount.toLocaleString()} out of ${data
+		.currentGoal?.title} words`;
 
 	return json(
 		{
-			// ...blog,
-			totalWordCount,
-			totalPosts,
-			authorsWithPosts,
-			currentGoal,
-			completedGoals,
+			...data,
 			meta: createMetaData({ title, description }),
 		},
 		{
@@ -132,13 +50,8 @@ export async function loader(_: LoaderArgs) {
 export default function Challenge() {
 	// const { completedGoals, currentGoal, sortedList, list, totals } =
 	// 	useLoaderData();
-	const {
-		authorsWithPosts,
-		totalWordCount,
-		totalPosts,
-		completedGoals,
-		currentGoal,
-	} = useLoaderData<typeof loader>();
+	const { sortedList, totals, completedGoals, currentGoal } =
+		useLoaderData<typeof loader>();
 
 	return (
 		<>
@@ -154,15 +67,14 @@ export default function Challenge() {
 				</a>
 				, we'll be doing the tech take on writing and working together towards
 				the goal while posting on our own blogs. We hit{' '}
-				<Link to="/monthlychallenges/nov-2022">
-					over 100k words last year
-				</Link>
-				, and we're going to start this year's challenge with a goal of 100k words.
+				<Link to="/monthlychallenges/nov-2022">over 100k words last year</Link>,
+				and we're going to start this year's challenge with a goal of 100k
+				words.
 			</LeadText>
 
 			<LeadText>Get those blog posts up!</LeadText>
 
-			{/* {totalPosts > 0 && (
+			{totals.totalPosts > 0 && (
 				<>
 					{completedGoals.length ? (
 						<>
@@ -180,13 +92,13 @@ export default function Challenge() {
 
 							<div className="h3">
 								Stretch Goal {completedGoals.length}:{' '}
-								{totalWordCount.toLocaleString()} out of{' '}
+								{totals.totalCount.toLocaleString()} out of{' '}
 								{currentGoal?.value.toLocaleString()} words
 							</div>
 						</>
 					) : (
 						<h2>
-							Current status: {totalWordCount.toLocaleString()} out of{' '}
+							Current status: {totals.totalCount.toLocaleString()} out of{' '}
 							{currentGoal?.title} words
 						</h2>
 					)}
@@ -196,28 +108,29 @@ export default function Challenge() {
 							className="progress-bar progress-bar progress-bar-striped"
 							role="progressbar"
 							style={{
-								width: `${(totalWordCount / (currentGoal?.value || 1)) * 100}%`,
+								width: `${
+									(totals.totalCount / (currentGoal?.value || 1)) * 100
+								}%`,
 							}}
-							aria-valuenow={totalWordCount}
+							aria-valuenow={totals.totalCount}
 							aria-valuemin={0}
 							aria-valuemax={currentGoal?.value}
 						>
-							{totalWordCount.toLocaleString()} Words
+							{totals.totalCount.toLocaleString()} Words
 						</div>
 					</div>
 
 					<h2 className="mt-5">Our Posts:</h2>
 
-					{authorsWithPosts.map((author, i) => (
+					{sortedList.map((author, i) => (
 						<Fragment key={i}>
 							<div className="header-anchor-wrapper header-anchor-wrapper-h3">
-								<h3 id={`${author.id}`} tabIndex={-1}>
-									{author.userYourName || author.fullName}
+								<h3 id={`${author.slug}`} tabIndex={-1}>
+									{author.name}
 								</h3>
 								<a className="header-anchor" href={`#${author.slug}`}>
 									<span className="sr-only">
-										Permalink to {author.userYourName || author.fullName}'s
-										posts
+										Permalink to {author.name}'s posts
 									</span>
 									<span aria-hidden="true">#</span>
 								</a>
@@ -226,8 +139,8 @@ export default function Challenge() {
 							<ul>
 								{author.posts.map((post, j) => (
 									<li key={j}>
-										<a href={post.urlValue}>{post.title}</a>
-										<code>({post.wordCount.toLocaleString()} words)</code>
+										<a href={post.url}>{post.title}</a>
+										<code>({post.count.toLocaleString()} words)</code>
 									</li>
 								))}
 							</ul>
@@ -249,14 +162,14 @@ export default function Challenge() {
 							</tr>
 						</thead>
 						<tbody>
-							{authorsWithPosts.map((author, i) => (
+							{totals.list.map((author, i) => (
 								<tr key={i}>
-									<td>{author.userYourName || author.fullName}</td>
+									<td>{author.name}</td>
 									<td className="text-right">
-										{author.totalPosts.toLocaleString()}
+										{author.posts.toLocaleString()}
 									</td>
 									<td className="text-right">
-										{author.totalWordCount.toLocaleString()}
+										{author.total.toLocaleString()}
 									</td>
 								</tr>
 							))}
@@ -265,24 +178,27 @@ export default function Challenge() {
 							<tr>
 								<th scope="col">Total</th>
 								<th scope="col" className="text-right">
-									{totalPosts.toLocaleString()}
+									{totals.totalPosts.toLocaleString()}
 								</th>
 								<th scope="col" className="text-right">
-									{totalWordCount.toLocaleString()} words
+									{totals.totalCount.toLocaleString()} words
 								</th>
 							</tr>
 						</tfoot>
 					</table>
 				</>
-			)} */}
+			)}
 
 			<h2>How to Participate</h2>
 
-			{/* <p>
-				Once you've written and published your content, sign in to the{' '}
-				<a href="https://members.virtualcoffee.io/"> VC Members section</a> and
-				follow links to the November Monthly Challenge!
-			</p> */}
+			<p>
+				Once you've written and published your content,{' '}
+				<a href="https://airtable.com/app10kd5ewHiLTjxn/shrgRjUFpNjLN1V12">
+					{' '}
+					add your entry{' '}
+				</a>
+				!
+			</p>
 
 			<h3>What kind of content counts towards the challenge?</h3>
 
@@ -299,8 +215,8 @@ export default function Challenge() {
 			</p>
 
 			<p>
-				Since last year, we're embracing an <strong>official topic</strong> as well as
-				general topics. We added a{' '}
+				Since last year, we're embracing an <strong>official topic</strong> as
+				well as general topics. We added a{' '}
 				<Link to="/resources/developer-resources/developer-health">
 					Developer Health
 				</Link>{' '}
@@ -311,9 +227,10 @@ export default function Challenge() {
 			<h3>What if I'm not confident about my writing?</h3>
 
 			<p>
-				We all start somewhere. The more you practice, the better you'll
-				get. We have volunteers who are willing to proofread and give you
-				feedback on your writing. Just put a link to your blog post draft in the <code>#monthly-challenge</code> channel and ask for the help you need.
+				We all start somewhere. The more you practice, the better you'll get. We
+				have volunteers who are willing to proofread and give you feedback on
+				your writing. Just put a link to your blog post draft in the{' '}
+				<code>#monthly-challenge</code> channel and ask for the help you need.
 			</p>
 
 			<h3>What if I don't know what to write about?</h3>
@@ -352,7 +269,8 @@ export default function Challenge() {
 			<h4>General Topic Suggestions</h4>
 			<ul>
 				<li>
-					What did your Virtual Coffee breakout room talk about recently? Can you compile a list of tips or takeaways from the conversation?
+					What did your Virtual Coffee breakout room talk about recently? Can
+					you compile a list of tips or takeaways from the conversation?
 				</li>
 				<li>
 					What did you learn this week? One of the best ways to teach is by
