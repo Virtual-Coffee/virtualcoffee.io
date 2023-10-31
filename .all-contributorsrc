@@ -84,6 +84,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/58997957?v=4",
 			"profile": "https://joekarow.dev/",
 			"contributions": ["content", "bug"]
+		},
+		{
+			"login": "nickytonline",
+			"name": "Nick Taylor",
+			"avatar_url": "https://avatars.githubusercontent.com/u/833231?v=4",
+			"profile": "https://nickyt.co/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
