@@ -196,6 +196,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/25398021?v=4",
 			"profile": "https://www.jenkens.dev/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "Cerchie",
+			"name": "Lucia Cerchie",
+			"avatar_url": "https://avatars.githubusercontent.com/u/54046179?v=4",
+			"profile": "https://luciacerchie.dev/blog",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
