@@ -6,6 +6,7 @@ import { getChallengeData } from '~/data/monthlyChallenges/nov-2023';
 import { useLoaderData, Link } from '@remix-run/react';
 import { cacheControlValues } from '~/util/http';
 import LeadText from '~/components/content/LeadText';
+import { Button } from '~/components/app/Button';
 
 export { metaFromData as meta } from '~/util/remixHelpers';
 
@@ -196,11 +197,25 @@ export default function Challenge() {
 
 			<p>
 				Once you've written and published your content,{' '}
-				<a href="https://airtable.com/app10kd5ewHiLTjxn/shrgRjUFpNjLN1V12">
-					{' '}
-					add your entry
+				<a
+					href="https://airtable.com/app10kd5ewHiLTjxn/shrgRjUFpNjLN1V12"
+					target="_blank"
+					rel="noreferrer"
+				>
+					add your entry to our VC NaNoWriMo entry form
 				</a>
 				!
+			</p>
+
+			<p>
+				<a
+					href="https://airtable.com/app10kd5ewHiLTjxn/shrgRjUFpNjLN1V12"
+					target="_blank"
+					rel="noreferrer"
+					className="btn btn-primary btn-lg"
+				>
+					Add Your Entry!
+				</a>
 			</p>
 
 			<h3>What kind of content counts towards the challenge?</h3>
