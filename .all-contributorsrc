@@ -133,6 +133,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/67210629?v=4",
 			"profile": "https://jessicawilkins.dev/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "colabottles",
+			"name": "Todd Libby",
+			"avatar_url": "https://avatars.githubusercontent.com/u/40549031?v=4",
+			"profile": "https://toddl.dev/",
+			"contributions": ["content", "a11y"]
 		}
 	],
 	"contributorsPerLine": 7,
