@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-48-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-49-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -281,6 +281,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/EvaGraceSmith"><img src="https://avatars.githubusercontent.com/u/115164153?v=4?s=100" width="100px;" alt="Eva Grace Smith"/><br /><sub><b>Eva Grace Smith</b></sub></a><br /><a href="#content-EvaGraceSmith" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://imani-dev-portfolio.vercel.app/"><img src="https://avatars.githubusercontent.com/u/111655655?v=4?s=100" width="100px;" alt="Imani Roberts"/><br /><sub><b>Imani Roberts</b></sub></a><br /><a href="#content-imanidev" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Jamaalwbrown"><img src="https://avatars.githubusercontent.com/u/59902352?v=4?s=100" width="100px;" alt="Jamaal Brown"/><br /><sub><b>Jamaal Brown</b></sub></a><br /><a href="#content-Jamaalwbrown" title="Content">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://jasmine582.github.io/jas_develops"><img src="https://avatars.githubusercontent.com/u/70559611?v=4?s=100" width="100px;" alt="Jasmine "/><br /><sub><b>Jasmine </b></sub></a><br /><a href="#content-Jasmine582" title="Content">🖋</a></td>
     </tr>
   </tbody>
   <tfoot>
