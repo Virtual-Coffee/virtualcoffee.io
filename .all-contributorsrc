@@ -168,6 +168,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/11077930?v=4",
 			"profile": "https://github.com/JesseRWeigel",
 			"contributions": ["content"]
+		},
+		{
+			"login": "MikeRogers0",
+			"name": "Mike Rogers",
+			"avatar_url": "https://avatars.githubusercontent.com/u/325384?v=4",
+			"profile": "https://mikerogers.io/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,

@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -250,6 +250,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/MattyMc"><img src="https://avatars.githubusercontent.com/u/1302166?v=4?s=100" width="100px;" alt="Matt McInnis (he/him)"/><br /><sub><b>Matt McInnis (he/him)</b></sub></a><br /><a href="#content-MattyMc" title="Content">🖋</a> <a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues?q=author%3AMattyMc" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/JesseRWeigel"><img src="https://avatars.githubusercontent.com/u/11077930?v=4?s=100" width="100px;" alt="Jesse R Weigel"/><br /><sub><b>Jesse R Weigel</b></sub></a><br /><a href="#content-JesseRWeigel" title="Content">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://mikerogers.io/"><img src="https://avatars.githubusercontent.com/u/325384?v=4?s=100" width="100px;" alt="Mike Rogers"/><br /><sub><b>Mike Rogers</b></sub></a><br /><a href="#content-MikeRogers0" title="Content">🖋</a></td>
     </tr>
   </tbody>
   <tfoot>
