@@ -364,6 +364,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/54803384?v=4",
 			"profile": "https://github.com/Lor1138",
 			"contributions": ["content"]
+		},
+		{
+			"login": "MarieReRe",
+			"name": "Marie",
+			"avatar_url": "https://avatars.githubusercontent.com/u/52573981?v=4",
+			"profile": "https://github.com/MarieReRe",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
