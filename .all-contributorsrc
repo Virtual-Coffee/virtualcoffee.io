@@ -238,6 +238,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/1579750?v=4",
 			"profile": "http://https//gwn-ws.com",
 			"contributions": ["content"]
+		},
+		{
+			"login": "mikestreety",
+			"name": "Mike Street",
+			"avatar_url": "https://avatars.githubusercontent.com/u/354085?v=4",
+			"profile": "https://www.mikestreety.co.uk/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
