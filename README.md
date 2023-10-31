@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-52-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-53-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -287,6 +287,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/lohityarra"><img src="https://avatars.githubusercontent.com/u/43040093?v=4?s=100" width="100px;" alt="Lohit Yarra"/><br /><sub><b>Lohit Yarra</b></sub></a><br /><a href="#content-lohityarra" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Lor1138"><img src="https://avatars.githubusercontent.com/u/54803384?v=4?s=100" width="100px;" alt="Laura OBrien"/><br /><sub><b>Laura OBrien</b></sub></a><br /><a href="#content-Lor1138" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/MarieReRe"><img src="https://avatars.githubusercontent.com/u/52573981?v=4?s=100" width="100px;" alt="Marie"/><br /><sub><b>Marie</b></sub></a><br /><a href="#content-MarieReRe" title="Content">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://twitter.com/MatthewTFoley"><img src="https://avatars.githubusercontent.com/u/3792749?v=4?s=100" width="100px;" alt="Matthew"/><br /><sub><b>Matthew</b></sub></a><br /><a href="#content-mtfoley" title="Content">🖋</a></td>
     </tr>
   </tbody>
   <tfoot>
