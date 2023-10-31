@@ -217,6 +217,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/74952593?v=4",
 			"profile": "https://github.com/klezi10",
 			"contributions": ["content"]
+		},
+		{
+			"login": "bogdaaamn",
+			"name": "Bogdan Covrig",
+			"avatar_url": "https://avatars.githubusercontent.com/u/22895284?v=4",
+			"profile": "https://github.com/bogdaaamn",
+			"contributions": ["content", "bug"]
 		}
 	],
 	"contributorsPerLine": 7,
