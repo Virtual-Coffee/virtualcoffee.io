@@ -224,6 +224,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/22895284?v=4",
 			"profile": "https://github.com/bogdaaamn",
 			"contributions": ["content", "bug"]
+		},
+		{
+			"login": "carmenkolohe",
+			"name": "Carmen",
+			"avatar_url": "https://avatars.githubusercontent.com/u/69023218?v=4",
+			"profile": "https://github.com/carmenkolohe",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
