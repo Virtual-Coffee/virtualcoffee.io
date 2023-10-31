@@ -56,6 +56,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/26224873?v=4",
 			"profile": "https://dominicduffin.uk/",
 			"contributions": ["content", "bug"]
+		},
+		{
+			"login": "ClJarvis",
+			"name": "Chris Jarvis",
+			"avatar_url": "https://avatars.githubusercontent.com/u/10702993?v=4",
+			"profile": "https://christopherleejarvis.com/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
