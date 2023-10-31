@@ -119,6 +119,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/2073648?v=4",
 			"profile": "https://www.linkedin.com/in/kldickenson/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "AlexVCS",
+			"name": "Alex Curtis-Slep",
+			"avatar_url": "https://avatars.githubusercontent.com/u/49458917?v=4",
+			"profile": "https://alexcurtisslep.com/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,

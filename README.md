@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -241,6 +241,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.yhaynes.com/"><img src="https://avatars.githubusercontent.com/u/12980710?v=4?s=100" width="100px;" alt="Yolanda Haynes"/><br /><sub><b>Yolanda Haynes</b></sub></a><br /><a href="#content-YolandaHaynes" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/kldickenson/"><img src="https://avatars.githubusercontent.com/u/2073648?v=4?s=100" width="100px;" alt="Karen Dickenson"/><br /><sub><b>Karen Dickenson</b></sub></a><br /><a href="#content-kldickenson" title="Content">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://alexcurtisslep.com/"><img src="https://avatars.githubusercontent.com/u/49458917?v=4?s=100" width="100px;" alt="Alex Curtis-Slep"/><br /><sub><b>Alex Curtis-Slep</b></sub></a><br /><a href="#content-AlexVCS" title="Content">🖋</a></td>
     </tr>
   </tbody>
   <tfoot>
