@@ -280,6 +280,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/25049536?v=4",
 			"profile": "https://github.com/surajrpanchal",
 			"contributions": ["content"]
+		},
+		{
+			"login": "vanessacor",
+			"name": "Vanessa ",
+			"avatar_url": "https://avatars.githubusercontent.com/u/46777560?v=4",
+			"profile": "https://vanessapoppe.me/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
