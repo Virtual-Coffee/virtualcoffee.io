@@ -70,6 +70,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/68071056?v=4",
 			"profile": "https://abbeyperini.dev/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "aishwarya-mali",
+			"name": "Aishwarya Mali",
+			"avatar_url": "https://avatars.githubusercontent.com/u/43086476?v=4",
+			"profile": "https://github.com/aishwarya-mali",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,

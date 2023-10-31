@@ -1,6 +1,6 @@
 <p align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a></div>
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # [![Virtual Coffee](public/assets/images/virtual-coffee-full-tagline.svg)](https://virtualcoffee.io)
@@ -232,6 +232,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://christopherleejarvis.com/"><img src="https://avatars.githubusercontent.com/u/10702993?v=4?s=100" width="100px;" alt="Chris Jarvis"/><br /><sub><b>Chris Jarvis</b></sub></a><br /><a href="#content-ClJarvis" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://abbeyperini.dev/"><img src="https://avatars.githubusercontent.com/u/68071056?v=4?s=100" width="100px;" alt="Abbey Perini"/><br /><sub><b>Abbey Perini</b></sub></a><br /><a href="#content-abbeyperini" title="Content">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aishwarya-mali"><img src="https://avatars.githubusercontent.com/u/43086476?v=4?s=100" width="100px;" alt="Aishwarya Mali"/><br /><sub><b>Aishwarya Mali</b></sub></a><br /><a href="#content-aishwarya-mali" title="Content">🖋</a></td>
     </tr>
   </tbody>
   <tfoot>
