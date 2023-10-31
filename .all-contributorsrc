@@ -140,6 +140,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/40549031?v=4",
 			"profile": "https://toddl.dev/",
 			"contributions": ["content", "a11y"]
+		},
+		{
+			"login": "secondl1ght",
+			"name": "secondl1ght",
+			"avatar_url": "https://avatars.githubusercontent.com/u/85003930?v=4",
+			"profile": "https://github.com/secondl1ght",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
