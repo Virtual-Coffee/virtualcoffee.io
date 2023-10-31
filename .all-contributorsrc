@@ -63,6 +63,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/10702993?v=4",
 			"profile": "https://christopherleejarvis.com/",
 			"contributions": ["content"]
+		},
+		{
+			"login": "abbeyperini",
+			"name": "Abbey Perini",
+			"avatar_url": "https://avatars.githubusercontent.com/u/68071056?v=4",
+			"profile": "https://abbeyperini.dev/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
