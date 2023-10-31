@@ -315,6 +315,13 @@
 			"avatar_url": "https://avatars.githubusercontent.com/u/42753366?v=4",
 			"profile": "https://github.com/crisbnp",
 			"contributions": ["content"]
+		},
+		{
+			"login": "danieljanderson",
+			"name": "Daniel Anderson",
+			"avatar_url": "https://avatars.githubusercontent.com/u/30938196?v=4",
+			"profile": "https://danieljanderson.github.io/",
+			"contributions": ["content"]
 		}
 	],
 	"contributorsPerLine": 7,
