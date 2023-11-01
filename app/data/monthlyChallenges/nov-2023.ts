@@ -27,9 +27,7 @@ async function fetchRecords() {
 		return result.map((r) => r.fields);
 	}
 
-	return [
-		
-	].map((r) => r.fields);
+	return [].map((r) => r.fields);
 }
 
 type PostMap = Record<
