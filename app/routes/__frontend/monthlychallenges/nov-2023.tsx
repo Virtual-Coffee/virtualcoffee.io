@@ -234,11 +234,8 @@ export default function Challenge() {
 
 			<p>
 				Since last year, we're embracing an <strong>official topic</strong> as
-				well as general topics. We added a{' '}
-				<Link to="/resources/developer-resources/developer-health">
-					Developer Health
-				</Link>{' '}
-				section to our site. We'd love to feature our members' blog posts on the
+				well as general topics. We hope to add a resource section to our site for Building Your Personal Brand.
+				We'd love to feature our members' blog posts on the
 				topic.
 			</p>
 
