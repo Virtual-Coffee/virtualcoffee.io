@@ -28,53 +28,7 @@ async function fetchRecords() {
 	}
 
 	return [
-		{
-			id: 'sdfsdfsd',
-			fields: {
-				Name: 'Dan Ott',
-				GitHubUsername: 'danieltott',
-				EntryTitle: `How I'm awesome`,
-				EntryUrl: `https://danott.dev`,
-				EntryDate: `10/31/2023`,
-				WordCount: 9000,
-				Topics: 'awesomeness,me',
-				ShortDescription:
-					'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin augue nisi, fermentum vitae, imperdiet a, auctor eu, mi. Nulla imperdiet molestie purus. Duis arcu dui, pretium in, molestie id, convallis eget, orci. Praesent eget purus. Nullam sed nunc. Etiam quis orci ac metus consectetuer consequat. Sed pulvinar aliquam sem. Vestibulum convallis. Pellentesque vestibulum dapibus est. Morbi iaculis. Morbi molestie molestie libero. Ut metus. Phasellus pulvinar. Aenean rutrum tristique neque. Morbi vulputate. Curabitur pretium, arcu a accumsan pretium, augue mi ullamcorper ligula, at tristique ligula purus quis mi. Etiam blandit arcu et lorem. Nam ligula. Aliquam nisi sem, euismod id, pharetra vitae, ullamcorper et, pede.',
-				created_at: `10/31/2023 11:14am`,
-			},
-			createdTime: '2021-11-01T16:19:16.000Z',
-		},
-		{
-			id: 'sdfsdfsd',
-			fields: {
-				Name: 'Dan Ott',
-				GitHubUsername: 'danieltott',
-				EntryTitle: `I'm still awesome`,
-				EntryUrl: `https://danott.dev`,
-				EntryDate: `10/30/2023`,
-				WordCount: 10834,
-				Topics: 'dan,ott',
-				ShortDescription:
-					'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin augue nisi, fermentum vitae, imperdiet a, auctor eu, mi. Nulla imperdiet molestie purus. Duis arcu dui, pretium in, molestie id, convallis eget, orci. Praesent eget purus. Nullam sed nunc. Etiam quis orci ac metus consectetuer consequat. Sed pulvinar aliquam sem. Vestibulum convallis. Pellentesque vestibulum dapibus est. Morbi iaculis. Morbi molestie molestie libero. Ut metus. Phasellus pulvinar. Aenean rutrum tristique neque. Morbi vulputate. Curabitur pretium, arcu a accumsan pretium, augue mi ullamcorper ligula, at tristique ligula purus quis mi. Etiam blandit arcu et lorem. Nam ligula. Aliquam nisi sem, euismod id, pharetra vitae, ullamcorper et, pede.',
-				created_at: `10/31/2023 11:25am`,
-			},
-			createdTime: '2021-11-01T16:19:16.000Z',
-		},
-		{
-			id: 'sdfsdfsd',
-			fields: {
-				Name: 'Someone else',
-				GitHubUsername: 'someone',
-				EntryTitle: `Another blog`,
-				EntryUrl: `https://virtualcoffee.io`,
-				EntryDate: `10/20/2023`,
-				WordCount: 234,
-				Topics: `something`,
-				ShortDescription: `Blah blah blah dsfksjd kjsd s sdfsdf.`,
-				created_at: `10/31/2023 11:26am`,
-			},
-			createdTime: '2021-11-01T16:19:16.000Z',
-		},
+		
 	].map((r) => r.fields);
 }
 
