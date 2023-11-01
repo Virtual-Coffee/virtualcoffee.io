@@ -122,7 +122,7 @@ const challengeList: Challenge[] = [
 					goal while posting on our own blogs.
 				</p>
 				<p>
-					Learn more about this challenge in <a href="">this blog post</a>.
+					Learn more about this challenge in <a href="https://dev.to/virtualcoffee/blogging-2023-monthly-challenge-3kng">this blog post</a>.
 				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
