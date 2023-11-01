@@ -234,9 +234,9 @@ export default function Challenge() {
 
 			<p>
 				Since last year, we're embracing an <strong>official topic</strong> as
-				well as general topics. We hope to add a resource section to our site for Building Your Personal Brand.
-				We'd love to feature our members' blog posts on the
-				topic.
+				well as general topics. We hope to add a resource section to our site
+				for Building Your Personal Brand. We'd love to feature our members' blog
+				posts on the topic.
 			</p>
 
 			<h3>What if I'm not confident about my writing?</h3>
