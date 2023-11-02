@@ -436,19 +436,28 @@ export class CmsActions {
 		{
 			authorId,
 			orderBy,
+			year,
 		}: {
 			authorId?: number | string;
 			orderBy?: string;
+			year?: number;
 		} = {
 			authorId: undefined,
 			orderBy: undefined,
+			year: DateTime.now().year,
 		},
 	) {
-		const query = `query getNovemberChallengeEntries($authorId: [QueryArgument], $orderBy:String = "dateCreated DESC") {
+		if (!year) {
+			year = DateTime.now().year;
+		}
+
+		const query = `query getNovemberChallengeEntries($before:String,$after:String, $authorId: [QueryArgument], $orderBy: String = "dateCreated DESC") {
 			entries(
 				section: "mcWritingChallengeSubmissions"
 				authorId: $authorId
 				orderBy: $orderBy
+				before: $before
+				after: $after
 			) {
 				... on mcWritingChallengeSubmissions_default_Entry {
 					id
@@ -457,7 +466,7 @@ export class CmsActions {
 					urlValue
 					wordCount
 					topics
-					date @formatDateTime (format: "Y-m-d")
+					date @formatDateTime(format: "Y-m-d")
 					author {
 						... on User {
 							id
@@ -473,9 +482,12 @@ export class CmsActions {
 
 		const response = await this.client.request<{
 			entries: NovemberChallengeEntry[];
-		}>(query, { authorId, orderBy });
-
-		console.log(response);
+		}>(query, {
+			authorId,
+			orderBy,
+			before: `${year + 1}-01-01`,
+			after: `${year}-01-01`,
+		});
 
 		if (!response?.entries) {
 			throw new CmsError(
