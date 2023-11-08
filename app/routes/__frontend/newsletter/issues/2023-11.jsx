@@ -66,20 +66,22 @@ export default function Issue() {
 				contributed, or mentored, or maintained or just tried to provide
 				support. We're super proud of all of you.
 			</p>
-			<p>
-				<strong>
-					A huge thank you to{' '}
-					<a href="https://clerk.com/?utm_source=sponsorship&utm_medium=event&utm_campaign=virtual-coffee">
-						Clerk
+			<LeadText>
+				<p>
+					<strong>
+						A huge thank you to{' '}
+						<a href="https://clerk.com/?utm_source=sponsorship&utm_medium=event&utm_campaign=virtual-coffee">
+							Clerk
+						</a>{' '}
+						for sponsoring the Virtual Coffee Hacktoberfest Initiative this year
+					</strong>
+					! Additional gratitude to{' '}
+					<a href="https://www.levelupfinancialplanning.com/?vc">
+						LevelUp Financial Planning
 					</a>{' '}
-					for sponsoring the Virtual Coffee Hacktoberfest Initiative this year
-				</strong>
-				! Additional gratitude to{' '}
-				<a href="https://www.levelupfinancialplanning.com/?vc">
-					LevelUp Financial Planning
-				</a>{' '}
-				for their support as well!
-			</p>
+					for their support as well!
+				</p>
+			</LeadText>
 
 			<h3 className="mt-4">November: Nanowrimo time!</h3>
 			<p>
