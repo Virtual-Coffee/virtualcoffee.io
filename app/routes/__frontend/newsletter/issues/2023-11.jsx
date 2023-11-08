@@ -169,9 +169,9 @@ export default function Issue() {
 				</li>
 			</ul>
 
-			<p>
+			<p className="mt-4">
 				<strong>Note:</strong> These are the currently scheduled times for these
-				events at the time of this publication. Please check the official VC
+				events at the time of this publication. Please check the official VC{' '}
 				<code>#announcements</code> Slack channel, or other noted channels, for
 				any updates and links to event rooms. For the full list of events, check
 				out <Link to="/events">our events page</Link>.
