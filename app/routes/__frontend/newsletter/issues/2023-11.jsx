@@ -177,7 +177,7 @@ export default function Issue() {
 
 			<hr />
 
-			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
+			<h3 className="mb-3">Volunteering at VC</h3>
 			<p>
 				We're very excited to continue open membership with the support of our
 				active volunteers! All our active volunteers have an invite to send out
