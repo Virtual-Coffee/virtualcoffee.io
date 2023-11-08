@@ -370,13 +370,15 @@ export default function Issue() {
 			<hr />
 
 			<LeadText>
-				Thanks to this issue's sponsor,{' '}
-				<a href="https://www.levelupfinancialplanning.com/?vc">
-					LevelUP Financial Planning
-				</a>
-				, who understands the importance of finding balance between having an
-				awesome life today, and being confident and excited about your future
-				possibilities.
+				<p>
+					Thanks to this issue's sponsor,{' '}
+					<a href="https://www.levelupfinancialplanning.com/?vc">
+						LevelUP Financial Planning
+					</a>
+					, who understands the importance of finding balance between having an
+					awesome life today, and being confident and excited about your future
+					possibilities.
+				</p>
 			</LeadText>
 		</>
 	);
