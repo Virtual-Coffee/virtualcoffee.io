@@ -19,8 +19,10 @@ export default function Issue() {
 		<>
 			<h2>Hey budding writers!</h2>
 			<LeadText>
-				October was Hacktoberfest and it was amazing, but now we're switching
-				gears and putting our writer caps on! It's Nanowrimo!
+				<p>
+					October was Hacktoberfest and it was amazing, but now we're switching
+					gears and putting our writer caps on! It's Nanowrimo!
+				</p>
 			</LeadText>
 
 			<hr />
@@ -53,7 +55,6 @@ export default function Issue() {
 			<hr />
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
-
 			<h3 className="font-italic">October Recap</h3>
 			<p>
 				<strong>💡Monthly Theme & Challenge: Hacktoberfest!</strong>
@@ -80,7 +81,7 @@ export default function Issue() {
 				for their support as well!
 			</p>
 
-			<h3 className="font-italic">November: Nanowrimo time!</h3>
+			<h3 className="mt-4">November: Nanowrimo time!</h3>
 			<p>
 				<strong>💡Monthly Theme & Challenge: Blogging Challenge!</strong>
 			</p>
@@ -101,7 +102,7 @@ export default function Issue() {
 				<Link to="/monthlychallenges/nov-2023">here</Link>!
 			</p>
 
-			<h4 className="mt-4">🎙️Podcasts</h4>
+			<h3 className="mt-4">🎙️Podcasts</h3>
 			<p className="font-italic">Season 9 is out!</p>
 			<ul>
 				<li>
@@ -116,7 +117,7 @@ export default function Issue() {
 				</li>
 			</ul>
 
-			<h4 className="mt-4">☕🪑 Coffee Table Events</h4>
+			<h3 className="mt-4">☕🪑 Coffee Table Events</h3>
 			<ul>
 				<li>Tech Interview Study Group (Mondays at 4:00 PM ET)</li>
 				<li>
@@ -156,7 +157,7 @@ export default function Issue() {
 				</li>
 			</ul>
 
-			<h4 className="mt-4">☕ Official Virtual Coffee Events</h4>
+			<h3 className="mt-4">☕ Official Virtual Coffee Events</h3>
 			<ul>
 				<li>
 					Virtual Coffee (Tuesdays at 9:00 AM ET | Thursdays at 12:00 PM ET)
@@ -174,6 +175,8 @@ export default function Issue() {
 				out <Link to="/events">our events page</Link>.
 			</p>
 
+			<hr />
+
 			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
 			<p>
 				We're very excited to continue open membership with the support of our
@@ -188,7 +191,7 @@ export default function Issue() {
 
 			<hr />
 
-			<h2>Member Content Highlights</h2>
+			<h2>✨ Member Content Highlights</h2>
 			<p>
 				<em>Some of our member contents we loved in October!</em>
 			</p>
@@ -226,7 +229,7 @@ export default function Issue() {
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h5 className="card-title text-primary font-italic">Member Wins</h5>
+					<h2 className="card-title text-primary font-italic">Member Wins</h2>
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">
@@ -296,7 +299,7 @@ export default function Issue() {
 				</li>
 			</ul>
 
-			<h3>Open Source Projects</h3>
+			<h2>Open Source Projects</h2>
 			<ul>
 				<li>
 					<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues">
@@ -361,7 +364,9 @@ export default function Issue() {
 					with Elm and Lamdera.
 				</li>
 			</ul>
+
 			<hr />
+
 			<LeadText>
 				Thanks to this issue's sponsor,{' '}
 				<a href="https://www.levelupfinancialplanning.com/?vc">
