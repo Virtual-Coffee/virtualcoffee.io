@@ -55,7 +55,7 @@ export default function Issue() {
 			<hr />
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
-			<h3 className="font-italic">October Recap</h3>
+			<h3>October Recap</h3>
 			<p>
 				<strong>💡Monthly Theme & Challenge: Hacktoberfest!</strong>
 			</p>
