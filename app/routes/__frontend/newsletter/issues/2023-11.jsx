@@ -324,7 +324,7 @@ export default function Issue() {
 				<li>
 					<a href="https://github.com/open-sauced/docs">OpenSauced's Docs</a> —
 					A static rendered documentation for open source developer onboarding
-					to OpenSauced.
+					to OpenSauced's projects.
 				</li>
 				<li>
 					<a href="https://github.com/open-sauced/intro/">
