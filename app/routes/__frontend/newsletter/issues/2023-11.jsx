@@ -177,7 +177,7 @@ export default function Issue() {
 
 			<hr />
 
-			<h3 className="mb-3">Volunteering at VC</h3>
+			<h3 className="mb-3">🤝 Volunteering at VC</h3>
 			<p>
 				We're very excited to continue open membership with the support of our
 				active volunteers! All our active volunteers have an invite to send out
@@ -229,7 +229,9 @@ export default function Issue() {
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h2 className="card-title text-primary font-italic">Member Wins</h2>
+					<h2 className="card-title text-primary font-italic">
+						🏆 Member Wins
+					</h2>
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">
@@ -271,7 +273,7 @@ export default function Issue() {
 				</div>
 			</div>
 
-			<h2>What our members are up to</h2>
+			<h2>👀 What our members are up to</h2>
 			<ul>
 				<li>
 					Chris J. does a{' '}
@@ -299,7 +301,7 @@ export default function Issue() {
 				</li>
 			</ul>
 
-			<h2>Open Source Projects</h2>
+			<h2>💻 Open Source Projects</h2>
 			<ul>
 				<li>
 					<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues">
