@@ -231,9 +231,7 @@ export default function Issue() {
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h2 className="card-title text-primary font-italic">
-						🏆 Member Wins
-					</h2>
+					<h2 className="card-title text-primary">🏆 Member Wins</h2>
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">
