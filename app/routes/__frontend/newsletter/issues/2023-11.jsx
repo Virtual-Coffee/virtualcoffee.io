@@ -365,6 +365,25 @@ export default function Issue() {
 			</ul>
 
 			<hr />
+			<div className="text-center">
+				<a href="https://www.levelupfinancialplanning.com/?vc">
+					<img
+						src="https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=80"
+						alt="Sponsored by LevelUP Financial Planning"
+						width={720}
+						height={557}
+						loading="lazy"
+						decoding="async"
+						sizes="(min-width: 768px) 400, calc(100vw - 60px)"
+						srcSet={`
+              https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=80   80w,
+              https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=160 160w,
+              https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=240 240w,
+              https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=480 480w,
+              https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=720 720w`}
+					/>
+				</a>
+			</div>
 
 			<LeadText>
 				<p>
