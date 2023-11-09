@@ -69,11 +69,8 @@ export default function Issue() {
 			<LeadText>
 				<p>
 					<strong>
-						A huge thank you to{' '}
-						<a href="https://clerk.com/?utm_source=sponsorship&utm_medium=event&utm_campaign=virtual-coffee">
-							Clerk
-						</a>{' '}
-						for sponsoring the Virtual Coffee Hacktoberfest Initiative this year
+						A huge thank you to <a href="https://dub.sh/PWT19Ra">Clerk</a> for
+						sponsoring the Virtual Coffee Hacktoberfest Initiative this year
 					</strong>
 					! Additional gratitude to{' '}
 					<a href="https://www.levelupfinancialplanning.com/?vc">
