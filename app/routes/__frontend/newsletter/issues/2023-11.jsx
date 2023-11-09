@@ -72,7 +72,10 @@ export default function Issue() {
 						A huge thank you to <a href="https://dub.sh/PWT19Ra">Clerk</a> for
 						sponsoring the Virtual Coffee Hacktoberfest Initiative this year
 					</strong>
-					! Additional gratitude to{' '}
+					!
+				</p>
+				<p>
+					Additional gratitude to{' '}
 					<a href="https://www.levelupfinancialplanning.com/?vc">
 						LevelUp Financial Planning
 					</a>{' '}
