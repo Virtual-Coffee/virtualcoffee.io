@@ -58,7 +58,7 @@ const vchiContributors = [
 	'abuna1985',
 	'zo0o0ot',
 ];
-const vchiMentors = [
+const vchiMentors: string[] = [
 	'BekahHW',
 	'shiftyp',
 	'michaeljolley',
@@ -75,7 +75,7 @@ const vchiMentors = [
 	'derekjj',
 ];
 
-const vchiMaintainers = [
+const vchiMaintainers: string[] = [
 	'BekahHW',
 	'michaeljolley',
 	'jdwilkin4',
@@ -208,86 +208,107 @@ async function getContributions(data: string[]): Promise<any> {
 		// 2022-10-27T18:44:05Z
 		// 2022-10-17T13:30:31Z
 
-		const response = await Promise.all(
-			data.map(async (login): Promise<UserObject | UserErrorObject> => {
-				try {
-					const { user } = await graphQLClient.request<UserResponse>(query, {
+		const response: UserObject[] = [];
+		let cursor: string | undefined;
+		for (let i = 0; i < data.length; i++) {
+			const login = data[i];
+
+			try {
+				const { user } = await graphQLClient.request<UserResponse>(query, {
+					login,
+				});
+
+				cursor = user.pullRequests.pageInfo.endCursor;
+
+				let prNodes = user.pullRequests.nodes;
+
+				while (
+					prNodes.length === 20 &&
+					new Date(prNodes[prNodes.length - 1].createdAt).getMonth() >= 9
+				) {
+					console.log('fetching another for ', login);
+					let response = await graphQLClient.request<UserResponse>(query, {
 						login,
+						cursor,
 					});
 
-					const pullRequests = user.pullRequests.nodes
-						.filter((pr) => {
-							const created = new Date(pr.createdAt);
+					cursor = response.user.pullRequests.pageInfo.endCursor;
 
-							// Only include PRs created in October 2023
-							if (
-								created < new Date('2023-10-01T00:00:00Z') ||
-								created > new Date('2023-10-31T23:59:59Z')
-							) {
-								return false;
-							}
-
-							// Only include PRs that are merged or have hacktoberfest-accepted label
-							if (
-								pr.state === 'MERGED' &&
-								pr.baseRepository.repositoryTopics.nodes.some(
-									(topic) => topic.topic.name === 'hacktoberfest',
-								)
-							) {
-								return true;
-							} else if (
-								pr.labels.nodes.find(
-									(label) =>
-										label.name.toLowerCase() === 'hacktoberfest-accepted',
-								)
-							) {
-								return true;
-							}
-
-							return false;
-						})
-						.map(({ labels: _, ...pr }) => {
-							return pr;
-						});
-
-					if (pullRequests.length >= 20) {
-						console.log('Need to fetch more for ' + login);
-					}
-
-					const uniqueRepos = new Set(
-						pullRequests.map((pr) => pr.baseRepository.nameWithOwner),
-					);
-					return {
-						login,
-						name: user.name,
-						pullRequests,
-						stats: {
-							totalPullRequests: pullRequests.length,
-							totalAdditions: pullRequests.reduce(
-								(total, pr) => total + pr.additions,
-								0,
-							),
-							totalDeletions: pullRequests.reduce(
-								(total, pr) => total + pr.deletions,
-								0,
-							),
-							totalChangedFiles: pullRequests.reduce(
-								(total, pr) => total + pr.changedFiles,
-								0,
-							),
-							totalUniqueRepos: uniqueRepos.size,
-							uniqueRepos: Array.from(uniqueRepos),
-						},
-					};
-				} catch (error) {
-					console.log(error);
-					if (error instanceof Error) {
-						return { login, error: error.message };
-					}
-					return { login, error: 'Unknown error' };
+					prNodes = [...prNodes, ...response.user.pullRequests.nodes];
 				}
-			}),
-		);
+
+				cursor = undefined;
+
+				const pullRequests = prNodes
+					.filter((pr) => {
+						const created = new Date(pr.createdAt);
+
+						console.log(
+							pr.title,
+							pr.createdAt,
+							pr.baseRepository.nameWithOwner,
+						);
+
+						// Only include PRs created in October 2023
+						if (
+							created < new Date('2023-10-01T00:00:00Z') ||
+							created > new Date('2023-11-01T23:59:59Z')
+						) {
+							return false;
+						}
+
+						// Only include PRs that are merged or have hacktoberfest-accepted label
+						if (
+							pr.state === 'MERGED' &&
+							pr.baseRepository.repositoryTopics.nodes.some(
+								(topic) => topic.topic.name === 'hacktoberfest',
+							)
+						) {
+							return true;
+						} else if (
+							pr.labels.nodes.find(
+								(label) =>
+									label.name.toLowerCase() === 'hacktoberfest-accepted',
+							)
+						) {
+							return true;
+						}
+
+						return false;
+					})
+					.map(({ labels: _, ...pr }) => {
+						return pr;
+					});
+
+				const uniqueRepos = new Set(
+					pullRequests.map((pr) => pr.baseRepository.nameWithOwner),
+				);
+				response.push({
+					login,
+					name: user.name,
+					pullRequests,
+					stats: {
+						totalPullRequests: pullRequests.length,
+						totalAdditions: pullRequests.reduce(
+							(total, pr) => total + pr.additions,
+							0,
+						),
+						totalDeletions: pullRequests.reduce(
+							(total, pr) => total + pr.deletions,
+							0,
+						),
+						totalChangedFiles: pullRequests.reduce(
+							(total, pr) => total + pr.changedFiles,
+							0,
+						),
+						totalUniqueRepos: uniqueRepos.size,
+						uniqueRepos: Array.from(uniqueRepos),
+					},
+				});
+			} catch (error) {
+				console.log(error);
+			}
+		}
 
 		function isNonError(
 			user: UserObject | UserErrorObject,
