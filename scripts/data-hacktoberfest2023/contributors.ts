@@ -114,7 +114,7 @@ async function getContributions(data: string[]): Promise<any> {
 					login
 					name
 					pullRequests(
-						first: 20
+						first: 25
 						orderBy: { field: CREATED_AT, direction: DESC }
 						after: $cursor
 					) {
@@ -223,7 +223,7 @@ async function getContributions(data: string[]): Promise<any> {
 				let prNodes = user.pullRequests.nodes;
 
 				while (
-					prNodes.length === 20 &&
+					prNodes.length === 25 &&
 					new Date(prNodes[prNodes.length - 1].createdAt).getMonth() >= 9
 				) {
 					console.log('fetching another for ', login);
@@ -242,12 +242,6 @@ async function getContributions(data: string[]): Promise<any> {
 				const pullRequests = prNodes
 					.filter((pr) => {
 						const created = new Date(pr.createdAt);
-
-						console.log(
-							pr.title,
-							pr.createdAt,
-							pr.baseRepository.nameWithOwner,
-						);
 
 						// Only include PRs created in October 2023
 						if (
@@ -345,7 +339,9 @@ async function getContributions(data: string[]): Promise<any> {
 		);
 
 		const results = {
-			contributions,
+			contributions: contributions.sort((a, b) => {
+				return a.login.toLowerCase().localeCompare(b.login.toLowerCase());
+			}),
 			stats: {
 				totalContributors: contributorsWithPRs.length,
 				totalPullRequests: contributorsWithPRs.reduce(
@@ -364,7 +360,9 @@ async function getContributions(data: string[]): Promise<any> {
 					(total, contributor) => total + contributor.stats.totalChangedFiles,
 					0,
 				),
-				uniqueRepos,
+				uniqueRepos: uniqueRepos.sort((a, b) => {
+					return a.toLowerCase().localeCompare(b.toLowerCase());
+				}),
 				totalUniqueRepos: uniqueRepos.length,
 			},
 		};
