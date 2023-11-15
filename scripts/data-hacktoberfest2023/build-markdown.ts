@@ -9,6 +9,9 @@ import contributors from '../../app/_generatedData/hacktoberfest2023/contributor
 
 const markdown = contributors.contributions
 	.filter((contribution) => contribution.stats.totalPullRequests > 0)
+	.sort((a, b) => {
+		return b.stats.totalPullRequests - a.stats.totalPullRequests;
+	})
 	.map((contribution) => {
 		let str = `
 ### [${contribution.name || contribution.login}](https://github.com/${
