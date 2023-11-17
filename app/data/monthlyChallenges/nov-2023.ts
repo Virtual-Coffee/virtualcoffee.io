@@ -108,10 +108,12 @@ export async function getChallengeData() {
 				count: row.WordCount,
 			};
 
-			if (!obj[row.GitHubUsername]) {
+			const ukey = row.GitHubUsername.toLowerCase();
+
+			if (!obj[ukey]) {
 				return {
 					...obj,
-					[row.GitHubUsername]: {
+					[ukey]: {
 						name: row.Name,
 						slug: row.GitHubUsername,
 						posts: [post],
@@ -120,9 +122,9 @@ export async function getChallengeData() {
 			} else {
 				return {
 					...obj,
-					[row.GitHubUsername]: {
-						...obj[row.GitHubUsername],
-						posts: [...obj[row.GitHubUsername].posts, post],
+					[ukey]: {
+						...obj[ukey],
+						posts: [...obj[ukey].posts, post],
 					},
 				};
 			}
