@@ -101,6 +101,13 @@ const challengeList: Challenge[] = [
 					code to improve other hobbies and outlets.
 				</p>
 				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-creative-community-monthly-challenge-44d5">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
 					To view all of the details of this year's challenge,{' '}
 					<Link to="/monthlychallenges/dec-2023">
 						check out the December 2023 challenge page
