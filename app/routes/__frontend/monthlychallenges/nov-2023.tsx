@@ -117,8 +117,9 @@ export default function Challenge() {
 							className="progress-bar progress-bar progress-bar-striped"
 							role="progressbar"
 							style={{
-								width: `${(totals.totalCount / (currentGoal?.value || 1)) * 100
-									}%`,
+								width: `${
+									(totals.totalCount / (currentGoal?.value || 1)) * 100
+								}%`,
 							}}
 							aria-valuenow={totals.totalCount}
 							aria-valuemin={0}
