@@ -56,6 +56,11 @@ export default function Challenge() {
 
 	return (
 		<>
+			<div className="alert alert-success">
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link to="/monthlychallenges/dec-2023">next challenge</Link>!
+			</div>
+
 			<h1>
 				<small>Monthly Challenge for November 2023:</small> Let's write 100k
 				words together!
@@ -112,9 +117,8 @@ export default function Challenge() {
 							className="progress-bar progress-bar progress-bar-striped"
 							role="progressbar"
 							style={{
-								width: `${
-									(totals.totalCount / (currentGoal?.value || 1)) * 100
-								}%`,
+								width: `${(totals.totalCount / (currentGoal?.value || 1)) * 100
+									}%`,
 							}}
 							aria-valuenow={totals.totalCount}
 							aria-valuemin={0}
