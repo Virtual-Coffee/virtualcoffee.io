@@ -59,7 +59,7 @@ export default function Challenge() {
 			<h2>How to Participate</h2>
 			<ul>
 				<li>
-					Pick one or two non-coding activities you want to focus on and talk
+					Pick one or two creative activities you want to focus on and talk
 					about this month.
 				</li>
 				<li>
@@ -86,9 +86,7 @@ export default function Challenge() {
 					We'll have opportunities for folks to check in and give updates on how
 					their activities are progressing.
 				</li>
-				<li>
-					Keep an eye out for the <code>#WIPWednesday</code> thread!
-				</li>
+				
 			</ul>
 		</>
 	);
