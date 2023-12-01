@@ -71,8 +71,8 @@ export default function Challenge() {
 					on social media.
 				</li>
 				<li>
-					Tweets, blog posts, and pictures are all welcome as long as they abide by
-					our{' '}
+					Tweets, blog posts, and pictures are all welcome as long as they abide
+					by our{' '}
 					<a href="https://virtualcoffee.io/code-of-conduct/">
 						Code of Conduct
 					</a>
@@ -86,7 +86,6 @@ export default function Challenge() {
 					We'll have opportunities for folks to check in and give updates on how
 					their activities are progressing.
 				</li>
-				
 			</ul>
 		</>
 	);
