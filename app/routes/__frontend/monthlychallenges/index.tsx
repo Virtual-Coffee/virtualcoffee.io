@@ -85,19 +85,36 @@ const challengeList: Challenge[] = [
 	},
 
 	{
+		current: true,
 		title: 'Creative Community Challenge',
 		subtitle: `Let's make some space for the other parts of ourselves.`,
 		description: (
-			<p>
-				Devs are more than just the code we write. This challenge is all about
-				embracing self-expression. Give back to yourself by indulging in
-				something just for fun. Share the art, music, poetry, sports, games, or
-				other hobbies that spark your joy. We spend so much time grinding away
-				on understanding things in the tech space. Let's make some space for the
-				other parts of ourselves. In this challenge, we encourage folks to spend
-				time working on things that aren't necessarily code-specific or using
-				code to improve other hobbies and outlets.
-			</p>
+			<>
+				<p>
+					Devs are more than just the code we write. This challenge is all about
+					embracing self-expression. Give back to yourself by indulging in
+					something just for fun. Share the art, music, poetry, sports, games, or
+					other hobbies that spark your joy. We spend so much time grinding away
+					on understanding things in the tech space. Let's make some space for the
+					other parts of ourselves. In this challenge, we encourage folks to spend
+					time working on things that aren't necessarily code-specific or using
+					code to improve other hobbies and outlets.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-creative-community-monthly-challenge-44d5">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/dec-2023">
+						check out the December 2023 challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 		links: [
 			{
@@ -111,7 +128,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Blogging Challenge',
 		subtitle: `A Community Challenge to hit a word count goal for all our tech blogs.`,
 		description: (

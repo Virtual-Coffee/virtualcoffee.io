@@ -56,6 +56,11 @@ export default function Challenge() {
 
 	return (
 		<>
+			<div className="alert alert-success">
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link to="/monthlychallenges/dec-2023">next challenge</Link>!
+			</div>
+
 			<h1>
 				<small>Monthly Challenge for November 2023:</small> Let's write 100k
 				words together!
