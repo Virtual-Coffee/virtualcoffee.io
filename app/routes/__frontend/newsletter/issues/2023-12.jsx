@@ -161,9 +161,9 @@ export default function Issue() {
 				out <Link to="/events">our events page</Link>.
 			</p>
 
-			<h3>🆕 New Channel Alert</h3>
+			<h3>🆕 New Channels Alert</h3>
 			<p>
-				We've added three new private channels — <code>Senior+</code>,
+				We've added three new private channels — <code>Senior+</code>,{' '}
 				<code>Mid-level</code>, <code>Early-career</code> — to our Slack for
 				peer-to-peer conversation, because we know that it's good to be able to
 				support and nurture conversations specific to your career level. If
@@ -173,7 +173,7 @@ export default function Issue() {
 
 			<h3>📝 Survey</h3>
 			<p>
-				The end of the Survey will be ready soon. We ask you take a couple of
+				The end of the year survey will be ready soon. We ask you take a couple of
 				minutes to fill it out so we can continue to improve this community and
 				make it a space that provides value to our members.
 			</p>
@@ -248,7 +248,7 @@ export default function Issue() {
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h2 className="card-title text-primary">🏆 Member Wins</h2>
+					<h2 className="card-title text-primary mb-3">🏆 Member Wins</h2>
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">"My blog reached 10K+ views!"</p>
