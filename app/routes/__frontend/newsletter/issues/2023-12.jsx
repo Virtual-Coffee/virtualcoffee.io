@@ -173,9 +173,9 @@ export default function Issue() {
 
 			<h3>📝 Survey</h3>
 			<p>
-				The end of the year survey will be ready soon. We ask you take a couple of
-				minutes to fill it out so we can continue to improve this community and
-				make it a space that provides value to our members.
+				The end of the year survey will be ready soon. We ask you take a couple
+				of minutes to fill it out so we can continue to improve this community
+				and make it a space that provides value to our members.
 			</p>
 
 			<hr />
