@@ -55,7 +55,7 @@ const teams = {
 		'sadiejay',
 	],
 
-	'Monthly Challenge Team Lead': ['aurelieverrot', 'Andrew-Bush'],
+	'Monthly Challenge Team Lead': ['adiati98', 'dominicduffin1'],
 
 	'Documentation Team Lead': ['adiati98'],
 	'VC Advisor': [
@@ -85,7 +85,7 @@ const teams = {
 
 	'VC MC': ['meg-gutshall', 'SuzeShardlow', 'saramccombs'],
 
-	'Monthly Challenge Team': ['dominicduffin1', 'redapy', 'lsparlin'],
+	'Monthly Challenge Team': ['redapy', 'lsparlin'],
 } as const;
 
 export default teams;
