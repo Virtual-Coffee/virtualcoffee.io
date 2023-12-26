@@ -32,18 +32,18 @@ export default function Challenge() {
 				<small>Monthly Challenge for January, 2024:</small> New Year, New Goals!
 			</h1>
 
-			<p className="lead mt-3">Happy New Year, everyone! 🎉</p>
-
-			<p className="lead">
+			<p className="lead mt-3">
 				The new year is the perfect time to set your new goals. Whether learning
 				new dev-related things, preparing yourself to get a new job, making new
-				habits to be a better developer or anything you work towards in 2024.
+				habits to be a better developer or anything you work towards this year.
 				And this month, we're here to support you!
 			</p>
 			<p className="lead">
 				During this month, we'll work on setting up your goals for the year and
 				break them into achievable goals for each month.
 			</p>
+
+			<hr />
 
 			<h2>Theme</h2>
 			<p>New year, new goals!</p>
@@ -54,13 +54,13 @@ export default function Challenge() {
 				year by the end of the month.
 			</p>
 
-			<h2>Who can Participate?</h2>
+			<h2>Who can participate?</h2>
 			<p>
 				Virtual Coffee's goal is to support all developers, no matter where they
 				are in their coding journey. We encourage all members to participate.
 			</p>
 
-			<h2>How it Works</h2>
+			<h2>How it works</h2>
 			<h3>Set your goal and create your plans</h3>
 			<ul>
 				<li>
@@ -75,12 +75,16 @@ export default function Challenge() {
 					to do each month to reach your big goal?
 				</li>
 			</ul>
-			<h3>What if I need help and want to hold myself accountable?</h3>
-			<h4>Coffee Table Groups</h4>
+			<h3 className="mb-3">
+				What if I need help and want to hold myself accountable?
+			</h3>
+			<p>
+				<strong>Coffee Table Groups</strong>
+			</p>
 			<p>
 				If you need help setting your goal(s) or want to hold yourself
-				accountable by working on your plans with the community over Zoom, we're
-				here for you!
+				accountable by working on them with the community over Zoom, we're here
+				for you!
 			</p>
 			<ul>
 				<li>
@@ -88,7 +92,7 @@ export default function Challenge() {
 					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#accountabilibuddies">
 						Accountabilibuddies
 					</Link>{' '}
-					to work on your plans with other members or ask for help and ideas.
+					to set goals with other members or ask for help and ideas.
 				</li>
 				<li>
 					Is your goal to prepare for that technical interview and get that
@@ -98,10 +102,10 @@ export default function Challenge() {
 					</Link>{' '}
 					and{' '}
 					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#the-pack-hunt">
-						Pack Hunt
+						The Pack Hunt
 					</Link>{' '}
-					to work on your resume, prepare for a technical interview, and go job
-					hunting!
+					to plan on working on your resume, preparing for a technical
+					interview, and going job hunting!
 				</li>
 			</ul>
 			<p>
@@ -109,10 +113,12 @@ export default function Challenge() {
 				of each Coffee Table Group and <code>#vc-events</code> channel to join
 				the event.
 			</p>
-			<h4>Slack</h4>
+			<p>
+				<strong>Slack</strong>
+			</p>
 			<ul>
 				<li>
-					We encourage you to post your ideas, questions, and fears in the
+					We encourage you to post your ideas, questions, and progress in the{' '}
 					<code>#monthly-challenge</code> channel in Slack. We're all learning
 					and growing together!
 				</li>
@@ -126,7 +132,7 @@ export default function Challenge() {
 					you.
 				</li>
 			</ul>
-			<p>Remember, we're always here to help ❤️</p>
+			<p>Remember, we're always here to help. ❤️</p>
 
 			<h2>Tools and Resources</h2>
 			<ul>

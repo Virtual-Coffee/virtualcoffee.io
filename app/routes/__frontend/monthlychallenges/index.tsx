@@ -471,7 +471,7 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					In this challenge, we encourage you to setting up the goals for the year and break them into achievable goals for each month. Our Coffee Table Groups — Accountabilibuddies, Tech Interview Study Group, and Pack Hunt — are participating in this challenge and ready to support you!
+					In this challenge, we encourage you to setting up the goals for the year and break them into achievable goals for each month. Our Coffee Table Groups — Accountabilibuddies, Tech Interview Study Group, and The Pack Hunt — are participating in this challenge and ready to support you!
 				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
