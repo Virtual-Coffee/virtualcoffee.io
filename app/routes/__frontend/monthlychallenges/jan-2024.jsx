@@ -1,5 +1,6 @@
 import { json } from '@remix-run/node';
 import { createMetaData } from '~/util/createMetaData.server';
+import { Link } from '@remix-run/react';
 
 export const handle = {
 	listTitle: 'January 2024: New Year, New Goals!',
@@ -84,21 +85,21 @@ export default function Challenge() {
 			<ul>
 				<li>
 					Join the{' '}
-					<a href="https://virtualcoffee.io/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#accountabilibuddies">
+					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#accountabilibuddies">
 						Accountabilibuddies
-					</a>{' '}
+					</Link>{' '}
 					to work on your plans with other members or ask for help and ideas.
 				</li>
 				<li>
 					Is your goal to prepare for that technical interview and get that
 					dream job? Come to our{' '}
-					<a href="https://virtualcoffee.io/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#tech-interview-study-group">
+					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#tech-interview-study-group">
 						Tech Interview Study Group
-					</a>{' '}
+					</Link>{' '}
 					and{' '}
-					<a href="https://virtualcoffee.io/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#the-pack-hunt">
+					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#the-pack-hunt">
 						Pack Hunt
-					</a>{' '}
+					</Link>{' '}
 					to work on your resume, prepare for a technical interview, and go job
 					hunting!
 				</li>
