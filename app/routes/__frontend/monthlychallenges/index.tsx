@@ -85,7 +85,6 @@ const challengeList: Challenge[] = [
 	},
 
 	{
-		current: true,
 		title: 'Creative Community Challenge',
 		subtitle: `Let's make some space for the other parts of ourselves.`,
 		description: (
@@ -466,6 +465,7 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
+		current: true,
 		title: 'New Year, New Goals',
 		subtitle: `The new year offers an opportunity for a fresh start and a chance to set new goals.`,
 		description: (
