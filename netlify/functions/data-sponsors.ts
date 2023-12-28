@@ -71,11 +71,11 @@ const sponsorOverrides: Record<string, Partial<SponsorEntity>> = {
 		}),
 	},
 	MDQ6VXNlcjY2Mjc0MzIy: {
-		websiteUrl: 'https://levelupfinancialplanning.com',
+		websiteUrl: 'https://levelupfinancialplanning.com?vc',
 		name: 'LevelUP Financial planning',
-		descriptionHTML: `We're grateful to be sponorsored by LevelUP Financial planning, who understands the importance of finding balance between having an awesome life today, and being confident and excited about your future possibilities. If you want to take your financial confidence to the next level, check out levelupfinancialplanning.com.`,
-		avatar_width: 557,
-		avatar_height: 720,
+		descriptionHTML: `We're grateful to be sponorsored by LevelUP Financial planning, who understands the importance of finding balance between having an awesome life today, and being confident and excited about your future possibilities. If you want to take your financial confidence to the next level, check out <a href="https://www.levelupfinancialplanning.com?vc">levelupfinancialplanning.com</a>.`,
+		avatar_height: 557,
+		avatar_width: 720,
 		avatarUrl_80:
 			'https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=80',
 		avatarUrl_160:

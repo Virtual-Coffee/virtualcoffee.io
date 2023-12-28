@@ -109,6 +109,7 @@
 		"@types/react-dom": "^18.2.14",
 		"@types/require-dir": "^1.0.3",
 		"@types/sanitize-html": "^2.9.3",
+		"all-contributors-cli": "^6.26.1",
 		"netlify-cli": "^16.9.2",
 		"prettier": "^3.0.3",
 		"source-map-explorer": "^2.5.3",
