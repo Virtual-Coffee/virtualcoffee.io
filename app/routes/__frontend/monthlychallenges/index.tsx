@@ -474,6 +474,13 @@ const challengeList: Challenge[] = [
 					In this challenge, we encourage you to setting up the goals for the year and break them into achievable goals for each month. Our Coffee Table Groups — Accountabilibuddies, Tech Interview Study Group, and The Pack Hunt — are participating in this challenge and ready to support you!
 				</p>
 				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-new-year-new-goals-241m">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
 					To view all of the details of this year's challenge,{' '}
 					<Link to="/monthlychallenges/jan-2024">
 						check out the January 2024 challenge page
