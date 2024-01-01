@@ -92,12 +92,12 @@ const challengeList: Challenge[] = [
 				<p>
 					Devs are more than just the code we write. This challenge is all about
 					embracing self-expression. Give back to yourself by indulging in
-					something just for fun. Share the art, music, poetry, sports, games, or
-					other hobbies that spark your joy. We spend so much time grinding away
-					on understanding things in the tech space. Let's make some space for the
-					other parts of ourselves. In this challenge, we encourage folks to spend
-					time working on things that aren't necessarily code-specific or using
-					code to improve other hobbies and outlets.
+					something just for fun. Share the art, music, poetry, sports, games,
+					or other hobbies that spark your joy. We spend so much time grinding
+					away on understanding things in the tech space. Let's make some space
+					for the other parts of ourselves. In this challenge, we encourage
+					folks to spend time working on things that aren't necessarily
+					code-specific or using code to improve other hobbies and outlets.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -471,7 +471,11 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					In this challenge, we encourage you to setting up the goals for the year and break them into achievable goals for each month. Our Coffee Table Groups — Accountabilibuddies, Tech Interview Study Group, and The Pack Hunt — are participating in this challenge and ready to support you!
+					In this challenge, we encourage you to setting up the goals for the
+					year and break them into achievable goals for each month. Our Coffee
+					Table Groups — Accountabilibuddies, Tech Interview Study Group, and
+					The Pack Hunt — are participating in this challenge and ready to
+					support you!
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
