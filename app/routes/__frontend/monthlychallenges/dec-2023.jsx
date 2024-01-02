@@ -1,5 +1,6 @@
 import { json } from '@remix-run/node';
 import { createMetaData } from '~/util/createMetaData.server';
+import { Link } from '@remix-run/react';
 
 export const handle = {
 	listTitle: 'December 2023: Creative Community Challenge',
@@ -28,6 +29,11 @@ export function meta({ data: { meta } = {} } = {}) {
 export default function Challenge() {
 	return (
 		<>
+			<div className="alert alert-success">
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link to="/monthlychallenges/jan-2024">next challenge</Link>!
+			</div>
+
 			<h1>
 				<small>Monthly Challenge for December, 2023:</small> Creative Community
 				Challenge
