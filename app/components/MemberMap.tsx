@@ -4,12 +4,13 @@ import L from 'leaflet';
 import { MapContainer, Marker, TileLayer, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
+
 const customIcon = new L.Icon.Default({
 	iconUrl: require('../../public/assets/images/virtual-coffee-mug-circle.svg'),
 	iconSize: new L.Point(33, 33, true),
 });
 
-const createClusterCustomIcon = function (cluster) {
+const createClusterCustomIcon = function (cluster: L.MarkerCluster) {
 	return L.divIcon({
 		html: `<span>${cluster.getChildCount()}</span>`,
 		className: 'custom-marker-cluster',
