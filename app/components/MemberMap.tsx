@@ -5,16 +5,21 @@ import { MapContainer, Marker, TileLayer, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 
-const customIcon = new L.Icon.Default({
-	iconUrl: require('../../public/assets/images/virtual-coffee-mug-circle.svg'),
-	iconSize: new L.Point(33, 33, true),
-});
+const defaultCustomIcon = require('../../public/assets/images/virtual-coffee-mug-circle.svg');
 
 const createClusterCustomIcon = function (cluster: L.MarkerCluster) {
 	return L.divIcon({
 		html: `<span>${cluster.getChildCount()}</span>`,
 		className: 'leaflet-custom-marker',
 		iconSize: L.point(33, 33, true),
+	});
+};
+
+const createCustomIcon = function (avatarUrl?: string) {
+	return new L.Icon.Default({
+		iconUrl: avatarUrl || defaultCustomIcon,
+		iconSize: new L.Point(33, 33, true),
+		className: 'leaflet-custom-marker',
 	});
 };
 
@@ -32,25 +37,31 @@ function Markers({ members }: { members: MappableMember[] }) {
 		);
 	}, [members, map]);
 
+	// avatarUrl
+
 	return (
 		<>
-			{members.map((member) => (
-				<Marker
-					key={member.github}
-					position={[member.location?.latitude, member.location?.longitude]}
-					icon={customIcon}
-				>
-					<Popup>
-						<a href={`#member_${member.github}`}>{member.name}</a>
-						{member.location?.title && (
-							<>
-								{' - '}
-								{member.location?.title}
-							</>
-						)}
-					</Popup>
-				</Marker>
-			))}
+			{members.map((member) => {
+				const customIcon = createCustomIcon(member.avatarUrl);
+
+				return (
+					<Marker
+						key={member.github}
+						position={[member.location?.latitude, member.location?.longitude]}
+						icon={customIcon}
+					>
+						<Popup>
+							<a href={`#member_${member.github}`}>{member.name}</a>
+							{member.location?.title && (
+								<>
+									{' - '}
+									{member.location?.title}
+								</>
+							)}
+						</Popup>
+					</Marker>
+				);
+			})}
 		</>
 	);
 }
