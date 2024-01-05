@@ -75,7 +75,7 @@ export default function MemberMap({ members }: { members: MappableMember[] }) {
 					spiderfyOnMaxZoom={true}
 					polygonOptions={{
 						fillColor: '#ffffff',
-						color: '#f00800',
+						color: '#d9376e',
 						weight: 5,
 						opacity: 1,
 						fillOpacity: 0.8,

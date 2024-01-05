@@ -319,11 +319,14 @@ ul {
 
 .custom-marker-cluster {
 	background: #ffffff;
-	border: 5px solid #f00800;
 	border-radius: 50%;
 	color: #000000;
 	height: 33px;
 	// line-height: 37px;
 	text-align: center;
 	width: 33px;
+	border: 3px solid $pink;
+	display: flex !important;
+	justify-content: center;
+	align-items: center;
 }
