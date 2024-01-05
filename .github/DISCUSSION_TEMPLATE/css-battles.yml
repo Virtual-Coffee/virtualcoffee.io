@@ -28,7 +28,7 @@ body:
       value: |
         ````md
         <details>
-        <summary>Code Source  – <strong>score {character count}</strong></summary>
+        <summary>Code Source – <strong>score {characters}</strong></summary>
         <!-- have to be followed by an empty line! -->
 
         ```html
@@ -47,7 +47,7 @@ body:
         This will result in a nice hidden bit like so:
 
         <details>
-        <summary>Code Source  – <strong>score {character count}</strong></summary>
+        <summary>Code Source – <strong>score {characters}</strong></summary>
 
         ```html
         your cssbattles code here!

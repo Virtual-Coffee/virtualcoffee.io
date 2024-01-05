@@ -30,6 +30,11 @@ export function meta({ data: { meta } = {} } = {}) {
 export default function Challenge() {
 	return (
 		<>
+			<div className="alert alert-success">
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link to="/monthlychallenges/nov-2023">next challenge</Link>!
+			</div>
+
 			<h1>
 				<small>Monthly Challenge for October 2023:</small> It's Hacktoberfest!
 				Participate in open source, learn, and have fun!
@@ -368,6 +373,86 @@ export default function Challenge() {
 					</p>
 					<p>
 						<strong>Maintainer</strong>: Kirk Shillingford
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/rupali-codes/LinksHub">LinksHub</a>
+					</h3>
+					<p>
+						LinksHub is a hub of links for developers by developers. They've
+						gathered a collection of all the best and most useful resources,
+						both free and paid, to aid in the development journey.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: Rupali Haldiya
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/AccessibleForAll/AccessibleWebDev">
+							Accessible Web Dev
+						</a>
+					</h3>
+					<p>
+						A site that is intended to be a resource for developers wanting to
+						learn the basics about accessibility in a clear and easy to
+						understand way.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: Accessible For All Community
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/Codecademy/docs">Codecademy's Docs</a>
+					</h3>
+					<p>
+						Documentation for popular programming languages and frameworks.
+						Built by the community. Maintained by Codecademy.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: Codecademy
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/TheOdinProject/curriculum">
+							The Odin Project's Curriculum
+						</a>
+					</h3>
+					<p>
+						The Odin Project (TOP) is an open-source curriculum for learning
+						full-stack web development.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: The Odin Project
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/mdn/content">MDN Web Docs' Content</a>
+					</h3>
+					<p>
+						MDN Web Docs is an open-source, collaborative project that documents
+						web technologies including CSS, HTML, JavaScript, and Web APIs.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: MDN Web Docs
+					</p>
+				</li>
+				<li>
+					<h3>
+						<a href="https://github.com/shesharpnl/knowledge-hub">
+							SheSharp's Knowledge Hub
+						</a>
+					</h3>
+					<p>
+						A collection of resources gathered for developers from tech-related
+						to general ones.
+					</p>
+					<p>
+						<strong>Maintainer</strong>: SheSharp
 					</p>
 				</li>
 				<li>

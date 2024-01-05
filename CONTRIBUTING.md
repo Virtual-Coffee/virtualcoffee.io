@@ -160,3 +160,7 @@ This repository has three basic types of labels:
 - `Type` - The nature of the issue. BUG, FEATURE, QUESTION, or DOCUMENTATION (will be pre-assigned if using issue templates). Only one active per issue.
 - `Status` - What part of the process is this issue in. e.g. Active, Needs Review, Resolved, etc. (will be filled in by maintainers and some contributors). Only one active per issue.
 - `Context` - Additional info that helps people parse issues. e.g. "good first issue", "for maintainer only". Multiple may be active on one issue.
+
+## Add yourself to the Contributor's list
+
+We want to thank you so much for contributing to our project. Check out all [contributor's documentation](https://allcontributors.org/docs/en/bot/usage) to learn how to add yourself to our Contributor's list.
