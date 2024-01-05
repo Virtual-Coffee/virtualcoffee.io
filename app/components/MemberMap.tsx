@@ -13,7 +13,7 @@ const customIcon = new L.Icon.Default({
 const createClusterCustomIcon = function (cluster: L.MarkerCluster) {
 	return L.divIcon({
 		html: `<span>${cluster.getChildCount()}</span>`,
-		className: 'custom-marker-cluster',
+		className: 'leaflet-custom-marker',
 		iconSize: L.point(33, 33, true),
 	});
 };
