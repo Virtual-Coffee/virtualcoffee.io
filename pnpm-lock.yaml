@@ -104,6 +104,9 @@ dependencies:
   leaflet:
     specifier: ^1.9.4
     version: 1.9.4
+  leaflet.markercluster:
+    specifier: ^1.5.3
+    version: 1.5.3(leaflet@1.9.4)
   luxon:
     specifier: ^3.4.3
     version: 3.4.3
@@ -208,6 +211,9 @@ devDependencies:
   '@types/leaflet':
     specifier: ^1.9.7
     version: 1.9.7
+  '@types/leaflet.markercluster':
+    specifier: ^1.5.4
+    version: 1.5.4
   '@types/luxon':
     specifier: ^3.3.3
     version: 3.3.3
@@ -4604,6 +4610,12 @@ packages:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
       '@types/node': 20.8.9
+
+  /@types/leaflet.markercluster@1.5.4:
+    resolution: {integrity: sha512-tfMP8J62+wfsVLDLGh5Zh1JZxijCaBmVsMAX78MkLPwvPitmZZtSin5aWOVRhZrCS+pEOZwNzexbfWXlY+7yjg==}
+    dependencies:
+      '@types/leaflet': 1.9.7
+    dev: true
 
   /@types/leaflet@1.9.7:
     resolution: {integrity: sha512-FOfKB1ALYUDnXkH7LfTFreWiZr9R7GErqGP+8lYQGWr2GFq5+jy3Ih0M7e9j41cvRN65kLALJ4dc43yZwyl/6g==}
