@@ -4,7 +4,6 @@ import L from 'leaflet';
 import { MapContainer, Marker, TileLayer, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
-
 const customIcon = new L.Icon.Default({
 	iconUrl: require('../../public/assets/images/virtual-coffee-mug-circle.svg'),
 	iconSize: new L.Point(33, 33, true),
@@ -70,7 +69,6 @@ export default function MemberMap({ members }: { members: MappableMember[] }) {
 				/>
 				<MarkerClusterGroup
 					chunkedLoading
-					// onClick={(e) => console.log('onClick', e)}
 					iconCreateFunction={createClusterCustomIcon}
 					maxClusterRadius={150}
 					spiderfyOnMaxZoom={true}
