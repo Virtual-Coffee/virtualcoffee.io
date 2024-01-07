@@ -312,6 +312,22 @@ ul {
 	background: none;
 	justify-content: flex-end;
 }
+
 .text-sm {
 	font-size: 0.8rem;
+}
+
+.leaflet-custom-marker {
+	background: #ffffff;
+	border-radius: 50%;
+	color: #000000;
+	height: 33px;
+	// line-height: 37px;
+	text-align: center;
+	width: 33px;
+	border: 3px solid $pink;
+	display: flex !important;
+	justify-content: center;
+	align-items: center;
+	box-shadow: 1px 1px 5px 0px $pink;
 }
