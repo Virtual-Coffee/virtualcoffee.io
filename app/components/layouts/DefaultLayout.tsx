@@ -70,7 +70,7 @@ export function HeroHead({
 							/>
 						</div>
 						<div className="col-sm-8">
-							<h1 className="display-4">{heroData.heroHeader}</h1>
+							<h1 className="display-4 mt-3">{heroData.heroHeader}</h1>
 							{heroData.heroSubheader && (
 								<div className="lead">{heroData.heroSubheader}</div>
 							)}
