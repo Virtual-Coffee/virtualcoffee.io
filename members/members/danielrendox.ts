@@ -44,8 +44,8 @@ export const danielrendox: MemberObject = {
 	],
 	badges: [],
 	location: {
-  		latitude: 48.464718,
-  		longitude: 35.046185,
-  		title: 'Dnipro, Ukraine', 
+		latitude: 48.464718,
+		longitude: 35.046185,
+		title: 'Dnipro, Ukraine',
 	},
 };
