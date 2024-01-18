@@ -29,6 +29,11 @@
   status = 301
 
 [[redirects]]
+  from = "/member-survey"
+  to = "https://airtable.com/appGHm8ztVWug6UxH/pagKrtAhS4jnRhtYD/form"
+  status = 301
+
+[[redirects]]
   from = "/netlify-forms"
   to = "/"
   status = 200
