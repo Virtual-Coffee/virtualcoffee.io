@@ -62,15 +62,15 @@ export function HeroHead({
 			<div className="py-4">
 				<div className="container">
 					<div className="row align-items-center">
-						<div className="col-sm-4">
+						<div className="col-md-4 text-center">
 							<UndrawIllustration
 								loading="eager"
-								style={{ width: '100%' }}
+								style={{ width: '100%', maxWidth: '300px' }}
 								filename={heroData.Hero}
 							/>
 						</div>
-						<div className="col-sm-8">
-							<h1 className="display-4 mt-3 mt-sm-0">{heroData.heroHeader}</h1>
+						<div className="col-md-8">
+							<h1 className="display-4 mt-3 mt-md-0">{heroData.heroHeader}</h1>
 							{heroData.heroSubheader && (
 								<div className="lead">{heroData.heroSubheader}</div>
 							)}
