@@ -255,9 +255,7 @@ export default function Issue() {
 					<a href="https://www.twitch.tv/iandouglas736">Ian</a>.
 				</li>
 				<li>
-					<a href="https://www.nickyt.co/news">
-						Nick Taylor's newsletter
-					</a>{' '}
+					<a href="https://www.nickyt.co/news">Nick Taylor's newsletter</a>{' '}
 					keeps you up to date with the hot topics in tech.
 				</li>
 				<li>
