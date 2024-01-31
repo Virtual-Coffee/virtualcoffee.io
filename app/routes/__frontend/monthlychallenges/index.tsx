@@ -31,17 +31,17 @@ const challengeList: Challenge[] = [
 		subtitle: `Time to learn new things!`,
 		description: (
 			<>
-			<p>
-				The goal of this challenge is to learn something new, share what we have
-				learned, and gather recommendations and resources to share with the
-				community. During this challenge, we work on learning new dev-related
-				things. You might deep-dive into one topic, start a small group that
-				focuses on community learning, focus on a new topic every week, or do a
-				little bit of everything.
-			</p>
-			<p>
+				<p>
+					The goal of this challenge is to learn something new, share what we have
+					learned, and gather recommendations and resources to share with the
+					community. During this challenge, we work on learning new dev-related
+					things. You might deep-dive into one topic, start a small group that
+					focuses on community learning, focus on a new topic every week, or do a
+					little bit of everything.
+				</p>
+				<p>
 					Learn more about this challenge in{' '}
-					<a href="">
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-month-of-learning-challenge-bdi">
 						this blog post
 					</a>
 					.
