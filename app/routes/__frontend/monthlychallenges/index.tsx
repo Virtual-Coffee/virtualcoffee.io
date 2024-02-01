@@ -26,17 +26,34 @@ type Challenge<T = any> = {
 
 const challengeList: Challenge[] = [
 	{
+		current: true,
 		title: 'Month of Learning',
 		subtitle: `Time to learn new things!`,
 		description: (
-			<p>
-				The goal of this challenge is to learn something new, share what we have
-				learned, and gather recommendations and resources to share with the
-				community. During this challenge, we work on learning new dev-related
-				things. You might deep-dive into one topic, start a small group that
-				focuses on community learning, focus on a new topic every week, or do a
-				little bit of everything.
-			</p>
+			<>
+				<p>
+					The goal of this challenge is to learn something new, share what we
+					have learned, and gather recommendations and resources to share with
+					the community. During this challenge, we work on learning new
+					dev-related things. You might deep-dive into one topic, start a small
+					group that focuses on community learning, focus on a new topic every
+					week, or do a little bit of everything.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-month-of-learning-challenge-bdi">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/feb-2024">
+						check out the February 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 		links: [
 			{
@@ -465,7 +482,6 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		current: true,
 		title: 'New Year, New Goals',
 		subtitle: `The new year offers an opportunity for a fresh start and a chance to set new goals.`,
 		description: (
