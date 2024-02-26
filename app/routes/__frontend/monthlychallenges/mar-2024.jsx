@@ -58,12 +58,12 @@ export default function Challenge() {
 				</li>
 				<li>A captivating elevator pitch</li>
 			</ul>
-			<h2>Who can participate?</h2>
+			<h2>Who can Participate?</h2>
 			<p>
 				Virtual Coffee's goal is to support all developers, no matter where they
 				are in their coding journey. We encourage all members to participate.
 			</p>
-			<h2>How it works</h2>
+			<h2>How it Works</h2>
 			<ul>
 				<li>
 					We're focusing on creating job application materials. Whether you're
@@ -91,37 +91,43 @@ export default function Challenge() {
 					on what's most important to you.
 				</strong>
 			</p>
-			<h3>Weeks one and two: Resume and Cover Letter</h3>
+			<h3>Weeks One and Two: Resume and Cover Letter</h3>
 			<h4>Resume</h4>
 			<ul>
-				<li>Step one: Find a job post.</li>
-				<li>Step two: Match your skills to the post.</li>
-				<li>Step three: Make your resume stand out.</li>
+				<li>
+					<strong>Step one</strong>: Find a job post.
+				</li>
+				<li>
+					<strong>Step two</strong>: Match your skills to the post.
+				</li>
+				<li>
+					<strong>Step three</strong>: Make your resume stand out.
+				</li>
 			</ul>
 			<p>This also includes updating your LinkedIn profile if you'd like.</p>
 			<h4>Cover Letter</h4>
 			<ul>
 				<li>
-					Step one: Do some research. Learn about a company and make a
-					connection.
+					<strong>Step one</strong>: Do some research. Learn about a company and
+					make a connection.
 				</li>
 				<li>
-					Step two: Do some storytelling. A cover letter isn't a written resume.
-					It's an opportunity to go deeper.
+					<strong>Step two</strong>: Do some storytelling. A cover letter isn't
+					a written resume. It's an opportunity to go deeper.
 				</li>
-				<li>Step three: Connect your experience to the position.</li>
-			</ul>
-			<h3>Week three: Elevator Pitch</h3>
-			<ul>
 				<li>
-					An elevator pitch is a short speech introducing yourself, what you do,
-					your experience, and why you would be an excellent person to have on
-					the team. The idea is to confidently convey information about yourself
-					in a short amount of time and leave an impression on the mind of the
-					person who hears it.
+					<strong>Step three</strong>: Connect your experience to the position.
 				</li>
 			</ul>
-			<h3>Week four: Tying it Together</h3>
+			<h3>Week Three: Elevator Pitch</h3>
+			<p>
+				An elevator pitch is a short speech introducing yourself, what you do,
+				your experience, and why you would be an excellent person to have on the
+				team. The idea is to confidently convey information about yourself in a
+				short amount of time and leave an impression on the mind of the person
+				who hears it.
+			</p>
+			<h3>Week Four: Tying it Together</h3>
 			<p>
 				Your resume, cover letter, and elevator pitch should work together to
 				tell your story and represent where you are on your career journey. Each
