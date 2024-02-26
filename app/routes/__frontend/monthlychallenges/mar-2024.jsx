@@ -135,8 +135,8 @@ export default function Challenge() {
 			</p>
 			<p>
 				Each week, our monthly challenge team will start us off with check-ins.
-				For this challenge to be fruitful, ensure you're sharing, providing
-				feedback, and asking for help when needed.
+				For this challenge to be fruitful, ensure you share, provide feedback,
+				and ask for help when needed.
 			</p>
 			<h3>Job Application Materials and Resources</h3>
 			<ul>
@@ -193,8 +193,8 @@ export default function Challenge() {
 				<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#accountabilibuddies">
 					Accountabilibuddies
 				</Link>{' '}
-				groups are here to support you during the challenge as well! Stay tuned
-				at the <code>#announcement</code> and <code>#vc-events</code> channel on
+				groups are also here to support you during the challenge! Stay tuned at
+				the <code>#announcement</code> and <code>#vc-events</code> channel on
 				Slack for the schedules!
 			</p>
 			<p>And remember, we're always here to help ❤️</p>
