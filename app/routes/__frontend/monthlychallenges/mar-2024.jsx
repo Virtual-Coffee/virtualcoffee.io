@@ -98,6 +98,7 @@ export default function Challenge() {
 				<li>Step two: Match your skills to the post.</li>
 				<li>Step three: Make your resume stand out.</li>
 			</ul>
+			<p>This also includes updating your LinkedIn profile if you'd like.</p>
 			<h4>Cover Letter</h4>
 			<ul>
 				<li>
@@ -142,25 +143,27 @@ export default function Challenge() {
 			<ul>
 				<li>
 					<a href="https://www.youtube.com/watch?v=NVaZu8--4p0">
-						Abbey Perini's L&L on promoting yourself to potential employers
-					</a>
+						How to Promote Yourself to Potential Employers
+					</a>{' '}
+					— Abbey Perini — Virtual Coffee Lunch & Learn
 				</li>
 				<li>
 					<a href="https://www.youtube.com/watch?v=XwPVZNvP_IM">
-						Abbey Perini and Jennifer K's L&L Optimize Your Resume For Both A
-						Hiring Manager And An ATS
-					</a>
+						Optimize Your Resume For Both A Hiring Manager And An ATS
+					</a>{' '}
+					– Jennifer & Abbey — Virtual Coffee Lunch & Learn
 				</li>
 				<li>
 					<a href="https://www.youtube.com/watch?v=ghFNiCMy67M">
-						Breaking down coding problems in interviews – Courtney Landau –
-						Lightning Talks 2021
-					</a>
+						Breaking down coding problems in interviews
+					</a>{' '}
+					– Courtney Landau – Lightning Talks 2021
 				</li>
 				<li>
 					<a href="https://www.youtube.com/watch?v=p4Ux7c7PQ0M">
 						Resume Roundtable
-					</a>
+					</a>{' '}
+					– Bryan Healey – Virtual Coffee Lunch & Learn
 				</li>
 				<li>
 					<a href="https://flowcv.io/">FlowCV: free resume builder</a>
