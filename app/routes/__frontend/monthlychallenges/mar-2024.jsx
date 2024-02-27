@@ -151,13 +151,13 @@ export default function Challenge() {
 					<a href="https://www.youtube.com/watch?v=NVaZu8--4p0">
 						How to Promote Yourself to Potential Employers
 					</a>{' '}
-					— Abbey Perini — Virtual Coffee Lunch & Learn
+					– Abbey Perini – Virtual Coffee Lunch & Learn
 				</li>
 				<li>
 					<a href="https://www.youtube.com/watch?v=XwPVZNvP_IM">
 						Optimize Your Resume For Both A Hiring Manager And An ATS
 					</a>{' '}
-					– Jennifer & Abbey — Virtual Coffee Lunch & Learn
+					– Jennifer & Abbey – Virtual Coffee Lunch & Learn
 				</li>
 				<li>
 					<a href="https://www.youtube.com/watch?v=ghFNiCMy67M">
