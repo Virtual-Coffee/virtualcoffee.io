@@ -48,7 +48,7 @@ export const KazSmino: MemberObject = {
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
 	location: {
-		latitude: 49.276415, 
+		latitude: 49.276415,
 		longitude: -123.128697,
 		title: 'Vancouver, BC', // optional
 	},
