@@ -29,14 +29,30 @@ const challengeList: Challenge[] = [
 		title: 'Month of Learning',
 		subtitle: `Time to learn new things!`,
 		description: (
-			<p>
-				The goal of this challenge is to learn something new, share what we have
-				learned, and gather recommendations and resources to share with the
-				community. During this challenge, we work on learning new dev-related
-				things. You might deep-dive into one topic, start a small group that
-				focuses on community learning, focus on a new topic every week, or do a
-				little bit of everything.
-			</p>
+			<>
+				<p>
+					The goal of this challenge is to learn something new, share what we
+					have learned, and gather recommendations and resources to share with
+					the community. During this challenge, we work on learning new
+					dev-related things. You might deep-dive into one topic, start a small
+					group that focuses on community learning, focus on a new topic every
+					week, or do a little bit of everything.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-month-of-learning-challenge-bdi">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/feb-2024">
+						check out the February 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 		links: [
 			{
@@ -55,18 +71,28 @@ const challengeList: Challenge[] = [
 	},
 
 	{
+		current: true,
 		title: 'Get Job Ready',
 		subtitle: `Resumes, Cover Letters, and Elevator Pitch. There's never a bad time to update your job application materials.`,
 		description: (
-			<p>
-				The goal of this challenge is to work on creating, revising, or updating
-				your job packet materials and that elevator pitch that might get you in
-				the door. Your resume, cover letter, and elevator pitch should work
-				together to tell your story and represent where you are on your career
-				journey; each piece should complement the others. This challenge
-				emphasizes taking time to ensure they work together or get some extra
-				feedback on what you've worked on.
-			</p>
+			<>
+				<p>
+					The goal of this challenge is to work on creating, revising, or updating
+					your job packet materials and that elevator pitch that might get you in
+					the door. Your resume, cover letter, and elevator pitch should work
+					together to tell your story and represent where you are on your career
+					journey; each piece should complement the others. This challenge
+					emphasizes taking time to ensure they work together or get some extra
+					feedback on what you've worked on.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/mar-2024">
+						check out the March 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 		links: [
 			{
@@ -85,7 +111,6 @@ const challengeList: Challenge[] = [
 	},
 
 	{
-		current: true,
 		title: 'Creative Community Challenge',
 		subtitle: `Let's make some space for the other parts of ourselves.`,
 		description: (
@@ -93,12 +118,12 @@ const challengeList: Challenge[] = [
 				<p>
 					Devs are more than just the code we write. This challenge is all about
 					embracing self-expression. Give back to yourself by indulging in
-					something just for fun. Share the art, music, poetry, sports, games, or
-					other hobbies that spark your joy. We spend so much time grinding away
-					on understanding things in the tech space. Let's make some space for the
-					other parts of ourselves. In this challenge, we encourage folks to spend
-					time working on things that aren't necessarily code-specific or using
-					code to improve other hobbies and outlets.
+					something just for fun. Share the art, music, poetry, sports, games,
+					or other hobbies that spark your joy. We spend so much time grinding
+					away on understanding things in the tech space. Let's make some space
+					for the other parts of ourselves. In this challenge, we encourage
+					folks to spend time working on things that aren't necessarily
+					code-specific or using code to improve other hobbies and outlets.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -463,6 +488,35 @@ const challengeList: Challenge[] = [
 				provide a supportive space for members to share their insights,
 				challenges, and successes.
 			</p>
+		),
+	},
+	{
+		title: 'New Year, New Goals',
+		subtitle: `The new year offers an opportunity for a fresh start and a chance to set new goals.`,
+		description: (
+			<>
+				<p>
+					In this challenge, we encourage you to setting up the goals for the
+					year and break them into achievable goals for each month. Our Coffee
+					Table Groups — Accountabilibuddies, Tech Interview Study Group, and
+					The Pack Hunt — are participating in this challenge and ready to
+					support you!
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-new-year-new-goals-241m">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/jan-2024">
+						check out the January 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 	},
 ];

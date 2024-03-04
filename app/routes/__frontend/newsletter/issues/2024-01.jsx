@@ -3,11 +3,11 @@ import LeadText from '~/components/content/LeadText';
 
 export const handle = {
 	meta: {
-		title: 'Virtual Coffee Newsletter, December 2023',
-		description: 'Creative Community at the End of 2023! 💝',
+		title: 'Virtual Coffee Newsletter, January 2024',
+		description: 'Ready, Set, Goals! 💝',
 	},
-	date: '2023-12-01',
-	listTitle: 'December 2023',
+	date: '2024-01-01',
+	listTitle: 'January 2024',
 };
 
 export const meta = () => {
@@ -20,9 +20,10 @@ export default function Issue() {
 			<h2>Hey Friends!</h2>
 			<LeadText>
 				<p>
-					After a successful blogging challenge with NaNoWriMo in November,
-					we're enjoying the creative parts of ourselves with Creative
-					Community!
+					2023 was a whirlwind year, for good and for bad, but the strength and
+					energy of this community shone through it all. We're looking forward
+					to a bright 2024, and starting it off with a goal-setting theme for
+					January!
 				</p>
 			</LeadText>
 
@@ -34,73 +35,76 @@ export default function Issue() {
 			</p>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"Grateful for feedback from Justin, Meg, and Ryan for my new
-					educational static site. Thanks to everyone for helping me get it out
-					there!"
+					"Been loving the group pomodoro sessions in the{' '}
+					<code>#co-working-room</code>! Definitely help my ADHD brain get/stay
+					in flow state!"
 				</p>
-				<footer className="blockquote-footer">Lucia</footer>
+				<footer className="blockquote-footer">Ethan</footer>
 			</blockquote>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"Managed to get two nights of restful sleep after having a night with
-					almost no sleep. Grateful for all the support from VC."
+					"I spent all day in bed yesterday due to a migraine. Today, I didn't
+					really want to do anything, but I saw we needed a room leader for
+					today's coffee. Grudgingly, I volunteered. I had a great time and was
+					immediately lifted out of my horrible mood. Thanks so much to everyone
+					that started and helps keep VC running. My life would be a much darker
+					place without all of you."
 				</p>
-				<footer className="blockquote-footer">Vitaly</footer>
+				<footer className="blockquote-footer">Justin</footer>
 			</blockquote>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"I participated in my first Hacktoberfest this year and just received
-					my reward kit. The content is really sick!!! I'm so grateful for this
-					community cause you guys really gave me the push through all your
-					messages here."
+					"I started a four month contract at EA this week as a Technical
+					Writer! This group has helped me feel more confident navigating a
+					career in tech, so thank you all so much."
 				</p>
-				<footer className="blockquote-footer">Wonuola</footer>
+				<footer className="blockquote-footer">Taryn</footer>
 			</blockquote>
 
 			<hr />
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
-			<h3>November Recap</h3>
+			<h3>December Recap</h3>
 			<p>
-				<strong>💡Monthly Theme & Challenge: NaNoWriMo!</strong>
+				<strong>💡Monthly Theme & Challenge: Creative Community!</strong>
 			</p>
 			<p>
-				November was our annual{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/nov-2023">
-					Writing Challenge
-				</a>{' '}
-				and it was amazing! We got over 150,000 words as a community. Shoutout
-				to <strong>Amy Shackles</strong> for her massive contribution this month
-				of almost 60,000 words!
+				Keeping up a VC tradition, our December focus was on making, sharing,
+				and creativity. We baked, crocheted, sewed, built with Legos,
+				photographed, and everything in between. If you enjoyed it, you can join
+				in the fun all year in the <code>#making-stuff</code> channel!
 			</p>
 
-			<h3 className="mt-4">December: Creative Community!</h3>
+			<h3 className="mt-4">January: Goal Get It!</h3>
 			<p>
-				<strong>
-					💡Monthly Theme & Challenge: Creative Community Challenge!
-				</strong>
+				<strong>💡Monthly Theme & Challenge: New Year, New Goals!</strong>
 			</p>
 			<p>
-				Devs are more than just the code we write. This challenge is all about
-				embracing self-expression. Give back to yourself by indulging in
-				something just for fun. Share the art, music, poetry, sports, games, or
-				other hobbies that spark your joy.
-			</p>
-			<p>
-				We spend so much time grinding away on understanding things in the tech
-				space; let's make some space for the other parts of ourselves. In{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/dec-2023">
-					this challenge
-				</a>
-				, we encourage folks to work on things that aren't necessarily
-				code-specific or use code to improve other hobbies and outlets.
-			</p>
-			<p>
-				Bekah wrote an amazing blog post called{' '}
-				<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-creative-community-monthly-challenge-44d5?preview=1915937bfaddd231a989f8d4f4f99215178b688fe8eb5cd6533fd81a188698c0ec971b8bcad6e4b34cb65930afb4cdb718543ce10b9d3ad83c51bf1c">
-					Join Virtual Coffee in the Creative Community Monthly Challenge!
+				Setting goals is a pretty well-worn practice for January, but New Year's
+				resolutions are notoriously hard to keep. This month's challenge is
+				about setting better goals that will serve you all year long, then
+				building the habits and tools to help you achieve. Check out the{' '}
+				<Link to="/monthlychallenges/jan-2024">VC Monthly Challenge page</Link>{' '}
+				or{' '}
+				<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-new-year-new-goals-241m">
+					Ayu's blog post
 				</a>{' '}
-				to get us started!
+				for more inspiration and info!
+			</p>
+			<p>
+				Some of our Coffee Table groups and Slack channels will have special
+				sessions and posts focused on the theme, including a goal-setting
+				workshop in <code>#tech-interview-study-group</code> on January 8 and
+				some creative goal tracking activities in The Pack Hunt.
+			</p>
+			<p>
+				In past years, our January theme has been "Month of Learning", and we'd
+				love to see folks setting goals to learn new tech stacks, data
+				structures and algorithms, RegEx wizardry, or tech interviewing skills.
+				But this community is more than tech! The goals to find more work/life
+				balance, improve your 5K time, or be a better ally are all just as
+				worthwhile. Whatever goals you set for this year, VC members are ready
+				to support you and cheer you on.
 			</p>
 
 			<h3 className="mt-4">☕🪑 Coffee Table Events</h3>
@@ -161,7 +165,7 @@ export default function Issue() {
 				out <Link to="/events">our events page</Link>.
 			</p>
 
-			<h3>🆕 New Channels Alert</h3>
+			<h3>🆕 New Career Focus Channels Alert</h3>
 			<p>
 				We've added three new private channels — <code>Senior+</code>,{' '}
 				<code>Mid-level</code>, <code>Early-career</code> — to our Slack for
@@ -196,52 +200,59 @@ export default function Issue() {
 
 			<h2>✨ Member Content Highlights</h2>
 			<p>
-				<em>Some of our member posts we loved during our Writing Challenge</em>
+				<em>
+					Our members are making the internet a better place with their words
+					and wisdom!
+				</em>
 			</p>
 			<h3>Articles</h3>
 			<ul>
 				<li>
-					<a href="https://harshleey.hashnode.dev/demystifying-the-internet">
-						Demystifying the Internet — Fatima Adekunle-logun
+					<a href="https://chrissycodes.hashnode.dev/novice-to-expert-my-freecodecamp-writing-journey">
+						Novice To Expert: My freeCodeCamp Writing Journey — Christine Belzie
 					</a>
 				</li>
 				<li>
-					<a href="https://dev.to/nickytonline/typescript-and-react-enforcing-props-for-accessibility-2h49">
-						TypeScript and React: Enforcing Props for Accessibility — Nick
+					<a href="https://baldbeardedbuilder.com/blog/choosing-between-dotnet-controllers-and-minimal-apis/">
+						Choosing Between Controllers and Minimal API for .NET APIs — Michael
+						Jolley
+					</a>
+				</li>
+				<li>
+					<a href="https://dev.to/jarvisscript/ugly-sweater-css-spider-man-2ke2">
+						Ugly Sweater CSS: Spider-man. — Chris Jarvis
+					</a>
+				</li>
+				<li>
+					<a href="https://dev.to/opensauced/migrating-from-jest-to-vitest-for-your-react-application-1b75">
+						Migrating from Jest to Vitest for your React Application — Nick
 						Taylor
 					</a>
 				</li>
 				<li>
-					<a href="https://klescode.hashnode.dev/volunteering-as-a-developer">
-						Volunteering as a Developer: Win-Win for You and the Tech Community
-						— Klesta L
+					<a href="https://github.com/compose-us/build-in-public/blob/main/updates/2023-12-01%20Gathering%20Feedback/README.md">
+						Gathering Feedback (Build In Public project) — Jörn Bernhardt
+					</a>
+				</li>
+			</ul>
+
+			<h3>Videos</h3>
+			<ul>
+				<li>
+					<a href="https://www.youtube.com/watch?v=xbJRNwfnQb4&themeRefresh=1">
+						Introduction to Consumer Group IDs (Apache Kafka Explained) — Lucia
+						Cerchie
 					</a>
 				</li>
 				<li>
-					<a href="https://baldbeardedbuilder.com/blog/primary-constructors-in-csharp-12-dotnet/">
-						Using Primary Constructors in C# 12 & .NET 8 — Michael Jolley
+					<a href="https://www.youtube.com/watch?v=xoEiMWxidPE">
+						The Power of Communities for Self-Taught Devs — Ayu Adiati
 					</a>
 				</li>
 				<li>
-					<a href="https://dev.to/raaynaldo/binary-search-finding-maxmin-template-in-javascript-1de7">
-						Binary Search Finding Max/Min Template in Javascript — Raynaldo
-						Sutisna
-					</a>
-				</li>
-				<li>
-					<a href="https://dev.to/bekahhw/hiring-firing-and-becoming-indispensable-kfe">
-						Hiring, Firing, and Becoming Indispensable — BekahHW
-					</a>
-				</li>
-				<li>
-					<a href="https://www.freecodecamp.org/news/how-to-write-commit-messages-maintainers-will-like/">
-						How to Write Commit Messages that Project Maintainers Will
-						Appreciate — Christine Belzie
-					</a>
-				</li>
-				<li>
-					<a href="https://dev.to/alexcurtisslep/lessons-from-starting-an-open-source-project-2g3l">
-						Lessons from Starting an Open Source Project — Alex Curtis-Slep
+					<a href="https://www.youtube.com/watch?v=n8mNX2YqkUs">
+						Learn JavaScript Interactively in New freeCodeCamp.org Curriculum —
+						Jessica Wilkins
 					</a>
 				</li>
 			</ul>
@@ -256,24 +267,38 @@ export default function Issue() {
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"I am so excited to officially be launching my new service, Say
-								My Name, on Product Hunt today."
+								"I finally broke a million post views on dev.to!"
 							</p>
-							<footer className="blockquote-footer">Justin</footer>
+							<footer className="blockquote-footer">Nick</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"Win: I had my PR merged into create-typescript-app."
+								"Woohoo! Bekah's New Maintainers Resources making it into
+								Favorite Series of the year on DEV! Congrats!!!"
 							</p>
-							<footer className="blockquote-footer">Dominic</footer>
+							<footer className="blockquote-footer">Ayu</footer>
 						</blockquote>
 						<blockquote className="blockquote">
-							<p className="mb-0">"Completed 3 blogs for this month!"</p>
-							<footer className="blockquote-footer">David</footer>
+							<p className="mb-0">
+								"I deleted over 20,000 emails and freed 16% of my inbox."
+							</p>
+							<footer className="blockquote-footer">Rad</footer>
 						</blockquote>
 						<blockquote className="blockquote">
-							<p className="mb-0">"Finally finished building my blog."</p>
-							<footer className="blockquote-footer">Jessica</footer>
+							<p className="mb-0">
+								"I've been really into both scrollytales and clis for a while
+								now... and now I'm iterating faster and faster! The hard work is
+								paying off."
+							</p>
+							<footer className="blockquote-footer">Lucia</footer>
+						</blockquote>
+						<blockquote className="blockquote">
+							<p className="mb-0">
+								"Just submitted the final draft of my final article for
+								Stoplight, and I think it’s one of the best articles I’ve ever
+								written. My editor agrees!"
+							</p>
+							<footer className="blockquote-footer">Julia</footer>
 						</blockquote>
 					</div>
 				</div>
