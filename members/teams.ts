@@ -1,5 +1,5 @@
 const teams = {
-	'Community Maintainer': ['BekahHW', 'tkshill', 'juliaseid'],
+	'Community Maintainer': ['BekahHW', 'tkshill', 'juliaseid', 'meg-gutshall'],
 
 	'Org Maintainer': ['danieltott', 'BekahHW'],
 	'Lunch & Learn Coordinator': ['shelleymcq'],
@@ -18,7 +18,6 @@ const teams = {
 		'juliaseid',
 		'mrsantons',
 		'marktnoonan',
-		'meg-gutshall',
 		'nickytonline',
 		'jamesrascal',
 		'shiftyp',
@@ -39,7 +38,6 @@ const teams = {
 		'glenmccallumcan',
 		'jdwilkin4',
 		'mrsantons',
-		'meg-gutshall',
 		'nickytonline',
 		'Rafi993',
 		'jamesrascal',
@@ -62,7 +60,6 @@ const teams = {
 		'adiati98',
 		'davidalpert',
 		'jdwilkin4',
-		'meg-gutshall',
 		'nickytonline',
 		'SuzeShardlow',
 		'tomcudd',
@@ -81,9 +78,9 @@ const teams = {
 		'kldickenson',
 	],
 
-	'VC Host': ['meg-gutshall', 'nickytonline', 'SuzeShardlow', 'saramccombs'],
+	'VC Host': ['nickytonline', 'SuzeShardlow', 'saramccombs'],
 
-	'VC MC': ['meg-gutshall', 'SuzeShardlow', 'saramccombs'],
+	'VC MC': ['SuzeShardlow', 'saramccombs'],
 
 	'Monthly Challenge Team': ['redapy', 'lsparlin'],
 } as const;
