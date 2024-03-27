@@ -48,8 +48,8 @@ export const _EXAMPLE: MemberObject = {
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
 	location: {
-		latitude: 	43.70011000,
-		longitude: -79.41630000,
+		latitude: 43.70011,
+		longitude: -79.4163,
 		title: 'Ontario, Canada',
 	},
 };
