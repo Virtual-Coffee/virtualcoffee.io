@@ -77,13 +77,13 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					The goal of this challenge is to work on creating, revising, or updating
-					your job packet materials and that elevator pitch that might get you in
-					the door. Your resume, cover letter, and elevator pitch should work
-					together to tell your story and represent where you are on your career
-					journey; each piece should complement the others. This challenge
-					emphasizes taking time to ensure they work together or get some extra
-					feedback on what you've worked on.
+					The goal of this challenge is to work on creating, revising, or
+					updating your job packet materials and that elevator pitch that might
+					get you in the door. Your resume, cover letter, and elevator pitch
+					should work together to tell your story and represent where you are on
+					your career journey; each piece should complement the others. This
+					challenge emphasizes taking time to ensure they work together or get
+					some extra feedback on what you've worked on.
 				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
@@ -116,7 +116,9 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-				Public speaking can feel daunting, but it is a valuable skill in all aspects of life. This month, we will help you conquer your fears and become a confident, captivating speaker!
+					Public speaking can feel daunting, but it is a valuable skill in all
+					aspects of life. This month, we will help you conquer your fears and
+					become a confident, captivating speaker!
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -134,7 +136,7 @@ const challengeList: Challenge[] = [
 				</p>
 			</>
 		),
-			},
+	},
 
 	{
 		title: 'Creative Community Challenge',
