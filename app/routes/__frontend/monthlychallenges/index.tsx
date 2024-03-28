@@ -71,7 +71,7 @@ const challengeList: Challenge[] = [
 	},
 
 	{
-		current: true,
+		current: false,
 		title: 'Get Job Ready',
 		subtitle: `Resumes, Cover Letters, and Elevator Pitch. There's never a bad time to update your job application materials.`,
 		description: (
