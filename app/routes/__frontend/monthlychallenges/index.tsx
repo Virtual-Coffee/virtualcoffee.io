@@ -109,6 +109,32 @@ const challengeList: Challenge[] = [
 			},
 		],
 	},
+	{
+		current: true,
+		title: 'Find Your Voice',
+		subtitle: `Public Speaking Challenge!`,
+		description: (
+			<>
+				<p>
+				Public speaking can feel daunting, but it is a valuable skill in all aspects of life. This month, we will help you conquer your fears and become a confident, captivating speaker!
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-month-of-learning-challenge-bdi">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/apr-2024">
+						check out the April 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
+			},
 
 	{
 		title: 'Creative Community Challenge',
