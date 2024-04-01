@@ -71,19 +71,19 @@ const challengeList: Challenge[] = [
 	},
 
 	{
-		current: true,
+		current: false,
 		title: 'Get Job Ready',
 		subtitle: `Resumes, Cover Letters, and Elevator Pitch. There's never a bad time to update your job application materials.`,
 		description: (
 			<>
 				<p>
-					The goal of this challenge is to work on creating, revising, or updating
-					your job packet materials and that elevator pitch that might get you in
-					the door. Your resume, cover letter, and elevator pitch should work
-					together to tell your story and represent where you are on your career
-					journey; each piece should complement the others. This challenge
-					emphasizes taking time to ensure they work together or get some extra
-					feedback on what you've worked on.
+					The goal of this challenge is to work on creating, revising, or
+					updating your job packet materials and that elevator pitch that might
+					get you in the door. Your resume, cover letter, and elevator pitch
+					should work together to tell your story and represent where you are on
+					your career journey; each piece should complement the others. This
+					challenge emphasizes taking time to ensure they work together or get
+					some extra feedback on what you've worked on.
 				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
@@ -108,6 +108,34 @@ const challengeList: Challenge[] = [
 				title: 'March, 2021',
 			},
 		],
+	},
+	{
+		current: true,
+		title: 'Find Your Voice',
+		subtitle: `Public Speaking Challenge!`,
+		description: (
+			<>
+				<p>
+					Public speaking can feel daunting, but it is a valuable skill in all
+					aspects of life. This month, we will help you conquer your fears and
+					become a confident, captivating speaker!
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/step-into-the-spotlight-join-our-public-speaking-monthly-challenge-52kl">
+						this blog post
+					</a>
+					. And check out our     <a href="/assets/pdfs/lightning-talk-guide.pdf" target="_blank" rel="noopener noreferrer">Lightning Talk Guide</a>!
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/apr-2024">
+						check out the April 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
 	},
 
 	{
