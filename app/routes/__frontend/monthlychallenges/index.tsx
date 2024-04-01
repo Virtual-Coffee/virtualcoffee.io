@@ -120,10 +120,10 @@ const challengeList: Challenge[] = [
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-month-of-learning-challenge-bdi">
+					<a href="https://dev.to/virtualcoffee/step-into-the-spotlight-join-our-public-speaking-monthly-challenge-52klß">
 						this blog post
 					</a>
-					.
+					. And check out our <Link to="/public/assets/pdfs/lightning-talk-guide.pdf">Lightning Talk Guide</Link>!
 				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
