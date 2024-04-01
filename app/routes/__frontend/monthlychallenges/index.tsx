@@ -122,7 +122,7 @@ const challengeList: Challenge[] = [
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/step-into-the-spotlight-join-our-public-speaking-monthly-challenge-52klß">
+					<a href="https://dev.to/virtualcoffee/step-into-the-spotlight-join-our-public-speaking-monthly-challenge-52kl">
 						this blog post
 					</a>
 					. And check out our <Link to="/public/assets/pdfs/lightning-talk-guide.pdf">Lightning Talk Guide</Link>!
