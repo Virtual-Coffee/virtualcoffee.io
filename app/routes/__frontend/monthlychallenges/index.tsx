@@ -125,7 +125,11 @@ const challengeList: Challenge[] = [
 					<a href="https://dev.to/virtualcoffee/step-into-the-spotlight-join-our-public-speaking-monthly-challenge-52klß">
 						this blog post
 					</a>
-					. And check out our <Link to="/public/assets/pdfs/lightning-talk-guide.pdf">Lightning Talk Guide</Link>!
+					. And check out our{' '}
+					<Link to="/public/assets/pdfs/lightning-talk-guide.pdf">
+						Lightning Talk Guide
+					</Link>
+					!
 				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
