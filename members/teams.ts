@@ -27,6 +27,7 @@ const teams = {
 		'LincolnFleet',
 		'needcaffeine',
 		'saramccombs',
+		'derekjj',
 	],
 
 	Notetaker: [
@@ -51,6 +52,7 @@ const teams = {
 		'SNikhill',
 		'CuriousCurmudgeon',
 		'sadiejay',
+		'derekjj',
 	],
 
 	'Monthly Challenge Team Lead': ['adiati98', 'dominicduffin1'],
