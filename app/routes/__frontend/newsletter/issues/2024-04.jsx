@@ -94,8 +94,7 @@ export default function Issue() {
 			<ul>
 				<li>Tech Interview Study Group (Mondays at 4:00 PM ET)</li>
 				<li>
-					Accountabilibuddies (Tuesdays at 7:00 PM ET and Thursdays at 9:00 AM
-					ET)
+					Accountabilibuddies (Tuesdays at 7:00 PM ET | Thursdays at 9:00 AM ET)
 				</li>
 				<li>The Pack Hunt (Tandem Job Hunting) (Wednesdays at 2:00 PM ET)</li>
 				<li>Feelings Friday (Fridays at 10:00 AM ET)</li>
