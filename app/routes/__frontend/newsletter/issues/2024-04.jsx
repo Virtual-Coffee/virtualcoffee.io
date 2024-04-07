@@ -362,7 +362,7 @@ export default function Issue() {
 			</p>
 			<p>
 				Have a question, suggestion, or want to nominate someone’s act of
-				kindness or blogpost? Email us at{' '}
+				kindness or blog post? Email us at{' '}
 				<a href="mailto:hello@virtualcoffee.io">hello@virtualcoffee.io</a>.
 			</p>
 		</>
