@@ -145,8 +145,8 @@ export default function Issue() {
 				<code>Mid-level</code>, <code>Early-career</code> — to our Slack for
 				peer-to-peer conversation, because we know that it's good to be able to
 				support and nurture conversations specific to your career level. If
-				you're interested in joining the one you identify with most, DM Bekah on
-				Slack.
+				you're interested in joining the one you identify with most, DM Bekah or
+				Meg on Slack.
 			</p>
 
 			<hr />
