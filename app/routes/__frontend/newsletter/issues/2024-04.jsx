@@ -65,7 +65,7 @@ export default function Issue() {
 				<strong>💡Monthly Theme & Challenge: Getting Job Ready!</strong>
 			</p>
 			<p>
-				We spent the month working on resumes, cover letters, interview skills
+				We spent the month working on resumes, cover letters, interview skills,
 				and all thing getting ready to work! Shoutout to all our community
 				members who participated!
 			</p>
@@ -357,7 +357,7 @@ export default function Issue() {
 			</p>
 			<p>
 				Have a question, suggestion, or want to nominate someone’s act of
-				kindness or blogpost? Email us at{' '}
+				kindness or blog post? Email us at{' '}
 				<a href="mailto:hello@virtualcoffee.io">hello@virtualcoffee.io</a>.
 			</p>
 		</>
