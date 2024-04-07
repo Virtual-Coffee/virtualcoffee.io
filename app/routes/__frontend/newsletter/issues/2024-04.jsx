@@ -97,7 +97,7 @@ export default function Issue() {
 					Accountabilibuddies (Tuesdays at 7:00 PM ET | Thursdays at 9:00 AM ET)
 				</li>
 				<li>The Pack Hunt (Tandem Job Hunting) (Wednesdays at 2:00 PM ET)</li>
-				<li>Feelings Friday (Fridays at 10:00 AM ET)</li>
+				<li>Feelings Friday (Fridays at 8:00 PM ET)</li>
 				<li>
 					Frontend Friday Folks fighting CSSBattle.dev (Fridays at 11:00 AM ET)
 				</li>
