@@ -65,7 +65,7 @@ export default function Issue() {
 				<strong>💡Monthly Theme & Challenge: Getting Job Ready!</strong>
 			</p>
 			<p>
-				We spent the month working on resumes, cover letters, interview skills
+				We spent the month working on resumes, cover letters, interview skills,
 				and all thing getting ready to work! Shoutout to all our community
 				members who participated!
 			</p>
