@@ -115,10 +115,6 @@ export default function Issue() {
 					Wednesdays: Midweek check-in in <code>#general</code>
 				</li>
 				<li>
-					Thursdays: New book club questions for Cracking the Coding Interview
-					on GitHub
-				</li>
-				<li>
 					Fridays:{' '}
 					<a href="https://twitter.com/VirtualCoffeeIO">X (formerly Twitter)</a>{' '}
 					chat and gratitude post in <code>#general</code>
