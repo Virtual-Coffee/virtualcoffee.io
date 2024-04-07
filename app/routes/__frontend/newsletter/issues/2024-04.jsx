@@ -45,7 +45,7 @@ export default function Issue() {
 			<blockquote className="blockquote">
 				<p className="mb-0">
 					"I am also grateful for all the encouragement Julia gave me this week;
-					it helped me break our of my shell."
+					it helped me break out of my shell."
 				</p>
 				<footer className="blockquote-footer">Ethan</footer>
 			</blockquote>
