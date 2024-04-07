@@ -127,7 +127,7 @@ export default function Issue() {
 					Virtual Coffee (Tuesdays at 9:00 AM ET | Thursdays at 12:00 PM ET)
 				</li>
 				<li>
-					Async Twitter Chat (Fridays — prompts tweeted out at 9:00 AM ET)
+					Async Twitter Chat (Weekly chat begins every Friday at 9:00 AM ET)
 				</li>
 			</ul>
 
