@@ -221,7 +221,7 @@ export default function Issue() {
 								Brave. Bold. Fearless. Our very own Meg spent 4+ hours working
 								on Rust ( <code>#doitlive</code> ) this weekend. While I don’t
 								always advocate weekend work, what a great show of effort and
-								inclusion to work through what we’re doing in the Rust
+								inclusion to work through what we’re doing in the Rust{' '}
 								<code>#learning-together</code> cohort live. Live! On YouTube
 								and Twitch! Congrats and way to go Meg.
 							</p>
