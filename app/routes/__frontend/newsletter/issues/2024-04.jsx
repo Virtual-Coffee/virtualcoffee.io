@@ -115,9 +115,18 @@ export default function Issue() {
 					Wednesdays: Midweek check-in in <code>#general</code>
 				</li>
 				<li>
-					Fridays:{' '}
-					<a href="https://twitter.com/VirtualCoffeeIO">X (formerly Twitter)</a>{' '}
-					chat and gratitude post in <code>#general</code>
+					Fridays:
+					<ul>
+						<li>
+							Rust Learning Cohort check-in in <code>#learning-together</code>
+						</li>
+						<li>
+							<a href="https://twitter.com/VirtualCoffeeIO">
+								X (formerly Twitter)
+							</a>{' '}
+							chat and gratitude post in <code>#general</code>
+						</li>
+					</ul>
 				</li>
 			</ul>
 
