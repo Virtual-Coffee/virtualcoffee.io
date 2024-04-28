@@ -47,11 +47,11 @@ export default function Challenge() {
 			</h1>
 
 			<p className="lead">
-				It's amazing to realize that we've made it through more than four years of 
-                Virtual Coffee! As we work hard to make sure this community continues 
-                to be the special and close-knit group that it has been during that time, 
-                let's celebrate one of the things that continually makes this community 
-                so special: Kindness.
+				It's amazing to realize that we've made it through more than four years
+				of Virtual Coffee! As we work hard to make sure this community continues
+				to be the special and close-knit group that it has been during that
+				time, let's celebrate one of the things that continually makes this
+				community so special: Kindness.
 			</p>
 
 			<p className="lead">
@@ -82,14 +82,14 @@ export default function Challenge() {
 					session.
 				</li>
 				<li>
-                    Share your tips for a skill others struggle through writing a blog post, 
-                    creating video or live streaming. Even better, share it with us on a 
-                    Lunch and Learn session!
-                </li>
+					Share your tips for a skill others struggle through writing a blog
+					post, creating video or live streaming. Even better, share it with us
+					on a Lunch and Learn session!
+				</li>
 				<li>Give honest and constructive feedback.</li>
 				<li>
-					Use another social media platform, like X or LinkedIn, to offer gratitude,
-					support, or kindness for a community member.
+					Use another social media platform, like X or LinkedIn, to offer
+					gratitude, support, or kindness for a community member.
 				</li>
 				<li>Give honest and constructive feedback.</li>
 			</ul>
