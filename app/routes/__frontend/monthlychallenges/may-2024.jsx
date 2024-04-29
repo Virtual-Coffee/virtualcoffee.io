@@ -73,8 +73,8 @@ export default function Challenge() {
 			</p>
 			<ul>
 				<li>
-					Use the <code>#gratitude</code> channel in Slack to thank someone in the community
-					you're grateful for.
+					Use the <code>#gratitude</code> channel in Slack to thank someone in
+					the community you're grateful for.
 				</li>
 				<li>Reach out to a member you haven't seen in a while.</li>
 				<li>
