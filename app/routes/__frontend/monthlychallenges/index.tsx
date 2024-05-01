@@ -110,7 +110,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Find Your Voice',
 		subtitle: `Public Speaking Challenge!`,
 		description: (
@@ -125,7 +124,15 @@ const challengeList: Challenge[] = [
 					<a href="https://dev.to/virtualcoffee/step-into-the-spotlight-join-our-public-speaking-monthly-challenge-52kl">
 						this blog post
 					</a>
-					. And check out our     <a href="/assets/pdfs/lightning-talk-guide.pdf" target="_blank" rel="noopener noreferrer">Lightning Talk Guide</a>!
+					. And check out our{' '}
+					<a
+						href="/assets/pdfs/lightning-talk-guide.pdf"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Lightning Talk Guide
+					</a>
+					!
 				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
@@ -136,6 +143,12 @@ const challengeList: Challenge[] = [
 				</p>
 			</>
 		),
+		links: [
+			{
+				href: '/monthlychallenges/apr-2024',
+				title: 'April, 2024',
+			},
+		],
 	},
 
 	{
@@ -371,18 +384,28 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Community Kindness',
 		subtitle: `Celebrating our Community as we move into a new year of Virtual Coffee!`,
 		description: (
-			<p>
-				As we work hard to make sure this community continues to be the special
-				and close-knit group, this challenge encourages our members to celebrate
-				one of the things that continually makes this community so special:
-				Kindness. Some of the ways we see this include: practicing gratitude,
-				reaching out to support other members, mentoring, helping, giving honest
-				and constructive feedback, and continuing to make Virtual Coffee a safe
-				and supportive space.
-			</p>
+			<>
+				<p>
+					As we work hard to make sure this community continues to be the
+					special and close-knit group, this challenge encourages our members to
+					celebrate one of the things that continually makes this community so
+					special: Kindness. Some of the ways we see this include: practicing
+					gratitude, reaching out to support other members, mentoring, helping,
+					giving honest and constructive feedback, and continuing to make
+					Virtual Coffee a safe and supportive space.
+				</p>
+				<p>
+					To view all of the details of this month's challenge,{' '}
+					<Link to="/monthlychallenges/may-2024">
+						check out the May 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 		links: [
 			{
