@@ -405,6 +405,13 @@ const challengeList: Challenge[] = [
 					</Link>
 					.
 				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-cultivating-community-kindness-in-uncertain-times-7n">
+						this blog post
+					</a>
+					.
+				</p>
 			</>
 		),
 		links: [
