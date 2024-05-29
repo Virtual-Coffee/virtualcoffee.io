@@ -1,5 +1,6 @@
 import { json } from '@remix-run/node';
 import { createMetaData } from '~/util/createMetaData.server';
+import { Link } from '@remix-run/react';
 
 import UndrawIllustration from '~/components/UndrawIllustration';
 
@@ -30,6 +31,10 @@ export function meta({ data: { meta } = {} } = {}) {
 export default function Challenge() {
 	return (
 		<>
+			<div className="alert alert-success">
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link to="/monthlychallenges/june-2024">next challenge</Link>!
+			</div>
 			<div className="row align-items-center">
 				<div className="col-sm-4">
 					<UndrawIllustration filename="UndrawAppreciation" />
