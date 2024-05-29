@@ -384,7 +384,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Community Kindness',
 		subtitle: `Celebrating our Community as we move into a new year of Virtual Coffee!`,
 		description: (
@@ -534,18 +533,28 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Mid-Year Check-In',
 		subtitle: `Reflect. Reevaluate. Grow.`,
 		description: (
-			<p>
-				The Mid-Year Check-In challenge is designed to provide an opportunity
-				for Virtual Coffee members to reflect on their progress, reevaluate
-				goals, and gain clarity on their journey. Let’s pause, assess, and
-				adjust as we reach the halfway point of the year. This challenge aims to
-				encourage personal growth, foster connection within the community, and
-				provide a supportive space for members to share their insights,
-				challenges, and successes.
-			</p>
+			<>
+				<p>
+					The Mid-Year Check-In challenge is designed to provide an opportunity
+					for Virtual Coffee members to reflect on their progress, reevaluate
+					goals, and gain clarity on their journey. Let’s pause, assess, and
+					adjust as we reach the halfway point of the year. This challenge aims to
+					encourage personal growth, foster connection within the community, and
+					provide a supportive space for members to share their insights,
+					challenges, and successes.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/june-2024">
+						check out the June 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 	},
 	{
