@@ -1,10 +1,17 @@
+import { handle as june2024 } from '~/routes/__frontend/monthlychallenges/june-2024';
+import { handle as may2024 } from '~/routes/__frontend/monthlychallenges/may-2024';
+import { handle as apr2024 } from '~/routes/__frontend/monthlychallenges/apr-2024';
+import { handle as mar2024 } from '~/routes/__frontend/monthlychallenges/mar-2024';
+import { handle as feb2024 } from '~/routes/__frontend/monthlychallenges/feb-2024';
 import { handle as jan2024 } from '~/routes/__frontend/monthlychallenges/jan-2024';
+
 import { handle as dec2023 } from '~/routes/__frontend/monthlychallenges/dec-2023';
 import { handle as nov2023 } from '~/routes/__frontend/monthlychallenges/nov-2023';
 import { handle as oct2023 } from '~/routes/__frontend/monthlychallenges/oct-2023';
 import { handle as sept2023 } from '~/routes/__frontend/monthlychallenges/sept-2023';
 import { handle as feb2023 } from '~/routes/__frontend/monthlychallenges/feb-2023';
 import { handle as jan2023 } from '~/routes/__frontend/monthlychallenges/jan-2023';
+
 import { handle as dec2022 } from '~/routes/__frontend/monthlychallenges/dec-2022';
 import { handle as nov2022 } from '~/routes/__frontend/monthlychallenges/nov-2022';
 import { handle as oct2022 } from '~/routes/__frontend/monthlychallenges/oct-2022';
@@ -34,13 +41,20 @@ import { handle as dec2020 } from '~/routes/__frontend/monthlychallenges/dec-202
 import { handle as nov2020 } from '~/routes/__frontend/monthlychallenges/nov-2020';
 
 const challenges: Challenge[] = [
+	{ handleData: june2024, slug: 'june-2024' },
+	{ handleData: may2024, slug: 'may-2024' },
+	{ handleData: apr2024, slug: 'apr-2024' },
+	{ handleData: mar2024, slug: 'mar-2024' },
+	{ handleData: feb2024, slug: 'feb-2024' },
 	{ handleData: jan2024, slug: 'jan-2024' },
+
 	{ handleData: dec2023, slug: 'dec-2023' },
 	{ handleData: nov2023, slug: 'nov-2023' },
 	{ handleData: oct2023, slug: 'oct-2023' },
 	{ handleData: sept2023, slug: 'sept-2023' },
 	{ handleData: feb2023, slug: 'feb-2023' },
 	{ handleData: jan2023, slug: 'jan-2023' },
+
 	{ handleData: dec2022, slug: 'dec-2022' },
 	{ handleData: nov2022, slug: 'nov-2022' },
 	{ handleData: oct2022, slug: 'oct-2022' },
