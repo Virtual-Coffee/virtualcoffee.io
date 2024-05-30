@@ -85,6 +85,12 @@ export default function Challenge() {
 					goals for the year? Are there any adjustments you want to make based
 					on your progress?
 				</li>
+				<li>
+					<strong>Embrace shifting goals</strong>: It's okay if your goals have
+					changed! Your priorities and circumstances can shift throughout the
+					year. Embrace the change, revisit your initial goals, and adjust your
+					goals accordingly.
+				</li>
 			</ul>
 			<h3 className="mb-3">
 				What if I need help and want to hold myself accountable?
