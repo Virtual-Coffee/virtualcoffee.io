@@ -40,7 +40,7 @@ export default function Challenge() {
 				down into achievable monthly plans.
 			</p>
 			<p className="lead">
-				This month, we do "Mid-Year Check-In" to provide you with the
+				This month, we're doing a "Mid-Year Check-In" to provide you with the
 				opportunity to reflect on your progress, reevaluate your goals, and gain
 				clarity on the path you set out on at the beginning of the year. Let's
 				take a moment to pause, assess, and adjust as we reach the halfway point
