@@ -542,9 +542,9 @@ const challengeList: Challenge[] = [
 					The Mid-Year Check-In challenge is designed to provide an opportunity
 					for Virtual Coffee members to reflect on their progress, reevaluate
 					goals, and gain clarity on their journey. Let’s pause, assess, and
-					adjust as we reach the halfway point of the year. This challenge aims to
-					encourage personal growth, foster connection within the community, and
-					provide a supportive space for members to share their insights,
+					adjust as we reach the halfway point of the year. This challenge aims
+					to encourage personal growth, foster connection within the community,
+					and provide a supportive space for members to share their insights,
 					challenges, and successes.
 				</p>
 				<p>
