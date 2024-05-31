@@ -548,6 +548,13 @@ const challengeList: Challenge[] = [
 					challenges, and successes.
 				</p>
 				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-mid-year-check-in-recharge-and-refocus-for-an-amazing-second-half-2k4c?preview=a791f8dd07aff349a398a7756c6099c120b0d09b0d0bcad1aa41e59d64b306292ca5bd66febb03a0fc42c3d4d650c1abe5c1f20f3c9252a7a80773ec">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
 					To view all of the details of this year's challenge,{' '}
 					<Link to="/monthlychallenges/june-2024">
 						check out the June 2024 challenge page
