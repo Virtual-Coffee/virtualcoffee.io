@@ -93,7 +93,7 @@ export default function Issue() {
 				<Link to="/monthlychallenges/june-2024">monthly challenge page</Link>!
 			</p>
 
-			<h3 className="my-5">☕📅 Virtual Coffee Events</h3>
+			<h3 className="mt-5 mb-4">☕📅 Virtual Coffee Events</h3>
 			<h4>MONDAYS</h4>
 			<ul>
 				<li>Tech Interview Study Group — 16:00 GMT-4</li>
@@ -147,7 +147,7 @@ export default function Issue() {
 				out <Link to="/events">our events page</Link>.
 			</p>
 
-			<h3 className="my-5">🆕 New Career Focus Channels Alert</h3>
+			<h3 className="mt-5 mb-4">🆕 New Career Focus Channels Alert</h3>
 			<p>
 				We've added three new private channels — <code>Senior+</code>,{' '}
 				<code>Mid-level</code>, <code>Early-career</code> — to our Slack for
@@ -159,7 +159,7 @@ export default function Issue() {
 
 			<hr />
 
-			<h3 className="mb-5">🤝 Volunteering at VC</h3>
+			<h3 className="mb-4">🤝 Volunteering at VC</h3>
 			<p>
 				We're very excited to continue open membership with the support of our
 				active volunteers! All our active volunteers have an invite to send out
