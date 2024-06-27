@@ -5,7 +5,7 @@ export default function NewsletterSubscribe({
 		<>
 			<h2>{header}</h2>
 			<form
-				action="https://virtualcoffee.us7.list-manage.com/subscribe/post?u=e52b6b09f8fe23f8277bfbe66&amp;id=d0267c9b8e"
+				action="https://virtualcoffeeio.beehiiv.com/subscribe"
 				method="post"
 				name="mc-embedded-subscribe-form"
 				style={{ maxWidth: '500px' }}
