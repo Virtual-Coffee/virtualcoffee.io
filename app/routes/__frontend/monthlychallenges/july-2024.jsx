@@ -62,16 +62,15 @@ export default function Challenge() {
 					channels on Slack.
 				</li>
 				<li>
-					<strong>Introduction:</strong> If you've invited your friend to join
-					Virtual Coffee, encourage them to introduce themselves in the{' '}
-					<code>#welcome</code> channel on Slack after attending their first
-					Coffee.
+					<strong>Encouraging introduction:</strong> If you've invited your
+					friend to join Virtual Coffee, encourage them to introduce themselves
+					in the <code>#welcome</code> channel on Slack after attending their
+					first Coffee.
 				</li>
 				<li>
-					<strong>Welcoming message:</strong> Send a quick welcome message to
-					new members when they introduce themselves in the{' '}
-					<code>#welcome</code> channel. This can be a personalized message or a
-					friendly hello!
+					<strong>Welcoming message:</strong> When new members introduce
+					themselves in the <code>#welcome</code> channel, send a quick welcome
+					message. This can be a personalized message or a friendly hello!
 				</li>
 				<li>
 					<strong>Offering help and support:</strong> This can be anything! For
