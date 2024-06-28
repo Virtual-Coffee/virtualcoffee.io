@@ -86,9 +86,11 @@ export default function Challenge() {
 			</ul>
 
 			<p>
-				Please always remember to abide by our{' '}
-				<Link to="/code-of-conduct">Code of Conduct</Link>, which we take
-				seriously.
+				<strong>
+					Please always remember to abide by our{' '}
+					<Link to="/code-of-conduct">Code of Conduct</Link>, which we take
+					seriously.
+				</strong>
 			</p>
 		</>
 	);
