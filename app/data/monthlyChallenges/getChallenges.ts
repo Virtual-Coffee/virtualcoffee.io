@@ -1,3 +1,4 @@
+import { handle as july2024 } from '~/routes/__frontend/monthlychallenges/july-2024';
 import { handle as june2024 } from '~/routes/__frontend/monthlychallenges/june-2024';
 import { handle as may2024 } from '~/routes/__frontend/monthlychallenges/may-2024';
 import { handle as apr2024 } from '~/routes/__frontend/monthlychallenges/apr-2024';
@@ -41,6 +42,7 @@ import { handle as dec2020 } from '~/routes/__frontend/monthlychallenges/dec-202
 import { handle as nov2020 } from '~/routes/__frontend/monthlychallenges/nov-2020';
 
 const challenges: Challenge[] = [
+	{ handleData: july2024, slug: 'july-2024' },
 	{ handleData: june2024, slug: 'june-2024' },
 	{ handleData: may2024, slug: 'may-2024' },
 	{ handleData: apr2024, slug: 'apr-2024' },
