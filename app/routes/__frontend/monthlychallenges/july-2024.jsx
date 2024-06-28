@@ -57,7 +57,7 @@ export default function Challenge() {
 			<ul>
 				<li>
 					<strong>One member, one invitation:</strong> You may invite one person
-					this month. The details for inviting a new member are in the
+					this month. The details for inviting a new member are in the{' '}
 					<code>#announcement</code> and <code>#monthly-challenge</code>{' '}
 					channels on Slack.
 				</li>
@@ -85,6 +85,12 @@ export default function Challenge() {
 					<code>#co-working-room</code>, too!
 				</li>
 			</ul>
+
+			<p>
+				Please always remember to abide by our{' '}
+				<Link to="/code-of-conduct">Code of Conduct</Link>, which we take
+				seriously.
+			</p>
 		</>
 	);
 }
