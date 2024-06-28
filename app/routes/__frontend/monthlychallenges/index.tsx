@@ -595,7 +595,7 @@ const challengeList: Challenge[] = [
 	{
 		current: true,
 		title: 'Welcoming Community',
-		subtitle: `Let's bring in and welcome our new friends!`,
+		subtitle: `Let's bring new friends in and give them a warm welcome!`,
 		description: (
 			<>
 				<p>
