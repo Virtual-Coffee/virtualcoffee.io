@@ -599,7 +599,11 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					This challenge allows you to invite a friend to join our community. However, simply inviting someone is not enough! We encourage you to warmly welcome and support our new friends and demonstrate what Virtual Coffee is truly all about - a welcoming and supportive community!
+					This challenge allows you to invite a friend to join our community.
+					However, simply inviting someone is not enough! We encourage you to
+					warmly welcome and support our new friends and demonstrate what
+					Virtual Coffee is truly all about - a welcoming and supportive
+					community!
 				</p>
 				{/* <p>
 					Learn more about this challenge in{' '}
