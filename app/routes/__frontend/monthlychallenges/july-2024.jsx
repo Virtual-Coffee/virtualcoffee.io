@@ -41,13 +41,13 @@ export default function Challenge() {
 
 			<h2 className="mt-5">The Challenge</h2>
 			<p>
-				We love new friends! This month, you can invite one person to join our
-				community! ✨
+				We love new friends! This month, you can invite{' '}
+				<strong>one person</strong> to join our community! ✨
 			</p>
 			<p>
 				During this month, we're also encouraging you to actively welcome our
-				new members and show what the Virtual Coffee community is all about. A
-				welcoming and supportive community. 💖
+				new members and show what Virtual Coffee is all about. A welcoming and
+				supportive community. 💖
 			</p>
 
 			<h2>Who can Participate?</h2>
@@ -69,7 +69,7 @@ export default function Challenge() {
 				</li>
 				<li>
 					<strong>Welcoming message:</strong> When new members introduce
-					themselves in the <code>#welcome</code> channel, send a quick welcome
+					themselves in the <code>#welcome</code> channel, send a welcome
 					message. This can be a personalized message or a friendly hello!
 				</li>
 				<li>
