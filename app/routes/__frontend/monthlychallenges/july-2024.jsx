@@ -78,9 +78,9 @@ export default function Challenge() {
 					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide">
 						Slack channels
 					</Link>{' '}
-					they may find interesting
-					or encourage them to attend our Coffee Table events and post in Slack. 
-					Invite them to hang out in the{' '} <code>#co-working-room</code>, too!
+					they may find interesting or encourage them to attend our Coffee Table
+					events and post in Slack. Invite them to hang out in the{' '}
+					<code>#co-working-room</code>, too!
 				</li>
 			</ul>
 
