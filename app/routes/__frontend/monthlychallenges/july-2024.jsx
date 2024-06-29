@@ -46,7 +46,7 @@ export default function Challenge() {
 			</p>
 			<p>
 				During this month, we're also encouraging you to actively welcome our
-				new members and show what Virtual Coffee is all about. A welcoming and
+				new members and show them what Virtual Coffee is all about. A welcoming and
 				supportive community. 💖
 			</p>
 
