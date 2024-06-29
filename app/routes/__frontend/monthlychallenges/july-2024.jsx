@@ -74,14 +74,13 @@ export default function Challenge() {
 				</li>
 				<li>
 					<strong>Offering help and support:</strong> This can be anything! For
-					example, based on our new friends' interest when introducing
-					themselves, you can point them to add the relevant{' '}
+					example, let them know about any{' '}
 					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide">
 						Slack channels
 					</Link>{' '}
-					or encourage them to attend and join VC events, answer questions in
-					our channels on Slack, etc. You can invite them to hang out in the{' '}
-					<code>#co-working-room</code>, too!
+					they may find interesting
+					or encourage them to attend our Coffee Table events and post in Slack. 
+					Invite them to hang out in the{' '} <code>#co-working-room</code>, too!
 				</li>
 			</ul>
 
