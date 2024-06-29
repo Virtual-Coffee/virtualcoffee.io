@@ -51,7 +51,7 @@ export default function Challenge() {
 			</p>
 
 			<h2>Who can Participate?</h2>
-			<p>All Virtual Coffee members who joined before July 2024.</p>
+			<p>All Virtual Coffee members.</p>
 
 			<h2>How to Participate</h2>
 			<ul>
