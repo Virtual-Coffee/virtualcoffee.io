@@ -58,7 +58,7 @@ export default function Challenge() {
 				<li>
 					<strong>One member, one invitation:</strong> You may invite one person
 					this month. The details for inviting a new member are in the{' '}
-					<code>#announcement</code> and <code>#monthly-challenge</code>{' '}
+					<code>#announcements</code> and <code>#monthly-challenge</code>{' '}
 					channels on Slack.
 				</li>
 				<li>
