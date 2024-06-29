@@ -533,7 +533,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Mid-Year Check-In',
 		subtitle: `Reflect. Reevaluate. Grow.`,
 		description: (
@@ -587,6 +586,36 @@ const challengeList: Challenge[] = [
 					To view all of the details of this year's challenge,{' '}
 					<Link to="/monthlychallenges/jan-2024">
 						check out the January 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
+	},
+	{
+		current: true,
+		title: 'Welcoming Community',
+		subtitle: `Let's bring new friends in and give them a warm welcome!`,
+		description: (
+			<>
+				<p>
+					This challenge allows you to invite a friend to join our community.
+					However, simply inviting someone is not enough! We encourage you to
+					warmly welcome and support our new friends and demonstrate what
+					Virtual Coffee is truly all about - a welcoming and supportive
+					community!
+				</p>
+				{/* <p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-new-year-new-goals-241m">
+						this blog post
+					</a>
+					.
+				</p> */}
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/july-2024">
+						check out the July 2024 challenge page
 					</Link>
 					.
 				</p>
