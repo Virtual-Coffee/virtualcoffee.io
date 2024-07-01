@@ -79,8 +79,8 @@ export default function Challenge() {
 						Slack channels
 					</Link>{' '}
 					they may find interesting or encourage them to attend our Coffee Table
-					events and post in Slack. Invite them to hang out in the{' '}
-					<code>#co-working-room</code>, too!
+					events and post in Slack, and answer their questions. Invite them to
+					hang out in the <code>#co-working-room</code>, too!
 				</li>
 			</ul>
 
