@@ -605,13 +605,13 @@ const challengeList: Challenge[] = [
 					Virtual Coffee is truly all about - a welcoming and supportive
 					community!
 				</p>
-				{/* <p>
+				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-new-year-new-goals-241m">
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-welcoming-community-4d44">
 						this blog post
 					</a>
 					.
-				</p> */}
+				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
 					<Link to="/monthlychallenges/july-2024">
