@@ -632,7 +632,7 @@ const challengeList: Challenge[] = [
 				The motivation behind our August challenge is to get folks out and about and seeing the world. 
 				We will be encouraging our members to make the most of summer (in the Northern hemisphere, at least), 
 				enjoy some work / life balance and benefit from the fresh air and exercise of the great outdoors. 
-				The challenge could also be completed without ever leaving the car, but the hope is that folks will 
+				The challenge <i>could</i> be completed without ever leaving the car, but to get the most out of it, 
 				leave the car for a bit and get some real fresh air and exercise. A little hint for those of you that 
 				have access to public transportation: Public transportation is a great way to see the world while someone 
 				else does the driving. It also forces you to actually get some exercise because it probably won't pick you 
@@ -640,7 +640,7 @@ const challengeList: Challenge[] = [
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/monthly-challenge-photography-30id">
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-photography-4g18">
 						this blog post
 					</a>
 					.

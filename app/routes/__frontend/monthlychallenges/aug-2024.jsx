@@ -53,7 +53,7 @@ export default function Challenge() {
 				</li>
 				<li>
 					<strong>Post:</strong> When you get back, post your photographs in the 
-					<code>#monthly-challenge</code> channel in Slack. Or you can post them 
+					<code> #monthly-challenge</code> channel in Slack. Or you can post them 
 					on your phone while you’re out if you’re too impatient to wait!
 				</li>
 				<li>
@@ -63,8 +63,8 @@ export default function Challenge() {
 
 			<p>
 				Read our <a 
-				href="https://dev.to/virtualcoffee/monthly-challenge-photography-30id"
-				>blogpost</a> for more info and inspiration
+				href="https://dev.to/virtualcoffee/monthly-challenge-photography-4g18"
+				>blogpost</a> for more info and inspiration!
 			</p>
 
 			<p>
