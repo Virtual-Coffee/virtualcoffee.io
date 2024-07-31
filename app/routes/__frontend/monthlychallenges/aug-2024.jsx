@@ -33,6 +33,8 @@ export default function Challenge() {
 				<small>Monthly Challenge for August 2024:</small> Photography Challenge
 			</h1>
 
+			<p>We're excited to announce this new challenge for August 2024!</p>
+
 			<p className="lead mt-3">
 				This month, we are encouraging our members to take some time away from their screens 
 				and get out of the house, then come back and share photographs in Slack. You can, of 
