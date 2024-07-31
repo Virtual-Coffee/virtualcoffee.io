@@ -36,10 +36,11 @@ export default function Challenge() {
 			<p>We're excited to announce this new challenge for August 2024!</p>
 
 			<p className="lead mt-3">
-				This month, we are encouraging our members to take some time away from their screens 
-				and get out of the house, then come back and share photographs in Slack. You can, of 
-				course, complete the challenge without going more than five feet from your car, but 
-				we encourage you to get the benefit of some fresh air and exercise.
+				This month, we are encouraging our members to take some time away from
+				their screens and get out of the house, then come back and share
+				photographs in Slack. You can, of course, complete the challenge without
+				going more than five feet from your car, but we encourage you to get the
+				benefit of some fresh air and exercise.
 			</p>
 
 			<h2 className="mt-5">How to Participate</h2>
@@ -49,14 +50,14 @@ export default function Challenge() {
 					<strong>Plan:</strong> Choose some places to visit outside your home.
 				</li>
 				<li>
-					<strong>Go:</strong> Visit them, and while you’re there, take photographs of your 
-					surroundings. Include a selfie if you want, but the main idea is to photograph 
-					the places you visit.
+					<strong>Go:</strong> Visit them, and while you’re there, take
+					photographs of your surroundings. Include a selfie if you want, but
+					the main idea is to photograph the places you visit.
 				</li>
 				<li>
-					<strong>Post:</strong> When you get back, post your photographs in the 
-					<code> #monthly-challenge</code> channel in Slack. Or you can post them 
-					on your phone while you’re out if you’re too impatient to wait!
+					<strong>Post:</strong> When you get back, post your photographs in the
+					<code> #monthly-challenge</code> channel in Slack. Or you can post
+					them on your phone while you’re out if you’re too impatient to wait!
 				</li>
 				<li>
 					<strong>Browse:</strong> Admire everyone else’s photographs
@@ -64,9 +65,11 @@ export default function Challenge() {
 			</ul>
 
 			<p>
-				Read our <a 
-				href="https://dev.to/virtualcoffee/monthly-challenge-photography-4g18"
-				>blogpost</a> for more info and inspiration!
+				Read our{' '}
+				<a href="https://dev.to/virtualcoffee/monthly-challenge-photography-4g18">
+					blogpost
+				</a>{' '}
+				for more info and inspiration!
 			</p>
 
 			<p>
