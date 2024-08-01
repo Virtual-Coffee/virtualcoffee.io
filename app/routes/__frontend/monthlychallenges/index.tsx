@@ -593,7 +593,6 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		current: true,
 		title: 'Welcoming Community',
 		subtitle: `Let's bring new friends in and give them a warm welcome!`,
 		description: (
@@ -616,6 +615,44 @@ const challengeList: Challenge[] = [
 					To view all of the details of this year's challenge,{' '}
 					<Link to="/monthlychallenges/july-2024">
 						check out the July 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
+	},
+	{
+		current: true,
+		title: 'Photography Challenge',
+		subtitle: `Let's get out and about.`,
+		description: (
+			<>
+				<p>
+					As programmers, we spend all day in front of the screen. At Virtual
+					Coffee, we also value health and wellbeing. The motivation behind our
+					August challenge is to get folks out and about and seeing the world.
+					We will be encouraging our members to make the most of summer (in the
+					Northern hemisphere, at least), enjoy some work / life balance and
+					benefit from the fresh air and exercise of the great outdoors. The
+					challenge <i>could</i> be completed without ever leaving the car, but
+					to get the most out of it, leave the car for a bit and get some real
+					fresh air and exercise. A little hint for those of you that have
+					access to public transportation: Public transportation is a great way
+					to see the world while someone else does the driving. It also forces
+					you to actually get some exercise because it probably won't pick you
+					up at your front door.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-photography-4g18">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/aug-2024">
+						check out the August 2024 challenge page
 					</Link>
 					.
 				</p>
