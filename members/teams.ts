@@ -1,5 +1,5 @@
 const teams = {
-	'Community Maintainer': ['BekahHW', 'tkshill', 'juliaseid'],
+	'Community Maintainer': ['BekahHW', 'tkshill', 'juliaseid', 'meg-gutshall'],
 
 	'Org Maintainer': ['danieltott', 'BekahHW'],
 	'Lunch & Learn Coordinator': ['shelleymcq'],
@@ -18,7 +18,6 @@ const teams = {
 		'juliaseid',
 		'mrsantons',
 		'marktnoonan',
-		'meg-gutshall',
 		'nickytonline',
 		'jamesrascal',
 		'shiftyp',
@@ -28,6 +27,7 @@ const teams = {
 		'LincolnFleet',
 		'needcaffeine',
 		'saramccombs',
+		'derekjj',
 	],
 
 	Notetaker: [
@@ -39,7 +39,6 @@ const teams = {
 		'glenmccallumcan',
 		'jdwilkin4',
 		'mrsantons',
-		'meg-gutshall',
 		'nickytonline',
 		'Rafi993',
 		'jamesrascal',
@@ -53,6 +52,7 @@ const teams = {
 		'SNikhill',
 		'CuriousCurmudgeon',
 		'sadiejay',
+		'derekjj',
 	],
 
 	'Monthly Challenge Team Lead': ['adiati98', 'dominicduffin1'],
@@ -62,7 +62,6 @@ const teams = {
 		'adiati98',
 		'davidalpert',
 		'jdwilkin4',
-		'meg-gutshall',
 		'nickytonline',
 		'SuzeShardlow',
 		'tomcudd',
@@ -79,11 +78,12 @@ const teams = {
 		'LincolnFleet',
 		'rhdeck',
 		'kldickenson',
+		'derekjj',
 	],
 
-	'VC Host': ['meg-gutshall', 'nickytonline', 'SuzeShardlow', 'saramccombs'],
+	'VC Host': ['nickytonline', 'SuzeShardlow', 'saramccombs'],
 
-	'VC MC': ['meg-gutshall', 'SuzeShardlow', 'saramccombs'],
+	'VC MC': ['SuzeShardlow', 'saramccombs'],
 
 	'Monthly Challenge Team': ['redapy', 'lsparlin'],
 } as const;

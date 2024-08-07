@@ -163,10 +163,6 @@ ul {
 	}
 }
 
-.prose h1 {
-	// text-align: center;
-}
-
 .prose h1 > small::before {
 	content: '\a';
 	white-space: pre;
@@ -177,7 +173,6 @@ ul {
 }
 
 .prose h3 {
-	font-size: 1.5rem;
 	font-weight: 600;
 	margin: 1.5rem 0 0.5rem 0;
 }
@@ -217,7 +212,6 @@ ul {
 }
 
 .resources-section .prose h2 {
-	font-size: 3rem;
 	font-weight: 900;
 	line-height: 1.2;
 	margin-bottom: 1rem;
@@ -225,17 +219,11 @@ ul {
 
 .resources-section .prose h3 {
 	margin: 1.5rem 0 1.5rem 0;
-	font-size: 2rem;
 }
 
 .resources-section .prose h4 {
 	margin: 1.5rem 0 1rem 0;
 	font-weight: 500;
-	font-size: 1.25rem;
-}
-
-.resources-section .prose h5 {
-	font-size: 1rem;
 }
 
 .resources-section .prose .header-anchor-wrapper-h2 {

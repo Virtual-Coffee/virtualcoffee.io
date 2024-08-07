@@ -24,8 +24,18 @@
     "Cache-Control" = "public, max-age=31536000, s-maxage=31536000"
 
 [[redirects]]
+  from = "/volunteer"
+  to = "/resources/virtual-coffee-handbook/get-involved"
+  status = 301
+
+[[redirects]]
   from = "/members/map"
   to = "/members"
+  status = 301
+
+[[redirects]]
+  from = "/member-survey"
+  to = "https://airtable.com/appGHm8ztVWug6UxH/pagKrtAhS4jnRhtYD/form"
   status = 301
 
 [[redirects]]

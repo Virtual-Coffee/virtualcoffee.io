@@ -14,7 +14,7 @@ export const danielrendox: MemberObject = {
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: `A junior Android developer with a passion for sharing knowledge, communicating with people, and a never-ending curiosity.`,
+	bio: `Passionate Android developer with big ambitions`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -31,7 +31,7 @@ export const danielrendox: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
+		{ type: 'linkedin', username: 'danielrendox' },
 		{ type: 'dev', username: 'danielrendox' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'DanielRendox' },
@@ -43,4 +43,9 @@ export const danielrendox: MemberObject = {
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: [],
+	location: {
+		latitude: 48.464718,
+		longitude: 35.046185,
+		title: 'Dnipro, Ukraine',
+	},
 };

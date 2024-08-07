@@ -29,14 +29,30 @@ const challengeList: Challenge[] = [
 		title: 'Month of Learning',
 		subtitle: `Time to learn new things!`,
 		description: (
-			<p>
-				The goal of this challenge is to learn something new, share what we have
-				learned, and gather recommendations and resources to share with the
-				community. During this challenge, we work on learning new dev-related
-				things. You might deep-dive into one topic, start a small group that
-				focuses on community learning, focus on a new topic every week, or do a
-				little bit of everything.
-			</p>
+			<>
+				<p>
+					The goal of this challenge is to learn something new, share what we
+					have learned, and gather recommendations and resources to share with
+					the community. During this challenge, we work on learning new
+					dev-related things. You might deep-dive into one topic, start a small
+					group that focuses on community learning, focus on a new topic every
+					week, or do a little bit of everything.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-month-of-learning-challenge-bdi">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/feb-2024">
+						check out the February 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 		links: [
 			{
@@ -55,18 +71,28 @@ const challengeList: Challenge[] = [
 	},
 
 	{
+		current: false,
 		title: 'Get Job Ready',
 		subtitle: `Resumes, Cover Letters, and Elevator Pitch. There's never a bad time to update your job application materials.`,
 		description: (
-			<p>
-				The goal of this challenge is to work on creating, revising, or updating
-				your job packet materials and that elevator pitch that might get you in
-				the door. Your resume, cover letter, and elevator pitch should work
-				together to tell your story and represent where you are on your career
-				journey; each piece should complement the others. This challenge
-				emphasizes taking time to ensure they work together or get some extra
-				feedback on what you've worked on.
-			</p>
+			<>
+				<p>
+					The goal of this challenge is to work on creating, revising, or
+					updating your job packet materials and that elevator pitch that might
+					get you in the door. Your resume, cover letter, and elevator pitch
+					should work together to tell your story and represent where you are on
+					your career journey; each piece should complement the others. This
+					challenge emphasizes taking time to ensure they work together or get
+					some extra feedback on what you've worked on.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/mar-2024">
+						check out the March 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 		links: [
 			{
@@ -80,6 +106,47 @@ const challengeList: Challenge[] = [
 			{
 				href: '/monthlychallenges/mar-2021',
 				title: 'March, 2021',
+			},
+		],
+	},
+	{
+		title: 'Find Your Voice',
+		subtitle: `Public Speaking Challenge!`,
+		description: (
+			<>
+				<p>
+					Public speaking can feel daunting, but it is a valuable skill in all
+					aspects of life. This month, we will help you conquer your fears and
+					become a confident, captivating speaker!
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/step-into-the-spotlight-join-our-public-speaking-monthly-challenge-52kl">
+						this blog post
+					</a>
+					. And check out our{' '}
+					<a
+						href="/assets/pdfs/lightning-talk-guide.pdf"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Lightning Talk Guide
+					</a>
+					!
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/apr-2024">
+						check out the April 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
+		links: [
+			{
+				href: '/monthlychallenges/apr-2024',
+				title: 'April, 2024',
 			},
 		],
 	},
@@ -320,15 +387,31 @@ const challengeList: Challenge[] = [
 		title: 'Community Kindness',
 		subtitle: `Celebrating our Community as we move into a new year of Virtual Coffee!`,
 		description: (
-			<p>
-				As we work hard to make sure this community continues to be the special
-				and close-knit group, this challenge encourages our members to celebrate
-				one of the things that continually makes this community so special:
-				Kindness. Some of the ways we see this include: practicing gratitude,
-				reaching out to support other members, mentoring, helping, giving honest
-				and constructive feedback, and continuing to make Virtual Coffee a safe
-				and supportive space.
-			</p>
+			<>
+				<p>
+					As we work hard to make sure this community continues to be the
+					special and close-knit group, this challenge encourages our members to
+					celebrate one of the things that continually makes this community so
+					special: Kindness. Some of the ways we see this include: practicing
+					gratitude, reaching out to support other members, mentoring, helping,
+					giving honest and constructive feedback, and continuing to make
+					Virtual Coffee a safe and supportive space.
+				</p>
+				<p>
+					To view all of the details of this month's challenge,{' '}
+					<Link to="/monthlychallenges/may-2024">
+						check out the May 2024 challenge page
+					</Link>
+					.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-cultivating-community-kindness-in-uncertain-times-7n">
+						this blog post
+					</a>
+					.
+				</p>
+			</>
 		),
 		links: [
 			{
@@ -453,19 +536,34 @@ const challengeList: Challenge[] = [
 		title: 'Mid-Year Check-In',
 		subtitle: `Reflect. Reevaluate. Grow.`,
 		description: (
-			<p>
-				The Mid-Year Check-In challenge is designed to provide an opportunity
-				for Virtual Coffee members to reflect on their progress, reevaluate
-				goals, and gain clarity on their journey. Let’s pause, assess, and
-				adjust as we reach the halfway point of the year. This challenge aims to
-				encourage personal growth, foster connection within the community, and
-				provide a supportive space for members to share their insights,
-				challenges, and successes.
-			</p>
+			<>
+				<p>
+					The Mid-Year Check-In challenge is designed to provide an opportunity
+					for Virtual Coffee members to reflect on their progress, reevaluate
+					goals, and gain clarity on their journey. Let’s pause, assess, and
+					adjust as we reach the halfway point of the year. This challenge aims
+					to encourage personal growth, foster connection within the community,
+					and provide a supportive space for members to share their insights,
+					challenges, and successes.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-mid-year-check-in-recharge-and-refocus-for-an-amazing-second-half-2k4c?preview=a791f8dd07aff349a398a7756c6099c120b0d09b0d0bcad1aa41e59d64b306292ca5bd66febb03a0fc42c3d4d650c1abe5c1f20f3c9252a7a80773ec">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/june-2024">
+						check out the June 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
 		),
 	},
 	{
-		current: true,
 		title: 'New Year, New Goals',
 		subtitle: `The new year offers an opportunity for a fresh start and a chance to set new goals.`,
 		description: (
@@ -488,6 +586,73 @@ const challengeList: Challenge[] = [
 					To view all of the details of this year's challenge,{' '}
 					<Link to="/monthlychallenges/jan-2024">
 						check out the January 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
+	},
+	{
+		title: 'Welcoming Community',
+		subtitle: `Let's bring new friends in and give them a warm welcome!`,
+		description: (
+			<>
+				<p>
+					This challenge allows you to invite a friend to join our community.
+					However, simply inviting someone is not enough! We encourage you to
+					warmly welcome and support our new friends and demonstrate what
+					Virtual Coffee is truly all about - a welcoming and supportive
+					community!
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-welcoming-community-4d44">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/july-2024">
+						check out the July 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
+	},
+	{
+		current: true,
+		title: 'Photography Challenge',
+		subtitle: `Let's get out and about.`,
+		description: (
+			<>
+				<p>
+					As programmers, we spend all day in front of the screen. At Virtual
+					Coffee, we also value health and wellbeing. The motivation behind our
+					August challenge is to get folks out and about and seeing the world.
+					We will be encouraging our members to make the most of summer (in the
+					Northern hemisphere, at least), enjoy some work / life balance and
+					benefit from the fresh air and exercise of the great outdoors. The
+					challenge <i>could</i> be completed without ever leaving the car, but
+					to get the most out of it, leave the car for a bit and get some real
+					fresh air and exercise. A little hint for those of you that have
+					access to public transportation: Public transportation is a great way
+					to see the world while someone else does the driving. It also forces
+					you to actually get some exercise because it probably won't pick you
+					up at your front door.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-photography-4g18">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/aug-2024">
+						check out the August 2024 challenge page
 					</Link>
 					.
 				</p>
