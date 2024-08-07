@@ -254,7 +254,8 @@ export default function Issue() {
 			<p>
 				<a href="https://dev.to/virtualcoffee/monthly-challenge-welcoming-community-4d44">
 					Monthly Challenge: Welcoming Community!
-				</a> — Ayu Adiati
+				</a>{' '}
+				— Ayu Adiati
 			</p>
 
 			<hr />
