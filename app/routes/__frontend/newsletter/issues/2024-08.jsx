@@ -222,19 +222,6 @@ export default function Issue() {
 							</p>
 							<footer className="blockquote-footer">Chris Jarvis</footer>
 						</blockquote>
-						<blockquote className="blockquote">
-							<p className="mb-0">
-								"Wow I'm still taking it in, but got a reply on a job position I
-								went for, as a tech lead/coach."
-							</p>
-							<footer className="blockquote-footer">Brett</footer>
-						</blockquote>
-						<blockquote className="blockquote">
-							<p className="mb-0">
-								"I am glad to have given a talk last week."
-							</p>
-							<footer className="blockquote-footer">Teri</footer>
-						</blockquote>
 					</div>
 				</div>
 			</div>
