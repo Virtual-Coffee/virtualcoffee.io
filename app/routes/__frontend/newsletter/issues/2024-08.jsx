@@ -92,7 +92,7 @@ export default function Issue() {
 				<li>
 					Accountabilibuddies (Tuesdays at 7:00 PM ET | Thursdays at 9:00 AM ET)
 				</li>
-				<li>The Pack Hunt (Tandem Job Hunting) (Wednesdays at 2:00 PM ET)</li>
+				<li>The Pack Hunt (Tandem Job Hunting) (Wednesdays at 10:00 AM ET)</li>
 				<li>
 					Data Structures and Algorithms (DSA) Office Hours (Wednesdays at 4:00
 					PM ET)
