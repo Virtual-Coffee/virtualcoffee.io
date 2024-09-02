@@ -53,7 +53,7 @@ export default function Challenge() {
 				<a href="https://github.com/Virtual-Coffee/vc-preptember">
 					Virtual Coffee Preptember repository
 				</a>{' '}
-				for you to add yourself as Preptember participant and to list
+				for you to add yourself as a Preptember participant and to list
 				repositories that pass our repository checklist to be recommended for
 				Hacktoberfest!
 			</LeadText>
