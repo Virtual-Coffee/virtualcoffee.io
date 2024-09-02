@@ -122,7 +122,7 @@ export default function Challenge() {
 				<Link to="/resources/developer-resources/open-source/maintainer-guide">
 					Our guide
 				</Link>{' '}
-				will help you prepare your project and be added to the list of Virtual
+				will help you prepare your project to be added to the list of Virtual
 				Coffee-endorsed projects for our Hacktoberfest Initiative.
 			</p>
 
