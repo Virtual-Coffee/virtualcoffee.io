@@ -117,7 +117,7 @@ export default function Challenge() {
 				Preparing your open source project for contributions is one of the best
 				ways to create a community of contributors that lasts beyond
 				Hacktoberfest. Your repository should have a clear path for
-				communication, a good explanation of how to run the project, and clear
+				communication, a good explanation of how to run the project, and well-written
 				issues.{' '}
 				<Link to="/resources/developer-resources/open-source/maintainer-guide">
 					Our guide
