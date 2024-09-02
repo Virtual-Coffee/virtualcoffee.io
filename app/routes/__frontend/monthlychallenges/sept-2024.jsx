@@ -234,7 +234,7 @@ export default function Challenge() {
 				the <code>#co-working-room</code>. Asking for help is part of the
 				process!
 			</p>
-			<p>And remember, we're always here to help ❤️</p>
+			<p>And remember, we're always here to help. ❤️</p>
 			<h3>Completing the challenge!</h3>
 			<p>
 				To complete this challenge, post to our{' '}
