@@ -36,7 +36,8 @@ export default function Challenge() {
 			</h1>
 
 			<LeadText>
-				This month, we have two tracks. Maintainers will review their open-source repositories with our{' '}
+				This month, we have two tracks. Maintainers will review their
+				open-source repositories with our{' '}
 				<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 					repository checklist
 				</Link>{' '}
@@ -127,12 +128,13 @@ export default function Challenge() {
 
 			<h2>Contributors</h2>
 			<p>
-				The first step in becoming a good contributor is navigating an open-source repository and understanding the time and effort maintainers put
-				into ensuring their projects are welcoming to contributors. As we move
-				into Hacktoberfest season, we can support maintainers in their efforts
-				to onboard new contributors. To complete this monthly challenge, find an
-				open-source repository you'd like to contribute to and evaluate it based
-				on our{' '}
+				The first step in becoming a good contributor is navigating an
+				open-source repository and understanding the time and effort maintainers
+				put into ensuring their projects are welcoming to contributors. As we
+				move into Hacktoberfest season, we can support maintainers in their
+				efforts to onboard new contributors. To complete this monthly challenge,
+				find an open-source repository you'd like to contribute to and evaluate
+				it based on our{' '}
 				<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 					repository checklist
 				</Link>
