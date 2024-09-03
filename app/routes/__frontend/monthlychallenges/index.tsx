@@ -289,13 +289,13 @@ const challengeList: Challenge[] = [
 					repos, evaluating them based on the guide, and writing good issues as
 					needed to fulfill the criteria.
 				</p>
-				{/* <p>
+				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-preptember-2023-monthly-challenge-51d2">
+					<a href="https://dev.to/virtualcoffee/preptember-preparing-for-a-successful-hacktoberfest-5baa">
 						this blog post
 					</a>
 					.
-				</p> */}
+				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
 					<Link to="/monthlychallenges/sept-2024">
