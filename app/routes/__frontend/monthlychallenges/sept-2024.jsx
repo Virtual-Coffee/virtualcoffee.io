@@ -36,8 +36,8 @@ export default function Challenge() {
 			</h1>
 
 			<LeadText>
-				This month, we have two tracks. Maintainers will review their open
-				source repositories with our{' '}
+				This month, we have two tracks. Maintainers will review their
+				open-source repositories with our{' '}
 				<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 					repository checklist
 				</Link>{' '}
@@ -53,7 +53,7 @@ export default function Challenge() {
 				<a href="https://github.com/Virtual-Coffee/vc-preptember">
 					Virtual Coffee Preptember repository
 				</a>{' '}
-				for you to add yourself as Preptember participant and to list
+				for you to add yourself as a Preptember participant and to list
 				repositories that pass our repository checklist to be recommended for
 				Hacktoberfest!
 			</LeadText>
@@ -69,14 +69,14 @@ export default function Challenge() {
 			</p>
 			<ul>
 				<li>
-					Evaluate your open source project and complete{' '}
+					Evaluate your open-source project and complete{' '}
 					<Link to="/resources/developer-resources/open-source/maintainer-guide">
 						the checklist
 					</Link>{' '}
 					before the end of September.
 				</li>
 				<li>
-					List your open source project in our{' '}
+					List your open-source project in our{' '}
 					<a href="https://github.com/Virtual-Coffee/vc-preptember">
 						Virtual Coffee Preptember repository
 					</a>{' '}
@@ -99,7 +99,7 @@ export default function Challenge() {
 					<Link to="/resources/developer-resources/open-source/maintainer-guide">
 						the guide
 					</Link>
-					, evaluate an open source project to VC-verify it as a good project to
+					, evaluate an open-source project to VC-verify it as a good project to
 					contribute to. If the repository doesn't meet our standards, create
 					and submit good issues to suggest updates.
 				</li>
@@ -114,27 +114,27 @@ export default function Challenge() {
 
 			<h2>Maintainers</h2>
 			<p>
-				Preparing your open source project for contributions is one of the best
+				Preparing your open-source project for contributions is one of the best
 				ways to create a community of contributors that lasts beyond
 				Hacktoberfest. Your repository should have a clear path for
-				communication, a good explanation of how to run the project, and clear
-				issues.{' '}
+				communication, a good explanation of how to run the project, and
+				well-written issues.{' '}
 				<Link to="/resources/developer-resources/open-source/maintainer-guide">
 					Our guide
 				</Link>{' '}
-				will help you prepare your project and be added to the list of Virtual
+				will help you prepare your project to be added to the list of Virtual
 				Coffee-endorsed projects for our Hacktoberfest Initiative.
 			</p>
 
 			<h2>Contributors</h2>
 			<p>
-				The first step in becoming a good contributor is navigating an open
-				source repository and understanding the time and effort maintainers put
-				into ensuring their projects are welcoming to contributors. As we move
-				into Hacktoberfest season, we can support maintainers in their efforts
-				to onboard new contributors. To complete this monthly challenge, find an
-				open source repository you'd like to contribute to and evaluate it based
-				on our{' '}
+				The first step in becoming a good contributor is navigating an
+				open-source repository and understanding the time and effort maintainers
+				put into ensuring their projects are welcoming to contributors. As we
+				move into Hacktoberfest season, we can support maintainers in their
+				efforts to onboard new contributors. To complete this monthly challenge,
+				find an open-source repository you'd like to contribute to and evaluate
+				it based on our{' '}
 				<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 					repository checklist
 				</Link>
@@ -150,7 +150,7 @@ export default function Challenge() {
 					<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 						Repository Checklist
 					</Link>
-					. This guide contains everything we look for in a good open source
+					. This guide contains everything we look for in a good open-source
 					project.
 				</p>
 			</LeadText>
@@ -169,7 +169,7 @@ export default function Challenge() {
 					<Link to="/resources/developer-resources/open-source/maintainer-guide">
 						repository checklist
 					</Link>{' '}
-					as you look at some possible open source repositories to contribute
+					as you look at some possible open-source repositories to contribute
 					to. If the repositories pass the checklist, add them to the
 					repositories list in the{' '}
 					<a href="https://github.com/Virtual-Coffee/vc-preptember">
@@ -178,7 +178,7 @@ export default function Challenge() {
 					.
 				</li>
 				<li>
-					If you are participating as an open source maintainer, use{' '}
+					If you are participating as an open-source maintainer, use{' '}
 					<Link to="/resources/developer-resources/open-source/maintainer-guide">
 						our checklist
 					</Link>{' '}
@@ -234,7 +234,7 @@ export default function Challenge() {
 				the <code>#co-working-room</code>. Asking for help is part of the
 				process!
 			</p>
-			<p>And remember, we're always here to help ❤️</p>
+			<p>And remember, we're always here to help. ❤️</p>
 			<h3>Completing the challenge!</h3>
 			<p>
 				To complete this challenge, post to our{' '}
