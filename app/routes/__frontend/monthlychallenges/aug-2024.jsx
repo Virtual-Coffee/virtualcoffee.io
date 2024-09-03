@@ -29,6 +29,11 @@ export function meta({ data: { meta } = {} } = {}) {
 export default function Challenge() {
 	return (
 		<>
+			<div className="alert alert-success">
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link to="/monthlychallenges/sept-2024">next challenge</Link>!
+			</div>
+
 			<h1>
 				<small>Monthly Challenge for August 2024:</small> Photography Challenge
 			</h1>
