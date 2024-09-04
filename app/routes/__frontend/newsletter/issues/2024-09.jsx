@@ -35,7 +35,7 @@ export default function Issue() {
 			</p>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"I big thank you to our monthly challenge leads, Ayu and Dominic for
+					"I big thank you to our monthly challenge leads, Ayu and Dominic, for
 					this new photography monthly challenge."
 				</p>
 				<footer className="blockquote-footer">Bekah</footer>
