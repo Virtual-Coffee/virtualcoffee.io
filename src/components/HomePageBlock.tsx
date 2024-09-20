@@ -1,6 +1,6 @@
-import { Link } from '@remix-run/react';
-import UndrawIllustration from '~/components/UndrawIllustration';
-import type { UndrawIllustrationName } from '~/components/UndrawIllustration';
+import Link from 'next/link';
+import UndrawIllustration from '@/components/UndrawIllustration';
+import type { UndrawIllustrationName } from '@/components/UndrawIllustration';
 
 type HomePageBlockProps = {
 	id?: string;
@@ -26,7 +26,7 @@ export default function HomePageBlock({
 	footer,
 	wide,
 }: HomePageBlockProps) {
-	const titleInner = linkTo ? <Link to={linkTo}>{title}</Link> : title;
+	const titleInner = linkTo ? <Link href={linkTo}>{title}</Link> : title;
 
 	return (
 		<>
@@ -48,7 +48,7 @@ export default function HomePageBlock({
 				{children}
 				{footer && linkTo && (
 					<p className="homepageblock-body-foot text-muted font-italic">
-						<Link to={linkTo}>{footer}</Link>
+						<Link href={linkTo}>{footer}</Link>
 					</p>
 				)}
 			</div>

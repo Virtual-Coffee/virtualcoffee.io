@@ -1,13 +1,15 @@
+'use client';
+
 import { useState } from 'react';
-import { Link } from '@remix-run/react';
-import VirtualCoffeeFull from '~/svg/VirtualCoffeeFull';
+import Link from 'next/link';
+import VirtualCoffeeFull from '@/svg/VirtualCoffeeFull';
 
 export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark fixed-top w-100">
-			<Link className="navbar-brand" to="/" aria-label="Virtual Coffee">
+			<Link className="navbar-brand" href="/" aria-label="Virtual Coffee">
 				<VirtualCoffeeFull title="Virtual Coffee" />
 			</Link>
 			<button
@@ -30,22 +32,22 @@ export default function Nav() {
 			>
 				<ul className="navbar-nav">
 					<li className="nav-item">
-						<Link className="nav-link" to="/about">
+						<Link className="nav-link" href="/about">
 							About
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" to="/events">
+						<Link className="nav-link" href="/events">
 							Events
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" to="/podcast">
+						<Link className="nav-link" href="/podcast">
 							Podcast
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" to="/resources">
+						<Link className="nav-link" href="/resources">
 							Resources
 						</Link>
 					</li>

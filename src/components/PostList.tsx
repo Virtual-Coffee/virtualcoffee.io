@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react';
+import Link from 'next/link';
 
 /*
 PostListItem is each resource under a section of content on the homepage.
@@ -25,13 +25,8 @@ export function PostListItemTitle({ item }: { item: PostListItem }) {
 	};
 
 	if (item.href) {
-		Component = 'a';
-		props.href = item.href;
-	}
-
-	if (item.to) {
 		Component = Link;
-		props.to = item.to;
+		props.href = item.href;
 	}
 
 	return <Component {...props}>{item.title}</Component>;

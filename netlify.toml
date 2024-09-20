@@ -4,7 +4,7 @@
   publish = "public"
 
 [dev]
-  command = "remix watch"
+  command = "pnpm dev"
   port = 9000
   autoLaunch = false
 
