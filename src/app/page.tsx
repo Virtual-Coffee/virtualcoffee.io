@@ -1,6 +1,11 @@
 import VirtualCoffeeFullBanner from '@/svg/VirtualCoffeeFullBanner';
 import HomePageBlock from '@/components/HomePageBlock';
-import PostList from '@/components/PostList';
+import PostList, {
+	formatFileListItemsForPostList,
+} from '@/components/PostList';
+import { getEvents } from '@/data/events';
+import { dateForDisplay } from '@/util/date';
+import { loadMdxDirectory } from '@/util/loadMdx.server';
 
 export const homePageLinks = [
 	{
@@ -50,7 +55,18 @@ export const homePageLinks = [
 	},
 ];
 
-export default function Home() {
+export default async function Home() {
+	const events = await getEvents({
+		limit: 5,
+	});
+
+	const resources = loadMdxDirectory({
+		baseDirectory: 'content/resources',
+		includeChildren: false,
+	});
+
+	console.log({ resources });
+
 	return (
 		<>
 			<div className="hero">
@@ -80,13 +96,13 @@ export default function Home() {
 						</p>
 
 						<p>
-							Anyone can join! Whether you&apos;re thinking about getting into tech
-							or have been in it for decades.
+							Anyone can join! Whether you&apos;re thinking about getting into
+							tech or have been in it for decades.
 						</p>
 					</div>
 				</div>
 			</div>
-      <main id="maincontent">
+			<main id="maincontent">
 				<div className="container-lg py-5">
 					<h2 className="text-center mb-5">What we&apos;re up to</h2>
 					<div className="homepageblocks homepageblocks-wide">
@@ -110,9 +126,35 @@ export default function Home() {
 							linkTo="/events"
 							footer="See more Community Events"
 						>
-Events
-            </HomePageBlock>
-          </div></div></main>
+							<PostList
+								items={events.map((event) => {
+									const eventTime = event.startDateLocalized;
+									return {
+										title: event.title,
+										description: (
+											<strong>
+												<time suppressHydrationWarning dateTime={eventTime}>
+													{dateForDisplay(eventTime)}
+												</time>
+											</strong>
+										),
+									};
+								})}
+							/>
+						</HomePageBlock>
+						<HomePageBlock
+							Hero="UndrawFolder"
+							id="resources"
+							title="Member Resources"
+							subtitle="A collection of resources for Virtual Coffee members"
+							linkTo="/resources"
+							footer="See more Member Resources"
+						>
+							<PostList items={formatFileListItemsForPostList(resources)} />
+						</HomePageBlock>
+					</div>
+				</div>
+			</main>
 		</>
 	);
 }

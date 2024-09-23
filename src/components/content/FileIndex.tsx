@@ -2,17 +2,17 @@ import { useOutletContext } from '@remix-run/react';
 import PostList, {
 	formatFileListItemsForPostList,
 } from '~/components/PostList';
-import type { FileListItem } from '~/components/PostList';
+import type { MdxFile } from '@/util/loadMdx.server';
 
 type FileIndexProps = {
 	subDirectory?: string;
 	depth?: number;
 };
 
-function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
+function findBase(files: FileListItem[], subDirectory: string): MdxFile[] {
 	const subDirectorySplit = subDirectory.split('/');
 
-	const filtered = files.reduce<FileListItem[]>((list, file) => {
+	const filtered = files.reduce<MdxFile[]>((list, file) => {
 		const slugSplit = file.slug.split('/');
 
 		if (slugSplit.length < subDirectorySplit.length) {
@@ -32,7 +32,7 @@ function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
 			subDirectory === file.slug
 		) {
 			// it's a match
-			const singleFileResult: FileListItem = {
+			const singleFileResult: MdxFile = {
 				...file,
 				children: file.children
 					? findBase(file.children, subDirectory)
@@ -43,7 +43,7 @@ function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
 
 		// else we're digging deeper into our matched files children
 		if (file.slug.startsWith(subDirectory)) {
-			const lastFile: FileListItem = {
+			const lastFile: MdxFile = {
 				...file,
 				children: file.children
 					? findBase(file.children, subDirectory)
@@ -67,7 +67,7 @@ function findBase(files: FileListItem[], subDirectory: string): FileListItem[] {
 }
 
 export default function FileIndex({ subDirectory, depth }: FileIndexProps) {
-	const allFiles: FileListItem[] = useOutletContext();
+	const allFiles: MdxFile[] = useOutletContext();
 
 	const result = subDirectory ? findBase(allFiles, subDirectory) : allFiles;
 	return <PostList items={formatFileListItemsForPostList(result, depth)} />;

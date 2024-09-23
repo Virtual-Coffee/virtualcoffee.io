@@ -5,16 +5,27 @@ import fm from 'front-matter';
 /**
  * Represents the attributes of an MDX route.
  */
-interface MdxRouteAttributes {
+export interface MdxFile {
 	slug: string;
 	order: number;
+	meta: {
+		title: string;
+		description: string;
+	};
+	hero?: {
+		Hero?: string;
+		heroHeader?: string;
+		heroSubheader?: string;
+	};
+	tags?: string[];
+	children?: MdxFile[];
 }
 
 /**
  * Loads MDX files in a directory and constructs a nested array of route attributes.
  * @param baseDirectory - The base directory from which to load MDX files.
  * @param includeChildren - If true, include children routes in the result.
- * @returns An array of MdxRouteAttributes representing the MDX routes.
+ * @returns An array of MdxFile representing the MDX routes.
  */
 export function loadMdxDirectory({
 	baseDirectory,
@@ -22,14 +33,18 @@ export function loadMdxDirectory({
 }: {
 	baseDirectory: string;
 	includeChildren?: boolean;
-}): MdxRouteAttributes[] {
+}): MdxFile[] {
 	// Get the absolute path to the base directory
-	const basePath = join(process.cwd(), 'app', 'routes', baseDirectory);
+	const basePath = join(process.cwd(), 'src', baseDirectory);
 
 	// Get the directory entries (files and directories) inside the base path
 	const dirEntries = readdirSync(basePath, { withFileTypes: true });
 	const dirs = dirEntries.filter((entry) => entry.isDirectory());
 	const files = dirEntries.filter((entry) => entry.isFile());
+
+	console.log('-------');
+	console.log({ dirEntries });
+	console.log('-------');
 
 	try {
 		// Process directories and their children
@@ -39,7 +54,7 @@ export function loadMdxDirectory({
 				slug: join(baseDirectory, dir.name, 'index'),
 			});
 
-			let children: MdxRouteAttributes[] | null = null;
+			let children: MdxFile[] | null = null;
 
 			if (includeChildren) {
 				// Read all files and subdirectories in the current directory
@@ -76,7 +91,7 @@ export function loadMdxDirectory({
 						}
 						return null;
 					})
-					.filter((route): route is MdxRouteAttributes => route !== null)
+					.filter((route): route is MdxFile => route !== null)
 					.sort((a, b) => a.order - b.order);
 			}
 
@@ -102,8 +117,8 @@ export function loadMdxDirectory({
 		});
 
 		// Combine directories and entries and filter out null values
-		const allRoutes: MdxRouteAttributes[] = [...entries, ...directories].filter(
-			(route): route is MdxRouteAttributes => route !== null,
+		const allRoutes: MdxFile[] = [...entries, ...directories].filter(
+			(route): route is MdxFile => route !== null,
 		);
 
 		// Sort the result by order
@@ -118,25 +133,27 @@ export function loadMdxDirectory({
 /**
  * Loads route attributes for a given slug, handling the special case of index.mdx files.
  * @param slug - The slug representing the path to the MDX file.
- * @returns The MdxRouteAttributes for the given slug, or null if not found.
+ * @returns The MdxFile for the given slug, or null if not found.
  */
 export function loadMdxRouteFileAttributes({
 	slug,
 }: {
 	slug: string;
-}): MdxRouteAttributes | null {
+}): MdxFile | null {
+	console.log('slug: ', slug);
+
+	// const basePath = join(process.cwd(), 'src', baseDirectory);
+
 	// Generate the regular file name and index file name based on the slug
 	const regularFileName = join(
 		process.cwd(),
-		'app',
-		'routes',
+		'src',
 		...`${slug}.mdx`.split('/').filter(Boolean),
 	);
 
 	const indexFileName = join(
 		process.cwd(),
-		'app',
-		'routes',
+		'src',
 		...slug.split('/').filter(Boolean),
 		'index.mdx',
 	);
@@ -161,11 +178,11 @@ export function loadMdxRouteFileAttributes({
 	// Parse the front matter from the file contents using the front-matter library
 	const { attributes } = fm(fileContents);
 
-	// The attributes type is unknown, but we know it should match the MdxRouteAttributes interface,
-	// so we assert the type to MdxRouteAttributes to resolve the TypeScript error.
+	// The attributes type is unknown, but we know it should match the MdxFile interface,
+	// so we assert the type to MdxFile to resolve the TypeScript error.
 	// Additionally, modify the slug to remove trailing "/index" and "__frontend/" if present.
 	return {
-		...(attributes as MdxRouteAttributes),
+		...(attributes as MdxFile),
 		slug: slug.replace(/\/index$/g, '').replace(/^__frontend\//g, ''),
 	};
 }

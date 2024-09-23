@@ -1,3 +1,4 @@
+import { MdxFile } from '@/util/loadMdx.server';
 import Link from 'next/link';
 
 /*
@@ -53,17 +54,8 @@ export default function PostList({ items }: { items: PostListItem[] | null }) {
 	);
 }
 
-export type FileListItem = {
-	meta: {
-		title: string;
-		description: string;
-	};
-	slug: string;
-	children?: FileListItem[];
-};
-
 export function formatFileListItemsForPostList(
-	items?: FileListItem[],
+	items?: MdxFile[],
 	depth?: number,
 	curLevel?: number,
 ): PostListItem[] | null {
@@ -82,7 +74,7 @@ export function formatFileListItemsForPostList(
 		(item): PostListItem => ({
 			title: item.meta.title,
 			description: item.meta.description,
-			to: `/${item.slug}`,
+			href: `/${item.slug}`,
 			children: formatFileListItemsForPostList(
 				item.children,
 				depth,

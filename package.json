@@ -13,23 +13,36 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"react": "^18",
-		"react-dom": "^18",
-		"next": "14.2.7",
+		"@mdx-js/loader": "^3.0.1",
+		"@mdx-js/react": "^3.0.1",
+		"@next/mdx": "^14.2.13",
+		"@types/mdx": "^2.0.13",
 		"bootstrap": "^4.6.2",
+		"calendar-link": "^2.6.0",
 		"graphql": "^16.8.1",
 		"graphql-request": "^6.1.0",
 		"luxon": "^3.4.4",
-		"calendar-link": "^2.6.0"
+		"next": "14.2.7",
+		"react": "^18",
+		"react-dom": "^18",
+		"remark-attr": "^0.11.1",
+		"remark-frontmatter": "^5.0.0",
+		"remark-parse": "^10.0.2",
+		"remark-rehype": "^10.1.0",
+		"sanitize-html": "^2.13.0",
+		"front-matter": "^4.0.2"
 	},
 	"devDependencies": {
-		"typescript": "^5",
+		"@faker-js/faker": "^8.4.1",
+		"@types/luxon": "^3.4.2",
 		"@types/node": "^20",
 		"@types/react": "^18",
 		"@types/react-dom": "^18",
+		"@types/sanitize-html": "^2.11.0",
+		"eslint": "^8",
+		"eslint-config-next": "14.2.7",
 		"postcss": "^8",
 		"tailwindcss": "^3.4.1",
-		"eslint": "^8",
-		"eslint-config-next": "14.2.7"
+		"typescript": "^5"
 	}
 }

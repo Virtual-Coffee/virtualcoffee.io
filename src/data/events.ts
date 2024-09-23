@@ -1,6 +1,8 @@
+'use server';
+
 import { GraphQLClient, gql } from 'graphql-request';
 import { DateTime } from 'luxon';
-import { sanitizeHtml } from '~/util/sanitizeCmsData';
+import { sanitizeHtml } from '@/util/sanitizeCmsData';
 import { ics } from 'calendar-link';
 
 const calendarsQuery = gql`
