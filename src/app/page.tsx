@@ -7,6 +7,8 @@ import { getEvents } from '@/data/events';
 import { dateForDisplay } from '@/util/date';
 import { loadMdxDirectory } from '@/util/loadMdx.server';
 import { getEpisodes } from '@/data/podcast';
+import getNewsletters from '@/data/newsletters';
+import { getSponsors } from '@/data/sponsors';
 
 export const homePageLinks = [
 	{
@@ -62,14 +64,14 @@ export default async function Home() {
 		includeChildren: false,
 	});
 
-	const [events, podcastEpisodes] = await Promise.all([
+	const [events, podcastEpisodes, newsletters, sponsors] = await Promise.all([
 		getEvents({
 			limit: 5,
 		}),
 		getEpisodes(),
+		getNewsletters({ limit: 5 }),
+		getSponsors(),
 	]);
-
-	console.log({ resources });
 
 	return (
 		<>
@@ -184,6 +186,138 @@ export default async function Home() {
 								)}
 							/>
 						</HomePageBlock>
+						<HomePageBlock
+							Hero="UndrawArrived"
+							id="newsletters"
+							title="Virtual Coffee Newsletter"
+							subtitle="Sign up for the Virtual Coffee Newsletter"
+							linkTo="/newsletter"
+							footer="See more Newsletter Issues"
+						>
+							<PostList items={newsletters} />
+						</HomePageBlock>
+					</div>
+				</div>
+				<div className="bg-light">
+					<div className="container-lg py-5">
+						<h2 className="mb-4">Our Supporters</h2>
+
+						<p className="lead">
+							We are eternally grateful to our amazing supporters and sponsors!
+						</p>
+
+						<p className="lead">
+							If you&apos;d like to support Virtual Coffee, please visit{' '}
+							<a href="https://github.com/sponsors/Virtual-Coffee">
+								our sponsorship page
+							</a>{' '}
+							on GitHub.
+						</p>
+
+						<div className="sponsors">
+							<ul className="sponsors-list">
+								{sponsors.logoSponsors.map((tier) =>
+									tier.sponsors.map((supporter) => (
+										<li key={supporter.id} data-id={supporter.id}>
+											<a href={supporter.websiteUrl || supporter.url}>
+												<img
+													src={supporter.avatarUrl_80}
+													alt=""
+													width={supporter.avatar_width || 240}
+													height={supporter.avatar_height || 240}
+													loading="lazy"
+													decoding="async"
+													sizes="(min-width: 768px) 400, calc(100vw - 60px)"
+													srcSet={`
+              ${supporter.avatarUrl_80}   80w,
+              ${supporter.avatarUrl_160} 160w,
+              ${supporter.avatarUrl_240} 240w,
+              ${supporter.avatarUrl_480} 480w,
+              ${supporter.avatarUrl_720} 720w`}
+												/>
+												<div className="sponsors-body">
+													<h3 className="h4">{supporter.name}</h3>
+													{supporter.descriptionHTML && (
+														<div
+															dangerouslySetInnerHTML={{
+																__html: supporter.descriptionHTML,
+															}}
+														/>
+													)}
+												</div>
+											</a>
+										</li>
+									)),
+								)}
+							</ul>
+						</div>
+
+						<ul className="supporters my-6">
+							{sponsors.supporters.map((tier) =>
+								tier.sponsors.map((supporter) => (
+									<li
+										className={`supporters-${tier.monthlyPriceInCents}`}
+										key={supporter.id}
+									>
+										<a
+											href={supporter.url}
+											title={supporter.name || supporter.login}
+										>
+											<img
+												src={supporter.avatarUrl_80}
+												alt={supporter.name || supporter.login}
+												width="80"
+												height="80"
+												loading="lazy"
+												decoding="async"
+												sizes="80px"
+												srcSet={`
+              ${supporter.avatarUrl_80}   80w,
+              ${supporter.avatarUrl_160} 160w,
+              ${supporter.avatarUrl_240} 240w
+            `}
+											/>
+											<div className="supporters-name">
+												<svg
+													viewBox="0 0 130 130"
+													xmlns="http://www.w3.org/2000/svg"
+													fillRule="evenodd"
+													clipRule="evenodd"
+													strokeLinejoin="round"
+													strokeMiterlimit="2"
+													aria-hidden="true"
+												>
+													<path
+														d="M 20 65 A 45 45 0 1 1 110 65 A 45 45 0 1 1 20 65"
+														id="curve"
+														fill="transparent"
+														stroke="transparent"
+													/>
+													<text width="500">
+														<textPath xlinkHref="#curve">
+															✨{supporter.name || supporter.login}✨
+														</textPath>
+													</text>
+												</svg>
+											</div>
+										</a>
+									</li>
+								)),
+							)}
+						</ul>
+
+						<div className="text-center">
+							<h2 className="mb-5">Thank you!!</h2>
+
+							<p>
+								<a
+									href="https://github.com/sponsors/Virtual-Coffee"
+									className="btn btn-primary btn-lg"
+								>
+									Sponsor Virtual Coffee
+								</a>
+							</p>
+						</div>
 					</div>
 				</div>
 			</main>

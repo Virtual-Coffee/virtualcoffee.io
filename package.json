@@ -31,7 +31,8 @@
 		"remark-rehype": "^10.1.0",
 		"sanitize-html": "^2.13.0",
 		"front-matter": "^4.0.2",
-		"@sindresorhus/slugify": "^2.2.1"
+		"@sindresorhus/slugify": "^2.2.1",
+		"@imgix/js-core": "^3.8.0"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^8.4.1",
