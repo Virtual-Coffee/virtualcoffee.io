@@ -7,10 +7,6 @@ export const handle = {
 	listTitle: 'July 2022',
 };
 
-export const meta = () => {
-	return handle.meta;
-};
-
 export default function Issue() {
 	return (
 		<>

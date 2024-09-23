@@ -1,6 +1,4 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
-import { Link } from '@remix-run/react';
+import Link from 'next/link';
 
 export const handle = {
 	meta: {
@@ -10,17 +8,6 @@ export const handle = {
 	date: '2022-03-01',
 	listTitle: 'March 2022',
 };
-
-export async function loader() {
-	const { title, description } = handle.meta;
-	return json({
-		meta: createMetaData({ title, description }),
-	});
-}
-
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
 
 export default function Issue() {
 	return (

@@ -1,5 +1,5 @@
-import { Link } from '@remix-run/react';
-import LeadText from '~/components/content/LeadText';
+import Link from 'next/link';
+import LeadText from '@/components/content/LeadText';
 
 export const handle = {
 	meta: {
@@ -8,10 +8,6 @@ export const handle = {
 	},
 	date: '2024-07-01',
 	listTitle: 'July 2024',
-};
-
-export const meta = () => {
-	return handle.meta;
 };
 
 export default function Issue() {
@@ -254,7 +250,8 @@ export default function Issue() {
 			<p>
 				<a href="https://dev.to/virtualcoffee/monthly-challenge-welcoming-community-4d44">
 					Monthly Challenge: Welcoming Community!
-				</a> — Ayu Adiati
+				</a>{' '}
+				— Ayu Adiati
 			</p>
 
 			<hr />

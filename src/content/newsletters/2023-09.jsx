@@ -1,5 +1,5 @@
-import { Link } from '@remix-run/react';
-import LeadText from '~/components/content/LeadText';
+import Link from 'next/link';
+import LeadText from '@/components/content/LeadText';
 
 export const handle = {
 	meta: {
@@ -8,10 +8,6 @@ export const handle = {
 	},
 	date: '2023-09-01',
 	listTitle: 'September 2023',
-};
-
-export const meta = () => {
-	return handle.meta;
 };
 
 export default function Issue() {

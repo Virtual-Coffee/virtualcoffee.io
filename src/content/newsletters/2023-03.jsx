@@ -1,4 +1,4 @@
-import { Link } from '@remix-run/react';
+import Link from 'next/link';
 
 export const handle = {
 	meta: {
@@ -7,10 +7,6 @@ export const handle = {
 	},
 	date: '2023-03-01',
 	listTitle: 'March 2023',
-};
-
-export const meta = () => {
-	return handle.meta;
 };
 
 export default function Issue() {
