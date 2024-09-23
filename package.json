@@ -30,7 +30,8 @@
 		"remark-parse": "^10.0.2",
 		"remark-rehype": "^10.1.0",
 		"sanitize-html": "^2.13.0",
-		"front-matter": "^4.0.2"
+		"front-matter": "^4.0.2",
+		"@sindresorhus/slugify": "^2.2.1"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^8.4.1",

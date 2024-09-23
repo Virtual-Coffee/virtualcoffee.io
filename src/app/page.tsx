@@ -6,6 +6,7 @@ import PostList, {
 import { getEvents } from '@/data/events';
 import { dateForDisplay } from '@/util/date';
 import { loadMdxDirectory } from '@/util/loadMdx.server';
+import { getEpisodes } from '@/data/podcast';
 
 export const homePageLinks = [
 	{
@@ -56,14 +57,17 @@ export const homePageLinks = [
 ];
 
 export default async function Home() {
-	const events = await getEvents({
-		limit: 5,
-	});
-
 	const resources = loadMdxDirectory({
 		baseDirectory: 'content/resources',
 		includeChildren: false,
 	});
+
+	const [events, podcastEpisodes] = await Promise.all([
+		getEvents({
+			limit: 5,
+		}),
+		getEpisodes(),
+	]);
 
 	console.log({ resources });
 
@@ -151,6 +155,34 @@ export default async function Home() {
 							footer="See more Member Resources"
 						>
 							<PostList items={formatFileListItemsForPostList(resources)} />
+						</HomePageBlock>
+					</div>
+					<div className="homepageblocks">
+						<HomePageBlock
+							Hero="UndrawWalkInTheCity"
+							id="about"
+							title="Virtual Coffee Podcast"
+							subtitle="Conversations with members of the community"
+							linkTo="/podcast"
+							footer="See more Podcast episodes"
+						>
+							<PostList
+								items={podcastEpisodes.map(
+									({
+										title,
+										metaDescription: description,
+										url,
+									}: {
+										title: any;
+										metaDescription: any;
+										url: any;
+									}) => ({
+										title,
+										description,
+										to: url,
+									}),
+								)}
+							/>
 						</HomePageBlock>
 					</div>
 				</div>

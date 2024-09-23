@@ -42,9 +42,7 @@ export function loadMdxDirectory({
 	const dirs = dirEntries.filter((entry) => entry.isDirectory());
 	const files = dirEntries.filter((entry) => entry.isFile());
 
-	console.log('-------');
-	console.log({ dirEntries });
-	console.log('-------');
+
 
 	try {
 		// Process directories and their children
@@ -140,7 +138,7 @@ export function loadMdxRouteFileAttributes({
 }: {
 	slug: string;
 }): MdxFile | null {
-	console.log('slug: ', slug);
+
 
 	// const basePath = join(process.cwd(), 'src', baseDirectory);
 
