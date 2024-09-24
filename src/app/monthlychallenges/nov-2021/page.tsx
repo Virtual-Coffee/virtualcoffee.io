@@ -1,8 +1,4 @@
-import { createMetaData } from '~/util/createMetaData.server';
-
-import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
-import { getChallengeData } from '~/data/monthlyChallenges/nov-2021';
+import { getChallengeData } from '@/data/monthlyChallenges/nov-2021';
 import { Fragment } from 'react';
 
 export const handle = {
@@ -18,20 +14,11 @@ export const handle = {
 	},
 };
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
-export async function loader() {
-	const { title, description } = handle.meta;
-	const data = await getChallengeData();
-
-	return json({ ...data, meta: createMetaData({ title, description }) });
-}
-
-export default function Challenge() {
+export default async function Challenge() {
 	const { completedGoals, currentGoal, sortedList, list, totals } =
-		useLoaderData();
+		await getChallengeData();
 
 	return (
 		<>
@@ -89,7 +76,7 @@ export default function Challenge() {
 					role="progressbar"
 					style={{ width: `${(totals.totalCount / currentGoal) * 100}%` }}
 					aria-valuenow={totals.totalCount}
-					aria-valuemin="0"
+					aria-valuemin={0}
 					aria-valuemax={currentGoal}
 				>
 					{totals.totalCount.toLocaleString()} Words
@@ -101,7 +88,7 @@ export default function Challenge() {
 			{sortedList.map((person, i) => (
 				<Fragment key={i}>
 					<div className="header-anchor-wrapper header-anchor-wrapper-h3">
-						<h3 id={person.slug} tabIndex="-1">
+						<h3 id={person.slug} tabIndex={-1}>
 							{person.name}
 						</h3>
 						<a className="header-anchor" href={`#${person.slug}`}>

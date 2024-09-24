@@ -1,7 +1,3 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
-
-import { useLoaderData } from '@remix-run/react';
 import challengeJson from './jan-2021.json';
 
 export const handle = {
@@ -17,23 +13,12 @@ export const handle = {
 	},
 };
 
-export function loader() {
-	const { challengedata } = challengeJson;
-
-	const { title, description } = handle.meta;
-
-	return json({
-		list: challengedata.sort((a, b) => a.name.localeCompare(b.name)),
-		meta: createMetaData({ title, description }),
-	});
-}
-
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
-	const { list } = useLoaderData();
+	const list = challengeJson.challengedata.sort((a, b) =>
+		a.name.localeCompare(b.name),
+	);
 	return (
 		<>
 			<div className="alert alert-success">

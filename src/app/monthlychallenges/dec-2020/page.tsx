@@ -1,7 +1,4 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
-
-import { useLoaderData } from '@remix-run/react';
+import { createMetaData } from '@/util/createMetaData.server';
 import challengeJson from './dec-2020.json';
 
 export const handle = {
@@ -17,16 +14,14 @@ export const handle = {
 	},
 };
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
-export function loader() {
-	const { challengedata } = challengeJson;
+export default function Challenge() {
+	const { challengedata: list } = challengeJson;
 
-	let totals = {};
+	let totals: Record<string, number> = {};
 
-	challengedata.forEach((challenge, i) => {
+	list.forEach((challenge, i) => {
 		challenge.participants.forEach((p) => {
 			if (p in totals) {
 				totals[p] = totals[p] + 1;
@@ -36,17 +31,6 @@ export function loader() {
 		});
 	});
 
-	const { title, description } = handle.meta;
-
-	return json({
-		list: challengedata,
-		totals,
-		meta: createMetaData({ title, description }),
-	});
-}
-
-export default function Challenge() {
-	const { list, totals } = useLoaderData();
 	return (
 		<>
 			<div className="alert alert-success">

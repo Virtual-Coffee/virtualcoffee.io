@@ -1,7 +1,3 @@
-import { createMetaData } from '~/util/createMetaData.server';
-
-import { json } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
 import challengeJson from './nov-2020.json';
 import { Fragment } from 'react';
 
@@ -18,15 +14,16 @@ export const handle = {
 	},
 };
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
-export function loader() {
+export default function Challenge() {
 	const { challengedata } = challengeJson;
-	const { title, description } = handle.meta;
 
-	const totals = [];
+	const totalsList: {
+		name: string;
+		posts: number;
+		total: number;
+	}[] = [];
 	let totalCount = 0;
 	let totalPosts = 0;
 
@@ -39,22 +36,15 @@ export function loader() {
 
 		totalCount = totalCount + p.total;
 		totalPosts = totalPosts + p.posts;
-		totals.push(p);
+		totalsList.push(p);
 	});
 
-	return json({
-		meta: createMetaData({ title, description }),
-		sortedList: challengedata.sort((a, b) => a.name.localeCompare(b.name)),
-		totals: {
-			list: totals.sort((a, b) => b.total - a.total),
-			totalCount,
-			totalPosts,
-		},
-	});
-}
-
-export default function Challenge() {
-	const { sortedList, totals } = useLoaderData();
+	const sortedList = challengedata.sort((a, b) => a.name.localeCompare(b.name));
+	const totals = {
+		list: totalsList.sort((a, b) => b.total - a.total),
+		totalCount,
+		totalPosts,
+	};
 
 	return (
 		<>
@@ -87,8 +77,8 @@ export default function Challenge() {
 					role="progressbar"
 					style={{ width: `${(totals.totalCount / 50000) * 100}%` }}
 					aria-valuenow={totals.totalCount}
-					aria-valuemin="0"
-					aria-valuemax="50000"
+					aria-valuemin={0}
+					aria-valuemax={50000}
 				>
 					{totals.totalCount.toLocaleString()} Words
 				</div>

@@ -1,3 +1,5 @@
+import Airtable from 'airtable';
+
 const mockData = [
 	{
 		id: 'recGDimb5snYUS0fc',
@@ -14,12 +16,16 @@ const mockData = [
 async function fetchRecords() {
 	try {
 		if (process.env.PUBLIC_AIRTABLE_API_KEY) {
-			const Airtable = require('airtable');
 			const base = new Airtable({
 				apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
 			}).base('appJStQemmYeoRcox');
 
-			const result = await base('Hacktoberfest2022 Repos')
+			const result = await base<{
+				RepoName: string;
+				RepoUrl: string;
+				Description: string;
+				Maintainer: string;
+			}>('Hacktoberfest2022 Repos')
 				.select({ view: 'Default' })
 				.all();
 

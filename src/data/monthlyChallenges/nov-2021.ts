@@ -1,13 +1,23 @@
 import slugify from '@sindresorhus/slugify';
+import Airtable from 'airtable';
+
+type MemberArticle = {
+	GitHubUsername: string;
+	Title: string;
+	Url: string;
+	'Member Name': string;
+	'Word Count': number;
+	'Date Published': string;
+	TwitterUsername: string;
+};
 
 async function fetchRecords() {
 	if (process.env.PUBLIC_AIRTABLE_API_KEY) {
-		const Airtable = require('airtable');
 		const base = new Airtable({
 			apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
 		}).base('appJStQemmYeoRcox');
 
-		const result = await base('Member Articles').select().all();
+		const result = await base<MemberArticle>('Member Articles').select().all();
 
 		return result.map((r) => r.fields);
 	}
@@ -52,37 +62,47 @@ export async function getChallengeData() {
 	const totalPosts = tableRows.length;
 
 	const sortedList = Object.values(
-		tableRows.reduce((obj, row) => {
-			const post = {
-				title: row['Title'],
-				url: row['Url'],
-				count: row['Word Count'],
-			};
+		tableRows.reduce(
+			(obj, row) => {
+				const post = {
+					title: row['Title'],
+					url: row['Url'],
+					count: row['Word Count'],
+				};
 
-			if (!obj[row['Member Name']]) {
-				return {
-					...obj,
-					[row['Member Name']]: {
-						name: row['Member Name'],
-						slug: slugify(row['Member Name']),
-						posts: [post],
-					},
-				};
-			} else {
-				return {
-					...obj,
-					[row['Member Name']]: {
-						...obj[row['Member Name']],
-						posts: [...obj[row['Member Name']].posts, post],
-					},
-				};
-			}
-		}, {}),
+				if (!obj[row['Member Name']]) {
+					return {
+						...obj,
+						[row['Member Name']]: {
+							name: row['Member Name'],
+							slug: slugify(row['Member Name']),
+							posts: [post],
+						},
+					};
+				} else {
+					return {
+						...obj,
+						[row['Member Name']]: {
+							...obj[row['Member Name']],
+							posts: [...obj[row['Member Name']].posts, post],
+						},
+					};
+				}
+			},
+			{} as Record<
+				string,
+				{
+					name: string;
+					slug: string;
+					posts: { title: string; url: string; count: number }[];
+				}
+			>,
+		),
 	).sort((a, b) => a.name.localeCompare(b.name));
 
 	const goals = [50000, 100000, 125000, 150000, 175000, 200000];
 	const completedGoals = goals.filter((g) => g <= totalCount);
-	const currentGoal = goals.find((g) => g > totalCount);
+	const currentGoal = goals.find((g) => g > totalCount) as number;
 
 	return {
 		completedGoals,

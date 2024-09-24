@@ -1,8 +1,6 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
-import { Link, useLoaderData } from '@remix-run/react';
-import { getChallengeData } from '~/data/monthlyChallenges/oct-2022';
-import LeadText from '~/components/content/LeadText';
+import Link from 'next/link';
+import { getChallengeData } from '@/data/monthlyChallenges/oct-2022';
+import LeadText from '@/components/content/LeadText';
 
 export const handle = {
 	listTitle: 'October 2022: Hacktoberfest!',
@@ -17,29 +15,16 @@ export const handle = {
 	},
 };
 
-export async function loader() {
-	const { title, description } = handle.meta;
+export const meta = handle.meta;
 
+export default async function Challenge() {
 	const repos = await getChallengeData();
-
-	return json({
-		repos,
-		meta: createMetaData({ title, description }),
-	});
-}
-
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
-
-export default function Challenge() {
-	const { repos } = useLoaderData();
 
 	return (
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges">next challenge</Link>!
+				the <Link href="/monthlychallenges">next challenge</Link>!
 			</div>
 
 			<h1>
@@ -170,8 +155,8 @@ export default function Challenge() {
 
 			<h2>Virtual Coffee Approved Repositories!</h2>
 			<ul className="list-unstyled">
-				{repos.map((repo) => (
-					<li key={repo.RepoUrl}>
+				{repos.map((repo, i) => (
+					<li key={i}>
 						<h3>
 							<a href={repo.RepoUrl}>{repo.RepoName}</a>
 						</h3>
