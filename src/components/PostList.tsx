@@ -5,10 +5,7 @@ import Link from 'next/link';
 PostListItem is each resource under a section of content on the homepage.
 */
 type PostListItem = {
-	/* To linking to another site, set the `href` property to the url. */
 	href?: string;
-	/* If linking to an internal page, use the `to` property. */
-	to?: string;
 	title: string;
 	description?: string | JSX.Element;
 	children?: PostListItem[] | null;
@@ -16,7 +13,7 @@ type PostListItem = {
 
 type TitleProps = {
 	className: 'postlist-title';
-} & Pick<PostListItem, 'href' | 'to'>;
+} & Pick<PostListItem, 'href'>;
 
 export function PostListItemTitle({ item }: { item: PostListItem }) {
 	/* Component type changes based on whether a link exists */
