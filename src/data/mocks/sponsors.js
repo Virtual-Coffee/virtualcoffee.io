@@ -6,9 +6,9 @@ module.exports = {
 			nodes: [
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -26,9 +26,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -46,9 +46,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -66,9 +66,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -86,9 +86,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -106,9 +106,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -126,9 +126,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -146,9 +146,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -166,9 +166,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -186,9 +186,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -206,9 +206,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -226,9 +226,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -246,9 +246,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -266,9 +266,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -286,9 +286,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -306,9 +306,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -326,9 +326,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -346,9 +346,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -366,9 +366,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -386,9 +386,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -406,9 +406,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -426,9 +426,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -446,9 +446,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -466,9 +466,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -486,9 +486,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
@@ -506,9 +506,9 @@ module.exports = {
 				},
 				{
 					sponsorEntity: {
-						name: faker.name.fullName(),
+						name: faker.person.fullName(),
 						login: faker.internet.userName(),
-						id: faker.datatype.uuid(),
+						id: faker.string.uuid(),
 						avatarUrl_80: faker.image.avatar(),
 						avatarUrl_160: faker.image.avatar(),
 						avatarUrl_240: faker.image.avatar(),
