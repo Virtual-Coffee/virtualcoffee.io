@@ -1,5 +1,5 @@
 import { qualifiedUrl } from '~/util/url.server';
-import type { MemberList } from '../../members/types';
+import type { MemberList } from '../content/members/types';
 
 export interface MembersResponse {
 	core: MemberList;

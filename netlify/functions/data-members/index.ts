@@ -1,7 +1,7 @@
 import { builder } from '@netlify/functions';
 import type { Handler } from '@netlify/functions';
 import { GraphQLClient, gql } from 'graphql-request';
-import teamsData from '../../../members/teams';
+import teamsData from '../../../src/content/members/teams';
 import mockMemberData from '~/data/mocks/memberData';
 import { sanitizeHtml } from '~/util/sanitizeCmsData';
 import type {
@@ -12,7 +12,7 @@ import type {
 	TeamName,
 	TeamsDict,
 	FixedUpUserAccount,
-} from '../../../members/types';
+} from '../../../src/content/members/types';
 import * as coreMembers from './core';
 import * as membersMembers from './members';
 
