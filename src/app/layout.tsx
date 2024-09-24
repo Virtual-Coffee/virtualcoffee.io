@@ -5,17 +5,12 @@ import '@/styles/main.scss';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 
+import { buildUrls } from '@/util/url.server';
+
 export const metadata: Metadata = {
 	title:
 		'Virtual Coffee IO - An intimate tech community for all, optimized for you',
 	description: `Virtual Coffee is an intimate tech community where friendships are formed and support is given to people at all stages of their journey. Join our laid-back conversations and online events to connect with like-minded individuals who share your passion for technology.`,
-};
-
-const buildUrls = {
-	NETLIFY: process.env.NETLIFY,
-	URL: process.env.URL,
-	DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL,
-	CONTEXT: process.env.CONTEXT,
 };
 
 export default function RootLayout({

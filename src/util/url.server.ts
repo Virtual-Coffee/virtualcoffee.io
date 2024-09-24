@@ -1,4 +1,9 @@
-import buildUrls from '../_generatedData/buildUrls.json';
+export const buildUrls: BuildUrls = {
+	NETLIFY: process.env.NETLIFY,
+	URL: process.env.URL as string,
+	DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL,
+	CONTEXT: process.env.CONTEXT,
+};
 
 type BuildUrls = {
 	URL: string;
@@ -7,18 +12,16 @@ type BuildUrls = {
 	DEPLOY_PRIME_URL?: string;
 };
 
-const buildUrlsObject: BuildUrls = buildUrls;
-
 // buildUrls is created in scripts/buildUrls.js at build-time
 export function qualifiedUrl(path = '') {
-	if (!buildUrlsObject.NETLIFY) {
+	if (!buildUrls.NETLIFY) {
 		return buildUrls.URL ? buildUrls.URL + path : path;
 	}
 
 	const baseUrl =
-		buildUrlsObject.CONTEXT === 'production'
-			? buildUrlsObject.URL
-			: buildUrlsObject.DEPLOY_PRIME_URL;
+		buildUrls.CONTEXT === 'production'
+			? buildUrls.URL
+			: buildUrls.DEPLOY_PRIME_URL;
 
 	return baseUrl ? baseUrl + path : path;
 }
