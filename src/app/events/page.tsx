@@ -1,13 +1,18 @@
-import { json } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
-import DefaultLayout from '~/components/layouts/DefaultLayout';
-import DisplayHtml from '~/components/DisplayHtml';
-import { getEvents } from '~/data/events';
-import { dateForDisplay } from '~/util/date';
-import { createMetaData } from '~/util/createMetaData.server';
-import getSponsors from '~/data/sponsors';
+import DefaultLayout from '@/components/layouts/DefaultLayout';
+import { getEvents } from '@/data/events';
+import { getSponsors } from '@/data/sponsors';
+import { createMetaData } from '@/util/createMetaData.server';
+import DisplayHtml from '@/components/DisplayHtml';
+import { dateForDisplay } from '@/util/date';
+import Link from 'next/link';
 
-export async function loader() {
+export const meta = createMetaData({
+	title: 'Virtual Coffee Community Events',
+	description: 'See our upcoming events!',
+	Hero: 'UndrawConferenceCall',
+});
+
+export default async function Page() {
 	const [events, sponsors] = await Promise.all([
 		getEvents({
 			limit: 20,
@@ -15,21 +20,6 @@ export async function loader() {
 		getSponsors(),
 	]);
 
-	const meta = createMetaData({
-		title: 'Virtual Coffee Community Events',
-		description: 'See our upcoming events!',
-		Hero: 'UndrawConferenceCall',
-	});
-
-	return json({ events, meta, sponsors });
-}
-
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
-
-export default function EventsIndex() {
-	const { events, sponsors } = useLoaderData();
 	const eventsSponsors = sponsors.logoSponsors.filter(
 		(tier) => tier.monthlyPriceInDollars > 150,
 	);
@@ -45,9 +35,9 @@ export default function EventsIndex() {
 					<h2>Upcoming Events</h2>
 					<div className="mb-3 lead">
 						<p>
-							Most of our events are members-only. If you'd like to join one of
-							these events, please consider{' '}
-							<Link to="/join">joining Virtual Coffee!</Link>
+							Most of our events are members-only. If you&apos;d like to join
+							one of these events, please consider{' '}
+							<Link href="/join">joining Virtual Coffee!</Link>
 						</p>
 					</div>
 
@@ -56,8 +46,8 @@ export default function EventsIndex() {
 					<h3>Recorded Events</h3>
 					<div className="mb-3">
 						<p>
-							If you can't join our events live, we got you covered! You can
-							find our{' '}
+							If you can&apos;t join our events live, we got you covered! You
+							can find our{' '}
 							<a href="https://www.youtube.com/playlist?list=PLh9uT23TA65idCyc_orC85RefgY_-fKsG">
 								Lunch & Learns
 							</a>
