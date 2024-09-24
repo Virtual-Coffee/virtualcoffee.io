@@ -57,3 +57,37 @@ export type PolymorphicComponentPropsWithRef<
 	C extends React.ElementType,
 	Props = {},
 > = PolymorphicComponentProps<C, Props> & { passedRef?: PolymorphicRef<C> };
+
+export type NextSearchParams = { [key: string]: string | string[] | undefined };
+
+export type NextParams<
+	ParamsKeys extends string = never,
+	IsOptional extends boolean = false,
+	IsCatchall extends boolean = false,
+> = ParamsKeys extends never
+	? never
+	: IsOptional extends true
+	? {
+			[key in ParamsKeys]?: IsCatchall extends true ? string[] : string;
+	  }
+	: {
+			[key in ParamsKeys]: IsCatchall extends true ? string[] : string;
+	  };
+
+export type NextPageProps<
+	ParamsKeys extends string = never,
+	IsOptional extends boolean = false,
+	IsCatchall extends boolean = false,
+> = {
+	params: NextParams<ParamsKeys, IsOptional, IsCatchall>;
+	searchParams: NextSearchParams;
+};
+
+export type NextLayoutProps<
+	ParamsKeys extends string,
+	IsOptional extends boolean = false,
+	IsCatchall extends boolean = false,
+> = {
+	params: NextParams<ParamsKeys, IsOptional, IsCatchall>;
+	children: React.ReactNode;
+} & Record<string, React.ReactNode>;

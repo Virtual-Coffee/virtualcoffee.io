@@ -120,11 +120,11 @@ export default function DefaultLayout({
 
 type DefaultLayoutProps = {
 	/** This is the name of the illustration you want to use. */
-	Hero: UndrawIllustrationName;
+	Hero?: UndrawIllustrationName;
 	/** The header text for the hero section */
-	heroHeader: String;
+	heroHeader?: String;
 	/** This is the subheader that will be displayed under the heroHeader. */
-	heroSubheader: string;
+	heroSubheader?: string;
 	/** If true, the hero will be a simple hero with no background image. */
 	simple?: Boolean;
 	/** This is a boolean that determines whether or not the hero component is shown. */

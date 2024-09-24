@@ -1,19 +1,20 @@
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import fm from 'front-matter';
+import { UndrawIllustrationName } from '@/components/UndrawIllustration';
 
 /**
  * Represents the attributes of an MDX route.
  */
 export interface MdxFile {
 	slug: string;
-	order: number;
+	order?: number;
 	meta: {
 		title: string;
 		description: string;
 	};
 	hero?: {
-		Hero?: string;
+		Hero?: UndrawIllustrationName;
 		heroHeader?: string;
 		heroSubheader?: string;
 	};
@@ -41,8 +42,6 @@ export function loadMdxDirectory({
 	const dirEntries = readdirSync(basePath, { withFileTypes: true });
 	const dirs = dirEntries.filter((entry) => entry.isDirectory());
 	const files = dirEntries.filter((entry) => entry.isFile());
-
-
 
 	try {
 		// Process directories and their children
@@ -90,7 +89,11 @@ export function loadMdxDirectory({
 						return null;
 					})
 					.filter((route): route is MdxFile => route !== null)
-					.sort((a, b) => a.order - b.order);
+					.sort((a, b) => {
+						return 'order' in a && 'order' in b && a.order && b.order
+							? a.order - b.order
+							: 0;
+					});
 			}
 
 			return {
@@ -120,7 +123,11 @@ export function loadMdxDirectory({
 		);
 
 		// Sort the result by order
-		return allRoutes.sort((a, b) => a.order - b.order);
+		return allRoutes.sort((a, b) => {
+			return 'order' in a && 'order' in b && a.order && b.order
+				? a.order - b.order
+				: 0;
+		});
 	} catch (error) {
 		// If any error occurs, log it and return an empty array
 		console.log(error);
@@ -138,8 +145,6 @@ export function loadMdxRouteFileAttributes({
 }: {
 	slug: string;
 }): MdxFile | null {
-
-
 	// const basePath = join(process.cwd(), 'src', baseDirectory);
 
 	// Generate the regular file name and index file name based on the slug
