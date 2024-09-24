@@ -82,14 +82,14 @@ export default function Issue() {
 				practice open source, add themselves as Preptember participant, and to
 				list repositories that pass our repository checklist to be recommended
 				for Hacktoberfest. You can learn more{' '}
-				<Link to="/monthlychallenges/sept-2023">here</Link>!
+				<Link href="/monthlychallenges/sept-2023">here</Link>!
 			</p>
 
 			<h4 className="mt-4">🎙️Podcasts</h4>
 			<p className="font-italic">Season 8 is out!</p>
 			<ul>
 				<li>
-					<Link to="/podcast/rafi-exploring-side-projects-and-ai">
+					<Link href="/podcast/rafi-exploring-side-projects-and-ai">
 						Rafi — Exploring Side Projects and AI
 					</Link>
 				</li>
@@ -128,7 +128,7 @@ export default function Issue() {
 				time of this publication. Please check the official VC{' '}
 				<code>#announcements</code> Slack channel or other noted channels for
 				any updates and links to event rooms. For the full list of events, check
-				out <Link to="/events">our events page</Link>.
+				out <Link href="/events">our events page</Link>.
 			</p>
 
 			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
@@ -137,7 +137,7 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
 					here
 				</Link>
 				!

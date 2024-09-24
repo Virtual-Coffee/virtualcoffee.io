@@ -97,19 +97,19 @@ export default function Issue() {
 					Blogging 2023 Monthly Challenge
 				</a>{' '}
 				to get us started! You can learn more about the challenge{' '}
-				<Link to="/monthlychallenges/nov-2023">here</Link>!
+				<Link href="/monthlychallenges/nov-2023">here</Link>!
 			</p>
 
 			<h3 className="mt-4">🎙️Podcasts</h3>
 			<p className="font-italic">Season 9 is out!</p>
 			<ul>
 				<li>
-					<Link to="/podcast/open-source-licenses-with-matt-mcinnis-tom-cudd-and-ray-deck">
+					<Link href="/podcast/open-source-licenses-with-matt-mcinnis-tom-cudd-and-ray-deck">
 						Open Source Licenses with Matt McInnis, Tom Cudd, and Ray Deck
 					</Link>
 				</li>
 				<li>
-					<Link to="/podcast/jessica-wilkins-using-open-source-to-create-connections">
+					<Link href="/podcast/jessica-wilkins-using-open-source-to-create-connections">
 						Jessica Wilkins — Using Open Source to Create Connections
 					</Link>
 				</li>
@@ -170,7 +170,7 @@ export default function Issue() {
 				events at the time of this publication. Please check the official VC{' '}
 				<code>#announcements</code> Slack channel, or other noted channels, for
 				any updates and links to event rooms. For the full list of events, check
-				out <Link to="/events">our events page</Link>.
+				out <Link href="/events">our events page</Link>.
 			</p>
 
 			<hr />
@@ -181,7 +181,7 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
 					here
 				</Link>
 				!

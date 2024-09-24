@@ -76,24 +76,24 @@ export default function Issue() {
 					Healthy Habits for Healthy Devs
 				</a>{' '}
 				to get us started! You can learn more{' '}
-				<Link to="/monthlychallenges">here</Link>!
+				<Link href="/monthlychallenges">here</Link>!
 			</p>
 
 			<h4 className="mt-4">🎙️Podcasts</h4>
 			<p className="font-italic">Season 8 is out!</p>
 			<ul>
 				<li>
-					<Link to="/podcast/reda-from-maritime-engineer-to-self-taught-front-end-developer">
+					<Link href="/podcast/reda-from-maritime-engineer-to-self-taught-front-end-developer">
 						Reda — From Maritime Engineer to Self-Taught Front-End Developer
 					</Link>
 				</li>
 				<li>
-					<Link to="/podcast/josh-the-life-of-a-full-time-open-source-developer">
+					<Link href="/podcast/josh-the-life-of-a-full-time-open-source-developer">
 						Josh — The Life of a Full Time Open Source Developer
 					</Link>
 				</li>
 				<li>
-					<Link to="/podcast/taiwo-yusuf-the-importance-of-having-a-learning-mindset">
+					<Link href="/podcast/taiwo-yusuf-the-importance-of-having-a-learning-mindset">
 						Taiwo Yusuf — The Importance of Having a Learning Mindset
 					</Link>
 				</li>
@@ -132,7 +132,7 @@ export default function Issue() {
 				time of this publication. Please check the official VC #announcements
 				Slack channel, or other noted channels, for any updates and links to
 				event rooms. For the full list of events, check out{' '}
-				<Link to="/events">our events page</Link>.
+				<Link href="/events">our events page</Link>.
 			</p>
 
 			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
@@ -141,7 +141,7 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
 					here
 				</Link>
 				!

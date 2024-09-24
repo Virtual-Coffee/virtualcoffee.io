@@ -59,8 +59,8 @@ export default function Issue() {
 				other's public personas and rounding things off with our annual
 				LIGHTNING TALKS. Thank you so so much to all who participated. To learn
 				more you can always check out our{' '}
-				<Link to="/monthlychallenges/apr-2024">website</Link>, and you can check
-				out a recap of the{' '}
+				<Link href="/monthlychallenges/apr-2024">website</Link>, and you can
+				check out a recap of the{' '}
 				<a href="https://www.youtube.com/live/pzLXQYZpOPU?si=63xFbmK18J01fpLn&t=6">
 					full lightning talk stream here
 				</a>
@@ -82,7 +82,7 @@ export default function Issue() {
 			</p>
 			<p>
 				To view all of the details of this month's challenge, check out the{' '}
-				<Link to="/monthlychallenges/may-2024">May 2024 challenge page</Link>{' '}
+				<Link href="/monthlychallenges/may-2024">May 2024 challenge page</Link>{' '}
 				and Bekah's{' '}
 				<a href="https://dev.to/virtualcoffee/monthly-challenge-cultivating-community-kindness-in-uncertain-times-7n">
 					blog post
@@ -145,7 +145,7 @@ export default function Issue() {
 				events at the time of this publication. Please check the official VC{' '}
 				<code>#announcements</code> Slack channel, or other noted channels, for
 				any updates and links to event rooms. For the full list of events, check
-				out <Link to="/events">our events page</Link>.
+				out <Link href="/events">our events page</Link>.
 			</p>
 
 			<h3>🆕 New Career Focus Channels Alert</h3>
@@ -166,7 +166,7 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
 					here
 				</Link>
 				!

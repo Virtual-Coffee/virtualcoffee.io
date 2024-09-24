@@ -93,27 +93,27 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<Link to="/podcast/rebecca-key-from-phd-to-frontend">
+					<Link href="/podcast/rebecca-key-from-phd-to-frontend">
 						Rebecca Key — From PhD to Frontend
 					</Link>
 				</li>
 				<li>
-					<Link to="/podcast/arthur-doler-the-human-side-of-tech">
+					<Link href="/podcast/arthur-doler-the-human-side-of-tech">
 						Arthur Doler — The Human Side of Tech
 					</Link>
 				</li>
 				<li>
-					<Link to="/podcast/dominic-duffin-finding-value-in-challenging-ourselves">
+					<Link href="/podcast/dominic-duffin-finding-value-in-challenging-ourselves">
 						Dominic Duffin — Finding value in challenging ourselves
 					</Link>
 				</li>
 				<li>
-					<Link to="/podcast/ramón-huidobro-thoughtful-learning">
+					<Link href="/podcast/ramón-huidobro-thoughtful-learning">
 						Ramón Huidobro — Thoughtful Learning
 					</Link>
 				</li>
 				<li>
-					<Link to="/podcast/season-seven-finale-live-with-nick-taylor">
+					<Link href="/podcast/season-seven-finale-live-with-nick-taylor">
 						Season Seven Finale — Live with Nick Taylor
 					</Link>
 				</li>
@@ -152,7 +152,7 @@ export default function Issue() {
 				time of this publication. Please check the official VC #announcements
 				Slack channel, or other noted channels, for any updates and links to
 				event rooms. For the full list of events, check out{' '}
-				<Link to="/events">our events page</Link>.
+				<Link href="/events">our events page</Link>.
 			</p>
 
 			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
@@ -161,7 +161,7 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link to="/resources/virtual-coffee/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee/get-involved/paths-to-leadership">
 					here
 				</Link>
 				!

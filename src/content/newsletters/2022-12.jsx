@@ -15,8 +15,8 @@ export default function Issue() {
 			<h2>Hey friends!</h2>
 
 			<p className="lead">
-				<Link to="/monthlychallenges/nov-2022">NaNoWriMo</Link> was a blast and
-				the community did so so much but now it's time to focus in on the
+				<Link href="/monthlychallenges/nov-2022">NaNoWriMo</Link> was a blast
+				and the community did so so much but now it's time to focus in on the
 				activities we do <strong>Just For Us</strong> with Community Creativity!
 			</p>
 
@@ -56,7 +56,7 @@ export default function Issue() {
 			<h3 className="font-italic">November Recap</h3>
 			<p>
 				Monthly challenge -&gt;{' '}
-				<Link to="/monthlychallenges/nov-2022">NaNoWriMo</Link>!
+				<Link href="/monthlychallenges/nov-2022">NaNoWriMo</Link>!
 			</p>
 			<p>
 				Last month we hit <strong>106,978 words</strong> during our writing
@@ -64,12 +64,12 @@ export default function Issue() {
 				everyone who participated and a special shoutout to this year's top
 				writer, <a href="https://twitter.com/AbbeyPerini">Abbey Perini</a>! You
 				can see the details of the challenge and all those who helped on the{' '}
-				<Link to="/monthlychallenges/nov-2022">Virtual Coffee website</Link>.
+				<Link href="/monthlychallenges/nov-2022">Virtual Coffee website</Link>.
 			</p>
 
 			<h3 className="mb-3 font-italic">
 				December -&gt;{' '}
-				<Link to="/monthlychallenges/dec-2022">
+				<Link href="/monthlychallenges/dec-2022">
 					Creative Community Challenge!
 				</Link>
 				!
@@ -90,8 +90,8 @@ export default function Issue() {
 				achievements. It can also be a great time to explore new hobbies and
 				activities. If someone is doing something you're interested in, this is
 				the month to learn more and maybe give it a try. Check out the{' '}
-				<Link to="/monthlychallenges/dec-2022">Virtual Coffee website</Link> for
-				more details!
+				<Link href="/monthlychallenges/dec-2022">Virtual Coffee website</Link>{' '}
+				for more details!
 			</p>
 
 			<h4 className="mt-4">☕🪑 Coffee Table Events</h4>
@@ -131,7 +131,7 @@ export default function Issue() {
 				time of this publication. Please check the official VC #announcements
 				Slack channel, or other noted channels, for any updates and links to
 				event rooms. For the full list of events, check out{' '}
-				<Link to="/events">our events page</Link>.
+				<Link href="/events">our events page</Link>.
 			</p>
 
 			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
@@ -141,7 +141,7 @@ export default function Issue() {
 				All of our active volunteers have an invite to send out to someone
 				interested in joining Virtual Coffee. If you're interested in joining
 				the volunteer team, check out some the roles{' '}
-				<Link to="/resources/virtual-coffee/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee/get-involved/paths-to-leadership">
 					here
 				</Link>
 				!

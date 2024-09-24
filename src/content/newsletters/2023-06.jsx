@@ -68,11 +68,11 @@ export default function Issue() {
 				<strong>💡Monthly Theme & Challenge</strong>: Reflect. Reevaluate. Grow.
 			</p>
 			<p>
-				The <Link to="/monthlychallenges">Mid-Year Check-In challenge</Link> is
-				designed to provide an opportunity for Virtual Coffee members to reflect
-				on their progress, reevaluate goals, and gain clarity on their journey.
-				Let’s pause, assess, and adjust as we reach the halfway point of the
-				year. This challenge aims to encourage personal growth, foster
+				The <Link href="/monthlychallenges">Mid-Year Check-In challenge</Link>{' '}
+				is designed to provide an opportunity for Virtual Coffee members to
+				reflect on their progress, reevaluate goals, and gain clarity on their
+				journey. Let’s pause, assess, and adjust as we reach the halfway point
+				of the year. This challenge aims to encourage personal growth, foster
 				connection within the community, and provide a supportive space for
 				members to share their insights, challenges, and successes.
 			</p>
@@ -118,7 +118,7 @@ export default function Issue() {
 				time of this publication. Please check the official VC #announcements
 				Slack channel, or other noted channels, for any updates and links to
 				event rooms. For the full list of events, check out{' '}
-				<Link to="/events">our events page</Link>.
+				<Link href="/events">our events page</Link>.
 			</p>
 
 			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
@@ -127,7 +127,7 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link to="/resources/virtual-coffee/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee/get-involved/paths-to-leadership">
 					here
 				</Link>
 				!

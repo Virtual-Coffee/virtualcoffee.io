@@ -80,7 +80,9 @@ export default function Issue() {
 				resolutions are notoriously hard to keep. This month's challenge is
 				about setting better goals that will serve you all year long, then
 				building the habits and tools to help you achieve. Check out the{' '}
-				<Link to="/monthlychallenges/jan-2024">VC Monthly Challenge page</Link>{' '}
+				<Link href="/monthlychallenges/jan-2024">
+					VC Monthly Challenge page
+				</Link>{' '}
 				or{' '}
 				<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-new-year-new-goals-241m">
 					Ayu's blog post
@@ -158,7 +160,7 @@ export default function Issue() {
 				events at the time of this publication. Please check the official VC{' '}
 				<code>#announcements</code> Slack channel, or other noted channels, for
 				any updates and links to event rooms. For the full list of events, check
-				out <Link to="/events">our events page</Link>.
+				out <Link href="/events">our events page</Link>.
 			</p>
 
 			<h3>🆕 New Career Focus Channels Alert</h3>
@@ -186,7 +188,7 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
 					here
 				</Link>
 				!

@@ -65,7 +65,7 @@ export default function Issue() {
 			<h3 className="font-italic">January Recap</h3>
 			<p>
 				Monthly challenge -&gt;{' '}
-				<Link to="/monthlychallenges/jan-2023">
+				<Link href="/monthlychallenges/jan-2023">
 					Month of Learning Challenge
 				</Link>
 				!
@@ -78,7 +78,7 @@ export default function Issue() {
 
 			<h3 className="font-italic">
 				February -&gt;{' '}
-				<Link to="/monthlychallenges/feb-2023">Get Job Ready</Link>!
+				<Link href="/monthlychallenges/feb-2023">Get Job Ready</Link>!
 			</h3>
 			<p>
 				<strong>
@@ -116,8 +116,8 @@ export default function Issue() {
 			</p>
 			<p>
 				Check out the{' '}
-				<Link to="/monthlychallenges/feb-2023">Virtual Coffee website</Link> for
-				more details!
+				<Link href="/monthlychallenges/feb-2023">Virtual Coffee website</Link>{' '}
+				for more details!
 			</p>
 
 			<h4 className="mt-4">☕🪑 Coffee Table Events</h4>
@@ -153,7 +153,7 @@ export default function Issue() {
 				time of this publication. Please check the official VC #announcements
 				Slack channel, or other noted channels, for any updates and links to
 				event rooms. For the full list of events, check out{' '}
-				<Link to="/events">our events page</Link>.
+				<Link href="/events">our events page</Link>.
 			</p>
 
 			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
@@ -162,7 +162,7 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link to="/resources/virtual-coffee/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee/get-involved/paths-to-leadership">
 					here
 				</Link>
 				!

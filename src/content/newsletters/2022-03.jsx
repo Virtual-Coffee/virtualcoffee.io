@@ -49,7 +49,7 @@ export default function Issue() {
 			<h3 className="font-italic">February Recap</h3>
 			<p>
 				Monthly challenge -&gt;
-				<Link to="/monthlychallenges/feb-2022/">All About Pairing!</Link>
+				<Link href="/monthlychallenges/feb-2022/">All About Pairing!</Link>
 			</p>
 			<p>
 				We spent the month of February forming teams to share ideas and work on
@@ -80,7 +80,7 @@ export default function Issue() {
 				process to join any Virtual Coffee event, you'll now check the
 				announcements for a "Join Now" button before the event. You can also see
 				our new and improved
-				<Link to="/events">Virtual Coffee Events page</Link> to see what
+				<Link href="/events">Virtual Coffee Events page</Link> to see what
 				official Virtual Coffee and member-led events we have going on every
 				week!
 			</p>
@@ -93,7 +93,7 @@ export default function Issue() {
 			<h3 className="mb-3 font-italic">March Happenings</h3>
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:
-				<Link to="/monthlychallenges/mar-2022/">
+				<Link href="/monthlychallenges/mar-2022/">
 					Month of Creating Audio/Visual content
 				</Link>
 				!

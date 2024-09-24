@@ -95,12 +95,12 @@ export default function Issue() {
 			<p className="font-italic">Season 9 is out!</p>
 			<ul>
 				<li>
-					<Link to="/podcast/ayu-dominic-hacktoberfest-is-coming-preptember-is-here">
+					<Link href="/podcast/ayu-dominic-hacktoberfest-is-coming-preptember-is-here">
 						Ayu & Dominic — Hacktoberfest is Coming, Preptember is Here!
 					</Link>
 				</li>
 				<li>
-					<Link to="/podcast/working-in-public-the-making-and-maintenance-of-open-source-software-book-review">
+					<Link href="/podcast/working-in-public-the-making-and-maintenance-of-open-source-software-book-review">
 						OSS Book Review: Nadia Eghbal's Working in Public — The Making and
 						Maintenance of Open Source Software
 					</Link>
@@ -163,7 +163,7 @@ export default function Issue() {
 				time of this publication. Please check the official VC{' '}
 				<code>#announcements</code> Slack channel or other noted channels for
 				any updates and links to event rooms. For the full list of events, check
-				out <Link to="/events">our events page</Link>.
+				out <Link href="/events">our events page</Link>.
 			</p>
 
 			<hr />
@@ -174,7 +174,7 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some of{' '}
-				<Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
 					our open roles
 				</Link>
 				!

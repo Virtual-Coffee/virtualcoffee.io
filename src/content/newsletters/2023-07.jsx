@@ -76,8 +76,8 @@ export default function Issue() {
 				do what you can to get your work out there. If you don't want to go full
 				public eye, you can always just stick to your handy dandy VC crew of
 				compatriots. Don't be scared to share! We always appreciate each other's
-				endeavours. You can learn more <Link to="/monthlychallenges">here</Link>
-				!
+				endeavours. You can learn more{' '}
+				<Link href="/monthlychallenges">here</Link>!
 			</p>
 
 			<h4 className="mt-4">🍔 Lunch & Learn</h4>
@@ -92,21 +92,21 @@ export default function Issue() {
 			<p className="font-italic">Season 8 is out!</p>
 			<ul>
 				<li>
-					<Link to="/podcast/caitlin-floyd">Caitlin Floyd — Mentorship</Link>
+					<Link href="/podcast/caitlin-floyd">Caitlin Floyd — Mentorship</Link>
 				</li>
 				<li>
-					<Link to="/podcast/carmen-tech-industry-friendships-leveraging-connections-for-growth-challenges-and-opportunities-and-devops">
+					<Link href="/podcast/carmen-tech-industry-friendships-leveraging-connections-for-growth-challenges-and-opportunities-and-devops">
 						Carmen — Tech Industry Friendships: Leveraging Connections for
 						Growth, Challenges, and Opportunities and DevOps!
 					</Link>
 				</li>
 				<li>
-					<Link to="/podcast/alex-curtis-slep-enriching-your-life-as-a-developer">
+					<Link href="/podcast/alex-curtis-slep-enriching-your-life-as-a-developer">
 						Alex Curtis-Slep — Enriching Your Life as a Developer
 					</Link>
 				</li>
 				<li>
-					<Link to="/podcast/vc-maintainers-importance-of-culture-citizenship">
+					<Link href="/podcast/vc-maintainers-importance-of-culture-citizenship">
 						VC Maintainers — Importance of Culture Citizenship
 					</Link>
 				</li>
@@ -146,7 +146,7 @@ export default function Issue() {
 				time of this publication. Please check the official VC #announcements
 				Slack channel, or other noted channels, for any updates and links to
 				event rooms. For the full list of events, check out{' '}
-				<Link to="/events">our events page</Link>.
+				<Link href="/events">our events page</Link>.
 			</p>
 
 			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
@@ -155,7 +155,7 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link to="/resources/virtual-coffee/get-involved/paths-to-leadership">
+				<Link href="/resources/virtual-coffee/get-involved/paths-to-leadership">
 					here
 				</Link>
 				!
