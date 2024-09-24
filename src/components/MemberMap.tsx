@@ -1,4 +1,6 @@
-import type { MappableMember } from 'members/types';
+'use client';
+
+import type { MappableMember } from '@/content/members/types';
 import { useEffect } from 'react';
 import L from 'leaflet';
 import { MapContainer, Marker, TileLayer, Popup, useMap } from 'react-leaflet';

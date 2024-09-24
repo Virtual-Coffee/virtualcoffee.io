@@ -28,6 +28,11 @@ export type Account =
 			type: 'website';
 			url: Website;
 			title: string;
+	  }
+	| {
+			type: 'mastodon';
+			title?: string;
+			url: Website;
 	  };
 
 export type Badge = 'Hacktoberfest2022' | 'Hacktoberfest2023';
@@ -83,7 +88,8 @@ export type Icons =
 	| 'Medium'
 	| 'HashNode'
 	| 'YouTube'
-	| 'Website';
+	| 'Website'
+	| 'Mastodon';
 
 export type IconProps = {
 	ariaHidden?: boolean;

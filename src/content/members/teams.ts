@@ -1,10 +1,10 @@
 const teams = {
-	'Community Maintainer': ['BekahHW', 'tkshill', 'juliaseid', 'meg-gutshall'],
+	'Community Maintainer': ['BekahHW', 'tkshill', 'meg-gutshall'],
 
 	'Org Maintainer': ['danieltott', 'BekahHW'],
 	'Lunch & Learn Coordinator': ['shelleymcq'],
 	'Coffee Table Groups Coordinator': ['abbeyperini'],
-	'Maintainer Emeritus': ['saramccombs'],
+	'Maintainer Emeritus': ['saramccombs', 'juliaseid'],
 	'Room Leader': [
 		'abbeyperini',
 		'AlexVCS',
@@ -15,7 +15,6 @@ const teams = {
 		'glenmccallumcan',
 		'jdwilkin4',
 		'JoeKarow',
-		'juliaseid',
 		'mrsantons',
 		'marktnoonan',
 		'nickytonline',
@@ -72,7 +71,6 @@ const teams = {
 
 	'AV Team Lead': ['BogDAAAMN'],
 	'Coffee Table Host': [
-		'juliaseid',
 		'mrsantons',
 		'meg-gutshall',
 		'LincolnFleet',

@@ -10,7 +10,8 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"build:members": "node scripts/loadMemberFiles.js"
 	},
 	"dependencies": {
 		"@mdx-js/loader": "^3.0.1",
