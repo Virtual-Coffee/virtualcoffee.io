@@ -1,50 +1,50 @@
 import { useMemo } from 'react';
-import { useMatches } from '@remix-run/react';
-import type { UndrawIllustrationName } from '~/components/UndrawIllustration';
-import UndrawIllustration from '~/components/UndrawIllustration';
+// import { useMatches } from '@remix-run/react';
+import type { UndrawIllustrationName } from '@/components/UndrawIllustration';
+import UndrawIllustration from '@/components/UndrawIllustration';
 
-function useHeroData({ Hero, heroHeader, heroSubheader }: HeroData) {
-	const matches = useMatches().reverse();
-	return useMemo(() => {
-		let firstHero = matches.find((match) => !!match.handle?.hero)?.handle?.hero;
-		if (!firstHero) {
-			firstHero = matches.find((match) => !!match.data?.hero)?.data.hero;
-		}
+// function useHeroData({ Hero, heroHeader, heroSubheader }: HeroData) {
+// 	const matches = useMatches().reverse();
+// 	return useMemo(() => {
+// 		let firstHero = matches.find((match) => !!match.handle?.hero)?.handle?.hero;
+// 		if (!firstHero) {
+// 			firstHero = matches.find((match) => !!match.data?.hero)?.data.hero;
+// 		}
 
-		let firstMeta = matches.find((match) => !!match.handle?.meta)?.handle?.meta;
-		if (!firstMeta) {
-			firstMeta = matches.find((match) => !!match.data?.meta)?.data.meta;
-		}
+// 		let firstMeta = matches.find((match) => !!match.handle?.meta)?.handle?.meta;
+// 		if (!firstMeta) {
+// 			firstMeta = matches.find((match) => !!match.data?.meta)?.data.meta;
+// 		}
 
-		const returnObject: HeroData = {
-			Hero: Hero || firstHero?.Hero,
-		};
+// 		const returnObject: HeroData = {
+// 			Hero: Hero || firstHero?.Hero,
+// 		};
 
-		// allow for setting to ''
-		if (typeof heroHeader !== 'undefined') {
-			returnObject.heroHeader = heroHeader;
-		}
-		// allow for setting to ''
-		else if (firstHero && typeof firstHero.heroHeader !== 'undefined') {
-			returnObject.heroHeader = firstHero.heroHeader;
-		} else {
-			returnObject.heroHeader = firstMeta?.title;
-		}
+// 		// allow for setting to ''
+// 		if (typeof heroHeader !== 'undefined') {
+// 			returnObject.heroHeader = heroHeader;
+// 		}
+// 		// allow for setting to ''
+// 		else if (firstHero && typeof firstHero.heroHeader !== 'undefined') {
+// 			returnObject.heroHeader = firstHero.heroHeader;
+// 		} else {
+// 			returnObject.heroHeader = firstMeta?.title;
+// 		}
 
-		// allow for setting to ''
-		if (typeof heroSubheader !== 'undefined') {
-			returnObject.heroSubheader = heroSubheader;
-		}
-		// allow for setting to ''
-		else if (firstHero && typeof firstHero.heroSubheader !== 'undefined') {
-			returnObject.heroSubheader = firstHero.heroSubheader;
-		} else {
-			returnObject.heroSubheader = firstMeta?.description;
-		}
+// 		// allow for setting to ''
+// 		if (typeof heroSubheader !== 'undefined') {
+// 			returnObject.heroSubheader = heroSubheader;
+// 		}
+// 		// allow for setting to ''
+// 		else if (firstHero && typeof firstHero.heroSubheader !== 'undefined') {
+// 			returnObject.heroSubheader = firstHero.heroSubheader;
+// 		} else {
+// 			returnObject.heroSubheader = firstMeta?.description;
+// 		}
 
-		return returnObject;
-	}, [Hero, heroHeader, heroSubheader, matches]);
-}
+// 		return returnObject;
+// 	}, [Hero, heroHeader, heroSubheader, matches]);
+// }
 
 export function HeroHead({
 	Hero,
@@ -55,9 +55,9 @@ export function HeroHead({
 	DefaultLayoutProps,
 	'Hero' | 'heroHeader' | 'heroSubheader' | 'simple'
 >) {
-	const heroData = useHeroData({ Hero, heroHeader, heroSubheader });
+	// const heroData = useHeroData({ Hero, heroHeader, heroSubheader });
 
-	if (heroData.Hero && heroData.heroHeader) {
+	if (Hero && heroHeader) {
 		return (
 			<div className="py-4">
 				<div className="container">
@@ -66,27 +66,23 @@ export function HeroHead({
 							<UndrawIllustration
 								loading="eager"
 								style={{ width: '100%', maxWidth: '300px' }}
-								filename={heroData.Hero}
+								filename={Hero}
 							/>
 						</div>
 						<div className="col-md-8">
-							<h1 className="display-4 mt-3 mt-md-0">{heroData.heroHeader}</h1>
-							{heroData.heroSubheader && (
-								<div className="lead">{heroData.heroSubheader}</div>
-							)}
+							<h1 className="display-4 mt-3 mt-md-0">{heroHeader}</h1>
+							{heroSubheader && <div className="lead">{heroSubheader}</div>}
 						</div>
 					</div>
 				</div>
 			</div>
 		);
 	}
-	if (heroData.heroHeader) {
+	if (heroHeader) {
 		return (
 			<div className={`container pt-5${simple ? ' container-simple' : ''}`}>
-				<h1 className="display-4">{heroData.heroHeader}</h1>
-				{heroData.heroSubheader && (
-					<div className="lead">{heroData.heroSubheader}</div>
-				)}
+				<h1 className="display-4">{heroHeader}</h1>
+				{heroSubheader && <div className="lead">{heroSubheader}</div>}
 			</div>
 		);
 	}

@@ -1,4 +1,5 @@
-import createSocialImage from '~/util/socialimage';
+import createSocialImage from '@/util/socialimage';
+import type { Metadata } from 'next';
 
 export function createMetaData({
 	title,
@@ -10,22 +11,30 @@ export function createMetaData({
 	description?: string;
 	hero?: string;
 	Hero?: string;
-}) {
+}): Metadata {
 	// `/assets/svg/${attributes.hero.Hero}.svg`
 	const hero = heroPath || Hero ? `/assets/svg/${Hero}.svg` : undefined;
 
 	return {
 		title,
 		description,
-		'og:image': createSocialImage({
-			title: title,
-			subtitle: description,
-			hero,
-		}),
-		'twitter:image': createSocialImage({
-			title: title,
-			subtitle: description,
-			hero,
-		}),
+		openGraph: {
+			images: [
+				createSocialImage({
+					title: title,
+					subtitle: description,
+					hero,
+				}),
+			],
+		},
+		twitter: {
+			images: [
+				createSocialImage({
+					title: title,
+					subtitle: description,
+					hero,
+				}),
+			],
+		},
 	};
 }

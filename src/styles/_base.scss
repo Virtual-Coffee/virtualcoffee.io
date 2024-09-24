@@ -29,6 +29,10 @@ h3 {
 	font-weight: 500;
 }
 
+.text-link {
+	color: $link-color;
+}
+
 .bg-light.py-5 + .bg-light.py-5 {
 	padding-top: 0 !important;
 }

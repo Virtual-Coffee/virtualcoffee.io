@@ -16,7 +16,7 @@ export default function createSocialImage({
 	title,
 	subtitle,
 	hero,
-}: SocialImageProps) {
+}: SocialImageProps): string {
 	const client = new ImgixClient({
 		domain: 'virtualcoffee.imgix.net',
 		// secureURLToken: '<SECURE TOKEN>',
