@@ -1,21 +1,12 @@
-import { json } from '@remix-run/node';
-import DefaultLayout from '~/components/layouts/DefaultLayout';
-import { createMetaData } from '~/util/createMetaData.server';
-import { Link } from '@remix-run/react';
+import DefaultLayout from '@/components/layouts/DefaultLayout';
+import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
-export async function loader() {
-	return json({
-		meta: createMetaData({
-			title: 'Join Virtual Coffee',
-			description: `Virtual Coffee is an intimate community that welcomes people at all stages of their tech journey.`,
-			Hero: 'UndrawTeamSpirit',
-		}),
-	});
-}
-
-export function meta({ data: { meta } }) {
-	return meta;
-}
+export const meta = createMetaData({
+	title: 'Join Virtual Coffee',
+	description: `Virtual Coffee is an intimate community that welcomes people at all stages of their tech journey.`,
+	Hero: 'UndrawTeamSpirit',
+});
 
 export default function Join() {
 	return (
@@ -36,15 +27,15 @@ export default function Join() {
 					</p>
 					<p>
 						We intentionally keep our group small to preserve what makes Virtual
-						Coffee special and support our existing members. We'd love to have
-						everyone as a part of Virtual Coffee, but we prioritize the intimacy
-						and closeness of the group. Our community is currently accepting
-						members on a limited basis. As new membership becomes available,
-						we'll reach out to those on the waitlist to join.
+						Coffee special and support our existing members. We&apos; love to
+						have everyone as a part of Virtual Coffee, but we prioritize the
+						intimacy and closeness of the group. Our community is currently
+						accepting members on a limited basis. As new membership becomes
+						available, we&apos;ll reach out to those on the waitlist to join.
 					</p>
 					<p>
 						In the meantime, feel free to check out the{' '}
-						<Link to="/resources/virtual-coffee-handbook/join-virtual-coffee">
+						<Link href="/resources/virtual-coffee-handbook/join-virtual-coffee">
 							FAQ about joining Virtual Coffee
 						</Link>
 						.
