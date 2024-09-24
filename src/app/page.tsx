@@ -7,7 +7,7 @@ import { getEvents } from '@/data/events';
 import { dateForDisplay } from '@/util/date';
 import { loadMdxDirectory } from '@/util/loadMdx.server';
 import { getEpisodes } from '@/data/podcast';
-import getNewsletters from '@/data/newsletters';
+import { getNewsletters } from '@/data/newsletters';
 import { getSponsors } from '@/data/sponsors';
 
 export const homePageLinks = [

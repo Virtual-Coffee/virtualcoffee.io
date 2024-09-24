@@ -33,7 +33,7 @@ export default function NewsletterSubscribe({
 					<input
 						type="text"
 						name="b_e52b6b09f8fe23f8277bfbe66_d0267c9b8e"
-						tabIndex="-1"
+						tabIndex={-1}
 						id="honeypot"
 					/>
 				</div>

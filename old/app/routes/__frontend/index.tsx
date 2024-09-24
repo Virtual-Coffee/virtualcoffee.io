@@ -11,7 +11,7 @@ import PostList, {
 } from '~/components/PostList';
 import { dateForDisplay } from '~/util/date';
 import { loadMdxDirectory } from '~/util/loadMdx.server';
-import getNewsletters from '~/data/newsletters';
+import { getNewsletters } from '~/data/newsletters';
 
 export const loader = async (args: LoaderArgs) => {
 	const [sponsors, events, podcastEpisodes, newsletters] = await Promise.all([
