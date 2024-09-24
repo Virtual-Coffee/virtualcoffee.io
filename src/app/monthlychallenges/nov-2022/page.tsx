@@ -52,7 +52,7 @@ const goals = [
 	},
 ];
 
-async function loader() {
+async function getData() {
 	const { title } = handle.meta;
 
 	let api = new CmsActions();
@@ -113,13 +113,11 @@ async function loader() {
 }
 
 export async function generateMetadata() {
-	const { meta } = await loader();
+	const { meta } = await getData();
 	return meta;
 }
 
 export default async function Challenge() {
-	// const { completedGoals, currentGoal, sortedList, list, totals } =
-	// 	useLoaderData();
 	const {
 		authorsWithPosts,
 		totalWordCount,
@@ -127,7 +125,7 @@ export default async function Challenge() {
 		completedGoals,
 		currentGoal,
 		meta,
-	} = await loader();
+	} = await getData();
 
 	return (
 		<DefaultLayout

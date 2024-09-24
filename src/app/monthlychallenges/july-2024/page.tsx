@@ -1,6 +1,5 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
-import { Link } from '@remix-run/react';
+import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
 export const handle = {
 	listTitle: 'July 2024: Welcoming Community!',
@@ -22,16 +21,14 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (
 		<>
 			<div className="alert alert-success">
-				This monthly challenge is complete. Congratulations! Please join us for the{' '}
-				<Link to="/monthlychallenges/aug-2024">next challenge</Link>!
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link href="/monthlychallenges/aug-2024">next challenge</Link>!
 			</div>
 			<h1>
 				<small>Monthly Challenge for July 2024:</small> Welcoming Community!
@@ -79,7 +76,7 @@ export default function Challenge() {
 				<li>
 					<strong>Offering help and support:</strong> This can be anything! For
 					example, let them know about any{' '}
-					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide">
+					<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide">
 						Slack channels
 					</Link>{' '}
 					they may find interesting or encourage them to attend our Coffee Table
@@ -91,7 +88,7 @@ export default function Challenge() {
 			<p>
 				<strong>
 					Please always remember to abide by our{' '}
-					<Link to="/code-of-conduct">Code of Conduct</Link>, which we take
+					<Link href="/code-of-conduct">Code of Conduct</Link>, which we take
 					seriously.
 				</strong>
 			</p>

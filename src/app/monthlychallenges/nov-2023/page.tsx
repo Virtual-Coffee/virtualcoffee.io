@@ -21,7 +21,7 @@ export const handle = {
 	},
 };
 
-async function loader() {
+async function getData() {
 	const { title } = handle.meta;
 
 	const data = await getChallengeData();
@@ -37,10 +37,8 @@ async function loader() {
 }
 
 export default async function Challenge() {
-	// const { completedGoals, currentGoal, sortedList, list, totals } =
-	// 	useLoaderData();
 	const { sortedList, totals, completedGoals, currentGoal, meta } =
-		await loader();
+		await getData();
 
 	return (
 		<DefaultLayout

@@ -1,6 +1,5 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
-import { Link } from '@remix-run/react';
+import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
 export const handle = {
 	listTitle: 'August 2024: Photography Challenge',
@@ -22,9 +21,7 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (
@@ -75,7 +72,7 @@ export default function Challenge() {
 			<p>
 				<strong>
 					Please always remember to abide by our{' '}
-					<Link to="/code-of-conduct">Code of Conduct</Link>, which we take
+					<Link href="/code-of-conduct">Code of Conduct</Link>, which we take
 					seriously.
 				</strong>
 			</p>

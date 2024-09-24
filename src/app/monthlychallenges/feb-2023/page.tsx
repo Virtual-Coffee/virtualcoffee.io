@@ -1,5 +1,4 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
+import { createMetaData } from '@/util/createMetaData.server';
 import logo from './logo.png';
 
 export const handle = {

@@ -1,7 +1,6 @@
-import { json } from '@remix-run/node';
-import { Link } from '@remix-run/react';
-import LeadText from '~/components/content/LeadText';
-import { createMetaData } from '~/util/createMetaData.server';
+import Link from 'next/link';
+import LeadText from '@/components/content/LeadText';
+import { createMetaData } from '@/util/createMetaData.server';
 
 export const handle = {
 	listTitle: 'October 2023: Hacktoberfest!',
@@ -23,16 +22,14 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges/nov-2023">next challenge</Link>!
+				the <Link href="/monthlychallenges/nov-2023">next challenge</Link>!
 			</div>
 
 			<h1>
@@ -501,7 +498,7 @@ export default function Challenge() {
 			<h3>Virtual Coffee Resources</h3>
 			<ul>
 				<li>
-					<Link to="/resources/developer-resources/open-source">
+					<Link href="/resources/developer-resources/open-source">
 						Open Source Resource
 					</Link>
 				</li>
@@ -511,10 +508,10 @@ export default function Challenge() {
 					</a>
 				</li>
 				<li>
-					<Link to="/podcast">Season 9 of Virtual Coffee Podcast</Link>
+					<Link href="/podcast">Season 9 of Virtual Coffee Podcast</Link>
 				</li>
 				<li>
-					<Link to="/podcast/chad-stewart-oss-and-techishiring">
+					<Link href="/podcast/chad-stewart-oss-and-techishiring">
 						Podcast with Chad Stewart: OSS and #TechIsHiring
 					</Link>
 				</li>

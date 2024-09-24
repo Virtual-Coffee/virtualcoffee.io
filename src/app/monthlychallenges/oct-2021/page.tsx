@@ -1,7 +1,6 @@
-import { json } from '@remix-run/node';
-import { Link } from '@remix-run/react';
-import LeadText from '~/components/content/LeadText';
-import { createMetaData } from '~/util/createMetaData.server';
+import Link from 'next/link';
+import LeadText from '@/components/content/LeadText';
+import { createMetaData } from '@/util/createMetaData.server';
 
 export const handle = {
 	listTitle: 'October 2021: Hacktoberfest!',
@@ -23,16 +22,14 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges">next challenge</Link>!
+				the <Link href="/monthlychallenges">next challenge</Link>!
 			</div>
 
 			<h1>

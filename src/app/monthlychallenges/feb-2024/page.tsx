@@ -1,6 +1,5 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
-import { Link } from '@remix-run/react';
+import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
 export const handle = {
 	listTitle: 'February, 2024: Month of Learning!',
@@ -21,16 +20,14 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges/mar-2024">next challenge</Link>!
+				the <Link href="/monthlychallenges/mar-2024">next challenge</Link>!
 			</div>
 
 			<h1>
@@ -51,8 +48,8 @@ export default function Challenge() {
 			<p>
 				If you're inspired by what you learn and want to share more, we
 				encourage you to give a{' '}
-				<Link to="/lunch-and-learn-idea/">Lunch & Learn</Link> or get ready for
-				our Lightning Talks in April!
+				<Link href="/lunch-and-learn-idea/">Lunch & Learn</Link> or get ready
+				for our Lightning Talks in April!
 			</p>
 
 			<h2>Goals</h2>
@@ -83,7 +80,7 @@ export default function Challenge() {
 						<li>
 							<strong>With people:</strong> If you need accountability and have
 							people around to support you, join our{' '}
-							<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#accountabilibuddies">
+							<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#accountabilibuddies">
 								Accountabilibuddies
 							</Link>{' '}
 							sessions. Check out the <code>#announcements</code> and{' '}

@@ -1,7 +1,6 @@
-import { json } from '@remix-run/node';
-import { Link } from '@remix-run/react';
-import LeadText from '~/components/content/LeadText';
-import { createMetaData } from '~/util/createMetaData.server';
+import Link from 'next/link';
+import LeadText from '@/components/content/LeadText';
+import { createMetaData } from '@/util/createMetaData.server';
 
 export const handle = {
 	listTitle: 'September 2021: Preptember!',
@@ -23,16 +22,14 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges/oct-2021">next challenge</Link>!
+				the <Link href="/monthlychallenges/oct-2021">next challenge</Link>!
 			</div>
 
 			<h1>
@@ -43,7 +40,7 @@ export default function Challenge() {
 			<LeadText>
 				This month, we have two tracks. Our member maintainers will be reviewing
 				their open source repos with{' '}
-				<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+				<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 					our checklist
 				</Link>{' '}
 				to make sure their projects are ready for Hacktoberfest contributions,
@@ -78,7 +75,7 @@ export default function Challenge() {
 				Hacktoberfest. Your repository should have a clear path for
 				communication, a good explanation of how to run the project, and clear
 				issues.{' '}
-				<Link to="/resources/developer-resources/open-source/maintainer-guide">
+				<Link href="/resources/developer-resources/open-source/maintainer-guide">
 					Our guide
 				</Link>{' '}
 				will help you prepare your project and be added to the list of Virtual
@@ -165,7 +162,7 @@ export default function Challenge() {
 				<li>
 					The issue guide is pinned in our Slack <code>#monthly-challenge</code>{' '}
 					channel, and you can find our maintainers' checklist{' '}
-					<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+					<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 						here
 					</Link>{' '}
 					as part of our Member Resources section on our site.

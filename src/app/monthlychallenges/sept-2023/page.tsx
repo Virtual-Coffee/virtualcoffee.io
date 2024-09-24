@@ -1,7 +1,6 @@
-import { json } from '@remix-run/node';
-import { Link } from '@remix-run/react';
-import LeadText from '~/components/content/LeadText';
-import { createMetaData } from '~/util/createMetaData.server';
+import Link from 'next/link';
+import LeadText from '@/components/content/LeadText';
+import { createMetaData } from '@/util/createMetaData.server';
 
 export const handle = {
 	listTitle: 'September 2023: Preptember!',
@@ -23,16 +22,14 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges/oct-2023">next challenge</Link>!
+				the <Link href="/monthlychallenges/oct-2023">next challenge</Link>!
 			</div>
 
 			<h1>
@@ -43,7 +40,7 @@ export default function Challenge() {
 			<LeadText>
 				This month, we have two tracks. Maintainers will review their
 				open-source repos with our{' '}
-				<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+				<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 					repository checklist
 				</Link>{' '}
 				to ensure their projects are ready for Hacktoberfest contributions.
@@ -77,7 +74,7 @@ export default function Challenge() {
 			<ul>
 				<li>
 					Evaluate your open-source project and complete{' '}
-					<Link to="/resources/developer-resources/open-source/maintainer-guide">
+					<Link href="/resources/developer-resources/open-source/maintainer-guide">
 						the checklist
 					</Link>{' '}
 					before the end of September.
@@ -103,7 +100,7 @@ export default function Challenge() {
 				</li>
 				<li>
 					Following{' '}
-					<Link to="/resources/developer-resources/open-source/maintainer-guide">
+					<Link href="/resources/developer-resources/open-source/maintainer-guide">
 						the guide
 					</Link>
 					, evaluate an open-source project to VC-verify it as a good project to
@@ -126,7 +123,7 @@ export default function Challenge() {
 				Hacktoberfest. Your repository should have a clear path for
 				communication, a good explanation of how to run the project, and clear
 				issues.{' '}
-				<Link to="/resources/developer-resources/open-source/maintainer-guide">
+				<Link href="/resources/developer-resources/open-source/maintainer-guide">
 					Our guide
 				</Link>{' '}
 				will help you prepare your project and be added to the list of Virtual
@@ -141,7 +138,7 @@ export default function Challenge() {
 				efforts to onboard new contributors. To complete this monthly challenge,
 				find an open-source repository you'd like to contribute to and evaluate
 				it based on our{' '}
-				<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+				<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 					repository checklist
 				</Link>
 				. If it doesn't meet our checklist requirements, add an issue or
@@ -152,7 +149,7 @@ export default function Challenge() {
 			<LeadText>
 				<p>
 					Please take a look at our{' '}
-					<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+					<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 						Repository Checklist
 					</Link>
 					. This guide contains everything we look for in a good open-source
@@ -171,7 +168,7 @@ export default function Challenge() {
 				<li>
 					If you are participating in this month's challenge as a contributor,
 					consider the items in our{' '}
-					<Link to="/resources/developer-resources/open-source/maintainer-guide">
+					<Link href="/resources/developer-resources/open-source/maintainer-guide">
 						repository checklist
 					</Link>{' '}
 					as you look at some possible open-source repositories to contribute
@@ -184,7 +181,7 @@ export default function Challenge() {
 				</li>
 				<li>
 					If you are participating as an open-source maintainer, use{' '}
-					<Link to="/resources/developer-resources/open-source/maintainer-guide">
+					<Link href="/resources/developer-resources/open-source/maintainer-guide">
 						our checklist
 					</Link>{' '}
 					as a guide to get your repository ready for contributions. Then add
@@ -255,7 +252,7 @@ export default function Challenge() {
 					<ul>
 						<li>
 							If the repository does meet{' '}
-							<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+							<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 								the checklist
 							</Link>{' '}
 							requirements, post the repository in the{' '}
@@ -276,7 +273,7 @@ export default function Challenge() {
 			<h2>Resources</h2>
 			<ul>
 				<li>
-					<Link to="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+					<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 						Virtual Coffee's repository checklist
 					</Link>
 				</li>

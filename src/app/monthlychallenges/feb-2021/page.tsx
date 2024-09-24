@@ -1,5 +1,4 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
+import { createMetaData } from '@/util/createMetaData.server';
 
 export const handle = {
 	listTitle: 'February, 2021: Show your work! Creating Audio Visual content',
@@ -22,9 +21,7 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (

@@ -1,6 +1,5 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
-import { Link } from '@remix-run/react';
+import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
 export const handle = {
 	listTitle:
@@ -24,9 +23,7 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (
@@ -191,15 +188,15 @@ export default function Challenge() {
 			</p>
 			<p>
 				Our{' '}
-				<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#tech-interview-study-group">
+				<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#tech-interview-study-group">
 					Tech Interview Study Group
 				</Link>
 				,{' '}
-				<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#the-pack-hunt">
+				<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#the-pack-hunt">
 					The Pack Hunt
 				</Link>
 				, and{' '}
-				<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#accountabilibuddies">
+				<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#accountabilibuddies">
 					Accountabilibuddies
 				</Link>{' '}
 				groups are also here to support you during the challenge! Stay tuned at

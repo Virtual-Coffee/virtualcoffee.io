@@ -1,6 +1,5 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
-import { Link } from '@remix-run/react';
+import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
 export const handle = {
 	listTitle: 'January 2024: New Year, New Goals!',
@@ -21,16 +20,14 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges/feb-2024">next challenge</Link>!
+				the <Link href="/monthlychallenges/feb-2024">next challenge</Link>!
 			</div>
 
 			<h1>
@@ -94,7 +91,7 @@ export default function Challenge() {
 			<ul>
 				<li>
 					Join the{' '}
-					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#accountabilibuddies">
+					<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#accountabilibuddies">
 						Accountabilibuddies
 					</Link>{' '}
 					to set goals with other members or ask for help and ideas.
@@ -102,11 +99,11 @@ export default function Challenge() {
 				<li>
 					Is your goal to prepare for that technical interview and get that
 					dream job? Come to our{' '}
-					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#tech-interview-study-group">
+					<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#tech-interview-study-group">
 						Tech Interview Study Group
 					</Link>{' '}
 					and{' '}
-					<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#the-pack-hunt">
+					<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups#the-pack-hunt">
 						The Pack Hunt
 					</Link>{' '}
 					to plan on working on your resume, preparing for a technical

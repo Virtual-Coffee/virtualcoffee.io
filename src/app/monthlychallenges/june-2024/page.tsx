@@ -1,6 +1,5 @@
-import { json } from '@remix-run/node';
-import { createMetaData } from '~/util/createMetaData.server';
-import { Link } from '@remix-run/react';
+import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
 export const handle = {
 	listTitle: 'June 2024: Mid-Year Check-In!',
@@ -22,16 +21,14 @@ export async function loader() {
 	});
 }
 
-export function meta({ data: { meta } = {} } = {}) {
-	return meta;
-}
+export const meta = handle.meta;
 
 export default function Challenge() {
 	return (
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges/july-2024">next challenge</Link>!
+				the <Link href="/monthlychallenges/july-2024">next challenge</Link>!
 			</div>
 			<h1>
 				<small>Monthly Challenge for June, 2024:</small> Mid-Year Check-In!
@@ -39,7 +36,7 @@ export default function Challenge() {
 
 			<p className="lead mt-3">
 				In January, we initiated the "
-				<Link to="/monthlychallenges/jan-2024">New Year, New Goals</Link>"
+				<Link href="/monthlychallenges/jan-2024">New Year, New Goals</Link>"
 				challenge, encouraging you to set your goals for the year and break them
 				down into achievable monthly plans.
 			</p>
@@ -109,7 +106,7 @@ export default function Challenge() {
 			</p>
 			<p>
 				We have various{' '}
-				<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups">
+				<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups">
 					Coffee Table Groups
 				</Link>{' '}
 				you can join to hold yourself accountable and support you!
