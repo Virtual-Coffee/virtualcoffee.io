@@ -1,18 +1,14 @@
-import { type MetaFunction, json } from '@remix-run/node';
-import { Link, useLoaderData } from '@remix-run/react';
-import { getTotalPairingSessions } from '~/data/monthlyChallenges/pairing-challenge';
-import { createMetaData } from '~/util/createMetaData.server';
+import DefaultLayout from '@/components/layouts/DefaultLayout';
+import { getTotalPairingSessions } from '@/data/monthlyChallenges/pairing-challenge';
+import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
-export const handle = {
-	meta: {
-		title: 'Virtual Coffee Monthly Challenges',
-		description:
-			'Every month, we create a challenge for our Virtual Coffee members to complete together.',
-	},
-	hero: {
-		Hero: 'UndrawGoodTeam',
-	},
-};
+export const meta = createMetaData({
+	title: 'Virtual Coffee Monthly Challenges',
+	description:
+		'Every month, we create a challenge for our Virtual Coffee members to complete together.',
+	Hero: 'UndrawGoodTeam',
+});
 
 type Challenge<T = any> = {
 	title: string;
@@ -46,8 +42,8 @@ const challengeList: Challenge[] = [
 					.
 				</p>
 				<p>
-					To view all of the details of this year's challenge,{' '}
-					<Link to="/monthlychallenges/feb-2024">
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/feb-2024">
 						check out the February 2024 challenge page
 					</Link>
 					.
@@ -83,11 +79,11 @@ const challengeList: Challenge[] = [
 					should work together to tell your story and represent where you are on
 					your career journey; each piece should complement the others. This
 					challenge emphasizes taking time to ensure they work together or get
-					some extra feedback on what you've worked on.
+					some extra feedback on what you&apos;ve worked on.
 				</p>
 				<p>
-					To view all of the details of this year's challenge,{' '}
-					<Link to="/monthlychallenges/mar-2024">
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/mar-2024">
 						check out the March 2024 challenge page
 					</Link>
 					.
@@ -135,8 +131,8 @@ const challengeList: Challenge[] = [
 					!
 				</p>
 				<p>
-					To view all of the details of this year's challenge,{' '}
-					<Link to="/monthlychallenges/apr-2024">
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/apr-2024">
 						check out the April 2024 challenge page
 					</Link>
 					.
@@ -161,10 +157,11 @@ const challengeList: Challenge[] = [
 					embracing self-expression. Give back to yourself by indulging in
 					something just for fun. Share the art, music, poetry, sports, games,
 					or other hobbies that spark your joy. We spend so much time grinding
-					away on understanding things in the tech space. Let's make some space
-					for the other parts of ourselves. In this challenge, we encourage
-					folks to spend time working on things that aren't necessarily
-					code-specific or using code to improve other hobbies and outlets.
+					away on understanding things in the tech space. Let&apos;s make some
+					space for the other parts of ourselves. In this challenge, we
+					encourage folks to spend time working on things that aren&apos;t
+					necessarily code-specific or using code to improve other hobbies and
+					outlets.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -174,8 +171,8 @@ const challengeList: Challenge[] = [
 					.
 				</p>
 				<p>
-					To view all of the details of this year's challenge,{' '}
-					<Link to="/monthlychallenges/dec-2023">
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/dec-2023">
 						check out the December 2023 challenge page
 					</Link>
 					.
@@ -211,8 +208,8 @@ const challengeList: Challenge[] = [
 					.
 				</p>
 				<p>
-					To view all of the details of this year's challenge,{' '}
-					<Link to="/monthlychallenges/nov-2023">
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/nov-2023">
 						check out the November 2023 challenge page
 					</Link>
 					.
@@ -255,7 +252,7 @@ const challengeList: Challenge[] = [
 				<p>
 					To view all of the details, including a list of VC-approved
 					repositories to contribute to,{' '}
-					<Link to="/monthlychallenges/oct-2023">
+					<Link href="/monthlychallenges/oct-2023">
 						check out the October monthly challenge page
 					</Link>
 					.
@@ -315,7 +312,7 @@ const challengeList: Challenge[] = [
 	},
 	{
 		title: 'Healthy Habits for Happy Devs',
-		subtitle: `This month's challenge is all about nourishing our bodies, minds, and spirits so that we can become healthier developers.`,
+		subtitle: `This month&apos;s challenge is all about nourishing our bodies, minds, and spirits so that we can become healthier developers.`,
 		description: (
 			<>
 				<p>
@@ -354,9 +351,9 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					In this challenge, we're working on creating a habit of talking about
-					the things we're working on, a plan for continuing progress, and
-					creating a demo for the Virtual Coffee community.
+					In this challenge, we&apos;re working on creating a habit of talking
+					about the things we&apos;re working on, a plan for continuing
+					progress, and creating a demo for the Virtual Coffee community.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -398,8 +395,8 @@ const challengeList: Challenge[] = [
 					Virtual Coffee a safe and supportive space.
 				</p>
 				<p>
-					To view all of the details of this month's challenge,{' '}
-					<Link to="/monthlychallenges/may-2024">
+					To view all of the details of this month&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/may-2024">
 						check out the May 2024 challenge page
 					</Link>
 					.
@@ -433,11 +430,11 @@ const challengeList: Challenge[] = [
 				understanding by exploring video and audio mediums for sharing
 				knowledge, highlighting their achievements. They might do that by giving
 				Lunch & Learns, YouTube videos, podcasts, or some other form of audio or
-				video content they created that explores a coding-related
-				concept--there's no length requirement. We believe this provides value
-				by solidifying ideas, creating a resource for others, inviting personal
-				growth through conversations sparked by sharing, and demonstrating your
-				ability to talk through a concept.
+				video content they created that explores a coding-related concept
+				&mdash; there&apos;s no length requirement. We believe this provides
+				value by solidifying ideas, creating a resource for others, inviting
+				personal growth through conversations sparked by sharing, and
+				demonstrating your ability to talk through a concept.
 			</p>
 		),
 		links: [
@@ -458,7 +455,7 @@ const challengeList: Challenge[] = [
 			return (
 				<>
 					<p>
-						For this community challenge, we're trying to hit 30 pairing
+						For this community challenge, we&apos;re trying to hit 30 pairing
 						sessions by the end of the month. Some ways to get started pairing
 						are by working on an open-source issue, a LeetCode problem, or a
 						project you need help on. Check out{' '}
@@ -554,8 +551,8 @@ const challengeList: Challenge[] = [
 					.
 				</p>
 				<p>
-					To view all of the details of this year's challenge,{' '}
-					<Link to="/monthlychallenges/june-2024">
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/june-2024">
 						check out the June 2024 challenge page
 					</Link>
 					.
@@ -583,8 +580,8 @@ const challengeList: Challenge[] = [
 					.
 				</p>
 				<p>
-					To view all of the details of this year's challenge,{' '}
-					<Link to="/monthlychallenges/jan-2024">
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/jan-2024">
 						check out the January 2024 challenge page
 					</Link>
 					.
@@ -612,8 +609,8 @@ const challengeList: Challenge[] = [
 					.
 				</p>
 				<p>
-					To view all of the details of this year's challenge,{' '}
-					<Link to="/monthlychallenges/july-2024">
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/july-2024">
 						check out the July 2024 challenge page
 					</Link>
 					.
@@ -639,8 +636,8 @@ const challengeList: Challenge[] = [
 					fresh air and exercise. A little hint for those of you that have
 					access to public transportation: Public transportation is a great way
 					to see the world while someone else does the driving. It also forces
-					you to actually get some exercise because it probably won't pick you
-					up at your front door.
+					you to actually get some exercise because it probably won&apos;t pick
+					you up at your front door.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -650,8 +647,8 @@ const challengeList: Challenge[] = [
 					.
 				</p>
 				<p>
-					To view all of the details of this year's challenge,{' '}
-					<Link to="/monthlychallenges/aug-2024">
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/aug-2024">
 						check out the August 2024 challenge page
 					</Link>
 					.
@@ -666,29 +663,6 @@ const currentItem = challengeList.find((item) => item.current);
 const filteredChallenges = currentItem
 	? [currentItem, ...challengeList.filter((item) => !item.current)]
 	: challengeList;
-
-export async function loader() {
-	const {
-		meta: { title, description },
-		hero: { Hero },
-	} = handle;
-
-	const returnData = {
-		challengeData: undefined,
-		meta: createMetaData({ title, description, Hero }),
-	};
-
-	if (currentItem?.loaderData) {
-		const data = await currentItem.loaderData();
-		returnData.challengeData = data;
-	}
-
-	return json(returnData);
-}
-
-export const meta: MetaFunction<typeof loader> = ({ data: { meta } }) => {
-	return meta;
-};
 
 function ChallengeItem({
 	challenge,
@@ -728,54 +702,67 @@ function ChallengeItem({
 	);
 }
 
-export default function Index() {
-	const { challengeData } = useLoaderData();
+export default async function Index() {
+	let currentChallengeData = null;
+
+	if (currentItem?.loaderData) {
+		currentChallengeData = await currentItem.loaderData();
+	}
+
 	return (
-		<div>
-			<div className="bg-white py-3">
-				<div className="container">
-					<h2>What are monthly challenges?</h2>
+		<DefaultLayout
+			Hero="UndrawGoodTeam"
+			heroHeader={meta.title as string}
+			heroSubheader={meta.description as string}
+		>
+			<div>
+				<div className="bg-white py-3">
+					<div className="container">
+						<h2>What are monthly challenges?</h2>
 
-					<p>
-						These monthly challenges provide members the opportunity to learn,
-						grow, and receive support and mentorship. There will be a theme for
-						each month's challenge and weekly goals for the members to work on.
-						Instructions, resources, and additional help for the challenges is
-						provided in the <code>#monthly-challenge</code> channel in Slack.
-						Along with our Maintainers, our Challenge Team Leads plan, organize,
-						and facilitate these challenges.
-					</p>
+						<p>
+							These monthly challenges provide members the opportunity to learn,
+							grow, and receive support and mentorship. There will be a theme
+							for each month&apos;s challenge and weekly goals for the members
+							to work on. Instructions, resources, and additional help for the
+							challenges is provided in the <code>#monthly-challenge</code>{' '}
+							channel in Slack. Along with our Maintainers, our Challenge Team
+							Leads plan, organize, and facilitate these challenges.
+						</p>
 
-					<h2>Who can participate?</h2>
+						<h2>Who can participate?</h2>
 
-					<p>
-						These challenges are available to all Virtual Coffee members. The
-						goal is to support developers of all stages in their coding journey
-						To become a member of Virtual Coffee, all you need to do is{' '}
-						<Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee#coffees-virtual-coffee-weekly-zoom-chats">
-							attend a Tuesday or Thursday Coffee
-						</Link>{' '}
-						and submit the form you'll receive at Coffee. After you submit the
-						form, you will receive an invitation to join the Slack group, where
-						you can share your progress on the challenges and ask questions.
-					</p>
+						<p>
+							These challenges are available to all Virtual Coffee members. The
+							goal is to support developers of all stages in their coding
+							journey To become a member of Virtual Coffee, all you need to do
+							is{' '}
+							<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee#coffees-virtual-coffee-weekly-zoom-chats">
+								attend a Tuesday or Thursday Coffee
+							</Link>{' '}
+							and submit the form you&apos;ll receive at Coffee. After you
+							submit the form, you will receive an invitation to join the Slack
+							group, where you can share your progress on the challenges and ask
+							questions.
+						</p>
+					</div>
+				</div>
+
+				<div className="bg-light py-5">
+					<div className="container">
+						<h2 className="display-5">Our challenges:</h2>
+						<dl className="gridlist mt-4">
+							{filteredChallenges.map((challenge) => (
+								<ChallengeItem
+									key={challenge.title}
+									challenge={challenge}
+									challengeData={currentChallengeData}
+								/>
+							))}
+						</dl>
+					</div>
 				</div>
 			</div>
-
-			<div className="bg-light py-5">
-				<div className="container">
-					<h2 className="display-5">Our challenges:</h2>
-					<dl className="gridlist mt-4">
-						{filteredChallenges.map((challenge) => (
-							<ChallengeItem
-								key={challenge.title}
-								challenge={challenge}
-								challengeData={challengeData}
-							/>
-						))}
-					</dl>
-				</div>
-			</div>
-		</div>
+		</DefaultLayout>
 	);
 }
