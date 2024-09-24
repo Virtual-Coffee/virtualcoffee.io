@@ -84,7 +84,7 @@ const episodesQuery = gql`
 	}
 `;
 
-export function getEpisodeQueryParams(request: Request) {
+export async function getEpisodeQueryParams(request: Request) {
 	const url = new URL(request.url);
 
 	const sp = new URLSearchParams();
@@ -131,6 +131,7 @@ export interface PodcastEpisode {
 		sponsorDescription: { renderHtml: string };
 	}>;
 }
+
 // type PodcastEpisodes = Partial<PodcastEpisode>[];
 type PodcastEpisodes = Pick<
 	PodcastEpisode,
@@ -196,8 +197,6 @@ export async function getEpisode({
 			url: `/podcast/${episode.slug}`,
 		};
 	}
-
-	console.log({ url: `${process.env.CMS_URL}/api` });
 
 	const graphQLClient = new GraphQLClient(
 		`${process.env.CMS_URL}/api?${queryParams || ''}`,

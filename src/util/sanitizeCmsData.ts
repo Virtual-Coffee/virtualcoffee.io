@@ -8,7 +8,7 @@ type SanitizedData<T> = T & {
 };
 type DataToSanitize = DirtyData | DirtyData[];
 
-export function sanitizeCmsData<T>(data: T): SanitizedData<T> {
+export function sanitizeCmsData<T>(data: T): T {
 	// const sanitize = await import('sanitize-html').then((mod) => mod.default);
 
 	function sanitizeInternal(
@@ -21,7 +21,7 @@ export function sanitizeCmsData<T>(data: T): SanitizedData<T> {
 				if (key === 'renderHtml') {
 					return {
 						...obj,
-						sanitizedHtml: sanitize(data[key], sanitizeOptions),
+						renderHtml: sanitize(data[key], sanitizeOptions),
 					};
 				} else {
 					return {
