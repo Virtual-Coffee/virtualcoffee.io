@@ -64,6 +64,8 @@ const svgAspectRatios = {
 	UndrawPowerful: '928.52587 / 635.2126',
 
 	UndrawConversation: '842 / 842.79999',
+
+	UndrawShowingSupport: '660.67004 / 513.66796',
 };
 
 /**
