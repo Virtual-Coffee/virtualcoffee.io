@@ -1,18 +1,12 @@
 import React, { Fragment } from 'react';
 import slugify from '@sindresorhus/slugify';
-import { createMetaData } from '~/util/createMetaData.server';
-import { json } from '@remix-run/node';
-import type { LoaderArgs } from '@remix-run/node';
-import { CmsActions } from '~/api/cms.server';
+import { createMetaData } from '@/util/createMetaData.server';
+import { CmsActions } from '@/util/api/cms.server';
 import type {
 	NovemberChallengeEntryAuthor,
 	NovemberChallengeEntry,
-} from '~/api/types';
-import { useLoaderData } from '@remix-run/react';
-import { cacheControlValues } from '~/util/http';
-// import { getChallengeData } from '~/data/monthlyChallenges/nov-2022';
-
-export { metaFromData as meta } from '~/util/remixHelpers';
+} from '@/util/api/types';
+import DefaultLayout from '@/components/layouts/DefaultLayout';
 
 export const handle = {
 	listTitle: 'November, 2022: 100k words!',
@@ -25,10 +19,6 @@ export const handle = {
 	hero: {
 		heroHeader: '',
 	},
-};
-
-export const headers = {
-	'Cache-Control': cacheControlValues.short,
 };
 
 const goals = [
@@ -62,7 +52,7 @@ const goals = [
 	},
 ];
 
-export async function loader(_: LoaderArgs) {
+async function loader() {
 	const { title } = handle.meta;
 
 	let api = new CmsActions();
@@ -111,25 +101,23 @@ export async function loader(_: LoaderArgs) {
 
 	const description = `Current status: ${totalWordCount.toLocaleString()} out of ${currentGoal?.title} words`;
 
-	return json(
-		{
-			// ...blog,
-			totalWordCount,
-			totalPosts,
-			authorsWithPosts,
-			currentGoal,
-			completedGoals,
-			meta: createMetaData({ title, description }),
-		},
-		{
-			headers: {
-				'Cache-Control': cacheControlValues.short,
-			},
-		},
-	);
+	return {
+		// ...blog,
+		totalWordCount,
+		totalPosts,
+		authorsWithPosts,
+		currentGoal,
+		completedGoals,
+		meta: createMetaData({ title, description }),
+	};
 }
 
-export default function Challenge() {
+export async function generateMetadata() {
+	const { meta } = await loader();
+	return meta;
+}
+
+export default async function Challenge() {
 	// const { completedGoals, currentGoal, sortedList, list, totals } =
 	// 	useLoaderData();
 	const {
@@ -138,27 +126,32 @@ export default function Challenge() {
 		totalPosts,
 		completedGoals,
 		currentGoal,
-	} = useLoaderData<typeof loader>();
+		meta,
+	} = await loader();
 
 	return (
-		<>
+		<DefaultLayout
+			heroHeader={meta.title as string}
+			heroSubheader={meta.description as string}
+		>
 			<h1>
-				<small>Monthly Challenge for November 2022:</small> Let's write 100k
-				words together!
+				<small>Monthly Challenge for November 2022:</small> Let&apos;s write
+				100k words together!
 			</h1>
 
 			<p className="lead">
-				This month we're working together to blog 100,000 words! Based off the{' '}
+				This month we&apos;re working together to blog 100,000 words! Based off
+				the{' '}
 				<a href="https://nanowrimo.org/">
 					NaNoWriMo (National Novel Writing Month) Challenge
 				</a>
-				, we'll be doing the tech take on writing and working together towards
-				the goal while posting on our own blogs. And since{' '}
+				, we&apos;ll be doing the tech take on writing and working together
+				towards the goal while posting on our own blogs. And since{' '}
 				<a href="https://virtualcoffee.io/monthlychallenges/nov-2021">
 					we hit over 125,000 words last year
 				</a>
-				, we're going to start this year's challenge big with a goal of 100k
-				words.
+				, we&apos;re going to start this year&apos;s challenge big with a goal
+				of 100k words.
 			</p>
 
 			<p className="lead">Get those blog posts up!</p>
@@ -217,7 +210,7 @@ export default function Challenge() {
 								</h3>
 								<a className="header-anchor" href={`#${author.slug}`}>
 									<span className="sr-only">
-										Permalink to {author.userYourName || author.fullName}'s
+										Permalink to {author.userYourName || author.fullName}&apos;s
 										posts
 									</span>
 									<span aria-hidden="true">#</span>
@@ -280,7 +273,7 @@ export default function Challenge() {
 			<h2>How to Participate</h2>
 
 			{/* <p>
-				Once you've written and published your content, sign in to the{' '}
+				Once you&apos;ve written and published your content, sign in to the{' '}
 				<a href="https://members.virtualcoffee.io/"> VC Members section</a> and
 				follow links to the November Monthly Challenge!
 			</p> */}
@@ -290,35 +283,36 @@ export default function Challenge() {
 			<p>
 				Any tech-related blog posts or articles published in the month of
 				November! Feel free to include code samples in your word count totals
-				(if it's a word and you wrote it, we'll count it 😊).
+				(if it&apos;s a word and you wrote it, we&apos;ll count it 😊).
 			</p>
 
 			<p>
 				While we love good documentation here at Virtual Coffee, README docs or
-				anything else you would normally consider documentation don't count for
-				this challenge.
+				anything else you would normally consider documentation don&apos;t count
+				for this challenge.
 			</p>
 
 			<p>
-				This year we're embracing an <strong>official topic</strong> as well as
-				general topics. We recently added a{' '}
+				This year we&apos;re embracing an <strong>official topic</strong> as
+				well as general topics. We recently added a{' '}
 				<a href="https://virtualcoffee.io/resources/developer-health">
 					Developer Health
 				</a>{' '}
-				section to our site. We'd love to feature our members' blog posts on the
-				topic.
+				section to our site. We&apos;d love to feature our members&apos; blog
+				posts on the topic.
 			</p>
-			<h3>What if I'm not confident about my writing?</h3>
+			<h3>What if I&apos;m not confident about my writing?</h3>
 			<p>
-				We all start somewhere, and the more you practice, the better you'll
-				get. We have volunteers who are willing to proofread and give you
-				feedback on your writing. Just put a link to your blog post draft in the
+				We all start somewhere, and the more you practice, the better
+				you&apos;ll get. We have volunteers who are willing to proofread and
+				give you feedback on your writing. Just put a link to your blog post
+				draft in the
 				<code> #monthly-challenge</code> channel and ask for the help you need.
 			</p>
 
-			<h3>What if I don't know what to write about?</h3>
+			<h3>What if I don&apos;t know what to write about?</h3>
 			<p>
-				We've got you covered with extensive lists in{' '}
+				We&apos;ve got you covered with extensive lists in{' '}
 				<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/711">
 					this discussion
 				</a>{' '}
@@ -341,7 +335,7 @@ export default function Challenge() {
 				</li>
 				<li>
 					Physical Health: What equipment or practice has helped you to maintain
-					physical health when you're at your computer all day?
+					physical health when you&apos;re at your computer all day?
 				</li>
 				<li>
 					Psychological Safety: What does that mean? How do company culture,
@@ -359,15 +353,15 @@ export default function Challenge() {
 					writing about something you just learned!
 				</li>
 				<li>
-					Best Practices. What are some guidelines you've learned that can help
-					developers create best practices?
+					Best Practices. What are some guidelines you&apos;ve learned that can
+					help developers create best practices?
 				</li>
 				<li>
 					Compare and Contast. Have you learned a new language or new approach?
-					How does that differ from what you've done in the past?
+					How does that differ from what you&apos;ve done in the past?
 				</li>
 
-				<li>What are 10 HTML tags you've never heard of or used?</li>
+				<li>What are 10 HTML tags you&apos;ve never heard of or used?</li>
 				<li>
 					What did you learn from building a project using X JavaScript
 					library/framework?
@@ -394,7 +388,7 @@ export default function Challenge() {
 				compose this list!
 			</p>
 
-			<p>And remember, we're always here to help ❤️</p>
+			<p>And remember, we&apos;re always here to help ❤️</p>
 
 			<h2>Resources</h2>
 			<ul>
@@ -405,8 +399,8 @@ export default function Challenge() {
 				</li>
 				<li>
 					<a href="https://twitter.com/amandanat/status/1448662631938596879?s=20">
-						Amanda Natividad's Twitter thread: 11 prompts so you'll never run
-						out of content ideas
+						Amanda Natividad&apos;s Twitter thread: 11 prompts so you&apos;ll
+						never run out of content ideas
 					</a>
 				</li>
 				<li>
@@ -415,6 +409,6 @@ export default function Challenge() {
 					</a>
 				</li>
 			</ul>
-		</>
+		</DefaultLayout>
 	);
 }

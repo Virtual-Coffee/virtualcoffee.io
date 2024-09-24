@@ -1,14 +1,12 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Fragment } from 'react';
-import { createMetaData } from '~/util/createMetaData.server';
-import { json } from '@remix-run/node';
-import type { LoaderArgs } from '@remix-run/node';
-import { getChallengeData } from '~/data/monthlyChallenges/nov-2023';
-import { useLoaderData, Link } from '@remix-run/react';
-import { cacheControlValues } from '~/util/http';
-import LeadText from '~/components/content/LeadText';
-import { Button } from '~/components/app/Button';
+import { createMetaData } from '@/util/createMetaData.server';
+import { getChallengeData } from '@/data/monthlyChallenges/nov-2023';
+import LeadText from '@/components/content/LeadText';
+import Link from 'next/link';
+import DefaultLayout from '@/components/layouts/DefaultLayout';
 
-export { metaFromData as meta } from '~/util/remixHelpers';
+export { metaFromData as meta } from '@/util/remixHelpers';
 
 export const handle = {
 	listTitle: 'November, 2023: 100k words!',
@@ -23,42 +21,35 @@ export const handle = {
 	},
 };
 
-export const headers = {
-	'Cache-Control': cacheControlValues.short,
-};
-
-export async function loader(_: LoaderArgs) {
+async function loader() {
 	const { title } = handle.meta;
 
 	const data = await getChallengeData();
 
-	const description = `Current status: ${data.totals.totalCount.toLocaleString()} out of ${data
-		.currentGoal?.title} words`;
+	const description = `Current status: ${data.totals.totalCount.toLocaleString()} out of ${
+		data.currentGoal?.title
+	} words`;
 
-	return json(
-		{
-			...data,
-			meta: createMetaData({ title, description }),
-		},
-		{
-			headers: {
-				'Cache-Control': cacheControlValues.short,
-			},
-		},
-	);
+	return {
+		...data,
+		meta: createMetaData({ title, description }),
+	};
 }
 
-export default function Challenge() {
+export default async function Challenge() {
 	// const { completedGoals, currentGoal, sortedList, list, totals } =
 	// 	useLoaderData();
-	const { sortedList, totals, completedGoals, currentGoal } =
-		useLoaderData<typeof loader>();
+	const { sortedList, totals, completedGoals, currentGoal, meta } =
+		await loader();
 
 	return (
-		<>
+		<DefaultLayout
+			heroHeader={meta.title as string}
+			heroSubheader={meta.description as string}
+		>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges/dec-2023">next challenge</Link>!
+				the <Link href="/monthlychallenges/dec-2023">next challenge</Link>!
 			</div>
 
 			<h1>
@@ -74,7 +65,7 @@ export default function Challenge() {
 					</a>
 					, we'll be doing the tech take on writing and working together towards
 					the goal while posting on our own blogs. We hit{' '}
-					<Link to="/monthlychallenges/nov-2022">
+					<Link href="/monthlychallenges/nov-2022">
 						over 100k words last year
 					</Link>
 					, and we're going to start this year's challenge with a goal of 100k
@@ -352,6 +343,6 @@ export default function Challenge() {
 					</a>
 				</li>
 			</ul>
-		</>
+		</DefaultLayout>
 	);
 }
