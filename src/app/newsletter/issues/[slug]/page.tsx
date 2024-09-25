@@ -5,7 +5,7 @@ import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { NextPageProps } from '@/util/types';
 import { notFound } from 'next/navigation';
 
-export const meta = createMetaData({
+export const metadata = createMetaData({
 	title: 'Virtual Coffee Newsletter',
 	description: 'Sign up for the Virtual Coffee Newsletter.',
 	Hero: 'UndrawArrived',

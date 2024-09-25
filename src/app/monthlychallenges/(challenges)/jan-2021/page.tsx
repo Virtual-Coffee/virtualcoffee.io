@@ -13,7 +13,7 @@ export const handle = {
 	},
 };
 
-export const meta = handle.meta;
+export const metadata = handle.meta;
 
 export default function Challenge() {
 	const list = challengeJson.challengedata.sort((a, b) =>

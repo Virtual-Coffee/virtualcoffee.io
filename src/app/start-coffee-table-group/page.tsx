@@ -4,7 +4,7 @@ import { Form } from './form';
 import LeadText from '@/components/content/LeadText';
 import Link from 'next/link';
 
-export const meta = createMetaData({
+export const metadata = createMetaData({
 	title: 'Start a Coffee Table Group',
 	description: `Submit your idea for a new Coffee Table Group at Virtual Coffee`,
 });

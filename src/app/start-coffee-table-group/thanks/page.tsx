@@ -1,7 +1,7 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 
-export const meta = createMetaData({
+export const metadata = createMetaData({
 	title: 'Volunteer Application Received!',
 	description: `Thank you so much for your willingness to help at VC!`,
 	Hero: 'UndrawPowerful',

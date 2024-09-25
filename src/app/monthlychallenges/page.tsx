@@ -3,7 +3,7 @@ import { getTotalPairingSessions } from '@/data/monthlyChallenges/pairing-challe
 import { createMetaData } from '@/util/createMetaData.server';
 import Link from 'next/link';
 
-export const meta = createMetaData({
+export const metadata = createMetaData({
 	title: 'Virtual Coffee Monthly Challenges',
 	description:
 		'Every month, we create a challenge for our Virtual Coffee members to complete together.',

@@ -1,6 +1,6 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
-export const meta = {
+export const metadata = {
 	title: 'Volunteer Application Received!',
 	description: `Thank you so much for your willingness to help at VC!`,
 };

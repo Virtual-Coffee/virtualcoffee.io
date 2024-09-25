@@ -4,7 +4,7 @@ import { Form } from './form';
 import LeadText from '@/components/content/LeadText';
 import Link from 'next/link';
 
-export const meta = createMetaData({
+export const metadata = createMetaData({
 	title: 'Volunteer at Virtual Coffee',
 	description: `Part of Virtual Coffee's mission is to make safe, supportive spaces for pursuing leadership and roles in community building. We currently have a few initiatives where we'd love to have more volunteers in helping make this community great!`,
 	Hero: 'UndrawPowerful',

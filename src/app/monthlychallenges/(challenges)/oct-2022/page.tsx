@@ -15,7 +15,7 @@ export const handle = {
 	},
 };
 
-export const meta = handle.meta;
+export const metadata = handle.meta;
 
 export default async function Challenge() {
 	const repos = await getChallengeData();

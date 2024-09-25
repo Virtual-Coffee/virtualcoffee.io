@@ -1,6 +1,6 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
-export const meta = {
+export const metadata = {
 	title: 'Membership Form Received!',
 	description: `You're now on the membership waiting list!`,
 };

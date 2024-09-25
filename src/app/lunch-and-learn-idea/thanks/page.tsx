@@ -1,7 +1,7 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 
-export const meta = createMetaData({
+export const metadata = createMetaData({
 	title: 'Lunch & Learn Idea Received!',
 	description: `We can't wait to hear your talk!`,
 	Hero: 'UndrawPresentation',

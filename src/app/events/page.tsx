@@ -6,7 +6,7 @@ import DisplayHtml from '@/components/DisplayHtml';
 import { dateForDisplay } from '@/util/date';
 import Link from 'next/link';
 
-export const meta = createMetaData({
+export const metadata = createMetaData({
 	title: 'Virtual Coffee Community Events',
 	description: 'See our upcoming events!',
 	Hero: 'UndrawConferenceCall',

@@ -10,7 +10,7 @@ import 'leaflet/dist/leaflet.css';
 
 import dynamic from 'next/dynamic';
 
-export const meta = createMetaData({
+export const metadata = createMetaData({
 	title: 'Virtual Coffee Members',
 	description: 'Meet our amazing members!',
 	Hero: 'UndrawTeamSpirit',

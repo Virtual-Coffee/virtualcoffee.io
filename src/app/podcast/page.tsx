@@ -15,7 +15,7 @@ const metadata = {
 	hero: 'UndrawWalkInTheCity',
 } as const;
 
-export const meta = createMetaData(metadata);
+export const metadata = createMetaData(metadata);
 
 export default async function PodcastsIndex() {
 	const podcastEpisodes = await getEpisodes({ limit: 99 });
