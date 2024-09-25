@@ -5,8 +5,7 @@ import { createCoCViolation } from '@/util/airtable/action';
 import { useAirtableForm } from '@/util/airtable/useAirtableForm';
 
 export function Form() {
-	const { formAction, isPending, errorContent } =
-		useAirtableForm(createCoCViolation);
+	const { formAction, errorContent } = useAirtableForm(createCoCViolation);
 	return (
 		<form
 			action={formAction}
@@ -112,7 +111,7 @@ export function Form() {
 
 			<CodeOfConduct />
 			{errorContent}
-			<Submit text={isPending ? 'Submitting...' : 'Submit'} />
+			<Submit />
 		</form>
 	);
 }

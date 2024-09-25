@@ -5,7 +5,7 @@ import { createLunchAndLearnSubmission } from '@/util/airtable/action';
 import { useAirtableForm } from '@/util/airtable/useAirtableForm';
 
 export function Form() {
-	const { formAction, isPending, errorContent } = useAirtableForm(
+	const { formAction, errorContent } = useAirtableForm(
 		createLunchAndLearnSubmission,
 	);
 
@@ -95,7 +95,7 @@ export function Form() {
 
 			<CodeOfConduct />
 			{errorContent}
-			<Submit text={isPending ? 'Submitting...' : 'Submit'} />
+			<Submit />
 		</form>
 	);
 }
