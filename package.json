@@ -13,7 +13,7 @@
 		"dev": "cross-env NODE_ENV=development pnpm netlify dev",
 		"build": "next build",
 		"start": "next start",
-		"build:members": "node scripts/loadMemberFiles.js"
+		"prebuild": "node scripts/loadMemberFiles.js"
 	},
 	"dependencies": {
 		"@imgix/js-core": "^3.8.0",
