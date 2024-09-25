@@ -1,7 +1,11 @@
-export function Submit({ text = 'Submit' }) {
+export function Submit({ text = 'Submit', loading = false }) {
 	return (
 		<div className="text-right">
-			<button type="submit" className="btn btn-primary btn-lg">
+			<button
+				type="submit"
+				className="btn btn-primary btn-lg"
+				disabled={loading}
+			>
 				{text}
 			</button>
 		</div>
