@@ -7,15 +7,13 @@ import { createMetaData } from '@/util/createMetaData.server';
 import createCmsImage from '@/util/cmsimage';
 import Script from 'next/script';
 
-const metadata = {
+export const metadata = createMetaData({
 	title: 'Virtual Coffee Podcast',
 	description:
 		'This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories as developers.',
 	Hero: 'UndrawWalkInTheCity',
 	hero: 'UndrawWalkInTheCity',
-} as const;
-
-export const metadata = createMetaData(metadata);
+});
 
 export default async function PodcastsIndex() {
 	const podcastEpisodes = await getEpisodes({ limit: 99 });

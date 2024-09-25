@@ -4,13 +4,13 @@ import PostList from '@/components/PostList';
 import { getNewsletters } from '@/data/newsletters';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
-const metadata = {
+const mdata = {
 	title: 'Virtual Coffee Newsletter',
 	description: 'Sign up for the Virtual Coffee Newsletter.',
 	Hero: 'UndrawArrived',
 };
 
-export const metadata = createMetaData(metadata);
+export const metadata = createMetaData(mdata);
 
 export default async function Index() {
 	const issues = await getNewsletters();
@@ -19,8 +19,8 @@ export default async function Index() {
 		<DefaultLayout
 			simple={true}
 			Hero="UndrawArrived"
-			heroHeader={metadata.title}
-			heroSubheader={metadata.description}
+			heroHeader={mdata.title}
+			heroSubheader={mdata.description}
 		>
 			<p className="lead">
 				Keep up to date with all things Virtual Coffee with our monthly
