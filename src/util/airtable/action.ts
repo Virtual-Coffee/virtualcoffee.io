@@ -144,3 +144,25 @@ export const createCoffeeTableGroup = makeAction<CoffeeTableGroup>(
 	'New Coffee Table Group',
 	'/start-coffee-table-group/thanks',
 );
+
+type Volunteer = {
+	name: string;
+	email: string;
+	description: string;
+	github_username: string;
+	position: string;
+};
+
+const VolunteerFields = [
+	'name',
+	'email',
+	'description',
+	'github_username',
+	'position',
+];
+
+export const createVolunteer = makeAction<Volunteer>(
+	VolunteerFields,
+	'Volunteer Form',
+	'/volunteer-at-virtual-coffee/thanks',
+);
