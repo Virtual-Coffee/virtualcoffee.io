@@ -1,12 +1,15 @@
-export function Submit({ text = 'Submit', loading = false }) {
+import { useFormStatus } from 'react-dom';
+
+export function Submit({ text = 'Submit', loadingText = 'Submitting...' }) {
+	const { pending } = useFormStatus();
 	return (
 		<div className="text-right">
 			<button
 				type="submit"
 				className="btn btn-primary btn-lg"
-				disabled={loading}
+				disabled={pending}
 			>
-				{text}
+				{pending ? loadingText : text}
 			</button>
 		</div>
 	);

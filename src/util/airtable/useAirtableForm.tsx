@@ -9,7 +9,7 @@ const initialState: FormState = {
 };
 
 export function useAirtableForm(action: Action) {
-	const [state, formAction, isPending] = useActionState<FormState, FormData>(
+	const [state, formAction] = useActionState<FormState, FormData>(
 		action,
 		initialState,
 	);
@@ -25,7 +25,7 @@ export function useAirtableForm(action: Action) {
 		) : null;
 
 	return useMemo(
-		() => ({ formAction, errorContent, isPending, state }),
-		[formAction, errorContent, isPending, state],
+		() => ({ formAction, errorContent, state }),
+		[formAction, errorContent, state],
 	);
 }
