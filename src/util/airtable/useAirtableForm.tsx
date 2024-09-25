@@ -14,18 +14,16 @@ export function useAirtableForm(action: Action) {
 		initialState,
 	);
 
-	const errorContent =
-		state && state.is_error ? (
-			<div className="alert alert-success" role="alert">
-				<h4 className="alert-heading">
-					There was an issue submitting your form.
-				</h4>
-				<p>{state.message}</p>
-			</div>
-		) : null;
-
-	return useMemo(
-		() => ({ formAction, errorContent, state }),
-		[formAction, errorContent, state],
-	);
+	return useMemo(() => {
+		const errorContent =
+			state && state.is_error ? (
+				<div className="alert alert-success" role="alert">
+					<h4 className="alert-heading">
+						There was an issue submitting your form.
+					</h4>
+					<p>{state.message}</p>
+				</div>
+			) : null;
+		return { formAction, errorContent, state };
+	}, [formAction, state]);
 }
