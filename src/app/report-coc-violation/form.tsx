@@ -48,7 +48,7 @@ export function Form() {
 						type="text"
 						className="form-control"
 						id="reporteeName"
-						name="reporteeName"
+						name="reportee_name"
 						required
 						aria-describedby="reporteeNameHelp"
 					/>
@@ -62,7 +62,7 @@ export function Form() {
 						type="text"
 						className="form-control"
 						id="timeLocation"
-						name="timeLocation"
+						name="time_location"
 						required
 						aria-describedby="timeLocationHelp"
 					/>
@@ -91,7 +91,7 @@ export function Form() {
 					<textarea
 						className="form-control"
 						id="anyoneElseInvolved"
-						name="anyoneElseInvolved"
+						name="anyone_else_involved"
 						rows={3}
 					></textarea>
 				</div>
