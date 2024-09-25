@@ -129,3 +129,18 @@ export const createCoCViolation = makeAction<CoCViolation>(
 	'CoC Violation Reports',
 	'/report-coc-violation/thanks',
 );
+
+type CoffeeTableGroup = {
+	name: string;
+	email: string;
+	description: string;
+	group_name: string;
+};
+
+const CoffeeTableGroupFields = ['name', 'email', 'description', 'group_name'];
+
+export const createCoffeeTableGroup = makeAction<CoffeeTableGroup>(
+	CoffeeTableGroupFields,
+	'New Coffee Table Group',
+	'/start-coffee-table-group/thanks',
+);
