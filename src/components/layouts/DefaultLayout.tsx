@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 // import { useMatches } from '@remix-run/react';
 import type { UndrawIllustrationName } from '@/components/UndrawIllustration';
 import UndrawIllustration from '@/components/UndrawIllustration';
@@ -122,15 +122,15 @@ type DefaultLayoutProps = {
 	/** This is the name of the illustration you want to use. */
 	Hero?: UndrawIllustrationName;
 	/** The header text for the hero section */
-	heroHeader?: String;
+	heroHeader?: ReactNode;
 	/** This is the subheader that will be displayed under the heroHeader. */
-	heroSubheader?: string;
+	heroSubheader?: ReactNode;
 	/** If true, the hero will be a simple hero with no background image. */
 	simple?: Boolean;
 	/** This is a boolean that determines whether or not the hero component is shown. */
 	showHero?: Boolean;
 	/** This is the content that will be rendered inside the HeroData component. */
-	children?: React.ReactNode;
+	children?: ReactNode;
 };
 
 type HeroData = {

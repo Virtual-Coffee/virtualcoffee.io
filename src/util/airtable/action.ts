@@ -81,7 +81,14 @@ function makeAction<T extends FieldSet>(
 	};
 }
 
-export type FormSelection = 'lunch-and-learn-idea';
+const lunchAndLearnSubmissionFields = [
+	'Name',
+	'Email',
+	'Topic',
+	'Description',
+	'Format',
+	'Timing',
+];
 
 type LunchAndLearnSubmission = {
 	Name: string;
@@ -92,18 +99,33 @@ type LunchAndLearnSubmission = {
 	Timing: string;
 };
 
-const lunchAndLearnSubmissionFields = [
-	'Name',
-	'Email',
-	'Topic',
-	'Description',
-	'Format',
-	'Timing',
-];
-
 export const createLunchAndLearnSubmission =
 	makeAction<LunchAndLearnSubmission>(
 		lunchAndLearnSubmissionFields,
 		'Lunch and Learn Idea',
 		'/lunch-and-learn-idea/thanks',
 	);
+
+type CoCViolation = {
+	name: string;
+	email: string;
+	reportee_name: string;
+	time_location: string;
+	description: string;
+	anyone_else_involved: string;
+};
+
+const CoCViolationFields = [
+	'name',
+	'email',
+	'reportee_name',
+	'time_location',
+	'description',
+	'anyone_else_involved',
+];
+
+export const createCoCViolation = makeAction<CoCViolation>(
+	CoCViolationFields,
+	'CoC Violation Reports',
+	'/report-coc-violation/thanks',
+);
