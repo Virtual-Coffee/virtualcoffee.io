@@ -56,11 +56,6 @@ export default function Page({
 	if (!file) {
 		notFound();
 	}
-	console.log({
-		Hero: file.hero?.Hero,
-		heroHeader: file.hero?.heroHeader,
-		heroSubheader: file.hero?.heroSubheader,
-	});
 
 	return (
 		<DefaultLayout

@@ -47,8 +47,6 @@ function trimString(s: string, c: string) {
 function findBreadcrumbs(files: MdxFile[], slug: string): MdxFile[] {
 	return files
 		.reduce((list, file) => {
-			console.log(slug, file.slug.replace('content/', ''));
-
 			if (
 				trimString(file.slug.replace('content/', ''), '/') ===
 				trimString(slug, '/')
