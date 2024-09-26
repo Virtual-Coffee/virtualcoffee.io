@@ -12,7 +12,7 @@ export default function Thanks() {
 		<DefaultLayout
 			simple
 			Hero="UndrawPowerful"
-			heroHeader={meta.title as string}
+			heroHeader={metadata.title as string}
 		>
 			<div className="lead mb-5">
 				<h2>Thank you so much for your willingness to help at VC!</h2>

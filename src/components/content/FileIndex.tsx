@@ -1,7 +1,6 @@
-import { useOutletContext } from '@remix-run/react';
 import PostList, {
 	formatFileListItemsForPostList,
-} from '~/components/PostList';
+} from '@/components/PostList';
 import type { MdxFile } from '@/util/loadMdx.server';
 
 type FileIndexProps = {

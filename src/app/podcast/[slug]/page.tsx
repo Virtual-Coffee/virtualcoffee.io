@@ -39,7 +39,7 @@ async function getEpisodeData(slug: string) {
 	};
 }
 
-export async function generateMetaData({
+export async function generateMetadata({
 	params,
 }: NextPageProps<'slug'>): Promise<Metadata> {
 	const { episode, playerUrl, playerStreamUrl } = await getEpisodeData(

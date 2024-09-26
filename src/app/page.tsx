@@ -10,7 +10,7 @@ import { getEpisodes } from '@/data/podcast';
 import { getNewsletters } from '@/data/newsletters';
 import { getSponsors } from '@/data/sponsors';
 
-export const homePageLinks = [
+const homePageLinks = [
 	{
 		href: '/join',
 		title: 'Join Virtual Coffee',

@@ -14,7 +14,7 @@ export default function CocForm() {
 			heroHeader="Report a Code of Conduct Violation"
 			heroSubheader={
 				<>
-					<p>{meta.description}</p>
+					<p>{metadata.description}</p>
 					<p>
 						Your privacy and security will be respected, but if you wish to
 						remain anonymous, we will still accept and review your report.

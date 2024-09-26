@@ -712,8 +712,8 @@ export default async function Index() {
 	return (
 		<DefaultLayout
 			Hero="UndrawGoodTeam"
-			heroHeader={meta.title as string}
-			heroSubheader={meta.description as string}
+			heroHeader={metadata.title as string}
+			heroSubheader={metadata.description as string}
 		>
 			<div>
 				<div className="bg-white py-3">
