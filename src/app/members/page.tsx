@@ -7,20 +7,13 @@ import { createMetaData } from '@/util/createMetaData.server';
 
 import type { MappableMember } from '@/content/members/types';
 import 'leaflet/dist/leaflet.css';
-
-import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import { MapLoader } from './map-loader';
 
 export const metadata = createMetaData({
 	title: 'Virtual Coffee Members',
 	description: 'Meet our amazing members!',
 	Hero: 'UndrawTeamSpirit',
-});
-
-const MapLoader = dynamic(() => import('@/components/MemberMap'), {
-	loading: () => (
-		<div style={{ aspectRatio: '16/9', minHeight: 400 }}>Loading...</div>
-	),
-	ssr: false,
 });
 
 export default async function EventsIndex() {
@@ -44,7 +37,10 @@ export default async function EventsIndex() {
 						We have members all over the world!
 					</h2>
 				</div>
-				<MapLoader members={mapMembers} />
+
+				<Suspense>
+					<MapLoader members={mapMembers} />
+				</Suspense>
 			</div>
 			<div className="bg-light py-5">
 				<div className="container-xl">
