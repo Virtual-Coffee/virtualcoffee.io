@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getChallengeData } from '@/data/monthlyChallenges/oct-2022';
 import LeadText from '@/components/content/LeadText';
 
-export const handle = {
+const handle = {
 	listTitle: 'October 2022: Hacktoberfest!',
 	meta: {
 		title: 'Monthly Theme & Challenge for October 2022: Hacktoberfest!',

@@ -2,7 +2,7 @@ import UndrawIllustration from '@/components/UndrawIllustration';
 
 import { createMetaData } from '@/util/createMetaData.server';
 
-export const handle = {
+const handle = {
 	listTitle: 'April, 2021: Community Kindness!',
 	meta: {
 		title: 'Monthly Theme & Challenge for April, 2021: Community Kindness!',

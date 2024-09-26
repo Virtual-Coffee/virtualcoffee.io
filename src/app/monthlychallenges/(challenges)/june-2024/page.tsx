@@ -1,7 +1,7 @@
 import { createMetaData } from '@/util/createMetaData.server';
 import Link from 'next/link';
 
-export const handle = {
+const handle = {
 	listTitle: 'June 2024: Mid-Year Check-In!',
 	meta: {
 		title: 'Monthly Challenge for June 2024: Mid-Year Check-In!',

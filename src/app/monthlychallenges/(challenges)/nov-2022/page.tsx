@@ -8,7 +8,7 @@ import type {
 } from '@/util/api/types';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
-export const handle = {
+const handle = {
 	listTitle: 'November, 2022: 100k words!',
 	meta: {
 		title: 'Monthly Theme & Challenge for November, 2022: 100k words!',

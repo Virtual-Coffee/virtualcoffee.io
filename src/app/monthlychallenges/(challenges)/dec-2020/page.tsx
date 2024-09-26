@@ -1,7 +1,7 @@
 import { createMetaData } from '@/util/createMetaData.server';
 import challengeJson from './dec-2020.json';
 
-export const handle = {
+const handle = {
 	listTitle: 'December, 2020: Pairing!',
 	meta: {
 		title: 'Monthly Theme & Challenge for December, 2020: Pairing!',

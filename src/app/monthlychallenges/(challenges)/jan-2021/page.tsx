@@ -1,6 +1,6 @@
 import challengeJson from './jan-2021.json';
 
-export const handle = {
+const handle = {
 	listTitle: 'January, 2021: Month of Learning!',
 	meta: {
 		title: 'Monthly Theme & Challenge for January, 2021: Month of Learning!',

@@ -2,7 +2,7 @@ import { createMetaData } from '@/util/createMetaData.server';
 
 import UndrawIllustration from '@/components/UndrawIllustration';
 
-export const handle = {
+const handle = {
 	listTitle: 'May, 2022: Community Kindness!',
 	meta: {
 		title: 'Monthly Theme & Challenge for May, 2022: Community Kindness!',

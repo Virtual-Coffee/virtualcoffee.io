@@ -1,7 +1,7 @@
 import challengeJson from './nov-2020.json';
 import { Fragment } from 'react';
 
-export const handle = {
+const handle = {
 	listTitle: 'November, 2020: 50k words!',
 	meta: {
 		title: 'Monthly Theme & Challenge for November, 2020: 50k words!',

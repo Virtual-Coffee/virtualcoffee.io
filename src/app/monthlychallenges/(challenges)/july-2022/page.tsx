@@ -1,6 +1,6 @@
 import { createMetaData } from '@/util/createMetaData.server';
 
-export const handle = {
+const handle = {
 	listTitle: 'July, 2022: Demo in public!',
 	meta: {
 		title: 'Monthly Theme & Challenge for July, 2022: Build in Public',

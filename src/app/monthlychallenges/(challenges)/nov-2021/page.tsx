@@ -1,7 +1,7 @@
 import { getChallengeData } from '@/data/monthlyChallenges/nov-2021';
 import { Fragment } from 'react';
 
-export const handle = {
+const handle = {
 	listTitle: 'November, 2021: 50k words!',
 	meta: {
 		title: 'Monthly Theme & Challenge for November, 2021: 50k words!',

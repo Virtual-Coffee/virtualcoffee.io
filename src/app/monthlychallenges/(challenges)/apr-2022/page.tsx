@@ -1,6 +1,6 @@
 import { createMetaData } from '@/util/createMetaData.server';
 
-export const handle = {
+const handle = {
 	listTitle:
 		'April, 2022: Get job ready! Resumes, Portfolios, Cover Letters, and Elevator Pitch',
 	meta: {

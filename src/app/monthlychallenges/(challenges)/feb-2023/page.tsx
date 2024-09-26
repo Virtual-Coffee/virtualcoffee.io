@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import logo from './logo.png';
 
-export const handle = {
+const handle = {
 	listTitle:
 		'February, 2023: Get job ready! Resumes, Cover Letters, and Elevator Pitch',
 	meta: {

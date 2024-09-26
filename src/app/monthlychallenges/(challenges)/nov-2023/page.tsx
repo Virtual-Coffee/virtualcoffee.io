@@ -8,7 +8,7 @@ import DefaultLayout from '@/components/layouts/DefaultLayout';
 
 export { metaFromData as meta } from '@/util/remixHelpers';
 
-export const handle = {
+const handle = {
 	listTitle: 'November, 2023: 100k words!',
 	meta: {
 		title: 'Monthly Theme & Challenge for November, 2023: 100k words!',

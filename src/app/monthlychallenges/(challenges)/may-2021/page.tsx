@@ -1,6 +1,6 @@
 import { createMetaData } from '@/util/createMetaData.server';
 
-export const handle = {
+const handle = {
 	listTitle: 'May, 2021: Giving meaningful and empathetic feedback',
 	meta: {
 		title:

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import LeadText from '@/components/content/LeadText';
 import { createMetaData } from '@/util/createMetaData.server';
 
-export const handle = {
+const handle = {
 	listTitle: 'September 2021: Preptember!',
 	meta: {
 		title: 'Monthly Theme & Challenge for September 2021: Preptember!',

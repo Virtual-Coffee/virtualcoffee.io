@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import UndrawIllustration from '@/components/UndrawIllustration';
 
-export const handle = {
+const handle = {
 	listTitle: 'May, 2024: Community Kindness!',
 	meta: {
 		title: 'Monthly Theme & Challenge for May, 2024: Community Kindness!',
