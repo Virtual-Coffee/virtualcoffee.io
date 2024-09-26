@@ -1,7 +1,7 @@
 [build]
   command = "pnpm build"
-  # functions = "netlify/functions"
-  # publish = ".next"
+  functions = "netlify/functions"
+  publish = ".next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
