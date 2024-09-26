@@ -1,50 +1,6 @@
-import { ReactNode, useMemo } from 'react';
-// import { useMatches } from '@remix-run/react';
+import { ReactNode } from 'react';
 import type { UndrawIllustrationName } from '@/components/UndrawIllustration';
 import UndrawIllustration from '@/components/UndrawIllustration';
-
-// function useHeroData({ Hero, heroHeader, heroSubheader }: HeroData) {
-// 	const matches = useMatches().reverse();
-// 	return useMemo(() => {
-// 		let firstHero = matches.find((match) => !!match.handle?.hero)?.handle?.hero;
-// 		if (!firstHero) {
-// 			firstHero = matches.find((match) => !!match.data?.hero)?.data.hero;
-// 		}
-
-// 		let firstMeta = matches.find((match) => !!match.handle?.meta)?.handle?.meta;
-// 		if (!firstMeta) {
-// 			firstMeta = matches.find((match) => !!match.data?.meta)?.data.meta;
-// 		}
-
-// 		const returnObject: HeroData = {
-// 			Hero: Hero || firstHero?.Hero,
-// 		};
-
-// 		// allow for setting to ''
-// 		if (typeof heroHeader !== 'undefined') {
-// 			returnObject.heroHeader = heroHeader;
-// 		}
-// 		// allow for setting to ''
-// 		else if (firstHero && typeof firstHero.heroHeader !== 'undefined') {
-// 			returnObject.heroHeader = firstHero.heroHeader;
-// 		} else {
-// 			returnObject.heroHeader = firstMeta?.title;
-// 		}
-
-// 		// allow for setting to ''
-// 		if (typeof heroSubheader !== 'undefined') {
-// 			returnObject.heroSubheader = heroSubheader;
-// 		}
-// 		// allow for setting to ''
-// 		else if (firstHero && typeof firstHero.heroSubheader !== 'undefined') {
-// 			returnObject.heroSubheader = firstHero.heroSubheader;
-// 		} else {
-// 			returnObject.heroSubheader = firstMeta?.description;
-// 		}
-
-// 		return returnObject;
-// 	}, [Hero, heroHeader, heroSubheader, matches]);
-// }
 
 export function HeroHead({
 	Hero,
@@ -55,8 +11,6 @@ export function HeroHead({
 	DefaultLayoutProps,
 	'Hero' | 'heroHeader' | 'heroSubheader' | 'simple'
 >) {
-	// const heroData = useHeroData({ Hero, heroHeader, heroSubheader });
-
 	if (Hero && heroHeader) {
 		return (
 			<div className="py-4">
@@ -131,10 +85,4 @@ type DefaultLayoutProps = {
 	showHero?: Boolean;
 	/** This is the content that will be rendered inside the HeroData component. */
 	children?: ReactNode;
-};
-
-type HeroData = {
-	Hero: UndrawIllustrationName;
-	heroHeader?: String;
-	heroSubheader?: string;
 };
