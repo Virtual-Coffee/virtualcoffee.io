@@ -71,7 +71,7 @@ export function formatFileListItemsForPostList(
 		(item): PostListItem => ({
 			title: item.meta.title,
 			description: item.meta.description,
-			href: `/${item.slug}`,
+			href: `/${item.slug.replace('content/', '')}`,
 			children: formatFileListItemsForPostList(
 				item.children,
 				depth,

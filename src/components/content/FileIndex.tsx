@@ -10,9 +10,11 @@ type FileIndexProps = {
 };
 
 function findBase(files: MdxFile[], subDirectory: string): MdxFile[] {
+	console.log(files);
 	const subDirectorySplit = subDirectory.split('/');
 
 	const filtered = files.reduce<MdxFile[]>((list, file) => {
+		console.log(file.slug);
 		const slugSplit = file.slug.split('/');
 
 		if (slugSplit.length < subDirectorySplit.length) {
@@ -68,9 +70,10 @@ function findBase(files: MdxFile[], subDirectory: string): MdxFile[] {
 
 export default function FileIndex({ subDirectory, depth }: FileIndexProps) {
 	const allFiles = loadMdxDirectory({
-		baseDirectory: 'content',
+		baseDirectory: 'content' + (subDirectory ? `/${subDirectory}` : ''),
 	});
 
-	const result = subDirectory ? findBase(allFiles, subDirectory) : allFiles;
+	// const result = subDirectory ? findBase(allFiles, subDirectory) : allFiles;
+	const result = allFiles;
 	return <PostList items={formatFileListItemsForPostList(result, depth)} />;
 }

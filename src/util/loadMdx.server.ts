@@ -8,6 +8,7 @@ import { UndrawIllustrationName } from '@/components/UndrawIllustration';
  */
 export interface MdxFile {
 	slug: string;
+	isIndex: boolean;
 	order?: number;
 	meta: {
 		title: string;
@@ -165,8 +166,8 @@ export function loadMdxRouteFileAttributes({
 	const fileName = existsSync(regularFileName)
 		? regularFileName
 		: existsSync(indexFileName)
-		? indexFileName
-		: null;
+			? indexFileName
+			: null;
 
 	// If the file doesn't exist, return null
 	if (!fileName) {
@@ -179,13 +180,20 @@ export function loadMdxRouteFileAttributes({
 	});
 
 	// Parse the front matter from the file contents using the front-matter library
-	const { attributes } = fm(fileContents);
+	const contents = fm(fileContents);
+	const attributes = contents.attributes as Omit<
+		MdxFile,
+		'slug' | 'requirePath'
+	>;
+
+	const requirePath = `content/${fileName.split('/src/content/')[1]}`;
 
 	// The attributes type is unknown, but we know it should match the MdxFile interface,
 	// so we assert the type to MdxFile to resolve the TypeScript error.
 	// Additionally, modify the slug to remove trailing "/index" and "__frontend/" if present.
 	return {
-		...(attributes as MdxFile),
+		...attributes,
+		isIndex: fileName === indexFileName,
 		slug: slug.replace(/\/index$/g, '').replace(/^__frontend\//g, ''),
 	};
 }
