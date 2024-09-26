@@ -1,4 +1,4 @@
-import { Hacktoberfest2023 } from '~/svg/badges';
+import { Hacktoberfest2023 } from '@/svg/badges';
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
