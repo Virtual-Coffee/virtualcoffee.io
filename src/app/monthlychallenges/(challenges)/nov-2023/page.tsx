@@ -6,8 +6,6 @@ import LeadText from '@/components/content/LeadText';
 import Link from 'next/link';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
-export { metaFromData as metadata } from '@/util/remixHelpers';
-
 const handle = {
 	listTitle: 'November, 2023: 100k words!',
 	meta: {
@@ -20,6 +18,8 @@ const handle = {
 		heroHeader: '',
 	},
 };
+
+export const metadata = handle.meta;
 
 async function getData() {
 	const { title } = handle.meta;
