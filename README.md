@@ -200,9 +200,9 @@ When you add a new issue, **make sure to add it to the index**. Here's how:
 So, if you have created `app/routes/__frontend/newsletter/issues/2022-03.jsx`:
 
 ```diff
-+ import { handle as issue202203 } from '~/routes/__frontend/newsletter/issues/2022-03';
-import { handle as issue202202 } from '~/routes/__frontend/newsletter/issues/2022-02';
-import { handle as issue202201 } from '~/routes/__frontend/newsletter/issues/2022-01';
++ import { handle as issue202203 } from '@/routes/__frontend/newsletter/issues/2022-03';
+import { handle as issue202202 } from '@/routes/__frontend/newsletter/issues/2022-02';
+import { handle as issue202201 } from '@/routes/__frontend/newsletter/issues/2022-01';
 
 const newsletters = [
 + 	{ handleData: issue202203, slug: '2022-03' },
