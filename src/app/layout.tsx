@@ -6,12 +6,14 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 
 import { buildUrls } from '@/util/url.server';
+import { createMetaData } from '@/util/createMetaData.server';
+import Script from 'next/script';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetaData({
 	title:
 		'Virtual Coffee IO - An intimate tech community for all, optimized for you',
 	description: `Virtual Coffee is an intimate tech community where friendships are formed and support is given to people at all stages of their journey. Join our laid-back conversations and online events to connect with like-minded individuals who share your passion for technology.`,
-};
+});
 
 export default function RootLayout({
 	children,
@@ -24,12 +26,12 @@ export default function RootLayout({
 				<head>
 					{/* @ts-ignore */}
 					{buildUrls.NETLIFY && buildUrls.CONTEXT === 'production' && (
-						<script
-							defer
+						<Script
+							strategy="afterInteractive"
 							data-domain="virtualcoffee.io"
 							data-api="/plausible/api/event"
 							src="/plausible/js/script.js"
-						></script>
+						/>
 					)}
 				</head>
 				<body className={`h-full `}>
