@@ -2,13 +2,14 @@ import PostList, {
 	formatFileListItemsForPostList,
 } from '@/components/PostList';
 import type { MdxFile } from '@/util/loadMdx.server';
+import { loadMdxDirectory } from '@/util/loadMdx.server';
 
 type FileIndexProps = {
 	subDirectory?: string;
 	depth?: number;
 };
 
-function findBase(files: FileListItem[], subDirectory: string): MdxFile[] {
+function findBase(files: MdxFile[], subDirectory: string): MdxFile[] {
 	const subDirectorySplit = subDirectory.split('/');
 
 	const filtered = files.reduce<MdxFile[]>((list, file) => {
@@ -66,7 +67,9 @@ function findBase(files: FileListItem[], subDirectory: string): MdxFile[] {
 }
 
 export default function FileIndex({ subDirectory, depth }: FileIndexProps) {
-	const allFiles: MdxFile[] = useOutletContext();
+	const allFiles = loadMdxDirectory({
+		baseDirectory: 'content',
+	});
 
 	const result = subDirectory ? findBase(allFiles, subDirectory) : allFiles;
 	return <PostList items={formatFileListItemsForPostList(result, depth)} />;
