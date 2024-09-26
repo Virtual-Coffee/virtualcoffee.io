@@ -26,7 +26,7 @@ See you there!
 
 # Working on the site:
 
-- This site is built using [Remix](https://remix.run/).
+- This site is built using [Next.js](https://nextjs.org/).
 - Check out our [CONTRIBUTING](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md) guideline to make contributions.
 - If you're new to open source, check out our [Git & GitHub 101](https://virtualcoffee.io/resources/developer-resources/open-source/git-101) and [Contributor Guide](https://virtualcoffee.io/resources/developer-resources/open-source/contributor-guide) resources.
 
@@ -121,23 +121,7 @@ Once you run this command, a local server is running at http://localhost:9000! A
 
 You should see something like 'Server now ready on http://localhost:9000' below, which means the watcher is waiting to build your awesome changes!
 
-Use ctrl-c to quit the server when you're done.
-
----
-
-**Note:**
-
-Depending on the speed of your computer, you can get a `TimeoutError - Task timed out after 10.00 seconds` message when the localhost renders the home page (http://localhost:9000) on the browser.
-
-If the feature you are working on is not on the home page (the newsletter or monthly challenges page, for example), you may still be able to load the page you need. After you see the notification of `Server now ready on http://localhost:9000`, go to your browser. Then add the path of the page you need (like `http://localhost:9000/newsletter` for the newsletter or `http://localhost:9000/monthlychallenges` for the monthly challenges page) to see the page.
-
----
-
-`pnpm dev` actually runs three sub commands, which can be run independently if you wish:
-
-- `pnpm dev:sass` - compiles sass styles found in `./styles`. When in dev mode will re-run when a file is changed. The files are compiled to the `./tmp` directory to be processed by the next step.
-- `pnpm dev:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
-- `pnpm dev:remix` - starts up the local Netlify dev environment and starts the Remix server.
+Use `ctrl-c` to quit the server when you're done.
 
 ### `pnpm build`
 
@@ -146,12 +130,6 @@ pnpm build
 ```
 
 Builds a production-ready version of the site. This is what Netlify uses to build our site.
-
-`pnpm build` actually runs three sub commands, which can be run independently if you wish:
-
-- `pnpm build:sass` - compiles sass styles found in `./styles`. The files are compiled to the `./tmp` directory to be processed by the next step.
-- `pnpm build:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
-- `pnpm build:remix` - compiles everything needed to run the site for production.
 
 ### `pnpm format`
 
@@ -183,26 +161,26 @@ If you'd like to work on a feature that requires an API key, please reach out to
 
 Our [VC Resources](https://virtualcoffee.io/resources) are created using [MDX](https://mdxjs.com/). MDX is basically a combination of Markdown and React.
 
-Any files added to `app/routes/__frontend/resources` will be automatically loaded and added to the appropriate index page.
+Any files added to `src/content/resources` will be automatically loaded and added to the appropriate index page.
 
 A good way to start adding a new page would be to copy one of the existing pages, then edit the details and content.
 
 ### Newsletters
 
-The newsletters (for now) are simply `jsx` files, and can be found in `app/routes/__frontend/newsletter/issues`.
+The newsletters (for now) are simply `tsx` files, and can be found in `src/content/newsletters`.
 
 When you add a new issue, **make sure to add it to the index**. Here's how:
 
-- Open `app/data/newsletters.js`
+- Open `src/data/newsletters.ts`
 - `import` the new issue
 - Add the new issue to the `newsletters` array.
 
-So, if you have created `app/routes/__frontend/newsletter/issues/2022-03.jsx`:
+So, if you have created `src/content/newsletters/2022-03.jsx`:
 
 ```diff
-+ import { handle as issue202203 } from '@/routes/__frontend/newsletter/issues/2022-03';
-import { handle as issue202202 } from '@/routes/__frontend/newsletter/issues/2022-02';
-import { handle as issue202201 } from '@/routes/__frontend/newsletter/issues/2022-01';
++ import { handle as issue202203 } from '@/content/newsletters/2022-03';
+import { handle as issue202202 } from '@/content/newsletters/2022-02';
+import { handle as issue202201 } from '@/content/newsletters/2022-01';
 
 const newsletters = [
 + 	{ handleData: issue202203, slug: '2022-03' },
@@ -215,7 +193,7 @@ const newsletters = [
 
 Every month, our monthly challenge page will need to move the current challenge to the main portion of the list, and add the new challenge to the current challenge section.
 
-To make the updates, go to `app/routes/__frontend/monthlychallenges/index.tsx`
+To make the updates, go to `src/app/monthlychallenges/page.tsx`
 
 ## Contributors ✨
 
