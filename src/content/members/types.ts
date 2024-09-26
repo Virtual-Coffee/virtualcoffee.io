@@ -27,7 +27,7 @@ export type Account =
 	| {
 			type: 'website';
 			url: Website;
-			title: string;
+			title?: string;
 	  }
 	| {
 			type: 'mastodon';
