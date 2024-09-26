@@ -1,4 +1,4 @@
-import type { IconProps } from 'members/types';
+import type { IconProps } from '@/content/members/types';
 
 export default function Polywork({
 	ariaHidden,
@@ -11,11 +11,11 @@ export default function Polywork({
 			{...(ariaHidden
 				? {
 						'aria-hidden': 'true',
-				  }
+					}
 				: {
 						role: 'img',
 						'aria-labelledby': 'polyworkSvgTitle',
-				  })}
+					})}
 		>
 			{!ariaHidden && (
 				<title id="polyworkSvgTitle">{title || 'Polywork'}</title>

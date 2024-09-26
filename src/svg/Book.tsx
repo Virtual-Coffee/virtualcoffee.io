@@ -1,4 +1,4 @@
-import type { IconProps } from 'members/types';
+import type { IconProps } from '@/content/members/types';
 export default function Book({
 	ariaHidden,
 	title = 'Book',
@@ -14,11 +14,11 @@ export default function Book({
 			{...(ariaHidden
 				? {
 						'aria-hidden': 'true',
-				  }
+					}
 				: {
 						role: 'img',
 						'aria-labelledby': 'bookSvgTitle',
-				  })}
+					})}
 		>
 			{!ariaHidden && <title id="bookSvgTitle">{title || 'Book'}</title>}
 			<path

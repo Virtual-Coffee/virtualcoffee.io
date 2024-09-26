@@ -1,4 +1,4 @@
-import type { IconProps } from 'members/types';
+import type { IconProps } from '@/content/members/types';
 
 export default function HashNode({
 	ariaHidden,
@@ -11,11 +11,11 @@ export default function HashNode({
 			{...(ariaHidden
 				? {
 						'aria-hidden': 'true',
-				  }
+					}
 				: {
 						role: 'img',
 						'aria-labelledby': 'hashnodeSvgTitle',
-				  })}
+					})}
 		>
 			{!ariaHidden && (
 				<title id="hashnodeSvgTitle">{title || 'HashNode'}</title>

@@ -1,4 +1,4 @@
-import type { IconProps } from 'members/types';
+import type { IconProps } from '@/content/members/types';
 
 export default function Website({
 	ariaHidden,
@@ -12,11 +12,11 @@ export default function Website({
 			{...(ariaHidden
 				? {
 						'aria-hidden': 'true',
-				  }
+					}
 				: {
 						role: 'img',
 						'aria-labelledby': 'websiteSvgTitle',
-				  })}
+					})}
 		>
 			{!ariaHidden && <title id="websiteSvgTitle">{title || 'Website'}</title>}
 			<path

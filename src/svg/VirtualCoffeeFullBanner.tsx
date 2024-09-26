@@ -1,4 +1,4 @@
-import type { IconProps } from 'members/types';
+import type { IconProps } from '@/content/members/types';
 
 export default function VirtualCoffeeFullBanner({
 	ariaHidden = false,
@@ -12,11 +12,11 @@ export default function VirtualCoffeeFullBanner({
 			{...(ariaHidden
 				? {
 						'aria-hidden': 'true',
-				  }
+					}
 				: {
 						role: 'img',
 						'aria-labelledby': 'navlogoBannerSvgTitle',
-				  })}
+					})}
 			{...rest}
 		>
 			{!ariaHidden && <title id="navlogoBannerSvgTitle">{title}</title>}

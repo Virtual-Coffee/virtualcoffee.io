@@ -1,4 +1,4 @@
-import type { IconProps } from 'members/types';
+import type { IconProps } from '@/content/members/types';
 
 export default function LinkedIn({
 	ariaHidden,
@@ -11,11 +11,11 @@ export default function LinkedIn({
 			{...(ariaHidden
 				? {
 						'aria-hidden': 'true',
-				  }
+					}
 				: {
 						role: 'img',
 						'aria-labelledby': 'linkedinSvgTitle',
-				  })}
+					})}
 		>
 			{!ariaHidden && (
 				<title id="linkedinSvgTitle">{title || 'LinkedIn'}</title>

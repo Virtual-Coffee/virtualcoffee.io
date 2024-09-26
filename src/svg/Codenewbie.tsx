@@ -1,4 +1,4 @@
-import type { IconProps } from 'members/types';
+import type { IconProps } from '@/content/members/types';
 
 export default function Codenewbie({
 	ariaHidden,
@@ -11,11 +11,11 @@ export default function Codenewbie({
 			{...(ariaHidden
 				? {
 						'aria-hidden': 'true',
-				  }
+					}
 				: {
 						role: 'img',
 						'aria-labelledby': 'codeNewbieSvgTitle',
-				  })}
+					})}
 		>
 			{!ariaHidden && (
 				<title id="codeNewbieSvgTitle">{title || 'CodeNewbie'}</title>
