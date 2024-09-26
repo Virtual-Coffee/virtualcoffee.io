@@ -67,7 +67,6 @@ const challengeList: Challenge[] = [
 	},
 
 	{
-		current: false,
 		title: 'Get Job Ready',
 		subtitle: `Resumes, Cover Letters, and Elevator Pitch. There's never a bad time to update your job application materials.`,
 		description: (
@@ -275,6 +274,7 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Preptember',
 		subtitle: `Get your open source projects ready!`,
 		description: (
@@ -288,9 +288,16 @@ const challengeList: Challenge[] = [
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-preptember-2023-monthly-challenge-51d2">
+					<a href="https://dev.to/virtualcoffee/preptember-preparing-for-a-successful-hacktoberfest-5baa">
 						this blog post
 					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year's challenge,{' '}
+					<Link to="/monthlychallenges/sept-2024">
+						check out the September 2024 challenge page
+					</Link>
 					.
 				</p>
 			</>
@@ -619,7 +626,6 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		current: true,
 		title: 'Photography Challenge',
 		subtitle: `Let's get out and about.`,
 		description: (
