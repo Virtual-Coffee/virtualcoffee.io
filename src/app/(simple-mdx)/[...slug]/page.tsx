@@ -1,14 +1,23 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
-import { loadMdxRouteFileAttributes } from '@/util/loadMdx.server';
+import {
+	loadMdxRouteFileAttributes,
+	loadMdxDirectory,
+} from '@/util/loadMdx.server';
 import type { NextPageProps } from '@/util/types';
 import { MDXProps } from 'mdx/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-// export function generateStaticParams() {
-// 	return [{ slug: [''] }, { slug: ['products'] }];
-// }
+export function generateStaticParams() {
+	const allFiles = loadMdxDirectory({
+		baseDirectory: 'content/simple-mdx-pages',
+	});
+
+	return allFiles.map((s) => ({
+		slug: [s.slug.replace('content/simple-mdx-pages/', '')],
+	}));
+}
 
 export const dynamicParams = true;
 

@@ -11,11 +11,27 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-// export function generateStaticParams() {
-// 	return [{ slug: [''] }, { slug: ['products'] }];
-// }
+function extractRoutes(files: MdxFile[]): string[] {
+	return files.reduce((list, file) => {
+		const slug = file.slug.replace('content/resources/', '');
+		if (file.children) {
+			return [...list, ...extractRoutes(file.children), slug];
+		}
+		return [...list, slug];
+	}, [] as string[]);
+}
 
-export const dynamicParams = true;
+export function generateStaticParams() {
+	const allFiles = loadMdxDirectory({
+		baseDirectory: 'content/resources',
+	});
+	const routes = extractRoutes(allFiles);
+
+	return [
+		{ slug: [''] },
+		...routes.map((slug) => ({ slug: slug.split('/').filter(Boolean) })),
+	];
+}
 
 function getFile(slug: string) {
 	const file = loadMdxRouteFileAttributes({

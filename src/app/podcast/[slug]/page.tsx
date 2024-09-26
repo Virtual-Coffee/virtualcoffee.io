@@ -6,6 +6,7 @@ import DisplayHtml from '@/components/DisplayHtml';
 import PodcastSubscribe from '@/components/PodcastSubscribe';
 import {
 	getEpisode,
+	getEpisodes,
 	getTranscript,
 	getPlayerSrc,
 	getPlayerUrl,
@@ -16,6 +17,14 @@ import { sanitizeCmsData } from '@/util/sanitizeCmsData';
 import createCmsImage from '@/util/cmsimage';
 import { Metadata } from 'next';
 import Script from 'next/script';
+
+export async function generateStaticParams() {
+	const podcastEpisodes = await getEpisodes({ limit: 99 });
+
+	return podcastEpisodes.map((pod) => ({
+		slug: pod.slug,
+	}));
+}
 
 async function getEpisodeData(slug: string) {
 	const episode = await getEpisode({
