@@ -7,9 +7,9 @@ hero:
 order: 1
 ---
 
-import LeadText from '~/components/content/LeadText';
-import TextContainer from '~/components/content/TextContainer';
-import { Link } from '@remix-run/react';
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import Link from 'next/link';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
@@ -98,7 +98,7 @@ If you are still figuring out where to ask questions, you can ask them here. Som
 
 <LeadText>
 
-Check our complete channel list on the <Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide">Virtual Coffee Slack Channels Guide</Link> page.
+Check our complete channel list on the <Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide">Virtual Coffee Slack Channels Guide</Link> page.
 
 </LeadText>
 

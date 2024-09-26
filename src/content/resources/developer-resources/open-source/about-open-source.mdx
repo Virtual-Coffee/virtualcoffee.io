@@ -8,9 +8,9 @@ hero:
 order: 1
 ---
 
-import LeadText from '~/components/content/LeadText';
-import TextContainer from '~/components/content/TextContainer';
-import { Link } from '@remix-run/react';
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import Link from 'next/link';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
@@ -59,10 +59,10 @@ Working out how to get started can be the most challenging part. So we've compil
 
 <dl>
 	{/* prettier-ignore */}
-	<dt><Link to="/resources/developer-resources/open-source/contributor-guide">Contributor Guide</Link></dt>
+	<dt><Link href="/resources/developer-resources/open-source/contributor-guide">Contributor Guide</Link></dt>
 	<dd>A guide to contributing to an open source project.</dd>
 	{/* prettier-ignore */}
-	<dt><Link to="/resources/developer-resources/open-source/maintainer-guide">Maintainer Guide</Link></dt>
+	<dt><Link href="/resources/developer-resources/open-source/maintainer-guide">Maintainer Guide</Link></dt>
 	{/* prettier-ignore */}
 	<dd>A guide for maintaining your open source project for the first time.</dd>
 </dl>

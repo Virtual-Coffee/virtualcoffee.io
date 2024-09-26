@@ -8,9 +8,9 @@ tags: [memberresources]
 order: 4
 ---
 
-import LeadText from '~/components/content/LeadText';
-import TextContainer from '~/components/content/TextContainer';
-import { Link } from '@remix-run/react';
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import Link from 'next/link';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
@@ -138,7 +138,7 @@ We work on a puzzle at [CSSBattle](https://cssbattle.dev/), and we're taking ove
 <LeadText>
 
 **Leader: Tom Cudd** <br />
-_(or contact our <Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership#coffee-table-groups-coordinator">Coffee Table Group Coordinator</Link>, Abbey Perini)_
+_(or contact our <Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership#coffee-table-groups-coordinator">Coffee Table Group Coordinator</Link>, Abbey Perini)_
 
 </LeadText>
 
@@ -162,7 +162,7 @@ These are the currently scheduled times for the events at the time of this publi
 
 ## Volunteering in Coffee Table Groups
 
-- If you'd like to start a new Coffee Table Group, head to the <Link to="/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups">Leading a Coffee Table Group</Link> page for more information.
-- If you want to help a particular Coffee Table Group, feel free to reach out to the group's Leader or our <Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership#coffee-table-groups-coordinator">Coffee Table Group Coordinator</Link>.
+- If you'd like to start a new Coffee Table Group, head to the <Link href="/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups">Leading a Coffee Table Group</Link> page for more information.
+- If you want to help a particular Coffee Table Group, feel free to reach out to the group's Leader or our <Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership#coffee-table-groups-coordinator">Coffee Table Group Coordinator</Link>.
 
 </TextContainer>

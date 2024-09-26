@@ -8,9 +8,9 @@ hero:
 order: 3
 ---
 
-import LeadText from '~/components/content/LeadText';
-import TextContainer from '~/components/content/TextContainer';
-import { Link } from '@remix-run/react';
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import Link from 'next/link';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
@@ -46,7 +46,7 @@ This is a guide for contributors to contribute to the project. If none is availa
 - Ways to communicate with the maintainers.
 
 **✅ A valid open source license** <br />
-It is not advised to work on a project that doesn't have a license or is not using a standard open source license. Check out <Link to="/resources/developer-resources/open-source/maintainer-guide#the-license">The License</Link> section of our Maintainer Guide for resources about licenses.
+It is not advised to work on a project that doesn't have a license or is not using a standard open source license. Check out <Link href="/resources/developer-resources/open-source/maintainer-guide#the-license">The License</Link> section of our Maintainer Guide for resources about licenses.
 
 **✅ A Code of Conduct (COC)** <br />
 Check the Code of Conduct (COC) to ensure you participate in a way that's consistent with the organization's guidelines.

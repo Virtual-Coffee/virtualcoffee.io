@@ -8,15 +8,15 @@ tags: [memberresources]
 order: 1
 ---
 
-import LeadText from '~/components/content/LeadText';
-import TextContainer from '~/components/content/TextContainer';
-import { Link } from '@remix-run/react';
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import Link from 'next/link';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
 <LeadText>
 
-The <Link to="/code-of-conduct">Code of Conduct</Link> is the _most essential part_ of
+The <Link href="/code-of-conduct">Code of Conduct</Link> is the _most essential part_ of
 Virtual Coffee. So please read it carefully. We want this community to be a welcoming,
 inclusive, supportive, and safe place for all our members.
 
@@ -36,7 +36,7 @@ In order to create a welcoming and inclusive community, we pledge to make partic
 
 <LeadText>
 
-**_We take our <Link to="/code-of-conduct">Code of Conduct</Link> seriously_**.
+**_We take our <Link href="/code-of-conduct">Code of Conduct</Link> seriously_**.
 
 </LeadText>
 
@@ -46,6 +46,6 @@ In order to create a welcoming and inclusive community, we pledge to make partic
 
 ### I think someone has violated the Code of Conduct. How can I report it?
 
-You can report your experience to our Maintainers at hello@virtualcoffee.io or by completing our <Link to="/report-coc-violation">Code of Conduct Violation Form</Link>.
+You can report your experience to our Maintainers at hello@virtualcoffee.io or by completing our <Link href="/report-coc-violation">Code of Conduct Violation Form</Link>.
 
 </TextContainer>

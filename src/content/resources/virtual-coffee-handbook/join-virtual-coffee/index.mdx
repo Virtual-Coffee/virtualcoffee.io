@@ -9,9 +9,9 @@ tags:
 order: 1
 ---
 
-import LeadText from '~/components/content/LeadText';
-import TextContainer from '~/components/content/TextContainer';
-import { Link } from '@remix-run/react';
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import Link from 'next/link';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
@@ -39,19 +39,19 @@ We are now accepting new members on a limited basis!
 
 </LeadText>
 
-If you are interested in joining Virtual Coffee, you can <Link to="/join">join the waiting list</Link> or receive an invite from an active volunteer. Once we've accepted and added you to our membership, you will receive an email with links to our Coffees.
+If you are interested in joining Virtual Coffee, you can <Link href="/join">join the waiting list</Link> or receive an invite from an active volunteer. Once we've accepted and added you to our membership, you will receive an email with links to our Coffees.
 
 ### 2. Attend one of our Coffees (Virtual Coffee weekly Zoom chats)
 
 <LeadText>
 
-You must attend one of our <Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee#coffees-virtual-coffee-weekly-zoom-chats">Coffees (Virtual Coffee weekly Zoom chats)</Link> on **Tuesday at 9:00 AM ET** or **Thursday at 12:00 PM ET**, which lasts an hour.
+You must attend one of our <Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee#coffees-virtual-coffee-weekly-zoom-chats">Coffees (Virtual Coffee weekly Zoom chats)</Link> on **Tuesday at 9:00 AM ET** or **Thursday at 12:00 PM ET**, which lasts an hour.
 
 </LeadText>
 
 We absolutely love the closeness of this community and know it’s one of the many things that sets us apart. This closeness starts with those Coffees. We would also like to give you the experience of Virtual Coffee in person before we move to the Slack group.
 
-When joining your first Coffee, tell your <Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/glossary#room-leader">Room Leader</Link> you're a new member. After the Coffee, you'll receive an email with a link to our Slack group and more information.
+When joining your first Coffee, tell your <Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/glossary#room-leader">Room Leader</Link> you're a new member. After the Coffee, you'll receive an email with a link to our Slack group and more information.
 
 ### 3. Now you’re a full member! Welcome! 👋
 
@@ -61,7 +61,7 @@ You can introduce yourself in the `#welcome` channel and join our members-only e
 
 ## What is going on in Coffees?
 
-We’re getting to know other members, old and new, through casual conversations on Zoom. We prioritize empathy, encouraging everyone to participate in the most comfortable ways and learning together. Check out the <Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee#coffees-virtual-coffee-weekly-zoom-chats">Coffees (Virtual Coffee Weekly Zoom Chats)</Link> section for more details.
+We’re getting to know other members, old and new, through casual conversations on Zoom. We prioritize empathy, encouraging everyone to participate in the most comfortable ways and learning together. Check out the <Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee#coffees-virtual-coffee-weekly-zoom-chats">Coffees (Virtual Coffee Weekly Zoom Chats)</Link> section for more details.
 
 ---
 
@@ -91,14 +91,14 @@ Absolutely! If you’re into online communities, and enjoy conversations around 
 
 ## What will I get when I join Virtual Coffee?
 
-You can participate in our <Link to="/events">events</Link>, access our Slack, get support and help as needed, get mentorship, and most of all, FRIENDSHIPS!
-See the <Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee">What To Expect In Virtual Coffee</Link> page for more insights.
+You can participate in our <Link href="/events">events</Link>, access our Slack, get support and help as needed, get mentorship, and most of all, FRIENDSHIPS!
+See the <Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee">What To Expect In Virtual Coffee</Link> page for more insights.
 
 ---
 
 ## Is there any membership fee?
 
-No, _nada_! You don’t need to pay any fees to join Virtual Coffee. Our members <Link to="/resources/virtual-coffee-handbook/get-involved">volunteer their time and support</Link> to keep Virtual Coffee running. [Sponsorships](https://github.com/sponsors/Virtual-Coffee) support everything you see on this website and help us continue serving the Virtual Coffee community!
+No, _nada_! You don’t need to pay any fees to join Virtual Coffee. Our members <Link href="/resources/virtual-coffee-handbook/get-involved">volunteer their time and support</Link> to keep Virtual Coffee running. [Sponsorships](https://github.com/sponsors/Virtual-Coffee) support everything you see on this website and help us continue serving the Virtual Coffee community!
 
 </TextContainer>
 

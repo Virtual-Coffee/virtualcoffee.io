@@ -8,9 +8,9 @@ tags: [memberresources]
 order: 9
 ---
 
-import LeadText from '~/components/content/LeadText';
-import TextContainer from '~/components/content/TextContainer';
-import { Link } from '@remix-run/react';
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import Link from 'next/link';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
@@ -32,11 +32,11 @@ Do you want to give back to the community but wondering how? There are many ways
 
 ### Get Involved
 
-As you can see, Virtual Coffee has <Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/glossary#coffees">Coffees (Virtual Coffee weekly Zoom chats)</Link>, <Link to="/events">events</Link>, and even <Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/glossary#office-hours">office hours</Link>! And these are all becoming possible thanks to our members who run these voluntarily. Do you want to <Link to="/resources/virtual-coffee-handbook/get-involved">get involved</Link> in Virtual Coffee?
+As you can see, Virtual Coffee has <Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/glossary#coffees">Coffees (Virtual Coffee weekly Zoom chats)</Link>, <Link href="/events">events</Link>, and even <Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/glossary#office-hours">office hours</Link>! And these are all becoming possible thanks to our members who run these voluntarily. Do you want to <Link href="/resources/virtual-coffee-handbook/get-involved">get involved</Link> in Virtual Coffee?
 
-If you want to join the volunteer team, check out <Link to="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">our open roles</Link>! If you want to share your knowledge with other members through a presentation, consider giving a <Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/lunch-and-learns">Lunch & Learn</Link> session. And if you are interested in starting a new <Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/glossary#coffee-table-groups">Coffee Table group</Link>, you can find more information on the <Link to="/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups">Leading a Coffee Table Group</Link> page.
+If you want to join the volunteer team, check out <Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">our open roles</Link>! If you want to share your knowledge with other members through a presentation, consider giving a <Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/lunch-and-learns">Lunch & Learn</Link> session. And if you are interested in starting a new <Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/glossary#coffee-table-groups">Coffee Table group</Link>, you can find more information on the <Link href="/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups">Leading a Coffee Table Group</Link> page.
 
-If you have questions about getting involved in Virtual Coffee, drop them in the `#community-questions` channel or contact one of our <Link to="/members">Maintainers</Link>.
+If you have questions about getting involved in Virtual Coffee, drop them in the `#community-questions` channel or contact one of our <Link href="/members">Maintainers</Link>.
 
 ## Contributing to Virtual Coffee
 
@@ -44,7 +44,7 @@ If you have questions about getting involved in Virtual Coffee, drop them in the
 
 Virtual Coffee's [website](https://github.com/Virtual-Coffee/virtualcoffee.io) and [podcast transcripts](https://github.com/Virtual-Coffee/podcast-transcripts) are open source, and we love contributions! Please read our Contributing Guide (CONTRIBUTING.md) in each repository before contributing.
 
-If you still need to become familiar with open source, we got you covered! Head over to our <Link to="/resources/developer-resources/open-source">Open Source Resources</Link> for more guidance about open source. And if you have questions, you can always drop them in the `open-source` channel on Slack.
+If you still need to become familiar with open source, we got you covered! Head over to our <Link href="/resources/developer-resources/open-source">Open Source Resources</Link> for more guidance about open source. And if you have questions, you can always drop them in the `open-source` channel on Slack.
 
 ### Sponsorships
 

@@ -8,16 +8,16 @@ tags: [memberresources]
 order: 1
 ---
 
-import LeadText from '~/components/content/LeadText';
-import TextContainer from '~/components/content/TextContainer';
-import { Link } from '@remix-run/react';
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import Link from 'next/link';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
 <LeadText>
 
 Our mission is to provide meaningful opportunities for learning, leadership, and contribution to our members. Below, you'll find a list of leadership opportunities for members who are in good standing and are willing to support the community.
-If you find a role or position you'd be interested in, please fill out our <Link to="/volunteer-at-virtual-coffee">Volunteer Form</Link> and let us know!
+If you find a role or position you'd be interested in, please fill out our <Link href="/volunteer-at-virtual-coffee">Volunteer Form</Link> and let us know!
 
 </LeadText>
 
@@ -66,7 +66,7 @@ Facilitating a Coffee breakout room. The role moderates the conversations once a
 
 <div className="my-5">
 	{/* prettier-ignore */}
-	<Link to={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Coffee Room Leader',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
+	<Link href={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Coffee Room Leader',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
 </div>
 
 </TextContainer>
@@ -103,7 +103,7 @@ This role gives members a chance to review the conversations during Coffee.
 
 <div className="my-5">
 	{/* prettier-ignore */}
-	<Link to={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Coffee Note Taker',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
+	<Link href={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Coffee Note Taker',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
 </div>
 
 </TextContainer>
@@ -139,7 +139,7 @@ The Host is vital to ensuring the smooth operation of the Coffees. They are resp
 
 <div className="my-5">
 	{/* prettier-ignore */}
-	<Link to={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Coffee Host',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
+	<Link href={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Coffee Host',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
 </div>
 
 </TextContainer>
@@ -176,7 +176,7 @@ Master of Ceremonies/main speaker for a Coffee. This role is the "face" of the c
 
 <div className="my-5">
 	{/* prettier-ignore */}
-	<Link to={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Coffee MC',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
+	<Link href={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Coffee MC',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
 </div>
 
 </TextContainer>
@@ -215,7 +215,7 @@ This role ensures the community is aware of upcoming Lunch & Learn events.
 
 <div className="my-5">
 	{/* prettier-ignore */}
-	<Link to={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Lunch & Learn Hype Person',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
+	<Link href={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Lunch & Learn Hype Person',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
 </div>
 
 <TextContainer>
@@ -297,7 +297,7 @@ This role acts as the MC for a Lunch & Learn event and supports the presenter an
 
 <div className="my-5">
 	{/* prettier-ignore */}
-	<Link to={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Lunch & Learn Host',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
+	<Link href={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Lunch & Learn Host',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
 </div>
 
 </TextContainer>
@@ -324,7 +324,7 @@ General Virtual Coffee Operations
 
 #### Role Purpose:
 
-This role coordinates and manages our <Link to="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups">Coffee Table Groups</Link> and supports them because they are essential to our community.
+This role coordinates and manages our <Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups">Coffee Table Groups</Link> and supports them because they are essential to our community.
 
 #### Role Duties and Responsibilities:
 
@@ -391,7 +391,7 @@ Uphold the tenets of the Code of Conduct in all community spaces. Ensure that me
 
 <div className="my-5">
 	{/* prettier-ignore */}
-	<Link to={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Virtual Coffee Moderator',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
+	<Link href={`/volunteer-at-virtual-coffee?position=${encodeURIComponent('Virtual Coffee Moderator',)}`} className="btn btn-primary btn-lg">Apply Now!</Link>
 </div>
 
 </TextContainer>

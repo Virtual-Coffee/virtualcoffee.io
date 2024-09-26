@@ -8,15 +8,15 @@ tags: [memberresources]
 order: 5
 ---
 
-import LeadText from '~/components/content/LeadText';
-import TextContainer from '~/components/content/TextContainer';
-import { Link } from '@remix-run/react';
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import Link from 'next/link';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
 <LeadText>
 
-We hold <Link to="/monthlychallenges">monthly challenges</Link> that we encourage our members to participate in!
+We hold <Link href="/monthlychallenges">monthly challenges</Link> that we encourage our members to participate in!
 
 </LeadText>
 
@@ -30,7 +30,7 @@ We hold <Link to="/monthlychallenges">monthly challenges</Link> that we encourag
 
 ## What Are Monthly Challenges?
 
-Every month, we create a challenge to provide members the opportunity to learn, grow, and receive support and mentorship. Each month's challenge will have a theme and weekly goals for the members to work on. Our Monthly Challenge Team Leads and Maintainers plan, organize, and facilitate these challenges. Go to the <Link to="/monthlychallenges">Virtual Coffee Monthly Challenges</Link> page to see our challenges.
+Every month, we create a challenge to provide members the opportunity to learn, grow, and receive support and mentorship. Each month's challenge will have a theme and weekly goals for the members to work on. Our Monthly Challenge Team Leads and Maintainers plan, organize, and facilitate these challenges. Go to the <Link href="/monthlychallenges">Virtual Coffee Monthly Challenges</Link> page to see our challenges.
 
 </TextContainer>
 

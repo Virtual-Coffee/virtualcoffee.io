@@ -8,9 +8,9 @@ hero:
 order: 2
 ---
 
-import LeadText from '~/components/content/LeadText';
-import TextContainer from '~/components/content/TextContainer';
-import { Link } from '@remix-run/react';
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import Link from 'next/link';
 
 <TextContainer background="light" showBackToTopLink={false}>
 
@@ -177,7 +177,7 @@ So you always want to ensure that your fork is up to date with the `upstream` re
 
 1. Go to your forked repository on GitHub.
 2. Click the "Sync fork" button under the green "Code" button.
-3. If the buttons are inactive, the repository has no changes. You can <Link to="/resources/developer-resources/open-source/git-101#push-changes">push your changes</Link> and <Link to="/resources/developer-resources/open-source/git-101#making-a-pull-request">make a pull request</Link> in that case. <br />
+3. If the buttons are inactive, the repository has no changes. You can <Link href="/resources/developer-resources/open-source/git-101#push-changes">push your changes</Link> and <Link href="/resources/developer-resources/open-source/git-101#making-a-pull-request">make a pull request</Link> in that case. <br />
    But when the button is green with "Update branch" stated, you want to click it.
 
 Now your fork has the same update as the `upstream` repository.
@@ -219,7 +219,7 @@ There are two ways to resolve conflicts:
 
 2. In the local environment
 
-   - Do all the steps in <Link to="/resources/developer-resources/open-source/git-101#fetching-upstream-changes">Fetching `upstream` Changes</Link> and <Link to="/resources/developer-resources/open-source/git-101#synchronizing-changes-locally">Synchronizing Changes Locally</Link> sections.<br />
+   - Do all the steps in <Link href="/resources/developer-resources/open-source/git-101#fetching-upstream-changes">Fetching `upstream` Changes</Link> and <Link href="/resources/developer-resources/open-source/git-101#synchronizing-changes-locally">Synchronizing Changes Locally</Link> sections.<br />
      Then you will see this in your text editor:
 
      ![git conflict.jpg](https://cdn.hashnode.com/res/hashnode/image/upload/v1662321487768/YXuwvPrzz.jpg)
@@ -232,7 +232,7 @@ There are two ways to resolve conflicts:
      - Accept Incoming Change—when you _only_ want to keep the incoming change.
      - Accept Both Changes—when you want to keep both your and the incoming changes.
 
-After resolving the conflicts, if necessary, you can fix and adjust the codes. Then <Link to="/resources/developer-resources/open-source/git-101#add-and-commit-changes">add and commit the changes</Link>.
+After resolving the conflicts, if necessary, you can fix and adjust the codes. Then <Link href="/resources/developer-resources/open-source/git-101#add-and-commit-changes">add and commit the changes</Link>.
 
 _Credit: [How To Use GitHub For Project Collaboration — Based on Agile Method](https://adiati.com/how-to-use-github-for-project-collaboration-based-on-agile-method) by Ayu Adiati_
 
