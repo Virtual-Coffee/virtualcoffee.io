@@ -16,6 +16,7 @@
 		"prebuild": "node scripts/loadMemberFiles.js"
 	},
 	"dependencies": {
+		"@heroicons/react": "^2.1.5",
 		"@imgix/js-core": "^3.8.0",
 		"@mdx-js/loader": "^3.0.1",
 		"@mdx-js/react": "^3.0.1",
