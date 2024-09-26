@@ -6,7 +6,7 @@ import LeadText from '@/components/content/LeadText';
 import Link from 'next/link';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
-export { metaFromData as meta } from '@/util/remixHelpers';
+export { metaFromData as metadata } from '@/util/remixHelpers';
 
 const handle = {
 	listTitle: 'November, 2023: 100k words!',
