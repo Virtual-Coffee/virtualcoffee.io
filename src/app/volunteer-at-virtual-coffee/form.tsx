@@ -4,12 +4,25 @@ import { Submit, CodeOfConduct } from '@/components/forms';
 import { createVolunteer } from '@/util/airtable/action';
 import { useAirtableForm } from '@/util/airtable/useAirtableForm';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-export function Form() {
+function Position() {
 	const searchParams = useSearchParams();
 
 	const position = searchParams.get('position');
+	return (
+		<input
+			type="text"
+			className="form-control"
+			id="position"
+			name="position"
+			defaultValue={position || ''}
+			required
+		/>
+	);
+}
 
+export function Form() {
 	const { formAction, errorContent } = useAirtableForm(createVolunteer);
 
 	return (
@@ -66,14 +79,9 @@ export function Form() {
 				<legend>Role Details:</legend>
 				<div className="form-group">
 					<label htmlFor="position">Name of Role/Position</label>
-					<input
-						type="text"
-						className="form-control"
-						id="position"
-						name="position"
-						defaultValue={position || ''}
-						required
-					/>
+					<Suspense>
+						<Position />
+					</Suspense>
 				</div>
 				<div className="form-group">
 					<label htmlFor="description">
