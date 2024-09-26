@@ -21,7 +21,7 @@ export default function Challenge() {
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link to="/monthlychallenges/sept-2024">next challenge</Link>!
+				the <Link href="/monthlychallenges/sept-2024">next challenge</Link>!
 			</div>
 
 			<h1>

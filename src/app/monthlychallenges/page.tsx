@@ -295,7 +295,7 @@ const challengeList: Challenge[] = [
 				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
-					<Link to="/monthlychallenges/sept-2024">
+					<Link href="/monthlychallenges/sept-2024">
 						check out the September 2024 challenge page
 					</Link>
 					.
