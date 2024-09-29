@@ -96,16 +96,12 @@ export default function Challenge() {
 
 			<h3>Weekly Check-ins</h3>
 			<p>
-				Let's start the week with an async check-in. You can find the check-ins in the <code>#monthly-challenge</code> and <code>#open-source</code> channels on Slack. What are your goals for
-				Hacktoberfest for the week? What support do you need? Do you plan on
-				spending time in the <code>#co-working-room</code>,
-				talking to your mentor, or answering questions on Slack as a maintainer?
+				Let's start the week with an async check-in. You can find the check-ins in the <code>#open-source</code> channel in Slack. What are your goals for Hacktoberfest for the week? What support do you need? Do you plan on spending time in the <code>#co-working-room</code>, talking to your mentor, or answering questions in Slack as a maintainer?
 			</p>
 
 			<h3>Share Progress</h3>
 			<p>
-				Share your progress in the <code>#open-source</code> channel in Slack
-				so we can celebrate with you! And if you need support, we'll be there to help you, too.
+				Share your progress in the <code>#open-source</code> channel in Slack so we can celebrate with you! And if you need support, we'll be there to help you, too.
 			</p>
 			<p>
 				While no other platform is imposed, sharing on social media for more
@@ -135,7 +131,7 @@ export default function Challenge() {
 				issue, creating content such as a blog post or video about contributing
 				to a project, helping to answer questions or triaging issues, meeting
 				with your mentee, and so on. Share your progress in the{' '}
-				<code>#open-source</code> channel on Slack.
+				<code>#open-source</code> channel in Slack.
 			</p>
 			<p>
 				Remember, VC is here to support you during Hacktoberfest but is not an
