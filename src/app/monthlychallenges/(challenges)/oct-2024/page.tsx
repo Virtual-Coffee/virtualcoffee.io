@@ -229,6 +229,7 @@ export default function Challenge() {
 						<strong>Maintainer</strong>: Rupali Haldiya
 					</p>
 				</li>
+				<li>
 					<h3>
 						<a href="https://github.com/Codecademy/docs">Codecademy's Docs</a>
 					</h3>
