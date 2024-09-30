@@ -20,11 +20,11 @@ export function Hacktoberfest2023({
 			{...(ariaHidden
 				? {
 						'aria-hidden': 'true',
-				  }
+					}
 				: {
 						role: 'img',
 						'aria-labelledby': 'Hacktoberfest2023SvgTitle',
-				  })}
+					})}
 		>
 			{!ariaHidden && <title id="Hacktoberfest2023SvgTitle">{title}</title>}
 			<g>

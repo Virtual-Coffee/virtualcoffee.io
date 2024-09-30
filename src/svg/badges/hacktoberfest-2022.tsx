@@ -20,11 +20,11 @@ export function Hacktoberfest2022({
 			{...(ariaHidden
 				? {
 						'aria-hidden': 'true',
-				  }
+					}
 				: {
 						role: 'img',
 						'aria-labelledby': 'Hacktoberfest2022SvgTitle',
-				  })}
+					})}
 		>
 			{!ariaHidden && <title id="Hacktoberfest2022SvgTitle">{title}</title>}
 			<g style={{ fill: '#2a2a2a', fillRule: 'nonzero' }}>
