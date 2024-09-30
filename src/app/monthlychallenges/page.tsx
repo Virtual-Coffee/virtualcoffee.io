@@ -242,13 +242,13 @@ const challengeList: Challenge[] = [
 					issues labeled for Hacktoberfest, contributors will solve issues, and
 					mentors will help contributors and maintainers be successful.
 				</p>
-				{/* <p>
+				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/hacktoberfest-2023-lets-make-positive-impacts-learn-grow-together-in-open-source-52a1">
+					<a href="https://dev.to/virtualcoffee/hacktoberfest-2024-why-you-should-participate-4ffm">
 						this blog post
 					</a>
 					.
-				</p> */}
+				</p>
 				<p>
 					To view all of the details, including a list of VC-approved
 					repositories to contribute to,{' '}
