@@ -1,0 +1,34 @@
+---
+meta:
+  title: Virtual Coffee Resources
+  description: A collection of resources we provide for our members and all developers.
+hero:
+  Hero: UndrawFolder
+  heroHeader: Virtual Coffee Resources
+tags:
+  - memberresources
+  - topnav
+order: 1
+---
+
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+import FileIndex from '@/components/content/FileIndex';
+
+<TextContainer background="light" showBackToTopLink={false}>
+
+<LeadText>
+
+We compile and provide guides and resources for Virtual Coffee's members as community documentation in the **Virtual Coffee Handbook**. We also have resources for all developers that live in **Developer Resources**. Feel free to check them out!
+
+</LeadText>
+
+</TextContainer>
+
+<TextContainer showBackToTopLink={false}>
+
+## Resources Available:
+
+<FileIndex subDirectory="resources" depth={2} />
+
+</TextContainer>
