@@ -67,12 +67,12 @@ export type NextParams<
 > = ParamsKeys extends never
 	? never
 	: IsOptional extends true
-	? {
-			[key in ParamsKeys]?: IsCatchall extends true ? string[] : string;
-	  }
-	: {
-			[key in ParamsKeys]: IsCatchall extends true ? string[] : string;
-	  };
+		? {
+				[key in ParamsKeys]?: IsCatchall extends true ? string[] : string;
+			}
+		: {
+				[key in ParamsKeys]: IsCatchall extends true ? string[] : string;
+			};
 
 export type NextPageProps<
 	ParamsKeys extends string = never,
