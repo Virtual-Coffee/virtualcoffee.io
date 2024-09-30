@@ -12,7 +12,7 @@ import Script from 'next/script';
 export const metadata: Metadata = createMetaData({
 	title:
 		'Virtual Coffee IO - An intimate tech community for all, optimized for you',
-	description: `Virtual Coffee is an intimate tech community where friendships are formed and support is given to people at all stages of their journey. Join our laid-back conversations and online events to connect with like-minded individuals who share your passion for technology.`,
+	description: `Join our laid-back conversations and online events to connect with like-minded individuals who share your passion for technology.`,
 });
 
 export default function RootLayout({
