@@ -1,5 +1,6 @@
 'use server';
 
+import { handle as issue202409 } from '@/content/newsletters/2024-09';
 import { handle as issue202408 } from '@/content/newsletters/2024-08';
 import { handle as issue202407 } from '@/content/newsletters/2024-07';
 import { handle as issue202406 } from '@/content/newsletters/2024-06';
@@ -46,6 +47,7 @@ import { handle as issue202102 } from '@/content/newsletters/2021-02';
 import { handle as issue202101 } from '@/content/newsletters/2021-01';
 
 const newsletters = [
+	{ handleData: issue202409, slug: '2024-09' },
 	{ handleData: issue202408, slug: '2024-08' },
 	{ handleData: issue202407, slug: '2024-07' },
 	{ handleData: issue202406, slug: '2024-06' },
