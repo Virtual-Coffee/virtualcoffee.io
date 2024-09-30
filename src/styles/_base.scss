@@ -93,6 +93,7 @@ h3 {
 
 body {
 	margin-top: 6rem;
+	overscroll-behavior-y: none;
 
 	&.vc-home {
 		margin-top: 0;
