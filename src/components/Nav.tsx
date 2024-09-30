@@ -52,7 +52,10 @@ export default function Nav() {
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" href="/resources/virtual-coffee-handbook/join-virtual-coffee">
+						<Link
+							className="nav-link"
+							href="/resources/virtual-coffee-handbook/join-virtual-coffee"
+						>
 							Join
 						</Link>
 					</li>
