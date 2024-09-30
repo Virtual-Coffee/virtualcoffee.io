@@ -251,6 +251,11 @@ export default function Challenge() {
 					</Link>
 				</li>
 				<li>
+					<a href="https://www.youtube.com/watch?v=KoVX3kGMn3c">
+						Intro to Open Source Workshop - Bekah Hawrot Weigel & Ayu Adiati - Lunch & Learn
+					</a>
+				</li>
+				<li>
 					<a href="https://www.youtube.com/watch?v=a-wrAFiBqFI">
 						Becoming an Open Source Maintainer Workshop - Bekah Hawrot Weigel & Ayu Adiati - Lunch & Learn
 					</a>
