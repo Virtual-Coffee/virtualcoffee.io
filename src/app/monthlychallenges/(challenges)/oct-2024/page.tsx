@@ -39,17 +39,17 @@ export default function Challenge() {
 			<h2>Challenge</h2>
 			<h3>Maintainers</h3>
 			<p>
-				They provide the repository(ies) with "hacktoberfest" topic(s) and
-				issues labeled "hacktoberfest" on their repository(ies). They will also
-				answer the contributors' questions, review the pull requests (PRs), and
-				validate and merge them following the contest rules.
+				They provide the repositories with "<code>hacktoberfest</code>" topic(s)
+				and issues labeled "<code>hacktoberfest</code>" on their repositories.
+				They will also answer the contributors' questions, review the pull
+				requests (PRs), and validate and merge them following the contest rules.
 			</p>
 
 			<h3>Contributors</h3>
 			<p>
-				They find repository(ies) with "hacktoberfest" topic(s) and issues they
-				want to solve. The contest's goal is to have four (4) pull requests
-				(PRs) approved during October.
+				They find repositories with "<code>hacktoberfest</code>" topic(s) and
+				issues they want to solve. The contest's goal is to have four (4) pull
+				requests (PRs) approved during October.
 			</p>
 
 			<h3>Mentors</h3>
@@ -80,8 +80,8 @@ export default function Challenge() {
 				</li>
 				<li>Contact your mentor if you request one.</li>
 				<li>
-					Check out repositories with the "hacktoberfest" topic and issues on
-					GitHub with the "hacktoberfest" label.
+					Check out repositories with the "<code>hacktoberfest</code>" topic and
+					issues on GitHub with the "<code>hacktoberfest</code>" label.
 				</li>
 			</ul>
 
@@ -89,19 +89,31 @@ export default function Challenge() {
 				<strong>Maintainers</strong>
 			</p>
 			<p>
-				Make sure you include "hacktoberfest" as a label in your project's
-				topics section (found in the "About" section on your repository). That's
-				how you opt-in to Hacktoberfest.
+				Make sure you include "<code>hacktoberfest</code>" as a label in your
+				project's topics section (found in the "About" section on your
+				repository). That's how you opt-in to Hacktoberfest.
+			</p>
+			<p>
+				<a href="https://hacktoberfest.com/participation#maintainers">
+					Check out all of the Hacktoberfest guidelines on the official website
+				</a>
+				.
 			</p>
 
 			<h3>Weekly Check-ins</h3>
 			<p>
-				Let's start the week with an async check-in. You can find the check-ins in the <code>#open-source</code> channel in Slack. What are your goals for Hacktoberfest for the week? What support do you need? Do you plan on spending time in the <code>#co-working-room</code>, talking to your mentor, or answering questions in Slack as a maintainer?
+				Let's start the week with an async check-in. You can find the check-ins
+				in the <code>#open-source</code> channel in Slack. What are your goals
+				for Hacktoberfest for the week? What support do you need? Do you plan on
+				spending time in the <code>#co-working-room</code>, talking to your
+				mentor, or answering questions in Slack as a maintainer?
 			</p>
 
 			<h3>Share Progress</h3>
 			<p>
-				Share your progress in the <code>#open-source</code> channel in Slack so we can celebrate with you! And if you need support, we'll be there to help you, too.
+				Share your progress in the <code>#open-source</code> channel in Slack so
+				we can celebrate with you! And if you need support, we'll be there to
+				help you, too.
 			</p>
 			<p>
 				While no other platform is imposed, sharing on social media for more
@@ -113,13 +125,17 @@ export default function Challenge() {
 			<p>
 				Sharing every time you add some work is a good idea. Small progress is
 				still progress. There is no need to write a detailed blog post. A
-				140-character post on X can be enough. For example, "<em>Today, I submitted my first PR for Hacktoberfest. #VCHI</em>"
+				140-character post on X can be enough. For example,{' '}
+				<a href="https://twitter.com/intent/tweet?text=Today,%20I%20submitted%20my%20first%20PR%20for%20Hacktoberfest!%20&url=https://github.com/Virtual-Coffee/virtualcoffee.io/pull/1230&hashtags=VCHI">
+					<q>Today, I submitted my first PR for Hacktoberfest. #VCHI</q>
+				</a>
 			</p>
 
 			<h3>Do You Need Help?</h3>
 			<p>
 				You can ask questions and ask for ideas and help in the{' '}
-				<code>#open-source</code> or <code>#help-and-pairing</code> channel in Slack. Asking for help is part of the process!
+				<code>#open-source</code> or <code>#help-and-pairing</code> channel in
+				Slack. Asking for help is part of the process!
 			</p>
 
 			<p>And remember, we're always here to help! 💙</p>
@@ -169,9 +185,7 @@ export default function Challenge() {
 							freeCodeCamp
 						</a>
 					</h3>
-					<p>
-						A list of issues on freeCodeCamp for Hacktoberfest 2024.
-					</p>
+					<p>A list of issues on freeCodeCamp for Hacktoberfest 2024.</p>
 					<p>
 						<strong>Maintainer</strong>: freeCodeCamp
 					</p>
@@ -182,7 +196,10 @@ export default function Challenge() {
 							OpenSauced's Open Source Education Path
 						</a>
 					</h3>
-					<p>Intro to Open Source and Becoming a Maintainer courses with OpenSauced.</p>
+					<p>
+						Intro to Open Source and Becoming a Maintainer courses with
+						OpenSauced.
+					</p>
 					<p>
 						<strong>Maintainer</strong>: OpenSauced
 					</p>
@@ -190,13 +207,16 @@ export default function Challenge() {
 				<li>
 					<h3>
 						<a href="https://github.com/open-sauced/pizza-verse">
-							OpenSauced's Pizza (and food from all around the world) Lovers Repository
+							OpenSauced's Pizza (and food from all around the world) Lovers
+							Repository
 						</a>
 					</h3>
 					<p>
 						A collaborative project where you can come together and contribute
-						pizza-related and food from all over the world content. Whether you have a fantastic pizza recipe, an
-						interesting fact about pizza, or want to share a favorite traditional food from your country to the world, this repository is the perfect place to do it!
+						pizza-related and food from all over the world content. Whether you
+						have a fantastic pizza recipe, an interesting fact about pizza, or
+						want to share a favorite traditional food from your country to the
+						world, this repository is the perfect place to do it!
 					</p>
 					<p>
 						<strong>Maintainer</strong>: OpenSauced
@@ -253,22 +273,26 @@ export default function Challenge() {
 				</li>
 				<li>
 					<a href="https://www.youtube.com/watch?v=KoVX3kGMn3c">
-						Intro to Open Source Workshop - Bekah Hawrot Weigel & Ayu Adiati - Lunch & Learn
+						Intro to Open Source Workshop - Bekah Hawrot Weigel & Ayu Adiati -
+						Lunch & Learn
 					</a>
 				</li>
 				<li>
 					<a href="https://www.youtube.com/watch?v=a-wrAFiBqFI">
-						Becoming an Open Source Maintainer Workshop - Bekah Hawrot Weigel & Ayu Adiati - Lunch & Learn
+						Becoming an Open Source Maintainer Workshop - Bekah Hawrot Weigel &
+						Ayu Adiati - Lunch & Learn
 					</a>
 				</li>
 				<li>
 					<a href="https://youtu.be/A7qZwaqBC00?si=h7N_BDbeibRdiSbV">
-						How to Discover Open Source Projects that Align with Your Needs and Goals - Jessica Wilkins - Lunch & Learn
+						How to Discover Open Source Projects that Align with Your Needs and
+						Goals - Jessica Wilkins - Lunch & Learn
 					</a>
 				</li>
 				<li>
 					<a href="https://youtu.be/b2d84LhlW6Q?si=8fl-BrU_F61uQBtz">
-						How to best prepare as a maintainer for Hacktoberfest - Jessica Wilkins - Lunch & Learn
+						How to best prepare as a maintainer for Hacktoberfest - Jessica
+						Wilkins - Lunch & Learn
 					</a>
 				</li>
 				<li>
