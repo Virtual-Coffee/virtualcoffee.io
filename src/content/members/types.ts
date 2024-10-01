@@ -35,7 +35,10 @@ export type Account =
 			url: Website;
 	  };
 
-export type Badge = 'Hacktoberfest2022' | 'Hacktoberfest2023';
+export type Badge =
+	| 'Hacktoberfest2022'
+	| 'Hacktoberfest2023'
+	| 'Hacktoberfest2024';
 export type Flare = {
 	profileMask?: string;
 };
