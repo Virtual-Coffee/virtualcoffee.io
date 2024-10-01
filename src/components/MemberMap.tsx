@@ -69,13 +69,37 @@ function Markers({ members }: { members: MappableMember[] }) {
 }
 
 export default function MemberMap({ members }: { members: MappableMember[] }) {
+	if (process.env.NODE_ENV === 'development') {
+		return (
+			<div
+				style={{
+					aspectRatio: '16/6',
+					minHeight: 400,
+					position: 'relative',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
+			>
+				Map disabled in local dev
+			</div>
+		);
+	}
+
 	return (
 		<div>
 			<MapContainer
 				center={[36.674222, -39.082187]}
 				zoom={1}
 				scrollWheelZoom={true}
-				style={{ aspectRatio: '16/6', minHeight: 400, position: 'relative' }}
+				style={{
+					aspectRatio: '16/6',
+					minHeight: 400,
+					position: 'relative',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
 			>
 				<TileLayer
 					attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
