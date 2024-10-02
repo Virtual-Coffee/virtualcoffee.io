@@ -34,7 +34,7 @@ export const ClJarvis: MemberObject = {
 		// { type: 'linkedin', username: 'yourlinkedinUserName' },
 		{ type: 'dev', username: 'jarvisscript' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'JarvisScript' },
+		{ type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		{ type: 'polywork', username: 'chrisjarvis' },
@@ -46,5 +46,5 @@ export const ClJarvis: MemberObject = {
 			title: 'Portfolio',
 		},
 	],
-	badges: ['Hacktoberfest2022'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024'],
 };
