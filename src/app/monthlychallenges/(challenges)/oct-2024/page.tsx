@@ -110,8 +110,8 @@ export default function Challenge() {
 
 			<h3>Share Progress</h3>
 			<p>
-				Share your progress in the <code>#hacktoberfest</code> channel in Slack so
-				we can celebrate with you! And if you need support, we'll be there to
+				Share your progress in the <code>#hacktoberfest</code> channel in Slack
+				so we can celebrate with you! And if you need support, we'll be there to
 				help you, too.
 			</p>
 			<p>
@@ -133,8 +133,9 @@ export default function Challenge() {
 			<h3>Do You Need Help?</h3>
 			<p>
 				You can ask questions and ask for ideas and help in the{' '}
-				<code>#hacktoberfest</code>, <code>#open-source</code>, or <code>#help-and-pairing</code> channel in
-				Slack. Asking for help is part of the process!
+				<code>#hacktoberfest</code>, <code>#open-source</code>, or{' '}
+				<code>#help-and-pairing</code> channel in Slack. Asking for help is part
+				of the process!
 			</p>
 
 			<p>And remember, we're always here to help! 💙</p>
