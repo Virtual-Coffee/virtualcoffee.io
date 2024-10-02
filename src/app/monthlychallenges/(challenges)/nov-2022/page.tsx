@@ -1,12 +1,25 @@
 import React, { Fragment } from 'react';
 import slugify from '@sindresorhus/slugify';
 import { createMetaData } from '@/util/createMetaData.server';
-import { CmsActions } from '@/util/api/cms.server';
-import type {
-	NovemberChallengeEntryAuthor,
-	NovemberChallengeEntry,
-} from '@/util/api/types';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
+import data from './data.json';
+
+type NovemberChallengeEntryAuthor = {
+	id: string | number;
+	fullName?: string | null;
+	userYourName?: string | null;
+};
+
+type NovemberChallengeEntry = {
+	title: string;
+	shortDescriptionMarkDown?: string | null;
+	id?: number | string;
+	urlValue: string;
+	wordCount: number;
+	topics?: string | null;
+	date: string;
+	author: NovemberChallengeEntryAuthor;
+};
 
 const handle = {
 	listTitle: 'November, 2022: 100k words!',
@@ -55,11 +68,7 @@ const goals = [
 async function getData() {
 	const { title } = handle.meta;
 
-	let api = new CmsActions();
-
-	const posts = await api.getNovemberChallengeEntries({
-		year: 2022,
-	});
+	const posts: NovemberChallengeEntry[] = data;
 
 	let totalWordCount = 0;
 
@@ -102,6 +111,7 @@ async function getData() {
 	const description = `Current status: ${totalWordCount.toLocaleString()} out of ${currentGoal?.title} words`;
 
 	return {
+		posts,
 		// ...blog,
 		totalWordCount,
 		totalPosts,
@@ -125,6 +135,7 @@ export default async function Challenge() {
 		completedGoals,
 		currentGoal,
 		meta,
+		posts,
 	} = await getData();
 
 	return (
