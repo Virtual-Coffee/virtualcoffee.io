@@ -9,14 +9,14 @@ export function getEpisodes({ limit = 5 }) {
 	return new Array(limit).fill(null).map((_, i) => {
 		const episode = limit - i;
 		const season = 1;
-		const name = faker.name.fullName();
+		const name = faker.person.fullName();
 
 		return {
 			title: `${name} - ${faker.lorem.words(4)}`,
 			slug: `0${season}${episode < 10 ? '0' + episode : episode}-${slugify(
 				name,
 			)}`,
-			id: faker.datatype.uuid(),
+			id: faker.string.uuid(),
 			metaDescription: `Season ${season}, Episode ${episode} of the Virtual Coffee Podcast`,
 			podcastEpisode: episode,
 			podcastSeason: season,
@@ -29,7 +29,7 @@ export function getEpisodes({ limit = 5 }) {
 
 export function getEpisode({ slug }: { slug: PodcastEpisode['slug'] }) {
 	const today = DateTime.now();
-	const name = faker.name.fullName();
+	const name = faker.person.fullName();
 	const season = parseInt(slug.slice(0, 2));
 	const episode = parseInt(slug.slice(2, 4));
 
@@ -38,7 +38,7 @@ export function getEpisode({ slug }: { slug: PodcastEpisode['slug'] }) {
 		slug: `0${season}${episode < 10 ? '0' + episode : episode}-${slugify(
 			name,
 		)}`,
-		id: faker.datatype.uuid(),
+		id: faker.string.uuid(),
 		metaDescription: `Season ${season}, Episode ${episode} of the Virtual Coffee Podcast`,
 		podcastEpisode: episode,
 		podcastSeason: season,
@@ -52,7 +52,7 @@ export function getEpisode({ slug }: { slug: PodcastEpisode['slug'] }) {
 		},
 		podcastGuests: [
 			{
-				id: faker.datatype.uuid(),
+				id: faker.string.uuid(),
 				guestName: name,
 				guestBio: {
 					renderHtml: `<p>${faker.lorem.sentence()}</p>`,
