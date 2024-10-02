@@ -41,14 +41,18 @@ export const codewithjazzy: MemberObject = {
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
-		 { type: 'website', url: 'https://jasminetaylor.dev/', title: 'Jasmine | Software Engineer Portfolio' },
+		{
+			type: 'website',
+			url: 'https://jasminetaylor.dev/',
+			title: 'Jasmine | Software Engineer Portfolio',
+		},
 	],
 	badges: ['Hacktoberfest2023', 'Hacktoberfest2024'],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
-	 location: {
-	 	latitude: 38.580379,
-	 	longitude: -121.494019,
-	 //	title: 'Lakewood, OH', // optional
-	 },
+	location: {
+		latitude: 38.580379,
+		longitude: -121.494019,
+		//	title: 'Lakewood, OH', // optional
+	},
 };
