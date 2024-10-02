@@ -11,7 +11,7 @@ export function createEventsData({
 	rangeStart: string;
 	rangeEnd: string;
 }) {
-	const dates = faker.date.betweens(rangeStart, rangeEnd, limit);
+	const dates = faker.date.betweens({rangeStart, rangeEnd, limit});
 
 	return dates.map((date) => {
 		const startDate = DateTime.fromJSDate(date);
@@ -23,7 +23,7 @@ export function createEventsData({
 		});
 
 		return {
-			id: faker.datatype.uuid(),
+			id: faker.string.uuid(),
 			title: faker.lorem.sentence(7),
 			startDateLocalized: startDate.toUTC().toString(),
 			endDateLocalized: startDate.toUTC().plus({ hours: 1 }).toString(),
