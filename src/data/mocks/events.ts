@@ -11,7 +11,11 @@ export function createEventsData({
 	rangeStart: string;
 	rangeEnd: string;
 }) {
-	const dates = faker.date.betweens({rangeStart, rangeEnd, limit});
+	const dates = faker.date.betweens({
+		from: rangeStart,
+		to: rangeEnd,
+		count: limit,
+	});
 
 	return dates.map((date) => {
 		const startDate = DateTime.fromJSDate(date);
