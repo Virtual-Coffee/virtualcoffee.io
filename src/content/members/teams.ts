@@ -77,6 +77,7 @@ const teams = {
 		'rhdeck',
 		'kldickenson',
 		'derekjj',
+		'JoeKarow',
 	],
 
 	'VC Host': ['nickytonline', 'SuzeShardlow', 'saramccombs'],
