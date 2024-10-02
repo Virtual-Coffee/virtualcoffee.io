@@ -1,0 +1,90 @@
+import fs from 'fs';
+import { join } from 'path';
+
+type UserResponse = {
+	user: {
+		login: string;
+		name: string;
+		pullRequests: {
+			pageInfo: {
+				hasNextPage: boolean;
+				endCursor: string;
+			};
+			nodes: {
+				title: string;
+				mergedAt: string | null;
+				labels: {
+					nodes: {
+						name: string;
+					}[];
+				};
+				url: string;
+				baseRepository: {
+					name: string;
+					nameWithOwner: string;
+					url: string;
+					repositoryTopics: { nodes: { topic: { name: string } }[] };
+				};
+				deletions: number;
+				additions: number;
+				changedFiles: number;
+				state: string;
+				createdAt: string;
+			}[];
+		};
+	};
+};
+
+type UserObject = {
+	login: string;
+	name: string;
+	pullRequests: Omit<
+		UserResponse['user']['pullRequests']['nodes'][number],
+		'labels'
+	>[];
+	stats: {
+		totalPullRequests: number;
+		totalAdditions: number;
+		totalDeletions: number;
+		totalChangedFiles: number;
+		totalUniqueRepos: number;
+		uniqueRepos: string[];
+	};
+};
+type DataFile = {
+	contributions: UserObject[];
+	stats: {
+		totalContributors: number;
+		totalPullRequests: number;
+		totalAdditions: number;
+		totalDeletions: number;
+		totalChangedFiles: number;
+		uniqueRepos: string[];
+		totalUniqueRepos: number;
+	};
+};
+
+function sortDataFile(filename: string) {
+	const datastr = fs.readFileSync(
+		join(process.cwd(), 'app', '_generatedData', 'hacktoberfest2023', filename),
+	);
+
+	const data: DataFile = JSON.parse(datastr.toString());
+
+	console.log(data);
+
+	data.contributions = data.contributions.sort((a, b) => {
+		return a.login.toLowerCase().localeCompare(b.login.toLowerCase());
+	});
+	data.stats.uniqueRepos = data.stats.uniqueRepos.sort((a, b) => {
+		return a.toLowerCase().localeCompare(b.toLowerCase());
+	});
+
+	fs.writeFileSync(
+		join(process.cwd(), 'app', '_generatedData', 'hacktoberfest2023', filename),
+		JSON.stringify(data, null, 2),
+	);
+}
+
+sortDataFile('contributors.json');
+sortDataFile('contributors-new.json');

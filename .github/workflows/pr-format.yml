@@ -1,20 +1,29 @@
-name: Format
+name: Prettier code formatting
+
+# This action works with pull requests and pushes
 on:
-  pull_request:
-    branches: [main]
+  pull_request_target:
+  push:
+    branches:
+      - main
+
 jobs:
-  format:
+  prettier:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
+          # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }}
-      - uses: actions/setup-node@v2
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          # This is important to fetch the changes to the previous commit
+          fetch-depth: 0
+
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.3
         with:
-          node-version: '16.x'
-      - run: yarn format
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Apply formatting changes
-          branch: ${{ github.head_ref }}
+          # This part is also where you can pass other options, for example:
+          prettier_options: --ignore-unknown --write .
+          only_changed: true
