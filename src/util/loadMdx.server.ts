@@ -36,6 +36,7 @@ export function loadMdxDirectory({
 	baseDirectory: string;
 	includeChildren?: boolean;
 }): MdxFile[] {
+	baseDirectory = join(...baseDirectory.split('/'));
 	// Get the absolute path to the base directory
 	const basePath = join(process.cwd(), 'src', baseDirectory);
 
@@ -146,6 +147,8 @@ export function loadMdxRouteFileAttributes({
 }: {
 	slug: string;
 }): MdxFile | null {
+	slug = join(...slug.split('/'));
+
 	// const basePath = join(process.cwd(), 'src', baseDirectory);
 
 	// Generate the regular file name and index file name based on the slug
