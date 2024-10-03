@@ -31,7 +31,7 @@ export const ClJarvis: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
+		 { type: 'linkedin', username: 'christopherljarvis' },
 		{ type: 'dev', username: 'jarvisscript' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		//{ type: 'twitter', username: 'JarvisScript' },
@@ -46,7 +46,7 @@ export const ClJarvis: MemberObject = {
 			title: 'Portfolio',
 		},
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024'],
 	location: {
 		latitude: 36.162663,
 		longitude: -86.781601,
