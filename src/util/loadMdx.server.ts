@@ -149,8 +149,6 @@ export function loadMdxRouteFileAttributes({
 }): MdxFile | null {
 	slug = join(...slug.split('/'));
 
-	// const basePath = join(process.cwd(), 'src', baseDirectory);
-
 	// Generate the regular file name and index file name based on the slug
 	const regularFileName = join(
 		process.cwd(),
@@ -188,8 +186,6 @@ export function loadMdxRouteFileAttributes({
 		MdxFile,
 		'slug' | 'requirePath'
 	>;
-
-	const requirePath = `content/${fileName.split('/src/content/')[1]}`;
 
 	// The attributes type is unknown, but we know it should match the MdxFile interface,
 	// so we assert the type to MdxFile to resolve the TypeScript error.
