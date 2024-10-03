@@ -110,6 +110,11 @@ const query = gql`
 	}
 `;
 
+const emptySponsorsResponse = {
+	logoSponsors: [],
+	supporters: [],
+};
+
 export async function getSponsors() {
 	// async function main() {
 
@@ -127,18 +132,23 @@ export async function getSponsors() {
 		headers,
 	});
 
-	let response: typeof mockData;
+	let response: undefined | typeof mockData;
 
-	if (!token) {
-		response = mockData;
-	} else {
+	if (token) {
 		try {
 			// do some expensive operation here, this is simplified for brevity
 			response = await graphQLClient.request(query);
 		} catch (error) {
 			console.log(error);
 			console.log('Error loading github sponsors, using fake data instead');
+		}
+	}
 
+	if (!response || !response?.organization?.sponsorsListing?.tiers) {
+		// If the GITHUB_TOKEN user doesn't have the right permissions, this will be empty
+		if (process.env.CONTEXT === 'production') {
+			return emptySponsorsResponse;
+		} else {
 			response = mockData;
 		}
 	}
