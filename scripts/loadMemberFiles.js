@@ -1,9 +1,10 @@
 var fs = require('fs');
+var path = require('path');
 
 function loadMemberFiles(dir) {
 	const filenames = [];
 
-	fs.readdirSync(`./src/content/members/${dir}`, {
+	fs.readdirSync(path.join('.', 'src', 'content', 'members', dir), {
 		withFileTypes: true,
 	}).forEach((file) => {
 		if (
@@ -16,7 +17,7 @@ function loadMemberFiles(dir) {
 	});
 
 	fs.writeFileSync(
-		`./src/data/members/${dir}.ts`,
+		path.join('.', 'src', 'data', 'members', `${dir}.ts`),
 		filenames
 			.map(
 				(name) => `export * from '@/content/members/${dir}/${name}';`,
