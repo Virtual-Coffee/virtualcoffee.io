@@ -14,7 +14,7 @@ export const christina_ml: MemberObject = {
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: `Full Stack Software Engineer | JavaScript, PERN Stack: React, Node.js, Express, PostgreSQL`,
+	bio: `Full Stack Software Engineer | JavaScript, TypeScript, PERN Stack: React, Node.js, Express, PostgreSQL`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -42,7 +42,7 @@ export const christina_ml: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ['Hacktoberfest2023'],
+	badges: ['Hacktoberfest2023', 'Hacktoberfest2024'],
 	location: {
 		latitude: 40.782864,
 		longitude: -73.965355,

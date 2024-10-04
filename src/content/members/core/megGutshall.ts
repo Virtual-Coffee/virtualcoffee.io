@@ -46,7 +46,7 @@ export const megGutshall: MemberObject = {
 			title: 'My Digital Garden',
 		},
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024'],
 	location: {
 		latitude: 39.952583,
 		longitude: -75.165222,

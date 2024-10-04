@@ -31,16 +31,23 @@ export const AisheIbrahim: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
-		// { type: 'dev', username: 'yourUserName' },
+		{ type: 'linkedin', username: 'aisheibrahim' },
+		{ type: 'dev', username: 'aisheibrahim' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
-		// { type: 'twitch', username: 'yourUserName' },
+		{ type: 'twitter', username: 'aisheibrahim404' },
+		{ type: 'twitch', username: 'adnerdable' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2023', 'Hacktoberfest2024'],
+	// Add your location to our member map at https://virtualcoffee.io/members (optional)
+	// Feel free to be as specific or vague as you're comfortable with.
+	// location: {
+	// 	latitude: 41.48266891706046,
+	// 	longitude: -81.80009779282766,
+	// 	title: 'Lakewood, OH', // optional
+	// },
 };

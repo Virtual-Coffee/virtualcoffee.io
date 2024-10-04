@@ -46,7 +46,7 @@ export const funbunch: MemberObject = {
 			title: 'Bunch of Ideas',
 		},
 	],
-	badges: ['Hacktoberfest2023'],
+	badges: ['Hacktoberfest2023', 'Hacktoberfest2024'],
 	location: {
 		latitude: 33.95993,
 		longitude: -118.393051,
