@@ -30,7 +30,7 @@
 		"@sindresorhus/slugify": "^2.2.1",
 		"@types/mdx": "^2.0.13",
 		"airtable": "^0.12.2",
-		"bootstrap": "^4.6.2",
+		"bootstrap": "^5.0.0",
 		"calendar-link": "^2.7.0",
 		"front-matter": "^4.0.2",
 		"graphql": "^16.9.0",
