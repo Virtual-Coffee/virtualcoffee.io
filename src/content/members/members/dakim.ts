@@ -31,8 +31,8 @@ export const davidakim: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'david-a-a3749a247' },
-		// { type: 'dev', username: 'dominicduffin1' },
+		{ type: 'linkedin', username: 'dakm100' },
+		{ type: 'dev', username: 'david001' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
@@ -46,7 +46,7 @@ export const davidakim: MemberObject = {
 			title: "David Akim's Website",
 		},
 	],
-	badges: ['Hacktoberfest2023'],
+	badges: ['Hacktoberfest2023', 'Hacktoberfest2024'],
 	location: {
 		latitude: 10.471756696642153,
 		longitude: -61.25258745794951,
