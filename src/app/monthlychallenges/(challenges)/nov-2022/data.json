@@ -1,0 +1,1374 @@
+[
+	{
+		"id": "1587",
+		"shortDescriptionMarkDown": "List of Job Boards I used when hunting for my first dev role.",
+		"title": "List of Job Boards I used when hunting for jobs + few more",
+		"urlValue": "https://dev.to/sadiejay/list-of-job-boards-i-used-when-hunting-for-jobs-few-more-2679",
+		"wordCount": 61,
+		"topics": "job hunting",
+		"date": "2022-11-30",
+		"author": {
+			"id": "1576",
+			"fullName": "Sadie Jay",
+			"userYourName": "sadie_jay"
+		}
+	},
+	{
+		"id": "1585",
+		"shortDescriptionMarkDown": null,
+		"title": "3 Small Moments That Defined My Hackathon Experience",
+		"urlValue": "https://dev.to/sadiejay/3-small-moments-that-defined-my-hackathon-experience-89e",
+		"wordCount": 1351,
+		"topics": "Hackathons, web developement",
+		"date": "2022-11-30",
+		"author": {
+			"id": "1576",
+			"fullName": "Sadie Jay",
+			"userYourName": "sadie_jay"
+		}
+	},
+	{
+		"id": "1580",
+		"shortDescriptionMarkDown": "This article focuses on the concept of incrementally understanding what could be causing a bug and reducing the number of varying factors and unknowns to help one keep one's sanity.",
+		"title": "Debugging as a Controlled Experiment",
+		"urlValue": "https://jocrah.hashnode.dev/debugging-as-a-controlled-experiment",
+		"wordCount": 1056,
+		"topics": "Debugging",
+		"date": "2022-12-30",
+		"author": {
+			"id": "1352",
+			"fullName": "Joshua Ocrah",
+			"userYourName": "Joshua Ocrah"
+		}
+	},
+	{
+		"id": "1572",
+		"shortDescriptionMarkDown": "I wrote about how I structure my writing in general last November, as part of the 14,584 words I wrote for Virtual Coffee's blogging monthly challenge. This will be my 14th blog this November, and I found myself reflecting on how I get my ideas and turn them into published technical blogs.",
+		"title": "Writing a Technical Blog",
+		"urlValue": "https://dev.to/abbeyperini/writing-a-technical-blog-79o",
+		"wordCount": 499,
+		"topics": "writing",
+		"date": "2022-11-30",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1569",
+		"shortDescriptionMarkDown": "Never trust anything a user puts into your app.",
+		"title": "Web Security 101 - Part 2: User Input",
+		"urlValue": "https://dev.to/abbeyperini/web-security-101-part-2-user-input-j20",
+		"wordCount": 1515,
+		"topics": "security",
+		"date": "2022-11-30",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1559",
+		"shortDescriptionMarkDown": "The marvels of the modern world aren't possible without the contributions of us all. YOU are important. Your role is vital. So is everyone else. Let's treat each other that way.",
+		"title": "Without Us",
+		"urlValue": "https://dev.to/justinnoel/without-us-b1c",
+		"wordCount": 1513,
+		"topics": "Life, careers, people",
+		"date": "2022-11-30",
+		"author": {
+			"id": "1556",
+			"fullName": "Justin Noel",
+			"userYourName": "Justin Noel"
+		}
+	},
+	{
+		"id": "1554",
+		"shortDescriptionMarkDown": "List of advent code challenges.",
+		"title": "2022 Advent Code Challenges",
+		"urlValue": "https://dev.to/jarvisscript/2022-advent-code-challenges-5445",
+		"wordCount": 879,
+		"topics": "Advent code challenges",
+		"date": "2022-11-30",
+		"author": {
+			"id": "1189",
+			"fullName": "Chris Jarvis",
+			"userYourName": "Chris Jarvis"
+		}
+	},
+	{
+		"id": "1551",
+		"shortDescriptionMarkDown": "In this article, I will walk through my initial points of fear and the steps I took to break through to the other side of joy.",
+		"title": "How I overcame the fear of learning something new and embraced the joy of learning",
+		"urlValue": "https://dev.to/codergirl1991/how-i-overcame-the-fear-of-learning-something-new-and-embraced-the-joy-of-learning-315i",
+		"wordCount": 577,
+		"topics": "learning",
+		"date": "2022-11-29",
+		"author": {
+			"id": "1182",
+			"fullName": "Jessica Wilkins",
+			"userYourName": "Jessica Wilkins"
+		}
+	},
+	{
+		"id": "1547",
+		"shortDescriptionMarkDown": "In this article, I will outline what I believe to be mistakes you should avoid making on your resumes.",
+		"title": "Common mistakes that developers make on resumes",
+		"urlValue": "https://dev.to/codergirl1991/common-mistakes-that-developers-make-on-resumes-1d00",
+		"wordCount": 1068,
+		"topics": "career",
+		"date": "2022-11-29",
+		"author": {
+			"id": "1182",
+			"fullName": "Jessica Wilkins",
+			"userYourName": "Jessica Wilkins"
+		}
+	},
+	{
+		"id": "1544",
+		"shortDescriptionMarkDown": "In this article, I will walk you through some methods I use to deal with imposter syndrome that will hopefully help you in your life.",
+		"title": "Developer Health: Tips for dealing with workplace anxieties and imposter syndrome",
+		"urlValue": "https://dev.to/codergirl1991/developer-health-tips-for-dealing-with-workplace-anxieties-and-imposter-syndrome-4i46",
+		"wordCount": 555,
+		"topics": "developer health",
+		"date": "2022-11-29",
+		"author": {
+			"id": "1182",
+			"fullName": "Jessica Wilkins",
+			"userYourName": "Jessica Wilkins"
+		}
+	},
+	{
+		"id": "1537",
+		"shortDescriptionMarkDown": null,
+		"title": "My Virtual Meeting Survival Strategies",
+		"urlValue": "https://dev.to/lillchan/my-virtual-meeting-survival-strategies-27oa",
+		"wordCount": 838,
+		"topics": null,
+		"date": "2022-11-29",
+		"author": {
+			"id": "1534",
+			"fullName": "Lillian Chan",
+			"userYourName": "Lillian Chan"
+		}
+	},
+	{
+		"id": "1532",
+		"shortDescriptionMarkDown": "https://dev.to/abbeyperini/web-security-101-part-1-secrets-5e39",
+		"title": "Web Security 101 - Part 1: Secrets",
+		"urlValue": "https://dev.to/abbeyperini/web-security-101-part-1-secrets-5e39",
+		"wordCount": 1234,
+		"topics": "https://dev.to/abbeyperini/web-security-101-part-1-secrets-5e39",
+		"date": "2022-11-29",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1529",
+		"shortDescriptionMarkDown": null,
+		"title": "What Makes You Stay In A Community?",
+		"urlValue": "https://dev.to/adiatiayu/what-makes-you-stay-in-a-community-4go",
+		"wordCount": 673,
+		"topics": null,
+		"date": "2022-11-30",
+		"author": {
+			"id": "856",
+			"fullName": "Ayu Adiati",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1524",
+		"shortDescriptionMarkDown": "The more I read about digital gardens, the more I wanted to build one, so I started drawing plants.",
+		"title": "About My Digital Garden",
+		"urlValue": "https://dev.to/abbeyperini/about-my-digital-garden-2o4h",
+		"wordCount": 514,
+		"topics": "digital garden",
+		"date": "2022-11-29",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1522",
+		"shortDescriptionMarkDown": "A list of tools you can use with git to make your life easier.",
+		"title": "#gitPanic - Tools",
+		"urlValue": "https://dev.to/abbeyperini/gitpanic-tools-4bbl",
+		"wordCount": 1155,
+		"topics": "git",
+		"date": "2022-11-29",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1518",
+		"shortDescriptionMarkDown": null,
+		"title": "how to: set up unique ssh keys per client",
+		"urlValue": "https://blog.spinthemoose.com/2022/11/20/how-to-configure-unique-ssh-keys-per-client/",
+		"wordCount": 495,
+		"topics": "git",
+		"date": "2022-11-20",
+		"author": {
+			"id": "1459",
+			"fullName": "David Alpert",
+			"userYourName": "David Alpert"
+		}
+	},
+	{
+		"id": "1513",
+		"shortDescriptionMarkDown": "An article about the importance of boundaries to pursue goals/personal growth.",
+		"title": "Learning to Code Taught Me the Importance of Boundaries",
+		"urlValue": "https://dev.to/adnerdable/learning-to-code-taught-me-the-importance-of-boundaries-1odm",
+		"wordCount": 602,
+		"topics": "Mental health, adult learners, beginners",
+		"date": "2022-11-19",
+		"author": {
+			"id": "1414",
+			"fullName": "Aishe Ibrahim",
+			"userYourName": "Aishe Ibrahim"
+		}
+	},
+	{
+		"id": "1508",
+		"shortDescriptionMarkDown": "some rumination on nearly four decades of coding",
+		"title": "I've Been Writing Code for 37 Years...",
+		"urlValue": "https://blog.spinthemoose.com/2022/11/27/ive-been-writing-code-for-37-years/",
+		"wordCount": 806,
+		"topics": "writing, coding",
+		"date": "2022-11-27",
+		"author": {
+			"id": "1459",
+			"fullName": "David Alpert",
+			"userYourName": "David Alpert"
+		}
+	},
+	{
+		"id": "1505",
+		"shortDescriptionMarkDown": "A cyclical approach to job hunting and goals, based on the double-hit song \"Back At One\". Keeping things hip with references to 22-year-old songs.",
+		"title": "A Chart-Topping Approach To Your Job Search",
+		"urlValue": "https://dev.to/juliaseid/back-at-one-a-chart-topping-approach-to-your-job-search-11nd",
+		"wordCount": 1092,
+		"topics": "Career, developer health, Brian McKnight",
+		"date": "2022-11-29",
+		"author": {
+			"id": "169",
+			"fullName": "Julia Seidman",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1500",
+		"shortDescriptionMarkDown": null,
+		"title": "7 Supportive Tech Communities You Want To Be Part Of",
+		"urlValue": "https://adiati.com/7-supportive-tech-communities-you-want-to-be-part-of",
+		"wordCount": 1125,
+		"topics": null,
+		"date": "2022-11-29",
+		"author": {
+			"id": "856",
+			"fullName": "Ayu Adiati",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1494",
+		"shortDescriptionMarkDown": "https://blog.caitlinfloyd.com/learning-to-code-as-a-form-of-language-learning",
+		"title": "Learning to Code as a Form of Language Learning",
+		"urlValue": "https://blog.caitlinfloyd.com/learning-to-code-as-a-form-of-language-learning",
+		"wordCount": 1457,
+		"topics": "https://blog.caitlinfloyd.com/learning-to-code-as-a-form-of-language-learning",
+		"date": "2022-11-28",
+		"author": {
+			"id": "1230",
+			"fullName": "Caitlin Floyd",
+			"userYourName": "Caitlin Floyd"
+		}
+	},
+	{
+		"id": "1491",
+		"shortDescriptionMarkDown": null,
+		"title": "My Experience with Chingu",
+		"urlValue": "https://klescode.hashnode.dev/my-experience-with-chingu",
+		"wordCount": 1303,
+		"topics": "Gaining experience as an early career developer",
+		"date": "2022-11-28",
+		"author": {
+			"id": "1488",
+			"fullName": "Klesta Luli",
+			"userYourName": "Klesta Luli"
+		}
+	},
+	{
+		"id": "1484",
+		"shortDescriptionMarkDown": "My experiences over the past two years surfaced six principles for live co-working that maximize the value - and minimize the time investment.",
+		"title": "Live Co-Working: Six Keys to Success",
+		"urlValue": "https://sustained.substack.com/p/live-co-working-six-keys-to-success",
+		"wordCount": 1400,
+		"topics": "coworking",
+		"date": "2022-11-23",
+		"author": {
+			"id": "854",
+			"fullName": "Ray Deck",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1480",
+		"shortDescriptionMarkDown": "In this blog, learn how to migrate your React project to TypeScript to maintain readability, consistency, and dependability. Read more here!",
+		"title": "How to Migrate your React Project to TypeScript",
+		"urlValue": "https://blog.deepgram.com/how-to-migrate-your-react-project-to-typescript/",
+		"wordCount": 1151,
+		"topics": "TypeScript",
+		"date": "2022-11-28",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1476",
+		"shortDescriptionMarkDown": "Weekly motivation and goal setting.",
+		"title": "What are your goals for the week of November 28?",
+		"urlValue": "https://dev.to/jarvisscript/what-are-your-goals-for-the-week-of-november-28-4akl",
+		"wordCount": 230,
+		"topics": "Motivation, Accountability",
+		"date": "2022-11-28",
+		"author": {
+			"id": "1189",
+			"fullName": "Chris Jarvis",
+			"userYourName": "Chris Jarvis"
+		}
+	},
+	{
+		"id": "1471",
+		"shortDescriptionMarkDown": "Steps to consider after getting the first job in tech.",
+		"title": "Now What : How To Keep Learning after Landing the 1st Tech job",
+		"urlValue": "https://dev.to/nerajno/now-what-how-to-keep-learning-after-landing-the-1st-tech-job-3nhj",
+		"wordCount": 1050,
+		"topics": "learning, career, job, careerdevelopment",
+		"date": "2022-11-27",
+		"author": {
+			"id": "1468",
+			"fullName": "Nerando Johnson",
+			"userYourName": "Nerando Johnson"
+		}
+	},
+	{
+		"id": "1464",
+		"shortDescriptionMarkDown": "Since I was so good at procrastinating I wrote a short post to own that and prod myself into writing for real.",
+		"title": "Why You Should Write Anyway",
+		"urlValue": "https://blog.spinthemoose.com/2022/11/26/why-you-should-write-anyway/",
+		"wordCount": 398,
+		"topics": "writing",
+		"date": "2022-11-26",
+		"author": {
+			"id": "1459",
+			"fullName": "David Alpert",
+			"userYourName": "David Alpert"
+		}
+	},
+	{
+		"id": "1462",
+		"shortDescriptionMarkDown": "While resurrecting and continuing my series on git fundamentals I discovered and published 10 old draft posts from as far back as 2009.",
+		"title": "Publishing Old Drafts",
+		"urlValue": "https://blog.spinthemoose.com/2022/11/25/publishing-old-drafts/",
+		"wordCount": 47,
+		"topics": "random, process, collaboration, throughput, ux",
+		"date": "2022-11-25",
+		"author": {
+			"id": "1459",
+			"fullName": "David Alpert",
+			"userYourName": "David Alpert"
+		}
+	},
+	{
+		"id": "1457",
+		"shortDescriptionMarkDown": null,
+		"title": "#GettingBetter at Interviews: Important Q's to Ask During your Developer Job Interview",
+		"urlValue": "https://dev.to/danitcodes/important-qs-to-ask-during-your-junior-developer-job-interview-844",
+		"wordCount": 1637,
+		"topics": null,
+		"date": "2022-11-27",
+		"author": {
+			"id": "1311",
+			"fullName": "Danielle Thompson",
+			"userYourName": "Danielle Thompson"
+		}
+	},
+	{
+		"id": "1453",
+		"shortDescriptionMarkDown": "Feedback helps us all to grow, and that's why it should be built into our processes.",
+		"title": "We All Need Good Feedback",
+		"urlValue": "https://dev.to/bekahhw/we-all-need-good-feedback-kgd",
+		"wordCount": 752,
+		"topics": "career",
+		"date": "2022-11-28",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1451",
+		"shortDescriptionMarkDown": null,
+		"title": "Getting Better at Recognizing your Accomplishments as Junior Developer (and Beyond)",
+		"urlValue": "https://dev.to/danitcodes/getting-better-at-recognizing-your-accomplishments-as-junior-developer-and-beyond-4goa",
+		"wordCount": 1482,
+		"topics": null,
+		"date": "2022-11-27",
+		"author": {
+			"id": "1311",
+			"fullName": "Danielle Thompson",
+			"userYourName": "Danielle Thompson"
+		}
+	},
+	{
+		"id": "1448",
+		"shortDescriptionMarkDown": "JWT Authentication with tRPC",
+		"title": "Implementing JWT Authentication with TRPC and Express",
+		"urlValue": "https://temitayoogunsusi.hashnode.dev/implementing-jwt-authentication-with-trpc-and-express",
+		"wordCount": 1956,
+		"topics": "Authentication",
+		"date": "2022-11-26",
+		"author": {
+			"id": "1443",
+			"fullName": "Temitayo Ogunsusi",
+			"userYourName": "Temitayo Ogunsusi"
+		}
+	},
+	{
+		"id": "1439",
+		"shortDescriptionMarkDown": "https://adiati.com/planning-and-tracking-projects-with-githubs-projects-tool",
+		"title": "Planning And Tracking Projects With GitHub's Projects Tool",
+		"urlValue": "https://adiati.com/planning-and-tracking-projects-with-githubs-projects-tool",
+		"wordCount": 1357,
+		"topics": "https://adiati.com/planning-and-tracking-projects-with-githubs-projects-tool",
+		"date": "2022-11-26",
+		"author": {
+			"id": "856",
+			"fullName": "Ayu Adiati",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1436",
+		"shortDescriptionMarkDown": "Let's learn about the differences between useRef vs useState and uncontrolled vs controlled components!",
+		"title": "A Look at React Hooks: useRef vs useState",
+		"urlValue": "https://lo-victoria.com/a-look-at-react-hooks-useref-vs-usestate",
+		"wordCount": 700,
+		"topics": "react, web developement",
+		"date": "2022-11-18",
+		"author": {
+			"id": "1206",
+			"fullName": "Victoria Lo",
+			"userYourName": "Victoria Lo"
+		}
+	},
+	{
+		"id": "1434",
+		"shortDescriptionMarkDown": "3 Simple Ways to Make Your Blog More Readable",
+		"title": "3 Simple Ways to Make Your Blog More Readable",
+		"urlValue": "https://www.showwcase.com/show/18703/3-simple-ways-to-make-your-blog-more-readable",
+		"wordCount": 714,
+		"topics": "blogging",
+		"date": "2022-11-26",
+		"author": {
+			"id": "1206",
+			"fullName": "Victoria Lo",
+			"userYourName": "Victoria Lo"
+		}
+	},
+	{
+		"id": "1431",
+		"shortDescriptionMarkDown": "Use Obsidian and dataview to pull together notes for a weekly summary.",
+		"title": "Aggregating Weekly Notes With Obsidian and Dataview",
+		"urlValue": "https://brianmeeker.me/2022/11/25/aggregating-weekly-notes-with-obsidian-and-dataview/",
+		"wordCount": 716,
+		"topics": "obsidian, dataview",
+		"date": "2022-11-25",
+		"author": {
+			"id": "1406",
+			"fullName": "Brian Meeker",
+			"userYourName": "Brian Meeker"
+		}
+	},
+	{
+		"id": "1427",
+		"shortDescriptionMarkDown": "As I evaluate my own performance over the last year and set goals for my next year as a Technical Community Builder, I wanted to share how I’ve broken down my self-evaluation and goal setting. I don’t think you need to be on a DevRel team to find this useful.",
+		"title": "Career Goal Setting",
+		"urlValue": "https://dev.to/bekahhw/career-goal-setting-3c6o",
+		"wordCount": 1707,
+		"topics": "career",
+		"date": "2022-11-26",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1425",
+		"shortDescriptionMarkDown": "In this article, I wanted to explore this a little bit and leave my thoughts on how much you should study after work.",
+		"title": "Should developers study 20 hours a week after work?",
+		"urlValue": "https://dev.to/codergirl1991/should-developers-study-20-hours-a-week-after-work-6no",
+		"wordCount": 614,
+		"topics": "career",
+		"date": "2022-11-25",
+		"author": {
+			"id": "1182",
+			"fullName": "Jessica Wilkins",
+			"userYourName": "Jessica Wilkins"
+		}
+	},
+	{
+		"id": "1422",
+		"shortDescriptionMarkDown": null,
+		"title": "Tips on Hosting a Twitter Space",
+		"urlValue": "https://dev.to/bekahhw/tips-on-hosting-a-twitter-space-78h",
+		"wordCount": 805,
+		"topics": "DevRel",
+		"date": "2022-11-25",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1412",
+		"shortDescriptionMarkDown": "In this article, I will show you my writing process and provide some tools that have helped me along the way.",
+		"title": "How to get started with technical writing - An inside look into my writing process",
+		"urlValue": "https://dev.to/codergirl1991/how-to-get-started-with-technical-writing-an-inside-look-into-my-writing-process-1jdl",
+		"wordCount": 1597,
+		"topics": "technical writing",
+		"date": "2022-11-23",
+		"author": {
+			"id": "1182",
+			"fullName": "Jessica Wilkins",
+			"userYourName": "Jessica Wilkins"
+		}
+	},
+	{
+		"id": "1409",
+		"shortDescriptionMarkDown": "How to stop Docker containers from the CLI if you only know part of the name",
+		"title": "Stopping Docker Containers By Partial Name",
+		"urlValue": "https://brianmeeker.me/2022/11/23/stopping-docker-containers-by-partial-name/",
+		"wordCount": 226,
+		"topics": "docker",
+		"date": "2022-11-23",
+		"author": {
+			"id": "1406",
+			"fullName": "Brian Meeker",
+			"userYourName": "Brian Meeker"
+		}
+	},
+	{
+		"id": "1402",
+		"shortDescriptionMarkDown": "The best way to practice your JavaScript skills is to build small projects. In this article we will build a small app that takes in a sentence and reverses it.",
+		"title": "Beginner JavaScript Project: How to reverse a sentence and display it on screen",
+		"urlValue": "https://dev.to/codergirl1991/beginner-javascript-project-how-to-reverse-a-sentence-and-display-it-on-screen-4d03",
+		"wordCount": 2029,
+		"topics": "javascript",
+		"date": "2022-11-23",
+		"author": {
+			"id": "1182",
+			"fullName": "Jessica Wilkins",
+			"userYourName": "Jessica Wilkins"
+		}
+	},
+	{
+		"id": "1398",
+		"shortDescriptionMarkDown": "https://adiati.com/audio-media-accessibility-how-to-improve-audio-media-transcriptions",
+		"title": "Audio Media Accessibility: How To Improve Audio Media Transcriptions",
+		"urlValue": "https://adiati.com/audio-media-accessibility-how-to-improve-audio-media-transcriptions",
+		"wordCount": 1191,
+		"topics": "https://adiati.com/audio-media-accessibility-how-to-improve-audio-media-transcriptions",
+		"date": "2022-11-23",
+		"author": {
+			"id": "856",
+			"fullName": "Ayu Adiati",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1390",
+		"shortDescriptionMarkDown": "Black Friday sales",
+		"title": "2022 Black Friday Sales for Developers",
+		"urlValue": "https://dev.to/jarvisscript/2022-black-friday-sales-for-developers-4dmh",
+		"wordCount": 927,
+		"topics": "Black Friday sales",
+		"date": "2022-11-23",
+		"author": {
+			"id": "1189",
+			"fullName": "Chris Jarvis",
+			"userYourName": "Chris Jarvis"
+		}
+	},
+	{
+		"id": "1385",
+		"shortDescriptionMarkDown": "I only learned about these commands because I was complaining about git not reliably tracking changes to files I made in the GUI (Finder, VS Code). Turns out git will always track file name changes, moving files, and deleting files ...if you tell it about them.",
+		"title": "#gitPanic - Files",
+		"urlValue": "https://dev.to/abbeyperini/gitpanic-files-3g83",
+		"wordCount": 474,
+		"topics": "git",
+		"date": "2022-11-22",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1381",
+		"shortDescriptionMarkDown": "When you think you've lost work, don't #gitPanic. As far as your commit history goes, git may as well be Ironborn, repeating \"what is dead may never die.\"",
+		"title": "#gitPanic - Removing and Restoring Work",
+		"urlValue": "https://virtual-coffee-group.slack.com/archives/C01GN2TLLC8/p1669152094152769",
+		"wordCount": 1832,
+		"topics": "git",
+		"date": "2022-11-22",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1378",
+		"shortDescriptionMarkDown": "Some motivation and goal-setting advice from Peloton instructors, tailored to dev life :)",
+		"title": "What Peloton Instructors Taught Me About Being a Dev",
+		"urlValue": "https://dev.to/juliaseid/what-peloton-instructors-taught-me-about-being-a-dev-3ap3",
+		"wordCount": 1827,
+		"topics": "developer health, learning",
+		"date": "2022-11-22",
+		"author": {
+			"id": "169",
+			"fullName": "Julia Seidman",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1373",
+		"shortDescriptionMarkDown": "Let’s stop having bad meetings and dive into ways to make our meetings better.",
+		"title": "Making Better Meetings",
+		"urlValue": "https://dev.to/bekahhw/making-better-meetings-469m",
+		"wordCount": 1318,
+		"topics": null,
+		"date": "2022-11-22",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1368",
+		"shortDescriptionMarkDown": null,
+		"title": "Frontend Architecture and tooling that will lead to a more resilient codebase",
+		"urlValue": "https://dev.to/chad_r_stewart/frontend-architecture-and-tooling-that-will-lead-to-a-more-resilient-codebase-7ib",
+		"wordCount": 1962,
+		"topics": "architecture, front-end",
+		"date": "2022-10-24",
+		"author": {
+			"id": "1297",
+			"fullName": "Chad Stewart",
+			"userYourName": "Chad R. Stewart"
+		}
+	},
+	{
+		"id": "1366",
+		"shortDescriptionMarkDown": null,
+		"title": "Making Progress: How I've learned to move towards my goals",
+		"urlValue": "https://dev.to/chad_r_stewart/making-progress-how-ive-learned-to-move-towards-my-goals-2jnl",
+		"wordCount": 2765,
+		"topics": "career, self improvement",
+		"date": "2022-11-17",
+		"author": {
+			"id": "1297",
+			"fullName": "Chad Stewart",
+			"userYourName": "Chad R. Stewart"
+		}
+	},
+	{
+		"id": "1362",
+		"shortDescriptionMarkDown": "This is the first article in the series The Human Aspect of Debugging Code. It addresses how to handle assumptions and hunches when trying to find the cause of a code malfunction.",
+		"title": "Debugging: Navigating Hunches and Assumptions",
+		"urlValue": "https://jocrah.hashnode.dev/navigating-hunches-and-assumptions-when-debugging",
+		"wordCount": 1218,
+		"topics": "Debugging, Development",
+		"date": "2022-11-21",
+		"author": {
+			"id": "1352",
+			"fullName": "Joshua Ocrah",
+			"userYourName": "Joshua Ocrah"
+		}
+	},
+	{
+		"id": "1359",
+		"shortDescriptionMarkDown": "https://dev.to/jarvisscript/what-are-your-goals-for-the-week-of-november-21-1gmm",
+		"title": "What are your goals for the week of November 21?",
+		"urlValue": "https://dev.to/jarvisscript/what-are-your-goals-for-the-week-of-november-21-1gmm",
+		"wordCount": 220,
+		"topics": "https://dev.to/jarvisscript/what-are-your-goals-for-the-week-of-november-21-1gmm",
+		"date": "2022-11-21",
+		"author": {
+			"id": "1189",
+			"fullName": "Chris Jarvis",
+			"userYourName": "Chris Jarvis"
+		}
+	},
+	{
+		"id": "1356",
+		"shortDescriptionMarkDown": "Hackathon competitions are like mini-product sprints. I've learned lessons about shipping faster from participating in a handful this year.",
+		"title": "Lessons from Winning Five Hackathons",
+		"urlValue": "https://sustained.substack.com/p/lessons-from-winning-five-hackathons",
+		"wordCount": 1310,
+		"topics": "Hackathons",
+		"date": "2022-11-21",
+		"author": {
+			"id": "854",
+			"fullName": "Ray Deck",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1348",
+		"shortDescriptionMarkDown": "Maybe you’ve been thinking about speaking at a conference, but you’re nervous. Hopefully, this blog post will help you discover an idea and/or overcome the fear of submitting.",
+		"title": "Writing Your First Conference Proposal",
+		"urlValue": "https://dev.to/bekahhw/writing-your-first-conference-proposal-4jei",
+		"wordCount": 1248,
+		"topics": "DevRel",
+		"date": "2022-11-20",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1345",
+		"shortDescriptionMarkDown": "Asking questions is a developer superpower. Many new devs are often hesitant to ask questions though!",
+		"title": "Questions are a Developer Superpower",
+		"urlValue": "https://dev.to/alexcurtisslep/questions-are-a-developer-superpower-120o",
+		"wordCount": 425,
+		"topics": "questions, developer questions",
+		"date": "2022-11-18",
+		"author": {
+			"id": "1342",
+			"fullName": "Alex Curtis-Slep",
+			"userYourName": "Alex Curtis-Slep"
+		}
+	},
+	{
+		"id": "1340",
+		"shortDescriptionMarkDown": null,
+		"title": "Mastodon Tips",
+		"urlValue": "https://dev.to/jarvisscript/mastodon-tips-6p8",
+		"wordCount": 367,
+		"topics": "Mastodon tips",
+		"date": "2022-11-20",
+		"author": {
+			"id": "1189",
+			"fullName": "Chris Jarvis",
+			"userYourName": "Chris Jarvis"
+		}
+	},
+	{
+		"id": "1337",
+		"shortDescriptionMarkDown": "In this article, I will walk you through how to create your own Mad Libs using HTML, CSS and JavaScript.",
+		"title": "Beginner JavaScript Tutorial: How to build your own Mad Libs game",
+		"urlValue": "https://dev.to/codergirl1991/beginner-javascript-tutorial-how-to-build-your-own-mad-libs-game-4hf8",
+		"wordCount": 3478,
+		"topics": "javascript",
+		"date": "2022-11-20",
+		"author": {
+			"id": "1182",
+			"fullName": "Jessica Wilkins",
+			"userYourName": "Jessica Wilkins"
+		}
+	},
+	{
+		"id": "1334",
+		"shortDescriptionMarkDown": "https://www.iamdeveloper.com/blog/have-you-moved-from-twitter-to-mastodon-for-social-media-4a37/",
+		"title": "Have you moved from Twitter to Mastodon for social media?",
+		"urlValue": "https://www.iamdeveloper.com/blog/have-you-moved-from-twitter-to-mastodon-for-social-media-4a37/",
+		"wordCount": 286,
+		"topics": "https://www.iamdeveloper.com/blog/have-you-moved-from-twitter-to-mastodon-for-social-media-4a37/",
+		"date": "2022-11-20",
+		"author": {
+			"id": "1172",
+			"fullName": "Nick Taylor",
+			"userYourName": "Nick Taylor"
+		}
+	},
+	{
+		"id": "1330",
+		"shortDescriptionMarkDown": "Documentation in Github goes far beyond a repo README.",
+		"title": "#gitPanic - Documentation and Profiles",
+		"urlValue": "https://dev.to/abbeyperini/gitpanic-documentation-and-profiles-1end",
+		"wordCount": 946,
+		"topics": "GitHub",
+		"date": "2022-11-18",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1326",
+		"shortDescriptionMarkDown": "I participated in my first hackathon! It's funny, I've run hackathons before, but I've never been a part of one. This is an internal hackathon for Deepgram, and we were paired with people from different teams.",
+		"title": "Speech Racer: My first hackathon project",
+		"urlValue": "https://dev.to/bekahhw/speech-racer-my-first-hackathon-project-2ona",
+		"wordCount": 1105,
+		"topics": "DevRel",
+		"date": "2022-11-18",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1322",
+		"shortDescriptionMarkDown": "https://dev.to/abbeyperini/gitpanic-stash-4gll",
+		"title": "#gitPanic - Stash",
+		"urlValue": "https://dev.to/abbeyperini/gitpanic-stash-4gll",
+		"wordCount": 1061,
+		"topics": "https://dev.to/abbeyperini/gitpanic-stash-4gll",
+		"date": "2022-11-17",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1314",
+		"shortDescriptionMarkDown": null,
+		"title": "Getting Better at PRs and Code Reviews as a Junior Developer",
+		"urlValue": "https://dev.to/danitcodes/getting-better-at-prs-and-code-reviews-as-a-junior-developer-1i9a",
+		"wordCount": 2257,
+		"topics": null,
+		"date": "2022-11-16",
+		"author": {
+			"id": "1311",
+			"fullName": "Danielle Thompson",
+			"userYourName": "Danielle Thompson"
+		}
+	},
+	{
+		"id": "1309",
+		"shortDescriptionMarkDown": "https://dev.to/abbeyperini/gitpanic-interactive-rebase-48fe",
+		"title": "#gitPanic - Interactive Rebase",
+		"urlValue": "https://dev.to/abbeyperini/gitpanic-interactive-rebase-48fe",
+		"wordCount": 2162,
+		"topics": "https://dev.to/abbeyperini/gitpanic-interactive-rebase-48fe",
+		"date": "2022-11-16",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1304",
+		"shortDescriptionMarkDown": "Understanding HEAD and refs helps with reading git logs and using git commands.",
+		"title": "#gitPanic - HEAD",
+		"urlValue": "https://dev.to/abbeyperini/gitpanic-head-37m8",
+		"wordCount": 695,
+		"topics": "git",
+		"date": "2022-11-16",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1301",
+		"shortDescriptionMarkDown": "The minimum setup required to run scripts written in typescript, without compiling them to js. Then connecting those to the built in VScode task machinery so you can execute them without leaving your browser.",
+		"title": "Scripting With VSCODE Tasks and Typescript",
+		"urlValue": "https://dev.to/kirkcodes/scripting-with-vscode-tasks-and-typescript-38h7",
+		"wordCount": 2300,
+		"topics": "typescript, scripting, vscode, automation, node",
+		"date": "2022-11-16",
+		"author": {
+			"id": "162",
+			"fullName": "Kirk Shillingford",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1295",
+		"shortDescriptionMarkDown": null,
+		"title": "Why Do You Do It That Way? How To Share Your Technical Opinions So People Will Listen",
+		"urlValue": "https://dev.to/juliaseid/why-do-you-do-it-that-wayhow-to-share-your-technical-opinions-so-people-will-listen-487j",
+		"wordCount": 1626,
+		"topics": "writing",
+		"date": "2022-11-15",
+		"author": {
+			"id": "169",
+			"fullName": "Julia Seidman",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1293",
+		"shortDescriptionMarkDown": "I'm making my writing guides public!",
+		"title": "I Want To Help You Write!",
+		"urlValue": "https://dev.to/juliaseid/i-want-to-help-you-write-2aj5",
+		"wordCount": 319,
+		"topics": "writing, community",
+		"date": "2022-11-15",
+		"author": {
+			"id": "169",
+			"fullName": "Julia Seidman",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1291",
+		"shortDescriptionMarkDown": "This is one of the guides I shared in the monthly challenge kickoff - I figured I'd make it public!",
+		"title": "How Did You Build That? Tell A Great Technical Story",
+		"urlValue": "https://dev.to/juliaseid/how-did-you-build-that-tell-a-great-technical-story-40f6",
+		"wordCount": 1517,
+		"topics": "writing, learning",
+		"date": "2022-11-15",
+		"author": {
+			"id": "169",
+			"fullName": "Julia Seidman",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1288",
+		"shortDescriptionMarkDown": "We practice for progress, not perfection - so start writing!",
+		"title": "Developers Should Write Because...",
+		"urlValue": "https://dev.to/juliaseid/developers-should-write-because-35h2",
+		"wordCount": 960,
+		"topics": "writing, developer health, learning",
+		"date": "2022-11-10",
+		"author": {
+			"id": "169",
+			"fullName": "Julia Seidman",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1286",
+		"shortDescriptionMarkDown": "A reflection on why I'm grateful to work in tech. I hope others will share their reasons, too!",
+		"title": "Gratitude in Tough Times",
+		"urlValue": "https://dev.to/juliaseid/gratitude-in-tough-times-34k1",
+		"wordCount": 613,
+		"topics": "developer health, gratitude, mental health, inclusion, learning",
+		"date": "2022-11-15",
+		"author": {
+			"id": "169",
+			"fullName": "Julia Seidman",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1284",
+		"shortDescriptionMarkDown": "I'm a regular contributor to Stoplight.io's API design blog. They don't have a search feature, but if you go back through the archives, you'll see lots of my work. If you're interested in API security, I've written several articles on it in the last year!",
+		"title": "A DIYer's Guide To API Tools",
+		"urlValue": "https://blog.stoplight.io/a-diyers-guide-to-api-tools",
+		"wordCount": 1430,
+		"topics": null,
+		"date": "2022-11-15",
+		"author": {
+			"id": "169",
+			"fullName": "Julia Seidman",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1281",
+		"shortDescriptionMarkDown": "Learn 3 key elements of a spicy, succinct abstract.",
+		"title": "Three Things I've Learned About Writing Abstracts",
+		"urlValue": "https://luciacerchie.dev/blog/three-things-ive-learned-about-writing-abstracts",
+		"wordCount": 768,
+		"topics": "devrel, beginners, writing",
+		"date": "2022-10-15",
+		"author": {
+			"id": "1149",
+			"fullName": "Lucia Cerchie",
+			"userYourName": "Lucia Cerchie"
+		}
+	},
+	{
+		"id": "1276",
+		"shortDescriptionMarkDown": "https://adiati.com/i-learned-about-audio-accessibility-and-more-from-improving-tech-podcast-transcriptions",
+		"title": "I Learned About Audio Accessibility (And More!) From Improving Tech Podcast Transcriptions",
+		"urlValue": "https://adiati.com/i-learned-about-audio-accessibility-and-more-from-improving-tech-podcast-transcriptions",
+		"wordCount": 1182,
+		"topics": "https://adiati.com/i-learned-about-audio-accessibility-and-more-from-improving-tech-podcast-transcriptions",
+		"date": "2022-11-14",
+		"author": {
+			"id": "856",
+			"fullName": "Ayu Adiati",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1273",
+		"shortDescriptionMarkDown": "A set of tips on how to ask for help and do so effectively, in both synchronous and asynchronous work environments",
+		"title": "Effectively Asking for Help as a Software Developer",
+		"urlValue": "https://ramonh.dev/2022/11/13/asking-for-help/",
+		"wordCount": 1109,
+		"topics": "Collaboration, Core Skills, Open Source",
+		"date": "2022-11-13",
+		"author": {
+			"id": "1270",
+			"fullName": "Ramón Huidobro",
+			"userYourName": "Ramón Huidobro"
+		}
+	},
+	{
+		"id": "1268",
+		"shortDescriptionMarkDown": null,
+		"title": "This Week in DevRel: Planning and Progress",
+		"urlValue": "https://dev.to/bekahhw/this-week-in-devrel-planning-and-progress-1k0k",
+		"wordCount": 951,
+		"topics": "devrel",
+		"date": "2022-11-11",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1264",
+		"shortDescriptionMarkDown": null,
+		"title": "What are your goals for the week of November 7?",
+		"urlValue": "https://dev.to/jarvisscript/what-are-your-goals-for-the-week-117-4ing",
+		"wordCount": 174,
+		"topics": "Motivation, Accountability",
+		"date": "2022-11-07",
+		"author": {
+			"id": "1189",
+			"fullName": "Chris Jarvis",
+			"userYourName": "Chris Jarvis"
+		}
+	},
+	{
+		"id": "1262",
+		"shortDescriptionMarkDown": "Post to encourage setting and working on goals.",
+		"title": "What are your goals for the week?",
+		"urlValue": "https://dev.to/jarvisscript/what-are-your-goals-for-the-week-1114-432c",
+		"wordCount": 185,
+		"topics": "Motivation",
+		"date": "2022-11-14",
+		"author": {
+			"id": "1189",
+			"fullName": "Chris Jarvis",
+			"userYourName": "Chris Jarvis"
+		}
+	},
+	{
+		"id": "1259",
+		"shortDescriptionMarkDown": "A write up on an app I wrote to pull down your Revue newsletters",
+		"title": "App to grab your Revue newsletters",
+		"urlValue": "https://www.iamdeveloper.com/blog/app-to-grab-your-revue-newsletters-1gci/",
+		"wordCount": 215,
+		"topics": "serverless,html,typescript,webdev",
+		"date": "2022-11-13",
+		"author": {
+			"id": "1172",
+			"fullName": "Nick Taylor",
+			"userYourName": "Nick Taylor"
+		}
+	},
+	{
+		"id": "1256",
+		"shortDescriptionMarkDown": "As an open source maintainer, I love to work with new contributors and see the community grow in a positive way. But as I start to get more involved with open source projects, I have noticed a few common mistakes made by new contributors.\n\nIn this blog post, I will go over 7 commonly made mistakes by new contributors in open source projects.",
+		"title": "7 common mistakes new contributors make in Open Source Software",
+		"urlValue": "https://dev.to/codergirl1991/7-common-mistakes-new-contributors-make-in-open-source-software-2noo",
+		"wordCount": 1173,
+		"topics": "open source",
+		"date": "2022-11-12",
+		"author": {
+			"id": "1182",
+			"fullName": "Jessica Wilkins",
+			"userYourName": "Jessica Wilkins"
+		}
+	},
+	{
+		"id": "1252",
+		"shortDescriptionMarkDown": "Maintaining a project for Hacktoberfest",
+		"title": "My first HacktoberFest as a Maintainer",
+		"urlValue": "https://dev.to/jarvisscript/my-first-hacktoberfest-as-a-maintainer-51j1",
+		"wordCount": 780,
+		"topics": "HacktoberFest",
+		"date": "2022-11-11",
+		"author": {
+			"id": "1189",
+			"fullName": "Chris Jarvis",
+			"userYourName": "Chris Jarvis"
+		}
+	},
+	{
+		"id": "1248",
+		"shortDescriptionMarkDown": "https://dev.to/drewclem/notes-on-typescript-1p37-temp-slug-4263269?preview=7f0c285e79e4b4875a6f65fbb025ee63e74f5f024d8ce26e68d3fb34508644a920eda91c06fdcf5706f758d70b93c0a1ecb5f67438d0557df3cfe4cd",
+		"title": "Typescript Notes",
+		"urlValue": "https://dev.to/drewclem/notes-on-typescript-1p37-temp-slug-4263269?preview=7f0c285e79e4b4875a6f65fbb025ee63e74f5f024d8ce26e68d3fb34508644a920eda91c06fdcf5706f758d70b93c0a1ecb5f67438d0557df3cfe4cd",
+		"wordCount": 333,
+		"topics": "https://dev.to/drewclem/notes-on-typescript-1p37-temp-slug-4263269?preview=7f0c285e79e4b4875a6f65fbb025ee63e74f5f024d8ce26e68d3fb34508644a920eda91c06fdcf5706f758d70b93c0a1ecb5f67438d0557df3cfe4cd",
+		"date": "2022-11-10",
+		"author": {
+			"id": "1245",
+			"fullName": "Drew Clements",
+			"userYourName": "Drew Clements"
+		}
+	},
+	{
+		"id": "1243",
+		"shortDescriptionMarkDown": "A short post showing an example of a small generic type I use sometimes when writing Typescript to improve intellisense and my developer experience by revealing the shape of Objects and Unions",
+		"title": "Revealing Compound Types in Typescript",
+		"urlValue": "https://dev.to/kirkcodes/revealing-compound-types-in-typescript-2ic8",
+		"wordCount": 1000,
+		"topics": "Typescript Developer Experience",
+		"date": "2022-11-10",
+		"author": {
+			"id": "162",
+			"fullName": "Kirk Shillingford",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1237",
+		"shortDescriptionMarkDown": "https://adiati.com/collective-nanowrimo-lets-write-together",
+		"title": "Collective NaNoWriMo: Let's Write Together!",
+		"urlValue": "https://adiati.com/collective-nanowrimo-lets-write-together",
+		"wordCount": 891,
+		"topics": "https://adiati.com/collective-nanowrimo-lets-write-together",
+		"date": "2022-11-09",
+		"author": {
+			"id": "856",
+			"fullName": "Ayu Adiati",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1228",
+		"shortDescriptionMarkDown": "Another Hacktoberfest has come and gone!\n\nThis was Virtual Coffee's third Hacktoberfest (🤯) and it was another great one! Our members knocked it out of the park as usual, and we wanted to take a moment to celebrate!",
+		"title": "Virtual Coffee Hacktoberfest 2022 Roundup",
+		"urlValue": "https://dev.to/virtualcoffee/virtual-coffee-hacktoberfest-2022-roundup-1c2k",
+		"wordCount": 507,
+		"topics": "Open Source, Hacktoberfest",
+		"date": "2022-11-02",
+		"author": {
+			"id": "1143",
+			"fullName": null,
+			"userYourName": "Dan Ott"
+		}
+	},
+	{
+		"id": "1219",
+		"shortDescriptionMarkDown": "This is my Community 101 reading and listening list. Each of these provides the basics of community building and then goes in-depth to help community builders discover more about the community experience",
+		"title": "Reading List: The Community Builder Edition",
+		"urlValue": "https://dev.to/bekahhw/reading-list-the-community-builder-edition-3d2h",
+		"wordCount": 705,
+		"topics": "DevRel",
+		"date": "2022-11-09",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1215",
+		"shortDescriptionMarkDown": "Let's learn about Vite tool and why it is a developer's favourite these days!",
+		"title": "Introduction to Vite: The Next Generation Frontend Tooling",
+		"urlValue": "https://victoria2666.medium.com/introduction-to-vite-the-next-generation-frontend-tooling-f38063873f99",
+		"wordCount": 660,
+		"topics": "Web development",
+		"date": "2022-11-08",
+		"author": {
+			"id": "1206",
+			"fullName": "Victoria Lo",
+			"userYourName": "Victoria Lo"
+		}
+	},
+	{
+		"id": "1213",
+		"shortDescriptionMarkDown": "Here's what you can do to integration PayPal checkout in your mobile apps",
+		"title": "The Complete Guide to Integrate a Payment Processor in Mobile Apps",
+		"urlValue": "https://victoria2666.medium.com/the-complete-guide-to-integrate-paypal-in-mobile-apps-4b0b5f778c07",
+		"wordCount": 2052,
+		"topics": "Mobile app development",
+		"date": "2022-11-09",
+		"author": {
+			"id": "1206",
+			"fullName": "Victoria Lo",
+			"userYourName": "Victoria Lo"
+		}
+	},
+	{
+		"id": "1210",
+		"shortDescriptionMarkDown": "Import maps: Enhancing the developer experience for importing libraries",
+		"title": "Import Maps 101",
+		"urlValue": "https://lo-victoria.com/import-maps-101",
+		"wordCount": 929,
+		"topics": "front end",
+		"date": "2022-11-04",
+		"author": {
+			"id": "1206",
+			"fullName": "Victoria Lo",
+			"userYourName": "Victoria Lo"
+		}
+	},
+	{
+		"id": "1203",
+		"shortDescriptionMarkDown": "When I started my current role, I had been using git in a professional setting, but not Github. I was surprised to find out how much I had to interact with other developers to get my code deployed. Let's talk about expectations when working with other developers in a repo.",
+		"title": "#gitPanic - Working in a Repo",
+		"urlValue": "https://dev.to/abbeyperini/gitpanic-working-in-a-repo-1chg",
+		"wordCount": 1992,
+		"topics": "github, git",
+		"date": "2022-11-08",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1192",
+		"shortDescriptionMarkDown": "A recap of my commits from HacktoberFest 2022.",
+		"title": "HacktoberFest Review",
+		"urlValue": "https://dev.to/jarvisscript/hacktoberfest-review-38e3",
+		"wordCount": 766,
+		"topics": "HacktoberFest",
+		"date": "2022-11-03",
+		"author": {
+			"id": "1189",
+			"fullName": "Chris Jarvis",
+			"userYourName": "Chris Jarvis"
+		}
+	},
+	{
+		"id": "1187",
+		"shortDescriptionMarkDown": "In this article, I have created a study guide for the freeCodeCamp curriculum's entire Learn Basic CSS by Building a Cafe Menu practice project. This study guide is filled with additional information, articles, and videos to help you understand the concepts better.",
+		"title": "Learn CSS – Responsive Web Design Study Guide",
+		"urlValue": "https://www.freecodecamp.org/news/learn-css/",
+		"wordCount": 4000,
+		"topics": "CSS",
+		"date": "2022-11-07",
+		"author": {
+			"id": "1182",
+			"fullName": "Jessica Wilkins",
+			"userYourName": "Jessica Wilkins"
+		}
+	},
+	{
+		"id": "1185",
+		"shortDescriptionMarkDown": "This month long Hacktoberfest journey has been crazy, productive, fun and educational. Here are all of the things that I learned during Hackotberfest 2022.",
+		"title": "What I Learned from Maintaining a Repo During Hacktoberfest and Merging 356 PRs",
+		"urlValue": "https://www.freecodecamp.org/news/what-i-learned-as-a-hacktoberfest-repo-maintainer/",
+		"wordCount": 1756,
+		"topics": "hacktoberfest",
+		"date": "2022-11-02",
+		"author": {
+			"id": "1182",
+			"fullName": "Jessica Wilkins",
+			"userYourName": "Jessica Wilkins"
+		}
+	},
+	{
+		"id": "1180",
+		"shortDescriptionMarkDown": "The last blog covered adding your changes to a remote branch, but what if other developers are working in the repo at the same time as you? How do you add changes from one branch to another?",
+		"title": "#gitPanic - Merging and Rebasing",
+		"urlValue": "https://dev.to/abbeyperini/gitpanic-merging-and-rebasing-2mo3",
+		"wordCount": 1588,
+		"topics": "git",
+		"date": "2022-11-07",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	},
+	{
+		"id": "1175",
+		"shortDescriptionMarkDown": "A post about creating pull requests (PR) for content updates for my blog and having the PRs auto-merge as long as all the checks pass using the GitHub CLI and GitHub Actions.",
+		"title": "Automate and Auto-Merge Pull Requests using GitHub Actions and the GitHub CLI",
+		"urlValue": "https://dev.to/nickytonline/automate-and-merge-pull-requests-using-github-actions-and-the-github-cli-4lo6",
+		"wordCount": 1067,
+		"topics": "github,githubcli,githubactions,git",
+		"date": "2022-11-05",
+		"author": {
+			"id": "1172",
+			"fullName": "Nick Taylor",
+			"userYourName": "Nick Taylor"
+		}
+	},
+	{
+		"id": "1170",
+		"shortDescriptionMarkDown": "Just because Hacktoberfest is over, doesn't mean you should quit contributing to open-source. Here are five reasons why you should continue to contribute.",
+		"title": "5 Reasons to Keep Contributing to Open Source Projects",
+		"urlValue": "https://blog.deepgram.com/5-reasons-to-keep-contributing-to-open-source-projects/",
+		"wordCount": 640,
+		"topics": "open-source",
+		"date": "2022-11-04",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1167",
+		"shortDescriptionMarkDown": "An overview of what I've been doing as a Technical Community Builder, from content creation to community events.",
+		"title": "This Week in DevRel: Life Moves Fast",
+		"urlValue": "https://dev.to/bekahhw/this-week-in-devrel-life-moves-fast-5gfc",
+		"wordCount": 793,
+		"topics": "DevRel",
+		"date": "2022-11-04",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1164",
+		"shortDescriptionMarkDown": "Overcoming imposter syndrome can be challenging, especially in an industry where there’s always something new to learn, switching companies often obtain promotions, and the pace of work can feel like you’re always running a marathon. You can overcome these feelings, though, and I want to share a couple of ways.",
+		"title": "Overcoming Imposter Syndrome",
+		"urlValue": "https://dev.to/bekahhw/overcoming-imposter-syndrome-23a3",
+		"wordCount": 765,
+		"topics": "Developer Health",
+		"date": "2022-11-02",
+		"author": {
+			"id": "163",
+			"fullName": "Bekah Hawrot Weigel",
+			"userYourName": null
+		}
+	},
+	{
+		"id": "1160",
+		"shortDescriptionMarkDown": "https://dev.to/abbeyperini/gitpanic-git-101-10db",
+		"title": "#gitPanic - Git 101",
+		"urlValue": "https://dev.to/abbeyperini/gitpanic-git-101-10db",
+		"wordCount": 1222,
+		"topics": "https://dev.to/abbeyperini/gitpanic-git-101-10db",
+		"date": "2022-11-04",
+		"author": {
+			"id": "850",
+			"fullName": "Abbey Perini",
+			"userYourName": "Abbey Perini"
+		}
+	}
+]
