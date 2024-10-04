@@ -10,10 +10,16 @@
 		"preinstall": "npx only-allow pnpm",
 		"format": "npx prettier --write --ignore-unknown --list-different \"**/*\"",
 		"lint": "next lint",
-		"dev": "cross-env NODE_ENV=development pnpm netlify dev",
+		"build-member-files": "node scripts/loadMemberFiles.js",
+		"local-dev": "cross-env NODE_ENV=development pnpm netlify dev",
 		"build": "next build",
 		"start": "next start",
-		"prebuild": "node scripts/loadMemberFiles.js"
+		"prebuild": "pnpm build-member-files",
+		"watch": "npm-watch",
+		"dev": "pnpm build-member-files && concurrently \"pnpm watch\" \"pnpm local-dev\""
+	},
+	"watch": {
+		"build-member-files": "src/content/members/**/*.ts"
 	},
 	"dependencies": {
 		"@heroicons/react": "^2.1.5",
@@ -37,6 +43,7 @@
 		"markdown-it": "^13.0.2",
 		"mdast-util-toc": "^7.1.0",
 		"next": "15.0.0-rc.0",
+		"npm-watch": "^0.13.0",
 		"react": "19.0.0-rc-04bd67a4-20240924",
 		"react-dom": "19.0.0-rc-04bd67a4-20240924",
 		"react-leaflet": "^4.2.1",
@@ -67,6 +74,7 @@
 		"@types/require-dir": "^1.0.4",
 		"@types/sanitize-html": "^2.13.0",
 		"all-contributors-cli": "^6.26.1",
+		"concurrently": "^9.0.1",
 		"cross-env": "^7.0.3",
 		"eslint": "^8.57.1",
 		"eslint-config-next": "15.0.0-rc.0",
