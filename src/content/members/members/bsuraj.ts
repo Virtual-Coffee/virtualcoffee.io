@@ -1,5 +1,5 @@
-import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
+import type { MemberObject } from '../types';
 
 // Change _EXAMPLE to `yourGitHubUserName` and add your info below
 export const surajb0710: MemberObject = {
