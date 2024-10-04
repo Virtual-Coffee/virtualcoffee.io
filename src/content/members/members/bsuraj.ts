@@ -1,7 +1,6 @@
-// import { profileMasks } from '../flare';
 import type { MemberObject } from '../types';
+// import { profileMasks } from '../flare';
 
-// Change _EXAMPLE to `yourGitHubUserName` and add your info below
 export const surajb0710: MemberObject = {
 	// GitHub username (required)
 	github: 'surajb0710',
@@ -41,15 +40,7 @@ export const surajb0710: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: ['Hacktoberfest2024'],
-	// Add your location to our member map at https://virtualcoffee.io/members (optional)
-	// Feel free to be as specific or vague as you're comfortable with.
-	// location: {
-	// 	latitude: 41.48266891706046,
-	// 	longitude: -81.80009779282766,
-	// 	title: 'Lakewood, OH', // optional
-	// },
 };
