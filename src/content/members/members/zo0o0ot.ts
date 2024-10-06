@@ -1,21 +1,21 @@
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
+import { profileMasks } from '../flare';
 
 // Change _EXAMPLE to `yourGitHubUserName` and add your info below
-export const derekjj: MemberObject = {
+export const zo0o0ot: MemberObject = {
 	// GitHub username (required)
-	github: 'derekjj',
+	github: 'zo0o0ot',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	name: 'Derek Johnston',
+	// name: 'Your Name',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
-	mainUrl: 'https://derekjohnston.ca',
+	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: `Fullstack / Mobile Developer with over 7 years of experience. Located Ontario, Canada.`,
+	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -27,16 +27,16 @@ export const derekjj: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		// profileMask: profileMasks.triangle,
+		profileMask: profileMasks.hexagon,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'derekjjohnston' },
+		// { type: 'linkedin', username: 'yourlinkedinUserName' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
-		// { type: 'twitch', username: 'yourUserName' },
+		{ type: 'twitter', username: 'rosslarsonWI' },
+		{ type: 'twitch', username: 'tanookizoot' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
@@ -44,12 +44,12 @@ export const derekjj: MemberObject = {
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: [],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024'],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
 	location: {
-		latitude: 43.70011,
-		longitude: -79.4163,
-		title: 'Ontario, Canada',
+		latitude: 43.04,
+		longitude: -89.220624,
+		title: 'Madison, WI', // optional
 	},
 };
