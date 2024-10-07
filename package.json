@@ -13,10 +13,12 @@
 		"build-member-files": "node scripts/loadMemberFiles.js",
 		"local-dev": "cross-env NODE_ENV=development pnpm netlify dev",
 		"build": "next build",
+		"postbuild": "pnpm generate-sitemap",
 		"start": "next start",
 		"prebuild": "pnpm build-member-files",
 		"watch": "npm-watch",
-		"dev": "pnpm build-member-files && concurrently \"pnpm watch\" \"pnpm local-dev\""
+		"dev": "pnpm build-member-files && concurrently \"pnpm watch\" \"pnpm local-dev\"",
+		"generate-sitemap": "node scripts/generate-sitemap.mjs"
 	},
 	"watch": {
 		"build-member-files": "src/content/members/**/*.ts"
