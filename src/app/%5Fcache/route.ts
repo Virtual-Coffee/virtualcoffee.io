@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 
 export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
-	const queryparam = searchParams.get('query');
+	const queryparam = searchParams.get('path');
 	let path = typeof queryparam === 'string' ? queryparam : '/';
 	if (!path.startsWith('/')) {
 		path = '/' + path;
