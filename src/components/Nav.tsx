@@ -8,7 +8,7 @@ export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleLinkClick = () => {
-		setIsOpen(false); 
+		setIsOpen(false);
 	};
 
 	return (
@@ -46,12 +46,20 @@ export default function Nav() {
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" href="/podcast" onClick={handleLinkClick}>
+						<Link
+							className="nav-link"
+							href="/podcast"
+							onClick={handleLinkClick}
+						>
 							Podcast
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" href="/resources" onClick={handleLinkClick}>
+						<Link
+							className="nav-link"
+							href="/resources"
+							onClick={handleLinkClick}
+						>
 							Resources
 						</Link>
 					</li>
