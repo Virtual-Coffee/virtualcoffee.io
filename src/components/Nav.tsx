@@ -7,6 +7,10 @@ import VirtualCoffeeFull from '@/svg/VirtualCoffeeFull';
 export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
 
+	const handleLinkClick = () => {
+		setIsOpen(false);
+	};
+
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark fixed-top w-100">
 			<Link className="navbar-brand" href="/" aria-label="Virtual Coffee">
@@ -32,22 +36,30 @@ export default function Nav() {
 			>
 				<ul className="navbar-nav">
 					<li className="nav-item">
-						<Link className="nav-link" href="/about">
+						<Link className="nav-link" href="/about" onClick={handleLinkClick}>
 							About
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" href="/events">
+						<Link className="nav-link" href="/events" onClick={handleLinkClick}>
 							Events
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" href="/podcast">
+						<Link
+							className="nav-link"
+							href="/podcast"
+							onClick={handleLinkClick}
+						>
 							Podcast
 						</Link>
 					</li>
 					<li className="nav-item">
-						<Link className="nav-link" href="/resources">
+						<Link
+							className="nav-link"
+							href="/resources"
+							onClick={handleLinkClick}
+						>
 							Resources
 						</Link>
 					</li>
@@ -55,6 +67,7 @@ export default function Nav() {
 						<Link
 							className="nav-link"
 							href="/resources/virtual-coffee-handbook/join-virtual-coffee"
+							onClick={handleLinkClick}
 						>
 							Join
 						</Link>
