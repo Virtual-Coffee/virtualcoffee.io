@@ -20,12 +20,6 @@ function sitemap() {
       priority: 0.8,
     },
     {
-      url: 'https://virtualcoffee.io/blog',
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.5,
-    },
-    {
       url: 'https://virtualcoffee.io/events',
       lastModified: new Date(),
       changeFrequency: 'weekly',
