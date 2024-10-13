@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { getEpisodes } from '../src/data/podcast';
 import { getNewsletter } from '../src/data/newsletters';
+import { url } from 'inspector';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,11 +14,11 @@ async function generateStaticParams() {
 
 	const newsletterUrls = newsletters.map((newsletter) => ({
 		href: newsletter.href,
-		lastModified: newsletter.lastModified,
+		lastModified: new Date(newsletter.date),
 	}));
 	const podcastUrls = podcasts.map((podcast) => ({
 		href: podcast.href,
-		lastModified: podcast.lastModified, // Ensure you have this field in your data
+		lastModified: new Date(podcast.date), 
 	}));
 
 	return {
@@ -49,7 +50,32 @@ async function sitemap() {
 			changeFrequency: 'monthly',
 			priority: 0.8,
 		},
+    {
+      url: 'https://virtualcoffee.io/resources',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: 'https://virtualcoffee.io/resources/virtual-coffee-handbook/join-virtual-coffee',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.6,
+    },
+    {
+      url: 'https://store.virtualcoffee.io/',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: 'https://store.virtualcoffee.io/collections/all',
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
 		...newsletterUrls,
+    ...podcastUrls
 	];
 }
 
