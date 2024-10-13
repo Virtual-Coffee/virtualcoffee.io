@@ -51,30 +51,6 @@ async function sitemap() {
 			priority: 0.8,
 		},
     {
-      url: 'https://virtualcoffee.io/resources',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: 'https://virtualcoffee.io/resources/virtual-coffee-handbook/join-virtual-coffee',
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.6,
-    },
-    {
-      url: 'https://store.virtualcoffee.io/',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: 'https://store.virtualcoffee.io/collections/all',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
       url: 'https://store.virtualcoffee.io/pages/contact',
       lastModified: new Date(),
       changeFrequency: 'yearly',
