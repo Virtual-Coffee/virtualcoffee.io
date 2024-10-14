@@ -2,7 +2,7 @@
 
 <!-- prettier-ignore-start -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-193-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-194-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- prettier-ignore-end -->
 
@@ -26,7 +26,7 @@ See you there!
 
 # Working on the site:
 
-- This site is built using [Remix](https://remix.run/).
+- This site is built using [Next.js](https://nextjs.org/).
 - Check out our [CONTRIBUTING](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md) guideline to make contributions.
 - If you're new to open source, check out our [Git & GitHub 101](https://virtualcoffee.io/resources/developer-resources/open-source/git-101) and [Contributor Guide](https://virtualcoffee.io/resources/developer-resources/open-source/contributor-guide) resources.
 
@@ -60,7 +60,7 @@ This repo requires `node`, `pnpm`, and the [Netlify CLI](https://www.netlify.com
 
 #### Installing `node`:
 
-The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires `node` version `18.16`, which is the latest [LTS version](https://nodejs.dev/en/about/releases/).
+The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires node version 20.17.
 
 If you already have a different version of `node` installed, but don't want to update globally, you can install [a package called `nvm`](https://github.com/nvm-sh/nvm), which will allow you to easily switch `node` versions. Once you have `nvm` installed (or if you already have it installed), you can run `nvm use` in the main directory and it will install the proper version of `node`.
 
@@ -121,23 +121,7 @@ Once you run this command, a local server is running at http://localhost:9000! A
 
 You should see something like 'Server now ready on http://localhost:9000' below, which means the watcher is waiting to build your awesome changes!
 
-Use ctrl-c to quit the server when you're done.
-
----
-
-**Note:**
-
-Depending on the speed of your computer, you can get a `TimeoutError - Task timed out after 10.00 seconds` message when the localhost renders the home page (http://localhost:9000) on the browser.
-
-If the feature you are working on is not on the home page (the newsletter or monthly challenges page, for example), you may still be able to load the page you need. After you see the notification of `Server now ready on http://localhost:9000`, go to your browser. Then add the path of the page you need (like `http://localhost:9000/newsletter` for the newsletter or `http://localhost:9000/monthlychallenges` for the monthly challenges page) to see the page.
-
----
-
-`pnpm dev` actually runs three sub commands, which can be run independently if you wish:
-
-- `pnpm dev:sass` - compiles sass styles found in `./styles`. When in dev mode will re-run when a file is changed. The files are compiled to the `./tmp` directory to be processed by the next step.
-- `pnpm dev:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
-- `pnpm dev:remix` - starts up the local Netlify dev environment and starts the Remix server.
+Use `ctrl-c` to quit the server when you're done.
 
 ### `pnpm build`
 
@@ -146,12 +130,6 @@ pnpm build
 ```
 
 Builds a production-ready version of the site. This is what Netlify uses to build our site.
-
-`pnpm build` actually runs three sub commands, which can be run independently if you wish:
-
-- `pnpm build:sass` - compiles sass styles found in `./styles`. The files are compiled to the `./tmp` directory to be processed by the next step.
-- `pnpm build:css` - processes css files using [PostCSS](https://postcss.org/). The resulting files are saved in `./app/styles`
-- `pnpm build:remix` - compiles everything needed to run the site for production.
 
 ### `pnpm format`
 
@@ -183,26 +161,26 @@ If you'd like to work on a feature that requires an API key, please reach out to
 
 Our [VC Resources](https://virtualcoffee.io/resources) are created using [MDX](https://mdxjs.com/). MDX is basically a combination of Markdown and React.
 
-Any files added to `app/routes/__frontend/resources` will be automatically loaded and added to the appropriate index page.
+Any files added to `src/content/resources` will be automatically loaded and added to the appropriate index page.
 
 A good way to start adding a new page would be to copy one of the existing pages, then edit the details and content.
 
 ### Newsletters
 
-The newsletters (for now) are simply `jsx` files, and can be found in `app/routes/__frontend/newsletter/issues`.
+The newsletters (for now) are simply `tsx` files, and can be found in `src/content/newsletters`.
 
 When you add a new issue, **make sure to add it to the index**. Here's how:
 
-- Open `app/data/newsletters.js`
+- Open `src/data/newsletters.ts`
 - `import` the new issue
 - Add the new issue to the `newsletters` array.
 
-So, if you have created `app/routes/__frontend/newsletter/issues/2022-03.jsx`:
+So, if you have created `src/content/newsletters/2022-03.jsx`:
 
 ```diff
-+ import { handle as issue202203 } from '~/routes/__frontend/newsletter/issues/2022-03';
-import { handle as issue202202 } from '~/routes/__frontend/newsletter/issues/2022-02';
-import { handle as issue202201 } from '~/routes/__frontend/newsletter/issues/2022-01';
++ import { handle as issue202203 } from '@/content/newsletters/2022-03';
+import { handle as issue202202 } from '@/content/newsletters/2022-02';
+import { handle as issue202201 } from '@/content/newsletters/2022-01';
 
 const newsletters = [
 + 	{ handleData: issue202203, slug: '2022-03' },
@@ -215,7 +193,7 @@ const newsletters = [
 
 Every month, our monthly challenge page will need to move the current challenge to the main portion of the list, and add the new challenge to the current challenge section.
 
-To make the updates, go to `app/routes/__frontend/monthlychallenges/index.tsx`
+To make the updates, go to `src/app/monthlychallenges/page.tsx`
 
 ## Contributors ✨
 
@@ -372,104 +350,105 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/bjorkypie"><img src="https://avatars.githubusercontent.com/u/43662395?v=4?s=100" width="100px;" alt="Madeline H"/><br /><sub><b>Madeline H</b></sub></a><br /><a href="#content-bjorkypie" title="Content">🖋</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/manya706"><img src="https://avatars.githubusercontent.com/u/96016153?v=4?s=100" width="100px;" alt="Manya Sharma"/><br /><sub><b>Manya Sharma</b></sub></a><br /><a href="https://github.com/Virtual-Coffee/virtualcoffee.io/commits?author=manya706" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/MarieReRe"><img src="https://avatars.githubusercontent.com/u/52573981?v=4?s=100" width="100px;" alt="Marie"/><br /><sub><b>Marie</b></sub></a><br /><a href="#content-MarieReRe" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://mary-lueder-portfolio.netlify.app/"><img src="https://avatars.githubusercontent.com/u/118684310?v=4?s=100" width="100px;" alt="Mary Lueder"/><br /><sub><b>Mary Lueder</b></sub></a><br /><a href="#content-mjlueder" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/MattyMc"><img src="https://avatars.githubusercontent.com/u/1302166?v=4?s=100" width="100px;" alt="Matt McInnis (he/him)"/><br /><sub><b>Matt McInnis (he/him)</b></sub></a><br /><a href="#content-MattyMc" title="Content">🖋</a> <a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues?q=author%3AMattyMc" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mattxwang"><img src="https://avatars.githubusercontent.com/u/14893287?v=4?s=100" width="100px;" alt="Matt Wang"/><br /><sub><b>Matt Wang</b></sub></a><br /><a href="#content-mattxwang" title="Content">🖋</a> <a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues?q=author%3Amattxwang" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mccurcio"><img src="https://avatars.githubusercontent.com/u/1915749?v=4?s=100" width="100px;" alt="MattCurcio"/><br /><sub><b>MattCurcio</b></sub></a><br /><a href="#content-mccurcio" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://twitter.com/MatthewTFoley"><img src="https://avatars.githubusercontent.com/u/3792749?v=4?s=100" width="100px;" alt="Matthew"/><br /><sub><b>Matthew</b></sub></a><br /><a href="#content-mtfoley" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://twitter.com/MatthewTFoley"><img src="https://avatars.githubusercontent.com/u/3792749?v=4?s=100" width="100px;" alt="Matthew"/><br /><sub><b>Matthew</b></sub></a><br /><a href="#content-mtfoley" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/matthew-dean"><img src="https://avatars.githubusercontent.com/u/414752?v=4?s=100" width="100px;" alt="Matthew Dean"/><br /><sub><b>Matthew Dean</b></sub></a><br /><a href="#content-matthew-dean" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/maylene-poulsen/"><img src="https://avatars.githubusercontent.com/u/58043669?v=4?s=100" width="100px;" alt="Maylene Poulsen"/><br /><sub><b>Maylene Poulsen</b></sub></a><br /><a href="#content-maylenepoulsen" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://meghangutshall.com/"><img src="https://avatars.githubusercontent.com/u/37842352?v=4?s=100" width="100px;" alt="Meg Gutshall"/><br /><sub><b>Meg Gutshall</b></sub></a><br /><a href="#content-meg-gutshall" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://https//gwn-ws.com"><img src="https://avatars.githubusercontent.com/u/1579750?v=4?s=100" width="100px;" alt="Michael Honey-Arcement"/><br /><sub><b>Michael Honey-Arcement</b></sub></a><br /><a href="#content-chaos986" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://baldbeardedbuilder.com/"><img src="https://avatars.githubusercontent.com/u/1228996?v=4?s=100" width="100px;" alt="Michael Jolley"/><br /><sub><b>Michael Jolley</b></sub></a><br /><a href="#content-michaeljolley" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://mikerogers.io/"><img src="https://avatars.githubusercontent.com/u/325384?v=4?s=100" width="100px;" alt="Mike Rogers"/><br /><sub><b>Mike Rogers</b></sub></a><br /><a href="#content-MikeRogers0" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.mikestreety.co.uk/"><img src="https://avatars.githubusercontent.com/u/354085?v=4?s=100" width="100px;" alt="Mike Street"/><br /><sub><b>Mike Street</b></sub></a><br /><a href="#content-mikestreety" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.mikestreety.co.uk/"><img src="https://avatars.githubusercontent.com/u/354085?v=4?s=100" width="100px;" alt="Mike Street"/><br /><sub><b>Mike Street</b></sub></a><br /><a href="#content-mikestreety" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Mohsin-mw"><img src="https://avatars.githubusercontent.com/u/122507740?v=4?s=100" width="100px;" alt="Mohsin"/><br /><sub><b>Mohsin</b></sub></a><br /><a href="#content-Mohsin-mw" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/manthony9"><img src="https://avatars.githubusercontent.com/u/13238071?v=4?s=100" width="100px;" alt="Morris Anthony"/><br /><sub><b>Morris Anthony</b></sub></a><br /><a href="#content-manthony9" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Zooglon"><img src="https://avatars.githubusercontent.com/u/76045918?v=4?s=100" width="100px;" alt="Nath Duncan"/><br /><sub><b>Nath Duncan</b></sub></a><br /><a href="#content-Zooglon" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/neilitalia"><img src="https://avatars.githubusercontent.com/u/38524171?v=4?s=100" width="100px;" alt="Neil Italia"/><br /><sub><b>Neil Italia</b></sub></a><br /><a href="#content-neilitalia" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://www.developindvlpr.com/"><img src="https://avatars.githubusercontent.com/u/18251846?v=4?s=100" width="100px;" alt="Nerando Johnson"/><br /><sub><b>Nerando Johnson</b></sub></a><br /><a href="#content-Nerajno" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://nickyt.co/"><img src="https://avatars.githubusercontent.com/u/833231?v=4?s=100" width="100px;" alt="Nick Taylor"/><br /><sub><b>Nick Taylor</b></sub></a><br /><a href="#content-nickytonline" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/nicoolel"><img src="https://avatars.githubusercontent.com/u/56747239?v=4?s=100" width="100px;" alt="Nicole Lee"/><br /><sub><b>Nicole Lee</b></sub></a><br /><a href="#content-nicoolel" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/nicoolel"><img src="https://avatars.githubusercontent.com/u/56747239?v=4?s=100" width="100px;" alt="Nicole Lee"/><br /><sub><b>Nicole Lee</b></sub></a><br /><a href="#content-nicoolel" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://snikhill.tech/"><img src="https://avatars.githubusercontent.com/u/51415616?v=4?s=100" width="100px;" alt="Nikkhiel Seath"/><br /><sub><b>Nikkhiel Seath</b></sub></a><br /><a href="#content-SNikhill" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://niklas.fyi/"><img src="https://avatars.githubusercontent.com/u/9086371?v=4?s=100" width="100px;" alt="Niklas Siefke"/><br /><sub><b>Niklas Siefke</b></sub></a><br /><a href="#content-niklasfyi" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.nikohoffren.com/"><img src="https://avatars.githubusercontent.com/u/82566656?v=4?s=100" width="100px;" alt="Niko Hoffrén"/><br /><sub><b>Niko Hoffrén</b></sub></a><br /><a href="#content-nikohoffren" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://norafergany.com/"><img src="https://avatars.githubusercontent.com/u/25270812?v=4?s=100" width="100px;" alt="Nora Fergany"/><br /><sub><b>Nora Fergany</b></sub></a><br /><a href="#content-norafergany" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://iamteri.tech/"><img src="https://avatars.githubusercontent.com/u/25850598?v=4?s=100" width="100px;" alt="Oteri Eyenike"/><br /><sub><b>Oteri Eyenike</b></sub></a><br /><a href="#content-Terieyenike" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/paceaux"><img src="https://avatars.githubusercontent.com/u/518862?v=4?s=100" width="100px;" alt="Paceaux"/><br /><sub><b>Paceaux</b></sub></a><br /><a href="#content-paceaux" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/patricio-huerta/"><img src="https://avatars.githubusercontent.com/u/59483053?v=4?s=100" width="100px;" alt="Patricio Huerta"/><br /><sub><b>Patricio Huerta</b></sub></a><br /><a href="#content-HpatricioH" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/patricio-huerta/"><img src="https://avatars.githubusercontent.com/u/59483053?v=4?s=100" width="100px;" alt="Patricio Huerta"/><br /><sub><b>Patricio Huerta</b></sub></a><br /><a href="#content-HpatricioH" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/piotrszymaniec"><img src="https://avatars.githubusercontent.com/u/5377285?v=4?s=100" width="100px;" alt="Piotrek"/><br /><sub><b>Piotrek</b></sub></a><br /><a href="#content-piotrszymaniec" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/radturkin"><img src="https://avatars.githubusercontent.com/u/67508317?v=4?s=100" width="100px;" alt="Rad Turkin"/><br /><sub><b>Rad Turkin</b></sub></a><br /><a href="#content-radturkin" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://raeshellerose.netlify.app/"><img src="https://avatars.githubusercontent.com/u/93204000?v=4?s=100" width="100px;" alt="Raeshelle Rose"/><br /><sub><b>Raeshelle Rose</b></sub></a><br /><a href="#content-raeplusplus" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://www.rahat.dev/"><img src="https://avatars.githubusercontent.com/u/40510125?v=4?s=100" width="100px;" alt="Rahat Chowdhury"/><br /><sub><b>Rahat Chowdhury</b></sub></a><br /><a href="#content-Rahat-ch" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://ramonh.dev/"><img src="https://avatars.githubusercontent.com/u/656318?v=4?s=100" width="100px;" alt="Ramón Huidobro"/><br /><sub><b>Ramón Huidobro</b></sub></a><br /><a href="#content-hola-soy-milk" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://statechange.ai/"><img src="https://avatars.githubusercontent.com/u/12201983?v=4?s=100" width="100px;" alt="Ray Deck"/><br /><sub><b>Ray Deck</b></sub></a><br /><a href="#content-rhdeck" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://raynaldmirville.com/"><img src="https://avatars.githubusercontent.com/u/1623207?v=4?s=100" width="100px;" alt="Raynald Mirville"/><br /><sub><b>Raynald Mirville</b></sub></a><br /><a href="#content-rmirville" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://raynaldmirville.com/"><img src="https://avatars.githubusercontent.com/u/1623207?v=4?s=100" width="100px;" alt="Raynald Mirville"/><br /><sub><b>Raynald Mirville</b></sub></a><br /><a href="#content-rmirville" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/raaynaldo"><img src="https://avatars.githubusercontent.com/u/22878284?v=4?s=100" width="100px;" alt="Raynaldo Sutisna"/><br /><sub><b>Raynaldo Sutisna</b></sub></a><br /><a href="#content-raaynaldo" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://rebeccakeyphd.com/"><img src="https://avatars.githubusercontent.com/u/47927958?v=4?s=100" width="100px;" alt="Rebecca Key"/><br /><sub><b>Rebecca Key</b></sub></a><br /><a href="#content-rek990" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/redapy"><img src="https://avatars.githubusercontent.com/u/85396770?v=4?s=100" width="100px;" alt="Reda Baha"/><br /><sub><b>Reda Baha</b></sub></a><br /><a href="#content-redapy" title="Content">🖋</a> <a href="https://github.com/Virtual-Coffee/virtualcoffee.io/issues?q=author%3Aredapy" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://regina-robinson.netlify.app/"><img src="https://avatars.githubusercontent.com/u/78179566?v=4?s=100" width="100px;" alt="Regina Robinson"/><br /><sub><b>Regina Robinson</b></sub></a><br /><a href="#content-regromrob" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://rishabh1s.web.app/"><img src="https://avatars.githubusercontent.com/u/89694788?v=4?s=100" width="100px;" alt="Rishabh Singh"/><br /><sub><b>Rishabh Singh</b></sub></a><br /><a href="#content-rishabh1S" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jamesrascal"><img src="https://avatars.githubusercontent.com/u/6054150?v=4?s=100" width="100px;" alt="Roger Gentry"/><br /><sub><b>Roger Gentry</b></sub></a><br /><a href="#content-jamesrascal" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://rutareiso.netlify.app/"><img src="https://avatars.githubusercontent.com/u/73975409?v=4?s=100" width="100px;" alt="Ruta R"/><br /><sub><b>Ruta R</b></sub></a><br /><a href="#content-RReiso" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://rutareiso.netlify.app/"><img src="https://avatars.githubusercontent.com/u/73975409?v=4?s=100" width="100px;" alt="Ruta R"/><br /><sub><b>Ruta R</b></sub></a><br /><a href="#content-RReiso" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/shiftyp"><img src="https://avatars.githubusercontent.com/u/131928?v=4?s=100" width="100px;" alt="Ryan Kahn"/><br /><sub><b>Ryan Kahn</b></sub></a><br /><a href="#content-shiftyp" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sadiejay"><img src="https://avatars.githubusercontent.com/u/19538219?v=4?s=100" width="100px;" alt="Sadie"/><br /><sub><b>Sadie</b></sub></a><br /><a href="#content-sadiejay" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.brokenpier.com/"><img src="https://avatars.githubusercontent.com/u/97759871?v=4?s=100" width="100px;" alt="Safety Vest 2789"/><br /><sub><b>Safety Vest 2789</b></sub></a><br /><a href="#content-SafetyVest2789" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://satoshis-developer.xyz/portfolio/"><img src="https://avatars.githubusercontent.com/u/73622805?v=4?s=100" width="100px;" alt="Satoshi S."/><br /><sub><b>Satoshi S.</b></sub></a><br /><a href="#content-Satoshi-Sh" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://sethhall.dev/"><img src="https://avatars.githubusercontent.com/u/1033332?v=4?s=100" width="100px;" alt="Seth Hall"/><br /><sub><b>Seth Hall</b></sub></a><br /><a href="#content-sethburtonhall" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/funbunch"><img src="https://avatars.githubusercontent.com/u/3441200?v=4?s=100" width="100px;" alt="Shannan Bunch"/><br /><sub><b>Shannan Bunch</b></sub></a><br /><a href="#content-funbunch" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://magsol.github.io/"><img src="https://avatars.githubusercontent.com/u/135417?v=4?s=100" width="100px;" alt="Shannon"/><br /><sub><b>Shannon</b></sub></a><br /><a href="#content-magsol" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://magsol.github.io/"><img src="https://avatars.githubusercontent.com/u/135417?v=4?s=100" width="100px;" alt="Shannon"/><br /><sub><b>Shannon</b></sub></a><br /><a href="#content-magsol" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.shelleymcq.dev/"><img src="https://avatars.githubusercontent.com/u/81432121?v=4?s=100" width="100px;" alt="Shelley McHardy"/><br /><sub><b>Shelley McHardy</b></sub></a><br /><a href="#content-shelleymcq" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.shraddha.tech/"><img src="https://avatars.githubusercontent.com/u/27571141?v=4?s=100" width="100px;" alt="Shraddha"/><br /><sub><b>Shraddha</b></sub></a><br /><a href="#content-5hraddha" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://simonprickett.dev/"><img src="https://avatars.githubusercontent.com/u/94062?v=4?s=100" width="100px;" alt="Simon Prickett"/><br /><sub><b>Simon Prickett</b></sub></a><br /><a href="#content-simonprickett" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sirohub"><img src="https://avatars.githubusercontent.com/u/54137956?v=4?s=100" width="100px;" alt="Simon Robinson"/><br /><sub><b>Simon Robinson</b></sub></a><br /><a href="#content-sirohub" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/superspike7"><img src="https://avatars.githubusercontent.com/u/65844337?v=4?s=100" width="100px;" alt="Spike Vinz Cruz"/><br /><sub><b>Spike Vinz Cruz</b></sub></a><br /><a href="#content-superspike7" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/s-blais"><img src="https://avatars.githubusercontent.com/u/51341914?v=4?s=100" width="100px;" alt="Stephen Blais"/><br /><sub><b>Stephen Blais</b></sub></a><br /><a href="#content-s-blais" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/carrollsa"><img src="https://avatars.githubusercontent.com/u/76665107?v=4?s=100" width="100px;" alt="Steve Carroll"/><br /><sub><b>Steve Carroll</b></sub></a><br /><a href="#content-carrollsa" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/carrollsa"><img src="https://avatars.githubusercontent.com/u/76665107?v=4?s=100" width="100px;" alt="Steve Carroll"/><br /><sub><b>Steve Carroll</b></sub></a><br /><a href="#content-carrollsa" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/SUCHITRAGIRI"><img src="https://avatars.githubusercontent.com/u/60110218?v=4?s=100" width="100px;" alt="Suchitra Giri"/><br /><sub><b>Suchitra Giri</b></sub></a><br /><a href="#content-SUCHITRAGIRI" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://dev.to/sumitkharche"><img src="https://avatars.githubusercontent.com/u/43902034?v=4?s=100" width="100px;" alt="Sumit Kharche"/><br /><sub><b>Sumit Kharche</b></sub></a><br /><a href="#content-sumitkharche" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/SuperRoach"><img src="https://avatars.githubusercontent.com/u/63333?v=4?s=100" width="100px;" alt="SuperRoach"/><br /><sub><b>SuperRoach</b></sub></a><br /><a href="#content-SuperRoach" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/surajrpanchal"><img src="https://avatars.githubusercontent.com/u/25049536?v=4?s=100" width="100px;" alt="Suraj Panchal"/><br /><sub><b>Suraj Panchal</b></sub></a><br /><a href="#content-surajrpanchal" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://suze.dev/"><img src="https://avatars.githubusercontent.com/u/6759411?v=4?s=100" width="100px;" alt="Suze Shardlow"/><br /><sub><b>Suze Shardlow</b></sub></a><br /><a href="#content-SuzeShardlow" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Tamsauce"><img src="https://avatars.githubusercontent.com/u/74758886?v=4?s=100" width="100px;" alt="Tami Hughes"/><br /><sub><b>Tami Hughes</b></sub></a><br /><a href="#content-Tamsauce" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/tgmiller5"><img src="https://avatars.githubusercontent.com/u/2456949?v=4?s=100" width="100px;" alt="Tammy Miller"/><br /><sub><b>Tammy Miller</b></sub></a><br /><a href="#content-tgmiller5" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/tgmiller5"><img src="https://avatars.githubusercontent.com/u/2456949?v=4?s=100" width="100px;" alt="Tammy Miller"/><br /><sub><b>Tammy Miller</b></sub></a><br /><a href="#content-tgmiller5" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/TarynMcMillan"><img src="https://avatars.githubusercontent.com/u/74480978?v=4?s=100" width="100px;" alt="Taryn McMillan"/><br /><sub><b>Taryn McMillan</b></sub></a><br /><a href="#content-TarynMcMillan" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/CodingatTiffanys"><img src="https://avatars.githubusercontent.com/u/37156207?v=4?s=100" width="100px;" alt="Tiffany Pena"/><br /><sub><b>Tiffany Pena</b></sub></a><br /><a href="#content-CodingatTiffanys" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/tiffanyudoh/"><img src="https://avatars.githubusercontent.com/u/55888277?v=4?s=100" width="100px;" alt="Tiffany U"/><br /><sub><b>Tiffany U</b></sub></a><br /><a href="#content-cassiel257" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://toddl.dev/"><img src="https://avatars.githubusercontent.com/u/40549031?v=4?s=100" width="100px;" alt="Todd Libby"/><br /><sub><b>Todd Libby</b></sub></a><br /><a href="#content-colabottles" title="Content">🖋</a> <a href="#a11y-colabottles" title="Accessibility">️️️️♿️</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/tom-bousquet/"><img src="https://avatars.githubusercontent.com/u/70987091?v=4?s=100" width="100px;" alt="Tom Bousquet"/><br /><sub><b>Tom Bousquet</b></sub></a><br /><a href="#content-tombousquet" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://tomcudd.com/"><img src="https://avatars.githubusercontent.com/u/30203207?v=4?s=100" width="100px;" alt="Tom Cudd"/><br /><sub><b>Tom Cudd</b></sub></a><br /><a href="#content-tomcudd" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://dev.to/torianne02"><img src="https://avatars.githubusercontent.com/u/37308853?v=4?s=100" width="100px;" alt="Tori Crawford"/><br /><sub><b>Tori Crawford</b></sub></a><br /><a href="#content-torianne02" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://dev.to/torianne02"><img src="https://avatars.githubusercontent.com/u/37308853?v=4?s=100" width="100px;" alt="Tori Crawford"/><br /><sub><b>Tori Crawford</b></sub></a><br /><a href="#content-torianne02" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LincolnFleet"><img src="https://avatars.githubusercontent.com/u/36611345?v=4?s=100" width="100px;" alt="Travis Martin"/><br /><sub><b>Travis Martin</b></sub></a><br /><a href="#content-LincolnFleet" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/danieluhl"><img src="https://avatars.githubusercontent.com/u/1517899?v=4?s=100" width="100px;" alt="Typing Turtle"/><br /><sub><b>Typing Turtle</b></sub></a><br /><a href="#content-danieluhl" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://vanessapoppe.me/"><img src="https://avatars.githubusercontent.com/u/46777560?v=4?s=100" width="100px;" alt="Vanessa "/><br /><sub><b>Vanessa </b></sub></a><br /><a href="#content-vanessacor" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://vicvijayakumar.com/"><img src="https://avatars.githubusercontent.com/u/205796?v=4?s=100" width="100px;" alt="Vic Vijayakumar"/><br /><sub><b>Vic Vijayakumar</b></sub></a><br /><a href="#content-needcaffeine" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://techhub.social/@VinceAggrippino"><img src="https://avatars.githubusercontent.com/u/195491?v=4?s=100" width="100px;" alt="Vince Aggrippino"/><br /><sub><b>Vince Aggrippino</b></sub></a><br /><a href="#content-VAggrippino" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sohodoll"><img src="https://avatars.githubusercontent.com/u/106656745?v=4?s=100" width="100px;" alt="Vitaly Kovalev"/><br /><sub><b>Vitaly Kovalev</b></sub></a><br /><a href="#content-sohodoll" title="Content">🖋</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.yhaynes.com/"><img src="https://avatars.githubusercontent.com/u/12980710?v=4?s=100" width="100px;" alt="Yolanda Haynes"/><br /><sub><b>Yolanda Haynes</b></sub></a><br /><a href="#content-YolandaHaynes" title="Content">🖋</a></td>
     </tr>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.yhaynes.com/"><img src="https://avatars.githubusercontent.com/u/12980710?v=4?s=100" width="100px;" alt="Yolanda Haynes"/><br /><sub><b>Yolanda Haynes</b></sub></a><br /><a href="#content-YolandaHaynes" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://yufa-li.com/"><img src="https://avatars.githubusercontent.com/u/112290188?v=4?s=100" width="100px;" alt="Yufa "/><br /><sub><b>Yufa </b></sub></a><br /><a href="#content-01001101CK" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://taiwodevlab.hashnode.dev/"><img src="https://avatars.githubusercontent.com/u/25867172?v=4?s=100" width="100px;" alt="Yusuf Taiwo Hassan"/><br /><sub><b>Yusuf Taiwo Hassan</b></sub></a><br /><a href="#content-teezzan" title="Content">🖋</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/secondl1ght"><img src="https://avatars.githubusercontent.com/u/85003930?v=4?s=100" width="100px;" alt="secondl1ght"/><br /><sub><b>secondl1ght</b></sub></a><br /><a href="#content-secondl1ght" title="Content">🖋</a></td>
