@@ -134,7 +134,7 @@ export default async function Home() {
 									}) => ({
 										title,
 										description,
-										to: url,
+										href: url,
 									}),
 								)}
 							/>
