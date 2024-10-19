@@ -119,7 +119,7 @@ export default async function Page() {
 						<div className="card mb-4" key={event.startDateLocalized}>
 							<div className="card-header py-2 d-flex justify-content-between align-items-center flex-row flex-wrap">
 								<time dateTime={event.startDateLocalized}>
-									{dateForDisplay(event.startDateLocalized, 'EEEE, fff')}
+									{`${dateForDisplay(event.startDateLocalized, 'EEEE, LLLL d, yyyy')} - ${dateForDisplay(event.startDateLocalized, 't')} to ${dateForDisplay(event.endDateLocalized, 't ZZZZ')}`}
 								</time>
 
 								<a href={event.eventCalendarLink} download>
