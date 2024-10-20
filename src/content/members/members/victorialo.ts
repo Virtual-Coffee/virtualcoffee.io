@@ -43,7 +43,11 @@ export const victorialo: MemberObject = {
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'victoria' },
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
-		{ type: 'website', url: 'https://lo-victoria.com', title: 'Articles by Victoria' },
+		{
+			type: 'website',
+			url: 'https://lo-victoria.com',
+			title: 'Articles by Victoria',
+		},
 	],
 	badges: ['Hacktoberfest2024'],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
