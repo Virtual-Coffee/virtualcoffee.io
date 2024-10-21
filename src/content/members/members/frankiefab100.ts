@@ -44,7 +44,7 @@ export const frankiefab: MemberObject = {
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
 		{ type: 'website', url: 'https://bento.me/frankiefab', title: 'Bio Links' },
 	],
-	badges: [’Hacktoberfest2024’],
+	badges: ['Hacktoberfest2024'],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
 	// location: {
