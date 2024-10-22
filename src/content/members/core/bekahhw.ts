@@ -31,7 +31,7 @@ export const bekahhw: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'bekah-hawrot-weigel' },
+		{ type: 'linkedin', username: 'bekahhw' },
 		{ type: 'dev', username: 'bekahhw' },
 		// { type: 'codenewbie', username: 'bekahhw' },
 		{ type: 'twitter', username: 'bekahhw' },
@@ -42,11 +42,11 @@ export const bekahhw: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		{
 			type: 'website',
-			url: 'https://bekahhw.github.io',
+			url: 'https://bekahhw.com',
 			title: `Code. Community. Feelings. It's all here`,
 		},
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024'],
 	location: {
 		latitude: 40.375059,
 		longitude: -80.947491,
