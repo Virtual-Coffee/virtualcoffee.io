@@ -42,7 +42,7 @@ export const bekahhw: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		{
 			type: 'website',
-			url: 'https://bekahhw.github.io',
+			url: 'https://bekahhw.com',
 			title: `Code. Community. Feelings. It's all here`,
 		},
 	],
