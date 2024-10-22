@@ -31,7 +31,7 @@ export const bekahhw: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'bekah-hawrot-weigel' },
+		{ type: 'linkedin', username: 'bekahhw' },
 		{ type: 'dev', username: 'bekahhw' },
 		// { type: 'codenewbie', username: 'bekahhw' },
 		{ type: 'twitter', username: 'bekahhw' },
