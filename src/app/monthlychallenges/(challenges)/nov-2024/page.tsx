@@ -45,7 +45,6 @@ export default async function Challenge() {
 			heroHeader={meta.title as string}
 			heroSubheader={meta.description as string}
 		>
-
 			<h1>
 				<small>Monthly Challenge for November 2024:</small> Let's write 50k
 				words together!
@@ -57,8 +56,8 @@ export default async function Challenge() {
 					<a href="https://nanowrimo.org/">
 						NaNoWriMo (National Novel Writing Month) Challenge
 					</a>
-					, we'll be doing the tech and non-tech take on writing and working together towards
-					the goal while posting on our own blogs.
+					, we'll be doing the tech and non-tech take on writing and working
+					together towards the goal while posting on our own blogs.
 				</p>
 				<p>Get those blog posts up!</p>
 			</LeadText>
@@ -206,20 +205,26 @@ export default async function Challenge() {
 			<h3>What kind of content counts towards the challenge?</h3>
 
 			<p>
-				Any tech-related or non-tech blog posts, articles, or novels published in November! For tech-related posts, feel free to include code samples in your word count totals (if it's a word and you wrote it, we'll count it 😊).
+				Any tech-related or non-tech blog posts, articles, or novels published
+				in November! For tech-related posts, feel free to include code samples
+				in your word count totals (if it's a word and you wrote it, we'll count
+				it 😊).
 			</p>
 
 			<p>
-				While we love good documentation here at Virtual Coffee, README docs, or anything else you would typically consider documentation, it doesn't count for this challenge.
+				While we love good documentation here at Virtual Coffee, README docs, or
+				anything else you would typically consider documentation, it doesn't
+				count for this challenge.
 			</p>
 
 			<h3>What if I'm not confident about my writing?</h3>
 
 			<p>
 				We all start somewhere. The more you practice, the better you'll get. We
-				have volunteers willing to proofread and give you feedback on
-				your writing. Just put a link to your draft in the{' '}
-				<code>#monthly-challenge</code> or <code>#content-creation</code> channel and ask for the help you need.
+				have volunteers willing to proofread and give you feedback on your
+				writing. Just put a link to your draft in the{' '}
+				<code>#monthly-challenge</code> or <code>#content-creation</code>{' '}
+				channel and ask for the help you need.
 			</p>
 
 			<h3>What if I don't know what to write about?</h3>
