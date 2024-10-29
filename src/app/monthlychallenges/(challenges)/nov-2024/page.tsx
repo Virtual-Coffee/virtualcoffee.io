@@ -218,7 +218,7 @@ export default async function Challenge() {
 			<p>
 				We all start somewhere. The more you practice, the better you'll get. We
 				have volunteers willing to proofread and give you feedback on
-				your writing. Just put a link to your blog post draft in the{' '}
+				your writing. Just put a link to your draft in the{' '}
 				<code>#monthly-challenge</code> or <code>#content-creation</code> channel and ask for the help you need.
 			</p>
 
