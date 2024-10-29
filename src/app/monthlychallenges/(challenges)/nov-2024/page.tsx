@@ -206,22 +206,18 @@ export default async function Challenge() {
 			<h3>What kind of content counts towards the challenge?</h3>
 
 			<p>
-				Any tech-related or non-tech blog posts or articles or novel published in the month of
-				November! For tech-related posts, feel free to include code samples in your word count totals
-				(if it's a word and you wrote it, we'll count it 😊).
+				Any tech-related or non-tech blog posts, articles, or novels published in November! For tech-related posts, feel free to include code samples in your word count totals (if it's a word and you wrote it, we'll count it 😊).
 			</p>
 
 			<p>
-				While we love good documentation, here, at Virtual Coffee, README docs or
-				anything else you would normally consider documentation don't count for
-				this challenge.
+				While we love good documentation here at Virtual Coffee, README docs, or anything else you would typically consider documentation, it doesn't count for this challenge.
 			</p>
 
 			<h3>What if I'm not confident about my writing?</h3>
 
 			<p>
 				We all start somewhere. The more you practice, the better you'll get. We
-				have volunteers who are willing to proofread and give you feedback on
+				have volunteers willing to proofread and give you feedback on
 				your writing. Just put a link to your blog post draft in the{' '}
 				<code>#monthly-challenge</code> or <code>#content-creation</code> channel and ask for the help you need.
 			</p>
