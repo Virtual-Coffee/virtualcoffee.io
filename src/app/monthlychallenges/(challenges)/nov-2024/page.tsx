@@ -57,7 +57,7 @@ export default async function Challenge() {
 					<a href="https://nanowrimo.org/">
 						NaNoWriMo (National Novel Writing Month) Challenge
 					</a>
-					, we'll be doing the tech take on writing and working together towards
+					, we'll be doing the tech and non-tech take on writing and working together towards
 					the goal while posting on our own blogs.
 				</p>
 				<p>Get those blog posts up!</p>
