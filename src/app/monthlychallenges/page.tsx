@@ -190,26 +190,27 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Blogging Challenge',
-		subtitle: `A Community Challenge to hit a word count goal for all our tech blogs.`,
+		subtitle: `A Community Challenge to hit a word count goal for all our tech and non-tech blogs.`,
 		description: (
 			<>
 				<p>
-					Based off the NaNoWriMo (National Novel Writing Month) Challenge, this
-					challenge is the tech take on writing and working together towards the
+					Based on the NaNoWriMo (National Novel Writing Month) Challenge, this
+					challenge is the tech and non-tech take on writing and working together towards the
 					goal while posting on our own blogs.
 				</p>
-				<p>
+				{/* <p>
 					Learn more about this challenge in{' '}
 					<a href="https://dev.to/virtualcoffee/blogging-2023-monthly-challenge-3kng">
 						this blog post
 					</a>
 					.
-				</p>
+				</p> */}
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/nov-2023">
-						check out the November 2023 challenge page
+					<Link href="/monthlychallenges/nov-2024">
+						check out the November 2024 challenge page
 					</Link>
 					.
 				</p>
@@ -217,6 +218,9 @@ const challengeList: Challenge[] = [
 		),
 		links: [
 			{
+				href: '/monthlychallenges/nov-2023',
+				title: 'November, 2023',
+			},			{
 				href: '/monthlychallenges/nov-2022',
 				title: 'November, 2022',
 			},
@@ -231,7 +235,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Hacktoberfest',
 		subtitle: `Participate in open source, learn, and have fun!`,
 		description: (
