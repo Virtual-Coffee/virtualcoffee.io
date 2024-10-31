@@ -3,17 +3,16 @@ import { Fragment } from 'react';
 import { createMetaData } from '@/util/createMetaData.server';
 import { getWritingChallengeData } from '@/data/monthlyChallenges/NaNoWriMo';
 import LeadText from '@/components/content/LeadText';
-import Link from 'next/link';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
 const handle = {
-	listTitle: 'November, 2023: 100k words!',
+	listTitle: 'November, 2024: 50k words!',
 	meta: {
-		title: 'Monthly Theme & Challenge for November, 2023: 100k words!',
+		title: 'Monthly Theme & Challenge for November, 2024: 50k words!',
 		description:
-			'November challenge -> Blogging: we all work together to hit 100,000 words.',
+			'November challenge -> Blogging: we all work together to hit 50,000 words.',
 	},
-	date: '2023-11-01',
+	date: '2024-11-01',
 	hero: {
 		heroHeader: '',
 	},
@@ -45,29 +44,19 @@ export default async function Challenge() {
 			heroHeader={meta.title as string}
 			heroSubheader={meta.description as string}
 		>
-			<div className="alert alert-success">
-				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link href="/monthlychallenges/dec-2023">next challenge</Link>!
-			</div>
-
 			<h1>
-				<small>Monthly Challenge for November 2023:</small> Let's write 100k
+				<small>Monthly Challenge for November 2024:</small> Let's write 50k
 				words together!
 			</h1>
 
 			<LeadText>
 				<p>
-					This month we're working together to blog 100,000 words! Based off the{' '}
+					This month, we're working together to blog 50,000 words! Based off the{' '}
 					<a href="https://nanowrimo.org/">
 						NaNoWriMo (National Novel Writing Month) Challenge
 					</a>
-					, we'll be doing the tech take on writing and working together towards
-					the goal while posting on our own blogs. We hit{' '}
-					<Link href="/monthlychallenges/nov-2022">
-						over 100k words last year
-					</Link>
-					, and we're going to start this year's challenge with a goal of 100k
-					words.
+					, we'll be doing the tech and non-tech take on writing and working
+					together towards the goal while posting on our own blogs.
 				</p>
 				<p>Get those blog posts up!</p>
 			</LeadText>
@@ -215,37 +204,32 @@ export default async function Challenge() {
 			<h3>What kind of content counts towards the challenge?</h3>
 
 			<p>
-				Any tech-related blog posts or articles published in the month of
-				November! Feel free to include code samples in your word count totals
-				(if it's a word and you wrote it, we'll count it 😊).
+				Any tech-related or non-tech blog posts, articles, or novels published
+				in November! For tech-related posts, feel free to include code samples
+				in your word count totals (if it's a word and you wrote it, we'll count
+				it 😊).
 			</p>
 
 			<p>
-				While we love good documentation here at Virtual Coffee, README docs or
-				anything else you would normally consider documentation don't count for
-				this challenge.
-			</p>
-
-			<p>
-				Since last year, we're embracing an <strong>official topic</strong> as
-				well as general topics. We hope to add a resource section to our site
-				for Building Your Personal Brand. We'd love to feature our members' blog
-				posts on the topic.
+				While we love good documentation here at Virtual Coffee, README docs, or
+				anything else you would typically consider documentation, it doesn't
+				count for this challenge.
 			</p>
 
 			<h3>What if I'm not confident about my writing?</h3>
 
 			<p>
 				We all start somewhere. The more you practice, the better you'll get. We
-				have volunteers who are willing to proofread and give you feedback on
-				your writing. Just put a link to your blog post draft in the{' '}
-				<code>#monthly-challenge</code> channel and ask for the help you need.
+				have volunteers willing to proofread and give you feedback on your
+				writing. Just put a link to your draft in the{' '}
+				<code>#monthly-challenge</code> or <code>#content-creation</code>{' '}
+				channel and ask for the help you need.
 			</p>
 
 			<h3>What if I don't know what to write about?</h3>
 
 			<p>
-				We've got you covered with extensive lists in{' '}
+				We've got you covered with extensive topic lists in{' '}
 				<a href="https://github.com/Virtual-Coffee/virtualcoffee.io/discussions/711">
 					this discussion
 				</a>{' '}
@@ -254,70 +238,6 @@ export default async function Challenge() {
 					this discussion
 				</a>
 				.
-			</p>
-			<h4>Developer Health Topic Suggestions</h4>
-			<ul>
-				<li>
-					Imposter Syndrome: What is it? What advice do you have for overcoming
-					it?
-				</li>
-				<li>
-					Burnout: We hear a lot about burnout in tech. Do you think this is
-					industry-specific? What contributes to burnout? How do we navigate
-					burnout? How can we reduce burnout in the industry?
-				</li>
-				<li>
-					Physical Health: What equipment or practice has helped you to maintain
-					physical health when you're at your computer all day?
-				</li>
-				<li>
-					Psychological Safety: What does that mean? How do company culture,
-					team dynamics, and good management impact it?
-				</li>
-			</ul>
-			<h4>General Topic Suggestions</h4>
-			<ul>
-				<li>
-					What did your Virtual Coffee breakout room talk about recently? Can
-					you compile a list of tips or takeaways from the conversation?
-				</li>
-				<li>
-					What did you learn this week? One of the best ways to teach is by
-					writing about something you just learned!
-				</li>
-				<li>
-					Best Practices. What are some guidelines you've learned that can help
-					developers create best practices?
-				</li>
-				<li>
-					Compare and Contast. Have you learned a new language or new approach?
-					How does that differ from what you've done in the past?
-				</li>
-				<li>What are 10 HTML tags you've never heard of or used?</li>
-				<li>
-					What did you learn from building a project using X JavaScript
-					library/framework?
-				</li>
-				<li>
-					What did you learn from doing an accessibility audit of your website?
-				</li>
-				<li>Hacktoberfest 2023: takeaways, review, tips.</li>
-				<li>How to write good headlines for technical blogs?</li>
-				<li>Beginner guide to getting started with Git.</li>
-				<li>
-					What did you learn from teaching yourself how to code and landing a
-					dev job
-				</li>
-				<li>What Is Apache Kafka?</li>
-				<li>How To Start Connecting With a New Community </li>
-				<li>What Learning a Second Programming Language Taught Me About JS</li>
-			</ul>
-
-			<p>
-				A very special thanks goes out to{' '}
-				<a href="https://github.com/jdwilkin4">Jessica Wilkins</a> and{' '}
-				<a href="https://github.com/Cerchie">Lucia Cerchie</a> for helping to
-				compose this list!
 			</p>
 
 			<p>And remember, we're always here to help ❤️</p>

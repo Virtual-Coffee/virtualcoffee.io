@@ -12,7 +12,7 @@ type NovRow = {
 	created_at: string;
 };
 
-async function fetchRecords() {
+async function fetchRecords(viewName: string) {
 	if (process.env.PUBLIC_AIRTABLE_API_KEY) {
 		const base = new Airtable({
 			apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
@@ -20,7 +20,7 @@ async function fetchRecords() {
 
 		const result = await base<NovRow>('NaNoWriMo')
 			.select({
-				view: 'NaNoWriMo 2023',
+				view: viewName,
 			})
 			.all();
 
@@ -91,8 +91,8 @@ type PostMap = Record<
 	}
 >;
 
-export async function getChallengeData() {
-	const tableRows = await fetchRecords();
+export async function getWritingChallengeData(viewName: string) {
+	const tableRows = await fetchRecords(viewName);
 
 	const totalCount = tableRows.reduce((total, row) => {
 		return total + row.WordCount;
