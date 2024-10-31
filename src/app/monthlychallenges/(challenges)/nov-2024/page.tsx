@@ -1,9 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Fragment } from 'react';
 import { createMetaData } from '@/util/createMetaData.server';
-import { getChallengeData } from '@/data/monthlyChallenges/nov-2023';
+import { getWritingChallengeData } from '@/data/monthlyChallenges/NaNoWriMo';
 import LeadText from '@/components/content/LeadText';
-import Link from 'next/link';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
 const handle = {
@@ -24,7 +23,7 @@ export const metadata = handle.meta;
 async function getData() {
 	const { title } = handle.meta;
 
-	const data = await getChallengeData();
+	const data = await getWritingChallengeData('NaNoWriMo 2024');
 
 	const description = `Current status: ${data.totals.totalCount.toLocaleString()} out of ${
 		data.currentGoal?.title
