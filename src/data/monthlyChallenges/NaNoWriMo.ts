@@ -133,6 +133,10 @@ export async function getWritingChallengeData(viewName: string) {
 
 	const goals = [
 		{
+			title: '50k',
+			value: 50000,
+		},
+		{
 			title: '100k',
 			value: 100000,
 		},
