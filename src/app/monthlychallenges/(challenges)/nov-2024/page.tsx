@@ -5,6 +5,8 @@ import { getWritingChallengeData } from '@/data/monthlyChallenges/NaNoWriMo';
 import LeadText from '@/components/content/LeadText';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
+export const revalidate = 600;
+
 const handle = {
 	listTitle: 'November, 2024: 50k words!',
 	meta: {
