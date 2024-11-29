@@ -49,10 +49,10 @@ export default async function Challenge() {
 		>
 			<h1>
 				<div className="alert alert-success">
-				This monthly challenge is complete. Congratulations! Please join us for
-				the <Link href="/monthlychallenges/dec-2024">next challenge</Link>!
-			</div>
-
+					This monthly challenge is complete. Congratulations! Please join us
+					for the <Link href="/monthlychallenges/dec-2024">next challenge</Link>
+					!
+				</div>
 				<small>Monthly Challenge for November 2024:</small> Let's write 50k
 				words together!
 			</h1>
