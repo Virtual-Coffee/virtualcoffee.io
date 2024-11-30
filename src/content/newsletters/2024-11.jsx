@@ -108,9 +108,9 @@ export default function Issue() {
 				it 😊).
 			</p>
 			<p>
-				While we love good documentation here at Virtual Coffee, <code>README</code> docs or
-				anything else you would typically consider documentation, don't
-				count for this challenge.
+				While we love good documentation here at Virtual Coffee,{' '}
+				<code>README</code> docs or anything else you would typically consider
+				documentation, don't count for this challenge.
 			</p>
 
 			<h4 className="my-4">What if I'm not confident about my writing?</h4>
@@ -158,7 +158,9 @@ export default function Issue() {
 					Accountabilibuddies (Tuesdays at 7:00 PM ET | Thursdays at 9:00 AM ET)
 				</li>
 				<li>
-				  The Pack Hunt (Tandem Job Hunting) (Wednesdays at 10:00 AM ET | Wednesdays at 10:00 PM ET)</li>
+					The Pack Hunt (Tandem Job Hunting) (Wednesdays at 10:00 AM ET |
+					Wednesdays at 10:00 PM ET)
+				</li>
 				<li>
 					Data Structures and Algorithms (DSA) Office Hours (Wednesdays at 4:00
 					PM ET)
