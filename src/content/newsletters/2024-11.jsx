@@ -108,8 +108,8 @@ export default function Issue() {
 				it 😊).
 			</p>
 			<p>
-				While we love good documentation here at Virtual Coffee, README docs, or
-				anything else you would typically consider documentation, it doesn't
+				While we love good documentation here at Virtual Coffee, <code>README</code> docs or
+				anything else you would typically consider documentation, don't
 				count for this challenge.
 			</p>
 
@@ -136,7 +136,7 @@ export default function Issue() {
 			</p>
 			<p className="mt-4">
 				Find more resources, and see past challenges on our{' '}
-				<Link href="/monthlychallenges">monthly challenge page</Link>, and learn
+				<Link href="/monthlychallenges">monthly challenge page</Link>. Learn
 				more about this challenge in{' '}
 				<a href="https://dev.to/virtualcoffee/monthly-challenge-blogging-challenge-35o4">
 					this blog post.
@@ -157,7 +157,8 @@ export default function Issue() {
 				<li>
 					Accountabilibuddies (Tuesdays at 7:00 PM ET | Thursdays at 9:00 AM ET)
 				</li>
-				<li>The Pack Hunt (Tandem Job Hunting) (Wednesdays at 10:00 AM ET)</li>
+				<li>
+				  The Pack Hunt (Tandem Job Hunting) (Wednesdays at 10:00 AM ET | Wednesdays at 10:00 PM ET)</li>
 				<li>
 					Data Structures and Algorithms (DSA) Office Hours (Wednesdays at 4:00
 					PM ET)
@@ -250,7 +251,7 @@ export default function Issue() {
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out{' '}
 				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
-					some the roles
+					some of the roles
 				</Link>
 				!
 			</p>
