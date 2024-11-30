@@ -163,13 +163,13 @@ const challengeList: Challenge[] = [
 					necessarily code-specific or using code to improve other hobbies and
 					outlets.
 				</p>
-				{/* <p>
+				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-creative-community-monthly-challenge-44d5">
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-creative-community-challenge-273l">
 						this blog post
 					</a>
 					.
-				</p> */}
+				</p>
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
 					<Link href="/monthlychallenges/dec-2024">
