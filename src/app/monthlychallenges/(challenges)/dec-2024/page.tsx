@@ -20,7 +20,7 @@ export default function Challenge() {
 	return (
 		<>
 			<h1>
-				<small>Monthly Challenge for December, 2024:</small> Creative Community
+				<small>Monthly Challenge for December 2024:</small> Creative Community
 				Challenge
 			</h1>
 
