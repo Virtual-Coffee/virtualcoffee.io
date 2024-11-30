@@ -147,6 +147,7 @@ const challengeList: Challenge[] = [
 	},
 
 	{
+		current: true,
 		title: 'Creative Community Challenge',
 		subtitle: `Let's make some space for the other parts of ourselves.`,
 		description: (
@@ -164,21 +165,25 @@ const challengeList: Challenge[] = [
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-creative-community-monthly-challenge-44d5">
+					<a href="https://dev.to/virtualcoffee/monthly-challenge-creative-community-challenge-273l">
 						this blog post
 					</a>
 					.
 				</p>
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/dec-2023">
-						check out the December 2023 challenge page
+					<Link href="/monthlychallenges/dec-2024">
+						check out the December 2024 challenge page
 					</Link>
 					.
 				</p>
 			</>
 		),
 		links: [
+			{
+				href: '/monthlychallenges/dec-2023',
+				title: 'December, 2023',
+			},
 			{
 				href: '/monthlychallenges/dec-2022',
 				title: 'December, 2022',
@@ -190,7 +195,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Blogging Challenge',
 		subtitle: `A Community Challenge to hit a word count goal for all our tech and non-tech blogs.`,
 		description: (

@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import { createMetaData } from '@/util/createMetaData.server';
 import { getWritingChallengeData } from '@/data/monthlyChallenges/NaNoWriMo';
 import LeadText from '@/components/content/LeadText';
+import Link from 'next/link';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
 export const revalidate = 600;
@@ -47,6 +48,11 @@ export default async function Challenge() {
 			heroSubheader={meta.description as string}
 		>
 			<h1>
+				<div className="alert alert-success">
+					This monthly challenge is complete. Congratulations! Please join us
+					for the <Link href="/monthlychallenges/dec-2024">next challenge</Link>
+					!
+				</div>
 				<small>Monthly Challenge for November 2024:</small> Let's write 50k
 				words together!
 			</h1>
