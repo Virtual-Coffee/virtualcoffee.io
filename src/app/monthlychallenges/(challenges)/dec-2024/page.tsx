@@ -51,7 +51,7 @@ export default function Challenge() {
 			<ul>
 				<li>
 					Pick one or two creative activities you want to focus on and talk
-					about this month.
+					about this month. If you need activity inspiration, check out the <code>#making-stuff</code> channel on Slack.
 				</li>
 				<li>
 					Use the VC <code>#monthly-challenge</code> channel to post any
