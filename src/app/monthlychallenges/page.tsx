@@ -326,7 +326,7 @@ const challengeList: Challenge[] = [
 	},
 	{
 		title: 'Healthy Habits for Happy Devs',
-		subtitle: `This month&apos;s challenge is all about nourishing our bodies, minds, and spirits so that we can become healthier developers.`,
+		subtitle: `This month's challenge is all about nourishing our bodies, minds, and spirits so that we can become healthier developers.`,
 		description: (
 			<>
 				<p>
