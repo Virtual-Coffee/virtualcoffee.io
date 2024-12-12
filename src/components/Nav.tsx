@@ -79,7 +79,7 @@ export default function Nav() {
 					</li>
 				</ul>
 
-				<ul className="navbar-nav d-flex flex-row justify-content-end">
+				<ul className="navbar-nav flex-row justify-content-end">
 					<li className="nav-item">
 						<a
 							href="https://github.com/Virtual-Coffee"
