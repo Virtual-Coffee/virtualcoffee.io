@@ -164,8 +164,11 @@ export default function Issue() {
 
 			<h3 className="mt-5 mb-4">🎙️ The Podcast is Back!</h3>
 			<p>
-				Check out our latest podcasts from season 10{' '}
-				<a href="https://virtualcoffee.io/podcast">here</a>!
+				Check out our{' '}
+				<a href="https://virtualcoffee.io/podcast">
+					latest podcasts from season 10
+				</a>
+				!
 			</p>
 
 			<h3 className="mt-5 mb-4">🆕 New Career Focus Channels Alert</h3>
