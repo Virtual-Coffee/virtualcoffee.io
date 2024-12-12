@@ -22,9 +22,9 @@ export default function Issue() {
 			<LeadText>
 				<p>
 					Time for some hobbies! Last month, we went all in on writing articles
-					and sharing our word with a wider audience. But now, at the end of the
-					year, we want to take some time for our passions, hobbies, games, and
-					the little things that provide us joy.
+					and sharing our words with a wider audience. But now, at the end of
+					the year, we want to take some time for our passions, hobbies, games,
+					and the little things that provide us joy.
 				</p>
 			</LeadText>
 
@@ -65,8 +65,8 @@ export default function Issue() {
 			<p>
 				Based on the NaNoWriMo (National Novel Writing Month) Challenge, this
 				challenge was the tech and non-tech take on writing and working together
-				towards the goal while posting on our own blogs. Thank you to all the
-				community members who participated!
+				towards a collective goal while posting on our own blogs. Thank you to
+				all the community members who participated!
 			</p>
 			<p>
 				To view all of the details of how this year's challenge went,{' '}
@@ -83,10 +83,10 @@ export default function Issue() {
 			<p>
 				Devs are more than just the code we write. This challenge is all about
 				embracing self-expression. Give back to yourself by indulging in
-				something just for fun. Share the art, music, poetry, sports, games, or
+				something just for fun! Share the art, music, poetry, sports, games, or
 				other hobbies that spark your joy. We spend so much time grinding away
 				on understanding things in the tech space. Let's make some space for the
-				other parts of ourselves. In this challenge, we encourage you to spend
+				other parts of ourselves! In this challenge, we encourage you to spend
 				time working on things that aren't necessarily code-specific or using
 				code to improve your other hobbies and outlets.
 			</p>
@@ -119,10 +119,10 @@ export default function Issue() {
 					Data Structures and Algorithms (DSA) Office Hours (Wednesdays at 4:00
 					PM ET)
 				</li>
-				<li>Feelings Friday (Fridays at 8:00 PM ET)</li>
 				<li>
 					Frontend Friday Folks fighting CSSBattle.dev (Fridays at 11:00 AM ET)
 				</li>
+				<li>Feelings Friday (Fridays at 8:00 PM ET)</li>
 			</ul>
 
 			<h3 className="mt-4">📅 Weekly Async Events</h3>
@@ -141,13 +141,6 @@ export default function Issue() {
 					<strong>Fridays:</strong>{' '}
 					<a href="https://twitter.com/VirtualCoffeeIO">X (formerly Twitter)</a>{' '}
 					chat and gratitude post in <code>#general</code>
-				</li>
-			</ul>
-			<ul>
-				<li>
-					<a href="https://github.com/orgs/Virtual-Coffee/discussions/1223">
-						Practical Deep Learning Study Group
-					</a>
 				</li>
 			</ul>
 
