@@ -201,8 +201,8 @@ const challengeList: Challenge[] = [
 			<>
 				<p>
 					Based on the NaNoWriMo (National Novel Writing Month) Challenge, this
-					challenge is the tech and non-tech take on writing and working together towards the
-					goal while posting on our own blogs.
+					challenge is the tech and non-tech take on writing and working
+					together towards the goal while posting on our own blogs.
 				</p>
 				{/* <p>
 					Learn more about this challenge in{' '}
@@ -224,7 +224,8 @@ const challengeList: Challenge[] = [
 			{
 				href: '/monthlychallenges/nov-2023',
 				title: 'November, 2023',
-			},			{
+			},
+			{
 				href: '/monthlychallenges/nov-2022',
 				title: 'November, 2022',
 			},
@@ -326,7 +327,7 @@ const challengeList: Challenge[] = [
 	},
 	{
 		title: 'Healthy Habits for Happy Devs',
-		subtitle: `This month&apos;s challenge is all about nourishing our bodies, minds, and spirits so that we can become healthier developers.`,
+		subtitle: `This month's challenge is all about nourishing our bodies, minds, and spirits so that we can become healthier developers.`,
 		description: (
 			<>
 				<p>

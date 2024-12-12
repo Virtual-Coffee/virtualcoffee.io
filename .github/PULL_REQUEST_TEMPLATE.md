@@ -30,7 +30,7 @@ If the request is not complete but you want feedback use  Draft Pull Request opt
 
 <!--
 
-This section explains why the above changes explained were done.
+This section explains why the above changes were made.
 
 Sometimes a developer feels that it's okay to write "Business/Product requirement" in the description. That's fine, but doing so defeats the purpose of this section.
 
