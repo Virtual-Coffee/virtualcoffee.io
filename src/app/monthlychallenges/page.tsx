@@ -147,7 +147,6 @@ const challengeList: Challenge[] = [
 	},
 
 	{
-		current: true,
 		title: 'Creative Community Challenge',
 		subtitle: `Let's make some space for the other parts of ourselves.`,
 		description: (
@@ -576,15 +575,16 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		title: 'New Year, New Goals',
-		subtitle: `The new year offers an opportunity for a fresh start and a chance to set new goals.`,
+		current: true,
+		title: 'New Year, New Goal',
+		subtitle: `The new year offers an opportunity for a fresh start and a chance to set a new goal.`,
 		description: (
 			<>
 				<p>
-					In this challenge, we encourage you to setting up the goals for the
-					year and break them into achievable goals for each month. Our Coffee
-					Table Groups — Accountabilibuddies, Tech Interview Study Group, and
-					The Pack Hunt — are participating in this challenge and ready to
+					In this challenge, we encourage you to setting up an ambitious goal for the
+					year and break it into achievable goals for each month. Our Coffee
+					Table Groups—Accountabilibuddies, Tech Interview Study Group, and
+					The Pack Hunt—are participating in this challenge and ready to
 					support you!
 				</p>
 				<p>
@@ -595,14 +595,20 @@ const challengeList: Challenge[] = [
 					.
 				</p>
 				<p>
-					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/jan-2024">
-						check out the January 2024 challenge page
+					To view all of the details of this year's challenge,{' '}
+					<Link href="/monthlychallenges/jan-2025">
+						check out the January 2025 challenge page
 					</Link>
 					.
 				</p>
 			</>
 		),
+		links: [
+			{
+				href: '/monthlychallenges/jan-2024',
+				title: 'January, 2024',
+			},
+		],
 	},
 	{
 		title: 'Welcoming Community',
