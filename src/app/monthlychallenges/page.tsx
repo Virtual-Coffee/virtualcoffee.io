@@ -589,13 +589,13 @@ const challengeList: Challenge[] = [
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-new-year-new-goals-241m">
+					<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-new-year-new-goal-setting-one-big-goal-and-achieving-it-30c5">
 						this blog post
 					</a>
 					.
 				</p>
 				<p>
-					To view all of the details of this year's challenge,{' '}
+					To view all of the details of this year&apos;s challenge,{' '}
 					<Link href="/monthlychallenges/jan-2025">
 						check out the January 2025 challenge page
 					</Link>
