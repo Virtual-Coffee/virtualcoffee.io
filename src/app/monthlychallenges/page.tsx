@@ -682,7 +682,9 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					Over three months, we'll work together to bring our internal conference to life, creating opportunities for both speakers and event organizers.
+					Over three months, we'll work together to bring our internal
+					conference to life, creating opportunities for both speakers and event
+					organizers.
 				</p>
 				{/* <p>
 					Learn more about this challenge in{' '}
