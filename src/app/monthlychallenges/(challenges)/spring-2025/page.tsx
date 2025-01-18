@@ -30,11 +30,11 @@ export default function Challenge() {
 
 			<TextContainer background="light" showBackToTopLink={false}>
 				<LeadText>
-					<h2 className="px-3">Celebrating 5 Years of Community Growth</h2>
-					<p className="px-3 text-justify mt-4">
+					<h2 className="pl-5 pr-3">Celebrating 5 Years of Community Growth</h2>
+					<p className="px-5 mt-4">
 						As Virtual Coffee celebrates its 5th anniversary, we're excited to launch our <strong>first-ever quarterly challenge</strong>! This special initiative embodies what makes our community unique: supporting developers at all stages, creating opportunities for growth, and fostering genuine connections.
 					</p>
-					<p className="px-3 text-justify">
+					<p className="px-5">
 						Since our first coffee in April 2020, we've grown from a small group of developers meeting for virtual coffee to a thriving community that supports and elevates each other. This quarter, we're channeling that spirit into helping members step into speaking and community leadership roles.
 					</p>
 				</LeadText>
