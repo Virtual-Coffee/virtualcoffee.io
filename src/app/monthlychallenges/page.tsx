@@ -694,7 +694,7 @@ const challengeList: Challenge[] = [
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
 					<Link href="/monthlychallenges/spring-2025">
-						check out the Spring 2024 Quarter Challenge page
+						check out the Spring 2025 Quarter Challenge page
 					</Link>
 					.
 				</p>
