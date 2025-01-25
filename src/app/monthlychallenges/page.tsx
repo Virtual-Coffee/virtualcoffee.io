@@ -678,11 +678,11 @@ const challengeList: Challenge[] = [
 	{
 		current: true,
 		title: 'Spring 2025 Quarter Challenge: From Idea to Stage',
-		subtitle: `Let's brainstorm those ideas, submit that CFP, and bring them to stage!`,
+		subtitle: `Let's brainstorm those ideas, submit that CFP, and bring them to the stage!`,
 		description: (
 			<>
 				<p>
-					Over three months, we'll work together to bring our internal
+					Over the next three months, we'll work together to bring our internal
 					conference to life, creating opportunities for both speakers and event
 					organizers.
 				</p>

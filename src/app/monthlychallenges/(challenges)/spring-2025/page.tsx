@@ -43,7 +43,7 @@ export default function Challenge() {
 			<hr />
 
 			<h2 className="mb-3">Challenge Overview</h2>
-			<p>Over three months, we'll work together to bring our internal conference to life, creating opportunities for both speakers and event organizers. Whether you dream of sharing your knowledge on stage or want to learn the ins and outs of running tech events, this challenge is for you!</p>
+			<p>Over the next three months, we'll work together to bring our internal conference to life, creating opportunities for both speakers and event organizers. Whether you dream of sharing your knowledge on stage or want to learn the ins and outs of running tech events, this challenge is for you!</p>
 
 			<h2 className="mb-3">Talk Formats</h2>
 			<p>
