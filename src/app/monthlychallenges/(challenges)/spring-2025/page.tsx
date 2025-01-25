@@ -164,6 +164,21 @@ export default function Challenge() {
 				<li>A supportive community cheering you on</li>
 				<li>Format-specific guidance and resources</li>
 			</ul>
+
+			<h2 className="mb-3">Join Us!</h2>
+			<p>Whether you're drafting your first CFP or helping others shine on stage, you're playing a crucial role in our community's growth. This challenge is about more than just speaking—it's about building confidence, sharing knowledge, and strengthening our community bonds.</p>
+
+			<h3>Ready to Start?</h3>
+			<ul>
+				<li><a href="">Sign up</a> for the challenge</li>
+				<li>Join our dedicated Slack channel</li>
+				<li>Attend our kickoff meeting</li>
+				<li>Start your journey from idea to stage!</li>
+			</ul>
+
+			<hr />
+
+			<p><strong>Remember:</strong> Every expert was once a beginner. In Virtual Coffee, we believe that everyone has something valuable to share, and we're here to help you share it with confidence! 💝</p>
 		</>
 	);
 }
