@@ -84,11 +84,12 @@ export default function Challenge() {
 				types:
 			</p>
 
-			<h3>Lightning Talks (7 minutes)</h3>
+			<h3>Lightning Talks</h3>
 			<p>
 				Perfect for focused, high-impact presentations on a specific topic.
 				Great for first-time speakers or concentrated technical demonstrations.
 			</p>
+			<p><strong>Time:</strong> 7 minutes</p>
 
 			<h3>30-Minute Talks</h3>
 			<p>
@@ -97,19 +98,21 @@ export default function Challenge() {
 				and thorough explanation.
 			</p>
 
-			<h3>Panel Discussions (30 minutes)</h3>
+			<h3>Panel Discussions</h3>
 			<p>
 				Join other community members to share different perspectives on a common
 				theme. Great for those who prefer conversational formats and
 				collaborative discussion.
 			</p>
+			<p><strong>Time:</strong> 30 minutes</p>
 
-			<h3>Group Discussion Lead (30 minutes)</h3>
+			<h3>Group Discussion Lead</h3>
 			<p>
 				Similar to our coffee chat format, lead an interactive discussion on
 				your chosen topic. Perfect for those who excel at facilitating
 				conversations and building community engagement.
 			</p>
+			<p><strong>Time:</strong> 30 minutes</p>
 
 			<h2 className="mb-5">The Journey: Month by Month</h2>
 
