@@ -4,16 +4,14 @@ import LeadText from '@/components/content/LeadText';
 import TextContainer from '@/components/content/TextContainer';
 
 const handle = {
-	listTitle: 'Virtual Coffee Spring 2025 Quarter Challenge: From Idea to Stage 🎤',
+	listTitle:
+		'Virtual Coffee Spring 2025 Quarter Challenge: From Idea to Stage 🎤',
 	meta: {
 		title: 'Spring 2025 Quarter Challenge: From Idea to Stage!',
-		description: "Spring 2025 Quarter challenge -> Let's get ready for our first Virtual Coffee Community Conference!",
+		description:
+			"Spring 2025 Quarter challenge -> Let's get ready for our first Virtual Coffee Community Conference!",
 	},
-	dates: [
-    '2025-02-01',
-    '2025-03-01',
-    '2025-04-01',
-  ],
+	dates: ['2025-02-01', '2025-03-01', '2025-04-01'],
 	hero: {
 		heroHeader: '',
 	},
@@ -25,17 +23,26 @@ export default function Challenge() {
 	return (
 		<>
 			<h1 className="mb-5">
-				<small>Virtual Coffee Spring 2025 Quarter Challenge:</small> From Idea to Stage! 🎤
+				<small>Virtual Coffee Spring 2025 Quarter Challenge:</small> From Idea
+				to Stage! 🎤
 			</h1>
 
 			<TextContainer background="light" showBackToTopLink={false}>
 				<LeadText>
 					<h2 className="pl-5 pr-3">Celebrating 5 Years of Community Growth</h2>
 					<p className="px-5 mt-4">
-						As Virtual Coffee celebrates its 5th anniversary, we're excited to launch our <strong>first-ever quarterly challenge</strong>! This special initiative embodies what makes our community unique: supporting developers at all stages, creating opportunities for growth, and fostering genuine connections.
+						As Virtual Coffee celebrates its 5th anniversary, we're excited to
+						launch our <strong>first-ever quarterly challenge</strong>! This
+						special initiative embodies what makes our community unique:
+						supporting developers at all stages, creating opportunities for
+						growth, and fostering genuine connections.
 					</p>
 					<p className="px-5">
-						Since our first coffee in April 2020, we've grown from a small group of developers meeting for virtual coffee to a thriving community that supports and elevates each other. This quarter, we're channeling that spirit into helping members step into speaking and community leadership roles.
+						Since our first coffee in April 2020, we've grown from a small group
+						of developers meeting for virtual coffee to a thriving community
+						that supports and elevates each other. This quarter, we're
+						channeling that spirit into helping members step into speaking and
+						community leadership roles.
 					</p>
 				</LeadText>
 			</TextContainer>
@@ -43,24 +50,46 @@ export default function Challenge() {
 			<hr />
 
 			<h2 className="mb-3">Challenge Overview</h2>
-			<p>Over the next three months, we'll work together to bring our internal conference to life, creating opportunities for both speakers and event organizers. Whether you dream of sharing your knowledge on stage or want to learn the ins and outs of running tech events, this challenge is for you!</p>
+			<p>
+				Over the next three months, we'll work together to bring our internal
+				conference to life, creating opportunities for both speakers and event
+				organizers. Whether you dream of sharing your knowledge on stage or want
+				to learn the ins and outs of running tech events, this challenge is for
+				you!
+			</p>
 
 			<h2 className="mb-3">Talk Formats</h2>
 			<p>
-				We offer multiple formats to suit different speaking styles and content types:
+				We offer multiple formats to suit different speaking styles and content
+				types:
 			</p>
 
 			<h3>Lightning Talks (7 minutes)</h3>
-			<p>Perfect for focused, high-impact presentations on a specific topic. Great for first-time speakers or concentrated technical demonstrations.</p>
+			<p>
+				Perfect for focused, high-impact presentations on a specific topic.
+				Great for first-time speakers or concentrated technical demonstrations.
+			</p>
 
 			<h3>30-Minute Talks</h3>
-			<p>Ideal for deeper dives into technical topics, career journeys, or comprehensive tutorials. These talks allow time for detailed examples and thorough explanation.</p>
+			<p>
+				Ideal for deeper dives into technical topics, career journeys, or
+				comprehensive tutorials. These talks allow time for detailed examples
+				and thorough explanation.
+			</p>
 
 			<h3>Panel Discussions (30 minutes)</h3>
-			<p>Join other community members to share different perspectives on a common theme. Great for those who prefer conversational formats and collaborative discussion.</p>
+			<p>
+				Join other community members to share different perspectives on a common
+				theme. Great for those who prefer conversational formats and
+				collaborative discussion.
+			</p>
 
 			<h3>Group Discussion Lead (30 minutes)</h3>
-			<p>Similar to our coffee chat format, lead an interactive discussion on your chosen topic. Perfect for those who excel at facilitating conversations and building community engagement.</p>
+			<p>
+				Similar to our coffee chat format, lead an interactive discussion on
+				your chosen topic. Perfect for those who excel at facilitating
+				conversations and building community engagement.
+			</p>
 
 			<h2 className="mb-3">How This Fits Into Virtual Coffee</h2>
 			<p>This challenge embodies our core values:</p>
@@ -101,7 +130,10 @@ export default function Challenge() {
 				<li>Develop your presentation</li>
 				<li>Get feedback in a supportive environment</li>
 				<li>Refine your message and delivery</li>
-				<li>Practice format-specific skills (for example, facilitation for discussion leads, timing for lightning talks)</li>
+				<li>
+					Practice format-specific skills (for example, facilitation for
+					discussion leads, timing for lightning talks)
+				</li>
 			</ul>
 
 			<h4>Resources & Support</h4>
@@ -166,11 +198,18 @@ export default function Challenge() {
 			</ul>
 
 			<h2 className="mb-3">Join Us!</h2>
-			<p>Whether you're drafting your first CFP or helping others shine on stage, you're playing a crucial role in our community's growth. This challenge is about more than just speaking—it's about building confidence, sharing knowledge, and strengthening our community bonds.</p>
+			<p>
+				Whether you're drafting your first CFP or helping others shine on stage,
+				you're playing a crucial role in our community's growth. This challenge
+				is about more than just speaking—it's about building confidence, sharing
+				knowledge, and strengthening our community bonds.
+			</p>
 
 			<h3>Ready to Start?</h3>
 			<ul>
-				<li><a href="">Sign up</a> for the challenge</li>
+				<li>
+					<a href="">Sign up</a> for the challenge
+				</li>
 				<li>Join our dedicated Slack channel</li>
 				<li>Attend our kickoff meeting</li>
 				<li>Start your journey from idea to stage!</li>
@@ -178,7 +217,11 @@ export default function Challenge() {
 
 			<hr />
 
-			<p><strong>Remember:</strong> Every expert was once a beginner. In Virtual Coffee, we believe that everyone has something valuable to share, and we're here to help you share it with confidence! 💝</p>
+			<p>
+				<strong>Remember:</strong> Every expert was once a beginner. In Virtual
+				Coffee, we believe that everyone has something valuable to share, and
+				we're here to help you share it with confidence! 💝
+			</p>
 		</>
 	);
 }
