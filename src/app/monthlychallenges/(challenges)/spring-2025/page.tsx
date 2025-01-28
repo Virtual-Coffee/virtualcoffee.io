@@ -180,7 +180,7 @@ export default function Challenge() {
 			<h2 className="mb-3">How to Participate</h2>
 			<h3>For Aspiring Speakers</h3>
 			<ol>
-				<li>Join the challenge by submitting your CFP</li>
+				<li>Join the challenge by <Link href="/l/vc-conf-cfp-form">submitting your CFP</Link></li>
 				<li>Choose your preferred talk format</li>
 				<li>Attend relevant workshops and support sessions</li>
 				<li>Connect with mentors and fellow speakers</li>
@@ -208,7 +208,7 @@ export default function Challenge() {
 			<h3>Ready to Start?</h3>
 			<ul>
 				<li>
-					<a href="">Sign up</a> for the challenge
+					<Link href="/l/vc-conf-cfp-form">Sign up</Link> for the challenge
 				</li>
 				<li>Join our dedicated Slack channel</li>
 				<li>Attend our kickoff meeting</li>
