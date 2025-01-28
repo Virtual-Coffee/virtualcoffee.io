@@ -224,3 +224,12 @@
   to = "https://plausible.io/api/event"
   status = 200
 
+[[redirects]]
+  from = "/l/vc-conf-survey"
+  to = "https://docs.google.com/forms/d/e/1FAIpQLSd3l-YJIhA-lAAkWqEP5qbWGUPg8_HtKOfIN5M_NKYfStv4nA/viewform"
+  status = 302
+
+[[redirects]]
+  from = "/l/vc-conf-cfp-form"
+  to = "https://docs.google.com/forms/d/e/1FAIpQLSc_F6A6hhOO8PNgRoR32sxKnIePZdHY7gMTK-nD0yGCFuClCQ/viewform"
+  status = 302
