@@ -49,7 +49,7 @@ export default function Challenge() {
 
 			<hr />
 
-			<h2>Table of Contents:</h2>
+			<h2>Table of Contents</h2>
 			<ul>
 				<li>
 					<Link href="#overview">Challenge Overview</Link>
@@ -111,7 +111,7 @@ export default function Challenge() {
 			</h2>
 			<p>
 				We offer multiple formats to suit different speaking styles and content
-				types:
+				types.
 			</p>
 
 			<h3>Lightning Talks</h3>
