@@ -51,17 +51,31 @@ export default function Challenge() {
 
 			<h2>Table of Contents:</h2>
 			<ul>
-					<li><Link href="#overview">Challenge Overview</Link></li>
-					<li><Link href="#support">Community Support</Link></li>
-					<li><Link href="#format">Talk Formats</Link></li>
-					<li><Link href="#monthly">The Journey: Month by Month</Link></li>
-					<li><Link href="#participation">How to Participate</Link></li>
-					<li><Link href="#join">Join Us!</Link></li>
+				<li>
+					<Link href="#overview">Challenge Overview</Link>
+				</li>
+				<li>
+					<Link href="#support">Community Support</Link>
+				</li>
+				<li>
+					<Link href="#format">Talk Formats</Link>
+				</li>
+				<li>
+					<Link href="#monthly">The Journey: Month by Month</Link>
+				</li>
+				<li>
+					<Link href="#participation">How to Participate</Link>
+				</li>
+				<li>
+					<Link href="#join">Join Us!</Link>
+				</li>
 			</ul>
 
 			<hr />
 
-			<h2 id="overview" className="mb-3">Challenge Overview</h2>
+			<h2 id="overview" className="mb-3">
+				Challenge Overview
+			</h2>
 			<p>
 				Over the next three months, we'll work together to bring our internal
 				conference to life, creating opportunities for both speakers and event
@@ -79,7 +93,9 @@ export default function Challenge() {
 				<li>Meeting people where they are in their journey</li>
 			</ul>
 
-			<h2 id="support" className="mb-3">Community Support</h2>
+			<h2 id="support" className="mb-3">
+				Community Support
+			</h2>
 			<p>Throughout this challenge, you'll have access to:</p>
 			<ul>
 				<li>Experienced speakers and organizers</li>
@@ -90,7 +106,9 @@ export default function Challenge() {
 				<li>Format-specific guidance and resources</li>
 			</ul>
 
-			<h2 id="format" className="mb-3">Talk Formats</h2>
+			<h2 id="format" className="mb-3">
+				Talk Formats
+			</h2>
 			<p>
 				We offer multiple formats to suit different speaking styles and content
 				types:
@@ -101,7 +119,9 @@ export default function Challenge() {
 				Perfect for focused, high-impact presentations on a specific topic.
 				Great for first-time speakers or concentrated technical demonstrations.
 			</p>
-			<p><strong>Time:</strong> 7 minutes</p>
+			<p>
+				<strong>Time:</strong> 7 minutes
+			</p>
 
 			<h3>30-Minute Talks</h3>
 			<p>
@@ -116,7 +136,9 @@ export default function Challenge() {
 				theme. Great for those who prefer conversational formats and
 				collaborative discussion.
 			</p>
-			<p><strong>Time:</strong> 30 minutes</p>
+			<p>
+				<strong>Time:</strong> 30 minutes
+			</p>
 
 			<h3>Group Discussion Lead</h3>
 			<p>
@@ -124,9 +146,13 @@ export default function Challenge() {
 				your chosen topic. Perfect for those who excel at facilitating
 				conversations and building community engagement.
 			</p>
-			<p><strong>Time:</strong> 30 minutes</p>
+			<p>
+				<strong>Time:</strong> 30 minutes
+			</p>
 
-			<h2 id="monthly" className="mb-5">The Journey: Month by Month</h2>
+			<h2 id="monthly" className="mb-5">
+				The Journey: Month by Month
+			</h2>
 
 			<h3>February: Finding Your Voice 📝</h3>
 			<h4>Focus: Call for Proposals (CFPs)</h4>
@@ -192,10 +218,15 @@ export default function Challenge() {
 				<li>Format-specific technical guidance</li>
 			</ul>
 
-			<h2 id="participation" className="mb-3">How to Participate</h2>
+			<h2 id="participation" className="mb-3">
+				How to Participate
+			</h2>
 			<h3>For Aspiring Speakers</h3>
 			<ol>
-				<li>Join the challenge by <Link href="/l/vc-conf-cfp-form">submitting your CFP</Link></li>
+				<li>
+					Join the challenge by{' '}
+					<Link href="/l/vc-conf-cfp-form">submitting your CFP</Link>
+				</li>
 				<li>Choose your preferred talk format</li>
 				<li>Attend relevant workshops and support sessions</li>
 				<li>Connect with mentors and fellow speakers</li>
@@ -212,7 +243,9 @@ export default function Challenge() {
 				<li>Be part of creating an unforgettable community event</li>
 			</ol>
 
-			<h2 id="join" className="mb-3">Join Us!</h2>
+			<h2 id="join" className="mb-3">
+				Join Us!
+			</h2>
 			<p>
 				Whether you're drafting your first CFP or helping others shine on stage,
 				you're playing a crucial role in our community's growth. This challenge
