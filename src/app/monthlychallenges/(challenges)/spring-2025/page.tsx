@@ -58,6 +58,26 @@ export default function Challenge() {
 				you!
 			</p>
 
+			<h3 className="mb-3">How This Fits Into Virtual Coffee</h3>
+			<p>This challenge embodies our core values:</p>
+			<ul>
+				<li>Supporting growth and mentorship at all levels</li>
+				<li>Creating meaningful opportunities for learning and leadership</li>
+				<li>Building a closer community through participation</li>
+				<li>Meeting people where they are in their journey</li>
+			</ul>
+
+			<h2 className="mb-3">Community Support</h2>
+			<p>Throughout this challenge, you'll have access to:</p>
+			<ul>
+				<li>Experienced speakers and organizers</li>
+				<li>Dedicated Slack channels</li>
+				<li>Regular feedback sessions</li>
+				<li>One-on-one mentorship</li>
+				<li>A supportive community cheering you on</li>
+				<li>Format-specific guidance and resources</li>
+			</ul>
+
 			<h2 className="mb-3">Talk Formats</h2>
 			<p>
 				We offer multiple formats to suit different speaking styles and content
@@ -90,15 +110,6 @@ export default function Challenge() {
 				your chosen topic. Perfect for those who excel at facilitating
 				conversations and building community engagement.
 			</p>
-
-			<h2 className="mb-3">How This Fits Into Virtual Coffee</h2>
-			<p>This challenge embodies our core values:</p>
-			<ul>
-				<li>Supporting growth and mentorship at all levels</li>
-				<li>Creating meaningful opportunities for learning and leadership</li>
-				<li>Building a closer community through participation</li>
-				<li>Meeting people where they are in their journey</li>
-			</ul>
 
 			<h2 className="mb-5">The Journey: Month by Month</h2>
 
@@ -185,17 +196,6 @@ export default function Challenge() {
 				<li>Gain hands-on event planning experience</li>
 				<li>Be part of creating an unforgettable community event</li>
 			</ol>
-
-			<h2 className="mb-3">Community Support</h2>
-			<p>Throughout this challenge, you'll have access to:</p>
-			<ul>
-				<li>Experienced speakers and organizers</li>
-				<li>Dedicated Slack channels</li>
-				<li>Regular feedback sessions</li>
-				<li>One-on-one mentorship</li>
-				<li>A supportive community cheering you on</li>
-				<li>Format-specific guidance and resources</li>
-			</ul>
 
 			<h2 className="mb-3">Join Us!</h2>
 			<p>
