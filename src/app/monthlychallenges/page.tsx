@@ -686,13 +686,13 @@ const challengeList: Challenge[] = [
 					conference to life, creating opportunities for both speakers and event
 					organizers.
 				</p>
-				{/* <p>
+				<p>
 					Learn more about this challenge in{' '}
-					<a href="https://dev.to/virtualcoffee/monthly-challenge-photography-4g18">
+					<a href="https://dev.to/virtualcoffee/finding-your-voice-why-speaking-matters-in-tech-439a">
 						this blog post
 					</a>
 					.
-				</p> */}
+				</p> 
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
 					<Link href="/monthlychallenges/spring-2025">
