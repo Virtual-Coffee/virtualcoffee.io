@@ -575,7 +575,6 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		current: true,
 		title: 'New Year, New Goal',
 		subtitle: `The new year offers an opportunity for a fresh start and a chance to set a new goal.`,
 		description: (
@@ -670,6 +669,34 @@ const challengeList: Challenge[] = [
 					To view all of the details of this year&apos;s challenge,{' '}
 					<Link href="/monthlychallenges/aug-2024">
 						check out the August 2024 challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
+	},
+	{
+		current: true,
+		title: 'Spring 2025 Quarter Challenge: From Idea to Stage',
+		subtitle: `Let's brainstorm those ideas, submit that CFP, and bring them to the stage!`,
+		description: (
+			<>
+				<p>
+					Over the next three months, we'll work together to bring our internal
+					conference to life, creating opportunities for both speakers and event
+					organizers.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/finding-your-voice-why-speaking-matters-in-tech-439a">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/spring-2025">
+						check out the Spring 2025 Quarter Challenge page
 					</Link>
 					.
 				</p>
