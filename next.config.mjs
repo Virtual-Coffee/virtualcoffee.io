@@ -114,6 +114,19 @@ const nextConfig = {
 		includePaths: [path.join(__dirname, 'node_modules')],
 	},
 	pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+	async headers() {
+		return [
+			{
+				source: '/feed/feed.rss',
+				headers: [
+					{
+						key: 'Content-Type',
+						value: 'text/xml; charset=utf-8',
+					},
+				],
+			},
+		];
+	},
 };
 
 const remarkToc = createRemarkToc();
