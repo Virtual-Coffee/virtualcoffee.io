@@ -25,11 +25,6 @@ export const homePageLinks = [
 		description: `Every month, we create a challenge for our Virtual Coffee members to complete together`,
 	},
 	{
-		href: 'https://store.virtualcoffee.io',
-		title: 'Merch Store',
-		description: `Support Virtual Coffee and show your love ❤️`,
-	},
-	{
 		href: 'https://github.com/Virtual-Coffee',
 		title: 'VC GitHub',
 		description: `Join our Open Source efforts!`,
