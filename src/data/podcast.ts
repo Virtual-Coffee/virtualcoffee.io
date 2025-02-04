@@ -249,7 +249,7 @@ export async function getTranscript({
 }: Partial<PodcastEpisode>): Promise<Transcript | null> {
 	try {
 		const response: { segments: TranscriptSegment[] } = await fetch(
-			`https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}/transcript.json`,
+			`https://feeds.virtualcoffee.io/podcast-assets/${id}/transcript.json`,
 		).then((res) => res.json());
 
 		if (response && response.segments) {
@@ -290,16 +290,4 @@ export async function getTranscript({
 		console.error(`Error loading transcript ${id}`, error);
 		return null;
 	}
-}
-
-export function getPlayerSrc({ id }: Pick<PodcastEpisode, 'id'>) {
-	return `https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}.js?container_id=buzzsprout-player-${id}&player=small`;
-}
-
-export function getPlayerUrl({ id }: Pick<PodcastEpisode, 'id'>) {
-	return `https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}?client_source=twitter_card&amp;player_type=full_screen`;
-}
-
-export function getPlayerStreamUrl({ id }: Pick<PodcastEpisode, 'id'>) {
-	return `https://www.buzzsprout.com/${buzzsproutPodcastId}/${id}.mp3?blob_id=${id}&client_source=twitter_card`;
 }

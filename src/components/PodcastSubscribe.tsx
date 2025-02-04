@@ -55,7 +55,10 @@ export default function PodcastSubscribe({
 					</g>
 				</svg>
 			</a>
-			<a href="https://feeds.buzzsprout.com/1558601.rss" aria-label="RSS Feed">
+			<a
+				href="https://feeds.virtualcoffee.io/virtual-coffee-podcast.rss"
+				aria-label="RSS Feed"
+			>
 				<svg width="160" height="40" xmlns="http://www.w3.org/2000/svg">
 					<g fill="none" fillRule="evenodd">
 						<rect fill="#000" width="160" height="40" rx="7" />

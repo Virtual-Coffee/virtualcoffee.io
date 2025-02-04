@@ -4,19 +4,11 @@ import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 import DisplayHtml from '@/components/DisplayHtml';
 import PodcastSubscribe from '@/components/PodcastSubscribe';
-import {
-	getEpisode,
-	getEpisodes,
-	getTranscript,
-	getPlayerSrc,
-	getPlayerUrl,
-	getPlayerStreamUrl,
-} from '@/data/podcast';
+import { getEpisode, getEpisodes, getTranscript } from '@/data/podcast';
 import { dateForDisplay } from '@/util/date';
 import { sanitizeCmsData } from '@/util/sanitizeCmsData';
 import createCmsImage from '@/util/cmsimage';
 import { Metadata } from 'next';
-import Script from 'next/script';
 
 export async function generateStaticParams() {
 	const podcastEpisodes = await getEpisodes({ limit: 99 });
@@ -42,18 +34,13 @@ async function getEpisodeData(slug: string) {
 	return {
 		episode: sanitizedEpisode,
 		transcript,
-		playerSrc: getPlayerSrc({ id: episode.podcastBuzzsproutId }),
-		playerUrl: getPlayerUrl({ id: episode.podcastBuzzsproutId }),
-		playerStreamUrl: getPlayerStreamUrl({ id: episode.podcastBuzzsproutId }),
 	};
 }
 
 export async function generateMetadata({
 	params,
 }: NextPageProps<'slug'>): Promise<Metadata> {
-	const { episode, playerUrl, playerStreamUrl } = await getEpisodeData(
-		params.slug,
-	);
+	const { episode } = await getEpisodeData(params.slug);
 
 	const cardImage = episode.podcastEpisodeCard && episode.podcastEpisodeCard[0];
 
@@ -88,14 +75,6 @@ export async function generateMetadata({
 			description: description,
 			card: 'player',
 			site: '@VirtualCoffeeIO',
-			players: [
-				{
-					width: 500,
-					height: 210,
-					playerUrl: playerUrl,
-					streamUrl: playerStreamUrl,
-				},
-			],
 			images: cardImage
 				? [
 						{
@@ -116,11 +95,10 @@ export async function generateMetadata({
 }
 
 export default async function Newsletter({ params }: NextPageProps<'slug'>) {
-	const { episode, transcript, playerSrc } = await getEpisodeData(params.slug);
+	const { episode, transcript } = await getEpisodeData(params.slug);
 
 	return (
 		<>
-			<Script src={playerSrc} strategy="afterInteractive" />
 			<main id="maincontent" className="container-lg py-md-4">
 				<h1 className="display-5">{episode.title}</h1>
 				<div className="text-right mb-2">
@@ -136,16 +114,6 @@ export default async function Newsletter({ params }: NextPageProps<'slug'>) {
 				</div>
 
 				<DisplayHtml className="lead" html={episode.podcastShortDescription} />
-
-				<div className="my-4 podcastplayer">
-					{playerSrc && (
-						<>
-							<div
-								id={`buzzsprout-player-${episode.podcastBuzzsproutId}`}
-							></div>
-						</>
-					)}
-				</div>
 
 				<PodcastSubscribe />
 

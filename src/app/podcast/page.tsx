@@ -2,10 +2,9 @@ import Link from 'next/link';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import PodcastSubscribe from '@/components/PodcastSubscribe';
 import PostList from '@/components/PostList';
-import { getEpisodes, getPlayerSrc } from '@/data/podcast';
+import { getEpisodes } from '@/data/podcast';
 import { createMetaData } from '@/util/createMetaData.server';
 import createCmsImage from '@/util/cmsimage';
-import Script from 'next/script';
 
 export const metadata = createMetaData({
 	title: 'Virtual Coffee Podcast',
@@ -19,17 +18,12 @@ export default async function PodcastsIndex() {
 	const podcastEpisodes = await getEpisodes({ limit: 99 });
 
 	const latestEpisode = podcastEpisodes[0];
-	const latestEpisodePlayerSrc = getPlayerSrc({
-		id: latestEpisode.podcastBuzzsproutId!,
-	});
 
 	return (
 		<DefaultLayout
 			heroHeader="Virtual Coffee Podcast"
 			Hero="UndrawWalkInTheCity"
 		>
-			<Script src={latestEpisodePlayerSrc} strategy="afterInteractive" />
-
 			<div className="container bodycopy py-5 lead">
 				<p>
 					Virtual Coffee is an intimate community for developers at all stages
@@ -60,15 +54,6 @@ export default async function PodcastsIndex() {
 					<Link href={latestEpisode.url!}>{latestEpisode.title}</Link>
 				</h3>
 
-				<div className="mt-4 podcastplayer">
-					{latestEpisodePlayerSrc && (
-						<>
-							<div
-								id={`buzzsprout-player-${latestEpisode.podcastBuzzsproutId}`}
-							></div>
-						</>
-					)}
-				</div>
 				{!!latestEpisode.episodeSponsors.length && (
 					<>
 						<div className="mt-3">
