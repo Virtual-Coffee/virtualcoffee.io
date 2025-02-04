@@ -5,6 +5,9 @@ import { createMetaData } from '@/util/createMetaData.server';
 import DisplayHtml from '@/components/DisplayHtml';
 import { dateForDisplay } from '@/util/date';
 import Link from 'next/link';
+import { Google } from '@/svg/calendar/Google';
+import { Outlook } from '@/svg/calendar/Outlook';
+import { Ics } from '@/svg/calendar/Ics';
 
 export const metadata = createMetaData({
 	title: 'Virtual Coffee Community Events',
@@ -121,10 +124,29 @@ export default async function Page() {
 								<time dateTime={event.startDateLocalized}>
 									{`${dateForDisplay(event.startDateLocalized, 'EEEE, LLLL d, yyyy')} - ${dateForDisplay(event.startDateLocalized, 't')} to ${dateForDisplay(event.endDateLocalized, 't ZZZZ')}`}
 								</time>
-
-								<a href={event.eventCalendarLink} download>
-									<small> Add to Calendar</small>
-								</a>
+								<div
+									className="d-flex flex-row align-items-center"
+									style={{ gap: '0.5rem' }}
+								>
+									<small className="text-muted">Add to Calendar:</small>
+									<a
+										href={event.eventCalendarLinks.google}
+										target="_blank"
+										rel="noreferrer"
+									>
+										<Google />
+									</a>
+									<a
+										href={event.eventCalendarLinks.outlook}
+										target="_blank"
+										rel="noreferrer"
+									>
+										<Outlook />
+									</a>
+									<a href={event.eventCalendarLinks.ics} download>
+										<Ics />
+									</a>
+								</div>
 							</div>
 							<div className="card-body">
 								<h5 className="card-title">{event.title}</h5>
