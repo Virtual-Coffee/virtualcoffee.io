@@ -25,7 +25,7 @@
       <title>The Virtual Coffee Podcast</title>
       <link>https://virtualcoffee.io/podcast</link>
     </image>
-    <itunes:image href="https://virtualcoffee.io/feed/vc-pod.jpg" />
+    <itunes:image href="https://virtualcoffee.io/feed/vc-pod.jpeg" />
     <itunes:category text="Technology" />
     <podcast:person role="co-host" href="https://bekahhw.github.io" img="https://virtualcoffee.io/feed/bekah.jpeg">Bekah Hawrot Weigel</podcast:person>
     <podcast:person role="co-host" href="https://dtott.com" img="https://virtualcoffee.io/feed/dan.jpeg">Dan Ott</podcast:person>
