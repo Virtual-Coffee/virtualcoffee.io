@@ -133,6 +133,7 @@ export default async function Page() {
 										href={event.eventCalendarLinks.google}
 										target="_blank"
 										rel="noreferrer"
+										title="Google Calendar"
 									>
 										<Google />
 									</a>
@@ -140,10 +141,15 @@ export default async function Page() {
 										href={event.eventCalendarLinks.outlook}
 										target="_blank"
 										rel="noreferrer"
+										title="Outlook Calendar"
 									>
 										<Outlook />
 									</a>
-									<a href={event.eventCalendarLinks.ics} download>
+									<a
+										href={event.eventCalendarLinks.ics}
+										title="Download ICS"
+										download
+									>
 										<Ics />
 									</a>
 								</div>
