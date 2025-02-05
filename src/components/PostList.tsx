@@ -1,5 +1,6 @@
 import { MdxFile } from '@/util/loadMdx.server';
 import Link from 'next/link';
+import path from 'path';
 
 /*
 PostListItem is each resource under a section of content on the homepage.
@@ -67,16 +68,20 @@ export function formatFileListItemsForPostList(
 		return null;
 	}
 
-	return items.map(
-		(item): PostListItem => ({
+	return items.map((item): PostListItem => {
+		const parts = item.slug.split(path.sep).filter((part) => {
+			return !!part && part !== 'content';
+		});
+
+		return {
 			title: item.meta.title,
 			description: item.meta.description,
-			href: `/${item.slug.replace('content/', '')}`,
+			href: `/${parts.join('/')}`,
 			children: formatFileListItemsForPostList(
 				item.children,
 				depth,
 				internalCurLevel + 1,
 			),
-		}),
-	);
+		};
+	});
 }
