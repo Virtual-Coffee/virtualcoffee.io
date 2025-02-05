@@ -3,7 +3,7 @@
 import { GraphQLClient, gql } from 'graphql-request';
 import { DateTime } from 'luxon';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
-import { ics } from 'calendar-link';
+import { ics, google, outlook } from 'calendar-link';
 
 const calendarsQuery = gql`
 	query getCalendars {
@@ -39,7 +39,11 @@ interface SolspaceEventResponse {
 	eventCalendarDescription: string;
 }
 export interface EventItem extends SolspaceEventResponse {
-	eventCalendarLink: string;
+	eventCalendarLinks: {
+		google: string;
+		outlook: string;
+		ics: string;
+	};
 }
 export interface EventsResponse extends Array<EventItem> {}
 
@@ -112,16 +116,32 @@ export async function getEvents({
 				const sanitizedDescription = await sanitizeHtml(
 					event.eventCalendarDescription,
 				);
-				const calendarLink = ics({
+				const calendarLinkGoogle = google({
 					title: event.title,
 					start: event.startDateLocalized,
 					end: event.endDateLocalized,
 					description: sanitizedDescription,
-				});
+				  });
+				  const calendarLinkOutlook = outlook({
+					title: event.title,
+					start: event.startDateLocalized,
+					end: event.endDateLocalized,
+					description: sanitizedDescription,
+				  });
+				  const calendarLinkIcs = ics({
+					title: event.title,
+					start: event.startDateLocalized,
+					end: event.endDateLocalized,
+					description: sanitizedDescription,
+				  });
 				return {
 					...event,
 					eventCalendarDescription: sanitizedDescription,
-					eventCalendarLink: calendarLink,
+					eventCalendarLinks: {
+						google: calendarLinkGoogle,
+						outlook: calendarLinkOutlook,
+						ics: calendarLinkIcs,
+					},
 				};
 			}),
 		);
