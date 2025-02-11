@@ -32,7 +32,7 @@ export default function Challenge() {
 					<h2 className="pl-5 pr-3">Celebrating 5 Years of Community Growth</h2>
 					<p className="px-5 mt-4">
 						As Virtual Coffee celebrates its 5th anniversary, we're excited to
-						launch our <strong>first-ever quarterly challenge</strong>! This
+						launch our <strong>first-ever quarter challenge</strong>! This
 						special initiative embodies what makes our community unique:
 						supporting developers at all stages, creating opportunities for
 						growth, and fostering genuine connections.
