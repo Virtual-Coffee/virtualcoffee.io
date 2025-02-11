@@ -36,7 +36,7 @@ export default async function Index() {
 
 			<div className="row">
 				<div className="col-sm">
-					<h2>Recent Issues:</h2>
+					<h2>Archived Newsletters:</h2>
 					<PostList items={issues} />
 					{/* {% displayPostList collections.newsletters | reverse %} */}
 				</div>
