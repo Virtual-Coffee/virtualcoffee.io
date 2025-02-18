@@ -36,7 +36,15 @@ export default async function Index() {
 
 			<div className="row">
 				<div className="col-sm">
-					<h2>Recent Issues:</h2>
+					<h2>Newsletter Archive</h2>
+					<p>
+						<small>
+							In 2024, we moved to{' '}
+							<a href="https://www.newsletter.virtualcoffee.io/">beehiv</a>, and
+							newer newsletters can be found there. All of our previous
+							newsletters can be found here:
+						</small>
+					</p>
 					<PostList items={issues} />
 					{/* {% displayPostList collections.newsletters | reverse %} */}
 				</div>
