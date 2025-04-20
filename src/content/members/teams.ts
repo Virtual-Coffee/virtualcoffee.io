@@ -28,7 +28,7 @@ const teams = {
 		'derekjj',
 	],
 
-	'Notetaker': [
+	Notetaker: [
 		'abbeyperini',
 		'andreamartz',
 		'aurelieverrot',
