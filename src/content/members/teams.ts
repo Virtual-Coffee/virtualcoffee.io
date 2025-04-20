@@ -1,10 +1,9 @@
 const teams = {
 	'Community Maintainer': ['BekahHW', 'tkshill', 'meg-gutshall'],
-
 	'Org Maintainer': ['danieltott', 'BekahHW'],
-	'Lunch & Learn Coordinator': ['shelleymcq'],
-	'Coffee Table Groups Coordinator': ['abbeyperini'],
 	'Maintainer Emeritus': ['saramccombs', 'juliaseid'],
+	'Lunch & Learn Coordinator': ['shelleymcq'],
+
 	'Room Leader': [
 		'abbeyperini',
 		'AlexVCS',
@@ -29,7 +28,7 @@ const teams = {
 		'derekjj',
 	],
 
-	Notetaker: [
+	'Notetaker': [
 		'abbeyperini',
 		'andreamartz',
 		'aurelieverrot',
