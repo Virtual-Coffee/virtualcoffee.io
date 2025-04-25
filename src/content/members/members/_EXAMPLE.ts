@@ -47,6 +47,7 @@ export const _EXAMPLE: MemberObject = {
 	badges: [],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
+	// Use this handy website to find your latitude and longitude: https://www.latlong.net/
 	// location: {
 	// 	latitude: 41.48266891706046,
 	// 	longitude: -81.80009779282766,
