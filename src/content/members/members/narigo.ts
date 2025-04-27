@@ -40,7 +40,11 @@ export const narigo: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://narigo.dev', title: 'Personal playground' },
+		{
+			type: 'website',
+			url: 'https://narigo.dev',
+			title: 'Personal playground',
+		},
 	],
 	badges: [],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
@@ -48,7 +52,7 @@ export const narigo: MemberObject = {
 	// Use this handy website to find your latitude and longitude: https://www.latlong.net/
 	location: {
 		latitude: 48.538818,
-		longitude: 12.151820,
+		longitude: 12.15182,
 		title: 'Landshut, DE', // optional
 	},
 };
