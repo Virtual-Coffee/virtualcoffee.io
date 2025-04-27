@@ -11,7 +11,7 @@ export const narigo: MemberObject = {
 	name: 'Jörn Bernhardt',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
-	// mainUrl: 'https://virtualcoffee.io',
+	mainUrl: 'https://narigo.dev',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
 	bio: `Founder and software engineer. Passion for frontend. Pronounciation help: "to yearn".`,
@@ -35,12 +35,20 @@ export const narigo: MemberObject = {
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'NarigoDF' },
-		// { type: 'twitch', username: 'yourUserName' },
+		{ type: 'twitch', username: 'narigodf' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://narigo.dev', title: 'Playground for development' },
+		{ type: 'website', url: 'https://narigo.dev', title: 'Personal playground' },
 	],
 	badges: [],
+	// Add your location to our member map at https://virtualcoffee.io/members (optional)
+	// Feel free to be as specific or vague as you're comfortable with.
+	// Use this handy website to find your latitude and longitude: https://www.latlong.net/
+	location: {
+		latitude: 48.538818,
+		longitude: 12.151820,
+		title: 'Landshut, DE', // optional
+	},
 };
