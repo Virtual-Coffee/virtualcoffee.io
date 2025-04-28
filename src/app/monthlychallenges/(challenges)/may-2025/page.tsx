@@ -109,8 +109,7 @@ export default function Challenge() {
 					<code>#monthly-challenge</code> channel in Slack.
 				</li>
 				<li>
-					We'll do a Slack check-in each week to track your progress and support
-					you.
+					We'll do synchronous and asynchronous weekly check-ins to track your progress and support you.
 				</li>
 			</ul>
 			<p>Remember, we're always here to help. ❤️</p>
