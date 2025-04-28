@@ -30,7 +30,11 @@ export default function Challenge() {
 				down into achievable monthly goals.
 			</p>
 			<p className="lead">
-				This month, we're doing a "Goals Check-In" to allow you to reflect on your progress, reevaluate the monthly goals, and gain clarity on the path you set out on at the beginning of the year to achieve that one big goal. Let's take a moment to pause, assess, and adjust those monthly goals if necessary. As always, we're here to support you!
+				This month, we're doing a "Goals Check-In" to allow you to reflect on
+				your progress, reevaluate the monthly goals, and gain clarity on the
+				path you set out on at the beginning of the year to achieve that one big
+				goal. Let's take a moment to pause, assess, and adjust those monthly
+				goals if necessary. As always, we're here to support you!
 			</p>
 
 			<hr />
@@ -40,9 +44,9 @@ export default function Challenge() {
 
 			<h2>Goals</h2>
 			<p>
-				Our goal is for you to reflect on your progress, reevaluate your monthly goals,
-				and gain clarity on the path you set out on at the beginning of the
-				year to achieve that big goal.
+				Our goal is for you to reflect on your progress, reevaluate your monthly
+				goals, and gain clarity on the path you set out on at the beginning of
+				the year to achieve that big goal.
 			</p>
 
 			<h2>Who can participate?</h2>
@@ -55,9 +59,9 @@ export default function Challenge() {
 			<h3>Reflect, Reevaluate, Adjust, and Move Forward</h3>
 			<ul>
 				<li>
-					<strong>Reflect on achievements</strong>: Think about your big goal and monthly goals set
-					at the beginning (or any point) this year. What have you accomplished
-					so far?
+					<strong>Reflect on achievements</strong>: Think about your big goal
+					and monthly goals set at the beginning (or any point) this year. What
+					have you accomplished so far?
 				</li>
 				<li>
 					<strong>Learn from challenges</strong>: Did you encounter any setbacks
@@ -67,8 +71,8 @@ export default function Challenge() {
 				</li>
 				<li>
 					<strong>Set your sights forward</strong>: What are your remaining
-					monthly goals for the year to reach your big goal? Are there any adjustments you want to make based
-					on your progress?
+					monthly goals for the year to reach your big goal? Are there any
+					adjustments you want to make based on your progress?
 				</li>
 				<li>
 					<strong>Embrace shifting goal</strong>: It's okay if your goal has
@@ -84,9 +88,9 @@ export default function Challenge() {
 				<strong>Coffee Table Groups</strong>
 			</p>
 			<p>
-				If you need help reflecting on and reevaluating your big goal and monthly goals or want to
-				hold yourself accountable by working on them with the community, we're
-				here for you!
+				If you need help reflecting on and reevaluating your big goal and
+				monthly goals or want to hold yourself accountable by working on them
+				with the community, we're here for you!
 			</p>
 			<p>
 				We have various{' '}
@@ -109,7 +113,8 @@ export default function Challenge() {
 					<code>#monthly-challenge</code> channel in Slack.
 				</li>
 				<li>
-					We'll do synchronous and asynchronous weekly check-ins to track your progress and support you.
+					We'll do synchronous and asynchronous weekly check-ins to track your
+					progress and support you.
 				</li>
 			</ul>
 			<p>Remember, we're always here to help. ❤️</p>
