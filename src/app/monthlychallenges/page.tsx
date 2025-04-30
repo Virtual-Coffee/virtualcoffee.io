@@ -709,7 +709,14 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					The Goals Check-In challenge provides an opportunity for Virtual Coffee members to reflect on their progress, reevaluate the achievable monthly goals, and gain clarity on their journey to achieve the big goal they set at the beginning of the year. Let’s pause, assess, and adjust those monthly goals if necessary. This challenge aims to encourage personal growth, foster connection within the community, and provide a supportive space for members to share their insights, challenges, and successes.
+					The Goals Check-In challenge provides an opportunity for Virtual
+					Coffee members to reflect on their progress, reevaluate the achievable
+					monthly goals, and gain clarity on their journey to achieve the big
+					goal they set at the beginning of the year. Let’s pause, assess, and
+					adjust those monthly goals if necessary. This challenge aims to
+					encourage personal growth, foster connection within the community, and
+					provide a supportive space for members to share their insights,
+					challenges, and successes.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
