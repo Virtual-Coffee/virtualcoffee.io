@@ -22,6 +22,11 @@ export const metadata = handle.meta;
 export default function Challenge() {
 	return (
 		<>
+			<div className="alert alert-success">
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link href="/monthlychallenges/may-2025">next challenge</Link>!
+			</div>
+
 			<h1 className="mb-5">
 				<small>Virtual Coffee Spring 2025 Quarter Challenge:</small> From Idea
 				to Stage! 🎤

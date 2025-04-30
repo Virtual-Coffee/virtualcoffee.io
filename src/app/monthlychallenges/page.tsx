@@ -676,7 +676,6 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		current: true,
 		title: 'Spring 2025 Quarter Challenge: From Idea to Stage',
 		subtitle: `Let's brainstorm those ideas, submit that CFP, and bring them to the stage!`,
 		description: (
@@ -697,6 +696,39 @@ const challengeList: Challenge[] = [
 					To view all of the details of this year&apos;s challenge,{' '}
 					<Link href="/monthlychallenges/spring-2025">
 						check out the Spring 2025 Quarter Challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
+	},
+	{
+		current: true,
+		title: 'Goals Check-In',
+		subtitle: `Reflect. Reevaluate. Adjust.`,
+		description: (
+			<>
+				<p>
+					The Goals Check-In challenge provides an opportunity for Virtual
+					Coffee members to reflect on their progress, reevaluate the achievable
+					monthly goals, and gain clarity on their journey to achieve the big
+					goal they set at the beginning of the year. Let’s pause, assess, and
+					adjust those monthly goals if necessary. This challenge aims to
+					encourage personal growth, foster connection within the community, and
+					provide a supportive space for members to share their insights,
+					challenges, and successes.
+				</p>
+				<p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/goals-check-in-hows-your-progress-flowing-2a45">
+						this blog post
+					</a>
+					.
+				</p>
+				<p>
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/may-2025">
+						check out the May 2025 challenge page
 					</Link>
 					.
 				</p>
