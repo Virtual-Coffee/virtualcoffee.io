@@ -173,7 +173,12 @@ export default function Challenge() {
 				<li>Reviewing resumes, social profiles, and elevator pitches and giving feedback</li>
 				<li>Answering questions from members and giving feedback related to job searching on Slack</li>
 			</ul>
-			<p>Please let our Monthly Challenge Team Leads, Ayu and Dominic, know if you'd like to help, or our Lunch & Learn Coordinator, Shelley, if you'd like to give a Lunch & Learn session. Your help is greatly appreciated! ❤️</p>
+			<p>
+				Please let our Monthly Challenge Team Leads, Ayu and Dominic, know if
+				you'd like to help, or our Lunch & Learn Coordinator, Shelley, if you'd
+				like to give a Lunch & Learn session. Your help is greatly appreciated!
+				❤️
+			</p>
 		</>
 	);
 }
