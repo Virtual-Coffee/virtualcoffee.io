@@ -35,11 +35,11 @@ export default function Challenge() {
 			<hr />
 
 			<h2 className="mb-3">Challenge Overview</h2>
-			<p>Over the next two months, we will guide and support you through every essential step in getting you job-ready. This includes defining your goals, creating a compelling elevator pitch, refreshing your resume, building your personal brand, and developing a strong portfolio. We will also encourage you to network effectively, apply for job openings, prepare for interviews, and confidently negotiate and make decisions about your next opportunity, all while prioritizing your well-being.</p>
+			<p>Over the next two months, we'll guide and support you through every essential step in getting you job-ready. This includes defining your goals, creating a compelling elevator pitch, refreshing your resume, building your personal brand, and developing a strong portfolio. We'll also encourage you to network effectively, apply for job openings, prepare for interviews, and confidently negotiate and make decisions about your next opportunity, all while prioritizing your well-being.</p>
 
 			<h2 className="mb-3">The Journey: How It Works</h2>
 			<h3 className="mb-3">Challenge Highlights</h3>
-			<p>You can take a glimpse of what we will do during the challenge, listed below, in no particular order:</p>
+			<p>You can take a glimpse of what we'll do during the challenge, listed below, in no particular order:</p>
 
 			<ul>
 				<li className="mb-2"><strong>Goal Setting:</strong> Outline your job goals and share them with us. Select a personalized career track—whether you're seeking your first job, making a career change, or returning to the workforce—to tailor your journey.</li>
@@ -98,7 +98,7 @@ export default function Challenge() {
 			<p>Depending on your availability, you can support us by:</p>
 			<ul>
 				<li>Reviewing resumes, social profiles, and elevator pitches and giving feedback</li>
-				<li>Answering questions from folks and giving feedback related to job searching on Slack</li>
+				<li>Answering questions from members and giving feedback related to job searching on Slack</li>
 				<li>Running mock technical interviews based on your expertise. Let our Monthly Challenge Team Leads (Ayu and Dominic) know if you'd like to help.</li>
 			</ul>
 			<p>Your help is greatly appreciated! ❤️</p>
