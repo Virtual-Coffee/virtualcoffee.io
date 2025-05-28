@@ -703,7 +703,6 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		current: true,
 		title: 'Goals Check-In',
 		subtitle: `Reflect. Reevaluate. Adjust.`,
 		description: (
@@ -729,6 +728,32 @@ const challengeList: Challenge[] = [
 					To view all of the details of this year&apos;s challenge,{' '}
 					<Link href="/monthlychallenges/may-2025">
 						check out the May 2025 challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
+	},
+	{
+		current: true,
+		title: 'Bi-Month Challenge: Get Job Ready',
+		subtitle: `There's never a bad time to update your job application materials and practice for job interviews!`,
+		description: (
+			<>
+				<p>
+					Over the next two months, we'll work on creating, revising, or updating your job packet materials and that elevator pitch that might get you in the door. We'll also learn to network and prepare for interviews.
+				</p>
+				{/* <p>
+					Learn more about this challenge in{' '}
+					<a href="https://dev.to/virtualcoffee/finding-your-voice-why-speaking-matters-in-tech-439a">
+						this blog post
+					</a>
+					.
+				</p> */}
+				<p>
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/summer-2025">
+						check out the Bi-Month Challenge: Get Job Ready page
 					</Link>
 					.
 				</p>
