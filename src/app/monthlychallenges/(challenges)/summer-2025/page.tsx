@@ -99,9 +99,10 @@ export default function Challenge() {
 			<ul>
 				<li>Reviewing resumes, social profiles, and elevator pitches and giving feedback</li>
 				<li>Answering questions from members and giving feedback related to job searching on Slack</li>
-				<li>Running mock technical interviews based on your expertise. Let our Monthly Challenge Team Leads (Ayu and Dominic) know if you'd like to help.</li>
+				<li>Running mock technical interviews based on your expertise</li>
+				<li>Giving Lunch & Learn related to job search. For example, "How to tailor your resume", "How to use X tool to track job applications", etc.</li>
 			</ul>
-			<p>Your help is greatly appreciated! ❤️</p>
+			<p>Please let our Monthly Challenge Team Leads, Ayu and Dominic, know if you'd like to help, or our Lunch & Learn Coordinator, Shelley, if you'd like to give a Lunch & Learn session. Your help is greatly appreciated! ❤️</p>
 		</>
 	);
 }
