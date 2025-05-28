@@ -185,9 +185,10 @@ export default function Challenge() {
 			</ul>
 			<p>
 				Please let our Monthly Challenge Team Leads, Ayu and Dominic, know if
-				you'd like to help, or submit a <Link href="/lunch-and-learn-idea">Lunch & Learn Idea Form</Link> if you'd
-				like to give a Lunch & Learn session. Your help is greatly appreciated!
-				❤️
+				you'd like to help, or submit a{' '}
+				<Link href="/lunch-and-learn-idea">Lunch & Learn Idea Form</Link> if
+				you'd like to give a Lunch & Learn session. Your help is greatly
+				appreciated! ❤️
 			</p>
 		</>
 	);
