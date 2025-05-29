@@ -2,11 +2,11 @@ import { createMetaData } from '@/util/createMetaData.server';
 import Link from 'next/link';
 
 const handle = {
-	listTitle: 'Bi-Month Challenge: Get Job Ready!',
+	listTitle: 'Summer 2025 Bi-Month Challenge: Get Job Ready!',
 	meta: {
-		title: 'Bi-Month Challenge: Get Job Ready!',
+		title: 'Summer 2025 Bi-Month Challenge: Get Job Ready!',
 		description:
-			'Bi-Month Challenge -> Get job ready! Resumes, Cover Letters, and Elevator Pitch',
+			'Summer 2025 Bi-Month Challenge -> Get job ready! Resumes, Cover Letters, Elevator Pitch, and more',
 	},
 	dates: ['2025-06-01', '2025-07-01'],
 	hero: {
@@ -20,7 +20,7 @@ export default function Challenge() {
 	return (
 		<>
 			<h1>
-				<small>Bi-Month Challenge:</small> Get Job Ready!
+				<small>Summer 2025 Bi-Month Challenge:</small> Get Job Ready!
 			</h1>
 
 			<p className="lead mt-3">
@@ -86,7 +86,7 @@ export default function Challenge() {
 					<strong>Networking:</strong> Expand your professional connections by
 					reaching out to former colleagues and the community, engaging with
 					your network on LinkedIn or other platforms, and participating in
-					industry meetups and events.
+					tech meetups and events.
 				</li>
 				<li className="mb-2">
 					<strong>Apply with Intention:</strong> Take a strategic approach to
