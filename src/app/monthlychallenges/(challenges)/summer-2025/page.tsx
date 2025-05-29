@@ -85,8 +85,8 @@ export default function Challenge() {
 				<li className="mb-2">
 					<strong>Networking:</strong> Expand your professional connections by
 					reaching out to former colleagues and the community, engaging with
-					your network on LinkedIn or other platforms, and participating in
-					tech meetups and events.
+					your network on LinkedIn or other platforms, and participating in tech
+					meetups and events.
 				</li>
 				<li className="mb-2">
 					<strong>Apply with Intention:</strong> Take a strategic approach to
