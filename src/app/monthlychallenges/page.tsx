@@ -65,31 +65,37 @@ const challengeList: Challenge[] = [
 			},
 		],
 	},
-
 	{
-		title: 'Get Job Ready',
-		subtitle: `Resumes, Cover Letters, and Elevator Pitch. There's never a bad time to update your job application materials.`,
+		current: true,
+		title: 'Summer 2025 Bi-Month Challenge: Get Job Ready',
+		subtitle: `There's never a bad time to update your job application materials and practice for job interviews!`,
 		description: (
 			<>
+				<p>We typically hold this challenge for one month, but we are now transforming it into a bi-month challenge to give you more time to prepare for job readiness!</p>
 				<p>
-					The goal of this challenge is to work on creating, revising, or
-					updating your job packet materials and that elevator pitch that might
-					get you in the door. Your resume, cover letter, and elevator pitch
-					should work together to tell your story and represent where you are on
-					your career journey; each piece should complement the others. This
-					challenge emphasizes taking time to ensure they work together or get
-					some extra feedback on what you&apos;ve worked on.
+				Over the next two months, we'll work on creating, revising, or updating your job packet materials and that elevator pitch that might get you in the door. We'll also learn to network and prepare for interviews.
 				</p>
+								{/* <p>
+					Learn more about this challenge in{' '}
+					<a href="">
+						this blog post
+					</a>
+					.
+				</p> */}
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/mar-2024">
-						check out the March 2024 challenge page
+					<Link href="/monthlychallenges/summer-2025">
+					check out the Summer 2025 Bi-Month Challenge: Get Job Ready page
 					</Link>
 					.
 				</p>
 			</>
 		),
 		links: [
+			{
+				href: '/monthlychallenges/mar-2024',
+				title: 'March, 2024',
+			},
 			{
 				href: '/monthlychallenges/feb-2023',
 				title: 'February, 2023',
@@ -582,8 +588,7 @@ const challengeList: Challenge[] = [
 				<p>
 					In this challenge, we encourage you to setting up an ambitious goal
 					for the year and break it into achievable goals for each month. Our
-					Coffee Table Groups—Accountabilibuddies, Tech Interview Study Group,
-					and The Pack Hunt—are participating in this challenge and ready to
+					Coffee Table Groups are participating in this challenge and ready to
 					support you!
 				</p>
 				<p>
@@ -703,7 +708,6 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		current: true,
 		title: 'Goals Check-In',
 		subtitle: `Reflect. Reevaluate. Adjust.`,
 		description: (
