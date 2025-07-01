@@ -42,16 +42,24 @@ export const itsmichaelroy: MemberObject = {
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
-		{ type: 'website', url: 'https://michaelroy.dev/', title: 'Michael Roy\'s Portfolio' },
-		{ type: 'website', url: 'https://mrcodewizard.com/', title: 'Michael Roy\'s Codefolio' },
+		{
+			type: 'website',
+			url: 'https://michaelroy.dev/',
+			title: "Michael Roy's Portfolio",
+		},
+		{
+			type: 'website',
+			url: 'https://mrcodewizard.com/',
+			title: "Michael Roy's Codefolio",
+		},
 	],
 	badges: [],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
 	// Use this handy website to find your latitude and longitude: https://www.latlong.net/
 	location: {
-	latitude: -25.448880,
-	longitude: -49.534568,
-	title: 'Brazil', // optional
-	 },
+		latitude: -25.44888,
+		longitude: -49.534568,
+		title: 'Brazil', // optional
+	},
 };
