@@ -15,7 +15,7 @@ export const devanshukoli: MemberObject = {
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: `I'm Software Engineer, Open-source lover, Swimmer, Anime-Manga Nerd.`,
+	bio: `I'm a Software Engineer, Open-source lover, Swimmer, Anime-Manga Nerd.`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
