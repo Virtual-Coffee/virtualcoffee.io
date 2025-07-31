@@ -66,7 +66,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Summer 2025 Bi-Month Challenge: Get Job Ready',
 		subtitle: `There's never a bad time to update your job application materials and practice for job interviews!`,
 		description: (
@@ -644,8 +643,9 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
+		current: true,
 		title: 'Photography Challenge',
-		subtitle: `Let's get out and about.`,
+		subtitle: `Let's get out and about!`,
 		description: (
 			<>
 				<p>
@@ -655,7 +655,7 @@ const challengeList: Challenge[] = [
 					We will be encouraging our members to make the most of summer (in the
 					Northern hemisphere, at least), enjoy some work / life balance and
 					benefit from the fresh air and exercise of the great outdoors. The
-					challenge <i>could</i> be completed without ever leaving the car, but
+					challenge <em>could</em> be completed without ever leaving the car, but
 					to get the most out of it, leave the car for a bit and get some real
 					fresh air and exercise. A little hint for those of you that have
 					access to public transportation: Public transportation is a great way
@@ -663,22 +663,28 @@ const challengeList: Challenge[] = [
 					you to actually get some exercise because it probably won&apos;t pick
 					you up at your front door.
 				</p>
-				<p>
+				{/* <p>
 					Learn more about this challenge in{' '}
 					<a href="https://dev.to/virtualcoffee/monthly-challenge-photography-4g18">
 						this blog post
 					</a>
 					.
-				</p>
+				</p> */}
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/aug-2024">
-						check out the August 2024 challenge page
+					<Link href="/monthlychallenges/aug-2025">
+						check out the August 2025 challenge page
 					</Link>
 					.
 				</p>
 			</>
 		),
+		links: [
+			{
+				href: '/monthlychallenges/aug-2024',
+				title: 'August, 2024',
+			},
+		],
 	},
 	{
 		title: 'Spring 2025 Quarter Challenge: From Idea to Stage',
