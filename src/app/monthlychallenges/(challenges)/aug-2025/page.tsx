@@ -27,7 +27,7 @@ export default function Challenge() {
 				This month, we encourage you to take some time away from
 				your screen, get out of the house, then come back and share
 				photographs in Slack. You can, of course, complete the challenge without
-				going more than five feet from your car, but do you know you get the
+				going more than five feet from your car, but even better would be to get the
 				benefit of some fresh air and exercise? So, let's do it!
 			</p>
 
