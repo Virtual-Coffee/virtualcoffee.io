@@ -28,7 +28,7 @@ export default function Challenge() {
 				your screen, get out of the house, then come back and share
 				photographs in Slack. You can, of course, complete the challenge without
 				going more than five feet from your car, but even better would be to get the
-				benefit of some fresh air and exercise? So, let's do it!
+				benefit of some fresh air and exercise as well. So, let's do it!
 			</p>
 
 			<h2 className="mt-5">How to Participate</h2>
