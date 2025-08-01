@@ -24,11 +24,11 @@ export default function Challenge() {
 			</h1>
 
 			<p className="lead mt-3">
-				This month, we encourage you to take some time away from
-				your screen, get out of the house, then come back and share
-				photographs in Slack. You can, of course, complete the challenge without
-				going more than five feet from your car, but even better would be to get the
-				benefit of some fresh air and exercise as well. So, let's do it!
+				This month, we encourage you to take some time away from your screen,
+				get out of the house, then come back and share photographs in Slack. You
+				can, of course, complete the challenge without going more than five feet
+				from your car, but even better would be to get the benefit of some fresh
+				air and exercise as well. So, let's do it!
 			</p>
 
 			<h2 className="mt-5">How to Participate</h2>
@@ -43,8 +43,9 @@ export default function Challenge() {
 					the main idea is to photograph the places you visit.
 				</li>
 				<li>
-					<strong>Post:</strong> When you get back, post your photographs in the <code>#monthly-challenge</code> channel in Slack. Or you can post
-					them on your phone while you’re out if you’re too impatient to wait!
+					<strong>Post:</strong> When you get back, post your photographs in the{' '}
+					<code>#monthly-challenge</code> channel in Slack. Or you can post them
+					on your phone while you’re out if you’re too impatient to wait!
 				</li>
 				<li>
 					<strong>Browse:</strong> Admire everyone else’s photographs.
