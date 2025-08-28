@@ -287,6 +287,7 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Preptember',
 		subtitle: `Get your open source projects ready!`,
 		description: (
@@ -643,7 +644,6 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		current: true,
 		title: 'Photography Challenge',
 		subtitle: `Let's get out and about!`,
 		description: (
