@@ -20,18 +20,23 @@ export default function Challenge() {
 	return (
 		<>
 			<h1>
-				<small>Bi-Monthly Challenge for Fall 2025:</small> Preptember & Hacktoberfest!
+				<small>Bi-Monthly Challenge for Fall 2025:</small> Preptember &
+				Hacktoberfest!
 			</h1>
 
 			<LeadText>
-				This two-month challenge combines preparation and participation in open source. 
-				<strong>September (Preptember)</strong>: Focus on helping maintainers polish their repositories and contributors 
-				gain confidence with our structured 4-week approach using our{' '}
+				This two-month challenge combines preparation and participation in open
+				source.
+				<strong>September (Preptember)</strong>: Focus on helping maintainers
+				polish their repositories and contributors gain confidence with our
+				structured 4-week approach using our{' '}
 				<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 					repository checklist
 				</Link>{' '}
-				and building skills through guided practice. <strong>October (Hacktoberfest)</strong>: Put your preparation into action 
-				by contributing to open source projects during the official Hacktoberfest event.
+				and building skills through guided practice.{' '}
+				<strong>October (Hacktoberfest)</strong>: Put your preparation into
+				action by contributing to open source projects during the official
+				Hacktoberfest event.
 			</LeadText>
 
 			<br />
@@ -46,31 +51,50 @@ export default function Challenge() {
 				Hacktoberfest!
 			</LeadText>
 
-			<hr /><h2>Theme</h2>
-		<p><strong>September</strong>: Prep + Confidence Building - Get ready for open source!</p>
-		<p><strong>October</strong>: Hacktoberfest - Participate in open source, learn, and have fun!</p>
+			<hr />
+			<h2>Theme</h2>
+			<p>
+				<strong>September</strong>: Prep + Confidence Building - Get ready for
+				open source!
+			</p>
+			<p>
+				<strong>October</strong>: Hacktoberfest - Participate in open source,
+				learn, and have fun!
+			</p>
 
-		<h2>Challenge</h2>
-		<h3>September: Preptember</h3>
-		<p>
-			<strong>Goal</strong>: Help maintainers polish repos and contributors gain confidence 
-			through a structured 4-week approach.
-		</p>
+			<h2>Challenge</h2>
+			<h3>September: Preptember</h3>
+			<p>
+				<strong>Goal</strong>: Help maintainers polish repos and contributors
+				gain confidence through a structured 4-week approach.
+			</p>
 
-		<h3>October: Hacktoberfest</h3>
-		<p>
-			<strong>Goal</strong>: Complete four meaningful contributions during October. We have three tracks:
-		</p>
-		<ul>
-			<li><strong>Maintainers</strong>: Provide repositories with "<code>hacktoberfest</code>" topics and issues labeled "<code>hacktoberfest</code>"</li>
-			<li><strong>Contributors</strong>: Find repositories and solve issues to achieve four approved pull requests</li>
-			<li><strong>Mentors</strong>: Support contributors and maintainers through pairing, 1:1s, and guidance</li>
-		</ul>
+			<h3>October: Hacktoberfest</h3>
+			<p>
+				<strong>Goal</strong>: Complete four meaningful contributions during
+				October. We have three tracks:
+			</p>
+			<ul>
+				<li>
+					<strong>Maintainers</strong>: Provide repositories with "
+					<code>hacktoberfest</code>" topics and issues labeled "
+					<code>hacktoberfest</code>"
+				</li>
+				<li>
+					<strong>Contributors</strong>: Find repositories and solve issues to
+					achieve four approved pull requests
+				</li>
+				<li>
+					<strong>Mentors</strong>: Support contributors and maintainers through
+					pairing, 1:1s, and guidance
+				</li>
+			</ul>
 
 			<h2>Community Issue</h2>
 			<p>
-				<strong>Preptember Accountability Issue</strong> → members comment weekly with their wins + GIFs 
-				to celebrate progress and keep each other motivated.
+				<strong>Preptember Accountability Issue</strong> → members comment
+				weekly with their wins + GIFs to celebrate progress and keep each other
+				motivated.
 			</p>
 
 			<h2>Maintainers</h2>
@@ -105,7 +129,7 @@ export default function Challenge() {
 			</p>
 
 			<h2>How to Participate</h2>
-			
+
 			<h3>September: Preptember Participation</h3>
 			<LeadText>
 				<p>
@@ -155,41 +179,61 @@ export default function Challenge() {
 			</ul>
 
 			<h3>Weekly Schedule</h3>
-			
+
 			<h4>Week 1: Repo Health Check</h4>
-			<p><strong>Focus</strong>: Use the maintainer checklist to review repos (README, LICENSE, CONTRIBUTING, issue/PR templates).</p>
+			<p>
+				<strong>Focus</strong>: Use the maintainer checklist to review repos
+				(README, LICENSE, CONTRIBUTING, issue/PR templates).
+			</p>
 			<ul>
-				<li>Maintainers and contributors will review repositories using our checklist</li>
+				<li>
+					Maintainers and contributors will review repositories using our
+					checklist
+				</li>
 				<li>Members will share 1 thing they fixed or improved</li>
 			</ul>
 
 			<h4>Week 2: Good First Issues</h4>
-			<p><strong>Focus</strong>: Create/label beginner-friendly issues in VC or personal repos.</p>
+			<p>
+				<strong>Focus</strong>: Create/label beginner-friendly issues in VC or
+				personal repos.
+			</p>
 			<ul>
 				<li>Maintainers create and label beginner-friendly issues</li>
-				<li>Contributors practice finding and commenting on approachable issues</li>
+				<li>
+					Contributors practice finding and commenting on approachable issues
+				</li>
 			</ul>
 
 			<h4>Week 3: Docs & Guides</h4>
-			<p><strong>Focus</strong>: Add or update CONTRIBUTING.md, onboarding notes, or a setup guide.</p>
+			<p>
+				<strong>Focus</strong>: Add or update CONTRIBUTING.md, onboarding notes,
+				or a setup guide.
+			</p>
 			<ul>
-				<li>Emphasis on non-code contributions (typos, screenshots, clarifications)</li>
+				<li>
+					Emphasis on non-code contributions (typos, screenshots,
+					clarifications)
+				</li>
 				<li>Improve documentation and contribution guidelines</li>
 			</ul>
 
 			<h4>Week 4: Promote your Project!</h4>
 			<ul>
-				<li>Maintainers share their projects in our{' '}
+				<li>
+					Maintainers share their projects in our{' '}
 					<a href="https://github.com/Virtual-Coffee/vc-preptember">
 						Virtual Coffee Preptember repository
-					</a> (there will be a 2025 issue)</li>
+					</a>{' '}
+					(there will be a 2025 issue)
+				</li>
 				<li>Share a pitch, video, etc. in #hacktoberfest in Slack</li>
 			</ul>
 
 			<h3>Synchronous check-ins</h3>
 			<p>
-				Synchronous check-ins will begin the second Monday in September. 
-				You can find more info at <Link href="/events">virtualcoffee.io/events</Link>.
+				Synchronous check-ins will begin the second Monday in September. You can
+				find more info at <Link href="/events">virtualcoffee.io/events</Link>.
 			</p>
 
 			<h3>Weekly check-ins</h3>
@@ -248,14 +292,16 @@ export default function Challenge() {
 
 			<h2>October: Hacktoberfest Participation</h2>
 			<p>
-				After preparing in September, it's time to participate in the official Hacktoberfest! 
-				You can access your dashboard{' '}
+				After preparing in September, it's time to participate in the official
+				Hacktoberfest! You can access your dashboard{' '}
 				<a href="https://hacktoberfest.virtualcoffee.io/dashboard">here</a> if
 				you've signed up for the VC Hacktoberfest Initiative.
 			</p>
 
 			<h3>Before Starting Hacktoberfest</h3>
-			<p><strong>Contributors</strong></p>
+			<p>
+				<strong>Contributors</strong>
+			</p>
 			<ul>
 				<li>
 					Sign up on the{' '}
@@ -270,11 +316,14 @@ export default function Challenge() {
 				</li>
 			</ul>
 
-			<p><strong>Maintainers</strong></p>
+			<p>
+				<strong>Maintainers</strong>
+			</p>
 			<p>
 				Make sure you include "<code>hacktoberfest</code>" as a label in your
 				project's topics section (found in the "About" section on your
-				repository) or on the issues you want to opt-in to the event. That's how you opt-in to Hacktoberfest.
+				repository) or on the issues you want to opt-in to the event. That's how
+				you opt-in to Hacktoberfest.
 			</p>
 			<p>
 				<a href="https://hacktoberfest.com/participation#maintainers">
@@ -285,9 +334,9 @@ export default function Challenge() {
 
 			<h3>October Weekly Check-ins</h3>
 			<p>
-				Let's start the week with a check-in. You can find the check-ins
-				in the <code>#hacktoberfest</code> channel in Slack. What are your goals
-				for Hacktoberfest for the week? What support do you need? Do you plan on
+				Let's start the week with a check-in. You can find the check-ins in the{' '}
+				<code>#hacktoberfest</code> channel in Slack. What are your goals for
+				Hacktoberfest for the week? What support do you need? Do you plan on
 				spending time in the <code>#co-working-room</code>, talking to your
 				mentor, or answering questions in Slack as a maintainer?
 			</p>
@@ -301,24 +350,23 @@ export default function Challenge() {
 			<p>
 				While no other platform is imposed, sharing on social media for more
 				reach can be a good idea, but only if you are comfortable doing so. You
-				can share on X using—or not—the hashtag{' '}
-				<code>#VCHI</code>, a personal blog, a post on{' '}
-				<a href="https://dev.to/">DEV.to</a>, you get the idea!
+				can share on X using—or not—the hashtag <code>#VCHI</code>, a personal
+				blog, a post on <a href="https://dev.to/">DEV.to</a>, you get the idea!
 			</p>
 
 			<h3>Completing Hacktoberfest</h3>
 			<p>
-				To complete the Hacktoberfest challenge, you need to complete four meaningful
-				contributions during October. It can be creating a PR, writing a good
-				issue, creating content such as a blog post or video about contributing
-				to a project, helping to answer questions or triaging issues, meeting
-				with your mentee, and so on. Share your progress in the{' '}
+				To complete the Hacktoberfest challenge, you need to complete four
+				meaningful contributions during October. It can be creating a PR,
+				writing a good issue, creating content such as a blog post or video
+				about contributing to a project, helping to answer questions or triaging
+				issues, meeting with your mentee, and so on. Share your progress in the{' '}
 				<code>#hacktoberfest</code> channel in Slack.
 			</p>
 			<p>
 				Remember, VC is here to support you during Hacktoberfest but is not an
-				official event partner. To complete the official Hacktoberfest, you must have
-				four (4) pull requests (PRs) accepted.
+				official event partner. To complete the official Hacktoberfest, you must
+				have four (4) pull requests (PRs) accepted.
 			</p>
 
 			<h3>Virtual Coffee Approved Repositories for Hacktoberfest</h3>
