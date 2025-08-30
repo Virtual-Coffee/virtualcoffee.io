@@ -24,10 +24,10 @@ export default function Challenge() {
 				Hacktoberfest!
 			</h1>
 
-			<LeadText>
+			<p className="lead mt-3">
 				This two-month challenge combines preparation and participation in open
 				source.
-				<p>
+				<p className="lead mt-3">
 					<strong>September (Preptember)</strong>: Focus on helping maintainers
 					polish their repositories and contributors gain confidence with our
 					structured 4-week approach using our{' '}
@@ -40,9 +40,9 @@ export default function Challenge() {
 					action by contributing to open source projects during the official
 					Hacktoberfest event.
 				</p>
-			</LeadText>
+			</p>
 
-			<LeadText>
+			<p className="lead mt-3">
 				We have a{' '}
 				<a href="https://github.com/Virtual-Coffee/vc-preptember">
 					Virtual Coffee Preptember repository
@@ -50,10 +50,10 @@ export default function Challenge() {
 				for you to add yourself as a Preptember participant and to list
 				repositories that pass our repository checklist to be recommended for
 				Hacktoberfest!
-			</LeadText>
+			</p>
 
 			<h2>Theme</h2>
-			<p>
+			<p className="mt-3">
 				<strong>September</strong>: Prep + Confidence Building - Get ready for
 				open source!
 			</p>
@@ -87,14 +87,14 @@ export default function Challenge() {
 			</ul>
 
 			<h2>Community Issue</h2>
-			<p>
+			<p className="mt-3">
 				<strong>Preptember Accountability Issue</strong> → members comment
 				weekly with their wins + GIFs to celebrate progress and keep each other
 				motivated.
 			</p>
 
 			<h2>Maintainers</h2>
-			<p>
+			<p className="mt-3">
 				Preparing your open-source project for contributions is one of the best
 				ways to create a community of contributors that lasts beyond
 				Hacktoberfest. Your repository should have a clear path for
@@ -108,7 +108,7 @@ export default function Challenge() {
 			</p>
 
 			<h2>Contributors</h2>
-			<p>
+			<p className="mt-3">
 				The first step in becoming a good contributor is navigating an
 				open-source repository and understanding the time and effort maintainers
 				put into ensuring their projects are welcoming to contributors. As we
@@ -127,16 +127,14 @@ export default function Challenge() {
 			<h2>How to Participate</h2>
 
 			<h3>September: Preptember Participation</h3>
-			<LeadText>
-				<p>
+			<p className="lead mt-3">
 					Please take a look at our{' '}
 					<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
 						Repository Checklist
 					</Link>
 					. This guide contains everything we look for in a good open-source
 					project.
-				</p>
-			</LeadText>
+			</p>
 			<ul>
 				<li>
 					If you are new to open source, we have a{' '}
@@ -176,7 +174,7 @@ export default function Challenge() {
 
 			<h3>Weekly Schedule</h3>
 
-			<h4>Week 1: Repo Health Check</h4>
+			<h4 className="mt-3">Week 1: Repo Health Check</h4>
 			<p>
 				<strong>Focus</strong>: Use the maintainer checklist to review repos
 				(README, LICENSE, CONTRIBUTING, issue/PR templates).
@@ -203,7 +201,7 @@ export default function Challenge() {
 
 			<h4>Week 3: Docs & Guides</h4>
 			<p>
-				<strong>Focus</strong>: Add or update CONTRIBUTING.md, onboarding notes,
+				<strong>Focus</strong>: Add or update <code>CONTRIBUTING.md</code>, onboarding notes,
 				or a setup guide.
 			</p>
 			<ul>
@@ -223,17 +221,17 @@ export default function Challenge() {
 					</a>{' '}
 					(there will be a 2025 issue)
 				</li>
-				<li>Share a pitch, video, etc. in #hacktoberfest in Slack</li>
+				<li>Share a pitch, video, etc. in <code>#hacktoberfest</code> channel in Slack</li>
 			</ul>
 
 			<h3>Synchronous check-ins</h3>
-			<p>
+			<p className="mt-3">
 				Synchronous check-ins will begin the second Monday in September. You can
 				find more info at <Link href="/events">virtualcoffee.io/events</Link>.
 			</p>
 
 			<h3>Weekly check-ins</h3>
-			<p>
+			<p className="mt-3">
 				Are you making progress? Let's check in on Mondays and Fridays in Slack.
 			</p>
 			<p>
@@ -251,7 +249,7 @@ export default function Challenge() {
 			</ol>
 
 			<h3>Completing the challenge!</h3>
-			<p>
+			<p className="mt-3">
 				To complete this challenge, post to our{' '}
 				<a href="https://github.com/Virtual-Coffee/vc-preptember">
 					Virtual Coffee Preptember repository
@@ -287,15 +285,14 @@ export default function Challenge() {
 			<hr />
 
 			<h2>October: Hacktoberfest Participation</h2>
-			<p>
+			<p className="lead mt-3">
 				After preparing in September, it's time to participate in the official
-				Hacktoberfest! You can access your dashboard{' '}
-				<a href="https://hacktoberfest.virtualcoffee.io/dashboard">here</a> if
+				Hacktoberfest! You can access <a href="https://hacktoberfest.virtualcoffee.io/dashboard">your dashboard</a> if
 				you've signed up for the VC Hacktoberfest Initiative.
 			</p>
 
 			<h3>Before Starting Hacktoberfest</h3>
-			<p>
+			<p className="mt-3">
 				<strong>Contributors</strong>
 			</p>
 			<ul>
@@ -329,7 +326,7 @@ export default function Challenge() {
 			</p>
 
 			<h3>October Weekly Check-ins</h3>
-			<p>
+			<p className="mt-3">
 				Let's start the week with a check-in. You can find the check-ins in the{' '}
 				<code>#monthly-challenge</code> channel in Slack. What are your goals
 				for Hacktoberfest for the week? What support do you need? Do you plan on
@@ -338,7 +335,7 @@ export default function Challenge() {
 			</p>
 
 			<h3>Completing Hacktoberfest</h3>
-			<p>
+			<p className="mt-3">
 				To complete the Hacktoberfest challenge, you need to complete four
 				meaningful contributions during October.
 			</p>
@@ -349,13 +346,13 @@ export default function Challenge() {
 			</p>
 
 			<h3>Virtual Coffee Approved Repositories for Hacktoberfest</h3>
-			<p>
+			<p className="mt-3">
 				Check back in October for our curated list of Virtual Coffee approved
 				repositories that will be ready for Hacktoberfest contributions!
 			</p>
 
 			<h3>Share Your Progress!</h3>
-			<p>
+			<p className="mt-3">
 				Share your progress in the <code>#monthly-challenge</code> channel in
 				Slack. While no other platform is imposed, sharing on social media for
 				more reach can be a good idea, but only if you are comfortable doing so.
@@ -374,7 +371,7 @@ export default function Challenge() {
 			</p>
 
 			<h3>What if I need help?</h3>
-			<p>
+			<p className="mt-3">
 				You can ask questions in the <code>#help-and-pairing</code> channel in
 				Slack, ask for ideas in the <code>#open-source</code> channel, or join
 				the <code>#co-working-room</code>. Asking for help is part of the
