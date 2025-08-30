@@ -212,7 +212,7 @@ export default function Challenge() {
 				<li>Improve documentation and contribution guidelines</li>
 			</ul>
 
-			<h4>Week 4: Promote your Project!</h4>
+			<h4>Week 4: Promote Your Project!</h4>
 			<ul>
 				<li>
 					Maintainers share their projects in our{' '}
