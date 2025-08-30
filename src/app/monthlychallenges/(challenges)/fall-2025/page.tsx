@@ -8,7 +8,7 @@ const handle = {
 		description:
 			'Fall bi-month challenge -> Get ready for and participate in Hacktoberfest! September: prep and confidence building. October: contribute to open source.',
 	},
-	date: '2025-09-01',
+	dates: ['2025-09-01', '2025-10-01'],
 	hero: {
 		heroHeader: '',
 	},
