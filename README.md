@@ -170,7 +170,7 @@ A good way to start adding a new page would be to copy one of the existing pages
 
 Every month, our monthly challenge page will need to move the current challenge to the main portion of the list, and add the new challenge to the current challenge section.
 
-To make the updates, go to `src/app/monthlychallenges/page.tsx`
+To make the updates, read the instructions at the [Monthly Challenge Technical Guidelines](https://vc-community-docs.netlify.app/docs/monthly-challenges/facilitators-docs/technical-guidelines#updating-the-monthly-challenge-pages-on-the-website) page on the VC Community Building Resources.
 
 ## Contributors ✨
 
