@@ -165,7 +165,6 @@ Any files added to `src/content/resources` will be automatically loaded and adde
 
 A good way to start adding a new page would be to copy one of the existing pages, then edit the details and content.
 
-
 ### Monthly Challenges
 
 Every month, our monthly challenge page will need to move the current challenge to the main portion of the list, and add the new challenge to the current challenge section.
