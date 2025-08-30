@@ -24,7 +24,7 @@ Please take a moment to read our [Code of Conduct](https://github.com/Virtual-Co
 
 See you there!
 
-# Working on the site:
+## Working on the site:
 
 - This site is built using [Next.js](https://nextjs.org/).
 - Check out our [CONTRIBUTING](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md) guideline to make contributions.
