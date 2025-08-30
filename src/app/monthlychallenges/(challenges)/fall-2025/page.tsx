@@ -331,7 +331,7 @@ export default function Challenge() {
 			<h3>October Weekly Check-ins</h3>
 			<p>
 				Let's start the week with a check-in. You can find the check-ins in the{' '}
-				<code>#hacktoberfest</code> channel in Slack. What are your goals for
+				<code>#monthly-challenge</code> channel in Slack. What are your goals for
 				Hacktoberfest for the week? What support do you need? Do you plan on
 				spending time in the <code>#co-working-room</code>, talking to a mentee,
 				or answering questions in Slack as a maintainer?
