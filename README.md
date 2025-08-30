@@ -24,7 +24,7 @@ Please take a moment to read our [Code of Conduct](https://github.com/Virtual-Co
 
 See you there!
 
-# Working on the site:
+## Working on the site:
 
 - This site is built using [Next.js](https://nextjs.org/).
 - Check out our [CONTRIBUTING](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md) guideline to make contributions.
@@ -165,35 +165,11 @@ Any files added to `src/content/resources` will be automatically loaded and adde
 
 A good way to start adding a new page would be to copy one of the existing pages, then edit the details and content.
 
-### Newsletters
-
-The newsletters (for now) are simply `tsx` files, and can be found in `src/content/newsletters`.
-
-When you add a new issue, **make sure to add it to the index**. Here's how:
-
-- Open `src/data/newsletters.ts`
-- `import` the new issue
-- Add the new issue to the `newsletters` array.
-
-So, if you have created `src/content/newsletters/2022-03.jsx`:
-
-```diff
-+ import { handle as issue202203 } from '@/content/newsletters/2022-03';
-import { handle as issue202202 } from '@/content/newsletters/2022-02';
-import { handle as issue202201 } from '@/content/newsletters/2022-01';
-
-const newsletters = [
-+ 	{ handleData: issue202203, slug: '2022-03' },
-	{ handleData: issue202202, slug: '2022-02' },
-	{ handleData: issue202201, slug: '2022-01' },
-];
-```
-
 ### Monthly Challenges
 
 Every month, our monthly challenge page will need to move the current challenge to the main portion of the list, and add the new challenge to the current challenge section.
 
-To make the updates, go to `src/app/monthlychallenges/page.tsx`
+To make the updates, read the instructions at the [Monthly Challenge Technical Guidelines](https://vc-community-docs.netlify.app/docs/monthly-challenges/facilitators-docs/technical-guidelines#updating-the-monthly-challenge-pages-on-the-website) page on the VC Community Building Resources.
 
 ## Contributors ✨
 

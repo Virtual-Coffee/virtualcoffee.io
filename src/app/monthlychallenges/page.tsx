@@ -287,16 +287,15 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Preptember',
-		subtitle: `Get your open source projects ready!`,
+		subtitle: `Get your open source projects ready and build confidence!`,
 		description: (
 			<>
 				<p>
-					Maintainers will be reviewing their open source repos with our
-					checklist to make sure their projects are ready for Hacktoberfest
-					contributions, and our contributors will be looking at their favorite
-					repos, evaluating them based on the guide, and writing good issues as
-					needed to fulfill the criteria.
+					This month, we focus on helping maintainers polish their repositories and contributors 
+					gain confidence. We have a structured 4-week approach to prepare for Hacktoberfest with 
+					our repository checklist and building skills through guided practice.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -307,14 +306,18 @@ const challengeList: Challenge[] = [
 				</p>
 				<p>
 					To view all of the details of this year's challenge,{' '}
-					<Link href="/monthlychallenges/sept-2024">
-						check out the September 2024 challenge page
+					<Link href="/monthlychallenges/fall-2025">
+						check out the Fall 2025 challenge page
 					</Link>
 					.
 				</p>
 			</>
 		),
 		links: [
+			{
+				href: '/monthlychallenges/sept-2024',
+				title: 'September, 2024',
+			},
 			{
 				href: '/monthlychallenges/sept-2023',
 				title: 'September, 2023',
@@ -643,7 +646,6 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		current: true,
 		title: 'Photography Challenge',
 		subtitle: `Let's get out and about!`,
 		description: (
