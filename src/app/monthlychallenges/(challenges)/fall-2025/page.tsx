@@ -27,19 +27,20 @@ export default function Challenge() {
 			<LeadText>
 				This two-month challenge combines preparation and participation in open
 				source.
-				<strong>September (Preptember)</strong>: Focus on helping maintainers
-				polish their repositories and contributors gain confidence with our
-				structured 4-week approach using our{' '}
-				<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
-					repository checklist
-				</Link>{' '}
-				and building skills through guided practice.{' '}
-				<strong>October (Hacktoberfest)</strong>: Put your preparation into
-				action by contributing to open source projects during the official
-				Hacktoberfest event.
+				<p>
+					<strong>September (Preptember)</strong>: Focus on helping maintainers
+					polish their repositories and contributors gain confidence with our
+					structured 4-week approach using our{' '}
+					<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+						repository checklist
+					</Link>{' '}
+					and building skills through guided practice.
+					<br />
+					<strong>October (Hacktoberfest)</strong>: Put your preparation into
+					action by contributing to open source projects during the official
+					Hacktoberfest event.
+				</p>
 			</LeadText>
-
-			<br />
 
 			<LeadText>
 				We have a{' '}
@@ -51,7 +52,6 @@ export default function Challenge() {
 				Hacktoberfest!
 			</LeadText>
 
-			<hr />
 			<h2>Theme</h2>
 			<p>
 				<strong>September</strong>: Prep + Confidence Building - Get ready for
@@ -72,7 +72,7 @@ export default function Challenge() {
 			<h3>October: Hacktoberfest</h3>
 			<p>
 				<strong>Goal</strong>: Complete four meaningful contributions during
-				October. We have three tracks:
+				October. We have two tracks:
 			</p>
 			<ul>
 				<li>
@@ -83,10 +83,6 @@ export default function Challenge() {
 				<li>
 					<strong>Contributors</strong>: Find repositories and solve issues to
 					achieve four approved pull requests
-				</li>
-				<li>
-					<strong>Mentors</strong>: Support contributors and maintainers through
-					pairing, 1:1s, and guidance
 				</li>
 			</ul>
 
@@ -337,31 +333,14 @@ export default function Challenge() {
 				Let's start the week with a check-in. You can find the check-ins in the{' '}
 				<code>#hacktoberfest</code> channel in Slack. What are your goals for
 				Hacktoberfest for the week? What support do you need? Do you plan on
-				spending time in the <code>#co-working-room</code>, talking to your
-				mentor, or answering questions in Slack as a maintainer?
-			</p>
-
-			<h3>Share Hacktoberfest Progress</h3>
-			<p>
-				Share your progress in the <code>#hacktoberfest</code> channel in Slack
-				so we can celebrate with you! And if you need support, we'll be there to
-				help you, too.
-			</p>
-			<p>
-				While no other platform is imposed, sharing on social media for more
-				reach can be a good idea, but only if you are comfortable doing so. You
-				can share on X using—or not—the hashtag <code>#VCHI</code>, a personal
-				blog, a post on <a href="https://dev.to/">DEV.to</a>, you get the idea!
+				spending time in the <code>#co-working-room</code>, talking to a mentee,
+				or answering questions in Slack as a maintainer?
 			</p>
 
 			<h3>Completing Hacktoberfest</h3>
 			<p>
 				To complete the Hacktoberfest challenge, you need to complete four
-				meaningful contributions during October. It can be creating a PR,
-				writing a good issue, creating content such as a blog post or video
-				about contributing to a project, helping to answer questions or triaging
-				issues, meeting with your mentee, and so on. Share your progress in the{' '}
-				<code>#hacktoberfest</code> channel in Slack.
+				meaningful contributions during October.
 			</p>
 			<p>
 				Remember, VC is here to support you during Hacktoberfest but is not an
@@ -375,19 +354,18 @@ export default function Challenge() {
 				repositories that will be ready for Hacktoberfest contributions!
 			</p>
 
-			<h3>How do I share my progress?</h3>
+			<h3>Share Your Progress!</h3>
 			<p>
 				Share your progress in the <code>#monthly-challenge</code> channel in
 				Slack. While no other platform is imposed, sharing on social media for
 				more reach can be a good idea, but only if you are comfortable doing so.
-				You can share on Twitter using — or not — the hashtag{' '}
-				<code>#VCMonthlyChallenge</code>, a personal blog, a post on{' '}
+				You can share on social media, in a personal blog, in a post on{' '}
 				<a href="https://dev.to/">DEV.to</a>, you get the idea!
 			</p>
 			<p>
 				Sharing every time some work is added is a good idea. Small progress is
-				still progress. There is no need to write a detailed blog post. A
-				140-character Tweet can be enough. For example, "
+				still progress. There is no need to write a detailed blog post. A social
+				media post can be enough. For example, "
 				<em>
 					Today, I updated my README to give instructions on how to run my
 					project.
