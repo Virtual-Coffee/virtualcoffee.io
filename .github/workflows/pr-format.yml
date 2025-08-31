@@ -1,6 +1,7 @@
 name: Prettier Format
 
 on:
+  pull_request_target:
   push:
     branches-ignore:
       - main
@@ -12,16 +13,20 @@ on:
 jobs:
   prettier:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
+          ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
 
       - name: Run Prettier
         uses: creyD/prettier_action@v4.3
         with:
           prettier_options: --write "**/*.{js,ts,tsx,jsx,json,css,md,yml,yaml}"
+          only_changed: true
 
       - name: Create Pull Request with Prettier fixes
         uses: peter-evans/create-pull-request@v5
@@ -30,4 +35,3 @@ jobs:
           commit-message: "chore: Prettier fixes"
           title: "Prettier fixes"
           body: "This PR contains Prettier formatting changes."
-
