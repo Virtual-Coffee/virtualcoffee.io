@@ -42,7 +42,7 @@
 		"luxon": "^3.5.0",
 		"markdown-it": "^13.0.2",
 		"mdast-util-toc": "^7.1.0",
-		"next": "15.0.0-rc.0",
+		"next": "15.4.7",
 		"npm-watch": "^0.13.0",
 		"react": "19.0.0-rc-04bd67a4-20240924",
 		"react-dom": "19.0.0-rc-04bd67a4-20240924",
