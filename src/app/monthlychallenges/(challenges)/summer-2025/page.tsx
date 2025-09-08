@@ -19,6 +19,11 @@ export const metadata = handle.meta;
 export default function Challenge() {
 	return (
 		<>
+			<div className="alert alert-success">
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link href="/monthlychallenges/aug-2025">next challenge</Link>!
+			</div>
+
 			<h1>
 				<small>Summer 2025 Bi-Month Challenge:</small> Get Job Ready!
 			</h1>
