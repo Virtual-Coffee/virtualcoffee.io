@@ -128,12 +128,12 @@ export default function Challenge() {
 
 			<h3>September: Preptember Participation</h3>
 			<p className="lead mt-3">
-					Please take a look at our{' '}
-					<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
-						Repository Checklist
-					</Link>
-					. This guide contains everything we look for in a good open-source
-					project.
+				Please take a look at our{' '}
+				<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+					Repository Checklist
+				</Link>
+				. This guide contains everything we look for in a good open-source
+				project.
 			</p>
 			<ul>
 				<li>
@@ -201,8 +201,8 @@ export default function Challenge() {
 
 			<h4>Week 3: Docs & Guides</h4>
 			<p>
-				<strong>Focus</strong>: Add or update <code>CONTRIBUTING.md</code>, onboarding notes,
-				or a setup guide.
+				<strong>Focus</strong>: Add or update <code>CONTRIBUTING.md</code>,
+				onboarding notes, or a setup guide.
 			</p>
 			<ul>
 				<li>
@@ -221,7 +221,10 @@ export default function Challenge() {
 					</a>{' '}
 					(there will be a 2025 issue)
 				</li>
-				<li>Share a pitch, video, etc. in <code>#hacktoberfest</code> channel in Slack</li>
+				<li>
+					Share a pitch, video, etc. in <code>#hacktoberfest</code> channel in
+					Slack
+				</li>
 			</ul>
 
 			<h3>Synchronous check-ins</h3>
@@ -287,8 +290,11 @@ export default function Challenge() {
 			<h2>October: Hacktoberfest Participation</h2>
 			<p className="lead mt-3">
 				After preparing in September, it's time to participate in the official
-				Hacktoberfest! You can access <a href="https://hacktoberfest.virtualcoffee.io/dashboard">your dashboard</a> if
-				you've signed up for the VC Hacktoberfest Initiative.
+				Hacktoberfest! You can access{' '}
+				<a href="https://hacktoberfest.virtualcoffee.io/dashboard">
+					your dashboard
+				</a>{' '}
+				if you've signed up for the VC Hacktoberfest Initiative.
 			</p>
 
 			<h3>Before Starting Hacktoberfest</h3>

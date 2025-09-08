@@ -70,11 +70,18 @@ const challengeList: Challenge[] = [
 		subtitle: `There's never a bad time to update your job application materials and practice for job interviews!`,
 		description: (
 			<>
-				<p>We typically hold this challenge for one month, but we are now transforming it into a bi-month challenge to give you more time to prepare for job readiness!</p>
 				<p>
-				Over the next two months, we'll work on creating, revising, or updating your job packet materials and that elevator pitch that might get you in the door. We'll also learn to network and prepare for interviews.
+					We typically hold this challenge for one month, but we are now
+					transforming it into a bi-month challenge to give you more time to
+					prepare for job readiness!
 				</p>
-								{/* <p>
+				<p>
+					Over the next two months, we'll work on creating, revising, or
+					updating your job packet materials and that elevator pitch that might
+					get you in the door. We'll also learn to network and prepare for
+					interviews.
+				</p>
+				{/* <p>
 					Learn more about this challenge in{' '}
 					<a href="">
 						this blog post
@@ -84,7 +91,7 @@ const challengeList: Challenge[] = [
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
 					<Link href="/monthlychallenges/summer-2025">
-					check out the Summer 2025 Bi-Month Challenge: Get Job Ready page
+						check out the Summer 2025 Bi-Month Challenge: Get Job Ready page
 					</Link>
 					.
 				</p>
@@ -293,9 +300,10 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					This month, we focus on helping maintainers polish their repositories and contributors 
-					gain confidence. We have a structured 4-week approach to prepare for Hacktoberfest with 
-					our repository checklist and building skills through guided practice.
+					This month, we focus on helping maintainers polish their repositories
+					and contributors gain confidence. We have a structured 4-week approach
+					to prepare for Hacktoberfest with our repository checklist and
+					building skills through guided practice.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -657,9 +665,9 @@ const challengeList: Challenge[] = [
 					We will be encouraging our members to make the most of summer (in the
 					Northern hemisphere, at least), enjoy some work / life balance and
 					benefit from the fresh air and exercise of the great outdoors. The
-					challenge <em>could</em> be completed without ever leaving the car, but
-					to get the most out of it, leave the car for a bit and get some real
-					fresh air and exercise. A little hint for those of you that have
+					challenge <em>could</em> be completed without ever leaving the car,
+					but to get the most out of it, leave the car for a bit and get some
+					real fresh air and exercise. A little hint for those of you that have
 					access to public transportation: Public transportation is a great way
 					to see the world while someone else does the driving. It also forces
 					you to actually get some exercise because it probably won&apos;t pick
