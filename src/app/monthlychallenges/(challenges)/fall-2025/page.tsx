@@ -286,6 +286,14 @@ export default function Challenge() {
 				</li>
 			</ol>
 
+			<TextContainer background="light" showBackToTopLink={false}>
+
+				<p className="px-4"><strong>Info:</strong></p>
+				<p className="px-4">If you would like to participate in the <strong>Virtual Coffee: Hacktoberfest Initiative</strong> as a contributor and/or a maintainer, please fill out the form pinned in the <code>#monthly-challenge</code> channel on Slack.
+				</p>
+
+			</TextContainer>
+
 			<hr />
 
 			<h2>October: Hacktoberfest Participation</h2>
