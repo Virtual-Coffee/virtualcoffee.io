@@ -1,5 +1,6 @@
 import LeadText from '@/components/content/LeadText';
 import Link from 'next/link';
+import TextContainer from '@/components/content/TextContainer';
 
 const handle = {
 	listTitle: 'Fall 2025: Preptember & Hacktoberfest!',
@@ -290,11 +291,7 @@ export default function Challenge() {
 			<h2>October: Hacktoberfest Participation</h2>
 			<p className="lead mt-3">
 				After preparing in September, it's time to participate in the official
-				Hacktoberfest! You can access{' '}
-				<a href="https://hacktoberfest.virtualcoffee.io/dashboard">
-					your dashboard
-				</a>{' '}
-				if you've signed up for the VC Hacktoberfest Initiative.
+				Hacktoberfest!
 			</p>
 
 			<h3>Before Starting Hacktoberfest</h3>
