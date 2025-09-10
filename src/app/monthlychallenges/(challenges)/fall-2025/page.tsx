@@ -25,9 +25,11 @@ export default function Challenge() {
 				Hacktoberfest!
 			</h1>
 
-			<p className="lead mt-3">
+			<p className="lead mt-5">
 				This two-month challenge combines preparation and participation in open
 				source.
+				</p>
+
 				<p className="lead mt-3">
 					<strong>September (Preptember)</strong>: Focus on helping maintainers
 					polish their repositories and contributors gain confidence with our
@@ -36,22 +38,23 @@ export default function Challenge() {
 						repository checklist
 					</Link>{' '}
 					and building skills through guided practice.
-					<br />
+				</p>
+
+				<p className="lead mt-3">
+					We have a{' '}
+					<a href="https://github.com/Virtual-Coffee/vc-preptember">
+						Virtual Coffee Preptember repository
+					</a>{' '}
+					for you to add yourself as a Preptember participant and to list
+					repositories that pass our repository checklist to be recommended for
+					Hacktoberfest!
+				</p>
+
+				<p className="lead mt-3">
 					<strong>October (Hacktoberfest)</strong>: Put your preparation into
 					action by contributing to open source projects during the official
 					Hacktoberfest event.
 				</p>
-			</p>
-
-			<p className="lead mt-3">
-				We have a{' '}
-				<a href="https://github.com/Virtual-Coffee/vc-preptember">
-					Virtual Coffee Preptember repository
-				</a>{' '}
-				for you to add yourself as a Preptember participant and to list
-				repositories that pass our repository checklist to be recommended for
-				Hacktoberfest!
-			</p>
 
 			<h2>Theme</h2>
 			<p className="mt-3">
