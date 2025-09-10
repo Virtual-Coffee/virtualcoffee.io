@@ -1,5 +1,6 @@
 import LeadText from '@/components/content/LeadText';
 import Link from 'next/link';
+import TextContainer from '@/components/content/TextContainer';
 
 const handle = {
 	listTitle: 'Fall 2025: Preptember & Hacktoberfest!',
@@ -24,22 +25,19 @@ export default function Challenge() {
 				Hacktoberfest!
 			</h1>
 
-			<p className="lead mt-3">
+			<p className="lead mt-5">
 				This two-month challenge combines preparation and participation in open
 				source.
-				<p className="lead mt-3">
-					<strong>September (Preptember)</strong>: Focus on helping maintainers
-					polish their repositories and contributors gain confidence with our
-					structured 4-week approach using our{' '}
-					<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
-						repository checklist
-					</Link>{' '}
-					and building skills through guided practice.
-					<br />
-					<strong>October (Hacktoberfest)</strong>: Put your preparation into
-					action by contributing to open source projects during the official
-					Hacktoberfest event.
-				</p>
+			</p>
+
+			<p className="lead mt-3">
+				<strong>September (Preptember)</strong>: Focus on helping maintainers
+				polish their repositories and contributors gain confidence with our
+				structured 4-week approach using our{' '}
+				<Link href="/resources/developer-resources/open-source/maintainer-guide#repository-checklist">
+					repository checklist
+				</Link>{' '}
+				and building skills through guided practice.
 			</p>
 
 			<p className="lead mt-3">
@@ -50,6 +48,12 @@ export default function Challenge() {
 				for you to add yourself as a Preptember participant and to list
 				repositories that pass our repository checklist to be recommended for
 				Hacktoberfest!
+			</p>
+
+			<p className="lead mt-3">
+				<strong>October (Hacktoberfest)</strong>: Put your preparation into
+				action by contributing to open source projects during the official
+				Hacktoberfest event.
 			</p>
 
 			<h2>Theme</h2>
@@ -285,16 +289,24 @@ export default function Challenge() {
 				</li>
 			</ol>
 
+			<TextContainer background="light" showBackToTopLink={false}>
+				<p className="px-4">
+					<strong>Info:</strong>
+				</p>
+				<p className="px-4">
+					If you would like to participate in the{' '}
+					<strong>Virtual Coffee: Hacktoberfest Initiative</strong> as a
+					contributor and/or a maintainer, please fill out the form pinned in
+					the <code>#monthly-challenge</code> channel on Slack.
+				</p>
+			</TextContainer>
+
 			<hr />
 
 			<h2>October: Hacktoberfest Participation</h2>
 			<p className="lead mt-3">
 				After preparing in September, it's time to participate in the official
-				Hacktoberfest! You can access{' '}
-				<a href="https://hacktoberfest.virtualcoffee.io/dashboard">
-					your dashboard
-				</a>{' '}
-				if you've signed up for the VC Hacktoberfest Initiative.
+				Hacktoberfest!
 			</p>
 
 			<h3>Before Starting Hacktoberfest</h3>
