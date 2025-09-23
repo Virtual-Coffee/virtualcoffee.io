@@ -75,7 +75,7 @@ export default function Challenge() {
 
 			<h3>October: Hacktoberfest</h3>
 			<p>
-				<strong>Goal</strong>: Complete four meaningful contributions during
+				<strong>Goal</strong>: Complete six meaningful contributions during
 				October. We have two tracks:
 			</p>
 			<ul>
@@ -86,7 +86,7 @@ export default function Challenge() {
 				</li>
 				<li>
 					<strong>Contributors</strong>: Find repositories and solve issues to
-					achieve four approved pull requests
+					achieve six approved pull requests
 				</li>
 			</ul>
 
@@ -354,13 +354,13 @@ export default function Challenge() {
 
 			<h3>Completing Hacktoberfest</h3>
 			<p className="mt-3">
-				To complete the Hacktoberfest challenge, you need to complete four
+				To complete the Hacktoberfest challenge, you need to complete six
 				meaningful contributions during October.
 			</p>
 			<p>
 				Remember, VC is here to support you during Hacktoberfest but is not an
 				official event partner. To complete the official Hacktoberfest, you must
-				have four (4) pull requests (PRs) accepted.
+				have six (6) pull requests (PRs) accepted.
 			</p>
 
 			<h3>Virtual Coffee Approved Repositories for Hacktoberfest</h3>
