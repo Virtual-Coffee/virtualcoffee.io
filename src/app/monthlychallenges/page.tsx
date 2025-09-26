@@ -257,7 +257,10 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					This challenge is always run during October and was our first-ever monthly challenge. Open source maintainers will provide issues for Hacktoberfest, contributors will solve issues, and the community will support contributors and maintainers during this challenge.
+					This challenge is always run during October and was our first-ever
+					monthly challenge. Open source maintainers will provide issues for
+					Hacktoberfest, contributors will solve issues, and the community will
+					support contributors and maintainers during this challenge.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
