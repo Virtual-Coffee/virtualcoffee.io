@@ -68,7 +68,6 @@ const svgAspectRatios = {
 	UndrawShowingSupport: '660.67004 / 513.66796',
 
 	NetworkingGuide: '790/705',
-
 };
 
 /**
