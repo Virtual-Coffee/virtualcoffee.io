@@ -85,9 +85,8 @@ function findBreadcrumbs(files: MdxFile[], slug: string): MdxFile[] {
 
 export async function generateMetadata({
 	params,
-	searchParams,
 }: NextPageProps<'slug', false, true>): Promise<Metadata> {
-	const uri = (params.slug ?? []).join('/');
+	const uri = ((await params).slug ?? []).join('/');
 
 	const file = getFile(uri);
 	if (!file) {
@@ -101,11 +100,10 @@ export async function generateMetadata({
 	});
 }
 
-export default function Page({
+export default async function Page({
 	params,
-	searchParams,
 }: NextPageProps<'slug', false, true>) {
-	const uri = (params.slug ?? []).join('/');
+	const uri = ((await params).slug ?? []).join('/');
 	const file = getFile(uri);
 
 	if (!file) {

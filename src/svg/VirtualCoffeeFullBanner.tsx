@@ -4,7 +4,7 @@ export default function VirtualCoffeeFullBanner({
 	ariaHidden = false,
 	title = 'Virtual Coffee',
 	...rest
-}: IconProps): JSX.Element {
+}: IconProps) {
 	return (
 		<svg
 			viewBox="0 0 999.028 144.347"

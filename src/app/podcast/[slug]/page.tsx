@@ -40,7 +40,7 @@ async function getEpisodeData(slug: string) {
 export async function generateMetadata({
 	params,
 }: NextPageProps<'slug'>): Promise<Metadata> {
-	const { episode } = await getEpisodeData(params.slug);
+	const { episode } = await getEpisodeData((await params).slug);
 
 	const cardImage = episode.podcastEpisodeCard && episode.podcastEpisodeCard[0];
 
@@ -95,7 +95,7 @@ export async function generateMetadata({
 }
 
 export default async function Newsletter({ params }: NextPageProps<'slug'>) {
-	const { episode, transcript } = await getEpisodeData(params.slug);
+	const { episode, transcript } = await getEpisodeData((await params).slug);
 
 	return (
 		<>

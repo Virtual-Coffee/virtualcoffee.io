@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 }
 
 export default async function Newsletter({ params }: NextPageProps<'slug'>) {
-	const newsletter = await getNewsletter(params.slug);
+	const newsletter = await getNewsletter((await params).slug);
 
 	if (!newsletter) {
 		notFound();

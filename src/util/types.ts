@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 // support for polymorphic components using {as=...}
 // Source https://www.benmvp.com/blog/forwarding-refs-polymorphic-react-component-typescript/
 
@@ -58,7 +59,9 @@ export type PolymorphicComponentPropsWithRef<
 	Props = {},
 > = PolymorphicComponentProps<C, Props> & { passedRef?: PolymorphicRef<C> };
 
-export type NextSearchParams = { [key: string]: string | string[] | undefined };
+export type NextSearchParams = Promise<{
+	[key: string]: string | string[] | undefined;
+}>;
 
 export type NextParams<
 	ParamsKeys extends string = never,
@@ -67,12 +70,12 @@ export type NextParams<
 > = ParamsKeys extends never
 	? never
 	: IsOptional extends true
-		? {
+		? Promise<{
 				[key in ParamsKeys]?: IsCatchall extends true ? string[] : string;
-			}
-		: {
+			}>
+		: Promise<{
 				[key in ParamsKeys]: IsCatchall extends true ? string[] : string;
-			};
+			}>;
 
 export type NextPageProps<
 	ParamsKeys extends string = never,
