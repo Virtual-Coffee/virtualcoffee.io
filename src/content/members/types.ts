@@ -59,6 +59,7 @@ export type MemberObject = {
 	badges?: Badge[];
 	flare?: Flare;
 	location?: Location;
+	emoji?: string;
 };
 
 export type GithubSearchUser = {
