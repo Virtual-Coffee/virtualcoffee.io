@@ -4,6 +4,7 @@ import type { MemberObject } from '../types';
 export const AlexVCS: MemberObject = {
 	// GitHub username (required)
 	github: 'AlexVCS',
+	emoji: '🏀',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
@@ -42,7 +43,7 @@ export const AlexVCS: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2025'],
 	location: {
 		latitude: 27.664827,
 		longitude: -81.515755,
