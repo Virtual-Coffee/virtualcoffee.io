@@ -9,6 +9,8 @@ export const pedaars: MemberObject = {
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
 	name: 'Aaron Pedwell',
+	// emoji
+	emoji: '👨🏻‍💻',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
@@ -42,7 +44,7 @@ export const pedaars: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024', 'Hacktoberfest2025'],
 	location: {
 		latitude: 51.27726,
 		longitude: 1.08046,
