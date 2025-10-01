@@ -2,6 +2,6 @@
 	"extends": "next/core-web-vitals",
 	"rules": {
 		"react/no-unescaped-entities": "off",
-		"@next/next/no-html-link-for-pages": "warning"
+		"@next/next/no-html-link-for-pages": "warn"
 	}
 }
