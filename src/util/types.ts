@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 // support for polymorphic components using {as=...}
 // Source https://www.benmvp.com/blog/forwarding-refs-polymorphic-react-component-typescript/
 

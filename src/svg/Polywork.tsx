@@ -1,9 +1,6 @@
 import type { IconProps } from '@/content/members/types';
 
-export default function Polywork({
-	ariaHidden,
-	title,
-}: IconProps): JSX.Element {
+export default function Polywork({ ariaHidden, title }: IconProps) {
 	return (
 		<svg
 			viewBox="0 0 24 24"

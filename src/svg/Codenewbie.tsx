@@ -3,7 +3,7 @@ import type { IconProps } from '@/content/members/types';
 export default function Codenewbie({
 	ariaHidden,
 	title = 'CodeNewbie',
-}: IconProps): JSX.Element {
+}: IconProps) {
 	return (
 		<svg
 			viewBox="0 0 24 24"
