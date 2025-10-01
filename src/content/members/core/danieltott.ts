@@ -46,7 +46,12 @@ export const danieltott: MemberObject = {
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024', 'Hacktoberfest2025'],
+	badges: [
+		'Hacktoberfest2022',
+		'Hacktoberfest2023',
+		'Hacktoberfest2024',
+		'Hacktoberfest2025',
+	],
 	location: {
 		latitude: 41.48266891706046,
 		longitude: -81.80009779282766,
