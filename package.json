@@ -3,9 +3,9 @@
 	"version": "0.1.0",
 	"private": true,
 	"engines": {
-		"node": ">=20.17"
+		"node": ">=22.20.0"
 	},
-	"packageManager": "pnpm@9.10.0",
+	"packageManager": "pnpm@10.17.1+sha512.17c560fca4867ae9473a3899ad84a88334914f379be46d455cbf92e5cf4b39d34985d452d2583baf19967fa76cb5c17bc9e245529d0b98745721aa7200ecaf7a",
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
 		"format": "npx prettier --write --ignore-unknown --list-different \"**/*\"",
@@ -68,7 +68,7 @@
 		"@types/leaflet": "^1.9.20",
 		"@types/leaflet.markercluster": "^1.5.6",
 		"@types/luxon": "^3.7.1",
-		"@types/node": "^20.19.19",
+		"@types/node": "^24.6.1",
 		"@types/react": "^19.1.16",
 		"@types/react-dom": "^19.1.9",
 		"@types/require-dir": "^1.0.4",
@@ -78,7 +78,7 @@
 		"cross-env": "^7.0.3",
 		"eslint": "^8.57.1",
 		"eslint-config-next": "15.5.4",
-		"netlify-cli": "^17.38.1",
+		"netlify-cli": "^23.9.1",
 		"postcss": "^8.5.6",
 		"prettier": "^3.6.2",
 		"tailwindcss": "^3.4.17",
