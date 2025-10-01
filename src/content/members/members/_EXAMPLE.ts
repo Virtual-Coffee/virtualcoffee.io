@@ -10,6 +10,8 @@ export const _EXAMPLE: MemberObject = {
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
 	// name: 'Your Name',
+	// Emoji - If you want an emoji to appear next to your name, you can add it here. Please only use standard unicode emojis - maintainers will reject PRs otherwise.
+	// emoji: '👩‍💻',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
