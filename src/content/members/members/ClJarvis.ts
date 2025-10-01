@@ -46,7 +46,7 @@ export const ClJarvis: MemberObject = {
 			title: 'Portfolio',
 		},
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024', 'Hacktoberfest2025'],
 	location: {
 		latitude: 36.162663,
 		longitude: -86.781601,
