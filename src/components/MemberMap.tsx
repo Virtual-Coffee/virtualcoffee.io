@@ -22,6 +22,7 @@ const createCustomIcon = function (avatarUrl?: string) {
 		iconUrl: avatarUrl || defaultCustomIcon,
 		iconSize: new L.Point(33, 33, true),
 		className: 'leaflet-custom-marker',
+		shadowUrl: undefined,
 	});
 };
 
