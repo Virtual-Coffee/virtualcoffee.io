@@ -10,6 +10,7 @@ export const adiati98: MemberObject = {
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
 	// name: 'Your Name',
 	name: 'Ayu Adiati',
+	emoji: '✨',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
