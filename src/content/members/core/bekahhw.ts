@@ -47,7 +47,12 @@ export const bekahhw: MemberObject = {
 			title: `Code. Community. Feelings. It's all here`,
 		},
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024', 'Hacktoberfest2025'],
+	badges: [
+		'Hacktoberfest2022',
+		'Hacktoberfest2023',
+		'Hacktoberfest2024',
+		'Hacktoberfest2025',
+	],
 	location: {
 		latitude: 40.375059,
 		longitude: -80.947491,
