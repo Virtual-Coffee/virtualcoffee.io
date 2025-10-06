@@ -4,6 +4,7 @@ import { profileMasks } from '../flare';
 export const bekahhw: MemberObject = {
 	// GitHub username (required)
 	github: 'bekahhw',
+	emoji: '📔',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
@@ -46,7 +47,7 @@ export const bekahhw: MemberObject = {
 			title: `Code. Community. Feelings. It's all here`,
 		},
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024'],
+	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024', 'Hacktoberfest2025'],
 	location: {
 		latitude: 40.375059,
 		longitude: -80.947491,
