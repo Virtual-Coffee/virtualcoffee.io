@@ -20,7 +20,7 @@ export const metadata = handle.meta;
 export default function Challenge() {
 	return (
 		<>
-		<div className="alert alert-success">
+			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
 				the <Link href="/monthlychallenges/spring-2025">next challenge</Link>!
 			</div>
@@ -31,20 +31,27 @@ export default function Challenge() {
 
 			<LeadText>
 				<p className="mt-3">
-					The new year is the perfect time to set your new goal. Whether learning new dev-related things, preparing yourself to get a new job, making new habits to be a better developer, or anything you work towards this year. And this month, we're here to support you!
+					The new year is the perfect time to set your new goal. Whether
+					learning new dev-related things, preparing yourself to get a new job,
+					making new habits to be a better developer, or anything you work
+					towards this year. And this month, we're here to support you!
 				</p>
 			</LeadText>
 
 			<LeadText>
 				<p className="mt-3">
-					During this month, we'll work on setting your one big goal for the year and breaking it down into achievable goals for each month.
+					During this month, we'll work on setting your one big goal for the
+					year and breaking it down into achievable goals for each month.
 				</p>
 			</LeadText>
 
 			<TextContainer background="light" showBackToTopLink={false}>
 				<LeadText>
 					<p className="px-3 text-justify">
-						This year, we aim to hold <strong>Virtual Coffee Community Conference</strong> for the first time! If your goal is to speak at tech conferences, this is the perfect time to prepare!
+						This year, we aim to hold{' '}
+						<strong>Virtual Coffee Community Conference</strong> for the first
+						time! If your goal is to speak at tech conferences, this is the
+						perfect time to prepare!
 					</p>
 				</LeadText>
 			</TextContainer>
@@ -87,9 +94,8 @@ export default function Challenge() {
 			</h3>
 			<h4 className="mb-3">Coffee Table Groups</h4>
 			<p>
-				If you need help setting your goal or want to hold yourself
-				accountable by working on them with the community over Zoom, we're here
-				for you!
+				If you need help setting your goal or want to hold yourself accountable
+				by working on them with the community over Zoom, we're here for you!
 			</p>
 			<ul>
 				<li>

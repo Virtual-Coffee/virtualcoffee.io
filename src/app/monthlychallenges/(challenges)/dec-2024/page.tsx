@@ -19,7 +19,7 @@ export const metadata = handle.meta;
 export default function Challenge() {
 	return (
 		<>
-		<div className="alert alert-success">
+			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
 				the <a href="/monthlychallenges/jan-2025">next challenge</a>!
 			</div>
@@ -56,7 +56,8 @@ export default function Challenge() {
 			<ul>
 				<li>
 					Pick one or two creative activities you want to focus on and talk
-					about this month. If you need activity inspiration, check out the <code>#making-stuff</code> channel on Slack.
+					about this month. If you need activity inspiration, check out the{' '}
+					<code>#making-stuff</code> channel on Slack.
 				</li>
 				<li>
 					Use the VC <code>#monthly-challenge</code> channel to post any
