@@ -57,7 +57,7 @@ export function getEpisode({ slug }: { slug: PodcastEpisode['slug'] }) {
 				guestBio: {
 					renderHtml: `<p>${faker.lorem.sentence()}</p>`,
 				},
-				headshot: [{ path: faker.internet.avatar() }],
+				headshot: [{ path: faker.image.avatar() }],
 			},
 		],
 		podcastEpisodeCard: [{ path: 'http://placekitten.com/1200/1200' }],

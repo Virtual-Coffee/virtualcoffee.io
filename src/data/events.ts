@@ -121,19 +121,19 @@ export async function getEvents({
 					start: event.startDateLocalized,
 					end: event.endDateLocalized,
 					description: sanitizedDescription,
-				  });
-				  const calendarLinkOutlook = outlook({
+				});
+				const calendarLinkOutlook = outlook({
 					title: event.title,
 					start: event.startDateLocalized,
 					end: event.endDateLocalized,
 					description: sanitizedDescription,
-				  });
-				  const calendarLinkIcs = ics({
+				});
+				const calendarLinkIcs = ics({
 					title: event.title,
 					start: event.startDateLocalized,
 					end: event.endDateLocalized,
 					description: sanitizedDescription,
-				  });
+				});
 				return {
 					...event,
 					eventCalendarDescription: sanitizedDescription,
