@@ -81,11 +81,11 @@ importers:
         specifier: 19.1.1
         version: 19.1.1(react@19.1.1)
       react-leaflet:
-        specifier: ^4.2.1
-        version: 4.2.1(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: ^5.0.0
+        version: 5.0.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react-leaflet-cluster:
-        specifier: ^2.1.0
-        version: 2.1.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react-leaflet@4.2.1(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+        specifier: ^3.1.1
+        version: 3.1.1(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react-leaflet@5.0.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
       rehype-autolink-headings:
         specifier: ^6.1.1
         version: 6.1.1
@@ -1280,12 +1280,12 @@ packages:
     resolution: {integrity: sha512-bWLDlHsBlgKY/05wDN/V3ETcn5G2SV/SiA2ZmNvKGGlmVX4G5li7GRDhHcgYvHJHyJ8TUStqg2xtHmCs0UbAbg==}
     engines: {node: '>=18'}
 
-  '@react-leaflet/core@2.1.0':
-    resolution: {integrity: sha512-Qk7Pfu8BSarKGqILj4x7bCSZ1pjuAPZ+qmRwH5S7mDS91VSbVVsJSrW4qA+GPrro8t69gFYVMWb1Zc4yFmPiVg==}
+  '@react-leaflet/core@3.0.0':
+    resolution: {integrity: sha512-3EWmekh4Nz+pGcr+xjf0KNyYfC3U2JjnkWsh0zcqaexYqmmB5ZhH37kz41JXGmKzpaMZCnPofBBm64i+YrEvGQ==}
     peerDependencies:
       leaflet: ^1.9.0
-      react: ^18.0.0
-      react-dom: ^18.0.0
+      react: ^19.0.0
+      react-dom: ^19.0.0
 
   '@rollup/pluginutils@5.3.0':
     resolution: {integrity: sha512-5EdhGZtnu3V88ces7s53hhfK5KSASnJZv8Lulpc04cWO3REESroJXg73DFsOmgbU2BhwV0E20bu2IDZb3VKW4Q==}
@@ -5147,20 +5147,20 @@ packages:
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
-  react-leaflet-cluster@2.1.0:
-    resolution: {integrity: sha512-16X7XQpRThQFC4PH4OpXHimGg19ouWmjxjtpxOeBKpvERSvIRqTx7fvhTwkEPNMFTQ8zTfddz6fRTUmUEQul7g==}
+  react-leaflet-cluster@3.1.1:
+    resolution: {integrity: sha512-g39QohKNrmIwHNlL0KTv+a9PYYWDtcRAsnHHytJyRhIgjxGxs4/SXe/Zr4kP8IZoEzxbqCMkJqUsFBEZJqKp2g==}
     peerDependencies:
       leaflet: ^1.8.0
-      react: ^18.0.0
-      react-dom: ^18.0.0
+      react: ^18.2.0 || ^19.0.0
+      react-dom: ^18.2.0 || ^19.0.0
       react-leaflet: ^4.0.0
 
-  react-leaflet@4.2.1:
-    resolution: {integrity: sha512-p9chkvhcKrWn/H/1FFeVSqLdReGwn2qmiobOQGO3BifX+/vV/39qhY8dGqbdcPh1e6jxh/QHriLXr7a4eLFK4Q==}
+  react-leaflet@5.0.0:
+    resolution: {integrity: sha512-CWbTpr5vcHw5bt9i4zSlPEVQdTVcML390TjeDG0cK59z1ylexpqC6M1PJFjV8jD7CF+ACBFsLIDs6DRMoLEofw==}
     peerDependencies:
       leaflet: ^1.9.0
-      react: ^18.0.0
-      react-dom: ^18.0.0
+      react: ^19.0.0
+      react-dom: ^19.0.0
 
   react@19.1.1:
     resolution: {integrity: sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ==}
@@ -7537,7 +7537,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@react-leaflet/core@2.1.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+  '@react-leaflet/core@3.0.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
       leaflet: 1.9.4
       react: 19.1.1
@@ -9348,7 +9348,7 @@ snapshots:
       '@typescript-eslint/parser': 8.45.0(eslint@8.57.1)(typescript@5.9.3)
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.45.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.45.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
@@ -9368,7 +9368,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@8.57.1):
+  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.45.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.3(supports-color@5.5.0)
@@ -9383,14 +9383,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.45.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1):
+  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.45.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.45.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 8.45.0(eslint@8.57.1)(typescript@5.9.3)
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@8.57.1)
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.45.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1))(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -9405,7 +9405,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.45.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.45.0(eslint@8.57.1)(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.45.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
@@ -12417,17 +12417,17 @@ snapshots:
 
   react-is@16.13.1: {}
 
-  react-leaflet-cluster@2.1.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react-leaflet@4.2.1(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
+  react-leaflet-cluster@3.1.1(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react-leaflet@5.0.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1):
     dependencies:
       leaflet: 1.9.4
       leaflet.markercluster: 1.5.3(leaflet@1.9.4)
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
-      react-leaflet: 4.2.1(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      react-leaflet: 5.0.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
 
-  react-leaflet@4.2.1(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+  react-leaflet@5.0.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
-      '@react-leaflet/core': 2.1.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@react-leaflet/core': 3.0.0(leaflet@1.9.4)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       leaflet: 1.9.4
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)

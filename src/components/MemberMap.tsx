@@ -7,8 +7,6 @@ import { MapContainer, Marker, TileLayer, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 
-const defaultCustomIcon = require('../../public/assets/images/virtual-coffee-mug-circle.svg');
-
 const createClusterCustomIcon = function (cluster: L.MarkerCluster) {
 	return L.divIcon({
 		html: `<span>${cluster.getChildCount()}</span>`,
@@ -19,10 +17,10 @@ const createClusterCustomIcon = function (cluster: L.MarkerCluster) {
 
 const createCustomIcon = function (avatarUrl?: string) {
 	return new L.Icon.Default({
-		iconUrl: avatarUrl || defaultCustomIcon,
+		iconUrl: avatarUrl || 'assets/images/virtual-coffee-mug-circle.svg',
 		iconSize: new L.Point(33, 33, true),
 		className: 'leaflet-custom-marker',
-		shadowUrl: undefined,
+		shadowUrl: '',
 	});
 };
 
@@ -44,8 +42,8 @@ function Markers({ members }: { members: MappableMember[] }) {
 
 	return (
 		<>
-			{members.map((member) => {
-				const customIcon = createCustomIcon(member.avatarUrl);
+			{members?.map((member) => {
+				const customIcon = createCustomIcon(member?.avatarUrl)
 
 				return (
 					<Marker
@@ -70,22 +68,22 @@ function Markers({ members }: { members: MappableMember[] }) {
 }
 
 export default function MemberMap({ members }: { members: MappableMember[] }) {
-	if (process.env.NODE_ENV === 'development') {
-		return (
-			<div
-				style={{
-					aspectRatio: '16/6',
-					minHeight: 400,
-					position: 'relative',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-				}}
-			>
-				Map disabled in local dev
-			</div>
-		);
-	}
+	// if (process.env.NODE_ENV === 'development') {
+	// 	return (
+	// 		<div
+	// 			style={{
+	// 				aspectRatio: '16/6',
+	// 				minHeight: 400,
+	// 				position: 'relative',
+	// 				display: 'flex',
+	// 				justifyContent: 'center',
+	// 				alignItems: 'center',
+	// 			}}
+	// 		>
+	// 			Map disabled in local dev
+	// 		</div>
+	// 	);
+	// }
 
 	return (
 		<div>
