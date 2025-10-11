@@ -43,7 +43,7 @@ function Markers({ members }: { members: MappableMember[] }) {
 	return (
 		<>
 			{members?.map((member) => {
-				const customIcon = createCustomIcon(member?.avatarUrl)
+				const customIcon = createCustomIcon(member?.avatarUrl);
 
 				return (
 					<Marker
