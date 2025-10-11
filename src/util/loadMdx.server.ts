@@ -20,6 +20,7 @@ export interface MdxFile {
 		heroSubheader?: string;
 	};
 	tags?: string[];
+	contentTags?: string[];
 	children?: MdxFile[];
 }
 
@@ -96,6 +97,12 @@ export function loadMdxDirectory({
 							? a.order - b.order
 							: 0;
 					});
+			}
+			if (index && children) {
+				index.contentTags = children
+					.filter((child) => child.contentTags)
+					.map((child) => child.contentTags!)
+					.flat();
 			}
 
 			return {
