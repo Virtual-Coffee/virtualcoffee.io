@@ -93,7 +93,9 @@ export function loadMdxDirectory({
 											.map((child) => child.contentTags!)
 											.flat();
 
-										dirIndex.contentTags = childContentTags;
+										dirIndex.contentTags = Array.from(
+											new Set(childContentTags),
+										);
 									}
 
 									return {
@@ -118,7 +120,7 @@ export function loadMdxDirectory({
 					.map((child) => child.contentTags!)
 					.flat();
 
-				index.contentTags = childContentTags;
+				index.contentTags = Array.from(new Set(childContentTags));
 			}
 
 			return {
