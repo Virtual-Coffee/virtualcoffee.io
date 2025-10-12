@@ -80,11 +80,25 @@ export function loadMdxDirectory({
 								});
 
 								if (dirIndex) {
+									const subChildren = loadMdxDirectory({
+										baseDirectory: join(baseDirectory, dir.name, e.name),
+									});
+
+									if (subChildren && subChildren.length > 0) {
+										const childContentTags = subChildren
+											.filter(
+												(child) =>
+													child.contentTags && child.contentTags.length > 0,
+											)
+											.map((child) => child.contentTags!)
+											.flat();
+
+										dirIndex.contentTags = childContentTags;
+									}
+
 									return {
 										...dirIndex,
-										children: loadMdxDirectory({
-											baseDirectory: join(baseDirectory, dir.name, e.name),
-										}),
+										children: subChildren,
 									};
 								}
 							}
@@ -99,10 +113,12 @@ export function loadMdxDirectory({
 					});
 			}
 			if (index && children) {
-				index.contentTags = children
-					.filter((child) => child.contentTags)
+				const childContentTags = children
+					.filter((child) => child.contentTags && child.contentTags.length > 0)
 					.map((child) => child.contentTags!)
 					.flat();
+
+				index.contentTags = childContentTags;
 			}
 
 			return {
@@ -189,6 +205,7 @@ export function loadMdxRouteFileAttributes({
 
 	// Parse the front matter from the file contents using the front-matter library
 	const contents = fm(fileContents);
+
 	const attributes = contents.attributes as Omit<
 		MdxFile,
 		'slug' | 'requirePath'

@@ -6,11 +6,12 @@ import { ReactNode } from 'react';
 /*
 PostListItem is each resource under a section of content on the homepage.
 */
-type PostListItem = {
+export type PostListItem = {
 	href?: string;
 	title: string;
 	description?: string | ReactNode;
 	children?: PostListItem[] | null;
+	contentTags?: string[];
 };
 
 type TitleProps = {
@@ -68,16 +69,17 @@ export function formatFileListItemsForPostList(
 	if (!items || internalCurLevel >= depth) {
 		return null;
 	}
-
 	return items.map((item): PostListItem => {
 		const parts = item.slug.split(path.sep).filter((part) => {
 			return !!part && part !== 'content';
 		});
 
+
 		return {
 			title: item.meta.title,
 			description: item.meta.description,
 			href: `/${parts.join('/')}`,
+			contentTags: item.contentTags || [],
 			children: formatFileListItemsForPostList(
 				item.children,
 				depth,
