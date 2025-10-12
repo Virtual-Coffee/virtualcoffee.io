@@ -30,28 +30,37 @@ export const TAG_CATEGORIES: TagCategory[] = [
 		name: 'Skill Level',
 		description: 'Experience level required for the resource',
 		tags: ['beginner', 'intermediate', 'advanced'],
-		color: '#e74c3c', // Red
+		color: TAG_CATEGORY_COLORS.RED,
 	},
 	{
 		id: 'technologies',
 		name: 'Technologies',
 		description: 'Programming languages, frameworks, and tools',
-		tags: ['javascript', 'typescript', 'react', 'node', 'css', 'html', 'git'],
-		color: '#3498db', // Blue
+		tags: [
+			'javascript',
+			'typescript',
+			'react',
+			'node',
+			'css',
+			'html',
+			'git',
+			'ai',
+		],
+		color: TAG_CATEGORY_COLORS.BLUE,
 	},
 	{
 		id: 'topics',
 		name: 'Topics',
 		description: 'Subject areas and domains',
 		tags: ['career', 'open-source', 'testing', 'deployment', 'interviewing'],
-		color: '#2ecc71', // Green
+		color: TAG_CATEGORY_COLORS.GREEN,
 	},
 	{
 		id: 'format',
 		name: 'Format',
 		description: 'Type of content or learning material',
 		tags: ['tutorial', 'reference', 'guide', 'tips'],
-		color: '#f39c12', // Orange
+		color: TAG_CATEGORY_COLORS.ORANGE,
 	},
 ];
 
