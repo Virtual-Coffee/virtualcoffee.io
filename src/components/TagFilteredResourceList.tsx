@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import PostList, { PostListItem } from '@/components/PostList';
 import TagBadge from '@/components/TagBadge';
+import { organizeTagsByCategories, TagGrouping } from '@/util/tagCategories';
 
 interface TagFilteredResourceListProps {
 	allTags: string[];
@@ -14,6 +15,10 @@ export default function TagFilteredResourceList({
 	processedPostListItems,
 }: TagFilteredResourceListProps) {
 	const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
+
+	const tagGrouping = useMemo(() => {
+		return organizeTagsByCategories(allTags);
+	}, [allTags]);
 
 	const filteredPostListItems = useMemo(() => {
 		if (selectedTags.size === 0 || !processedPostListItems) {
@@ -101,15 +106,55 @@ export default function TagFilteredResourceList({
 					</div>
 
 					<div className="resource-tag-filter-tags">
-						{allTags.map((tag) => (
-							<TagBadge
-								key={tag}
-								tag={tag}
-								variant="filter"
-								isSelected={selectedTags.has(tag)}
-								onClick={handleTagToggle}
-							/>
+						{/* Render categorized tags */}
+						{tagGrouping.categories.map((category) => (
+							<div key={category.id} className="tag-category-group">
+								<div className="tag-category-header">
+									<h5 className="tag-category-title" style={{ color: category.color }}>
+										{category.name}
+									</h5>
+									{category.description && (
+										<span className="tag-category-description">
+											{category.description}
+										</span>
+									)}
+								</div>
+								<div className="tag-category-tags">
+									{category.tags.map((tag) => (
+										<TagBadge
+											key={tag}
+											tag={tag}
+											variant="filter"
+											isSelected={selectedTags.has(tag)}
+											onClick={handleTagToggle}
+										/>
+									))}
+								</div>
+							</div>
 						))}
+
+						{/* Render uncategorized tags if any */}
+						{tagGrouping.uncategorizedTags.length > 0 && (
+							<div className="tag-category-group">
+								<div className="tag-category-header">
+									<h5 className="tag-category-title">Other</h5>
+									<span className="tag-category-description">
+										Additional tags
+									</span>
+								</div>
+								<div className="tag-category-tags">
+									{tagGrouping.uncategorizedTags.map((tag) => (
+										<TagBadge
+											key={tag}
+											tag={tag}
+											variant="filter"
+											isSelected={selectedTags.has(tag)}
+											onClick={handleTagToggle}
+										/>
+									))}
+								</div>
+							</div>
+						)}
 					</div>
 
 					{selectedTags.size > 0 && (
