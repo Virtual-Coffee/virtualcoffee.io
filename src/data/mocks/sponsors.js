@@ -1,6 +1,6 @@
-const { faker } = require('@faker-js/faker');
+import { faker } from '@faker-js/faker';
 
-module.exports = {
+const sponsors = {
 	organization: {
 		sponsorshipsAsMaintainer: {
 			nodes: [
@@ -614,3 +614,5 @@ module.exports = {
 		},
 	},
 };
+
+export default sponsors;

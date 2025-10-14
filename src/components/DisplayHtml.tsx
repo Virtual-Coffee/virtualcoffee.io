@@ -6,7 +6,7 @@ interface DisplayHtmlProps {
 				renderHtml: string;
 		  }
 		| string;
-	as: ElementType;
+	as?: ElementType;
 	[k: string]: unknown;
 }
 

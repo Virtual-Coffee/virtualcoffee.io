@@ -103,10 +103,8 @@ async function getMemberGithubData(
 
 		const queries: string[] = [];
 		const githubData: GithubSearchUserLookup = {};
-
-		let i,
-			j,
-			chunk = 15;
+		const chunk = 15;
+		let i, j;
 		for (i = 0, j = data.length; i < j; i += chunk) {
 			queries.push(
 				`${data
