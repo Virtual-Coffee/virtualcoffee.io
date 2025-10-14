@@ -45,7 +45,7 @@ export interface EventItem extends SolspaceEventResponse {
 		ics: string;
 	};
 }
-export interface EventsResponse extends Array<EventItem> {}
+export type EventsResponse = Array<EventItem>;
 
 function createEventsQuery(
 	calendars: Pick<SolspaceCalendar, 'handle'>[],

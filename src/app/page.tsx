@@ -31,7 +31,6 @@ export default async function Home() {
 			<div className="hero">
 				<div className="container pt-5 pb-5 pt-sm-6">
 					<h1>
-						{/* @ts-ignore */}
 						<VirtualCoffeeFullBanner />
 					</h1>
 
@@ -65,7 +64,6 @@ export default async function Home() {
 				<div className="container-lg py-5">
 					<h2 className="text-center mb-5">What we&apos;re up to</h2>
 					<div className="homepageblocks homepageblocks-wide">
-						{/* @ts-ignore */}
 						<HomePageBlock
 							Hero="UndrawCelebration"
 							id="about"
@@ -128,9 +126,9 @@ export default async function Home() {
 										metaDescription: description,
 										url,
 									}: {
-										title: any;
-										metaDescription: any;
-										url: any;
+										title: string;
+										metaDescription: string;
+										url: string;
 									}) => ({
 										title,
 										description,
