@@ -24,19 +24,19 @@ export function createEventsData({
 			start: startDate.toUTC().toString(),
 			end: startDate.toUTC().plus({ hours: 1 }).toString(),
 			description: faker.lorem.paragraph(),
-		  });
-		  const calendarLinkOutlook = outlook({
+		});
+		const calendarLinkOutlook = outlook({
 			title: faker.lorem.sentence(7),
 			start: startDate.toUTC().toString(),
 			end: startDate.toUTC().plus({ hours: 1 }).toString(),
 			description: faker.lorem.paragraph(),
-		  });
-		  const calendarLinkIcs = ics({
+		});
+		const calendarLinkIcs = ics({
 			title: faker.lorem.sentence(7),
 			start: startDate.toUTC().toString(),
 			end: startDate.toUTC().plus({ hours: 1 }).toString(),
 			description: faker.lorem.paragraph(),
-		  });
+		});
 
 		return {
 			id: faker.string.uuid(),
