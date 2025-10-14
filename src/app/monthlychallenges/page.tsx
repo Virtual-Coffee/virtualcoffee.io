@@ -10,7 +10,7 @@ export const metadata = createMetaData({
 	Hero: 'UndrawGoodTeam',
 });
 
-type Challenge<T = any> = {
+type Challenge<T = unknown> = {
 	title: string;
 	subtitle: string;
 	description?: React.ReactNode;
@@ -484,7 +484,11 @@ const challengeList: Challenge[] = [
 	{
 		title: 'Pairing',
 		subtitle: `Pairing is more than just coding with someone else. Pairing is about communication, teaching, learning, positive reinforcements, and growing.`,
-		renderDescription: (totalSessions: number) => {
+		renderDescription: (challengeData: unknown) => {
+			let totalSessions: number = 0;
+			if (typeof challengeData === 'number') {
+				totalSessions = challengeData;
+			}
 			return (
 				<>
 					<p>
@@ -771,7 +775,7 @@ function ChallengeItem({
 	challengeData,
 }: {
 	challenge: Challenge;
-	challengeData: any;
+	challengeData: unknown;
 }) {
 	return (
 		<>

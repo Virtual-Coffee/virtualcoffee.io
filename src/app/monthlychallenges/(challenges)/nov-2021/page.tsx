@@ -1,5 +1,6 @@
 import { getChallengeData } from '@/data/monthlyChallenges/nov-2021';
 import { Fragment } from 'react';
+import Link from 'next/link';
 
 const handle = {
 	listTitle: 'November, 2021: 50k words!',
@@ -17,14 +18,14 @@ const handle = {
 export const metadata = handle.meta;
 
 export default async function Challenge() {
-	const { completedGoals, currentGoal, sortedList, list, totals } =
+	const { completedGoals, currentGoal, sortedList, totals } =
 		await getChallengeData();
 
 	return (
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <a href="/monthlychallenges/">next challenge</a>!
+				the <Link href="/monthlychallenges/">next challenge</Link>!
 			</div>
 
 			<h1>

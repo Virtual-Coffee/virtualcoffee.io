@@ -145,15 +145,15 @@ export async function getNewsletters(
 
 export async function getNewsletter(slug: string) {
 	try {
-		const { handle, default: Page } = require(
-			'@/content/newsletters/' + slug,
-		) as {
+		const { handle, default: Page } = (await import(
+			'@/content/newsletters/' + slug
+		)) as {
 			handle: NewsletterIssue['handleData'];
 			default: () => React.ReactNode;
 		};
 
 		return { handle, Page };
-	} catch (error) {
+	} catch (_error) {
 		return null;
 	}
 }

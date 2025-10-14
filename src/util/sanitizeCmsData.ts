@@ -1,7 +1,7 @@
 import sanitize from 'sanitize-html';
 
 interface DirtyData {
-	[key: string]: any;
+	[key: string]: unknown;
 }
 type SanitizedData<T> = T & {
 	sanitizedHtml: string;
@@ -13,20 +13,20 @@ export function sanitizeCmsData<T>(data: T): T {
 
 	function sanitizeInternal(
 		data: DirtyData | DirtyData[],
-	): SanitizedData<T> | DataToSanitize {
+	): SanitizedData<T> | SanitizedData<T>[] | DataToSanitize {
 		if (Array.isArray(data)) {
-			return data.map((o) => sanitizeInternal(o));
-		} else if (typeof data === 'object') {
+			return data.map((o) => sanitizeInternal(o)) as SanitizedData<T>[];
+		} else if (typeof data === 'object' && data !== null) {
 			return Object.keys(data).reduce((obj, key) => {
 				if (key === 'renderHtml') {
 					return {
 						...obj,
-						renderHtml: sanitize(data[key], sanitizeOptions),
+						renderHtml: sanitize(data[key] as string, sanitizeOptions),
 					};
 				} else {
 					return {
 						...obj,
-						[key]: sanitizeInternal(data[key]),
+						[key]: sanitizeInternal(data[key] as DirtyData | DirtyData[]),
 					};
 				}
 			}, {}) as SanitizedData<typeof data>;

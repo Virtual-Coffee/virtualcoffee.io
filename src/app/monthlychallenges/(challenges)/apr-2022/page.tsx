@@ -1,5 +1,3 @@
-import { createMetaData } from '@/util/createMetaData.server';
-
 const handle = {
 	listTitle:
 		'April, 2022: Get job ready! Resumes, Portfolios, Cover Letters, and Elevator Pitch',

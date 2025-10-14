@@ -82,6 +82,7 @@ export default async function Page() {
 									tier.sponsors.map((supporter) => (
 										<li key={supporter.id} data-id={supporter.id}>
 											<a href={supporter.websiteUrl || supporter.url}>
+												{/* eslint-disable-next-line @next/next/no-img-element */}
 												<img
 													src={supporter.avatarUrl_80}
 													alt=""
@@ -113,7 +114,7 @@ export default async function Page() {
 								)}
 							</ul>
 							<div className="text-right text-muted">
-								<a href="/sponsorship">Sponsor Virtual Coffee</a>
+								<Link href="/sponsorship">Sponsor Virtual Coffee</Link>
 							</div>
 						</div>
 					)}

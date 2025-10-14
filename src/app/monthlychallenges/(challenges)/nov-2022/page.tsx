@@ -135,7 +135,6 @@ export default async function Challenge() {
 		completedGoals,
 		currentGoal,
 		meta,
-		posts,
 	} = await getData();
 
 	return (

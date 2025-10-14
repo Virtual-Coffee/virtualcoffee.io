@@ -1,5 +1,6 @@
 import challengeJson from './nov-2020.json';
 import { Fragment } from 'react';
+import Link from 'next/link';
 
 const handle = {
 	listTitle: 'November, 2020: 50k words!',
@@ -51,7 +52,7 @@ export default function Challenge() {
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
 				the
-				<a href="/monthlychallenges/">next challenge</a>!
+				<Link href="/monthlychallenges/">next challenge</Link>!
 			</div>
 
 			<h1>

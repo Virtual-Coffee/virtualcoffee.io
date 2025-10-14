@@ -1,4 +1,3 @@
-import { createMetaData } from '@/util/createMetaData.server';
 import Link from 'next/link';
 import LeadText from '@/components/content/LeadText';
 import TextContainer from '@/components/content/TextContainer';

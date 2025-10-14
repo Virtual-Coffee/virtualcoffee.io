@@ -1,12 +1,12 @@
-const { faker } = require('@faker-js/faker');
-const markdownIt = require('markdown-it');
+import { faker } from '@faker-js/faker';
+import markdownIt from 'markdown-it';
 let markdownLibrary = markdownIt({
 	html: false,
 	breaks: true,
 	linkify: true,
 });
 
-module.exports = function (data) {
+function memberData(data) {
 	return data.reduce((obj, member) => {
 		return {
 			...obj,
@@ -22,4 +22,6 @@ module.exports = function (data) {
 			},
 		};
 	}, {});
-};
+}
+
+export default memberData;

@@ -1,6 +1,5 @@
 import UndrawIllustration from '@/components/UndrawIllustration';
-
-import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
 const handle = {
 	listTitle: 'April, 2021: Community Kindness!',
@@ -22,7 +21,7 @@ export default function Challenge() {
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <a href="/monthlychallenges/">next challenge</a>!
+				the <Link href="/monthlychallenges/">next challenge</Link>!
 			</div>
 
 			<div className="row align-items-center">

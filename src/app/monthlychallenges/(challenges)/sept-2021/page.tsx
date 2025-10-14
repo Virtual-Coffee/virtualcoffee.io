@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import LeadText from '@/components/content/LeadText';
-import { createMetaData } from '@/util/createMetaData.server';
 
 const handle = {
 	listTitle: 'September 2021: Preptember!',

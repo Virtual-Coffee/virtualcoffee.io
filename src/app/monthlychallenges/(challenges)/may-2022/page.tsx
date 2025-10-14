@@ -1,5 +1,3 @@
-import { createMetaData } from '@/util/createMetaData.server';
-
 import UndrawIllustration from '@/components/UndrawIllustration';
 
 const handle = {

@@ -21,7 +21,7 @@ export function generateStaticParams() {
 
 export const dynamicParams = true;
 
-function getFile(slug: string) {
+async function getFile(slug: string) {
 	const file = loadMdxRouteFileAttributes({
 		slug: `content/simple-mdx-pages/${slug}`,
 	});
@@ -30,7 +30,7 @@ function getFile(slug: string) {
 			default: Component,
 		}: {
 			default: React.ComponentType<MDXProps>;
-		} = require(`@/content/simple-mdx-pages/${slug}.mdx`);
+		} = await import(`@/content/simple-mdx-pages/${slug}.mdx`);
 		return { ...file, Component };
 	} else {
 		return null;
@@ -42,7 +42,7 @@ export async function generateMetadata({
 }: NextPageProps<'slug', false, true>): Promise<Metadata> {
 	const uri = ((await params).slug ?? []).join('/');
 
-	const file = getFile(uri);
+	const file = await getFile(uri);
 	if (!file) {
 		notFound();
 	}
@@ -58,7 +58,7 @@ export default async function Page({
 	params,
 }: NextPageProps<'slug', false, true>) {
 	const uri = ((await params).slug ?? []).join('/');
-	const file = getFile(uri);
+	const file = await getFile(uri);
 
 	if (!file) {
 		notFound();
