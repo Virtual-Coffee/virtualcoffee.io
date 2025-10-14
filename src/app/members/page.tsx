@@ -8,7 +8,7 @@ import { createMetaData } from '@/util/createMetaData.server';
 import type { MappableMember } from '@/content/members/types';
 import 'leaflet/dist/leaflet.css';
 import { Suspense } from 'react';
-import { MapLoader } from './map-loader';
+import { MapLoader, MapLoaderDev } from './map-loader';
 
 export const metadata = createMetaData({
 	title: 'Virtual Coffee Members',
@@ -39,7 +39,11 @@ export default async function EventsIndex() {
 				</div>
 
 				<Suspense>
-					<MapLoader members={mapMembers} />
+					{process.env.NODE_ENV === 'development' ? (
+						<MapLoaderDev members={mapMembers} />
+					) : (
+						<MapLoader members={mapMembers} />
+					)}
 				</Suspense>
 			</div>
 			<div className="bg-light py-5">

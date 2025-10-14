@@ -67,23 +67,6 @@ function Markers({ members }: { members: MappableMember[] }) {
 }
 
 export default function MemberMap({ members }: { members: MappableMember[] }) {
-	if (process.env.NODE_ENV === 'development') {
-		return (
-			<div
-				style={{
-					aspectRatio: '16/6',
-					minHeight: 400,
-					position: 'relative',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-				}}
-			>
-				Map disabled in local dev
-			</div>
-		);
-	}
-
 	return (
 		<div>
 			<MapContainer
