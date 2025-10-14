@@ -16,11 +16,10 @@ const createClusterCustomIcon = function (cluster: L.MarkerCluster) {
 };
 
 const createCustomIcon = function (avatarUrl?: string) {
-	return new L.Icon.Default({
+	return new L.Icon({
 		iconUrl: avatarUrl || 'assets/images/virtual-coffee-mug-circle.svg',
 		iconSize: new L.Point(33, 33, true),
 		className: 'leaflet-custom-marker',
-		shadowUrl: '',
 	});
 };
 
