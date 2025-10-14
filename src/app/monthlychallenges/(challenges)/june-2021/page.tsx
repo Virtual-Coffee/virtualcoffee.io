@@ -1,4 +1,4 @@
-import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
 const handle = {
 	listTitle: 'June, 2021: Build in Public',
@@ -20,7 +20,7 @@ export default function Challenge() {
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <a href="/monthlychallenges/">next challenge</a>!
+				the <Link href="/monthlychallenges/">next challenge</Link>!
 			</div>
 
 			<h1>

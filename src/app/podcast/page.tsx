@@ -63,6 +63,7 @@ export default async function PodcastsIndex() {
 							{latestEpisode.episodeSponsors.map((sponsor) => (
 								<li key={sponsor.title} className="media align-items-center">
 									<a href={sponsor.sponsorUrl}>
+										{/* eslint-disable-next-line @next/next/no-img-element */}
 										<img
 											src={createCmsImage({
 												path: sponsor.sponsorImage[0].path,

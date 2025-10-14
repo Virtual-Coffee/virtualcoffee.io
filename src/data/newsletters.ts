@@ -153,7 +153,7 @@ export async function getNewsletter(slug: string) {
 		};
 
 		return { handle, Page };
-	} catch (error) {
+	} catch (_error) {
 		return null;
 	}
 }

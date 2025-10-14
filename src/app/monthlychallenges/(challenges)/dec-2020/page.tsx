@@ -1,4 +1,4 @@
-import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 import challengeJson from './dec-2020.json';
 
 const handle = {
@@ -21,7 +21,7 @@ export default function Challenge() {
 
 	const totals: Record<string, number> = {};
 
-	list.forEach((challenge, i) => {
+	list.forEach((challenge) => {
 		challenge.participants.forEach((p) => {
 			if (p in totals) {
 				totals[p] = totals[p] + 1;
@@ -35,7 +35,7 @@ export default function Challenge() {
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <a href="/monthlychallenges/">next challenge</a>!
+				the <Link href="/monthlychallenges/">next challenge</Link>!
 			</div>
 
 			<h1>
