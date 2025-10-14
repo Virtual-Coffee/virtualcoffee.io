@@ -19,7 +19,7 @@ export const metadata = handle.meta;
 export default function Challenge() {
 	const { challengedata: list } = challengeJson;
 
-	let totals: Record<string, number> = {};
+	const totals: Record<string, number> = {};
 
 	list.forEach((challenge, i) => {
 		challenge.participants.forEach((p) => {

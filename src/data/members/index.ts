@@ -66,7 +66,7 @@ async function getMemberGithubData(
 		return mockMemberData(data);
 	}
 
-	let headers = {
+	const headers = {
 		Accept: 'application/vnd.github.v3+json',
 		Authorization: 'bearer ' + token,
 	};
@@ -148,8 +148,8 @@ function loadDirectory(
 	const list = Object.keys(memberList).map((key) => memberList[key]);
 
 	return list.sort(function (a, b) {
-		var nameA = a.github.toLowerCase(); // ignore upper and lowercase
-		var nameB = b.github.toLowerCase(); // ignore upper and lowercase
+		const nameA = a.github.toLowerCase(); // ignore upper and lowercase
+		const nameB = b.github.toLowerCase(); // ignore upper and lowercase
 		if (nameA < nameB) {
 			return -1;
 		}

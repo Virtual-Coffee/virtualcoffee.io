@@ -24,7 +24,6 @@ export default function RootLayout({
 		<>
 			<html lang="en" className="h-full bg-gray-100">
 				<head>
-					{/* @ts-ignore */}
 					{buildUrls.NETLIFY && buildUrls.CONTEXT === 'production' && (
 						<Script
 							strategy="afterInteractive"
