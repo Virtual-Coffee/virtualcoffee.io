@@ -1,4 +1,3 @@
- 
 import { Fragment } from 'react';
 import { createMetaData } from '@/util/createMetaData.server';
 import { getWritingChallengeData } from '@/data/monthlyChallenges/NaNoWriMo';
