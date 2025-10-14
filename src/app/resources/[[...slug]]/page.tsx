@@ -33,7 +33,7 @@ export function generateStaticParams() {
 	];
 }
 
-function getFile(slug: string) {
+async function getFile(slug: string) {
 	const file = loadMdxRouteFileAttributes({
 		slug: `content/resources/${slug}`,
 	});
@@ -43,10 +43,10 @@ function getFile(slug: string) {
 		}: {
 			default: React.ComponentType<MDXProps>;
 		} = slug
-			? require(
-					`@/content/resources/${slug}${file.isIndex ? '/index' : ''}.mdx`,
+			? await import(
+					`@/content/resources/${slug}${file.isIndex ? '/index' : ''}.mdx`
 				)
-			: require('@/content/resources/index.mdx');
+			: await import('@/content/resources/index.mdx');
 		return { ...file, Component };
 	} else {
 		return null;
@@ -88,7 +88,7 @@ export async function generateMetadata({
 }: NextPageProps<'slug', false, true>): Promise<Metadata> {
 	const uri = ((await params).slug ?? []).join('/');
 
-	const file = getFile(uri);
+	const file = await getFile(uri);
 	if (!file) {
 		notFound();
 	}
@@ -104,7 +104,7 @@ export default async function Page({
 	params,
 }: NextPageProps<'slug', false, true>) {
 	const uri = ((await params).slug ?? []).join('/');
-	const file = getFile(uri);
+	const file = await getFile(uri);
 
 	if (!file) {
 		notFound();
@@ -125,7 +125,7 @@ export default async function Page({
 						<nav aria-label="breadcrumb">
 							<ol className="breadcrumb">
 								<li className="breadcrumb-item">
-									<a href="/resources">Resources</a>
+									<Link href="/resources">Resources</Link>
 								</li>
 								{breadCrumbs.map((bc, i) => {
 									if (i === breadCrumbs.length - 1) {

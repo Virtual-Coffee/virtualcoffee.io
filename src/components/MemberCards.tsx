@@ -44,6 +44,7 @@ export default function MemberCards({ data }: { data: MemberList }) {
 						>
 							<div className="membercard-img">
 								<div className="membercard-img-w">
+									{/* eslint-disable-next-line @next/next/no-img-element */}
 									<img
 										src={member.avatarUrl}
 										alt=""

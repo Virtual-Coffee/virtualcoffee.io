@@ -1,4 +1,3 @@
-import LeadText from '@/components/content/LeadText';
 import Link from 'next/link';
 import TextContainer from '@/components/content/TextContainer';
 

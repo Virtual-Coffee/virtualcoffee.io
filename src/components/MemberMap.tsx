@@ -7,7 +7,7 @@ import { MapContainer, Marker, TileLayer, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 
-const defaultCustomIcon = require('../../public/assets/images/virtual-coffee-mug-circle.svg');
+const defaultCustomIcon = '/assets/images/virtual-coffee-mug-circle.svg';
 
 const createClusterCustomIcon = function (cluster: L.MarkerCluster) {
 	return L.divIcon({

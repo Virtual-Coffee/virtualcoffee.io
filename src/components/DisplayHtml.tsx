@@ -1,10 +1,13 @@
+import { ElementType } from 'react';
+
 interface DisplayHtmlProps {
 	html:
 		| {
 				renderHtml: string;
 		  }
 		| string;
-	[k: string]: any;
+	as?: ElementType;
+	[k: string]: unknown;
 }
 
 export default function DisplayHtml({

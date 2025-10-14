@@ -1,4 +1,4 @@
-const { performance } = require('perf_hooks');
+import { performance } from 'perf_hooks';
 
 export default async function measure(fn, name) {
 	console.log(`fetching ${name}`);

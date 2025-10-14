@@ -87,6 +87,7 @@ export default function UndrawIllustration({
 	const aspectRatio = svgAspectRatios[filename];
 
 	return (
+		// eslint-disable-next-line @next/next/no-img-element
 		<img
 			style={{ aspectRatio, ...style }}
 			src={`/assets/svg/${filename}.svg`}

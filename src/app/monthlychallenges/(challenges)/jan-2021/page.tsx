@@ -1,4 +1,5 @@
 import challengeJson from './jan-2021.json';
+import Link from 'next/link';
 
 const handle = {
 	listTitle: 'January, 2021: Month of Learning!',
@@ -24,7 +25,7 @@ export default function Challenge() {
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
 				the
-				<a href="/monthlychallenges/">next challenge</a>!
+				<Link href="/monthlychallenges/">next challenge</Link>!
 			</div>
 
 			<h1>

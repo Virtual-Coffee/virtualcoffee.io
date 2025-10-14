@@ -1,4 +1,4 @@
-import { createMetaData } from '@/util/createMetaData.server';
+import Link from 'next/link';
 
 const handle = {
 	listTitle: 'August, 2021: Healthy Habits for Healthy Devs',
@@ -21,7 +21,7 @@ export default function Challenge() {
 		<>
 			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
-				the <a href="/monthlychallenges/oct-2021/">next challenge</a>!
+				the <Link href="/monthlychallenges/oct-2021/">next challenge</Link>!
 			</div>
 
 			<h1>

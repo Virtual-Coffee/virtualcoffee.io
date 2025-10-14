@@ -35,7 +35,7 @@ type CreateCmsImageProps = {
 	/** Any other {@link https://docs.imgix.com/apis/rendering rendering options} for the Imgix library
 	 * @defaultValue `{}`
 	 */
-	settings?: Record<string, any>;
+	settings?: Record<string, unknown>;
 };
 
 createCmsImage({ path: '', folder: '', settings: {} });
