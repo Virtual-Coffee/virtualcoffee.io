@@ -19,6 +19,14 @@ export default defineConfig([
 		rules: {
 			'react/no-unescaped-entities': 'off',
 			'@next/next/no-html-link-for-pages': 'warn',
+			'@typescript-eslint/no-unused-vars': [
+				'warn',
+				{
+					varsIgnorePattern: '^_',
+					argsIgnorePattern: '^_',
+					caughtErrorsIgnorePattern: '^_|^error$|^e$',
+				},
+			],
 		},
 	},
 	{
