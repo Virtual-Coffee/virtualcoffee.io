@@ -10,7 +10,7 @@
 		"preinstall": "npx only-allow pnpm",
 		"format": "npx prettier --write --ignore-unknown --list-different \"**/*\"",
 		"lint": "eslint",
-		"build-member-files": "node scripts/loadMemberFiles.js",
+		"build-member-files": "tsx scripts/loadMemberFiles.js",
 		"local-dev": "cross-env NODE_ENV=development pnpm netlify dev",
 		"build": "next build",
 		"start": "next start",

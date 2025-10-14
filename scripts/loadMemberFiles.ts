@@ -1,8 +1,8 @@
-var fs = require('fs');
-var path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-function loadMemberFiles(dir) {
-	const filenames = [];
+function loadMemberFiles(dir: string) {
+	const filenames: string[] = [];
 
 	fs.readdirSync(path.join('.', 'src', 'content', 'members', dir), {
 		withFileTypes: true,
