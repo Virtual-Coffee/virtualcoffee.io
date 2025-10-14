@@ -189,6 +189,9 @@ importers:
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
+      sass:
+        specifier: ^1.93.2
+        version: 1.93.2
       tailwindcss:
         specifier: ^3.4.18
         version: 3.4.18(tsx@4.20.6)(yaml@2.8.1)
@@ -10221,8 +10224,7 @@ snapshots:
 
   image-size@2.0.2: {}
 
-  immutable@5.1.4:
-    optional: true
+  immutable@5.1.4: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -12623,7 +12625,6 @@ snapshots:
       source-map-js: 1.2.1
     optionalDependencies:
       '@parcel/watcher': 2.5.1
-    optional: true
 
   sax@1.4.1: {}
 
