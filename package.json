@@ -76,7 +76,7 @@
 		"@types/sanitize-html": "^2.16.0",
 		"all-contributors-cli": "^6.26.1",
 		"concurrently": "^9.2.1",
-		"cross-env": "^7.0.3",
+		"cross-env": "^10.1.0",
 		"esbuild": "^0.25.10",
 		"eslint": "^9.37.0",
 		"eslint-config-next": "15.5.5",
