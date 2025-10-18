@@ -38,7 +38,8 @@ export type Account =
 export type Badge =
 	| 'Hacktoberfest2022'
 	| 'Hacktoberfest2023'
-	| 'Hacktoberfest2024';
+	| 'Hacktoberfest2024'
+	| 'Hacktoberfest2025';
 export type Flare = {
 	profileMask?: string;
 };
@@ -58,6 +59,7 @@ export type MemberObject = {
 	badges?: Badge[];
 	flare?: Flare;
 	location?: Location;
+	emoji?: string;
 };
 
 export type GithubSearchUser = {

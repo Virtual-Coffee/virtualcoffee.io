@@ -118,7 +118,7 @@ const emptySponsorsResponse = {
 export async function getSponsors() {
 	// async function main() {
 
-	let headers: HeadersInit = {
+	const headers: HeadersInit = {
 		Accept: 'application/vnd.github.v3+json',
 	};
 

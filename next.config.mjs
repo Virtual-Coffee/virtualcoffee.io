@@ -110,8 +110,16 @@ const __filename = fileURLToPath(import.meta.url); // get the resolved path to t
 const __dirname = path.dirname(__filename);
 
 const nextConfig = {
+	reactStrictMode: true,
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'node_modules')],
+		silenceDeprecations: [
+			'abs-percent',
+			'color-functions',
+			'color-module-compat',
+			'import',
+			'legacy-js-api',
+		],
 	},
 	pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
 	async headers() {

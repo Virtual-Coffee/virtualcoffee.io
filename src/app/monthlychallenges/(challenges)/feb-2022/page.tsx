@@ -1,5 +1,3 @@
-import { createMetaData } from '@/util/createMetaData.server';
-
 const handle = {
 	listTitle: 'February, 2022: Pairing!',
 	meta: {

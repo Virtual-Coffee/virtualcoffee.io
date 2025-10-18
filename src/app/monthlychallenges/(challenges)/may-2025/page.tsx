@@ -1,4 +1,3 @@
-import { createMetaData } from '@/util/createMetaData.server';
 import Link from 'next/link';
 
 const handle = {
@@ -19,7 +18,7 @@ export const metadata = handle.meta;
 export default function Challenge() {
 	return (
 		<>
-		<div className="alert alert-success">
+			<div className="alert alert-success">
 				This monthly challenge is complete. Congratulations! Please join us for
 				the <Link href="/monthlychallenges/summer-2025">next challenge</Link>!
 			</div>

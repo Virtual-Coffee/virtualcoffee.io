@@ -10,7 +10,7 @@ export const metadata = createMetaData({
 	Hero: 'UndrawGoodTeam',
 });
 
-type Challenge<T = any> = {
+type Challenge<T = unknown> = {
 	title: string;
 	subtitle: string;
 	description?: React.ReactNode;
@@ -251,15 +251,16 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
+		current: true,
 		title: 'Hacktoberfest',
 		subtitle: `Participate in open source, learn, and have fun!`,
 		description: (
 			<>
 				<p>
 					This challenge is always run during October and was our first-ever
-					monthly challenge. We have three tracks: maintainers will provide
-					issues labeled for Hacktoberfest, contributors will solve issues, and
-					mentors will help contributors and maintainers be successful.
+					monthly challenge. Open source maintainers will provide issues for
+					Hacktoberfest, contributors will solve issues, and the community will
+					support contributors and maintainers during this challenge.
 				</p>
 				<p>
 					Learn more about this challenge in{' '}
@@ -269,16 +270,19 @@ const challengeList: Challenge[] = [
 					.
 				</p>
 				<p>
-					To view all of the details, including a list of VC-approved
-					repositories to contribute to,{' '}
-					<Link href="/monthlychallenges/oct-2024">
-						check out the October monthly challenge page
+					To view all of the details of this year's challenge,{' '}
+					<Link href="/monthlychallenges/fall-2025">
+						check out the Fall 2025 challenge page
 					</Link>
 					.
 				</p>
 			</>
 		),
 		links: [
+			{
+				href: '/monthlychallenges/oct-2024',
+				title: 'October, 2024',
+			},
 			{
 				href: '/monthlychallenges/oct-2023',
 				title: 'October, 2023',
@@ -294,7 +298,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Preptember',
 		subtitle: `Get your open source projects ready and build confidence!`,
 		description: (
@@ -481,7 +484,11 @@ const challengeList: Challenge[] = [
 	{
 		title: 'Pairing',
 		subtitle: `Pairing is more than just coding with someone else. Pairing is about communication, teaching, learning, positive reinforcements, and growing.`,
-		renderDescription: (totalSessions: number) => {
+		renderDescription: (challengeData: unknown) => {
+			let totalSessions: number = 0;
+			if (typeof challengeData === 'number') {
+				totalSessions = challengeData;
+			}
 			return (
 				<>
 					<p>
@@ -768,7 +775,7 @@ function ChallengeItem({
 	challengeData,
 }: {
 	challenge: Challenge;
-	challengeData: any;
+	challengeData: unknown;
 }) {
 	return (
 		<>

@@ -1,8 +1,5 @@
 import type { IconProps } from '@/content/members/types';
-export default function Book({
-	ariaHidden,
-	title = 'Book',
-}: IconProps): JSX.Element {
+export default function Book({ ariaHidden, title = 'Book' }: IconProps) {
 	return (
 		<svg
 			width="1em"

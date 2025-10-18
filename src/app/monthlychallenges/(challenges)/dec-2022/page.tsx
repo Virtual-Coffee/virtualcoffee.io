@@ -1,5 +1,3 @@
-import { createMetaData } from '@/util/createMetaData.server';
-
 const handle = {
 	listTitle: 'December, 2022: Creative Community Challenge',
 	meta: {

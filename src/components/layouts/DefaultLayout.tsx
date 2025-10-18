@@ -80,9 +80,9 @@ type DefaultLayoutProps = {
 	/** This is the subheader that will be displayed under the heroHeader. */
 	heroSubheader?: ReactNode;
 	/** If true, the hero will be a simple hero with no background image. */
-	simple?: Boolean;
+	simple?: boolean;
 	/** This is a boolean that determines whether or not the hero component is shown. */
-	showHero?: Boolean;
+	showHero?: boolean;
 	/** This is the content that will be rendered inside the HeroData component. */
 	children?: ReactNode;
 };

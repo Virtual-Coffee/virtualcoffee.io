@@ -40,7 +40,7 @@ async function getEpisodeData(slug: string) {
 export async function generateMetadata({
 	params,
 }: NextPageProps<'slug'>): Promise<Metadata> {
-	const { episode } = await getEpisodeData(params.slug);
+	const { episode } = await getEpisodeData((await params).slug);
 
 	const cardImage = episode.podcastEpisodeCard && episode.podcastEpisodeCard[0];
 
@@ -95,7 +95,7 @@ export async function generateMetadata({
 }
 
 export default async function Newsletter({ params }: NextPageProps<'slug'>) {
-	const { episode, transcript } = await getEpisodeData(params.slug);
+	const { episode, transcript } = await getEpisodeData((await params).slug);
 
 	return (
 		<>
@@ -130,6 +130,7 @@ export default async function Newsletter({ params }: NextPageProps<'slug'>) {
 							{episode.episodeSponsors.map((sponsor) => (
 								<li key={sponsor.title}>
 									<a href={sponsor.sponsorUrl}>
+										{/* eslint-disable-next-line @next/next/no-img-element */}
 										<img
 											src={createCmsImage({
 												path: sponsor.sponsorImage[0].path,
@@ -199,6 +200,7 @@ export default async function Newsletter({ params }: NextPageProps<'slug'>) {
 									<div className="row no-gutters">
 										<div className="col-sm-4 col-md-12">
 											{headshot && (
+												// eslint-disable-next-line @next/next/no-img-element
 												<img
 													alt=""
 													className="card-img-top"

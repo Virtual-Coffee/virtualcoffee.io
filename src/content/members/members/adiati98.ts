@@ -10,6 +10,7 @@ export const adiati98: MemberObject = {
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
 	// name: 'Your Name',
 	name: 'Ayu Adiati',
+	emoji: '✨',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
@@ -37,16 +38,21 @@ export const adiati98: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'adiatiayu' },
 		{ type: 'dev', username: 'adiatiayu' },
-		{ type: 'codenewbie', username: 'adiatiayu' },
+		// { type: 'codenewbie', username: 'adiatiayu' },
 		{ type: 'twitter', username: 'AdiatiAyu' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'adiatiayu' },
+		// { type: 'polywork', username: 'adiatiayu' },
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'adiatiayu' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ['Hacktoberfest2022', 'Hacktoberfest2023', 'Hacktoberfest2024'],
+	badges: [
+		'Hacktoberfest2022',
+		'Hacktoberfest2023',
+		'Hacktoberfest2024',
+		'Hacktoberfest2025',
+	],
 	location: {
 		latitude: 52.020798,
 		longitude: 4.493784,

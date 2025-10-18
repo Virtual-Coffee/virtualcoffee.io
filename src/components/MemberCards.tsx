@@ -44,6 +44,7 @@ export default function MemberCards({ data }: { data: MemberList }) {
 						>
 							<div className="membercard-img">
 								<div className="membercard-img-w">
+									{/* eslint-disable-next-line @next/next/no-img-element */}
 									<img
 										src={member.avatarUrl}
 										alt=""
@@ -70,7 +71,7 @@ export default function MemberCards({ data }: { data: MemberList }) {
 							</div>
 
 							<div className="membercard-header">
-								<h3 className="membercard-name">{member.name}</h3>
+								<h3 className="membercard-name">{`${member.emoji ? `${member.emoji} ` : ''}${member.name}`}</h3>
 
 								{member?.teams && member.teams.length > 0 && (
 									<div className="membercard-teams">

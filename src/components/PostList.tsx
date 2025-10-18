@@ -1,6 +1,7 @@
 import { MdxFile } from '@/util/loadMdx.server';
 import Link from 'next/link';
 import path from 'path';
+import { ReactNode } from 'react';
 
 /*
 PostListItem is each resource under a section of content on the homepage.
@@ -8,7 +9,7 @@ PostListItem is each resource under a section of content on the homepage.
 type PostListItem = {
 	href?: string;
 	title: string;
-	description?: string | JSX.Element;
+	description?: string | ReactNode;
 	children?: PostListItem[] | null;
 };
 
