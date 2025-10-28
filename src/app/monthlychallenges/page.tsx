@@ -159,6 +159,7 @@ const challengeList: Challenge[] = [
 	},
 
 	{
+		current: true,
 		title: 'Creative Community Challenge',
 		subtitle: `Let's make some space for the other parts of ourselves.`,
 		description: (
@@ -166,7 +167,7 @@ const challengeList: Challenge[] = [
 				<p>
 					Devs are more than just the code we write. This challenge is all about
 					embracing self-expression. Give back to yourself by indulging in
-					something just for fun. Share the art, music, poetry, sports, games,
+					something just for fun. Share the art, music, blog post, poetry, sports, games,
 					or other hobbies that spark your joy. We spend so much time grinding
 					away on understanding things in the tech space. Let&apos;s make some
 					space for the other parts of ourselves. In this challenge, we
@@ -174,23 +175,27 @@ const challengeList: Challenge[] = [
 					necessarily code-specific or using code to improve other hobbies and
 					outlets.
 				</p>
-				<p>
+				{/* <p>
 					Learn more about this challenge in{' '}
 					<a href="https://dev.to/virtualcoffee/monthly-challenge-creative-community-challenge-273l">
 						this blog post
 					</a>
 					.
-				</p>
+				</p> */}
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/dec-2024">
-						check out the December 2024 challenge page
+					<Link href="/monthlychallenges/nov-2025">
+						check out the November 2025 challenge page
 					</Link>
 					.
 				</p>
 			</>
 		),
 		links: [
+			{
+				href: '/monthlychallenges/dec-2024',
+				title: 'December, 2024',
+			},
 			{
 				href: '/monthlychallenges/dec-2023',
 				title: 'December, 2023',
@@ -251,7 +256,6 @@ const challengeList: Challenge[] = [
 		],
 	},
 	{
-		current: true,
 		title: 'Hacktoberfest',
 		subtitle: `Participate in open source, learn, and have fun!`,
 		description: (
