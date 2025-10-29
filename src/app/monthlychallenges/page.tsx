@@ -167,16 +167,18 @@ const challengeList: Challenge[] = [
 				<p>
 					Devs are more than just the code we write. This challenge is all about
 					embracing self-expression. Give back to yourself by indulging in
-					something just for fun. Share the art, music, blog post, poetry, sports, games,
-					or other hobbies that spark your joy. We spend so much time grinding
-					away on understanding things in the tech space. Let&apos;s make some
-					space for the other parts of ourselves. In this challenge, we
-					encourage folks to spend time working on things that aren&apos;t
-					necessarily code-specific or using code to improve other hobbies and
-					outlets.
+					something just for fun. Share the art, music, blog post, poetry,
+					sports, games, or other hobbies that spark your joy. We spend so much
+					time grinding away on understanding things in the tech space.
+					Let&apos;s make some space for the other parts of ourselves. In this
+					challenge, we encourage folks to spend time working on things that
+					aren&apos;t necessarily code-specific or using code to improve other
+					hobbies and outlets.
 				</p>
 				<p>
-					We've also included a <strong>Blogging Track</strong>, allowing you to continue the November writing goals and use content creation as primary outlet for self-expression.
+					We've also included a <strong>Blogging Track</strong>, allowing you to
+					continue the November writing goals and use content creation as
+					primary outlet for self-expression.
 				</p>
 				{/* <p>
 					Learn more about this challenge in{' '}
