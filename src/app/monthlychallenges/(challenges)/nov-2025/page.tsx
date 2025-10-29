@@ -23,15 +23,15 @@ export default function Challenge() {
 				Challenge
 			</h1>
 
-			<p className="lead text-center mt-3">
+			<p className="lead text-center mt-5">
 				Let's make some space for the other parts of ourselves.
 			</p>
 
-			<h2 className="mt-5">The Challenge</h2>
+			<h2 className="mt-5 mb-4">The Challenge</h2>
 			<p>
 				Devs are more than just the code we write. This month is all about
 				embracing self-expression. Give back to yourself by indulging in
-				something just for fun. Share the art, music, blog post, poetry, sports, games, or
+				something just for fun. Share the art, music, poetry, sports, games, or
 				other hobbies that spark your joy. We spend so much time grinding away
 				on understanding things in the tech space.{' '}
 				<em>Let's make some space for the other parts of ourselves</em>.
@@ -46,7 +46,15 @@ export default function Challenge() {
 				the month to learn more and give it a try.
 			</p>
 
-			<h2>How to Participate</h2>
+			<h2 className="mt-5 mb-4">Blogging Track: Continuing the November Tradition</h2>
+			<p>
+				For those who used to participate in our November Blogging Challenge, we're making sure that blogging remains a key component of this year's creative focus!
+			</p>
+			<p>
+				You can choose to make blogging (either non-tech or tech-related) your primary creative activity this month. Whether you're writing a novel, starting a new blog, or just publishing a single post, we encourage you to use the resources and community support to achieve your writing goals. This specific track allows you to continue the tradition of prioritizing content creation during November as part of the broader Creative Community Challenge.
+			</p>
+
+			<h2 className="mt-5 mb-4">How to Participate</h2>
 			<ul>
 				<li>
 					Pick one or two creative activities you want to focus on and talk
