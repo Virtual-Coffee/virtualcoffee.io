@@ -175,6 +175,9 @@ const challengeList: Challenge[] = [
 					necessarily code-specific or using code to improve other hobbies and
 					outlets.
 				</p>
+				<p>
+					We've also included a <strong>Blogging Track</strong>, allowing you to continue the November writing goals and use content creation as primary outlet for self-expression.
+				</p>
 				{/* <p>
 					Learn more about this challenge in{' '}
 					<a href="https://dev.to/virtualcoffee/monthly-challenge-creative-community-challenge-273l">
