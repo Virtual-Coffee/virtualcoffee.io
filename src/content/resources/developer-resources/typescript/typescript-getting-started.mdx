@@ -9,36 +9,30 @@ tags:
 order: 1
 ---
 
-
 import TextContainer from '@/components/content/TextContainer';
 import LeadText from '@/components/content/LeadText';
-
 
 <TextContainer background="light" showBackToTopLink={false}>
 <LeadText>
 
-Welcome to the **TypeScript Getting Started** guide!  <br />This resource is designed for developers of all levels who want to learn TypeScript from scratch and gradually build up to using types, interfaces, and generics in real-world code patterns. By the end of this guide, you'll be confident writing type-safe JavaScript applications.
+Welcome to the **TypeScript Getting Started** guide! <br />This resource is designed for developers of all levels who want to learn TypeScript from scratch and gradually build up to using types, interfaces, and generics in real-world code patterns. By the end of this guide, you'll be confident writing type-safe JavaScript applications.
 
 </LeadText>
 </TextContainer>
-
-
 
 <TextContainer>
 
 ## Table of Contents
 
-1. [Introduction](#introduction)  
-2. [Installation and Setup](#installation-and-setup)  
-3. [Basic Types](#basic-types)  
-4. [Interfaces](#interfaces)  
-5. [Generics](#generics)  
-6. [Examples from Virtual Coffee Code Patterns](#examples-from-virtual-coffee-code-patterns)  
+1. [Introduction](#introduction)
+2. [Installation and Setup](#installation-and-setup)
+3. [Basic Types](#basic-types)
+4. [Interfaces](#interfaces)
+5. [Generics](#generics)
+6. [Examples from Virtual Coffee Code Patterns](#examples-from-virtual-coffee-code-patterns)
 7. [Resources](#resources)
 
 </TextContainer>
-
-
 
 <TextContainer background="light">
 
@@ -48,8 +42,6 @@ TypeScript is a **superset of JavaScript** that adds **static types**. It helps 
 Even if you're new to JavaScript, TypeScript is beginner-friendly and gradually introduces type annotations without forcing drastic changes.
 
 </TextContainer>
-
-
 
 <TextContainer>
 
@@ -73,18 +65,20 @@ npm install --save-dev typescript
 **Initialize a TypeScript project with:**
 
 ```bash
-tsc --init  
+tsc --init
 ```
+
 This creates a `tsconfig.json` file to configure TypeScript options.
 
 <br />
-Optional: If you’re using Node.js directly, 
-you can install ts-node to run TypeScript files without precompiling:
+Optional: If you’re using Node.js directly, you can install ts-node to run
+TypeScript files without precompiling:
 
 ```bash
 npm install -g ts-node
 ts-node yourfile_name.ts
 ```
+
 </TextContainer>
 
 <TextContainer background="light">
@@ -93,18 +87,19 @@ ts-node yourfile_name.ts
 **TypeScript introduces static typing for variables and function parameters.**
 
 ```ts
-let username: string = "Roman";
+let username: string = 'Roman';
 let age: number = 22;
 let isDeveloper: boolean = true;
-let anything: any = "can be anything";   // flexible but avoid overuse
-let unknownValue: unknown = "something unknown";
+let anything: any = 'can be anything'; // flexible but avoid overuse
+let unknownValue: unknown = 'something unknown';
 ```
+
 <br />
 **Functions with typed parameters and return types:**
 
 ```ts
 function greet(name: string): string {
-  return `Hello, ${name}!`;
+	return `Hello, ${name}!`;
 }
 ```
 
@@ -113,32 +108,25 @@ function greet(name: string): string {
 
 ```ts
 let numbers: number[] = [1, 2, 3];
-let user: [string, number] = ["Roman", 22]; // tuple
+let user: [string, number] = ['Roman', 22]; // tuple
 ```
 
 <br />
-**Union Types:**
-```ts
-let id: string | number;
-id = "abc123";
-id = 456;
-``` 
+**Union Types:** ```ts let id: string | number; id = "abc123"; id = 456; ```
 
 <br />
 **Enums:**
 
 ```ts
 enum Role {
-  Admin,
-  Member,
-  Guest
+	Admin,
+	Member,
+	Guest,
 }
 let myRole: Role = Role.Member;
 ```
 
 </TextContainer>
-
-
 
 <TextContainer>
 ## Interfaces
@@ -147,14 +135,14 @@ let myRole: Role = Role.Member;
 
 ```ts
 interface User {
-  name: string;
-  age: number;
-  isDeveloper?: boolean; // optional
+	name: string;
+	age: number;
+	isDeveloper?: boolean; // optional
 }
 
 const roman: User = {
-  name: "Roman",
-  age: 25,
+	name: 'Roman',
+	age: 25,
 };
 ```
 
@@ -163,13 +151,13 @@ const roman: User = {
 
 ```ts
 interface Employee extends User {
-  department: string;
+	department: string;
 }
 
 const alice: Employee = {
-  name: "Alice",
-  age: 30,
-  department: "Engineering",
+	name: 'Alice',
+	age: 30,
+	department: 'Engineering',
 };
 ```
 
@@ -186,9 +174,8 @@ function Button({ label, onClick }: ButtonProps) {
   return <button onClick={onClick}>{label}</button>;
 }
 ```
+
 </TextContainer>
-
-
 
 <TextContainer background="light">
 ## Generics
@@ -196,11 +183,11 @@ Generics allow creating reusable components and functions while maintaining type
 
 ```ts
 function identity<T>(arg: T): T {
-  return arg;
+	return arg;
 }
 
 const result = identity<number>(42);
-const text = identity<string>("Hello TypeScript");
+const text = identity<string>('Hello TypeScript');
 ```
 
 <br />
@@ -208,18 +195,18 @@ const text = identity<string>("Hello TypeScript");
 
 ```ts
 interface ApiResponse<T> {
-  data: T;
-  error?: string;
+	data: T;
+	error?: string;
 }
 
 const response: ApiResponse<User> = {
-  data: { name: "Roman", age: 25 },
+	data: { name: 'Roman', age: 25 },
 };
 ```
+
 `Generics are essential for building flexible, scalable code.`
+
 </TextContainer>
-
-
 
 <TextContainer>
 ## Examples from Virtual Coffee Code Patterns
@@ -227,36 +214,39 @@ const response: ApiResponse<User> = {
 
 ```ts
 interface Member {
-  id: number;
-  name: string;
-  role: "Admin" | "Member";
+	id: number;
+	name: string;
+	role: 'Admin' | 'Member';
 }
 
 const members: Member[] = [
-  { id: 1, name: "Roman", role: "Member" },
-  { id: 2, name: "Ayu", role: "Admin" },
+	{ id: 1, name: 'Roman', role: 'Member' },
+	{ id: 2, name: 'Ayu', role: 'Admin' },
 ];
 
 // Function to get all admin members
 function getAdmins<T extends Member>(list: T[]): T[] {
-  return list.filter(member => member.role === "Admin");
+	return list.filter((member) => member.role === 'Admin');
 }
 
 const admins = getAdmins(members);
 console.log(admins);
 ```
+
 This demonstrates interfaces, arrays, generics, and type-safe filtering.
+
 </TextContainer>
-
-
 
 <TextContainer background="light">
-## Resources
-- [TypeScript Official Documentation](https://www.typescriptlang.org/docs/)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
-- [Virtual Coffee Developer Resources](https://virtualcoffee.io/resources/developer-resources/)
+	## Resources - [TypeScript Official
+	Documentation](https://www.typescriptlang.org/docs/) - [TypeScript
+	Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) - [Virtual
+	Coffee Developer
+	Resources](https://virtualcoffee.io/resources/developer-resources/)
 </TextContainer>
 
-<TextContainer style={{ textAlign: 'center', fontSize: '0.875rem', marginTop: '2rem' }}>
-  Made with ❤️ [Technozamazing](https://github.com/Technozamazing)
+<TextContainer
+	style={{ textAlign: 'center', fontSize: '0.875rem', marginTop: '2rem' }}
+>
+	Made with ❤️ [Technozamazing](https://github.com/Technozamazing)
 </TextContainer>
