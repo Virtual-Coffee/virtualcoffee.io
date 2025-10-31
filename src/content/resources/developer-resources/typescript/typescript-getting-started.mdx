@@ -86,12 +86,13 @@ ts-node yourfile_name.ts
 TypeScript's type system helps us catch errors before running our code. Types can be explicit or inferred by TypeScript.
 
 **Concept Explanation**
+
 - Types are annotations that tell TypeScript what kind of data a variable can hold
 - TypeScript can infer types automatically in many cases
 - Types help catch errors during development
 
-
 ### Basic Examples
+
 ```ts
 let username: string = 'Roman';
 let age: number = 22;
@@ -118,10 +119,7 @@ let user: [string, number] = ['Roman', 22]; // tuple
 ```
 
 <br />
-**Union Types:** 
-```ts 
-let id: string | number; id = "abc123"; id = 456;
-```
+**Union Types:** ```ts let id: string | number; id = "abc123"; id = 456; ```
 
 <br />
 **Enums:**
@@ -138,23 +136,24 @@ let myRole: Role = Role.Member;
 **// From src/util/loadMdx.server.ts **
 
 type DirectoryConfig = {
-  baseDirectory: string;
-  includeChildren?: boolean;
+baseDirectory: string;
+includeChildren?: boolean;
 };
 
 **// From src/util/cmsimage.ts - Basic type definition **
 type CreateCmsImageProps = {
-    path: string;
-    folder: string;
-    settings?: Record<string, unknown>;
+path: string;
+folder: string;
+settings?: Record<string, unknown>;
 };
-```
+
+````
 </TextContainer>
 
 <TextContainer>
 ## Interfaces
 
-**Interfaces define the shape of objects and ensure consistent structures:**  
+**Interfaces define the shape of objects and ensure consistent structures:**
 Interfaces are powerful tools for defining contracts in your code and object shapes.
 
 **Concept Explanation**
@@ -175,7 +174,7 @@ const roman: User = {
 	name: 'Roman',
 	age: 25,
 };
-```
+````
 
 <br />
 **Extending Interfaces:**
@@ -205,7 +204,9 @@ function Button({ label, onClick }: ButtonProps) {
   return <button onClick={onClick}>{label}</button>;
 }
 ```
+
 ### Virtual Coffee Example
+
 ```ts
 **// From src/util/loadMdx.server.ts **
 
@@ -226,6 +227,7 @@ interface MdxFile {
   children?: MdxFile[];
 }
 ```
+
 </TextContainer>
 
 <TextContainer>
@@ -233,12 +235,14 @@ interface MdxFile {
 Generics allow you to write flexible, reusable code that works with different types while maintaining type safety.
 
 **Concept Explanation**
+
 - Generics create reusable components that work with any type
 - They preserve type information throughout the code
 - Commonly used in functions, interfaces, and classes
 - Help avoid code duplication while maintaining type safety
 
 ### Basic Examples
+
 ```ts
 function identity<T>(arg: T): T {
 	return arg;
@@ -261,40 +265,43 @@ const response: ApiResponse<User> = {
 	data: { name: 'Roman', age: 25 },
 };
 ```
+
 `Generics are essential for building flexible, scalable code.`
 
 ### Virtual Coffee Example
 
 **Type Predicate with Generics**
+
 ```ts
 // From src/util/loadMdx.server.ts - Type predicate example
 
 const allRoutes: MdxFile[] = [...entries, ...directories].filter(
-			(route): route is MdxFile => route !== null,
-		);
+	(route): route is MdxFile => route !== null,
+);
 ```
 
 **Generic Type with Sorting**
+
 ```ts
 // From src/util/loadMdx.server.ts - Sort function using type constraints
 
 return allRoutes.sort((a, b) => {
-    return 'order' in a && 'order' in b && a.order && b.order
-        ? a.order - b.order
-        : 0;
+	return 'order' in a && 'order' in b && a.order && b.order
+		? a.order - b.order
+		: 0;
 });
 ```
 
 **Type Assertion with Generics**
+
 ```ts
 // From src/util/loadMdx.server.ts - Type assertion example
 
-const attributes = contents.attributes as Omit<
-    MdxFile,
-    'slug' | 'requirePath'
-    >;
+const attributes = contents.attributes as Omit<MdxFile, 'slug' | 'requirePath'>;
 ```
+
 These examples demonstrate how Virtual Coffee uses TypeScript's generic features:
+
 - Type predicates for type-safe filtering
 - Generic constraints with optional properties
 - Type assertions with utility types
