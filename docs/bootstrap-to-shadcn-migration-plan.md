@@ -45,12 +45,14 @@ This document outlines the complete migration plan for converting the Virtual Co
 ### Technology Stack
 
 **Current:**
+
 - Bootstrap 4.6.2
 - Custom SCSS with Bootstrap mixins
 - Next.js 15 (App Router)
 - Tailwind CSS (partial usage)
 
 **Target:**
+
 - ShadCN/UI components
 - Tailwind CSS (full adoption)
 - Radix UI primitives
@@ -83,13 +85,16 @@ Based on comprehensive codebase analysis, Bootstrap is used in **80+ files** inc
 #### Key Files Using Bootstrap
 
 **Navigation:**
+
 - `src/components/Nav.tsx` - Main navbar with responsive collapse
 
 **Layout:**
+
 - `src/components/layouts/DefaultLayout.tsx` - Hero sections with grid
 - `src/components/content/TextContainer.tsx` - Container wrapper
 
 **Forms:**
+
 - `src/app/volunteer-at-virtual-coffee/form.tsx`
 - `src/app/report-coc-violation/form.tsx`
 - `src/app/start-coffee-table-group/form.tsx`
@@ -97,6 +102,7 @@ Based on comprehensive codebase analysis, Bootstrap is used in **80+ files** inc
 - `src/components/forms/index.tsx`
 
 **Pages:**
+
 - `src/app/page.tsx` - Homepage
 - `src/app/events/page.tsx` - Event listings with cards
 - `src/app/members/page.tsx` - Member directory
@@ -106,16 +112,19 @@ Based on comprehensive codebase analysis, Bootstrap is used in **80+ files** inc
 - All challenge pages in `src/app/monthlychallenges/(challenges)/`
 
 **Components:**
+
 - `src/components/MemberCards.tsx` - Member profile cards with badges
 - `src/app/resources/[[...slug]]/breadcrumbs.tsx` - Breadcrumb navigation
 
 **SCSS:**
+
 - `src/styles/_bootstrap.scss` - Bootstrap module imports
 - `src/styles/_variables.scss` - Bootstrap variable overrides
 - `src/styles/_nav.scss` - Uses Bootstrap mixins
 - `src/styles/_members.scss` - Uses Bootstrap mixins
 
 **Content:**
+
 - 10+ MDX files in `src/content/` directories
 
 ---
@@ -154,6 +163,7 @@ pnpm add @radix-ui/react-slot
 ```
 
 **Dependencies Explained:**
+
 - `tailwindcss-animate` - Tailwind animation utilities
 - `class-variance-authority` - Type-safe component variants
 - `clsx` - Conditional className utility
@@ -168,6 +178,7 @@ npx shadcn@latest init
 ```
 
 **Configuration Choices:**
+
 - **TypeScript:** Yes
 - **Style:** Default
 - **Base color:** Slate (matches current design)
@@ -436,12 +447,14 @@ Convert Bootstrap utility classes to Tailwind equivalents. This is the safest mi
 #### Spacing Utilities
 
 **Direct equivalents** (Bootstrap → Tailwind):
+
 - `mt-3` → `mt-3` ✓
 - `mb-4` → `mb-4` ✓
 - `py-5` → `py-5` ✓
 - `px-2` → `px-2` ✓
 
 **Custom Bootstrap spacers** (from `_variables.scss`):
+
 - `mt-6` → `mt-12` (if 6 = 3rem)
 - `mt-7` → `mt-16`
 - `mt-8` → `mt-20`
@@ -508,24 +521,28 @@ Convert Bootstrap utility classes to Tailwind equivalents. This is the safest mi
 3. **Key Files to Update**
 
 **High Priority:**
+
 - `src/app/page.tsx` - Homepage (heavy utility usage)
 - `src/app/events/page.tsx` - Events page
 - `src/app/members/page.tsx` - Members page
 - `src/components/layouts/DefaultLayout.tsx` - Layout component
 
 **Medium Priority:**
+
 - `src/app/newsletter/page.tsx`
 - `src/app/podcast/page.tsx`
 - `src/app/monthlychallenges/page.tsx`
 - All challenge pages
 
 **Lower Priority:**
+
 - Individual challenge pages
 - Content pages
 
 ### Example Migrations
 
 #### Before (Bootstrap):
+
 ```tsx
 <div className="container py-5">
   <h1 className="display-4 text-center mb-3">Welcome</h1>
@@ -538,6 +555,7 @@ Convert Bootstrap utility classes to Tailwind equivalents. This is the safest mi
 ```
 
 #### After (Tailwind):
+
 ```tsx
 <div className="container py-5">
   <h1 className="text-3xl font-bold lg:text-4xl text-center mb-3">Welcome</h1>
@@ -616,6 +634,7 @@ Convert Bootstrap grid system (container/row/col) to Tailwind flexbox/grid. This
 ### Row/Column Migration
 
 #### Bootstrap Grid Approach:
+
 ```tsx
 <div className="row">
   <div className="col-md-4">Sidebar</div>
@@ -624,6 +643,7 @@ Convert Bootstrap grid system (container/row/col) to Tailwind flexbox/grid. This
 ```
 
 #### Tailwind Flex Approach:
+
 ```tsx
 <div className="flex flex-wrap -mx-4">
   <div className="w-full md:w-1/3 px-4">Sidebar</div>
@@ -632,6 +652,7 @@ Convert Bootstrap grid system (container/row/col) to Tailwind flexbox/grid. This
 ```
 
 #### Tailwind Grid Approach (Alternative):
+
 ```tsx
 <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
   <div className="md:col-span-4">Sidebar</div>
@@ -653,6 +674,7 @@ Convert Bootstrap grid system (container/row/col) to Tailwind flexbox/grid. This
 | `col-12` | `w-full` | `col-span-12` |
 
 **Responsive prefixes:**
+
 - `col-sm-*` → `sm:w-*`
 - `col-md-*` → `md:w-*`
 - `col-lg-*` → `lg:w-*`
@@ -663,6 +685,7 @@ Convert Bootstrap grid system (container/row/col) to Tailwind flexbox/grid. This
 #### 1. `src/components/layouts/DefaultLayout.tsx`
 
 **Current:**
+
 ```tsx
 <div className="container container-simple">
   <div className="row align-items-center">
@@ -677,6 +700,7 @@ Convert Bootstrap grid system (container/row/col) to Tailwind flexbox/grid. This
 ```
 
 **After:**
+
 ```tsx
 <div className="container-simple">
   <div className="flex flex-wrap items-center -mx-4">
@@ -693,6 +717,7 @@ Convert Bootstrap grid system (container/row/col) to Tailwind flexbox/grid. This
 #### 2. `src/app/newsletter/page.tsx`
 
 **Current:**
+
 ```tsx
 <div className="row">
   <div className="col-sm">Newsletter content</div>
@@ -701,6 +726,7 @@ Convert Bootstrap grid system (container/row/col) to Tailwind flexbox/grid. This
 ```
 
 **After:**
+
 ```tsx
 <div className="flex flex-wrap -mx-4">
   <div className="w-full sm:w-1/2 px-4">Newsletter content</div>
@@ -802,9 +828,11 @@ import { Badge } from "@/components/ui/badge"
 ### Files to Migrate
 
 #### 1. Homepage CTA Button
+
 **File:** `src/app/page.tsx:268`
 
 **Before:**
+
 ```tsx
 <button className="btn btn-primary btn-lg">
   Become a Sponsor
@@ -812,6 +840,7 @@ import { Badge } from "@/components/ui/badge"
 ```
 
 **After:**
+
 ```tsx
 import { Button } from "@/components/ui/button"
 
@@ -821,9 +850,11 @@ import { Button } from "@/components/ui/button"
 ```
 
 #### 2. Join Page Button
+
 **File:** `src/app/join/page.tsx:46`
 
 **Before:**
+
 ```tsx
 <button className="btn btn-primary btn-lg">
   Join the Waitlist
@@ -831,6 +862,7 @@ import { Button } from "@/components/ui/button"
 ```
 
 **After:**
+
 ```tsx
 <Button size="lg">
   Join the Waitlist
@@ -838,9 +870,11 @@ import { Button } from "@/components/ui/button"
 ```
 
 #### 3. Form Submit Buttons
+
 **File:** `src/components/forms/index.tsx:9`
 
 **Before:**
+
 ```tsx
 <button type="submit" className="btn btn-primary btn-lg">
   Submit
@@ -848,6 +882,7 @@ import { Button } from "@/components/ui/button"
 ```
 
 **After:**
+
 ```tsx
 <Button type="submit" size="lg">
   Submit
@@ -855,15 +890,18 @@ import { Button } from "@/components/ui/button"
 ```
 
 **Also update in:**
+
 - `src/app/volunteer-at-virtual-coffee/form.tsx`
 - `src/app/report-coc-violation/form.tsx`
 - `src/app/start-coffee-table-group/form.tsx`
 - `src/app/lunch-and-learn-idea/form.tsx`
 
 #### 4. Member Card Badges
+
 **File:** `src/components/MemberCards.tsx:79-80`
 
 **Before:**
+
 ```tsx
 <span className="badge badge-secondary">
   Core Team
@@ -871,6 +909,7 @@ import { Button } from "@/components/ui/button"
 ```
 
 **After:**
+
 ```tsx
 import { Badge } from "@/components/ui/badge"
 
@@ -903,6 +942,7 @@ Migrate Bootstrap form components to ShadCN Form components with React Hook Form
 ### ShadCN Form Architecture
 
 **Stack:**
+
 - `react-hook-form` - Form state management
 - `zod` - Schema validation
 - ShadCN Form components - UI layer
@@ -971,6 +1011,7 @@ export function MyForm() {
 #### Text Input Field
 
 **Before (Bootstrap):**
+
 ```tsx
 <div className="form-group">
   <label htmlFor="name">Name</label>
@@ -987,6 +1028,7 @@ export function MyForm() {
 ```
 
 **After (ShadCN):**
+
 ```tsx
 <FormField
   control={form.control}
@@ -1009,6 +1051,7 @@ export function MyForm() {
 #### Textarea Field
 
 **Before:**
+
 ```tsx
 <div className="form-group">
   <label htmlFor="comments">Comments</label>
@@ -1021,6 +1064,7 @@ export function MyForm() {
 ```
 
 **After:**
+
 ```tsx
 <FormField
   control={form.control}
@@ -1044,6 +1088,7 @@ export function MyForm() {
 #### Checkbox Field
 
 **Before:**
+
 ```tsx
 <div className="form-check">
   <input
@@ -1059,6 +1104,7 @@ export function MyForm() {
 ```
 
 **After:**
+
 ```tsx
 <FormField
   control={form.control}
@@ -1090,9 +1136,11 @@ export function MyForm() {
 ### Files to Migrate
 
 #### 1. Volunteer Form
+
 **File:** `src/app/volunteer-at-virtual-coffee/form.tsx`
 
 **Fields:**
+
 - Name (text input)
 - Email (email input)
 - Interests (checkboxes - multiple)
@@ -1100,6 +1148,7 @@ export function MyForm() {
 - Comments (textarea)
 
 **Validation Schema:**
+
 ```typescript
 const volunteerFormSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -1111,9 +1160,11 @@ const volunteerFormSchema = z.object({
 ```
 
 #### 2. Report COC Violation Form
+
 **File:** `src/app/report-coc-violation/form.tsx`
 
 **Fields:**
+
 - Reporter name (text input, optional)
 - Reporter email (email input, optional)
 - Description (textarea, required)
@@ -1121,6 +1172,7 @@ const volunteerFormSchema = z.object({
 - Witnesses (textarea, optional)
 
 **Validation Schema:**
+
 ```typescript
 const cocReportSchema = z.object({
   reporterName: z.string().optional(),
@@ -1132,9 +1184,11 @@ const cocReportSchema = z.object({
 ```
 
 #### 3. Start Coffee Table Group Form
+
 **File:** `src/app/start-coffee-table-group/form.tsx`
 
 **Fields:**
+
 - Your name (text)
 - Email (email)
 - Group topic (text)
@@ -1142,9 +1196,11 @@ const cocReportSchema = z.object({
 - Preferred schedule (text)
 
 #### 4. Lunch and Learn Idea Form
+
 **File:** `src/app/lunch-and-learn-idea/form.tsx`
 
 **Fields:**
+
 - Your name (text)
 - Email (email)
 - Topic idea (text)
@@ -1152,9 +1208,11 @@ const cocReportSchema = z.object({
 - Willing to present (checkbox)
 
 #### 5. Form Components
+
 **File:** `src/components/forms/index.tsx`
 
 Refactor reusable form components:
+
 - `SubmitButton` - Use ShadCN Button
 - `FormCheckbox` - Use ShadCN Checkbox wrapper
 - Form layout utilities
@@ -1189,6 +1247,7 @@ Migrate the main navigation component from Bootstrap navbar to ShadCN Navigation
 **File:** `src/components/Nav.tsx`
 
 **Features:**
+
 - Responsive navbar
 - Mobile toggle menu
 - Collapsible menu on mobile
@@ -1371,11 +1430,13 @@ export function Nav() {
 ### Migration Steps
 
 1. **Install Sheet component** (for Option 1):
+
    ```bash
    npx shadcn@latest add sheet
    ```
 
 2. **Backup current Nav.tsx**:
+
    ```bash
    cp src/components/Nav.tsx src/components/Nav.tsx.backup
    ```
@@ -1389,12 +1450,14 @@ export function Nav() {
 ### Styling Considerations
 
 **Current Bootstrap navbar features to preserve:**
+
 - `navbar-dark` - Dark theme
 - `fixed-top` - Fixed positioning
 - `navbar-expand-lg` - Responsive breakpoint
 - Background gradient (if custom)
 
 **Tailwind equivalent:**
+
 ```tsx
 className="fixed top-0 w-full z-50 bg-slate-900 text-white shadow-md"
 ```
@@ -1465,9 +1528,11 @@ import {
 ### Files to Migrate
 
 #### 1. Events Page
+
 **File:** `src/app/events/page.tsx:123-163`
 
 **Current Structure:**
+
 ```tsx
 <div className="card mb-4">
   <div className="card-header py-2 d-flex justify-content-between align-items-center flex-row flex-wrap">
@@ -1482,6 +1547,7 @@ import {
 ```
 
 **After:**
+
 ```tsx
 import {
   Card,
@@ -1512,6 +1578,7 @@ import {
 #### 2. Other Files Using Cards
 
 Search for `.card` class usage in:
+
 - Challenge pages (if cards are used)
 - Resource pages
 - Any other listing pages
@@ -1562,6 +1629,7 @@ import { Progress } from "@/components/ui/progress"
 ```
 
 **Props:**
+
 - `value` - Progress percentage (0-100)
 - `className` - Additional Tailwind classes
 - `indicatorClassName` - Style the progress indicator
@@ -1569,6 +1637,7 @@ import { Progress } from "@/components/ui/progress"
 ### Bootstrap to ShadCN Conversion
 
 **Before (Bootstrap):**
+
 ```tsx
 <div className="progress my-4">
   <div
@@ -1585,6 +1654,7 @@ import { Progress } from "@/components/ui/progress"
 ```
 
 **After (ShadCN):**
+
 ```tsx
 <div className="my-4">
   <Progress value={percentage} />
@@ -1657,9 +1727,10 @@ export function StripedProgress({
 
 #### Monthly Challenges Overview Page
 
-6. `src/app/monthlychallenges/page.tsx:523-525`
+1. `src/app/monthlychallenges/page.tsx:523-525`
 
 **Pattern:**
+
 ```tsx
 // Before
 <div className="progress my-4">
@@ -1734,9 +1805,11 @@ import {
 ### Files to Migrate
 
 #### 1. Resources Breadcrumbs
+
 **File:** `src/app/resources/[[...slug]]/breadcrumbs.tsx`
 
 **Current (Bootstrap):**
+
 ```tsx
 <div className="py-4">
   <div className="container">
@@ -1758,6 +1831,7 @@ import {
 ```
 
 **After (ShadCN):**
+
 ```tsx
 import {
   Breadcrumb,
@@ -1790,9 +1864,11 @@ import {
 ```
 
 #### 2. Media Objects (Podcast Page)
+
 **File:** `src/app/podcast/page.tsx:64-102`
 
 **Current (Bootstrap):**
+
 ```tsx
 <div className="media align-items-center">
   <img src={sponsor.logo} className="mr-3" alt={sponsor.name} />
@@ -1804,6 +1880,7 @@ import {
 ```
 
 **After (Tailwind Flex):**
+
 ```tsx
 <div className="flex items-center gap-4">
   <img src={sponsor.logo} alt={sponsor.name} className="flex-shrink-0" />
@@ -1817,6 +1894,7 @@ import {
 ### Other Miscellaneous Components
 
 **Check for:**
+
 - Alerts (if any) - Use ShadCN Alert component
 - Modals (if any) - Use ShadCN Dialog component
 - Tooltips (if any) - Use ShadCN Tooltip component
@@ -1857,7 +1935,8 @@ Based on the codebase analysis:
 
 #### Bootstrap Classes in MDX HTML
 
-**Pattern 1: Containers and Rows**
+##### Pattern 1: Containers and Rows
+
 ```mdx
 <!-- Before -->
 <div className="container">
@@ -1876,7 +1955,8 @@ Based on the codebase analysis:
 </div>
 ```
 
-**Pattern 2: Buttons**
+##### Pattern 2: Buttons
+
 ```mdx
 <!-- Before -->
 <a href="/join" className="btn btn-primary btn-lg">Join Now</a>
@@ -1887,7 +1967,8 @@ Based on the codebase analysis:
 </a>
 ```
 
-**Pattern 3: Alerts**
+##### Pattern 3: Alerts
+
 ```mdx
 <!-- Before -->
 <div className="alert alert-info">
@@ -1900,7 +1981,8 @@ Based on the codebase analysis:
 </div>
 ```
 
-**Pattern 4: Cards**
+##### Pattern 4: Cards
+
 ```mdx
 <!-- Before -->
 <div className="card">
@@ -1920,6 +2002,7 @@ Based on the codebase analysis:
 ### Migration Strategy
 
 1. **Search for Bootstrap classes in MDX:**
+
    ```bash
    grep -r "className=\".*\(btn\|card\|row\|col-\|container\|alert\).*\"" src/content/
    ```
@@ -1993,14 +2076,17 @@ Remove Bootstrap dependencies, clean up SCSS files, and complete the migration b
 ### Files to Clean Up
 
 #### 1. Remove Bootstrap SCSS Import
+
 **File:** `src/styles/_bootstrap.scss`
 
 **Action:** Delete this file entirely (or comment out all imports)
 
 #### 2. Update Main SCSS
+
 **File:** `src/styles/main.scss`
 
 **Before:**
+
 ```scss
 @import 'variables';
 @import 'bootstrap';
@@ -2010,6 +2096,7 @@ Remove Bootstrap dependencies, clean up SCSS files, and complete the migration b
 ```
 
 **After:**
+
 ```scss
 // Remove Bootstrap import
 @import 'variables';
@@ -2019,9 +2106,11 @@ Remove Bootstrap dependencies, clean up SCSS files, and complete the migration b
 ```
 
 #### 3. Convert Bootstrap Variables
+
 **File:** `src/styles/_variables.scss`
 
 Convert Bootstrap variable overrides to either:
+
 - Tailwind config (`tailwind.config.js`)
 - CSS custom properties (`globals.css`)
 
@@ -2058,6 +2147,7 @@ theme: {
 ```
 
 #### 4. Update Nav SCSS
+
 **File:** `src/styles/_nav.scss`
 
 **Remove Bootstrap mixins:**
@@ -2087,6 +2177,7 @@ theme: {
 ```
 
 #### 5. Update Members SCSS
+
 **File:** `src/styles/_members.scss`
 
 **Remove Bootstrap mixins:**
@@ -2118,6 +2209,7 @@ pnpm remove bootstrap
 ```
 
 **Before:**
+
 ```json
 {
   "dependencies": {
@@ -2128,6 +2220,7 @@ pnpm remove bootstrap
 ```
 
 **After:**
+
 ```json
 {
   "dependencies": {
@@ -2142,6 +2235,7 @@ pnpm remove bootstrap
 Remove Bootstrap-specific configurations:
 
 **Before:**
+
 ```javascript
 {
   sassOptions: {
@@ -2156,11 +2250,13 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ### Verification Steps
 
 1. **Build the project:**
+
    ```bash
    pnpm build
    ```
 
 2. **Check for Bootstrap references:**
+
    ```bash
    grep -r "bootstrap" src/
    grep -r "btn btn-" src/
@@ -2173,6 +2269,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
    - Should not be present
 
 4. **Check bundle size reduction:**
+
    ```bash
    pnpm build
    # Check .next/static/css/ folder
@@ -2196,11 +2293,13 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ### Visual Regression Testing
 
 #### Tools
+
 - **Percy** (recommended) - Visual diff testing
 - **Playwright** - Screenshot testing
 - **Manual comparison** - Before/after screenshots
 
 #### Pages to Test
+
 1. Homepage (/)
 2. About page (/about)
 3. Events page (/events)
@@ -2213,6 +2312,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 10. All form pages
 
 #### Breakpoints to Test
+
 - Mobile: 375px (iPhone SE)
 - Mobile: 414px (iPhone Pro)
 - Tablet: 768px (iPad)
@@ -2223,6 +2323,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ### Functional Testing
 
 #### Forms
+
 - [ ] All form fields work
 - [ ] Validation displays correctly
 - [ ] Submit functionality works
@@ -2231,6 +2332,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 - [ ] Required fields enforced
 
 #### Navigation
+
 - [ ] Desktop menu links work
 - [ ] Mobile menu opens/closes
 - [ ] All nav links clickable
@@ -2238,6 +2340,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 - [ ] Dropdown menus (if any)
 
 #### Interactive Components
+
 - [ ] Buttons are clickable
 - [ ] Cards are interactive (if applicable)
 - [ ] Progress bars animate
@@ -2246,12 +2349,14 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ### Accessibility Testing
 
 #### Tools
+
 - **axe DevTools** - Automated accessibility testing
 - **Lighthouse** - Chrome DevTools audit
 - **Screen reader** - Manual testing (NVDA/JAWS/VoiceOver)
 - **Keyboard navigation** - Tab through all interactive elements
 
 #### Checklist
+
 - [ ] All images have alt text
 - [ ] Form inputs have labels
 - [ ] Buttons have accessible names
@@ -2266,17 +2371,20 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ### Performance Testing
 
 #### Metrics to Track
+
 - **First Contentful Paint (FCP)**
 - **Largest Contentful Paint (LCP)**
 - **Time to Interactive (TTI)**
 - **Bundle size**
 
 #### Tools
+
 - Chrome DevTools Lighthouse
 - WebPageTest
 - Bundle analyzer
 
 #### Expected Improvements
+
 - Reduced CSS bundle size (Bootstrap removal)
 - Faster page load times
 - Better Lighthouse scores
@@ -2284,6 +2392,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ### Browser Compatibility Testing
 
 #### Browsers to Test
+
 - Chrome (latest)
 - Firefox (latest)
 - Safari (latest)
@@ -2294,6 +2403,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ### Deployment Testing
 
 #### Staging Environment
+
 1. Deploy to Netlify preview
 2. Test all pages
 3. Test all forms
@@ -2305,27 +2415,33 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ## Timeline
 
 ### Week 1
+
 - **Day 1-2:** Phase 0 (Setup) + Phase 1 (Utilities)
 - **Day 3-4:** Phase 2 (Grid System)
 - **Day 5:** Phase 3 (Buttons & Badges)
 
 ### Week 2
+
 - **Day 1-3:** Phase 4 (Forms) - Most complex
 - **Day 4-5:** Phase 5 (Navigation)
 
 ### Week 3
+
 - **Day 1:** Phase 6 (Cards)
 - **Day 2:** Phase 7 (Progress Bars)
 - **Day 3:** Phase 8 (Breadcrumbs & Misc)
 - **Day 4-5:** Phase 9 (MDX Files)
 
 ### Week 4
+
 - **Day 1:** Phase 10 (SCSS Cleanup)
 - **Day 2-3:** Testing & QA
 - **Day 4:** Bug fixes
 - **Day 5:** Final review & deployment
 
+<!-- markdownlint-disable MD036 -->
 **Total: 3-4 weeks**
+<!-- markdownlint-enable MD036 -->
 
 ### Milestones
 
@@ -2341,6 +2457,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ### Development Practices
 
 1. **Feature Branch**
+
    ```bash
    git checkout -b migration/bootstrap-to-shadcn
    ```
@@ -2362,11 +2479,13 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
    - Allows fallback if needed
 
 2. **Git tags**
+
    ```bash
    git tag -a phase-1-complete -m "Phase 1: Utilities migrated"
    ```
 
 3. **Easy revert**
+
    ```bash
    git revert <commit-hash>
    ```
@@ -2390,6 +2509,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ## Post-Migration Benefits
 
 ### Technical Benefits
+
 ✅ **Modern stack** - Up-to-date component library
 ✅ **Type-safe** - Full TypeScript support
 ✅ **Accessible** - Radix UI primitives (WCAG compliant)
@@ -2398,12 +2518,14 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ✅ **Server Components** - Next.js 15 compatible
 
 ### User Benefits
+
 ✅ **Faster load times** - Smaller CSS bundle
 ✅ **Better accessibility** - Improved keyboard navigation
 ✅ **Consistent UI** - Design system with ShadCN
 ✅ **Mobile-first** - Better responsive design
 
 ### Developer Benefits
+
 ✅ **Easy customization** - Own the component code
 ✅ **Better documentation** - ShadCN docs + Tailwind docs
 ✅ **Modern patterns** - React best practices
@@ -2414,6 +2536,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 ## Resources
 
 ### Documentation
+
 - [ShadCN/UI Documentation](https://ui.shadcn.com/)
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [Radix UI Documentation](https://www.radix-ui.com/primitives/docs/overview/introduction)
@@ -2421,10 +2544,12 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 - [Zod Validation](https://zod.dev/)
 
 ### Tools
+
 - [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) - VS Code extension
 - [Prettier Plugin Tailwind](https://github.com/tailwindlabs/prettier-plugin-tailwindcss) - Class sorting
 
 ### Support
+
 - [ShadCN GitHub Discussions](https://github.com/shadcn/ui/discussions)
 - [Tailwind Discord](https://tailwindcss.com/discord)
 
@@ -2435,6 +2560,7 @@ Keep if still using Sass for custom styles, or remove if fully migrated to Tailw
 This migration plan provides a comprehensive, phased approach to converting from Bootstrap 4.6.2 to ShadCN/UI. By following each phase systematically with thorough testing, the migration can be completed successfully with minimal risk.
 
 The key to success is:
+
 1. **Take it slow** - One phase at a time
 2. **Test thoroughly** - Visual, functional, and accessibility testing
 3. **Commit often** - Easy rollback if needed

@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD036 -->
 # Netlify Bandwidth & Serverless Function Optimization Plan
 
 **Version:** 1.0
@@ -75,6 +76,7 @@ The map is now functional but remains a significant bandwidth consumer due to la
 **Commit bea0d53** - "fix broken map marker images on the members map"
 
 Changes that caused the spike:
+
 ```typescript
 // BEFORE: Map disabled in production
 export default function MemberMap({ members }: { members: MappableMember[] }) {
@@ -94,17 +96,20 @@ export default function MemberMap({ members }: { members: MappableMember[] }) {
 ```
 
 Additional problematic changes:
+
 - Upgraded `react-leaflet` v4.2.1 → v5.0.0 (major version during bug fix)
 - Upgraded `react-leaflet-cluster` v2.1.0 → v3.1.1
 - Changed icon path without testing: `'assets/images/...'` (missing leading `/`)
 
 **Two follow-up commits same day:**
+
 - 30584a4 - Second fix attempt (still broken)
 - 8258499 - Attempted to restore dev mode check (map still enabled)
 
 #### October 14, 2025 (The Fix)
 
 **Commit eab94db** (#1421) - "fix broken map marker images on the members map"
+
 - Created new `MapLoaderDev` component with proper dev/prod separation
 - Fixed icon implementation
 - But 3 days of damage already done
@@ -123,6 +128,7 @@ Additional problematic changes:
 ```
 
 **Problem:**
+
 - Hundreds of tiles loaded per page visit to `/members`
 - Direct requests to OpenStreetMap servers (no CDN)
 - No local caching
@@ -143,6 +149,7 @@ const icon = new L.Icon({
 ```
 
 **Problem:**
+
 - Broken path for fallback icon (missing `/`)
 - 100+ failed HTTP requests per page load (one per member with location data)
 - 404 responses still consume bandwidth
@@ -152,6 +159,7 @@ const icon = new L.Icon({
 **Location:** Same icon creation, `avatarUrl` comes from member data
 
 **Problem:**
+
 - Each member marker loads external GitHub CDN image
 - No local caching or CDN proxying
 - Cold cache = fresh external requests for all avatars
@@ -168,6 +176,7 @@ export async function getMembers() {
 ```
 
 **Problem:**
+
 - NO caching implemented (despite comment at line 72 mentioning On-Demand Builder)
 - Called on EVERY `/members` page load
 - Makes chunked GitHub GraphQL API queries (groups of 15 members)
@@ -333,11 +342,13 @@ export default function MembersPage() {
 **File:** `src/app/members/components/MemberMap.tsx:36`
 
 **Current:**
+
 ```typescript
 iconUrl: avatarUrl || 'assets/images/virtual-coffee-mug-circle.svg',
 ```
 
 **Fixed:**
+
 ```typescript
 iconUrl: avatarUrl || '/assets/images/virtual-coffee-mug-circle.svg',
 ```
@@ -383,6 +394,7 @@ export const config = { path: '/tiles/*' };
 ```
 
 **Update MemberMap.tsx:**
+
 ```typescript
 <TileLayer
   url="/tiles/{z}/{x}/{y}.png"  // Use local proxy
@@ -494,6 +506,7 @@ export default function MembersPage() {
 ```
 
 **In Netlify UI:**
+
 - Set `NEXT_PUBLIC_ENABLE_MEMBER_MAP=true` for production
 - Can quickly set to `false` if bandwidth spikes
 - No deploy needed to disable (with edge functions)
@@ -662,6 +675,7 @@ Use Netlify logs or external service (Datadog, LogDNA) to analyze.
 ### Before Deploying Changes
 
 1. **Local Testing**
+
    ```bash
    pnpm dev
    # Visit http://localhost:9000/members
@@ -673,6 +687,7 @@ Use Netlify logs or external service (Datadog, LogDNA) to analyze.
    ```
 
 2. **Preview Deploy Testing**
+
    ```bash
    git checkout -b optimize/bandwidth-reduction
    # Make changes
@@ -747,11 +762,13 @@ When reviewing PRs that touch high-bandwidth features:
 2. **Quick Mitigation (< 30 minutes)**
    - If map is causing issue: Revert to commit before map changes
    - If serverless functions: Add rate limiting in `netlify.toml`:
+
      ```toml
      [[functions]]
        path = "/.netlify/functions/*"
        cache-control = "max-age=3600"
      ```
+
    - Deploy immediately
 
 3. **Root Cause Analysis (< 2 hours)**
@@ -798,17 +815,20 @@ When reviewing PRs that touch high-bandwidth features:
 The October 11, 2025 bandwidth spike was caused by accidentally re-enabling the Member Map feature while it was in a broken state. The map was previously disabled specifically for performance reasons.
 
 **Key Takeaways:**
+
 1. High-bandwidth features need proper safeguards (feature flags)
 2. Major library upgrades should not happen during bug fixes
 3. Preview deploys are essential for features affecting performance
 4. Monitoring is critical for early detection
 
 **Immediate Actions:**
+
 - Implement Phase 1 fixes (caching, lazy loading, path fixes)
 - Add monitoring to catch future issues early
 - Update PR review process to check bandwidth impact
 
 **Long-term:**
+
 - Build proper caching infrastructure
 - Consider alternative map solutions
 - Implement comprehensive feature flag system
