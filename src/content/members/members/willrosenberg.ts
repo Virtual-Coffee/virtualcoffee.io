@@ -54,9 +54,9 @@ export const willrosenberg: MemberObject = {
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
 	// Use this handy website to find your latitude and longitude: https://www.latlong.net/
-	// location: {
+	location: {
 	latitude: 41.893917,
 	longitude: -87.624645,
 	title: 'Chicago, IL', // optional
-	// },
+	},
 };
