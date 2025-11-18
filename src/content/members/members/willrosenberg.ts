@@ -44,15 +44,19 @@ export const willrosenberg: MemberObject = {
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
-		{ type: 'website', url: 'https://instagram.com/SimpleAmericanAccent', title: 'IG: Simple American Accent (200k+ followers)' },
+		{
+			type: 'website',
+			url: 'https://instagram.com/SimpleAmericanAccent',
+			title: 'IG: Simple American Accent (200k+ followers)',
+		},
 	],
 	badges: [],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
 	// Use this handy website to find your latitude and longitude: https://www.latlong.net/
 	// location: {
-		latitude: 41.893917,
-		longitude: -87.624645,
-		title: 'Chicago, IL', // optional
+	latitude: 41.893917,
+	longitude: -87.624645,
+	title: 'Chicago, IL', // optional
 	// },
 };
