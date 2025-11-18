@@ -55,8 +55,8 @@ export const willrosenberg: MemberObject = {
 	// Feel free to be as specific or vague as you're comfortable with.
 	// Use this handy website to find your latitude and longitude: https://www.latlong.net/
 	location: {
-	latitude: 41.893917,
-	longitude: -87.624645,
-	title: 'Chicago, IL', // optional
+		latitude: 41.893917,
+		longitude: -87.624645,
+		title: 'Chicago, IL', // optional
 	},
 };
