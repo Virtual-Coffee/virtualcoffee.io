@@ -51,7 +51,7 @@ export default function Challenge() {
 				<li className="mb-3"><strong>📚 Tradition-in-a-Book:</strong> Share a book, poem, or story connected to a tradition.</li>
 				<li className="mb-3"><strong>🐾 Pet Traditions:</strong> Do your pets celebrate with you? Share their customs!</li>
 				<li className="mb-3"><strong>🔨 Tradition-Inspired Crafts or DIY:</strong> Share photos or steps for a craft you make for a tradition.</li>
-				<li className="mb-3"><strong>💡 Lights & Lanterns (any culture):</strong> Share photos of beautiful light displays, night light traditions, or cultural lanterns.</li>
+				<li className="mb-3"><strong>💡 Lights & Lanterns:</strong> Share photos of beautiful light displays, night light traditions, or cultural lanterns.</li>
 				<li className="mb-3"><strong>🏡 Places & Decorations:</strong> Share a photo of a place, decoration, or display connected to a tradition important to you or your family.</li>
 				<li className="mb-3"><strong>🤣 Traditions That Make You Laugh:</strong> share a funny, quirky, or unexpected tradition.</li>
 				<li className="mb-3"><strong>👨‍👩‍👧‍👦 Family & Community:</strong> Share a story about a tradition that brings people together.</li>
