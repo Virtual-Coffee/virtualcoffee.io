@@ -10,6 +10,9 @@ import 'leaflet/dist/leaflet.css';
 import { Suspense } from 'react';
 import { MapLoader } from './map-loader';
 
+// ISR: Revalidate every 24 hours
+export const revalidate = 86400;
+
 export const metadata = createMetaData({
 	title: 'Virtual Coffee Members',
 	description: 'Meet our amazing members!',
