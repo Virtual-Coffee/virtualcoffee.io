@@ -18,6 +18,11 @@ export const metadata = handle.meta;
 export default function Challenge() {
 	return (
 		<>
+			<div className="alert alert-success">
+				This monthly challenge is complete. Congratulations! Please join us for
+				the <Link href="/monthlychallenges/dec-2025">next challenge</Link>!
+			</div>
+
 			<h1>
 				<small>Monthly Challenge for November 2025:</small> Creative Community
 				Challenge
@@ -46,12 +51,22 @@ export default function Challenge() {
 				the month to learn more and give it a try.
 			</p>
 
-			<h2 className="mt-5 mb-4">Blogging Track: Continuing the November Tradition</h2>
+			<h2 className="mt-5 mb-4">
+				Blogging Track: Continuing the November Tradition
+			</h2>
 			<p>
-				For those who used to participate in our November Blogging Challenge, we're making sure that blogging remains a key component of this year's creative focus!
+				For those who used to participate in our November Blogging Challenge,
+				we're making sure that blogging remains a key component of this year's
+				creative focus!
 			</p>
 			<p>
-				You can choose to make blogging (either non-tech or tech-related) your primary creative activity this month. Whether you're writing a novel, starting a new blog, or just publishing a single post, we encourage you to use the resources and community support to achieve your writing goals. This specific track allows you to continue the tradition of prioritizing content creation during November as part of the broader Creative Community Challenge.
+				You can choose to make blogging (either non-tech or tech-related) your
+				primary creative activity this month. Whether you're writing a novel,
+				starting a new blog, or just publishing a single post, we encourage you
+				to use the resources and community support to achieve your writing
+				goals. This specific track allows you to continue the tradition of
+				prioritizing content creation during November as part of the broader
+				Creative Community Challenge.
 			</p>
 
 			<h2 className="mt-5 mb-4">How to Participate</h2>
@@ -62,7 +77,8 @@ export default function Challenge() {
 					<code>#making-stuff</code> channel on Slack.
 				</li>
 				<li>
-					If you want to share your blog post, either non-tech or tech-related, drop it at <code>#content-creation</code> channel on Slack.
+					If you want to share your blog post, either non-tech or tech-related,
+					drop it at <code>#content-creation</code> channel on Slack.
 				</li>
 				<li>
 					Use the VC <code>#monthly-challenge</code> channel to post any
@@ -73,8 +89,8 @@ export default function Challenge() {
 					on social media.
 				</li>
 				<li>
-					X posts, blog posts, and pictures are all welcome as long as they abide
-					by our{' '}
+					X posts, blog posts, and pictures are all welcome as long as they
+					abide by our{' '}
 					<a href="https://virtualcoffee.io/code-of-conduct/">
 						Code of Conduct
 					</a>
@@ -85,12 +101,14 @@ export default function Challenge() {
 			<hr />
 
 			<p>
-					As always, you can reach out to the maintainers or monthly challenge
-					facilitators if you have any questions.
-				</p>
-				<p>
-					We also do weekly check ins in the <code>#monthly-challenge</code> channel on Slack to track your activities progress and to celebrate with you! 🩵
-				</p>
+				As always, you can reach out to the maintainers or monthly challenge
+				facilitators if you have any questions.
+			</p>
+			<p>
+				We also do weekly check ins in the <code>#monthly-challenge</code>{' '}
+				channel on Slack to track your activities progress and to celebrate with
+				you! 🩵
+			</p>
 		</>
 	);
 }

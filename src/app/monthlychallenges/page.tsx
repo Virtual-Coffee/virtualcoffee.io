@@ -159,7 +159,6 @@ const challengeList: Challenge[] = [
 	},
 
 	{
-		current: true,
 		title: 'Creative Community Challenge',
 		subtitle: `Let's make some space for the other parts of ourselves.`,
 		description: (
@@ -765,6 +764,35 @@ const challengeList: Challenge[] = [
 					To view all of the details of this year&apos;s challenge,{' '}
 					<Link href="/monthlychallenges/may-2025">
 						check out the May 2025 challenge page
+					</Link>
+					.
+				</p>
+			</>
+		),
+	},
+	{
+		current: true,
+		title: 'Share Your Tradition',
+		subtitle: `Let's celebrate the diverse cultures and traditions within our community.`,
+		description: (
+			<>
+				<p>
+					This challenge is all about connection, storytelling, and celebrating the customs that make <em>you, you</em>. Whether it's a winter holiday, a family birthday ritual, a favorite summer meal, or a silly household custom, we want to hear about it! Share photos, stories, recipes, or even host a Lunch & Learn about any tradition—big or small—that brings meaning or joy to your life. We spend so much time focused on work and code. Let's make space to learn about the personal histories and cultural experiences that enrich our community.
+				</p>
+				<p>
+					In this challenge, we encourage you to connect with one another by sharing the special ways you celebrate moments throughout the year.
+				</p>
+				{/* <p>
+					Learn more about this challenge in{' '}
+					<a href="">
+						this blog post
+					</a>
+					.
+				</p> */}
+				<p>
+					To view all of the details of this year&apos;s challenge,{' '}
+					<Link href="/monthlychallenges/dec-2025">
+						check out the December 2025 challenge page
 					</Link>
 					.
 				</p>
