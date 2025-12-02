@@ -198,7 +198,7 @@ async function getEpisodeInternal({
 	queryParams = '',
 }: {
 	slug: PodcastEpisode['slug'];
-	queryParams?: any;
+	queryParams?: string;
 }): Promise<PodcastEpisode | null> {
 	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
 		const fakeData = await import('./mocks/podcast.server');
@@ -247,7 +247,7 @@ export const getEpisode = async ({
 	queryParams = '',
 }: {
 	slug: PodcastEpisode['slug'];
-	queryParams?: any;
+	queryParams?: string;
 }): Promise<PodcastEpisode | null> => {
 	return unstable_cache(
 		() => getEpisodeInternal({ slug, queryParams }),
