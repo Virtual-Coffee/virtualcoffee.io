@@ -2,15 +2,17 @@ import { MdxFile } from '@/util/loadMdx.server';
 import Link from 'next/link';
 import path from 'path';
 import { ReactNode } from 'react';
+import TagBadge from './TagBadge';
 
 /*
 PostListItem is each resource under a section of content on the homepage.
 */
-type PostListItem = {
+export type PostListItem = {
 	href?: string;
 	title: string;
 	description?: string | ReactNode;
 	children?: PostListItem[] | null;
+	contentTags?: string[];
 };
 
 type TitleProps = {
@@ -41,7 +43,21 @@ export default function PostList({ items }: { items: PostListItem[] | null }) {
 			{items.map((item, key) => {
 				return (
 					<li className="postlist-item" key={key}>
-						<PostListItemTitle item={item} />
+						<div className="postlist-header">
+							<PostListItemTitle item={item} />
+							{item.contentTags && item.contentTags.length > 0 && (
+								<div className="postlist-tags">
+									{item.contentTags.map((tag, tagIndex) => (
+										<TagBadge
+											key={`${key}-${tagIndex}-${tag}`}
+											tag={tag}
+											variant="default"
+											size="sm"
+										/>
+									))}
+								</div>
+							)}
+						</div>
 						{item.description && (
 							<p className="postlist-description">{item.description}</p>
 						)}
@@ -68,16 +84,17 @@ export function formatFileListItemsForPostList(
 	if (!items || internalCurLevel >= depth) {
 		return null;
 	}
-
 	return items.map((item): PostListItem => {
 		const parts = item.slug.split(path.sep).filter((part) => {
 			return !!part && part !== 'content';
 		});
 
+
 		return {
 			title: item.meta.title,
 			description: item.meta.description,
 			href: `/${parts.join('/')}`,
+			contentTags: item.contentTags || [],
 			children: formatFileListItemsForPostList(
 				item.children,
 				depth,
