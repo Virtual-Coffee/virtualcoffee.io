@@ -1,19 +1,29 @@
 import { type NextRequest } from 'next/server';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
-	const queryparam = searchParams.get('path');
-	let path = typeof queryparam === 'string' ? queryparam : '/';
+	const tagParam = searchParams.get('tag');
+	const pathParam = searchParams.get('path');
+	const pathTypeParam = searchParams.get('pathType');
+
+	// Handle tag-based revalidation if provided
+	if (tagParam) {
+		revalidateTag(tagParam);
+	}
+
+	// Handle path-based revalidation if provided
+	let path = typeof pathParam === 'string' ? pathParam : '/';
 	if (!path.startsWith('/')) {
 		path = '/' + path;
 	}
 
-	// Invalidate the /posts route in the cache
-	revalidatePath(path);
+	if (pathParam) {
+		revalidatePath(path, pathTypeParam === 'layout' ? 'layout' : 'page');
+	}
 
 	redirect(path);
 }

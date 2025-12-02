@@ -2,6 +2,9 @@ import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 import Link from 'next/link';
 
+// ISR: Revalidate every 24 hours
+export const revalidate = 86400;
+
 export const metadata = createMetaData({
 	title: 'Join Virtual Coffee',
 	description: `Virtual Coffee is an intimate community that welcomes people at all stages of their tech journey.`,

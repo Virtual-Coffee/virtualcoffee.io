@@ -10,6 +10,9 @@ import { sanitizeCmsData } from '@/util/sanitizeCmsData';
 import createCmsImage from '@/util/cmsimage';
 import { Metadata } from 'next';
 
+// ISR: Revalidate every 24 hours
+export const revalidate = 86400;
+
 export async function generateStaticParams() {
 	const podcastEpisodes = await getEpisodes({ limit: 99 });
 

@@ -1,4 +1,5 @@
 import { GraphQLClient, gql } from 'graphql-request';
+import { unstable_cache } from 'next/cache';
 
 export const buzzsproutPodcastId = '1558601' as const;
 
@@ -150,7 +151,7 @@ type PodcastEpisodeResponse = {
 	entries: PodcastEpisode[];
 };
 
-export async function getEpisodes({
+async function getEpisodesInternal({
 	limit = 5,
 }: { limit?: number } = {}): Promise<PodcastEpisodes> {
 	if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
@@ -182,7 +183,17 @@ export async function getEpisodes({
 	}
 }
 
-export async function getEpisode({
+export const getEpisodes = async ({
+	limit = 5,
+}: { limit?: number } = {}): Promise<PodcastEpisodes> => {
+	return unstable_cache(
+		() => getEpisodesInternal({ limit }),
+		[`podcast-episodes-${limit}`],
+		{ revalidate: 86400, tags: ['podcast'] },
+	)();
+};
+
+async function getEpisodeInternal({
 	slug,
 	queryParams = '',
 }: {
@@ -231,6 +242,20 @@ export async function getEpisode({
 	}
 }
 
+export const getEpisode = async ({
+	slug,
+	queryParams = '',
+}: {
+	slug: PodcastEpisode['slug'];
+	queryParams?: string;
+}): Promise<PodcastEpisode | null> => {
+	return unstable_cache(
+		() => getEpisodeInternal({ slug, queryParams }),
+		[`podcast-episode-${slug}`],
+		{ revalidate: 86400, tags: ['podcast'] },
+	)();
+};
+
 type TranscriptSegment = {
 	speaker: string;
 	startTime: number;
@@ -244,7 +269,7 @@ type TranscriptItem = {
 };
 type Transcript = Array<TranscriptItem>;
 
-export async function getTranscript({
+async function getTranscriptInternal({
 	id,
 }: Partial<PodcastEpisode>): Promise<Transcript | null> {
 	try {
@@ -291,3 +316,13 @@ export async function getTranscript({
 		return null;
 	}
 }
+
+export const getTranscript = async ({
+	id,
+}: Partial<PodcastEpisode>): Promise<Transcript | null> => {
+	return unstable_cache(
+		() => getTranscriptInternal({ id }),
+		[`podcast-transcript-${id}`],
+		{ revalidate: 86400, tags: ['podcast'] },
+	)();
+};

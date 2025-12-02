@@ -9,6 +9,9 @@ import { MDXProps } from 'mdx/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+// ISR: Revalidate every 24 hours
+export const revalidate = 86400;
+
 export function generateStaticParams() {
 	const allFiles = loadMdxDirectory({
 		baseDirectory: 'content/simple-mdx-pages',

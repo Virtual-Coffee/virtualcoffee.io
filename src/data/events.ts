@@ -1,5 +1,6 @@
 'use server';
 
+import { unstable_cache } from 'next/cache';
 import { GraphQLClient, gql } from 'graphql-request';
 import { DateTime } from 'luxon';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
@@ -75,7 +76,7 @@ function createEventsQuery(
 `;
 }
 
-export async function getEvents({
+async function getEventsInternal({
 	limit,
 }: {
 	limit: number;
@@ -150,3 +151,11 @@ export async function getEvents({
 		return [];
 	}
 }
+
+export const getEvents = async ({ limit }: { limit: number }) => {
+	return unstable_cache(
+		() => getEventsInternal({ limit }),
+		[`events-${limit}`],
+		{ revalidate: 43200, tags: ['events'] }
+	)();
+};

@@ -1,5 +1,6 @@
 import type { MemberList } from '@/content/members/types';
 import { GraphQLClient, gql } from 'graphql-request';
+import { unstable_cache } from 'next/cache';
 import teamsData from '@/content/members/teams';
 import mockMemberData from '@/data/mocks/memberData';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
@@ -29,11 +30,17 @@ function nonNullable<T>(value: T): value is NonNullable<T> {
 	return value !== null && value !== undefined;
 }
 
-export async function getMembers(): Promise<MembersResponse> {
+async function getMembersInternal(): Promise<MembersResponse> {
 	const userData = await loadUserData();
 
 	return userData;
 }
+
+export const getMembers = unstable_cache(
+	getMembersInternal,
+	['members'],
+	{ revalidate: 86400, tags: ['members'] }
+);
 
 async function parseMarkdown(markdown: string) {
 	const [unified, remarkParse, remarkRehype, rehypeSanitize, rehypeStringify] =

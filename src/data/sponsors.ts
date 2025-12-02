@@ -1,4 +1,5 @@
 import { GraphQLClient, gql } from 'graphql-request';
+import { unstable_cache } from 'next/cache';
 import mockData from './mocks/sponsors';
 import ImgixClient from '@imgix/js-core';
 
@@ -115,7 +116,7 @@ const emptySponsorsResponse = {
 	supporters: [],
 };
 
-export async function getSponsors() {
+async function getSponsorsInternal() {
 	// async function main() {
 
 	const headers: HeadersInit = {
@@ -157,7 +158,7 @@ export async function getSponsors() {
 		(tier) => {
 			const sponsors = response.organization.sponsorshipsAsMaintainer.nodes
 				.filter((sponsor) => {
-					return sponsor.tier.id === tier.id;
+					return sponsor.tier?.id === tier.id;
 				})
 				.map((sponsor) => ({
 					...sponsor.sponsorEntity,
@@ -191,5 +192,11 @@ export async function getSponsors() {
 
 	return returnVal;
 }
+
+export const getSponsors = unstable_cache(
+	getSponsorsInternal,
+	['sponsors'],
+	{ revalidate: 86400, tags: ['sponsors'] },
+);
 
 export type SponsorsResponse = Awaited<ReturnType<typeof getSponsors>>;
