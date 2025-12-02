@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
 	const searchParams = request.nextUrl.searchParams;
 	const tagParam = searchParams.get('tag');
 	const pathParam = searchParams.get('path');
+	const pathTypeParam = searchParams.get('pathType');
 
 	// Handle tag-based revalidation if provided
 	if (tagParam) {
@@ -21,7 +22,7 @@ export async function GET(request: NextRequest) {
 	}
 
 	if (pathParam) {
-		revalidatePath(path);
+		revalidatePath(path, pathTypeParam === 'layout' ? 'layout' : 'page');
 	}
 
 	redirect(path);
