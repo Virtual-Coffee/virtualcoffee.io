@@ -25,16 +25,14 @@ function nonNullable<T>(value: T): value is NonNullable<T> {
 	return value !== null && value !== undefined;
 }
 
-async function getMembersInternal(): Promise<MembersResponse> {
-	const userData = await loadUserData();
-
-	return userData;
-}
-
 export const getMembers = unstable_cache(
-	getMembersInternal,
-	['members'],
-	{ revalidate: 86400, tags: ['members'] }
+	async (): Promise<MembersResponse> => {
+		const userData = await loadUserData();
+
+		return userData;
+	},
+	[],
+	{ revalidate: 86400, tags: ['members'] },
 );
 
 async function parseMarkdown(markdown: string) {

@@ -116,86 +116,84 @@ const emptySponsorsResponse = {
 	supporters: [],
 };
 
-async function getSponsorsInternal() {
-	// async function main() {
-
-	const headers: HeadersInit = {
-		Accept: 'application/vnd.github.v3+json',
-	};
-
-	const token = process.env.GITHUB_TOKEN;
-
-	if (token) {
-		headers.Authorization = 'bearer ' + token;
-	}
-
-	const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
-		headers,
-	});
-
-	let response: undefined | typeof mockData;
-
-	if (token) {
-		try {
-			// do some expensive operation here, this is simplified for brevity
-			response = await graphQLClient.request(query);
-		} catch (error) {
-			console.log(error);
-			console.log('Error loading github sponsors, using fake data instead');
-		}
-	}
-
-	if (!response || !response?.organization?.sponsorsListing?.tiers) {
-		// If the GITHUB_TOKEN user doesn't have the right permissions, this will be empty
-		if (process.env.CONTEXT === 'production') {
-			return emptySponsorsResponse;
-		} else {
-			response = mockData;
-		}
-	}
-
-	const tiers = response.organization.sponsorsListing.tiers.nodes.map(
-		(tier) => {
-			const sponsors = response.organization.sponsorshipsAsMaintainer.nodes
-				.filter((sponsor) => {
-					return sponsor.tier?.id === tier.id;
-				})
-				.map((sponsor) => ({
-					...sponsor.sponsorEntity,
-					...(sponsorOverrides[sponsor.sponsorEntity.id] || {}),
-				}));
-
-			return {
-				...tier,
-				sponsors,
-			};
-		},
-	);
-
-	const returnVal = {
-		logoSponsors: tiers
-			.filter(
-				(tier) =>
-					!tier.isOneTime &&
-					tier.monthlyPriceInDollars >= 100 &&
-					tier.sponsors.length > 0,
-			)
-			.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
-		supporters: tiers
-			.filter(
-				(tier) =>
-					(tier.isOneTime || tier.monthlyPriceInDollars < 100) &&
-					tier.sponsors.length > 0,
-			)
-			.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
-	};
-
-	return returnVal;
-}
-
 export const getSponsors = unstable_cache(
-	getSponsorsInternal,
-	['sponsors'],
+	async function getSponsorsInternal() {
+		// async function main() {
+
+		const headers: HeadersInit = {
+			Accept: 'application/vnd.github.v3+json',
+		};
+
+		const token = process.env.GITHUB_TOKEN;
+
+		if (token) {
+			headers.Authorization = 'bearer ' + token;
+		}
+
+		const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
+			headers,
+		});
+
+		let response: undefined | typeof mockData;
+
+		if (token) {
+			try {
+				// do some expensive operation here, this is simplified for brevity
+				response = await graphQLClient.request(query);
+			} catch (error) {
+				console.log(error);
+				console.log('Error loading github sponsors, using fake data instead');
+			}
+		}
+
+		if (!response || !response?.organization?.sponsorsListing?.tiers) {
+			// If the GITHUB_TOKEN user doesn't have the right permissions, this will be empty
+			if (process.env.CONTEXT === 'production') {
+				return emptySponsorsResponse;
+			} else {
+				response = mockData;
+			}
+		}
+
+		const tiers = response.organization.sponsorsListing.tiers.nodes.map(
+			(tier) => {
+				const sponsors = response.organization.sponsorshipsAsMaintainer.nodes
+					.filter((sponsor) => {
+						return sponsor.tier?.id === tier.id;
+					})
+					.map((sponsor) => ({
+						...sponsor.sponsorEntity,
+						...(sponsorOverrides[sponsor.sponsorEntity.id] || {}),
+					}));
+
+				return {
+					...tier,
+					sponsors,
+				};
+			},
+		);
+
+		const returnVal = {
+			logoSponsors: tiers
+				.filter(
+					(tier) =>
+						!tier.isOneTime &&
+						tier.monthlyPriceInDollars >= 100 &&
+						tier.sponsors.length > 0,
+				)
+				.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
+			supporters: tiers
+				.filter(
+					(tier) =>
+						(tier.isOneTime || tier.monthlyPriceInDollars < 100) &&
+						tier.sponsors.length > 0,
+				)
+				.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
+		};
+
+		return returnVal;
+	},
+	[],
 	{ revalidate: 86400, tags: ['sponsors'] },
 );
 
