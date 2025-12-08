@@ -38,7 +38,7 @@ export async function generateStaticParams() {
 }
 
 async function getFile(slug: string) {
-	const file = loadMdxRouteFileAttributes({
+	const file = await loadMdxRouteFileAttributes({
 		slug: `content/resources/${slug}`,
 	});
 	if (file) {
