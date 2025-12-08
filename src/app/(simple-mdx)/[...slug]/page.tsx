@@ -14,8 +14,8 @@ export const revalidate = 345600;
 export const dynamicParams = false;
 export const dynamic = 'force-static';
 
-export function generateStaticParams() {
-	const allFiles = loadMdxDirectory({
+export async function generateStaticParams() {
+	const allFiles = await loadMdxDirectory({
 		baseDirectory: 'content/simple-mdx-pages',
 	});
 

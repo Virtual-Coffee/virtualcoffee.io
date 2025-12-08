@@ -25,8 +25,8 @@ function extractRoutes(files: MdxFile[]): string[] {
 	}, [] as string[]);
 }
 
-export function generateStaticParams() {
-	const allFiles = loadMdxDirectory({
+export async function generateStaticParams() {
+	const allFiles = await loadMdxDirectory({
 		baseDirectory: 'content/resources',
 	});
 	const routes = extractRoutes(allFiles);
@@ -114,7 +114,9 @@ export default async function Page({
 		notFound();
 	}
 
-	const allFiles = loadMdxDirectory({ baseDirectory: 'content/resources' });
+	const allFiles = await loadMdxDirectory({
+		baseDirectory: 'content/resources',
+	});
 	const breadCrumbs = findBreadcrumbs(allFiles, 'resources/' + uri);
 
 	return (
