@@ -10,7 +10,9 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 // ISR: Revalidate every 24 hours
-export const revalidate = 86400;
+export const revalidate = 345600;
+export const dynamicParams = false;
+export const dynamic = 'force-static';
 
 export function generateStaticParams() {
 	const allFiles = loadMdxDirectory({
@@ -21,8 +23,6 @@ export function generateStaticParams() {
 		slug: [s.slug.replace('content/simple-mdx-pages/', '')],
 	}));
 }
-
-export const dynamicParams = true;
 
 async function getFile(slug: string) {
 	const file = loadMdxRouteFileAttributes({

@@ -11,6 +11,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+export const revalidate = 345600;
+export const dynamicParams = false;
+export const dynamic = 'force-static';
+
 function extractRoutes(files: MdxFile[]): string[] {
 	return files.reduce((list, file) => {
 		const slug = file.slug.replace('content/resources/', '');
