@@ -9,13 +9,15 @@ import createCmsImage from '@/util/cmsimage';
 // ISR: Revalidate every 24 hours
 export const revalidate = 86400;
 
-export const metadata = createMetaData({
-	title: 'Virtual Coffee Podcast',
-	description:
-		'This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories as developers.',
-	Hero: 'UndrawWalkInTheCity',
-	hero: 'UndrawWalkInTheCity',
-});
+export async function generateMetadata() {
+	return await createMetaData({
+		title: 'Virtual Coffee Podcast',
+		description:
+			'This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories as developers.',
+		Hero: 'UndrawWalkInTheCity',
+		hero: 'UndrawWalkInTheCity',
+	});
+}
 
 export default async function PodcastsIndex() {
 	const podcastEpisodes = await getEpisodes({ limit: 99 });

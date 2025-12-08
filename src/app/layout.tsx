@@ -2,18 +2,19 @@ import Nav from '@/components/Nav';
 import Link from 'next/link';
 import '@/styles/main.scss';
 
-import type { Metadata } from 'next';
 import Image from 'next/image';
 
 import { buildUrls } from '@/util/url.server';
 import { createMetaData } from '@/util/createMetaData.server';
 import Script from 'next/script';
 
-export const metadata: Metadata = createMetaData({
-	title:
-		'Virtual Coffee IO - An intimate tech community for all, optimized for you',
-	description: `Join our laid-back conversations and online events to connect with like-minded individuals who share your passion for technology.`,
-});
+export async function generateMetadata() {
+	return await createMetaData({
+		title:
+			'Virtual Coffee IO - An intimate tech community for all, optimized for you',
+		description: `Join our laid-back conversations and online events to connect with like-minded individuals who share your passion for technology.`,
+	});
+}
 
 export default function RootLayout({
 	children,

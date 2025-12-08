@@ -31,7 +31,7 @@ async function getData() {
 
 	return {
 		...data,
-		meta: createMetaData({ title, description }),
+		meta: await createMetaData({ title, description }),
 	};
 }
 

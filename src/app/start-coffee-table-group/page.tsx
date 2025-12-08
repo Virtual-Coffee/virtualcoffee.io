@@ -4,10 +4,12 @@ import { Form } from './form';
 import LeadText from '@/components/content/LeadText';
 import Link from 'next/link';
 
-export const metadata = createMetaData({
-	title: 'Start a Coffee Table Group',
-	description: `Submit your idea for a new Coffee Table Group at Virtual Coffee`,
-});
+export async function generateMetadata() {
+	return await createMetaData({
+		title: 'Start a Coffee Table Group',
+		description: `Submit your idea for a new Coffee Table Group at Virtual Coffee`,
+	});
+}
 
 export default function CoffeeTableGroupForm() {
 	return (

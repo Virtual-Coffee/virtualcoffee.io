@@ -93,7 +93,7 @@ export async function generateMetadata({
 		notFound();
 	}
 
-	return createMetaData({
+	return await createMetaData({
 		title: file.meta.title,
 		description: file.meta.description,
 		Hero: file.hero?.Hero,

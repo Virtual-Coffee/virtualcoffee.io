@@ -6,12 +6,14 @@ import Link from 'next/link';
 // ISR: Revalidate every 24 hours
 export const revalidate = 86400;
 
-export const metadata = createMetaData({
-	title: 'Virtual Coffee Monthly Challenges',
-	description:
-		'Every month, we create a challenge for our Virtual Coffee members to complete together.',
-	Hero: 'UndrawGoodTeam',
-});
+export async function generateMetadata() {
+	return await createMetaData({
+		title: 'Virtual Coffee Monthly Challenges',
+		description:
+			'Every month, we create a challenge for our Virtual Coffee members to complete together.',
+		Hero: 'UndrawGoodTeam',
+	});
+}
 
 type Challenge<T = unknown> = {
 	title: string;
@@ -780,10 +782,18 @@ const challengeList: Challenge[] = [
 		description: (
 			<>
 				<p>
-					This challenge is all about connection, storytelling, and celebrating the customs that make <em>you, you</em>. Whether it's a winter holiday, a family birthday ritual, a favorite summer meal, or a silly household custom, we want to hear about it! Share photos, stories, recipes, or even host a Lunch & Learn about any tradition—big or small—that brings meaning or joy to your life. We spend so much time focused on work and code. Let's make space to learn about the personal histories and cultural experiences that enrich our community.
+					This challenge is all about connection, storytelling, and celebrating
+					the customs that make <em>you, you</em>. Whether it's a winter
+					holiday, a family birthday ritual, a favorite summer meal, or a silly
+					household custom, we want to hear about it! Share photos, stories,
+					recipes, or even host a Lunch & Learn about any tradition—big or
+					small—that brings meaning or joy to your life. We spend so much time
+					focused on work and code. Let's make space to learn about the personal
+					histories and cultural experiences that enrich our community.
 				</p>
 				<p>
-					In this challenge, we encourage you to connect with one another by sharing the special ways you celebrate moments throughout the year.
+					In this challenge, we encourage you to connect with one another by
+					sharing the special ways you celebrate moments throughout the year.
 				</p>
 				{/* <p>
 					Learn more about this challenge in{' '}
@@ -854,6 +864,13 @@ export default async function Index() {
 	if (currentItem?.loaderData) {
 		currentChallengeData = await currentItem.loaderData();
 	}
+
+	const metadata = await createMetaData({
+		title: 'Virtual Coffee Monthly Challenges',
+		description:
+			'Every month, we create a challenge for our Virtual Coffee members to complete together.',
+		Hero: 'UndrawGoodTeam',
+	});
 
 	return (
 		<DefaultLayout

@@ -10,7 +10,9 @@ const mdata = {
 	Hero: 'UndrawArrived',
 };
 
-export const metadata = createMetaData(mdata);
+export async function generateMetadata() {
+	return await createMetaData(mdata);
+}
 
 export default async function Index() {
 	const issues = await getNewsletters();
