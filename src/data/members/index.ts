@@ -21,11 +21,6 @@ export interface MembersResponse {
 	members: MemberList;
 }
 
-// This file is an On-Demand Builder
-// It allows us to cache third-party data for a specified amount of time
-// Any deploys will clear the cache
-// Read more here: https://docs.netlify.com/configure-builds/on-demand-builders/
-
 function nonNullable<T>(value: T): value is NonNullable<T> {
 	return value !== null && value !== undefined;
 }
