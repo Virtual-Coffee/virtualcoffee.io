@@ -40,6 +40,7 @@ We really want to make space for all developers to feel comfortable and supporte
   - [Tips and Gotchas](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#tips-and-gotchas)
 - [Reporting A Bug](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#reporting-a-bug)
 - [Labelling conventions](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#labelling-conventions)
+- [Content Tagging System](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md#content-tagging-system)
 
 ## What Type of Contributions We're Looking For
 
@@ -160,6 +161,166 @@ This repository has three basic types of labels:
 - `Type` - The nature of the issue. BUG, FEATURE, QUESTION, or DOCUMENTATION (will be pre-assigned if using issue templates). Only one active per issue.
 - `Status` - What part of the process is this issue in. e.g. Active, Needs Review, Resolved, etc. (will be filled in by maintainers and some contributors). Only one active per issue.
 - `Context` - Additional info that helps people parse issues. e.g. "good first issue", "for maintainer only". Multiple may be active on one issue.
+
+## Content Tagging System
+
+Our resource filtering system uses a structured tagging approach to help users find relevant content quickly. All content tags are organized into logical categories to improve discoverability and user experience.
+
+### Tag Categories
+
+#### 🎯 Skill Level
+
+Tags that indicate the experience level required for the resource:
+
+- **`beginner`** - Content suitable for those new to programming or the specific topic
+- **`intermediate`** - Content for developers with some experience who want to deepen their knowledge
+- **`advanced`** - Content for experienced developers looking to master complex topics
+
+#### 🛠️ Technologies
+
+Tags for programming languages, frameworks, and tools:
+
+- **`javascript`** - JavaScript language, ES6+, Node.js, and related concepts
+- **`typescript`** - TypeScript language, type systems, and TypeScript-specific patterns
+- **`react`** - React library, hooks, components, and React ecosystem
+- **`node`** - Node.js runtime, server-side JavaScript, and backend development
+- **`css`** - CSS styling, layouts, animations, and modern CSS features
+- **`html`** - HTML markup, semantic elements, and web standards
+- **`git`** - Git version control, branching strategies, and collaboration workflows
+
+#### 📚 Topics
+
+Subject areas and domains:
+
+- **`career`** - Career development, job searching, professional growth, and industry insights
+- **`open-source`** - Contributing to open source, maintaining projects, and community involvement
+- **`testing`** - Testing strategies, frameworks, TDD, and quality assurance
+- **`deployment`** - Deployment strategies, CI/CD, hosting, and DevOps practices
+- **`interviewing`** - Technical interviews, coding challenges, and interview preparation
+
+#### 📖 Format
+
+Type of content or learning material:
+
+- **`tutorial`** - Step-by-step instructional content with hands-on examples
+- **`reference`** - Quick lookup guides, documentation, and technical specifications
+- **`guide`** - Comprehensive walkthroughs and best practices
+- **`tips`** - Short, actionable advice and quick wins
+
+### Tagging Guidelines
+
+#### When to Add New Tags
+
+**Add a new tag when:**
+
+- A new technology, framework, or tool becomes widely adopted in the community
+- A new topic area emerges that doesn't fit existing categories
+- Multiple resources would benefit from a more specific tag than existing ones
+- The tag would help users find content more effectively
+
+**Don't add a new tag when:**
+
+- Only one or two resources would use the tag
+- An existing tag already covers the concept adequately
+- The tag is too specific or niche for general use
+- The tag duplicates functionality of existing tags
+
+#### How to Add New Tags
+
+1. **Propose the tag** - Create an issue or discussion explaining:
+   - What the new tag represents
+   - Which category it belongs to
+   - Why existing tags don't suffice
+   - Examples of content that would use this tag
+
+2. **Get community feedback** - Allow time for maintainers and community members to discuss the proposal
+
+3. **Update the system** - Once approved, the tag will be added to the `TAG_CATEGORIES` configuration in `src/util/tagCategories.ts`
+
+#### Tagging Best Practices
+
+**Do:**
+
+- Use existing tags when they accurately describe your content
+- Apply multiple relevant tags from different categories
+- Be consistent with tag naming (lowercase, hyphenated for multi-word tags)
+- Consider your audience's skill level when choosing skill-level tags
+- Think about how users might search for your content
+
+**Don't:**
+
+- Create overly specific tags that only apply to one piece of content
+- Use tags that are too broad or vague
+- Apply tags that don't accurately represent the content
+- Use inconsistent naming conventions
+- Over-tag content (3-5 relevant tags are usually sufficient)
+
+### Examples of Proper Tagging
+
+#### Example 1: React Tutorial
+
+```yaml
+contentTags:
+  - beginner
+  - react
+  - javascript
+  - tutorial
+```
+
+**Rationale:** This is a beginner-friendly tutorial about React (JavaScript framework), so it gets skill level, technology, and format tags.
+
+#### Example 2: Career Guide
+
+```yaml
+contentTags:
+  - intermediate
+  - career
+  - guide
+```
+
+**Rationale:** This is an intermediate-level career development guide, covering the topic and format categories.
+
+#### Example 3: Advanced Testing Resource
+
+```yaml
+contentTags:
+  - advanced
+  - testing
+  - javascript
+  - reference
+```
+
+**Rationale:** This is an advanced reference for JavaScript testing, covering skill level, topic, technology, and format.
+
+#### Example 4: Open Source Contribution Tips
+
+```yaml
+contentTags:
+  - intermediate
+  - open-source
+  - git
+  - tips
+```
+
+**Rationale:** This provides intermediate-level tips for contributing to open source projects using Git, covering multiple relevant categories.
+
+### Tag Maintenance
+
+- **Regular Review**: Tags are reviewed periodically to ensure they remain relevant and useful
+- **Community Input**: Suggestions for new tags or modifications are welcome through issues or discussions
+- **Documentation Updates**: This documentation is updated when new tags are added or existing ones are modified
+- **Migration**: When tags are deprecated or renamed, existing content is updated accordingly
+
+### Questions About Tagging?
+
+If you're unsure about which tags to use for your content, or if you think a new tag might be needed, please:
+
+1. Check existing similar content to see what tags are commonly used
+2. Ask in the [discussions board](https://github.com/Virtual-Coffee/virtualcoffee.io/discussions)
+3. Create an issue with your tagging question
+4. Reach out to maintainers for guidance
+
+Remember: Good tagging helps the entire community find and benefit from your contributions!
 
 ## Add yourself to the Contributor's list
 
