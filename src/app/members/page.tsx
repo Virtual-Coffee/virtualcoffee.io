@@ -10,8 +10,7 @@ import 'leaflet/dist/leaflet.css';
 import { Suspense } from 'react';
 import { MapLoader, MapLoaderDev } from './map-loader';
 
-// ISR: Revalidate every 24 hours
-export const revalidate = 86400;
+export const dynamic = 'force-static';
 
 export async function generateMetadata() {
 	return await createMetaData({

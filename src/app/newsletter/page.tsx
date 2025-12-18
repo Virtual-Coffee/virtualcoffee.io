@@ -4,6 +4,8 @@ import PostList from '@/components/PostList';
 import { getNewsletters } from '@/data/newsletters';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
+export const dynamic = 'force-static';
+
 const mdata = {
 	title: 'Virtual Coffee Newsletter',
 	description: 'Sign up for the Virtual Coffee Newsletter.',

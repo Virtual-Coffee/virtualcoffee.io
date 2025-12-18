@@ -5,6 +5,9 @@ import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { NextPageProps } from '@/util/types';
 import { notFound } from 'next/navigation';
 
+export const dynamicParams = false;
+export const dynamic = 'force-static';
+
 export async function generateMetadata() {
 	return await createMetaData({
 		title: 'Virtual Coffee Newsletter',

@@ -11,7 +11,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-export const revalidate = 345600;
+// ISR: Revalidate every week
 export const dynamicParams = false;
 export const dynamic = 'force-static';
 

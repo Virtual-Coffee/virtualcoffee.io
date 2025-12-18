@@ -15,6 +15,11 @@ export async function GET(request: NextRequest) {
 		revalidateTag(tagParam);
 	}
 
+	if (!pathParam) {
+		// If no path is provided, redirect to home
+		redirect('/');
+	}
+
 	// Handle path-based revalidation if provided
 	let path = typeof pathParam === 'string' ? pathParam : '/';
 	if (!path.startsWith('/')) {

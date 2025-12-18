@@ -6,8 +6,7 @@ import { getEpisodes } from '@/data/podcast';
 import { createMetaData } from '@/util/createMetaData.server';
 import createCmsImage from '@/util/cmsimage';
 
-// ISR: Revalidate every 24 hours
-export const revalidate = 86400;
+export const dynamic = 'force-static';
 
 export async function generateMetadata() {
 	return await createMetaData({
