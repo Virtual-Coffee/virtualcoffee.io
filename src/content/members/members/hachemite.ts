@@ -1,7 +1,7 @@
 import { profileMasks } from '../flare';
 import type { MemberObject } from '../types';
 
-export const _EXAMPLE: MemberObject = {
+export const hachemite: MemberObject = {
 	// GitHub username (required)
     github: 'hachemite',
 	//
