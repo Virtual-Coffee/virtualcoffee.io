@@ -2,12 +2,12 @@ import { profileMasks } from '../flare';
 import type { MemberObject } from '../types';
 
 export const hachemite: MemberObject = {
-    github: 'hachemite',
+	github: 'hachemite',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-    name: 'Hachem Squalli',
+	name: 'Hachem Squalli',
 	// Emoji - If you want an emoji to appear next to your name, you can add it here. Please only use standard unicode emojis - maintainers will reject PRs otherwise.
 	// emoji: '👩‍💻',
 	//
@@ -15,7 +15,7 @@ export const hachemite: MemberObject = {
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-    bio: 'An Engineering student at ENSA Fès specializing in Software Engineering and Artificial Intelligence|SecOps & MLOps Enthusiast.',
+	bio: 'An Engineering student at ENSA Fès specializing in Software Engineering and Artificial Intelligence|SecOps & MLOps Enthusiast.',
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -32,10 +32,10 @@ export const hachemite: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-        { type: 'linkedin', username: 'hachem-squalli-elhoussaini-2a7957250' },
+		{ type: 'linkedin', username: 'hachem-squalli-elhoussaini-2a7957250' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-        { type: 'twitter', username: 'dodoracula' },
+		{ type: 'twitter', username: 'dodoracula' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
@@ -48,9 +48,9 @@ export const hachemite: MemberObject = {
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)
 	// Feel free to be as specific or vague as you're comfortable with.
 	// Use this handy website to find your latitude and longitude: https://www.latlong.net/
-	 location: {
+	location: {
 		latitude: 34.0331,
-        longitude: -5.0002,
-        title: 'Fes, Morocco',
-    },
+		longitude: -5.0002,
+		title: 'Fes, Morocco',
+	},
 };
