@@ -1,4 +1,5 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
+import ResourceIndex from '@/app/resources/[[...slug]]/ResourceIndex.client';
 import { createMetaData } from '@/util/createMetaData.server';
 import {
 	loadMdxDirectory,
@@ -108,15 +109,31 @@ export default async function Page({
 	params,
 }: NextPageProps<'slug', false, true>) {
 	const uri = ((await params).slug ?? []).join('/');
+
+	// ✅ Load all resources first
+	const allFiles = await loadMdxDirectory({
+		baseDirectory: 'content/resources',
+	});
+
+	// ✅ INDEX PAGE (/resources)
+	if (!uri) {
+		return (
+			<DefaultLayout
+				heroHeader="Resources"
+				heroSubheader="A collection of resources for the Virtual Coffee community"
+			>
+				<ResourceIndex resources={allFiles} />
+			</DefaultLayout>
+		);
+	}
+
+	// ✅ INDIVIDUAL RESOURCE PAGE
 	const file = await getFile(uri);
 
 	if (!file) {
 		notFound();
 	}
 
-	const allFiles = await loadMdxDirectory({
-		baseDirectory: 'content/resources',
-	});
 	const breadCrumbs = findBreadcrumbs(allFiles, 'resources/' + uri);
 
 	return (
