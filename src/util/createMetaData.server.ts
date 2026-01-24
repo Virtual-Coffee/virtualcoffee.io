@@ -1,7 +1,7 @@
 import createSocialImage from '@/util/socialimage';
 import type { Metadata } from 'next';
 
-export function createMetaData({
+export async function createMetaData({
 	title,
 	description,
 	hero: heroPath,
@@ -11,30 +11,22 @@ export function createMetaData({
 	description?: string;
 	hero?: string;
 	Hero?: string;
-}): Metadata {
+}): Promise<Metadata> {
 	// `/assets/svg/${attributes.hero.Hero}.svg`
 	const hero = heroPath || Hero ? `/assets/svg/${Hero}.svg` : undefined;
-
+	const image = await createSocialImage({
+		title: title,
+		subtitle: description,
+		hero,
+	});
 	return {
 		title,
 		description,
 		openGraph: {
-			images: [
-				createSocialImage({
-					title: title,
-					subtitle: description,
-					hero,
-				}),
-			],
+			images: [image],
 		},
 		twitter: {
-			images: [
-				createSocialImage({
-					title: title,
-					subtitle: description,
-					hero,
-				}),
-			],
+			images: [image],
 		},
 	};
 }

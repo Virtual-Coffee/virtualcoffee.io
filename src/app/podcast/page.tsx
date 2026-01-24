@@ -6,13 +6,17 @@ import { getEpisodes } from '@/data/podcast';
 import { createMetaData } from '@/util/createMetaData.server';
 import createCmsImage from '@/util/cmsimage';
 
-export const metadata = createMetaData({
-	title: 'Virtual Coffee Podcast',
-	description:
-		'This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories as developers.',
-	Hero: 'UndrawWalkInTheCity',
-	hero: 'UndrawWalkInTheCity',
-});
+export const dynamic = 'force-static';
+
+export async function generateMetadata() {
+	return await createMetaData({
+		title: 'Virtual Coffee Podcast',
+		description:
+			'This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories as developers.',
+		Hero: 'UndrawWalkInTheCity',
+		hero: 'UndrawWalkInTheCity',
+	});
+}
 
 export default async function PodcastsIndex() {
 	const podcastEpisodes = await getEpisodes({ limit: 99 });

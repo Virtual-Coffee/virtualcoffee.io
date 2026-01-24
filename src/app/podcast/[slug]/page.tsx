@@ -10,6 +10,8 @@ import { sanitizeCmsData } from '@/util/sanitizeCmsData';
 import createCmsImage from '@/util/cmsimage';
 import { Metadata } from 'next';
 
+export const dynamic = 'force-static';
+
 export async function generateStaticParams() {
 	const podcastEpisodes = await getEpisodes({ limit: 99 });
 

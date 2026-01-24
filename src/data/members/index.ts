@@ -1,5 +1,6 @@
 import type { MemberList } from '@/content/members/types';
 import { GraphQLClient, gql } from 'graphql-request';
+import { unstable_cache } from 'next/cache';
 import teamsData from '@/content/members/teams';
 import mockMemberData from '@/data/mocks/memberData';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
@@ -20,20 +21,19 @@ export interface MembersResponse {
 	members: MemberList;
 }
 
-// This file is an On-Demand Builder
-// It allows us to cache third-party data for a specified amount of time
-// Any deploys will clear the cache
-// Read more here: https://docs.netlify.com/configure-builds/on-demand-builders/
-
 function nonNullable<T>(value: T): value is NonNullable<T> {
 	return value !== null && value !== undefined;
 }
 
-export async function getMembers(): Promise<MembersResponse> {
-	const userData = await loadUserData();
+export const getMembers = unstable_cache(
+	async (): Promise<MembersResponse> => {
+		const userData = await loadUserData();
 
-	return userData;
-}
+		return userData;
+	},
+	[],
+	{ revalidate: 86400, tags: ['members'] },
+);
 
 async function parseMarkdown(markdown: string) {
 	const [unified, remarkParse, remarkRehype, rehypeSanitize, rehypeStringify] =

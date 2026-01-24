@@ -9,11 +9,16 @@ import { Google } from '@/svg/calendar/Google';
 import { Outlook } from '@/svg/calendar/Outlook';
 import { Ics } from '@/svg/calendar/Ics';
 
-export const metadata = createMetaData({
-	title: 'Virtual Coffee Community Events',
-	description: 'See our upcoming events!',
-	Hero: 'UndrawConferenceCall',
-});
+// ISR: Revalidate every 12 hours
+export const revalidate = 43200;
+
+export async function generateMetadata() {
+	return await createMetaData({
+		title: 'Virtual Coffee Community Events',
+		description: 'See our upcoming events!',
+		Hero: 'UndrawConferenceCall',
+	});
+}
 
 export default async function Page() {
 	const [events, sponsors] = await Promise.all([

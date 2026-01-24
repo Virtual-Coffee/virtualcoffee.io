@@ -11,8 +11,11 @@ import { getNewsletters } from '@/data/newsletters';
 import { getSponsors } from '@/data/sponsors';
 import { homePageLinks } from '@/util/homePageLinks';
 
+// ISR: Revalidate every 12 hours
+export const revalidate = 43200;
+
 export default async function Home() {
-	const resources = loadMdxDirectory({
+	const resources = await loadMdxDirectory({
 		baseDirectory: 'content/resources',
 		includeChildren: false,
 	});

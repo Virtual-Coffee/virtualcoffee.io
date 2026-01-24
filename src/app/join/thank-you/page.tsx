@@ -1,5 +1,8 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
+// ISR: Revalidate every 24 hours
+export const revalidate = 86400;
+
 export const metadata = {
 	title: 'Membership Form Received!',
 	description: `You're now on the membership waiting list!`,

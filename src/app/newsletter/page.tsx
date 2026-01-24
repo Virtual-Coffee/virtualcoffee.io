@@ -4,13 +4,17 @@ import PostList from '@/components/PostList';
 import { getNewsletters } from '@/data/newsletters';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
+export const dynamic = 'force-static';
+
 const mdata = {
 	title: 'Virtual Coffee Newsletter',
 	description: 'Sign up for the Virtual Coffee Newsletter.',
 	Hero: 'UndrawArrived',
 };
 
-export const metadata = createMetaData(mdata);
+export async function generateMetadata() {
+	return await createMetaData(mdata);
+}
 
 export default async function Index() {
 	const issues = await getNewsletters();

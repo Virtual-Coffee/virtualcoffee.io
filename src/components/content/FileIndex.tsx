@@ -9,12 +9,13 @@ type FileIndexProps = {
 	depth?: number;
 };
 
-export default function FileIndex({ subDirectory, depth }: FileIndexProps) {
-	const allFiles = loadMdxDirectory({
+export default async function FileIndex({
+	subDirectory,
+	depth,
+}: FileIndexProps) {
+	const allFiles = await loadMdxDirectory({
 		baseDirectory: 'content' + (subDirectory ? `/${subDirectory}` : ''),
 	});
 
-	// const result = subDirectory ? findBase(allFiles, subDirectory) : allFiles;
-	const result = allFiles;
-	return <PostList items={formatFileListItemsForPostList(result, depth)} />;
+	return <PostList items={formatFileListItemsForPostList(allFiles, depth)} />;
 }

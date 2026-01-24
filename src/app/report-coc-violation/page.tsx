@@ -2,12 +2,18 @@ import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 import { Form } from './form';
 
-export const metadata = createMetaData({
-	title: 'Report a Code of Conduct Violation',
-	description: `If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.`,
-});
+export async function generateMetadata() {
+	return await createMetaData({
+		title: 'Report a Code of Conduct Violation',
+		description: `If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.`,
+	});
+}
 
-export default function CocForm() {
+export default async function CocForm() {
+	const metadata = await createMetaData({
+		title: 'Report a Code of Conduct Violation',
+		description: `If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.`,
+	});
 	return (
 		<DefaultLayout
 			simple

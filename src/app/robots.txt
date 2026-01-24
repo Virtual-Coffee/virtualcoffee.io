@@ -7,6 +7,7 @@ User-agent: ChatGPT-User
 User-agent: ClaudeBot
 User-agent: Claude-Web
 User-agent: cohere-ai
+User-agent: DatadogSynthetics
 User-agent: Diffbot
 User-agent: DuckDuckBot
 User-agent: FacebookBot
@@ -29,6 +30,19 @@ User-agent: StractBot
 User-agent: Trove
 User-agent: Yandex
 User-agent: YouBot
-
+User-agent: AdsBot-Google
+User-agent: Applebot
+User-agent: AwarioRssBot
+User-agent: AwarioSmartBot
+User-agent: ChatGPT
+User-agent: DataForSeoBot
+User-agent: magpie-crawler
+User-agent: Omgilibot
+User-agent: peer39_crawler
 
 Disallow: /
+
+
+User-agent: *
+Disallow: /_cache
+Disallow: /api/

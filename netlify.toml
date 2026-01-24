@@ -6,6 +6,10 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+[[edge_functions]]
+  function = "block-bots"
+  path = "/*"
+
 [dev]
   command = "next dev"
   port = 9000

@@ -2,11 +2,13 @@ import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 import { Form } from './form';
 
-export const metadata = createMetaData({
-	title: 'Lunch & Learn Talk Submission Form',
-	description: `We can't wait to hear your talk!`,
-	Hero: 'UndrawPresentation',
-});
+export async function generateMetadata() {
+	return await createMetaData({
+		title: 'Lunch & Learn Talk Submission Form',
+		description: `We can't wait to hear your talk!`,
+		Hero: 'UndrawPresentation',
+	});
+}
 
 export default function CocForm() {
 	return (

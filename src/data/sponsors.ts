@@ -1,4 +1,5 @@
 import { GraphQLClient, gql } from 'graphql-request';
+import { unstable_cache } from 'next/cache';
 import mockData from './mocks/sponsors';
 import ImgixClient from '@imgix/js-core';
 
@@ -115,81 +116,85 @@ const emptySponsorsResponse = {
 	supporters: [],
 };
 
-export async function getSponsors() {
-	// async function main() {
+export const getSponsors = unstable_cache(
+	async function getSponsorsInternal() {
+		// async function main() {
 
-	const headers: HeadersInit = {
-		Accept: 'application/vnd.github.v3+json',
-	};
+		const headers: HeadersInit = {
+			Accept: 'application/vnd.github.v3+json',
+		};
 
-	const token = process.env.GITHUB_TOKEN;
+		const token = process.env.GITHUB_TOKEN;
 
-	if (token) {
-		headers.Authorization = 'bearer ' + token;
-	}
-
-	const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
-		headers,
-	});
-
-	let response: undefined | typeof mockData;
-
-	if (token) {
-		try {
-			// do some expensive operation here, this is simplified for brevity
-			response = await graphQLClient.request(query);
-		} catch (error) {
-			console.log(error);
-			console.log('Error loading github sponsors, using fake data instead');
+		if (token) {
+			headers.Authorization = 'bearer ' + token;
 		}
-	}
 
-	if (!response || !response?.organization?.sponsorsListing?.tiers) {
-		// If the GITHUB_TOKEN user doesn't have the right permissions, this will be empty
-		if (process.env.CONTEXT === 'production') {
-			return emptySponsorsResponse;
-		} else {
-			response = mockData;
+		const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
+			headers,
+		});
+
+		let response: undefined | typeof mockData;
+
+		if (token) {
+			try {
+				// do some expensive operation here, this is simplified for brevity
+				response = await graphQLClient.request(query);
+			} catch (error) {
+				console.log(error);
+				console.log('Error loading github sponsors, using fake data instead');
+			}
 		}
-	}
 
-	const tiers = response.organization.sponsorsListing.tiers.nodes.map(
-		(tier) => {
-			const sponsors = response.organization.sponsorshipsAsMaintainer.nodes
-				.filter((sponsor) => {
-					return sponsor.tier.id === tier.id;
-				})
-				.map((sponsor) => ({
-					...sponsor.sponsorEntity,
-					...(sponsorOverrides[sponsor.sponsorEntity.id] || {}),
-				}));
+		if (!response || !response?.organization?.sponsorsListing?.tiers) {
+			// If the GITHUB_TOKEN user doesn't have the right permissions, this will be empty
+			if (process.env.CONTEXT === 'production') {
+				return emptySponsorsResponse;
+			} else {
+				response = mockData;
+			}
+		}
 
-			return {
-				...tier,
-				sponsors,
-			};
-		},
-	);
+		const tiers = response.organization.sponsorsListing.tiers.nodes.map(
+			(tier) => {
+				const sponsors = response.organization.sponsorshipsAsMaintainer.nodes
+					.filter((sponsor) => {
+						return sponsor.tier?.id === tier.id;
+					})
+					.map((sponsor) => ({
+						...sponsor.sponsorEntity,
+						...(sponsorOverrides[sponsor.sponsorEntity.id] || {}),
+					}));
 
-	const returnVal = {
-		logoSponsors: tiers
-			.filter(
-				(tier) =>
-					!tier.isOneTime &&
-					tier.monthlyPriceInDollars >= 100 &&
-					tier.sponsors.length > 0,
-			)
-			.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
-		supporters: tiers
-			.filter(
-				(tier) =>
-					(tier.isOneTime || tier.monthlyPriceInDollars < 100) &&
-					tier.sponsors.length > 0,
-			)
-			.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
-	};
+				return {
+					...tier,
+					sponsors,
+				};
+			},
+		);
 
-	return returnVal;
-}
+		const returnVal = {
+			logoSponsors: tiers
+				.filter(
+					(tier) =>
+						!tier.isOneTime &&
+						tier.monthlyPriceInDollars >= 100 &&
+						tier.sponsors.length > 0,
+				)
+				.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
+			supporters: tiers
+				.filter(
+					(tier) =>
+						(tier.isOneTime || tier.monthlyPriceInDollars < 100) &&
+						tier.sponsors.length > 0,
+				)
+				.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
+		};
+
+		return returnVal;
+	},
+	[],
+	{ revalidate: 86400, tags: ['sponsors'] },
+);
 
 export type SponsorsResponse = Awaited<ReturnType<typeof getSponsors>>;

@@ -9,8 +9,11 @@ import { MDXProps } from 'mdx/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-export function generateStaticParams() {
-	const allFiles = loadMdxDirectory({
+export const dynamicParams = false;
+export const dynamic = 'force-static';
+
+export async function generateStaticParams() {
+	const allFiles = await loadMdxDirectory({
 		baseDirectory: 'content/simple-mdx-pages',
 	});
 
@@ -19,10 +22,8 @@ export function generateStaticParams() {
 	}));
 }
 
-export const dynamicParams = true;
-
 async function getFile(slug: string) {
-	const file = loadMdxRouteFileAttributes({
+	const file = await loadMdxRouteFileAttributes({
 		slug: `content/simple-mdx-pages/${slug}`,
 	});
 	if (file) {
@@ -47,7 +48,7 @@ export async function generateMetadata({
 		notFound();
 	}
 
-	return createMetaData({
+	return await createMetaData({
 		title: file.meta.title,
 		description: file.meta.description,
 		Hero: file.hero?.Hero,

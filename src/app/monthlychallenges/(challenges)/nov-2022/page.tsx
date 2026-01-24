@@ -118,7 +118,7 @@ async function getData() {
 		authorsWithPosts,
 		currentGoal,
 		completedGoals,
-		meta: createMetaData({ title, description }),
+		meta: await createMetaData({ title, description }),
 	};
 }
 

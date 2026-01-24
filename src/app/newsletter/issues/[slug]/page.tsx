@@ -5,11 +5,16 @@ import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { NextPageProps } from '@/util/types';
 import { notFound } from 'next/navigation';
 
-export const metadata = createMetaData({
-	title: 'Virtual Coffee Newsletter',
-	description: 'Sign up for the Virtual Coffee Newsletter.',
-	Hero: 'UndrawArrived',
-});
+export const dynamicParams = false;
+export const dynamic = 'force-static';
+
+export async function generateMetadata() {
+	return await createMetaData({
+		title: 'Virtual Coffee Newsletter',
+		description: 'Sign up for the Virtual Coffee Newsletter.',
+		Hero: 'UndrawArrived',
+	});
+}
 
 export async function generateStaticParams() {
 	const newsletters = await getNewsletters();

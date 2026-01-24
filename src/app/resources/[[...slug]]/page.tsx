@@ -11,6 +11,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+// ISR: Revalidate every week
+export const dynamicParams = false;
+export const dynamic = 'force-static';
+
 function extractRoutes(files: MdxFile[]): string[] {
 	return files.reduce((list, file) => {
 		const slug = file.slug.replace('content/resources/', '');
@@ -21,8 +25,8 @@ function extractRoutes(files: MdxFile[]): string[] {
 	}, [] as string[]);
 }
 
-export function generateStaticParams() {
-	const allFiles = loadMdxDirectory({
+export async function generateStaticParams() {
+	const allFiles = await loadMdxDirectory({
 		baseDirectory: 'content/resources',
 	});
 	const routes = extractRoutes(allFiles);
@@ -34,7 +38,7 @@ export function generateStaticParams() {
 }
 
 async function getFile(slug: string) {
-	const file = loadMdxRouteFileAttributes({
+	const file = await loadMdxRouteFileAttributes({
 		slug: `content/resources/${slug}`,
 	});
 	if (file) {
@@ -93,7 +97,7 @@ export async function generateMetadata({
 		notFound();
 	}
 
-	return createMetaData({
+	return await createMetaData({
 		title: file.meta.title,
 		description: file.meta.description,
 		Hero: file.hero?.Hero,
@@ -110,7 +114,9 @@ export default async function Page({
 		notFound();
 	}
 
-	const allFiles = loadMdxDirectory({ baseDirectory: 'content/resources' });
+	const allFiles = await loadMdxDirectory({
+		baseDirectory: 'content/resources',
+	});
 	const breadCrumbs = findBreadcrumbs(allFiles, 'resources/' + uri);
 
 	return (
