@@ -28,23 +28,23 @@ export default async function PodcastsIndex() {
 			heroHeader="Virtual Coffee Podcast"
 			Hero="UndrawWalkInTheCity"
 		>
-		<div className="container bodycopy py-5 lead">
-			<p>
-				The Virtual Coffee Podcast was our way of sharing the stories,
-				lessons, and conversations that grew out of the Virtual Coffee
-				community.
-			</p>
-			<p>
-				We&apos;re not currently recording new episodes, but we&apos;re
-				grateful for the many guests who shared their experiences with us
-				across nine seasons. These conversations reflect so much of what we
-				love about Virtual Coffee: learning together, supporting one another,
-				being honest about the hard parts, and celebrating the many different
-				paths people take through tech.
-			</p>
-			<p>We hope you enjoy exploring the archive.</p>
+			<div className="container bodycopy py-5 lead">
+				<p>
+					The Virtual Coffee Podcast was our way of sharing the stories,
+					lessons, and conversations that grew out of the Virtual Coffee
+					community.
+				</p>
+				<p>
+					We&apos;re not currently recording new episodes, but we&apos;re
+					grateful for the many guests who shared their experiences with us
+					across nine seasons. These conversations reflect so much of what we
+					love about Virtual Coffee: learning together, supporting one another,
+					being honest about the hard parts, and celebrating the many different
+					paths people take through tech.
+				</p>
+				<p>We hope you enjoy exploring the archive.</p>
 
-			<hr />
+				<hr />
 
 				<PodcastSubscribe />
 
@@ -113,8 +113,8 @@ export default async function PodcastsIndex() {
 			</div>
 
 			<div className="bg-light py-5">
-			<div className="container-xl">
-				<h2 className="display-5">Episode Archive:</h2>
+				<div className="container-xl">
+					<h2 className="display-5">Episode Archive:</h2>
 
 					<PostList
 						items={podcastEpisodes.map(
