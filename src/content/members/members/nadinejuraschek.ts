@@ -1,17 +1,20 @@
 import type { MemberObject } from '../types';
 import { profileMasks } from '../flare';
 
-export const abuna1985: MemberObject = {
+// Change _EXAMPLE to `yourGitHubUserName` and add your info below
+export const nadinejuraschek: MemberObject = {
 	// GitHub username (required)
-	github: 'abuna1985',
+	github: 'nadinejuraschek',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	// name: 'Your Name',
+	name: 'Nadine Pesso',
+	// Emoji - If you want an emoji to appear next to your name, you can add it here. Please only use standard unicode emojis - maintainers will reject PRs otherwise.
+	// emoji: '👩‍💻',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
-	// mainUrl: 'https://virtualcoffee.io',
+	mainUrl: 'https://www.nadinepesso.com',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
 	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
@@ -31,16 +34,25 @@ export const abuna1985: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'adam-abundis' },
-		{ type: 'dev', username: 'adamabundis' },
+		{ type: 'linkedin', username: 'nadinepesso' },
+		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'adamabundis' },
+		// { type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
+		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ['Hacktoberfest2022'],
+	badges: [],
+	// Add your location to our member map at https://virtualcoffee.io/members (optional)
+	// Feel free to be as specific or vague as you're comfortable with.
+	// Use this handy website to find your latitude and longitude: https://www.latlong.net/
+	location: {
+		latitude: 30.267153,
+		longitude: -97.743057,
+		title: 'Austin, TX',
+	},
 };
