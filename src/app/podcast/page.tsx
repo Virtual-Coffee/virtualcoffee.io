@@ -12,7 +12,7 @@ export async function generateMetadata() {
 	return await createMetaData({
 		title: 'Virtual Coffee Podcast',
 		description:
-			'This is the Virtual Coffee Podcast, where we interview members of the community to learn more about their stories as developers.',
+			'Explore nine seasons of the Virtual Coffee Podcast, where we shared the stories, lessons, and conversations from our community of developers.',
 		Hero: 'UndrawWalkInTheCity',
 		hero: 'UndrawWalkInTheCity',
 	});
@@ -30,22 +30,19 @@ export default async function PodcastsIndex() {
 		>
 			<div className="container bodycopy py-5 lead">
 				<p>
-					Virtual Coffee is an intimate community for developers at all stages
-					of the journey. In the Virtual Coffee Podcast, hosted by Bekah Hawrot
-					Weigel and Dan Ott, you&apos;ll find interviews with members of our
-					community to learn more about their stories, who they are, how they
-					found Virtual Coffee, and how it has influenced their lives as
-					developers.
+					The Virtual Coffee Podcast was our way of sharing the stories,
+					lessons, and conversations that grew out of the Virtual Coffee
+					community.
 				</p>
 				<p>
-					We want to bring everything that&apos;s special about Virtual Coffee,
-					the intimacy and the friendships we&rsquo;ve built, and share that
-					with everyone through the podcast. We&rsquo;re always growing and
-					learning together as a group, and there&rsquo;s something really
-					special about being able to do that knowing that you&rsquo;ll have the
-					full support of the community around you. And that&rsquo;s what this
-					podcast is about too.
+					We&apos;re not currently recording new episodes, but we&apos;re
+					grateful for the many guests who shared their experiences with us
+					across nine seasons. These conversations reflect so much of what we
+					love about Virtual Coffee: learning together, supporting one another,
+					being honest about the hard parts, and celebrating the many different
+					paths people take through tech.
 				</p>
+				<p>We hope you enjoy exploring the archive.</p>
 
 				<hr />
 
@@ -117,7 +114,7 @@ export default async function PodcastsIndex() {
 
 			<div className="bg-light py-5">
 				<div className="container-xl">
-					<h2 className="display-5">All Episodes:</h2>
+					<h2 className="display-5">Episode Archive:</h2>
 
 					<PostList
 						items={podcastEpisodes.map(
