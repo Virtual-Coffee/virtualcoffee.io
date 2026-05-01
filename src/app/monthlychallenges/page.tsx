@@ -744,7 +744,8 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
-		title: 'Goals Check-In',
+		current: true,
+		title: ‘Goals Check-In’,
 		subtitle: `Reflect. Reevaluate. Adjust.`,
 		description: (
 			<>
@@ -759,57 +760,42 @@ const challengeList: Challenge[] = [
 					challenges, and successes.
 				</p>
 				<p>
-					Learn more about this challenge in{' '}
+					Learn more about this challenge in{‘ ‘}
 					<a href="https://dev.to/virtualcoffee/goals-check-in-hows-your-progress-flowing-2a45">
 						this blog post
 					</a>
 					.
 				</p>
 				<p>
-					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/may-2025">
-						check out the May 2025 challenge page
+					To view all of the details of this year&apos;s challenge,{‘ ‘}
+					<Link href="/monthlychallenges/may-2026">
+						check out the May 2026 challenge page
 					</Link>
 					.
 				</p>
 			</>
 		),
+		links: [
+			{
+				href: ‘/monthlychallenges/may-2025’,
+				title: ‘May, 2025’,
+			},
+		],
 	},
 	{
-		current: true,
 		title: 'Share Your Tradition',
 		subtitle: `Let's celebrate the diverse cultures and traditions within our community.`,
 		description: (
-			<>
-				<p>
-					This challenge is all about connection, storytelling, and celebrating
-					the customs that make <em>you, you</em>. Whether it's a winter
-					holiday, a family birthday ritual, a favorite summer meal, or a silly
-					household custom, we want to hear about it! Share photos, stories,
-					recipes, or even host a Lunch & Learn about any tradition—big or
-					small—that brings meaning or joy to your life. We spend so much time
-					focused on work and code. Let's make space to learn about the personal
-					histories and cultural experiences that enrich our community.
-				</p>
-				<p>
-					In this challenge, we encourage you to connect with one another by
-					sharing the special ways you celebrate moments throughout the year.
-				</p>
-				{/* <p>
-					Learn more about this challenge in{' '}
-					<a href="">
-						this blog post
-					</a>
-					.
-				</p> */}
-				<p>
-					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/dec-2025">
-						check out the December 2025 challenge page
-					</Link>
-					.
-				</p>
-			</>
+			<p>
+				This challenge is all about connection, storytelling, and celebrating
+				the customs that make you, you. Share photos, stories, recipes, or host
+				a Lunch &amp; Learn about any tradition that brings meaning or joy to
+				your life.{' '}
+				<Link href="/monthlychallenges/dec-2025">
+					Check out the December 2025 challenge page
+				</Link>{' '}
+				for all the details.
+			</p>
 		),
 	},
 ];
