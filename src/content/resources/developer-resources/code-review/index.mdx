@@ -1,0 +1,108 @@
+---
+meta:
+  title: Code Review
+  description: Good code review is a skill — one that makes teams stronger, code better, and reviewers more effective developers.
+hero:
+  Hero: UndrawCodeReview
+tags:
+  - memberresources
+order: 8
+---
+
+import LeadText from '@/components/content/LeadText';
+import TextContainer from '@/components/content/TextContainer';
+
+<TextContainer background="light" showBackToTopLink={false}>
+
+<LeadText>
+
+Good code review is a skill — one that makes teams stronger, code better, and reviewers more effective developers. Whether you're reviewing someone else's work or receiving feedback on yours, how you approach it matters.
+
+</LeadText>
+
+</TextContainer>
+
+<TextContainer>
+
+## The purpose of code review
+
+Code review isn't primarily about finding bugs (though that's a benefit). It's about:
+
+- Sharing knowledge across the team
+- Maintaining a consistent codebase
+- Catching issues before they reach production
+- Creating a record of why decisions were made
+- Helping everyone on the team level up
+
+When done well, code review is a conversation — not a gatekeeping mechanism.
+
+</TextContainer>
+
+<TextContainer>
+
+## Giving good feedback
+
+The reviewer's job is to be helpful, not to be right. A few principles:
+
+**Be specific.** "This is confusing" isn't actionable. "This variable name doesn't describe what it holds — could you rename it to something that reflects its purpose?" is.
+
+**Explain the why.** Don't just say what to change. Explain why it matters. The author learns more, and you might be wrong.
+
+**Distinguish between required and optional.** Make it clear when something is a blocker versus a suggestion. "Required: this will cause a null pointer exception" vs "Optional: this could be simplified with Array.map."
+
+**Ask questions.** If something seems odd, ask about it before assuming it's wrong. "I haven't seen this pattern before — can you walk me through the reasoning?" opens a conversation.
+
+**Acknowledge good work.** If something is well-done, say so. Positive feedback is useful and not given often enough.
+
+</TextContainer>
+
+<TextContainer>
+
+## Receiving feedback
+
+Being reviewed can feel personal. It isn't. A few things that help:
+
+- **Separate yourself from your code.** A critique of a function is not a critique of you.
+- **Ask for clarification when you need it.** If feedback isn't clear, ask. Don't guess.
+- **Say thank you.** Even when feedback is hard to receive, it usually comes from someone trying to help.
+- **You don't have to agree.** It's okay to push back on feedback respectfully. Explain your reasoning.
+- **Don't take it personally when your PR has lots of comments.** A thorough review is a good thing.
+
+</TextContainer>
+
+<TextContainer>
+
+## What to look for in a review
+
+A helpful checklist when reviewing code:
+
+- **Does it work?** Does it do what it's supposed to do?
+- **Is it readable?** Can someone unfamiliar with this area understand what it's doing?
+- **Are there edge cases?** What happens with empty input, large data, or unexpected values?
+- **Is it consistent?** Does it follow the patterns used elsewhere in the codebase?
+- **Are there tests?** Are the tests meaningful, or do they just cover the happy path?
+- **Is there documentation?** For public APIs or complex logic, is there enough context?
+
+You don't need to catch everything. Focus on the things that matter most.
+
+</TextContainer>
+
+<TextContainer>
+
+## Resources
+
+- [Virtual Coffee Month of Feedback Challenge](https://dev.to/virtualcoffee/monthly-challenge-cultivating-community-kindness-in-uncertain-times-7n)
+- [Google's Engineering Practices: Code Review Guide](https://google.github.io/eng-practices/review/) — thorough guide from Google's internal practices
+- [Conventional Comments](https://conventionalcomments.org/) — a lightweight format for labeling code review feedback
+
+</TextContainer>
+
+<TextContainer background="light">
+
+## Code review as a learning tool
+
+One of the fastest ways to grow as a developer is to review code you didn't write. You'll encounter patterns, approaches, and solutions you wouldn't have thought of on your own.
+
+Volunteer to review PRs in open source projects. Ask to be added as a reviewer at work. Read the code review comments on others' PRs, even when you're not involved. It all counts.
+
+</TextContainer>

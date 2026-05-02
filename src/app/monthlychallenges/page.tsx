@@ -587,7 +587,7 @@ const challengeList: Challenge[] = [
 				<p>
 					The Mid-Year Check-In challenge is designed to provide an opportunity
 					for Virtual Coffee members to reflect on their progress, reevaluate
-					goals, and gain clarity on their journey. Let’s pause, assess, and
+					goals, and gain clarity on their journey. Let's pause, assess, and
 					adjust as we reach the halfway point of the year. This challenge aims
 					to encourage personal growth, foster connection within the community,
 					and provide a supportive space for members to share their insights,
@@ -744,6 +744,7 @@ const challengeList: Challenge[] = [
 		),
 	},
 	{
+		current: true,
 		title: 'Goals Check-In',
 		subtitle: `Reflect. Reevaluate. Adjust.`,
 		description: (
@@ -752,7 +753,7 @@ const challengeList: Challenge[] = [
 					The Goals Check-In challenge provides an opportunity for Virtual
 					Coffee members to reflect on their progress, reevaluate the achievable
 					monthly goals, and gain clarity on their journey to achieve the big
-					goal they set at the beginning of the year. Let’s pause, assess, and
+					goal they set at the beginning of the year. Let's pause, assess, and
 					adjust those monthly goals if necessary. This challenge aims to
 					encourage personal growth, foster connection within the community, and
 					provide a supportive space for members to share their insights,
@@ -767,49 +768,34 @@ const challengeList: Challenge[] = [
 				</p>
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/may-2025">
-						check out the May 2025 challenge page
+					<Link href="/monthlychallenges/may-2026">
+						check out the May 2026 challenge page
 					</Link>
 					.
 				</p>
 			</>
 		),
+		links: [
+			{
+				href: '/monthlychallenges/may-2025',
+				title: 'May, 2025',
+			},
+		],
 	},
 	{
-		current: true,
 		title: 'Share Your Tradition',
 		subtitle: `Let's celebrate the diverse cultures and traditions within our community.`,
 		description: (
-			<>
-				<p>
-					This challenge is all about connection, storytelling, and celebrating
-					the customs that make <em>you, you</em>. Whether it's a winter
-					holiday, a family birthday ritual, a favorite summer meal, or a silly
-					household custom, we want to hear about it! Share photos, stories,
-					recipes, or even host a Lunch & Learn about any tradition—big or
-					small—that brings meaning or joy to your life. We spend so much time
-					focused on work and code. Let's make space to learn about the personal
-					histories and cultural experiences that enrich our community.
-				</p>
-				<p>
-					In this challenge, we encourage you to connect with one another by
-					sharing the special ways you celebrate moments throughout the year.
-				</p>
-				{/* <p>
-					Learn more about this challenge in{' '}
-					<a href="">
-						this blog post
-					</a>
-					.
-				</p> */}
-				<p>
-					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/dec-2025">
-						check out the December 2025 challenge page
-					</Link>
-					.
-				</p>
-			</>
+			<p>
+				This challenge is all about connection, storytelling, and celebrating
+				the customs that make you, you. Share photos, stories, recipes, or host
+				a Lunch &amp; Learn about any tradition that brings meaning or joy to
+				your life.{' '}
+				<Link href="/monthlychallenges/dec-2025">
+					Check out the December 2025 challenge page
+				</Link>{' '}
+				for all the details.
+			</p>
 		),
 	},
 ];
