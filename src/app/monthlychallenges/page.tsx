@@ -768,19 +768,13 @@ const challengeList: Challenge[] = [
 				</p>
 				<p>
 					To view all of the details of this year&apos;s challenge,{' '}
-					<Link href="/monthlychallenges/may-2026">
-						check out the May 2026 challenge page
+					<Link href="/monthlychallenges/may-2025">
+						check out the May 2025 challenge page
 					</Link>
 					.
 				</p>
 			</>
 		),
-		links: [
-			{
-				href: '/monthlychallenges/may-2025',
-				title: 'May, 2025',
-			},
-		],
 	},
 	{
 		title: 'Share Your Tradition',
