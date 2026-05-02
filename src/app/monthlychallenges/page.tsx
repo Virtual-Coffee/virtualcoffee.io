@@ -587,7 +587,7 @@ const challengeList: Challenge[] = [
 				<p>
 					The Mid-Year Check-In challenge is designed to provide an opportunity
 					for Virtual Coffee members to reflect on their progress, reevaluate
-					goals, and gain clarity on their journey. Let’s pause, assess, and
+					goals, and gain clarity on their journey. Let's pause, assess, and
 					adjust as we reach the halfway point of the year. This challenge aims
 					to encourage personal growth, foster connection within the community,
 					and provide a supportive space for members to share their insights,
@@ -745,7 +745,7 @@ const challengeList: Challenge[] = [
 	},
 	{
 		current: true,
-		title: ‘Goals Check-In’,
+		title: 'Goals Check-In',
 		subtitle: `Reflect. Reevaluate. Adjust.`,
 		description: (
 			<>
@@ -753,21 +753,21 @@ const challengeList: Challenge[] = [
 					The Goals Check-In challenge provides an opportunity for Virtual
 					Coffee members to reflect on their progress, reevaluate the achievable
 					monthly goals, and gain clarity on their journey to achieve the big
-					goal they set at the beginning of the year. Let’s pause, assess, and
+					goal they set at the beginning of the year. Let's pause, assess, and
 					adjust those monthly goals if necessary. This challenge aims to
 					encourage personal growth, foster connection within the community, and
 					provide a supportive space for members to share their insights,
 					challenges, and successes.
 				</p>
 				<p>
-					Learn more about this challenge in{‘ ‘}
+					Learn more about this challenge in{' '}
 					<a href="https://dev.to/virtualcoffee/goals-check-in-hows-your-progress-flowing-2a45">
 						this blog post
 					</a>
 					.
 				</p>
 				<p>
-					To view all of the details of this year&apos;s challenge,{‘ ‘}
+					To view all of the details of this year&apos;s challenge,{' '}
 					<Link href="/monthlychallenges/may-2026">
 						check out the May 2026 challenge page
 					</Link>
@@ -777,8 +777,8 @@ const challengeList: Challenge[] = [
 		),
 		links: [
 			{
-				href: ‘/monthlychallenges/may-2025’,
-				title: ‘May, 2025’,
+				href: '/monthlychallenges/may-2025',
+				title: 'May, 2025',
 			},
 		],
 	},
