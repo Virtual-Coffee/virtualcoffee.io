@@ -34,9 +34,4 @@ export const homePageLinks = [
 		title: 'VC Videos',
 		description: `Recordings of Virtual Coffee Events and Live Streams.`,
 	},
-	{
-		href: 'https://twitter.com/VirtualCoffeeIO',
-		title: 'VC Twitter',
-		description: `Stay up to date and join in the fun!`,
-	},
 ];
