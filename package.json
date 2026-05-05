@@ -16,6 +16,7 @@
 		"build": "next build",
 		"start": "next start",
 		"prebuild": "pnpm build-member-files && pnpm build-rooms",
+		"pretypecheck": "pnpm build-rooms",
 		"typecheck": "tsc --noEmit",
 		"watch": "npm-watch",
 		"dev": "pnpm build-member-files && concurrently \"pnpm watch\" \"pnpm local-dev\""

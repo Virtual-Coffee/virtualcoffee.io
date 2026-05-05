@@ -174,8 +174,6 @@ Scheduled functions (cron schedules declared inline via `export const config`):
 
 The `scripts/build-rooms.ts` prebuild step pulls co-working room records from Airtable into `data/rooms.json`, which is bundled into the Zoom function via `included_files` in `netlify.toml`.
 
-See `docs/co-working-bot-ideation.md` for an unbuilt design exploring deeper Slack Calls API integration.
-
 ## Adding content
 
 ### Resources
