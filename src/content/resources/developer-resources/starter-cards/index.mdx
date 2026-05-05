@@ -17,37 +17,46 @@ import Link from 'next/link';
 
 <LeadText>
 
-These starter cards are short, actionable guides for common developer situations. Each one gives you a starting point — not the full picture, but enough to get moving.
+These starter cards are short, actionable guides for common developer situations. Each one gives you a starting point, not the full picture, but enough to get moving.
 
 </LeadText>
 
 </TextContainer>
 
-<TextContainer>
+<div className="container py-3">
+<div className="row g-3">
 
-## Starting a new project
+<div className="col-12 col-md-6 col-lg-4">
+<div className="card h-100 shadow-sm">
+<div className="card-body">
+
+### Starting a new project
 
 Before you write a line of code:
 
 1. Define the goal in one sentence. What does this do, and for whom?
-2. Sketch the simplest version — not the full vision, the first working version.
+2. Sketch the simplest version, not the full vision, the first working version.
 3. Set up version control (Git) before you start.
 4. Create a README with the project name, what it does, and how to run it.
 5. Pick your stack and commit to it. Don't optimize before you've built anything.
 
 **When you're stuck getting started:** Write the smallest possible thing that proves the concept works. One component, one function, one endpoint. Then build from there.
 
-</TextContainer>
+</div>
+</div>
+</div>
 
-<TextContainer>
+<div className="col-12 col-md-6 col-lg-4">
+<div className="card h-100 shadow-sm">
+<div className="card-body">
 
-## Making your first open source contribution
+### Making your first open source contribution
 
 A checklist for contributing to a project for the first time:
 
 1. Read the README and CONTRIBUTING guide before doing anything else.
 2. Look for issues labeled `good first issue` or `help wanted`.
-3. Comment on the issue before starting work — ask if it's still open and if you can take it.
+3. Comment on the issue before starting work, ask if it's still open and if you can take it.
 4. Fork the repo and create a branch with a descriptive name.
 5. Make the smallest change that addresses the issue.
 6. Write a clear PR description: what you changed, why, and how to test it.
@@ -57,29 +66,37 @@ A checklist for contributing to a project for the first time:
 
 See also: <Link href="/resources/developer-resources/open-source/contributor-guide">Contributor Guide</Link>
 
-</TextContainer>
+</div>
+</div>
+</div>
 
-<TextContainer>
+<div className="col-12 col-md-6 col-lg-4">
+<div className="card h-100 shadow-sm">
+<div className="card-body">
 
-## Asking for help effectively
+### Asking for help effectively
 
 When you're stuck and need to ask for help:
 
-1. Try to solve it yourself first — spend 20–30 minutes before asking.
+1. Try to solve it yourself first, spend 20-30 minutes before asking.
 2. Describe what you're trying to do, not just what's broken.
 3. Include the relevant code, error message, and what you've already tried.
 4. Share your environment: language version, framework, OS if relevant.
-5. Ask in the right place — a specific Slack channel, a GitHub issue, Stack Overflow.
+5. Ask in the right place, a specific Slack channel, a GitHub issue, Stack Overflow.
 
 **The rubber duck test:** Explain the problem out loud to yourself (or an imaginary rubber duck) before asking. You'll solve it more often than you expect.
 
 See also: <Link href="/resources/developer-resources/developer-tips/asking-coding-questions">Asking Better Coding Questions</Link>
 
-</TextContainer>
+</div>
+</div>
+</div>
 
-<TextContainer>
+<div className="col-12 col-md-6 col-lg-4">
+<div className="card h-100 shadow-sm">
+<div className="card-body">
 
-## Setting up a new development environment
+### Setting up a new development environment
 
 When starting fresh on a machine:
 
@@ -88,15 +105,19 @@ When starting fresh on a machine:
 3. Set up Git: configure your name, email, and default branch name (`git config --global`).
 4. Add an SSH key to GitHub or GitLab.
 5. Create a `~/projects` (or similar) directory to keep your work organized.
-6. Document what you installed — your future self will thank you.
+6. Document what you installed, your future self will thank you.
 
 **Worth doing once:** Create a dotfiles repo to store your config files so setup is faster next time.
 
-</TextContainer>
+</div>
+</div>
+</div>
 
-<TextContainer>
+<div className="col-12 col-md-6 col-lg-4">
+<div className="card h-100 shadow-sm">
+<div className="card-body">
 
-## Writing a good commit message
+### Writing a good commit message
 
 A commit message should tell the story of why a change was made:
 
@@ -108,40 +129,48 @@ A commit message should tell the story of why a change was made:
 
 **Less helpful:** `stuff` or `fix` or `updates`
 
-Commit messages are for the person who reads your code six months from now — including you.
+Commit messages are for the person who reads your code six months from now, including you.
 
-</TextContainer>
+</div>
+</div>
+</div>
 
-<TextContainer>
+<div className="col-12 col-md-6 col-lg-4">
+<div className="card h-100 shadow-sm">
+<div className="card-body">
 
-## Preparing for a technical interview
+### Preparing for a technical interview
 
 A focused checklist for the week before an interview:
 
 1. Review the job description and note the specific technologies mentioned.
-2. Practice explaining your past projects out loud in 2–3 minutes each.
+2. Practice explaining your past projects out loud in 2-3 minutes each.
 3. Do a few coding problems in the format the interview uses (whiteboard, online editor, etc.).
 4. Review the fundamentals for your primary language: data structures, algorithms, common patterns.
-5. Prepare 3–4 questions to ask the interviewer.
+5. Prepare 3-4 questions to ask the interviewer.
 6. Check your setup: audio, camera, screen sharing if it's remote.
 
 **The night before:** Get enough sleep. You'll think more clearly than if you stayed up reviewing notes.
 
 See also: <Link href="/resources/developer-resources/job-hunt">Job Hunt Resources</Link>
 
-</TextContainer>
+</div>
+</div>
+</div>
 
-<TextContainer>
+<div className="col-12 col-md-6 col-lg-4">
+<div className="card h-100 shadow-sm">
+<div className="card-body">
 
-## Writing a good README
+### Writing a good README
 
 A README is the front door of your project. At minimum, include:
 
-1. **Project name and description** — what it does and why it exists
-2. **How to install and run it** — exact commands, not summaries
-3. **How to use it** — a quick example or screenshot
-4. **How to contribute** — even if it's just "open an issue"
-5. **License** — choose one and include it
+1. **Project name and description**, what it does and why it exists
+2. **How to install and run it**, exact commands, not summaries
+3. **How to use it**, a quick example or screenshot
+4. **How to contribute**, even if it's just "open an issue"
+5. **License**, choose one and include it
 
 **Optional but useful:**
 
@@ -154,11 +183,15 @@ A README that's 80% complete and accurate is better than a comprehensive one tha
 
 See also: <Link href="/resources/developer-resources/open-source/maintainer-guide">Open Source Maintainer Guide</Link>
 
-</TextContainer>
+</div>
+</div>
+</div>
 
-<TextContainer>
+<div className="col-12 col-md-6 col-lg-4">
+<div className="card h-100 shadow-sm">
+<div className="card-body">
 
-## Navigating burnout
+### Navigating burnout
 
 Signs you might be burning out:
 
@@ -169,26 +202,30 @@ Signs you might be burning out:
 
 **When you recognize it:**
 
-1. Acknowledge it rather than pushing through — burnout that goes unaddressed gets worse.
+1. Acknowledge it rather than pushing through, burnout that goes unaddressed gets worse.
 2. Reduce your load where you can. Something has to give.
 3. Protect your off-time. Not answering Slack at 10pm is okay.
 4. Do something that has nothing to do with code.
-5. Talk to someone — a friend, a therapist, a doctor. You don't have to figure it out alone.
+5. Talk to someone, a friend, a therapist, a doctor. You don't have to figure it out alone.
 
 **It's not a character flaw.** Burnout is a response to sustained stress. It happens to capable, hardworking people.
 
 See also: <Link href="/resources/developer-resources/developer-health/burnout">Burnout Resources</Link>
 
-</TextContainer>
+</div>
+</div>
+</div>
 
-<TextContainer>
+<div className="col-12 col-md-6 col-lg-4">
+<div className="card h-100 shadow-sm">
+<div className="card-body">
 
-## Giving a lightning talk
+### Giving a lightning talk
 
-A lightning talk is 5 minutes. That's about 500–700 words. You have one job: make one point well.
+A lightning talk is 5 minutes. That's about 500-700 words. You have one job: make one point well.
 
-1. **Pick one idea.** Not an overview — one thing your audience will remember.
-2. **Structure it simply:** Hook → context → the thing → takeaway.
+1. **Pick one idea.** Not an overview, one thing your audience will remember.
+2. **Structure it simply:** Hook, context, the thing, takeaway.
 3. **Create minimal slides.** One idea per slide. Large text. No walls of text.
 4. **Practice out loud** at least twice before you give it.
 5. **Don't apologize.** Not for being nervous, not for the talk being simple.
@@ -197,14 +234,21 @@ A lightning talk is 5 minutes. That's about 500–700 words. You have one job: m
 
 See also: <Link href="/resources/developer-resources/public-speaking">Public Speaking Resources</Link> and the [Virtual Coffee Lightning Talk Guide](/assets/pdfs/lightning-talk-guide.pdf)
 
-</TextContainer>
+</div>
+</div>
+</div>
+
+</div>
+</div>
 
 <TextContainer background="light">
 
 ## These are starting points
 
-Starter cards are not comprehensive guides — they're the first step. Each one links to more detailed resources where they exist.
+Starter cards are not comprehensive guides, they're the first step. Each one links to more detailed resources where they exist.
 
 If there's a situation you'd like a starter card for, bring it up in the Virtual Coffee Slack. The best resources come from the questions our community is actually asking.
+
+Want to learn more? Check out additional resources on our [YouTube channel](https://www.youtube.com/@virtualcoffeeio) and in the [Virtual Coffee Community Docs](https://github.com/Virtual-Coffee/VC-Community-Docs).
 
 </TextContainer>
