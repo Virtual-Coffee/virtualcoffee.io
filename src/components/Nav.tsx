@@ -6,9 +6,11 @@ import VirtualCoffeeFull from '@/svg/VirtualCoffeeFull';
 
 export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isResourcesOpen, setIsResourcesOpen] = useState(false);
 
 	const handleLinkClick = () => {
 		setIsOpen(false);
+		setIsResourcesOpen(false);
 	};
 
 	return (
@@ -60,13 +62,16 @@ export default function Nav() {
 							href="#"
 							id="navbarResourcesDropdown"
 							role="button"
-							data-bs-toggle="dropdown"
-							aria-expanded="false"
+							aria-expanded={isResourcesOpen ? 'true' : 'false'}
+							onClick={(e) => {
+								e.preventDefault();
+								setIsResourcesOpen(!isResourcesOpen);
+							}}
 						>
 							Resources
 						</a>
 						<ul
-							className="dropdown-menu"
+							className={`dropdown-menu${isResourcesOpen ? ' show' : ''}`}
 							aria-labelledby="navbarResourcesDropdown"
 						>
 							<li>
