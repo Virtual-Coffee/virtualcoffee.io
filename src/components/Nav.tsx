@@ -65,7 +65,10 @@ export default function Nav() {
 						>
 							Resources
 						</a>
-						<ul className="dropdown-menu" aria-labelledby="navbarResourcesDropdown">
+						<ul
+							className="dropdown-menu"
+							aria-labelledby="navbarResourcesDropdown"
+						>
 							<li>
 								<Link
 									className="dropdown-item"
