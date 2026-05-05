@@ -54,14 +54,48 @@ export default function Nav() {
 							Podcast
 						</Link>
 					</li>
-					<li className="nav-item">
-						<Link
-							className="nav-link"
-							href="/resources"
-							onClick={handleLinkClick}
+					<li className="nav-item dropdown">
+						<a
+							className="nav-link dropdown-toggle"
+							href="#"
+							id="navbarResourcesDropdown"
+							role="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
 						>
 							Resources
-						</Link>
+						</a>
+						<ul className="dropdown-menu" aria-labelledby="navbarResourcesDropdown">
+							<li>
+								<Link
+									className="dropdown-item"
+									href="/resources/virtual-coffee-handbook"
+									onClick={handleLinkClick}
+								>
+									Virtual Coffee Handbook
+								</Link>
+							</li>
+							<li>
+								<Link
+									className="dropdown-item"
+									href="/resources/developer-resources"
+									onClick={handleLinkClick}
+								>
+									Developer Resources
+								</Link>
+							</li>
+							<li>
+								<a
+									className="dropdown-item"
+									href="https://vc-community-docs.netlify.app/docs/"
+									target="_blank"
+									rel="noopener noreferrer"
+									onClick={handleLinkClick}
+								>
+									VC Community Docs
+								</a>
+							</li>
+						</ul>
 					</li>
 					<li className="nav-item">
 						<Link
