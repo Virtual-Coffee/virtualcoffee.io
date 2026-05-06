@@ -10,7 +10,7 @@ export default function TextContainer({
 	showBackToTopLink,
 }: TextContainerProps) {
 	return (
-		<div className={`bg-${background} py-5`}>
+		<div className={`bg-${background} py-3`}>
 			<div className="container prose">
 				{children}
 
