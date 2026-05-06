@@ -6,8 +6,6 @@ import PostList, {
 import { getEvents } from '@/data/events';
 import { dateForDisplay } from '@/util/date';
 import { loadMdxDirectory } from '@/util/loadMdx.server';
-import { getEpisodes } from '@/data/podcast';
-import { getNewsletters } from '@/data/newsletters';
 import { getSponsors } from '@/data/sponsors';
 import { homePageLinks } from '@/util/homePageLinks';
 
@@ -20,12 +18,10 @@ export default async function Home() {
 		includeChildren: false,
 	});
 
-	const [events, podcastEpisodes, newsletters, sponsors] = await Promise.all([
+	const [events, sponsors] = await Promise.all([
 		getEvents({
 			limit: 5,
 		}),
-		getEpisodes(),
-		getNewsletters({ limit: 5 }),
 		getSponsors(),
 	]);
 
@@ -111,44 +107,6 @@ export default async function Home() {
 							footer="See more Member Resources"
 						>
 							<PostList items={formatFileListItemsForPostList(resources)} />
-						</HomePageBlock>
-					</div>
-					<div className="homepageblocks">
-						<HomePageBlock
-							Hero="UndrawWalkInTheCity"
-							id="about"
-							title="Virtual Coffee Podcast"
-							subtitle="Conversations with members of the community"
-							linkTo="/podcast"
-							footer="See more Podcast episodes"
-						>
-							<PostList
-								items={podcastEpisodes.map(
-									({
-										title,
-										metaDescription: description,
-										url,
-									}: {
-										title: string;
-										metaDescription: string;
-										url: string;
-									}) => ({
-										title,
-										description,
-										href: url,
-									}),
-								)}
-							/>
-						</HomePageBlock>
-						<HomePageBlock
-							Hero="UndrawArrived"
-							id="newsletters"
-							title="Virtual Coffee Newsletter"
-							subtitle="Sign up for the Virtual Coffee Newsletter"
-							linkTo="/newsletter"
-							footer="See more Newsletter Issues"
-						>
-							<PostList items={newsletters} />
 						</HomePageBlock>
 					</div>
 				</div>

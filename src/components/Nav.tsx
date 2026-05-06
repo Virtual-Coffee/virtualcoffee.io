@@ -47,15 +47,6 @@ export default function Nav() {
 							Events
 						</Link>
 					</li>
-					<li className="nav-item">
-						<Link
-							className="nav-link"
-							href="/podcast"
-							onClick={handleLinkClick}
-						>
-							Podcast
-						</Link>
-					</li>
 					<li className="nav-item dropdown">
 						<a
 							className="nav-link dropdown-toggle"
@@ -73,8 +64,11 @@ export default function Nav() {
 						<ul
 							className={`dropdown-menu${isResourcesOpen ? ' show' : ''}`}
 							aria-labelledby="navbarResourcesDropdown"
+							style={{
+								backgroundColor: 'var(--bs-dark)',
+							}}
 						>
-							<li>
+							<li className="mb-2">
 								<Link
 									className="dropdown-item"
 									href="/resources/virtual-coffee-handbook"
@@ -83,13 +77,22 @@ export default function Nav() {
 									Virtual Coffee Handbook
 								</Link>
 							</li>
-							<li>
+							<li className="mb-2">
 								<Link
 									className="dropdown-item"
 									href="/resources/developer-resources"
 									onClick={handleLinkClick}
 								>
 									Developer Resources
+								</Link>
+							</li>
+							<li className="mb-2">
+								<Link
+									className="dropdown-item"
+									href="/podcast"
+									onClick={handleLinkClick}
+								>
+									Podcast (Archive)
 								</Link>
 							</li>
 							<li>
