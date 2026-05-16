@@ -8532,14 +8532,14 @@ snapshots:
 
   '@slack/logger@4.0.1':
     dependencies:
-      '@types/node': 24.12.2
+      '@types/node': 24.12.4
 
   '@slack/oauth@3.0.5':
     dependencies:
       '@slack/logger': 4.0.1
       '@slack/web-api': 7.15.2
       '@types/jsonwebtoken': 9.0.10
-      '@types/node': 24.12.2
+      '@types/node': 24.12.4
       jsonwebtoken: 9.0.2
     transitivePeerDependencies:
       - debug
@@ -8548,7 +8548,7 @@ snapshots:
     dependencies:
       '@slack/logger': 4.0.1
       '@slack/web-api': 7.15.2
-      '@types/node': 24.12.2
+      '@types/node': 24.12.4
       '@types/ws': 8.18.1
       eventemitter3: 5.0.4
       ws: 8.18.3
@@ -8563,7 +8563,7 @@ snapshots:
     dependencies:
       '@slack/logger': 4.0.1
       '@slack/types': 2.21.0
-      '@types/node': 24.12.2
+      '@types/node': 24.12.4
       '@types/retry': 0.12.0
       axios: 1.16.0
       eventemitter3: 5.0.4
@@ -8652,7 +8652,7 @@ snapshots:
   '@types/jsonwebtoken@9.0.10':
     dependencies:
       '@types/ms': 2.1.0
-      '@types/node': 24.12.2
+      '@types/node': 24.12.4
 
   '@types/leaflet.markercluster@1.5.6':
     dependencies:
@@ -8720,7 +8720,7 @@ snapshots:
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 24.12.2
+      '@types/node': 24.12.4
 
   '@types/yauzl@2.10.3':
     dependencies:
