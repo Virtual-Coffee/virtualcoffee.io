@@ -1,5 +1,5 @@
 import Airtable from 'airtable';
-import { updateMeetingStatus, updateMeetingAttendence } from './slack';
+import { updateMeetingStatus, updateMeetingAttendance } from './slack';
 import { findRoomInstance } from './airtable';
 import { requireEnv } from '../_shared/env';
 import { verifyZoomSignature, hmacSha256Hex } from '../_shared/verify';
@@ -80,7 +80,7 @@ export default async (req: Request) => {
 						// create room event record
 						console.log(`found room instance ${roomInstance.getId()}`);
 
-						await updateMeetingAttendence(
+						await updateMeetingAttendance(
 							room,
 							roomInstance.get('slack_thread_timestamp') as string,
 							request,

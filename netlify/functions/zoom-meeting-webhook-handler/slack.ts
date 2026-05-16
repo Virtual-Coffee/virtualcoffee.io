@@ -91,7 +91,7 @@ export async function updateMeetingStatus(room: Room, timestamp?: string) {
 	return slackResult;
 }
 
-export async function updateMeetingAttendence(
+export async function updateMeetingAttendance(
 	room: Room,
 	thread_ts: string,
 	zoomRequest: ZoomWebhookRequest,
