@@ -1,142 +1,60 @@
-import { GraphQLClient, gql } from 'graphql-request';
 import { unstable_cache } from 'next/cache';
 
 export const buzzsproutPodcastId = '1558601' as const;
 
-const episodeQuery = gql`
-	query getEpisode($slug: String!) {
-		entry(section: "podcast", slug: [$slug]) {
-			title
-			... on podcast_default_Entry {
-				id
-				episodeSponsors {
-					title
-					... on podcastSponsors_default_Entry {
-						sponsorUrl: urlValue
-						sponsorImage: podcastEpisodeCard {
-							path
-							width
-							height
-						}
-						sponsorDescription: podcastShowNotes {
-							renderHtml
-						}
-					}
-				}
-				metaDescription
-				podcastEpisode
-				podcastBuzzsproutId
-				podcastPublishDate
-				podcastSeason
-				podcastShortDescription {
-					renderHtml
-				}
-				podcastShowNotes {
-					renderHtml
-				}
-				podcastGuests {
-					... on podcastGuests_guest_BlockType {
-						id
-						guestName
-						guestBio {
-							renderHtml
-						}
-						headshot {
-							path
-						}
-					}
-				}
-				podcastEpisodeCard {
-					path
-				}
-			}
-		}
-	}
-`;
+// vc-data is the single source of truth for podcast data.
+// https://github.com/Virtual-Coffee/vc-data
+const VC_DATA_EPISODES_URL =
+		'https://raw.githubusercontent.com/Virtual-Coffee/vc-data/main/podcast/episodes.json';
 
-const episodesQuery = gql`
-	query getEpisodes($limit: Int!) {
-		entries(section: "podcast", limit: $limit) {
-			title
-			slug
-			... on podcast_default_Entry {
-				id
-				metaDescription
-				podcastEpisode
-				podcastSeason
-				podcastPublishDate
-				podcastBuzzsproutId
-				episodeSponsors {
-					title
-					... on podcastSponsors_default_Entry {
-						sponsorUrl: urlValue
-						sponsorImage: podcastEpisodeCard {
-							path
-							width
-							height
-						}
-						sponsorDescription: podcastShowNotes {
-							renderHtml
-						}
-					}
-				}
-			}
-		}
-	}
-`;
+const IMGIX_PREFIX = 'https://virtualcoffeeio-cms.imgix.net/podcast/';
 
-export async function getEpisodeQueryParams(request: Request) {
-	const url = new URL(request.url);
-
-	const sp = new URLSearchParams();
-	const craftPreview = url.searchParams.get('x-craft-preview');
-	if (craftPreview) {
-		sp.set('x-craft-preview', craftPreview);
-	}
-
-	const token = url.searchParams.get('token');
-	if (token) {
-		sp.set('token', token);
-	}
-
-	return sp.toString();
+/** Strip the full imgix URL down to just the filename, which is what createCmsImage expects. */
+function extractPath(fullUrl: string | null | undefined): string {
+		if (!fullUrl) return '';
+		return fullUrl.startsWith(IMGIX_PREFIX)
+			? fullUrl.slice(IMGIX_PREFIX.length)
+					: fullUrl;
 }
+
+// ---------------------------------------------------------------------------
+// Types that match the shape the rest of the app expects (unchanged from before)
+// ---------------------------------------------------------------------------
 
 export interface PodcastEpisode {
-	title: string;
-	slug: string;
-	id: string;
-	metaDescription: string;
-	podcastEpisode: number;
-	podcastSeason: number;
-	podcastPublishDate: string;
-	podcastBuzzsproutId: string;
-	podcastShortDescription: {
-		renderHtml: string;
-	};
-	podcastShowNotes: {
-		renderHtml: string;
-	};
-	podcastGuests: Array<{
-		id: number | string;
-		guestName: string;
-		guestBio: { renderHtml: string };
-		headshot: Array<{ path: string }>;
-	}>;
-	podcastEpisodeCard: Array<{ path: string }>;
-	url: string;
-	episodeSponsors: Array<{
 		title: string;
-		sponsorUrl: string;
-		sponsorImage: Array<{ path: string; width: number; height: number }>;
-		sponsorDescription: { renderHtml: string };
-	}>;
+		slug: string;
+		id: string;
+		metaDescription: string;
+		podcastEpisode: number;
+		podcastSeason: number;
+		podcastPublishDate: string;
+		podcastBuzzsproutId: string;
+		podcastShortDescription: {
+			renderHtml: string;
+		};
+		podcastShowNotes: {
+			renderHtml: string;
+		};
+		podcastGuests: Array<{
+			id: number | string;
+			guestName: string;
+			guestBio: { renderHtml: string };
+			headshot: Array<{ path: string }>;
+		}>;
+		podcastEpisodeCard: Array<{ path: string }>;
+		url: string;
+		episodeSponsors: Array<{
+			title: string;
+			sponsorUrl: string;
+			sponsorImage: Array<{ path: string; width: number; height: number }>;
+			sponsorDescription: { renderHtml: string };
+		}>;
 }
 
-// type PodcastEpisodes = Partial<PodcastEpisode>[];
 type PodcastEpisodes = Pick<
-	PodcastEpisode,
-	| 'title'
+		PodcastEpisode,
+		| 'title'
 	| 'slug'
 	| 'id'
 	| 'metaDescription'
@@ -147,156 +65,202 @@ type PodcastEpisodes = Pick<
 	| 'url'
 	| 'episodeSponsors'
 >[];
-type PodcastEpisodeResponse = {
-	entries: PodcastEpisode[];
-};
+
+// ---------------------------------------------------------------------------
+// Shape of data in vc-data/podcast/episodes.json
+// ---------------------------------------------------------------------------
+
+interface VcDataEpisode {
+		title: string;
+		slug: string;
+		id: string;
+		metaDescription: string;
+		season: number;
+		episode: number;
+		buzzsproutId: string;
+		publishDate: string;
+		shortDescription: string;
+		showNotes: string;
+		episodeCard: string;
+		guests: Array<{
+			guestName: string;
+			guestBio: string;
+			headshot: string | null;
+		}>;
+		sponsors: Array<{
+			title: string;
+			url: string;
+			logo: string | null;
+			logoWidth: number;
+			logoHeight: number;
+			description: string;
+		}>;
+}
+
+// ---------------------------------------------------------------------------
+// Mapping: vc-data shape → legacy Craft shape the app expects
+// ---------------------------------------------------------------------------
+
+function mapEpisode(e: VcDataEpisode): PodcastEpisode {
+		return {
+					title: e.title,
+					slug: e.slug,
+					id: e.id,
+					metaDescription: e.metaDescription,
+					podcastEpisode: e.episode,
+					podcastSeason: e.season,
+					podcastPublishDate: e.publishDate,
+					podcastBuzzsproutId: e.buzzsproutId,
+					podcastShortDescription: { renderHtml: e.shortDescription },
+					podcastShowNotes: { renderHtml: e.showNotes },
+					podcastEpisodeCard: e.episodeCard
+						? [{ path: extractPath(e.episodeCard) }]
+									: [],
+					podcastGuests: (e.guests || []).map((g, i) => ({
+									id: i,
+									guestName: g.guestName,
+									guestBio: { renderHtml: g.guestBio },
+									headshot: g.headshot ? [{ path: extractPath(g.headshot) }] : [],
+					})),
+					episodeSponsors: (e.sponsors || []).map((s) => ({
+									title: s.title,
+									sponsorUrl: s.url,
+									sponsorImage: s.logo
+										? [
+											{
+																			path: extractPath(s.logo),
+																			width: s.logoWidth,
+																			height: s.logoHeight,
+											},
+																]
+														: [],
+									sponsorDescription: { renderHtml: s.description },
+					})),
+					url: `/podcast/${e.slug}`,
+		};
+}
+
+// ---------------------------------------------------------------------------
+// Fetch all episodes from vc-data (cached 24 hrs)
+// ---------------------------------------------------------------------------
+
+const getAllEpisodes = unstable_cache(
+		async (): Promise<PodcastEpisode[]> => {
+					const res = await fetch(VC_DATA_EPISODES_URL, {
+									next: { revalidate: 86400 },
+					});
+					if (!res.ok) {
+									throw new Error(`Failed to fetch episodes: ${res.status}`);
+					}
+					const raw: VcDataEpisode[] = await res.json();
+					return raw.map(mapEpisode);
+		},
+		['vc-data-podcast-episodes'],
+	{ revalidate: 86400, tags: ['podcast'] },
+	);
+
+// ---------------------------------------------------------------------------
+// Public API (same signatures as before)
+// ---------------------------------------------------------------------------
 
 export const getEpisodes = unstable_cache(
-	async ({ limit = 5 }: { limit?: number } = {}): Promise<PodcastEpisodes> => {
-		if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
-			const fakeData = await import('./mocks/podcast.server');
-			return fakeData.getEpisodes({ limit }).map((entry) => ({
-				...entry,
-				url: `/podcast/${entry.slug}`,
-			}));
-		}
-
-		const graphQLClient = new GraphQLClient(`${process.env.CMS_URL}/api`, {
-			headers: {
-				Authorization: `bearer ${process.env.CMS_TOKEN}`,
-			},
-		});
-
-		try {
-			const episodesResponse =
-				await graphQLClient.request<PodcastEpisodeResponse>(episodesQuery, {
-					limit,
-				});
-			return episodesResponse.entries.map((entry) => ({
-				...entry,
-				url: `/podcast/${entry.slug}`,
-			}));
-		} catch (e) {
-			console.error(e);
-			return [];
-		}
-	},
-	[],
+		async ({ limit = 5 }: { limit?: number } = {}): Promise<PodcastEpisodes> => {
+					const episodes = await getAllEpisodes();
+					return episodes.slice(0, limit);
+		},
+		[],
 	{ revalidate: 86400, tags: ['podcast'] },
-);
+	);
 
 export const getEpisode = unstable_cache(
-	async ({
-		slug,
-		queryParams = '',
-	}: {
-		slug: PodcastEpisode['slug'];
-		queryParams?: string;
-	}): Promise<PodcastEpisode | null> => {
-		if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
-			const fakeData = await import('./mocks/podcast.server');
-			const episode = fakeData.getEpisode({ slug });
-			return {
-				...episode,
-				url: `/podcast/${episode.slug}`,
-			};
-		}
-
-		const graphQLClient = new GraphQLClient(
-			`${process.env.CMS_URL}/api?${queryParams || ''}`,
-			{
-				headers: {
-					Authorization: `bearer ${process.env.CMS_TOKEN}`,
-				},
-			},
-		);
-
-		try {
-			console.log('requesting');
-			const episodesResponse = await graphQLClient.request<{
-				entry: PodcastEpisode;
-			}>(episodeQuery, {
-				slug,
-			});
-			console.log('finished:');
-
-			// return response.slice(0, 10);
-			if (!episodesResponse.entry) {
-				throw new Error('No episode found');
-			}
-
-			return {
-				...episodesResponse.entry,
-				url: `/podcast/${episodesResponse.entry.slug}`,
-			};
-		} catch (e) {
-			console.error(e);
-			return null;
-		}
-	},
-	[],
+		async ({
+					slug,
+		}: {
+					slug: PodcastEpisode['slug'];
+					queryParams?: string;
+		}): Promise<PodcastEpisode | null> => {
+					const episodes = await getAllEpisodes();
+					return episodes.find((e) => e.slug === slug) ?? null;
+		},
+		[],
 	{ revalidate: 86400, tags: ['podcast'] },
-);
+	);
+
+// ---------------------------------------------------------------------------
+// Transcript — unchanged, reads from feeds.virtualcoffee.io
+// ---------------------------------------------------------------------------
 
 type TranscriptSegment = {
-	speaker: string;
-	startTime: number;
-	endTime: number;
-	body: string;
+		speaker: string;
+		startTime: number;
+		endTime: number;
+		body: string;
 };
 type TranscriptItem = {
-	name: string;
-	text: string;
-	timestamp: string;
+		name: string;
+		text: string;
+		timestamp: string;
 };
 type Transcript = Array<TranscriptItem>;
 
 export const getTranscript = unstable_cache(
-	async ({ id }: Partial<PodcastEpisode>): Promise<Transcript | null> => {
-		try {
-			const response: { segments: TranscriptSegment[] } = await fetch(
-				`https://feeds.virtualcoffee.io/podcast-assets/${id}/transcript.json`,
-			).then((res) => res.json());
+		async ({ id }: Partial<PodcastEpisode>): Promise<Transcript | null> => {
+					try {
+									const response: { segments: TranscriptSegment[] } = await fetch(
+														`https://feeds.virtualcoffee.io/podcast-assets/${id}/transcript.json`,
+													).then((res) => res.json());
 
-			if (response && response.segments) {
-				return response.segments.reduce(
-					(arr: Transcript, segment: TranscriptSegment) => {
-						if (arr.length && arr[arr.length - 1].name === segment.speaker) {
-							const cur: TranscriptItem | undefined = arr.pop();
-							if (typeof cur === 'undefined') return [...arr];
-							return [
-								...arr,
-								{
-									...cur,
-									text: cur.text + ' ' + segment.body,
-								},
-							];
-						} else {
-							const date = new Date(0);
-							date.setSeconds(segment.startTime);
+						if (response && response.segments) {
+											return response.segments.reduce(
+																	(arr: Transcript, segment: TranscriptSegment) => {
+																								if (
+																																arr.length &&
+																																arr[arr.length - 1].name === segment.speaker
+																															) {
+																																const cur: TranscriptItem | undefined = arr.pop();
+																																if (typeof cur === 'undefined') return [...arr];
+																																return [
+																																									...arr,
+																																	{
+																																											...cur,
+																																											text: cur.text + ' ' + segment.body,
+																																	},
+																																								];
+																								} else {
+																																const date = new Date(0);
+																																date.setSeconds(segment.startTime);
 
-							return [
-								...arr,
-								{
-									name: segment.speaker,
-									text: segment.body,
-									timestamp: date.toISOString().substr(14, 5),
-								},
-							];
+																									return [
+																																		...arr,
+																										{
+																																				name: segment.speaker,
+																																				text: segment.body,
+																																				timestamp: date.toISOString().substr(14, 5),
+																										},
+																																	];
+																								}
+																	},
+																	[],
+																);
 						}
-					},
-					[],
-				);
-			}
 
-			console.log('no response.segments');
+						console.log('no response.segments');
 
-			return null;
-		} catch (error) {
-			console.error(`Error loading transcript ${id}`, error);
-			return null;
-		}
-	},
-	[],
+						return null;
+					} catch (error) {
+									console.error(`Error loading transcript ${id}`, error);
+									return null;
+					}
+		},
+		[],
 	{ revalidate: 86400, tags: ['podcast'] },
-);
+	);
+
+// ---------------------------------------------------------------------------
+// Kept for backwards compatibility — no longer needed with vc-data
+// but removing it would be a breaking change if anything imports it.
+// ---------------------------------------------------------------------------
+
+export async function getEpisodeQueryParams(_request: Request) {
+		return '';
+}
