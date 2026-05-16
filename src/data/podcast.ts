@@ -143,7 +143,7 @@ function mapEpisode(e: VcDataEpisode): PodcastEpisode {
 
 // Map all episodes once at module load (bundled JSON, no async needed)
 const allMappedEpisodes: PodcastEpisode[] = (
-	rawEpisodes as VcDataEpisode[]
+	rawEpisodes as unknown as VcDataEpisode[]
 ).map(mapEpisode);
 
 // ---------------------------------------------------------------------------
