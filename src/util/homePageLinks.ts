@@ -20,11 +20,6 @@ export const homePageLinks = [
 		description: `Meet our amazing members!`,
 	},
 	{
-		href: '/monthlychallenges',
-		title: 'Monthly Challenges',
-		description: `Every month, we create a challenge for our Virtual Coffee members to complete together`,
-	},
-	{
 		href: 'https://github.com/Virtual-Coffee',
 		title: 'VC GitHub',
 		description: `Join our Open Source efforts!`,
@@ -33,10 +28,5 @@ export const homePageLinks = [
 		href: 'https://youtube.com/c/virtualcoffeeio',
 		title: 'VC Videos',
 		description: `Recordings of Virtual Coffee Events and Live Streams.`,
-	},
-	{
-		href: 'https://twitter.com/VirtualCoffeeIO',
-		title: 'VC Twitter',
-		description: `Stay up to date and join in the fun!`,
 	},
 ];

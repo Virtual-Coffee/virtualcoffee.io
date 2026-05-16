@@ -6,9 +6,11 @@ import VirtualCoffeeFull from '@/svg/VirtualCoffeeFull';
 
 export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isResourcesOpen, setIsResourcesOpen] = useState(false);
 
 	const handleLinkClick = () => {
 		setIsOpen(false);
+		setIsResourcesOpen(false);
 	};
 
 	return (
@@ -45,23 +47,66 @@ export default function Nav() {
 							Events
 						</Link>
 					</li>
-					<li className="nav-item">
-						<Link
-							className="nav-link"
-							href="/podcast"
-							onClick={handleLinkClick}
-						>
-							Podcast
-						</Link>
-					</li>
-					<li className="nav-item">
-						<Link
-							className="nav-link"
-							href="/resources"
-							onClick={handleLinkClick}
+					<li className="nav-item dropdown">
+						<a
+							className="nav-link dropdown-toggle"
+							href="#"
+							id="navbarResourcesDropdown"
+							role="button"
+							aria-expanded={isResourcesOpen ? 'true' : 'false'}
+							onClick={(e) => {
+								e.preventDefault();
+								setIsResourcesOpen(!isResourcesOpen);
+							}}
 						>
 							Resources
-						</Link>
+						</a>
+						<ul
+							className={`dropdown-menu${isResourcesOpen ? ' show' : ''}`}
+							aria-labelledby="navbarResourcesDropdown"
+							style={{
+								backgroundColor: 'var(--bs-dark)',
+							}}
+						>
+							<li className="mb-2">
+								<Link
+									className="dropdown-item"
+									href="/resources/virtual-coffee-handbook"
+									onClick={handleLinkClick}
+								>
+									Virtual Coffee Handbook
+								</Link>
+							</li>
+							<li className="mb-2">
+								<Link
+									className="dropdown-item"
+									href="/resources/developer-resources"
+									onClick={handleLinkClick}
+								>
+									Developer Resources
+								</Link>
+							</li>
+							<li className="mb-2">
+								<Link
+									className="dropdown-item"
+									href="/podcast"
+									onClick={handleLinkClick}
+								>
+									Podcast (Archive)
+								</Link>
+							</li>
+							<li>
+								<a
+									className="dropdown-item"
+									href="https://vc-community-docs.netlify.app/docs/"
+									target="_blank"
+									rel="noopener noreferrer"
+									onClick={handleLinkClick}
+								>
+									VC Community Docs
+								</a>
+							</li>
+						</ul>
 					</li>
 					<li className="nav-item">
 						<Link
