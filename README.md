@@ -155,6 +155,25 @@ All of the data points have mock data that is used if the required API key isn't
 
 If you'd like to work on a feature that requires an API key, please reach out to a maintainer and we can probably get that going.
 
+## Webhooks
+
+Netlify Functions in `netlify/functions/` handle webhook events for the Slack and Zoom integrations, plus scheduled event reminders. Shared utilities and types live in `netlify/functions/_shared/`.
+
+HTTP endpoints (rewrites configured in `netlify.toml`):
+
+- **`/slack-events`** — Slack Events API. Currently handles `team_join` (welcome message) and `app_home_opened` (publishes the welcome view to a member's App Home).
+- **`/slack-interactivity`** — Slack interactivity URL. Shares the same handler as `/slack-events`; required to keep buttons in Slack messages working.
+- **`/zoom-meeting-webhook-handler`** — Zoom meeting webhooks. Tracks `meeting.{started,ended,participant_joined,participant_left}` for the co-working room and posts/updates Slack messages and Airtable records.
+- **`/join-coffee`** and **`/join-slack`** — short-link redirects to the Tuesday/Thursday Zoom rooms and the Slack invite link.
+
+Scheduled functions (cron schedules declared inline via `export const config`):
+
+- **`event-reminders-daily`** — `0 12 * * *` (12pm UTC daily). Posts that day's events to the announcements channel; skips Mondays since the weekly reminder runs that day.
+- **`event-reminders-hourly`** — `50 * * * *` (50 minutes past every hour). Posts upcoming events starting in the next hour.
+- **`event-reminders-weekly`** — `0 12 * * 1` (Monday 12pm UTC). Posts the week's events.
+
+The `scripts/build-rooms.ts` prebuild step pulls co-working room records from Airtable into `data/rooms.json`, which is bundled into the Zoom function via `included_files` in `netlify.toml`.
+
 ## Adding content
 
 ### Resources
