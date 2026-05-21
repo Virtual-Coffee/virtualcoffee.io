@@ -12,7 +12,9 @@ export default async (req: Request) => {
 	console.log(`Joining ${day}: ${code}`);
 
 	const target =
-		day === 'tuesday' ? requireEnv('ZOOM_TUESDAYS') : requireEnv('ZOOM_THURSDAYS');
+		day === 'tuesday'
+			? requireEnv('ZOOM_TUESDAYS')
+			: requireEnv('ZOOM_THURSDAYS');
 
 	return Response.redirect(target, 302);
 };
