@@ -22,10 +22,10 @@ export default function Nav() {
 			}
 		};
 
-		document.addEventListener("mousedown", handleClickOutside);
+		document.addEventListener('mousedown', handleClickOutside);
 
 		return () => {
-			document.removeEventListener("mousedown", handleClickOutside);
+			document.removeEventListener('mousedown', handleClickOutside);
 		};
 	}, []);
 
@@ -47,8 +47,9 @@ export default function Nav() {
 				<span className="navbar-toggler-icon"></span>
 			</button>
 			<div
-				className={`collapse navbar-collapse justify-content-end mt-2 mt-lg-0${isOpen ? ' show' : ''
-					}`}
+				className={`collapse navbar-collapse justify-content-end mt-2 mt-lg-0${
+					isOpen ? ' show' : ''
+				}`}
 				id="navbarNav"
 			>
 				<ul className="navbar-nav">
