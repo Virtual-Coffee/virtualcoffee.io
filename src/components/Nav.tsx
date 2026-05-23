@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import VirtualCoffeeFull from '@/svg/VirtualCoffeeFull';
 
@@ -8,10 +8,26 @@ export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isResourcesOpen, setIsResourcesOpen] = useState(false);
 
+	const dropdownRef = useRef(null);
+
 	const handleLinkClick = () => {
 		setIsOpen(false);
 		setIsResourcesOpen(false);
 	};
+
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+				setIsResourcesOpen(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark fixed-top w-100">
@@ -31,9 +47,8 @@ export default function Nav() {
 				<span className="navbar-toggler-icon"></span>
 			</button>
 			<div
-				className={`collapse navbar-collapse justify-content-end mt-2 mt-lg-0${
-					isOpen ? ' show' : ''
-				}`}
+				className={`collapse navbar-collapse justify-content-end mt-2 mt-lg-0${isOpen ? ' show' : ''
+					}`}
 				id="navbarNav"
 			>
 				<ul className="navbar-nav">
@@ -47,7 +62,7 @@ export default function Nav() {
 							Events
 						</Link>
 					</li>
-					<li className="nav-item dropdown">
+					<li className="nav-item dropdown" ref={dropdownRef}>
 						<a
 							className="nav-link dropdown-toggle"
 							href="#"
