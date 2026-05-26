@@ -8,7 +8,7 @@ export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isResourcesOpen, setIsResourcesOpen] = useState(false);
 
-	const dropdownRef = useRef(null);
+	const dropdownRef = useRef<HTMLLIElement>(null);
 
 	const handleLinkClick = () => {
 		setIsOpen(false);
