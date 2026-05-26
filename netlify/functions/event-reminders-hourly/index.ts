@@ -197,77 +197,74 @@ export default async (req: Request) => {
 								emoji: true,
 							},
 						},
-						...filteredList.reduce<Record<string, unknown>[]>(
-							(list, event) => {
-								const eventDate = DateTime.fromISO(event.startDateLocalized);
+						...filteredList.reduce<Record<string, unknown>[]>((list, event) => {
+							const eventDate = DateTime.fromISO(event.startDateLocalized);
 
-								const titleBlock: Record<string, unknown> = {
+							const titleBlock: Record<string, unknown> = {
+								type: 'section',
+								text: {
+									type: 'mrkdwn',
+									text: `*${
+										event.title
+									}*\n<!date^${eventDate.toSeconds()}^{date_long_pretty} {time}|${eventDate.toFormat(
+										'EEEE, fff',
+									)}>`,
+								},
+							};
+
+							if (
+								event.eventJoinLink &&
+								event.eventJoinLink.substring(0, 4) === 'http'
+							) {
+								titleBlock.accessory = {
+									type: 'button',
+									text: {
+										type: 'plain_text',
+										text: 'Join Event',
+										emoji: true,
+									},
+									value: `join_event_${event.id}`,
+									url: event.eventJoinLink,
+									action_id: 'button-join-event',
+								};
+							}
+
+							return [
+								...list,
+								titleBlock,
+								{
 									type: 'section',
 									text: {
 										type: 'mrkdwn',
-										text: `*${
-											event.title
-										}*\n<!date^${eventDate.toSeconds()}^{date_long_pretty} {time}|${eventDate.toFormat(
-											'EEEE, fff',
-										)}>`,
+										text: `*Location:* ${event.eventJoinLink}`,
 									},
-								};
-
-								if (
-									event.eventJoinLink &&
-									event.eventJoinLink.substring(0, 4) === 'http'
-								) {
-									titleBlock.accessory = {
-										type: 'button',
-										text: {
-											type: 'plain_text',
-											text: 'Join Event',
-											emoji: true,
-										},
-										value: `join_event_${event.id}`,
-										url: event.eventJoinLink,
-										action_id: 'button-join-event',
-									};
-								}
-
-								return [
-									...list,
-									titleBlock,
-									{
-										type: 'section',
-										text: {
-											type: 'mrkdwn',
-											text: `*Location:* ${event.eventJoinLink}`,
-										},
-									},
-									...(event.eventZoomHostCode
-										? [
-												{
-													type: 'section',
-													text: {
-														type: 'mrkdwn',
-														text: `*Host Code:* ${event.eventZoomHostCode}`,
-													},
+								},
+								...(event.eventZoomHostCode
+									? [
+											{
+												type: 'section',
+												text: {
+													type: 'mrkdwn',
+													text: `*Host Code:* ${event.eventZoomHostCode}`,
 												},
-											]
-										: []),
-									{
-										type: 'section',
-										text: {
-											type: 'mrkdwn',
-											text: `*Announcement posted to:* <#${
-												event.eventSlackAnnouncementsChannelId ||
-												DEFAULT_SLACK_EVENT_CHANNEL
-											}>`,
-										},
+											},
+										]
+									: []),
+								{
+									type: 'section',
+									text: {
+										type: 'mrkdwn',
+										text: `*Announcement posted to:* <#${
+											event.eventSlackAnnouncementsChannelId ||
+											DEFAULT_SLACK_EVENT_CHANNEL
+										}>`,
 									},
-									{
-										type: 'divider',
-									},
-								];
-							},
-							[],
-						),
+								},
+								{
+									type: 'divider',
+								},
+							];
+						}, []),
 					],
 				};
 

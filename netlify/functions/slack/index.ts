@@ -48,7 +48,11 @@ class NetlifyReceiver implements Receiver {
 			});
 		}
 
-		const isValid = verifySlackRequest(rawBody, req.headers, this.signingSecret);
+		const isValid = verifySlackRequest(
+			rawBody,
+			req.headers,
+			this.signingSecret,
+		);
 		if (!isValid.valid) {
 			console.log('Failed validation:', isValid.reason);
 			return new Response(isValid.reason, { status: 401 });

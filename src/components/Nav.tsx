@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import VirtualCoffeeFull from '@/svg/VirtualCoffeeFull';
 
@@ -8,10 +8,29 @@ export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isResourcesOpen, setIsResourcesOpen] = useState(false);
 
+	const dropdownRef = useRef<HTMLLIElement>(null);
+
 	const handleLinkClick = () => {
 		setIsOpen(false);
 		setIsResourcesOpen(false);
 	};
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target as Node)
+			) {
+				setIsResourcesOpen(false);
+			}
+		};
+
+		document.addEventListener('click', handleClickOutside);
+
+		return () => {
+			document.removeEventListener('click', handleClickOutside);
+		};
+	}, []);
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark fixed-top w-100">
@@ -47,7 +66,7 @@ export default function Nav() {
 							Events
 						</Link>
 					</li>
-					<li className="nav-item dropdown">
+					<li className="nav-item dropdown" ref={dropdownRef}>
 						<a
 							className="nav-link dropdown-toggle"
 							href="#"
@@ -64,9 +83,6 @@ export default function Nav() {
 						<ul
 							className={`dropdown-menu${isResourcesOpen ? ' show' : ''}`}
 							aria-labelledby="navbarResourcesDropdown"
-							style={{
-								backgroundColor: 'var(--bs-dark)',
-							}}
 						>
 							<li className="mb-2">
 								<Link
