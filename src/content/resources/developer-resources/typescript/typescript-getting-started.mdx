@@ -1,0 +1,331 @@
+---
+meta:
+  title: Getting Started with TypeScript
+  description: A beginner-friendly, comprehensive guide to learning TypeScript from basics to intermediate concepts.
+hero:
+  Hero: UndrawOnlineArticles
+tags:
+  - memberresources
+order: 1
+---
+
+import TextContainer from '@/components/content/TextContainer';
+import LeadText from '@/components/content/LeadText';
+
+<TextContainer background="light" showBackToTopLink={false}>
+<LeadText>
+
+Welcome to the **Getting Started with TypeScript** guide!
+
+This resource is a beginner-friendly guide designed for developers of all levels who want to learn TypeScript basics from scratch. We'll cover everything from setup instructions for your local environment to gradually building up to using types, interfaces, and generics. By the end of this guide, you'll be confident writing type-safe JavaScript applications, including looking at examples from the Virtual Coffee codebase to see these concepts in practice.
+
+</LeadText>
+</TextContainer>
+
+<TextContainer>
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Installation and Setup](#installation-and-setup)
+3. [Basic Types](#basic-types)
+4. [Interfaces](#interfaces)
+5. [Generics](#generics)
+6. [Examples from Virtual Coffee Code Patterns](#examples-from-virtual-coffee-code-patterns)
+7. [Resources](#resources)
+
+</TextContainer>
+
+<TextContainer background="light">
+
+## Introduction
+
+TypeScript is a **superset of JavaScript** that adds **static types**. It helps catch errors early, improves code readability, and makes large codebases easier to maintain.  
+Even if you're new to JavaScript, TypeScript is beginner-friendly and gradually introduces type annotations without forcing drastic changes.
+
+</TextContainer>
+
+<TextContainer>
+
+## Installation and Setup
+
+You can install TypeScript globally or locally in a project.
+
+**Global installation:**
+
+```bash
+npm install -g typescript
+```
+
+**Local installation(recommended):**
+
+```bash
+npm install --save-dev typescript
+```
+
+<br />
+**Initialize a TypeScript project with:**
+
+```bash
+tsc --init
+```
+
+**Optional:** If you’re using Node.js directly, you can install `ts-node` to run TypeScript files without precompiling:
+
+```bash
+npm install -g ts-node
+ts-node yourfile_name.ts
+```
+
+</TextContainer>
+
+<TextContainer>
+## Basic Types
+
+**TypeScript introduces static typing for variables and function parameters.**  
+TypeScript's type system helps us catch errors before running our code. Types can be explicit or inferred by TypeScript.
+
+**Concept Explanation**
+
+- Types are annotations that tell TypeScript what kind of data a variable can hold
+- TypeScript can infer types automatically in many cases
+- Types help catch errors during development
+
+### Basic Examples
+
+```ts
+let username: string = 'Roman';
+let age: number = 22;
+let isDeveloper: boolean = true;
+let anything: any = 'can be anything'; // flexible but avoid overuse
+let unknownValue: unknown = 'something unknown';
+```
+
+<br />
+**Functions with typed parameters and return types:**
+
+```ts
+function greet(name: string): string {
+	return `Hello, ${name}!`;
+}
+```
+
+<br />
+**Arrays and Tuples:**
+
+```ts
+let numbers: number[] = [1, 2, 3];
+let user: [string, number] = ['Roman', 22]; // tuple
+```
+
+<br />
+**Union Types:** ```ts let id: string | number; id = "abc123"; id = 456; ```
+
+<br />
+**Enums:**
+```ts
+enum Role {
+	Admin,
+	Member,
+	Guest,
+}
+let myRole: Role = Role.Member;
+```
+### Virtual Coffee Example
+```ts
+**// From src/util/loadMdx.server.ts **
+
+type DirectoryConfig = {
+baseDirectory: string;
+includeChildren?: boolean;
+};
+
+**// From src/util/cmsimage.ts - Basic type definition **
+type CreateCmsImageProps = {
+path: string;
+folder: string;
+settings?: Record<string, unknown>;
+};
+
+````
+</TextContainer>
+
+<TextContainer>
+## Interfaces
+
+**Interfaces define the shape of objects and ensure consistent structures:**
+Interfaces are powerful tools for defining contracts in your code and object shapes.
+
+**Concept Explanation**
+- Interfaces define the structure of objects
+- They can be extended to create more specific types
+- They support optional and readonly properties
+- Interfaces can describe function types and class structures
+
+### Basic Examples
+```ts
+interface User {
+	name: string;
+	age: number;
+	isDeveloper?: boolean; // optional
+}
+
+const roman: User = {
+	name: 'Roman',
+	age: 25,
+};
+````
+
+<br />
+**Extending Interfaces:**
+
+```ts
+interface Employee extends User {
+	department: string;
+}
+
+const alice: Employee = {
+	name: 'Alice',
+	age: 30,
+	department: 'Engineering',
+};
+```
+
+<br />
+**Interfaces are also useful for typing React props:**
+
+```ts
+interface ButtonProps {
+  label: string;
+  onClick: () => void;
+}
+
+function Button({ label, onClick }: ButtonProps) {
+  return <button onClick={onClick}>{label}</button>;
+}
+```
+
+### Virtual Coffee Example
+
+```ts
+**// From src/util/loadMdx.server.ts **
+
+interface MdxFile {
+  slug: string;
+  isIndex: boolean;
+  order?: number;
+  meta: {
+    title: string;
+    description: string;
+  };
+  hero?: {
+    Hero?: UndrawIllustrationName;
+    heroHeader?: string;
+    heroSubheader?: string;
+  };
+  tags?: string[];
+  children?: MdxFile[];
+}
+```
+
+</TextContainer>
+
+<TextContainer>
+## Generics
+Generics allow you to write flexible, reusable code that works with different types while maintaining type safety.
+
+**Concept Explanation**
+
+- Generics create reusable components that work with any type
+- They preserve type information throughout the code
+- Commonly used in functions, interfaces, and classes
+- Help avoid code duplication while maintaining type safety
+
+### Basic Examples
+
+```ts
+function identity<T>(arg: T): T {
+	return arg;
+}
+
+const result = identity<number>(42);
+const text = identity<string>('Hello TypeScript');
+```
+
+<br />
+**Generic Interfaces:**
+
+```ts
+interface ApiResponse<T> {
+	data: T;
+	error?: string;
+}
+
+const response: ApiResponse<User> = {
+	data: { name: 'Roman', age: 25 },
+};
+```
+
+`Generics are essential for building flexible, scalable code.`
+
+### Virtual Coffee Example
+
+**Type Predicate with Generics**
+
+```ts
+// From src/util/loadMdx.server.ts - Type predicate example
+
+const allRoutes: MdxFile[] = [...entries, ...directories].filter(
+	(route): route is MdxFile => route !== null,
+);
+```
+
+**Generic Type with Sorting**
+
+```ts
+// From src/util/loadMdx.server.ts - Sort function using type constraints
+
+return allRoutes.sort((a, b) => {
+	return 'order' in a && 'order' in b && a.order && b.order
+		? a.order - b.order
+		: 0;
+});
+```
+
+**Type Assertion with Generics**
+
+```ts
+// From src/util/loadMdx.server.ts - Type assertion example
+
+const attributes = contents.attributes as Omit<MdxFile, 'slug' | 'requirePath'>;
+```
+
+These examples demonstrate how Virtual Coffee uses TypeScript's generic features:
+
+- Type predicates for type-safe filtering
+- Generic constraints with optional properties
+- Type assertions with utility types
+- Complex type relationships in a production environment
+
+</TextContainer>
+
+<TextContainer>
+
+## Resources
+
+- [TypeScript Official Documentation](https://www.typescriptlang.org/docs/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+
+</TextContainer>
+
+<TextContainer background="light">
+
+## Appreciation
+
+<LeadText>
+
+Thank you to **[Roman Shrestha](https://github.com/Technozamazing)** for writing this resource!
+
+</LeadText>
+
+</TextContainer>
