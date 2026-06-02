@@ -41,7 +41,7 @@ export default async function Home() {
 			</div>
 
 			<div className="container pt-3 pb-5">
-				<div className="bodycopy lead text-center">
+				<div className="bodycopy lead">
 					<p>
 						Virtual Coffee is a tech community where friendships are formed and
 						support is given to people at all stages of their journey. Join our
