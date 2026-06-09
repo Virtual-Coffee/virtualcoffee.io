@@ -6,22 +6,32 @@ import VirtualCoffeeFull from '@/svg/VirtualCoffeeFull';
 
 export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isCommunityOpen, setIsCommunityOpen] = useState(false);
 	const [isResourcesOpen, setIsResourcesOpen] = useState(false);
 
-	const dropdownRef = useRef<HTMLLIElement>(null);
+	const dropdownRefResource = useRef<HTMLLIElement>(null);
+	const dropdownRefCommunity = useRef<HTMLLIElement>(null);
 
 	const handleLinkClick = () => {
 		setIsOpen(false);
+		setIsCommunityOpen(false);
 		setIsResourcesOpen(false);
 	};
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (
-				dropdownRef.current &&
-				!dropdownRef.current.contains(event.target as Node)
+				dropdownRefResource.current &&
+				!dropdownRefResource.current.contains(event.target as Node)
 			) {
 				setIsResourcesOpen(false);
+			}
+
+			if (
+				dropdownRefCommunity.current &&
+				!dropdownRefCommunity.current.contains(event.target as Node)
+			) {
+				setIsCommunityOpen(false);
 			}
 		};
 
@@ -64,7 +74,7 @@ export default function Nav() {
 
 
 					{/* Community Dropdown */}
-					<li className="nav-item dropdown" ref={dropdownRef}>
+					<li className="nav-item dropdown" ref={dropdownRefCommunity}>
 						<a
 							className="nav-link dropdown-toggle"
 							href="#"
@@ -73,12 +83,12 @@ export default function Nav() {
 							aria-expanded={isCommunityOpen ? 'true' : 'false'}
 							onClick={(e) => {
 								e.preventDefault();
-								setIsResourcesOpen(!isCommunityOpen);
+								setIsCommunityOpen(!isCommunityOpen);
 							}}
 						>
 							Community
 						</a>
-						<ul className={`dropdown-menu${isResourcesOpen ? ' show' : ''}`} aria-labelledby="navbarResourcesDropdown">
+						<ul className={`dropdown-menu${isCommunityOpen ? ' show' : ''}`} aria-labelledby="navbarCommunityDropdown">
 
 							<li className="mb-2">
 								<Link
@@ -114,7 +124,7 @@ export default function Nav() {
 
 
 					{/* Resource Dropdown */}
-					<li className="nav-item dropdown" ref={dropdownRef}>
+					<li className="nav-item dropdown" ref={dropdownRefResource}>
 						<a
 							className="nav-link dropdown-toggle"
 							href="#"
