@@ -57,15 +57,63 @@ export default function Nav() {
 			>
 				<ul className="navbar-nav">
 					<li className="nav-item">
-						<Link className="nav-link" href="/about" onClick={handleLinkClick}>
-							About
-						</Link>
-					</li>
-					<li className="nav-item">
 						<Link className="nav-link" href="/events" onClick={handleLinkClick}>
 							Events
 						</Link>
 					</li>
+
+
+					{/* Community Dropdown */}
+					<li className="nav-item dropdown" ref={dropdownRef}>
+						<a
+							className="nav-link dropdown-toggle"
+							href="#"
+							id="navbarCommunityDropdown"
+							role="button"
+							aria-expanded={isCommunityOpen ? 'true' : 'false'}
+							onClick={(e) => {
+								e.preventDefault();
+								setIsResourcesOpen(!isCommunityOpen);
+							}}
+						>
+							Community
+						</a>
+						<ul className={`dropdown-menu${isResourcesOpen ? ' show' : ''}`} aria-labelledby="navbarResourcesDropdown">
+
+							<li className="mb-2">
+								<Link
+									className="dropdown-item"
+									href="/about"
+									onClick={handleLinkClick}
+								>
+									About
+								</Link>
+							</li>
+
+							<li className="mb-2">
+								<Link
+									className="dropdown-item"
+									href="/resources/virtual-coffee-handbook"
+									onClick={handleLinkClick}
+								>
+									Virtual Coffee Community Handbook
+								</Link>
+							</li>
+
+							<li className="mb-2">
+								<Link
+									className="dropdown-item"
+									href="/members"
+									onClick={handleLinkClick}
+								>
+									Members
+								</Link>
+							</li>
+						</ul>
+					</li>
+
+
+					{/* Resource Dropdown */}
 					<li className="nav-item dropdown" ref={dropdownRef}>
 						<a
 							className="nav-link dropdown-toggle"
@@ -84,15 +132,6 @@ export default function Nav() {
 							className={`dropdown-menu${isResourcesOpen ? ' show' : ''}`}
 							aria-labelledby="navbarResourcesDropdown"
 						>
-							<li className="mb-2">
-								<Link
-									className="dropdown-item"
-									href="/resources/virtual-coffee-handbook"
-									onClick={handleLinkClick}
-								>
-									Virtual Coffee Handbook
-								</Link>
-							</li>
 							<li className="mb-2">
 								<Link
 									className="dropdown-item"
