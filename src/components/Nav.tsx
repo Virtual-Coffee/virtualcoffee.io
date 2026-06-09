@@ -72,7 +72,6 @@ export default function Nav() {
 						</Link>
 					</li>
 
-
 					{/* Community Dropdown */}
 					<li className="nav-item dropdown" ref={dropdownRefCommunity}>
 						<a
@@ -88,8 +87,10 @@ export default function Nav() {
 						>
 							Community
 						</a>
-						<ul className={`dropdown-menu${isCommunityOpen ? ' show' : ''}`} aria-labelledby="navbarCommunityDropdown">
-
+						<ul
+							className={`dropdown-menu${isCommunityOpen ? ' show' : ''}`}
+							aria-labelledby="navbarCommunityDropdown"
+						>
 							<li className="mb-2">
 								<Link
 									className="dropdown-item"
@@ -121,7 +122,6 @@ export default function Nav() {
 							</li>
 						</ul>
 					</li>
-
 
 					{/* Resource Dropdown */}
 					<li className="nav-item dropdown" ref={dropdownRefResource}>
