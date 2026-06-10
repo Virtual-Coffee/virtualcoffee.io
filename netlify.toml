@@ -209,6 +209,12 @@
   status = 200
 
 [[redirects]]
+  from = "/bots/*"
+  to = "https://vc-bots.lucky-art-2f02.workers.dev/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/plausible/js/script.js"
   to = "https://plausible.io/js/script.js"
   status = 200
