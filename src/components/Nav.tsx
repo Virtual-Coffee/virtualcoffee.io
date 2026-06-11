@@ -107,7 +107,7 @@ export default function Nav() {
 									href="/resources/virtual-coffee-handbook"
 									onClick={handleLinkClick}
 								>
-									Virtual Coffee Community Handbook
+									VC Community Handbook
 								</Link>
 							</li>
 
