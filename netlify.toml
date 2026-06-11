@@ -17,9 +17,6 @@
   autoLaunch = false
   framework="next"
 
-[functions]
-  included_files = ["data/*.json"]
-
 [[headers]]
   for = "/_next/static/*"
   [headers.values]
@@ -212,19 +209,10 @@
   status = 200
 
 [[redirects]]
-  from = "/zoom-meeting-webhook-handler"
-  to = "/.netlify/functions/zoom-meeting-webhook-handler"
+  from = "/bots/*"
+  to = "https://vc-bots.lucky-art-2f02.workers.dev/:splat"
   status = 200
-
-[[redirects]]
-  from = "/slack-interactivity"
-  to = "/.netlify/functions/slack"
-  status = 200
-
-[[redirects]]
-  from = "/slack-events"
-  to = "/.netlify/functions/slack"
-  status = 200
+  force = true
 
 [[redirects]]
   from = "/plausible/js/script.js"
