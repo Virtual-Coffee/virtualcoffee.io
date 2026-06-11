@@ -32,7 +32,7 @@ export default async function Home() {
 					<VirtualCoffeeFullBanner />
 				</h1>
 
-				<h2 className="pt-5">
+				<h2 className="pt-5 text-center">
 					<span>An intimate tech community for all,</span>{' '}
 					<span>
 						optimized for <strong className="gradient-text-primary">you</strong>
