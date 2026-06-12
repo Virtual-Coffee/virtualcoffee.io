@@ -11,6 +11,7 @@ const loaderStyle: CSSProperties = {
 	display: 'flex',
 	justifyContent: 'center',
 	alignItems: 'center',
+	width: '100%',
 };
 
 export function MapLoaderDev({ members }: { members: MappableMember[] }) {
