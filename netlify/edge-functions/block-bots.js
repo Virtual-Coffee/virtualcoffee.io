@@ -45,7 +45,7 @@ const botUas = [
 ];
 
 export default async (request, context) => {
-	const ua = request.headers.get('user-agent');
+	const ua = request.headers.get('user-agent') ?? '';
 
 	let isBot = false;
 
