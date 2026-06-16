@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
 	// Handle tag-based revalidation if provided
 	if (tagParam) {
-		revalidateTag(tagParam);
+		revalidateTag(tagParam, 'max');
 	}
 
 	if (!pathParam) {
