@@ -41,4 +41,12 @@ export default defineConfig({
       external: ["cloudflare:workers"],
     },
   },
+  // The Cloudflare plugin only registers `cloudflare:workers` for the worker
+  // (ssr/rsc) environments. Server-only data modules that import `env` from it
+  // get crawled by the *client* dep scan too, which can't resolve the virtual
+  // module and aborts the whole optimize -> empty route manifest -> blanket
+  // 404. Excluding it externalizes the import in the scan instead of failing.
+  optimizeDeps: {
+    exclude: ["cloudflare:workers"],
+  },
 });

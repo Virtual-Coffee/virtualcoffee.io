@@ -6,13 +6,6 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-[dev]
-  command = "next dev"
-  port = 9000
-  targetPort = 3000
-  autoLaunch = false
-  framework="next"
-
 [[headers]]
   for = "/_next/static/*"
   [headers.values]

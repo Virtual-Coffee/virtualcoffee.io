@@ -6,6 +6,13 @@
 	"compatibility_date": "2026-02-12",
 	"compatibility_flags": ["nodejs_compat"],
 
+	// Worker fetch entry. Required for `vinext dev` (and deploy) to route
+	// requests through the Cloudflare worker — without it every request falls
+	// through to a 404. `vinext/server/app-router-entry` is vinext's built-in
+	// App Router handler (no custom worker/index.ts needed; the app uses
+	// @unpic/react rather than the /_next/image optimizer).
+	"main": "vinext/server/app-router-entry",
+
 	// Production env vars (non-secret). Secrets (CMS_TOKEN, GITHUB_TOKEN,
 	// FORMS_AIRTABLE_API_KEY, PUBLIC_AIRTABLE_API_KEY, CMS_URL,
 	// REVALIDATE_SECRET, SLACK_JOIN_LINK, ZOOM_TUESDAYS, ZOOM_THURSDAYS) are
