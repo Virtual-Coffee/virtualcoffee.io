@@ -1,12 +1,12 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 import {
+	loadMdxComponent,
 	loadMdxDirectory,
 	loadMdxRouteFileAttributes,
 	MdxFile,
 } from '@/util/loadMdx.server';
 import type { NextPageProps } from '@/util/types';
-import { MDXProps } from 'mdx/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -32,7 +32,7 @@ export async function generateStaticParams() {
 	const routes = extractRoutes(allFiles);
 
 	return [
-		{ slug: [''] },
+		{},
 		...routes.map((slug) => ({ slug: slug.split('/').filter(Boolean) })),
 	];
 }
@@ -42,15 +42,8 @@ async function getFile(slug: string) {
 		slug: `content/resources/${slug}`,
 	});
 	if (file) {
-		const {
-			default: Component,
-		}: {
-			default: React.ComponentType<MDXProps>;
-		} = slug
-			? await import(
-					`@/content/resources/${slug}${file.isIndex ? '/index' : ''}.mdx`
-				)
-			: await import('@/content/resources/index.mdx');
+		const Component = await loadMdxComponent(`content/resources/${slug}`);
+		if (!Component) return null;
 		return { ...file, Component };
 	} else {
 		return null;
