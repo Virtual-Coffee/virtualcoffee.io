@@ -1,3 +1,4 @@
+import { env } from 'cloudflare:workers';
 import { GraphQLClient, gql } from 'graphql-request';
 import { unstable_cache } from 'next/cache';
 import mockData from './mocks/sponsors';
@@ -124,7 +125,7 @@ export const getSponsors = unstable_cache(
 			Accept: 'application/vnd.github.v3+json',
 		};
 
-		const token = process.env.GITHUB_TOKEN;
+		const token = env.GITHUB_TOKEN;
 
 		if (token) {
 			headers.Authorization = 'bearer ' + token;
@@ -148,7 +149,7 @@ export const getSponsors = unstable_cache(
 
 		if (!response || !response?.organization?.sponsorsListing?.tiers) {
 			// If the GITHUB_TOKEN user doesn't have the right permissions, this will be empty
-			if (process.env.CONTEXT === 'production') {
+			if (env.ENVIRONMENT === 'production') {
 				return emptySponsorsResponse;
 			} else {
 				response = mockData;

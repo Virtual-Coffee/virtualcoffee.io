@@ -1,4 +1,5 @@
 import Airtable from 'airtable';
+import { env } from 'cloudflare:workers';
 
 const currentYear = new Date().getFullYear().toString();
 
@@ -13,7 +14,7 @@ type ChallengeRow = {
 export async function getPairingChallengeData(year: string = currentYear) {
 	Airtable.configure({
 		endpointUrl: 'https://api.airtable.com',
-		apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
+		apiKey: env.PUBLIC_AIRTABLE_API_KEY,
 	});
 	const base = Airtable.base('app10kd5ewHiLTjxn');
 

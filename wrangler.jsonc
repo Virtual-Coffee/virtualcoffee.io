@@ -1,0 +1,28 @@
+{
+	// vinext / Cloudflare Workers configuration.
+	// See: https://developers.cloudflare.com/workers/wrangler/configuration/
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "virtualcoffeeio",
+	"compatibility_date": "2026-02-12",
+	"compatibility_flags": ["nodejs_compat"],
+
+	// Production env vars (non-secret). Secrets (CMS_TOKEN, GITHUB_TOKEN,
+	// FORMS_AIRTABLE_API_KEY, PUBLIC_AIRTABLE_API_KEY, CMS_URL) are configured
+	// via `wrangler secret put` (or the dashboard) — never committed.
+	// Local dev reads these from .dev.vars (gitignored via .env*.local pattern).
+	"vars": {
+		"SITE_URL": "https://virtualcoffee.io",
+		"ENVIRONMENT": "production"
+	},
+
+	"env": {
+		"preview": {
+			"vars": {
+				// Override at deploy time per preview if a stable preview URL exists;
+				// otherwise the worker's *.workers.dev URL is used at runtime.
+				"SITE_URL": "https://virtualcoffeeio.workers.dev",
+				"ENVIRONMENT": "preview"
+			}
+		}
+	}
+}
