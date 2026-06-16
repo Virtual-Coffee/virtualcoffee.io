@@ -7,8 +7,9 @@
 	"compatibility_flags": ["nodejs_compat"],
 
 	// Production env vars (non-secret). Secrets (CMS_TOKEN, GITHUB_TOKEN,
-	// FORMS_AIRTABLE_API_KEY, PUBLIC_AIRTABLE_API_KEY, CMS_URL) are configured
-	// via `wrangler secret put` (or the dashboard) — never committed.
+	// FORMS_AIRTABLE_API_KEY, PUBLIC_AIRTABLE_API_KEY, CMS_URL,
+	// REVALIDATE_SECRET) are configured via `wrangler secret put` (or the
+	// dashboard) — never committed.
 	// Local dev reads these from .dev.vars (gitignored via .env*.local pattern).
 	"vars": {
 		"SITE_URL": "https://virtualcoffee.io",

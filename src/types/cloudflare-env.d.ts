@@ -7,6 +7,7 @@ declare module 'cloudflare:workers' {
 		GITHUB_TOKEN?: string;
 		FORMS_AIRTABLE_API_KEY?: string;
 		PUBLIC_AIRTABLE_API_KEY?: string;
+		REVALIDATE_SECRET?: string;
 	}
 
 	export const env: Env;
