@@ -1,5 +1,6 @@
 import { cloudflare } from "@cloudflare/vite-plugin";
 import mdx from "@mdx-js/rollup";
+import { kvDataAdapter } from "@vinext/cloudflare/cache/kv-data-adapter";
 import { defineConfig } from "vite";
 import vinext from "vinext";
 
@@ -24,7 +25,13 @@ export default defineConfig({
         rehypePlugins,
       }),
     },
-    vinext(),
+    vinext({
+      cache: {
+        // Persist ISR / unstable_cache / revalidate across Worker isolates.
+        // Binding name must match `kv_namespaces[].binding` in wrangler.jsonc.
+        data: kvDataAdapter(),
+      },
+    }),
     cloudflare({
       viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
     }),

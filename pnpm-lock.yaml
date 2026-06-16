@@ -165,6 +165,9 @@ importers:
       '@types/sanitize-html':
         specifier: ^2.16.0
         version: 2.16.0
+      '@vinext/cloudflare':
+        specifier: ^0.1.2
+        version: 0.1.2(vinext@0.1.4(@mdx-js/rollup@3.1.1(rollup@4.62.0))(@vitejs/plugin-react@6.0.2(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2)))(@vitejs/plugin-rsc@0.5.27(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.102.0(esbuild@0.25.12)(postcss@8.5.10)))(react@19.2.7)(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2)))(next@16.2.9(@babel/core@7.29.7)(@opentelemetry/api@1.8.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.97.0))(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.102.0(esbuild@0.25.12)(postcss@8.5.10)))(react@19.2.7)(typescript@5.9.3)(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2)))
       '@vitejs/plugin-react':
         specifier: ^6.0.2
         version: 6.0.2(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2))
@@ -2525,6 +2528,12 @@ packages:
   '@vercel/og@0.8.6':
     resolution: {integrity: sha512-hBcWIOppZV14bi+eAmCZj8Elj8hVSUZJTpf1lgGBhVD85pervzQ1poM/qYfFUlPraYSZYP+ASg6To5BwYmUSGQ==}
     engines: {node: '>=16'}
+
+  '@vinext/cloudflare@0.1.2':
+    resolution: {integrity: sha512-7bPtkUeTQkUvKfXWZ0M9QSJHKxaIjur2cfOVFZisCUBsM6VLl6duHlj0Z0urvg6BKry0i1KKewsOtFFaJl2NBQ==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      vinext: '>=0.0.0'
 
   '@vitejs/plugin-react@6.0.2':
     resolution: {integrity: sha512-DlSMqo4WhThw4vB8Mpn0Woe9J+Jfq1geJ61AKW0QEgLzGMNwtIMdxbDUzLxcun8W7NbJO0e2Jg/Nxm3cCSVzzg==}
@@ -10020,6 +10029,10 @@ snapshots:
     dependencies:
       '@resvg/resvg-wasm': 2.4.0
       satori: 0.16.0
+
+  '@vinext/cloudflare@0.1.2(vinext@0.1.4(@mdx-js/rollup@3.1.1(rollup@4.62.0))(@vitejs/plugin-react@6.0.2(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2)))(@vitejs/plugin-rsc@0.5.27(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.102.0(esbuild@0.25.12)(postcss@8.5.10)))(react@19.2.7)(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2)))(next@16.2.9(@babel/core@7.29.7)(@opentelemetry/api@1.8.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.97.0))(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.102.0(esbuild@0.25.12)(postcss@8.5.10)))(react@19.2.7)(typescript@5.9.3)(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2)))':
+    dependencies:
+      vinext: 0.1.4(@mdx-js/rollup@3.1.1(rollup@4.62.0))(@vitejs/plugin-react@6.0.2(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2)))(@vitejs/plugin-rsc@0.5.27(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.102.0(esbuild@0.25.12)(postcss@8.5.10)))(react@19.2.7)(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2)))(next@16.2.9(@babel/core@7.29.7)(@opentelemetry/api@1.8.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.97.0))(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.102.0(esbuild@0.25.12)(postcss@8.5.10)))(react@19.2.7)(typescript@5.9.3)(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2))
 
   '@vitejs/plugin-react@6.0.2(vite@8.0.16(@types/node@24.10.4)(esbuild@0.25.12)(jiti@1.21.7)(sass@1.97.0)(terser@5.47.1)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:

@@ -80,6 +80,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/require-dir": "^1.0.4",
     "@types/sanitize-html": "^2.16.0",
+    "@vinext/cloudflare": "^0.1.2",
     "@vitejs/plugin-react": "^6.0.2",
     "@vitejs/plugin-rsc": "^0.5.27",
     "all-contributors-cli": "^6.26.1",

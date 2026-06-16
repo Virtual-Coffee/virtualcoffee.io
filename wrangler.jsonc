@@ -16,6 +16,24 @@
 		"ENVIRONMENT": "production"
 	},
 
+	// ISR / unstable_cache / revalidate are persisted to Workers KV by
+	// vinext's `kvDataAdapter()` (wired in vite.config.ts). The binding
+	// name `VINEXT_KV_CACHE` is the adapter's default.
+	//
+	// Operator action before first deploy: create the namespaces and
+	// paste their IDs in below. `wrangler` ID lookup:
+	//   wrangler kv namespace create VINEXT_KV_CACHE
+	//   wrangler kv namespace create VINEXT_KV_CACHE_PREVIEW
+	// `vinext dev` works without real IDs (in-memory fallback);
+	// `wrangler deploy` will refuse to deploy with placeholders.
+	"kv_namespaces": [
+		{
+			"binding": "VINEXT_KV_CACHE",
+			"id": "REPLACE_WITH_PROD_KV_NAMESPACE_ID",
+			"preview_id": "REPLACE_WITH_PREVIEW_KV_NAMESPACE_ID"
+		}
+	],
+
 	"env": {
 		"preview": {
 			"vars": {
@@ -23,7 +41,13 @@
 				// otherwise the worker's *.workers.dev URL is used at runtime.
 				"SITE_URL": "https://virtualcoffeeio.workers.dev",
 				"ENVIRONMENT": "preview"
-			}
+			},
+			"kv_namespaces": [
+				{
+					"binding": "VINEXT_KV_CACHE",
+					"id": "REPLACE_WITH_PREVIEW_KV_NAMESPACE_ID"
+				}
+			]
 		}
 	}
 }
