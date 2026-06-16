@@ -26,3 +26,10 @@ PUBLIC_AIRTABLE_API_KEY=""
 # Must be set as a Cloudflare secret in prod (`wrangler secret put REVALIDATE_SECRET`).
 # Without it, /_cache returns 401 to anything.
 REVALIDATE_SECRET=""
+
+# Join-link targets — destinations for the /join-slack and /join-coffee
+# route handlers. Treated as secrets (don't commit; `wrangler secret put` in prod).
+# Without any of these set, the corresponding route returns 401.
+SLACK_JOIN_LINK=""
+ZOOM_TUESDAYS=""
+ZOOM_THURSDAYS=""
