@@ -1,5 +1,4 @@
 import type { MemberList } from '@/content/members/types';
-import { env } from 'cloudflare:workers';
 import { GraphQLClient, gql } from 'graphql-request';
 import { unstable_cache } from 'next/cache';
 import teamsData from '@/content/members/teams';
@@ -32,7 +31,7 @@ export const getMembers = unstable_cache(
 
 		return userData;
 	},
-	['members'],
+	[],
 	{ revalidate: 86400, tags: ['members'] },
 );
 
@@ -61,7 +60,7 @@ async function parseMarkdown(markdown: string) {
 async function getMemberGithubData(
 	data: MemberObject[],
 ): Promise<GithubSearchUserLookup> {
-	const token = env.GITHUB_TOKEN;
+	const token = process.env.GITHUB_TOKEN;
 
 	if (!token) {
 		return mockMemberData(data);

@@ -4,7 +4,7 @@ import '@/styles/main.scss';
 
 import Image from 'next/image';
 
-import { env } from 'cloudflare:workers';
+import { buildUrls } from '@/util/url.server';
 import { createMetaData } from '@/util/createMetaData.server';
 import Script from 'next/script';
 
@@ -25,7 +25,7 @@ export default function RootLayout({
 		<>
 			<html lang="en" className="h-full bg-gray-100">
 				<head>
-					{env.ENVIRONMENT === 'production' && (
+					{buildUrls.NETLIFY && buildUrls.CONTEXT === 'production' && (
 						<Script
 							strategy="afterInteractive"
 							data-domain="virtualcoffee.io"

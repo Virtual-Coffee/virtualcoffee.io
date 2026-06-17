@@ -1,7 +1,6 @@
 'use server';
 
 import Airtable, { FieldSet } from 'airtable';
-import { env } from 'cloudflare:workers';
 import { redirect } from 'next/navigation';
 import { FormState } from './types';
 import AirtableError from 'airtable/lib/airtable_error';
@@ -49,9 +48,9 @@ function makeAction<T extends FieldSet>(
 	redirectPath: string,
 ) {
 	return async function create(_: FormState, formData: FormData) {
-		if (env.FORMS_AIRTABLE_API_KEY) {
+		if (process.env.FORMS_AIRTABLE_API_KEY) {
 			const base = new Airtable({
-				apiKey: env.FORMS_AIRTABLE_API_KEY,
+				apiKey: process.env.FORMS_AIRTABLE_API_KEY,
 			}).base('appZ4d2Q9K0IepQnA');
 
 			const record = getRecordFromFormData<T>(formData, fields);

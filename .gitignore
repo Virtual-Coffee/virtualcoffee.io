@@ -38,9 +38,6 @@ yarn-error.log*
 
 # local env files
 .env*.local
-.dev.vars
-.dev.vars.*
-!.dev.vars.example
 
 # vercel
 .vercel
@@ -49,6 +46,3 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /deno.lock
-/dist/
-/.vinext/
-/.wrangler/

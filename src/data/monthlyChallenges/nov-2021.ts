@@ -1,6 +1,5 @@
 import slugify from '@sindresorhus/slugify';
 import Airtable from 'airtable';
-import { env } from 'cloudflare:workers';
 
 type MemberArticle = {
 	GitHubUsername: string;
@@ -13,9 +12,9 @@ type MemberArticle = {
 };
 
 async function fetchRecords() {
-	if (env.PUBLIC_AIRTABLE_API_KEY) {
+	if (process.env.PUBLIC_AIRTABLE_API_KEY) {
 		const base = new Airtable({
-			apiKey: env.PUBLIC_AIRTABLE_API_KEY,
+			apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
 		}).base('appJStQemmYeoRcox');
 
 		const result = await base<MemberArticle>('Member Articles').select().all();

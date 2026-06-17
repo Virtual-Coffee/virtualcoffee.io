@@ -1,4 +1,4 @@
-<div align="right">
+<div align="right"><a href="https://app.netlify.com/sites/virtual-coffee-io/deploys"><img alt="Netlify Status" src="https://api.netlify.com/api/v1/badges/ad849482-1158-4a45-bed5-14f3d17ae97d/deploy-status" /></a>
 
 <!-- prettier-ignore-start -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
@@ -26,7 +26,7 @@ See you there!
 
 ## Working on the site:
 
-- This site uses the [Next.js](https://nextjs.org/) App Router, built with [Vite](https://vitejs.dev/) via [vinext](https://www.npmjs.com/package/vinext) and deployed to [Cloudflare Workers](https://developers.cloudflare.com/workers/).
+- This site is built using [Next.js](https://nextjs.org/).
 - Check out our [CONTRIBUTING](https://github.com/Virtual-Coffee/virtualcoffee.io/blob/main/CONTRIBUTING.md) guideline to make contributions.
 - If you're new to open source, check out our [Git & GitHub 101](https://virtualcoffee.io/resources/developer-resources/open-source/git-101) and [Contributor Guide](https://virtualcoffee.io/resources/developer-resources/open-source/contributor-guide) resources.
 
@@ -56,7 +56,7 @@ cd virtualcoffee.io
 
 ### 3. Install dependencies
 
-This repo requires `node` and `pnpm` to get started.
+This repo requires `node`, `pnpm`, and the [Netlify CLI](https://www.netlify.com/products/dev/) to get started.
 
 #### Installing `node`:
 
@@ -89,7 +89,7 @@ cp .env.example .env
 
 #### Installing package dependencies
 
-Once you have `node` and `pnpm` installed, you're ready to install the local dependencies! Run the following command:
+Once you have `node`, `pnpm`, and the Netlify CLI installed, you're ready to install the local dependencies! Run the following command:
 
 ```shell
 pnpm install
@@ -117,9 +117,9 @@ This is the only command you need to do normal local development.
 
 Starts a local server and watches your source files for changes. Use this to preview local development.
 
-Once you run this command, a local server is running at http://localhost:3001! Any changes you make to the src folder should also re-build the site and re-load your browser.
+Once you run this command, a local server is running at http://localhost:9000! Any changes you make to the src folder should also re-build the site and re-load your browser.
 
-You should see something like 'Server now ready on http://localhost:3001' below, which means the watcher is waiting to build your awesome changes!
+You should see something like 'Server now ready on http://localhost:9000' below, which means the watcher is waiting to build your awesome changes!
 
 Use `ctrl-c` to quit the server when you're done.
 
@@ -129,7 +129,7 @@ Use `ctrl-c` to quit the server when you're done.
 pnpm build
 ```
 
-Builds a production-ready version of the site. This is what Cloudflare Workers uses to build and deploy our site.
+Builds a production-ready version of the site. This is what Netlify uses to build our site.
 
 ### `pnpm format`
 
@@ -155,9 +155,9 @@ All of the data points have mock data that is used if the required API key isn't
 
 If you'd like to work on a feature that requires an API key, please reach out to a maintainer and we can probably get that going.
 
-## Short-link redirects
+## Netlify Functions
 
-Two short-link redirects are provided by handlers in `netlify/functions/` (rewrites configured in `netlify.toml`). These still run on Netlify Functions today and are pending migration to Cloudflare Workers (tracked separately):
+Netlify Functions in `netlify/functions/` provide two short-link redirects (rewrites configured in `netlify.toml`):
 
 - **`/join-coffee`** — redirects to the Tuesday/Thursday Zoom rooms.
 - **`/join-slack`** — redirects to the Slack invite link.

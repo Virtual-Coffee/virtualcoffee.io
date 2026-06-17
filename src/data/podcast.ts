@@ -154,7 +154,7 @@ export const getEpisodes = unstable_cache(
 	async ({ limit = 5 }: { limit?: number } = {}): Promise<PodcastEpisodes> => {
 		return allMappedEpisodes.slice(0, limit);
 	},
-	['podcast', 'episodes'],
+	[],
 	{ revalidate: false, tags: ['podcast'] },
 );
 
@@ -167,7 +167,7 @@ export const getEpisode = unstable_cache(
 	}): Promise<PodcastEpisode | null> => {
 		return allMappedEpisodes.find((e) => e.slug === slug) ?? null;
 	},
-	['podcast', 'episode'],
+	[],
 	{ revalidate: false, tags: ['podcast'] },
 );
 
@@ -234,7 +234,7 @@ export const getTranscript = unstable_cache(
 			return null;
 		}
 	},
-	['podcast', 'transcript'],
+	[],
 	{ revalidate: 86400, tags: ['podcast'] },
 );
 
