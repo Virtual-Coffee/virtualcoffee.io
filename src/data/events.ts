@@ -1,6 +1,5 @@
 'use server';
 
-import { env } from 'cloudflare:workers';
 import { unstable_cache } from 'next/cache';
 import { GraphQLClient, gql } from 'graphql-request';
 import { DateTime } from 'luxon';
@@ -86,14 +85,14 @@ export const getEvents = unstable_cache(
 			.plus({ days: 30 })
 			.toISO();
 
-		if (!(env.CMS_URL && env.CMS_TOKEN)) {
+		if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
 			const fakeData = await import('./mocks/events');
 			return fakeData.createEventsData({ limit, rangeEnd, rangeStart });
 		}
 
-		const graphQLClient = new GraphQLClient(`${env.CMS_URL}/api`, {
+		const graphQLClient = new GraphQLClient(`${process.env.CMS_URL}/api`, {
 			headers: {
-				Authorization: `bearer ${env.CMS_TOKEN}`,
+				Authorization: `bearer ${process.env.CMS_TOKEN}`,
 			},
 		});
 
@@ -149,6 +148,6 @@ export const getEvents = unstable_cache(
 			return [];
 		}
 	},
-	['events'],
+	[],
 	{ revalidate: 43200, tags: ['events'] },
 );
