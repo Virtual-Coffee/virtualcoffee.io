@@ -32,7 +32,7 @@ export const getMembers = unstable_cache(
 
 		return userData;
 	},
-	[],
+	['members'],
 	{ revalidate: 86400, tags: ['members'] },
 );
 

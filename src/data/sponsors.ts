@@ -194,7 +194,7 @@ export const getSponsors = unstable_cache(
 
 		return returnVal;
 	},
-	[],
+	['sponsors'],
 	{ revalidate: 86400, tags: ['sponsors'] },
 );
 
