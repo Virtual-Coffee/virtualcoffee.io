@@ -1,4 +1,5 @@
 import Airtable from 'airtable';
+import { env } from 'cloudflare:workers';
 
 type NovRow = {
 	Name: string;
@@ -13,9 +14,9 @@ type NovRow = {
 };
 
 async function fetchRecords(viewName: string) {
-	if (process.env.PUBLIC_AIRTABLE_API_KEY) {
+	if (env.PUBLIC_AIRTABLE_API_KEY) {
 		const base = new Airtable({
-			apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
+			apiKey: env.PUBLIC_AIRTABLE_API_KEY,
 		}).base('app10kd5ewHiLTjxn');
 
 		const result = await base<NovRow>('NaNoWriMo')

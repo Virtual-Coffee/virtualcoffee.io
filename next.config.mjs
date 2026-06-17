@@ -3,111 +3,111 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import createMDX from '@next/mdx';
 
-import remarkFrontmatter from 'remark-frontmatter';
-
-import { toc } from 'mdast-util-toc';
-
-import rehypeHighlight from 'rehype-highlight';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import { h as hastscript } from 'hastscript';
-import { toString } from 'hast-util-to-string';
-
-/**
- * Plugin to generate a Table of Contents (TOC).
- * Created from https://github.com/remarkjs/remark-toc
- *
- * @type {import('unified').Plugin<[Options?]|void[], Root>}
- */
-function createRemarkToc() {
-	return (options = {}) => {
-		return (node) => {
-			// console.log(node.children);
-			// console.log(JSON.stringify(node.children[4], null, 2));
-			// console.log(
-			// 	JSON.stringify(
-			// 		node.children.filter((n) => n.type === 'paragraph'),
-			// 		null,
-			// 		2,
-			// 	),
-			// );
-			const result = toc(
-				node,
-				Object.assign({}, options, {
-					heading: options.heading || 'toc|table[ -]of[ -]contents?',
-				}),
-			);
-
-			if (
-				result.endIndex === null ||
-				result.index === null ||
-				result.index === -1 ||
-				!result.map
-			) {
-				return;
-			}
-
-			// console.log(JSON.stringify(result.map, null, 2));
-
-			// console.log({
-			// 	length: node.children.length,
-			// 	index: result.index,
-			// 	endIndex: result.endIndex,
-			// 	slice: node.children.slice(result.endIndex),
-			// });
-
-			if (node.children[result.index].type === 'mdxJsxFlowElement') {
-				node.children = [
-					...node.children.slice(0, result.index - 1),
-					{
-						...node.children[result.index],
-						children: [
-							node.children[result.index - 1],
-							result.map,
-							...node.children[result.index].children,
-						],
-					},
-					...node.children.slice(result.index + 1),
-				];
-			} else {
-				node.children = [
-					...node.children.slice(0, result.index - 1),
-					{
-						type: 'mdxJsxFlowElement',
-						name: 'div',
-						attributes: [
-							{
-								type: 'mdxJsxAttribute',
-								name: 'className',
-								value: 'pt-5 bg-white',
-							},
-						],
-						children: [
-							{
-								type: 'mdxJsxFlowElement',
-								name: 'div',
-								attributes: [
-									{
-										type: 'mdxJsxAttribute',
-										name: 'className',
-										value: 'container prose',
-									},
-								],
-								children: [node.children[result.index - 1], result.map],
-								data: { _xdmExplicitJsx: true },
-							},
-						],
-						data: { _xdmExplicitJsx: true },
-					},
-					...node.children.slice(result.index),
-				];
-			}
-		};
-	};
-}
+import { remarkPlugins, rehypePlugins } from './mdx.config.mjs';
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename);
+
+const permanent301 = [
+	{ source: '/volunteer', destination: '/resources/virtual-coffee-handbook/get-involved' },
+	{ source: '/members/map', destination: '/members' },
+	{ source: '/member-survey', destination: 'https://airtable.com/appGHm8ztVWug6UxH/pagKrtAhS4jnRhtYD/form' },
+	{ source: '/brownbag-idea', destination: '/lunch-and-learn-idea' },
+	{ source: '/brownbag-idea-thanks', destination: '/lunch-and-learn-idea-thanks' },
+	{ source: '/member-resources', destination: '/resources' },
+	{
+		source: '/member-resources/oss-maintainer-checklist',
+		destination: '/resources/developer-resources/open-source/maintainer-guide#repository-checklist',
+	},
+	{
+		source: '/member-resources/oss-writing-issues',
+		destination: '/resources/developer-resources/open-source/contributor-guide#guide-to-writing-issues',
+	},
+	{
+		source: '/member-resources/guide-to-vc',
+		destination: '/resources/virtual-coffee-handbook/guides-to-virtual-coffee',
+	},
+	{
+		source: '/member-resources/join-virtual-coffee',
+		destination: '/resources/virtual-coffee-handbook/join-virtual-coffee',
+	},
+	{
+		source: '/member-resources/slack-channel-guide',
+		destination: '/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide',
+	},
+	{
+		source: '/resources/open-source/oss-writing-issues',
+		destination: '/resources/developer-resources/open-source/contributor-guide#guide-to-writing-issues',
+	},
+	{
+		source: '/resources/open-source/oss-maintainer-checklist',
+		destination: '/resources/developer-resources/open-source/maintainer-guide#repository-checklist',
+	},
+	{ source: '/resources/open-source', destination: '/resources/developer-resources/open-source' },
+	{
+		source: '/resources/open-source/about-open-source',
+		destination: '/resources/developer-resources/open-source/about-open-source',
+	},
+	{
+		source: '/resources/open-source/git-101',
+		destination: '/resources/developer-resources/open-source/git-101',
+	},
+	{
+		source: '/resources/open-source/contributor-guide',
+		destination: '/resources/developer-resources/open-source/contributor-guide',
+	},
+	{
+		source: '/resources/open-source/maintainer-guide',
+		destination: '/resources/developer-resources/open-source/maintainer-guide',
+	},
+	{ source: '/resources/virtual-coffee', destination: '/resources/virtual-coffee-handbook' },
+	{
+		source: '/resources/virtual-coffee/get-involved',
+		destination: '/resources/virtual-coffee-handbook/get-involved',
+	},
+	{
+		source: '/resources/virtual-coffee/get-involved/paths-to-leadership',
+		destination: '/resources/virtual-coffee-handbook/get-involved/paths-to-leadership',
+	},
+	{
+		source: '/resources/virtual-coffee/get-involved/coffee-table-groups',
+		destination: '/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups',
+	},
+	{
+		source: '/resources/virtual-coffee/get-involved/lunch-and-learns',
+		destination: '/resources/virtual-coffee-handbook/guides-to-virtual-coffee/lunch-and-learns',
+	},
+	{
+		source: '/resources/virtual-coffee/join-virtual-coffee',
+		destination: '/resources/virtual-coffee-handbook/join-virtual-coffee',
+	},
+	{
+		source: '/resources/virtual-coffee/guide-to-vc',
+		destination: '/resources/virtual-coffee-handbook/guides-to-virtual-coffee',
+	},
+	{
+		source: '/resources/virtual-coffee/slack-channel-guide',
+		destination: '/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide',
+	},
+	{
+		source: '/resources/virtual-coffee/coding-questions-guide',
+		destination: '/resources/developer-resources/developer-tips/asking-coding-questions',
+	},
+];
+
+const temporary302 = [
+	{ source: '/sponsorship', destination: 'https://github.com/sponsors/Virtual-Coffee' },
+	{
+		source: '/l/vc-conf-survey',
+		destination:
+			'https://docs.google.com/forms/d/e/1FAIpQLSd3l-YJIhA-lAAkWqEP5qbWGUPg8_HtKOfIN5M_NKYfStv4nA/viewform',
+	},
+	{
+		source: '/l/vc-conf-cfp-form',
+		destination:
+			'https://docs.google.com/forms/d/e/1FAIpQLSc_F6A6hhOO8PNgRoR32sxKnIePZdHY7gMTK-nD0yGCFuClCQ/viewform',
+	},
+];
 
 const nextConfig = {
 	reactStrictMode: true,
@@ -135,47 +135,39 @@ const nextConfig = {
 			},
 		];
 	},
+	async redirects() {
+		return [
+			...permanent301.map((r) => ({ ...r, statusCode: 301 })),
+			...temporary302.map((r) => ({ ...r, statusCode: 302 })),
+		];
+	},
+	async rewrites() {
+		return {
+			beforeFiles: [
+				{
+					source: '/bots/:path*',
+					destination: 'https://vc-bots.lucky-art-2f02.workers.dev/:path*',
+				},
+			],
+			afterFiles: [
+				{
+					source: '/plausible/js/script.js',
+					destination: 'https://plausible.io/js/script.js',
+				},
+				{
+					source: '/plausible/api/event',
+					destination: 'https://plausible.io/api/event',
+				},
+			],
+			fallback: [],
+		};
+	},
 };
 
-const remarkToc = createRemarkToc();
-
 const withMDX = createMDX({
-	// Add markdown plugins here, as desired
 	options: {
-		remarkPlugins: [
-			[
-				remarkToc,
-				{
-					tight: true,
-					parents: ['root', 'mdxJsxFlowElement'],
-					maxDepth: 3,
-				},
-			],
-			remarkFrontmatter,
-		],
-		rehypePlugins: [
-			rehypeSlug,
-			[
-				rehypeAutolinkHeadings,
-				{
-					behavior: 'after',
-					properties: { class: 'header-anchor' },
-					content: (node) => {
-						return [
-							hastscript('span.sr-only', `Permalink to “${toString(node)}”`),
-							hastscript('span', { ariaHidden: 'true' }, '#'),
-						];
-					},
-					group: (node) => {
-						return hastscript(
-							`.header-anchor-wrapper.header-anchor-wrapper-${node.tagName}`,
-						);
-					},
-					test: ['h2', 'h3'],
-				},
-			],
-			rehypeHighlight,
-		],
+		remarkPlugins,
+		rehypePlugins,
 	},
 });
 

@@ -1,4 +1,5 @@
 import Airtable from 'airtable';
+import { env } from 'cloudflare:workers';
 
 const mockData = [
 	{
@@ -15,9 +16,9 @@ const mockData = [
 
 async function fetchRecords() {
 	try {
-		if (process.env.PUBLIC_AIRTABLE_API_KEY) {
+		if (env.PUBLIC_AIRTABLE_API_KEY) {
 			const base = new Airtable({
-				apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
+				apiKey: env.PUBLIC_AIRTABLE_API_KEY,
 			}).base('appJStQemmYeoRcox');
 
 			const result = await base<{

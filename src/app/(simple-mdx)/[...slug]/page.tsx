@@ -1,11 +1,11 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 import {
+	loadMdxComponent,
 	loadMdxRouteFileAttributes,
 	loadMdxDirectory,
 } from '@/util/loadMdx.server';
 import type { NextPageProps } from '@/util/types';
-import { MDXProps } from 'mdx/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -27,11 +27,10 @@ async function getFile(slug: string) {
 		slug: `content/simple-mdx-pages/${slug}`,
 	});
 	if (file) {
-		const {
-			default: Component,
-		}: {
-			default: React.ComponentType<MDXProps>;
-		} = await import(`@/content/simple-mdx-pages/${slug}.mdx`);
+		const Component = await loadMdxComponent(
+			`content/simple-mdx-pages/${slug}`,
+		);
+		if (!Component) return null;
 		return { ...file, Component };
 	} else {
 		return null;

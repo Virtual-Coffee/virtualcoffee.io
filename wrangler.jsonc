@@ -1,0 +1,60 @@
+{
+	// vinext / Cloudflare Workers configuration.
+	// See: https://developers.cloudflare.com/workers/wrangler/configuration/
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "virtualcoffeeio",
+	"compatibility_date": "2026-02-12",
+	"compatibility_flags": ["nodejs_compat"],
+
+	// Worker fetch entry. Required for `vinext dev` (and deploy) to route
+	// requests through the Cloudflare worker — without it every request falls
+	// through to a 404. `vinext/server/app-router-entry` is vinext's built-in
+	// App Router handler (no custom worker/index.ts needed; the app uses
+	// @unpic/react rather than the /_next/image optimizer).
+	"main": "vinext/server/app-router-entry",
+
+	// Production env vars (non-secret). Secrets (CMS_TOKEN, GITHUB_TOKEN,
+	// FORMS_AIRTABLE_API_KEY, PUBLIC_AIRTABLE_API_KEY, CMS_URL,
+	// REVALIDATE_SECRET, SLACK_JOIN_LINK, ZOOM_TUESDAYS, ZOOM_THURSDAYS) are
+	// configured via `wrangler secret put` (or the dashboard) — never committed.
+	// Local dev reads these from .dev.vars (gitignored via .env*.local pattern).
+	"vars": {
+		"SITE_URL": "https://virtualcoffee.io",
+		"ENVIRONMENT": "production"
+	},
+
+	// ISR / unstable_cache / revalidate are persisted to Workers KV by
+	// vinext's `kvDataAdapter()` (wired in vite.config.ts). The binding
+	// name `VINEXT_KV_CACHE` is the adapter's default.
+	//
+	// Operator action before first deploy: create the namespaces and
+	// paste their IDs in below. `wrangler` ID lookup:
+	//   wrangler kv namespace create VINEXT_KV_CACHE
+	//   wrangler kv namespace create VINEXT_KV_CACHE_PREVIEW
+	// `vinext dev` works without real IDs (in-memory fallback);
+	// `wrangler deploy` will refuse to deploy with placeholders.
+	"kv_namespaces": [
+		{
+			"binding": "VINEXT_KV_CACHE",
+			"id": "REPLACE_WITH_PROD_KV_NAMESPACE_ID",
+			"preview_id": "REPLACE_WITH_PREVIEW_KV_NAMESPACE_ID"
+		}
+	],
+
+	"env": {
+		"preview": {
+			"vars": {
+				// Override at deploy time per preview if a stable preview URL exists;
+				// otherwise the worker's *.workers.dev URL is used at runtime.
+				"SITE_URL": "https://virtualcoffeeio.workers.dev",
+				"ENVIRONMENT": "preview"
+			},
+			"kv_namespaces": [
+				{
+					"binding": "VINEXT_KV_CACHE",
+					"id": "REPLACE_WITH_PREVIEW_KV_NAMESPACE_ID"
+				}
+			]
+		}
+	}
+}

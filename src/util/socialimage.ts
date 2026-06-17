@@ -122,7 +122,7 @@ const createSocialImage = unstable_cache(
 
 		return full;
 	},
-	[],
+	['social-image'],
 	{ revalidate: 86400, tags: ['global'] },
 );
 
