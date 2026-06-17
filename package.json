@@ -83,7 +83,7 @@
     "all-contributors-cli": "^6.26.1",
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
-    "esbuild": "^0.25.12",
+    "esbuild": "^0.28.1",
     "eslint": "^9.39.2",
     "eslint-config-next": "16.2.9",
     "netlify-cli": "^23.13.0",
