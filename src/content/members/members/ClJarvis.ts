@@ -37,7 +37,7 @@ export const ClJarvis: MemberObject = {
 		//{ type: 'twitter', username: 'JarvisScript' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'chrisjarvis' },
+		// { type: 'polywork', username: 'chrisjarvis' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{
