@@ -1,6 +1,7 @@
 import { GraphQLClient, gql } from 'graphql-request';
 import { unstable_cache } from 'next/cache';
-import mockData from './mocks/sponsors';
+import type mockSponsors from './mocks/sponsors';
+import { assertMocksAllowed } from './mocks';
 import ImgixClient from '@imgix/js-core';
 
 const client = new ImgixClient({
@@ -9,7 +10,7 @@ const client = new ImgixClient({
 });
 
 type SponsorEntity =
-	(typeof mockData.organization.sponsorshipsAsMaintainer.nodes)[number]['sponsorEntity'] & {
+	(typeof mockSponsors.organization.sponsorshipsAsMaintainer.nodes)[number]['sponsorEntity'] & {
 		avatar_width?: number;
 		avatar_height?: number;
 	};
@@ -111,11 +112,6 @@ const query = gql`
 	}
 `;
 
-const emptySponsorsResponse = {
-	logoSponsors: [],
-	supporters: [],
-};
-
 export const getSponsors = unstable_cache(
 	async function getSponsorsInternal() {
 		// async function main() {
@@ -134,7 +130,7 @@ export const getSponsors = unstable_cache(
 			headers,
 		});
 
-		let response: undefined | typeof mockData;
+		let response: undefined | typeof mockSponsors;
 
 		if (token) {
 			try {
@@ -147,12 +143,10 @@ export const getSponsors = unstable_cache(
 		}
 
 		if (!response || !response?.organization?.sponsorsListing?.tiers) {
-			// If the GITHUB_TOKEN user doesn't have the right permissions, this will be empty
-			if (process.env.CONTEXT === 'production') {
-				return emptySponsorsResponse;
-			} else {
-				response = mockData;
-			}
+			// Also reached when the GITHUB_TOKEN user lacks the right permissions,
+			// which returns an empty response rather than throwing.
+			assertMocksAllowed('GitHub sponsors');
+			response = (await import('./mocks/sponsors')).default;
 		}
 
 		const tiers = response.organization.sponsorsListing.tiers.nodes.map(

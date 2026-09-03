@@ -4,6 +4,7 @@ import { unstable_cache } from 'next/cache';
 import { GraphQLClient, gql } from 'graphql-request';
 import { DateTime } from 'luxon';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
+import { assertMocksAllowed, mocksAllowed } from './mocks';
 import { ics, google, outlook } from 'calendar-link';
 
 const calendarsQuery = gql`
@@ -86,6 +87,7 @@ export const getEvents = unstable_cache(
 			.toISO();
 
 		if (!(process.env.CMS_URL && process.env.CMS_TOKEN)) {
+			assertMocksAllowed('calendar events');
 			const fakeData = await import('./mocks/events');
 			return fakeData.createEventsData({ limit, rangeEnd, rangeStart });
 		}
@@ -145,6 +147,9 @@ export const getEvents = unstable_cache(
 			);
 		} catch (e) {
 			console.error(e);
+			// A production build that can't reach the CMS should fail rather than
+			// silently render an empty events list.
+			if (!mocksAllowed()) throw e;
 			return [];
 		}
 	},
