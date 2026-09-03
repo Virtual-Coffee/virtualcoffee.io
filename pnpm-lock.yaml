@@ -8,12 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@eslint/eslintrc':
-        specifier: ^3.3.3
-        version: 3.3.7(supports-color@5.5.0)
-      '@eslint/js':
-        specifier: ^9.39.2
-        version: 9.39.5
       '@imgix/js-core':
         specifier: ^3.8.0
         version: 3.8.0
@@ -68,9 +62,6 @@ importers:
       next:
         specifier: 15.5.21
         version: 15.5.21(@opentelemetry/api@1.9.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.103.1)
-      npm-watch:
-        specifier: ^0.13.0
-        version: 0.13.0
       react:
         specifier: ^19.2.3
         version: 19.2.8
@@ -114,6 +105,12 @@ importers:
         specifier: ^10.1.2
         version: 10.1.2
     devDependencies:
+      '@eslint/eslintrc':
+        specifier: ^3.3.3
+        version: 3.3.7(supports-color@5.5.0)
+      '@eslint/js':
+        specifier: ^9.39.2
+        version: 9.39.5
       '@faker-js/faker':
         specifier: ^10.1.0
         version: 10.6.0
@@ -156,6 +153,9 @@ importers:
       netlify-cli:
         specifier: ^27.4.2
         version: 27.4.2(@parcel/watcher@2.6.0)(@types/node@24.13.3)(picomatch@4.0.7)(supports-color@5.5.0)
+      npm-watch:
+        specifier: ^0.13.0
+        version: 0.13.0
       postcss:
         specifier: ^8.5.10
         version: 8.5.26
