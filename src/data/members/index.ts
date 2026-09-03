@@ -4,6 +4,7 @@ import { unstable_cache } from 'next/cache';
 import teamsData from '@/content/members/teams';
 import mockMemberData from '@/data/mocks/memberData';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
+import { parseMarkdown } from '@/util/markdown.server';
 import type {
 	FixedUpUser,
 	MemberObject,
@@ -35,35 +36,13 @@ export const getMembers = unstable_cache(
 	{ revalidate: 86400, tags: ['members'] },
 );
 
-async function parseMarkdown(markdown: string) {
-	const [unified, remarkParse, remarkRehype, rehypeSanitize, rehypeStringify] =
-		await Promise.all([
-			import('unified').then((mod) => mod.unified),
-			// import('@jsdevtools/rehype-toc').then((mod) => mod.default),
-			// import('remark-toc').then((mod) => mod.default),
-			import('remark-parse').then((mod) => mod.default),
-			import('remark-rehype').then((mod) => mod.default),
-			import('rehype-sanitize').then((mod) => mod.default),
-			import('rehype-stringify').then((mod) => mod.default),
-		]);
-
-	const file = await unified()
-		.use(remarkParse)
-		.use(remarkRehype)
-		.use(rehypeSanitize)
-		.use(rehypeStringify)
-		.process(markdown);
-
-	return String(file);
-}
-
 async function getMemberGithubData(
 	data: MemberObject[],
 ): Promise<GithubSearchUserLookup> {
 	const token = process.env.GITHUB_TOKEN;
 
 	if (!token) {
-		return mockMemberData(data);
+		return (await mockMemberData(data)) as GithubSearchUserLookup;
 	}
 
 	const headers = {
@@ -136,7 +115,7 @@ async function getMemberGithubData(
 			console.log(error.message);
 		}
 		console.log('Error loading github member data, using fake data instead');
-		return mockMemberData(data);
+		return (await mockMemberData(data)) as GithubSearchUserLookup;
 	}
 }
 

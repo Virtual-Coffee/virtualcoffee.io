@@ -9,8 +9,6 @@ type SanitizedData<T> = T & {
 type DataToSanitize = DirtyData | DirtyData[];
 
 export function sanitizeCmsData<T>(data: T): T {
-	// const sanitize = await import('sanitize-html').then((mod) => mod.default);
-
 	function sanitizeInternal(
 		data: DirtyData | DirtyData[],
 	): SanitizedData<T> | SanitizedData<T>[] | DataToSanitize {
@@ -39,7 +37,6 @@ export function sanitizeCmsData<T>(data: T): T {
 }
 
 export async function sanitizeHtml(html: string) {
-	// const sanitize = await import('sanitize-html').then((mod) => mod.default);
 	return sanitize(html, sanitizeOptions);
 }
 
