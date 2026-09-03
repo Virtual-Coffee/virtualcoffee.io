@@ -122,19 +122,6 @@ const nextConfig = {
 		],
 	},
 	pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
-	async headers() {
-		return [
-			{
-				source: '/feed/feed.rss',
-				headers: [
-					{
-						key: 'Content-Type',
-						value: 'text/xml; charset=utf-8',
-					},
-				],
-			},
-		];
-	},
 };
 
 const remarkToc = createRemarkToc();

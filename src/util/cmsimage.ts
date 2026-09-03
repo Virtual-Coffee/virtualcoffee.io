@@ -37,5 +37,3 @@ type CreateCmsImageProps = {
 	 */
 	settings?: Record<string, unknown>;
 };
-
-createCmsImage({ path: '', folder: '', settings: {} });
