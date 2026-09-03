@@ -1,7 +1,9 @@
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - esbuild
-  - netlify-cli
-  - sharp
-  - unix-dgram
-  - unrs-resolver
+publicHoistPattern:
+  - '*'
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  netlify-cli: true
+  sharp: false
+  unix-dgram: true
+  unrs-resolver: true
