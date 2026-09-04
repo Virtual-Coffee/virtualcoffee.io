@@ -56,11 +56,11 @@ cd virtualcoffee.io
 
 ### 3. Install dependencies
 
-This repo requires `node`, `pnpm`, and the [Netlify CLI](https://www.netlify.com/products/dev/) to get started.
+This repo requires `node` and `pnpm` to get started. The [Netlify CLI](https://www.netlify.com/products/dev/) is installed as a project dependency, so you don't need to install it globally.
 
 #### Installing `node`:
 
-The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires node version 22.20.
+The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires node version 24.20 (see `.nvmrc`).
 
 If you already have a different version of `node` installed, but don't want to update globally, you can install [a package called `nvm`](https://github.com/nvm-sh/nvm), which will allow you to easily switch `node` versions. Once you have `nvm` installed (or if you already have it installed), you can run `nvm use` in the main directory and it will install the proper version of `node`.
 
@@ -89,7 +89,7 @@ cp .env.example .env
 
 #### Installing package dependencies
 
-Once you have `node`, `pnpm`, and the Netlify CLI installed, you're ready to install the local dependencies! Run the following command:
+Once you have `node` and `pnpm` installed, you're ready to install the local dependencies! Run the following command:
 
 ```shell
 pnpm install
@@ -137,7 +137,7 @@ Builds a production-ready version of the site. This is what Netlify uses to buil
 pnpm format
 ```
 
-Runs [Prettier](https://prettier.io/) on all of our files. This happens automatically via [husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged), so there's usually no need to run this manually.
+Runs [Prettier](https://prettier.io/) on all of our files. A GitHub Action also formats changed files automatically on pull requests, so there's usually no need to run this manually.
 
 ### `pnpm lint`
 
@@ -146,6 +146,22 @@ pnpm lint
 ```
 
 Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. This happens automatically at build time.
+
+### `pnpm typecheck`
+
+```shell
+pnpm typecheck
+```
+
+Runs the TypeScript compiler (`tsc --noEmit`) to check for type errors without producing output.
+
+### `pnpm build-member-files`
+
+```shell
+pnpm build-member-files
+```
+
+Regenerates `src/data/members/core.ts` and `src/data/members/members.ts` from the files in `src/content/members/`. These generated files are gitignored. `pnpm dev` and `pnpm build` run this for you, and the dev watcher re-runs it whenever a member file changes.
 
 ## Loading data
 

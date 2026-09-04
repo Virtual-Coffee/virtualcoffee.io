@@ -88,7 +88,7 @@ You can refer to our resource on [how to write an issue](https://virtualcoffee.i
 
 > ⚠️ **Heads up!** If you'd like to work on issues, please make sure you **create a new branch and work in this branch** to avoid pushing your changes directly into the `main` branch.
 
-- Follow the steps for local development [in our README](README.md#local-development).
+- Follow the steps for local development [in our README](README.md#local-development-setup).
 - Create a new branch by typing this command on the terminal:
 
   ```bash
