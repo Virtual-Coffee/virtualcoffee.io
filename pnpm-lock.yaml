@@ -100,34 +100,34 @@ importers:
         version: 11.0.5
     devDependencies:
       '@eslint/eslintrc':
-        specifier: ^3.3.3
+        specifier: ^3.3.7
         version: 3.3.7(supports-color@5.5.0)
       '@eslint/js':
-        specifier: ^9.39.2
+        specifier: ^9.39.5
         version: 9.39.5
       '@faker-js/faker':
-        specifier: ^10.1.0
+        specifier: ^10.6.0
         version: 10.6.0
       '@types/leaflet':
-        specifier: ^1.9.21
+        specifier: ^1.9.22
         version: 1.9.22
       '@types/leaflet.markercluster':
         specifier: ^1.5.6
         version: 1.5.6
       '@types/luxon':
-        specifier: ^3.7.1
+        specifier: ^3.7.5
         version: 3.7.5
       '@types/node':
-        specifier: ^24.10.4
+        specifier: ^24.13.3
         version: 24.13.3
       '@types/react':
-        specifier: ^19.2.7
+        specifier: ^19.2.18
         version: 19.2.18
       '@types/react-dom':
-        specifier: ^19.2.3
+        specifier: ^19.2.5
         version: 19.2.5(@types/react@19.2.18)
       '@types/sanitize-html':
-        specifier: ^2.16.0
+        specifier: ^2.16.1
         version: 2.16.1
       concurrently:
         specifier: ^10.0.5
@@ -136,11 +136,11 @@ importers:
         specifier: ^10.1.0
         version: 10.1.0
       eslint:
-        specifier: ^9.39.2
+        specifier: ^9.39.5
         version: 9.39.5(jiti@2.7.0)(supports-color@5.5.0)
       eslint-config-next:
-        specifier: 15.5.18
-        version: 15.5.18(eslint@9.39.5(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0)(typescript@5.9.3)
+        specifier: 15.5.25
+        version: 15.5.25(eslint@9.39.5(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0)(typescript@5.9.3)
       netlify-cli:
         specifier: ^27.4.2
         version: 27.4.2(@parcel/watcher@2.6.0)(@types/node@24.13.3)(picomatch@4.0.7)(supports-color@5.5.0)
@@ -148,13 +148,13 @@ importers:
         specifier: ^0.13.0
         version: 0.13.0
       prettier:
-        specifier: ^3.7.4
+        specifier: ^3.9.6
         version: 3.9.6
       sass:
-        specifier: ^1.97.0
+        specifier: ^1.103.1
         version: 1.103.1
       tsx:
-        specifier: ^4.21.0
+        specifier: ^4.23.13
         version: 4.23.13
       typescript:
         specifier: ^5.9.3
@@ -1122,8 +1122,8 @@ packages:
   '@next/env@15.5.25':
     resolution: {integrity: sha512-42h1lLr07vl4gawALP1hsgRZjHB1xYa58JfUfHwr0f7jG/zhPakh5GHkADHXOC9ZxUvlQFOPIrp7s6qX4DezPQ==}
 
-  '@next/eslint-plugin-next@15.5.18':
-    resolution: {integrity: sha512-w4MYq8M26a8PNrfto0JosLf5/3ssln1rsyP96g2DkC8uFVymStM5DLSz5ElxxrPRg2XnTMnFo3kREFlhYvxhWw==}
+  '@next/eslint-plugin-next@15.5.25':
+    resolution: {integrity: sha512-dAzOqZQCAOgIq5yQpsuMBZcwxK0AtzGqHMQpxNWYLQlvf79rsP3SDwdGPNQC4ySaMSihOQXMO/VXubQ3JWW+3A==}
 
   '@next/mdx@15.5.25':
     resolution: {integrity: sha512-KRYidEY0ce0HnwoxqyfTd+aVZXVWc8QcoxbFGZiXYqVFj3GQb0wBfvnlsxrrNgqMV2iAQZydWLbONU9OkfZv1Q==}
@@ -2872,8 +2872,8 @@ packages:
     engines: {node: '>=6.0'}
     hasBin: true
 
-  eslint-config-next@15.5.18:
-    resolution: {integrity: sha512-HuoJU6uUPD00eyiud78IBnT4HLhztFj2V+ild2Uon5ZUrYZKe0Olu2QRD99e9IgL4/H1eg5Onka3BsfRW2U0Xw==}
+  eslint-config-next@15.5.25:
+    resolution: {integrity: sha512-hB1oClZzRO3vMAeMmBMch0FHNJ4irH74LvQWDEMHkJtG/Us9+SAsg1f5Pvcw9jz4tc8wSGnvbmF050BRAAIbBg==}
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0 || ^9.0.0
       typescript: '>=3.3.1'
@@ -7073,7 +7073,7 @@ snapshots:
 
   '@next/env@15.5.25': {}
 
-  '@next/eslint-plugin-next@15.5.18':
+  '@next/eslint-plugin-next@15.5.25':
     dependencies:
       fast-glob: 3.3.1
 
@@ -8946,9 +8946,9 @@ snapshots:
     optionalDependencies:
       source-map: 0.6.1
 
-  eslint-config-next@15.5.18(eslint@9.39.5(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0)(typescript@5.9.3):
+  eslint-config-next@15.5.25(eslint@9.39.5(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0)(typescript@5.9.3):
     dependencies:
-      '@next/eslint-plugin-next': 15.5.18
+      '@next/eslint-plugin-next': 15.5.25
       '@rushstack/eslint-patch': 1.16.1
       '@typescript-eslint/eslint-plugin': 8.69.0(@typescript-eslint/parser@8.69.0(eslint@9.39.5(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0)(typescript@5.9.3))(eslint@9.39.5(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0)(typescript@5.9.3)
       '@typescript-eslint/parser': 8.69.0(eslint@9.39.5(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0)(typescript@5.9.3)
