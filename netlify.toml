@@ -3,9 +3,6 @@
   functions = "netlify/functions"
   publish = ".next"
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
 [[edge_functions]]
   function = "block-bots"
   path = "/*"

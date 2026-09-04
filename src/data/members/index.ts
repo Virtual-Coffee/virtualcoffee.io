@@ -2,8 +2,9 @@ import type { MemberList } from '@/content/members/types';
 import { GraphQLClient, gql } from 'graphql-request';
 import { unstable_cache } from 'next/cache';
 import teamsData from '@/content/members/teams';
-import mockMemberData from '@/data/mocks/memberData';
+import { assertMocksAllowed } from '@/data/mocks';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
+import { parseMarkdown } from '@/util/markdown.server';
 import type {
 	FixedUpUser,
 	MemberObject,
@@ -35,26 +36,12 @@ export const getMembers = unstable_cache(
 	{ revalidate: 86400, tags: ['members'] },
 );
 
-async function parseMarkdown(markdown: string) {
-	const [unified, remarkParse, remarkRehype, rehypeSanitize, rehypeStringify] =
-		await Promise.all([
-			import('unified').then((mod) => mod.unified),
-			// import('@jsdevtools/rehype-toc').then((mod) => mod.default),
-			// import('remark-toc').then((mod) => mod.default),
-			import('remark-parse').then((mod) => mod.default),
-			import('remark-rehype').then((mod) => mod.default),
-			import('rehype-sanitize').then((mod) => mod.default),
-			import('rehype-stringify').then((mod) => mod.default),
-		]);
-
-	const file = await unified()
-		.use(remarkParse)
-		.use(remarkRehype)
-		.use(rehypeSanitize)
-		.use(rehypeStringify)
-		.process(markdown);
-
-	return String(file);
+async function loadMockMemberData(
+	data: MemberObject[],
+): Promise<GithubSearchUserLookup> {
+	assertMocksAllowed('GitHub member data');
+	const { default: mockMemberData } = await import('@/data/mocks/memberData');
+	return (await mockMemberData(data)) as GithubSearchUserLookup;
 }
 
 async function getMemberGithubData(
@@ -63,7 +50,7 @@ async function getMemberGithubData(
 	const token = process.env.GITHUB_TOKEN;
 
 	if (!token) {
-		return mockMemberData(data);
+		return loadMockMemberData(data);
 	}
 
 	const headers = {
@@ -135,8 +122,10 @@ async function getMemberGithubData(
 		if (error instanceof Error) {
 			console.log(error.message);
 		}
+		// Outside production, fall back to mocks so local dev and deploy previews
+		// still render. In production this rethrows via assertMocksAllowed.
 		console.log('Error loading github member data, using fake data instead');
-		return mockMemberData(data);
+		return loadMockMemberData(data);
 	}
 }
 
