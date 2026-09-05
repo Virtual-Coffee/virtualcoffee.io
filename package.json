@@ -29,7 +29,7 @@
 		"@sindresorhus/slugify": "^3.0.1",
 		"@types/mdx": "^2.0.14",
 		"airtable": "^0.12.2",
-		"bootstrap": "^4.6.2",
+		"bootstrap": "^5.3.8",
 		"calendar-link": "^2.11.5",
 		"front-matter": "^4.0.2",
 		"graphql": "^16.14.2",
