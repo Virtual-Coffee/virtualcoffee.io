@@ -47,7 +47,7 @@ export default function HomePageBlock({
 				{subtitle && <p className="lead">{subtitle}</p>}
 				{children}
 				{footer && linkTo && (
-					<p className="homepageblock-body-foot text-muted font-italic">
+					<p className="homepageblock-body-foot text-muted fst-italic">
 						<Link href={linkTo}>{footer}</Link>
 					</p>
 				)}

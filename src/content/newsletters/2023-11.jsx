@@ -101,7 +101,7 @@ export default function Issue() {
 			</p>
 
 			<h3 className="mt-4">🎙️Podcasts</h3>
-			<p className="font-italic">Season 9 is out!</p>
+			<p className="fst-italic">Season 9 is out!</p>
 			<ul>
 				<li>
 					<Link href="/podcast/open-source-licenses-with-matt-mcinnis-tom-cudd-and-ray-deck">

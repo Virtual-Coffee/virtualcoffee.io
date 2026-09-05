@@ -63,7 +63,7 @@ export default function Issue() {
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
 
-			<h3 className="font-italic">March Recap</h3>
+			<h3 className="fst-italic">March Recap</h3>
 			<p>
 				Monthly challenge -&gt;
 				<a href="https://virtualcoffee.io/monthlychallenges/mar-2022/">
@@ -75,7 +75,7 @@ export default function Issue() {
 				knowledge with others.
 			</p>
 
-			<h3 className="mb-3 font-italic">VC Phase Three</h3>
+			<h3 className="mb-3 fst-italic">VC Phase Three</h3>
 			<p>
 				It’s almost been two years since the first Virtual Coffee happened.
 				We’ve met so many new friends, learned and grew together, and formed
@@ -89,7 +89,7 @@ export default function Issue() {
 				like for us all.
 			</p>
 
-			<h3 className="mb-3 font-italic">April Happenings</h3>
+			<h3 className="mb-3 fst-italic">April Happenings</h3>
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:
 				<a href="https://virtualcoffee.io/monthlychallenges/apr-2022/">
@@ -159,10 +159,10 @@ export default function Issue() {
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h5 className="card-title text-primary font-italic">Member Wins</h5>
+					<h5 className="card-title text-primary fst-italic">Member Wins</h5>
 					<div className="card-text">
 						<blockquote className="blockquote">
-							<p className="mb-0 font-italic">
+							<p className="mb-0 fst-italic">
 								As always, shout-out to all our members celebrating new roles
 								this month!
 							</p>

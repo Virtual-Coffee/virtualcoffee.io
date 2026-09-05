@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 :root {
 	font-family: 'Inter', sans-serif;
 }
@@ -13,7 +15,19 @@ html {
 }
 
 a:focus {
-	outline: 3px solid var(--purple);
+	outline: 3px solid var(--bs-purple);
+}
+
+// v5's reboot dropped `label { margin-bottom: .5rem }`. These forms use bare
+// <label> elements rather than .form-label, so restore it here.
+label {
+	margin-bottom: 0.5rem;
+}
+
+// v4's .thead-dark used a dedicated $table-dark-bg ($gray-800). v5 replaced it
+// with .table-dark, which derives from $dark ($gray-900) via $table-variants.
+.table-dark {
+	--bs-table-bg: #{$gray-800};
 }
 
 img,
@@ -129,12 +143,6 @@ ul {
 	font-size: 0.75em;
 }
 
-.display-5 {
-	@include font-size(2.5rem);
-	font-weight: $display5-weight;
-	line-height: $display-line-height;
-}
-
 .display-1,
 .display-2,
 .display-3,
@@ -145,7 +153,7 @@ ul {
 
 .bodycopy {
 	@include media-breakpoint-up(sm) {
-		max-width: map-get($container-max-widths, lg);
+		max-width: map.get($container-max-widths, lg);
 		margin-left: auto;
 		margin-right: auto;
 	}
@@ -153,7 +161,7 @@ ul {
 
 .container-simple {
 	@include media-breakpoint-up(sm) {
-		max-width: map-get($container-max-widths, lg);
+		max-width: map.get($container-max-widths, lg);
 		margin-left: auto;
 		margin-right: auto;
 	}

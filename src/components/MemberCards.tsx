@@ -76,7 +76,7 @@ export default function MemberCards({ data }: { data: MemberList }) {
 								{member?.teams && member.teams.length > 0 && (
 									<div className="membercard-teams">
 										{member.teams.map((team) => (
-											<span key={team} className="badge badge-secondary">
+											<span key={team} className="badge text-bg-secondary">
 												{team}
 											</span>
 										))}

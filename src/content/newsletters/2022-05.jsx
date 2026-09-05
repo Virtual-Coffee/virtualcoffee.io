@@ -56,7 +56,7 @@ export default function Issue() {
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
 
-			<h3 className="font-italic">April Recap</h3>
+			<h3 className="fst-italic">April Recap</h3>
 			<p>
 				Monthly challenge -&gt;{' '}
 				<a href="https://virtualcoffee.io/monthlychallenges/apr-2022">
@@ -70,7 +70,7 @@ export default function Issue() {
 				of job searching.
 			</p>
 
-			<h3 className="mb-3 font-italic">Lightning talks! ⚡</h3>
+			<h3 className="mb-3 fst-italic">Lightning talks! ⚡</h3>
 			<p>
 				We can an amazing lightning talk event last month and we want to express
 				our gratitude to everyone involved; our brave speakers, but also our
@@ -81,7 +81,7 @@ export default function Issue() {
 				!
 			</p>
 
-			<h3 className="mb-3 font-italic">VC Phase Three Update</h3>
+			<h3 className="mb-3 fst-italic">VC Phase Three Update</h3>
 			<p>
 				The team continues to work hard prepping for the next phase of Virtual
 				Coffee. We have a lot of great things planned and we can't wait to open
@@ -90,7 +90,7 @@ export default function Issue() {
 				us and eagerly looking forward to opening up membership again!
 			</p>
 
-			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
+			<h3 className="mb-3 fst-italic">Volunteering at VC</h3>
 			<p>
 				Over the last few months we've been trying to improve our documentation
 				here at VC. he team continues to work hard prepping for the next phase
@@ -106,7 +106,7 @@ export default function Issue() {
 				!
 			</p>
 
-			<h3 className="mb-3 font-italic">May Happenings</h3>
+			<h3 className="mb-3 fst-italic">May Happenings</h3>
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
 				<a href="https://virtualcoffee.io/monthlychallenges/may-2022">
@@ -202,14 +202,14 @@ export default function Issue() {
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h5 className="card-title text-primary font-italic">Member Wins</h5>
+					<h5 className="card-title text-primary fst-italic">Member Wins</h5>
 					<div className="card-text">
 						<blockquote className="blockquote">
-							<p className="mb-0 font-italic">
+							<p className="mb-0 fst-italic">
 								As always, shout-out to all our members celebrating new roles
 								this month!
 							</p>
-							<p className="mb-0 font-italic">
+							<p className="mb-0 fst-italic">
 								And an extra special shout out to those who participated in our
 								lightning talks!
 							</p>

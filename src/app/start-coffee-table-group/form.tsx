@@ -15,7 +15,7 @@ export function Form() {
 				<p className="text-muted">
 					Just a couple quick pieces of info that we'll need:
 				</p>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="formName">Your Name</label>
 					<input
 						type="text"
@@ -29,7 +29,7 @@ export function Form() {
 						Required
 					</small>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="formEmail">Email</label>
 					<input
 						type="email"
@@ -46,7 +46,7 @@ export function Form() {
 			</fieldset>
 			<fieldset>
 				<legend>Group Details:</legend>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="group_name">Name of the Coffee Table Group</label>
 					<input
 						type="text"
@@ -56,7 +56,7 @@ export function Form() {
 						required
 					/>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="description">Group Description</label>
 					<textarea
 						className="form-control"

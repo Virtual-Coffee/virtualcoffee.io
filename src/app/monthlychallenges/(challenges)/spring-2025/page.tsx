@@ -33,7 +33,7 @@ export default function Challenge() {
 
 			<TextContainer background="light" showBackToTopLink={false}>
 				<LeadText>
-					<h2 className="pl-5 pr-3">Celebrating 5 Years of Community Growth</h2>
+					<h2 className="ps-5 pe-3">Celebrating 5 Years of Community Growth</h2>
 					<p className="px-5 mt-4">
 						As Virtual Coffee celebrates its 5th anniversary, we're excited to
 						launch our <strong>first-ever quarter challenge</strong>! This

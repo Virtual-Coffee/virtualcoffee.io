@@ -1,48 +1,51 @@
-$enable-responsive-font-sizes: true;
+// Bootstrap overrides. main.scss imports this before ./bootstrap, so these win
+// over Bootstrap's !default values.
+//
+// Two gotchas worth knowing before you edit:
+//   - Nothing here can use a Bootstrap variable or function; they aren't
+//     imported yet. Use literals.
+//   - A map assigned here REPLACES Bootstrap's, it doesn't merge. Write maps
+//     out in full or you'll silently drop keys.
 
-$container-max-widths: (
-	sm: 540px,
-	md: 720px,
-	lg: 960px,
-	xl: 1200px,
-);
+$enable-rfs: true;
+$enable-dark-mode: false;
 
-$spacer: 1rem;
-$spacers: (
-	6: (
-		$spacer * 6,
-	),
-	7: (
-		$spacer * 9,
-	),
-	8: (
-		$spacer * 12,
-	),
-);
+// #d9376e lands at 4.435:1 on white, just under the 4.5 default, which would
+// flip .btn-primary and .badge to black text. Keep them white.
+$min-contrast-ratio: 4.4;
 
+// Color system
+// ------------
 $white: #fff;
 $gray-200: #eff0f3;
-$gray-900: #0d0d0d;
-$gray-800: #2a2a2a;
+$gray-600: #6c757d;
 $gray-700: #313d3e;
+$gray-800: #2a2a2a;
+$gray-900: #0d0d0d;
 $black: #000;
 
 $blue: #376ed9;
 $pink: #d9376e;
-$anotherBlue: #355074;
-$pinkDarker: #7e0029;
+$anotherBlue: #355074; // project-custom
+$pinkDarker: #7e0029; // project-custom
 $red: #dc3545;
 $orange: #da6f36;
-$blackCoral: #3d5467;
+$blackCoral: #3d5467; // project-custom
 $green: #6ed937;
 $purple: #3f3d56;
 $primary: $pink;
 $secondary: $blackCoral;
-$alert-color-level: 12;
 
-$gradient-primary: linear-gradient(to right bottom, $pink, $orange);
+$gradient-primary: linear-gradient(
+	to right bottom,
+	$pink,
+	$orange
+); // project-custom
 
 $link-color: $blue;
+// v5 defaults links to always-underlined with no hover change. Keep v4's.
+$link-decoration: none;
+$link-hover-decoration: underline;
 
 $body-bg: $white;
 $body-color: $gray-800;
@@ -50,12 +53,52 @@ $body-color: $gray-800;
 
 $code-color: $blackCoral;
 
+// Components
+// ----------
+// v5 bumped $border-radius .25rem -> .375rem and made card borders darker.
+// Pinned to v4 so buttons, inputs and cards keep their existing corners.
+// -lg matters here: the shared Submit button is .btn-lg.
+$border-radius: 0.25rem;
+$border-radius-sm: 0.2rem;
+$border-radius-lg: 0.3rem;
+$card-border-color: rgba($black, 0.125);
+
+// Tables
+// ------
+// v5 tightened cells (.75rem -> .5rem) and darkened .table-dark, which
+// replaced v4's .thead-dark ($gray-800).
+$table-cell-padding-y: 0.75rem;
+$table-cell-padding-x: 0.75rem;
+
+// Drives both the $text-muted Sass variable and the .text-muted utility class,
+// which v5 wires to --bs-secondary-color.
+$body-secondary-color: $gray-600;
+$text-muted: $gray-600;
+
 // $card-height: 100%;
 
-$form-group-margin-bottom: 2rem;
+// Spacing
+// -------
+// Keys 0-5 must be spelled out; v5 won't merge its defaults back in.
+// `form` carries v4's $form-group-margin-bottom, since .form-group is gone.
+$spacer: 1rem;
+$spacers: (
+	0: 0,
+	1: $spacer * 0.25,
+	2: $spacer * 0.5,
+	3: $spacer,
+	4: $spacer * 1.5,
+	5: $spacer * 3,
+	6: $spacer * 6,
+	7: $spacer * 9,
+	8: $spacer * 12,
+	form: 2rem,
+);
 
 $hr-margin-y: $spacer * 3;
 
+// Grid
+// ----
 $grid-breakpoints: (
 	xs: 0,
 	sm: 576px,
@@ -65,44 +108,72 @@ $grid-breakpoints: (
 	xxl: 1875px,
 );
 
+// No xxl key on purpose: .container stays capped at 1200px above xl.
+$container-max-widths: (
+	sm: 540px,
+	md: 720px,
+	lg: 960px,
+	xl: 1200px,
+);
+
 $grid-gutter-width: 60px;
 
+// Typography
+// ----------
+// Keep this a single flat list. Composing it as `'Inter var', $stack` nests the
+// list, and v5 emits that into --bs-body-font-family verbatim as
+// `"Inter var", (-apple-system, ...)`, which is invalid CSS.
 $font-family-sans-serif:
-	-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-	Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-	'Segoe UI Symbol', 'Noto Color Emoji';
-$font-family-base: 'Inter var', $font-family-sans-serif;
+	'Inter var',
+	-apple-system,
+	BlinkMacSystemFont,
+	'Segoe UI',
+	Roboto,
+	'Helvetica Neue',
+	Arial,
+	'Noto Sans',
+	sans-serif,
+	'Apple Color Emoji',
+	'Segoe UI Emoji',
+	'Segoe UI Symbol',
+	'Noto Color Emoji';
 
 $headings-font-weight: 700;
 $headings-line-height: 1;
 
-$display1-weight: 900;
-$display2-weight: 900;
-$display3-weight: 900;
-$display4-weight: 900;
-$display5-weight: 900;
+// v4's display ramp. Stopping at 5 keeps .display-5 at 2.5rem and skips
+// v5's new .display-6.
+$display-font-weight: 900;
+$display-font-sizes: (
+	1: 6rem,
+	2: 5.5rem,
+	3: 4.5rem,
+	4: 3.5rem,
+	5: 2.5rem,
+);
 
-// html { font-family: 'Inter', sans-serif; }
-// @supports (font-variation-settings: normal) {
-//   html { font-family: 'Inter var', sans-serif; }
-// }
-
+// Navbar
+// ------
 $navbar-padding-y: 0.75rem;
+$navbar-padding-x: $spacer; // v5 defaults this to null
+
 $navbar-dark-color: rgba($white, 0.9);
 $navbar-dark-hover-color: $white;
 $navbar-dark-active-color: $white;
-$navbar-dark-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-dark-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
 $navbar-dark-toggler-border-color: $white;
 
 $navbar-light-color: rgba($black, 0.85);
 $navbar-light-hover-color: rgba($black, 1);
 $navbar-light-active-color: rgba($black, 1);
 $navbar-light-disabled-color: rgba($black, 0.3);
-$navbar-light-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-light-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
 $navbar-light-toggler-border-color: rgba($black, 0.85);
 
 $navbar-light-brand-color: $navbar-light-active-color;
 $navbar-light-brand-hover-color: $navbar-light-active-color;
+
+// v5.3's hook for the toggler icon colour; it builds the SVG data URI for us.
+$navbar-dark-icon-color: $navbar-dark-color;
+$navbar-light-icon-color: $navbar-light-color;
 
 $navbar-toggler-padding-y: 0.25rem;
 $navbar-toggler-padding-x: 0.5rem;

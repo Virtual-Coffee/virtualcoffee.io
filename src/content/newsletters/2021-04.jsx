@@ -72,13 +72,13 @@ export default function Issue() {
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
 
-			<h3 className="mb-3 font-italic">March Recap:</h3>
+			<h3 className="mb-3 fst-italic">March Recap:</h3>
 			<ul>
 				<li>Monthly challenge &gt; Get Job Ready!</li>
 				<li>New members: ~29 new members</li>
 			</ul>
 
-			<h3 className="mb-3 font-italic">April Happenings:</h3>
+			<h3 className="mb-3 fst-italic">April Happenings:</h3>
 
 			<h4 className="mt-4">💡Monthly Challenge: Month of Kindness!</h4>
 			<p>
@@ -175,7 +175,7 @@ export default function Issue() {
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h5 className="card-title text-primary font-italic">Slack Love</h5>
+					<h5 className="card-title text-primary fst-italic">Slack Love</h5>
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">

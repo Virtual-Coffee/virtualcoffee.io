@@ -52,7 +52,7 @@ export default function Issue() {
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
 
-			<h3 className="mb-5 font-italic">June Recap</h3>
+			<h3 className="mb-5 fst-italic">June Recap</h3>
 			<ul>
 				<li>
 					Monthly challenge -&gt;{' '}
@@ -63,7 +63,7 @@ export default function Issue() {
 				<li>New members: 27 new members</li>
 			</ul>
 
-			<h3 className="mb-3 font-italic">July Happenings</h3>
+			<h3 className="mb-3 fst-italic">July Happenings</h3>
 
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
@@ -159,7 +159,7 @@ export default function Issue() {
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h5 className="card-title text-primary font-italic">Slack Love</h5>
+					<h5 className="card-title text-primary fst-italic">Slack Love</h5>
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">

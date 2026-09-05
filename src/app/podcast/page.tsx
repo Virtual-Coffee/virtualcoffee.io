@@ -58,11 +58,11 @@ export default async function PodcastsIndex() {
 				{!!latestEpisode.episodeSponsors.length && (
 					<>
 						<div className="mt-3">
-							<h4 className="h6 text-muted font-italic">
+							<h4 className="h6 text-muted fst-italic">
 								<small>This episode is brought to you by:</small>
 							</h4>
 							{latestEpisode.episodeSponsors.map((sponsor) => (
-								<li key={sponsor.title} className="media align-items-center">
+								<li key={sponsor.title} className="d-flex align-items-center">
 									<a href={sponsor.sponsorUrl}>
 										{/* eslint-disable-next-line @next/next/no-img-element */}
 										<img
@@ -73,7 +73,7 @@ export default async function PodcastsIndex() {
 													w: 64,
 												},
 											})}
-											className="mr-3"
+											className="me-3"
 											alt=""
 											style={{ width: 64, height: 'auto' }}
 											width={sponsor.sponsorImage[0].width}
@@ -100,7 +100,7 @@ export default async function PodcastsIndex() {
 											})} 192w`}
 										/>
 									</a>
-									<div className="media-body">
+									<div className="flex-grow-1">
 										<span className="h5">
 											<a href={sponsor.sponsorUrl}>{sponsor.title}</a>
 										</span>

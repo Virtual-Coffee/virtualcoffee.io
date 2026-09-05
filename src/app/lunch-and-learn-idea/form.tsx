@@ -16,7 +16,7 @@ export function Form() {
 				<p className="text-muted">
 					Just a couple quick pieces of info that we'll need:
 				</p>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="formName">Your Name</label>
 					<input
 						type="text"
@@ -30,7 +30,7 @@ export function Form() {
 						Required
 					</small>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="formEmail">Email</label>
 					<input
 						type="email"
@@ -47,7 +47,7 @@ export function Form() {
 			</fieldset>
 			<fieldset>
 				<legend>Your Lunch & Learn Idea:</legend>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="topicTitle">Title of the Lunch & Learn</label>
 					<input
 						type="text"
@@ -57,7 +57,7 @@ export function Form() {
 						required
 					/>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="topicIdea">
 						Description we can share on the event page.
 					</label>
@@ -69,7 +69,7 @@ export function Form() {
 						rows={3}
 					></textarea>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="format">
 						What is the format of your talk (question and answer,
 						conference-style, etc.) and will you have slides?
@@ -81,7 +81,7 @@ export function Form() {
 						name="Format"
 					/>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="date-time">What date and time works for you?</label>
 					<input
 						type="text"
