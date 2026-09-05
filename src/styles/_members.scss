@@ -1,12 +1,14 @@
+@use 'sass:map';
+
 .membercards {
 	display: grid;
-	gap: map-get($spacers, 4);
+	gap: map.get($spacers, 4);
 	grid-template-columns: 1fr;
-	margin-bottom: map-get($spacers, 5);
+	margin-bottom: map.get($spacers, 5);
 
 	@include media-breakpoint-up(lg) {
 		grid-template-columns: 1fr 1fr;
-		gap: map-get($spacers, 5);
+		gap: map.get($spacers, 5);
 	}
 }
 
@@ -17,7 +19,7 @@
 	grid-template-rows: min-content 1fr;
 	grid-gap: 1rem;
 	border-bottom: 1px solid rgba($pink, 0.1);
-	padding-bottom: map-get($spacers, 4);
+	padding-bottom: map.get($spacers, 4);
 	scroll-margin-top: 100px;
 
 	&:last-child {
