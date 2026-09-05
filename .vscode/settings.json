@@ -14,5 +14,8 @@
 	},
 	"[json]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	}
+	},
+	"js/ts.experimental.useTsgo": true,
+	"js/ts.tsdk.path": "./node_modules/typescript/lib",
+	"js/ts.tsdk.additionalLocations": ["./node_modules/@typescript/native"]
 }

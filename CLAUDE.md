@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-virtualcoffee.io is a Next.js 15 App Router site (React 19, TypeScript, Bootstrap 4.6 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS and build-time fetches from GitHub, a Craft CMS, and Airtable, all of which fall back to mock data when credentials are absent.
+virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 4.6 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS and build-time fetches from GitHub, a Craft CMS, and Airtable, all of which fall back to mock data when credentials are absent.
 
 ## Commands
 
@@ -16,7 +16,7 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Dev server                                 | `pnpm dev` — regenerates member barrels, then runs `npm-watch` + `netlify dev` (site on http://localhost:9000, proxying Next on :3000) |
 | Next only (no Netlify functions/redirects) | `next dev`                                                                                                                             |
 | Build                                      | `pnpm build` — `prebuild` runs the member codegen first                                                                                |
-| Typecheck                                  | `pnpm typecheck` (`tsc --noEmit`)                                                                                                      |
+| Typecheck                                  | `pnpm typecheck` (`tsc --noEmit`, the native TypeScript 7 binary)                                                                      |
 | Lint                                       | `pnpm lint` (ESLint flat config: `next/core-web-vitals` + `next/typescript`; `netlify/**` is ignored)                                  |
 | Format                                     | `pnpm format` (Prettier: tabs, single quotes, trailing commas; a GitHub Action auto-formats PRs; there is no husky/lint-staged hook)   |
 | Regenerate member barrels                  | `pnpm build-member-files`                                                                                                              |
@@ -24,6 +24,8 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 There is no test suite and no test runner. CI does not run lint/typecheck/build on PRs; Netlify runs `pnpm build`. Run `pnpm typecheck && pnpm lint` before finishing a change.
 
 `@/*` maps to `./src/*`.
+
+Two TypeScript packages are installed on purpose: `typescript` is aliased to `@typescript/typescript6` (the JS compiler API that typescript-eslint and `next build` need) and `@typescript/native` is aliased to `typescript@7` (provides the native `tsc` binary used by `pnpm typecheck`). Keep both until typescript-eslint supports TypeScript 7.
 
 ## Architecture
 
@@ -51,7 +53,7 @@ Podcast episodes are a checked-in JSON snapshot (`src/data/podcast/episodes.json
 
 ### MDX content pipeline
 
-- `next.config.mjs` configures `@next/mdx` with remark-frontmatter, a locally defined TOC plugin (replaces a `## Table of Contents` heading with a generated list), rehype-slug, rehype-autolink-headings (h2/h3), and rehype-highlight.
+- `next.config.mjs` configures `@next/mdx` with remark-frontmatter, a custom TOC plugin (`src/mdx-plugins/remark-toc.mjs`, replaces a `## Table of Contents` heading with a generated list), rehype-slug, a rehype-autolink-headings wrapper (`src/mdx-plugins/rehype-heading-anchors.mjs`, h2/h3), and rehype-highlight. Plugins are referenced by path string because Turbopack requires serializable MDX loader options; put any plugin that needs function options in `src/mdx-plugins/`.
 - `src/util/loadMdx.server.ts` walks a content directory and reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then dynamically `import()`s the `.mdx` file itself.
 - Routes: `src/app/(simple-mdx)/[...slug]/page.tsx` serves `src/content/simple-mdx-pages/*.mdx`; `src/app/resources/[[...slug]]/page.tsx` serves the nested `src/content/resources/` tree (`index.mdx` is a directory's own page, siblings are children sorted by `order`). Both are `force-static` with `dynamicParams = false`. Adding a resource is just adding an `.mdx` file with frontmatter; index listings come from `<FileIndex />` (`src/components/content/FileIndex.tsx`).
 - `src/mdx-components.tsx` is a passthrough; MDX files import components explicitly from `@/components/content/`.
@@ -74,3 +76,13 @@ Podcast episodes are a checked-in JSON snapshot (`src/data/podcast/episodes.json
 - Monthly challenges: prose lives in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`. Follow the process in the VC Community Building Resources "Monthly Challenge Technical Guidelines" linked from the README.
 - Member emoji must be standard Unicode; maintainers reject PRs otherwise.
 - PRs should link an issue (`Closes #123`); the PR template asks for Description and Methodology sections.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
