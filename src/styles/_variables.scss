@@ -53,6 +53,23 @@ $body-color: $gray-800;
 
 $code-color: $blackCoral;
 
+// Components
+// ----------
+// v5 bumped $border-radius .25rem -> .375rem and made card borders darker.
+// Pinned to v4 so buttons, inputs and cards keep their existing corners.
+// -lg matters here: the shared Submit button is .btn-lg.
+$border-radius: 0.25rem;
+$border-radius-sm: 0.2rem;
+$border-radius-lg: 0.3rem;
+$card-border-color: rgba($black, 0.125);
+
+// Tables
+// ------
+// v5 tightened cells (.75rem -> .5rem) and darkened .table-dark, which
+// replaced v4's .thead-dark ($gray-800).
+$table-cell-padding-y: 0.75rem;
+$table-cell-padding-x: 0.75rem;
+
 // Drives both the $text-muted Sass variable and the .text-muted utility class,
 // which v5 wires to --bs-secondary-color.
 $body-secondary-color: $gray-600;

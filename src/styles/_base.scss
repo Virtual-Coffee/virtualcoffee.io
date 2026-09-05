@@ -16,6 +16,18 @@ a:focus {
 	outline: 3px solid var(--bs-purple);
 }
 
+// v5's reboot dropped `label { margin-bottom: .5rem }`. These forms use bare
+// <label> elements rather than .form-label, so restore it here.
+label {
+	margin-bottom: 0.5rem;
+}
+
+// v4's .thead-dark used a dedicated $table-dark-bg ($gray-800). v5 replaced it
+// with .table-dark, which derives from $dark ($gray-900) via $table-variants.
+.table-dark {
+	--bs-table-bg: #{$gray-800};
+}
+
 img,
 svg {
 	max-width: 100%;
