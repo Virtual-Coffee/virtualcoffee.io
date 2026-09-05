@@ -1,5 +1,6 @@
 const teams = {
 	'Community Maintainer': ['BekahHW', 'tkshill', 'meg-gutshall'],
+	'Technical Maintainer': ['JoeKarow'],
 	'Org Maintainer': ['danieltott', 'BekahHW'],
 	'Maintainer Emeritus': ['saramccombs', 'juliaseid'],
 	'Lunch & Learn Coordinator': ['shelleymcq'],
@@ -13,7 +14,6 @@ const teams = {
 		'davidalpert',
 		'glenmccallumcan',
 		'jdwilkin4',
-		'JoeKarow',
 		'mrsantons',
 		'marktnoonan',
 		'nickytonline',
