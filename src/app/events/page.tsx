@@ -125,10 +125,10 @@ export default async function Page() {
 					)}
 
 					{events.map((event) => (
-						<div className="card mb-4" key={event.startDateLocalized}>
+						<div className="card mb-4" key={event.id}>
 							<div className="card-header py-2 d-flex justify-content-between align-items-center flex-row flex-wrap">
-								<time dateTime={event.startDateLocalized}>
-									{`${dateForDisplay(event.startDateLocalized, 'EEEE, LLLL d, yyyy')} - ${dateForDisplay(event.startDateLocalized, 't')} to ${dateForDisplay(event.endDateLocalized, 't ZZZZ')}`}
+								<time dateTime={event.start}>
+									{`${dateForDisplay(event.start, 'EEEE, LLLL d, yyyy')} - ${dateForDisplay(event.start, 't')} to ${dateForDisplay(event.end, 't ZZZZ')}`}
 								</time>
 								<div
 									className="d-flex flex-row align-items-center"
@@ -136,7 +136,7 @@ export default async function Page() {
 								>
 									<small className="text-muted">Add to Calendar:</small>
 									<a
-										href={event.eventCalendarLinks.google}
+										href={event.calendarLinks.google}
 										target="_blank"
 										rel="noreferrer"
 										title="Google Calendar"
@@ -144,7 +144,7 @@ export default async function Page() {
 										<Google />
 									</a>
 									<a
-										href={event.eventCalendarLinks.outlook}
+										href={event.calendarLinks.outlook}
 										target="_blank"
 										rel="noreferrer"
 										title="Outlook Calendar"
@@ -152,7 +152,7 @@ export default async function Page() {
 										<Outlook />
 									</a>
 									<a
-										href={event.eventCalendarLinks.ics}
+										href={event.calendarLinks.ics}
 										title="Download ICS"
 										download
 									>
@@ -162,11 +162,8 @@ export default async function Page() {
 							</div>
 							<div className="card-body">
 								<h5 className="card-title">{event.title}</h5>
-								{event.eventCalendarDescription && (
-									<DisplayHtml
-										html={event.eventCalendarDescription}
-										className="card-text"
-									/>
+								{event.description && (
+									<DisplayHtml html={event.description} className="card-text" />
 								)}
 							</div>
 						</div>

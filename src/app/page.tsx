@@ -81,7 +81,7 @@ export default async function Home() {
 						>
 							<PostList
 								items={events.map((event) => {
-									const eventTime = event.startDateLocalized;
+									const eventTime = event.start;
 									return {
 										title: event.title,
 										description: (
