@@ -59,17 +59,15 @@ function createCalendarClient(): calendar_v3.Calendar {
 }
 
 /**
- * Google stores HTML when an event is edited in the web UI, but plain text
- * when it comes from other clients. Plain text would otherwise collapse into a
- * single line, so escape it and keep the line breaks.
+ * Google returns descriptions as HTML: text is already entity-encoded
+ * (`&#39;`, `&quot;`, `&amp;`) whether or not it contains tags, so it must not
+ * be escaped again. Tag-free descriptions use newlines for paragraph breaks,
+ * which would collapse into a single line, so turn those into `<br />`.
+ * `sanitizeHtml` handles anything unsafe either way.
  */
 function normalizeDescription(raw: string): string {
 	if (/<[a-z][\s\S]*>/i.test(raw)) return raw;
-	return raw
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/\r?\n/g, '<br />');
+	return raw.replace(/\r?\n/g, '<br />');
 }
 
 export const getEvents = unstable_cache(
