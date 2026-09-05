@@ -23,6 +23,7 @@
 		"build-member-files": "src/content/members/**/*.ts"
 	},
 	"dependencies": {
+		"@googleapis/calendar": "^16.0.0",
 		"@imgix/js-core": "^3.8.0",
 		"@mdx-js/loader": "^3.1.1",
 		"@next/mdx": "16.3.4",

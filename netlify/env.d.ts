@@ -1,8 +1,8 @@
 declare namespace NodeJS {
 	interface ProcessEnv {
-		// CMS
-		CMS_URL?: string;
-		CMS_TOKEN?: string;
+		// Google Calendar (events)
+		GOOGLE_SERVICE_ACCOUNT_KEY?: string;
+		GOOGLE_CALENDAR_ID?: string;
 
 		// Slack
 		SLACK_JOIN_LINK?: string;
