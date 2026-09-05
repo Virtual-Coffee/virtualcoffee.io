@@ -103,7 +103,7 @@ export default async function Newsletter({ params }: NextPageProps<'slug'>) {
 		<>
 			<main id="maincontent" className="container-lg py-md-4">
 				<h1 className="display-5">{episode.title}</h1>
-				<div className="text-right mb-2">
+				<div className="text-end mb-2">
 					<code>
 						<span className="d-block d-sm-inline">
 							Season {episode.podcastSeason}, Episode {episode.podcastEpisode}
@@ -124,7 +124,7 @@ export default async function Newsletter({ params }: NextPageProps<'slug'>) {
 				{episode.episodeSponsors.length > 0 && (
 					<>
 						<h3 className="h5">
-							<div className="text-muted font-italic">
+							<div className="text-muted fst-italic">
 								<small>This episode is brought to you by:</small>
 							</div>
 						</h3>
@@ -141,7 +141,7 @@ export default async function Newsletter({ params }: NextPageProps<'slug'>) {
 													w: 80,
 												},
 											})}
-											className="mr-3"
+											className="me-3"
 											alt=""
 											width={sponsor.sponsorImage[0].width}
 											height={sponsor.sponsorImage[0].height}
@@ -199,7 +199,7 @@ export default async function Newsletter({ params }: NextPageProps<'slug'>) {
 							const headshot = guest.headshot[0];
 							return (
 								<div className="card mb-4" key={guest.id}>
-									<div className="row no-gutters">
+									<div className="row g-0">
 										<div className="col-sm-4 col-md-12">
 											{headshot && (
 												// eslint-disable-next-line @next/next/no-img-element

@@ -32,7 +32,7 @@ export function Form() {
 				<p className="text-muted">
 					Just a couple quick pieces of info that we'll need:
 				</p>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="formName">Your Name</label>
 					<input
 						type="text"
@@ -46,7 +46,7 @@ export function Form() {
 						Required.
 					</small>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="formEmail">Email</label>
 					<input
 						type="email"
@@ -60,7 +60,7 @@ export function Form() {
 						Required. We'll never share your email with anyone else.
 					</small>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="formEmail">GitHub User Name</label>
 					<input
 						type="text"
@@ -77,13 +77,13 @@ export function Form() {
 			</fieldset>
 			<fieldset>
 				<legend>Role Details:</legend>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="position">Name of Role/Position</label>
 					<Suspense>
 						<Position />
 					</Suspense>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="description">
 						Any details or thoughts you may have
 					</label>

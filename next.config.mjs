@@ -10,6 +10,10 @@ const nextConfig = {
 	reactStrictMode: true,
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'node_modules')],
+		// Bootstrap 5.3's own Sass triggers if-function and global-builtin
+		// deprecations on Dart Sass 1.10x. Silence warnings coming from
+		// dependencies only, so warnings in src/styles/ still surface.
+		quietDeps: true,
 		silenceDeprecations: [
 			'abs-percent',
 			'color-functions',

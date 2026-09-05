@@ -67,10 +67,10 @@ export default function Challenge() {
 			</p>
 
 			<table className="table mt-5" style={{ maxWidth: '600px' }}>
-				<thead className="thead-dark">
+				<thead className="table-dark">
 					<tr>
 						<th scope="col">Pairing topic</th>
-						<th scope="col" className="text-right">
+						<th scope="col" className="text-end">
 							Members
 						</th>
 					</tr>
@@ -79,9 +79,7 @@ export default function Challenge() {
 					{list.map((challenge, i) => (
 						<tr key={i}>
 							<td>{challenge.theme}</td>
-							<td className="text-right">
-								{challenge.participants.join(', ')}
-							</td>
+							<td className="text-end">{challenge.participants.join(', ')}</td>
 						</tr>
 					))}
 				</tbody>
@@ -94,7 +92,7 @@ export default function Challenge() {
 				<thead>
 					<tr>
 						<th scope="col">Member</th>
-						<th scope="col" className="text-right">
+						<th scope="col" className="text-end">
 							Number of pairing sessions
 						</th>
 					</tr>
@@ -105,7 +103,7 @@ export default function Challenge() {
 						return (
 							<tr key={i}>
 								<td>{person}</td>
-								<td className="text-right">
+								<td className="text-end">
 									{num} event{num > 1 ? 's' : ''}
 								</td>
 							</tr>

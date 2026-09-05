@@ -57,7 +57,7 @@ export default function Issue() {
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
 
-			<h3 className="font-italic">April Recap</h3>
+			<h3 className="fst-italic">April Recap</h3>
 			<p>
 				<strong>💡Monthly Theme & Challenge</strong>: Gratitude!
 			</p>
@@ -70,7 +70,7 @@ export default function Issue() {
 				the space!
 			</p>
 
-			<h3 className="font-italic">May Happenings</h3>
+			<h3 className="fst-italic">May Happenings</h3>
 			<p>
 				<strong>💡Monthly Theme & Challenge</strong>: Month of Pairing!
 			</p>
@@ -128,7 +128,7 @@ export default function Issue() {
 				<Link href="/events">our events page</Link>.
 			</p>
 
-			<h3 className="mb-3 font-italic">Volunteering at VC</h3>
+			<h3 className="mb-3 fst-italic">Volunteering at VC</h3>
 			<p>
 				We're very excited to continue open membership with the support of our
 				active volunteers! All our active volunteers have an invite to send out
@@ -174,7 +174,7 @@ export default function Issue() {
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h5 className="card-title text-primary font-italic">Member Wins</h5>
+					<h5 className="card-title text-primary fst-italic">Member Wins</h5>
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">

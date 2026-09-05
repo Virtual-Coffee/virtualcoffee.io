@@ -3,7 +3,7 @@ import { useFormStatus } from 'react-dom';
 export function Submit({ text = 'Submit', loadingText = 'Submitting...' }) {
 	const { pending } = useFormStatus();
 	return (
-		<div className="text-right">
+		<div className="text-end">
 			<button
 				type="submit"
 				className="btn btn-primary btn-lg"
@@ -27,7 +27,7 @@ export function CodeOfConduct() {
 				.
 			</p>
 
-			<label className="form-group form-check">
+			<label className="mb-form form-check">
 				<input
 					type="checkbox"
 					name="agree"

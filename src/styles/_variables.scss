@@ -1,25 +1,45 @@
-$enable-responsive-font-sizes: true;
+// ---------------------------------------------------------------------------
+// Project overrides for Bootstrap 5.3.x
+//
+// main.scss imports this BEFORE ./bootstrap, so everything here wins over
+// Bootstrap's `!default` values — including Sass MAPS.
+//
+// RULE 1: nothing in this file may reference a Bootstrap-defined variable
+// ($gray-600, $font-size-lg, ...) or call a Bootstrap function (tint-color(),
+// color-contrast(), escape-svg(), ...) — bootstrap/scss/functions and
+// bootstrap/scss/variables have not been imported yet at this point. If you
+// need one, move that declaration into _bootstrap.scss between the `functions`
+// and `variables` imports.
+//
+// RULE 2: any MAP assigned here is a full REPLACEMENT, not a merge.
+// Bootstrap's own value is never seen. Write maps out in full. (v4 map-merged
+// several of these for you; v5 does not.)
+//
+// Declarations marked PROJECT-CUSTOM are not Bootstrap variables; they exist
+// only for the partials in this directory.
+// ---------------------------------------------------------------------------
 
-$container-max-widths: (
-	sm: 540px,
-	md: 720px,
-	lg: 960px,
-	xl: 1200px,
-);
+// Options
+// -------
+// v4's $enable-responsive-font-sizes was renamed $enable-rfs in v5 and now
+// defaults to true. Kept explicit so the intent survives.
+$enable-rfs: true;
 
-$spacer: 1rem;
-$spacers: (
-	6: (
-		$spacer * 6,
-	),
-	7: (
-		$spacer * 9,
-	),
-	8: (
-		$spacer * 12,
-	),
-);
+// This site has no dark theme; skip the [data-bs-theme="dark"] block that
+// _root.scss would otherwise emit.
+$enable-dark-mode: false;
 
+// $primary is #d9376e. v4's color-yiq() scored it 109.7 (below the 150
+// threshold) and gave it WHITE foreground text. v5's color-contrast() measures
+// it against white at 4.435:1 — just under the default $min-contrast-ratio of
+// 4.5 — and would silently flip .btn-primary, .badge and .text-bg-primary to
+// BLACK text, and invert the button hover direction with it. _base.scss styles
+// .btn with a dark text-shadow that assumes white text. Nudge the threshold to
+// preserve v4 rendering.
+$min-contrast-ratio: 4.4;
+
+// Color system
+// ------------
 $white: #fff;
 $gray-200: #eff0f3;
 $gray-900: #0d0d0d;
@@ -29,18 +49,21 @@ $black: #000;
 
 $blue: #376ed9;
 $pink: #d9376e;
-$anotherBlue: #355074;
-$pinkDarker: #7e0029;
+$anotherBlue: #355074; // PROJECT-CUSTOM
+$pinkDarker: #7e0029; // PROJECT-CUSTOM
 $red: #dc3545;
 $orange: #da6f36;
-$blackCoral: #3d5467;
+$blackCoral: #3d5467; // PROJECT-CUSTOM
 $green: #6ed937;
 $purple: #3f3d56;
 $primary: $pink;
 $secondary: $blackCoral;
-$alert-color-level: 12;
 
-$gradient-primary: linear-gradient(to right bottom, $pink, $orange);
+$gradient-primary: linear-gradient(
+	to right bottom,
+	$pink,
+	$orange
+); // PROJECT-CUSTOM
 
 $link-color: $blue;
 
@@ -50,12 +73,45 @@ $body-color: $gray-800;
 
 $code-color: $blackCoral;
 
+// $text-muted still exists in 5.3 but is deprecated and now resolves to
+// var(--bs-secondary-color). _base.scss and _footer.scss use it as a plain
+// Sass colour, so pin it to v4's $gray-600 value. Written as a literal because
+// $gray-600 is not defined yet (RULE 1).
+$text-muted: #6c757d;
+
 // $card-height: 100%;
 
-$form-group-margin-bottom: 2rem;
+// Spacing
+// -------
+// THE #1 MIGRATION HAZARD. In v4, Bootstrap shipped `$spacers: () !default`
+// and then map-merged keys 0–5 on top of whatever you set, so assigning
+// {6,7,8} here was additive. In v5, $spacers ships as a complete 0–5 map
+// guarded by !default — and because this file assigns without !default, a
+// {6,7,8}-only map would REPLACE it outright, deleting every .m-*/.p-*/.g-*/
+// .gap-* utility on the site and making map-get($spacers, 4) and
+// map-get($spacers, 5) return null in _members.scss. So: write out all keys.
+// _maps.scss derives $gutters and $negative-spacers from this map too.
+//
+// `form` replaces v4's $form-group-margin-bottom (2rem); .form-group was
+// removed in v5, so form fields use .mb-form instead.
+$spacer: 1rem;
+$spacers: (
+	0: 0,
+	1: $spacer * 0.25,
+	2: $spacer * 0.5,
+	3: $spacer,
+	4: $spacer * 1.5,
+	5: $spacer * 3,
+	6: $spacer * 6,
+	7: $spacer * 9,
+	8: $spacer * 12,
+	form: 2rem,
+);
 
 $hr-margin-y: $spacer * 3;
 
+// Grid
+// ----
 $grid-breakpoints: (
 	xs: 0,
 	sm: 576px,
@@ -65,8 +121,24 @@ $grid-breakpoints: (
 	xxl: 1875px,
 );
 
+// Deliberately has no xxl key. _containers.scss iterates $container-max-widths
+// (not $grid-breakpoints), so a missing key is not an error — .container just
+// stays capped at 1200px above xl, exactly as in v4. Adding xxl here would
+// also mint a .container-xxl class.
+$container-max-widths: (
+	sm: 540px,
+	md: 720px,
+	lg: 960px,
+	xl: 1200px,
+);
+
+// v5 derives $container-padding-x from this, and both .container and .row
+// halve it in calc(), so 60px still yields 30px container padding and 30px
+// per-column padding — identical geometry to v4.
 $grid-gutter-width: 60px;
 
+// Typography
+// ----------
 $font-family-sans-serif:
 	-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
 	Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
@@ -76,34 +148,59 @@ $font-family-base: 'Inter var', $font-family-sans-serif;
 $headings-font-weight: 700;
 $headings-line-height: 1;
 
-$display1-weight: 900;
-$display2-weight: 900;
-$display3-weight: 900;
-$display4-weight: 900;
-$display5-weight: 900;
+// v5 collapsed $display1-weight..$display4-weight into a single
+// $display-font-weight (default 300) and changed the size ramp to
+// (1:5rem 2:4.5rem 3:4rem 4:3.5rem 5:3rem 6:2.5rem). Restore v4's ramp and
+// stop at 5, so Bootstrap's generated .display-5 matches the 2.5rem that
+// _base.scss used to hand-roll and no unused .display-6 is emitted.
+$display-font-weight: 900;
+$display-font-sizes: (
+	1: 6rem,
+	2: 5.5rem,
+	3: 4.5rem,
+	4: 3.5rem,
+	5: 2.5rem,
+);
 
-// html { font-family: 'Inter', sans-serif; }
-// @supports (font-variation-settings: normal) {
-//   html { font-family: 'Inter var', sans-serif; }
-// }
-
+// Navbar
+// ------
 $navbar-padding-y: 0.75rem;
+// v4 defaulted this to $spacer; v5 defaults it to null, which would pull the
+// brand and toggler 1rem closer to the container edge.
+$navbar-padding-x: $spacer;
+
 $navbar-dark-color: rgba($white, 0.9);
 $navbar-dark-hover-color: $white;
 $navbar-dark-active-color: $white;
-$navbar-dark-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-dark-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
 $navbar-dark-toggler-border-color: $white;
 
 $navbar-light-color: rgba($black, 0.85);
 $navbar-light-hover-color: rgba($black, 1);
 $navbar-light-active-color: rgba($black, 1);
 $navbar-light-disabled-color: rgba($black, 0.3);
-$navbar-light-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><path stroke='#{$navbar-light-color}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
 $navbar-light-toggler-border-color: rgba($black, 0.85);
 
 $navbar-light-brand-color: $navbar-light-active-color;
 $navbar-light-brand-hover-color: $navbar-light-active-color;
 
+// v5.3 added $navbar-{light,dark}-icon-color as the supported hook for the
+// toggler icon, because the stock $navbar-*-color values became
+// `rgba(var(--bs-emphasis-color-rgb), .65)` — a CSS custom property, which is
+// illegal inside an SVG data URI. Setting these lets Bootstrap's own
+// -toggler-icon-bg data URI interpolate a real colour, so the hand-written
+// data URIs carried over from v4 are no longer needed.
+$navbar-dark-icon-color: $navbar-dark-color;
+$navbar-light-icon-color: $navbar-light-color;
+
 $navbar-toggler-padding-y: 0.25rem;
 $navbar-toggler-padding-x: 0.5rem;
 $navbar-toggler-font-size: 1rem;
+
+// Removed in v5, deleted here:
+//   $enable-responsive-font-sizes  -> $enable-rfs (above)
+//   $alert-color-level             -> v5 alerts use --bs-{state}-bg-subtle
+//                                     from _maps.scss and compute nothing
+//   $form-group-margin-bottom      -> .form-group removed; see the `form`
+//                                     spacer key above
+//   $display1-weight..$display4-weight and the project's $display5-weight
+//                                  -> single $display-font-weight (above)

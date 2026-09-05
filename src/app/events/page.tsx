@@ -118,7 +118,7 @@ export default async function Page() {
 									)),
 								)}
 							</ul>
-							<div className="text-right text-muted">
+							<div className="text-end text-muted">
 								<Link href="/sponsorship">Sponsor Virtual Coffee</Link>
 							</div>
 						</div>

@@ -13,7 +13,7 @@ export function Form() {
 		>
 			<input type="hidden" name="form-name" value="coc-violation" />
 			<fieldset>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="formName">Your Name</label>
 					<input
 						type="text"
@@ -26,7 +26,7 @@ export function Form() {
 						Optional, skip if you wish to remain anonymous
 					</small>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="formEmail">Email</label>
 					<input
 						type="email"
@@ -39,7 +39,7 @@ export function Form() {
 						Optional, skip if you wish to remain anonymous
 					</small>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="reporteeName">
 						Slack name of member you're reporting
 					</label>
@@ -55,7 +55,7 @@ export function Form() {
 						Required
 					</small>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="timeLocation">Approximate time/location</label>
 					<input
 						type="text"
@@ -69,7 +69,7 @@ export function Form() {
 						Required
 					</small>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="description">Description of the event:</label>
 					<textarea
 						className="form-control"
@@ -83,7 +83,7 @@ export function Form() {
 						Required
 					</small>
 				</div>
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="anyoneElseInvolved">
 						Was anyone else involved in this event?
 					</label>
@@ -97,7 +97,7 @@ export function Form() {
 
 				{/*
 				TODO: hook up file upload - probably using Netlify Blob
-				<div className="form-group">
+				<div className="mb-form">
 					<label htmlFor="uploadedFiles">Screenshot or any other file:</label>
 					<input
 						type="file"

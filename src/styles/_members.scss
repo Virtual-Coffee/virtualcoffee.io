@@ -134,7 +134,8 @@
 		fill: currentColor;
 	}
 
-	@include hover-focus() {
+	&:hover,
+	&:focus {
 		color: $secondary;
 	}
 }

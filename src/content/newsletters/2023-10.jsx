@@ -92,7 +92,7 @@ export default function Issue() {
 			</div>
 
 			<h3 className="mt-4">🎙️Podcasts</h3>
-			<p className="font-italic">Season 9 is out!</p>
+			<p className="fst-italic">Season 9 is out!</p>
 			<ul>
 				<li>
 					<Link href="/podcast/ayu-dominic-hacktoberfest-is-coming-preptember-is-here">
@@ -213,7 +213,7 @@ export default function Issue() {
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h2 className="card-title text-primary font-italic">Member Wins</h2>
+					<h2 className="card-title text-primary fst-italic">Member Wins</h2>
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">

@@ -13,7 +13,7 @@ html {
 }
 
 a:focus {
-	outline: 3px solid var(--purple);
+	outline: 3px solid var(--bs-purple);
 }
 
 img,
@@ -127,12 +127,6 @@ ul {
 
 .direct-link {
 	font-size: 0.75em;
-}
-
-.display-5 {
-	@include font-size(2.5rem);
-	font-weight: $display5-weight;
-	line-height: $display-line-height;
 }
 
 .display-1,

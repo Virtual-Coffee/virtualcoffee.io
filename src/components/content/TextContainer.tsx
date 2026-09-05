@@ -15,7 +15,7 @@ export default function TextContainer({
 				{children}
 
 				{showBackToTopLink && (
-					<p className="text-right">
+					<p className="text-end">
 						<a href="#top">Back to Top</a>
 					</p>
 				)}

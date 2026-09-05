@@ -93,7 +93,7 @@ export default async function Challenge() {
 							{person.name}
 						</h3>
 						<a className="header-anchor" href={`#${person.slug}`}>
-							<span className="sr-only">
+							<span className="visually-hidden">
 								Permalink to {person.name}'s posts
 							</span>
 							<span aria-hidden="true">#</span>
@@ -114,13 +114,13 @@ export default async function Challenge() {
 			<h2 className="mt-5">Totals:</h2>
 
 			<table className="table mt-5" style={{ maxWidth: '600px' }}>
-				<thead className="thead-dark">
+				<thead className="table-dark">
 					<tr>
 						<th scope="col">Member Totals</th>
-						<th scope="col" className="text-right">
+						<th scope="col" className="text-end">
 							Posts
 						</th>
-						<th scope="col" className="text-right">
+						<th scope="col" className="text-end">
 							Total Words
 						</th>
 					</tr>
@@ -129,18 +129,18 @@ export default async function Challenge() {
 					{totals.list.map((person, i) => (
 						<tr key={i}>
 							<td>{person.name}</td>
-							<td className="text-right">{person.posts.toLocaleString()}</td>
-							<td className="text-right">{person.total.toLocaleString()}</td>
+							<td className="text-end">{person.posts.toLocaleString()}</td>
+							<td className="text-end">{person.total.toLocaleString()}</td>
 						</tr>
 					))}
 				</tbody>
 				<tfoot>
 					<tr>
 						<th scope="col">Total</th>
-						<th scope="col" className="text-right">
+						<th scope="col" className="text-end">
 							{totals.totalPosts.toLocaleString()}
 						</th>
-						<th scope="col" className="text-right">
+						<th scope="col" className="text-end">
 							{totals.totalCount.toLocaleString()} words
 						</th>
 					</tr>

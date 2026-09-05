@@ -17,7 +17,7 @@ export default function rehypeHeadingAnchors() {
 		properties: { class: 'header-anchor' },
 		content: (node) => {
 			return [
-				hastscript('span.sr-only', `Permalink to “${toString(node)}”`),
+				hastscript('span.visually-hidden', `Permalink to “${toString(node)}”`),
 				hastscript('span', { ariaHidden: 'true' }, '#'),
 			];
 		},
