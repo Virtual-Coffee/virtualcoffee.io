@@ -12,7 +12,10 @@ export async function GET(request: NextRequest) {
 
 	// Handle tag-based revalidation if provided
 	if (tagParam) {
-		revalidateTag(tagParam);
+		// Next 16 requires a cache profile. `{ expire: 0 }` keeps the previous
+		// behaviour: the next request waits for fresh data instead of serving
+		// stale content, which matters because we redirect to `path` below.
+		revalidateTag(tagParam, { expire: 0 });
 	}
 
 	if (!pathParam) {

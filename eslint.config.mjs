@@ -1,21 +1,14 @@
-import { defineConfig } from 'eslint/config';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-	baseDirectory: __dirname,
-	recommendedConfig: js.configs.recommended,
-	allConfig: js.configs.all,
-});
+import { defineConfig, globalIgnores } from 'eslint/config';
+import { fixupConfigRules } from '@eslint/compat';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
 
 export default defineConfig([
+	// eslint-plugin-react / -import / -jsx-a11y (pulled in by eslint-config-next)
+	// still call context methods that ESLint 10 removed; fixupConfigRules shims
+	// them. Drop this once eslint-config-next ships ESLint 10-ready plugins.
+	...fixupConfigRules([...nextVitals, ...nextTs]),
 	{
-		extends: compat.extends('next/core-web-vitals', 'next/typescript'),
-
 		rules: {
 			'react/no-unescaped-entities': 'off',
 			'@next/next/no-html-link-for-pages': 'warn',
@@ -29,15 +22,13 @@ export default defineConfig([
 			],
 		},
 	},
-	{
-		ignores: [
-			'node_modules/**',
-			'.next/**',
-			'out/**',
-			'build/**',
-			'next-env.d.ts',
-			'.netlify/**',
-			'netlify/**',
-		],
-	},
+	globalIgnores([
+		'node_modules/**',
+		'.next/**',
+		'out/**',
+		'build/**',
+		'next-env.d.ts',
+		'.netlify/**',
+		'netlify/**',
+	]),
 ]);
