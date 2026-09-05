@@ -2,6 +2,7 @@
 	"recommendations": [
 		"esbenp.prettier-vscode",
 		"dbaeumer.vscode-eslint",
-		"unifiedjs.vscode-mdx"
+		"unifiedjs.vscode-mdx",
+		"typescriptteam.native-preview"
 	]
 }
