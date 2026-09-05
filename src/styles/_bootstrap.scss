@@ -1,20 +1,9 @@
-// Bootstrap 5.3.x
+// Bootstrap 5.3.x. Order mirrors node_modules/bootstrap/scss/bootstrap.scss.
+// Bare specifiers resolve via sassOptions.includePaths in next.config.mjs.
 //
-// Import order mirrors node_modules/bootstrap/scss/bootstrap.scss. Bare
-// specifiers resolve via sassOptions.includePaths in next.config.mjs.
-//
-// Project overrides live in ./_variables.scss, which main.scss imports BEFORE
-// this file, so every `!default` below resolves against them.
-//
-// Three ordering rules that did not exist in v4 and break silently if moved:
-//   1. `variables-dark` and `maps` are new and must sit between `variables`
-//      and `mixins`. `maps` derives $gutters, $negative-spacers and the
-//      $theme-colors-{rgb,text,bg-subtle,border-subtle} maps.
-//   2. `utilities` is now only the $utilities CONFIG MAP. It emits no CSS and
-//      must come BEFORE `root`.
-//   3. `utilities/api` is what actually emits .m-*, .p-*, .text-* etc. and
-//      MUST stay last, so the project partials imported after this file can
-//      still override them.
+// Ordering is load-bearing: `utilities` is only the config map and must precede
+// `root`, while `utilities/api` emits the actual utility classes and must stay
+// last so the project partials imported after this file can override them.
 
 // Configuration
 @import 'bootstrap/scss/functions';
@@ -47,19 +36,7 @@
 @import 'bootstrap/scss/progress';
 @import 'bootstrap/scss/list-group';
 
-// Helpers — .visually-hidden, .ratio, .stretched-link, .vr
+// .visually-hidden, .ratio, .stretched-link, .vr
 @import 'bootstrap/scss/helpers';
 
-// Utilities API — MUST stay last.
 @import 'bootstrap/scss/utilities/api';
-
-// Removed from the v4 list because the files no longer exist in v5 (hard
-// compile errors): code (moved into reboot), custom-forms (merged into
-// forms), jumbotron, media, print.
-//
-// input-group moved to forms/_input-group.scss and is pulled in by `forms`.
-// containers split out of `grid`.
-//
-// Also dropped: close, toasts, modal, tooltip, popover, carousel. Nothing in
-// src/ references any of them; the navbar and dropdowns in Nav.tsx are
-// hand-rolled React and need no Bootstrap JS or CSS beyond nav/navbar/dropdown.
