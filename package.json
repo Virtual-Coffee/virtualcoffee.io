@@ -17,7 +17,10 @@
 		"prebuild": "pnpm build-member-files",
 		"typecheck": "tsc --noEmit",
 		"watch": "npm-watch",
-		"dev": "pnpm build-member-files && concurrently \"pnpm watch\" \"pnpm local-dev\""
+		"dev": "pnpm build-member-files && concurrently \"pnpm watch\" \"pnpm local-dev\"",
+		"db:generate": "drizzle-kit generate && tsx scripts/syncMigrations.ts",
+		"db:migrate": "netlify database migrations apply",
+		"db:seed": "bash scripts/with-local-db.sh tsx scripts/seedDev.ts"
 	},
 	"watch": {
 		"build-member-files": "src/content/members/**/*.ts"
@@ -25,12 +28,16 @@
 	"dependencies": {
 		"@imgix/js-core": "^3.8.0",
 		"@mdx-js/loader": "^3.1.1",
+		"@netlify/database": "^2.0.1",
 		"@next/mdx": "16.3.4",
 		"@sindresorhus/slugify": "^3.0.1",
+		"@tanstack/react-table": "^9.2.4",
 		"@types/mdx": "^2.0.14",
 		"airtable": "^0.12.2",
+		"better-auth": "^1.7.3",
 		"bootstrap": "^5.3.8",
 		"calendar-link": "^2.11.5",
+		"drizzle-orm": "^0.45.2",
 		"front-matter": "^4.0.2",
 		"graphql": "^16.14.2",
 		"graphql-request": "^7.4.0",
@@ -40,6 +47,7 @@
 		"luxon": "^3.7.2",
 		"mdast-util-toc": "^7.1.0",
 		"next": "16.3.4",
+		"nodemailer": "^10.0.0",
 		"react": "^19.2.8",
 		"react-dom": "^19.2.8",
 		"react-leaflet": "^5.0.0",
@@ -52,7 +60,8 @@
 		"remark-parse": "^11.0.0",
 		"remark-rehype": "^11.1.2",
 		"sanitize-html": "^2.17.7",
-		"unified": "^11.0.5"
+		"unified": "^11.0.5",
+		"zod": "^4.5.4"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.1.1",
@@ -61,12 +70,14 @@
 		"@types/leaflet.markercluster": "^1.5.6",
 		"@types/luxon": "^3.7.5",
 		"@types/node": "^24.13.3",
+		"@types/nodemailer": "^8.0.1",
 		"@types/react": "^19.2.18",
 		"@types/react-dom": "^19.2.5",
 		"@types/sanitize-html": "^2.16.1",
 		"@typescript/native": "npm:typescript@^7.0.2",
 		"concurrently": "^10.0.5",
 		"cross-env": "^10.1.0",
+		"drizzle-kit": "^0.31.10",
 		"eslint": "^10.9.1",
 		"eslint-config-next": "16.3.4",
 		"netlify-cli": "^27.4.2",
