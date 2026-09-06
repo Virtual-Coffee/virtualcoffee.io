@@ -200,12 +200,6 @@
   status = 200
 
 [[redirects]]
-  from = "/join-slack"
-  query = { code = ":code"}
-  to = "/.netlify/functions/join-slack"
-  status = 200
-
-[[redirects]]
   from = "/bots/*"
   to = "https://vc-bots.lucky-art-2f02.workers.dev/:splat"
   status = 200

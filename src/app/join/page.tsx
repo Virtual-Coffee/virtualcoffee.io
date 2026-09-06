@@ -2,8 +2,11 @@ import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 import Link from 'next/link';
 
-// ISR: Revalidate every 24 hours
-export const revalidate = 86400;
+import { JoinForm } from './form';
+
+// The form posts to a server action, so this page can't be statically cached
+// the way it was when it only linked out to a hosted Airtable form.
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
 	return await createMetaData({
@@ -31,12 +34,10 @@ export default function Join() {
 						contribution for everyone.
 					</p>
 					<p>
-						We intentionally keep our group small to preserve what makes Virtual
-						Coffee special and support our existing members. We&apos; love to
-						have everyone as a part of Virtual Coffee, but we prioritize the
-						intimacy and closeness of the group. Our community is currently
-						accepting members on a limited basis. As new membership becomes
-						available, we&apos;ll reach out to those on the waitlist to join.
+						We keep the group small on purpose, so there&rsquo;s a waitlist. We
+						intentionally keep it that way to preserve what makes Virtual Coffee
+						special and support our existing members. As new membership becomes
+						available, we&rsquo;ll reach out to those on the waitlist to join.
 					</p>
 					<p>
 						In the meantime, feel free to check out the{' '}
@@ -45,15 +46,14 @@ export default function Join() {
 						</Link>
 						.
 					</p>
-					<div className="mt-5 text-center">
-						<a
-							href="https://airtable.com/shrWOl22B5iKYADub"
-							className="btn btn-primary btn-lg"
-						>
-							Join the Waitlist
-						</a>
-					</div>
 				</div>
+
+				<h2>Join the waitlist</h2>
+				<p>
+					Tell us a bit about you and we&rsquo;ll be in touch when a spot opens.
+				</p>
+
+				<JoinForm />
 			</div>
 		</DefaultLayout>
 	);

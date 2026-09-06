@@ -1,11 +1,13 @@
+import Link from 'next/link';
+
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
 // ISR: Revalidate every 24 hours
 export const revalidate = 86400;
 
 export const metadata = {
-	title: 'Membership Form Received!',
-	description: `You're now on the membership waiting list!`,
+	title: 'You’re on the list',
+	description: `You're now on the Virtual Coffee membership waiting list.`,
 };
 
 export default function Thanks() {
@@ -13,14 +15,21 @@ export default function Thanks() {
 		<DefaultLayout simple Hero="UndrawShowingSupport">
 			<div className="prose">
 				<div className="lead">
-					<h2>Thank you for filling out the New Member Form!</h2>
+					<h2>You&rsquo;re on the list</h2>
 					<p>
-						You&apos;ve been added to our membership waiting list. You&apos;ll
-						get an email when you have been added, and that email will contain
-						further instructions.
+						We read applications in batches, usually weekly. When a spot opens
+						we&rsquo;ll email you an invite to a Coffee — that&rsquo;s a casual
+						hour on Zoom, and the last step before joining.
 					</p>
-					<p>Please direct any questions you have to hello@virtualcoffee.io</p>
-					<p>Thanks, and we can&apos;t wait to meet you!</p>
+					<p>
+						In the meantime, the <Link href="/newsletter">newsletter</Link> and
+						the <Link href="/podcast">podcast archive</Link> are open to
+						everyone.
+					</p>
+					<p>
+						Please direct any questions you have to hello@virtualcoffee.io.
+						Thanks, and we can&rsquo;t wait to meet you!
+					</p>
 				</div>
 			</div>
 		</DefaultLayout>

@@ -26,12 +26,9 @@ function bootstrapAdminEmails(): Set<string> {
 }
 
 /**
- * Defer opening a connection until Better Auth actually handles a request.
- *
- * `drizzleAdapter()` wants a database instance at config time, but this module
- * is imported while Next collects routes during a build, where there may be no
- * database to connect to. Resolving on first property access keeps `next build`
- * working without one.
+ * Defer opening a connection until a query actually runs. Not sufficient on
+ * its own — see `createAuth` below — but it keeps the database out of module
+ * evaluation for every other consumer.
  */
 const lazyDatabase = new Proxy({} as Database, {
 	get(_target, property, receiver) {
@@ -46,67 +43,101 @@ const slackClientSecret = process.env.SLACK_CLIENT_SECRET;
 const slackTeamId = process.env.SLACK_TEAM_ID;
 
 /**
- * Whether Slack sign-in can work at all. False on a fresh clone and on deploy
- * previews, where the OAuth redirect URI isn't registered — the sign-in page
- * reads this to explain itself rather than offering a button that 500s.
+ * Whether Slack sign-in can work at all. False on a fresh clone, where the
+ * sign-in page reads this to explain itself rather than offering a button
+ * that 500s.
  */
 export const slackAuthConfigured = Boolean(slackClientId && slackClientSecret);
 
-export const auth = betterAuth({
-	database: drizzleAdapter(lazyDatabase, {
-		provider: 'pg',
-		schema,
-	}),
-	// Slack is the only way in; there is deliberately no email/password path.
-	socialProviders: slackAuthConfigured
-		? {
-				slack: {
-					clientId: slackClientId as string,
-					clientSecret: slackClientSecret as string,
-					/**
-					 * Better Auth 1.7.3's Slack provider has no `team` option (the
-					 * documented one belongs to a later release), so the workspace
-					 * check happens here. Without it, any Slack account anywhere
-					 * could create a user — they would land on the "not an admin"
-					 * screen, but there is no reason to let them in at all.
-					 */
-					mapProfileToUser: (profile) => {
-						const team = profile[SLACK_TEAM_ID_CLAIM];
+function createAuth() {
+	return betterAuth({
+		database: drizzleAdapter(lazyDatabase, {
+			provider: 'pg',
+			schema,
+		}),
+		// Slack is the only way in; there is deliberately no email/password path.
+		socialProviders: slackAuthConfigured
+			? {
+					slack: {
+						clientId: slackClientId as string,
+						clientSecret: slackClientSecret as string,
+						/**
+						 * Better Auth 1.7.3's Slack provider has no `team` option (the
+						 * documented one belongs to a later release), so the workspace
+						 * check happens here. Without it any Slack account anywhere
+						 * could create a user — they would land on the "not an admin"
+						 * screen, but there is no reason to let them in at all.
+						 */
+						mapProfileToUser: (profile) => {
+							const team = profile[SLACK_TEAM_ID_CLAIM];
 
-						if (slackTeamId && team !== slackTeamId) {
-							throw new Error(
-								'This Slack account is not in the Virtual Coffee workspace.',
-							);
-						}
+							if (slackTeamId && team !== slackTeamId) {
+								throw new Error(
+									'This Slack account is not in the Virtual Coffee workspace.',
+								);
+							}
 
-						return {
-							name: profile.name,
-							email: profile.email,
-							image: profile.picture,
-						};
+							return {
+								name: profile.name,
+								email: profile.email,
+								image: profile.picture,
+							};
+						},
 					},
+				}
+			: {},
+		databaseHooks: {
+			user: {
+				create: {
+					before: async (user) => ({
+						data: {
+							...user,
+							role: bootstrapAdminEmails().has(user.email.toLowerCase())
+								? 'admin'
+								: 'user',
+						},
+					}),
 				},
-			}
-		: {},
-	databaseHooks: {
-		user: {
-			create: {
-				before: async (user) => ({
-					data: {
-						...user,
-						role: bootstrapAdminEmails().has(user.email.toLowerCase())
-							? 'admin'
-							: 'user',
-					},
-				}),
 			},
 		},
+		plugins: [
+			admin({ defaultRole: 'user', adminRoles: ['admin'] }),
+			// Must stay last: it wraps the others to set cookies from server actions.
+			nextCookies(),
+		],
+	});
+}
+
+type Auth = ReturnType<typeof createAuth>;
+
+let cached: Auth | undefined;
+
+/**
+ * Built on first use, not at module load.
+ *
+ * `drizzleAdapter()` inspects the database instance while `betterAuth()` is
+ * constructing, so the lazy database proxy alone isn't enough — it fires
+ * during module evaluation. Next imports this module while collecting page
+ * data at build time, where there is no database, and the build fails with
+ * MissingDatabaseConnectionError. Making the whole instance lazy defers all of
+ * it to the first request.
+ */
+export function getAuth(): Auth {
+	cached ??= createAuth();
+	return cached;
+}
+
+/**
+ * Convenience wrapper so callers can write `auth.api.getSession(...)`. The
+ * property access happens inside request handlers, which is when the instance
+ * gets built.
+ */
+export const auth = new Proxy({} as Auth, {
+	get(_target, property, receiver) {
+		const instance = getAuth() as unknown as Record<PropertyKey, unknown>;
+		const value = Reflect.get(instance, property, receiver);
+		return typeof value === 'function' ? value.bind(instance) : value;
 	},
-	plugins: [
-		admin({ defaultRole: 'user', adminRoles: ['admin'] }),
-		// Must stay last: it wraps the others to set cookies from server actions.
-		nextCookies(),
-	],
 });
 
-export type Session = typeof auth.$Infer.Session;
+export type Session = Auth['$Infer']['Session'];

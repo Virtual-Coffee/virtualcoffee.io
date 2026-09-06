@@ -1,0 +1,90 @@
+import { createHash, randomBytes } from 'crypto';
+import { and, eq, isNull } from 'drizzle-orm';
+
+import { db, inviteToken, membershipApplication } from '@/db';
+
+/**
+ * Single-use, expiring Slack invite tokens.
+ *
+ * Replaces `/join-slack?code=…`, which accepted any non-empty value and never
+ * expired — anyone who had ever been sent a link, or guessed one, could hand
+ * out Slack access indefinitely. Only the hash is stored, so a database leak
+ * doesn't yield working invites.
+ */
+
+const TOKEN_TTL_DAYS = 30;
+
+function hash(token: string): string {
+	return createHash('sha256').update(token).digest('hex');
+}
+
+export async function createSlackInviteToken(
+	applicationId: number,
+): Promise<{ token: string; expiresAt: Date }> {
+	const token = randomBytes(32).toString('base64url');
+	const expiresAt = new Date(Date.now() + TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000);
+
+	await db()
+		.insert(inviteToken)
+		.values({
+			applicationId,
+			purpose: 'slack',
+			tokenHash: hash(token),
+			expiresAt,
+		});
+
+	return { token, expiresAt };
+}
+
+export type TokenRedemption =
+	| { ok: true; applicationId: number }
+	| { ok: false; reason: 'unknown' | 'used' | 'expired' };
+
+/**
+ * Redeem a token, marking it used in the same statement that checks it so two
+ * concurrent requests can't both succeed.
+ */
+export async function redeemSlackInviteToken(
+	token: string,
+): Promise<TokenRedemption> {
+	const database = db();
+	const tokenHash = hash(token);
+
+	const [row] = await database
+		.select({
+			id: inviteToken.id,
+			applicationId: inviteToken.applicationId,
+			expiresAt: inviteToken.expiresAt,
+			usedAt: inviteToken.usedAt,
+		})
+		.from(inviteToken)
+		.where(eq(inviteToken.tokenHash, tokenHash))
+		.limit(1);
+
+	if (!row) return { ok: false, reason: 'unknown' };
+	if (row.usedAt) return { ok: false, reason: 'used' };
+	if (row.expiresAt < new Date()) return { ok: false, reason: 'expired' };
+
+	// Conditional update: only the request that flips usedAt from null wins.
+	const claimed = await database
+		.update(inviteToken)
+		.set({ usedAt: new Date() })
+		.where(and(eq(inviteToken.id, row.id), isNull(inviteToken.usedAt)))
+		.returning({ id: inviteToken.id });
+
+	if (claimed.length === 0) return { ok: false, reason: 'used' };
+
+	return { ok: true, applicationId: row.applicationId };
+}
+
+export async function applicationEmailFor(
+	applicationId: number,
+): Promise<string | null> {
+	const [row] = await db()
+		.select({ email: membershipApplication.email })
+		.from(membershipApplication)
+		.where(eq(membershipApplication.id, applicationId))
+		.limit(1);
+
+	return row?.email ?? null;
+}

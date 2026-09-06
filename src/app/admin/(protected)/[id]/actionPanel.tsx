@@ -1,0 +1,185 @@
+'use client';
+
+import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+
+import type { ApplicationStatus } from '@/db';
+import {
+	approveMembership,
+	declineApplication,
+	recordAttendance,
+	sendCoffeeInvite,
+	withdrawApplication,
+	type ActionResult,
+} from '../actions';
+import { ConfirmSendDialog } from './confirmSendDialog';
+
+type Template = { subject: string; text: string };
+
+type Props = {
+	applicationId: number;
+	applicantName: string;
+	applicantEmail: string;
+	status: ApplicationStatus;
+	statusText: string;
+	attendedAt: string | null;
+	emailConfigured: boolean;
+	coffeeInvite: Template;
+	welcome: Template;
+	slackInvite: Template;
+};
+
+type Dialog = 'coffee' | 'approve' | null;
+
+export function ActionPanel(props: Props) {
+	const router = useRouter();
+	const [dialog, setDialog] = useState<Dialog>(null);
+	const [result, setResult] = useState<ActionResult | null>(null);
+	const [pending, startTransition] = useTransition();
+
+	function run(action: () => Promise<ActionResult>) {
+		startTransition(async () => {
+			const outcome = await action();
+			setResult(outcome);
+			if (outcome.ok) {
+				setDialog(null);
+				router.refresh();
+			}
+		});
+	}
+
+	return (
+		<>
+			{result && !result.ok && (
+				<div className="alert alert-danger" role="alert">
+					<h3 className="h6 alert-heading">That didn&rsquo;t work</h3>
+					<p className="mb-1">{result.message}</p>
+					{/* Whether anything was emailed is the thing the maintainer needs
+					    in order to decide about retrying, so it is stated outright
+					    rather than left to be inferred. */}
+					<p className="mb-0 small">
+						{result.emailSent === false
+							? `${props.applicantName} is still ${props.statusText} and nothing was emailed — safe to try again.`
+							: result.emailSent === 'unknown'
+								? `We can’t confirm whether the email went out. Check with ${props.applicantEmail} before retrying, or you may email them twice.`
+								: 'An email was already sent — read the message above before retrying.'}
+					</p>
+				</div>
+			)}
+
+			{!props.emailConfigured && (
+				<div className="alert alert-warning small" role="alert">
+					Email isn&rsquo;t configured, so nothing can be sent from here yet.
+				</div>
+			)}
+
+			<div className="d-grid gap-2">
+				{props.status === 'waitlisted' && (
+					<button
+						type="button"
+						className="btn btn-primary"
+						disabled={pending}
+						onClick={() => setDialog('coffee')}
+					>
+						Send Coffee invite
+					</button>
+				)}
+
+				{props.status === 'coffee_invited' && (
+					<>
+						<button
+							type="button"
+							className="btn btn-primary"
+							disabled={pending}
+							onClick={() => setDialog('approve')}
+						>
+							Approve membership
+						</button>
+						<button
+							type="button"
+							className="btn btn-outline-secondary"
+							disabled={pending}
+							onClick={() => run(() => recordAttendance(props.applicationId))}
+						>
+							Record attendance
+						</button>
+					</>
+				)}
+
+				{props.status !== 'member' && (
+					<>
+						<button
+							type="button"
+							className="btn btn-outline-danger"
+							disabled={pending}
+							onClick={() =>
+								run(() => declineApplication(props.applicationId, null))
+							}
+						>
+							Decline
+						</button>
+						<button
+							type="button"
+							className="btn btn-outline-secondary"
+							disabled={pending}
+							onClick={() =>
+								run(() => withdrawApplication(props.applicationId))
+							}
+						>
+							Mark withdrawn
+						</button>
+					</>
+				)}
+			</div>
+
+			{props.status === 'coffee_invited' && (
+				<p className="text-body-secondary small mt-3 mb-0">
+					Approving also sends the Slack invite.
+				</p>
+			)}
+
+			<ConfirmSendDialog
+				open={dialog === 'coffee'}
+				title="Send Coffee invite"
+				intro={
+					<>
+						This sends an email to <strong>{props.applicantEmail}</strong> and
+						moves {props.applicantName} to <strong>Coffee invited</strong>.
+					</>
+				}
+				to={props.applicantEmail}
+				emails={[props.coffeeInvite]}
+				confirmLabel="Send invite"
+				pending={pending}
+				onCancel={() => setDialog(null)}
+				onConfirm={(copyMe) =>
+					run(() => sendCoffeeInvite(props.applicationId, copyMe))
+				}
+			/>
+
+			<ConfirmSendDialog
+				open={dialog === 'approve'}
+				title="Approve membership"
+				intro={
+					<>
+						Two things happen and neither can be taken back:{' '}
+						{props.applicantName} gets a welcome email, and a Slack invite goes
+						out to <strong>{props.applicantEmail}</strong>.
+						<span className="d-block mt-2 text-body-secondary">
+							Coffee invited → Member
+							{props.attendedAt ? ` · Attended ${props.attendedAt}` : ''}
+						</span>
+					</>
+				}
+				to={props.applicantEmail}
+				emails={[props.welcome, props.slackInvite]}
+				confirmLabel="Approve &amp; send Slack invite"
+				pending={pending}
+				onCancel={() => setDialog(null)}
+				onConfirm={(copyMe) =>
+					run(() => approveMembership(props.applicationId, copyMe))
+				}
+			/>
+		</>
+	);
+}
