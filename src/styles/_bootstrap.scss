@@ -35,6 +35,13 @@
 @import 'bootstrap/scss/alert';
 @import 'bootstrap/scss/progress';
 @import 'bootstrap/scss/list-group';
+// .btn-close and .spinner-* are used by /admin. Kept in bootstrap.scss's own
+// order (close, …, spinners) so this file stays a subset of it. The drawer and
+// confirmation dialogs are native <dialog> elements styled in _admin.scss
+// rather than Bootstrap's offcanvas/modal, which need Bootstrap's JS — this
+// project loads none.
+@import 'bootstrap/scss/close';
+@import 'bootstrap/scss/spinners';
 
 // .visually-hidden, .ratio, .stretched-link, .vr
 @import 'bootstrap/scss/helpers';
