@@ -17,21 +17,22 @@ jobs:
     env:
       # Secrets can't be referenced from a step-level `if:`, so the whole
       # "may we push a fix?" decision is resolved once, here.
-      # Fork PRs get no secrets at all, so CI_APP_ID is empty and they fall
+      # Fork PRs get no secrets at all, so the client id is empty and they fall
       # through to check-only automatically.
       # Bot branches are excluded because Renovate stops rebasing a branch as
       # soon as a commit from another author lands on it.
       CAN_AUTOFIX:
-        ${{ secrets.CI_APP_ID != '' && github.event.pull_request.head.repo.full_name ==
-        github.repository && !contains(fromJSON('["renovate[bot]", "dependabot[bot]"]'),
-        github.actor) }}
+        ${{ secrets.CI_APP_CLIENT_ID != '' && github.event.pull_request.head.repo.full_name
+        == github.repository && !contains(fromJSON('["renovate[bot]",
+        "dependabot[bot]"]'), github.actor) }}
     steps:
       - name: Generate app token
         id: app-token
         if: env.CAN_AUTOFIX == 'true'
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
-          app-id: ${{ secrets.CI_APP_ID }}
+          # `app-id` is deprecated in favour of `client-id`.
+          client-id: ${{ secrets.CI_APP_CLIENT_ID }}
           private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
 
       - name: Checkout PR branch
@@ -69,11 +70,54 @@ jobs:
         if: steps.check.outputs.needs_fix == 'true' && env.CAN_AUTOFIX == 'true'
         run: pnpm exec prettier --write --ignore-unknown .
 
+      # Committed through the GraphQL API rather than the git CLI, because
+      # GitHub signs API-created commits: they show as Verified and are
+      # attributed to the app instead of inheriting the last human committer.
+      # expectedHeadOid also makes a concurrent push fail cleanly rather than
+      # racing. Untrusted values (the branch name) go through env, never
+      # interpolated into the shell.
       - name: Commit formatting
         if: steps.check.outputs.needs_fix == 'true' && env.CAN_AUTOFIX == 'true'
-        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
-        with:
-          commit_message: 'style: apply prettier formatting'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          # Prettier only ever rewrites files that already exist, so additions
+          # cover every change it can make: no deletions, no binaries.
+          additions=$(git diff --name-only -z | while IFS= read -r -d '' f; do
+            jq -n --arg path "$f" --arg contents "$(base64 -w0 -- "$f")" \
+              '{path: $path, contents: $contents}'
+          done | jq -sc '.')
+
+          jq -n \
+            --arg repo "$REPO" \
+            --arg branch "$BRANCH" \
+            --arg oid "$(git rev-parse HEAD)" \
+            --argjson additions "$additions" \
+            '{
+              query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }",
+              variables: {
+                input: {
+                  branch: {
+                    repositoryNameWithOwner: $repo,
+                    branchName: $branch
+                  },
+                  expectedHeadOid: $oid,
+                  message: { headline: "style: apply prettier formatting" },
+                  fileChanges: { additions: $additions }
+                }
+              }
+            }' > "$RUNNER_TEMP/commit.json"
+
+          response=$(gh api graphql --input "$RUNNER_TEMP/commit.json")
+          oid=$(printf '%s' "$response" | jq -r '.data.createCommitOnBranch.commit.oid // empty')
+          if [ -z "$oid" ]; then
+            echo "::error::createCommitOnBranch returned no commit"
+            printf '%s' "$response" | jq .
+            exit 1
+          fi
+          echo "Committed $oid"
 
       - name: Report unformatted files
         if: steps.check.outputs.needs_fix == 'true' && env.CAN_AUTOFIX != 'true'
