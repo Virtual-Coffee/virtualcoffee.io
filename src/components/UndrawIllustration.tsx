@@ -1,3 +1,5 @@
+import Image, { type ImageProps } from 'next/image';
+
 const svgAspectRatios = {
 	Undraw404: '860.13137 / 571.14799',
 
@@ -77,20 +79,24 @@ type UndrawIllustrationProps = {
 	/** Filename of svg file found in [`public/assets/svg`](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/public/assets/svg) */
 	filename: UndrawIllustrationName;
 	style?: React.CSSProperties;
-} & React.ImgHTMLAttributes<HTMLImageElement>;
+} & Omit<ImageProps, 'src' | 'alt' | 'width' | 'height'>;
 
 export default function UndrawIllustration({
 	filename,
 	style = {},
 	...props
-}: UndrawIllustrationProps): React.ReactElement<'img'> {
+}: UndrawIllustrationProps) {
 	const aspectRatio = svgAspectRatios[filename];
+	// `width`/`height` are required but only establish the ratio: these are
+	// vector, and `next/image` serves SVG as-is rather than optimizing it.
+	const [width, height] = aspectRatio.split(' / ').map(Number);
 
 	return (
-		// eslint-disable-next-line @next/next/no-img-element
-		<img
+		<Image
 			style={{ aspectRatio, ...style }}
 			src={`/assets/svg/${filename}.svg`}
+			width={width}
+			height={height}
 			loading="lazy"
 			aria-hidden="true"
 			alt=""

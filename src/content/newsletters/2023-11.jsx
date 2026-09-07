@@ -1,6 +1,7 @@
-import Image from 'next/image';
 import Link from 'next/link';
+import CdnImage from '@/components/CdnImage';
 import LeadText from '@/components/content/LeadText';
+import { cmsImageUrl } from '@/util/cmsimage';
 
 export const handle = {
 	meta: {
@@ -367,8 +368,8 @@ export default function Issue() {
 			<hr />
 			<div className="text-center">
 				<a href="https://www.levelupfinancialplanning.com/?vc">
-					<Image
-						src="https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png"
+					<CdnImage
+						src={cmsImageUrl({ path: 'levelUP.png', folder: 'podcast' })}
 						alt="Sponsored by LevelUP Financial Planning"
 						width={679}
 						height={525}

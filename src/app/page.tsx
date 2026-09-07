@@ -1,4 +1,5 @@
 import VirtualCoffeeFullBanner from '@/svg/VirtualCoffeeFullBanner';
+import CdnImage from '@/components/CdnImage';
 import HomePageBlock from '@/components/HomePageBlock';
 import PostList, {
 	formatFileListItemsForPostList,
@@ -129,21 +130,12 @@ export default async function Home() {
 									tier.sponsors.map((supporter) => (
 										<li key={supporter.id} data-id={supporter.id}>
 											<a href={supporter.websiteUrl || supporter.url}>
-												{/* eslint-disable-next-line @next/next/no-img-element */}
-												<img
+												<CdnImage
 													src={supporter.avatarUrl_80}
 													alt=""
 													width={supporter.avatar_width || 240}
 													height={supporter.avatar_height || 240}
-													loading="lazy"
-													decoding="async"
-													sizes="(min-width: 768px) 400, calc(100vw - 60px)"
-													srcSet={`
-              ${supporter.avatarUrl_80}   80w,
-              ${supporter.avatarUrl_160} 160w,
-              ${supporter.avatarUrl_240} 240w,
-              ${supporter.avatarUrl_480} 480w,
-              ${supporter.avatarUrl_720} 720w`}
+													sizes="(min-width: 768px) 400px, calc(100vw - 60px)"
 												/>
 												<div className="sponsors-body">
 													<h3 className="h4">{supporter.name}</h3>
@@ -173,20 +165,12 @@ export default async function Home() {
 											href={supporter.url}
 											title={supporter.name || supporter.login}
 										>
-											{/* eslint-disable-next-line @next/next/no-img-element */}
-											<img
+											<CdnImage
 												src={supporter.avatarUrl_80}
 												alt={supporter.name || supporter.login}
-												width="80"
-												height="80"
-												loading="lazy"
-												decoding="async"
+												width={80}
+												height={80}
 												sizes="80px"
-												srcSet={`
-              ${supporter.avatarUrl_80}   80w,
-              ${supporter.avatarUrl_160} 160w,
-              ${supporter.avatarUrl_240} 240w
-            `}
 											/>
 											<div className="supporters-name">
 												<svg
