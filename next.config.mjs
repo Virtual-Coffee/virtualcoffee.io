@@ -30,6 +30,16 @@ const localMdxPlugin = (relPath, options = {}) => {
 
 const nextConfig = {
 	reactStrictMode: true,
+	images: {
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'virtualcoffeeio-cms.imgix.net',
+				pathname: '/podcast/**',
+				search: '',
+			},
+		],
+	},
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'node_modules')],
 		// Bootstrap 5.3's own Sass triggers if-function and global-builtin

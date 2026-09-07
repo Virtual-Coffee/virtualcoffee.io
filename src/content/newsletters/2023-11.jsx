@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import LeadText from '@/components/content/LeadText';
 
@@ -366,20 +367,13 @@ export default function Issue() {
 			<hr />
 			<div className="text-center">
 				<a href="https://www.levelupfinancialplanning.com/?vc">
-					<img
-						src="https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=80"
+					<Image
+						src="https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png"
 						alt="Sponsored by LevelUP Financial Planning"
-						width={720}
-						height={557}
-						loading="lazy"
-						decoding="async"
-						sizes="(min-width: 768px) 400, calc(100vw - 60px)"
-						srcSet={`
-              https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=80   80w,
-              https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=160 160w,
-              https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=240 240w,
-              https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=480 480w,
-              https://virtualcoffeeio-cms.imgix.net/podcast/levelUP.png?ixlib=js-3.8.0&auto=compress%2Cformat&w=720 720w`}
+						width={679}
+						height={525}
+						sizes="(min-width: 768px) 400px, calc(100vw - 60px)"
+						style={{ height: 'auto' }}
 					/>
 				</a>
 			</div>

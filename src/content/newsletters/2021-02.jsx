@@ -54,7 +54,7 @@ export default function Issue() {
 					<strong>New members:</strong> 30+ new members
 				</li>
 				<li>
-					Had over 300 downloads of our <a href="/podcast/">podcast</a>
+					Had over 300 downloads of our <Link href="/podcast/">podcast</Link>
 				</li>
 			</ul>
 
@@ -70,19 +70,19 @@ export default function Issue() {
 			<h4 className="mt-4">🎙️ Podcast</h4>
 			<ul>
 				<li>
-					<a href="/podcast/0101-nickyt/">
+					<Link href="/podcast/0101-nickyt/">
 						Nick Taylor: Open Source, Live Streaming, and Structured YOLO
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="/podcast/0102-marieantons/">
+					<Link href="/podcast/0102-marieantons/">
 						Marie Antons: From Chef to Tech
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="/podcast/0103-tori-crawford/">
+					<Link href="/podcast/0103-tori-crawford/">
 						Tori Crawford: Interviewing -- If it's broke, fix it
-					</a>
+					</Link>
 				</li>
 			</ul>
 			<h4 className="mt-4">🥪 Brownbags</h4>
