@@ -89,7 +89,7 @@ Podcast episodes are a checked-in JSON snapshot (`src/data/podcast/episodes.json
 
 ### Netlify
 
-- `netlify/functions/join-coffee.ts` and `join-slack.ts` are redirect functions (env: `ZOOM_TUESDAYS`, `ZOOM_THURSDAYS`, `SLACK_JOIN_LINK`); `netlify/edge-functions/block-bots.js` returns 401 to AI-scraper user agents on every path.
+- `netlify/functions/join-coffee.ts` is a redirect function (env: `ZOOM_TUESDAYS`, `ZOOM_THURSDAYS`). `netlify/edge-functions/block-bots.ts` returns 401 to AI-scraper user agents on every path, on deploys only — it is skipped in local dev unless `BLOCK_BOTS_LOCAL=true`, and allows user-initiated agent fetches. Its list lives in `src/data/bots.ts` and also generates `src/app/robots.ts`; the edge function imports it with an explicit `.ts` extension because it bundles for Deno.
 - `netlify.toml` holds the legacy 301 map, the `/join-*` rewrites, a `/bots/*` proxy to a Cloudflare Worker, and the Plausible analytics proxy. Add new URL redirects there, not in Next config.
 
 ## Content conventions

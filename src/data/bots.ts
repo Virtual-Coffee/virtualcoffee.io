@@ -1,6 +1,10 @@
+// The one bot list. Consumed by src/app/robots.ts (the polite request) and
+// netlify/edge-functions/block-bots.ts (enforcement). Keep this module free of
+// imports — the edge function bundles it for Deno, which has no Node built-ins.
+//
 // inspired (and taken) from ethan marcotte's blog post
 // https://ethanmarcotte.com/wrote/blockin-bots/
-const botUas = [
+export const botUas = [
 	'Amazonbot',
 	'anthropic-ai',
 	'Applebot-Extended',
@@ -44,19 +48,13 @@ const botUas = [
 	'peer39_crawler',
 ];
 
-export default async (request, context) => {
-	const ua = request.headers.get('user-agent') ?? '';
-
-	let isBot = false;
-
-	botUas.forEach((u) => {
-		if (ua.toLowerCase().includes(u.toLowerCase())) {
-			isBot = true;
-		}
-	});
-
-	const response = isBot
-		? new Response(null, { status: 401 })
-		: await context.next();
-	return response;
-};
+// Agents that fetch a page because a human asked for it right now, rather than
+// harvesting the site. Checked before botUas and wins, so a broad entry there
+// (`ChatGPT` also matches `ChatGPT-User`) can't swallow them. Also subtracted
+// from robots.txt, without which these agents decline to fetch anyway.
+export const userInitiatedUas = [
+	'Claude-User',
+	'ChatGPT-User',
+	'Perplexity-User',
+	'OAI-SearchBot',
+];

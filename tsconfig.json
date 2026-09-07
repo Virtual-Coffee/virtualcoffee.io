@@ -6,6 +6,9 @@
 		"skipLibCheck": true,
 		"strict": true,
 		"noEmit": true,
+		// The Deno edge bundle needs an explicit .ts in its import specifier
+		// (netlify/edge-functions/block-bots.ts -> src/data/bots.ts).
+		"allowImportingTsExtensions": true,
 		"esModuleInterop": true,
 		"module": "esnext",
 		"moduleResolution": "bundler",
