@@ -46,3 +46,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /deno.lock
+
+# generated member barrels (pnpm build-member-files)
+/src/data/members/*
+!/src/data/members/index.ts

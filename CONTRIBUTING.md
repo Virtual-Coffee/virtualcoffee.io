@@ -115,6 +115,29 @@ Once you've been assigned the issue, you have two options.
 
 **Note:** The guide referenced above uses _master_ as the naming convention for the default branch in all its repos. In this project, _main_ is the default branch name. When following the instructions in the guide, simply replace _master_ with _main_ wherever it appears and it should proceed as normal. [This guide from Scott Hanselman](https://www.hanselman.com/blog/EasilyRenameYourGitDefaultBranchFromMasterToMain.aspx) can help you transition with your own personal repos from master to main, and explains the methodology as to why you should.
 
+### Automated Checks
+
+When you open a pull request, three checks run automatically:
+
+| Check       | What it does                                                           |
+| ----------- | ---------------------------------------------------------------------- |
+| `format`    | Verifies every file matches our [Prettier](https://prettier.io/) style |
+| `lint`      | Runs [ESLint](https://eslint.org/) and fails on errors                 |
+| `typecheck` | Runs the TypeScript compiler to catch type errors                      |
+
+`lint` and `typecheck` report problems as annotations directly on the **Files changed** tab, so you can see exactly which line needs attention without digging through logs.
+
+**If the `format` check fails**, don't worry — it's the easiest one to fix. Because your pull request comes from a fork, our automation can't push to your branch, so you fix it yourself in two commands:
+
+```shell
+pnpm format
+git commit -am "style: apply prettier formatting"
+```
+
+Push that, and the check goes green. The failed check's summary page also lists exactly which files needed reformatting.
+
+A red check is not a judgement on your contribution — it's just a robot being picky about spacing. Ask if you get stuck.
+
 ### Awaiting Review
 
 Once you've submitted your pull request, the only thing left is to wait from feedback from one of the project maintainers. Since this is volunteer work for all, of course, we ask for your patience if you don't see a response immediately. It can take time for someone's schedule to clear up to have the right conditions to properly review incoming pull requests. We'd rather not rush a response after someone has put time and effort into submitting it. If it's been over **one week** and you haven't received any acknowledgement, you can post a comment on your pull request reminding of its status.
