@@ -56,12 +56,14 @@ jobs:
       - name: Check formatting
         id: check
         run: |
-          if pnpm exec prettier --check --ignore-unknown . > prettier-output.txt 2>&1; then
+          # Written outside the workspace: anything left in it would be swept
+          # up by the auto-commit below.
+          if pnpm exec prettier --check --ignore-unknown . > "$RUNNER_TEMP/prettier-output.txt" 2>&1; then
             echo "needs_fix=false" >> "$GITHUB_OUTPUT"
           else
             echo "needs_fix=true" >> "$GITHUB_OUTPUT"
           fi
-          cat prettier-output.txt
+          cat "$RUNNER_TEMP/prettier-output.txt"
 
       - name: Apply formatting
         if: steps.check.outputs.needs_fix == 'true' && env.CAN_AUTOFIX == 'true'
@@ -82,7 +84,7 @@ jobs:
             echo "These files are not formatted:"
             echo
             echo '```'
-            grep '^\[warn\] ' prettier-output.txt | grep -v 'Code style issues' | sed 's/^\[warn\] //' || true
+            grep '^\[warn\] ' "$RUNNER_TEMP/prettier-output.txt" | grep -v 'Code style issues' | sed 's/^\[warn\] //' || true
             echo '```'
             echo
             echo 'Run `pnpm format` locally and push the result.'
