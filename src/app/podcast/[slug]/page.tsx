@@ -20,9 +20,26 @@ export async function generateStaticParams() {
 	}));
 }
 
+/**
+ * Route params arrive percent-encoded, while `episodes.json` stores slugs as
+ * written — two episodes have a non-ASCII character in theirs (`jörn`,
+ * `ramón`), so an undecoded lookup misses them and the page 404s.
+ *
+ * `decodeURIComponent` throws on a malformed escape like a bare `%`, which
+ * anyone can type into the address bar; falling back to the raw slug turns that
+ * into the 404 below rather than a 500.
+ */
+function decodeSlug(slug: string) {
+	try {
+		return decodeURIComponent(slug);
+	} catch {
+		return slug;
+	}
+}
+
 async function getEpisodeData(slug: string) {
 	const episode = await getEpisode({
-		slug: slug,
+		slug: decodeSlug(slug),
 		// TODO: enable CMS previews
 		// queryParams: getEpisodeQueryParams(request),
 	});
