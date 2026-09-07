@@ -35,6 +35,16 @@ svg {
 	max-width: 100%;
 }
 
+// `next/image` always emits width/height attributes, which are presentational
+// hints. The `max-width` above frees the width but leaves the height hint
+// definite, so an image scaled down by CSS keeps its full attribute height and
+// sits letterboxed in the leftover space — and a definite height also cancels
+// any `aspect-ratio`. Deliberate fixed heights are class-scoped (see
+// `.navbar-brand img`) and so still win over this.
+img {
+	height: auto;
+}
+
 ul p:last-child {
 	margin-bottom: 0;
 }

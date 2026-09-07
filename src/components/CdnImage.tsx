@@ -85,6 +85,12 @@ function resolveSrc(src: ImageProps['src']) {
  * Anything from an unrecognized host falls through to Next's default loader,
  * which keeps its own conveniences — SVG and `data:` sources are served as-is
  * rather than proxied.
+ *
+ * `width`/`height` are required, but on a CSS-sized image they only set the
+ * ratio and the widths the srcset is built from. They also become
+ * presentational hints, which is why `_base.scss` gives every `img` a global
+ * `height: auto` — without it a definite height hint survives and letterboxes
+ * the image.
  */
 export default function CdnImage({ alt, ...props }: ImageProps) {
 	const { src, loader } = resolveSrc(props.src);
