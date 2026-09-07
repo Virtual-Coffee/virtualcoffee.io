@@ -10,18 +10,24 @@ virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScr
 
 pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`).
 
-| Task                                       | Command                                                                                                                                |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Install                                    | `pnpm install` (copy `.env.example` to `.env` first)                                                                                   |
-| Dev server                                 | `pnpm dev` — regenerates member barrels, then runs `npm-watch` + `netlify dev` (site on http://localhost:9000, proxying Next on :3000) |
-| Next only (no Netlify functions/redirects) | `next dev`                                                                                                                             |
-| Build                                      | `pnpm build` — `prebuild` runs the member codegen first                                                                                |
-| Typecheck                                  | `pnpm typecheck` (`tsc --noEmit`, the native TypeScript 7 binary)                                                                      |
-| Lint                                       | `pnpm lint` (ESLint flat config: `next/core-web-vitals` + `next/typescript`; `netlify/**` is ignored)                                  |
-| Format                                     | `pnpm format` (Prettier: tabs, single quotes, trailing commas; a GitHub Action auto-formats PRs; there is no husky/lint-staged hook)   |
-| Regenerate member barrels                  | `pnpm build-member-files`                                                                                                              |
+| Task                                       | Command                                                                                                                                                 |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Install                                    | `pnpm install` (copy `.env.example` to `.env` first)                                                                                                    |
+| Dev server                                 | `pnpm dev` — regenerates member barrels, then runs `npm-watch` + `netlify dev` (site on http://localhost:9000, proxying Next on :3000)                  |
+| Next only (no Netlify functions/redirects) | `next dev`                                                                                                                                              |
+| Build                                      | `pnpm build` — `prebuild` runs the member codegen first                                                                                                 |
+| Typecheck                                  | `pnpm typecheck` (`next typegen` then `tsc --noEmit`, the native TypeScript 7 binary)                                                                   |
+| Lint                                       | `pnpm lint` (ESLint flat config: `next/core-web-vitals` + `next/typescript`; `netlify/**` is ignored)                                                   |
+| Format                                     | `pnpm format` (Prettier: tabs, single quotes, trailing commas; CI auto-commits fixes on same-repo PR branches only; there is no husky/lint-staged hook) |
+| Regenerate member barrels                  | `pnpm build-member-files`                                                                                                                               |
 
-There is no test suite and no test runner. CI does not run lint/typecheck/build on PRs; Netlify runs `pnpm build`. Run `pnpm typecheck && pnpm lint` before finishing a change.
+There is no test suite and no test runner. `.github/workflows/ci.yml` runs three jobs on every pull request — `format`, `lint`, `typecheck`. Netlify still owns `pnpm build`; CI does not build.
+
+The `lint` and `typecheck` jobs run `pnpm build-member-files` first, because `src/data/members/{core,members}.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm build-member-files && pnpm typecheck && pnpm lint` before finishing a change.
+
+`typecheck` shells out to `next typegen` before `tsc` because `next-env.d.ts` is gitignored (Next's docs require this) and is what declares non-code imports like `*.png`. Without it a clean checkout fails on any image import. `typegen` also writes `.next/types/`, so `tsc` validates typed routes without a full build.
+
+The `format` job auto-commits Prettier fixes, but only on branches in this repo, and never on `renovate[bot]`/`dependabot[bot]` branches (a foreign commit stops Renovate rebasing). Fork PRs get no secrets, so they fall back to `prettier --check` and fail with the file list in the job summary — the contributor runs `pnpm format` themselves.
 
 `@/*` maps to `./src/*`.
 
