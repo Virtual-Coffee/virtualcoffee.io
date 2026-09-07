@@ -155,7 +155,7 @@ Runs [ESLint](https://eslint.org/) on all of our files, so you can check for err
 pnpm typecheck
 ```
 
-Runs the TypeScript compiler (`tsc --noEmit`) to check for type errors without producing output. CI runs this on every pull request. Run `pnpm build-member-files` first if you haven't built recently.
+Runs `next typegen` (which regenerates the gitignored `next-env.d.ts` and the route types) and then the TypeScript compiler (`tsc --noEmit`). CI runs this on every pull request. Run `pnpm build-member-files` first if you haven't built recently.
 
 ### `pnpm build-member-files`
 
