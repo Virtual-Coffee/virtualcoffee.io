@@ -1,0 +1,153 @@
+name: CI
+
+on:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    name: format
+    runs-on: ubuntu-latest
+    env:
+      # Secrets can't be referenced from a step-level `if:`, so the whole
+      # "may we push a fix?" decision is resolved once, here.
+      # Fork PRs get no secrets at all, so CI_APP_ID is empty and they fall
+      # through to check-only automatically.
+      # Bot branches are excluded because Renovate stops rebasing a branch as
+      # soon as a commit from another author lands on it.
+      CAN_AUTOFIX:
+        ${{ secrets.CI_APP_ID != '' && github.event.pull_request.head.repo.full_name ==
+        github.repository && !contains(fromJSON('["renovate[bot]", "dependabot[bot]"]'),
+        github.actor) }}
+    steps:
+      - name: Generate app token
+        id: app-token
+        if: env.CAN_AUTOFIX == 'true'
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.CI_APP_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+
+      - name: Checkout PR branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          token: ${{ steps.app-token.outputs.token || github.token }}
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        id: check
+        run: |
+          if pnpm exec prettier --check --ignore-unknown . > prettier-output.txt 2>&1; then
+            echo "needs_fix=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "needs_fix=true" >> "$GITHUB_OUTPUT"
+          fi
+          cat prettier-output.txt
+
+      - name: Apply formatting
+        if: steps.check.outputs.needs_fix == 'true' && env.CAN_AUTOFIX == 'true'
+        run: pnpm exec prettier --write --ignore-unknown .
+
+      - name: Commit formatting
+        if: steps.check.outputs.needs_fix == 'true' && env.CAN_AUTOFIX == 'true'
+        uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
+        with:
+          commit_message: 'style: apply prettier formatting'
+
+      - name: Report unformatted files
+        if: steps.check.outputs.needs_fix == 'true' && env.CAN_AUTOFIX != 'true'
+        run: |
+          {
+            echo "### :x: Formatting check failed"
+            echo
+            echo "These files are not formatted:"
+            echo
+            echo '```'
+            grep '^\[warn\] ' prettier-output.txt | grep -v 'Code style issues' | sed 's/^\[warn\] //' || true
+            echo '```'
+            echo
+            echo 'Run `pnpm format` locally and push the result.'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 1
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # src/data/members/{core,members}.ts are gitignored codegen that the app
+      # imports through the @/* alias. Only `prebuild` generates them, so
+      # lint/typecheck have to do it themselves.
+      - name: Generate member barrels
+        run: pnpm build-member-files
+
+      - name: Register ESLint problem matcher
+        run: echo "::add-matcher::.github/problem-matchers/eslint-stylish.json"
+
+      - name: Lint
+        # ESLint's stylish formatter prints absolute paths, which stop
+        # annotations anchoring to the diff; strip the workspace prefix.
+        run: |
+          set -o pipefail
+          pnpm lint | sed "s|^${GITHUB_WORKSPACE}/||"
+
+  typecheck:
+    name: typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate member barrels
+        run: pnpm build-member-files
+
+      - name: Register tsc problem matcher
+        run: echo "::add-matcher::.github/problem-matchers/tsc.json"
+
+      - name: Typecheck
+        run: pnpm typecheck

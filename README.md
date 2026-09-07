@@ -137,7 +137,9 @@ Builds a production-ready version of the site. This is what Netlify uses to buil
 pnpm format
 ```
 
-Runs [Prettier](https://prettier.io/) on all of our files. A GitHub Action also formats changed files automatically on pull requests, so there's usually no need to run this manually.
+Runs [Prettier](https://prettier.io/) on all of our files.
+
+If your branch lives in this repository, CI formats it for you and pushes the fix back to your pull request. **If you are working from a fork** — which is the normal path for most contributors — CI cannot push to your branch, so the `format` check will fail and list the offending files. Run `pnpm format` locally and push the result.
 
 ### `pnpm lint`
 
@@ -145,7 +147,7 @@ Runs [Prettier](https://prettier.io/) on all of our files. A GitHub Action also 
 pnpm lint
 ```
 
-Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. This happens automatically at build time.
+Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. CI runs this on every pull request and fails on errors (warnings are allowed for now). Run `pnpm build-member-files` first if you haven't built recently.
 
 ### `pnpm typecheck`
 
@@ -153,7 +155,7 @@ Runs [ESLint](https://eslint.org/) on all of our files, so you can check for err
 pnpm typecheck
 ```
 
-Runs the TypeScript compiler (`tsc --noEmit`) to check for type errors without producing output.
+Runs the TypeScript compiler (`tsc --noEmit`) to check for type errors without producing output. CI runs this on every pull request. Run `pnpm build-member-files` first if you haven't built recently.
 
 ### `pnpm build-member-files`
 
