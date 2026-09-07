@@ -1,8 +1,6 @@
 # CI autofix probe
 
-*   item one
-*   item two
-
-
+- item one
+- item two
 
 Verifies the signed createCommitOnBranch path. Removed after.
