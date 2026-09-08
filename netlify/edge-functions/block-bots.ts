@@ -21,7 +21,7 @@ const blockBots: EdgeFunction = (request) => {
 
 	return new Response(
 		'Automated crawling of virtualcoffee.io is not permitted. See /robots.txt\n',
-		{ status: 401, headers: { 'content-type': 'text/plain; charset=utf-8' } },
+		{ status: 403, headers: { 'content-type': 'text/plain; charset=utf-8' } },
 	);
 };
 
