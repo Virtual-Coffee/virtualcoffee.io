@@ -30,9 +30,31 @@ label {
 	--bs-table-bg: #{$gray-800};
 }
 
+// v5's .blockquote-footer adds `margin-top: -$blockquote-margin-y` because v5
+// documents the footer as a *sibling* of the blockquote, where the negative
+// margin cancels the blockquote's own margin-bottom. The newsletters use v4's
+// markup — the <footer> nested inside .blockquote, after a `.mb-0` <p> — so
+// nothing is left to absorb it: `.blockquote > :last-child` zeroes the
+// footer's bottom margin rather than the paragraph's, and `.mb-0` kills the
+// paragraph's. The attribution then lands on top of the quote's last line.
+// Scoped to the nested case so correct v5 sibling markup keeps its -1rem.
+.blockquote > .blockquote-footer {
+	margin-top: 0;
+}
+
 img,
 svg {
 	max-width: 100%;
+}
+
+// `next/image` always emits width/height attributes, which are presentational
+// hints. The `max-width` above frees the width but leaves the height hint
+// definite, so an image scaled down by CSS keeps its full attribute height and
+// sits letterboxed in the leftover space — and a definite height also cancels
+// any `aspect-ratio`. Deliberate fixed heights are class-scoped (see
+// `.navbar-brand img`) and so still win over this.
+img {
+	height: auto;
 }
 
 ul p:last-child {

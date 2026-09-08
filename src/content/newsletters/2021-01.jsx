@@ -49,7 +49,7 @@ export default function Issue() {
 			<ul>
 				<li>
 					Check out how our monthly challenge -&gt;{' '}
-					<a href="/monthlychallenges/dec-2020/">Pair up!</a> turned out
+					<Link href="/monthlychallenges/dec-2020/">Pair up!</Link> turned out
 				</li>
 				<li>
 					<strong>New members:</strong> ~33 new members
@@ -67,8 +67,8 @@ export default function Issue() {
 
 			<h4 className="mt-4">🎙️ Podcast</h4>
 			<p>
-				<a href="/podcast">Check out the trailer for our new podcast!</a> New
-				episodes will be dropping soon.
+				<Link href="/podcast">Check out the trailer for our new podcast!</Link>{' '}
+				New episodes will be dropping soon.
 			</p>
 
 			<h4 className="mt-4">🛠️ Workshop</h4>
