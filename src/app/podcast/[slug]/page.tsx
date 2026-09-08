@@ -2,12 +2,13 @@ import { NextPageProps } from '@/util/types';
 import { notFound } from 'next/navigation';
 
 import { Fragment } from 'react';
+import CdnImage from '@/components/CdnImage';
 import DisplayHtml from '@/components/DisplayHtml';
 import PodcastSubscribe from '@/components/PodcastSubscribe';
 import { getEpisode, getEpisodes, getTranscript } from '@/data/podcast';
 import { dateForDisplay } from '@/util/date';
 import { sanitizeCmsData } from '@/util/sanitizeCmsData';
-import createCmsImage from '@/util/cmsimage';
+import createCmsImage, { cmsImageUrl } from '@/util/cmsimage';
 import { Metadata } from 'next';
 
 export const dynamic = 'force-static';
@@ -149,51 +150,16 @@ export default async function Newsletter({ params }: NextPageProps<'slug'>) {
 							{episode.episodeSponsors.map((sponsor) => (
 								<li key={sponsor.title}>
 									<a href={sponsor.sponsorUrl}>
-										{/* eslint-disable-next-line @next/next/no-img-element */}
-										<img
-											src={createCmsImage({
+										<CdnImage
+											src={cmsImageUrl({
 												path: sponsor.sponsorImage[0].path,
 												folder: 'podcast',
-												settings: {
-													w: 80,
-												},
 											})}
 											className="me-3"
 											alt=""
 											width={sponsor.sponsorImage[0].width}
 											height={sponsor.sponsorImage[0].height}
-											sizes="(min-width: 768px) 400, calc(100vw - 60px)"
-											srcSet={`${createCmsImage({
-												path: sponsor.sponsorImage[0].path,
-												folder: 'podcast',
-												settings: {
-													w: 80,
-												},
-											})} 80w, ${createCmsImage({
-												path: sponsor.sponsorImage[0].path,
-												folder: 'podcast',
-												settings: {
-													w: 160,
-												},
-											})} 160w, ${createCmsImage({
-												path: sponsor.sponsorImage[0].path,
-												folder: 'podcast',
-												settings: {
-													w: 240,
-												},
-											})} 240w, ${createCmsImage({
-												path: sponsor.sponsorImage[0].path,
-												folder: 'podcast',
-												settings: {
-													w: 480,
-												},
-											})} 480w, ${createCmsImage({
-												path: sponsor.sponsorImage[0].path,
-												folder: 'podcast',
-												settings: {
-													w: 720,
-												},
-											})} 720w`}
+											sizes="(min-width: 768px) 400px, calc(100vw - 60px)"
 										/>
 									</a>
 
@@ -219,73 +185,21 @@ export default async function Newsletter({ params }: NextPageProps<'slug'>) {
 									<div className="row g-0">
 										<div className="col-sm-4 col-md-12">
 											{headshot && (
-												// eslint-disable-next-line @next/next/no-img-element
-												<img
+												<CdnImage
 													alt=""
 													className="card-img-top"
-													src={createCmsImage({
+													src={cmsImageUrl({
 														path: headshot.path,
 														folder: 'podcast',
-														settings: {
-															w: 258,
-														},
 													})}
+													// Headshots carry no dimensions in episodes.json and
+													// range from 1:1 to 4:3 to 3:4, so these only reserve
+													// space; `height: auto` lets each image's real ratio
+													// win once it loads, as it does today.
+													width={400}
+													height={400}
+													style={{ height: 'auto' }}
 													sizes="(min-width: 1200px) 338px, (min-width: 992px) 258px, (min-width: 768px) calc((100vw - 150px) * (5 / 12)), (min-width: 576px) calc((100vw - 60px) / 3), calc(100vw - 60px)"
-													srcSet={`${createCmsImage({
-														path: headshot.path,
-														folder: 'podcast',
-														settings: {
-															w: 1352,
-														},
-													})} 1352w, ${createCmsImage({
-														path: headshot.path,
-														folder: 'podcast',
-														settings: {
-															w: 1032,
-														},
-													})} 1032w, ${createCmsImage({
-														path: headshot.path,
-														folder: 'podcast',
-														settings: {
-															w: 1026,
-														},
-													})} 1026w, ${createCmsImage({
-														path: headshot.path,
-														folder: 'podcast',
-														settings: {
-															w: 704,
-														},
-													})} 704w, ${createCmsImage({
-														path: headshot.path,
-														folder: 'podcast',
-														settings: {
-															w: 676,
-														},
-													})} 676w, ${createCmsImage({
-														path: headshot.path,
-														folder: 'podcast',
-														settings: {
-															w: 516,
-														},
-													})} 516w, ${createCmsImage({
-														path: headshot.path,
-														folder: 'podcast',
-														settings: {
-															w: 513,
-														},
-													})} 513w, ${createCmsImage({
-														path: headshot.path,
-														folder: 'podcast',
-														settings: {
-															w: 352,
-														},
-													})} 352w, ${createCmsImage({
-														path: headshot.path,
-														folder: 'podcast',
-														settings: {
-															w: 338,
-														},
-													})} 338w`}
 												/>
 											)}
 										</div>

@@ -11,16 +11,19 @@
 		"format": "prettier --write --ignore-unknown --list-different .",
 		"lint": "eslint",
 		"build-member-files": "tsx scripts/loadMemberFiles.ts",
+		"build-undraw-ratios": "tsx scripts/loadUndrawAspectRatios.ts",
+		"codegen": "pnpm build-member-files && pnpm build-undraw-ratios",
 		"local-dev": "cross-env NODE_ENV=development pnpm netlify dev",
 		"build": "next build",
 		"start": "next start",
-		"prebuild": "pnpm build-member-files",
+		"prebuild": "pnpm codegen",
 		"typecheck": "next typegen && tsc --noEmit",
 		"watch": "npm-watch",
-		"dev": "pnpm build-member-files && concurrently \"pnpm watch\" \"pnpm local-dev\""
+		"dev": "pnpm codegen && concurrently \"pnpm watch\" \"pnpm local-dev\""
 	},
 	"watch": {
-		"build-member-files": "src/content/members/**/*.ts"
+		"build-member-files": "src/content/members/**/*.ts",
+		"build-undraw-ratios": "public/assets/svg/*.svg"
 	},
 	"dependencies": {
 		"@googleapis/calendar": "^16.0.0",

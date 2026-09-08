@@ -13,17 +13,21 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Task                                       | Command                                                                                                                                                 |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Install                                    | `pnpm install` (copy `.env.example` to `.env` first)                                                                                                    |
-| Dev server                                 | `pnpm dev` — regenerates member barrels, then runs `npm-watch` + `netlify dev` (site on http://localhost:9000, proxying Next on :3000)                  |
+| Dev server                                 | `pnpm dev` — runs the codegen, then `npm-watch` + `netlify dev` (site on http://localhost:9000, proxying Next on :3000)                                 |
 | Next only (no Netlify functions/redirects) | `next dev`                                                                                                                                              |
-| Build                                      | `pnpm build` — `prebuild` runs the member codegen first                                                                                                 |
+| Build                                      | `pnpm build` — `prebuild` runs the codegen first                                                                                                        |
 | Typecheck                                  | `pnpm typecheck` (`next typegen` then `tsc --noEmit`, the native TypeScript 7 binary)                                                                   |
 | Lint                                       | `pnpm lint` (ESLint flat config: `next/core-web-vitals` + `next/typescript`; `netlify/**` is ignored)                                                   |
 | Format                                     | `pnpm format` (Prettier: tabs, single quotes, trailing commas; CI auto-commits fixes on same-repo PR branches only; there is no husky/lint-staged hook) |
+| Regenerate all codegen                     | `pnpm codegen` (member barrels + Undraw aspect ratios)                                                                                                  |
 | Regenerate member barrels                  | `pnpm build-member-files`                                                                                                                               |
+| Regenerate Undraw aspect ratios            | `pnpm build-undraw-ratios`                                                                                                                              |
 
 There is no test suite and no test runner. `.github/workflows/ci.yml` runs three jobs on every pull request — `format`, `lint`, `typecheck`. Netlify still owns `pnpm build`; CI does not build.
 
-The `lint` and `typecheck` jobs run `pnpm build-member-files` first, because `src/data/members/{core,members}.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm build-member-files && pnpm typecheck && pnpm lint` before finishing a change.
+The `lint` and `typecheck` jobs run `pnpm codegen` first, because `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm codegen && pnpm typecheck && pnpm lint` before finishing a change.
+
+Neither CI nor those checks run `next build`, so nothing before Netlify's deploy preview exercises prerendering. Run `pnpm build` locally when a change can only fail there — anything touching MDX frontmatter, `generateStaticParams`, or a component that pages render at build time.
 
 `typecheck` shells out to `next typegen` before `tsc` because `next-env.d.ts` is gitignored (Next's docs require this) and is what declares non-code imports like `*.png`. Without it a clean checkout fails on any image import. `typegen` also writes `.next/types/`, so `tsc` validates typed routes without a full build.
 
@@ -55,6 +59,7 @@ Podcast episodes are a checked-in JSON snapshot (`src/data/podcast/episodes.json
 
 - One file per member in `src/content/members/members/<github-username>.ts` (core team in `core/`), exporting a `MemberObject` (`src/content/members/types.ts`). Template: `_EXAMPLE.ts`.
 - `scripts/loadMemberFiles.ts` generates `src/data/members/core.ts` and `src/data/members/members.ts` as barrel re-exports. **These two files are gitignored and generated — never hand-edit them; run `pnpm build-member-files` after adding a member.**
+- The other codegen is `scripts/loadUndrawAspectRatios.ts`, which reads the `viewBox` of every SVG in `public/assets/svg` into the gitignored `src/data/undrawAspectRatios.ts`. `UndrawIllustration` renders through `next/image`, which needs concrete dimensions, and a hand-maintained map had drifted to covering barely half the files. Run `pnpm build-undraw-ratios` after adding an SVG.
 - `getMembers()` merges the local overrides with GitHub GraphQL data (batched 15 logins per query) and team membership from `src/content/members/teams.ts`.
 
 ### MDX content pipeline

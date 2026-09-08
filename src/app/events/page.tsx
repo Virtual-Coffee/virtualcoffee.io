@@ -1,3 +1,4 @@
+import CdnImage from '@/components/CdnImage';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { getEvents } from '@/data/events';
 import { getSponsors } from '@/data/sponsors';
@@ -87,21 +88,12 @@ export default async function Page() {
 									tier.sponsors.map((supporter) => (
 										<li key={supporter.id} data-id={supporter.id}>
 											<a href={supporter.websiteUrl || supporter.url}>
-												{/* eslint-disable-next-line @next/next/no-img-element */}
-												<img
+												<CdnImage
 													src={supporter.avatarUrl_80}
 													alt=""
-													width="240"
-													height="240"
-													loading="lazy"
-													decoding="async"
+													width={240}
+													height={240}
 													sizes="(min-width: 915px) 240px, 24vw"
-													srcSet={`
-              ${supporter.avatarUrl_80}   80w,
-              ${supporter.avatarUrl_160} 160w,
-              ${supporter.avatarUrl_240} 240w,
-              ${supporter.avatarUrl_480} 480w,
-              ${supporter.avatarUrl_720} 720w`}
 												/>
 												<div className="sponsors-body">
 													<h3 className="h4">{supporter.name}</h3>

@@ -154,11 +154,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # src/data/members/{core,members}.ts are gitignored codegen that the app
-      # imports through the @/* alias. Only `prebuild` generates them, so
-      # lint/typecheck have to do it themselves.
-      - name: Generate member barrels
-        run: pnpm build-member-files
+      # src/data/members/{core,members}.ts and src/data/undrawAspectRatios.ts
+      # are gitignored codegen that the app imports through the @/* alias. Only
+      # `prebuild` generates them, so lint/typecheck have to do it themselves.
+      - name: Generate codegen files
+        run: pnpm codegen
 
       - name: Register ESLint problem matcher
         run: echo "::add-matcher::.github/problem-matchers/eslint-stylish.json"
@@ -189,8 +189,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate member barrels
-        run: pnpm build-member-files
+      - name: Generate codegen files
+        run: pnpm codegen
 
       - name: Register tsc problem matcher
         run: echo "::add-matcher::.github/problem-matchers/tsc.json"

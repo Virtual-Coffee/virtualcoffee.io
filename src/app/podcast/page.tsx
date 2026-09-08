@@ -1,10 +1,11 @@
 import Link from 'next/link';
+import CdnImage from '@/components/CdnImage';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import PodcastSubscribe from '@/components/PodcastSubscribe';
 import PostList from '@/components/PostList';
 import { getEpisodes } from '@/data/podcast';
 import { createMetaData } from '@/util/createMetaData.server';
-import createCmsImage from '@/util/cmsimage';
+import { cmsImageUrl } from '@/util/cmsimage';
 
 export const dynamic = 'force-static';
 
@@ -64,14 +65,10 @@ export default async function PodcastsIndex() {
 							{latestEpisode.episodeSponsors.map((sponsor) => (
 								<li key={sponsor.title} className="d-flex align-items-center">
 									<a href={sponsor.sponsorUrl}>
-										{/* eslint-disable-next-line @next/next/no-img-element */}
-										<img
-											src={createCmsImage({
+										<CdnImage
+											src={cmsImageUrl({
 												path: sponsor.sponsorImage[0].path,
 												folder: 'podcast',
-												settings: {
-													w: 64,
-												},
 											})}
 											className="me-3"
 											alt=""
@@ -79,25 +76,6 @@ export default async function PodcastsIndex() {
 											width={sponsor.sponsorImage[0].width}
 											height={sponsor.sponsorImage[0].height}
 											sizes="64px"
-											srcSet={`${createCmsImage({
-												path: sponsor.sponsorImage[0].path,
-												folder: 'podcast',
-												settings: {
-													w: 64,
-												},
-											})} 64w, ${createCmsImage({
-												path: sponsor.sponsorImage[0].path,
-												folder: 'podcast',
-												settings: {
-													w: 128,
-												},
-											})} 128w, ${createCmsImage({
-												path: sponsor.sponsorImage[0].path,
-												folder: 'podcast',
-												settings: {
-													w: 192,
-												},
-											})} 192w`}
 										/>
 									</a>
 									<div className="flex-grow-1">
