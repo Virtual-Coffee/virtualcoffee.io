@@ -16,7 +16,8 @@ export const TEMPLATE_EXPORT_NAME = '_EXAMPLE';
  * GitHub's own username rule: alphanumerics and single interior hyphens, 39
  * characters at most.
  */
-export const GITHUB_USERNAME = /^[A-Za-z\d](?:[A-Za-z\d]|-(?=[A-Za-z\d])){0,38}$/;
+export const GITHUB_USERNAME =
+	/^[A-Za-z\d](?:[A-Za-z\d]|-(?=[A-Za-z\d])){0,38}$/;
 
 /**
  * Turn a GitHub username into the identifier the member file must export.

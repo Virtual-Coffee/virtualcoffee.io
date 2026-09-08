@@ -1,7 +1,7 @@
 import type { MemberObject } from '../types';
 import { profileMasks } from '../flare';
 
-export const adamabundis: MemberObject = {
+export const adam_abundis: MemberObject = {
 	github: 'adam-abundis',
 	bio: `Returning dev making tech purposeful again. Frontend-focused | Accessibility | Unlearning spaghetti code in public.`,
 	flare: {

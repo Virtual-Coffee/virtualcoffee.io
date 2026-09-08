@@ -1,22 +1,21 @@
 import type { MemberObject } from '../types';
-import { profileMasks } from '../flare';
+// import { profileMasks } from '../flare';
 
-export const alvarosanchez: MemberObject = {
+export const tamsauce: MemberObject = {
 	// GitHub username (required)
-	github: 'raykotab',
+	github: 'tamsauce',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	name: 'Álvaro Sánchez Taboada',
+	name: 'Tami Hughes',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples. Please keep your bio to a reasonable length, refer to
 	// [members page](https://virtualcoffee.io/members/) for examples
-	bio: `junior front-end, bass player, learning,
-	 communicating and bike riding.`,
+	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -28,21 +27,25 @@ export const alvarosanchez: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		profileMask: profileMasks.circle,
+		// profileMask: profileMasks.triangle,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'taboada7' },
+		{ type: 'linkedin', username: 'tamsauce' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
-		// { type: 'twitch', username: 'yourUserName' },
+		{ type: 'twitter', username: 'tamsaucce' },
+		{ type: 'twitch', username: 'tamsauce' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
+		{ type: 'polywork', username: 'tamsauce' },
 		// { type: 'medium', username: 'yourUserName' },
-		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+		{ type: 'hashnode', username: 'tamsauce' },
+		{
+			type: 'website',
+			url: 'https://www.tamsauce.com/',
+			title: 'Personal Portfolio',
+		},
 	],
-	badges: ['Hacktoberfest2022'],
+	badges: [],
 };

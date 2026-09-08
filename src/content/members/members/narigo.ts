@@ -1,7 +1,7 @@
 import type { MemberObject } from '../types';
 import { profileMasks } from '../flare';
 
-export const narigo: MemberObject = {
+export const Narigo: MemberObject = {
 	// GitHub username (required)
 	github: 'Narigo',
 	//

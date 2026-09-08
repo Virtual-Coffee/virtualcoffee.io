@@ -17,7 +17,7 @@ export const eternalmaha: MemberObject = {
 
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'www.linkedin.com/in/maha-ahmed3' },
+		{ type: 'linkedin', username: 'maha-ahmed3' },
 		{
 			type: 'website',
 			url: 'https://maha-ahmed.netlify.app',

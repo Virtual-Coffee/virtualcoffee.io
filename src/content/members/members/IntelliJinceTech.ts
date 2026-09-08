@@ -1,20 +1,20 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-export const tamihughes: MemberObject = {
+export const IntelliJinceTech: MemberObject = {
 	// GitHub username (required)
-	github: 'tamsauce',
+	github: 'IntelliJinceTech',
+	bio: 'Full Stack Software Engineer and Product Manager focusing on building purposeful, scalable products.',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	name: 'Tami Hughes',
+	// name: 'Your Name',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
 	//
-	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples. Please keep your bio to a reasonable length, refer to
-	// [members page](https://virtualcoffee.io/members/) for examples
+	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
 	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
@@ -32,20 +32,25 @@ export const tamihughes: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'tamsauce' },
+		{ type: 'linkedin', username: 'chrisjin1' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'tamsaucce' },
-		{ type: 'twitch', username: 'tamsauce' },
+		{ type: 'twitter', username: 'theChrisJin' },
+		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'tamsauce' },
+		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
-		{ type: 'hashnode', username: 'tamsauce' },
+		// { type: 'hashnode', username: 'yourUserName' },
 		{
 			type: 'website',
-			url: 'https://www.tamsauce.com/',
-			title: 'Personal Portfolio',
+			url: 'https://www.christopherjin.com/',
+			title: 'Portfolio',
 		},
 	],
-	badges: [],
+	badges: ['Hacktoberfest2023'],
+	location: {
+		latitude: 40.82708129129381,
+		longitude: -73.97608283860276,
+		title: 'Edgewater, NJ',
+	},
 };

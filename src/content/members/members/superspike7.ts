@@ -1,21 +1,20 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-// Change _EXAMPLE to `yourGitHubUserName` and add your info below
-export const shraddha: MemberObject = {
+export const superspike7: MemberObject = {
 	// GitHub username (required)
-	github: '5hraddha',
+	github: 'superspike7',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	name: 'Shraddha',
+	name: 'Spike Vinz Cruz',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: `Full Stack Web Developer | Javascript, Typescript, Python, CSS, React, NodeJS, Headless CMS`,
+	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -32,24 +31,16 @@ export const shraddha: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: '5hraddha' },
+		{ type: 'linkedin', username: 'spikevinz' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		// { type: 'twitter', username: 'yourUserName' },
+		{ type: 'twitter', username: 'sspikeyy' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: '5hraddha' },
+		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
-		{ type: 'website', url: 'https://www.shraddha.tech/', title: 'Portfolio' },
+		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
-	badges: ['Hacktoberfest2023'],
-	// Add your location to our member map at https://virtualcoffee.io/members (optional)
-	// Feel free to be as specific or vague as you're comfortable with.
-	location: {
-		latitude: 37.54129,
-		longitude: -77.434769,
-		title: 'Richmond, VA', // optional
-	},
+	badges: [],
 };

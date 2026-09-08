@@ -2,7 +2,7 @@ import type { MemberObject } from '../types';
 import { profileMasks } from '../flare';
 
 // Change _EXAMPLE to `yourGitHubUserName` and add your info below
-export const Shubham404: MemberObject = {
+export const Shubham_404: MemberObject = {
 	// GitHub username (required)
 	github: 'Shubham-404',
 	//

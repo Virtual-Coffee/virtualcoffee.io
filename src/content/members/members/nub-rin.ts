@@ -1,20 +1,21 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-export const YufaLi: MemberObject = {
+// Change _EXAMPLE to `yourGitHubUserName` and add your info below
+export const nub_rin: MemberObject = {
 	// GitHub username (required)
-	github: '01001101CK',
+	github: 'nub-rin',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	name: 'Yufa Li',
+	name: 'Arin Sharma',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
-	mainUrl: 'https://yufa-li.com/',
+	mainUrl: 'https://arin.dev',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: `Fullstack Software Engineer | JavaScript | TypeScript | React | SQL | Basketball Player | Meditation Teacher`,
+	bio: `Aspiring Backend Engineer | Open Source Advocate | Enthusiast in AI&ML, Generative AI, & Cybersecurity`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -31,21 +32,24 @@ export const YufaLi: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'yufa-li' },
+		{ type: 'linkedin', username: 'arin-sharma' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'yufa_li' },
-		// { type: 'twitch', username: 'yourUserName' },
+		{ type: 'twitter', username: 'thatnubarin' },
+		{ type: 'twitch', username: 'thatnubarin' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://yufa-li.com/', title: 'Portfolio' },
+		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
+		{ type: 'website', url: 'https://arin.dev', title: 'Personal Portfolio' },
 	],
-	badges: ['Hacktoberfest2023'],
-	location: {
-		latitude: 47.6062095,
-		longitude: -122.3320708,
-		title: 'Seattle, WA',
-	},
+	badges: [],
+	// Add your location to our member map at https://virtualcoffee.io/members (optional)
+	// Feel free to be as specific or vague as you're comfortable with.
+	// location: {
+	// 	latitude: 41.48266891706046,
+	// 	longitude: -81.80009779282766,
+	// 	title: 'Lakewood, OH', // optional
+	// },
 };

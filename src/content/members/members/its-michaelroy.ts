@@ -1,20 +1,21 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-export const raeshelleRose: MemberObject = {
+// Change _EXAMPLE to `yourGitHubUserName` and add your info below
+export const its_michaelroy: MemberObject = {
 	// GitHub username (required)
-	github: 'raeplusplus',
+	github: 'its-michaelroy',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	name: 'Raeshelle Rose',
+	name: 'Michael Roy',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
-	mainUrl: 'https://raeshellerose.netlify.app',
+	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: ` 🌹 | software engineer | game dev for environmental change & social good 🌿🌎🦋 | fantasy writer for fun`,
+	bio: `Digital Craftsman | Army Veteran | Amateur HAM Radio Operator | Lover of Pancakes & Bacon`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -31,24 +32,34 @@ export const raeshelleRose: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'raeshellerose' },
-		{ type: 'dev', username: 'raeplusplus' },
+		{ type: 'linkedin', username: 'michaelroy91' },
+		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'raeplusplus' },
-		{ type: 'twitch', username: 'raeplusplus' },
-		// { type: 'youtube', channelId: 'yourChannelId' }, OR
-		{
-			type: 'youtube',
-			customUrl: 'https://www.youtube.com/channel/UC-FknvQZklUcLAfSNrRbzhw',
-		},
+		// { type: 'twitter', username: 'yourUserName' },
+		// { type: 'twitch', username: 'yourUserName' },
+		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
+		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
 		{
 			type: 'website',
-			url: 'https://raeshellerose.netlify.app',
-			title: 'Portfolio',
+			url: 'https://michaelroy.dev/',
+			title: "Michael Roy's Portfolio",
+		},
+		{
+			type: 'website',
+			url: 'https://mrcodewizard.com/',
+			title: "Michael Roy's Codefolio",
 		},
 	],
 	badges: [],
+	// Add your location to our member map at https://virtualcoffee.io/members (optional)
+	// Feel free to be as specific or vague as you're comfortable with.
+	// Use this handy website to find your latitude and longitude: https://www.latlong.net/
+	location: {
+		latitude: -25.44888,
+		longitude: -49.534568,
+		title: 'Brazil', // optional
+	},
 };

@@ -1,21 +1,20 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-// Change _EXAMPLE to `yourGitHubUserName` and add your info below
-export const nubrin: MemberObject = {
+export const matthew_dean: MemberObject = {
 	// GitHub username (required)
-	github: 'nub-rin',
+	github: 'matthew-dean',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	name: 'Arin Sharma',
+	// name: 'Your Name',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
-	mainUrl: 'https://arin.dev',
+	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: `Aspiring Backend Engineer | Open Source Advocate | Enthusiast in AI&ML, Generative AI, & Cybersecurity`,
+	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -32,24 +31,16 @@ export const nubrin: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'arin-sharma' },
+		// { type: 'linkedin', username: 'yourlinkedinUserName' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'thatnubarin' },
-		{ type: 'twitch', username: 'thatnubarin' },
+		// { type: 'twitter', username: 'yourUserName' },
+		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
-		{ type: 'website', url: 'https://arin.dev', title: 'Personal Portfolio' },
+		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: [],
-	// Add your location to our member map at https://virtualcoffee.io/members (optional)
-	// Feel free to be as specific or vague as you're comfortable with.
-	// location: {
-	// 	latitude: 41.48266891706046,
-	// 	longitude: -81.80009779282766,
-	// 	title: 'Lakewood, OH', // optional
-	// },
 };

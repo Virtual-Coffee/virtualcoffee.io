@@ -1,20 +1,20 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-export const TammyMiller: MemberObject = {
+export const s_blais: MemberObject = {
 	// GitHub username (required)
-	github: 'tgmiller5',
+	github: 's-blais',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
 	// Name - If not defined here, it will default to your display name on GitHub. If that's not defined, then your GitHub username.
-	name: 'Tammy Miller',
+	// name: 'Your Name',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
 	// mainUrl: 'https://virtualcoffee.io',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
-	bio: `A manual software tester, Python enthuiast, blogger, Python teacher, and accessibility advocate.`,
+	// bio: `This is _my_ **bio** and [here is a link](https://virtualcoffee.io)`,
 	//
 	// flare - If you want to add a flare to your profile, you can do so here.
 	// Uncomment the `import { profileMasks } from '../flare';` line at the top of this file to use the profileMasks.
@@ -34,7 +34,7 @@ export const TammyMiller: MemberObject = {
 		// { type: 'linkedin', username: 'yourlinkedinUserName' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'dctechsista' },
+		// { type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'polywork', username: 'yourUserName' },
@@ -43,9 +43,4 @@ export const TammyMiller: MemberObject = {
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
 	],
 	badges: [],
-	location: {
-		latitude: 38.911459,
-		longitude: -77.036536,
-		title: 'Washington, DC',
-	},
 };

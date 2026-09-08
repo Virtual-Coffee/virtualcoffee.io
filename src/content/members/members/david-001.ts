@@ -1,9 +1,9 @@
 import type { MemberObject } from '../types';
-// import { profileMasks } from '../flare';
+import { profileMasks } from '../flare';
 
-export const lennoxCodes: MemberObject = {
+export const david_001: MemberObject = {
 	// GitHub username (required)
-	github: 'lennox-codes',
+	github: 'david-001',
 	//
 	// Everything below here is optional. By default, we pull most profile data from your GitHub profile. You can override that data here, as well as provide some additional account links below.
 	//
@@ -26,13 +26,13 @@ export const lennoxCodes: MemberObject = {
 	// you can also use a custom string. the profileMask values are [css clipPath values](https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path)
 	flare: {
 		// example:
-		// profileMask: profileMasks.triangle,
+		profileMask: profileMasks.hexagon,
 	},
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		// { type: 'linkedin', username: 'yourlinkedinUserName' },
-		// { type: 'dev', username: 'yourUserName' },
+		{ type: 'linkedin', username: 'dakm100' },
+		{ type: 'dev', username: 'david001' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
@@ -40,7 +40,16 @@ export const lennoxCodes: MemberObject = {
 		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
+		{
+			type: 'website',
+			url: 'https://david-001.github.io/website/',
+			title: "David Akim's Website",
+		},
 	],
-	badges: [],
+	badges: ['Hacktoberfest2023', 'Hacktoberfest2024'],
+	location: {
+		latitude: 10.471756696642153,
+		longitude: -61.25258745794951,
+		title: 'Trinidad and Tobago', // optional
+	},
 };

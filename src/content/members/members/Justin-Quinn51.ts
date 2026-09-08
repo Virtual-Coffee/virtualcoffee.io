@@ -1,6 +1,6 @@
 import type { MemberObject } from '../types';
 
-export const JustinQuinn51: MemberObject = {
+export const Justin_Quinn51: MemberObject = {
 	github: 'Justin-Quinn51',
 	mainUrl: 'https://justinquinn.dev',
 	bio: `Full-stack engineer trying to get better, one code block at a time.`,

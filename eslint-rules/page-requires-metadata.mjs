@@ -14,8 +14,7 @@ const rule = {
 	meta: {
 		type: 'problem',
 		docs: {
-			description:
-				'Require a page to export `metadata` or `generateMetadata`.',
+			description: 'Require a page to export `metadata` or `generateMetadata`.',
 		},
 		schema: [],
 		messages: {
