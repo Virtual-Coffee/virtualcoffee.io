@@ -1,7 +1,8 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-// Change _EXAMPLE to `yourGitHubUserName` and add your info below
+// Name this file after your GitHub username, and change both `_EXAMPLE` and the
+// `github` value below to match it. Lint will tell you if they disagree.
 export const _EXAMPLE: MemberObject = {
 	// GitHub username (required)
 	github: 'yourGitHubUserName',

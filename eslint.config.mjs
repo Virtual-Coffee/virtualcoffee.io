@@ -45,6 +45,14 @@ export default defineConfig([
 		ignores: ['src/components/DisplayHtml.tsx'],
 		rules: { 'vc/no-raw-dangerously-set-inner-html': 'error' },
 	},
+	{
+		name: 'vc/page-metadata',
+		plugins: { vc },
+		files: ['src/app/**/page.tsx'],
+		// The home page should inherit the site-wide metadata from the root layout.
+		ignores: ['src/app/page.tsx'],
+		rules: { 'vc/page-requires-metadata': 'error' },
+	},
 	globalIgnores([
 		'node_modules/**',
 		'.next/**',
