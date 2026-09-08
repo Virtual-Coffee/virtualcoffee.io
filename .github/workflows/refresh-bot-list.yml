@@ -37,7 +37,7 @@ jobs:
           client-id: ${{ secrets.CI_APP_CLIENT_ID }}
           private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
           # Without these the token inherits everything the app installation
-          # can do. It needs to push a branch and open a PR, nothing else.
+          # can do. It needs to move a branch ref, commit to it, and open a PR.
           permission-contents: write
           permission-pull-requests: write
 
@@ -149,13 +149,13 @@ jobs:
             echo '```'
           } > "$RUNNER_TEMP/pr-body.md"
 
-          # A PR from a previous run picks the new commit up on push; only open
+          # A PR from a previous run picks the new commit up on its own; only open
           # one when there isn't one already.
-          open_pr=$(gh pr list --head "$branch" --state open --json number --jq '.[].number')
+          open_pr=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')
           if [ -z "$open_pr" ]; then
             gh pr create \
               --base main \
-              --head "$branch" \
+              --head "$BRANCH" \
               --title 'chore(bots): refresh the generated bot list' \
               --body-file "$RUNNER_TEMP/pr-body.md"
           fi
