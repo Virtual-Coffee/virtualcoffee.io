@@ -72,12 +72,17 @@ function normalizeDescription(raw: string): string {
 
 export const getEvents = unstable_cache(
 	async ({ limit }: { limit: number }): Promise<EventsResponse> => {
-		const rangeStart = DateTime.now().toUTC().set({ hour: 0 }).toISO();
-		const rangeEnd = DateTime.now()
-			.toUTC()
-			.set({ hour: 0 })
-			.plus({ days: 30 })
-			.toISO();
+		// `timeMax` is an exclusive upper bound on an event's start time, so the
+		// window has to run from local midnight in the zone the UI renders in.
+		// Truncating in UTC instead would cut off the final local day.
+		const now = DateTime.now().setZone(DISPLAY_ZONE);
+		if (!now.isValid) {
+			throw new Error(`Invalid time zone: ${DISPLAY_ZONE}`);
+		}
+		const displayRangeStart = now.startOf('day');
+		const rangeStart = displayRangeStart.toUTC().toISO();
+		// Calendar days, so the window survives the DST change.
+		const rangeEnd = displayRangeStart.plus({ days: 30 }).toUTC().toISO();
 
 		if (!(
 			process.env.GOOGLE_SERVICE_ACCOUNT_KEY && process.env.GOOGLE_CALENDAR_ID
