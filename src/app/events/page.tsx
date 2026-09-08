@@ -98,11 +98,7 @@ export default async function Page() {
 												<div className="sponsors-body">
 													<h3 className="h4">{supporter.name}</h3>
 													{supporter.descriptionHTML && (
-														<div
-															dangerouslySetInnerHTML={{
-																__html: supporter.descriptionHTML,
-															}}
-														/>
+														<DisplayHtml html={supporter.descriptionHTML} />
 													)}
 												</div>
 											</a>

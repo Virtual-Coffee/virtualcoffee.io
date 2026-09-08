@@ -1,7 +1,7 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-export const rreiso: MemberObject = {
+export const RReiso: MemberObject = {
 	// GitHub username (required)
 	github: 'RReiso',
 	//
