@@ -45,8 +45,8 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Checkout writes the token into .git/config by default, where
-          # `pnpm install` lifecycle scripts could read it. Authentication is
-          # set up in the one step that needs it instead.
+          # `pnpm install` lifecycle scripts could read it. Nothing here pushes
+          # over git — the commit goes through the API — so it is never needed.
           persist-credentials: false
 
       - name: Set up pnpm
@@ -76,24 +76,65 @@ jobs:
         if: steps.generate.outputs.changed == 'true'
         run: pnpm check-bot-matching
 
+      # Committed through the GraphQL API rather than the git CLI, for the same
+      # reasons as the format job in ci.yml: GitHub signs API-created commits,
+      # so they show as Verified and are attributed to the app rather than to
+      # whoever committed last. It also means nothing here needs git push
+      # credentials, which is why checkout can keep persist-credentials off.
       - name: Open or update the pull request
         if: steps.generate.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: chore/refresh-bot-list
         run: |
           set -euo pipefail
-          branch=chore/refresh-bot-list
 
-          # Checkout was told not to persist credentials, so git has no way to
-          # authenticate until here.
-          gh auth setup-git
+          # createCommitOnBranch needs the branch to exist, and a previous run
+          # may have left one behind. Point it at the commit we generated from
+          # either way, so the PR only ever carries the one file change.
+          base=$(git rev-parse HEAD)
+          if gh api "repos/$REPO/git/refs/heads/$BRANCH" --silent 2>/dev/null; then
+            gh api -X PATCH "repos/$REPO/git/refs/heads/$BRANCH" \
+              -f sha="$base" -F force=true --silent
+          else
+            gh api -X POST "repos/$REPO/git/refs" \
+              -f ref="refs/heads/$BRANCH" -f sha="$base" --silent
+          fi
 
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git switch -c "$branch"
-          git add src/data/bots.ts
-          git commit -m 'chore(bots): refresh the generated bot list'
-          git push --force origin "$branch"
+          additions=$(jq -n \
+            --arg path src/data/bots.ts \
+            --arg contents "$(base64 -w0 -- src/data/bots.ts)" \
+            '[{path: $path, contents: $contents}]')
+
+          jq -n \
+            --arg repo "$REPO" \
+            --arg branch "$BRANCH" \
+            --arg oid "$base" \
+            --argjson additions "$additions" \
+            '{
+              query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }",
+              variables: {
+                input: {
+                  branch: {
+                    repositoryNameWithOwner: $repo,
+                    branchName: $branch
+                  },
+                  expectedHeadOid: $oid,
+                  message: { headline: "chore(bots): refresh the generated bot list" },
+                  fileChanges: { additions: $additions }
+                }
+              }
+            }' > "$RUNNER_TEMP/commit.json"
+
+          response=$(gh api graphql --input "$RUNNER_TEMP/commit.json")
+          oid=$(printf '%s' "$response" | jq -r '.data.createCommitOnBranch.commit.oid // empty')
+          if [ -z "$oid" ]; then
+            echo "::error::createCommitOnBranch returned no commit"
+            printf '%s' "$response" | jq .
+            exit 1
+          fi
+          echo "Committed $oid"
 
           # The summary quotes crawler names and descriptions from upstream, so
           # it is third-party text. Write it to a file rather than interpolating
