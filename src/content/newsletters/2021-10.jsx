@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 export const handle = {
 	listTitle: 'October 2021',
 	meta: {

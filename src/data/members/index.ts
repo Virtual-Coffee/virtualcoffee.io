@@ -63,58 +63,83 @@ async function getMemberGithubData(
 
 		const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
 			headers,
+			// A member who has since deleted their GitHub account resolves to null
+			// with a NOT_FOUND error alongside everybody else's data. That is
+			// ordinary drift in a hand-maintained list, not a failed request, so
+			// don't let it throw. Transport and auth failures are not GraphQL
+			// errors and still throw into the catch below.
+			errorPolicy: 'all',
 		});
 
-		const query = gql`
-			query ($searchQuery: String!) {
-				search(type: USER, query: $searchQuery, first: 20) {
-					nodes {
-						... on User {
-							login
-							id
-							url
-							avatarUrl
-							name
-							company
-							location
-							isHireable
-							bio
-							bioHTML
-							twitterUsername
-							websiteUrl
-						}
-					}
-				}
-			}
-		`;
-
-		const queries: string[] = [];
 		const githubData: GithubSearchUserLookup = {};
-		const chunk = 15;
-		let i, j;
-		for (i = 0, j = data.length; i < j; i += chunk) {
-			queries.push(
-				`${data
-					.slice(i, i + chunk)
-					.map((member) => {
-						return `user:${member.github}`;
-					})
-					.join(' ')}`,
-			);
+		const missing: string[] = [];
+
+		// One `user(login:)` lookup per member, aliased, rather than one
+		// `search(type: USER)` per batch: GitHub's user search index omits accounts
+		// whose owner has made their activity private, so search silently loses
+		// real members. Direct lookups resolve them, and cost one rate-limit point
+		// per request no matter how many members are in it.
+		const chunk = 100;
+
+		for (let i = 0; i < data.length; i += chunk) {
+			const batch = data.slice(i, i + chunk);
+
+			// A GraphQL alias has to be a valid name, and a GitHub login may start
+			// with a digit or contain a hyphen, so alias by position and read the
+			// results back the same way.
+			const query = gql`
+				query {
+					${batch
+						.map(
+							(member, index) =>
+								`u${index}: user(login: ${JSON.stringify(member.github)}) { ...memberFields }`,
+						)
+						.join('\n\t\t\t\t\t')}
+				}
+
+				fragment memberFields on User {
+					login
+					id
+					url
+					avatarUrl
+					name
+					company
+					location
+					isHireable
+					bio
+					bioHTML
+					twitterUsername
+					websiteUrl
+				}
+			`;
+
+			const response =
+				await graphQLClient.request<Record<string, GithubSearchUser | null>>(
+					query,
+				);
+
+			batch.forEach((member, index) => {
+				const user = response[`u${index}`];
+
+				if (user) {
+					githubData[user.login.toLowerCase()] = { ...user };
+				} else {
+					missing.push(member.github);
+				}
+			});
 		}
 
-		for (let i = 0; i < queries.length; i++) {
-			const response = await graphQLClient.request<{
-				search: { nodes: GithubSearchUser[] };
-			}>(query, {
-				searchQuery: queries[i],
-			});
+		if (data.length > 0 && Object.keys(githubData).length === 0) {
+			// A response shaped like a success that resolved nobody is far more
+			// likely a broken query than every member deleting their account at
+			// once. Fall back rather than ship an empty members page.
+			throw new Error('GitHub resolved none of the members');
+		}
 
-			response.search.nodes.forEach((user: GithubSearchUser) => {
-				githubData[user.login.toLowerCase()] = {
-					...user,
-				};
-			});
+		if (missing.length > 0) {
+			console.warn(
+				`No GitHub account for ${missing.length} member(s), so they will not appear on the members page: ${missing.join(', ')}`,
+			);
 		}
 
 		return githubData;

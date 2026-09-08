@@ -1,3 +1,4 @@
+import CdnImage from '@/components/CdnImage';
 import DisplayHtml from '@/components/DisplayHtml';
 
 import GitHub from '@/svg/GitHub';
@@ -44,18 +45,24 @@ export default function MemberCards({ data }: { data: MemberList }) {
 						>
 							<div className="membercard-img">
 								<div className="membercard-img-w">
-									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img
-										src={member.avatarUrl}
-										alt=""
-										loading="lazy"
-										decoding="async"
-										style={
-											member.flare?.profileMask
-												? { clipPath: member.flare.profileMask }
-												: {}
-										}
-									/>
+									{member.avatarUrl && (
+										<CdnImage
+											src={member.avatarUrl}
+											alt=""
+											// GitHub avatars are square. `.membercard-img img` in
+											// _members.scss sizes the rendered element, so these
+											// only set the ratio and the widths the srcset is
+											// built from.
+											width={400}
+											height={400}
+											sizes="(min-width: 992px) 200px, (min-width: 576px) 25vw, 40vw"
+											style={
+												member.flare?.profileMask
+													? { clipPath: member.flare.profileMask }
+													: {}
+											}
+										/>
+									)}
 								</div>
 								{member.badges && (
 									<div className="membercard-badges">
