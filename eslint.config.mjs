@@ -38,6 +38,13 @@ export default defineConfig([
 			'vc/member-account-username': 'error',
 		},
 	},
+	{
+		name: 'vc/html-safety',
+		plugins: { vc },
+		files: ['src/**/*.tsx'],
+		ignores: ['src/components/DisplayHtml.tsx'],
+		rules: { 'vc/no-raw-dangerously-set-inner-html': 'error' },
+	},
 	globalIgnores([
 		'node_modules/**',
 		'.next/**',
