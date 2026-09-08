@@ -137,7 +137,7 @@ async function getMemberGithubData(
 		}
 
 		if (missing.length > 0) {
-			console.log(
+			console.warn(
 				`No GitHub account for ${missing.length} member(s), so they will not appear on the members page: ${missing.join(', ')}`,
 			);
 		}
