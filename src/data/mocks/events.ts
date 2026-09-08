@@ -3,6 +3,11 @@ import { DateTime } from 'luxon';
 import { ics, google, outlook } from 'calendar-link';
 import type { EventsResponse } from '../events';
 
+/**
+ * Stand-in for `getEvents` when Google Calendar is not configured: `limit`
+ * fake one-hour events scattered across the same range the real query uses,
+ * shaped like `EventsResponse` down to the calendar links.
+ */
 export function createEventsData({
 	limit = 15,
 	rangeStart,

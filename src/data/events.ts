@@ -31,6 +31,13 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar.events.readonly'];
 // Matches the zone that `dateForDisplay` renders in (src/util/date.ts).
 const DISPLAY_ZONE = 'America/New_York';
 
+/**
+ * Builds an authenticated Calendar client from `GOOGLE_SERVICE_ACCOUNT_KEY`,
+ * which holds the raw contents of a service account key file. Both failure
+ * modes — unparseable JSON and a key missing the fields the auth call needs —
+ * throw here with the fix in the message, because the alternative is an opaque
+ * auth error much later in the request.
+ */
 function createCalendarClient(): calendar_v3.Calendar {
 	let credentials: { client_email?: string; private_key?: string };
 	try {
@@ -70,6 +77,14 @@ function normalizeDescription(raw: string): string {
 	return raw.replace(/\r?\n/g, '<br />');
 }
 
+/**
+ * Upcoming events for the next 30 days, in start order. Recurring events are
+ * expanded into their individual instances; cancelled entries and all-day
+ * events are dropped, the latter because the UI always shows a clock time.
+ * Without Google credentials this returns mock data, and a failed fetch
+ * rethrows wherever mocks are disallowed (production) so a broken build fails
+ * loudly instead of shipping an empty events page.
+ */
 export const getEvents = unstable_cache(
 	async ({ limit }: { limit: number }): Promise<EventsResponse> => {
 		// `timeMax` is an exclusive upper bound on an event's start time, so the
