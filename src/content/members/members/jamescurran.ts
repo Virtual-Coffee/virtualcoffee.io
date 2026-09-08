@@ -1,7 +1,7 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-export const Jamescurran: MemberObject = {
+export const jamescurran: MemberObject = {
 	// GitHub username (required)
 	github: 'jamescurran',
 	//
