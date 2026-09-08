@@ -149,6 +149,16 @@ pnpm lint
 
 Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. CI runs this on every pull request and fails on errors (warnings are allowed for now). Run `pnpm build-member-files` first if you haven't built recently.
 
+Alongside the standard Next.js rules, `eslint-rules/` holds a few rules of our own for the things TypeScript can't check:
+
+- **`vc/member-file-identity`** — a member file's name and its exported const must both match its `github` field. `github` is what we look you up by, so a typo quietly leaves you off the members page, and the exported name has to be unique because the members list is built from `export *`.
+- **`vc/member-emoji`** — your `emoji` has to be a standard Unicode emoji.
+- **`vc/member-account-username`** — account usernames are bare handles, not URLs and not `@name`; we add the `@` where a platform needs one.
+- **`vc/no-raw-dangerously-set-inner-html`** — render HTML through `DisplayHtml`, and sanitize it first.
+- **`vc/page-requires-metadata`** — every page exports `metadata` or `generateMetadata`.
+
+Most of these fix themselves with `pnpm lint --fix`.
+
 ### `pnpm typecheck`
 
 ```shell

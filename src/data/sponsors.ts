@@ -3,6 +3,7 @@ import { unstable_cache } from 'next/cache';
 import type mockSponsors from './mocks/sponsors';
 import { assertMocksAllowed } from './mocks';
 import ImgixClient from '@imgix/js-core';
+import { sanitizeHtml } from '@/util/sanitizeCmsData';
 
 const client = new ImgixClient({
 	domain: 'virtualcoffee.imgix.net',
@@ -149,22 +150,38 @@ export const getSponsors = unstable_cache(
 			response = (await import('./mocks/sponsors')).default;
 		}
 
-		const tiers = response.organization.sponsorsListing.tiers.nodes.map(
-			(tier) => {
-				const sponsors = response.organization.sponsorshipsAsMaintainer.nodes
-					.filter((sponsor) => {
-						return sponsor.tier?.id === tier.id;
-					})
-					.map((sponsor) => ({
-						...sponsor.sponsorEntity,
-						...(sponsorOverrides[sponsor.sponsorEntity.id] || {}),
-					}));
+		const tiers = await Promise.all(
+			response.organization.sponsorsListing.tiers.nodes.map(async (tier) => {
+				const sponsors = await Promise.all(
+					response.organization.sponsorshipsAsMaintainer.nodes
+						.filter((sponsor) => {
+							return sponsor.tier?.id === tier.id;
+						})
+						.map(async (sponsor) => {
+							const entity = sponsor.sponsorEntity;
+
+							return {
+								...entity,
+								// A sponsor writes their own description, and it is rendered
+								// as HTML, so it goes through the one allowlist like every
+								// other HTML path in the app.
+								descriptionHTML: entity.descriptionHTML
+									? await sanitizeHtml(entity.descriptionHTML)
+									: entity.descriptionHTML,
+								// Overrides are authored here and reviewed like any other
+								// code, so they are applied after sanitizing -- the allowlist
+								// carries no `class` attribute, and stripping it would drop
+								// the styling they rely on.
+								...(sponsorOverrides[entity.id] || {}),
+							};
+						}),
+				);
 
 				return {
 					...tier,
 					sponsors,
 				};
-			},
+			}),
 		);
 
 		const returnVal = {

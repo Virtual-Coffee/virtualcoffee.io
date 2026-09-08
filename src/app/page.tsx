@@ -8,6 +8,7 @@ import { getEvents } from '@/data/events';
 import { dateForDisplay } from '@/util/date';
 import { loadMdxDirectory } from '@/util/loadMdx.server';
 import { getSponsors } from '@/data/sponsors';
+import DisplayHtml from '@/components/DisplayHtml';
 import { homePageLinks } from '@/util/homePageLinks';
 
 // ISR: Revalidate every 12 hours
@@ -140,11 +141,7 @@ export default async function Home() {
 												<div className="sponsors-body">
 													<h3 className="h4">{supporter.name}</h3>
 													{supporter.descriptionHTML && (
-														<div
-															dangerouslySetInnerHTML={{
-																__html: supporter.descriptionHTML,
-															}}
-														/>
+														<DisplayHtml html={supporter.descriptionHTML} />
 													)}
 												</div>
 											</a>
