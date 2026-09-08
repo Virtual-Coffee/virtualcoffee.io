@@ -1,5 +1,39 @@
 # Code Owners
-# see https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# ORDER IS LOAD-BEARING. The LAST matching pattern wins outright; rules are not
+# additive. Two `*` lines do not mean "both teams own everything" — the second
+# silently replaces the first. To give a path several owners, list them all on
+# ONE line. Any one of the listed owners can then satisfy the review.
+#
+# Code-owner review is enforced by the `main (pr-merges)` ruleset, so a mistake
+# here can block every PR. Teams must be visible (not secret) AND have explicit
+# write access, or they are ignored without error.
 
-* @Virtual-Coffee/maintainers
-* @Virtual-Coffee/super-contributors
+# --- Default owners: everything not matched by a more specific rule below ---
+# This intentionally covers src/content/members/** — routine member-profile PRs
+# should not be gated on the content team.
+*                               @Virtual-Coffee/maintainers @Virtual-Coffee/super-contributors
+
+# --- Site content ---
+# Prose and editorial assets. Content Team is auto-requested here; super-contributors
+# remain listed so content is never blocked waiting on a single team.
+
+# MDX prose: resources tree, handbook, and standalone pages
+src/content/resources/          @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors
+src/content/simple-mdx-pages/   @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors
+
+# Newsletters. Covers today's .jsx issues, the hand-maintained import registry,
+# and any .mdx that lands in the same directory after the planned migration.
+src/content/newsletters/        @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors
+src/data/newsletters.ts         @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors
+
+# Monthly challenges. Currently route files under src/app/; the second path is a
+# no-op until the MDX migration moves them under src/content/.
+src/app/monthlychallenges/      @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors
+src/content/monthlychallenges/  @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors
+
+# Editorial assets. public/assets/svg/ is deliberately excluded: it feeds the
+# `pnpm build-undraw-ratios` codegen and is engineering-owned.
+public/assets/images/           @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors
+public/assets/pdfs/             @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors
