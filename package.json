@@ -12,6 +12,8 @@
 		"lint": "eslint",
 		"build-member-files": "tsx scripts/loadMemberFiles.ts",
 		"build-undraw-ratios": "tsx scripts/loadUndrawAspectRatios.ts",
+		"build-bot-list": "tsx scripts/loadBotList.ts",
+		"check-bot-matching": "tsx scripts/checkBotMatching.ts",
 		"codegen": "pnpm build-member-files && pnpm build-undraw-ratios",
 		"local-dev": "cross-env NODE_ENV=development pnpm netlify dev",
 		"build": "next build",
@@ -60,6 +62,7 @@
 	"devDependencies": {
 		"@eslint/compat": "^2.1.1",
 		"@faker-js/faker": "^10.6.0",
+		"@netlify/edge-functions": "^4.0.0",
 		"@types/leaflet": "^1.9.22",
 		"@types/leaflet.markercluster": "^1.5.6",
 		"@types/luxon": "^3.7.5",

@@ -1,0 +1,190 @@
+name: Refresh bot list
+
+# src/data/bots.ts is generated from ai-robots-txt/ai.robots.txt and checked in,
+# so nothing fetches it at build time. That trade needs something to keep it
+# current: the list it replaced was copied from a blog post in 2024 and went two
+# years without an update.
+#
+# This opens a PR rather than committing to main, because the diff is the
+# review — it is the only place anyone sees that we started or stopped blocking
+# a crawler.
+
+on:
+  workflow_dispatch:
+  # Renovate bumps the pin in .botlist-version.json, but it cannot run the
+  # generator: postUpgradeTasks is blocked on the hosted app. So the bump lands
+  # first and this picks it up, rather than the list waiting for the next cron.
+  push:
+    branches: [main]
+    paths: ['.botlist-version.json']
+  schedule:
+    # Mondays at 0730, ahead of the daily Netlify rebuild at 0815. With the
+    # source pinned this is usually a no-op — its job is to catch a generated
+    # file that has drifted from the overrides, not to track upstream.
+    - cron: '30 7 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    name: Refresh bot list
+    runs-on: ubuntu-latest
+    # `workflow_dispatch` lets the caller pick a branch, and the steps below run
+    # that branch's package.json scripts with an App token in scope. Pin the job
+    # to main so a branch can't borrow the token. A scheduled run reports main
+    # as `github.ref`, so the cron is unaffected.
+    if: github.repository == 'Virtual-Coffee/virtualcoffee.io' && github.ref ==
+      'refs/heads/main'
+    steps:
+      - name: Generate app token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          # `app-id` is deprecated in favour of `client-id`.
+          client-id: ${{ secrets.CI_APP_CLIENT_ID }}
+          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
+          # Without these the token inherits everything the app installation
+          # can do. It needs to move a branch ref, commit to it, and open a PR.
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Checkout writes the token into .git/config by default, where
+          # `pnpm install` lifecycle scripts could read it. Nothing here pushes
+          # over git — the commit goes through the API — so it is never needed.
+          persist-credentials: false
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Regenerate the list
+        id: generate
+        run: |
+          set -o pipefail
+          pnpm build-bot-list | tee "$RUNNER_TEMP/summary.txt"
+          pnpm format > /dev/null
+          if git diff --quiet -- src/data/bots.ts; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify matching still holds
+        if: steps.generate.outputs.changed == 'true'
+        run: pnpm check-bot-matching
+
+      # Committed through the GraphQL API rather than the git CLI, for the same
+      # reasons as the format job in ci.yml: GitHub signs API-created commits,
+      # so they show as Verified and are attributed to the app rather than to
+      # whoever committed last. It also means nothing here needs git push
+      # credentials, which is why checkout can keep persist-credentials off.
+      - name: Open or update the pull request
+        if: steps.generate.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: chore/refresh-bot-list
+        run: |
+          set -euo pipefail
+
+          # createCommitOnBranch needs the branch to exist, and a previous run
+          # may have left one behind. Point it at the commit we generated from
+          # either way, so the PR only ever carries the one file change.
+          base=$(git rev-parse HEAD)
+          if gh api "repos/$REPO/git/refs/heads/$BRANCH" --silent 2>/dev/null; then
+            gh api -X PATCH "repos/$REPO/git/refs/heads/$BRANCH" \
+              -f sha="$base" -F force=true --silent
+          else
+            gh api -X POST "repos/$REPO/git/refs" \
+              -f ref="refs/heads/$BRANCH" -f sha="$base" --silent
+          fi
+
+          additions=$(jq -n \
+            --arg path src/data/bots.ts \
+            --arg contents "$(base64 -w0 -- src/data/bots.ts)" \
+            '[{path: $path, contents: $contents}]')
+
+          jq -n \
+            --arg repo "$REPO" \
+            --arg branch "$BRANCH" \
+            --arg oid "$base" \
+            --argjson additions "$additions" \
+            '{
+              query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }",
+              variables: {
+                input: {
+                  branch: {
+                    repositoryNameWithOwner: $repo,
+                    branchName: $branch
+                  },
+                  expectedHeadOid: $oid,
+                  message: { headline: "chore(bots): refresh the generated bot list" },
+                  fileChanges: { additions: $additions }
+                }
+              }
+            }' > "$RUNNER_TEMP/commit.json"
+
+          response=$(gh api graphql --input "$RUNNER_TEMP/commit.json")
+          oid=$(printf '%s' "$response" | jq -r '.data.createCommitOnBranch.commit.oid // empty')
+          if [ -z "$oid" ]; then
+            echo "::error::createCommitOnBranch returned no commit"
+            printf '%s' "$response" | jq .
+            exit 1
+          fi
+          echo "Committed $oid"
+
+          # The source is pinned, so a run that wasn't triggered by a pin change
+          # should produce nothing. A diff here means src/data/bots.ts drifted
+          # from botOverrides.ts — someone changed policy without regenerating.
+          # The PR still opens, because the regenerated file is the fix and
+          # withholding it would leave the drift on main.
+          if [ "$GITHUB_EVENT_NAME" = push ]; then
+            title='chore(bots): refresh the generated bot list'
+            note='Follows a bump of the pin in `.botlist-version.json`.'
+          else
+            title='chore(bots): regenerate the drifted bot list'
+            note='**This is drift, not an upstream bump.** The pin in `.botlist-version.json` has not changed, so `src/data/bots.ts` was out of step with `src/data/botOverrides.ts` — someone changed policy without running `pnpm build-bot-list`.'
+            echo "::error::src/data/bots.ts is out of step with botOverrides.ts at the pinned version"
+          fi
+
+          # The summary quotes crawler names and descriptions from upstream, so
+          # it is third-party text. Write it to a file rather than interpolating
+          # it into a command line.
+          {
+            echo 'Regenerated by `pnpm build-bot-list` from [ai-robots-txt/ai.robots.txt](https://github.com/ai-robots-txt/ai.robots.txt).'
+            echo
+            echo "$note"
+            echo
+            echo 'The diff on `src/data/bots.ts` is who we start and stop blocking. Tiering policy lives in `src/data/botOverrides.ts` and is not touched by this job.'
+            echo
+            echo '```'
+            cat "$RUNNER_TEMP/summary.txt"
+            echo '```'
+          } > "$RUNNER_TEMP/pr-body.md"
+
+          # A PR from a previous run picks the new commit up on its own, but its
+          # title and body would still describe the run that opened it.
+          open_pr=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[].number')
+          if [ -z "$open_pr" ]; then
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "$title" \
+              --body-file "$RUNNER_TEMP/pr-body.md"
+          else
+            gh pr edit "$open_pr" \
+              --title "$title" \
+              --body-file "$RUNNER_TEMP/pr-body.md"
+          fi
