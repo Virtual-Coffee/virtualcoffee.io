@@ -1,0 +1,98 @@
+[
+	{
+		"RepoName": "Virtual Coffee",
+		"RepoUrl": "https://github.com/Virtual-Coffee/virtualcoffee.io",
+		"Description": "Our very own site!",
+		"Maintainer": "Virtual Coffee Maintainers"
+	},
+	{
+		"RepoName": "InReach",
+		"RepoUrl": "https://github.com/weareinreach/InReach",
+		"Description": "InReach is the world’s first tech platform matching LGBTQ+ people with safe, verified resources.",
+		"Maintainer": "InReach"
+	},
+	{
+		"RepoName": "Hello There",
+		"RepoUrl": "https://github.com/ClJarvis/Hello_There",
+		"Description": "An alternative greeting for learning a new language. Here is a list of how to say \"Hello There\" in several Languages.",
+		"Maintainer": "Chris Jarvis"
+	},
+	{
+		"RepoName": "StepZen examples",
+		"RepoUrl": "https://github.com/stepzen-dev/examples",
+		"Description": "Quickstart examples of different tooling and stacks in combination with StepZen.",
+		"Maintainer": "StepZen"
+	},
+	{
+		"RepoName": "freeCodeCamp Developer Quiz",
+		"RepoUrl": "https://github.com/freeCodeCamp/Developer_Quiz_Site",
+		"Description": "This is a quiz site filled with over 600+ questions on programming.",
+		"Maintainer": "freeCodeCamp"
+	},
+	{
+		"RepoName": "Deepgram Python SDK",
+		"RepoUrl": "https://github.com/deepgram/python-sdk",
+		"Description": "Official Python SDK for Deepgram's automated speech recognition APIs.",
+		"Maintainer": "deepgram"
+	},
+	{
+		"RepoName": "Deepgram Node.js SDK",
+		"RepoUrl": "https://github.com/deepgram/deepgram-node-sdk",
+		"Description": "Official JavaScript SDK for Deepgram's automated speech recognition APIs.",
+		"Maintainer": "deepgram"
+	},
+	{
+		"RepoName": "Deepgram .NET SDK",
+		"RepoUrl": "https://github.com/deepgram/deepgram-dotnet-sdk",
+		"Description": ".NET SDK for Deepgram's automated speech recognition APIs.",
+		"Maintainer": "deepgram"
+	},
+	{
+		"RepoName": "novu",
+		"RepoUrl": "https://github.com/novuhq/novu",
+		"Description": "The open-source notifications infrastructure. A fully-featured microservice to send SMS, E-mail, Slack and Push notifications. Embeddable notification center for React with real-time updates, content management, and much more...",
+		"Maintainer": "novuhq"
+	},
+	{
+		"RepoName": "strapi",
+		"RepoUrl": "https://github.com/strapi/strapi",
+		"Description": "Strapi is the leading open-source headless CMS. It’s 100% JavaScript, fully customizable and developer-first.",
+		"Maintainer": "strapi"
+	},
+	{
+		"RepoName": "ToolJet",
+		"RepoUrl": "https://github.com/ToolJet/Tooljet",
+		"Description": "Extensible low-code framework for building business applications. Connect to databases, cloud storages, GraphQL, API endpoints, Airtable, etc and build apps using drag and drop application builder. Built using JavaScript/TypeScript.",
+		"Maintainer": "ToolJet"
+	},
+	{
+		"RepoName": "Battle Math",
+		"RepoUrl": "https://github.com/JesseRWeigel/battlemath",
+		"Description": "A math game for children written in React.",
+		"Maintainer": "Jesse Weigel"
+	},
+	{
+		"RepoName": "Voice to Text Notes",
+		"RepoUrl": "https://github.com/JesseRWeigel/voice-to-text-notes",
+		"Description": "A notes app built with React and Typescript that uses the Deepgram API to turn speech into text from the browser.",
+		"Maintainer": "Jesse Weigel"
+	},
+	{
+		"RepoName": "Postpartum Wellness App",
+		"RepoUrl": "https://github.com/BekahHW/postpartum-wellness-app",
+		"Description": "An app to help moms monitor their well-being during the post-partum stage.",
+		"Maintainer": "BekahHW"
+	},
+	{
+		"RepoName": "Translation Chrome Extension ",
+		"RepoUrl": "https://github.com/deepgram-devs/dg-translation-chrome-ext",
+		"Description": "A JS and TS chrome extension that uses Deepgram to provide live transcription and translation",
+		"Maintainer": "Deepgram"
+	},
+	{
+		"RepoName": "railsdevs.com",
+		"RepoUrl": "https://github.com/joemasilotti/railsdevs.com",
+		"Description": "The reverse job board for Ruby on Rails developers.",
+		"Maintainer": "joemasilotti"
+	}
+]

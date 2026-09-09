@@ -8,7 +8,7 @@ import {
 	type ApplicationSource,
 	type ApplicationStatus,
 	type NewMembershipApplication,
-} from '../src/db';
+} from '../../src/db';
 
 /**
  * One-off import of the Airtable membership base into Postgres.
