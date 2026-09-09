@@ -72,6 +72,7 @@ jobs:
       - name: Regenerate the list
         id: generate
         run: |
+          set -o pipefail
           pnpm build-bot-list | tee "$RUNNER_TEMP/summary.txt"
           pnpm format > /dev/null
           if git diff --quiet -- src/data/bots.ts; then
