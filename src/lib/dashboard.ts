@@ -1,0 +1,206 @@
+import { count, desc, eq, inArray, isNotNull, or, sql } from 'drizzle-orm';
+
+import {
+	applicationEvent,
+	db,
+	membershipApplication,
+	submissionEvent,
+	user,
+} from '@/db';
+import { QUEUE_STATUSES } from '@/lib/applications';
+import type { Section } from '@/lib/permissions';
+import {
+	openCount,
+	SUBMISSION_KINDS,
+	type SubmissionKind,
+} from '@/lib/submissions';
+
+export type DashboardCard = {
+	section: Section;
+	label: string;
+	href: string;
+	/** Things still waiting on a maintainer. */
+	openCount: number;
+	countLabel: string;
+};
+
+export type ActivityEntry = {
+	key: string;
+	createdAt: Date;
+	type: string;
+	body: string | null;
+	actorName: string | null;
+	/** Where the entry links to, or null when the viewer cannot open it. */
+	href: string | null;
+	subject: string;
+};
+
+const SUBMISSION_SECTIONS = Object.fromEntries(
+	(Object.keys(SUBMISSION_KINDS) as SubmissionKind[]).map((kind) => [
+		SUBMISSION_KINDS[kind].section,
+		kind,
+	]),
+) as Record<string, SubmissionKind>;
+
+/**
+ * One card per section the viewer holds `read` on.
+ *
+ * Built from the caller's already-computed section list rather than re-deriving
+ * it, so the dashboard can never show a card the nav hides.
+ */
+export async function dashboardCards(
+	sections: readonly Section[],
+): Promise<DashboardCard[]> {
+	const cards = await Promise.all(
+		sections.map(async (section): Promise<DashboardCard | null> => {
+			if (section === 'waitlist') {
+				const [row] = await db()
+					.select({ value: count() })
+					.from(membershipApplication)
+					.where(inArray(membershipApplication.status, QUEUE_STATUSES));
+
+				return {
+					section,
+					label: 'Waitlist',
+					href: '/admin/waitlist',
+					openCount: row?.value ?? 0,
+					countLabel: 'in the queue',
+				};
+			}
+
+			// The Admins screen is a list of people, not a queue of work.
+			if (section === 'admins') return null;
+
+			const kind = SUBMISSION_SECTIONS[section];
+			if (!kind) return null;
+
+			return {
+				section,
+				label: SUBMISSION_KINDS[kind].label,
+				href: `/admin/submissions/${kind}`,
+				openCount: await openCount(kind),
+				countLabel: 'awaiting a response',
+			};
+		}),
+	);
+
+	return cards.filter((card): card is DashboardCard => card !== null);
+}
+
+const ACTIVITY_LIMIT = 15;
+
+/**
+ * The most recent events across everything the viewer can see.
+ *
+ * Merged in JavaScript rather than as a SQL UNION: the two event tables have
+ * different shapes and different foreign keys, and at fifteen rows the cost of
+ * over-fetching a little from each is irrelevant next to the complexity of
+ * keeping a union in step with both.
+ */
+export async function recentActivity(
+	sections: readonly Section[],
+): Promise<ActivityEntry[]> {
+	const entries: ActivityEntry[] = [];
+
+	if (sections.includes('waitlist')) {
+		const rows = await db()
+			.select({
+				id: applicationEvent.id,
+				applicationId: applicationEvent.applicationId,
+				type: sql<string>`${applicationEvent.type}`,
+				body: applicationEvent.body,
+				createdAt: applicationEvent.createdAt,
+				actorName: user.name,
+				subject: membershipApplication.name,
+			})
+			.from(applicationEvent)
+			.leftJoin(user, eq(applicationEvent.actorUserId, user.id))
+			.leftJoin(
+				membershipApplication,
+				eq(applicationEvent.applicationId, membershipApplication.id),
+			)
+			.orderBy(desc(applicationEvent.createdAt))
+			.limit(ACTIVITY_LIMIT);
+
+		for (const row of rows) {
+			entries.push({
+				key: `application-${row.id}`,
+				createdAt: row.createdAt,
+				type: row.type,
+				body: row.body,
+				actorName: row.actorName,
+				href: `/admin/waitlist/${row.applicationId}`,
+				subject: row.subject ?? `Application ${row.applicationId}`,
+			});
+		}
+	}
+
+	const visibleKinds = (
+		Object.keys(SUBMISSION_KINDS) as SubmissionKind[]
+	).filter((kind) => sections.includes(SUBMISSION_KINDS[kind].section));
+
+	if (visibleKinds.length > 0) {
+		// One query across every visible kind: the columns are shared, only which
+		// foreign key is set differs.
+		const rows = await db()
+			.select({
+				id: submissionEvent.id,
+				cocReportId: submissionEvent.cocReportId,
+				volunteerSignupId: submissionEvent.volunteerSignupId,
+				lunchAndLearnIdeaId: submissionEvent.lunchAndLearnIdeaId,
+				coffeeTableGroupRequestId: submissionEvent.coffeeTableGroupRequestId,
+				type: sql<string>`${submissionEvent.type}`,
+				body: submissionEvent.body,
+				createdAt: submissionEvent.createdAt,
+				actorName: user.name,
+			})
+			.from(submissionEvent)
+			.leftJoin(user, eq(submissionEvent.actorUserId, user.id))
+			.where(
+				or(
+					...visibleKinds.map((kind) =>
+						isNotNull(SUBMISSION_KINDS[kind].eventColumn),
+					),
+				),
+			)
+			.orderBy(desc(submissionEvent.createdAt))
+			.limit(ACTIVITY_LIMIT);
+
+		for (const row of rows) {
+			const kind = visibleKinds.find((candidate) => {
+				switch (candidate) {
+					case 'coc':
+						return row.cocReportId !== null;
+					case 'volunteers':
+						return row.volunteerSignupId !== null;
+					case 'lunch-and-learn':
+						return row.lunchAndLearnIdeaId !== null;
+					case 'coffee-tables':
+						return row.coffeeTableGroupRequestId !== null;
+				}
+			});
+
+			if (!kind) continue;
+
+			const submissionId =
+				row.cocReportId ??
+				row.volunteerSignupId ??
+				row.lunchAndLearnIdeaId ??
+				row.coffeeTableGroupRequestId;
+
+			entries.push({
+				key: `submission-${row.id}`,
+				createdAt: row.createdAt,
+				type: row.type,
+				body: row.body,
+				actorName: row.actorName,
+				href: `/admin/submissions/${kind}/${submissionId}`,
+				subject: `${SUBMISSION_KINDS[kind].singular} ${submissionId}`,
+			});
+		}
+	}
+
+	return entries
+		.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+		.slice(0, ACTIVITY_LIMIT);
+}

@@ -4,12 +4,12 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 import { db, user } from '@/db';
-import { requireAdmin } from '@/lib/adminAccess';
+import { requirePermission } from '@/lib/adminAccess';
 
 export type AdminActionResult = { ok: true } | { ok: false; message: string };
 
 export async function grantAdmin(userId: string): Promise<AdminActionResult> {
-	const session = await requireAdmin();
+	const session = await requirePermission('admins', 'manage');
 
 	await db()
 		.update(user)
@@ -25,7 +25,7 @@ export async function grantAdmin(userId: string): Promise<AdminActionResult> {
 }
 
 export async function revokeAdmin(userId: string): Promise<AdminActionResult> {
-	const session = await requireAdmin();
+	const session = await requirePermission('admins', 'manage');
 
 	/**
 	 * Enforced here as well as hidden in the UI. The UI simply omits the button

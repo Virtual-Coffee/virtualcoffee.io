@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 
 import { SignOutButton } from '@/app/admin/sign-in/buttons';
-import { requireAdmin } from '@/lib/adminAccess';
+import { requireSession, visibleSections } from '@/lib/adminAccess';
 import { AdminNav } from './adminNav';
 import { DevtoolsPanel } from './devtoolsPanel';
 
@@ -18,9 +18,12 @@ export default async function AdminLayout({
 }: {
 	children: ReactNode;
 }) {
-	// The authorization boundary. Server actions re-check independently rather
-	// than trusting that they were reached from inside this layout.
-	const session = await requireAdmin();
+	// The authorization boundary: holding a permission on at least one section
+	// is what gets you in here. Each section gates itself again, and server
+	// actions re-check independently rather than trusting that they were
+	// reached from inside this layout.
+	const session = await requireSession();
+	const sections = visibleSections(session);
 
 	return (
 		<div className="admin-shell d-flex flex-column min-vh-100">
@@ -33,7 +36,7 @@ export default async function AdminLayout({
 						>
 							Admin
 						</Link>
-						<AdminNav />
+						<AdminNav sections={sections} />
 						<div className="ms-auto d-flex align-items-center gap-2">
 							<span className="text-body-secondary small">
 								{session.user.name || session.user.email}

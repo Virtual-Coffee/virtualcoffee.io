@@ -2,6 +2,13 @@ import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 
 import { auth, type Session } from '@/lib/auth';
+import {
+	parseRoles,
+	roles,
+	SECTIONS,
+	type Section,
+	type RoleName,
+} from '@/lib/permissions';
 
 /**
  * Deploy previews must never serve /admin.
@@ -23,6 +30,9 @@ export function adminRoutesEnabled(): boolean {
  * Slack sign-in needs OAuth credentials and a registered redirect URI, which a
  * contributor working from a fork has no way to get. Without this, /admin is
  * unreachable for exactly the people most likely to want to change it.
+ *
+ * `ADMIN_DEV_BYPASS_ROLES` narrows what the bypass session holds, so the narrow
+ * roles can be exercised locally without a database. It defaults to `admin`.
  *
  * Three conditions must all hold, and each is independently sufficient to
  * disable it in any deployed environment:
@@ -46,6 +56,8 @@ function devBypassSession(): Session | null {
 
 	if (!enabled) return null;
 
+	const role = process.env.ADMIN_DEV_BYPASS_ROLES?.trim() || 'admin';
+
 	return {
 		session: {
 			id: 'dev-bypass',
@@ -61,7 +73,7 @@ function devBypassSession(): Session | null {
 			email: 'dev@localhost',
 			emailVerified: true,
 			image: null,
-			role: 'admin',
+			role,
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		},
@@ -75,8 +87,39 @@ export async function getSession(): Promise<Session | null> {
 	return auth.api.getSession({ headers: await headers() });
 }
 
+function sessionRoles(session: Session | null): RoleName[] {
+	return parseRoles(
+		(session?.user as { role?: string | null } | undefined)?.role,
+	);
+}
+
 export function isAdmin(session: Session | null): boolean {
-	return session?.user.role === 'admin';
+	return sessionRoles(session).includes('admin');
+}
+
+/**
+ * Whether the session's roles grant an action on a section.
+ *
+ * Evaluated against the local access-control definitions rather than through
+ * `auth.api.userHasPermission`: the answer depends only on the role string
+ * already in the session, so a round trip through the plugin's HTTP layer
+ * would add a request per section on every dashboard render. The plugin's own
+ * endpoints still enforce their own checks independently.
+ */
+export function sessionCan(
+	session: Session | null,
+	section: Section | 'dashboard',
+	action: 'read' | 'manage' = 'read',
+): boolean {
+	return sessionRoles(session).some(
+		(name) =>
+			roles[name].authorize({ [section]: [action] } as never).success === true,
+	);
+}
+
+/** Sections this session can see, in nav order. Drives the nav and the dashboard. */
+export function visibleSections(session: Session | null): Section[] {
+	return SECTIONS.filter((section) => sessionCan(session, section, 'read'));
 }
 
 /**
@@ -88,16 +131,45 @@ export function isAdmin(session: Session | null): boolean {
  * re-check independently rather than trusting the route they were reached from.
  * See docs/adr/0003.
  */
-export async function requireAdmin(): Promise<Session> {
+export async function requireSession(): Promise<Session> {
 	if (!adminRoutesEnabled()) {
 		notFound();
 	}
 
 	const session = await getSession();
 
-	if (!isAdmin(session)) {
+	if (visibleSections(session).length === 0) {
 		redirect('/admin/sign-in');
 	}
 
 	return session as Session;
+}
+
+/**
+ * The boundary for one section. Anyone without `read` on it gets a 404 rather
+ * than a 403: a volunteer_coordinator should not learn that /admin/submissions/coc
+ * exists.
+ */
+export async function requirePermission(
+	section: Section,
+	action: 'read' | 'manage' = 'read',
+): Promise<Session> {
+	const session = await requireSession();
+
+	if (!sessionCan(session, section, action)) {
+		notFound();
+	}
+
+	return session;
+}
+
+/** Kept for call sites that genuinely mean "a full maintainer", not a section. */
+export async function requireAdmin(): Promise<Session> {
+	const session = await requireSession();
+
+	if (!isAdmin(session)) {
+		notFound();
+	}
+
+	return session;
 }

@@ -10,7 +10,7 @@ import {
 	user,
 	type ApplicationStatus,
 } from '@/db';
-import { requireAdmin } from '@/lib/adminAccess';
+import { requirePermission } from '@/lib/adminAccess';
 import { sendEmail } from '@/lib/email/transport';
 import {
 	coffeeInviteEmail,
@@ -91,7 +91,7 @@ export async function sendCoffeeInvite(
 	applicationId: number,
 	copyMe: boolean,
 ): Promise<ActionResult> {
-	const session = await requireAdmin();
+	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
 
@@ -154,7 +154,7 @@ export async function sendCoffeeInvite(
 export async function recordAttendance(
 	applicationId: number,
 ): Promise<ActionResult> {
-	const session = await requireAdmin();
+	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
 
@@ -183,7 +183,7 @@ export async function approveMembership(
 	applicationId: number,
 	copyMe: boolean,
 ): Promise<ActionResult> {
-	const session = await requireAdmin();
+	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
 
@@ -277,7 +277,7 @@ async function close(
 	status: Extract<ApplicationStatus, 'declined' | 'withdrawn'>,
 	note: string | null,
 ): Promise<ActionResult> {
-	const session = await requireAdmin();
+	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
 
@@ -320,7 +320,7 @@ export async function addNote(
 	applicationId: number,
 	body: string,
 ): Promise<ActionResult> {
-	const session = await requireAdmin();
+	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 
 	const trimmed = body.trim();

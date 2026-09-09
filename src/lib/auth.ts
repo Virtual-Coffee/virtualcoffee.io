@@ -6,6 +6,7 @@ import { devtools } from 'better-auth-devtools';
 
 import { db, type Database } from '@/db';
 import * as schema from '@/db/schema';
+import { ac, DEFAULT_ROLE, roles } from '@/lib/permissions';
 
 const SLACK_TEAM_ID_CLAIM = 'https://slack.com/team_id';
 
@@ -102,7 +103,13 @@ function createAuth() {
 			},
 		},
 		plugins: [
-			admin({ defaultRole: 'user', adminRoles: ['admin'] }),
+			/**
+			 * `adminRoles` deliberately stays `['admin']`. It gates the plugin's own
+			 * user-management endpoints — ban, impersonate, set-role — which only
+			 * /admin/admins uses. The narrow roles in `roles` grant a section and
+			 * nothing else; a volunteer_coordinator must not be able to ban anyone.
+			 */
+			admin({ ac, roles, defaultRole: DEFAULT_ROLE, adminRoles: ['admin'] }),
 			devtools({ enabled: true }),
 			// Must stay last: it wraps the others to set cookies from server actions.
 			nextCookies(),

@@ -3,7 +3,11 @@ import { notFound } from 'next/navigation';
 
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { SignInButton, SignOutButton } from '@/app/admin/sign-in/buttons';
-import { adminRoutesEnabled, getSession, isAdmin } from '@/lib/adminAccess';
+import {
+	adminRoutesEnabled,
+	getSession,
+	visibleSections,
+} from '@/lib/adminAccess';
 import { slackAuthConfigured } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
@@ -21,7 +25,9 @@ export default async function AdminSignInPage() {
 
 	const session = await getSession();
 
-	if (isAdmin(session)) {
+	// Holding a permission on any section is enough to get in — a volunteer who
+	// only reviews Lunch & Learn ideas should not be told they are "not an admin".
+	if (visibleSections(session).length > 0) {
 		redirect('/admin');
 	}
 

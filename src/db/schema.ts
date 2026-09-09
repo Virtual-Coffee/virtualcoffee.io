@@ -8,6 +8,7 @@ import {
 	pgTable,
 	text,
 	timestamp,
+	unique,
 	uuid,
 } from 'drizzle-orm/pg-core';
 
@@ -337,26 +338,26 @@ export const submissionEventType = pgEnum('submission_event_type', [
 /**
  * Columns every submission kind carries, spread into each table below.
  *
- * A function rather than a shared object: `.unique()` derives its constraint
- * name once, when the column builder is created, so spreading one object into
- * four tables gives all four the *first* table's constraint name and the
- * migration fails on the second `CREATE TABLE`. Naming it explicitly per table
- * is what keeps them distinct.
+ * `airtableRecordId` deliberately does *not* carry `.unique()`. That derives
+ * its constraint name once, when the column builder is created, so spreading
+ * one object into four tables would give all four
+ * `coc_report_airtable_record_id_unique` and the migration fails on the second
+ * CREATE TABLE. Each table declares the constraint itself, named for the table.
+ *
+ * A plain object rather than a factory returning one: spreading a function's
+ * return type loses the column types, and `table.status` then does not exist
+ * on the resulting table.
  */
-function submissionColumns(table: string) {
-	return {
-		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-		status: submissionStatus('status').notNull().default('new'),
-		submittedAt: timestamp('submitted_at', { withTimezone: true })
-			.notNull()
-			.defaultNow(),
-		closedAt: timestamp('closed_at', { withTimezone: true }),
-		/** Set by the one-off import; lets it be re-run idempotently. */
-		airtableRecordId: text('airtable_record_id').unique(
-			`${table}_airtable_record_id_unique`,
-		),
-	};
-}
+const submissionColumns = {
+	id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+	status: submissionStatus('status').notNull().default('new'),
+	submittedAt: timestamp('submitted_at', { withTimezone: true })
+		.notNull()
+		.defaultNow(),
+	closedAt: timestamp('closed_at', { withTimezone: true }),
+	/** Set by the one-off import; lets it be re-run idempotently. */
+	airtableRecordId: text('airtable_record_id'),
+};
 
 /**
  * Name and email are nullable: the form tells reporters to skip both if they
@@ -369,7 +370,7 @@ function submissionColumns(table: string) {
 export const cocReport = pgTable(
 	'coc_report',
 	{
-		...submissionColumns('coc_report'),
+		...submissionColumns,
 		name: text('name'),
 		email: text('email'),
 		reporteeName: text('reportee_name').notNull(),
@@ -382,6 +383,7 @@ export const cocReport = pgTable(
 		attachmentSize: integer('attachment_size'),
 	},
 	(table) => [
+		unique('coc_report_airtable_record_id_unique').on(table.airtableRecordId),
 		index('coc_report_status_idx').on(table.status),
 		index('coc_report_submitted_at_idx').on(table.submittedAt),
 	],
@@ -390,7 +392,7 @@ export const cocReport = pgTable(
 export const volunteerSignup = pgTable(
 	'volunteer_signup',
 	{
-		...submissionColumns('volunteer_signup'),
+		...submissionColumns,
 		name: text('name').notNull(),
 		email: text('email').notNull(),
 		githubUsername: text('github_username'),
@@ -398,6 +400,9 @@ export const volunteerSignup = pgTable(
 		description: text('description'),
 	},
 	(table) => [
+		unique('volunteer_signup_airtable_record_id_unique').on(
+			table.airtableRecordId,
+		),
 		index('volunteer_signup_status_idx').on(table.status),
 		index('volunteer_signup_submitted_at_idx').on(table.submittedAt),
 	],
@@ -406,7 +411,7 @@ export const volunteerSignup = pgTable(
 export const lunchAndLearnIdea = pgTable(
 	'lunch_and_learn_idea',
 	{
-		...submissionColumns('lunch_and_learn_idea'),
+		...submissionColumns,
 		name: text('name').notNull(),
 		email: text('email').notNull(),
 		topic: text('topic').notNull(),
@@ -417,6 +422,9 @@ export const lunchAndLearnIdea = pgTable(
 		githubIssueUrl: text('github_issue_url'),
 	},
 	(table) => [
+		unique('lunch_and_learn_idea_airtable_record_id_unique').on(
+			table.airtableRecordId,
+		),
 		index('lunch_and_learn_idea_status_idx').on(table.status),
 		index('lunch_and_learn_idea_submitted_at_idx').on(table.submittedAt),
 	],
@@ -425,13 +433,16 @@ export const lunchAndLearnIdea = pgTable(
 export const coffeeTableGroupRequest = pgTable(
 	'coffee_table_group_request',
 	{
-		...submissionColumns('coffee_table_group_request'),
+		...submissionColumns,
 		name: text('name').notNull(),
 		email: text('email').notNull(),
 		groupName: text('group_name'),
 		description: text('description'),
 	},
 	(table) => [
+		unique('coffee_table_group_request_airtable_record_id_unique').on(
+			table.airtableRecordId,
+		),
 		index('coffee_table_group_request_status_idx').on(table.status),
 		index('coffee_table_group_request_submitted_at_idx').on(table.submittedAt),
 	],
