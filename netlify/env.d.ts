@@ -36,10 +36,11 @@ declare namespace NodeJS {
 		SLACK_WEBHOOK_LUNCH_AND_LEARN?: string;
 		SLACK_WEBHOOK_COFFEE_TABLES?: string;
 
-		// The GitHub App CI already uses, for the Lunch & Learn issue. Not the
-		// same credential as GITHUB_TOKEN, which stays a permission-less PAT.
-		CI_APP_CLIENT_ID?: string;
-		CI_APP_PRIVATE_KEY?: string;
+		// The GitHub App CI already uses, for the Lunch & Learn issue — the same
+		// App the workflows read as the CI_APP_* Actions secrets. Not the same
+		// credential as GITHUB_TOKEN, which stays a permission-less PAT.
+		GITHUB_APP_CLIENT_ID?: string;
+		GITHUB_APP_PRIVATE_KEY?: string;
 
 		// Netlify Blobs credentials, needed only by the one-off submissions
 		// import — the runtime finds its own.

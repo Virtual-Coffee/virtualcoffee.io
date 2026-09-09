@@ -48,14 +48,14 @@ Two TypeScript packages are installed on purpose: `typescript` is aliased to `@t
 
 Every external data source lives in `src/data/` and degrades to mocks when its env var is missing:
 
-| Source                                         | File                        | Env var                                   | Fallback                                        |
-| ---------------------------------------------- | --------------------------- | ----------------------------------------- | ----------------------------------------------- |
-| Member GitHub profiles                         | `src/data/members/index.ts` | `GITHUB_TOKEN`                            | `src/data/mocks/memberData.js` (faker)          |
-| GitHub Sponsors                                | `src/data/sponsors.ts`      | `GITHUB_TOKEN`                            | `src/data/mocks/sponsors.ts`                    |
-| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`        | `CMS_URL`, `CMS_TOKEN`                    | `src/data/mocks/events.ts`                      |
-| Submission notifications (Slack)               | `src/lib/slack/notify.ts`   | `SLACK_WEBHOOK_*`                         | failure recorded as an event, shown in `/admin` |
-| Lunch & Learn GitHub issue                     | `src/lib/github/issues.ts`  | `CI_APP_CLIENT_ID` / `CI_APP_PRIVATE_KEY` | same                                            |
-| Membership applications (`/join`, `/admin`)    | `src/db/`                   | none (auto-provisioned)                   | local Postgres from `netlify dev`               |
+| Source                                         | File                        | Env var                                           | Fallback                                        |
+| ---------------------------------------------- | --------------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| Member GitHub profiles                         | `src/data/members/index.ts` | `GITHUB_TOKEN`                                    | `src/data/mocks/memberData.js` (faker)          |
+| GitHub Sponsors                                | `src/data/sponsors.ts`      | `GITHUB_TOKEN`                                    | `src/data/mocks/sponsors.ts`                    |
+| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`        | `CMS_URL`, `CMS_TOKEN`                            | `src/data/mocks/events.ts`                      |
+| Submission notifications (Slack)               | `src/lib/slack/notify.ts`   | `SLACK_WEBHOOK_*`                                 | failure recorded as an event, shown in `/admin` |
+| Lunch & Learn GitHub issue                     | `src/lib/github/issues.ts`  | `GITHUB_APP_CLIENT_ID` / `GITHUB_APP_PRIVATE_KEY` | same                                            |
+| Membership applications (`/join`, `/admin`)    | `src/db/`                   | none (auto-provisioned)                           | local Postgres from `netlify dev`               |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. Any new external fetch should follow this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`. Fetches are wrapped in `unstable_cache` with a tag (`members`, `events`, `mdx-routes`); `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates on demand and a daily GitHub Action triggers a Netlify rebuild.
 

@@ -7,11 +7,17 @@ import { Octokit } from '@octokit/rest';
  * The issue is the working artefact — the Slack message just links it — so
  * dropping it would have quietly removed two maintainers' workflow.
  *
- * Authenticates as the GitHub App already used by CI (`CI_APP_CLIENT_ID` /
- * `CI_APP_PRIVATE_KEY`, see .github/workflows/ci.yml). The read-only
- * `GITHUB_TOKEN` used by /members and sponsors is deliberately untouched: it is
- * a permission-less PAT that contributors are told to create with every scope
- * box unchecked, and widening it would defeat that.
+ * Authenticates as `GITHUB_APP_CLIENT_ID` / `GITHUB_APP_PRIVATE_KEY`.
+ *
+ * This is the same GitHub App that CI uses, but the names differ by
+ * environment: the workflows read it from the Actions secrets `CI_APP_CLIENT_ID`
+ * and `CI_APP_PRIVATE_KEY` (`.github/workflows/ci.yml`), while the site's
+ * runtime reads the `GITHUB_APP_*` variables above. Same App and same values,
+ * two namespaces.
+ *
+ * The read-only `GITHUB_TOKEN` used by /members and sponsors is deliberately
+ * untouched: it is a permission-less PAT that contributors are told to create
+ * with every scope box unchecked, and widening it would defeat that.
  */
 
 const OWNER = 'Virtual-Coffee';
@@ -26,7 +32,7 @@ export type CreateIssueResult =
 
 export function githubAppConfigured(): boolean {
 	return Boolean(
-		process.env.CI_APP_CLIENT_ID && process.env.CI_APP_PRIVATE_KEY,
+		process.env.GITHUB_APP_CLIENT_ID && process.env.GITHUB_APP_PRIVATE_KEY,
 	);
 }
 
@@ -36,7 +42,7 @@ export function githubAppConfigured(): boolean {
  * error, which is not worth rediscovering.
  */
 function privateKey(): string {
-	return (process.env.CI_APP_PRIVATE_KEY ?? '').replace(/\\n/g, '\n');
+	return (process.env.GITHUB_APP_PRIVATE_KEY ?? '').replace(/\\n/g, '\n');
 }
 
 let cached: Octokit | undefined;
@@ -57,7 +63,7 @@ async function client(): Promise<Octokit> {
 	const appOctokit = new Octokit({
 		authStrategy: createAppAuth,
 		auth: {
-			clientId: process.env.CI_APP_CLIENT_ID,
+			clientId: process.env.GITHUB_APP_CLIENT_ID,
 			privateKey: privateKey(),
 		},
 	});
@@ -72,7 +78,7 @@ async function client(): Promise<Octokit> {
 	cached = new Octokit({
 		authStrategy: createAppAuth,
 		auth: {
-			clientId: process.env.CI_APP_CLIENT_ID,
+			clientId: process.env.GITHUB_APP_CLIENT_ID,
 			privateKey: privateKey(),
 			installationId: installation.id,
 			repositoryNames: [REPO],
@@ -130,7 +136,7 @@ export async function createLunchAndLearnIssue(idea: {
 			ok: false,
 			skipped: true,
 			message:
-				'CI_APP_CLIENT_ID / CI_APP_PRIVATE_KEY are not set, so no GitHub issue was opened.',
+				'GITHUB_APP_CLIENT_ID / GITHUB_APP_PRIVATE_KEY are not set, so no GitHub issue was opened.',
 		};
 	}
 
