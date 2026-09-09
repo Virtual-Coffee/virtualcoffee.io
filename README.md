@@ -175,6 +175,16 @@ pnpm build-member-files
 
 Regenerates `src/data/members/core.ts` and `src/data/members/members.ts` from the files in `src/content/members/`. These generated files are gitignored. `pnpm dev` and `pnpm build` run this for you, and the dev watcher re-runs it whenever a member file changes.
 
+### `pnpm build-bot-list`
+
+```shell
+pnpm build-bot-list
+```
+
+Regenerates `src/data/bots.ts` — the list of crawlers the site blocks — from the [ai.robots.txt](https://github.com/ai-robots-txt/ai.robots.txt) release pinned in `.botlist-version.json`. It feeds both `/robots.txt` and the Netlify edge function.
+
+Unlike the other generated files this one **is** checked in, so nothing runs it for you and you only need it if you are changing the list. Edit `src/data/botOverrides.ts` — which holds every decision about who gets blocked or allowed — then run this and commit the result. Renovate keeps the pinned version current, and a scheduled workflow opens a PR when the list changes.
+
 ## Loading data
 
 A lot of the data loaded on the site is from APIs that require private keys or tokens. Unfortunately we can't publish these or distribute them too widely.

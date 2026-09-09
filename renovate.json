@@ -1,4 +1,16 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["github>Virtual-Coffee/renovate-config"]
+	"extends": ["github>Virtual-Coffee/renovate-config"],
+	"customManagers": [
+		{
+			"description": "Track the ai-robots-txt release that src/data/bots.ts is generated from. Renovate bumps .botlist-version.json; .github/workflows/refresh-bot-list.yml regenerates the list once the bump lands on main. Queried structurally rather than by regex so that reformatting the file cannot silently turn this into 'no dependency found'.",
+			"customType": "jsonata",
+			"fileFormat": "json",
+			"managerFilePatterns": ["/^\\.botlist-version\\.json$/"],
+			"matchStrings": ["{ \"currentValue\": version }"],
+			"depNameTemplate": "ai-robots-txt/ai.robots.txt",
+			"datasourceTemplate": "github-releases",
+			"versioningTemplate": "semver-coerced"
+		}
+	]
 }
