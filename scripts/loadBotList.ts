@@ -24,8 +24,24 @@ import {
  * Policy lives in `src/data/botOverrides.ts`. Run with `pnpm build-bot-list`.
  */
 
-const SOURCE =
-	'https://raw.githubusercontent.com/ai-robots-txt/ai.robots.txt/main/robots.json';
+/**
+ * The upstream release to build from, kept in its own JSON file for two
+ * reasons. Renovate bumps it through the `jsonata` custom manager in
+ * `renovate.json`, which queries the `version` field structurally — a regex
+ * over TypeScript source would break silently if the file were ever
+ * reformatted, and Renovate reports a non-matching manager as "no dependency
+ * found" rather than as an error. It also lets the refresh workflow trigger on
+ * a push to just this path, so editing the generator doesn't fire a run.
+ *
+ * Pinning to a tag rather than tracking `main` means two runs a week apart
+ * produce the same file.
+ */
+const pinFile = path.join('.', '.botlist-version.json');
+const { version: UPSTREAM_VERSION } = JSON.parse(
+	fs.readFileSync(pinFile, 'utf8'),
+) as { version: string };
+
+const SOURCE = `https://raw.githubusercontent.com/ai-robots-txt/ai.robots.txt/${UPSTREAM_VERSION}/robots.json`;
 
 const outFile = path.join('.', 'src', 'data', 'bots.ts');
 
@@ -203,9 +219,11 @@ async function main() {
 	fs.writeFileSync(outFile, file);
 
 	console.log(
-		`Wrote ${outFile}: ${tidy(blocked).length} blocked, ${
-			tidy(allowed).length
-		} allowed, ${tidy(signals).length} robots.txt-only.`,
+		`Wrote ${outFile} from ai.robots.txt ${UPSTREAM_VERSION}: ${
+			tidy(blocked).length
+		} blocked, ${tidy(allowed).length} allowed, ${
+			tidy(signals).length
+		} robots.txt-only.`,
 	);
 
 	if (unrecognised.length > 0) {
