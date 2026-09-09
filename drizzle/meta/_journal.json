@@ -8,6 +8,13 @@
       "when": 1788665530987,
       "tag": "0000_create_membership_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788981950110,
+      "tag": "0001_public_the_leader",
+      "breakpoints": true
     }
   ]
 }

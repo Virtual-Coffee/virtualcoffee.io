@@ -2,6 +2,7 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { admin } from 'better-auth/plugins';
 import { nextCookies } from 'better-auth/next-js';
+import { devtools } from 'better-auth-devtools';
 
 import { db, type Database } from '@/db';
 import * as schema from '@/db/schema';
@@ -102,6 +103,7 @@ function createAuth() {
 		},
 		plugins: [
 			admin({ defaultRole: 'user', adminRoles: ['admin'] }),
+			devtools({ enabled: true }),
 			// Must stay last: it wraps the others to set cookies from server actions.
 			nextCookies(),
 		],

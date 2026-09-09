@@ -109,6 +109,26 @@ export const verification = pgTable(
 	(table) => [index('verification_identifier_idx').on(table.identifier)],
 );
 
+/**
+ * Owned by the `better-auth-devtools` plugin (`devtools()` in
+ * `src/lib/auth.ts`) — tracks users the DevTools panel created so it can
+ * offer to delete only the ones it made. The plugin's server-side guard
+ * disables every endpoint that touches this table outside development, so
+ * it stays empty in production.
+ */
+export const devtoolsUser = pgTable('devtools_user', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.unique()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	templateKey: text('template_key').notNull(),
+	label: text('label').notNull(),
+	email: text('email').notNull().unique(),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
+});
+
 /* -------------------------------------------------------------------------- */
 /* Membership pipeline                                                        */
 /* -------------------------------------------------------------------------- */
