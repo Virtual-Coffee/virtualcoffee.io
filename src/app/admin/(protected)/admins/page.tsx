@@ -1,7 +1,7 @@
 import { requirePermission } from '@/lib/adminAccess';
 import { listAdmins, listGrantableUsers } from '@/lib/admins';
 import { formatDate } from '../presentation';
-import { AdminRowActions, GrantAdminForm } from './adminControls';
+import { GrantAccessForm, RoleCheckboxes } from './adminControls';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,10 +26,10 @@ export default async function AdminsPage() {
 					<h1 className="h4 mb-1">Admins</h1>
 					<p className="text-body-secondary mb-0 small">
 						{admins.length} {admins.length === 1 ? 'person' : 'people'} can
-						review applications.
+						reach /admin. A role grants one section; Admin grants all of them.
 					</p>
 				</div>
-				<GrantAdminForm candidates={grantable} />
+				<GrantAccessForm candidates={grantable} />
 			</div>
 
 			<div className="table-responsive">
@@ -37,29 +37,35 @@ export default async function AdminsPage() {
 					<thead>
 						<tr className="small">
 							<th scope="col">Person</th>
+							<th scope="col">Access</th>
 							<th scope="col">Granted</th>
 							<th scope="col">By</th>
-							<th scope="col">
-								<span className="visually-hidden">Actions</span>
-							</th>
 						</tr>
 					</thead>
 					<tbody>
 						{admins.map((admin) => (
 							<tr key={admin.id}>
 								<td>
-									<div className="fw-semibold">{admin.name}</div>
+									<div className="fw-semibold">
+										{admin.name}
+										{admin.id === session?.user.id && (
+											<span className="badge text-bg-light border ms-2">
+												You
+											</span>
+										)}
+									</div>
 									<div className="text-body-secondary small">{admin.email}</div>
+								</td>
+								<td>
+									<RoleCheckboxes
+										userId={admin.id}
+										name={admin.name}
+										roles={admin.roles}
+										isSelf={admin.id === session?.user.id}
+									/>
 								</td>
 								<td className="small">{formatDate(admin.roleGrantedAt)}</td>
 								<td className="small">{admin.roleGrantedBy ?? '—'}</td>
-								<td className="text-end">
-									{admin.id === session?.user.id ? (
-										<span className="text-body-secondary small">You</span>
-									) : (
-										<AdminRowActions userId={admin.id} name={admin.name} />
-									)}
-								</td>
 							</tr>
 						))}
 						{admins.length === 0 && (
@@ -68,8 +74,9 @@ export default async function AdminsPage() {
 									colSpan={4}
 									className="text-body-secondary text-center py-4"
 								>
-									No admins yet. The first person whose email is in{' '}
-									<code>ADMIN_BOOTSTRAP_EMAILS</code> becomes one on sign-in.
+									Nobody has access yet. The first person whose email is in{' '}
+									<code>ADMIN_BOOTSTRAP_EMAILS</code> becomes an admin on
+									sign-in.
 								</td>
 							</tr>
 						)}
@@ -78,7 +85,7 @@ export default async function AdminsPage() {
 			</div>
 
 			<p className="text-body-secondary small mb-0">
-				There&rsquo;s no Revoke on your own row — the cheapest way to avoid a
+				You can&rsquo;t remove your own Admin role — the cheapest way to avoid a
 				community with zero admins.
 			</p>
 		</div>
