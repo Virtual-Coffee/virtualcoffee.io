@@ -106,8 +106,9 @@ function createAuth() {
 			/**
 			 * `adminRoles` deliberately stays `['admin']`. It gates the plugin's own
 			 * user-management endpoints — ban, impersonate, set-role — which only
-			 * /admin/admins uses. The narrow roles in `roles` grant a section and
-			 * nothing else; a volunteer_coordinator must not be able to ban anyone.
+			 * /admin/user-management uses. The narrow roles in `roles` grant a
+			 * section and nothing else; a volunteer_coordinator must not be able
+			 * to ban anyone.
 			 */
 			admin({ ac, roles, defaultRole: DEFAULT_ROLE, adminRoles: ['admin'] }),
 			devtools({ enabled: true }),

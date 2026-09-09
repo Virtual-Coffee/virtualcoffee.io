@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import type { Section } from '@/lib/permissions';
+import { useDropdown } from './useDropdown';
 
 const WAITLIST_SECTIONS = [
 	{ href: '/admin/waitlist', label: 'Queue' },
@@ -40,14 +40,13 @@ const SUBMISSION_SECTIONS = [
 }>;
 
 /**
- * A dropdown whose open/close is hand-rolled.
+ * A dropdown whose open/close is hand-rolled — see `useDropdown`.
  *
- * Bootstrap's dropdown JavaScript is not loaded anywhere in this project, so
- * this mirrors the way the marketing Nav does it, plus Escape to close. Without
- * Popper there is no `data-bs-popper` attribute and therefore no `top: 100%`
- * rule; the menu lands under the toggle because an absolutely positioned box
- * with `auto` offsets sits at its static position, which is directly below the
- * button it follows in the markup.
+ * Without Popper there is no `data-bs-popper` attribute and therefore no
+ * `top: 100%` rule; the menu lands under the toggle because an absolutely
+ * positioned box with `auto` offsets sits at its static position, which is
+ * directly below the button it follows in the markup. Nothing clips it here,
+ * unlike the User Management table's menu.
  */
 function NavDropdown({
 	label,
@@ -59,31 +58,10 @@ function NavDropdown({
 	items: readonly { href: string; label: string }[];
 }) {
 	const pathname = usePathname();
-	const [open, setOpen] = useState(false);
-	const wrapperRef = useRef<HTMLLIElement>(null);
-	const toggleRef = useRef<HTMLButtonElement>(null);
-
-	useEffect(() => {
-		if (!open) return;
-
-		const onDocumentClick = (event: MouseEvent) => {
-			if (!wrapperRef.current?.contains(event.target as Node)) {
-				setOpen(false);
-			}
-		};
-		const onKeyDown = (event: KeyboardEvent) => {
-			if (event.key !== 'Escape') return;
-			setOpen(false);
-			toggleRef.current?.focus();
-		};
-
-		document.addEventListener('click', onDocumentClick);
-		document.addEventListener('keydown', onKeyDown);
-		return () => {
-			document.removeEventListener('click', onDocumentClick);
-			document.removeEventListener('keydown', onKeyDown);
-		};
-	}, [open]);
+	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
+		HTMLLIElement,
+		HTMLButtonElement
+	>();
 
 	return (
 		<li className="nav-item dropdown" ref={wrapperRef}>
@@ -134,7 +112,7 @@ export function AdminNav({ sections }: { sections: readonly Section[] }) {
 	// parent tab that goes dark on its own children reads as a broken link.
 	const inWaitlist = pathname.startsWith('/admin/waitlist');
 	const inSubmissions = pathname.startsWith('/admin/submissions');
-	const onAdmins = pathname.startsWith('/admin/admins');
+	const onUserManagement = pathname.startsWith('/admin/user-management');
 	const onDashboard = pathname === '/admin';
 
 	const submissionItems = SUBMISSION_SECTIONS.filter((item) =>
@@ -170,11 +148,13 @@ export function AdminNav({ sections }: { sections: readonly Section[] }) {
 				{can('admins') && (
 					<li className="nav-item">
 						<Link
-							className={`nav-link py-1 px-2${onAdmins ? ' active' : ''}`}
-							aria-current={onAdmins ? 'page' : undefined}
-							href="/admin/admins"
+							className={`nav-link py-1 px-2${
+								onUserManagement ? ' active' : ''
+							}`}
+							aria-current={onUserManagement ? 'page' : undefined}
+							href="/admin/user-management"
 						>
-							Admins
+							User Management
 						</Link>
 					</li>
 				)}

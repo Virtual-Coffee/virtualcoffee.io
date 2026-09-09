@@ -32,7 +32,7 @@ export const user = pgTable('user', {
 	banned: boolean('banned').default(false),
 	banReason: text('ban_reason'),
 	banExpires: timestamp('ban_expires', { withTimezone: true }),
-	// Ours: the Admins screen shows who granted access and when.
+	// Ours: the User Management screen shows who granted access and when.
 	roleGrantedBy: text('role_granted_by'),
 	roleGrantedAt: timestamp('role_granted_at', { withTimezone: true }),
 	createdAt: timestamp('created_at', { withTimezone: true })

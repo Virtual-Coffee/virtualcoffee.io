@@ -31,7 +31,7 @@ two functions that know about that encoding.
 ## `adminRoles` stays `['admin']`
 
 The admin plugin's `adminRoles` option gates its _own_ endpoints — ban,
-impersonate, set-role — which only `/admin/admins` uses. The narrow roles are
+impersonate, set-role — which only `/admin/user-management` uses. The narrow roles are
 deliberately absent from it. A `volunteer_coordinator` must be able to reach
 their section and nothing else; being able to ban or impersonate users is not
 "nothing else".
@@ -40,8 +40,8 @@ their section and nothing else; being able to ban or impersonate users is not
 
 `(protected)/layout.tsx` only checks that the viewer holds _some_ section. Each
 section gates itself, and every server action re-checks independently, per 0003. This is easy to get wrong: the first version of this change left
-`/admin/waitlist` and `/admin/admins` relying on the layout alone, which meant a
-volunteer with one narrow role could open the membership queue and the Admins
+`/admin/waitlist` and `/admin/user-management` relying on the layout alone, which meant a
+volunteer with one narrow role could open the membership queue and the User Management
 screen. **A new section is not gated until its own page says so.**
 
 Sections a viewer cannot read return 404, not 403. Someone who only handles

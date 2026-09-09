@@ -62,7 +62,7 @@ export async function setUserRoles(
 		})
 		.where(eq(user.id, userId));
 
-	revalidatePath('/admin/admins');
+	revalidatePath('/admin/user-management');
 	revalidatePath('/admin');
 	return { ok: true };
 }

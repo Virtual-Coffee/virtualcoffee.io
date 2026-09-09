@@ -1,12 +1,12 @@
 import { requirePermission } from '@/lib/adminAccess';
 import { listAdmins, listGrantableUsers } from '@/lib/admins';
 import { formatDate } from '../presentation';
-import { GrantAccessForm, RoleCheckboxes } from './adminControls';
+import { GrantAccessForm, RolesDropdown } from './adminControls';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-	title: 'Admins · Admin',
+	title: 'User Management · Admin',
 	robots: { index: false, follow: false },
 };
 
@@ -23,7 +23,7 @@ export default async function AdminsPage() {
 		<div className="container-fluid px-3 px-lg-4 py-4">
 			<div className="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
 				<div>
-					<h1 className="h4 mb-1">Admins</h1>
+					<h1 className="h4 mb-1">User Management</h1>
 					<p className="text-body-secondary mb-0 small">
 						{admins.length} {admins.length === 1 ? 'person' : 'people'} can
 						reach /admin. A role grants one section; Admin grants all of them.
@@ -57,7 +57,7 @@ export default async function AdminsPage() {
 									<div className="text-body-secondary small">{admin.email}</div>
 								</td>
 								<td>
-									<RoleCheckboxes
+									<RolesDropdown
 										userId={admin.id}
 										name={admin.name}
 										roles={admin.roles}

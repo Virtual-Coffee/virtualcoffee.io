@@ -68,7 +68,7 @@ export async function dashboardCards(
 				};
 			}
 
-			// The Admins screen is a list of people, not a queue of work.
+			// The User Management screen is a list of people, not a queue of work.
 			if (section === 'admins') return null;
 
 			const kind = SUBMISSION_SECTIONS[section];

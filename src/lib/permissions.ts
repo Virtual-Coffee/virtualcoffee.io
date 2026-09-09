@@ -11,7 +11,7 @@ import { adminAc, defaultStatements } from 'better-auth/plugins/admin/access';
  *
  * `defaultStatements` carries Better Auth's own `user` and `session` resources.
  * They have to be spread in, or granting a custom role would silently drop the
- * built-in admin capabilities that /admin/admins depends on.
+ * built-in admin capabilities that /admin/user-management depends on.
  */
 export const statement = {
 	...defaultStatements,
@@ -102,7 +102,8 @@ export const roles = {
 export type RoleName = keyof typeof roles;
 
 /**
- * Roles that can be granted in /admin/admins, with the label the UI shows.
+ * Roles that can be granted in /admin/user-management, with the label the
+ * UI shows.
  * `user` is excluded: it is the default, and is what revoking everything
  * leaves behind rather than something anyone is given.
  */
