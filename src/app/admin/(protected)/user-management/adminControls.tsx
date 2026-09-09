@@ -136,8 +136,16 @@ export function RolesDropdown({
 						const inputId = `${userId}-${role.name}`;
 
 						return (
-							<li key={role.name}>
-								<div className="form-check px-3 py-1 mb-0 lh-sm">
+							/**
+							 * The inset lives on the `li`, not on the `.form-check`.
+							 * Bootstrap pairs `.form-check`'s `padding-left: 1.5em` with
+							 * `margin-left: -1.5em` on the input, so overriding that padding
+							 * with a `px-*` utility leaves the input pulled further left
+							 * than the padding it is cancelling — the checkbox ends up
+							 * outside the menu's border.
+							 */
+							<li key={role.name} className="px-3">
+								<div className="form-check py-1 mb-0 lh-sm">
 									<input
 										className="form-check-input"
 										type="checkbox"
