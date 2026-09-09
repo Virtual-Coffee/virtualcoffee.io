@@ -119,8 +119,26 @@ h3 {
 	text-align: center;
 }
 
+// The site navbar is `fixed-top`, so it is out of flow and `body` has to
+// reserve the space itself. Two separate numbers, deliberately:
+//   --vc-navbar-height    what the bar actually occupies. Measured at 69px wide
+//                         and 68px narrow — the collapsed bar keeps the brand,
+//                         so it barely changes across navbar-expand-lg. Rounded
+//                         *down* on purpose: the bar is fixed and paints over
+//                         what follows, so being a pixel under hides harmlessly
+//                         beneath it, while being a pixel over shows as a
+//                         hairline of page background.
+//   --vc-navbar-clearance what body reserves. Larger on purpose — the surplus
+//                         is breathing room above page content.
+// Anything that needs to sit flush under the navbar rather than below that
+// breathing room subtracts one from the other; see `.admin-shell`.
+:root {
+	--vc-navbar-height: 68px;
+	--vc-navbar-clearance: 6rem;
+}
+
 body {
-	margin-top: 6rem;
+	margin-top: var(--vc-navbar-clearance);
 	overscroll-behavior-y: none;
 
 	&.vc-home {

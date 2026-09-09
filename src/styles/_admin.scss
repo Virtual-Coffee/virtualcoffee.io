@@ -5,6 +5,16 @@
 // for free. Bootstrap's own offcanvas/modal components need Bootstrap's
 // JavaScript, which this project deliberately doesn't load.
 
+// The admin bar is a header in its own right and should meet the site navbar
+// directly, with no band of page background between the two. `body`'s clearance
+// includes breathing room meant to sit above page *content*, which is wrong
+// between two stacked headers — so give exactly that surplus back. Scoped here
+// rather than shrinking the body margin, which would move every marketing page
+// up with it.
+.admin-shell {
+	margin-top: calc(var(--vc-navbar-height) - var(--vc-navbar-clearance));
+}
+
 .admin-dialog,
 .admin-drawer {
 	border: 0;

@@ -22,7 +22,7 @@ export default async function AdminLayout({
 	const session = await requireAdmin();
 
 	return (
-		<div className="d-flex flex-column min-vh-100">
+		<div className="admin-shell d-flex flex-column min-vh-100">
 			<header className="border-bottom bg-body-tertiary">
 				<div className="container-fluid px-3 px-lg-4">
 					<div className="d-flex flex-wrap align-items-center gap-3 py-2">
