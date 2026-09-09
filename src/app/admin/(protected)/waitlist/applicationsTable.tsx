@@ -12,7 +12,7 @@ import {
 
 import type { MembershipApplication } from '@/db';
 import { ApplicationDrawer } from './applicationDrawer';
-import { StatusBadge, SourceBadge, formatDate } from './presentation';
+import { StatusBadge, SourceBadge, formatDate } from '../presentation';
 
 /**
  * Only sorting is registered, and even that is manual: the server does the
@@ -241,7 +241,7 @@ export function ApplicationsTable({
 							</button>
 							<Link
 								className="btn btn-sm btn-outline-secondary"
-								href={`/admin/${row.id}`}
+								href={`/admin/waitlist/${row.id}`}
 							>
 								Open
 							</Link>

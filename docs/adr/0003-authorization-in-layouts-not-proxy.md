@@ -1,6 +1,6 @@
 # Authorization lives in server components, not in proxy.ts
 
-`/admin` is gated in `src/app/admin/layout.tsx`, which calls
+`/admin` is gated in `src/app/admin/(protected)/layout.tsx`, which calls
 `auth.api.getSession()` and redirects. It is deliberately **not** gated in
 `proxy.ts`.
 

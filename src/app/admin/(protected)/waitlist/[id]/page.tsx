@@ -16,7 +16,7 @@ import {
 	formatDate,
 	formatDateTime,
 	statusLabel,
-} from '../presentation';
+} from '../../presentation';
 
 export const dynamic = 'force-dynamic';
 
@@ -63,7 +63,7 @@ export default async function ApplicationDetailPage({
 			<nav aria-label="Breadcrumb" className="mb-3">
 				<ol className="breadcrumb mb-0 small">
 					<li className="breadcrumb-item">
-						<Link href="/admin">Queue</Link>
+						<Link href="/admin/waitlist">Queue</Link>
 					</li>
 					<li className="breadcrumb-item active" aria-current="page">
 						Application {application.id}

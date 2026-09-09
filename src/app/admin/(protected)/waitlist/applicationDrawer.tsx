@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 import type { MembershipApplication } from '@/db';
-import { SourceBadge, StatusBadge, formatDate } from './presentation';
+import { SourceBadge, StatusBadge, formatDate } from '../presentation';
 
 /**
  * A native <dialog>, so Escape-to-close, focus trapping and making the page
@@ -86,7 +86,10 @@ export function ApplicationDrawer({
 					</div>
 
 					<div className="border-top p-3 d-flex flex-wrap gap-2">
-						<Link className="btn btn-primary" href={`/admin/${application.id}`}>
+						<Link
+							className="btn btn-primary"
+							href={`/admin/waitlist/${application.id}`}
+						>
 							Open full application
 						</Link>
 						<button

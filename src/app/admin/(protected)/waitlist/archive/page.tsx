@@ -61,7 +61,7 @@ export default async function ArchivePage({
 				{STATUS_FILTERS.map((option) => (
 					<Link
 						key={option.value}
-						href={`/admin/archive?status=${option.value}`}
+						href={`/admin/waitlist/archive?status=${option.value}`}
 						className={`btn btn-sm ${
 							active === option.value ? 'btn-primary' : 'btn-outline-secondary'
 						}`}

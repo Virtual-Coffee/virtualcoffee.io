@@ -75,6 +75,18 @@ async function actorId(userId: string): Promise<string | null> {
 	return row?.id ?? null;
 }
 
+/**
+ * A status change moves an application between the two list views, so both have
+ * to be revalidated. The archive is not just closed applications — it defaults
+ * to "All statuses" and lists queue rows too — so revalidating the queue alone
+ * leaves a row in the archive showing a status it no longer has.
+ */
+function revalidateApplication(applicationId: number) {
+	revalidatePath('/admin/waitlist');
+	revalidatePath('/admin/waitlist/archive');
+	revalidatePath(`/admin/waitlist/${applicationId}`);
+}
+
 export async function sendCoffeeInvite(
 	applicationId: number,
 	copyMe: boolean,
@@ -135,8 +147,7 @@ export async function sendCoffeeInvite(
 		body: `Coffee invite emailed to ${application.email}`,
 	});
 
-	revalidatePath('/admin');
-	revalidatePath(`/admin/${applicationId}`);
+	revalidateApplication(applicationId);
 	return { ok: true };
 }
 
@@ -164,7 +175,7 @@ export async function recordAttendance(
 		body: 'Attended a Coffee',
 	});
 
-	revalidatePath(`/admin/${applicationId}`);
+	revalidatePath(`/admin/waitlist/${applicationId}`);
 	return { ok: true };
 }
 
@@ -257,8 +268,7 @@ export async function approveMembership(
 		body: `Membership approved; welcome and Slack invite emailed to ${application.email}`,
 	});
 
-	revalidatePath('/admin');
-	revalidatePath(`/admin/${applicationId}`);
+	revalidateApplication(applicationId);
 	return { ok: true };
 }
 
@@ -289,8 +299,7 @@ async function close(
 		body: note,
 	});
 
-	revalidatePath('/admin');
-	revalidatePath(`/admin/${applicationId}`);
+	revalidateApplication(applicationId);
 	return { ok: true };
 }
 
@@ -326,6 +335,6 @@ export async function addNote(
 		body: trimmed,
 	});
 
-	revalidatePath(`/admin/${applicationId}`);
+	revalidatePath(`/admin/waitlist/${applicationId}`);
 	return { ok: true };
 }

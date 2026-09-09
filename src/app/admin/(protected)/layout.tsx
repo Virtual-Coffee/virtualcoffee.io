@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { SignOutButton } from '@/app/admin/sign-in/buttons';
 import { requireAdmin } from '@/lib/adminAccess';
+import { AdminNav } from './adminNav';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,12 +11,6 @@ export const metadata = {
 	title: 'Admin',
 	robots: { index: false, follow: false },
 };
-
-const SECTIONS = [
-	{ href: '/admin', label: 'Queue' },
-	{ href: '/admin/archive', label: 'Archive' },
-	{ href: '/admin/admins', label: 'Admins' },
-];
 
 export default async function AdminLayout({
 	children,
@@ -37,17 +32,7 @@ export default async function AdminLayout({
 						>
 							Admin
 						</Link>
-						<nav aria-label="Admin sections">
-							<ul className="nav nav-pills gap-1">
-								{SECTIONS.map((section) => (
-									<li className="nav-item" key={section.href}>
-										<Link className="nav-link py-1 px-2" href={section.href}>
-											{section.label}
-										</Link>
-									</li>
-								))}
-							</ul>
-						</nav>
+						<AdminNav />
 						<div className="ms-auto d-flex align-items-center gap-2">
 							<span className="text-body-secondary small">
 								{session.user.name || session.user.email}
