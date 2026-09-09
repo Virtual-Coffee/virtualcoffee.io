@@ -30,6 +30,13 @@ const localMdxPlugin = (relPath, options = {}) => {
 
 const nextConfig = {
 	reactStrictMode: true,
+	// `netlify dev` routes every request through the block-bots edge function
+	// (netlify.toml declares it on /*), and the local Deno runtime gunzips the
+	// upstream body while passing Next's `content-encoding: gzip` header through
+	// untouched — the browser then fails with ERR_CONTENT_DECODING_FAILED. Netlify's
+	// CDN compresses in production, so let the proxy own compression locally.
+	// NETLIFY_DEV is set by the CLI for the process it spawns.
+	compress: process.env.NETLIFY_DEV !== 'true',
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'node_modules')],
 		// Bootstrap 5.3's own Sass triggers if-function and global-builtin
