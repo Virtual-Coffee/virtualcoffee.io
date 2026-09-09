@@ -1,7 +1,8 @@
 export type FormState = null | {
 	is_error: boolean;
 	message?: string;
-	error?: unknown;
+	/** Field name -> first error, so inputs can be marked individually. */
+	fieldErrors?: Record<string, string>;
 };
 
 export type Action = (

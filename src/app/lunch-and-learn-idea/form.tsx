@@ -1,13 +1,12 @@
 'use client';
 
 import { Submit, CodeOfConduct } from '@/components/forms';
-import { createLunchAndLearnSubmission } from '@/util/airtable/action';
-import { useAirtableForm } from '@/util/airtable/useAirtableForm';
+import { SpamGuardFields } from '@/util/forms/SpamGuardFields';
+import { useFormAction } from '@/util/forms/useFormAction';
+import { submitLunchAndLearnIdea } from './action';
 
-export function Form() {
-	const { formAction, errorContent } = useAirtableForm(
-		createLunchAndLearnSubmission,
-	);
+export function Form({ spamToken }: { spamToken: string }) {
+	const { formAction, errorContent } = useFormAction(submitLunchAndLearnIdea);
 
 	return (
 		<form action={formAction}>
@@ -94,6 +93,7 @@ export function Form() {
 			</fieldset>
 
 			<CodeOfConduct />
+			<SpamGuardFields token={spamToken} />
 			{errorContent}
 			<Submit />
 		</form>

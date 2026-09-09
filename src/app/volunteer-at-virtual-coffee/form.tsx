@@ -1,8 +1,9 @@
 'use client';
 
 import { Submit, CodeOfConduct } from '@/components/forms';
-import { createVolunteer } from '@/util/airtable/action';
-import { useAirtableForm } from '@/util/airtable/useAirtableForm';
+import { SpamGuardFields } from '@/util/forms/SpamGuardFields';
+import { useFormAction } from '@/util/forms/useFormAction';
+import { submitVolunteerSignup } from './action';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
@@ -22,8 +23,10 @@ function Position() {
 	);
 }
 
-export function Form() {
-	const { formAction, errorContent } = useAirtableForm(createVolunteer);
+export function Form({ spamToken }: { spamToken: string }) {
+	const { formAction, errorContent, fieldError } = useFormAction(
+		submitVolunteerSignup,
+	);
 
 	return (
 		<form action={formAction}>
@@ -61,11 +64,13 @@ export function Form() {
 					</small>
 				</div>
 				<div className="mb-form">
-					<label htmlFor="formEmail">GitHub User Name</label>
+					<label htmlFor="githubUsername">GitHub User Name</label>
 					<input
 						type="text"
-						className="form-control"
-						id="formEmail"
+						className={`form-control${
+							fieldError('github_username') ? ' is-invalid' : ''
+						}`}
+						id="githubUsername"
 						name="github_username"
 						aria-describedby="githubHelp"
 						required
@@ -98,6 +103,7 @@ export function Form() {
 			</fieldset>
 
 			<CodeOfConduct />
+			<SpamGuardFields token={spamToken} />
 			{errorContent}
 			<Submit />
 		</form>

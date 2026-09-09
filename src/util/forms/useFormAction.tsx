@@ -8,7 +8,7 @@ const initialState: FormState = {
 	is_error: false,
 };
 
-export function useAirtableForm(action: Action) {
+export function useFormAction(action: Action) {
 	const [state, formAction] = useActionState<FormState, FormData>(
 		action,
 		initialState,
@@ -17,13 +17,18 @@ export function useAirtableForm(action: Action) {
 	return useMemo(() => {
 		const errorContent =
 			state && state.is_error ? (
-				<div className="alert alert-success" role="alert">
+				// `alert-danger`, not `alert-success` — the old Airtable version used
+				// the success colour for its error banner.
+				<div className="alert alert-danger" role="alert">
 					<h4 className="alert-heading">
 						There was an issue submitting your form.
 					</h4>
-					<p>{state.message}</p>
+					<p className="mb-0">{state.message}</p>
 				</div>
 			) : null;
-		return { formAction, errorContent, state };
+
+		const fieldError = (name: string) => state?.fieldErrors?.[name];
+
+		return { formAction, errorContent, fieldError, state };
 	}, [formAction, state]);
 }

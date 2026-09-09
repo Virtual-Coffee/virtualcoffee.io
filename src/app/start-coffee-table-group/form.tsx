@@ -1,15 +1,17 @@
 'use client';
 
 import { Submit, CodeOfConduct } from '@/components/forms';
-import { createCoffeeTableGroup } from '@/util/airtable/action';
-import { useAirtableForm } from '@/util/airtable/useAirtableForm';
+import { SpamGuardFields } from '@/util/forms/SpamGuardFields';
+import { useFormAction } from '@/util/forms/useFormAction';
+import { submitCoffeeTableGroupRequest } from './action';
 
-export function Form() {
-	const { formAction, errorContent } = useAirtableForm(createCoffeeTableGroup);
+export function Form({ spamToken }: { spamToken: string }) {
+	const { formAction, errorContent } = useFormAction(
+		submitCoffeeTableGroupRequest,
+	);
 
 	return (
 		<form action={formAction}>
-			<input type="hidden" name="form-name" value="start-coffee-table-group" />
 			<fieldset>
 				<legend>Your Information:</legend>
 				<p className="text-muted">
@@ -73,6 +75,7 @@ export function Form() {
 			</fieldset>
 
 			<CodeOfConduct />
+			<SpamGuardFields token={spamToken} />
 			{errorContent}
 			<Submit />
 		</form>

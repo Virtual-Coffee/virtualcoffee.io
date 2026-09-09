@@ -1,0 +1,167 @@
+/**
+ * Slack notifications for inbound Submissions.
+ *
+ * These replace four Airtable automations that fired on record creation and
+ * posted into specific channels. Airtable was never just storage: it was the
+ * only thing telling maintainers a CoC report had arrived. Moving the data
+ * without moving the notification would have made those reports land silently.
+ *
+ * Incoming webhooks rather than a bot token: each one is bound to the channel
+ * it was created for, so there is no channel ID in the code and no bot to
+ * invite to the two private groups. The channels the automations posted to were
+ * #lunch-and-learn (C022SHKKQG2) and three private groups.
+ */
+
+export type NotifyResult =
+	| { ok: true }
+	| { ok: false; skipped: true; message: string }
+	| { ok: false; skipped?: false; message: string };
+
+/** One webhook per destination, so a missing one only silences its own form. */
+const WEBHOOK_ENV = {
+	coc: 'SLACK_WEBHOOK_COC',
+	volunteers: 'SLACK_WEBHOOK_VOLUNTEERS',
+	'lunch-and-learn': 'SLACK_WEBHOOK_LUNCH_AND_LEARN',
+	'coffee-tables': 'SLACK_WEBHOOK_COFFEE_TABLES',
+} as const;
+
+export type NotifyChannel = keyof typeof WEBHOOK_ENV;
+
+export function slackConfigured(channel: NotifyChannel): boolean {
+	return Boolean(process.env[WEBHOOK_ENV[channel]]);
+}
+
+const TIMEOUT_MS = 10_000;
+
+/**
+ * Post a message, returning rather than throwing.
+ *
+ * Callers have already written the submission to the database by this point, so
+ * a failure here must never propagate — losing a CoC report because Slack was
+ * unreachable is far worse than a report nobody was pinged about. The caller
+ * records the outcome as an event either way. See docs/adr/0005.
+ */
+export async function notifySlack(
+	channel: NotifyChannel,
+	text: string,
+): Promise<NotifyResult> {
+	const url = process.env[WEBHOOK_ENV[channel]];
+
+	if (!url) {
+		return {
+			ok: false,
+			skipped: true,
+			message: `${WEBHOOK_ENV[channel]} is not set, so nothing was posted to Slack.`,
+		};
+	}
+
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ text, unfurl_links: true }),
+			signal: AbortSignal.timeout(TIMEOUT_MS),
+		});
+
+		if (!response.ok) {
+			// Slack returns a plain-text reason ("no_service", "invalid_payload").
+			const detail = await response.text().catch(() => '');
+			return {
+				ok: false,
+				message: `Slack rejected the message (${response.status}${
+					detail ? `: ${detail.slice(0, 200)}` : ''
+				}).`,
+			};
+		}
+
+		return { ok: true };
+	} catch (error) {
+		return {
+			ok: false,
+			message:
+				error instanceof Error
+					? `Could not reach Slack: ${error.message}`
+					: 'Could not reach Slack.',
+		};
+	}
+}
+
+/** `*bold*` is Slack's mrkdwn, not Markdown's `**bold**`. */
+function field(label: string, value: string | null | undefined): string {
+	return `*${label}:* ${value?.trim() || '—'}`;
+}
+
+export function cocReportMessage(report: {
+	name: string | null;
+	email: string | null;
+	reporteeName: string;
+	timeLocation: string;
+	description: string;
+	anyoneElseInvolved: string | null;
+	hasAttachment: boolean;
+}): string {
+	return [
+		'*CoC Report Submitted*',
+		'',
+		field('Name', report.name ?? '(anonymous)'),
+		field('Email', report.email ?? '(anonymous)'),
+		field('Reportee Name', report.reporteeName),
+		field('Time/Location', report.timeLocation),
+		'',
+		'*Description:*',
+		report.description,
+		'',
+		'*Anyone else involved:*',
+		report.anyoneElseInvolved?.trim() || '—',
+		report.hasAttachment
+			? '\n_A file was attached; open the report to view it._'
+			: '',
+	]
+		.join('\n')
+		.trimEnd();
+}
+
+export function volunteerSignupMessage(signup: {
+	name: string;
+	email: string;
+	position: string | null;
+	description: string | null;
+}): string {
+	return [
+		'*New Volunteer Form Submission*',
+		'',
+		field('Name', signup.name),
+		field('Email', signup.email),
+		field('Position', signup.position),
+		'',
+		'*Description:*',
+		signup.description?.trim() || '—',
+	].join('\n');
+}
+
+export function lunchAndLearnMessage(idea: {
+	topic: string;
+	name: string;
+	issueUrl: string | null;
+}): string {
+	const lead = `New Lunch & Learn Submission: ${idea.topic} by ${idea.name}`;
+	return idea.issueUrl ? `${lead}\n\nGitHub Link: ${idea.issueUrl}` : lead;
+}
+
+export function coffeeTableGroupMessage(request: {
+	name: string;
+	email: string;
+	groupName: string | null;
+	description: string | null;
+}): string {
+	return [
+		'*New Coffee Table Group*',
+		'',
+		field('Name', request.name),
+		field('Email', request.email),
+		field('Group name', request.groupName),
+		'',
+		'*Description:*',
+		request.description?.trim() || '—',
+	].join('\n');
+}

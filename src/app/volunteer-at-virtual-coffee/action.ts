@@ -1,0 +1,122 @@
+'use server';
+
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
+
+import { db, volunteerSignup } from '@/db';
+import { notifySlack, volunteerSignupMessage } from '@/lib/slack/notify';
+import { notifyAndRecord, recordSubmissionEvent } from '@/lib/submitSubmission';
+import { looksLikeSpam } from '@/util/forms/spamGuard';
+import type { FormState } from '@/util/forms/types';
+
+const schema = z.object({
+	name: z.string().trim().min(1, 'Please tell us your name.').max(200),
+	email: z.email('That doesn’t look like an email address.').max(320),
+	// Required in the browser, so required here too — server validation that is
+	// laxer than the form's own `required` attributes is validation in name only.
+	github_username: z
+		.string()
+		.trim()
+		.min(1, 'Please give us your GitHub username.')
+		.max(100)
+		// Accept a pasted profile URL or an @handle as well as a bare username.
+		.transform((value) =>
+			value
+				.replace(/^https?:\/\/(www\.)?github\.com\//i, '')
+				.replace(/^@/, '')
+				.replace(/\/$/, ''),
+		),
+	position: z
+		.string()
+		.trim()
+		.min(1, 'Please tell us which role you’re interested in.')
+		.max(300),
+	description: z
+		.string()
+		.trim()
+		.min(1, 'Please share any details or thoughts.')
+		.max(5000),
+	agree: z.literal('agree', {
+		message: 'Please confirm you’ve read the Code of Conduct.',
+	}),
+});
+
+export async function submitVolunteerSignup(
+	_state: FormState,
+	formData: FormData,
+): Promise<FormState> {
+	if (looksLikeSpam(formData)) {
+		redirect('/volunteer-at-virtual-coffee/thanks');
+	}
+
+	const parsed = schema.safeParse({
+		name: formData.get('name') ?? '',
+		email: formData.get('email') ?? '',
+		github_username: formData.get('github_username') ?? '',
+		position: formData.get('position') ?? '',
+		description: formData.get('description') ?? '',
+		agree: formData.get('agree') ?? '',
+	});
+
+	if (!parsed.success) {
+		const fieldErrors: Record<string, string> = {};
+		for (const issue of parsed.error.issues) {
+			const key = String(issue.path[0] ?? '');
+			fieldErrors[key] ??= issue.message;
+		}
+		return {
+			is_error: true,
+			message: 'Please check the highlighted fields.',
+			fieldErrors,
+		};
+	}
+
+	let signupId: number;
+
+	try {
+		const [row] = await db()
+			.insert(volunteerSignup)
+			.values({
+				name: parsed.data.name,
+				email: parsed.data.email,
+				githubUsername: parsed.data.github_username,
+				position: parsed.data.position,
+				description: parsed.data.description,
+			})
+			.returning({ id: volunteerSignup.id });
+
+		signupId = row.id;
+
+		await recordSubmissionEvent({
+			kind: 'volunteers',
+			submissionId: signupId,
+			type: 'submitted',
+			body: 'Signup submitted',
+		});
+	} catch (error) {
+		console.error('Volunteer signup failed to save', error);
+		return {
+			is_error: true,
+			message:
+				'Something went wrong saving your form. Please try again, or email hello@virtualcoffee.io.',
+		};
+	}
+
+	await notifyAndRecord('volunteers', signupId, async () => {
+		const result = await notifySlack(
+			'volunteers',
+			volunteerSignupMessage({
+				name: parsed.data.name,
+				email: parsed.data.email,
+				position: parsed.data.position,
+				description: parsed.data.description,
+			}),
+		);
+
+		return result.ok
+			? { ok: true, detail: 'Posted to Slack.' }
+			: { ok: false, detail: result.message };
+	});
+
+	redirect('/volunteer-at-virtual-coffee/thanks');
+}
