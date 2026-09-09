@@ -160,6 +160,11 @@ jobs:
       - name: Generate codegen files
         run: pnpm codegen
 
+      # The edge function's user-agent matching is no longer a one-liner, and
+      # the list it runs against comes from upstream. ESLint can't see either.
+      - name: Check bot matching
+        run: pnpm check-bot-matching
+
       - name: Register ESLint problem matcher
         run: echo "::add-matcher::.github/problem-matchers/eslint-stylish.json"
 
