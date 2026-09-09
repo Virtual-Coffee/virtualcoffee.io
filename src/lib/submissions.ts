@@ -145,3 +145,149 @@ export async function failedNotifications(
 
 	return Object.fromEntries(results.filter(([, value]) => value > 0));
 }
+
+/**
+ * How each kind is rendered, kept next to the tables it describes.
+ *
+ * `summary` is the line the list shows; `fields` are the labelled values on the
+ * detail screen, in the order they appeared on the form the person filled in.
+ */
+export const SUBMISSION_DISPLAY: Record<
+	SubmissionKind,
+	{
+		summary: (row: Record<string, unknown>) => {
+			title: string;
+			subtitle: string;
+		};
+		fields: { label: string; key: string; long?: boolean }[];
+	}
+> = {
+	coc: {
+		summary: (row) => ({
+			// Anonymous reports are the point of the form, not an edge case.
+			title: `Report about ${String(row.reporteeName ?? '—')}`,
+			subtitle: row.name ? String(row.name) : 'Anonymous',
+		}),
+		fields: [
+			{ label: 'Reporter', key: 'name' },
+			{ label: 'Email', key: 'email' },
+			{ label: 'Member reported', key: 'reporteeName' },
+			{ label: 'Time / location', key: 'timeLocation' },
+			{ label: 'What happened', key: 'description', long: true },
+			{ label: 'Anyone else involved', key: 'anyoneElseInvolved', long: true },
+		],
+	},
+	volunteers: {
+		summary: (row) => ({
+			title: String(row.name ?? '—'),
+			subtitle: String(row.position ?? 'No role given'),
+		}),
+		fields: [
+			{ label: 'Name', key: 'name' },
+			{ label: 'Email', key: 'email' },
+			{ label: 'GitHub', key: 'githubUsername' },
+			{ label: 'Role', key: 'position' },
+			{ label: 'Details', key: 'description', long: true },
+		],
+	},
+	'lunch-and-learn': {
+		summary: (row) => ({
+			title: String(row.topic ?? '—'),
+			subtitle: String(row.name ?? '—'),
+		}),
+		fields: [
+			{ label: 'Name', key: 'name' },
+			{ label: 'Email', key: 'email' },
+			{ label: 'Title', key: 'topic' },
+			{ label: 'Description', key: 'description', long: true },
+			{ label: 'Format', key: 'format' },
+			{ label: 'Timing', key: 'timing' },
+			{ label: 'GitHub issue', key: 'githubIssueUrl' },
+		],
+	},
+	'coffee-tables': {
+		summary: (row) => ({
+			title: String(row.groupName ?? '—'),
+			subtitle: String(row.name ?? '—'),
+		}),
+		fields: [
+			{ label: 'Name', key: 'name' },
+			{ label: 'Email', key: 'email' },
+			{ label: 'Group name', key: 'groupName' },
+			{ label: 'Description', key: 'description', long: true },
+		],
+	},
+};
+
+export function isSubmissionKind(value: string): value is SubmissionKind {
+	return SUBMISSION_KEYS.includes(value as SubmissionKind);
+}
+
+export type SubmissionRow = Record<string, unknown> & {
+	id: number;
+	status: SubmissionStatus;
+	submittedAt: Date;
+};
+
+export async function listSubmissions(
+	kind: SubmissionKind,
+	options: { statuses?: SubmissionStatus[]; page?: number } = {},
+): Promise<{ rows: SubmissionRow[]; rowCount: number }> {
+	const { table } = SUBMISSION_KINDS[kind];
+	const page = options.page ?? 0;
+	const where = options.statuses?.length
+		? inArray(table.status, options.statuses)
+		: undefined;
+
+	const [rows, [totals]] = await Promise.all([
+		db()
+			.select()
+			.from(table)
+			.where(where)
+			.orderBy(desc(table.submittedAt))
+			.limit(PAGE_SIZE)
+			.offset(page * PAGE_SIZE),
+		db().select({ value: count() }).from(table).where(where),
+	]);
+
+	return {
+		rows: rows as unknown as SubmissionRow[],
+		rowCount: totals?.value ?? 0,
+	};
+}
+
+export async function getSubmission(
+	kind: SubmissionKind,
+	id: number,
+): Promise<SubmissionRow | null> {
+	const { table } = SUBMISSION_KINDS[kind];
+
+	const [row] = await db()
+		.select()
+		.from(table)
+		.where(eq(table.id, id))
+		.limit(1);
+
+	return (row as unknown as SubmissionRow) ?? null;
+}
+
+/** Counts per status, for the filter chips on a list screen. */
+export async function submissionStatusCounts(
+	kind: SubmissionKind,
+): Promise<Record<string, number>> {
+	const { table } = SUBMISSION_KINDS[kind];
+
+	const rows = await db()
+		.select({ status: table.status, value: count() })
+		.from(table)
+		.groupBy(table.status);
+
+	const counts: Record<string, number> = {};
+	let total = 0;
+	for (const row of rows) {
+		counts[row.status] = row.value;
+		total += row.value;
+	}
+	counts.all = total;
+	return counts;
+}

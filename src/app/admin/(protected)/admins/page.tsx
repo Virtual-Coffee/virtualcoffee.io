@@ -1,4 +1,4 @@
-import { getSession } from '@/lib/adminAccess';
+import { requirePermission } from '@/lib/adminAccess';
 import { listAdmins, listGrantableUsers } from '@/lib/admins';
 import { formatDate } from '../presentation';
 import { AdminRowActions, GrantAdminForm } from './adminControls';
@@ -11,7 +11,9 @@ export const metadata = {
 };
 
 export default async function AdminsPage() {
-	const session = await getSession();
+	// Managing who has access is admin-only: the layout admits anyone holding
+	// any section, so without this a narrow role could grant itself more.
+	const session = await requirePermission('admins', 'read');
 	const [admins, grantable] = await Promise.all([
 		listAdmins(),
 		listGrantableUsers(),

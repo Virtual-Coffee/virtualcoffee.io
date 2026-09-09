@@ -1,4 +1,9 @@
-import { db, submissionEvent } from '@/db';
+import {
+	db,
+	submissionEvent,
+	type SubmissionEventType,
+	type SubmissionStatus,
+} from '@/db';
 import type { SubmissionKind } from '@/lib/submissions';
 import { SUBMISSION_KINDS } from '@/lib/submissions';
 
@@ -25,9 +30,11 @@ function subjectColumn(kind: SubmissionKind, id: number) {
 export async function recordSubmissionEvent(input: {
 	kind: SubmissionKind;
 	submissionId: number;
-	type: 'submitted' | 'notification_sent' | 'notification_failed' | 'imported';
+	type: SubmissionEventType;
 	body?: string | null;
 	actorUserId?: string | null;
+	fromStatus?: SubmissionStatus | null;
+	toStatus?: SubmissionStatus | null;
 }) {
 	await db()
 		.insert(submissionEvent)
@@ -36,6 +43,8 @@ export async function recordSubmissionEvent(input: {
 			type: input.type,
 			body: input.body ?? null,
 			actorUserId: input.actorUserId ?? null,
+			fromStatus: input.fromStatus ?? null,
+			toStatus: input.toStatus ?? null,
 		});
 }
 

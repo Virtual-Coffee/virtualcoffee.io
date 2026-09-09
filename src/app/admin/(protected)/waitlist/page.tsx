@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { requirePermission } from '@/lib/adminAccess';
 import { listApplications, statusCounts } from '@/lib/applications';
 import { ApplicationsTable } from './applicationsTable';
 import { QueueSearch } from './queueSearch';
@@ -23,6 +24,11 @@ export default async function AdminQueuePage({
 }: {
 	searchParams: Promise<RawSearchParams>;
 }) {
+	// The layout only checks that the viewer holds *some* section, so each
+	// section gates itself. Without this a volunteer_coordinator reaches the
+	// membership queue.
+	await requirePermission('waitlist', 'read');
+
 	const params = await searchParams;
 	const filters = parseSearchParams(params, {
 		// The queue defaults to the two statuses that need a human decision.

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { requirePermission } from '@/lib/adminAccess';
 import { getApplication, getApplicationHistory } from '@/lib/applications';
 import {
 	coffeeInviteEmail,
@@ -44,6 +45,8 @@ export default async function ApplicationDetailPage({
 }: {
 	params: Promise<{ id: string }>;
 }) {
+	await requirePermission('waitlist', 'read');
+
 	const { id } = await params;
 	const applicationId = Number(id);
 

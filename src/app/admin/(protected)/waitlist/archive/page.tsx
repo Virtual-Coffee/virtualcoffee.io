@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { requirePermission } from '@/lib/adminAccess';
 import { listApplications, statusCounts } from '@/lib/applications';
 import { ApplicationsTable } from '../applicationsTable';
 import { QueueSearch } from '../queueSearch';
@@ -30,6 +31,8 @@ export default async function ArchivePage({
 }: {
 	searchParams: Promise<RawSearchParams>;
 }) {
+	await requirePermission('waitlist', 'read');
+
 	const params = await searchParams;
 	const filters = parseSearchParams(params, { defaultStatuses: [] });
 
