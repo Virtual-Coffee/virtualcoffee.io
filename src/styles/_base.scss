@@ -1,14 +1,5 @@
 @use 'sass:map';
 
-:root {
-	font-family: 'Inter', sans-serif;
-}
-@supports (font-variation-settings: normal) {
-	:root {
-		font-family: 'Inter var', sans-serif;
-	}
-}
-
 html {
 	font-size: 18px;
 	scroll-padding-top: 100px;
