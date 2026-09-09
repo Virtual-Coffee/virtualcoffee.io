@@ -1,5 +1,7 @@
+import { sql } from 'drizzle-orm';
 import {
 	boolean,
+	check,
 	index,
 	integer,
 	pgEnum,
@@ -301,3 +303,210 @@ export type NewMembershipApplication =
 export type ApplicationEvent = typeof applicationEvent.$inferSelect;
 export type ApplicationStatus = (typeof applicationStatus.enumValues)[number];
 export type ApplicationSource = (typeof applicationSource.enumValues)[number];
+
+/* -------------------------------------------------------------------------- */
+/* Submissions                                                                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * A Submission is something a non-member sends through a public form on the
+ * site that a maintainer has to act on. Four kinds, one table each — a CoC
+ * Report and a Volunteer Signup share almost no fields, and CoC needs its own
+ * table so its access can be narrowed independently.
+ *
+ * These previously lived in the Airtable "Form Submissions" base, where they
+ * were flat lists with no status of any kind. The status and the event log are
+ * new.
+ */
+export const submissionStatus = pgEnum('submission_status', [
+	'new',
+	'in_progress',
+	'resolved',
+	'dismissed',
+]);
+
+export const submissionEventType = pgEnum('submission_event_type', [
+	'submitted',
+	'status_changed',
+	'note',
+	'notification_sent',
+	'notification_failed',
+	'imported',
+]);
+
+/**
+ * Columns every submission kind carries, spread into each table below.
+ *
+ * A function rather than a shared object: `.unique()` derives its constraint
+ * name once, when the column builder is created, so spreading one object into
+ * four tables gives all four the *first* table's constraint name and the
+ * migration fails on the second `CREATE TABLE`. Naming it explicitly per table
+ * is what keeps them distinct.
+ */
+function submissionColumns(table: string) {
+	return {
+		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+		status: submissionStatus('status').notNull().default('new'),
+		submittedAt: timestamp('submitted_at', { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+		closedAt: timestamp('closed_at', { withTimezone: true }),
+		/** Set by the one-off import; lets it be re-run idempotently. */
+		airtableRecordId: text('airtable_record_id').unique(
+			`${table}_airtable_record_id_unique`,
+		),
+	};
+}
+
+/**
+ * Name and email are nullable: the form tells reporters to skip both if they
+ * wish to remain anonymous, and some historical reports did.
+ *
+ * Only one attachment is supported because only one was ever collected. The
+ * blob key points into the Netlify Blobs store; the file is served through an
+ * authorized route, never a public URL.
+ */
+export const cocReport = pgTable(
+	'coc_report',
+	{
+		...submissionColumns('coc_report'),
+		name: text('name'),
+		email: text('email'),
+		reporteeName: text('reportee_name').notNull(),
+		timeLocation: text('time_location').notNull(),
+		description: text('description').notNull(),
+		anyoneElseInvolved: text('anyone_else_involved'),
+		attachmentBlobKey: text('attachment_blob_key'),
+		attachmentFilename: text('attachment_filename'),
+		attachmentContentType: text('attachment_content_type'),
+		attachmentSize: integer('attachment_size'),
+	},
+	(table) => [
+		index('coc_report_status_idx').on(table.status),
+		index('coc_report_submitted_at_idx').on(table.submittedAt),
+	],
+);
+
+export const volunteerSignup = pgTable(
+	'volunteer_signup',
+	{
+		...submissionColumns('volunteer_signup'),
+		name: text('name').notNull(),
+		email: text('email').notNull(),
+		githubUsername: text('github_username'),
+		position: text('position'),
+		description: text('description'),
+	},
+	(table) => [
+		index('volunteer_signup_status_idx').on(table.status),
+		index('volunteer_signup_submitted_at_idx').on(table.submittedAt),
+	],
+);
+
+export const lunchAndLearnIdea = pgTable(
+	'lunch_and_learn_idea',
+	{
+		...submissionColumns('lunch_and_learn_idea'),
+		name: text('name').notNull(),
+		email: text('email').notNull(),
+		topic: text('topic').notNull(),
+		description: text('description'),
+		format: text('format'),
+		timing: text('timing'),
+		/** The issue opened in Virtual-Coffee/VC-Community-Docs on submit. */
+		githubIssueUrl: text('github_issue_url'),
+	},
+	(table) => [
+		index('lunch_and_learn_idea_status_idx').on(table.status),
+		index('lunch_and_learn_idea_submitted_at_idx').on(table.submittedAt),
+	],
+);
+
+export const coffeeTableGroupRequest = pgTable(
+	'coffee_table_group_request',
+	{
+		...submissionColumns('coffee_table_group_request'),
+		name: text('name').notNull(),
+		email: text('email').notNull(),
+		groupName: text('group_name'),
+		description: text('description'),
+	},
+	(table) => [
+		index('coffee_table_group_request_status_idx').on(table.status),
+		index('coffee_table_group_request_submitted_at_idx').on(table.submittedAt),
+	],
+);
+
+/**
+ * Append-only, and the equivalent of `applicationEvent` for Submissions.
+ *
+ * One table with four nullable foreign keys rather than four event tables, or
+ * one table keyed by (kind, id). Four near-identical tables is a lot of schema
+ * for data this small, and a bare (kind, id) pair has no referential integrity
+ * — nothing would stop an orphaned row and deletes would need cleaning up by
+ * hand. The CHECK below is what keeps the exclusive-arc honest: exactly one
+ * reference is set, and each one cascades on delete.
+ */
+export const submissionEvent = pgTable(
+	'submission_event',
+	{
+		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+		cocReportId: integer('coc_report_id').references(() => cocReport.id, {
+			onDelete: 'cascade',
+		}),
+		volunteerSignupId: integer('volunteer_signup_id').references(
+			() => volunteerSignup.id,
+			{ onDelete: 'cascade' },
+		),
+		lunchAndLearnIdeaId: integer('lunch_and_learn_idea_id').references(
+			() => lunchAndLearnIdea.id,
+			{ onDelete: 'cascade' },
+		),
+		coffeeTableGroupRequestId: integer(
+			'coffee_table_group_request_id',
+		).references(() => coffeeTableGroupRequest.id, { onDelete: 'cascade' }),
+		/** Null for system events (import, form submission). */
+		actorUserId: text('actor_user_id').references(() => user.id, {
+			onDelete: 'set null',
+		}),
+		type: submissionEventType('type').notNull(),
+		fromStatus: submissionStatus('from_status'),
+		toStatus: submissionStatus('to_status'),
+		/** Note text, or a summary of what was notified and where. */
+		body: text('body'),
+		createdAt: timestamp('created_at', { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+	},
+	(table) => [
+		index('submission_event_coc_report_id_idx').on(table.cocReportId),
+		index('submission_event_volunteer_signup_id_idx').on(
+			table.volunteerSignupId,
+		),
+		index('submission_event_lunch_and_learn_idea_id_idx').on(
+			table.lunchAndLearnIdeaId,
+		),
+		index('submission_event_coffee_table_group_request_id_idx').on(
+			table.coffeeTableGroupRequestId,
+		),
+		check(
+			'submission_event_exactly_one_subject',
+			sql`(
+				(${table.cocReportId} IS NOT NULL)::int
+				+ (${table.volunteerSignupId} IS NOT NULL)::int
+				+ (${table.lunchAndLearnIdeaId} IS NOT NULL)::int
+				+ (${table.coffeeTableGroupRequestId} IS NOT NULL)::int
+			) = 1`,
+		),
+	],
+);
+
+export type CocReport = typeof cocReport.$inferSelect;
+export type VolunteerSignup = typeof volunteerSignup.$inferSelect;
+export type LunchAndLearnIdea = typeof lunchAndLearnIdea.$inferSelect;
+export type CoffeeTableGroupRequest =
+	typeof coffeeTableGroupRequest.$inferSelect;
+export type SubmissionEvent = typeof submissionEvent.$inferSelect;
+export type SubmissionStatus = (typeof submissionStatus.enumValues)[number];
+export type SubmissionEventType =
+	(typeof submissionEventType.enumValues)[number];

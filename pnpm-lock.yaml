@@ -115,12 +115,21 @@ importers:
       '@mdx-js/loader':
         specifier: ^3.1.1
         version: 3.1.1(supports-color@5.5.0)
+      '@netlify/blobs':
+        specifier: ^11.0.3
+        version: 11.0.3(supports-color@5.5.0)
       '@netlify/database':
         specifier: ^2.0.1
         version: 2.0.1
       '@next/mdx':
         specifier: 16.3.4
         version: 16.3.4(@mdx-js/loader@3.1.1(supports-color@5.5.0))(@mdx-js/react@3.1.1(@types/react@19.2.18)(react@19.2.8))
+      '@octokit/auth-app':
+        specifier: ^8.3.1
+        version: 8.3.1
+      '@octokit/rest':
+        specifier: ^22.0.1
+        version: 22.0.1
       '@sindresorhus/slugify':
         specifier: ^3.0.1
         version: 3.0.1
@@ -1956,6 +1965,22 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
+  '@octokit/auth-app@8.3.1':
+    resolution: {integrity: sha512-XHWxZsF4mvGTQCv7AOxgby9t9OjVO19FBuKq+QmyBxFrf+B2hR/P5j/MTF8g95bITf8cRtR17KIXThpFNqiKbg==}
+    engines: {node: '>= 20'}
+
+  '@octokit/auth-oauth-app@9.0.5':
+    resolution: {integrity: sha512-Hn2yAlIDjFLGjAz7t+CRu7e9VYoFW1W3LLyOLyahFoJGlCf4PtDkHKtRET8w/2CJpsrC0FxIF5g5Xtx9E4O78w==}
+    engines: {node: '>= 20'}
+
+  '@octokit/auth-oauth-device@8.0.5':
+    resolution: {integrity: sha512-kdJtjRhykMLJrMdcoC56XUBDfoUAuWEFKpkDxwYim+bNwYw1MreLolk+PLnwEYT8djm589YepeMuJ8+ECAIzVQ==}
+    engines: {node: '>= 20'}
+
+  '@octokit/auth-oauth-user@6.0.4':
+    resolution: {integrity: sha512-eya2pMJ9pCBq1jrm1Rf6J3NI+NemEpzDMLo9J/GpRoK0KgdxIVXWX4LESIfwJ+GYeoq6QFIlUJNi1lVp5FBgmw==}
+    engines: {node: '>= 20'}
+
   '@octokit/auth-token@6.0.0':
     resolution: {integrity: sha512-P4YJBPdPSpWTQ1NU4XYdvHvXJJDxM6YwpS0FZHRgP7YFkdVxsWcpWGy/NVqlAA7PcPCnMacXlRm1y2PFZRWL/w==}
     engines: {node: '>= 20'}
@@ -1970,6 +1995,14 @@ packages:
 
   '@octokit/graphql@9.0.5':
     resolution: {integrity: sha512-bt/hm03LeU6Vy7FwTrkkC9p3XGT/lBwClglMqxBSe5/q0E5CdJTXeAqEI0vlw89/LF/G6tryTIH8HirZ3prMVg==}
+    engines: {node: '>= 20'}
+
+  '@octokit/oauth-authorization-url@8.0.0':
+    resolution: {integrity: sha512-7QoLPRh/ssEA/HuHBHdVdSgF8xNLz/Bc5m9fZkArJE5bb6NmVkDm3anKxXPmN1zh6b5WKZPRr3697xKT/yM3qQ==}
+    engines: {node: '>= 20'}
+
+  '@octokit/oauth-methods@6.0.5':
+    resolution: {integrity: sha512-/mAz7taDZD7DcV4zcG6TDw3Kr6TOldmYBRpvA62C3WIxRMmcgX8XxsTvVQomqKE7VEk/BgYhUao1aR2tYGyIKg==}
     engines: {node: '>= 20'}
 
   '@octokit/openapi-types@27.0.0':
@@ -6778,6 +6811,9 @@ packages:
   unist-util-visit@5.1.0:
     resolution: {integrity: sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg==}
 
+  universal-github-app-jwt@2.2.2:
+    resolution: {integrity: sha512-dcmbeSrOdTnsjGjUfAlqNDJrhxXizjAz94ija9Qw8YkZ1uu0d+GoZzyH+Jb9tIIqvGsadUfwg+22k5aDqqwzbw==}
+
   universal-user-agent@7.0.3:
     resolution: {integrity: sha512-TmnEAEAsBJVZM/AADELsK76llnwcf9vMKuPz8JflO1frO8Lchitr0fNaN9d+Ap0BjKtqWqd/J17qeDnXh8CL2A==}
 
@@ -8806,6 +8842,40 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
+  '@octokit/auth-app@8.3.1':
+    dependencies:
+      '@octokit/auth-oauth-app': 9.0.5
+      '@octokit/auth-oauth-user': 6.0.4
+      '@octokit/request': 10.0.16
+      '@octokit/request-error': 7.1.2
+      '@octokit/types': 18.0.0
+      toad-cache: 3.7.4
+      universal-github-app-jwt: 2.2.2
+      universal-user-agent: 7.0.3
+
+  '@octokit/auth-oauth-app@9.0.5':
+    dependencies:
+      '@octokit/auth-oauth-device': 8.0.5
+      '@octokit/auth-oauth-user': 6.0.4
+      '@octokit/request': 10.0.16
+      '@octokit/types': 18.0.0
+      universal-user-agent: 7.0.3
+
+  '@octokit/auth-oauth-device@8.0.5':
+    dependencies:
+      '@octokit/oauth-methods': 6.0.5
+      '@octokit/request': 10.0.16
+      '@octokit/types': 18.0.0
+      universal-user-agent: 7.0.3
+
+  '@octokit/auth-oauth-user@6.0.4':
+    dependencies:
+      '@octokit/auth-oauth-device': 8.0.5
+      '@octokit/oauth-methods': 6.0.5
+      '@octokit/request': 10.0.16
+      '@octokit/types': 18.0.0
+      universal-user-agent: 7.0.3
+
   '@octokit/auth-token@6.0.0': {}
 
   '@octokit/core@7.0.8':
@@ -8828,6 +8898,15 @@ snapshots:
       '@octokit/request': 10.0.16
       '@octokit/types': 18.0.0
       universal-user-agent: 7.0.3
+
+  '@octokit/oauth-authorization-url@8.0.0': {}
+
+  '@octokit/oauth-methods@6.0.5':
+    dependencies:
+      '@octokit/oauth-authorization-url': 8.0.0
+      '@octokit/request': 10.0.16
+      '@octokit/request-error': 7.1.2
+      '@octokit/types': 18.0.0
 
   '@octokit/openapi-types@27.0.0': {}
 
@@ -14520,6 +14599,8 @@ snapshots:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.1
       unist-util-visit-parents: 6.0.2
+
+  universal-github-app-jwt@2.2.2: {}
 
   universal-user-agent@7.0.3: {}
 

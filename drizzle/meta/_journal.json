@@ -15,6 +15,13 @@
       "when": 1788981950110,
       "tag": "0001_public_the_leader",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788983895283,
+      "tag": "0002_create-submissions-schema",
+      "breakpoints": true
     }
   ]
 }
