@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS and build-time fetches from GitHub, a Craft CMS, and Airtable, all of which fall back to mock data when credentials are absent.
+virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS/JSON and build-time fetches from GitHub and a Craft CMS, both of which fall back to mock data when credentials are absent. Airtable is retired — see `docs/adr/0004`.
 
 ## Commands
 
@@ -48,25 +48,33 @@ Two TypeScript packages are installed on purpose: `typescript` is aliased to `@t
 
 Every external data source lives in `src/data/` and degrades to mocks when its env var is missing:
 
-| Source                                         | File                              | Env var                   | Fallback                               |
-| ---------------------------------------------- | --------------------------------- | ------------------------- | -------------------------------------- |
-| Member GitHub profiles                         | `src/data/members/index.ts`       | `GITHUB_TOKEN`            | `src/data/mocks/memberData.js` (faker) |
-| GitHub Sponsors                                | `src/data/sponsors.ts`            | `GITHUB_TOKEN`            | `src/data/mocks/sponsors.ts`           |
-| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`              | `CMS_URL`, `CMS_TOKEN`    | `src/data/mocks/events.ts`             |
-| Monthly challenge counters                     | `src/data/monthlyChallenges/*.ts` | `PUBLIC_AIRTABLE_API_KEY` | empty data                             |
-| Form submissions (server actions)              | `src/util/airtable/action.ts`     | `FORMS_AIRTABLE_API_KEY`  | error state returned to the form       |
-| Membership applications (`/join`, `/admin`)    | `src/db/`                         | none (auto-provisioned)   | local Postgres from `netlify dev`      |
+| Source                                         | File                        | Env var                                   | Fallback                                        |
+| ---------------------------------------------- | --------------------------- | ----------------------------------------- | ----------------------------------------------- |
+| Member GitHub profiles                         | `src/data/members/index.ts` | `GITHUB_TOKEN`                            | `src/data/mocks/memberData.js` (faker)          |
+| GitHub Sponsors                                | `src/data/sponsors.ts`      | `GITHUB_TOKEN`                            | `src/data/mocks/sponsors.ts`                    |
+| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`        | `CMS_URL`, `CMS_TOKEN`                    | `src/data/mocks/events.ts`                      |
+| Submission notifications (Slack)               | `src/lib/slack/notify.ts`   | `SLACK_WEBHOOK_*`                         | failure recorded as an event, shown in `/admin` |
+| Lunch & Learn GitHub issue                     | `src/lib/github/issues.ts`  | `CI_APP_CLIENT_ID` / `CI_APP_PRIVATE_KEY` | same                                            |
+| Membership applications (`/join`, `/admin`)    | `src/db/`                   | none (auto-provisioned)                   | local Postgres from `netlify dev`               |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. Any new external fetch should follow this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`. Fetches are wrapped in `unstable_cache` with a tag (`members`, `events`, `mdx-routes`); `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates on demand and a daily GitHub Action triggers a Netlify rebuild.
 
 ### Membership pipeline (Postgres)
 
-`/join` writes a Membership Application to Netlify Database and `/admin` is where maintainers work the queue. The panel is organised by section: `/admin` itself only redirects to the default one, the waitlist owns `/admin/waitlist/*` (queue, `archive/`, and the `[id]` detail page) and `/admin/admins` manages who has access. A new section is a new segment beside `waitlist/`, with its routes and its own components under it — `(protected)/presentation.tsx` is the only shared piece. See `CONTEXT.md` for the vocabulary (a **Member Profile** in `src/content/members/` is a voluntary public listing and is unrelated to a **Membership Application**) and `docs/adr/0001-0003` for why Netlify DB, why the data stays out of `vc-data`, and why authorization lives in layouts rather than `proxy.ts`.
+`/join` writes a Membership Application to Netlify Database and `/admin` is where maintainers work the queue. The panel is organised by section: `/admin` is a dashboard scoped to what the viewer may see, the waitlist owns `/admin/waitlist/*` (queue, `archive/`, and the `[id]` detail page), `/admin/submissions/[kind]/*` covers the four Submission kinds, and `/admin/admins` manages who has access. A new section is a new segment beside `waitlist/`, with its routes and its own components under it — `(protected)/presentation.tsx` is the only shared piece. See `CONTEXT.md` for the vocabulary (a **Member Profile** in `src/content/members/` is a voluntary public listing and is unrelated to a **Membership Application**) and `docs/adr/0001-0006`.
+
+**Access to `/admin` is per-section.** `src/lib/permissions.ts` declares one access-control resource per section with `read`/`manage`, and roles live comma-separated in `user.role`. The `(protected)` layout only checks that the viewer holds _some_ section — **each page must gate itself with `requirePermission()`, and each server action must re-check independently.** A section with no check of its own is reachable by every role. See `docs/adr/0006`.
 
 - Schema is Drizzle in `src/db/schema.ts`. `pnpm db:generate` runs drizzle-kit and then `scripts/syncMigrations.ts`, which copies the SQL into `netlify/database/migrations/<version>_<slug>/migration.sql` — Netlify applies those on deploy. The two tools disagree about numbering (Netlify rejects drizzle's `0000` prefix as "out of order"), which is the whole reason that script exists. **Never edit a migration that has already deployed.**
 - `netlify dev` starts a local Postgres; `getDatabase()` finds it automatically. One-off scripts run outside that runtime, so they go through `scripts/with-local-db.sh`, which fetches the local connection string and refuses to run against anything non-local.
 - Auth is Better Auth with Slack OAuth (`src/lib/auth.ts`). Version 1.7.3 has no `team` option, so the workspace check is in `mapProfileToUser`. `/admin` 404s on deploy previews: Netlify seeds preview databases from production and preview URLs are shareable. `ADMIN_DEV_BYPASS=true` gives a local admin session for contributors without Slack credentials.
 - Any admin action that emails must **send first and only then write the status change**, and report whether anything went out. The UI tells the maintainer "nothing was emailed — safe to try again", and they decide whether to retry on that basis; getting it backwards double-emails applicants.
+
+### Submissions (Postgres)
+
+The four public forms — `/report-coc-violation`, `/volunteer-at-virtual-coffee`, `/lunch-and-learn-idea`, `/start-coffee-table-group` — each have a zod-validated server action writing to their own table, with a shared `submission_event` log. They **persist first and notify second**, deliberately inverting the "send first, then write" rule below; `docs/adr/0005` explains why, and it will look like a bug without it.
+
+All four are `force-dynamic` because the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token — prerendering would bake one into the cached HTML and reject every submission once it expired. CoC attachments go to Netlify Blobs and are served only through a route that checks `coc:read`.
 
 Podcast episodes are a checked-in JSON snapshot (`src/data/podcast/episodes.json`) copied from the `vc-data` repo; the update procedure is in the comment at the top of `src/data/podcast.ts`. Newsletters are local JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
 
@@ -113,7 +121,7 @@ Unlike the other codegen it is **checked in**, so it is not part of `pnpm codege
 
 ## Content conventions
 
-- Monthly challenges: prose lives in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`. Follow the process in the VC Community Building Resources "Monthly Challenge Technical Guidelines" linked from the README.
+- Monthly challenges: prose lives in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`. Follow the process in the VC Community Building Resources "Monthly Challenge Technical Guidelines" linked from the README. The entry data for past challenges is a frozen snapshot in `src/data/monthlyChallenges/data/*.json` — see `docs/adr/0004` for why it is JSON and not database tables.
 - Member emoji must be standard Unicode; maintainers reject PRs otherwise.
 - PRs should link an issue (`Closes #123`); the PR template asks for Description and Methodology sections.
 

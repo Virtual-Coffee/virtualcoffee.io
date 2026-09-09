@@ -1,8 +1,10 @@
 # Virtual Coffee
 
 The public website for Virtual Coffee, a deliberately small developer community.
-This glossary covers the **membership pipeline**: how someone gets from "I'd like
-to join" to "I'm in the Slack".
+This glossary covers the **membership pipeline** — how someone gets from "I'd
+like to join" to "I'm in the Slack" — along with the **Submissions** the site's
+other public forms produce, and the **access** model that decides who can work
+on either.
 
 ## Membership
 
@@ -54,7 +56,52 @@ state, and a Member need not have one.
 _Avoid_: Member record, member page, profile
 
 **Admin**:
-A maintainer who can review Membership Applications. Authenticated by Slack, and
-authorised by a role held in the database.
+Someone who holds every **Permission** — every Section of `/admin`, including
+CoC Reports. Authenticated by Slack, and authorised by a **Role** held in the
+database. Not everyone who can reach `/admin` is an Admin: a narrower Role gets
+someone into one Section and nowhere else.
 _Avoid_: Moderator, staff, maintainer (a maintainer is a community role, which
 does not by itself confer admin access)
+
+## Submissions
+
+**Submission**:
+Something a non-member sends through a public form on the site that a maintainer
+has to act on. Four kinds, below. Distinct from a **Membership Application**,
+which is a request to join and has a pipeline of its own.
+_Avoid_: Form submission, enquiry, ticket, request
+
+**CoC Report**:
+A report that someone breached the Code of Conduct. May be anonymous — the form
+asks for a name and email and says to skip both if the reporter prefers.
+Deliberately readable by fewer people than the other kinds.
+_Avoid_: Complaint, incident, violation
+
+**Volunteer Signup**:
+Someone offering to help with a role or initiative.
+_Avoid_: Application (a Membership Application is a different thing)
+
+**Lunch & Learn Idea**:
+A proposed talk. Becomes an issue in the community docs repo, which is where the
+work of scheduling it actually happens.
+_Avoid_: Talk submission, proposal
+
+**Coffee Table Group Request**:
+A proposal for a new small special-interest group.
+_Avoid_: Group application
+
+## Access
+
+**Section**:
+One area of `/admin` — the Waitlist, each kind of Submission, or the Admins
+screen. A Permission is always over a Section.
+
+**Permission**:
+A capability over one Section: `read` to see it, `manage` to change anything in
+it. Someone can hold `read` without `manage`.
+
+**Role**:
+A named set of Permissions. **Admin** holds every Section. The narrower roles
+each hold one, so a volunteer can help with a single area without being given
+the membership queue or CoC Reports.
+_Avoid_: Permission level, group, tier
