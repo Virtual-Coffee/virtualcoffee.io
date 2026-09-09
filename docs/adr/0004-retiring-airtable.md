@@ -40,6 +40,11 @@ historical rows show as open work, which is the honest presentation.
 - `netlify.toml` still redirects `/member-survey` to an Airtable-hosted form.
   It is a config redirect with no code behind it and a separate maintainer
   workflow; replacing it is its own piece of work.
+- The November 2023 and 2024 challenge pages still link out to the Airtable
+  entry form ("once you've published your content, submit it here"). Those
+  challenges are over, so the links are stale content rather than a live
+  dependency — but archiving the Monthly Challenges base will break them, and
+  rewriting finished challenge prose is an editorial call, not a migration one.
 - `scripts/airtable/importMembership.ts` and `MEMBERSHIP_AIRTABLE_API_KEY`
   stay until the production membership import is confirmed complete. The
   `airtable` dependency stays for the one-off scripts.
