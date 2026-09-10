@@ -37,7 +37,11 @@ export default function RootLayout({
 }) {
 	return (
 		<>
-			<html lang="en" className={`h-full bg-gray-100 ${inter.variable}`}>
+			<html
+				lang="en"
+				className={`h-full bg-gray-100 ${inter.variable}`}
+				data-scroll-behavior="smooth"
+			>
 				<head>
 					{buildUrls.NETLIFY && buildUrls.CONTEXT === 'production' && (
 						<Script
