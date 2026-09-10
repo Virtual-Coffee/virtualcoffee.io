@@ -41,6 +41,23 @@ export function statusLabel(status: ApplicationStatus) {
 }
 
 /**
+ * Why a row on the User Management screen has no user behind it yet.
+ *
+ * `pending` is the normal case — a Pending Grant waiting for its first
+ * sign-in. `stranded` is the rare one: they signed in, but the claim did not
+ * apply, so the roles somebody chose for them need setting by hand.
+ */
+export function AccessStateBadge({ state }: { state: 'pending' | 'stranded' }) {
+	return state === 'pending' ? (
+		<span className="badge text-bg-light border">
+			Hasn&rsquo;t signed in yet
+		</span>
+	) : (
+		<span className="badge text-bg-warning">Grant not applied</span>
+	);
+}
+
+/**
  * How an application's event log reads on the detail screen. Kept here beside
  * the status labels, and symmetric with `SUBMISSION_EVENT_LABELS` in the
  * submissions section's own presentation module.

@@ -1,5 +1,5 @@
 import { requirePermission } from '@/lib/adminAccess';
-import { listAdmins, listGrantableUsers } from '@/lib/admins';
+import { grantCandidates, listAccessRows } from '@/lib/admins';
 import { GrantAccessForm } from './adminControls';
 import { AdminsTable } from './adminsTable';
 
@@ -14,10 +14,12 @@ export default async function AdminsPage() {
 	// Managing who has access is admin-only: the layout admits anyone holding
 	// any section, so without this a narrow role could grant itself more.
 	const session = await requirePermission('admins', 'read');
-	const [admins, grantable] = await Promise.all([
-		listAdmins(),
-		listGrantableUsers(),
+	const [rows, candidates] = await Promise.all([
+		listAccessRows(),
+		grantCandidates(),
 	]);
+
+	const pending = rows.filter((row) => row.kind === 'pending').length;
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -25,14 +27,21 @@ export default async function AdminsPage() {
 				<div>
 					<h1 className="h4 mb-1">User Management</h1>
 					<p className="text-body-secondary mb-0 small">
-						{admins.length} {admins.length === 1 ? 'person' : 'people'} can
-						reach /admin. A role grants one section; Admin grants all of them.
+						{rows.length} {rows.length === 1 ? 'person' : 'people'} can reach
+						/admin. A role grants one section; Admin grants all of them.
+						{pending > 0 && (
+							<>
+								{' '}
+								{pending} {pending === 1 ? 'has' : 'have'} not signed in yet —
+								their roles apply the first time they do.
+							</>
+						)}
 					</p>
 				</div>
-				<GrantAccessForm candidates={grantable} />
+				<GrantAccessForm candidates={candidates} />
 			</div>
 
-			<AdminsTable admins={admins} currentUserId={session?.user.id ?? null} />
+			<AdminsTable rows={rows} currentUserId={session?.user.id ?? null} />
 
 			<p className="text-body-secondary small mb-0">
 				You can&rsquo;t remove your own Admin role — the cheapest way to avoid a

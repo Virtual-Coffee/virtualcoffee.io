@@ -11,15 +11,15 @@ import {
 	useTable,
 } from '@tanstack/react-table';
 
-import type { AdminRow } from '@/lib/admins';
-import { formatDate } from '../presentation';
+import type { AccessRow } from '@/lib/admins';
+import { AccessStateBadge, formatDate } from '../presentation';
 import { SortableHeader } from '../sortableHeader';
 import { RolesDropdown } from './adminControls';
 
 /**
  * Unlike the queue tables, this one really does sort in the browser.
  *
- * `listAdmins()` returns every admin in a single unpaginated query, so the
+ * `listAccessRows()` returns everyone in a single unpaginated query, so the
  * component holds the whole set and a client-side sort orders all of it —
  * there is no larger result behind it for the header to misrepresent.
  *
@@ -32,7 +32,7 @@ const features = tableFeatures({
 	sortFns: { text: sortFn_text, datetime: sortFn_datetime },
 });
 
-const helper = createColumnHelper<typeof features, AdminRow>();
+const helper = createColumnHelper<typeof features, AccessRow>();
 
 /**
  * Two columns need to know who is looking, so the definitions cannot sit at
@@ -53,7 +53,14 @@ function buildColumns(currentUserId: string | null) {
 							<span className="badge text-bg-light border ms-2">You</span>
 						)}
 					</div>
-					<div className="text-body-secondary small">{row.original.email}</div>
+					<div className="text-body-secondary small">
+						{row.original.email ??
+							(row.original.handle ? `@${row.original.handle}` : '—')}
+					</div>
+					{row.original.kind === 'pending' && (
+						<AccessStateBadge state="pending" />
+					)}
+					{row.original.stranded && <AccessStateBadge state="stranded" />}
 				</>
 			),
 		}),
@@ -63,14 +70,15 @@ function buildColumns(currentUserId: string | null) {
 			enableSorting: false,
 			cell: ({ row }) => (
 				<RolesDropdown
-					userId={row.original.id}
+					kind={row.original.kind}
+					id={row.original.id}
 					name={row.original.name}
 					roles={row.original.roles}
 					isSelf={row.original.id === currentUserId}
 				/>
 			),
 		}),
-		helper.accessor('roleGrantedAt', {
+		helper.accessor('grantedAt', {
 			header: 'Granted',
 			// Both of the remaining columns are nullable, and both built-ins
 			// resolve null to a sortable value rather than throwing — nulls land
@@ -81,7 +89,7 @@ function buildColumns(currentUserId: string | null) {
 				<span className="small">{formatDate(getValue())}</span>
 			),
 		}),
-		helper.accessor('roleGrantedBy', {
+		helper.accessor('grantedBy', {
 			header: 'By',
 			sortFn: 'text',
 			cell: ({ getValue }) => (
@@ -92,10 +100,10 @@ function buildColumns(currentUserId: string | null) {
 }
 
 export function AdminsTable({
-	admins,
+	rows,
 	currentUserId,
 }: {
-	admins: AdminRow[];
+	rows: AccessRow[];
 	currentUserId: string | null;
 }) {
 	const columns = useMemo(() => buildColumns(currentUserId), [currentUserId]);
@@ -103,10 +111,10 @@ export function AdminsTable({
 	const table = useTable({
 		features,
 		columns,
-		data: admins,
+		data: rows,
 		getRowId: (row) => row.id,
-		// Matches the `ORDER BY user.name` the rows arrive in, so the first
-		// render does not reorder them.
+		// Matches the name order the rows arrive in, so the first render does not
+		// reorder them.
 		initialState: { sorting: [{ id: 'name', desc: false }] },
 		// Someone always holds the sort; there is no unsorted state worth
 		// cycling back to on a list this short.
@@ -147,11 +155,13 @@ export function AdminsTable({
 							))}
 						</tr>
 					))}
-					{admins.length === 0 && (
+					{rows.length === 0 && (
 						<tr>
 							<td colSpan={4} className="text-body-secondary text-center py-4">
-								Nobody has access yet. The first person whose email is in{' '}
-								<code>ADMIN_BOOTSTRAP_EMAILS</code> becomes an admin on sign-in.
+								Nobody has access yet. Grant it to anyone in the Slack workspace
+								above — or, on an empty database, the first person whose Slack
+								member id is in <code>ADMIN_BOOTSTRAP_SLACK_IDS</code> becomes
+								an admin on sign-in.
 							</td>
 						</tr>
 					)}

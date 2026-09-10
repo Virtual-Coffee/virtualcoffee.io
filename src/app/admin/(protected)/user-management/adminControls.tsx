@@ -1,12 +1,24 @@
 'use client';
 
-import { useCallback, useEffect, useState, useTransition } from 'react';
+import {
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+	useTransition,
+} from 'react';
 import { useRouter } from 'next/navigation';
 
-import type { AdminRow } from '@/lib/admins';
+import type { GrantCandidate } from '@/lib/admins';
 import { GRANTABLE_ROLES, type RoleName } from '@/lib/permissions';
 import { useDropdown } from '../useDropdown';
-import { setUserRoles } from './actions';
+import {
+	grantPendingAccess,
+	revokePendingGrant,
+	setPendingGrantRoles,
+	setUserRoles,
+	type AdminActionResult,
+} from './actions';
 
 const LABELS = new Map(
 	GRANTABLE_ROLES.map((role) => [role.name as RoleName, role.label]),
@@ -21,14 +33,21 @@ const LABELS = new Map(
  * The held roles are also summarised under the toggle. Six identical "Roles"
  * buttons would otherwise tell a maintainer scanning this table nothing about
  * who can do what.
+ *
+ * A row is backed either by a user or by a Pending Grant, and the control is
+ * identical for both — only the action differs, because the roles live in a
+ * different row. Dispatching here rather than rendering two near-identical
+ * dropdowns keeps the "Access" column one thing.
  */
 export function RolesDropdown({
-	userId,
+	kind,
+	id,
 	name,
 	roles,
 	isSelf,
 }: {
-	userId: string;
+	kind: 'user' | 'pending';
+	id: string;
 	name: string;
 	roles: RoleName[];
 	isSelf: boolean;
@@ -77,7 +96,18 @@ export function RolesDropdown({
 		if (confirmMessage && !window.confirm(confirmMessage)) return;
 
 		startTransition(async () => {
-			const result = await setUserRoles(userId, next);
+			/**
+			 * Revoking a Pending Grant deletes it rather than setting it to no
+			 * roles: it never took effect, so there is nothing to keep, and a grant
+			 * holding nothing would sit in the table meaning nothing.
+			 */
+			const result: AdminActionResult =
+				kind === 'user'
+					? await setUserRoles(id, next)
+					: next.length === 0
+						? await revokePendingGrant(id)
+						: await setPendingGrantRoles(id, next);
+
 			if (result.ok) {
 				setError(null);
 				router.refresh();
@@ -87,7 +117,7 @@ export function RolesDropdown({
 		});
 	}
 
-	const menuId = `${userId}-roles-menu`;
+	const menuId = `${id}-roles-menu`;
 
 	return (
 		<div className="dropdown" ref={wrapperRef}>
@@ -133,7 +163,7 @@ export function RolesDropdown({
 						// Removing your own admin role is refused server-side too; the
 						// disabled box just avoids offering an action that cannot work.
 						const locked = isSelf && role.name === 'admin' && held;
-						const inputId = `${userId}-${role.name}`;
+						const inputId = `${id}-${role.name}`;
 
 						return (
 							/**
@@ -223,49 +253,168 @@ export function RolesDropdown({
 	);
 }
 
-export function GrantAccessForm({ candidates }: { candidates: AdminRow[] }) {
+/**
+ * Pre-provision a Role for someone in the Slack workspace.
+ *
+ * Candidates come from Slack, not from `user`: the whole point is to give
+ * access to someone who has never visited the site, and the only identifier
+ * they have here is a Slack member id.
+ *
+ * A combobox rather than the `<select>` this used to be — that listed only the
+ * handful of people who had signed in, where this lists the workspace.
+ */
+export function GrantAccessForm({
+	candidates,
+}: {
+	candidates: GrantCandidate[];
+}) {
 	const router = useRouter();
-	const [userId, setUserId] = useState('');
+	const [query, setQuery] = useState('');
+	const [selected, setSelected] = useState<GrantCandidate | null>(null);
 	const [role, setRole] = useState<RoleName>('admin');
+	const [error, setError] = useState<string | null>(null);
 	const [pending, startTransition] = useTransition();
+	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
+		HTMLDivElement,
+		HTMLInputElement
+	>();
 
-	if (candidates.length === 0) {
-		return (
-			<p className="text-body-secondary small mb-0">
-				Only people who have signed in at least once can be granted access.
-			</p>
-		);
+	const matches = useMemo(() => {
+		const needle = query.trim().toLowerCase();
+		const pool = needle
+			? candidates.filter((candidate) =>
+					`${candidate.displayName} ${candidate.name} ${candidate.handle}`
+						.toLowerCase()
+						.includes(needle),
+				)
+			: candidates;
+
+		// Enough to scroll, few enough to render: the workspace is far larger
+		// than anyone scrolls through, and the search is what narrows it.
+		return pool.slice(0, 50);
+	}, [candidates, query]);
+
+	function choose(candidate: GrantCandidate) {
+		setSelected(candidate);
+		setQuery(candidate.displayName);
+		setError(null);
+		setOpen(false);
+	}
+
+	function submit(event: React.FormEvent) {
+		event.preventDefault();
+		if (!selected) return;
+
+		startTransition(async () => {
+			const result = await grantPendingAccess(selected.id, [role]);
+
+			if (result.ok) {
+				setSelected(null);
+				setQuery('');
+				setError(null);
+				router.refresh();
+			} else {
+				// Surfacing this is load-bearing: picking someone who has already
+				// signed in is refused, and a silent refusal reads as the button
+				// being broken.
+				setError(result.message);
+			}
+		});
 	}
 
 	return (
 		<form
-			className="d-flex flex-wrap gap-2"
-			onSubmit={(event) => {
-				event.preventDefault();
-				if (!userId) return;
-				startTransition(async () => {
-					await setUserRoles(userId, [role]);
-					setUserId('');
-					router.refresh();
-				});
-			}}
+			className="d-flex flex-wrap gap-2 align-items-start"
+			onSubmit={submit}
 		>
-			<label className="visually-hidden" htmlFor="grant-user">
-				Person to grant access to
-			</label>
-			<select
-				id="grant-user"
-				className="form-select form-select-sm"
-				value={userId}
-				onChange={(event) => setUserId(event.target.value)}
-			>
-				<option value="">Choose someone…</option>
-				{candidates.map((candidate) => (
-					<option key={candidate.id} value={candidate.id}>
-						{candidate.name} ({candidate.email})
-					</option>
-				))}
-			</select>
+			<div className="dropdown" ref={wrapperRef}>
+				<label className="visually-hidden" htmlFor="grant-person">
+					Person to grant access to
+				</label>
+				<input
+					id="grant-person"
+					ref={toggleRef}
+					type="text"
+					className="form-control form-control-sm"
+					role="combobox"
+					aria-expanded={open}
+					aria-controls="grant-person-listbox"
+					aria-autocomplete="list"
+					autoComplete="off"
+					placeholder="Search Slack…"
+					value={query}
+					onChange={(event) => {
+						setQuery(event.target.value);
+						setSelected(null);
+						setOpen(true);
+					}}
+					onFocus={() => setOpen(true)}
+				/>
+
+				{open && (
+					<ul
+						id="grant-person-listbox"
+						className="dropdown-menu show py-1"
+						role="listbox"
+						style={
+							{
+								maxHeight: '18rem',
+								overflowY: 'auto',
+								'--bs-dropdown-font-size': '0.8125rem',
+							} as React.CSSProperties
+						}
+					>
+						{matches.length === 0 && (
+							<li className="px-3 py-1 text-body-secondary small">
+								Nobody in Slack matches that.
+							</li>
+						)}
+
+						{matches.map((candidate) => {
+							/**
+							 * Someone who has signed in has a user row, so a Grant against
+							 * their Slack id would never be claimed. Shown rather than
+							 * omitted: a maintainer searching for a name they know is in
+							 * Slack should find them and be told why they cannot be picked
+							 * here, not find nothing.
+							 */
+							const unavailable =
+								candidate.hasAccount || candidate.hasPendingGrant;
+							const reason = candidate.hasAccount
+								? 'has signed in — set their roles below'
+								: 'already has access pending';
+
+							return (
+								<li key={candidate.id}>
+									<button
+										type="button"
+										role="option"
+										aria-selected={selected?.id === candidate.id}
+										className="dropdown-item d-flex justify-content-between gap-3"
+										disabled={unavailable}
+										onClick={() => choose(candidate)}
+									>
+										<span>
+											{candidate.displayName}
+											{candidate.handle && (
+												<span className="text-body-secondary">
+													{' '}
+													@{candidate.handle}
+												</span>
+											)}
+										</span>
+										{unavailable && (
+											<span className="text-body-secondary small text-nowrap">
+												{reason}
+											</span>
+										)}
+									</button>
+								</li>
+							);
+						})}
+					</ul>
+				)}
+			</div>
 
 			<label className="visually-hidden" htmlFor="grant-role">
 				Role to grant
@@ -286,10 +435,16 @@ export function GrantAccessForm({ candidates }: { candidates: AdminRow[] }) {
 			<button
 				type="submit"
 				className="btn btn-sm btn-primary text-nowrap"
-				disabled={pending || !userId}
+				disabled={pending || !selected}
 			>
 				Grant access
 			</button>
+
+			{error && (
+				<p className="text-danger small mb-0 w-100" role="alert">
+					{error}
+				</p>
+			)}
 		</form>
 	);
 }
