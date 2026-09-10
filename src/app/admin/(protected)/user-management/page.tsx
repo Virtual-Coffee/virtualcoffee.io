@@ -1,7 +1,7 @@
 import { requirePermission } from '@/lib/adminAccess';
 import { listAdmins, listGrantableUsers } from '@/lib/admins';
-import { formatDate } from '../presentation';
-import { GrantAccessForm, RolesDropdown } from './adminControls';
+import { GrantAccessForm } from './adminControls';
+import { AdminsTable } from './adminsTable';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,57 +32,7 @@ export default async function AdminsPage() {
 				<GrantAccessForm candidates={grantable} />
 			</div>
 
-			<div className="table-responsive">
-				<table className="table align-middle">
-					<thead>
-						<tr className="small">
-							<th scope="col">Person</th>
-							<th scope="col">Access</th>
-							<th scope="col">Granted</th>
-							<th scope="col">By</th>
-						</tr>
-					</thead>
-					<tbody>
-						{admins.map((admin) => (
-							<tr key={admin.id}>
-								<td>
-									<div className="fw-semibold">
-										{admin.name}
-										{admin.id === session?.user.id && (
-											<span className="badge text-bg-light border ms-2">
-												You
-											</span>
-										)}
-									</div>
-									<div className="text-body-secondary small">{admin.email}</div>
-								</td>
-								<td>
-									<RolesDropdown
-										userId={admin.id}
-										name={admin.name}
-										roles={admin.roles}
-										isSelf={admin.id === session?.user.id}
-									/>
-								</td>
-								<td className="small">{formatDate(admin.roleGrantedAt)}</td>
-								<td className="small">{admin.roleGrantedBy ?? '—'}</td>
-							</tr>
-						))}
-						{admins.length === 0 && (
-							<tr>
-								<td
-									colSpan={4}
-									className="text-body-secondary text-center py-4"
-								>
-									Nobody has access yet. The first person whose email is in{' '}
-									<code>ADMIN_BOOTSTRAP_EMAILS</code> becomes an admin on
-									sign-in.
-								</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
-			</div>
+			<AdminsTable admins={admins} currentUserId={session?.user.id ?? null} />
 
 			<p className="text-body-secondary small mb-0">
 				You can&rsquo;t remove your own Admin role — the cheapest way to avoid a
