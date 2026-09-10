@@ -3,6 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 <!-- intent-skills:start -->
+
 ## Skill Loading
 
 Before editing files for a substantial task:
@@ -12,6 +13,7 @@ Before editing files for a substantial task:
 - Use the loaded `SKILL.md` guidance while making the change.
 - Monorepos: when working across packages, run the skill check from the workspace root and prefer the local skill for the package being changed.
 - Multiple matches: prefer the most specific local skill for the package or concern you are changing; load additional skills only when the task spans multiple packages or concerns.
+
 <!-- intent-skills:end -->
 
 <!-- BEGIN:nextjs-agent-rules -->
@@ -35,7 +37,7 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Task                                       | Command                                                                                                                                                 |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Install                                    | `pnpm install` (copy `.env.example` to `.env` first)                                                                                                    |
-| Dev server                                 | `pnpm dev` — runs the codegen, then `npm-watch` + `netlify dev` (site on <http://localhost:9000>, proxying Next on :3000)                                 |
+| Dev server                                 | `pnpm dev` — runs the codegen, then `npm-watch` + `netlify dev` (site on <http://localhost:9000>, proxying Next on :3000)                               |
 | Next only (no Netlify functions/redirects) | `next dev`                                                                                                                                              |
 | Build                                      | `pnpm build` — `prebuild` runs the codegen first                                                                                                        |
 | Typecheck                                  | `pnpm typecheck` (`next typegen` then `tsc --noEmit`, the native TypeScript 7 binary)                                                                   |
