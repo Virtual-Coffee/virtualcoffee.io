@@ -1,12 +1,22 @@
+import { eq, inArray } from 'drizzle-orm';
+
 import {
 	db,
 	applicationEvent,
+	cocReport,
+	coffeeTableGroupRequest,
 	invite,
+	lunchAndLearnIdea,
 	membershipApplication,
+	pendingGrant,
+	submissionEvent,
+	user,
 	volunteer,
 	volunteerInviteLedger,
+	volunteerSignup,
 } from '../src/db';
-import type { InviteStatus } from '../src/db/schema';
+import type { InviteStatus, SubmissionStatus } from '../src/db/schema';
+import { serialiseRoles } from '../src/lib/permissions';
 
 /**
  * Seed the local development database.
@@ -18,8 +28,9 @@ import type { InviteStatus } from '../src/db/schema';
  * actually looking at. The names are the ones used in the wireframes so a
  * seeded local site matches the design.
  *
- * Safe to re-run: it clears the membership tables first. Never point this at
- * anything but a local database.
+ * Safe to re-run: it clears the membership, submission and (a scoped subset
+ * of) user-management tables first. Never point this at anything but a local
+ * database.
  */
 
 type Seed = {
@@ -254,6 +265,87 @@ function daysAgo(days: number) {
 const DEV_BYPASS_SLACK_ID = 'U_DEV_BYPASS';
 
 /**
+ * Slack ids for the User Management seeds below. Chosen to collide with
+ * neither the hardcoded volunteer ids above nor the 40 faker-generated
+ * `U`-prefixed ids in `createSlackMembers()` (`src/data/mocks/slackMembers.ts`),
+ * so the grant picker's mock directory stays untouched by this script.
+ */
+const PENDING_GRANT_SLACK_ID = 'U_DEV_PENDING_1';
+const STRANDED_SLACK_ID = 'U_DEV_PENDING_2';
+const STRANDED_USER_ID = 'dev-seed-stranded-user';
+
+/**
+ * The `user` and `pending_grant` rows this script owns. Both tables can also
+ * hold rows from a contributor's own real local Slack sign-in or hand-testing
+ * of the grant flow, and `session`/`account`/`devtools_user` all cascade from
+ * `user.id` — so, unlike the membership tables above, these are cleared by id
+ * rather than wholesale, to avoid silently signing someone out.
+ */
+const SEEDED_USER_IDS = ['dev-bypass', STRANDED_USER_ID];
+const SEEDED_PENDING_GRANT_SLACK_IDS = [
+	PENDING_GRANT_SLACK_ID,
+	STRANDED_SLACK_ID,
+];
+
+/**
+ * A `user` row for the identity `ADMIN_DEV_BYPASS` actually logs in as, plus
+ * one ordinary and one "stranded" Pending Grant, so `/admin/user-management`
+ * shows something real locally.
+ *
+ * `devBypassSession()` synthesizes its session in memory and never touches the
+ * database, so without this the dev-bypass identity — the one every local
+ * admin action is actually performed as — never appears in User Management no
+ * matter what `ADMIN_DEV_BYPASS_ROLES` is set to. The seeded `role` here is
+ * cosmetic: `requirePermission()` authorizes off `ADMIN_DEV_BYPASS_ROLES`, not
+ * off this row, so changing it has no effect on what the dev bypass can do —
+ * it only affects what the User Management screen displays.
+ */
+async function seedUserManagement(database: ReturnType<typeof db>) {
+	await database.insert(user).values([
+		{
+			id: 'dev-bypass',
+			name: 'Local dev',
+			email: 'dev@localhost',
+			emailVerified: true,
+			role: serialiseRoles(['admin']),
+			slackUserId: DEV_BYPASS_SLACK_ID,
+			roleGrantedBy: 'Seed script',
+			roleGrantedAt: daysAgo(30),
+		},
+		{
+			// Signed in once (hence the `user` row) but the claim wrote no roles,
+			// and the grant below is still unclaimed — the edge case
+			// `listAccessRows()` flags with `stranded: true`.
+			id: STRANDED_USER_ID,
+			name: 'Jordan Lee',
+			email: 'jordan.lee@example.com',
+			emailVerified: true,
+			role: serialiseRoles([]),
+			slackUserId: STRANDED_SLACK_ID,
+		},
+	]);
+
+	await database.insert(pendingGrant).values([
+		{
+			slackUserId: PENDING_GRANT_SLACK_ID,
+			slackDisplayName: 'Priya Fernandez',
+			slackHandle: 'priyaf',
+			role: serialiseRoles(['coc_reviewer', 'volunteer_coordinator']),
+			grantedBy: 'Local dev',
+			grantedAt: daysAgo(5),
+		},
+		{
+			slackUserId: STRANDED_SLACK_ID,
+			slackDisplayName: 'Jordan Lee',
+			slackHandle: 'jlee',
+			role: serialiseRoles(['admin']),
+			grantedBy: 'Local dev',
+			grantedAt: daysAgo(20),
+		},
+	]);
+}
+
+/**
  * One Invite per state, including the two nobody can reach by hand: `expired`
  * needs a ninety-day-old Invite and `cancelled` needs a Volunteer to have
  * changed their mind. Without seeds those two renderings only ever get looked
@@ -314,6 +406,10 @@ async function seedVolunteers(database: ReturnType<typeof db>) {
 			slackHandle: 'localdev',
 			roleLabels: 'VC Host, Coffee Table Group Leader',
 			email: 'localdev@example.com',
+			// Matches the `user` row seeded by `seedUserManagement()`, which runs
+			// first — representing the identity as already linked, the way
+			// `claimPendingGrant()` would leave it after a real Slack sign-in.
+			userId: 'dev-bypass',
 		},
 		{
 			slackUserId: 'U_DEV_FORMER',
@@ -415,6 +511,501 @@ async function seedVolunteers(database: ReturnType<typeof db>) {
 	return invitesByEmail;
 }
 
+/**
+ * CoC Reports: one per status. Includes the two states an admin cannot
+ * produce by hand — an anonymous report (`name`/`email` both null, a form
+ * convention, not a schema constraint) and a failed Slack notification (the
+ * warning banner on the CoC list) — plus one maintainer note, so the history
+ * timeline has a real note to render, and one attachment, so the "has
+ * attachment" link renders (it 404s locally with no real blob behind it,
+ * which is an accepted tradeoff — see the plan, not a bug to chase).
+ */
+type CocReportSeed = {
+	status: SubmissionStatus;
+	daysAgo: number;
+	name: string | null;
+	email: string | null;
+	reporteeName: string;
+	timeLocation: string;
+	description: string;
+	anyoneElseInvolved?: string;
+	attachment?: {
+		blobKey: string;
+		filename: string;
+		contentType: string;
+		size: number;
+	};
+	note?: string;
+};
+
+const COC_REPORT_SEEDS: CocReportSeed[] = [
+	{
+		status: 'resolved',
+		daysAgo: 14,
+		name: 'Grace Okonkwo',
+		email: 'grace@example.com',
+		reporteeName: 'A member in the #career-chat channel',
+		timeLocation: 'Slack, #career-chat, around 3pm Eastern on a weekday.',
+		description:
+			'They kept steering an unrelated thread toward unsolicited comments about my appearance on video calls. I asked them to stop twice and they brushed it off as a joke both times.',
+		anyoneElseInvolved:
+			'A couple of people reacted with the eyes emoji but nobody else said anything in the thread.',
+		note: 'Talked to the member privately. They apologized and understood why it landed badly. No further action needed.',
+	},
+	{
+		status: 'dismissed',
+		daysAgo: 9,
+		name: 'Owen Marsh',
+		email: 'owen@example.com',
+		reporteeName: 'Someone in a coffee group I do not know well',
+		timeLocation: 'During a Thursday coffee session, near the end.',
+		description:
+			'I misread a blunt comment about my code as an attack, but after re-reading the thread with the host I think it was just terse feedback, not hostility. Flagging in case others read it the same way I did.',
+	},
+	{
+		status: 'in_progress',
+		daysAgo: 5,
+		name: 'Renata Silva',
+		email: 'renata@example.com',
+		reporteeName: 'A member who DMed me after a Lunch & Learn',
+		timeLocation: 'Direct message, the evening after the March Lunch & Learn.',
+		description:
+			'The DM started as networking and turned into repeated requests to move the conversation off Slack. I said no each time and they kept asking. Screenshot attached.',
+		attachment: {
+			blobKey: 'seed/coc-report-screenshot.png',
+			filename: 'screenshot.png',
+			contentType: 'image/png',
+			size: 245_678,
+		},
+	},
+	{
+		status: 'new',
+		daysAgo: 1,
+		name: null,
+		email: null,
+		reporteeName: 'Prefer not to say',
+		timeLocation: 'A coffee group this week — I would rather not say which one.',
+		description:
+			'Someone made a comment that assumed everyone in the group was early-career and dismissed a point I made because of it. I do not want to escalate, I just want it on record.',
+	},
+];
+
+async function seedCocReports(database: ReturnType<typeof db>) {
+	for (const seed of COC_REPORT_SEEDS) {
+		const submittedAt = daysAgo(seed.daysAgo);
+
+		const [row] = await database
+			.insert(cocReport)
+			.values({
+				status: seed.status,
+				submittedAt,
+				name: seed.name,
+				email: seed.email,
+				reporteeName: seed.reporteeName,
+				timeLocation: seed.timeLocation,
+				description: seed.description,
+				anyoneElseInvolved: seed.anyoneElseInvolved ?? null,
+				attachmentBlobKey: seed.attachment?.blobKey ?? null,
+				attachmentFilename: seed.attachment?.filename ?? null,
+				attachmentContentType: seed.attachment?.contentType ?? null,
+				attachmentSize: seed.attachment?.size ?? null,
+			})
+			.returning({ id: cocReport.id });
+
+		await database.insert(submissionEvent).values({
+			cocReportId: row.id,
+			type: 'submitted',
+			toStatus: 'new',
+			createdAt: submittedAt,
+		});
+
+		// A note, when present, happens before the status settles — the
+		// maintainer talks to the reportee first, then closes it out.
+		if (seed.note) {
+			await database.insert(submissionEvent).values({
+				cocReportId: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'note',
+				body: seed.note,
+				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
+			});
+		}
+
+		if (seed.status === 'in_progress') {
+			await database.insert(submissionEvent).values({
+				cocReportId: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'status_changed',
+				fromStatus: 'new',
+				toStatus: 'in_progress',
+				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
+			});
+		}
+
+		if (seed.status === 'resolved' || seed.status === 'dismissed') {
+			const closedAt = daysAgo(
+				Math.max(seed.daysAgo - (seed.note ? 2 : 1), 1),
+			);
+			await database.insert(submissionEvent).values({
+				cocReportId: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'status_changed',
+				fromStatus: 'new',
+				toStatus: seed.status,
+				createdAt: closedAt,
+			});
+			await database
+				.update(cocReport)
+				.set({ closedAt })
+				.where(eq(cocReport.id, row.id));
+		}
+
+		// Anonymous report: the Slack post to the private CoC channel failed —
+		// the state that lights up the failed-notification warning banner.
+		if (seed.status === 'new' && seed.name === null) {
+			await database.insert(submissionEvent).values({
+				cocReportId: row.id,
+				type: 'notification_failed',
+				body: 'Slack notification failed: channel not found.',
+				createdAt: submittedAt,
+			});
+		}
+	}
+}
+
+/** Volunteer Signups: one per status, including one with no `position` given. */
+type VolunteerSignupSeed = {
+	status: SubmissionStatus;
+	daysAgo: number;
+	name: string;
+	email: string;
+	githubUsername: string | null;
+	position: string | null;
+	description: string;
+};
+
+const VOLUNTEER_SIGNUP_SEEDS: VolunteerSignupSeed[] = [
+	{
+		status: 'resolved',
+		daysAgo: 14,
+		name: 'Deshawn Carter',
+		email: 'deshawn@example.com',
+		githubUsername: 'dcarter',
+		position: 'VC Host',
+		description:
+			'I have hosted a handful of coffee sessions informally at my old job and would like to do it here properly. Mornings work best for my schedule.',
+	},
+	{
+		status: 'dismissed',
+		daysAgo: 8,
+		name: 'Mei Lin Tan',
+		email: 'meilin@example.com',
+		githubUsername: 'meilintan',
+		position: 'Notetaker',
+		description:
+			'Realized after submitting that I already signed up for this through a Slack thread last week — apologies for the duplicate.',
+	},
+	{
+		status: 'in_progress',
+		daysAgo: 5,
+		name: 'Yusuf Demir',
+		email: 'yusuf@example.com',
+		githubUsername: 'yusufdemir',
+		position: null,
+		description:
+			'Not sure which volunteer role fits best yet, but I would like to help somewhere. I am most comfortable with anything code-review adjacent.',
+	},
+	{
+		status: 'new',
+		daysAgo: 2,
+		name: 'Camille Fontaine',
+		email: 'camille@example.com',
+		githubUsername: 'cfontaine',
+		position: 'Coffee Table Group Leader',
+		description:
+			'I already run an informal group with three coworkers and would like to bring that structure into a proper Coffee Table Group here.',
+	},
+];
+
+async function seedVolunteerSignups(database: ReturnType<typeof db>) {
+	for (const seed of VOLUNTEER_SIGNUP_SEEDS) {
+		const submittedAt = daysAgo(seed.daysAgo);
+
+		const [row] = await database
+			.insert(volunteerSignup)
+			.values({
+				status: seed.status,
+				submittedAt,
+				name: seed.name,
+				email: seed.email,
+				githubUsername: seed.githubUsername,
+				position: seed.position,
+				description: seed.description,
+			})
+			.returning({ id: volunteerSignup.id });
+
+		await database.insert(submissionEvent).values({
+			volunteerSignupId: row.id,
+			type: 'submitted',
+			toStatus: 'new',
+			createdAt: submittedAt,
+		});
+
+		if (seed.status === 'in_progress') {
+			await database.insert(submissionEvent).values({
+				volunteerSignupId: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'status_changed',
+				fromStatus: 'new',
+				toStatus: 'in_progress',
+				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
+			});
+		}
+
+		if (seed.status === 'resolved' || seed.status === 'dismissed') {
+			const closedAt = daysAgo(Math.max(seed.daysAgo - 1, 1));
+			await database.insert(submissionEvent).values({
+				volunteerSignupId: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'status_changed',
+				fromStatus: 'new',
+				toStatus: seed.status,
+				createdAt: closedAt,
+			});
+			await database
+				.update(volunteerSignup)
+				.set({ closedAt })
+				.where(eq(volunteerSignup.id, row.id));
+		}
+	}
+}
+
+/**
+ * Lunch & Learn Ideas: one per status, including both states of
+ * `githubIssueUrl` — set when `createLunchAndLearnIssue()` succeeds, null
+ * (the default local state, with no GitHub App credentials) when it doesn't.
+ */
+type LunchAndLearnIdeaSeed = {
+	status: SubmissionStatus;
+	daysAgo: number;
+	name: string;
+	email: string;
+	topic: string;
+	description: string;
+	format: string | null;
+	timing: string | null;
+	githubIssueUrl: string | null;
+};
+
+const LUNCH_AND_LEARN_IDEA_SEEDS: LunchAndLearnIdeaSeed[] = [
+	{
+		status: 'resolved',
+		daysAgo: 14,
+		name: 'Halima Yusuf',
+		email: 'halima@example.com',
+		topic: 'Reading a slow query plan without panicking',
+		description:
+			'A walkthrough of EXPLAIN ANALYZE output on a real query from a side project, and the handful of things I actually check before reaching for an index.',
+		format: 'Live demo, 20 minutes plus questions',
+		timing: 'A Tuesday evening, after 6pm Eastern',
+		githubIssueUrl:
+			'https://github.com/Virtual-Coffee/VC-Community-Docs/issues/123',
+	},
+	{
+		status: 'dismissed',
+		daysAgo: 9,
+		name: 'Bram Janssen',
+		email: 'bram@example.com',
+		topic: 'My personal Neovim config',
+		description:
+			'Realized this is closer to a show-and-tell than a Lunch & Learn topic — happy to bring it back as a lightning talk if that format exists.',
+		format: null,
+		timing: null,
+		githubIssueUrl: null,
+	},
+	{
+		status: 'in_progress',
+		daysAgo: 6,
+		name: 'Sofia Marchetti',
+		email: 'sofia@example.com',
+		topic: 'What actually broke when we turned on strict mode',
+		description:
+			'A postmortem-style talk on enabling TypeScript strict mode on a five-year-old codebase: what caught real bugs, what was just noise, and how we sequenced the rollout.',
+		format: 'Talk plus live Q&A',
+		timing: 'Weekday lunchtime, any day works',
+		githubIssueUrl:
+			'https://github.com/Virtual-Coffee/VC-Community-Docs/issues/145',
+	},
+	{
+		status: 'new',
+		daysAgo: 1,
+		name: 'Theo Bakker',
+		email: 'theo@example.com',
+		topic: 'Getting comfortable with regular expressions',
+		description:
+			'A beginner-friendly session building up a few regexes from scratch, aimed at people who currently just copy-paste them from Stack Overflow like I used to.',
+		format: null,
+		timing: 'Flexible',
+		githubIssueUrl: null,
+	},
+];
+
+async function seedLunchAndLearnIdeas(database: ReturnType<typeof db>) {
+	for (const seed of LUNCH_AND_LEARN_IDEA_SEEDS) {
+		const submittedAt = daysAgo(seed.daysAgo);
+
+		const [row] = await database
+			.insert(lunchAndLearnIdea)
+			.values({
+				status: seed.status,
+				submittedAt,
+				name: seed.name,
+				email: seed.email,
+				topic: seed.topic,
+				description: seed.description,
+				format: seed.format,
+				timing: seed.timing,
+				githubIssueUrl: seed.githubIssueUrl,
+			})
+			.returning({ id: lunchAndLearnIdea.id });
+
+		await database.insert(submissionEvent).values({
+			lunchAndLearnIdeaId: row.id,
+			type: 'submitted',
+			toStatus: 'new',
+			createdAt: submittedAt,
+		});
+
+		if (seed.status === 'in_progress') {
+			await database.insert(submissionEvent).values({
+				lunchAndLearnIdeaId: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'status_changed',
+				fromStatus: 'new',
+				toStatus: 'in_progress',
+				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
+			});
+		}
+
+		if (seed.status === 'resolved' || seed.status === 'dismissed') {
+			const closedAt = daysAgo(Math.max(seed.daysAgo - 1, 1));
+			await database.insert(submissionEvent).values({
+				lunchAndLearnIdeaId: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'status_changed',
+				fromStatus: 'new',
+				toStatus: seed.status,
+				createdAt: closedAt,
+			});
+			await database
+				.update(lunchAndLearnIdea)
+				.set({ closedAt })
+				.where(eq(lunchAndLearnIdea.id, row.id));
+		}
+	}
+}
+
+/** Coffee Table Group Requests: one per status, including a null `groupName`. */
+type CoffeeTableGroupRequestSeed = {
+	status: SubmissionStatus;
+	daysAgo: number;
+	name: string;
+	email: string;
+	groupName: string | null;
+	description: string | null;
+};
+
+const COFFEE_TABLE_GROUP_REQUEST_SEEDS: CoffeeTableGroupRequestSeed[] = [
+	{
+		status: 'resolved',
+		daysAgo: 13,
+		name: 'Anders Lindqvist',
+		email: 'anders@example.com',
+		groupName: 'Backend Deep Dives',
+		description:
+			'A small group focused on backend architecture discussions — queueing, data modeling, that kind of thing. I would like to run it biweekly.',
+	},
+	{
+		status: 'dismissed',
+		daysAgo: 7,
+		name: 'Fatima Rahman',
+		email: 'fatima@example.com',
+		groupName: null,
+		description:
+			'Wanted to start something around accessibility but found out there is already a group covering that — happy to just join theirs instead.',
+	},
+	{
+		status: 'in_progress',
+		daysAgo: 4,
+		name: 'Lucas Meyer',
+		email: 'lucas@example.com',
+		groupName: 'Frontend Friday',
+		description:
+			'A casual weekly group for anyone working on frontend stuff, no fixed agenda beyond bringing whatever you are stuck on.',
+	},
+	{
+		status: 'new',
+		daysAgo: 1,
+		name: 'Ngozi Eze',
+		email: 'ngozi@example.com',
+		groupName: 'Career Switchers',
+		description:
+			'A group specifically for people who changed careers into tech, since that conversation keeps coming up one-on-one and seems worth having a regular space for.',
+	},
+];
+
+async function seedCoffeeTableGroupRequests(database: ReturnType<typeof db>) {
+	for (const seed of COFFEE_TABLE_GROUP_REQUEST_SEEDS) {
+		const submittedAt = daysAgo(seed.daysAgo);
+
+		const [row] = await database
+			.insert(coffeeTableGroupRequest)
+			.values({
+				status: seed.status,
+				submittedAt,
+				name: seed.name,
+				email: seed.email,
+				groupName: seed.groupName,
+				description: seed.description,
+			})
+			.returning({ id: coffeeTableGroupRequest.id });
+
+		await database.insert(submissionEvent).values({
+			coffeeTableGroupRequestId: row.id,
+			type: 'submitted',
+			toStatus: 'new',
+			createdAt: submittedAt,
+		});
+
+		if (seed.status === 'in_progress') {
+			await database.insert(submissionEvent).values({
+				coffeeTableGroupRequestId: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'status_changed',
+				fromStatus: 'new',
+				toStatus: 'in_progress',
+				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
+			});
+		}
+
+		if (seed.status === 'resolved' || seed.status === 'dismissed') {
+			const closedAt = daysAgo(Math.max(seed.daysAgo - 1, 1));
+			await database.insert(submissionEvent).values({
+				coffeeTableGroupRequestId: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'status_changed',
+				fromStatus: 'new',
+				toStatus: seed.status,
+				createdAt: closedAt,
+			});
+			await database
+				.update(coffeeTableGroupRequest)
+				.set({ closedAt })
+				.where(eq(coffeeTableGroupRequest.id, row.id));
+		}
+	}
+}
+
 async function main() {
 	if (process.env.CONTEXT === 'production') {
 		throw new Error('Refusing to seed a production database.');
@@ -430,6 +1021,24 @@ async function main() {
 	await database.delete(volunteerInviteLedger);
 	await database.delete(invite);
 	await database.delete(volunteer);
+
+	// submission_event cascades from all four tables below (ON DELETE CASCADE),
+	// so clearing the parents is enough — no separate ledger-style delete.
+	await database.delete(cocReport);
+	await database.delete(volunteerSignup);
+	await database.delete(lunchAndLearnIdea);
+	await database.delete(coffeeTableGroupRequest);
+
+	// Scoped by id/slackUserId rather than wholesale — see the comment on
+	// SEEDED_USER_IDS above.
+	await database
+		.delete(pendingGrant)
+		.where(inArray(pendingGrant.slackUserId, SEEDED_PENDING_GRANT_SLACK_IDS));
+	await database.delete(user).where(inArray(user.id, SEEDED_USER_IDS));
+
+	// Runs before seedVolunteers(), which links the dev-bypass Volunteer to the
+	// `user` row seeded here.
+	await seedUserManagement(database);
 
 	const invitesByEmail = await seedVolunteers(database);
 
@@ -504,8 +1113,20 @@ async function main() {
 		}
 	}
 
+	await seedCocReports(database);
+	await seedVolunteerSignups(database);
+	await seedLunchAndLearnIdeas(database);
+	await seedCoffeeTableGroupRequests(database);
+
+	const totalSubmissions =
+		COC_REPORT_SEEDS.length +
+		VOLUNTEER_SIGNUP_SEEDS.length +
+		LUNCH_AND_LEARN_IDEA_SEEDS.length +
+		COFFEE_TABLE_GROUP_REQUEST_SEEDS.length;
+
 	console.log(
-		`Seeded ${SEEDS.length} membership applications, 2 volunteers and ${INVITE_SEEDS.length} invites.`,
+		`Seeded ${SEEDS.length} membership applications, 2 volunteers, ${INVITE_SEEDS.length} invites, ` +
+			`${totalSubmissions} submissions across 4 kinds, 2 users and 2 pending grants.`,
 	);
 	process.exit(0);
 }
