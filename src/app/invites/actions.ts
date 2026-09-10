@@ -1,0 +1,343 @@
+'use server';
+
+import { and, eq, sql } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
+
+import { db, invite, user, volunteer, volunteerInviteLedger } from '@/db';
+import { isId } from '@/db/ids';
+import { volunteerInviteEmail } from '@/lib/email/templates';
+import { sendEmail } from '@/lib/email/transport';
+import {
+	applicationBlockingInvite,
+	hashClaimToken,
+	newClaimToken,
+} from '@/lib/invites';
+import { requireVolunteer } from '@/lib/volunteerAccess';
+
+/**
+ * The same shape the waitlist actions return, and for the same reason:
+ * `emailSent` is what the UI leans on to tell someone whether it is safe to try
+ * again. 'unknown' is a real answer and is never rounded to false for a tidier
+ * message.
+ */
+export type InviteActionResult =
+	| { ok: true; message?: string }
+	| { ok: false; message: string; emailSent: boolean | 'unknown' };
+
+const schema = z.object({
+	name: z.string().trim().min(1, 'Please give their name.').max(200),
+	email: z.email('That doesn’t look like an email address.').max(320),
+});
+
+function siteUrl(): string {
+	return process.env.URL?.replace(/\/$/, '') ?? 'https://virtualcoffee.io';
+}
+
+/**
+ * The dev bypass session has no `user` row, so its ledger rows record a null
+ * actor rather than a dangling foreign key. Same helper, same reason, as
+ * `actorId()` in the waitlist actions.
+ */
+async function actorId(userId: string): Promise<string | null> {
+	const [row] = await db()
+		.select({ id: user.id })
+		.from(user)
+		.where(eq(user.id, userId))
+		.limit(1);
+	return row?.id ?? null;
+}
+
+/**
+ * The exact email that will go out, for the confirmation dialog.
+ *
+ * The waitlist screens render their templates on the server and hand them down
+ * as props, because the recipient is already known. Here the Volunteer types
+ * the invitee's name, so the text cannot exist until they have — this is the
+ * same idea reached by a round trip rather than a prop.
+ *
+ * The Claim Link is shown elided. The real token is minted at send time and
+ * would be a working invite sitting in a dialog nobody has confirmed yet.
+ */
+export async function previewInvite(
+	rawName: string,
+	rawEmail: string,
+): Promise<
+	| { ok: true; to: string; subject: string; text: string }
+	| { ok: false; message: string }
+> {
+	const { session } = await requireVolunteer();
+
+	const parsed = schema.safeParse({ name: rawName, email: rawEmail });
+	if (!parsed.success) {
+		return {
+			ok: false,
+			message: parsed.error.issues[0]?.message ?? 'Please check the form.',
+		};
+	}
+
+	const template = volunteerInviteEmail(
+		session.user.name || 'A Virtual Coffee volunteer',
+		parsed.data.name,
+		`${siteUrl()}/join?invite=…`,
+	);
+
+	return {
+		ok: true,
+		to: parsed.data.email,
+		subject: template.subject,
+		text: template.text,
+	};
+}
+
+/**
+ * Send an Invite.
+ *
+ * The write has to come first: the Claim Link carries a token that must exist
+ * in the database before the email can be composed. That inverts the
+ * "send first, then write" rule the waitlist actions follow, so the failure
+ * path compensates — on a send failure we know did not deliver, the Invite is
+ * cancelled and the allowance refunded, and the Volunteer is told plainly that
+ * nothing went out. On a failure we cannot be sure about, it stays charged and
+ * they are told that instead; refunding there risks two invitations reaching
+ * one person. See docs/adr/0011.
+ */
+export async function sendInvite(
+	rawName: string,
+	rawEmail: string,
+): Promise<InviteActionResult> {
+	const { session, slackUserId } = await requireVolunteer();
+	const actor = await actorId(session.user.id);
+
+	const parsed = schema.safeParse({ name: rawName, email: rawEmail });
+	if (!parsed.success) {
+		return {
+			ok: false,
+			message: parsed.error.issues[0]?.message ?? 'Please check the form.',
+			emailSent: false,
+		};
+	}
+	const { name, email } = parsed.data;
+
+	const blocking = await applicationBlockingInvite(email);
+	if (blocking === 'member') {
+		return {
+			ok: false,
+			message: `${name} is already a member of Virtual Coffee — no invite needed.`,
+			emailSent: false,
+		};
+	}
+	if (blocking === 'in_progress') {
+		return {
+			ok: false,
+			message: `${name} already has an application in progress, so an invite would duplicate it. Nothing has been sent and your invite is untouched.`,
+			emailSent: false,
+		};
+	}
+
+	const { token, expiresAt } = newClaimToken();
+
+	let inviteId: string;
+	try {
+		inviteId = await db().transaction(async (tx) => {
+			/**
+			 * Lock the Volunteer's row before reading the balance. Two sends started
+			 * at once would otherwise both read the same balance, both find it
+			 * sufficient, and both spend it — the ledger's unique indexes stop an
+			 * Invite being charged twice, but nothing stops two Invites being
+			 * charged once each against one remaining allowance.
+			 */
+			const [held] = await tx
+				.select({ id: volunteer.id })
+				.from(volunteer)
+				.where(eq(volunteer.slackUserId, slackUserId))
+				.limit(1)
+				.for('update');
+
+			if (!held) throw new Error('NO_VOLUNTEER_ROW');
+
+			const [totals] = await tx
+				.select({
+					total: sql<string | null>`sum(${volunteerInviteLedger.delta})`,
+				})
+				.from(volunteerInviteLedger)
+				.where(eq(volunteerInviteLedger.slackUserId, slackUserId));
+
+			if (Number(totals?.total ?? 0) < 1) throw new Error('NO_BALANCE');
+
+			const [row] = await tx
+				.insert(invite)
+				.values({
+					inviterUserId: actor,
+					inviterName: session.user.name || session.user.email,
+					inviterSlackUserId: slackUserId,
+					inviteeName: name,
+					inviteeEmail: email,
+					status: 'pending',
+					tokenHash: hashClaimToken(token),
+					tokenExpiresAt: expiresAt,
+				})
+				.returning({ id: invite.id });
+
+			await tx.insert(volunteerInviteLedger).values({
+				slackUserId,
+				delta: -1,
+				reason: 'spend',
+				inviteId: row.id,
+				actorUserId: actor,
+				body: `Invited ${name} <${email}>`,
+			});
+
+			return row.id;
+		});
+	} catch (error) {
+		const reason = error instanceof Error ? error.message : '';
+
+		if (reason === 'NO_VOLUNTEER_ROW') {
+			return {
+				ok: false,
+				message:
+					'We haven’t finished setting you up as a volunteer. Ask a maintainer to add you in Admin → Volunteers.',
+				emailSent: false,
+			};
+		}
+		if (reason === 'NO_BALANCE') {
+			return {
+				ok: false,
+				message: 'You have no invites left. You get one more on the 1st.',
+				emailSent: false,
+			};
+		}
+
+		console.error('Failed to record an invite', { slackUserId, error });
+		return {
+			ok: false,
+			message: 'Something went wrong saving that invite. Please try again.',
+			emailSent: false,
+		};
+	}
+
+	const template = volunteerInviteEmail(
+		session.user.name || 'A Virtual Coffee volunteer',
+		name,
+		`${siteUrl()}/join?invite=${token}`,
+	);
+
+	const sent = await sendEmail({
+		to: email,
+		subject: template.subject,
+		text: template.text,
+	});
+
+	if (!sent.ok) {
+		if (sent.definitelyNotSent) {
+			/**
+			 * Cancel as well as refund. Leaving it `pending` would hand it to the
+			 * ninety-day expiry sweep, which refunds too — and while the ledger's
+			 * refund index would refuse the second credit, an Invite nobody can ever
+			 * claim has no business sitting in the Volunteer's list as "Sent".
+			 */
+			await db()
+				.update(invite)
+				.set({ status: 'cancelled', tokenHash: null, tokenExpiresAt: null })
+				.where(eq(invite.id, inviteId));
+
+			await refund(
+				inviteId,
+				slackUserId,
+				actor,
+				'refund_cancelled',
+				`Send to ${email} failed: ${sent.message}`,
+			);
+
+			revalidatePath('/invites');
+			return {
+				ok: false,
+				message: `${sent.message} Nothing was emailed and your invite has been given back — safe to try again.`,
+				emailSent: false,
+			};
+		}
+
+		revalidatePath('/invites');
+		return {
+			ok: false,
+			message: `${sent.message} We can’t confirm whether the email went out, so the invite is still spent. Check with ${email} before sending another, or you may invite them twice — a maintainer can give the invite back.`,
+			emailSent: 'unknown',
+		};
+	}
+
+	revalidatePath('/invites');
+	return { ok: true, message: `Invite sent to ${email}.` };
+}
+
+/**
+ * Give an Invite back before anyone claims it.
+ *
+ * The status change is conditional on it still being `pending`, so two clicks
+ * cannot produce two refunds even before the ledger's unique index on
+ * (invite_id, reason) refuses the second row.
+ */
+export async function cancelInvite(
+	inviteId: string,
+): Promise<InviteActionResult> {
+	const { session, slackUserId } = await requireVolunteer();
+	const actor = await actorId(session.user.id);
+
+	// Postgres raises 22P02 on a malformed literal against a uuid column, so an
+	// unchecked id throws rather than matching nothing. See docs/adr/0008.
+	if (!isId(inviteId)) {
+		return {
+			ok: false,
+			message: 'That invite no longer exists. Reload the page.',
+			emailSent: false,
+		};
+	}
+
+	const cancelled = await db()
+		.update(invite)
+		.set({ status: 'cancelled', tokenHash: null, tokenExpiresAt: null })
+		.where(
+			and(
+				eq(invite.id, inviteId),
+				// Scoped to the caller: an id from someone else's list is not theirs
+				// to cancel, and this is the only place that is enforced.
+				eq(invite.inviterSlackUserId, slackUserId),
+				eq(invite.status, 'pending'),
+			),
+		)
+		.returning({ id: invite.id });
+
+	if (cancelled.length === 0) {
+		return {
+			ok: false,
+			message:
+				'That invite can’t be cancelled — it may already have been used. Reload the page.',
+			emailSent: false,
+		};
+	}
+
+	await refund(inviteId, slackUserId, actor, 'refund_cancelled', 'Cancelled');
+
+	revalidatePath('/invites');
+	return { ok: true, message: 'Invite cancelled and given back.' };
+}
+
+/**
+ * Append the compensating credit.
+ *
+ * `onConflictDoNothing` leans on the unique index over (invite_id, reason): if
+ * a refund for this Invite already exists the second one is silently dropped
+ * rather than doubling the allowance.
+ */
+async function refund(
+	inviteId: string,
+	slackUserId: string,
+	actorUserId: string | null,
+	reason: 'refund_cancelled' | 'refund_expired',
+	body: string,
+): Promise<void> {
+	await db()
+		.insert(volunteerInviteLedger)
+		.values({ slackUserId, delta: 1, reason, inviteId, actorUserId, body })
+		.onConflictDoNothing();
+}

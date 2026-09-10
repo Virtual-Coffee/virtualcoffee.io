@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { SignOutButton } from '@/app/admin/sign-in/buttons';
 import { getVolunteer, listInvitesFor, volunteerBalance } from '@/lib/invites';
 import { requireVolunteer } from '@/lib/volunteerAccess';
+import { CancelInviteButton } from './cancelButton';
 import { formatDate, InviteStatusBadge } from './presentation';
+import { SendInviteForm } from './sendForm';
 
 export const dynamic = 'force-dynamic';
 
@@ -51,7 +53,7 @@ export default async function InvitesPage() {
 
 			<div className="row g-4">
 				<div className="col-lg-5">
-					<div className="card">
+					<div className="card mb-4">
 						<div className="card-body">
 							<h2 className="h6 text-body-secondary">Invites available</h2>
 							<p className="display-6 mb-1">{balance}</p>
@@ -61,6 +63,8 @@ export default async function InvitesPage() {
 							</p>
 						</div>
 					</div>
+
+					{volunteer && <SendInviteForm balance={balance} />}
 				</div>
 
 				<div className="col-lg-7">
@@ -84,6 +88,9 @@ export default async function InvitesPage() {
 											<th scope="col">Who</th>
 											<th scope="col">Sent</th>
 											<th scope="col">Status</th>
+											<th scope="col">
+												<span className="visually-hidden">Actions</span>
+											</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -98,6 +105,14 @@ export default async function InvitesPage() {
 												<td>{formatDate(row.createdAt)}</td>
 												<td>
 													<InviteStatusBadge status={row.status} />
+												</td>
+												<td className="text-end">
+													{row.status === 'pending' && (
+														<CancelInviteButton
+															inviteId={row.id}
+															inviteeName={row.inviteeName || 'this person'}
+														/>
+													)}
 												</td>
 											</tr>
 										))}
@@ -117,8 +132,16 @@ export default async function InvitesPage() {
 											</div>
 											<InviteStatusBadge status={row.status} />
 										</div>
-										<div className="text-body-secondary small mt-1">
-											Sent {formatDate(row.createdAt)}
+										<div className="d-flex justify-content-between align-items-end gap-2 mt-1">
+											<span className="text-body-secondary small">
+												Sent {formatDate(row.createdAt)}
+											</span>
+											{row.status === 'pending' && (
+												<CancelInviteButton
+													inviteId={row.id}
+													inviteeName={row.inviteeName || 'this person'}
+												/>
+											)}
 										</div>
 									</li>
 								))}

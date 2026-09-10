@@ -42,6 +42,42 @@ Virtual Coffee`,
 	};
 }
 
+/**
+ * The Claim Link a Volunteer sends.
+ *
+ * Names the Volunteer, because an email from an address the recipient does not
+ * recognise is one they delete. There is deliberately no free-text field for
+ * the Volunteer to fill in: this goes out as hello@virtualcoffee.io, and
+ * nothing anyone types should leave under the community's name unread.
+ *
+ * Reply-To is left as the sending address rather than pointed at the Volunteer.
+ * A reply is as likely to be "what is this?" as a question for the person who
+ * sent it, and hello@ is where someone is actually watching.
+ */
+export function volunteerInviteEmail(
+	inviterName: string,
+	inviteeName: string,
+	claimUrl: string,
+): Template {
+	return {
+		subject: `${inviterName} invited you to Virtual Coffee`,
+		text: `Hi ${firstName(inviteeName)},
+
+${inviterName} thought you'd like Virtual Coffee, and used one of their invites on you. We're a deliberately small community of developers who meet for a casual hour on Zoom.
+
+An invite skips the waitlist, so start here:
+
+  ${claimUrl}
+
+You'll be asked a few questions about yourself and to read our Code of Conduct. After that we'll invite you to a Coffee, and that's the last step before joining.
+
+This link is for you and works once. If nothing happens for a few months it stops working, and ${inviterName} gets the invite back.
+
+Hope to see you there,
+Virtual Coffee`,
+	};
+}
+
 export function slackInviteEmail(name: string, inviteUrl: string): Template {
 	return {
 		subject: 'Your Virtual Coffee Slack invite',

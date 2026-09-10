@@ -419,13 +419,21 @@ export const volunteerInviteLedger = pgTable(
 			.on(table.slackUserId, table.periodKey)
 			.where(sql`reason = 'monthly_accrual'`),
 		/**
-		 * An Invite is charged once and refunded at most once. Without this a
-		 * crash between the send and its compensation — or two clicks on Cancel —
-		 * hands out free invites.
+		 * An Invite is charged exactly once and refunded at most once.
+		 *
+		 * Two indexes rather than one over (invite_id, reason), which was the first
+		 * attempt and was wrong: it permits a `refund_cancelled` *and* a
+		 * `refund_expired` for the same Invite, which nets the Volunteer an extra
+		 * invite out of nothing. Grouping both refund reasons under one index is
+		 * what actually says "at most once". The status guards in the cancel and
+		 * expiry paths make it hard to reach; these make it impossible.
 		 */
-		uniqueIndex('volunteer_invite_ledger_invite_reason_idx')
-			.on(table.inviteId, table.reason)
-			.where(sql`invite_id is not null`),
+		uniqueIndex('volunteer_invite_ledger_spend_idx')
+			.on(table.inviteId)
+			.where(sql`reason = 'spend'`),
+		uniqueIndex('volunteer_invite_ledger_refund_idx')
+			.on(table.inviteId)
+			.where(sql`reason in ('refund_cancelled', 'refund_expired')`),
 		index('volunteer_invite_ledger_slack_user_id_idx').on(table.slackUserId),
 	],
 );
