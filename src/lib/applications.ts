@@ -13,8 +13,10 @@ import {
 import {
 	applicationEvent,
 	db,
+	invite,
 	membershipApplication,
 	user,
+	volunteer,
 	type ApplicationStatus,
 	type MembershipApplication,
 } from '@/db';
@@ -139,6 +141,51 @@ export async function getApplication(id: string) {
 		.limit(1);
 
 	return row ?? null;
+}
+
+export type ApplicationInviter = {
+	/** What to show. The Volunteer's current name where we have one. */
+	name: string;
+	/** Set only when the inviter resolves to a Volunteer on the roster. */
+	volunteerId: string | null;
+};
+
+/**
+ * Who invited this applicant, for an application that came from an Invite.
+ *
+ * Not the `referrer` column. That is free text from the join form — "a friend
+ * told me", a name typed by the applicant — and the Airtable import fills it
+ * from Airtable's own `referrer` field, which is empty for most rows. The
+ * inviter is a different fact entirely, and lives on the Invite.
+ *
+ * Prefers the Volunteer's current display name over `invite.inviter_name`,
+ * which is a snapshot taken when the Invite was created and goes stale on a
+ * rename. Falls back to the snapshot for the imported Invites the reviewed
+ * mapping could not resolve to a Slack member, which have a name and nothing
+ * else.
+ */
+export async function getApplicationInviter(
+	inviteId: string | null,
+): Promise<ApplicationInviter | null> {
+	if (!inviteId) return null;
+
+	const [row] = await db()
+		.select({
+			inviterName: invite.inviterName,
+			volunteerId: volunteer.id,
+			volunteerName: volunteer.slackDisplayName,
+		})
+		.from(invite)
+		.leftJoin(volunteer, eq(volunteer.slackUserId, invite.inviterSlackUserId))
+		.where(eq(invite.id, inviteId))
+		.limit(1);
+
+	if (!row) return null;
+
+	const name = row.volunteerName ?? row.inviterName;
+	if (!name) return null;
+
+	return { name, volunteerId: row.volunteerId };
 }
 
 export type HistoryEntry = {

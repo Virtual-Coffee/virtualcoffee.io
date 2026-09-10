@@ -2,8 +2,12 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { isId } from '@/db/ids';
-import { requirePermission } from '@/lib/adminAccess';
-import { getApplication, getApplicationHistory } from '@/lib/applications';
+import { requirePermission, sessionCan } from '@/lib/adminAccess';
+import {
+	getApplication,
+	getApplicationHistory,
+	getApplicationInviter,
+} from '@/lib/applications';
 import {
 	coffeeInviteEmail,
 	slackInviteEmail,
@@ -17,6 +21,7 @@ import {
 	SourceBadge,
 	StatusBadge,
 	formatDate,
+	sourceLabel,
 	statusLabel,
 } from '../../presentation';
 
@@ -31,7 +36,7 @@ export default async function ApplicationDetailPage({
 }: {
 	params: Promise<{ id: string }>;
 }) {
-	await requirePermission('waitlist', 'read');
+	const session = await requirePermission('waitlist', 'read');
 
 	const { id: applicationId } = await params;
 
@@ -46,7 +51,17 @@ export default async function ApplicationDetailPage({
 		notFound();
 	}
 
-	const history = await getApplicationHistory(applicationId);
+	const [history, inviter] = await Promise.all([
+		getApplicationHistory(applicationId),
+		getApplicationInviter(application.inviteId),
+	]);
+
+	/**
+	 * A `waitlist_reviewer` holds this Section and not the roster, so the link
+	 * below would 404 for them. Unlike the mirror of this link on the volunteer
+	 * screen, that is a live case rather than a precaution.
+	 */
+	const canOpenVolunteers = sessionCan(session, 'volunteers', 'read');
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -105,7 +120,32 @@ export default async function ApplicationDetailPage({
 					<h2 className="h6 text-body-secondary mt-4">Details</h2>
 					<dl className="row small mb-0">
 						<dt className="col-sm-4">Source</dt>
-						<dd className="col-sm-8">{application.source}</dd>
+						<dd className="col-sm-8">{sourceLabel(application.source)}</dd>
+						{/*
+						 * Only for an invited application, and separate from Referrer
+						 * below: that is free text the applicant typed, while this is the
+						 * Volunteer who spent an Invite on them. The two are different
+						 * facts and were being confused for one another, which is why an
+						 * invited applicant showed no referrer at all.
+						 */}
+						{application.source === 'volunteer_invite' && (
+							<>
+								<dt className="col-sm-4">Invited by</dt>
+								<dd className="col-sm-8">
+									{inviter ? (
+										inviter.volunteerId && canOpenVolunteers ? (
+											<Link href={`/admin/volunteers/${inviter.volunteerId}`}>
+												{inviter.name}
+											</Link>
+										) : (
+											inviter.name
+										)
+									) : (
+										'—'
+									)}
+								</dd>
+							</>
+						)}
 						<dt className="col-sm-4">Referrer</dt>
 						<dd className="col-sm-8">{application.referrer ?? '—'}</dd>
 						<dt className="col-sm-4">Twitter</dt>
