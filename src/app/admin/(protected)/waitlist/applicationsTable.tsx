@@ -8,9 +8,11 @@ import {
 	rowSortingFeature,
 	tableFeatures,
 	useTable,
+	type SortingState,
 } from '@tanstack/react-table';
 
 import type { MembershipApplication } from '@/db';
+import type { SortField } from '@/lib/applications';
 import { ApplicationDrawer } from './applicationDrawer';
 import { StatusBadge, SourceBadge, formatDate } from '../presentation';
 
@@ -77,7 +79,7 @@ type Props = {
 	rowCount: number;
 	page: number;
 	pageSize: number;
-	sort: string;
+	sort: SortField;
 	direction: 'asc' | 'desc';
 };
 
@@ -106,24 +108,47 @@ export function ApplicationsTable({
 		[pathname, router, searchParams],
 	);
 
+	// The table's model inputs have to keep a stable identity between renders —
+	// a fresh array here on every render is not compensated for by any of the
+	// state subscriptions.
+	const sorting = useMemo<SortingState>(
+		() => [{ id: sort, desc: direction === 'desc' }],
+		[direction, sort],
+	);
+
 	const table = useTable({
 		features,
 		columns,
 		data: rows,
-		// Sorting is the only feature registered, and it is manual: the header
-		// buttons write to the URL and the server returns the ordered page.
+		// Sorting is the only feature registered, and it is manual: the server
+		// returns the ordered page and the table trusts that order.
 		// Pagination and filtering are not table features here at all — they are
 		// URL state applied in SQL — so the table renders exactly the rows it is
 		// given and can never imply it ordered or counted the other 2,500.
 		manualSorting: true,
-		getRowId: (row) => String(row.id),
-		state: {
-			sorting: [{ id: sort, desc: direction === 'desc' }],
+		// The URL is the owner of this slice, so both ends are spelled out: the
+		// state comes from the query string and every change goes back to it.
+		state: { sorting },
+		onSortingChange: (updater) => {
+			const next = typeof updater === 'function' ? updater(sorting) : updater;
+			const [first] = next;
+			if (!first) return;
+			// Any sort change resets to the first page. Omitting the client-side
+			// sorted row model also omits its automatic page reset, so this is on us.
+			push({
+				sort: first.id,
+				dir: first.desc ? 'desc' : 'asc',
+				page: null,
+			});
 		},
-		onSortingChange: () => {
-			// Handled by the header buttons below, which write to the URL. Kept as
-			// a no-op so the controlled `state.sorting` above never desyncs.
-		},
+		// A column always carries a sort; there is no unsorted third state to
+		// cycle into, because the server has to be told *some* order. Without
+		// this the built-in toggle would cycle to "none" and push an empty sort.
+		enableSortingRemoval: false,
+		// Preserves the previous behaviour of a newly clicked column opening
+		// descending — newest and largest first is what this queue is read for.
+		sortDescFirst: true,
+		getRowId: (row) => row.id,
 	});
 
 	const openRow = useMemo(
@@ -134,14 +159,6 @@ export function ApplicationsTable({
 	const totalPages = Math.max(1, Math.ceil(rowCount / pageSize));
 	const firstRow = rowCount === 0 ? 0 : page * pageSize + 1;
 	const lastRow = Math.min((page + 1) * pageSize, rowCount);
-
-	function toggleSort(field: string) {
-		const nextDirection =
-			sort === field && direction === 'desc' ? 'asc' : 'desc';
-		// Any sort change resets to the first page. Omitting the client-side
-		// sorted row model also omits its automatic page reset, so this is on us.
-		push({ sort: field, dir: nextDirection, page: null });
-	}
 
 	if (rows.length === 0) {
 		return (
@@ -163,24 +180,19 @@ export function ApplicationsTable({
 						{table.getHeaderGroups().map((group) => (
 							<tr key={group.id}>
 								{group.headers.map((header) => {
-									const canSort = header.column.getCanSort();
-									const isSorted = sort === header.column.id;
+									const sorted = header.column.getIsSorted();
 									return (
 										<th key={header.id} scope="col" className="small">
-											{header.isPlaceholder ? null : canSort ? (
+											{header.isPlaceholder ? null : header.column.getCanSort() ? (
 												<button
 													type="button"
 													className="btn btn-link btn-sm p-0 text-decoration-none text-body"
-													onClick={() => toggleSort(header.column.id)}
+													onClick={header.column.getToggleSortingHandler()}
 													aria-label={`Sort by ${String(header.column.columnDef.header)}`}
 												>
 													<table.FlexRender header={header} />
 													<span aria-hidden="true">
-														{isSorted
-															? direction === 'desc'
-																? ' ↓'
-																: ' ↑'
-															: ''}
+														{sorted === 'desc' ? ' ↓' : sorted ? ' ↑' : ''}
 													</span>
 												</button>
 											) : (
@@ -212,9 +224,11 @@ export function ApplicationsTable({
 			</div>
 
 			{/* Mobile: a dense table is unusable on a phone, so the same rows
-			    render as stacked cards. */}
+			    render as stacked cards. Driven off the row model rather than the
+			    `rows` prop, so the two renders cannot drift apart if this table
+			    ever registers a client-side row model. */}
 			<ul className="list-unstyled d-md-none mb-0">
-				{rows.map((row) => (
+				{table.getRowModel().rows.map(({ original: row }) => (
 					<li key={row.id} className="border-bottom py-3">
 						<div className="d-flex justify-content-between align-items-start gap-2">
 							<div>
