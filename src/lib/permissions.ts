@@ -21,6 +21,7 @@ export const statement = {
 	volunteerSignups: ['read', 'manage'],
 	lunchAndLearn: ['read', 'manage'],
 	coffeeTables: ['read', 'manage'],
+	volunteers: ['read', 'manage'],
 	admins: ['read', 'manage'],
 } as const;
 
@@ -33,6 +34,7 @@ export const SECTIONS = [
 	'volunteerSignups',
 	'lunchAndLearn',
 	'coffeeTables',
+	'volunteers',
 	'admins',
 ] as const;
 
@@ -51,6 +53,7 @@ export const admin = ac.newRole({
 	volunteerSignups: ['read', 'manage'],
 	lunchAndLearn: ['read', 'manage'],
 	coffeeTables: ['read', 'manage'],
+	volunteers: ['read', 'manage'],
 	admins: ['read', 'manage'],
 });
 

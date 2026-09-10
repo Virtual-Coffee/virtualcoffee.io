@@ -113,6 +113,7 @@ export function AdminNav({ sections }: { sections: readonly Section[] }) {
 	const inWaitlist = pathname.startsWith('/admin/waitlist');
 	const inSubmissions = pathname.startsWith('/admin/submissions');
 	const onUserManagement = pathname.startsWith('/admin/user-management');
+	const inVolunteers = pathname.startsWith('/admin/volunteers');
 	const onDashboard = pathname === '/admin';
 
 	const submissionItems = SUBMISSION_SECTIONS.filter((item) =>
@@ -144,6 +145,17 @@ export function AdminNav({ sections }: { sections: readonly Section[] }) {
 						active={inSubmissions}
 						items={submissionItems}
 					/>
+				)}
+				{can('volunteers') && (
+					<li className="nav-item">
+						<Link
+							className={`nav-link py-1 px-2${inVolunteers ? ' active' : ''}`}
+							aria-current={inVolunteers ? 'page' : undefined}
+							href="/admin/volunteers"
+						>
+							Volunteers
+						</Link>
+					</li>
 				)}
 				{can('admins') && (
 					<li className="nav-item">

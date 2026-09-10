@@ -1,4 +1,13 @@
-import { count, desc, eq, inArray, isNotNull, or, sql } from 'drizzle-orm';
+import {
+	count,
+	desc,
+	eq,
+	inArray,
+	isNotNull,
+	isNull,
+	or,
+	sql,
+} from 'drizzle-orm';
 
 import {
 	applicationEvent,
@@ -9,6 +18,7 @@ import {
 	membershipApplication,
 	submissionEvent,
 	user,
+	volunteer,
 	volunteerSignup,
 } from '@/db';
 import { QUEUE_STATUSES } from '@/lib/applications';
@@ -69,6 +79,28 @@ export async function dashboardCards(
 					href: '/admin/waitlist',
 					openCount: row?.value ?? 0,
 					countLabel: 'in the queue',
+				};
+			}
+
+			/**
+			 * Volunteers are a roster, not a queue, so the count is how many can
+			 * currently give out Invites rather than how much work is waiting.
+			 * A new Section that is neither the waitlist nor a Submission kind
+			 * falls through to `SUBMISSION_SECTIONS` below and silently produces no
+			 * card at all, which is why this branch has to exist.
+			 */
+			if (section === 'volunteers') {
+				const [row] = await db()
+					.select({ value: count() })
+					.from(volunteer)
+					.where(isNull(volunteer.deactivatedAt));
+
+				return {
+					section,
+					label: 'Volunteers',
+					href: '/admin/volunteers',
+					openCount: row?.value ?? 0,
+					countLabel: 'active',
 				};
 			}
 
