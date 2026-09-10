@@ -18,7 +18,7 @@ export const statement = {
 	dashboard: ['read'],
 	waitlist: ['read', 'manage'],
 	coc: ['read', 'manage'],
-	volunteers: ['read', 'manage'],
+	volunteerSignups: ['read', 'manage'],
 	lunchAndLearn: ['read', 'manage'],
 	coffeeTables: ['read', 'manage'],
 	admins: ['read', 'manage'],
@@ -30,7 +30,7 @@ export const ac = createAccessControl(statement);
 export const SECTIONS = [
 	'waitlist',
 	'coc',
-	'volunteers',
+	'volunteerSignups',
 	'lunchAndLearn',
 	'coffeeTables',
 	'admins',
@@ -48,7 +48,7 @@ export const admin = ac.newRole({
 	dashboard: ['read'],
 	waitlist: ['read', 'manage'],
 	coc: ['read', 'manage'],
-	volunteers: ['read', 'manage'],
+	volunteerSignups: ['read', 'manage'],
 	lunchAndLearn: ['read', 'manage'],
 	coffeeTables: ['read', 'manage'],
 	admins: ['read', 'manage'],
@@ -76,7 +76,7 @@ export const coc_reviewer = ac.newRole({
 
 export const volunteer_coordinator = ac.newRole({
 	dashboard: ['read'],
-	volunteers: ['read', 'manage'],
+	volunteerSignups: ['read', 'manage'],
 });
 
 export const lunch_and_learn_organizer = ac.newRole({

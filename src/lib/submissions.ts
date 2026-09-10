@@ -29,9 +29,9 @@ export const SUBMISSION_KINDS = {
 		eventColumn: submissionEvent.cocReportId,
 	},
 	volunteers: {
-		label: 'Volunteers',
+		label: 'Volunteer signups',
 		singular: 'Volunteer signup',
-		section: 'volunteers',
+		section: 'volunteerSignups',
 		table: volunteerSignup,
 		eventColumn: submissionEvent.volunteerSignupId,
 	},

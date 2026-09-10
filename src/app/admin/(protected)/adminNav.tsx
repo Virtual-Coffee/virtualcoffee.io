@@ -20,8 +20,8 @@ const SUBMISSION_SECTIONS = [
 	{ href: '/admin/submissions/coc', label: 'CoC reports', section: 'coc' },
 	{
 		href: '/admin/submissions/volunteers',
-		label: 'Volunteers',
-		section: 'volunteers',
+		label: 'Volunteer signups',
+		section: 'volunteerSignups',
 	},
 	{
 		href: '/admin/submissions/lunch-and-learn',
