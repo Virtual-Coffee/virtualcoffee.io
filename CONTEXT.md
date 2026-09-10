@@ -29,9 +29,22 @@ the welcome email and the Slack invite.
 _Avoid_: Approval, final approval, acceptance
 
 **Invite**:
-A referral from an active volunteer, subject to a per-volunteer quota. An
-application arising from one enters the Waitlist with priority.
+A referral from a **Volunteer**, spent from their **Invite Allowance** and sent
+as a **Claim Link**. An application arising from one enters the Waitlist with
+priority. An Invite nobody claims eventually lapses, and the Volunteer gets it
+back.
 _Avoid_: Referral, nomination
+
+**Invite Allowance**:
+How many Invites a Volunteer may currently give out. It grows a little each
+month and is spent one Invite at a time.
+_Avoid_: Quota, credits, balance
+
+**Claim Link**:
+The single-use link an Invite sends to the person being invited. It carries them
+to the ordinary join form, where they still answer every question and agree to
+the Code of Conduct themselves.
+_Avoid_: Invite link, referral link, token
 
 **Lapsed**:
 An application that went cold without anyone deciding on it. Distinct from
@@ -47,6 +60,12 @@ _Avoid_: Meeting, call, event
 **Member**:
 Someone whose Membership Application reached `member` status. Membership is
 about access to the community, not about appearing on the website.
+
+**Volunteer**:
+A Member trusted to give out Invites. Being one is exactly holding that access:
+there is no separate idea of an "active" Volunteer, and someone who steps back
+simply stops being one until they come back.
+_Avoid_: Volunteer signup (that is the form), referrer, sponsor
 
 **Member Profile**:
 A voluntary public listing on `/members`, authored as a file in
@@ -78,8 +97,10 @@ Deliberately readable by fewer people than the other kinds.
 _Avoid_: Complaint, incident, violation
 
 **Volunteer Signup**:
-Someone offering to help with a role or initiative.
-_Avoid_: Application (a Membership Application is a different thing)
+A form submission from someone offering to help with a role or initiative. It is
+how someone might _become_ a **Volunteer**, and is not one — a Volunteer is a
+person who can give out Invites, and most have never filled this in.
+_Avoid_: Application (a Membership Application is a different thing), Volunteer
 
 **Lunch & Learn Idea**:
 A proposed talk. Becomes an issue in the community docs repo, which is where the
@@ -93,8 +114,8 @@ _Avoid_: Group application
 ## Access
 
 **Section**:
-One area of `/admin` — the Waitlist, each kind of Submission, or the Admins
-screen. A Permission is always over a Section.
+One area of `/admin` — the Waitlist, each kind of Submission, the Volunteers
+roster, or the Admins screen. A Permission is always over a Section.
 
 **Permission**:
 A capability over one Section: `read` to see it, `manage` to change anything in
@@ -102,8 +123,9 @@ it. Someone can hold `read` without `manage`.
 
 **Role**:
 A named set of Permissions. **Admin** holds every Section. The narrower roles
-each hold one, so a volunteer can help with a single area without being given
-the membership queue or CoC Reports.
+each hold one, so a maintainer can help with a single area without being given
+the membership queue or CoC Reports. One Role holds no Section at all:
+**Volunteer** is about `/invites`, which is not part of `/admin`.
 _Avoid_: Permission level, group, tier
 
 **Pending Grant**:

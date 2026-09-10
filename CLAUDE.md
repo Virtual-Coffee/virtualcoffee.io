@@ -50,7 +50,8 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Check the bot matcher                      | `pnpm check-bot-matching` (runs in CI's `lint` job)                                                                                                     |
 | Generate a DB migration                    | `pnpm db:generate` (drizzle-kit, then syncs SQL into `netlify/database/migrations/`)                                                                    |
 | Apply migrations locally                   | `pnpm db:migrate` (needs `netlify dev` running)                                                                                                         |
-| Seed local sample applications             | `pnpm db:seed`                                                                                                                                          |
+| Seed local sample applications             | `pnpm db:seed` (also seeds Volunteers, ledger rows and Invites)                                                                                         |
+| Run the daily invite upkeep by hand        | `pnpm invite-maintenance` (accrual and expiry; the scheduled function itself answers no requests)                                                       |
 
 There is no test suite and no test runner. `.github/workflows/ci.yml` runs three jobs on every pull request — `format`, `lint`, `typecheck`. Netlify still owns `pnpm build`; CI does not build.
 
@@ -72,23 +73,25 @@ Two TypeScript packages are installed on purpose: `typescript` is aliased to `@t
 
 Every external data source lives in `src/data/` and degrades to mocks when its env var is missing:
 
-| Source                                         | File                        | Env var                                           | Fallback                                        |
-| ---------------------------------------------- | --------------------------- | ------------------------------------------------- | ----------------------------------------------- |
-| Member GitHub profiles                         | `src/data/members/index.ts` | `GITHUB_TOKEN`                                    | `src/data/mocks/memberData.js` (faker)          |
-| GitHub Sponsors                                | `src/data/sponsors.ts`      | `GITHUB_TOKEN`                                    | `src/data/mocks/sponsors.ts`                    |
-| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`        | `CMS_URL`, `CMS_TOKEN`                            | `src/data/mocks/events.ts`                      |
-| Submission notifications (Slack)               | `src/lib/slack/notify.ts`   | `SLACK_WEBHOOK_*`                                 | failure recorded as an event, shown in `/admin` |
-| Lunch & Learn GitHub issue                     | `src/lib/github/issues.ts`  | `GITHUB_APP_CLIENT_ID` / `GITHUB_APP_PRIVATE_KEY` | same                                            |
-| Slack member directory (`/admin` grant picker) | `src/data/slackMembers.ts`  | `SLACK_BOT_TOKEN`                                 | `src/data/mocks/slackMembers.ts` (faker)        |
-| Membership applications (`/join`, `/admin`)    | `src/db/`                   | none (auto-provisioned)                           | local Postgres from `netlify dev`               |
+| Source                                          | File                        | Env var                                           | Fallback                                        |
+| ----------------------------------------------- | --------------------------- | ------------------------------------------------- | ----------------------------------------------- |
+| Member GitHub profiles                          | `src/data/members/index.ts` | `GITHUB_TOKEN`                                    | `src/data/mocks/memberData.js` (faker)          |
+| GitHub Sponsors                                 | `src/data/sponsors.ts`      | `GITHUB_TOKEN`                                    | `src/data/mocks/sponsors.ts`                    |
+| Events (Craft CMS + Solspace Calendar GraphQL)  | `src/data/events.ts`        | `CMS_URL`, `CMS_TOKEN`                            | `src/data/mocks/events.ts`                      |
+| Submission and membership notifications (Slack) | `src/lib/slack/notify.ts`   | `SLACK_WEBHOOK_*`                                 | failure recorded as an event, shown in `/admin` |
+| Lunch & Learn GitHub issue                      | `src/lib/github/issues.ts`  | `GITHUB_APP_CLIENT_ID` / `GITHUB_APP_PRIVATE_KEY` | same                                            |
+| Slack member directory (`/admin` grant picker)  | `src/data/slackMembers.ts`  | `SLACK_BOT_TOKEN`                                 | `src/data/mocks/slackMembers.ts` (faker)        |
+| Membership applications (`/join`, `/admin`)     | `src/db/`                   | none (auto-provisioned)                           | local Postgres from `netlify dev`               |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. Any new external fetch should follow this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`. Fetches are wrapped in `unstable_cache` with a tag (`members`, `events`, `mdx-routes`); `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates on demand and a daily GitHub Action triggers a Netlify rebuild.
 
 ### Membership pipeline (Postgres)
 
-`/join` writes a Membership Application to Netlify Database and `/admin` is where maintainers work the queue. The panel is organised by section: `/admin` is a dashboard scoped to what the viewer may see, the waitlist owns `/admin/waitlist/*` (queue, `archive/`, and the `[id]` detail page), `/admin/submissions/[kind]/*` covers the four Submission kinds, and `/admin/user-management` manages who has access. A new section is a new segment beside `waitlist/`, with its routes and its own components under it — `(protected)/presentation.tsx` is the only shared piece. See `CONTEXT.md` for the vocabulary (a **Member Profile** in `src/content/members/` is a voluntary public listing and is unrelated to a **Membership Application**) and `docs/adr/0001-0009`.
+`/join` writes a Membership Application to Netlify Database and `/admin` is where maintainers work the queue. The panel is organised by section: `/admin` is a dashboard scoped to what the viewer may see, the waitlist owns `/admin/waitlist/*` (queue, `archive/`, and the `[id]` detail page), `/admin/submissions/[kind]/*` covers the four Submission kinds, `/admin/volunteers/*` is the Volunteer roster and their Invite Allowances, and `/admin/user-management` manages who has access. A new section is a new segment beside `waitlist/`, with its routes and its own components under it — `(protected)/presentation.tsx` is the only shared piece. **Adding a Section also needs a branch in `dashboardCards()`**: it falls through to a lookup of Submission kinds, so anything else silently renders no card at all. See `CONTEXT.md` for the vocabulary (a **Member Profile** in `src/content/members/` is a voluntary public listing and is unrelated to a **Membership Application**) and `docs/adr/0001-0009`.
 
 **Access to `/admin` is per-section.** `src/lib/permissions.ts` declares one access-control resource per section with `read`/`manage`, and roles live comma-separated in `user.role`. The `(protected)` layout only checks that the viewer holds _some_ section — **each page must gate itself with `requirePermission()`, and each server action must re-check independently.** A section with no check of its own is reachable by every role. See `docs/adr/0006`.
+
+**Volunteer Invites are the exception to all of that.** `volunteer` is a Role that grants _no_ Section, and `/invites` lives outside `/admin` behind `requireVolunteer()` in `src/lib/volunteerAccess.ts` — deliberately not `adminRoutesEnabled()`, which 404s the whole admin tree on deploy previews. The allowance is an append-only ledger summed on read, accrued by a daily Netlify scheduled function (`netlify/functions/invite-maintenance.ts`), and `volunteer` is excluded from `GRANTABLE_ROLES` because `/admin/volunteers` must write the `volunteer` row and the Role together. See `docs/adr/0010-0012`.
 
 Access can be **pre-provisioned**: a **Pending Grant** (`pending_grant`) assigns roles to a Slack member id before that person has ever signed in, and `claimPendingGrant()` (`src/lib/pendingGrants.ts`) applies it from `databaseHooks.account.create.after` — not the user hook, because the Slack member id only exists on the account and Better Auth will not let `mapProfileToUser` write an `input: false` field. Matching is **never on email**; `ADMIN_BOOTSTRAP_SLACK_IDS` replaced `ADMIN_BOOTSTRAP_EMAILS` for the same reason. See `docs/adr/0009`.
 
