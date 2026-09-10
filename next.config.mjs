@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 import path from 'path';
 import { createHash } from 'crypto';
 import { readFileSync } from 'fs';
@@ -28,6 +27,7 @@ const localMdxPlugin = (relPath, options = {}) => {
 	return [absPath, { ...options, pluginVersion }];
 };
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
 	// `netlify dev` routes every request through the block-bots edge function
