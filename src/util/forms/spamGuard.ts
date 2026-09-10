@@ -53,6 +53,17 @@ function verifyTimestamp(token: string | null, now = Date.now()): boolean {
 	const signature = token.slice(separator + 1);
 
 	const expected = sign(value);
+
+	/**
+	 * The alphabet as well as the length, and both before decoding.
+	 *
+	 * Node's hex decoder stops at the first invalid pair, so a signature of the
+	 * right length but the wrong alphabet decodes to a *shorter* buffer —
+	 * `timingSafeEqual` then throws on the length mismatch instead of returning
+	 * false, and the crash surfaces as a 500 rather than the silent drop this
+	 * file promises.
+	 */
+	if (!/^[0-9a-f]+$/.test(signature)) return false;
 	if (signature.length !== expected.length) return false;
 
 	if (
