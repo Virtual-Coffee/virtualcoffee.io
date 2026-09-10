@@ -19,7 +19,7 @@ function createDatabase(): Database {
 	// One-off scripts (seed, Airtable import) run outside that runtime — even
 	// under `netlify dev:exec`, which injects project env vars but not
 	// `NETLIFY_DB_URL` — so they pass the connection string via `DATABASE_URL`.
-	// See `scripts/with-local-db.sh`.
+	// See `scripts/with-local-netlify.ts`.
 	const override = process.env.NETLIFY_DB_URL ?? process.env.DATABASE_URL;
 	const connection = getDatabase(
 		override ? { connectionString: override } : {},

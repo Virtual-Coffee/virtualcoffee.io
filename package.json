@@ -24,7 +24,7 @@
 		"dev": "pnpm codegen && concurrently \"pnpm watch\" \"pnpm local-dev\"",
 		"db:generate": "drizzle-kit generate && tsx scripts/syncMigrations.ts",
 		"db:migrate": "netlify database migrations apply",
-		"db:seed": "bash scripts/with-local-db.sh tsx scripts/seedDev.ts"
+		"db:seed": "tsx scripts/with-local-netlify.ts tsx scripts/seedDev.ts"
 	},
 	"watch": {
 		"build-member-files": "src/content/members/**/*.ts",

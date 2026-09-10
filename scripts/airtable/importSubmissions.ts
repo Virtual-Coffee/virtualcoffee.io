@@ -30,17 +30,19 @@ import { ATTACHMENT_STORE } from '../../src/lib/attachments';
  *     still resolve, so the files are fetched into Netlify Blobs here rather
  *     than left as a dead link.
  *
- * A dry run needs only the Airtable key. A real run also needs blob
- * credentials, because storing those four attachments happens outside the
- * Netlify runtime — it fails up front rather than silently importing 79 rows
- * with no files attached.
+ * A dry run needs only the Airtable key. A real run also needs a blob store,
+ * because storing those four attachments happens outside the Netlify runtime —
+ * it fails up front rather than silently importing 79 rows with no files
+ * attached. The wrapper supplies a local store; NETLIFY_SITE_ID and
+ * NETLIFY_AUTH_TOKEN target the production one instead.
  *
- *   FORMS_AIRTABLE_API_KEY=… bash scripts/with-local-db.sh \
- *     ./node_modules/.bin/tsx scripts/airtable/importSubmissions.ts --dry-run
+ * Full runbook: scripts/airtable/README.md.
  *
- *   FORMS_AIRTABLE_API_KEY=… NETLIFY_SITE_ID=… NETLIFY_AUTH_TOKEN=… \
- *     bash scripts/with-local-db.sh \
- *     ./node_modules/.bin/tsx scripts/airtable/importSubmissions.ts
+ *   FORMS_AIRTABLE_API_KEY=… pnpm exec tsx scripts/with-local-netlify.ts \
+ *     tsx scripts/airtable/importSubmissions.ts --dry-run
+ *
+ *   FORMS_AIRTABLE_API_KEY=… pnpm exec tsx scripts/with-local-netlify.ts \
+ *     tsx scripts/airtable/importSubmissions.ts
  */
 
 const BASE_ID = 'appZ4d2Q9K0IepQnA';
@@ -148,13 +150,18 @@ type StoredLegacy = {
 };
 
 /**
- * The blob store, which this script has to configure explicitly.
+ * The blob store.
  *
- * `getStore(name)` finds its credentials in the Netlify runtime, and this runs
- * outside it — the same reason `scripts/with-local-db.sh` exists for the
- * database. Without this the writes fail with "The environment has not been
- * configured to use Netlify Blobs", which the per-file error handling would
- * report as a skipped attachment: a config mistake dressed up as a dead URL.
+ * `getStore(name)` reads credentials from the environment, which
+ * `scripts/with-local-netlify.ts` fills in with a local sandbox store — the
+ * same reason it also supplies the database connection string. Passing
+ * NETLIFY_SITE_ID and NETLIFY_AUTH_TOKEN overrides that and writes to the real
+ * production store, which is what a live migration needs.
+ *
+ * With neither, the writes fail with "The environment has not been configured
+ * to use Netlify Blobs", which the per-file error handling would report as a
+ * skipped attachment: a config mistake dressed up as a dead URL. Hence the
+ * preflight below.
  */
 function attachmentStore() {
 	const siteID = process.env.NETLIFY_SITE_ID;
@@ -177,11 +184,11 @@ async function assertBlobsUsable(): Promise<void> {
 		throw new Error(
 			'Netlify Blobs is not configured, so the four historical CoC ' +
 				'attachments could not be stored.\n\n' +
-				'Run this through the Netlify runtime, or set NETLIFY_SITE_ID and ' +
-				'NETLIFY_AUTH_TOKEN:\n\n' +
-				'  NETLIFY_SITE_ID=… NETLIFY_AUTH_TOKEN=… \\\n' +
-				'    bash scripts/with-local-db.sh ./node_modules/.bin/tsx \\\n' +
-				'    scripts/airtable/importSubmissions.ts\n\n' +
+				'Run this through the wrapper, which supplies a local store:\n\n' +
+				'  pnpm exec tsx scripts/with-local-netlify.ts \\\n' +
+				'    tsx scripts/airtable/importSubmissions.ts\n\n' +
+				'To write to the production store instead, set NETLIFY_SITE_ID and ' +
+				'NETLIFY_AUTH_TOKEN.\n\n' +
 				`Underlying error: ${
 					error instanceof Error ? error.message : String(error)
 				}`,

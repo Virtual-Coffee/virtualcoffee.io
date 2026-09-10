@@ -16,7 +16,7 @@ declare namespace NodeJS {
 
 		// Membership database and /admin
 		// NETLIFY_DB_URL is set by the Netlify runtime; DATABASE_URL is the
-		// override one-off scripts use (see scripts/with-local-db.sh).
+		// override one-off scripts use (see scripts/with-local-netlify.ts).
 		NETLIFY_DB_URL?: string;
 		DATABASE_URL?: string;
 		ADMIN_DEV_BYPASS?: string;
