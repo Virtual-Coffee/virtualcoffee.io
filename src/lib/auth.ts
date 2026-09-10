@@ -7,25 +7,9 @@ import { devtools } from 'better-auth-devtools';
 import { db, type Database } from '@/db';
 import * as schema from '@/db/schema';
 import { ac, DEFAULT_ROLE, roles } from '@/lib/permissions';
+import { claimPendingGrant } from '@/lib/pendingGrants';
 
 const SLACK_TEAM_ID_CLAIM = 'https://slack.com/team_id';
-
-/**
- * Emails that get the admin role the first time they sign in. This is a
- * bootstrap only: once someone is an admin, roles are granted and revoked in
- * /admin and live in the database. Removing an address here revokes nothing.
- *
- * Email rather than Slack user ID because a maintainer knows their own email
- * and would have to go digging for the other.
- */
-function bootstrapAdminEmails(): Set<string> {
-	return new Set(
-		(process.env.ADMIN_BOOTSTRAP_EMAILS ?? '')
-			.split(',')
-			.map((entry) => entry.trim().toLowerCase())
-			.filter(Boolean),
-	);
-}
 
 /**
  * Defer opening a connection until a query actually runs. Not sufficient on
@@ -88,17 +72,31 @@ function createAuth() {
 					},
 				}
 			: {},
+		/**
+		 * `slackUserId` is server-owned, like `role`. `input: false` keeps every
+		 * Better Auth input path away from it — including `mapProfileToUser`,
+		 * which is why it is written by the account hook below rather than mapped
+		 * off the Slack profile. Our own Drizzle writes are unaffected.
+		 */
+		user: {
+			additionalFields: {
+				slackUserId: { type: 'string', required: false, input: false },
+			},
+		},
 		databaseHooks: {
 			user: {
 				create: {
-					before: async (user) => ({
-						data: {
-							...user,
-							role: bootstrapAdminEmails().has(user.email.toLowerCase())
-								? 'admin'
-								: 'user',
-						},
-					}),
+					// Everyone starts with nothing. Pre-provisioned roles are applied
+					// by the account hook below, which is the first point at which the
+					// Slack member id exists.
+					before: async (user) => ({ data: { ...user, role: DEFAULT_ROLE } }),
+				},
+			},
+			account: {
+				create: {
+					after: async (account) => {
+						await claimPendingGrant(account);
+					},
 				},
 			},
 		},

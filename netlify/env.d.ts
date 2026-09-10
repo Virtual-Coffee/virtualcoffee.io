@@ -21,7 +21,7 @@ declare namespace NodeJS {
 		DATABASE_URL?: string;
 		ADMIN_DEV_BYPASS?: string;
 		ADMIN_DEV_BYPASS_ROLES?: string;
-		ADMIN_BOOTSTRAP_EMAILS?: string;
+		ADMIN_BOOTSTRAP_SLACK_IDS?: string;
 		BETTER_AUTH_SECRET?: string;
 		BETTER_AUTH_URL?: string;
 
@@ -35,6 +35,11 @@ declare namespace NodeJS {
 		SLACK_WEBHOOK_VOLUNTEERS?: string;
 		SLACK_WEBHOOK_LUNCH_AND_LEARN?: string;
 		SLACK_WEBHOOK_COFFEE_TABLES?: string;
+
+		// Bot token with `users:read`, for the Slack member directory the
+		// "Grant access" picker reads. A separate credential from SLACK_CLIENT_*:
+		// those scopes are OIDC-only and cannot call users.list.
+		SLACK_BOT_TOKEN?: string;
 
 		// The GitHub App CI already uses, for the Lunch & Learn issue — the same
 		// App the workflows read as the CI_APP_* Actions secrets. Not the same
