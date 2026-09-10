@@ -60,7 +60,7 @@ export const EVENT_LABELS: Record<string, string> = {
 	email_failed: 'Email failed',
 };
 
-const DATE_FORMAT = new Intl.DateTimeFormat('en-GB', {
+const DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
 	day: 'numeric',
 	month: 'short',
 	year: 'numeric',
@@ -70,7 +70,7 @@ export function formatDate(value: Date | null) {
 	return value ? DATE_FORMAT.format(value) : '—';
 }
 
-const DATE_TIME_FORMAT = new Intl.DateTimeFormat('en-GB', {
+const DATE_TIME_FORMAT = new Intl.DateTimeFormat('en-US', {
 	day: 'numeric',
 	month: 'short',
 	year: 'numeric',
