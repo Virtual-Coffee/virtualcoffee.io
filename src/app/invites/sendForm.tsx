@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { useModalDialog } from '@/util/useModalDialog';
 import { previewInvite, sendInvite } from './actions';
 
 type Preview = { to: string; subject: string; text: string };
@@ -28,14 +29,8 @@ export function SendInviteForm({ balance }: { balance: number }) {
 	const [error, setError] = useState<string | null>(null);
 	const [notice, setNotice] = useState<string | null>(null);
 	const [pending, startTransition] = useTransition();
-	const dialogRef = useRef<HTMLDialogElement>(null);
-
-	useEffect(() => {
-		const dialog = dialogRef.current;
-		if (!dialog) return;
-		if (preview && !dialog.open) dialog.showModal();
-		else if (!preview && dialog.open) dialog.close();
-	}, [preview]);
+	// A click on the backdrop discards the preview and sends nothing.
+	const dialog = useModalDialog(preview !== null, () => setPreview(null));
 
 	const spent = balance < 1;
 
@@ -149,11 +144,7 @@ export function SendInviteForm({ balance }: { balance: number }) {
 				)}
 			</div>
 
-			<dialog
-				ref={dialogRef}
-				className="admin-dialog"
-				onClose={() => setPreview(null)}
-			>
+			<dialog {...dialog} className="admin-dialog">
 				<div className="p-3 border-bottom d-flex justify-content-between align-items-start gap-3">
 					<h2 className="h5 mb-0">Send this invite?</h2>
 					<button

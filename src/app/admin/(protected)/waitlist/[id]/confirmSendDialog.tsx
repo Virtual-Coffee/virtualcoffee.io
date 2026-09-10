@@ -1,6 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
+
+import { useModalDialog } from '@/util/useModalDialog';
 
 /**
  * Shows the actual email that is about to go out, rather than asking "are you
@@ -28,18 +30,13 @@ export function ConfirmSendDialog({
 	onCancel: () => void;
 	onConfirm: (copyMe: boolean) => void;
 }) {
-	const ref = useRef<HTMLDialogElement>(null);
 	const [copyMe, setCopyMe] = useState(false);
-
-	useEffect(() => {
-		const dialog = ref.current;
-		if (!dialog) return;
-		if (open && !dialog.open) dialog.showModal();
-		else if (!open && dialog.open) dialog.close();
-	}, [open]);
+	// A click on the backdrop cancels, which is the safe direction: nothing is
+	// sent, and the dialog is reopened by the same button that opened it.
+	const dialog = useModalDialog(open, onCancel);
 
 	return (
-		<dialog ref={ref} className="admin-dialog" onClose={onCancel}>
+		<dialog {...dialog} className="admin-dialog">
 			<div className="p-3 border-bottom d-flex justify-content-between align-items-start gap-3">
 				<h2 className="h5 mb-0">{title}</h2>
 				<button

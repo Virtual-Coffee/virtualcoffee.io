@@ -1,15 +1,18 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 import type { MembershipApplication } from '@/db';
+import { useModalDialog } from '@/util/useModalDialog';
 import { SourceBadge, StatusBadge, formatDate } from '../presentation';
 
 /**
  * A native <dialog>, so Escape-to-close, focus trapping and making the page
  * behind it inert all come from the platform. Bootstrap's offcanvas would need
  * Bootstrap's JavaScript, which this project doesn't load.
+ *
+ * Clicking the backdrop is the one thing the platform does not give us — see
+ * `useModalDialog`.
  */
 export function ApplicationDrawer({
 	application,
@@ -18,21 +21,10 @@ export function ApplicationDrawer({
 	application: MembershipApplication | null;
 	onClose: () => void;
 }) {
-	const ref = useRef<HTMLDialogElement>(null);
-
-	useEffect(() => {
-		const dialog = ref.current;
-		if (!dialog) return;
-
-		if (application && !dialog.open) {
-			dialog.showModal();
-		} else if (!application && dialog.open) {
-			dialog.close();
-		}
-	}, [application]);
+	const dialog = useModalDialog(application !== null, onClose);
 
 	return (
-		<dialog ref={ref} className="admin-drawer" onClose={onClose}>
+		<dialog {...dialog} className="admin-drawer">
 			{application && (
 				<div className="d-flex flex-column h-100">
 					<div className="d-flex justify-content-between align-items-start gap-3 p-3 border-bottom">
