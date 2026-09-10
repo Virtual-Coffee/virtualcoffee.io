@@ -9,6 +9,7 @@ import {
 	text,
 	timestamp,
 	unique,
+	uniqueIndex,
 	uuid,
 } from 'drizzle-orm/pg-core';
 
@@ -37,6 +38,17 @@ export const user = pgTable('user', {
 	// Ours: the User Management screen shows who granted access and when.
 	roleGrantedBy: text('role_granted_by'),
 	roleGrantedAt: timestamp('role_granted_at', { withTimezone: true }),
+	/**
+	 * Ours: the Slack member id, copied from `account.account_id` the first time
+	 * a Slack account is linked (see `claimPendingGrant`). Declared to Better
+	 * Auth as an `input: false` additional field, so nothing user-facing can
+	 * write it — only our own Drizzle writes do.
+	 *
+	 * It duplicates `account.account_id` on purpose: matching a Pending Grant
+	 * and answering "has this Slack member signed in?" are both single-table
+	 * lookups because of it, on a column that is unique and indexed.
+	 */
+	slackUserId: text('slack_user_id').unique(),
 	createdAt: timestamp('created_at', { withTimezone: true })
 		.notNull()
 		.defaultNow(),
@@ -133,6 +145,61 @@ export const devtoolsUser = pgTable('devtools_user', {
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull(),
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull(),
 });
+
+/* -------------------------------------------------------------------------- */
+/* Access                                                                     */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * A Role assigned to a Slack member id before that person has ever signed in.
+ *
+ * Keyed on the Slack member id rather than an email address: that is the value
+ * Better Auth's Slack provider already uses as the account subject
+ * (`profile['https://slack.com/user_id']` -> `account.account_id`), so it is
+ * the only identifier guaranteed to match at sign-in. See `docs/adr/0009`.
+ *
+ * Claimed rows are kept rather than deleted — they are the record of who
+ * pre-provisioned whom, and `user.role` takes over from that point.
+ */
+export const pendingGrant = pgTable(
+	'pending_grant',
+	{
+		id: uuid('id').primaryKey().$defaultFn(newId),
+		slackUserId: text('slack_user_id').notNull(),
+		/**
+		 * Snapshotted at grant time, not looked up when the row is rendered. The
+		 * User Management table has to be readable when Slack is unreachable, when
+		 * the token is revoked, and on a clone that only has mocks — and a grant
+		 * for someone who has since left the workspace would otherwise render as
+		 * a bare `U0123ABCD`. The trade is that a later rename goes unnoticed.
+		 */
+		slackDisplayName: text('slack_display_name').notNull(),
+		slackHandle: text('slack_handle'),
+		/** `serialiseRoles()` output — the same comma-separated encoding as `user.role`. */
+		role: text('role').notNull(),
+		/** A display string like `user.roleGrantedBy`, so it survives the grantor being deleted. */
+		grantedBy: text('granted_by').notNull(),
+		grantedAt: timestamp('granted_at', { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+		claimedAt: timestamp('claimed_at', { withTimezone: true }),
+		claimedUserId: text('claimed_user_id').references(() => user.id, {
+			onDelete: 'set null',
+		}),
+	},
+	(table) => [
+		/**
+		 * At most one *unclaimed* grant per Slack member, but any number of
+		 * claimed ones. A plain unique constraint would mean someone whose user
+		 * row was deleted could never be granted access again, because their own
+		 * claimed history would collide with the new grant.
+		 */
+		uniqueIndex('pending_grant_unclaimed_slack_user_id_idx')
+			.on(table.slackUserId)
+			.where(sql`claimed_at is null`),
+		index('pending_grant_claimed_user_id_idx').on(table.claimedUserId),
+	],
+);
 
 /* -------------------------------------------------------------------------- */
 /* Membership pipeline                                                        */
