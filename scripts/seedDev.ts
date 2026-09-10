@@ -584,7 +584,8 @@ const COC_REPORT_SEEDS: CocReportSeed[] = [
 		name: null,
 		email: null,
 		reporteeName: 'Prefer not to say',
-		timeLocation: 'A coffee group this week — I would rather not say which one.',
+		timeLocation:
+			'A coffee group this week — I would rather not say which one.',
 		description:
 			'Someone made a comment that assumed everyone in the group was early-career and dismissed a point I made because of it. I do not want to escalate, I just want it on record.',
 	},
@@ -643,9 +644,7 @@ async function seedCocReports(database: ReturnType<typeof db>) {
 		}
 
 		if (seed.status === 'resolved' || seed.status === 'dismissed') {
-			const closedAt = daysAgo(
-				Math.max(seed.daysAgo - (seed.note ? 2 : 1), 1),
-			);
+			const closedAt = daysAgo(Math.max(seed.daysAgo - (seed.note ? 2 : 1), 1));
 			await database.insert(submissionEvent).values({
 				cocReportId: row.id,
 				actorUserId: 'dev-bypass',
