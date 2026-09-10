@@ -1,4 +1,4 @@
-import { count, desc, eq, inArray, sql } from 'drizzle-orm';
+import { asc, count, desc, eq, inArray, sql } from 'drizzle-orm';
 
 import {
 	cocReport,
@@ -232,12 +232,41 @@ export type SubmissionRow = Record<string, unknown> & {
 	submittedAt: Date;
 };
 
+/**
+ * The columns a Submission list may be ordered by.
+ *
+ * Deliberately only the ones every kind has. The four tables share just the
+ * `submissionColumns` spread, and of those only `status` and `submittedAt`
+ * carry an index on all four. The title a list actually shows is per-kind
+ * (`reporteeName`, `topic`, `groupName`, `name`), so it cannot be a uniform
+ * sort key at all — `reference` is the stable per-kind ordinal that stands in
+ * for it.
+ */
+export type SubmissionSortField = 'reference' | 'status' | 'submittedAt';
+
+export const SUBMISSION_SORT_FIELDS: SubmissionSortField[] = [
+	'reference',
+	'status',
+	'submittedAt',
+];
+
 export async function listSubmissions(
 	kind: SubmissionKind,
-	options: { statuses?: SubmissionStatus[]; page?: number } = {},
+	options: {
+		statuses?: SubmissionStatus[];
+		page?: number;
+		sort?: SubmissionSortField;
+		direction?: 'asc' | 'desc';
+	} = {},
 ): Promise<{ rows: SubmissionRow[]; rowCount: number }> {
 	const { table } = SUBMISSION_KINDS[kind];
 	const page = options.page ?? 0;
+	const direction = options.direction === 'asc' ? asc : desc;
+	const sortColumn = {
+		reference: table.reference,
+		status: table.status,
+		submittedAt: table.submittedAt,
+	}[options.sort ?? 'submittedAt'];
 	const where = options.statuses?.length
 		? inArray(table.status, options.statuses)
 		: undefined;
@@ -247,8 +276,10 @@ export async function listSubmissions(
 			.select()
 			.from(table)
 			.where(where)
-			// `submittedAt` is not unique; the v7 id breaks ties by creation order.
-			.orderBy(desc(table.submittedAt), desc(table.id))
+			// None of the sortable columns except `reference` is unique, and a
+			// non-deterministic order across pages would drop and repeat rows as
+			// the maintainer pages through. The v7 id breaks ties by creation order.
+			.orderBy(direction(sortColumn), desc(table.id))
 			.limit(PAGE_SIZE)
 			.offset(page * PAGE_SIZE),
 		db().select({ value: count() }).from(table).where(where),

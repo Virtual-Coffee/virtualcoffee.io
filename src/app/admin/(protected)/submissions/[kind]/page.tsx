@@ -1,17 +1,18 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import type { SubmissionStatus } from '@/db';
 import { requirePermission } from '@/lib/adminAccess';
 import {
 	isSubmissionKind,
 	listSubmissions,
+	PAGE_SIZE,
 	SUBMISSION_DISPLAY,
 	SUBMISSION_KINDS,
 	submissionStatusCounts,
 } from '@/lib/submissions';
-import { formatDateTime } from '../../presentation';
 import { STATUS_ORDER, SubmissionStatusBadge } from './presentation';
+import { parseSubmissionSearchParams } from './searchParams';
+import { SubmissionsTable, type SubmissionListRow } from './submissionsTable';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,7 +43,7 @@ export default async function SubmissionListPage({
 	searchParams,
 }: {
 	params: Promise<{ kind: string }>;
-	searchParams: Promise<{ status?: string }>;
+	searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
 	const { kind } = await params;
 
@@ -52,18 +53,46 @@ export default async function SubmissionListPage({
 	// learn that the CoC section exists.
 	await requirePermission(SUBMISSION_KINDS[kind].section, 'read');
 
-	const { status } = await searchParams;
-	const active = STATUS_ORDER.includes(status as SubmissionStatus)
-		? (status as SubmissionStatus)
-		: null;
+	const filters = parseSubmissionSearchParams(await searchParams);
+	const active = filters.status;
 
 	const [{ rows, rowCount }, counts] = await Promise.all([
-		listSubmissions(kind, { statuses: active ? [active] : undefined }),
+		listSubmissions(kind, {
+			statuses: active ? [active] : undefined,
+			page: filters.page,
+			sort: filters.sort,
+			direction: filters.direction,
+		}),
 		submissionStatusCounts(kind),
 	]);
 
 	const display = SUBMISSION_DISPLAY[kind];
 	const base = `/admin/submissions/${kind}`;
+
+	// Flattened here so the client table never has to reach for
+	// `SUBMISSION_DISPLAY`, which lives behind a drizzle import.
+	const listRows: SubmissionListRow[] = rows.map((row) => {
+		const summary = display.summary(row);
+		return {
+			id: row.id,
+			reference: row.reference,
+			title: summary.title,
+			subtitle: summary.subtitle,
+			status: row.status,
+			submittedAt: row.submittedAt,
+		};
+	});
+
+	// The status chips are a filter, so they reset the page — but they keep the
+	// order the maintainer chose.
+	const chipQuery = (status: string | null) => {
+		const query = new URLSearchParams();
+		if (status) query.set('status', status);
+		if (filters.sort !== 'submittedAt') query.set('sort', filters.sort);
+		if (filters.direction !== 'desc') query.set('dir', filters.direction);
+		const suffix = query.toString();
+		return suffix ? `${base}?${suffix}` : base;
+	};
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -81,7 +110,7 @@ export default async function SubmissionListPage({
 				aria-label="Filter by status"
 			>
 				<Link
-					href={base}
+					href={chipQuery(null)}
 					className={`btn btn-sm ${active ? 'btn-outline-secondary' : 'btn-secondary'}`}
 				>
 					All ({counts.all ?? 0})
@@ -89,7 +118,7 @@ export default async function SubmissionListPage({
 				{STATUS_ORDER.map((value) => (
 					<Link
 						key={value}
-						href={`${base}?status=${value}`}
+						href={chipQuery(value)}
 						className={`btn btn-sm ${
 							active === value ? 'btn-secondary' : 'btn-outline-secondary'
 						}`}
@@ -99,42 +128,15 @@ export default async function SubmissionListPage({
 				))}
 			</nav>
 
-			{rows.length === 0 ? (
-				<p className="text-body-secondary">Nothing here yet.</p>
-			) : (
-				<div className="table-responsive">
-					<table className="table table-hover align-middle">
-						<thead>
-							<tr>
-								<th scope="col">Submission</th>
-								<th scope="col">Status</th>
-								<th scope="col">Received</th>
-							</tr>
-						</thead>
-						<tbody>
-							{rows.map((row) => {
-								const summary = display.summary(row);
-								return (
-									<tr key={row.id}>
-										<td>
-											<Link href={`${base}/${row.id}`}>{summary.title}</Link>
-											<div className="small text-body-secondary">
-												{summary.subtitle}
-											</div>
-										</td>
-										<td>
-											<SubmissionStatusBadge status={row.status} />
-										</td>
-										<td className="small text-body-secondary">
-											{formatDateTime(row.submittedAt)}
-										</td>
-									</tr>
-								);
-							})}
-						</tbody>
-					</table>
-				</div>
-			)}
+			<SubmissionsTable
+				rows={listRows}
+				rowCount={rowCount}
+				basePath={base}
+				page={filters.page}
+				pageSize={PAGE_SIZE}
+				sort={filters.sort}
+				direction={filters.direction}
+			/>
 		</div>
 	);
 }
