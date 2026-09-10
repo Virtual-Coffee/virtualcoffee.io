@@ -85,12 +85,23 @@ export default async function AdminDashboardPage() {
 									<h2 className="h6 card-title text-body-secondary">
 										{card.label}
 									</h2>
-									<p className="display-6 mb-0">
-										{card.openCount.toLocaleString()}
-									</p>
-									<p className="small text-body-secondary mb-0">
-										{card.countLabel}
-									</p>
+									{/*
+									 * Side by side rather than stacked, so a card with two
+									 * figures is still one glance. `gap-4` keeps them from
+									 * reading as a single number at the display size.
+									 */}
+									<div className="d-flex flex-wrap gap-4">
+										{card.figures.map((figure) => (
+											<div key={figure.label}>
+												<p className="display-6 mb-0">
+													{figure.count.toLocaleString()}
+												</p>
+												<p className="small text-body-secondary mb-0">
+													{figure.label}
+												</p>
+											</div>
+										))}
+									</div>
 								</div>
 							</Link>
 						</div>

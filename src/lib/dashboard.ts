@@ -29,13 +29,25 @@ import {
 	type SubmissionKind,
 } from '@/lib/submissions';
 
+/** One number on a card. Most sections have a single one; the queue has two. */
+export type DashboardFigure = {
+	count: number;
+	label: string;
+};
+
 export type DashboardCard = {
 	section: Section;
 	label: string;
 	href: string;
-	/** Things still waiting on a maintainer. */
-	openCount: number;
-	countLabel: string;
+	/**
+	 * Things still waiting on a maintainer, as one or more numbers.
+	 *
+	 * A list rather than a count and a label, because the Waitlist is two
+	 * different jobs sharing a card: people awaiting a first decision, and people
+	 * who have been sent a Coffee invite and are awaiting a second. Summing them
+	 * into one number said "43 in the queue" and hid which half needed doing.
+	 */
+	figures: DashboardFigure[];
 };
 
 export type ActivityEntry = {
@@ -68,17 +80,32 @@ export async function dashboardCards(
 	const cards = await Promise.all(
 		sections.map(async (section): Promise<DashboardCard | null> => {
 			if (section === 'waitlist') {
-				const [row] = await db()
-					.select({ value: count() })
+				/**
+				 * Grouped rather than two counts, because the two figures are the two
+				 * halves of the same set — one query, and they cannot disagree about
+				 * a row that changed status between them.
+				 */
+				const rows = await db()
+					.select({
+						status: membershipApplication.status,
+						value: count(),
+					})
 					.from(membershipApplication)
-					.where(inArray(membershipApplication.status, QUEUE_STATUSES));
+					.where(inArray(membershipApplication.status, QUEUE_STATUSES))
+					.groupBy(membershipApplication.status);
+
+				const byStatus = new Map(rows.map((row) => [row.status, row.value]));
 
 				return {
 					section,
 					label: 'Waitlist',
 					href: '/admin/waitlist',
-					openCount: row?.value ?? 0,
-					countLabel: 'in the queue',
+					figures: [
+						// Awaiting a first decision — nobody has looked at them yet.
+						{ count: byStatus.get('waitlisted') ?? 0, label: 'waiting' },
+						// Sent a Coffee invite, awaiting a Membership Approval after it.
+						{ count: byStatus.get('coffee_invited') ?? 0, label: 'pending' },
+					],
 				};
 			}
 
@@ -99,8 +126,7 @@ export async function dashboardCards(
 					section,
 					label: 'Volunteers',
 					href: '/admin/volunteers',
-					openCount: row?.value ?? 0,
-					countLabel: 'active',
+					figures: [{ count: row?.value ?? 0, label: 'active' }],
 				};
 			}
 
@@ -114,8 +140,9 @@ export async function dashboardCards(
 				section,
 				label: SUBMISSION_KINDS[kind].label,
 				href: `/admin/submissions/${kind}`,
-				openCount: await openCount(kind),
-				countLabel: 'awaiting a response',
+				figures: [
+					{ count: await openCount(kind), label: 'awaiting a response' },
+				],
 			};
 		}),
 	);
