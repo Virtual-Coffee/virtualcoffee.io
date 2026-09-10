@@ -18,6 +18,9 @@ import {
 	lunchAndLearnIdea,
 	coffeeTableGroupRequest,
 	submissionEvent,
+	pendingGrant,
+	volunteer,
+	volunteerInviteLedger,
 } from '../src/db';
 import { ATTACHMENT_STORE } from '../src/lib/attachments';
 
@@ -76,6 +79,21 @@ function seedFor(id: string | number): number {
  * the verification pass below a trivial pattern match, and the id-derived
  * suffix guarantees uniqueness even if the random local part ever collided.
  */
+/**
+ * A fake Slack member id, derived from the real one.
+ *
+ * Deterministic on purpose. The same Slack id appears on `user`,
+ * `pending_grant`, `volunteer`, `volunteer_invite_ledger` and `invite` and is
+ * what joins them — an Invite Allowance is keyed on it (docs/adr/0009). Fake
+ * each occurrence independently and a preview's volunteers lose their balances
+ * and their invites, which is a broken /admin rather than a sanitized one.
+ *
+ * `U` plus base36 keeps the shape recognisable without being a real id.
+ */
+function fakeSlackId(realId: string): string {
+	return `U${seedFor(realId).toString(36).toUpperCase().padStart(8, '0')}`;
+}
+
 function fakeEmail(id: string | number): string {
 	const local = faker.internet
 		.username()
@@ -208,6 +226,7 @@ async function sanitizeInvites(database: Database): Promise<void> {
 		.select({
 			id: invite.id,
 			inviterName: invite.inviterName,
+			inviterSlackUserId: invite.inviterSlackUserId,
 			inviteeName: invite.inviteeName,
 			inviteeEmail: invite.inviteeEmail,
 		})
@@ -220,8 +239,21 @@ async function sanitizeInvites(database: Database): Promise<void> {
 			.update(invite)
 			.set({
 				inviterName: row.inviterName ? faker.person.fullName() : null,
+				// Kept consistent with `volunteer` and the ledger — this is what
+				// attributes an Invite to a Volunteer.
+				inviterSlackUserId: row.inviterSlackUserId
+					? fakeSlackId(row.inviterSlackUserId)
+					: null,
 				inviteeName: row.inviteeName ? faker.person.fullName() : null,
 				inviteeEmail: row.inviteeEmail ? fakeEmail(row.id) : null,
+				/**
+				 * Claim Links do not survive into a preview. Only the hash is stored
+				 * so a leak hands out nothing on its own, but a preview has no
+				 * business holding a credential for a real person's invitation, and
+				 * an expiry with no token is just confusing.
+				 */
+				tokenHash: null,
+				tokenExpiresAt: null,
 			})
 			.where(eq(invite.id, row.id));
 	});
@@ -230,6 +262,97 @@ async function sanitizeInvites(database: Database): Promise<void> {
 /* -------------------------------------------------------------------------- */
 /* Submissions                                                                */
 /* -------------------------------------------------------------------------- */
+
+/**
+ * Volunteers, their allowance history, and the Slack ids that tie the two
+ * together.
+ *
+ * `volunteer_invite_ledger.body` is the sharpest edge here: a spend records
+ * `Invited {name} <{email}>` verbatim, so leaving it alone would publish real
+ * invitees' email addresses on a public preview URL. It is rewritten from the
+ * already-faked Invite rather than blanked, so the ledger still reads like a
+ * ledger.
+ */
+async function sanitizeVolunteers(database: Database): Promise<void> {
+	const rows = await database
+		.select({
+			id: volunteer.id,
+			slackUserId: volunteer.slackUserId,
+			slackHandle: volunteer.slackHandle,
+		})
+		.from(volunteer);
+
+	await inBatches(rows, async (row) => {
+		faker.seed(seedFor(row.id));
+
+		await database
+			.update(volunteer)
+			.set({
+				slackUserId: fakeSlackId(row.slackUserId),
+				slackDisplayName: faker.person.fullName(),
+				slackHandle: row.slackHandle ? faker.internet.username() : null,
+				// Community role labels ("VC Host", "Notetaker") are generic and
+				// carry no identity once the name beside them is fake.
+			})
+			.where(eq(volunteer.id, row.id));
+	});
+
+	const entries = await database
+		.select({
+			id: volunteerInviteLedger.id,
+			slackUserId: volunteerInviteLedger.slackUserId,
+			body: volunteerInviteLedger.body,
+			inviteeName: invite.inviteeName,
+			inviteeEmail: invite.inviteeEmail,
+		})
+		.from(volunteerInviteLedger)
+		.leftJoin(invite, eq(volunteerInviteLedger.inviteId, invite.id));
+
+	await inBatches(entries, async (row) => {
+		await database
+			.update(volunteerInviteLedger)
+			.set({
+				slackUserId: fakeSlackId(row.slackUserId),
+				body: row.body
+					? row.inviteeEmail
+						? `Invited ${row.inviteeName ?? 'someone'} <${row.inviteeEmail}>`
+						: 'Sanitized for preview'
+					: null,
+			})
+			.where(eq(volunteerInviteLedger.id, row.id));
+	});
+}
+
+/**
+ * Pending Grants carry a snapshot of a real person's Slack name and handle, and
+ * are the one place a Slack member id is stored for someone who has never
+ * signed in. Never sanitized before this — the table shipped after the script.
+ */
+async function sanitizePendingGrants(database: Database): Promise<void> {
+	const rows = await database
+		.select({
+			id: pendingGrant.id,
+			slackUserId: pendingGrant.slackUserId,
+			slackHandle: pendingGrant.slackHandle,
+		})
+		.from(pendingGrant);
+
+	await inBatches(rows, async (row) => {
+		faker.seed(seedFor(row.id));
+
+		await database
+			.update(pendingGrant)
+			.set({
+				slackUserId: fakeSlackId(row.slackUserId),
+				slackDisplayName: faker.person.fullName(),
+				slackHandle: row.slackHandle ? faker.internet.username() : null,
+				// Same reasoning as `user.roleGrantedBy`: an audit nicety, and
+				// simpler to clear than to resolve to the matching fake identity.
+				grantedBy: 'sanitized',
+			})
+			.where(eq(pendingGrant.id, row.id));
+	});
+}
 
 async function sanitizeCocReports(
 	database: Database,
@@ -495,6 +618,7 @@ async function sanitizeAuthTables(database: Database): Promise<void> {
 			id: user.id,
 			banReason: user.banReason,
 			roleGrantedBy: user.roleGrantedBy,
+			slackUserId: user.slackUserId,
 		})
 		.from(user);
 
@@ -507,6 +631,10 @@ async function sanitizeAuthTables(database: Database): Promise<void> {
 				name: faker.person.fullName(),
 				email: fakeEmail(row.id),
 				image: null,
+				// Duplicates `account.account_id`, which is rewritten below — and was
+				// being left behind, so the real Slack member id survived every
+				// sanitize. It is also what links a user to their `volunteer` row.
+				slackUserId: row.slackUserId ? fakeSlackId(row.slackUserId) : null,
 				banReason: row.banReason ? faker.lorem.sentence() : null,
 				// Who granted a role is an audit nicety, not something /admin's
 				// permission checks depend on — clearing it is simpler and safer
@@ -601,6 +729,48 @@ async function verify(database: Database): Promise<string[]> {
 			'user has a non-fake email',
 			() => countWhere(database, user, realEmail(user.email)),
 		],
+		/**
+		 * A sanitized Slack member id always starts `U` and is otherwise base36
+		 * upper-case, so "does not look sanitized" is `not like 'U%'` — a real
+		 * Slack id starts `U` too, but never with our derived shape. These check
+		 * the cheaper property that the column changed at all, by looking for the
+		 * ids that survived: anything not matching the fake pattern.
+		 */
+		[
+			'user.slack_user_id was not sanitized',
+			() =>
+				countWhere(
+					database,
+					user,
+					and(isNotNull(user.slackUserId), not(like(user.slackUserId, 'U%'))),
+				),
+		],
+		[
+			'pending_grant still names a real grantor',
+			() =>
+				countWhere(
+					database,
+					pendingGrant,
+					ne(pendingGrant.grantedBy, 'sanitized'),
+				),
+		],
+		[
+			'volunteer_invite_ledger body has a non-fake email',
+			() =>
+				countWhere(
+					database,
+					volunteerInviteLedger,
+					and(
+						isNotNull(volunteerInviteLedger.body),
+						like(volunteerInviteLedger.body, '%@%'),
+						not(like(volunteerInviteLedger.body, `%@${FAKE_EMAIL_DOMAIN}%`)),
+					),
+				),
+		],
+		[
+			'invite still carries a claim token',
+			() => countWhere(database, invite, isNotNull(invite.tokenHash)),
+		],
 		[
 			'account still has an OAuth secret',
 			() =>
@@ -684,6 +854,8 @@ async function main() {
 	});
 
 	await sanitizeCocAttachments(database);
+	await sanitizeVolunteers(database);
+	await sanitizePendingGrants(database);
 	await sanitizeAuthTables(database);
 
 	const failures = await verify(database);
