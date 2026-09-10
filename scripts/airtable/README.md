@@ -1,6 +1,6 @@
 # Airtable scripts
 
-The three one-off scripts that carried this site off Airtable. None of them run
+The four one-off scripts that carried this site off Airtable. None of them run
 in a build or in CI, and nothing on the site reads Airtable at runtime any more.
 They are kept for provenance, for re-verification, and because the production
 membership import is not yet confirmed complete.
@@ -113,6 +113,72 @@ is always null.
 string on purpose, so there is no supported path here for importing into the
 production database. Doing it is a deliberate maintainer decision that has not
 been made — see "What is deliberately left" in `docs/adr/0004-retiring-airtable.md`.
+
+## `importVolunteers.ts`
+
+Imports the 91 rows of the `Volunteers` table: who may give out Invites, what
+they had left, and which historical Invites were theirs.
+
+**The hard part is identity, and it needs a human.** Everything about an Invite
+Allowance is keyed on the Slack member id (`docs/adr/0009`), and Airtable holds
+no Slack ids at all — `member_profiles.SlackID` exists and is entirely empty. So
+the join has to be made from a name, a GitHub username and an email against the
+live Slack directory, and it will not be clean: 9 of the 91 rows have no GitHub
+link, the names are informal ("Kirk", "Meg", "Nicky T"), and one username ends
+in a space. A wrong match credits or debits a real person's allowance and does
+it invisibly, so nothing is guessed. See `docs/adr/0012`.
+
+It therefore runs in two phases with a review in between:
+
+```bash
+# 1. read Airtable and Slack, score every candidate, write the mapping file
+MEMBERSHIP_AIRTABLE_API_KEY=… SLACK_BOT_TOKEN=xoxb-… \
+  pnpm exec tsx scripts/airtable/importVolunteers.ts --propose
+
+# 2. open scripts/airtable/volunteerSlackMapping.json and check every row
+
+# 3. see what would be written
+pnpm exec tsx scripts/with-local-netlify.ts \
+  tsx scripts/airtable/importVolunteers.ts --apply --dry-run
+
+# 4. write it
+pnpm exec tsx scripts/with-local-netlify.ts \
+  tsx scripts/airtable/importVolunteers.ts --apply
+```
+
+`--propose` needs no database and no wrapper. `--apply` writes to Postgres, so
+it goes through the wrapper like the other imports.
+
+**The mapping file is gitignored on purpose.** It pairs real names with Slack
+member ids, and it is a working artefact of one migration rather than something
+the site reads. `--propose` overwrites it, so do not re-run that after editing.
+
+**`slackUserId` is the only field you edit.** `--propose` fills it in where one
+candidate scores at least 50 and beats every other; everything else arrives
+blank with up to five scored `candidates` beside it for reference. **Leaving it
+blank is a valid answer** — that volunteer is skipped, and their Invites keep
+`inviter_name` and stay unattributed, which is the honest result rather than a
+guess. Two rows mapped to the same Slack member abort the run before anything
+is written.
+
+**Only active volunteers get a balance.** Airtable has 91 volunteers and only 25
+`Active`. The other 66 are imported paused, with no credit: their history stays
+attributable and reactivating them is one click in `/admin/volunteers`, but they
+do not arrive holding invites. The 12 rows with no `Invites Available` value at
+all import as zero — absent is not a number, and all twelve are recent.
+
+**Balances arrive as one net row**, not a reconstruction. Airtable's number is a
+running balance with no history behind it (the grants were manual, +5 at a time,
+and unrecorded), so there is nothing to replay. One `imported` ledger row saying
+what Airtable said is the honest version of a number nobody can explain further.
+
+**Re-running is safe.** Volunteers key on `airtable_record_id` and insert with
+`onConflictDoNothing`; the balance is only written for a Volunteer with no
+ledger rows at all, because an append-only ledger would otherwise double every
+balance on a second run.
+
+Run `importMembership.ts` **first**. This script attributes Invites that script
+creates; with an empty `invite` table it will report `Attributed 0`.
 
 ## `importSubmissions.ts`
 
