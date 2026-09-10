@@ -21,6 +21,13 @@ declare namespace NodeJS {
 		DATABASE_URL?: string;
 		ADMIN_DEV_BYPASS?: string;
 		ADMIN_DEV_BYPASS_ROLES?: string;
+		// The Slack member id the dev bypass acts as. Everything about an Invite
+		// Allowance keys on it, so /invites needs one to find a volunteer row.
+		ADMIN_DEV_BYPASS_SLACK_ID?: string;
+		// The deploy-preview equivalents, read by the same module.
+		PREVIEW_ADMIN_BYPASS?: string;
+		PREVIEW_ADMIN_BYPASS_ROLES?: string;
+		PREVIEW_ADMIN_BYPASS_SLACK_ID?: string;
 		ADMIN_BOOTSTRAP_SLACK_IDS?: string;
 		BETTER_AUTH_SECRET?: string;
 		BETTER_AUTH_URL?: string;

@@ -9,6 +9,7 @@ import {
 	visibleSections,
 } from '@/lib/adminAccess';
 import { slackAuthConfigured } from '@/lib/auth';
+import { isVolunteer } from '@/lib/volunteerAccess';
 import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
@@ -25,10 +26,19 @@ export default async function AdminSignInPage() {
 
 	const session = await getSession();
 
-	// Holding a permission on any section is enough to get in — a volunteer who
+	// Holding a permission on any section is enough to get in — a maintainer who
 	// only reviews Lunch & Learn ideas should not be told they are "not an admin".
 	if (visibleSections(session).length > 0) {
 		redirect('/admin');
+	}
+
+	/**
+	 * A Volunteer holds no Section, so the check above is false for them and
+	 * they would land on "you're signed in, but not an admin" — which is true
+	 * and useless. They have somewhere to be.
+	 */
+	if (isVolunteer(session)) {
+		redirect('/invites');
 	}
 
 	return (

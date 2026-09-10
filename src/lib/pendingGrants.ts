@@ -1,6 +1,6 @@
 import { and, eq, isNull } from 'drizzle-orm';
 
-import { db, pendingGrant, user } from '@/db';
+import { db, pendingGrant, user, volunteer } from '@/db';
 import { grantedRoles } from '@/lib/permissions';
 
 /**
@@ -121,6 +121,21 @@ export async function claimPendingGrant(account: {
 					.set({ claimedAt: new Date(), claimedUserId: account.userId })
 					.where(eq(pendingGrant.id, claimedGrantId));
 			}
+
+			/**
+			 * A Volunteer may have been designated — and carry an imported balance —
+			 * long before this moment. The `volunteer` row is keyed on the Slack
+			 * member id precisely so that it can exist first; this is the point at
+			 * which it can finally learn the user id.
+			 *
+			 * Unconditional, not gated on `holdsNothing`: linking a row to its
+			 * owner is not a grant, and someone who already had access can still be
+			 * signing in with Slack for the first time.
+			 */
+			await tx
+				.update(volunteer)
+				.set({ userId: account.userId })
+				.where(eq(volunteer.slackUserId, account.accountId));
 		});
 	} catch (error) {
 		console.error('Failed to claim a Pending Grant', {

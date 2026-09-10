@@ -10,6 +10,8 @@ import { userForSlackId } from '@/lib/admins';
 import { isId } from '@/db/ids';
 import {
 	DEFAULT_ROLE,
+	GRANTABLE_ROLE_NAMES,
+	grantedRoles,
 	parseRoles,
 	roles as ROLE_DEFINITIONS,
 	serialiseRoles,
@@ -19,7 +21,31 @@ import {
 export type AdminActionResult = { ok: true } | { ok: false; message: string };
 
 function isRoleName(value: string): value is RoleName {
-	return value in ROLE_DEFINITIONS && value !== DEFAULT_ROLE;
+	return (
+		value in ROLE_DEFINITIONS &&
+		value !== DEFAULT_ROLE &&
+		GRANTABLE_ROLE_NAMES.has(value as RoleName)
+	);
+}
+
+/**
+ * Carry over any role this screen does not grant.
+ *
+ * The dropdown replaces the whole set rather than toggling one role, which is
+ * what keeps the server from merging a stale client view — but it means an
+ * empty selection, or a selection made while someone also holds `volunteer`,
+ * would silently revoke a role granted somewhere else. `volunteer` is granted
+ * from /admin/volunteers alongside a `volunteer` row; dropping it here would
+ * leave that row active and accruing invites its owner can no longer spend.
+ */
+function preserveUngrantedRoles(
+	current: string | null | undefined,
+	requested: RoleName[],
+): RoleName[] {
+	const kept = grantedRoles(current).filter(
+		(role) => !GRANTABLE_ROLE_NAMES.has(role),
+	);
+	return [...new Set([...requested, ...kept])];
 }
 
 /**
@@ -73,12 +99,26 @@ export async function setUserRoles(
 		}
 	}
 
-	const granting = requested.length > 0;
+	const [target] = await db()
+		.select({ role: user.role })
+		.from(user)
+		.where(eq(user.id, userId))
+		.limit(1);
+
+	if (!target) {
+		return {
+			ok: false,
+			message: 'That person no longer exists. Reload the page.',
+		};
+	}
+
+	const resulting = preserveUngrantedRoles(target.role, requested);
+	const granting = resulting.length > 0;
 
 	const result = await db()
 		.update(user)
 		.set({
-			role: serialiseRoles(requested),
+			role: serialiseRoles(resulting),
 			roleGrantedAt: granting ? new Date() : null,
 			roleGrantedBy: granting ? session.user.name || session.user.email : null,
 		})
@@ -190,9 +230,24 @@ export async function setPendingGrantRoles(
 		};
 	}
 
+	const [grant] = await db()
+		.select({ role: pendingGrant.role })
+		.from(pendingGrant)
+		.where(and(eq(pendingGrant.id, grantId), isNull(pendingGrant.claimedAt)))
+		.limit(1);
+
+	if (!grant) {
+		return {
+			ok: false,
+			message: 'That grant has already been claimed. Reload the page.',
+		};
+	}
+
 	const result = await db()
 		.update(pendingGrant)
-		.set({ role: serialiseRoles(validated.roles) })
+		.set({
+			role: serialiseRoles(preserveUngrantedRoles(grant.role, validated.roles)),
+		})
 		.where(and(eq(pendingGrant.id, grantId), isNull(pendingGrant.claimedAt)));
 
 	if (result.rowCount === 0) {
@@ -222,6 +277,37 @@ export async function revokePendingGrant(
 		return {
 			ok: false,
 			message: 'That grant no longer exists. Reload the page.',
+		};
+	}
+
+	const [grant] = await db()
+		.select({ role: pendingGrant.role })
+		.from(pendingGrant)
+		.where(and(eq(pendingGrant.id, grantId), isNull(pendingGrant.claimedAt)))
+		.limit(1);
+
+	if (!grant) {
+		return {
+			ok: false,
+			message: 'That grant has already been claimed. Reload the page.',
+		};
+	}
+
+	/**
+	 * "Revoke all" reaches this action rather than `setPendingGrantRoles`, so it
+	 * is the one path that could delete a role this screen does not grant. A
+	 * Grant carrying `volunteer` belongs to a `volunteer` row created in the
+	 * same transaction; deleting it here would leave that row behind.
+	 */
+	const ungranted = grantedRoles(grant.role).filter(
+		(role) => !GRANTABLE_ROLE_NAMES.has(role),
+	);
+
+	if (ungranted.length > 0) {
+		return {
+			ok: false,
+			message:
+				'This grant includes Volunteer access. Remove it in Admin → Volunteers.',
 		};
 	}
 

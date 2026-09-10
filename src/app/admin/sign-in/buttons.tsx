@@ -5,7 +5,16 @@ import { useRouter } from 'next/navigation';
 
 import { signIn, signOut } from '@/lib/auth-client';
 
-export function SignInButton() {
+/**
+ * `callbackURL` is where Slack sends them back to. It defaults to /admin, but
+ * /invites signs its own visitors in: a Volunteer holds no Section, so landing
+ * them on /admin would bounce them straight back out to this page.
+ */
+export function SignInButton({
+	callbackURL = '/admin',
+}: {
+	callbackURL?: string;
+}) {
 	const [pending, setPending] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -25,7 +34,7 @@ export function SignInButton() {
 					setError(null);
 					const result = await signIn.social({
 						provider: 'slack',
-						callbackURL: '/admin',
+						callbackURL,
 					});
 					if (result?.error) {
 						// Most likely cause is a Slack account outside the Virtual Coffee

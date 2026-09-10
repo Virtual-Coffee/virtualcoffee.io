@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/navigation';
 
 import type { GrantCandidate } from '@/lib/admins';
-import { GRANTABLE_ROLES, type RoleName } from '@/lib/permissions';
+import { GRANTABLE_ROLES, ROLE_LABELS, type RoleName } from '@/lib/permissions';
 import { useDropdown } from '../useDropdown';
 import {
 	grantPendingAccess,
@@ -20,9 +20,13 @@ import {
 	type AdminActionResult,
 } from './actions';
 
-const LABELS = new Map(
-	GRANTABLE_ROLES.map((role) => [role.name as RoleName, role.label]),
-);
+/**
+ * Labels for the summary badges, read from every role rather than from
+ * `GRANTABLE_ROLES`. The checkboxes below still offer only the grantable ones,
+ * but someone can hold a role this screen does not grant — `volunteer` is
+ * granted from /admin/volunteers — and it should not render as a blank badge.
+ */
+const LABELS = new Map(Object.entries(ROLE_LABELS) as [RoleName, string][]);
 
 /**
  * The roles one person holds, as a dropdown of checkboxes.

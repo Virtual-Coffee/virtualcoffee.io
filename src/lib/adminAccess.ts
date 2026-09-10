@@ -77,6 +77,15 @@ function devBypassSession(): Session | null {
 			emailVerified: true,
 			image: null,
 			role,
+			/**
+			 * Everything about an Invite Allowance is keyed on the Slack member id,
+			 * so a bypass session without one authenticates as a Volunteer and then
+			 * matches no `volunteer` row. `pnpm db:seed` creates a Volunteer for the
+			 * default below, so `ADMIN_DEV_BYPASS_ROLES=volunteer` works with no
+			 * further setup; override it to act as a different one.
+			 */
+			slackUserId:
+				process.env.ADMIN_DEV_BYPASS_SLACK_ID?.trim() || 'U_DEV_BYPASS',
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		},
@@ -121,6 +130,10 @@ function previewBypassSession(): Session | null {
 			emailVerified: true,
 			image: null,
 			role,
+			// See the note on the dev bypass; the preview database is seeded from
+			// production and then sanitized, so this matches nothing by design.
+			slackUserId:
+				process.env.PREVIEW_ADMIN_BYPASS_SLACK_ID?.trim() || 'U_PREVIEW_BYPASS',
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		},
