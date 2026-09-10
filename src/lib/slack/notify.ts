@@ -17,12 +17,24 @@ export type NotifyResult =
 	| { ok: false; skipped: true; message: string }
 	| { ok: false; skipped?: false; message: string };
 
-/** One webhook per destination, so a missing one only silences its own form. */
+/**
+ * One webhook per destination, so a missing one only silences its own form.
+ *
+ * The first four are the Submission kinds and share their keys with
+ * `SUBMISSION_KINDS`. `membership` is not a Submission kind — it is the
+ * membership pipeline, which had no Slack notification at all until Volunteer
+ * Invites needed one. It is named for the pipeline rather than for invites so
+ * the next thing the queue wants to announce does not need a sixth variable.
+ * Reach it through `notifySlack` directly: `notifyAndRecord` is keyed on
+ * `SubmissionKind` and records into `submission_event`, which is the wrong table
+ * for an application.
+ */
 const WEBHOOK_ENV = {
 	coc: 'SLACK_WEBHOOK_COC',
 	volunteers: 'SLACK_WEBHOOK_VOLUNTEERS',
 	'lunch-and-learn': 'SLACK_WEBHOOK_LUNCH_AND_LEARN',
 	'coffee-tables': 'SLACK_WEBHOOK_COFFEE_TABLES',
+	membership: 'SLACK_WEBHOOK_MEMBERSHIP',
 } as const;
 
 export type NotifyChannel = keyof typeof WEBHOOK_ENV;
@@ -146,6 +158,30 @@ export function lunchAndLearnMessage(idea: {
 }): string {
 	const lead = `New Lunch & Learn Submission: ${idea.topic} by ${idea.name}`;
 	return idea.issueUrl ? `${lead}\n\nGitHub Link: ${idea.issueUrl}` : lead;
+}
+
+/**
+ * An invited applicant has joined the queue.
+ *
+ * The one membership-pipeline notification, and it fires on the claim rather
+ * than on the send: sending an Invite is a Volunteer spending their own
+ * allowance and is nobody else's work, whereas a claim puts a priority
+ * application at the front of the Waitlist for a reviewer to pick up.
+ */
+export function inviteClaimedMessage(claim: {
+	inviteeName: string;
+	inviteeEmail: string;
+	inviterName: string | null;
+}): string {
+	return [
+		'*Invited Application Received*',
+		'',
+		field('Name', claim.inviteeName),
+		field('Email', claim.inviteeEmail),
+		field('Invited by', claim.inviterName),
+		'',
+		'_Invited applications sort to the front of the waitlist._',
+	].join('\n');
 }
 
 export function coffeeTableGroupMessage(request: {

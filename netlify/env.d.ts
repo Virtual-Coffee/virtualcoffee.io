@@ -42,6 +42,10 @@ declare namespace NodeJS {
 		SLACK_WEBHOOK_VOLUNTEERS?: string;
 		SLACK_WEBHOOK_LUNCH_AND_LEARN?: string;
 		SLACK_WEBHOOK_COFFEE_TABLES?: string;
+		// Not a Submission kind: the membership pipeline, which had no Slack
+		// notification at all until an invited application needed to announce
+		// itself at the front of the queue.
+		SLACK_WEBHOOK_MEMBERSHIP?: string;
 
 		// Bot token with `users:read`, for the Slack member directory the
 		// "Grant access" picker reads. A separate credential from SLACK_CLIENT_*:

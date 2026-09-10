@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import {
 	applicationEvent,
 	db,
+	invite,
 	membershipApplication,
 	user,
 	type ApplicationStatus,
@@ -258,6 +259,29 @@ export async function approveMembership(
 			coffeeAttendedAt: application.coffeeAttendedAt ?? now,
 		})
 		.where(eq(membershipApplication.id, applicationId));
+
+	/**
+	 * Close the loop on the Invite that produced this application, if there was
+	 * one. `completed` is what tells the Volunteer their invite actually worked —
+	 * it is the only status change they ever see that is not their own doing.
+	 *
+	 * After the status change rather than before, and not fatal: an application
+	 * that has been approved and emailed must not be reported as a failure
+	 * because a second row would not update.
+	 */
+	if (application.inviteId) {
+		try {
+			await db()
+				.update(invite)
+				.set({ status: 'completed' })
+				.where(eq(invite.id, application.inviteId));
+		} catch (error) {
+			console.error('Failed to complete an invite', {
+				applicationId,
+				error,
+			});
+		}
+	}
 
 	await recordEvent({
 		applicationId,

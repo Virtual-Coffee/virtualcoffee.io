@@ -77,6 +77,45 @@ export async function applicationBlockingInvite(
 }
 
 /**
+ * What a Claim Link is worth, without spending it.
+ *
+ * Called while rendering /join, so it must not consume anything — someone can
+ * open the link, close the tab and come back. Returns null for a token that is
+ * unknown, already claimed, cancelled, expired by the sweep, or past its date
+ * but not yet swept; the form then behaves exactly like an ordinary signup.
+ */
+export async function inviteForClaimToken(token: string): Promise<{
+	id: string;
+	inviterName: string | null;
+	inviteeName: string | null;
+	inviteeEmail: string | null;
+} | null> {
+	const [row] = await db()
+		.select({
+			id: invite.id,
+			inviterName: invite.inviterName,
+			inviteeName: invite.inviteeName,
+			inviteeEmail: invite.inviteeEmail,
+			status: invite.status,
+			tokenExpiresAt: invite.tokenExpiresAt,
+		})
+		.from(invite)
+		.where(eq(invite.tokenHash, hashClaimToken(token)))
+		.limit(1);
+
+	if (!row) return null;
+	if (row.status !== 'pending') return null;
+	if (row.tokenExpiresAt && row.tokenExpiresAt < new Date()) return null;
+
+	return {
+		id: row.id,
+		inviterName: row.inviterName,
+		inviteeName: row.inviteeName,
+		inviteeEmail: row.inviteeEmail,
+	};
+}
+
+/**
  * Reading a Volunteer's Invite Allowance and the Invites they have sent.
  *
  * Everything here keys on the Slack member id rather than a user id, because a

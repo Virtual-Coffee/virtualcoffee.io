@@ -75,6 +75,8 @@ export const EVENT_LABELS: Record<string, string> = {
 	note: 'added a note',
 	email_sent: 'Email sent',
 	email_failed: 'Email failed',
+	notification_sent: 'Slack notified',
+	notification_failed: 'Slack notification failed',
 };
 
 const DATE_FORMAT = new Intl.DateTimeFormat('en-US', {

@@ -7,7 +7,22 @@ import { submitMembershipApplication, type JoinFormState } from './action';
 
 const initialState: JoinFormState = { is_error: false };
 
-export function JoinForm() {
+/**
+ * `claimToken` rides along in a hidden field rather than being read from the URL
+ * by the action — a server action gets a FormData, not the page's query string.
+ * The name and email are prefilled from the Invite but stay editable: a
+ * Volunteer typing a friend's name from memory is not the authority on how they
+ * spell it.
+ */
+export function JoinForm({
+	claimToken,
+	defaultName,
+	defaultEmail,
+}: {
+	claimToken?: string;
+	defaultName?: string;
+	defaultEmail?: string;
+}) {
 	const [state, formAction] = useActionState<JoinFormState, FormData>(
 		submitMembershipApplication,
 		initialState,
@@ -17,6 +32,7 @@ export function JoinForm() {
 
 	return (
 		<form action={formAction} noValidate>
+			{claimToken && <input type="hidden" name="invite" value={claimToken} />}
 			{state?.is_error && (
 				// The existing Airtable forms render their error banner with
 				// `alert-success`, so failures show up green. This one is red.
@@ -37,6 +53,7 @@ export function JoinForm() {
 					label="Your name"
 					help="Required."
 					error={fieldErrors.name}
+					defaultValue={defaultName}
 					required
 				/>
 				<Field
@@ -46,6 +63,7 @@ export function JoinForm() {
 					label="Email"
 					help="Required. We’ll never share it."
 					error={fieldErrors.email}
+					defaultValue={defaultEmail}
 					required
 				/>
 				<Field
@@ -115,6 +133,7 @@ function Field({
 	error,
 	type = 'text',
 	required = false,
+	defaultValue,
 }: {
 	id: string;
 	name: string;
@@ -123,6 +142,7 @@ function Field({
 	error?: string;
 	type?: string;
 	required?: boolean;
+	defaultValue?: string;
 }) {
 	return (
 		<div className="mb-form">
@@ -135,6 +155,7 @@ function Field({
 				aria-describedby={`${id}Help`}
 				aria-invalid={error ? true : undefined}
 				required={required}
+				defaultValue={defaultValue}
 			/>
 			<small id={`${id}Help`} className="form-text text-muted">
 				{error ? <span className="text-danger">{error}</span> : help}

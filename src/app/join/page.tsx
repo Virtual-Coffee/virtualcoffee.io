@@ -1,4 +1,5 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
+import { inviteForClaimToken } from '@/lib/invites';
 import { createMetaData } from '@/util/createMetaData.server';
 import Link from 'next/link';
 
@@ -16,7 +17,21 @@ export async function generateMetadata() {
 	});
 }
 
-export default function Join() {
+export default async function Join({
+	searchParams,
+}: {
+	searchParams: Promise<{ invite?: string }>;
+}) {
+	const { invite } = await searchParams;
+
+	/**
+	 * Looking the Claim Link up here does not spend it — someone can open the
+	 * link, close the tab and come back. An unknown, used or expired token
+	 * resolves to null and the page is the ordinary waitlist form, which is also
+	 * what the action falls back to.
+	 */
+	const claimed = invite ? await inviteForClaimToken(invite) : null;
+
 	return (
 		<DefaultLayout
 			simple
@@ -48,12 +63,31 @@ export default function Join() {
 					</p>
 				</div>
 
-				<h2>Join the waitlist</h2>
-				<p>
-					Tell us a bit about you and we&rsquo;ll be in touch when a spot opens.
-				</p>
+				{claimed ? (
+					<>
+						<h2>You&rsquo;ve been invited</h2>
+						<p>
+							{claimed.inviterName ?? 'A Virtual Coffee volunteer'} invited you,
+							so you skip the waitlist — we&rsquo;ll look at your answers first.
+							We still need them, and we still need you to read the Code of
+							Conduct.
+						</p>
+					</>
+				) : (
+					<>
+						<h2>Join the waitlist</h2>
+						<p>
+							Tell us a bit about you and we&rsquo;ll be in touch when a spot
+							opens.
+						</p>
+					</>
+				)}
 
-				<JoinForm />
+				<JoinForm
+					claimToken={claimed ? invite : undefined}
+					defaultName={claimed?.inviteeName ?? undefined}
+					defaultEmail={claimed?.inviteeEmail ?? undefined}
+				/>
 			</div>
 		</DefaultLayout>
 	);

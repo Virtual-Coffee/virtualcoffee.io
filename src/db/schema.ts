@@ -255,6 +255,14 @@ export const applicationEventType = pgEnum('application_event_type', [
 	'note',
 	'email_sent',
 	'email_failed',
+	/**
+	 * A Slack post about this application, and its failure. Named the way
+	 * `submission_event_type` names the same pair rather than reusing
+	 * `email_sent`: the History panel renders the type as a sentence, and
+	 * "Sent an email" about a Slack message is simply untrue.
+	 */
+	'notification_sent',
+	'notification_failed',
 	'imported',
 ]);
 
