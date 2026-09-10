@@ -1,5 +1,6 @@
 import { defineConfig } from 'drizzle-kit';
 
+const dbUrl = process.env.DATABASE_URL;
 /**
  * `drizzle-kit generate` writes SQL plus a journal into `drizzle/`, and the
  * journal is what lets later runs diff against the previous schema — so that
@@ -14,4 +15,11 @@ export default defineConfig({
 	schema: './src/db/schema.ts',
 	out: './drizzle',
 	casing: 'snake_case',
+	...(dbUrl
+		? {
+				dbCredentials: {
+					url: dbUrl,
+				},
+			}
+		: {}),
 });

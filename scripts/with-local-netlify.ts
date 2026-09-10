@@ -37,8 +37,18 @@ function fail(...lines: string[]): never {
 	process.exit(1);
 }
 
+/** The shape of `netlify database status --json`, trimmed to what this needs. */
+type DatabaseStatus = {
+	database: { connectionString: string } | null;
+};
+
 /**
  * Ask the CLI for the local connection string.
+ *
+ * `--json` is parsed rather than scraping the human-readable report for a
+ * `postgres://…` substring — the pretty output is prose meant to change, and a
+ * rewording (or the connection string appearing in a "run this command"
+ * example line) could silently feed the wrong text to `new URL()` below.
  *
  * The guard is the point of this function: a seed or an import must never be
  * able to reach production, so anything that is not plainly local is refused
@@ -48,17 +58,31 @@ function localDatabaseUrl(): string {
 	let output = '';
 
 	try {
-		output = execFileSync(CLI, ['database', 'status', '--show-credentials'], {
-			cwd: PROJECT_ROOT,
-			encoding: 'utf8',
-			stdio: ['ignore', 'pipe', 'ignore'],
-		});
+		output = execFileSync(
+			CLI,
+			['database', 'status', '--json', '--show-credentials'],
+			{
+				cwd: PROJECT_ROOT,
+				encoding: 'utf8',
+				stdio: ['ignore', 'pipe', 'ignore'],
+			},
+		);
 	} catch {
-		// A non-zero exit means there is no connection string to read, which the
-		// same branch below covers as a clean run that printed none.
+		// A non-zero exit means there is nothing to parse, which the same branch
+		// below covers as a response with no connection string.
 	}
 
-	const url = output.match(/postgres:\/\/\S+/)?.[0];
+	let status: DatabaseStatus | undefined;
+
+	try {
+		status = JSON.parse(output) as DatabaseStatus;
+	} catch {
+		// Not JSON (an empty string when the command above failed, most likely) —
+		// covered by the same "could not read" failure as a clean response with a
+		// null `database`.
+	}
+
+	const url = status?.database?.connectionString;
 
 	if (!url) {
 		fail(
