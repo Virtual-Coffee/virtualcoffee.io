@@ -78,6 +78,34 @@ Virtual Coffee`,
 	};
 }
 
+/**
+ * The monthly nudge that a Volunteer has invites to give.
+ *
+ * Airtable sent one of these whenever a balance changed, because the balance
+ * lived somewhere the Volunteer could not see. They can see it now, so this is
+ * a prompt rather than a statement of record: an unused invite helps nobody,
+ * and the whole point of a monthly drip is that it keeps arriving.
+ */
+export function volunteerAccrualEmail(
+	name: string,
+	balance: number,
+	invitesUrl: string,
+): Template {
+	return {
+		subject: `You have ${balance} Virtual Coffee invite${balance === 1 ? '' : 's'}`,
+		text: `Hi ${firstName(name)},
+
+You've got another invite to give out this month, which brings you to ${balance}.
+
+Someone you invite skips the waitlist, so if there's a developer you've been meaning to bring in, this is the nudge:
+
+  ${invitesUrl}
+
+Thanks for everything you do here,
+Virtual Coffee`,
+	};
+}
+
 export function slackInviteEmail(name: string, inviteUrl: string): Template {
 	return {
 		subject: 'Your Virtual Coffee Slack invite',
