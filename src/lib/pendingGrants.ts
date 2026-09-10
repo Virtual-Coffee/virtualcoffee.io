@@ -1,7 +1,7 @@
 import { and, eq, isNull } from 'drizzle-orm';
 
 import { db, pendingGrant, user } from '@/db';
-import { parseRoles } from '@/lib/permissions';
+import { grantedRoles } from '@/lib/permissions';
 
 /**
  * Pending Grants: a Role assigned to a Slack member id before that person has
@@ -71,7 +71,7 @@ export async function claimPendingGrant(account: {
 			 * environment variable, or from a grant that predates that decision —
 			 * would be a silent demotion.
 			 */
-			const holdsNothing = parseRoles(existing.role).length === 0;
+			const holdsNothing = grantedRoles(existing.role).length === 0;
 
 			let roleUpdate: RoleUpdate | null = null;
 			let claimedGrantId: string | null = null;

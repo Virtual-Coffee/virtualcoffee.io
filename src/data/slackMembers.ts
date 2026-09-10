@@ -55,49 +55,59 @@ function eligible(member: {
 }
 
 /**
+ * The uncached fetch, kept separate from the cache wrapper below so it can be
+ * exercised outside a request — `unstable_cache` throws without Next's
+ * incremental cache, which puts the real API call out of reach of any script.
+ */
+export async function fetchSlackMembers(): Promise<SlackMember[]> {
+	const token = process.env.SLACK_BOT_TOKEN;
+
+	if (!token) {
+		assertMocksAllowed('the Slack member directory');
+		const fakeData = await import('./mocks/slackMembers');
+		return fakeData.createSlackMembers();
+	}
+
+	const client = new WebClient(token);
+	const members: SlackMember[] = [];
+	let cursor: string | undefined;
+
+	do {
+		const response = await client.users.list({ limit: 200, cursor });
+
+		for (const member of response.members ?? []) {
+			if (!member.id || !eligible(member)) continue;
+
+			const handle = member.name ?? '';
+			const realName = member.profile?.real_name || member.real_name || '';
+			const displayName = member.profile?.display_name || realName || handle;
+
+			members.push({
+				id: member.id,
+				name: realName || handle,
+				displayName,
+				handle,
+				image: member.profile?.image_192 ?? null,
+			});
+		}
+
+		cursor = response.response_metadata?.next_cursor || undefined;
+	} while (cursor);
+
+	return members.sort((a, b) => a.displayName.localeCompare(b.displayName));
+}
+
+/**
  * Cached for twelve hours and tagged, so `/_cache?tag=slack-members` picks up a
  * new hire without waiting. `users.list` is rate limited and pages the whole
  * workspace, which is far too much work to repeat on every render of a screen
  * two or three maintainers have open at once.
  */
 export const getSlackMembers = unstable_cache(
-	async (): Promise<SlackMember[]> => {
-		const token = process.env.SLACK_BOT_TOKEN;
-
-		if (!token) {
-			assertMocksAllowed('the Slack member directory');
-			const fakeData = await import('./mocks/slackMembers');
-			return fakeData.createSlackMembers();
-		}
-
-		const client = new WebClient(token);
-		const members: SlackMember[] = [];
-		let cursor: string | undefined;
-
-		do {
-			const response = await client.users.list({ limit: 200, cursor });
-
-			for (const member of response.members ?? []) {
-				if (!member.id || !eligible(member)) continue;
-
-				const handle = member.name ?? '';
-				const realName = member.profile?.real_name || member.real_name || '';
-				const displayName = member.profile?.display_name || realName || handle;
-
-				members.push({
-					id: member.id,
-					name: realName || handle,
-					displayName,
-					handle,
-					image: member.profile?.image_192 ?? null,
-				});
-			}
-
-			cursor = response.response_metadata?.next_cursor || undefined;
-		} while (cursor);
-
-		return members.sort((a, b) => a.displayName.localeCompare(b.displayName));
-	},
+	fetchSlackMembers,
 	['slack-members'],
-	{ revalidate: 43200, tags: ['slack-members'] },
+	{
+		revalidate: 43200,
+		tags: ['slack-members'],
+	},
 );

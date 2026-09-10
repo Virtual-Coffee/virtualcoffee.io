@@ -149,7 +149,7 @@ export const DEFAULT_ROLE = 'user';
 /**
  * Better Auth stores roles as a comma-separated string in `user.role` and
  * authorises if *any* of them grants the permission (`hasPermission` in
- * `better-auth/plugins/admin` splits on ","). These two helpers are the only
+ * `better-auth/plugins/admin` splits on ","). These helpers are the only
  * places that encoding is known about.
  */
 export function parseRoles(role: string | null | undefined): RoleName[] {
@@ -163,4 +163,18 @@ export function parseRoles(role: string | null | undefined): RoleName[] {
 export function serialiseRoles(names: readonly RoleName[]): string {
 	const unique = [...new Set(names)].filter((name) => name !== DEFAULT_ROLE);
 	return unique.length > 0 ? unique.join(',') : DEFAULT_ROLE;
+}
+
+/**
+ * The roles that actually grant something.
+ *
+ * `serialiseRoles` writes the default role for an empty selection, but
+ * `parseRoles` reads it straight back as a role like any other — so
+ * `parseRoles('user')` is `['user']`, not `[]`, and "holds nothing" is not
+ * `parseRoles(...).length === 0`. Ask through here instead: `user` is
+ * `ac.newRole({})` and grants nothing, so it never belongs in a list of what
+ * someone can do.
+ */
+export function grantedRoles(role: string | null | undefined): RoleName[] {
+	return parseRoles(role).filter((name) => name !== DEFAULT_ROLE);
 }
