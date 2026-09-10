@@ -1,4 +1,12 @@
-import { db, applicationEvent, membershipApplication } from '../src/db';
+import {
+	db,
+	applicationEvent,
+	invite,
+	membershipApplication,
+	volunteer,
+	volunteerInviteLedger,
+} from '../src/db';
+import type { InviteStatus } from '../src/db/schema';
 
 /**
  * Seed the local development database.
@@ -237,6 +245,174 @@ function daysAgo(days: number) {
 	return new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 }
 
+/**
+ * The Slack member id the dev bypass acts as by default, so
+ * `ADMIN_DEV_BYPASS_ROLES=volunteer` lands on a working /invites with no
+ * further setup. Keep in step with `devBypassSession()` in
+ * `src/lib/adminAccess.ts`.
+ */
+const DEV_BYPASS_SLACK_ID = 'U_DEV_BYPASS';
+
+/**
+ * One Invite per state, including the two nobody can reach by hand: `expired`
+ * needs a ninety-day-old Invite and `cancelled` needs a Volunteer to have
+ * changed their mind. Without seeds those two renderings only ever get looked
+ * at in production.
+ */
+const INVITE_SEEDS: {
+	inviteeName: string;
+	inviteeEmail: string;
+	status: InviteStatus;
+	daysAgo: number;
+}[] = [
+	{
+		inviteeName: 'Rosa Delgado',
+		inviteeEmail: 'rosa@example.com',
+		status: 'pending',
+		daysAgo: 2,
+	},
+	{
+		inviteeName: 'Priya Raman',
+		inviteeEmail: 'priya@example.com',
+		status: 'accepted',
+		daysAgo: 4,
+	},
+	{
+		inviteeName: 'Ade Balogun',
+		inviteeEmail: 'ade@example.com',
+		status: 'completed',
+		daysAgo: 40,
+	},
+	{
+		inviteeName: 'Sam Whitfield',
+		inviteeEmail: 'sam@example.com',
+		status: 'expired',
+		daysAgo: 120,
+	},
+	{
+		inviteeName: 'Tyop Adress',
+		inviteeEmail: 'typo@exmaple.com',
+		status: 'cancelled',
+		daysAgo: 6,
+	},
+];
+
+/**
+ * Volunteers, their allowance history, and the Invites they have sent.
+ *
+ * The balance is not stored anywhere — it is the sum of the ledger — so seeding
+ * it means seeding the movements that produce it. This adds up to 4 for the dev
+ * bypass Volunteer: six imported, one accrued, five spent, two given back.
+ */
+async function seedVolunteers(database: ReturnType<typeof db>) {
+	const period = new Date().toISOString().slice(0, 7);
+
+	await database.insert(volunteer).values([
+		{
+			slackUserId: DEV_BYPASS_SLACK_ID,
+			slackDisplayName: 'Local dev',
+			slackHandle: 'localdev',
+			roleLabels: 'VC Host, Coffee Table Group Leader',
+		},
+		{
+			slackUserId: 'U_DEV_FORMER',
+			slackDisplayName: 'Former Volunteer',
+			slackHandle: 'former',
+			roleLabels: 'Notetaker',
+			// Stepped back, so the daily job accrues nothing for them.
+			deactivatedAt: daysAgo(60),
+		},
+	]);
+
+	await database.insert(volunteerInviteLedger).values([
+		{
+			slackUserId: DEV_BYPASS_SLACK_ID,
+			delta: 6,
+			reason: 'imported',
+			body: 'Balance carried over from Airtable',
+			createdAt: daysAgo(200),
+		},
+		{
+			slackUserId: DEV_BYPASS_SLACK_ID,
+			delta: 1,
+			reason: 'monthly_accrual',
+			periodKey: period,
+		},
+		{
+			slackUserId: 'U_DEV_FORMER',
+			delta: 2,
+			reason: 'imported',
+			body: 'Balance carried over from Airtable',
+			createdAt: daysAgo(200),
+		},
+		{
+			slackUserId: 'U_DEV_FORMER',
+			delta: -2,
+			reason: 'admin_revoke',
+			body: 'Stepped back from volunteering',
+			createdAt: daysAgo(60),
+		},
+	]);
+
+	const invitesByEmail = new Map<string, string>();
+
+	for (const seed of INVITE_SEEDS) {
+		const sentAt = daysAgo(seed.daysAgo);
+		const live = seed.status === 'pending';
+
+		const [row] = await database
+			.insert(invite)
+			.values({
+				inviterSlackUserId: DEV_BYPASS_SLACK_ID,
+				inviterName: 'Local dev',
+				inviteeName: seed.inviteeName,
+				inviteeEmail: seed.inviteeEmail,
+				status: seed.status,
+				// Only a pending Invite still has a usable Claim Link. The others
+				// have had theirs cleared by redemption, cancellation or the sweep.
+				tokenHash: live ? `seed-${seed.inviteeEmail}` : null,
+				tokenExpiresAt: live ? daysAgo(seed.daysAgo - 90) : null,
+				claimedAt:
+					seed.status === 'accepted' || seed.status === 'completed'
+						? daysAgo(seed.daysAgo - 1)
+						: null,
+				createdAt: sentAt,
+			})
+			.returning({ id: invite.id });
+
+		// Only an Invite that was actually claimed has an application to link to.
+		// Mapping a cancelled or expired one would produce a chain that cannot
+		// happen: the application exists, so the Invite was never unclaimed.
+		if (seed.status === 'accepted' || seed.status === 'completed') {
+			invitesByEmail.set(seed.inviteeEmail, row.id);
+		}
+
+		await database.insert(volunteerInviteLedger).values({
+			slackUserId: DEV_BYPASS_SLACK_ID,
+			delta: -1,
+			reason: 'spend',
+			inviteId: row.id,
+			body: `Invited ${seed.inviteeName} <${seed.inviteeEmail}>`,
+			createdAt: sentAt,
+		});
+
+		// An Invite that will never be claimed gives the allowance back.
+		if (seed.status === 'expired' || seed.status === 'cancelled') {
+			await database.insert(volunteerInviteLedger).values({
+				slackUserId: DEV_BYPASS_SLACK_ID,
+				delta: 1,
+				reason:
+					seed.status === 'expired' ? 'refund_expired' : 'refund_cancelled',
+				inviteId: row.id,
+				body: seed.status === 'expired' ? 'Expired unclaimed' : 'Cancelled',
+				createdAt: daysAgo(Math.max(seed.daysAgo - 90, 1)),
+			});
+		}
+	}
+
+	return invitesByEmail;
+}
+
 async function main() {
 	if (process.env.CONTEXT === 'production') {
 		throw new Error('Refusing to seed a production database.');
@@ -244,8 +420,16 @@ async function main() {
 
 	const database = db();
 
-	// Events cascade from applications, so one delete is enough.
+	// Events cascade from applications, so one delete is enough there. The
+	// ledger and the invites do not cascade — both foreign keys are ON DELETE
+	// SET NULL, which is right in production and would leave orphans here — so
+	// they are cleared explicitly, ledger first because it points at invites.
 	await database.delete(membershipApplication);
+	await database.delete(volunteerInviteLedger);
+	await database.delete(invite);
+	await database.delete(volunteer);
+
+	const invitesByEmail = await seedVolunteers(database);
 
 	for (const seed of SEEDS) {
 		const submittedAt = daysAgo(seed.daysAgo);
@@ -268,6 +452,10 @@ async function main() {
 				status: seed.status,
 				source: seed.source,
 				isPriority: seed.source === 'volunteer_invite',
+				// Links the two invited applications back to the Invite that produced
+				// them, so /admin/waitlist shows a real chain rather than an orphaned
+				// "Volunteer invite" badge.
+				inviteId: invitesByEmail.get(seed.email) ?? null,
 				referrer: seed.referrer ?? null,
 				howDidYouHear: seed.howDidYouHear,
 				journey: seed.journey,
@@ -314,7 +502,9 @@ async function main() {
 		}
 	}
 
-	console.log(`Seeded ${SEEDS.length} membership applications.`);
+	console.log(
+		`Seeded ${SEEDS.length} membership applications, 2 volunteers and ${INVITE_SEEDS.length} invites.`,
+	);
 	process.exit(0);
 }
 
