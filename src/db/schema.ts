@@ -225,10 +225,22 @@ export const applicationSource = pgEnum('application_source', [
 	'volunteer_invite',
 ]);
 
+/**
+ * The life of an Invite. `pending` is sent but unclaimed; `accepted` means the
+ * invitee filled in the application; `completed` means they became a Member.
+ *
+ * `expired` and `cancelled` both mean the Invite will never be claimed, and
+ * both refund the Volunteer's allowance — but they are kept apart because only
+ * one of them is anybody's fault. `cancelled` is a Volunteer taking back an
+ * Invite they sent to the wrong address; `expired` is the ninety-day sweep
+ * reclaiming one nobody ever clicked.
+ */
 export const inviteStatus = pgEnum('invite_status', [
 	'pending',
 	'accepted',
 	'completed',
+	'expired',
+	'cancelled',
 ]);
 
 export const applicationEventType = pgEnum('application_event_type', [
@@ -255,14 +267,178 @@ export const invite = pgTable('invite', {
 		onDelete: 'set null',
 	}),
 	inviterName: text('inviter_name'),
+	/**
+	 * The identifier the allowance is actually keyed on, and the reason this
+	 * column exists next to `inviter_user_id` rather than instead of it.
+	 *
+	 * Spend has to be counted against the same key the ledger credits, or a
+	 * Volunteer whose `user` row is replaced — the foreign key above is
+	 * `ON DELETE SET NULL` — silently loses their history and is handed their
+	 * invites back. Imported rows have neither identifier and keep only
+	 * `inviter_name`; the reviewed mapping file fills this in where it can.
+	 */
+	inviterSlackUserId: text('inviter_slack_user_id'),
 	inviteeName: text('invitee_name'),
 	inviteeEmail: text('invitee_email'),
 	status: inviteStatus('status').notNull().default('pending'),
+	/**
+	 * The Claim Link, stored the way `invite_token` stores its own: hash only,
+	 * so a database leak does not hand out working invites. Deliberately not
+	 * reusing `invite_token` — that table's `application_id` is NOT NULL, and a
+	 * Claim Link points at an Invite precisely because the application does not
+	 * exist yet.
+	 */
+	tokenHash: text('token_hash').unique(),
+	tokenExpiresAt: timestamp('token_expires_at', { withTimezone: true }),
+	claimedAt: timestamp('claimed_at', { withTimezone: true }),
 	airtableRecordId: text('airtable_record_id').unique(),
 	createdAt: timestamp('created_at', { withTimezone: true })
 		.notNull()
 		.defaultNow(),
 });
+
+/* -------------------------------------------------------------------------- */
+/* Volunteers and Invite Allowance                                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Why a movement was recorded. Every row in the ledger is one of these, and the
+ * reason is what makes the audit trail answer "where did my invites go?".
+ *
+ * `monthly_accrual` is the only one written by a machine on a schedule, and the
+ * only one that carries a `period_key`. `imported` is the single net row each
+ * Volunteer arrives with from Airtable. The two refunds are kept distinct from
+ * each other for the same reason the two Invite statuses are.
+ */
+export const volunteerLedgerReason = pgEnum('volunteer_ledger_reason', [
+	'monthly_accrual',
+	'imported',
+	'admin_grant',
+	'admin_revoke',
+	'spend',
+	'refund_cancelled',
+	'refund_expired',
+]);
+
+/**
+ * Someone trusted to give out Invites.
+ *
+ * Keyed on the Slack member id for the same reason `pending_grant` is (see
+ * docs/adr/0009): a Volunteer can be designated — and carry an imported balance
+ * — before they have ever signed in, and the Slack member id is the only
+ * identifier that exists at that point and still matches at sign-in.
+ *
+ * This table is deliberately mutable while `volunteer_invite_ledger` is
+ * append-only. Identity and accounting are different concerns: a display name
+ * gets re-snapshotted, a `user_id` is backfilled at first sign-in, someone is
+ * deactivated and later comes back — none of which should be expressible as a
+ * movement of invites.
+ *
+ * Whether a Volunteer may *spend* is not stored here at all: that is the
+ * `volunteer` role in `user.role`, and nothing else.
+ */
+export const volunteer = pgTable('volunteer', {
+	id: uuid('id').primaryKey().$defaultFn(newId),
+	slackUserId: text('slack_user_id').notNull().unique(),
+	/**
+	 * Snapshotted at designation, not looked up on render — the same trade
+	 * `pending_grant` makes, and for the same reasons: the roster has to be
+	 * readable when Slack is unreachable and on a clone that only has mocks, and
+	 * someone who has left the workspace would otherwise render as a bare
+	 * `U0123ABCD`. A later rename goes unnoticed until someone re-syncs.
+	 */
+	slackDisplayName: text('slack_display_name').notNull(),
+	slackHandle: text('slack_handle'),
+	/** Backfilled by `claimPendingGrant()` the first time they sign in. */
+	userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
+	/**
+	 * The community roles Airtable tracked — "VC Host", "Room Leader", "Lunch &
+	 * Learn Team" and a dozen more. Descriptive only: they grant nothing and no
+	 * authorization check ever reads them. Kept because they are how a
+	 * coordinator knows who to ask for what, and because they would otherwise be
+	 * lost when the Airtable base is archived.
+	 */
+	roleLabels: text('role_labels'),
+	/**
+	 * Set when the `volunteer` role is revoked, cleared when it is granted again.
+	 * The cron accrues only for rows where this is null, so someone who has
+	 * stepped back does not quietly bank an invite every month for years and
+	 * return holding a supply nobody reviewed.
+	 */
+	deactivatedAt: timestamp('deactivated_at', { withTimezone: true }),
+	/** Set by the one-off import; lets it be re-run idempotently. */
+	airtableRecordId: text('airtable_record_id').unique(),
+	createdAt: timestamp('created_at', { withTimezone: true })
+		.notNull()
+		.defaultNow(),
+});
+
+/**
+ * Every movement of a Volunteer's Invite Allowance. Append-only: nothing here is
+ * ever updated or deleted, and the balance is `SUM(delta)`.
+ *
+ * A stored integer that went up and down would be smaller and faster, and would
+ * also be unable to answer the only question anyone actually asks — "why do I
+ * have four?". See docs/adr/0011.
+ *
+ * The two unique indexes are where the correctness lives. Neither double-accrual
+ * nor double-refund is prevented by careful code; both are unrepresentable.
+ */
+export const volunteerInviteLedger = pgTable(
+	'volunteer_invite_ledger',
+	{
+		id: uuid('id').primaryKey().$defaultFn(newId),
+		/** Matches `volunteer.slack_user_id`; see the note on `invite.inviter_slack_user_id`. */
+		slackUserId: text('slack_user_id').notNull(),
+		/** Positive credits, negative spends. Never zero. */
+		delta: integer('delta').notNull(),
+		reason: volunteerLedgerReason('reason').notNull(),
+		/**
+		 * `YYYY-MM`, and only ever set on `monthly_accrual`. It exists solely so
+		 * the unique index below can exist: the accrual job runs daily and is
+		 * retried on failure, so "has this month already been granted?" has to be
+		 * a question the database answers, not one the job asks and then races.
+		 */
+		periodKey: text('period_key'),
+		/** Set on `spend` and both refunds — the Invite the movement is about. */
+		inviteId: uuid('invite_id').references(() => invite.id, {
+			onDelete: 'set null',
+		}),
+		/** Null for machine-written rows (accrual, expiry, import). */
+		actorUserId: text('actor_user_id').references(() => user.id, {
+			onDelete: 'set null',
+		}),
+		body: text('body'),
+		createdAt: timestamp('created_at', { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+	},
+	(table) => [
+		/** One accrual per Volunteer per month, however many times the job runs. */
+		uniqueIndex('volunteer_invite_ledger_accrual_period_idx')
+			.on(table.slackUserId, table.periodKey)
+			.where(sql`reason = 'monthly_accrual'`),
+		/**
+		 * An Invite is charged once and refunded at most once. Without this a
+		 * crash between the send and its compensation — or two clicks on Cancel —
+		 * hands out free invites.
+		 */
+		uniqueIndex('volunteer_invite_ledger_invite_reason_idx')
+			.on(table.inviteId, table.reason)
+			.where(sql`invite_id is not null`),
+		index('volunteer_invite_ledger_slack_user_id_idx').on(table.slackUserId),
+	],
+);
+
+export type Volunteer = typeof volunteer.$inferSelect;
+export type VolunteerLedgerReason =
+	(typeof volunteerLedgerReason.enumValues)[number];
+export type Invite = typeof invite.$inferSelect;
+export type InviteStatus = (typeof inviteStatus.enumValues)[number];
+
+/* -------------------------------------------------------------------------- */
+/* Membership pipeline, continued                                             */
+/* -------------------------------------------------------------------------- */
 
 export const membershipApplication = pgTable(
 	'membership_application',

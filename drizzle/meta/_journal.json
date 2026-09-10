@@ -15,6 +15,13 @@
       "when": 1789016736979,
       "tag": "0001_pending-grants-and-slack-user-id",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789022622013,
+      "tag": "0002_volunteer-invites",
+      "breakpoints": true
     }
   ]
 }
