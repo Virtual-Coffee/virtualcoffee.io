@@ -562,7 +562,7 @@ export const applicationEvent = pgTable(
 export const inviteToken = pgTable(
 	'invite_token',
 	{
-		id: uuid('id').primaryKey().defaultRandom(),
+		id: uuid('id').primaryKey().$defaultFn(newId),
 		applicationId: uuid('application_id')
 			.notNull()
 			.references(() => membershipApplication.id, { onDelete: 'cascade' }),
