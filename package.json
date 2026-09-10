@@ -99,5 +99,10 @@
 		"tsx": "^4.23.13",
 		"typescript": "npm:@typescript/typescript6@^6.0.2"
 	},
-	"overrides": {}
+	"overrides": {},
+	"intent": {
+		"skills": [
+			"*"
+		]
+	}
 }
