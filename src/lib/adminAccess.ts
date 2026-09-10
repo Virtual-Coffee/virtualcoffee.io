@@ -11,17 +11,20 @@ import {
 } from '@/lib/permissions';
 
 /**
- * Deploy previews must never serve /admin.
+ * Whether /admin should render at all on this deploy.
  *
  * Netlify gives each deploy preview its own database branch seeded with a copy
  * of production data, and preview URLs are public and unguessable-but-shareable.
- * Combining those with a relaxed auth check would put real applicants' email
- * addresses and personal writing on a public URL. Previews therefore 404 rather
- * than render, and the UI is reviewed locally against seeded data instead.
+ * `db:sanitize-preview` (see netlify.toml, docs/adr/0007) scrubs that branch to
+ * fake data as part of the build and fails the build loudly if it can't — so a
+ * preview that published at all is one that was actually sanitized. Previews
+ * therefore only need `PREVIEW_ADMIN_BYPASS` to unblock /admin; production and
+ * branch deploys still 404 unconditionally.
  */
 export function adminRoutesEnabled(): boolean {
 	const context = process.env.CONTEXT;
-	return context !== 'deploy-preview' && context !== 'branch-deploy';
+	if (context !== 'deploy-preview' && context !== 'branch-deploy') return true;
+	return process.env.PREVIEW_ADMIN_BYPASS === 'true';
 }
 
 /**
@@ -80,9 +83,56 @@ function devBypassSession(): Session | null {
 	} as unknown as Session;
 }
 
+/**
+ * A stand-in admin session for reviewing /admin on a sanitized deploy preview.
+ *
+ * The mirror image of `devBypassSession()`: it only fires in a *deployed*
+ * preview context, never locally or in production. Anyone with the preview
+ * link gets this session, so it only exists because `db:sanitize-preview`
+ * has already scrubbed the branch by the time the deploy is live — see
+ * `adminRoutesEnabled()` above and docs/adr/0007. `adminRoutesEnabled()`
+ * already gates the route on the same two conditions, but this checks them
+ * again independently rather than trusting the caller.
+ */
+const PREVIEW_BYPASS_CONTEXTS = new Set(['deploy-preview', 'branch-deploy']);
+
+function previewBypassSession(): Session | null {
+	const enabled =
+		process.env.PREVIEW_ADMIN_BYPASS === 'true' &&
+		PREVIEW_BYPASS_CONTEXTS.has(process.env.CONTEXT ?? '');
+
+	if (!enabled) return null;
+
+	const role = process.env.PREVIEW_ADMIN_BYPASS_ROLES?.trim() || 'admin';
+
+	return {
+		session: {
+			id: 'preview-bypass',
+			token: 'preview-bypass',
+			userId: 'preview-bypass',
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+		},
+		user: {
+			id: 'preview-bypass',
+			name: 'Preview reviewer',
+			email: 'preview-bypass@preview.invalid',
+			emailVerified: true,
+			image: null,
+			role,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		},
+	} as unknown as Session;
+}
+
 export async function getSession(): Promise<Session | null> {
-	const bypass = devBypassSession();
-	if (bypass) return bypass;
+	const devBypass = devBypassSession();
+	if (devBypass) return devBypass;
+
+	const previewBypass = previewBypassSession();
+	if (previewBypass) return previewBypass;
 
 	return auth.api.getSession({ headers: await headers() });
 }
