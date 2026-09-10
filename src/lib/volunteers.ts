@@ -26,15 +26,47 @@ export type VolunteerRow = {
 };
 
 /**
- * Every Volunteer with their balance, in one query.
+ * Every Volunteer with their balance and how many Invites they have sent, in
+ * one query.
  *
- * The balance is a sum over the ledger, so a roster of ninety would otherwise
- * be ninety extra round trips. Both aggregates are correlated subqueries rather
- * than joins: joining two one-to-many tables at once multiplies the rows, and
- * the resulting counts are silently wrong rather than obviously broken.
+ * The two aggregates are **pre-aggregated subqueries joined on**, not
+ * correlated subqueries written inline. That is not a style preference:
+ *
+ *   - A correlated subquery has to be spelled in raw `sql`, and drizzle renders
+ *     an interpolated column *unqualified*. `volunteer` and
+ *     `volunteer_invite_ledger` both have a `slack_user_id`, so
+ *     `where ${ledger.slackUserId} = ${volunteer.slackUserId}` becomes
+ *     `where "slack_user_id" = "slack_user_id"` — the inner column shadows the
+ *     outer one, the predicate is always true, and every Volunteer is handed
+ *     the sum of the entire ledger. It reads correctly and is silently wrong.
+ *   - Joining the *tables* directly would be wrong a different way: two
+ *     one-to-many joins at once multiply the rows and inflate both aggregates.
+ *
+ * Grouping first fixes both. Each subquery is already one row per Slack member,
+ * so the joins cannot fan out, and drizzle aliases them so nothing is shadowed.
  */
 export async function listVolunteers(): Promise<VolunteerRow[]> {
-	const rows = await db()
+	const database = db();
+
+	const balances = database
+		.select({
+			slackUserId: volunteerInviteLedger.slackUserId,
+			total: sql<string>`sum(${volunteerInviteLedger.delta})`.as('total'),
+		})
+		.from(volunteerInviteLedger)
+		.groupBy(volunteerInviteLedger.slackUserId)
+		.as('balances');
+
+	const sent = database
+		.select({
+			slackUserId: invite.inviterSlackUserId,
+			total: sql<string>`count(*)`.as('sent_total'),
+		})
+		.from(invite)
+		.groupBy(invite.inviterSlackUserId)
+		.as('sent');
+
+	const rows = await database
 		.select({
 			id: volunteer.id,
 			slackUserId: volunteer.slackUserId,
@@ -44,22 +76,18 @@ export async function listVolunteers(): Promise<VolunteerRow[]> {
 			deactivatedAt: volunteer.deactivatedAt,
 			userId: volunteer.userId,
 			createdAt: volunteer.createdAt,
-			balance: sql<string | null>`(
-				select sum(${volunteerInviteLedger.delta})
-				from ${volunteerInviteLedger}
-				where ${volunteerInviteLedger.slackUserId} = ${volunteer.slackUserId}
-			)`,
-			invitesSent: sql<string | null>`(
-				select count(*)
-				from ${invite}
-				where ${invite.inviterSlackUserId} = ${volunteer.slackUserId}
-			)`,
+			balance: balances.total,
+			invitesSent: sent.total,
 		})
 		.from(volunteer)
+		.leftJoin(balances, eq(balances.slackUserId, volunteer.slackUserId))
+		.leftJoin(sent, eq(sent.slackUserId, volunteer.slackUserId))
 		.orderBy(volunteer.slackDisplayName);
 
 	return rows.map((row) => ({
 		...row,
+		// Both are null for a Volunteer with no rows on that side, and `sum()` is
+		// numeric, which the driver hands back as a string.
 		balance: Number(row.balance ?? 0),
 		invitesSent: Number(row.invitesSent ?? 0),
 	}));

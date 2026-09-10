@@ -170,23 +170,36 @@ async function notify(slackUserIds: string[]): Promise<{
 					name: volunteer.slackDisplayName,
 					email: volunteer.email,
 					accountEmail: user.email,
-					balance: sql<string | null>`(
-						select sum(${volunteerInviteLedger.delta})
-						from ${volunteerInviteLedger}
-						where ${volunteerInviteLedger.slackUserId} = ${volunteer.slackUserId}
-					)`,
 				})
 				.from(volunteer)
 				.leftJoin(user, eq(volunteer.userId, user.id))
 				.where(eq(volunteer.slackUserId, slackUserId))
 				.limit(1);
 
-			const address = row?.email ?? row?.accountEmail;
+			/**
+			 * A separate query rather than a subquery beside the row above.
+			 *
+			 * An inline correlated subquery has to be raw `sql`, and drizzle renders
+			 * an interpolated column unqualified — `volunteer` and
+			 * `volunteer_invite_ledger` share a `slack_user_id`, so the inner one
+			 * shadows the outer, the predicate is always true, and every Volunteer
+			 * would be emailed the sum of the whole ledger. This runs once per
+			 * Volunteer who actually accrued, which is a handful a month.
+			 */
+			const [totals] = await database
+				.select({
+					total: sql<string | null>`sum(${volunteerInviteLedger.delta})`,
+				})
+				.from(volunteerInviteLedger)
+				.where(eq(volunteerInviteLedger.slackUserId, slackUserId));
+
+			if (!row) continue;
+			const address = row.email ?? row.accountEmail;
 			if (!address) continue;
 
 			const template = volunteerAccrualEmail(
-				row!.name,
-				Number(row.balance ?? 0),
+				row.name,
+				Number(totals?.total ?? 0),
 				`${siteUrl}/invites`,
 			);
 
