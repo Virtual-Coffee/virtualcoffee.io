@@ -105,3 +105,10 @@ A named set of Permissions. **Admin** holds every Section. The narrower roles
 each hold one, so a volunteer can help with a single area without being given
 the membership queue or CoC Reports.
 _Avoid_: Permission level, group, tier
+
+**Pending Grant**:
+A Role assigned to a Slack member before that person has ever signed in to the
+site. Applied the first time they do, after which the Grant is _claimed_ and
+their Role is authoritative. Unrelated to an **Invite**, which is a volunteer's
+referral into the Waitlist.
+_Avoid_: Invite, pre-provision, reservation
