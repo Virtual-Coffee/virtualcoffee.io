@@ -12,12 +12,9 @@ import {
 } from '@/lib/submissions';
 import { formatDateTime } from '../../../presentation';
 import { SubmissionNoteComposer } from '../noteComposer';
-import {
-	SUBMISSION_EVENT_LABELS,
-	SubmissionStatusBadge,
-	submissionStatusLabel,
-} from '../presentation';
+import { SubmissionStatusBadge } from '../presentation';
 import { StatusControl } from '../statusControl';
+import { HistoryTimeline } from './historyTimeline';
 
 export const dynamic = 'force-dynamic';
 
@@ -131,35 +128,7 @@ export default async function SubmissionDetailPage({
 
 				<div className="col-lg-5">
 					<h2 className="h6">History</h2>
-					<ul className="list-group list-group-flush">
-						{history.map((entry) => (
-							<li className="list-group-item px-0" key={entry.id}>
-								<div className="d-flex flex-wrap gap-2 align-items-baseline">
-									<span className="badge text-bg-light border">
-										{SUBMISSION_EVENT_LABELS[entry.type] ?? entry.type}
-									</span>
-									{entry.fromStatus && entry.toStatus && (
-										<span className="small text-body-secondary">
-											{submissionStatusLabel(entry.fromStatus)} →{' '}
-											{submissionStatusLabel(entry.toStatus)}
-										</span>
-									)}
-									<span className="ms-auto small text-body-secondary">
-										{formatDateTime(entry.createdAt)}
-										{entry.actorName ? ` · ${entry.actorName}` : ''}
-									</span>
-								</div>
-								{entry.body && (
-									<p
-										className="small mb-0 mt-1"
-										style={{ whiteSpace: 'pre-wrap' }}
-									>
-										{entry.body}
-									</p>
-								)}
-							</li>
-						))}
-					</ul>
+					<HistoryTimeline history={history} />
 
 					{canManage && (
 						<SubmissionNoteComposer kind={kind} id={submission.id} />

@@ -11,12 +11,12 @@ import {
 } from '@/lib/email/templates';
 import { emailConfigured } from '@/lib/email/transport';
 import { ActionPanel } from './actionPanel';
+import { HistoryTimeline } from './historyTimeline';
 import { NoteComposer } from './noteComposer';
 import {
 	SourceBadge,
 	StatusBadge,
 	formatDate,
-	formatDateTime,
 	statusLabel,
 } from '../../presentation';
 
@@ -24,21 +24,6 @@ export const dynamic = 'force-dynamic';
 
 export const metadata = {
 	robots: { index: false, follow: false },
-};
-
-const EVENT_LABELS: Record<string, string> = {
-	submitted: 'Application submitted',
-	imported: 'Imported from Airtable',
-	waitlisted: 'Added to the waitlist',
-	coffee_invited: 'Sent a Coffee invite',
-	attendance_recorded: 'Recorded attendance',
-	approved: 'Approved membership',
-	declined: 'Declined',
-	withdrawn: 'Marked withdrawn',
-	lapsed: 'Marked lapsed',
-	note: 'added a note',
-	email_sent: 'Email sent',
-	email_failed: 'Email failed',
 };
 
 export default async function ApplicationDetailPage({
@@ -171,36 +156,9 @@ export default async function ApplicationDetailPage({
 					<section>
 						<h2 className="h6">History</h2>
 						<NoteComposer applicationId={application.id} />
-						<ol className="list-unstyled mt-3 mb-0">
-							{history.map((entry) => (
-								<li key={entry.id} className="border-bottom py-2">
-									<div className="small">
-										{entry.type === 'note' ? (
-											<>
-												<strong>{entry.actorName ?? 'Someone'}</strong> added a
-												note: <em>&ldquo;{entry.body}&rdquo;</em>
-											</>
-										) : (
-											<>
-												{entry.actorName ? (
-													<strong>{entry.actorName} </strong>
-												) : null}
-												{EVENT_LABELS[entry.type] ?? entry.type}
-												{entry.body ? (
-													<span className="text-body-secondary">
-														{' '}
-														— {entry.body}
-													</span>
-												) : null}
-											</>
-										)}
-									</div>
-									<div className="text-body-secondary small">
-										{formatDateTime(entry.createdAt)}
-									</div>
-								</li>
-							))}
-						</ol>
+						<div className="mt-3">
+							<HistoryTimeline history={history} />
+						</div>
 					</section>
 				</div>
 			</div>

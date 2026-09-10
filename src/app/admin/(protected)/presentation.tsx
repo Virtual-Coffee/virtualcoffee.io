@@ -40,6 +40,26 @@ export function statusLabel(status: ApplicationStatus) {
 	return STATUS_LABELS[status];
 }
 
+/**
+ * How an application's event log reads on the detail screen. Kept here beside
+ * the status labels, and symmetric with `SUBMISSION_EVENT_LABELS` in the
+ * submissions section's own presentation module.
+ */
+export const EVENT_LABELS: Record<string, string> = {
+	submitted: 'Application submitted',
+	imported: 'Imported from Airtable',
+	waitlisted: 'Added to the waitlist',
+	coffee_invited: 'Sent a Coffee invite',
+	attendance_recorded: 'Recorded attendance',
+	approved: 'Approved membership',
+	declined: 'Declined',
+	withdrawn: 'Marked withdrawn',
+	lapsed: 'Marked lapsed',
+	note: 'added a note',
+	email_sent: 'Email sent',
+	email_failed: 'Email failed',
+};
+
 const DATE_FORMAT = new Intl.DateTimeFormat('en-GB', {
 	day: 'numeric',
 	month: 'short',

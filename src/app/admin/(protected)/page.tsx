@@ -7,31 +7,13 @@ import {
 	SUBMISSION_KINDS,
 	type SubmissionKind,
 } from '@/lib/submissions';
-import { formatDateTime } from './presentation';
+import { ActivityTable } from './activityTable';
 
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
 	title: 'Admin',
 	robots: { index: false, follow: false },
-};
-
-const EVENT_LABELS: Record<string, string> = {
-	submitted: 'Submitted',
-	waitlisted: 'Waitlisted',
-	coffee_invited: 'Coffee invited',
-	attendance_recorded: 'Attendance recorded',
-	approved: 'Approved',
-	declined: 'Declined',
-	withdrawn: 'Withdrawn',
-	lapsed: 'Lapsed',
-	note: 'Note',
-	email_sent: 'Email sent',
-	email_failed: 'Email failed',
-	imported: 'Imported',
-	status_changed: 'Status changed',
-	notification_sent: 'Notified',
-	notification_failed: 'Notification failed',
 };
 
 /**
@@ -117,35 +99,7 @@ export default async function AdminDashboardPage() {
 			)}
 
 			<h2 className="h5">Recent activity</h2>
-			{activity.length === 0 ? (
-				<p className="text-body-secondary">Nothing has happened yet.</p>
-			) : (
-				<ul className="list-group">
-					{activity.map((entry) => (
-						<li className="list-group-item" key={entry.key}>
-							<div className="d-flex flex-wrap gap-2 align-items-baseline">
-								<span className="badge text-bg-light border">
-									{EVENT_LABELS[entry.type] ?? entry.type}
-								</span>
-								{entry.href ? (
-									<Link href={entry.href}>{entry.subject}</Link>
-								) : (
-									<span>{entry.subject}</span>
-								)}
-								<span className="ms-auto small text-body-secondary">
-									{formatDateTime(entry.createdAt)}
-									{entry.actorName ? ` · ${entry.actorName}` : ''}
-								</span>
-							</div>
-							{entry.body && (
-								<p className="small text-body-secondary mb-0 mt-1">
-									{entry.body}
-								</p>
-							)}
-						</li>
-					))}
-				</ul>
-			)}
+			<ActivityTable entries={activity} />
 		</div>
 	);
 }
