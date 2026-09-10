@@ -1,13 +1,14 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
 	createColumnHelper,
+	rowPaginationFeature,
 	rowSortingFeature,
 	tableFeatures,
 	useTable,
+	type PaginationState,
 	type SortingState,
 } from '@tanstack/react-table';
 
@@ -15,14 +16,22 @@ import type { MembershipApplication } from '@/db';
 import type { SortField } from '@/lib/applications';
 import { ApplicationDrawer } from './applicationDrawer';
 import { StatusBadge, SourceBadge, formatDate } from '../presentation';
+import { SortableHeader } from '../sortableHeader';
+import { TablePager } from '../tablePager';
+import { useTableUrlState } from '../tableUrlState';
 
 /**
- * Only sorting is registered, and even that is manual: the server does the
- * work. Registering the client-side sorted/paginated row models would quietly
- * re-sort the 50 rows on screen and present it as if the whole 2,547 had been
- * ordered.
+ * Sorting and pagination are registered, but neither row model is: the server
+ * does that work and the table is told so with `manualSorting` /
+ * `manualPagination` below. Adding `createSortedRowModel()` or
+ * `createPaginatedRowModel()` here would quietly re-sort and re-slice the 50
+ * rows on screen and present the result as if the whole 2,547 had been ordered.
+ *
+ * The features are still registered, because that is what installs
+ * `getPageCount()`, `getCanNextPage()` and the sorting handlers this table
+ * renders its header and footer from.
  */
-const features = tableFeatures({ rowSortingFeature });
+const features = tableFeatures({ rowSortingFeature, rowPaginationFeature });
 
 const helper = createColumnHelper<typeof features, MembershipApplication>();
 
@@ -91,22 +100,7 @@ export function ApplicationsTable({
 	sort,
 	direction,
 }: Props) {
-	const router = useRouter();
-	const pathname = usePathname();
-	const searchParams = useSearchParams();
 	const [openId, setOpenId] = useState<string | null>(null);
-
-	const push = useCallback(
-		(changes: Record<string, string | null>) => {
-			const next = new URLSearchParams(searchParams.toString());
-			for (const [key, value] of Object.entries(changes)) {
-				if (value === null) next.delete(key);
-				else next.set(key, value);
-			}
-			router.push(`${pathname}?${next.toString()}`);
-		},
-		[pathname, router, searchParams],
-	);
 
 	// The table's model inputs have to keep a stable identity between renders —
 	// a fresh array here on every render is not compensated for by any of the
@@ -115,32 +109,35 @@ export function ApplicationsTable({
 		() => [{ id: sort, desc: direction === 'desc' }],
 		[direction, sort],
 	);
+	const pagination = useMemo<PaginationState>(
+		() => ({ pageIndex: page, pageSize }),
+		[page, pageSize],
+	);
+
+	const { onSortingChange, onPaginationChange } = useTableUrlState({
+		sorting,
+		pagination,
+	});
 
 	const table = useTable({
 		features,
 		columns,
 		data: rows,
-		// Sorting is the only feature registered, and it is manual: the server
-		// returns the ordered page and the table trusts that order.
-		// Pagination and filtering are not table features here at all — they are
-		// URL state applied in SQL — so the table renders exactly the rows it is
-		// given and can never imply it ordered or counted the other 2,500.
+		// Both features are manual: the server returns one already-ordered page
+		// and the table trusts it. Neither flag asks anything of a backend and
+		// neither one sorts or slices — they only stop the client row models from
+		// re-processing rows that are already correct, which is what would let
+		// this table imply it had ordered or counted the other 2,500.
 		manualSorting: true,
-		// The URL is the owner of this slice, so both ends are spelled out: the
-		// state comes from the query string and every change goes back to it.
-		state: { sorting },
-		onSortingChange: (updater) => {
-			const next = typeof updater === 'function' ? updater(sorting) : updater;
-			const [first] = next;
-			if (!first) return;
-			// Any sort change resets to the first page. Omitting the client-side
-			// sorted row model also omits its automatic page reset, so this is on us.
-			push({
-				sort: first.id,
-				dir: first.desc ? 'desc' : 'asc',
-				page: null,
-			});
-		},
+		manualPagination: true,
+		// Without the total, "is there a next page" cannot be answered.
+		rowCount,
+		// The URL owns both slices, so nothing here may reset them behind its
+		// back; sort changes reset the page deliberately, in the hook.
+		autoResetPageIndex: false,
+		state: { sorting, pagination },
+		onSortingChange,
+		onPaginationChange,
 		// A column always carries a sort; there is no unsorted third state to
 		// cycle into, because the server has to be told *some* order. Without
 		// this the built-in toggle would cycle to "none" and push an empty sort.
@@ -155,10 +152,6 @@ export function ApplicationsTable({
 		() => rows.find((row) => row.id === openId) ?? null,
 		[openId, rows],
 	);
-
-	const totalPages = Math.max(1, Math.ceil(rowCount / pageSize));
-	const firstRow = rowCount === 0 ? 0 : page * pageSize + 1;
-	const lastRow = Math.min((page + 1) * pageSize, rowCount);
 
 	if (rows.length === 0) {
 		return (
@@ -179,28 +172,21 @@ export function ApplicationsTable({
 					<thead>
 						{table.getHeaderGroups().map((group) => (
 							<tr key={group.id}>
-								{group.headers.map((header) => {
-									const sorted = header.column.getIsSorted();
-									return (
-										<th key={header.id} scope="col" className="small">
-											{header.isPlaceholder ? null : header.column.getCanSort() ? (
-												<button
-													type="button"
-													className="btn btn-link btn-sm p-0 text-decoration-none text-body"
-													onClick={header.column.getToggleSortingHandler()}
-													aria-label={`Sort by ${String(header.column.columnDef.header)}`}
-												>
-													<table.FlexRender header={header} />
-													<span aria-hidden="true">
-														{sorted === 'desc' ? ' ↓' : sorted ? ' ↑' : ''}
-													</span>
-												</button>
-											) : (
+								{group.headers.map((header) => (
+									<th key={header.id} scope="col" className="small">
+										{header.isPlaceholder ? null : header.column.getCanSort() ? (
+											<SortableHeader
+												sorted={header.column.getIsSorted()}
+												label={String(header.column.columnDef.header)}
+												onClick={header.column.getToggleSortingHandler()}
+											>
 												<table.FlexRender header={header} />
-											)}
-										</th>
-									);
-								})}
+											</SortableHeader>
+										) : (
+											<table.FlexRender header={header} />
+										)}
+									</th>
+								))}
 							</tr>
 						))}
 					</thead>
@@ -264,32 +250,16 @@ export function ApplicationsTable({
 				))}
 			</ul>
 
-			<div className="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-3">
-				<p className="text-body-secondary small mb-0">
-					{firstRow}–{lastRow} of {rowCount}
-				</p>
-				<div className="btn-group">
-					<button
-						type="button"
-						className="btn btn-sm btn-outline-secondary"
-						disabled={page === 0}
-						onClick={() => push({ page: String(page) })}
-					>
-						Previous
-					</button>
-					<span className="btn btn-sm btn-outline-secondary disabled">
-						Page {page + 1} of {totalPages}
-					</span>
-					<button
-						type="button"
-						className="btn btn-sm btn-outline-secondary"
-						disabled={page + 1 >= totalPages}
-						onClick={() => push({ page: String(page + 2) })}
-					>
-						Next
-					</button>
-				</div>
-			</div>
+			<TablePager
+				pageIndex={pagination.pageIndex}
+				pageSize={pagination.pageSize}
+				pageCount={table.getPageCount()}
+				rowCount={rowCount}
+				canPrevious={table.getCanPreviousPage()}
+				canNext={table.getCanNextPage()}
+				onPrevious={() => table.previousPage()}
+				onNext={() => table.nextPage()}
+			/>
 
 			<ApplicationDrawer
 				application={openRow}
