@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { isId } from '@/db/ids';
-import { requirePermission } from '@/lib/adminAccess';
+import { requirePermission, sessionCan } from '@/lib/adminAccess';
 import {
 	getVolunteerById,
 	volunteerInvites,
@@ -32,7 +32,15 @@ export default async function VolunteerDetailPage({
 }: {
 	params: Promise<{ id: string }>;
 }) {
-	await requirePermission('volunteers', 'read');
+	const session = await requirePermission('volunteers', 'read');
+
+	/**
+	 * The roster is admin-only today, and an admin holds every Section — but the
+	 * link below goes to a different Section's screen, and rendering a link that
+	 * 404s is the kind of thing that only shows up after someone widens who can
+	 * see this page. Ask, rather than assume.
+	 */
+	const canOpenApplications = sessionCan(session, 'waitlist', 'read');
 
 	const { id } = await params;
 
@@ -98,9 +106,22 @@ export default async function VolunteerDetailPage({
 									{invites.map((row) => (
 										<tr key={row.id}>
 											<td>
-												<div>{row.inviteeName || '—'}</div>
+												{/*
+												 * Linked only where the Invite was actually claimed:
+												 * a pending, expired or cancelled one has no
+												 * application behind it to open.
+												 */}
+												{row.applicationId && canOpenApplications ? (
+													<Link href={`/admin/waitlist/${row.applicationId}`}>
+														{row.inviteeName || 'View application'}
+													</Link>
+												) : (
+													<div>{row.inviteeName || '—'}</div>
+												)}
 												<div className="text-body-secondary small">
 													{row.inviteeEmail || '—'}
+													{row.applicationReference !== null &&
+														` · Application ${row.applicationReference}`}
 												</div>
 											</td>
 											<td>{formatDate(row.createdAt)}</td>

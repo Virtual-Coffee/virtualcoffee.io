@@ -1,6 +1,12 @@
 import { and, count, desc, eq, isNull, sql } from 'drizzle-orm';
 
-import { db, invite, volunteer, volunteerInviteLedger } from '@/db';
+import {
+	db,
+	invite,
+	membershipApplication,
+	volunteer,
+	volunteerInviteLedger,
+} from '@/db';
 import type { InviteStatus, VolunteerLedgerReason } from '@/db/schema';
 
 /**
@@ -143,19 +149,31 @@ export type AdminInviteRow = {
 	status: InviteStatus;
 	createdAt: Date;
 	tokenExpiresAt: Date | null;
+	/** The application this Invite produced, if it was ever claimed. */
+	applicationId: string | null;
+	/** The number the waitlist screens show — never put it in a URL (ADR 0008). */
+	applicationReference: number | null;
 };
 
 /**
- * Invites this Volunteer has sent.
+ * Invites this Volunteer has sent, and where each one led.
  *
  * Unlike the Volunteer's own view this is not narrowed for privacy — a
- * maintainer already has the application itself two clicks away — but it is
- * still only the Invite, not the application behind it.
+ * maintainer can already open the application itself, which is the point of
+ * joining it on here.
+ *
+ * The join runs from `membership_application.invite_id`, which is the direction
+ * the foreign key points: an application knows the Invite it came from, not the
+ * other way round. Nothing stops two applications naming one Invite — the
+ * column has no unique constraint, and the Airtable import sets it from a
+ * `from_invite_id` this codebase never wrote — so the rows are deduplicated
+ * rather than trusted to be one-to-one. A fan-out would otherwise list the same
+ * Invite twice.
  */
 export async function volunteerInvites(
 	slackUserId: string,
 ): Promise<AdminInviteRow[]> {
-	return db()
+	const rows = await db()
 		.select({
 			id: invite.id,
 			inviteeName: invite.inviteeName,
@@ -163,10 +181,27 @@ export async function volunteerInvites(
 			status: invite.status,
 			createdAt: invite.createdAt,
 			tokenExpiresAt: invite.tokenExpiresAt,
+			applicationId: membershipApplication.id,
+			applicationReference: membershipApplication.reference,
 		})
 		.from(invite)
+		.leftJoin(
+			membershipApplication,
+			eq(membershipApplication.inviteId, invite.id),
+		)
 		.where(eq(invite.inviterSlackUserId, slackUserId))
 		.orderBy(desc(invite.createdAt));
+
+	const seen = new Set<string>();
+	const unique: AdminInviteRow[] = [];
+
+	for (const row of rows) {
+		if (seen.has(row.id)) continue;
+		seen.add(row.id);
+		unique.push(row);
+	}
+
+	return unique;
 }
 
 /** How many Volunteers can currently give out Invites. */
