@@ -367,6 +367,10 @@ async function apply(dryRun: boolean) {
 				slackDisplayName: entry.profileName ?? entry.name,
 				slackHandle: entry.githubUsername?.trim() || null,
 				roleLabels: entry.roleLabels,
+				// The one place a Volunteer's address comes from in bulk. Slack's
+				// directory does not carry one without `users:read.email`, so without
+				// this the grant and accrual emails reach almost nobody.
+				email: entry.email?.trim().toLowerCase() || null,
 				/**
 				 * Only 25 of the 91 are active. The rest come across so their history
 				 * stays attributable and reactivating them is one click, but they

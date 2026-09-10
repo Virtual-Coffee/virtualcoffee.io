@@ -79,6 +79,36 @@ Virtual Coffee`,
 }
 
 /**
+ * Told once, when someone is made a Volunteer.
+ *
+ * A capability nobody is told about is a capability nobody uses, and this one
+ * is invisible: most Volunteers are pre-provisioned by Slack member id and have
+ * never seen `/invites`, so without this the first they would hear of it is a
+ * monthly balance email for a page they do not know exists.
+ */
+export function volunteerGrantEmail(
+	name: string,
+	balance: number,
+	invitesUrl: string,
+): Template {
+	return {
+		subject: 'You can now invite people to Virtual Coffee',
+		text: `Hi ${firstName(name)},
+
+Thanks for volunteering with Virtual Coffee. As one of our volunteers you can now invite people to join us directly, and anyone you invite skips the waitlist.
+
+You have ${balance} invite${balance === 1 ? '' : 's'} to give out, and you'll get another on the 1st of each month:
+
+  ${invitesUrl}
+
+Sign in there with the same Slack account you use for Virtual Coffee.
+
+Thank you,
+Virtual Coffee`,
+	};
+}
+
+/**
  * The monthly nudge that a Volunteer has invites to give.
  *
  * Airtable sent one of these whenever a balance changed, because the balance

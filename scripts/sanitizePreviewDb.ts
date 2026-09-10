@@ -279,6 +279,7 @@ async function sanitizeVolunteers(database: Database): Promise<void> {
 			id: volunteer.id,
 			slackUserId: volunteer.slackUserId,
 			slackHandle: volunteer.slackHandle,
+			email: volunteer.email,
 		})
 		.from(volunteer);
 
@@ -291,6 +292,7 @@ async function sanitizeVolunteers(database: Database): Promise<void> {
 				slackUserId: fakeSlackId(row.slackUserId),
 				slackDisplayName: faker.person.fullName(),
 				slackHandle: row.slackHandle ? faker.internet.username() : null,
+				email: row.email ? fakeEmail(row.id) : null,
 				// Community role labels ("VC Host", "Notetaker") are generic and
 				// carry no identity once the name beside them is fake.
 			})
@@ -744,6 +746,10 @@ async function verify(database: Database): Promise<string[]> {
 					user,
 					and(isNotNull(user.slackUserId), not(like(user.slackUserId, 'U%'))),
 				),
+		],
+		[
+			'volunteer has a non-fake email',
+			() => countWhere(database, volunteer, realEmail(volunteer.email)),
 		],
 		[
 			'pending_grant still names a real grantor',

@@ -70,11 +70,20 @@ The README says how to regenerate it.
 
 ## What arrives, and what does not
 
-**Only the 25 active volunteers get a balance.** All 91 are imported so that
-history stays attributable and reactivating someone is one click, but the other
-66 arrive paused with no credit. The 12 rows with no `Invites Available` value
-at all import as zero: absent is not a number, and all twelve were created
-recently enough never to have been granted anything.
+**Only the 25 active volunteers get a balance.** A mapped inactive volunteer is
+still imported, so history stays attributable and reactivating them is one
+click, but they arrive paused with no credit.
+
+**An unmapped volunteer is not imported at all.** The roster is keyed on a Slack
+member id and there is nothing else to key it on: a row with none could not
+accrue, could not be linked to an account, and could not have Invites
+attributed to it — a name in a list and nothing more. Getting the unmapped count
+to zero is what the review is for, and leaving one blank is an admission that
+nobody could identify that person, not a shortcut.
+
+**The 12 rows with no `Invites Available` value import as zero.** Absent is not
+a number, and all twelve were created recently enough never to have been granted
+anything.
 
 **Balances arrive as one net `imported` row.** Airtable's figure is a running
 balance whose grants were manual, +5 at a time, and unrecorded — there is no

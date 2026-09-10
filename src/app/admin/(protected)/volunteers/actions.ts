@@ -14,7 +14,10 @@ import {
 import { isId } from '@/db/ids';
 import { getSlackMembers } from '@/data/slackMembers';
 import { requirePermission } from '@/lib/adminAccess';
-import { volunteerInviteEmail } from '@/lib/email/templates';
+import {
+	volunteerGrantEmail,
+	volunteerInviteEmail,
+} from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
 import { newClaimToken, hashClaimToken } from '@/lib/invites';
 import { grantedRoles, serialiseRoles, type RoleName } from '@/lib/permissions';
@@ -69,6 +72,7 @@ function withoutVolunteerRole(current: string | null | undefined): string {
 export async function addVolunteer(
 	slackUserId: string,
 	roleLabels: string,
+	email: string,
 ): Promise<VolunteerActionResult> {
 	const session = await requirePermission('volunteers', 'manage');
 
@@ -89,6 +93,7 @@ export async function addVolunteer(
 				slackDisplayName: member.displayName,
 				slackHandle: member.handle,
 				roleLabels: roleLabels.trim() || null,
+				email: email.trim().toLowerCase() || null,
 			});
 
 			const [existing] = await tx
@@ -151,7 +156,41 @@ export async function addVolunteer(
 	}
 
 	revalidate();
-	return { ok: true, message: `${member.displayName} can now send invites.` };
+
+	/**
+	 * Tell them, after the writes and outside the transaction.
+	 *
+	 * Deliberately not fatal, and deliberately last: they *are* a Volunteer by
+	 * this point, and reporting a failed email as a failed grant would send a
+	 * maintainer round again to create a row that already exists. The message
+	 * says which half happened.
+	 */
+	const address = email.trim();
+	if (!address) {
+		return {
+			ok: true,
+			message: `${member.displayName} can now send invites. Add an email address to let us tell them.`,
+		};
+	}
+
+	const template = volunteerGrantEmail(
+		member.displayName,
+		0,
+		`${siteUrl()}/invites`,
+	);
+
+	const sent = await sendEmail({
+		to: address,
+		subject: template.subject,
+		text: template.text,
+	});
+
+	return {
+		ok: true,
+		message: sent.ok
+			? `${member.displayName} can now send invites, and we've emailed them.`
+			: `${member.displayName} can now send invites, but the email didn't send: ${sent.message}`,
+	};
 }
 
 /**

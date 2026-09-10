@@ -313,12 +313,14 @@ async function seedVolunteers(database: ReturnType<typeof db>) {
 			slackDisplayName: 'Local dev',
 			slackHandle: 'localdev',
 			roleLabels: 'VC Host, Coffee Table Group Leader',
+			email: 'localdev@example.com',
 		},
 		{
 			slackUserId: 'U_DEV_FORMER',
 			slackDisplayName: 'Former Volunteer',
 			slackHandle: 'former',
 			roleLabels: 'Notetaker',
+			email: 'former@example.com',
 			// Stepped back, so the daily job accrues nothing for them.
 			deactivatedAt: daysAgo(60),
 		},

@@ -140,10 +140,11 @@ async function expire(now: Date): Promise<number> {
 /**
  * Tell the Volunteers who accrued something what they now hold.
  *
- * Only reaches Volunteers who have signed in: the roster is keyed on a Slack
- * member id and carries no email address of its own, so someone pre-provisioned
- * but never signed in has no address to write to. They see the balance the
- * first time they visit.
+ * Prefers the address on the roster over the one on the `user` row. Most
+ * Volunteers are pre-provisioned by Slack member id and have never signed in,
+ * so a `user` row is the exception rather than the rule — the Airtable import
+ * fills `volunteer.email` in for all 91. A Volunteer with neither is skipped
+ * and sees the balance the first time they visit.
  *
  * A failure here is logged and swallowed. The accrual has already happened and
  * is the thing that matters; failing the run would only mean the next day's
@@ -167,7 +168,8 @@ async function notify(slackUserIds: string[]): Promise<{
 			const [row] = await database
 				.select({
 					name: volunteer.slackDisplayName,
-					email: user.email,
+					email: volunteer.email,
+					accountEmail: user.email,
 					balance: sql<string | null>`(
 						select sum(${volunteerInviteLedger.delta})
 						from ${volunteerInviteLedger}
@@ -179,16 +181,17 @@ async function notify(slackUserIds: string[]): Promise<{
 				.where(eq(volunteer.slackUserId, slackUserId))
 				.limit(1);
 
-			if (!row?.email) continue;
+			const address = row?.email ?? row?.accountEmail;
+			if (!address) continue;
 
 			const template = volunteerAccrualEmail(
-				row.name,
+				row!.name,
 				Number(row.balance ?? 0),
 				`${siteUrl}/invites`,
 			);
 
 			const sent = await sendEmail({
-				to: row.email,
+				to: address,
 				subject: template.subject,
 				text: template.text,
 			});

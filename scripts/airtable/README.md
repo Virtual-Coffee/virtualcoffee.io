@@ -162,9 +162,12 @@ guess. Two rows mapped to the same Slack member abort the run before anything
 is written.
 
 **Only active volunteers get a balance.** Airtable has 91 volunteers and only 25
-`Active`. The other 66 are imported paused, with no credit: their history stays
-attributable and reactivating them is one click in `/admin/volunteers`, but they
-do not arrive holding invites. The 12 rows with no `Invites Available` value at
+`Active`. A mapped inactive volunteer is imported paused, with no credit: their
+history stays attributable and reactivating them is one click in
+`/admin/volunteers`, but they do not arrive holding invites. **An unmapped row
+is not imported at all** — the roster is keyed on a Slack member id, so there is
+nothing to key it on. The point of reviewing the file is to get that number to
+zero. The 12 rows with no `Invites Available` value at
 all import as zero — absent is not a number, and all twelve are recent.
 
 **Balances arrive as one net row**, not a reconstruction. Airtable's number is a

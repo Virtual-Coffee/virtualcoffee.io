@@ -360,6 +360,21 @@ export const volunteer = pgTable('volunteer', {
 	/** Backfilled by `claimPendingGrant()` the first time they sign in. */
 	userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
 	/**
+	 * Where to write to them, and the reason this is not just read off `user`.
+	 *
+	 * A Volunteer can be designated long before they sign in — that is what
+	 * Pending Grants are for — so for most of the roster there is no `user` row
+	 * to join to. Without an address of its own, the two emails this feature
+	 * sends ("you can now give out invites", "you have another one this month")
+	 * would reach only the people who least need telling.
+	 *
+	 * Nullable because Slack's directory does not carry one without the
+	 * `users:read.email` scope, so a Volunteer added from the picker may have
+	 * none until someone types it. The Airtable import fills it in for the 91
+	 * rows it brings across.
+	 */
+	email: text('email'),
+	/**
 	 * The community roles Airtable tracked — "VC Host", "Room Leader", "Lunch &
 	 * Learn Team" and a dozen more. Descriptive only: they grant nothing and no
 	 * authorization check ever reads them. Kept because they are how a

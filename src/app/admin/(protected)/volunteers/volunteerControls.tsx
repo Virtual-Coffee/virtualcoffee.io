@@ -62,6 +62,7 @@ export function AddVolunteerForm({
 	const [query, setQuery] = useState('');
 	const [selected, setSelected] = useState<string | null>(null);
 	const [roleLabels, setRoleLabels] = useState('');
+	const [email, setEmail] = useState('');
 
 	const matches = candidates
 		.filter((member) =>
@@ -124,6 +125,23 @@ export function AddVolunteerForm({
 				)}
 
 				<div className="mb-3">
+					<label className="form-label" htmlFor="volunteer-email">
+						Email <span className="text-body-secondary">(optional)</span>
+					</label>
+					<input
+						id="volunteer-email"
+						type="email"
+						className="form-control"
+						value={email}
+						onChange={(event) => setEmail(event.target.value)}
+					/>
+					<div className="form-text">
+						Slack doesn&rsquo;t give us addresses, so without one we can&rsquo;t
+						tell them they can invite people, or nudge them each month.
+					</div>
+				</div>
+
+				<div className="mb-3">
 					<label className="form-label" htmlFor="volunteer-roles">
 						Community roles{' '}
 						<span className="text-body-secondary">(optional)</span>
@@ -146,10 +164,11 @@ export function AddVolunteerForm({
 					disabled={!selected || pending}
 					onClick={() => {
 						if (!selected) return;
-						run(() => addVolunteer(selected, roleLabels));
+						run(() => addVolunteer(selected, roleLabels, email));
 						setSelected(null);
 						setQuery('');
 						setRoleLabels('');
+						setEmail('');
 					}}
 				>
 					{pending ? 'Adding…' : 'Add volunteer'}
