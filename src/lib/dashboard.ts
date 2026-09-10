@@ -2,10 +2,14 @@ import { count, desc, eq, inArray, isNotNull, or, sql } from 'drizzle-orm';
 
 import {
 	applicationEvent,
+	cocReport,
+	coffeeTableGroupRequest,
 	db,
+	lunchAndLearnIdea,
 	membershipApplication,
 	submissionEvent,
 	user,
+	volunteerSignup,
 } from '@/db';
 import { QUEUE_STATUSES } from '@/lib/applications';
 import type { Section } from '@/lib/permissions';
@@ -112,6 +116,7 @@ export async function recentActivity(
 				createdAt: applicationEvent.createdAt,
 				actorName: user.name,
 				subject: membershipApplication.name,
+				reference: membershipApplication.reference,
 			})
 			.from(applicationEvent)
 			.leftJoin(user, eq(applicationEvent.actorUserId, user.id))
@@ -119,7 +124,8 @@ export async function recentActivity(
 				membershipApplication,
 				eq(applicationEvent.applicationId, membershipApplication.id),
 			)
-			.orderBy(desc(applicationEvent.createdAt))
+			// `createdAt` is not unique; the v7 id breaks ties by creation order.
+			.orderBy(desc(applicationEvent.createdAt), desc(applicationEvent.id))
 			.limit(ACTIVITY_LIMIT);
 
 		for (const row of rows) {
@@ -130,7 +136,7 @@ export async function recentActivity(
 				body: row.body,
 				actorName: row.actorName,
 				href: `/admin/waitlist/${row.applicationId}`,
-				subject: row.subject ?? `Application ${row.applicationId}`,
+				subject: row.subject ?? `Application ${row.reference}`,
 			});
 		}
 	}
@@ -153,9 +159,27 @@ export async function recentActivity(
 				body: submissionEvent.body,
 				createdAt: submissionEvent.createdAt,
 				actorName: user.name,
+				// The kinds are mutually exclusive, so exactly one of these is set.
+				reference: sql<number>`coalesce(${cocReport.reference}, ${volunteerSignup.reference}, ${lunchAndLearnIdea.reference}, ${coffeeTableGroupRequest.reference})`,
 			})
 			.from(submissionEvent)
 			.leftJoin(user, eq(submissionEvent.actorUserId, user.id))
+			.leftJoin(cocReport, eq(submissionEvent.cocReportId, cocReport.id))
+			.leftJoin(
+				volunteerSignup,
+				eq(submissionEvent.volunteerSignupId, volunteerSignup.id),
+			)
+			.leftJoin(
+				lunchAndLearnIdea,
+				eq(submissionEvent.lunchAndLearnIdeaId, lunchAndLearnIdea.id),
+			)
+			.leftJoin(
+				coffeeTableGroupRequest,
+				eq(
+					submissionEvent.coffeeTableGroupRequestId,
+					coffeeTableGroupRequest.id,
+				),
+			)
 			.where(
 				or(
 					...visibleKinds.map((kind) =>
@@ -163,7 +187,7 @@ export async function recentActivity(
 					),
 				),
 			)
-			.orderBy(desc(submissionEvent.createdAt))
+			.orderBy(desc(submissionEvent.createdAt), desc(submissionEvent.id))
 			.limit(ACTIVITY_LIMIT);
 
 		for (const row of rows) {
@@ -195,7 +219,7 @@ export async function recentActivity(
 				body: row.body,
 				actorName: row.actorName,
 				href: `/admin/submissions/${kind}/${submissionId}`,
-				subject: `${SUBMISSION_KINDS[kind].singular} ${submissionId}`,
+				subject: `${SUBMISSION_KINDS[kind].singular} ${row.reference}`,
 			});
 		}
 	}

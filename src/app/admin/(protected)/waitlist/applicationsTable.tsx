@@ -92,7 +92,7 @@ export function ApplicationsTable({
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
-	const [openId, setOpenId] = useState<number | null>(null);
+	const [openId, setOpenId] = useState<string | null>(null);
 
 	const push = useCallback(
 		(changes: Record<string, string | null>) => {

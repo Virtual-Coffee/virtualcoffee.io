@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { isId } from '@/db/ids';
 import { requirePermission } from '@/lib/adminAccess';
 import { getApplication, getApplicationHistory } from '@/lib/applications';
 import {
@@ -47,10 +48,11 @@ export default async function ApplicationDetailPage({
 }) {
 	await requirePermission('waitlist', 'read');
 
-	const { id } = await params;
-	const applicationId = Number(id);
+	const { id: applicationId } = await params;
 
-	if (!Number.isInteger(applicationId)) {
+	// Checked before the query, not for politeness: Postgres raises on a
+	// malformed literal against a uuid column rather than matching nothing.
+	if (!isId(applicationId)) {
 		notFound();
 	}
 
@@ -69,7 +71,7 @@ export default async function ApplicationDetailPage({
 						<Link href="/admin/waitlist">Queue</Link>
 					</li>
 					<li className="breadcrumb-item active" aria-current="page">
-						Application {application.id}
+						Application {application.reference}
 					</li>
 				</ol>
 			</nav>

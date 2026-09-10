@@ -71,7 +71,7 @@ export async function submitVolunteerSignup(
 		};
 	}
 
-	let signupId: number;
+	let signupId: string;
 
 	try {
 		const [row] = await db()

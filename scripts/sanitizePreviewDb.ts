@@ -99,7 +99,7 @@ async function inBatches<T>(
 
 async function sanitizeMembershipApplications(
 	database: Database,
-): Promise<Map<number, string>> {
+): Promise<Map<string, string>> {
 	const rows = await database
 		.select({
 			id: membershipApplication.id,
@@ -114,7 +114,7 @@ async function sanitizeMembershipApplications(
 		})
 		.from(membershipApplication);
 
-	const emailById = new Map<number, string>();
+	const emailById = new Map<string, string>();
 
 	await inBatches(rows, async (row) => {
 		faker.seed(seedFor(row.id));
@@ -150,7 +150,7 @@ async function sanitizeMembershipApplications(
  * fragment of the real sentence can survive a missed pattern. */
 async function sanitizeApplicationEvents(
 	database: Database,
-	emailById: Map<number, string>,
+	emailById: Map<string, string>,
 ): Promise<void> {
 	const rows = await database
 		.select({
@@ -233,7 +233,7 @@ async function sanitizeInvites(database: Database): Promise<void> {
 
 async function sanitizeCocReports(
 	database: Database,
-): Promise<Map<number, string>> {
+): Promise<Map<string, string>> {
 	const rows = await database
 		.select({
 			id: cocReport.id,
@@ -243,7 +243,7 @@ async function sanitizeCocReports(
 		})
 		.from(cocReport);
 
-	const emailById = new Map<number, string>();
+	const emailById = new Map<string, string>();
 
 	await inBatches(rows, async (row) => {
 		faker.seed(seedFor(row.id));
@@ -273,7 +273,7 @@ async function sanitizeCocReports(
 
 async function sanitizeVolunteerSignups(
 	database: Database,
-): Promise<Map<number, string>> {
+): Promise<Map<string, string>> {
 	const rows = await database
 		.select({
 			id: volunteerSignup.id,
@@ -283,7 +283,7 @@ async function sanitizeVolunteerSignups(
 		})
 		.from(volunteerSignup);
 
-	const emailById = new Map<number, string>();
+	const emailById = new Map<string, string>();
 
 	await inBatches(rows, async (row) => {
 		faker.seed(seedFor(row.id));
@@ -309,7 +309,7 @@ async function sanitizeVolunteerSignups(
 
 async function sanitizeLunchAndLearnIdeas(
 	database: Database,
-): Promise<Map<number, string>> {
+): Promise<Map<string, string>> {
 	const rows = await database
 		.select({
 			id: lunchAndLearnIdea.id,
@@ -319,7 +319,7 @@ async function sanitizeLunchAndLearnIdeas(
 		})
 		.from(lunchAndLearnIdea);
 
-	const emailById = new Map<number, string>();
+	const emailById = new Map<string, string>();
 
 	await inBatches(rows, async (row) => {
 		faker.seed(seedFor(row.id));
@@ -348,7 +348,7 @@ async function sanitizeLunchAndLearnIdeas(
 
 async function sanitizeCoffeeTableGroupRequests(
 	database: Database,
-): Promise<Map<number, string>> {
+): Promise<Map<string, string>> {
 	const rows = await database
 		.select({
 			id: coffeeTableGroupRequest.id,
@@ -357,7 +357,7 @@ async function sanitizeCoffeeTableGroupRequests(
 		})
 		.from(coffeeTableGroupRequest);
 
-	const emailById = new Map<number, string>();
+	const emailById = new Map<string, string>();
 
 	await inBatches(rows, async (row) => {
 		faker.seed(seedFor(row.id));
@@ -381,10 +381,10 @@ async function sanitizeCoffeeTableGroupRequests(
 async function sanitizeSubmissionEvents(
 	database: Database,
 	emailByKind: {
-		coc: Map<number, string>;
-		volunteer: Map<number, string>;
-		lunchAndLearn: Map<number, string>;
-		coffeeTable: Map<number, string>;
+		coc: Map<string, string>;
+		volunteer: Map<string, string>;
+		lunchAndLearn: Map<string, string>;
+		coffeeTable: Map<string, string>;
 	},
 ): Promise<void> {
 	const rows = await database

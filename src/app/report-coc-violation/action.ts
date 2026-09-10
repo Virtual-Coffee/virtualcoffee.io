@@ -100,7 +100,7 @@ export async function submitCocReport(
 		attachment = result;
 	}
 
-	let reportId: number;
+	let reportId: string;
 
 	try {
 		const [row] = await db()

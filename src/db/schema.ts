@@ -12,6 +12,8 @@ import {
 	uuid,
 } from 'drizzle-orm/pg-core';
 
+import { newId } from './ids';
+
 /**
  * Better Auth owns the `user`, `session`, `account` and `verification` tables.
  * Their field names are dictated by `buildAuthTables()` in
@@ -180,7 +182,7 @@ export const applicationEventType = pgEnum('application_event_type', [
 export const inviteTokenPurpose = pgEnum('invite_token_purpose', ['slack']);
 
 export const invite = pgTable('invite', {
-	id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+	id: uuid('id').primaryKey().$defaultFn(newId),
 	// Nullable: imported rows predate any user account, and only carry a name.
 	inviterUserId: text('inviter_user_id').references(() => user.id, {
 		onDelete: 'set null',
@@ -198,9 +200,12 @@ export const invite = pgTable('invite', {
 export const membershipApplication = pgTable(
 	'membership_application',
 	{
-		// Identity rather than a uuid: the detail screen shows the number
-		// ("Application 1842") and maintainers refer to it out loud.
-		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+		// Two identifiers, deliberately. `id` is opaque because it appears in
+		// /admin URLs; `reference` is the number the detail screen shows
+		// ("Application 1842") and maintainers refer to out loud. Never put
+		// `reference` in a URL — it is the guessable one. See docs/adr/0008.
+		id: uuid('id').primaryKey().$defaultFn(newId),
+		reference: integer('reference').notNull().generatedAlwaysAsIdentity(),
 		status: applicationStatus('status').notNull().default('waitlisted'),
 		source: applicationSource('source').notNull(),
 		/** Volunteer-invite applications sort to the front of the queue. */
@@ -226,7 +231,7 @@ export const membershipApplication = pgTable(
 		agreedToCocAt: timestamp('agreed_to_coc_at', { withTimezone: true }),
 
 		referrer: text('referrer'),
-		inviteId: integer('invite_id').references(() => invite.id, {
+		inviteId: uuid('invite_id').references(() => invite.id, {
 			onDelete: 'set null',
 		}),
 
@@ -253,8 +258,8 @@ export const membershipApplication = pgTable(
 export const applicationEvent = pgTable(
 	'application_event',
 	{
-		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-		applicationId: integer('application_id')
+		id: uuid('id').primaryKey().$defaultFn(newId),
+		applicationId: uuid('application_id')
 			.notNull()
 			.references(() => membershipApplication.id, { onDelete: 'cascade' }),
 		/** Null for system events (import, form submission). */
@@ -284,7 +289,7 @@ export const inviteToken = pgTable(
 	'invite_token',
 	{
 		id: uuid('id').primaryKey().defaultRandom(),
-		applicationId: integer('application_id')
+		applicationId: uuid('application_id')
 			.notNull()
 			.references(() => membershipApplication.id, { onDelete: 'cascade' }),
 		purpose: inviteTokenPurpose('purpose').notNull(),
@@ -349,7 +354,13 @@ export const submissionEventType = pgEnum('submission_event_type', [
  * on the resulting table.
  */
 const submissionColumns = {
-	id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+	// `id` is opaque because it appears in /admin URLs; `reference` is the number
+	// the detail screen shows ("CoC Report 42"). Never put `reference` in a URL.
+	// Unlike `airtableRecordId` below, an identity column is safe to spread: the
+	// sequence name is derived per table at generate time, not once on the
+	// builder. See docs/adr/0008.
+	id: uuid('id').primaryKey().$defaultFn(newId),
+	reference: integer('reference').notNull().generatedAlwaysAsIdentity(),
 	status: submissionStatus('status').notNull().default('new'),
 	submittedAt: timestamp('submitted_at', { withTimezone: true })
 		.notNull()
@@ -461,21 +472,22 @@ export const coffeeTableGroupRequest = pgTable(
 export const submissionEvent = pgTable(
 	'submission_event',
 	{
-		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-		cocReportId: integer('coc_report_id').references(() => cocReport.id, {
+		id: uuid('id').primaryKey().$defaultFn(newId),
+		cocReportId: uuid('coc_report_id').references(() => cocReport.id, {
 			onDelete: 'cascade',
 		}),
-		volunteerSignupId: integer('volunteer_signup_id').references(
+		volunteerSignupId: uuid('volunteer_signup_id').references(
 			() => volunteerSignup.id,
 			{ onDelete: 'cascade' },
 		),
-		lunchAndLearnIdeaId: integer('lunch_and_learn_idea_id').references(
+		lunchAndLearnIdeaId: uuid('lunch_and_learn_idea_id').references(
 			() => lunchAndLearnIdea.id,
 			{ onDelete: 'cascade' },
 		),
-		coffeeTableGroupRequestId: integer(
-			'coffee_table_group_request_id',
-		).references(() => coffeeTableGroupRequest.id, { onDelete: 'cascade' }),
+		coffeeTableGroupRequestId: uuid('coffee_table_group_request_id').references(
+			() => coffeeTableGroupRequest.id,
+			{ onDelete: 'cascade' },
+		),
 		/** Null for system events (import, form submission). */
 		actorUserId: text('actor_user_id').references(() => user.id, {
 			onDelete: 'set null',

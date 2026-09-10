@@ -83,7 +83,7 @@ export async function submitLunchAndLearnIdea(
 		timing: parsed.data.Timing,
 	};
 
-	let ideaId: number;
+	let ideaId: string;
 
 	try {
 		const [row] = await db()

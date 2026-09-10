@@ -284,7 +284,14 @@ async function main() {
 	) {
 		let inserted = 0;
 
-		for (const row of rows) {
+		// Oldest first, so the `reference` identity column — the number
+		// maintainers see — counts up with submission age rather than Airtable's
+		// fetch order.
+		const inOrder = [...rows].sort(
+			(a, b) => submittedAt(a).getTime() - submittedAt(b).getTime(),
+		);
+
+		for (const row of inOrder) {
 			const values = await toValues(row);
 
 			if (dryRun) {

@@ -17,7 +17,7 @@ import { ConfirmSendDialog } from './confirmSendDialog';
 type Template = { subject: string; text: string };
 
 type Props = {
-	applicationId: number;
+	applicationId: string;
 	applicantName: string;
 	applicantEmail: string;
 	status: ApplicationStatus;

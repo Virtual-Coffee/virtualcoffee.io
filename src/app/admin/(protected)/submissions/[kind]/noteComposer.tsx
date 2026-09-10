@@ -10,7 +10,7 @@ export function SubmissionNoteComposer({
 	id,
 }: {
 	kind: string;
-	id: number;
+	id: string;
 }) {
 	const router = useRouter();
 	const [body, setBody] = useState('');

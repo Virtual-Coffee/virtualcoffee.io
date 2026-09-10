@@ -14,7 +14,7 @@ import { SUBMISSION_KINDS } from '@/lib/submissions';
  * trips the `submission_event_exactly_one_subject` CHECK rather than writing a
  * bad row.
  */
-function subjectColumn(kind: SubmissionKind, id: number) {
+function subjectColumn(kind: SubmissionKind, id: string) {
 	switch (kind) {
 		case 'coc':
 			return { cocReportId: id };
@@ -29,7 +29,7 @@ function subjectColumn(kind: SubmissionKind, id: number) {
 
 export async function recordSubmissionEvent(input: {
 	kind: SubmissionKind;
-	submissionId: number;
+	submissionId: string;
 	type: SubmissionEventType;
 	body?: string | null;
 	actorUserId?: string | null;
@@ -63,7 +63,7 @@ export type NotifyOutcome =
  */
 export async function notifyAndRecord(
 	kind: SubmissionKind,
-	submissionId: number,
+	submissionId: string,
 	notify: () => Promise<NotifyOutcome>,
 ): Promise<void> {
 	let outcome: NotifyOutcome;

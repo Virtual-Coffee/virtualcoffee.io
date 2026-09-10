@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { isId } from '@/db/ids';
 import { requirePermission, sessionCan } from '@/lib/adminAccess';
 import {
 	getSubmission,
@@ -50,8 +51,9 @@ export default async function SubmissionDetailPage({
 		'manage',
 	);
 
-	const submissionId = Number(id);
-	if (!Number.isInteger(submissionId)) notFound();
+	// Checked before the query: a malformed literal against a uuid column raises.
+	const submissionId = id;
+	if (!isId(submissionId)) notFound();
 
 	const [submission, history] = await Promise.all([
 		getSubmission(kind, submissionId),
@@ -73,7 +75,7 @@ export default async function SubmissionDetailPage({
 
 			<div className="d-flex flex-wrap align-items-baseline gap-3 mb-4">
 				<h1 className="h4 mb-0">
-					{SUBMISSION_KINDS[kind].singular} {submission.id}
+					{SUBMISSION_KINDS[kind].singular} {submission.reference}
 				</h1>
 				<SubmissionStatusBadge status={submission.status} />
 				<span className="small text-body-secondary">

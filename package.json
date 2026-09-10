@@ -71,6 +71,7 @@
 		"remark-rehype": "^11.1.2",
 		"sanitize-html": "^2.17.7",
 		"unified": "^11.0.5",
+		"uuid": "^14.0.2",
 		"zod": "^4.5.4"
 	},
 	"devDependencies": {

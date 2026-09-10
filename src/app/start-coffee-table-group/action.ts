@@ -57,7 +57,7 @@ export async function submitCoffeeTableGroupRequest(
 		};
 	}
 
-	let requestId: number;
+	let requestId: string;
 
 	try {
 		const [row] = await db()

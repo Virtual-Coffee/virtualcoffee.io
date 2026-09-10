@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 
+import { isId } from '@/db/ids';
 import { readAttachment } from '@/lib/attachments';
 import { requirePermission } from '@/lib/adminAccess';
 import { getSubmission } from '@/lib/submissions';
@@ -24,8 +25,9 @@ export async function GET(
 
 	await requirePermission('coc', 'read');
 
-	const submissionId = Number(id);
-	if (!Number.isInteger(submissionId)) notFound();
+	// Checked before the query: a malformed literal against a uuid column raises.
+	const submissionId = id;
+	if (!isId(submissionId)) notFound();
 
 	const report = await getSubmission('coc', submissionId);
 	const key = report?.attachmentBlobKey as string | null | undefined;

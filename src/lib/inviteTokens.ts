@@ -19,7 +19,7 @@ function hash(token: string): string {
 }
 
 export async function createSlackInviteToken(
-	applicationId: number,
+	applicationId: string,
 ): Promise<{ token: string; expiresAt: Date }> {
 	const token = randomBytes(32).toString('base64url');
 	const expiresAt = new Date(Date.now() + TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000);
@@ -37,7 +37,7 @@ export async function createSlackInviteToken(
 }
 
 export type TokenRedemption =
-	| { ok: true; applicationId: number }
+	| { ok: true; applicationId: string }
 	| { ok: false; reason: 'unknown' | 'used' | 'expired' };
 
 /**
@@ -78,7 +78,7 @@ export async function redeemSlackInviteToken(
 }
 
 export async function applicationEmailFor(
-	applicationId: number,
+	applicationId: string,
 ): Promise<string | null> {
 	const [row] = await db()
 		.select({ email: membershipApplication.email })

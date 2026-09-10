@@ -35,7 +35,7 @@ function siteUrl(): string {
 }
 
 async function recordEvent(input: {
-	applicationId: number;
+	applicationId: string;
 	actorUserId: string | null;
 	type:
 		| 'coffee_invited'
@@ -81,14 +81,14 @@ async function actorId(userId: string): Promise<string | null> {
  * to "All statuses" and lists queue rows too — so revalidating the queue alone
  * leaves a row in the archive showing a status it no longer has.
  */
-function revalidateApplication(applicationId: number) {
+function revalidateApplication(applicationId: string) {
 	revalidatePath('/admin/waitlist');
 	revalidatePath('/admin/waitlist/archive');
 	revalidatePath(`/admin/waitlist/${applicationId}`);
 }
 
 export async function sendCoffeeInvite(
-	applicationId: number,
+	applicationId: string,
 	copyMe: boolean,
 ): Promise<ActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
@@ -152,7 +152,7 @@ export async function sendCoffeeInvite(
 }
 
 export async function recordAttendance(
-	applicationId: number,
+	applicationId: string,
 ): Promise<ActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
@@ -180,7 +180,7 @@ export async function recordAttendance(
 }
 
 export async function approveMembership(
-	applicationId: number,
+	applicationId: string,
 	copyMe: boolean,
 ): Promise<ActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
@@ -273,7 +273,7 @@ export async function approveMembership(
 }
 
 async function close(
-	applicationId: number,
+	applicationId: string,
 	status: Extract<ApplicationStatus, 'declined' | 'withdrawn'>,
 	note: string | null,
 ): Promise<ActionResult> {
@@ -304,20 +304,20 @@ async function close(
 }
 
 export async function declineApplication(
-	applicationId: number,
+	applicationId: string,
 	note: string | null,
 ): Promise<ActionResult> {
 	return close(applicationId, 'declined', note);
 }
 
 export async function withdrawApplication(
-	applicationId: number,
+	applicationId: string,
 ): Promise<ActionResult> {
 	return close(applicationId, 'withdrawn', null);
 }
 
 export async function addNote(
-	applicationId: number,
+	applicationId: string,
 	body: string,
 ): Promise<ActionResult> {
 	const session = await requirePermission('waitlist', 'manage');

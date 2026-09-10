@@ -131,7 +131,7 @@ export async function statusCounts(): Promise<Record<string, number>> {
 	return counts;
 }
 
-export async function getApplication(id: number) {
+export async function getApplication(id: string) {
 	const [row] = await db()
 		.select()
 		.from(membershipApplication)
@@ -142,7 +142,7 @@ export async function getApplication(id: number) {
 }
 
 export type HistoryEntry = {
-	id: number;
+	id: string;
 	type: string;
 	body: string | null;
 	fromStatus: ApplicationStatus | null;
@@ -152,7 +152,7 @@ export type HistoryEntry = {
 };
 
 export async function getApplicationHistory(
-	applicationId: number,
+	applicationId: string,
 ): Promise<HistoryEntry[]> {
 	return db()
 		.select({
@@ -167,5 +167,5 @@ export async function getApplicationHistory(
 		.from(applicationEvent)
 		.leftJoin(user, eq(applicationEvent.actorUserId, user.id))
 		.where(eq(applicationEvent.applicationId, applicationId))
-		.orderBy(desc(applicationEvent.createdAt));
+		.orderBy(desc(applicationEvent.createdAt), desc(applicationEvent.id));
 }

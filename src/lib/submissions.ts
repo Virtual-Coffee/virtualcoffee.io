@@ -87,7 +87,7 @@ export async function openCount(kind: SubmissionKind): Promise<number> {
 }
 
 export type SubmissionEventEntry = {
-	id: number;
+	id: string;
 	type: string;
 	body: string | null;
 	fromStatus: SubmissionStatus | null;
@@ -98,7 +98,7 @@ export type SubmissionEventEntry = {
 
 export async function getSubmissionHistory(
 	kind: SubmissionKind,
-	submissionId: number,
+	submissionId: string,
 ): Promise<SubmissionEventEntry[]> {
 	const { eventColumn } = SUBMISSION_KINDS[kind];
 
@@ -115,7 +115,7 @@ export async function getSubmissionHistory(
 		.from(submissionEvent)
 		.leftJoin(user, eq(submissionEvent.actorUserId, user.id))
 		.where(eq(eventColumn, submissionId))
-		.orderBy(desc(submissionEvent.createdAt));
+		.orderBy(desc(submissionEvent.createdAt), desc(submissionEvent.id));
 }
 
 /**
@@ -224,7 +224,10 @@ export function isSubmissionKind(value: string): value is SubmissionKind {
 }
 
 export type SubmissionRow = Record<string, unknown> & {
-	id: number;
+	/** Opaque, and what URLs carry. */
+	id: string;
+	/** The number shown to maintainers. Never put this in a URL. */
+	reference: number;
 	status: SubmissionStatus;
 	submittedAt: Date;
 };
@@ -244,7 +247,8 @@ export async function listSubmissions(
 			.select()
 			.from(table)
 			.where(where)
-			.orderBy(desc(table.submittedAt))
+			// `submittedAt` is not unique; the v7 id breaks ties by creation order.
+			.orderBy(desc(table.submittedAt), desc(table.id))
 			.limit(PAGE_SIZE)
 			.offset(page * PAGE_SIZE),
 		db().select({ value: count() }).from(table).where(where),
@@ -258,7 +262,7 @@ export async function listSubmissions(
 
 export async function getSubmission(
 	kind: SubmissionKind,
-	id: number,
+	id: string,
 ): Promise<SubmissionRow | null> {
 	const { table } = SUBMISSION_KINDS[kind];
 

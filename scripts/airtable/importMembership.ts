@@ -236,7 +236,7 @@ async function main() {
 	const database = db();
 
 	console.log('\nImporting invites…');
-	const inviteIdByAirtableId = new Map<string, number>();
+	const inviteIdByAirtableId = new Map<string, string>();
 	for (const row of inviteRows) {
 		const statusName = str(
 			typeof row.fields.Status === 'object' && row.fields.Status !== null
@@ -270,7 +270,15 @@ async function main() {
 	console.log('Importing applications…');
 	let insertedCount = 0;
 
-	for (const { row, classified } of prepared) {
+	// Oldest first, so the `reference` identity column — the number maintainers
+	// see — counts up with application age rather than Airtable's fetch order.
+	const inOrder = [...prepared].sort(
+		(a, b) =>
+			(date(a.row.fields.created)?.getTime() ?? 0) -
+			(date(b.row.fields.created)?.getTime() ?? 0),
+	);
+
+	for (const { row, classified } of inOrder) {
 		const fields = row.fields;
 		const submittedAt = date(fields.created) ?? new Date();
 		const fromInviteId = str(fields.from_invite_id);

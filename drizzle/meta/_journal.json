@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1788665530987,
-      "tag": "0000_create_membership_schema",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1788981950110,
-      "tag": "0001_public_the_leader",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1788983895283,
-      "tag": "0002_create-submissions-schema",
+      "when": 1789004857035,
+      "tag": "0000_create-membership-and-submissions-schema",
       "breakpoints": true
     }
   ]

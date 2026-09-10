@@ -44,7 +44,7 @@ const VALID_STATUSES: SubmissionStatus[] = [
 
 export async function setSubmissionStatus(
 	kind: string,
-	id: number,
+	id: string,
 	status: string,
 ): Promise<ActionResult> {
 	const context = await authorise(kind);
@@ -95,7 +95,7 @@ export async function setSubmissionStatus(
 
 export async function addSubmissionNote(
 	kind: string,
-	id: number,
+	id: string,
 	body: string,
 ): Promise<ActionResult> {
 	const context = await authorise(kind);

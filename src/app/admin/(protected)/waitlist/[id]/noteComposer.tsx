@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { addNote } from '../actions';
 
-export function NoteComposer({ applicationId }: { applicationId: number }) {
+export function NoteComposer({ applicationId }: { applicationId: string }) {
 	const router = useRouter();
 	const [body, setBody] = useState('');
 	const [error, setError] = useState<string | null>(null);

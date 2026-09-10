@@ -14,7 +14,7 @@ export function StatusControl({
 	canManage,
 }: {
 	kind: string;
-	id: number;
+	id: string;
 	status: SubmissionStatus;
 	canManage: boolean;
 }) {
