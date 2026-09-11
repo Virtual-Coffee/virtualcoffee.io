@@ -1,3 +1,0 @@
-DROP INDEX "volunteer_invite_ledger_invite_reason_idx";--> statement-breakpoint
-CREATE UNIQUE INDEX "volunteer_invite_ledger_spend_idx" ON "volunteer_invite_ledger" USING btree ("invite_id") WHERE reason = 'spend';--> statement-breakpoint
-CREATE UNIQUE INDEX "volunteer_invite_ledger_refund_idx" ON "volunteer_invite_ledger" USING btree ("invite_id") WHERE reason in ('refund_cancelled', 'refund_expired');

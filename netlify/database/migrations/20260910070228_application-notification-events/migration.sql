@@ -1,1 +1,0 @@
-ALTER TYPE "public"."application_event_type" ADD VALUE 'notification_sent' BEFORE 'imported';ALTER TYPE "public"."application_event_type" ADD VALUE 'notification_failed' BEFORE 'imported';

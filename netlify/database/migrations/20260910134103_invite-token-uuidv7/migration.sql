@@ -1,1 +1,0 @@
-ALTER TABLE "invite_token" ALTER COLUMN "id" DROP DEFAULT;

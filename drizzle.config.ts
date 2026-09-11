@@ -2,19 +2,22 @@ import { defineConfig } from 'drizzle-kit';
 
 const dbUrl = process.env.DATABASE_URL;
 /**
- * `drizzle-kit generate` writes SQL plus a journal into `drizzle/`, and the
- * journal is what lets later runs diff against the previous schema — so that
- * directory is committed even though Netlify never reads it.
+ * `drizzle-kit generate` writes straight into the directory Netlify applies on
+ * deploy: `netlify/database/migrations/<version>_<slug>/migration.sql`, sorted
+ * lexicographically, with slugs restricted to lowercase alphanumerics and
+ * hyphens. Drizzle v1 names each folder `<YYYYMMDDHHmmss>_<name>`, which is
+ * that layout already — so always generate with `--name=<hyphenated-slug>`,
+ * because drizzle's own auto-generated names use underscores.
  *
- * Netlify applies migrations from `netlify/database/migrations/<n>_<slug>/
- * migration.sql` on deploy, so generated SQL is copied there by
- * `pnpm db:generate`. Never hand-edit a migration that has already deployed.
+ * The `snapshot.json` beside each `migration.sql` is drizzle-kit's, not
+ * Netlify's: it is what later `generate` runs diff against, so it is committed
+ * and Netlify ignores it. Never hand-edit a migration that has already
+ * deployed.
  */
 export default defineConfig({
 	dialect: 'postgresql',
 	schema: './src/db/schema.ts',
-	out: './drizzle',
-	casing: 'snake_case',
+	out: './netlify/database/migrations',
 	...(dbUrl
 		? {
 				dbCredentials: {

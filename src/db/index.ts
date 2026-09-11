@@ -3,9 +3,7 @@ import { drizzle as drizzleNeon } from 'drizzle-orm/neon-serverless';
 import { drizzle as drizzleNode } from 'drizzle-orm/node-postgres';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 
-import * as schema from './schema';
-
-export type Database = NodePgDatabase<typeof schema>;
+export type Database = NodePgDatabase;
 
 /**
  * `getDatabase()` picks the driver for the current environment and returns a
@@ -26,10 +24,10 @@ function createDatabase(): Database {
 	);
 
 	if (connection.driver === 'serverless') {
-		return drizzleNeon(connection.pool, { schema }) as unknown as Database;
+		return drizzleNeon({ client: connection.pool }) as unknown as Database;
 	}
 
-	return drizzleNode(connection.pool, { schema });
+	return drizzleNode({ client: connection.pool });
 }
 
 let cached: Database | undefined;
