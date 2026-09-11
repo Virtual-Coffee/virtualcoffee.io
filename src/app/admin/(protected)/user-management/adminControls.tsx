@@ -36,11 +36,13 @@ const LABELS = new Map(Object.entries(ROLE_LABELS) as [RoleName, string][]);
 /**
  * The roles one person holds, as a dropdown of checkboxes.
  *
- * Each change replaces the whole grantable set rather than toggling one role,
- * so the server never has to merge a stale client view with what is actually
- * stored. Only the grantable set: a role this screen does not grant
+ * Changes are staged in the menu and written together on Save, as the whole
+ * grantable set rather than one toggle at a time: swapping one role for
+ * another is one write, and the server never has to merge a stale client view
+ * with what is actually stored. Cancel, Escape and clicking away all discard
+ * the draft. Only the grantable set is sent: a role this screen does not grant
  * (`volunteer`) is carried over from what is stored by
- * `preserveUngrantedRoles` in the actions, and sending it would be refused.
+ * `preserveUngrantedRoles` in the actions.
  *
  * The held roles are also summarised under the toggle. Six identical "Roles"
  * buttons would otherwise tell a maintainer scanning this table nothing about
@@ -106,12 +108,35 @@ export function RolesDropdown({
 
 	const grantable = roles.filter((role) => GRANTABLE_ROLE_NAMES.has(role));
 
-	function run(action: () => Promise<AdminActionResult>) {
+	/**
+	 * Seeded from `grantable` each time the menu opens, not in an effect: the
+	 * hook closes the menu on Escape and outside clicks without telling us, and
+	 * reseeding on open is what makes those discard the draft.
+	 */
+	const [draft, setDraft] = useState<RoleName[]>([]);
+
+	const dirty =
+		draft.length !== grantable.length ||
+		draft.some((role) => !grantable.includes(role));
+
+	function toggleDraft(role: RoleName) {
+		setDraft((current) =>
+			current.includes(role)
+				? current.filter((value) => value !== role)
+				: [...current, role],
+		);
+	}
+
+	function run(
+		action: () => Promise<AdminActionResult>,
+		onSuccess?: () => void,
+	) {
 		startTransition(async () => {
 			const result = await action();
 
 			if (result.ok) {
 				setError(null);
+				onSuccess?.();
 				router.refresh();
 			} else {
 				setError(result.message);
@@ -119,9 +144,17 @@ export function RolesDropdown({
 		});
 	}
 
-	function apply(next: RoleName[]) {
-		run(() =>
-			kind === 'user' ? setUserRoles(id, next) : setPendingGrantRoles(id, next),
+	/**
+	 * The menu stays open on failure: the error renders under the chips, and
+	 * the draft is still there to fix and retry.
+	 */
+	function save() {
+		run(
+			() =>
+				kind === 'user'
+					? setUserRoles(id, draft)
+					: setPendingGrantRoles(id, draft),
+			() => setOpen(false),
 		);
 	}
 
@@ -130,9 +163,9 @@ export function RolesDropdown({
 	 * never took effect, so there is nothing to keep, and a grant holding nothing
 	 * would sit in the table meaning nothing.
 	 *
-	 * Only this button deletes. Unticking the last checkbox goes through `apply`
-	 * with an empty set, because a Volunteer's grant still holds `volunteer`
-	 * after that and is not empty.
+	 * Only this button deletes, and it is not staged. Unticking every checkbox
+	 * and saving goes through `save` with an empty set, because a Volunteer's
+	 * grant still holds `volunteer` after that and is not empty.
 	 */
 	function revokeAll() {
 		if (!window.confirm(`Revoke all access for ${name}?`)) return;
@@ -153,7 +186,10 @@ export function RolesDropdown({
 				aria-expanded={open}
 				aria-haspopup="true"
 				aria-controls={menuId}
-				onClick={() => setOpen((wasOpen) => !wasOpen)}
+				onClick={() => {
+					if (!open) setDraft(grantable);
+					setOpen((wasOpen) => !wasOpen);
+				}}
 			>
 				Roles
 				{roles.length > 0 && (
@@ -184,10 +220,10 @@ export function RolesDropdown({
 					}
 				>
 					{GRANTABLE_ROLES.map((role) => {
-						const held = roles.includes(role.name);
 						// Removing your own admin role is refused server-side too; the
 						// disabled box just avoids offering an action that cannot work.
-						const locked = isSelf && role.name === 'admin' && held;
+						const locked =
+							isSelf && role.name === 'admin' && roles.includes('admin');
 						const inputId = `${id}-${role.name}`;
 
 						return (
@@ -205,17 +241,9 @@ export function RolesDropdown({
 										className="form-check-input"
 										type="checkbox"
 										id={inputId}
-										checked={held}
+										checked={draft.includes(role.name)}
 										disabled={pending || locked}
-										// No `setOpen(false)`: you are usually toggling more
-										// than one role, so the menu stays put.
-										onChange={() =>
-											apply(
-												held
-													? grantable.filter((value) => value !== role.name)
-													: [...grantable, role.name],
-											)
-										}
+										onChange={() => toggleDraft(role.name)}
 									/>
 									<label className="form-check-label" htmlFor={inputId}>
 										{role.label}
@@ -233,6 +261,28 @@ export function RolesDropdown({
 							</li>
 						);
 					})}
+
+					<li>
+						<hr className="dropdown-divider" />
+					</li>
+					<li className="px-3 py-1 d-flex gap-2">
+						<button
+							type="button"
+							className="btn btn-sm btn-primary"
+							disabled={pending || !dirty}
+							onClick={save}
+						>
+							Save
+						</button>
+						<button
+							type="button"
+							className="btn btn-sm btn-outline-secondary"
+							disabled={pending}
+							onClick={() => setOpen(false)}
+						>
+							Cancel
+						</button>
+					</li>
 
 					{!isSelf && roles.length > 0 && (
 						<>
