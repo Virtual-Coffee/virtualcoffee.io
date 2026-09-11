@@ -159,10 +159,6 @@ function sessionRoles(session: Session | null): RoleName[] {
 	);
 }
 
-export function isAdmin(session: Session | null): boolean {
-	return sessionRoles(session).includes('admin');
-}
-
 /**
  * Whether the session's roles grant an action on a section.
  *
@@ -223,17 +219,6 @@ export async function requirePermission(
 	const session = await requireSession();
 
 	if (!sessionCan(session, section, action)) {
-		notFound();
-	}
-
-	return session;
-}
-
-/** Kept for call sites that genuinely mean "a full maintainer", not a section. */
-export async function requireAdmin(): Promise<Session> {
-	const session = await requireSession();
-
-	if (!isAdmin(session)) {
 		notFound();
 	}
 

@@ -54,8 +54,6 @@ function createAuth() {
 						 * could create a user — they would land on the "not an admin"
 						 * screen, but there is no reason to let them in at all.
 						 */
-						// @ts-expect-error see above
-						team: slackTeamId as string,
 						mapProfileToUser: (profile) => {
 							const team = profile[SLACK_TEAM_ID_CLAIM];
 

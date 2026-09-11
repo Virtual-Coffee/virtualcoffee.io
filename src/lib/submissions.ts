@@ -11,7 +11,6 @@ import {
 	type SubmissionStatus,
 } from '@/db';
 import { isId } from '@/db/ids';
-import type { Section } from '@/lib/permissions';
 
 /**
  * The four Submission kinds, keyed by the URL segment they live at.
@@ -57,13 +56,6 @@ export type SubmissionKind = keyof typeof SUBMISSION_KINDS;
 export const SUBMISSION_KEYS = Object.keys(
 	SUBMISSION_KINDS,
 ) as SubmissionKind[];
-
-export function kindForSection(section: Section): SubmissionKind | null {
-	return (
-		SUBMISSION_KEYS.find((key) => SUBMISSION_KINDS[key].section === section) ??
-		null
-	);
-}
 
 /** `new` and `in_progress` are the two a maintainer still has to do something about. */
 export const OPEN_STATUSES: SubmissionStatus[] = ['new', 'in_progress'];

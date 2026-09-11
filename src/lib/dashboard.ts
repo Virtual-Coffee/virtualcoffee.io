@@ -1,13 +1,4 @@
-import {
-	count,
-	desc,
-	eq,
-	inArray,
-	isNotNull,
-	isNull,
-	or,
-	sql,
-} from 'drizzle-orm';
+import { count, desc, eq, inArray, isNotNull, or, sql } from 'drizzle-orm';
 
 import {
 	applicationEvent,
@@ -18,10 +9,10 @@ import {
 	membershipApplication,
 	submissionEvent,
 	user,
-	volunteer,
 	volunteerSignup,
 } from '@/db';
 import { QUEUE_STATUSES } from '@/lib/applications';
+import { activeVolunteerCount } from '@/lib/volunteers';
 import type { Section } from '@/lib/permissions';
 import {
 	openCount,
@@ -117,16 +108,11 @@ export async function dashboardCards(
 			 * card at all, which is why this branch has to exist.
 			 */
 			if (section === 'volunteers') {
-				const [row] = await db()
-					.select({ value: count() })
-					.from(volunteer)
-					.where(isNull(volunteer.deactivatedAt));
-
 				return {
 					section,
 					label: 'Volunteers',
 					href: '/admin/volunteers',
-					figures: [{ count: row?.value ?? 0, label: 'active' }],
+					figures: [{ count: await activeVolunteerCount(), label: 'active' }],
 				};
 			}
 

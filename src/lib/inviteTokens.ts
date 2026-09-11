@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from 'crypto';
 import { and, eq, isNull } from 'drizzle-orm';
 
-import { db, inviteToken, membershipApplication } from '@/db';
+import { db, inviteToken } from '@/db';
 
 /**
  * Single-use, expiring Slack invite tokens.
@@ -75,16 +75,4 @@ export async function redeemSlackInviteToken(
 	if (claimed.length === 0) return { ok: false, reason: 'used' };
 
 	return { ok: true, applicationId: row.applicationId };
-}
-
-export async function applicationEmailFor(
-	applicationId: string,
-): Promise<string | null> {
-	const [row] = await db()
-		.select({ email: membershipApplication.email })
-		.from(membershipApplication)
-		.where(eq(membershipApplication.id, applicationId))
-		.limit(1);
-
-	return row?.email ?? null;
 }
