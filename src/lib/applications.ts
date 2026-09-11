@@ -27,6 +27,17 @@ export const QUEUE_STATUSES: ApplicationStatus[] = [
 	'coffee_invited',
 ];
 
+/**
+ * Everything the queue is not. The Waitlist is a working queue and the Archive
+ * is its history (CONTEXT.md), so the two never show the same row.
+ */
+export const ARCHIVE_STATUSES: ApplicationStatus[] = [
+	'member',
+	'lapsed',
+	'declined',
+	'withdrawn',
+];
+
 export const PAGE_SIZE = 50;
 
 export type SortField = 'name' | 'email' | 'status' | 'source' | 'submittedAt';

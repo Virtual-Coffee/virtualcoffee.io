@@ -1,7 +1,11 @@
 import Link from 'next/link';
 
 import { requirePermission } from '@/lib/adminAccess';
-import { listApplications, statusCounts } from '@/lib/applications';
+import {
+	ARCHIVE_STATUSES,
+	listApplications,
+	statusCounts,
+} from '@/lib/applications';
 import { ApplicationsTable } from '../applicationsTable';
 import { QueueSearch } from '../queueSearch';
 import { parseSearchParams, type RawSearchParams } from '../searchParams';
@@ -34,13 +38,23 @@ export default async function ArchivePage({
 	await requirePermission('waitlist', 'read');
 
 	const params = await searchParams;
-	const filters = parseSearchParams(params, { defaultStatuses: [] });
+	const parsed = parseSearchParams(params, {
+		defaultStatuses: ARCHIVE_STATUSES,
+	});
+	// "All statuses" here means all *archive* statuses. Queue rows belong on the
+	// queue; `?status=all` clears the filter in `parseSearchParams`, so it is
+	// put back rather than letting the archive list the Waitlist as well.
+	const filters = { ...parsed, statuses: parsed.statuses ?? ARCHIVE_STATUSES };
 
 	const [{ rows, rowCount }, counts] = await Promise.all([
 		listApplications(filters),
 		statusCounts(),
 	]);
 
+	const archived = ARCHIVE_STATUSES.reduce(
+		(sum, status) => sum + (counts[status] ?? 0),
+		0,
+	);
 	const active = (params.status as string | undefined) ?? 'all';
 
 	return (
@@ -49,7 +63,7 @@ export default async function ArchivePage({
 				<div>
 					<h1 className="h4 mb-1">Archive</h1>
 					<p className="text-body-secondary mb-0 small">
-						{counts.all ?? 0} applications · {counts.lapsed ?? 0} lapsed ·{' '}
+						{archived} applications · {counts.lapsed ?? 0} lapsed ·{' '}
 						{counts.member ?? 0} members
 					</p>
 				</div>

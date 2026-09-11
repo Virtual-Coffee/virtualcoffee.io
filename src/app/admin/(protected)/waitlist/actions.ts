@@ -63,10 +63,9 @@ async function recordEvent(input: {
 }
 
 /**
- * A status change moves an application between the two list views, so both have
- * to be revalidated. The archive is not just closed applications — it defaults
- * to "All statuses" and lists queue rows too — so revalidating the queue alone
- * leaves a row in the archive showing a status it no longer has.
+ * A status change moves an application between the two list views — off the
+ * queue and into the archive, or back — so both have to be revalidated, or one
+ * of them keeps showing a row that now belongs to the other.
  */
 function revalidateApplication(applicationId: string) {
 	revalidatePath('/admin/waitlist');
