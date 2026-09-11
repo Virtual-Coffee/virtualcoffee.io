@@ -1,7 +1,7 @@
 import { and, eq, isNull } from 'drizzle-orm';
 
-import { db, pendingGrant, user, volunteer } from '@/db';
-import { grantedRoles } from '@/lib/permissions';
+import { db, pendingGrant, user, volunteer, type Database } from '@/db';
+import { grantedRoles, serialiseRoles, type RoleName } from '@/lib/permissions';
 
 /**
  * Pending Grants: a Role assigned to a Slack member id before that person has
@@ -33,6 +33,95 @@ type RoleUpdate = {
 	roleGrantedBy: string;
 	roleGrantedAt: Date;
 };
+
+/** The handle `db().transaction()` passes to its callback. */
+type Transaction = Parameters<Parameters<Database['transaction']>[0]>[0];
+
+/** Add `volunteer` to whatever someone already holds, without dropping any of it. */
+export function withVolunteerRole(current: string | null | undefined): string {
+	const held = grantedRoles(current);
+	return serialiseRoles([...new Set<RoleName>([...held, 'volunteer'])]);
+}
+
+export function withoutVolunteerRole(
+	current: string | null | undefined,
+): string {
+	return serialiseRoles(grantedRoles(current).filter((r) => r !== 'volunteer'));
+}
+
+/**
+ * Give someone the `volunteer` role, the way access is always given: directly
+ * on the user if they have signed in, otherwise as a Pending Grant keyed on the
+ * Slack member id that `claimPendingGrant()` applies at their first sign-in.
+ *
+ * Takes the caller's transaction rather than opening one, because the role is
+ * only half of a Volunteer — the caller is also writing the `volunteer` row,
+ * and either on its own is a broken state (docs/adr/0010). Shared by
+ * /admin/volunteers and the Airtable import, which has no session and so
+ * names itself as the grantor.
+ *
+ * Safe to repeat: an existing role string or Grant is merged into, not
+ * duplicated, so a re-run over people already granted changes nothing.
+ */
+export async function grantVolunteerRole(
+	tx: Transaction,
+	member: {
+		slackUserId: string;
+		slackDisplayName: string;
+		slackHandle: string | null;
+	},
+	grantedBy: string,
+): Promise<void> {
+	const [existing] = await tx
+		.select({ id: user.id, role: user.role })
+		.from(user)
+		.where(eq(user.slackUserId, member.slackUserId))
+		.limit(1);
+
+	if (existing) {
+		await tx
+			.update(user)
+			.set({
+				role: withVolunteerRole(existing.role),
+				roleGrantedAt: new Date(),
+				roleGrantedBy: grantedBy,
+			})
+			.where(eq(user.id, existing.id));
+		return;
+	}
+
+	/**
+	 * A Grant may already exist from User Management for their other roles.
+	 * Adding to it rather than inserting a second one, because the partial
+	 * unique index allows only one unclaimed Grant per Slack member.
+	 */
+	const [grant] = await tx
+		.select({ id: pendingGrant.id, role: pendingGrant.role })
+		.from(pendingGrant)
+		.where(
+			and(
+				eq(pendingGrant.slackUserId, member.slackUserId),
+				isNull(pendingGrant.claimedAt),
+			),
+		)
+		.limit(1);
+
+	if (grant) {
+		await tx
+			.update(pendingGrant)
+			.set({ role: withVolunteerRole(grant.role) })
+			.where(eq(pendingGrant.id, grant.id));
+		return;
+	}
+
+	await tx.insert(pendingGrant).values({
+		slackUserId: member.slackUserId,
+		slackDisplayName: member.slackDisplayName,
+		slackHandle: member.slackHandle,
+		role: serialiseRoles(['volunteer']),
+		grantedBy,
+	});
+}
 
 /**
  * Copy the Slack member id onto the user and apply whatever was pre-provisioned

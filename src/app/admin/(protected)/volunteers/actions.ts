@@ -20,7 +20,11 @@ import {
 } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
 import { newClaimToken, hashClaimToken } from '@/lib/invites';
-import { grantedRoles, serialiseRoles, type RoleName } from '@/lib/permissions';
+import {
+	grantVolunteerRole,
+	withVolunteerRole,
+	withoutVolunteerRole,
+} from '@/lib/pendingGrants';
 import { pendingInvite } from '@/lib/volunteers';
 
 export type VolunteerActionResult =
@@ -44,16 +48,6 @@ async function actorId(userId: string): Promise<string | null> {
 		.where(eq(user.id, userId))
 		.limit(1);
 	return row?.id ?? null;
-}
-
-/** Add `volunteer` to whatever someone already holds, without dropping any of it. */
-function withVolunteerRole(current: string | null | undefined): string {
-	const held = grantedRoles(current);
-	return serialiseRoles([...new Set<RoleName>([...held, 'volunteer'])]);
-}
-
-function withoutVolunteerRole(current: string | null | undefined): string {
-	return serialiseRoles(grantedRoles(current).filter((r) => r !== 'volunteer'));
 }
 
 /**
@@ -96,55 +90,15 @@ export async function addVolunteer(
 				email: email.trim().toLowerCase() || null,
 			});
 
-			const [existing] = await tx
-				.select({ id: user.id, role: user.role })
-				.from(user)
-				.where(eq(user.slackUserId, member.id))
-				.limit(1);
-
-			if (existing) {
-				await tx
-					.update(user)
-					.set({
-						role: withVolunteerRole(existing.role),
-						roleGrantedAt: new Date(),
-						roleGrantedBy: session.user.name || session.user.email,
-					})
-					.where(eq(user.id, existing.id));
-				return;
-			}
-
-			/**
-			 * A Grant may already exist from User Management for their other roles.
-			 * Adding to it rather than inserting a second one, because the partial
-			 * unique index allows only one unclaimed Grant per Slack member.
-			 */
-			const [grant] = await tx
-				.select({ id: pendingGrant.id, role: pendingGrant.role })
-				.from(pendingGrant)
-				.where(
-					and(
-						eq(pendingGrant.slackUserId, member.id),
-						isNull(pendingGrant.claimedAt),
-					),
-				)
-				.limit(1);
-
-			if (grant) {
-				await tx
-					.update(pendingGrant)
-					.set({ role: withVolunteerRole(grant.role) })
-					.where(eq(pendingGrant.id, grant.id));
-				return;
-			}
-
-			await tx.insert(pendingGrant).values({
-				slackUserId: member.id,
-				slackDisplayName: member.displayName,
-				slackHandle: member.handle,
-				role: serialiseRoles(['volunteer']),
-				grantedBy: session.user.name || session.user.email,
-			});
+			await grantVolunteerRole(
+				tx,
+				{
+					slackUserId: member.id,
+					slackDisplayName: member.displayName,
+					slackHandle: member.handle,
+				},
+				session.user.name || session.user.email,
+			);
 		});
 	} catch {
 		// The unique index on volunteer.slack_user_id is the authority here, so a
