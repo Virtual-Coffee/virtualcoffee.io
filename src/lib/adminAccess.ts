@@ -20,9 +20,9 @@ import {
  * of production data, and preview URLs are public and unguessable-but-shareable.
  * `db:sanitize-preview` (see netlify.toml, docs/adr/0007) scrubs that branch to
  * fake data as part of the build and fails the build loudly if it can't — so a
- * preview that published at all is one that was actually sanitized. Previews
- * therefore only need `PREVIEW_ADMIN_BYPASS` to unblock /admin; production and
- * branch deploys still 404 unconditionally.
+ * preview that published at all is one that was actually sanitized. Deploy
+ * previews and branch deploys therefore need only `PREVIEW_ADMIN_BYPASS=true`
+ * to unblock /admin, and without it they 404; production is always on.
  */
 export function adminRoutesEnabled(): boolean {
 	const context = process.env.CONTEXT;

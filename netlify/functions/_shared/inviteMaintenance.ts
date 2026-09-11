@@ -40,8 +40,9 @@ export function periodKey(now: Date): string {
  * Written as "ensure this month's row exists" rather than "run on the 1st", so
  * the job is self-healing: a run that fails or is skipped on the 1st is made
  * good by the next day's, and running it ten times over changes nothing. The
- * unique index on (slack_user_id, reason, period_key) is what makes that true —
- * `onConflictDoNothing` is leaning on the database, not hoping.
+ * partial unique index on (slack_user_id, period_key) for `monthly_accrual`
+ * rows is what makes that true — `onConflictDoNothing` is leaning on the
+ * database, not hoping.
  *
  * Volunteers with `deactivated_at` set are skipped. Without that, someone who
  * stepped back two years ago quietly banks twenty-four invites and returns

@@ -261,8 +261,8 @@ export async function sendInvite(
  * Give an Invite back before anyone claims it.
  *
  * The status change is conditional on it still being `pending`, so two clicks
- * cannot produce two refunds even before the ledger's unique index on
- * (invite_id, reason) refuses the second row.
+ * cannot produce two refunds even before the ledger's partial unique index on
+ * invite_id over both refund reasons refuses the second row.
  */
 export async function cancelInvite(
 	inviteId: string,
@@ -312,9 +312,10 @@ export async function cancelInvite(
 /**
  * Append the compensating credit.
  *
- * `onConflictDoNothing` leans on the unique index over (invite_id, reason): if
- * a refund for this Invite already exists the second one is silently dropped
- * rather than doubling the allowance.
+ * `onConflictDoNothing` leans on `volunteer_invite_ledger_refund_idx`, the
+ * partial unique index on invite_id where the reason is either refund: if a
+ * refund for this Invite already exists — of either kind — the second one is
+ * silently dropped rather than doubling the allowance.
  */
 async function refund(
 	inviteId: string,
