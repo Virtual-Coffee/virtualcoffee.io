@@ -11,3 +11,14 @@ type BuildUrls = {
 	CONTEXT?: string;
 	DEPLOY_PRIME_URL?: string;
 };
+
+/**
+ * The site's own origin for links in emails, with no trailing slash.
+ *
+ * `URL` is what Netlify sets to the primary site URL on every deploy, and it
+ * is also what `.env.example` sets locally, so a Coffee invite sent from
+ * `netlify dev` links back to localhost rather than to production.
+ */
+export function siteUrl(): string {
+	return process.env.URL?.replace(/\/$/, '') ?? 'https://virtualcoffee.io';
+}

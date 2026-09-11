@@ -26,6 +26,7 @@ import {
 	withoutVolunteerRole,
 } from '@/lib/pendingGrants';
 import { pendingInvite } from '@/lib/volunteers';
+import { siteUrl } from '@/util/url.server';
 
 export type VolunteerActionResult =
 	{ ok: true; message?: string } | { ok: false; message: string };
@@ -34,10 +35,6 @@ function revalidate(volunteerId?: string) {
 	revalidatePath('/admin/volunteers');
 	revalidatePath('/admin');
 	if (volunteerId) revalidatePath(`/admin/volunteers/${volunteerId}`);
-}
-
-function siteUrl(): string {
-	return process.env.URL?.replace(/\/$/, '') ?? 'https://virtualcoffee.io';
 }
 
 /**

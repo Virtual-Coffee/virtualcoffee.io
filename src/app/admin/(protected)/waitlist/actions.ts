@@ -19,6 +19,7 @@ import {
 } from '@/lib/email/templates';
 import { createSlackInviteToken } from '@/lib/inviteTokens';
 import { getApplication } from '@/lib/applications';
+import { siteUrl } from '@/util/url.server';
 
 /**
  * `emailSent` is the field the UI leans on. A maintainer decides whether to
@@ -29,10 +30,6 @@ import { getApplication } from '@/lib/applications';
 export type ActionResult =
 	| { ok: true; message?: string }
 	| { ok: false; message: string; emailSent: boolean | 'unknown' };
-
-function siteUrl(): string {
-	return process.env.URL?.replace(/\/$/, '') ?? 'https://virtualcoffee.io';
-}
 
 async function recordEvent(input: {
 	applicationId: string;

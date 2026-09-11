@@ -9,6 +9,7 @@ import {
 } from '../../../src/db/index.ts';
 import { volunteerAccrualEmail } from '../../../src/lib/email/templates.ts';
 import { sendEmail } from '../../../src/lib/email/transport.ts';
+import { siteUrl } from '../../../src/util/url.server.ts';
 
 /**
  * The daily upkeep behind Volunteer Invites: accrue this month's Invite, expire
@@ -159,8 +160,6 @@ async function notify(slackUserIds: string[]): Promise<{
 	if (slackUserIds.length === 0) return { emailed: 0, failures: 0 };
 
 	const database = db();
-	const siteUrl =
-		process.env.URL?.replace(/\/$/, '') ?? 'https://virtualcoffee.io';
 	let emailed = 0;
 	let failures = 0;
 
@@ -201,7 +200,7 @@ async function notify(slackUserIds: string[]): Promise<{
 			const template = volunteerAccrualEmail(
 				row.name,
 				Number(totals?.total ?? 0),
-				`${siteUrl}/invites`,
+				`${siteUrl()}/invites`,
 			);
 
 			const sent = await sendEmail({

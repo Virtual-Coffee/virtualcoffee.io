@@ -15,6 +15,7 @@ import {
 } from '@/lib/invites';
 import { actorId } from '@/lib/adminAccess';
 import { requireVolunteer } from '@/lib/volunteerAccess';
+import { siteUrl } from '@/util/url.server';
 
 /**
  * The same shape the waitlist actions return, and for the same reason:
@@ -30,10 +31,6 @@ const schema = z.object({
 	name: z.string().trim().min(1, 'Please give their name.').max(200),
 	email: z.email('That doesn’t look like an email address.').max(320),
 });
-
-function siteUrl(): string {
-	return process.env.URL?.replace(/\/$/, '') ?? 'https://virtualcoffee.io';
-}
 
 /**
  * The exact email that will go out, for the confirmation dialog.
