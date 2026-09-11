@@ -20,6 +20,7 @@ import {
 	type ApplicationStatus,
 	type MembershipApplication,
 } from '@/db';
+import { isId } from '@/db/ids';
 
 export const QUEUE_STATUSES: ApplicationStatus[] = [
 	'waitlisted',
@@ -98,9 +99,12 @@ export async function listApplications(
 			.where(where)
 			// Volunteer invites sort to the front of the queue no matter what else
 			// is applied; that priority is the point of the invite.
+			// The id is the tie-break (ADR 0008): `submittedAt` is not unique, and
+			// without a total order a row can straddle two pages of the queue.
 			.orderBy(
 				desc(membershipApplication.isPriority),
 				order(SORT_COLUMNS[filters.sort]),
+				desc(membershipApplication.id),
 			)
 			.limit(filters.pageSize)
 			.offset(filters.page * filters.pageSize),
@@ -133,7 +137,13 @@ export async function statusCounts(): Promise<Record<string, number>> {
 	return counts;
 }
 
+/**
+ * Null for an id that is not one, rather than a thrown 22P02: every waitlist
+ * server action reads its id from the client and comes through here.
+ */
 export async function getApplication(id: string) {
+	if (!isId(id)) return null;
+
 	const [row] = await db()
 		.select()
 		.from(membershipApplication)

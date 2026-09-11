@@ -10,6 +10,7 @@ import {
 	volunteerSignup,
 	type SubmissionStatus,
 } from '@/db';
+import { isId } from '@/db/ids';
 import type { Section } from '@/lib/permissions';
 
 /**
@@ -296,6 +297,8 @@ export async function getSubmission(
 	id: string,
 ): Promise<SubmissionRow | null> {
 	const { table } = SUBMISSION_KINDS[kind];
+
+	if (!isId(id)) return null;
 
 	const [row] = await db()
 		.select()

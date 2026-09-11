@@ -294,6 +294,23 @@ async function close(
 	if (!application) {
 		return { ok: false, message: 'Application not found.', emailSent: false };
 	}
+	// The panel hides these buttons for a member, but a server action is
+	// reachable without the panel. Closing twice would also write a second
+	// event over the first one's timestamp.
+	if (application.status === 'member') {
+		return {
+			ok: false,
+			message: 'A member cannot be declined or withdrawn.',
+			emailSent: false,
+		};
+	}
+	if (application.status === 'declined' || application.status === 'withdrawn') {
+		return {
+			ok: false,
+			message: `Already ${application.status}.`,
+			emailSent: false,
+		};
+	}
 
 	await db()
 		.update(membershipApplication)
