@@ -50,6 +50,8 @@ export const blockedUas = [
 	'Crawl4AI',
 	'Crawlspace',
 	'Cursor',
+	'Datadog/Synthetics',
+	'DatadogSynthetics',
 	'DataForSeoBot',
 	'Datenbank Crawler',
 	'DeepSeekBot',
