@@ -1,4 +1,5 @@
 import Airtable from 'airtable';
+import { inArray } from 'drizzle-orm';
 
 import {
 	applicationEvent,
@@ -236,7 +237,7 @@ async function main() {
 	const database = db();
 
 	console.log('\nImporting invites…');
-	const inviteIdByAirtableId = new Map<string, string>();
+	let insertedInvites = 0;
 	for (const row of inviteRows) {
 		const statusName = str(
 			typeof row.fields.Status === 'object' && row.fields.Status !== null
@@ -259,13 +260,34 @@ async function main() {
 				createdAt: date(row.fields['Invited Date']) ?? new Date(),
 			})
 			.onConflictDoNothing({ target: invite.airtableRecordId })
-			.returning({ id: invite.id, airtableRecordId: invite.airtableRecordId });
+			.returning({ id: invite.id });
 
-		if (inserted?.airtableRecordId) {
-			inviteIdByAirtableId.set(inserted.airtableRecordId, inserted.id);
+		if (inserted) insertedInvites += 1;
+	}
+
+	// Map every invite, not just the ones this run inserted: `onConflictDoNothing`
+	// returns nothing for a row that already exists, and a re-run after a partial
+	// failure would otherwise write the remaining applications with no invite.
+	const inviteIdByAirtableId = new Map<string, string>();
+	if (inviteRows.length > 0) {
+		const existing = await database
+			.select({ id: invite.id, airtableRecordId: invite.airtableRecordId })
+			.from(invite)
+			.where(
+				inArray(
+					invite.airtableRecordId,
+					inviteRows.map((row) => row.id),
+				),
+			);
+		for (const row of existing) {
+			if (row.airtableRecordId) {
+				inviteIdByAirtableId.set(row.airtableRecordId, row.id);
+			}
 		}
 	}
-	console.log(`Inserted ${inviteIdByAirtableId.size} invites.`);
+	console.log(
+		`Inserted ${insertedInvites} invites, ${inviteIdByAirtableId.size - insertedInvites} already present.`,
+	);
 
 	console.log('Importing applications…');
 	let insertedCount = 0;
