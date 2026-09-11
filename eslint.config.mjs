@@ -2,6 +2,7 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 import { fixupConfigRules } from '@eslint/compat';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
+import vitest from '@vitest/eslint-plugin';
 import vc from './eslint-rules/index.mjs';
 
 export default defineConfig([
@@ -52,6 +53,12 @@ export default defineConfig([
 		// The home page should inherit the site-wide metadata from the root layout.
 		ignores: ['src/app/page.tsx'],
 		rules: { 'vc/page-requires-metadata': 'error' },
+	},
+	{
+		name: 'vitest',
+		files: ['**/*.test.ts', 'vitest.config.mts'],
+		plugins: { vitest },
+		rules: { ...vitest.configs.recommended.rules },
 	},
 	globalIgnores([
 		'node_modules/**',
