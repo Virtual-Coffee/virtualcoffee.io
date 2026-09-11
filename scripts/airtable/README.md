@@ -170,6 +170,13 @@ nothing to key it on. The point of reviewing the file is to get that number to
 zero. The 12 rows with no `Invites Available` value at
 all import as zero — absent is not a number, and all twelve are recent.
 
+**Only active volunteers get the `volunteer` role.** The row alone would accrue
+Invites its owner cannot reach, so an active volunteer is also granted the role
+— directly on their user if they have signed in, otherwise as a Pending Grant
+that `claimPendingGrant()` applies at first sign-in (`docs/adr/0009`, `0010`),
+with `Airtable import` as the grantor. Paused volunteers arrive with no role,
+exactly as pausing in `/admin/volunteers` leaves someone.
+
 **Balances arrive as one net row**, not a reconstruction. Airtable's number is a
 running balance with no history behind it (the grants were manual, +5 at a time,
 and unrecorded), so there is nothing to replay. One `imported` ledger row saying
@@ -178,7 +185,9 @@ what Airtable said is the honest version of a number nobody can explain further.
 **Re-running is safe.** Volunteers key on `airtable_record_id` and insert with
 `onConflictDoNothing`; the balance is only written for a Volunteer with no
 ledger rows at all, because an append-only ledger would otherwise double every
-balance on a second run.
+balance on a second run. The role is merged into whatever a person already
+holds rather than duplicated, so a second run also backfills grants for rows an
+earlier run imported.
 
 Run `importMembership.ts` **first**. This script attributes Invites that script
 creates; with an empty `invite` table it will report `Attributed 0`.

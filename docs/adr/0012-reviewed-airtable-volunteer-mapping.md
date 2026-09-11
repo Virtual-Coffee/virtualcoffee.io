@@ -74,6 +74,13 @@ The README says how to regenerate it.
 still imported, so history stays attributable and reactivating them is one
 click, but they arrive paused with no credit.
 
+**Only the active volunteers get the `volunteer` role, too.** A `volunteer` row
+is half of a Volunteer (0010): the role is what lets them into `/invites`, and
+almost none of the 91 have signed in, so it is written as a Pending Grant on the
+Slack member id (0009) through the same helper `/admin/volunteers` uses. A
+paused volunteer arrives the way pausing leaves someone — with no role — and
+gets it back on reactivation.
+
 **An unmapped volunteer is not imported at all.** The roster is keyed on a Slack
 member id and there is nothing else to key it on: a row with none could not
 accrue, could not be linked to an account, and could not have Invites

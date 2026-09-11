@@ -9,6 +9,7 @@ import {
 	fetchSlackMembers,
 	type SlackMember,
 } from '../../src/data/slackMembers';
+import { grantVolunteerRole } from '../../src/lib/pendingGrants';
 
 /**
  * One-off import of the Airtable `Volunteers` table into Postgres.
@@ -35,6 +36,10 @@ import {
  *
  * Same principle as `lapsed` not `declined` in 0004: where the old system does
  * not actually say something, this does not invent it.
+ *
+ * An active volunteer also gets the `volunteer` role — as a Pending Grant, since
+ * almost none of them have signed in (docs/adr/0010) — because a `volunteer`
+ * row on its own accrues Invites its owner cannot reach.
  */
 
 const BASE_ID = 'appGHm8ztVWug6UxH';
@@ -344,7 +349,9 @@ async function apply(dryRun: boolean) {
 			console.log(
 				`  ${entry.name.padEnd(24)} ${entry.slackUserId.padEnd(14)} ${
 					entry.active ? 'active  ' : 'paused  '
-				} credit ${credit}  invites ${entry.inviteRecordIds.length}`,
+				} ${entry.active ? 'grant   ' : 'no grant'} credit ${credit}  invites ${
+					entry.inviteRecordIds.length
+				}`,
 			);
 		}
 		console.log('\nDry run: nothing written.');
@@ -353,6 +360,7 @@ async function apply(dryRun: boolean) {
 
 	const database = db();
 	let created = 0;
+	let granted = 0;
 	let credited = 0;
 	let attributed = 0;
 
@@ -362,8 +370,8 @@ async function apply(dryRun: boolean) {
 			.values({
 				slackUserId: entry.slackUserId,
 				// The Airtable name is what a maintainer will recognise. A later
-				// sign-in does not overwrite it; `claimPendingGrant` only fills in
-				// the user id.
+				// sign-in does not overwrite it; `claimPendingGrant` applies the
+				// Grant written below and fills in the user id.
 				slackDisplayName: entry.profileName ?? entry.name,
 				slackHandle: entry.githubUsername?.trim() || null,
 				roleLabels: entry.roleLabels,
@@ -383,6 +391,27 @@ async function apply(dryRun: boolean) {
 			.returning({ id: volunteer.id });
 
 		if (row) created += 1;
+
+		/**
+		 * The other half of a Volunteer. Only for the active ones — the paused
+		 * arrive the way `setVolunteerActive` leaves someone, with no role — and
+		 * not gated on `row`: the helper merges rather than duplicates, so a
+		 * second run over people already imported backfills anyone missed.
+		 */
+		if (entry.active) {
+			await database.transaction(async (tx) => {
+				await grantVolunteerRole(
+					tx,
+					{
+						slackUserId: entry.slackUserId,
+						slackDisplayName: entry.profileName ?? entry.name,
+						slackHandle: entry.githubUsername?.trim() || null,
+					},
+					'Airtable import',
+				);
+			});
+			granted += 1;
+		}
 
 		/**
 		 * One net row, not a reconstruction.
@@ -431,6 +460,7 @@ async function apply(dryRun: boolean) {
 	console.log(
 		`Created ${created} volunteers (${mapped.length - created} already present).`,
 	);
+	console.log(`Granted the volunteer role to ${granted}.`);
 	console.log(`Wrote ${credited} imported balances.`);
 	console.log(`Attributed ${attributed} invites.`);
 
