@@ -3,6 +3,7 @@
 import { useActionState } from 'react';
 
 import { CodeOfConduct, Submit } from '@/components/forms';
+import { SpamGuardFields } from '@/util/forms/SpamGuardFields';
 import { submitMembershipApplication, type JoinFormState } from './action';
 
 const initialState: JoinFormState = { is_error: false };
@@ -15,10 +16,12 @@ const initialState: JoinFormState = { is_error: false };
  * spell it.
  */
 export function JoinForm({
+	spamToken,
 	claimToken,
 	defaultName,
 	defaultEmail,
 }: {
+	spamToken: string;
 	claimToken?: string;
 	defaultName?: string;
 	defaultEmail?: string;
@@ -119,6 +122,7 @@ export function JoinForm({
 					{fieldErrors.agree}
 				</p>
 			)}
+			<SpamGuardFields token={spamToken} />
 
 			<Submit />
 		</form>

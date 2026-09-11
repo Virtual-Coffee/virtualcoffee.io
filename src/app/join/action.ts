@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { applicationEvent, db, invite, membershipApplication } from '@/db';
 import { hashClaimToken } from '@/lib/invites';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
+import { looksLikeSpam } from '@/util/forms/spamGuard';
 
 /** What redeeming a Claim Link yields, or null when there was nothing to redeem. */
 type ClaimedInvite = {
@@ -63,6 +64,12 @@ export async function submitMembershipApplication(
 	_state: JoinFormState,
 	formData: FormData,
 ): Promise<JoinFormState> {
+	// Same silent success the four submission forms give a bot: it sees the
+	// thank-you page and nothing is written.
+	if (looksLikeSpam(formData)) {
+		redirect('/join/thank-you');
+	}
+
 	const parsed = schema.safeParse({
 		name: formData.get('name') ?? '',
 		email: formData.get('email') ?? '',

@@ -1,12 +1,14 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { inviteForClaimToken } from '@/lib/invites';
 import { createMetaData } from '@/util/createMetaData.server';
+import { issueTimestamp } from '@/util/forms/spamGuard';
 import Link from 'next/link';
 
 import { JoinForm } from './form';
 
 // The form posts to a server action, so this page can't be statically cached
-// the way it was when it only linked out to a hosted Airtable form.
+// the way it was when it only linked out to a hosted Airtable form — and the
+// spam guard signs a per-render token that prerendering would bake in.
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
@@ -84,6 +86,7 @@ export default async function Join({
 				)}
 
 				<JoinForm
+					spamToken={issueTimestamp()}
 					claimToken={claimed ? invite : undefined}
 					defaultName={claimed?.inviteeName ?? undefined}
 					defaultEmail={claimed?.inviteeEmail ?? undefined}

@@ -105,7 +105,7 @@ Access can be **pre-provisioned**: a **Pending Grant** (`pending_grant`) assigns
 
 The four public forms — `/report-coc-violation`, `/volunteer-at-virtual-coffee`, `/lunch-and-learn-idea`, `/start-coffee-table-group` — each have a zod-validated server action writing to their own table, with a shared `submission_event` log. They **persist first and notify second**, deliberately inverting the "send first, then write" rule below; `docs/adr/0005` explains why, and it will look like a bug without it.
 
-All four are `force-dynamic` because the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token — prerendering would bake one into the cached HTML and reject every submission once it expired. CoC attachments go to Netlify Blobs and are served only through a route that checks `coc:read`.
+All four — and `/join` — are `force-dynamic` because the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token — prerendering would bake one into the cached HTML and reject every submission once it expired. CoC attachments go to Netlify Blobs and are served only through a route that checks `coc:read`.
 
 Podcast episodes are a checked-in JSON snapshot (`src/data/podcast/episodes.json`) copied from the `vc-data` repo; the update procedure is in the comment at the top of `src/data/podcast.ts`. Newsletters are local JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
 
