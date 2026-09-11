@@ -185,11 +185,6 @@ export const GRANTABLE_ROLES = [
 		label: 'Coffee Table organiser',
 		description: 'Coffee Table group requests',
 	},
-	{
-		name: 'volunteer',
-		label: 'Volunteer (Invites)',
-		description: 'Volunteer',
-	},
 ] as const satisfies ReadonlyArray<{
 	name: RoleName;
 	label: string;
