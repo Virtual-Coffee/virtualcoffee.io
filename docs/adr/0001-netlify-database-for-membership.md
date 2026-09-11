@@ -60,6 +60,10 @@ gone. Two consequences that look odd without this context:
 The seven migrations that had accumulated on the feature branch were squashed
 into a single baseline at the same time. None of them had reached production —
 `main` had no `netlify/database/migrations/` at all — so the "never edit a
-deployed migration" rule did not bind, and the branch's deploy-preview database
-was deleted and re-created from production so it would replay the baseline
-from an empty schema.
+deployed migration" rule did not bind. The one database that _had_ run the
+old seven was the branch's deploy-preview database, and that has to be deleted
+by hand (on the Netlify website; the CLI cannot) before the next preview
+deploy, so it is re-created from production and replays the baseline from an
+empty schema. Netlify's applier passes the baseline's newer timestamp straight
+through onto a populated schema otherwise, and fails on the first
+`CREATE TYPE`.
