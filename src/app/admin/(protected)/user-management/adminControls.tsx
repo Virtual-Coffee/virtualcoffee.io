@@ -10,7 +10,12 @@ import {
 import { useRouter } from 'next/navigation';
 
 import type { GrantCandidate } from '@/lib/admins';
-import { GRANTABLE_ROLES, ROLE_LABELS, type RoleName } from '@/lib/permissions';
+import {
+	GRANTABLE_ROLE_NAMES,
+	GRANTABLE_ROLES,
+	ROLE_LABELS,
+	type RoleName,
+} from '@/lib/permissions';
 import { useDropdown } from '../useDropdown';
 import {
 	grantPendingAccess,
@@ -31,8 +36,11 @@ const LABELS = new Map(Object.entries(ROLE_LABELS) as [RoleName, string][]);
 /**
  * The roles one person holds, as a dropdown of checkboxes.
  *
- * Each change replaces the whole set rather than toggling one role, so the
- * server never has to merge a stale client view with what is actually stored.
+ * Each change replaces the whole grantable set rather than toggling one role,
+ * so the server never has to merge a stale client view with what is actually
+ * stored. Only the grantable set: a role this screen does not grant
+ * (`volunteer`) is carried over from what is stored by
+ * `preserveUngrantedRoles` in the actions, and sending it would be refused.
  *
  * The held roles are also summarised under the toggle. Six identical "Roles"
  * buttons would otherwise tell a maintainer scanning this table nothing about
@@ -96,21 +104,11 @@ export function RolesDropdown({
 		};
 	}, [open, measure]);
 
-	function apply(next: RoleName[], confirmMessage?: string) {
-		if (confirmMessage && !window.confirm(confirmMessage)) return;
+	const grantable = roles.filter((role) => GRANTABLE_ROLE_NAMES.has(role));
 
+	function run(action: () => Promise<AdminActionResult>) {
 		startTransition(async () => {
-			/**
-			 * Revoking a Pending Grant deletes it rather than setting it to no
-			 * roles: it never took effect, so there is nothing to keep, and a grant
-			 * holding nothing would sit in the table meaning nothing.
-			 */
-			const result: AdminActionResult =
-				kind === 'user'
-					? await setUserRoles(id, next)
-					: next.length === 0
-						? await revokePendingGrant(id)
-						: await setPendingGrantRoles(id, next);
+			const result = await action();
 
 			if (result.ok) {
 				setError(null);
@@ -119,6 +117,29 @@ export function RolesDropdown({
 				setError(result.message);
 			}
 		});
+	}
+
+	function apply(next: RoleName[]) {
+		run(() =>
+			kind === 'user' ? setUserRoles(id, next) : setPendingGrantRoles(id, next),
+		);
+	}
+
+	/**
+	 * Revoking a Pending Grant deletes it rather than setting it to no roles: it
+	 * never took effect, so there is nothing to keep, and a grant holding nothing
+	 * would sit in the table meaning nothing.
+	 *
+	 * Only this button deletes. Unticking the last checkbox goes through `apply`
+	 * with an empty set, because a Volunteer's grant still holds `volunteer`
+	 * after that and is not empty.
+	 */
+	function revokeAll() {
+		if (!window.confirm(`Revoke all access for ${name}?`)) return;
+
+		run(() =>
+			kind === 'user' ? setUserRoles(id, []) : revokePendingGrant(id),
+		);
 	}
 
 	const menuId = `${id}-roles-menu`;
@@ -191,8 +212,8 @@ export function RolesDropdown({
 										onChange={() =>
 											apply(
 												held
-													? roles.filter((value) => value !== role.name)
-													: [...roles, role.name],
+													? grantable.filter((value) => value !== role.name)
+													: [...grantable, role.name],
 											)
 										}
 									/>
@@ -225,7 +246,7 @@ export function RolesDropdown({
 									disabled={pending}
 									onClick={() => {
 										setOpen(false);
-										apply([], `Revoke all access for ${name}?`);
+										revokeAll();
 									}}
 								>
 									Revoke all

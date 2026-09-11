@@ -22,11 +22,7 @@ import type { ActionResult } from '@/lib/actionResult';
 export type AdminActionResult = ActionResult;
 
 function isRoleName(value: string): value is RoleName {
-	return (
-		value in ROLE_DEFINITIONS &&
-		value !== DEFAULT_ROLE &&
-		GRANTABLE_ROLE_NAMES.has(value as RoleName)
-	);
+	return value in ROLE_DEFINITIONS && value !== DEFAULT_ROLE;
 }
 
 /**
@@ -52,17 +48,25 @@ function preserveUngrantedRoles(
 /**
  * Whitelist the requested roles, or say so. Shared by every action here, since
  * all four accept the same array off the same dropdown.
+ *
+ * A role that exists but is not grantable here (`volunteer`) is dropped rather
+ * than refused: whether someone keeps it is decided from what is stored, by
+ * `preserveUngrantedRoles`, so sending it grants nothing — but refusing it
+ * would make the dropdown unusable for anyone who already holds it.
  */
 function validateRoles(
 	next: string[],
 ): { ok: true; roles: RoleName[] } | { ok: false; message: string } {
-	const requested = next.filter(isRoleName);
+	const known = next.filter(isRoleName);
 
-	if (requested.length !== next.length) {
+	if (known.length !== next.length) {
 		return { ok: false, message: 'That is not a role we recognise.' };
 	}
 
-	return { ok: true, roles: requested };
+	return {
+		ok: true,
+		roles: known.filter((role) => GRANTABLE_ROLE_NAMES.has(role)),
+	};
 }
 
 function revalidate() {
@@ -224,13 +228,6 @@ export async function setPendingGrantRoles(
 	const validated = validateRoles(next);
 	if (!validated.ok) return validated;
 
-	if (validated.roles.length === 0) {
-		return {
-			ok: false,
-			message: 'Revoke the grant instead of leaving it with no roles.',
-		};
-	}
-
 	const [grant] = await db()
 		.select({ role: pendingGrant.role })
 		.from(pendingGrant)
@@ -244,11 +241,20 @@ export async function setPendingGrantRoles(
 		};
 	}
 
+	// Judged on what would be stored, not what was asked for: a Volunteer's
+	// grant with its last grantable role unticked still holds `volunteer`.
+	const resulting = preserveUngrantedRoles(grant.role, validated.roles);
+
+	if (resulting.length === 0) {
+		return {
+			ok: false,
+			message: 'Revoke the grant instead of leaving it with no roles.',
+		};
+	}
+
 	const result = await db()
 		.update(pendingGrant)
-		.set({
-			role: serialiseRoles(preserveUngrantedRoles(grant.role, validated.roles)),
-		})
+		.set({ role: serialiseRoles(resulting) })
 		.where(and(eq(pendingGrant.id, grantId), isNull(pendingGrant.claimedAt)));
 
 	if (result.rowCount === 0) {
