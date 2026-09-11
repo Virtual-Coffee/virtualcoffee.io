@@ -112,6 +112,15 @@ const cases: [ua: string, expected: 'allow' | 'block', why: string][] = [
 		'Baiduspider must not match the Spider token',
 	],
 
+	// Datadog Synthetics is hand-carried, and its two test types identify
+	// differently — the second has a `/` where the token boundary falls.
+	[
+		'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 DatadogSynthetics',
+		'block',
+		'Datadog browser test',
+	],
+	['Datadog/Synthetics', 'block', 'Datadog API test'],
+
 	// Ordinary people.
 	[
 		'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36',
