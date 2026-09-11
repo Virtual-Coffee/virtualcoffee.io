@@ -77,6 +77,7 @@ export const extraBlocked = [
 	'DataForSeoBot',
 	'magpie-crawler',
 	'peer39_crawler',
+	'DatadogSynthetics',
 ];
 
 /**
