@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 
 import { db, type SubmissionStatus } from '@/db';
 import { isId } from '@/db/ids';
+import type { ActionResult } from '@/lib/actionResult';
 import { actorId, requirePermission } from '@/lib/adminAccess';
 import type { Session } from '@/lib/auth';
 import {
@@ -13,8 +14,6 @@ import {
 	type SubmissionKind,
 } from '@/lib/submissions';
 import { recordSubmissionEvent } from '@/lib/submitSubmission';
-
-export type ActionResult = { ok: true } | { ok: false; message: string };
 
 /**
  * Every action re-checks `manage` on the kind's own section rather than

@@ -10,6 +10,7 @@ import {
 	membershipApplication,
 	type ApplicationStatus,
 } from '@/db';
+import type { EmailActionResult } from '@/lib/actionResult';
 import { actorId, requirePermission } from '@/lib/adminAccess';
 import { sendEmail } from '@/lib/email/transport';
 import {
@@ -21,15 +22,8 @@ import { createSlackInviteToken } from '@/lib/inviteTokens';
 import { getApplication } from '@/lib/applications';
 import { siteUrl } from '@/util/url.server';
 
-/**
- * `emailSent` is the field the UI leans on. A maintainer decides whether to
- * retry based on it, and retrying after a successful send double-emails an
- * applicant — so 'unknown' is a real and distinct answer, never rounded to
- * false for a tidier message.
- */
-export type ActionResult =
-	| { ok: true; message?: string }
-	| { ok: false; message: string; emailSent: boolean | 'unknown' };
+/** Every action here can email, so all of them report `emailSent`. */
+export type ActionResult = EmailActionResult;
 
 async function recordEvent(input: {
 	applicationId: string;

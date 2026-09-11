@@ -17,8 +17,9 @@ import {
 	serialiseRoles,
 	type RoleName,
 } from '@/lib/permissions';
+import type { ActionResult } from '@/lib/actionResult';
 
-export type AdminActionResult = { ok: true } | { ok: false; message: string };
+export type AdminActionResult = ActionResult;
 
 function isRoleName(value: string): value is RoleName {
 	return (

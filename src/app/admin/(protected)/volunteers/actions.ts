@@ -13,6 +13,7 @@ import {
 } from '@/db';
 import { isId } from '@/db/ids';
 import { getSlackMembers } from '@/data/slackMembers';
+import type { ActionResult } from '@/lib/actionResult';
 import { actorId, requirePermission } from '@/lib/adminAccess';
 import {
 	volunteerGrantEmail,
@@ -28,8 +29,7 @@ import {
 import { pendingInvite } from '@/lib/volunteers';
 import { siteUrl } from '@/util/url.server';
 
-export type VolunteerActionResult =
-	{ ok: true; message?: string } | { ok: false; message: string };
+export type VolunteerActionResult = ActionResult;
 
 function revalidate(volunteerId?: string) {
 	revalidatePath('/admin/volunteers');

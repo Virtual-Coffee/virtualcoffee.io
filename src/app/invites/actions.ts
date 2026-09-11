@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
 import { db, invite, volunteer, volunteerInviteLedger } from '@/db';
+import type { EmailActionResult } from '@/lib/actionResult';
 import { isId } from '@/db/ids';
 import { volunteerInviteEmail } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
@@ -16,16 +17,6 @@ import {
 import { actorId } from '@/lib/adminAccess';
 import { requireVolunteer } from '@/lib/volunteerAccess';
 import { siteUrl } from '@/util/url.server';
-
-/**
- * The same shape the waitlist actions return, and for the same reason:
- * `emailSent` is what the UI leans on to tell someone whether it is safe to try
- * again. 'unknown' is a real answer and is never rounded to false for a tidier
- * message.
- */
-export type InviteActionResult =
-	| { ok: true; message?: string }
-	| { ok: false; message: string; emailSent: boolean | 'unknown' };
 
 const schema = z.object({
 	name: z.string().trim().min(1, 'Please give their name.').max(200),
@@ -89,7 +80,7 @@ export async function previewInvite(
 export async function sendInvite(
 	rawName: string,
 	rawEmail: string,
-): Promise<InviteActionResult> {
+): Promise<EmailActionResult> {
 	const { session, slackUserId } = await requireVolunteer();
 	const actor = await actorId(session.user.id);
 
@@ -263,7 +254,7 @@ export async function sendInvite(
  */
 export async function cancelInvite(
 	inviteId: string,
-): Promise<InviteActionResult> {
+): Promise<EmailActionResult> {
 	const { session, slackUserId } = await requireVolunteer();
 	const actor = await actorId(session.user.id);
 
