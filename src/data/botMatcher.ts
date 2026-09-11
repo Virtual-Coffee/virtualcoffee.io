@@ -20,16 +20,23 @@ const escapeRegExp = (value: string) =>
 
 /**
  * Builds one case-insensitive pattern for the whole list. Returns a matcher
- * that is always false for an empty list, rather than a pattern that matches
- * everything.
+ * that gives back the list entry that fired — spelled as it is in the list,
+ * not as it appeared in the header — or `null` for no match. For an empty
+ * list it is always `null`, rather than a pattern that matches everything.
  */
 export function createBotMatcher(tokens: string[]) {
-	if (tokens.length === 0) return () => false;
+	if (tokens.length === 0) return () => null;
 
 	const pattern = new RegExp(
-		`(?:^|[^a-z0-9-])(?:${tokens.map(escapeRegExp).join('|')})(?:$|[^a-z0-9-])`,
+		`(?:^|[^a-z0-9-])(${tokens.map(escapeRegExp).join('|')})(?:$|[^a-z0-9-])`,
 		'i',
 	);
+	const byLowerCase = new Map(tokens.map((t) => [t.toLowerCase(), t]));
 
-	return (userAgent: string) => pattern.test(userAgent);
+	return (userAgent: string): string | null => {
+		const hit = pattern.exec(userAgent)?.[1];
+		return hit === undefined
+			? null
+			: (byLowerCase.get(hit.toLowerCase()) ?? null);
+	};
 }

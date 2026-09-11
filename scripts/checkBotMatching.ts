@@ -22,6 +22,25 @@ function verdict(ua: string) {
 	return isBlocked(ua) ? 'block' : 'allow';
 }
 
+/**
+ * Which list entry fires. The edge function logs this, so it has to be the
+ * token as written in the list, not however the header happened to spell it.
+ */
+const tokenCases: [ua: string, expected: string, why: string][] = [
+	['Datadog/Synthetics', 'Datadog/Synthetics', 'a token containing a slash'],
+	[
+		'Mozilla/5.0 (X11; Linux x86_64; rv:155) Gecko/20100101 Firefox/155 DatadogSynthetics',
+		'DatadogSynthetics',
+		'a token at the end of a browser UA',
+	],
+	['Code/1.2.3', 'Code', 'a short token'],
+	[
+		'mozilla/5.0 (compatible; gptbot/1.1; +https://openai.com/gptbot)',
+		'GPTBot',
+		'reported in list casing, not header casing',
+	],
+];
+
 const cases: [ua: string, expected: 'allow' | 'block', why: string][] = [
 	// Training crawlers are the point of the list.
 	[
@@ -145,6 +164,16 @@ for (const [ua, expected, why] of cases) {
 	}
 }
 
+for (const [ua, expected, why] of tokenCases) {
+	const actual = isBlocked(ua);
+	if (actual !== expected) {
+		failures += 1;
+		console.error(
+			`✗ expected token ${expected}, got ${String(actual)}: ${why}\n    ${ua}`,
+		);
+	}
+}
+
 // A token in two tiers would make robots.txt both allow and disallow it.
 const tiers = new Map<string, string[]>();
 for (const [tier, list] of [
@@ -169,4 +198,6 @@ if (failures > 0) {
 	process.exit(1);
 }
 
-console.log(`Bot matching: ${cases.length} cases and ${tiers.size} tokens OK.`);
+console.log(
+	`Bot matching: ${cases.length} verdicts, ${tokenCases.length} token identities and ${tiers.size} tokens OK.`,
+);
