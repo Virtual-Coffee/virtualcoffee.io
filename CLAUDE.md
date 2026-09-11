@@ -26,7 +26,7 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Regenerate the bot list                    | `pnpm build-bot-list` (fetches the release pinned in `.botlist-version.json`)                                                                           |
 | Check the bot matcher                      | `pnpm check-bot-matching` (just `src/data/botMatcher.test.ts`; `pnpm test` covers it, this alias is for `refresh-bot-list.yml`)                         |
 
-`.github/workflows/ci.yml` runs four jobs on every pull request — `format`, `lint`, `typecheck`, `test`. Netlify still owns `pnpm build`; CI does not build.
+`.github/workflows/ci.yml` runs four jobs on every pull request — `format`, `lint`, `typecheck`, `test` — and the same four on pushes to `main`, which exists only so the `test` job's coverage upload gives GitHub Code Quality a baseline for its PR comment (the upload is `fail-on-error: false` and skipped on fork PRs, whose token can't write). Netlify still owns `pnpm build`; CI does not build.
 
 The `lint`, `typecheck` and `test` jobs run `pnpm codegen` first, because `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test` before finishing a change.
 

@@ -41,6 +41,9 @@ export default defineConfig({
 		],
 		coverage: {
 			provider: 'v8',
+			// cobertura is what GitHub's code-coverage upload reads; `text` is for
+			// the terminal and the job log.
+			reporter: ['text', 'cobertura'],
 			include: ['src/**'],
 			exclude: [
 				// Pages and components: a unit runner cannot render async Server
