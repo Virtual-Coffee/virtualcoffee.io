@@ -2,19 +2,23 @@ import type { EdgeFunction } from '@netlify/edge-functions';
 import { allowedUas, blockedUas } from '../../src/data/bots.ts';
 import { createBotMatcher } from '../../src/data/botMatcher.ts';
 
-// Netlify sets CONTEXT to one of these on a real deploy and leaves it unset
-// under `netlify dev`. Test for a deploy positively — there is nothing to
-// protect on a laptop, and a silent 403 there reads as an auth bug.
+// Netlify reports one of these as `context.deploy.context` on a real deploy,
+// and `dev` under `netlify dev`. Test for a deploy positively — there is
+// nothing to protect on a laptop, and a silent 403 there reads as an auth bug.
+//
+// Read it from the context object, not `Netlify.env.get('CONTEXT')`: that is
+// a build-scope variable and is undefined at the edge, which made this gate
+// fail closed on every production request.
 const deployContexts = ['production', 'deploy-preview', 'branch-deploy'];
 
 // Built once at module load rather than per request.
 const isAllowed = createBotMatcher(allowedUas);
 const isBlocked = createBotMatcher(blockedUas);
 
-// Returning undefined bypasses the edge function, so there is no use for the
-// `context` argument and nothing here to await.
-const blockBots: EdgeFunction = (request) => {
-	const onDeploy = deployContexts.includes(Netlify.env.get('CONTEXT') ?? '');
+// Returning undefined bypasses the edge function, so there is nothing here to
+// await.
+const blockBots: EdgeFunction = (request, context) => {
+	const onDeploy = deployContexts.includes(context.deploy.context);
 	if (!onDeploy && Netlify.env.get('BLOCK_BOTS_LOCAL') !== 'true') return;
 
 	const ua = request.headers.get('user-agent') ?? '';
