@@ -19,6 +19,9 @@ export default defineConfig({
 	},
 	test: {
 		environment: 'node',
+		// Root-level on purpose: per-project it does not cover `--project db`
+		// while that project is still empty.
+		passWithNoTests: true,
 		projects: [
 			{
 				test: {
@@ -33,7 +36,6 @@ export default defineConfig({
 					include: ['**/*.db.test.ts'],
 					// One in-memory database per run, so files must not race.
 					fileParallelism: false,
-					passWithNoTests: true,
 				},
 			},
 		],
@@ -41,13 +43,18 @@ export default defineConfig({
 			provider: 'v8',
 			include: ['src/**'],
 			exclude: [
+				// Pages and components: a unit runner cannot render async Server
+				// Components (Next's own guidance), so listing them is only noise.
+				'src/app/**',
+				'**/*.tsx',
 				// Codegen (gitignored) and the generated, checked-in bot list.
 				'src/data/members/core.ts',
 				'src/data/members/members.ts',
 				'src/data/undrawAspectRatios.ts',
 				'src/data/bots.ts',
-				// Content, not code.
+				// Content and styles, not code.
 				'src/content/**',
+				'src/styles/**',
 			],
 		},
 	},

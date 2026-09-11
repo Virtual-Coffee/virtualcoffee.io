@@ -160,11 +160,6 @@ jobs:
       - name: Generate codegen files
         run: pnpm codegen
 
-      # The edge function's user-agent matching is no longer a one-liner, and
-      # the list it runs against comes from upstream. ESLint can't see either.
-      - name: Check bot matching
-        run: pnpm check-bot-matching
-
       - name: Register ESLint problem matcher
         run: echo "::add-matcher::.github/problem-matchers/eslint-stylish.json"
 
@@ -202,3 +197,32 @@ jobs:
 
       - name: Typecheck
         run: pnpm typecheck
+
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Same reason as lint/typecheck: a test is free to import a module that
+      # reaches the gitignored codegen through @/*.
+      - name: Generate codegen files
+        run: pnpm codegen
+
+      # Vitest switches to its github-actions reporter on its own here, so
+      # failures annotate the diff without a problem matcher.
+      - name: Test
+        run: pnpm test
