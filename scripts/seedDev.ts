@@ -307,7 +307,10 @@ async function seedUserManagement(database: ReturnType<typeof db>) {
 			name: 'Local dev',
 			email: 'dev@localhost',
 			emailVerified: true,
-			role: serialiseRoles(['admin']),
+			// `volunteer` as well, because `seedVolunteers()` gives this identity a
+			// `volunteer` row and a row without the role is the broken state
+			// /admin/volunteers exists to prevent.
+			role: serialiseRoles(['admin', 'volunteer']),
 			slackUserId: DEV_BYPASS_SLACK_ID,
 			roleGrantedBy: 'Seed script',
 			roleGrantedAt: daysAgo(30),
