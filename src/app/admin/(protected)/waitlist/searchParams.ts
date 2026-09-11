@@ -1,4 +1,4 @@
-import type { ApplicationStatus } from '@/db';
+import { applicationStatus, type ApplicationStatus } from '@/db';
 import {
 	PAGE_SIZE,
 	QUEUE_STATUSES,
@@ -14,14 +14,8 @@ const SORT_FIELDS: SortField[] = [
 	'submittedAt',
 ];
 
-const ALL_STATUSES: ApplicationStatus[] = [
-	'waitlisted',
-	'coffee_invited',
-	'member',
-	'declined',
-	'withdrawn',
-	'lapsed',
-];
+// Read off the pgEnum so a new status is accepted here without a second edit.
+const ALL_STATUSES: readonly ApplicationStatus[] = applicationStatus.enumValues;
 
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
