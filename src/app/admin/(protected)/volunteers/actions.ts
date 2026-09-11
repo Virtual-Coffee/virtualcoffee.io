@@ -13,7 +13,7 @@ import {
 } from '@/db';
 import { isId } from '@/db/ids';
 import { getSlackMembers } from '@/data/slackMembers';
-import { requirePermission } from '@/lib/adminAccess';
+import { actorId, requirePermission } from '@/lib/adminAccess';
 import {
 	volunteerGrantEmail,
 	volunteerInviteEmail,
@@ -38,16 +38,6 @@ function revalidate(volunteerId?: string) {
 
 function siteUrl(): string {
 	return process.env.URL?.replace(/\/$/, '') ?? 'https://virtualcoffee.io';
-}
-
-/** Events are recorded with a null actor for the dev bypass, which has no row. */
-async function actorId(userId: string): Promise<string | null> {
-	const [row] = await db()
-		.select({ id: user.id })
-		.from(user)
-		.where(eq(user.id, userId))
-		.limit(1);
-	return row?.id ?? null;
 }
 
 /**

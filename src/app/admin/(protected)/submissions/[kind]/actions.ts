@@ -4,7 +4,8 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 import { db, type SubmissionStatus } from '@/db';
-import { requirePermission } from '@/lib/adminAccess';
+import { isId } from '@/db/ids';
+import { actorId, requirePermission } from '@/lib/adminAccess';
 import type { Session } from '@/lib/auth';
 import {
 	isSubmissionKind,
@@ -57,6 +58,11 @@ export async function setSubmissionStatus(
 	const next = status as SubmissionStatus;
 	const { table } = SUBMISSION_KINDS[context.kind];
 
+	// The id comes from the client, not a URL, but the 22P02 hazard is the
+	// same: Postgres throws on a malformed literal against a uuid column.
+	if (!isId(id))
+		return { ok: false, message: 'That submission no longer exists.' };
+
 	const [current] = await db()
 		.select({ status: table.status })
 		.from(table)
@@ -66,6 +72,10 @@ export async function setSubmissionStatus(
 	if (!current)
 		return { ok: false, message: 'That submission no longer exists.' };
 	if (current.status === next) return { ok: true };
+
+	// Resolve the actor before the update, so a lookup failure cannot leave a
+	// status change behind with no event recording who made it.
+	const actor = await actorId(context.session.user.id);
 
 	// `closedAt` records when it stopped needing attention, so reopening clears
 	// it rather than leaving a date that is no longer true.
@@ -81,7 +91,7 @@ export async function setSubmissionStatus(
 		submissionId: id,
 		type: 'status_changed',
 		body: null,
-		actorUserId: actorId(context.session.user.id),
+		actorUserId: actor,
 		fromStatus: current.status,
 		toStatus: next,
 	});
@@ -103,25 +113,19 @@ export async function addSubmissionNote(
 
 	const trimmed = body.trim();
 	if (!trimmed) return { ok: false, message: 'A note needs some text.' };
+	if (!isId(id))
+		return { ok: false, message: 'That submission no longer exists.' };
 
 	await recordSubmissionEvent({
 		kind: context.kind,
 		submissionId: id,
 		type: 'note',
 		body: trimmed,
-		actorUserId: actorId(context.session.user.id),
+		actorUserId: await actorId(context.session.user.id),
 	});
 
 	revalidatePath(`/admin/submissions/${context.kind}/${id}`);
 	revalidatePath('/admin');
 
 	return { ok: true };
-}
-
-/**
- * The local dev bypass has no row in `user`, so its id would break the foreign
- * key. Recording the event with no actor is the honest outcome there.
- */
-function actorId(userId: string): string | null {
-	return userId === 'dev-bypass' ? null : userId;
 }

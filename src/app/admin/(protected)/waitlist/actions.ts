@@ -8,10 +8,9 @@ import {
 	db,
 	invite,
 	membershipApplication,
-	user,
 	type ApplicationStatus,
 } from '@/db';
-import { requirePermission } from '@/lib/adminAccess';
+import { actorId, requirePermission } from '@/lib/adminAccess';
 import { sendEmail } from '@/lib/email/transport';
 import {
 	coffeeInviteEmail,
@@ -61,19 +60,6 @@ async function recordEvent(input: {
 			toStatus: input.toStatus ?? null,
 			body: input.body ?? null,
 		});
-}
-
-/**
- * Actor id for audit rows. The local dev bypass has no matching `user` row, so
- * its events are recorded with a null actor rather than a dangling foreign key.
- */
-async function actorId(userId: string): Promise<string | null> {
-	const [row] = await db()
-		.select({ id: user.id })
-		.from(user)
-		.where(eq(user.id, userId))
-		.limit(1);
-	return row?.id ?? null;
 }
 
 /**

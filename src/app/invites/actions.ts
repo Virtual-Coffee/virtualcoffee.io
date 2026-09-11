@@ -4,7 +4,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-import { db, invite, user, volunteer, volunteerInviteLedger } from '@/db';
+import { db, invite, volunteer, volunteerInviteLedger } from '@/db';
 import { isId } from '@/db/ids';
 import { volunteerInviteEmail } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
@@ -13,6 +13,7 @@ import {
 	hashClaimToken,
 	newClaimToken,
 } from '@/lib/invites';
+import { actorId } from '@/lib/adminAccess';
 import { requireVolunteer } from '@/lib/volunteerAccess';
 
 /**
@@ -32,20 +33,6 @@ const schema = z.object({
 
 function siteUrl(): string {
 	return process.env.URL?.replace(/\/$/, '') ?? 'https://virtualcoffee.io';
-}
-
-/**
- * The dev bypass session has no `user` row, so its ledger rows record a null
- * actor rather than a dangling foreign key. Same helper, same reason, as
- * `actorId()` in the waitlist actions.
- */
-async function actorId(userId: string): Promise<string | null> {
-	const [row] = await db()
-		.select({ id: user.id })
-		.from(user)
-		.where(eq(user.id, userId))
-		.limit(1);
-	return row?.id ?? null;
 }
 
 /**

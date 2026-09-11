@@ -1,6 +1,9 @@
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 
+import { eq } from 'drizzle-orm';
+
+import { db, user } from '@/db';
 import { auth, type Session } from '@/lib/auth';
 import {
 	parseRoles,
@@ -235,4 +238,23 @@ export async function requireAdmin(): Promise<Session> {
 	}
 
 	return session;
+}
+
+/**
+ * The actor to record on an audit row for this session, or null.
+ *
+ * The dev bypass and the preview bypass sessions above have no `user` row, and
+ * every `*_event.actor_user_id` is a foreign key — so writing the session's id
+ * straight in would throw on the event insert, after the status change it was
+ * meant to record had already been written. Looking the row up is what makes a
+ * bypass session's events land with no actor rather than not at all. Every
+ * server action that records an event should get its actor from here.
+ */
+export async function actorId(userId: string): Promise<string | null> {
+	const [row] = await db()
+		.select({ id: user.id })
+		.from(user)
+		.where(eq(user.id, userId))
+		.limit(1);
+	return row?.id ?? null;
 }
