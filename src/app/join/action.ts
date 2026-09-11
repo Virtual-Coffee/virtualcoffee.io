@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { applicationEvent, db, invite, membershipApplication } from '@/db';
 import { hashClaimToken } from '@/lib/invites';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
+import { formValue, fieldErrorsFrom } from '@/util/forms/parse';
 import { looksLikeSpam } from '@/util/forms/spamGuard';
 
 /** What redeeming a Claim Link yields, or null when there was nothing to redeem. */
@@ -53,13 +54,6 @@ const schema = z.object({
 	}),
 });
 
-function value(formData: FormData, key: string): string | undefined {
-	const raw = formData.get(key);
-	if (typeof raw !== 'string') return undefined;
-	const trimmed = raw.trim();
-	return trimmed.length > 0 ? trimmed : undefined;
-}
-
 export async function submitMembershipApplication(
 	_state: JoinFormState,
 	formData: FormData,
@@ -73,30 +67,25 @@ export async function submitMembershipApplication(
 	const parsed = schema.safeParse({
 		name: formData.get('name') ?? '',
 		email: formData.get('email') ?? '',
-		pronouns: value(formData, 'pronouns'),
-		githubUsername: value(formData, 'githubUsername'),
-		howDidYouHear: value(formData, 'howDidYouHear'),
-		journey: value(formData, 'journey'),
-		codeInterests: value(formData, 'codeInterests'),
-		virtualCoffee: value(formData, 'virtualCoffee'),
+		pronouns: formValue(formData, 'pronouns'),
+		githubUsername: formValue(formData, 'githubUsername'),
+		howDidYouHear: formValue(formData, 'howDidYouHear'),
+		journey: formValue(formData, 'journey'),
+		codeInterests: formValue(formData, 'codeInterests'),
+		virtualCoffee: formValue(formData, 'virtualCoffee'),
 		agree: formData.get('agree') ?? '',
 	});
 
 	if (!parsed.success) {
-		const fieldErrors: Record<string, string> = {};
-		for (const issue of parsed.error.issues) {
-			const key = String(issue.path[0] ?? '');
-			fieldErrors[key] ??= issue.message;
-		}
 		return {
 			is_error: true,
 			message: 'Please check the highlighted fields.',
-			fieldErrors,
+			fieldErrors: fieldErrorsFrom(parsed.error),
 		};
 	}
 
 	const now = new Date();
-	const claimToken = value(formData, 'invite');
+	const claimToken = formValue(formData, 'invite');
 	let result: { applicationId: string; claimed: ClaimedInvite };
 
 	try {

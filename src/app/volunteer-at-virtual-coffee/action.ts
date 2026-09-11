@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { db, volunteerSignup } from '@/db';
 import { notifySlack, volunteerSignupMessage } from '@/lib/slack/notify';
 import { notifyAndRecord, recordSubmissionEvent } from '@/lib/submitSubmission';
+import { fieldErrorsFrom } from '@/util/forms/parse';
 import { looksLikeSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
@@ -59,15 +60,10 @@ export async function submitVolunteerSignup(
 	});
 
 	if (!parsed.success) {
-		const fieldErrors: Record<string, string> = {};
-		for (const issue of parsed.error.issues) {
-			const key = String(issue.path[0] ?? '');
-			fieldErrors[key] ??= issue.message;
-		}
 		return {
 			is_error: true,
 			message: 'Please check the highlighted fields.',
-			fieldErrors,
+			fieldErrors: fieldErrorsFrom(parsed.error),
 		};
 	}
 

@@ -7,6 +7,7 @@ import { cocReport, db } from '@/db';
 import { storeAttachment, type StoredAttachment } from '@/lib/attachments';
 import { cocReportMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, recordSubmissionEvent } from '@/lib/submitSubmission';
+import { formValue, fieldErrorsFrom } from '@/util/forms/parse';
 import { looksLikeSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
@@ -41,13 +42,6 @@ const schema = z.object({
 	}),
 });
 
-function value(formData: FormData, key: string): string | undefined {
-	const raw = formData.get(key);
-	if (typeof raw !== 'string') return undefined;
-	const trimmed = raw.trim();
-	return trimmed.length > 0 ? trimmed : undefined;
-}
-
 export async function submitCocReport(
 	_state: FormState,
 	formData: FormData,
@@ -59,25 +53,20 @@ export async function submitCocReport(
 	}
 
 	const parsed = schema.safeParse({
-		name: value(formData, 'name'),
-		email: value(formData, 'email'),
+		name: formValue(formData, 'name'),
+		email: formValue(formData, 'email'),
 		reportee_name: formData.get('reportee_name') ?? '',
 		time_location: formData.get('time_location') ?? '',
 		description: formData.get('description') ?? '',
-		anyone_else_involved: value(formData, 'anyone_else_involved'),
+		anyone_else_involved: formValue(formData, 'anyone_else_involved'),
 		agree: formData.get('agree') ?? '',
 	});
 
 	if (!parsed.success) {
-		const fieldErrors: Record<string, string> = {};
-		for (const issue of parsed.error.issues) {
-			const key = String(issue.path[0] ?? '');
-			fieldErrors[key] ??= issue.message;
-		}
 		return {
 			is_error: true,
 			message: 'Please check the highlighted fields.',
-			fieldErrors,
+			fieldErrors: fieldErrorsFrom(parsed.error),
 		};
 	}
 

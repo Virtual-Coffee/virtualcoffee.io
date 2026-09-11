@@ -8,6 +8,7 @@ import { db, lunchAndLearnIdea } from '@/db';
 import { createLunchAndLearnIssue } from '@/lib/github/issues';
 import { lunchAndLearnMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, recordSubmissionEvent } from '@/lib/submitSubmission';
+import { formValue, fieldErrorsFrom } from '@/util/forms/parse';
 import { looksLikeSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
@@ -36,13 +37,6 @@ const schema = z.object({
 	}),
 });
 
-function value(formData: FormData, key: string): string | undefined {
-	const raw = formData.get(key);
-	if (typeof raw !== 'string') return undefined;
-	const trimmed = raw.trim();
-	return trimmed.length > 0 ? trimmed : undefined;
-}
-
 export async function submitLunchAndLearnIdea(
 	_state: FormState,
 	formData: FormData,
@@ -56,21 +50,16 @@ export async function submitLunchAndLearnIdea(
 		Email: formData.get('Email') ?? '',
 		Topic: formData.get('Topic') ?? '',
 		Description: formData.get('Description') ?? '',
-		Format: value(formData, 'Format'),
+		Format: formValue(formData, 'Format'),
 		Timing: formData.get('Timing') ?? '',
 		agree: formData.get('agree') ?? '',
 	});
 
 	if (!parsed.success) {
-		const fieldErrors: Record<string, string> = {};
-		for (const issue of parsed.error.issues) {
-			const key = String(issue.path[0] ?? '');
-			fieldErrors[key] ??= issue.message;
-		}
 		return {
 			is_error: true,
 			message: 'Please check the highlighted fields.',
-			fieldErrors,
+			fieldErrors: fieldErrorsFrom(parsed.error),
 		};
 	}
 
