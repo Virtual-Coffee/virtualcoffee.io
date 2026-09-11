@@ -77,6 +77,8 @@ export const extraBlocked = [
 	'DataForSeoBot',
 	'magpie-crawler',
 	'peer39_crawler',
+	// Third-party synthetic monitoring, never asked for here and heavy enough to
+	// notice. Not upstream's remit, so it can only live here.
 	'DatadogSynthetics',
 ];
 
