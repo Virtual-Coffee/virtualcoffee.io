@@ -111,7 +111,8 @@ export function AdminsTable({
 	});
 
 	return (
-		<div className="table-responsive">
+		// No `.table-responsive`: its scroll container would clip the roles menu.
+		<div>
 			<table className="table align-middle">
 				<thead>
 					{table.getHeaderGroups().map((group) => (

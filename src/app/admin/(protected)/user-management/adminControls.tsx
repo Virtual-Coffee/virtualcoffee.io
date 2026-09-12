@@ -1,12 +1,6 @@
 'use client';
 
-import {
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-	useTransition,
-} from 'react';
+import { useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
 import type { GrantCandidate } from '@/lib/admins';
@@ -53,31 +47,6 @@ export function RolesDropdown({
 		HTMLDivElement,
 		HTMLButtonElement
 	>();
-
-	// Positioned `fixed` and anchored to the toggle's rect: the table's
-	// `.table-responsive` scroll container would clip an absolute menu.
-	const [anchor, setAnchor] = useState<{ top: number; left: number } | null>(
-		null,
-	);
-
-	const measure = useCallback(() => {
-		const rect = toggleRef.current?.getBoundingClientRect();
-		if (rect) setAnchor({ top: rect.bottom + 4, left: rect.left });
-	}, [toggleRef]);
-
-	useEffect(() => {
-		if (!open) return;
-
-		measure();
-
-		// `true` so a scroll of the table itself is caught, not just the page.
-		window.addEventListener('scroll', measure, true);
-		window.addEventListener('resize', measure);
-		return () => {
-			window.removeEventListener('scroll', measure, true);
-			window.removeEventListener('resize', measure);
-		};
-	}, [open, measure]);
 
 	const grantable = roles.filter((role) => GRANTABLE_ROLE_NAMES.has(role));
 
@@ -173,11 +142,6 @@ export function RolesDropdown({
 					className="dropdown-menu show py-1"
 					style={
 						{
-							position: 'fixed',
-							top: anchor?.top ?? 0,
-							left: anchor?.left ?? 0,
-							// Hidden until measured, so it never flashes at the top-left.
-							visibility: anchor ? 'visible' : 'hidden',
 							// `.small` loses to `.dropdown-menu`'s own font-size; the variable wins.
 							'--bs-dropdown-font-size': '0.8125rem',
 						} as React.CSSProperties
