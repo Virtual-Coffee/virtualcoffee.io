@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import type { MembershipApplication } from '@/db';
 import { useModalDialog } from '@/util/useModalDialog';
-import { SourceBadge, StatusBadge, formatDate } from '../presentation';
+import { Answer, SourceBadge, StatusBadge, formatDate } from '../presentation';
 
 /**
  * A native <dialog>, so Escape-to-close, focus trapping and making the page
@@ -50,15 +50,29 @@ export function ApplicationDrawer({
 
 					<div className="flex-grow-1 overflow-auto p-3">
 						<Answer
+							heading="h3"
+							spacing="mb-3"
 							label="How did you hear about us?"
 							value={application.howDidYouHear}
 						/>
-						<Answer label="Coding journey" value={application.journey} />
 						<Answer
+							heading="h3"
+							spacing="mb-3"
+							label="Coding journey"
+							value={application.journey}
+						/>
+						<Answer
+							heading="h3"
+							spacing="mb-3"
 							label="Coding interests"
 							value={application.codeInterests}
 						/>
-						<Answer label="Hoping to get" value={application.virtualCoffee} />
+						<Answer
+							heading="h3"
+							spacing="mb-3"
+							label="Hoping to get"
+							value={application.virtualCoffee}
+						/>
 						<dl className="row small text-body-secondary mb-0">
 							<dt className="col-5">Submitted</dt>
 							<dd className="col-7">{formatDate(application.submittedAt)}</dd>
@@ -95,18 +109,5 @@ export function ApplicationDrawer({
 				</div>
 			)}
 		</dialog>
-	);
-}
-
-function Answer({ label, value }: { label: string; value: string | null }) {
-	return (
-		<section className="mb-3">
-			<h3 className="h6 text-body-secondary">{label}</h3>
-			{value ? (
-				<p className="admin-answer mb-0">{value}</p>
-			) : (
-				<p className="text-body-secondary fst-italic mb-0">No answer given</p>
-			)}
-		</section>
 	);
 }

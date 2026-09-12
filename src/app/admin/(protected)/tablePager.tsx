@@ -1,32 +1,30 @@
 'use client';
 
+import type { PaginationState, RowData, Table } from '@tanstack/react-table';
+
+import type { ServerTableFeatures } from './tableUrlState';
+
 /**
- * The footer under a server-paginated admin table.
- *
- * Deliberately presentational: every value here comes from the caller's table
- * instance (`getPageCount()`, `getCanPreviousPage()`, …), because those APIs
- * only exist once `rowPaginationFeature` is registered and the concrete
- * feature set lives at the call site.
+ * The footer under a table from `useServerPagedTable()`. The hook hands back
+ * both halves; the page state is the URL's, the counts are the table's.
  */
-export function TablePager({
-	pageIndex,
-	pageSize,
-	pageCount,
+export function TablePager<TData extends RowData>({
+	table,
+	pagination: { pageIndex, pageSize },
 	rowCount,
-	canPrevious,
-	canNext,
-	onPrevious,
-	onNext,
 }: {
-	pageIndex: number;
-	pageSize: number;
-	pageCount: number;
+	table: Pick<
+		Table<ServerTableFeatures, TData>,
+		| 'getPageCount'
+		| 'getCanPreviousPage'
+		| 'getCanNextPage'
+		| 'previousPage'
+		| 'nextPage'
+	>;
+	pagination: PaginationState;
 	rowCount: number;
-	canPrevious: boolean;
-	canNext: boolean;
-	onPrevious: () => void;
-	onNext: () => void;
 }) {
+	const pageCount = table.getPageCount();
 	const firstRow = rowCount === 0 ? 0 : pageIndex * pageSize + 1;
 	const lastRow = Math.min((pageIndex + 1) * pageSize, rowCount);
 
@@ -39,8 +37,8 @@ export function TablePager({
 				<button
 					type="button"
 					className="btn btn-sm btn-outline-secondary"
-					disabled={!canPrevious}
-					onClick={onPrevious}
+					disabled={!table.getCanPreviousPage()}
+					onClick={() => table.previousPage()}
 				>
 					Previous
 				</button>
@@ -50,8 +48,8 @@ export function TablePager({
 				<button
 					type="button"
 					className="btn btn-sm btn-outline-secondary"
-					disabled={!canNext}
-					onClick={onNext}
+					disabled={!table.getCanNextPage()}
+					onClick={() => table.nextPage()}
 				>
 					Next
 				</button>

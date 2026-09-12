@@ -2,15 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import {
-	createColumnHelper,
-	rowPaginationFeature,
-	rowSortingFeature,
-	tableFeatures,
-	useTable,
-	type PaginationState,
-	type SortingState,
-} from '@tanstack/react-table';
+import { createColumnHelper } from '@tanstack/react-table';
 
 import type { MembershipApplication } from '@/db';
 import type { SortField } from '@/lib/applications';
@@ -18,14 +10,12 @@ import { ApplicationDrawer } from './applicationDrawer';
 import { StatusBadge, SourceBadge, formatDate } from '../presentation';
 import { SortableHeader } from '../sortableHeader';
 import { TablePager } from '../tablePager';
-import { useTableUrlState } from '../tableUrlState';
+import {
+	useServerPagedTable,
+	type ServerTableFeatures,
+} from '../tableUrlState';
 
-// Features registered for their header/footer APIs, row models deliberately
-// not: the server sorts and pages, and a client row model would re-sort the
-// 50 rows on screen as if it had ordered them all. See `useTableUrlState`.
-const features = tableFeatures({ rowSortingFeature, rowPaginationFeature });
-
-const helper = createColumnHelper<typeof features, MembershipApplication>();
+const helper = createColumnHelper<ServerTableFeatures, MembershipApplication>();
 
 const columns = helper.columns([
 	helper.accessor('name', {
@@ -94,45 +84,14 @@ export function ApplicationsTable({
 }: Props) {
 	const [openId, setOpenId] = useState<string | null>(null);
 
-	// The table's model inputs have to keep a stable identity between renders —
-	// a fresh array here on every render is not compensated for by any of the
-	// state subscriptions.
-	const sorting = useMemo<SortingState>(
-		() => [{ id: sort, desc: direction === 'desc' }],
-		[direction, sort],
-	);
-	const pagination = useMemo<PaginationState>(
-		() => ({ pageIndex: page, pageSize }),
-		[page, pageSize],
-	);
-
-	const { onSortingChange, onPaginationChange } = useTableUrlState({
-		sorting,
-		pagination,
-	});
-
-	const table = useTable({
-		features,
+	const { table, pagination } = useServerPagedTable({
 		columns,
-		data: rows,
-		manualSorting: true,
-		manualPagination: true,
-		// Without the total, "is there a next page" cannot be answered.
+		rows,
 		rowCount,
-		// The URL owns both slices, so nothing here may reset them behind its
-		// back; sort changes reset the page deliberately, in the hook.
-		autoResetPageIndex: false,
-		state: { sorting, pagination },
-		onSortingChange,
-		onPaginationChange,
-		// A column always carries a sort; there is no unsorted third state to
-		// cycle into, because the server has to be told *some* order. Without
-		// this the built-in toggle would cycle to "none" and push an empty sort.
-		enableSortingRemoval: false,
-		// Preserves the previous behaviour of a newly clicked column opening
-		// descending — newest and largest first is what this queue is read for.
-		sortDescFirst: true,
-		getRowId: (row) => row.id,
+		page,
+		pageSize,
+		sort,
+		direction,
 	});
 
 	const openRow = useMemo(
@@ -237,16 +196,7 @@ export function ApplicationsTable({
 				))}
 			</ul>
 
-			<TablePager
-				pageIndex={pagination.pageIndex}
-				pageSize={pagination.pageSize}
-				pageCount={table.getPageCount()}
-				rowCount={rowCount}
-				canPrevious={table.getCanPreviousPage()}
-				canNext={table.getCanNextPage()}
-				onPrevious={() => table.previousPage()}
-				onNext={() => table.nextPage()}
-			/>
+			<TablePager table={table} pagination={pagination} rowCount={rowCount} />
 
 			<ApplicationDrawer
 				application={openRow}

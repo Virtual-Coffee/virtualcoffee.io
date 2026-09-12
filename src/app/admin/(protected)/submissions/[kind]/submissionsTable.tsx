@@ -2,22 +2,17 @@
 
 import { useMemo } from 'react';
 import Link from 'next/link';
-import {
-	createColumnHelper,
-	rowPaginationFeature,
-	rowSortingFeature,
-	tableFeatures,
-	useTable,
-	type PaginationState,
-	type SortingState,
-} from '@tanstack/react-table';
+import { createColumnHelper } from '@tanstack/react-table';
 
 import type { SubmissionStatus } from '@/db';
 import type { SubmissionSortField } from '@/lib/submissions';
 import { formatDateTime } from '../../presentation';
 import { SortableHeader } from '../../sortableHeader';
 import { TablePager } from '../../tablePager';
-import { useTableUrlState } from '../../tableUrlState';
+import {
+	useServerPagedTable,
+	type ServerTableFeatures,
+} from '../../tableUrlState';
 import { SubmissionStatusBadge } from './presentation';
 
 /**
@@ -34,11 +29,7 @@ export type SubmissionListRow = {
 	submittedAt: Date;
 };
 
-// As the waitlist queue: features for their APIs, no row models — the server
-// already ordered and sliced this page.
-const features = tableFeatures({ rowSortingFeature, rowPaginationFeature });
-
-const helper = createColumnHelper<typeof features, SubmissionListRow>();
+const helper = createColumnHelper<ServerTableFeatures, SubmissionListRow>();
 
 function buildColumns(basePath: string) {
 	return helper.columns([
@@ -99,36 +90,14 @@ export function SubmissionsTable({
 }) {
 	const columns = useMemo(() => buildColumns(basePath), [basePath]);
 
-	const sorting = useMemo<SortingState>(
-		() => [{ id: sort, desc: direction === 'desc' }],
-		[direction, sort],
-	);
-	const pagination = useMemo<PaginationState>(
-		() => ({ pageIndex: page, pageSize }),
-		[page, pageSize],
-	);
-
-	const { onSortingChange, onPaginationChange } = useTableUrlState({
-		sorting,
-		pagination,
-	});
-
-	const table = useTable({
-		features,
+	const { table, pagination } = useServerPagedTable({
 		columns,
-		data: rows,
-		manualSorting: true,
-		manualPagination: true,
+		rows,
 		rowCount,
-		autoResetPageIndex: false,
-		state: { sorting, pagination },
-		onSortingChange,
-		onPaginationChange,
-		enableSortingRemoval: false,
-		// Newest first is what a queue of reports is read for, so a newly
-		// clicked column opens descending.
-		sortDescFirst: true,
-		getRowId: (row) => row.id,
+		page,
+		pageSize,
+		sort,
+		direction,
 	});
 
 	if (rows.length === 0) {
@@ -174,16 +143,7 @@ export function SubmissionsTable({
 				</table>
 			</div>
 
-			<TablePager
-				pageIndex={pagination.pageIndex}
-				pageSize={pagination.pageSize}
-				pageCount={table.getPageCount()}
-				rowCount={rowCount}
-				canPrevious={table.getCanPreviousPage()}
-				canNext={table.getCanNextPage()}
-				onPrevious={() => table.previousPage()}
-				onNext={() => table.nextPage()}
-			/>
+			<TablePager table={table} pagination={pagination} rowCount={rowCount} />
 		</>
 	);
 }

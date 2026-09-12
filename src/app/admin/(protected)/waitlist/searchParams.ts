@@ -1,11 +1,8 @@
 import type { ApplicationStatus } from '@/db';
-import {
-	PAGE_SIZE,
-	type ListFilters,
-	type SortField,
-} from '@/lib/applications';
+import type { ListFilters, SortField } from '@/lib/applications';
 import {
 	oneOf,
+	PAGE_SIZE,
 	pageIndex,
 	single,
 	sortDirection,

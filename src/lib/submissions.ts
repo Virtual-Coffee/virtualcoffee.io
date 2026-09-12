@@ -1,5 +1,6 @@
 import { and, asc, count, desc, eq, inArray, sql } from 'drizzle-orm';
 
+import { PAGE_SIZE } from '@/util/searchParams';
 import {
 	cocReport,
 	coffeeTableGroupRequest,
@@ -77,8 +78,6 @@ export function visibleSubmissionKinds(
 
 /** `new` and `in_progress` are the two a maintainer still has to do something about. */
 export const OPEN_STATUSES: SubmissionStatus[] = ['new', 'in_progress'];
-
-export const PAGE_SIZE = 50;
 
 /**
  * How many submissions of one kind are still open.

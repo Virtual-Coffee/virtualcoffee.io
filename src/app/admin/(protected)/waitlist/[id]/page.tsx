@@ -19,6 +19,7 @@ import { HistoryTimeline } from './historyTimeline';
 import { NoteComposer } from '../../noteComposer';
 import { addNote } from '../actions';
 import {
+	Answer,
 	SourceBadge,
 	StatusBadge,
 	formatDate,
@@ -200,18 +201,5 @@ export default async function ApplicationDetailPage({
 				</div>
 			</div>
 		</div>
-	);
-}
-
-function Answer({ label, value }: { label: string; value: string | null }) {
-	return (
-		<section className="mb-4">
-			<h2 className="h6 text-body-secondary">{label}</h2>
-			{value ? (
-				<p className="admin-answer mb-0">{value}</p>
-			) : (
-				<p className="text-body-secondary fst-italic mb-0">No answer given</p>
-			)}
-		</section>
 	);
 }

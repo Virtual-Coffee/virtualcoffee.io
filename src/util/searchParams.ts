@@ -10,6 +10,9 @@
 
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
+/** Rows per page on every server-paged /admin list. */
+export const PAGE_SIZE = 50;
+
 export function single(
 	value: string | string[] | undefined,
 ): string | undefined {

@@ -5,12 +5,12 @@ import { requirePermission } from '@/lib/adminAccess';
 import {
 	isSubmissionKind,
 	listSubmissions,
-	PAGE_SIZE,
 	SUBMISSION_DISPLAY,
 	SUBMISSION_KINDS,
 	submissionStatusCounts,
 } from '@/lib/submissions';
 import { STATUS_ORDER, SubmissionStatusBadge } from './presentation';
+import { PAGE_SIZE } from '@/util/searchParams';
 import { parseSubmissionSearchParams } from './searchParams';
 import { SubmissionsTable, type SubmissionListRow } from './submissionsTable';
 

@@ -116,3 +116,31 @@ export function ReadOnlyNotice() {
 		</p>
 	);
 }
+
+/**
+ * One free-text answer from a form, or the fact that it was skipped. The
+ * heading level follows the screen: the detail page's are h2, the drawer's
+ * sit under the drawer's own heading.
+ */
+export function Answer({
+	label,
+	value,
+	heading: Heading = 'h2',
+	spacing = 'mb-4',
+}: {
+	label: string;
+	value: string | null;
+	heading?: 'h2' | 'h3';
+	spacing?: 'mb-3' | 'mb-4';
+}) {
+	return (
+		<section className={spacing}>
+			<Heading className="h6 text-body-secondary">{label}</Heading>
+			{value ? (
+				<p className="admin-answer mb-0">{value}</p>
+			) : (
+				<p className="text-body-secondary fst-italic mb-0">No answer given</p>
+			)}
+		</section>
+	);
+}
