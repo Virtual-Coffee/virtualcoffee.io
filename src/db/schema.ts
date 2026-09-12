@@ -422,6 +422,17 @@ export const volunteerInviteLedger = pgTable(
 		uniqueIndex('volunteer_invite_ledger_refund_idx')
 			.on(table.inviteId)
 			.where(sql`reason in ('refund_cancelled', 'refund_expired')`),
+		/**
+		 * The three indexes above only bite when their key is present: a `spend`
+		 * with no `invite_id` would be a charge nothing can refund, and a second
+		 * one would not be a duplicate. So each keyed reason requires its key.
+		 */
+		check(
+			'volunteer_invite_ledger_reason_keys',
+			sql`(${table.reason} <> 'monthly_accrual' OR ${table.periodKey} IS NOT NULL)
+				AND (${table.reason} <> 'spend' OR ${table.inviteId} IS NOT NULL)
+				AND (${table.reason} NOT IN ('refund_cancelled', 'refund_expired') OR ${table.inviteId} IS NOT NULL)`,
+		),
 		index('volunteer_invite_ledger_slack_user_id_idx').on(table.slackUserId),
 	],
 );

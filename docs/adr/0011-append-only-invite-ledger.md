@@ -39,6 +39,14 @@ of nothing. The status guards make that hard to reach, but the schema claimed
 the database made it impossible and it did not. Grouping both refund reasons
 under one index is what actually says "at most once".
 
+Both indexes are partial on a key column, and a unique index says nothing
+about a row whose key is NULL: a `spend` with no `invite_id` would be a
+charge nothing can refund, and a second one would not be a duplicate. A CHECK
+constraint (`volunteer_invite_ledger_reason_keys`) therefore requires
+`period_key` on an accrual and `invite_id` on a spend or refund. The code
+always set them; the constraint is what makes the indexes mean what this
+section claims.
+
 ## Accrual is a cron, which Airtable never had
 
 There was no schedule in Airtable at all. `Increase Invites` fired on a manual

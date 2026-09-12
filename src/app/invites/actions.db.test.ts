@@ -366,6 +366,24 @@ describe('cancelInvite', () => {
 		});
 	});
 
+	/**
+	 * The spend-once and refund-once indexes are partial on the key column, so
+	 * a keyed row without its key would slip past both. The CHECK is what
+	 * makes them mean what ADR 0011 says.
+	 */
+	test.each([
+		'spend',
+		'refund_cancelled',
+		'refund_expired',
+		'monthly_accrual',
+	] as const)('the ledger refuses a %s without its key', async (reason) => {
+		await expect(
+			ledgerRow({ slackUserId: GRACE, delta: 1, reason }),
+		).rejects.toMatchObject({
+			cause: { constraint: 'volunteer_invite_ledger_reason_keys' },
+		});
+	});
+
 	test('a refund that fails leaves the invite pending, so it can be retried', async () => {
 		await volunteerWithBalance(1);
 		const { id } = await insertInvite({ inviterSlackUserId: GRACE });

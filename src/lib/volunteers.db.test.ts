@@ -20,14 +20,20 @@ describe('listVolunteers', () => {
 		await insertVolunteer({ slackUserId: 'U_B', name: 'Bea' });
 		await insertVolunteer({ slackUserId: 'U_C', name: 'Cal' });
 
+		const invites = [];
+		for (const inviter of ['U_A', 'U_A', 'U_B', 'U_B']) {
+			invites.push(await insertInvite({ inviterSlackUserId: inviter }));
+		}
+
 		await ledgerRow({ slackUserId: 'U_A', delta: 3, reason: 'imported' });
-		await ledgerRow({ slackUserId: 'U_A', delta: -1, reason: 'spend' });
+		await ledgerRow({
+			slackUserId: 'U_A',
+			delta: -1,
+			reason: 'spend',
+			inviteId: invites[0].id,
+		});
 		await ledgerRow({ slackUserId: 'U_B', delta: 5, reason: 'imported' });
 		await ledgerRow({ slackUserId: 'U_B', delta: 1, reason: 'admin_grant' });
-
-		for (const inviter of ['U_A', 'U_A', 'U_B', 'U_B']) {
-			await insertInvite({ inviterSlackUserId: inviter });
-		}
 
 		const rows = await listVolunteers();
 		expect(
