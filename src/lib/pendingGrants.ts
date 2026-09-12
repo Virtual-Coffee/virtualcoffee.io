@@ -135,6 +135,18 @@ export async function claimPendingGrant(account: {
 	if (account.providerId !== 'slack') return;
 
 	try {
+		/**
+		 * The Slack member id goes on first, in its own statement, so that a
+		 * claim that fails below still leaves the person findable: the recovery
+		 * join in `listAccessRows()` and every "has this Slack member signed
+		 * in?" check key on this column. Inside the transaction it would roll
+		 * back with the claim and strand them where nothing can see them.
+		 */
+		await db()
+			.update(user)
+			.set({ slackUserId: account.accountId })
+			.where(eq(user.id, account.userId));
+
 		await db().transaction(async (tx) => {
 			const [existing] = await tx
 				.select({ role: user.role })
@@ -200,10 +212,12 @@ export async function claimPendingGrant(account: {
 				}
 			}
 
-			await tx
-				.update(user)
-				.set({ slackUserId: account.accountId, ...(roleUpdate ?? {}) })
-				.where(eq(user.id, account.userId));
+			if (roleUpdate) {
+				await tx
+					.update(user)
+					.set(roleUpdate)
+					.where(eq(user.id, account.userId));
+			}
 
 			if (claimedGrantId) {
 				await tx

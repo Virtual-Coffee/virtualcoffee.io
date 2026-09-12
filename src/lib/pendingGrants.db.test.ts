@@ -3,11 +3,13 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, pendingGrant, user, volunteer } from '@/db';
 import {
+	failWrites,
 	insertPendingGrant,
 	insertUser,
 	insertVolunteer,
 } from '@/test/db/fixtures';
 
+import { listAccessRows } from './admins';
 import { claimPendingGrant, grantVolunteerRole } from './pendingGrants';
 
 async function userRow(id: string) {
@@ -140,6 +142,37 @@ describe('claimPendingGrant', () => {
 			.from(volunteer)
 			.where(eq(volunteer.slackUserId, 'U_GRACE'));
 		expect(row.userId).toBe(grace.id);
+	});
+
+	/**
+	 * ADR 0009 promises that a failed claim strands nobody: listAccessRows()
+	 * finds them by Slack id. That only holds if the Slack id was written
+	 * before the part that failed.
+	 */
+	test('a claim that fails still records the Slack id, so the person can be found', async () => {
+		const ada = await insertUser({});
+		await insertPendingGrant({ slackUserId: 'U_ADA', role: 'coc_reviewer' });
+		const trigger = await failWrites('pending_grant', 'update');
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		try {
+			await claimPendingGrant(slackAccount(ada.id, 'U_ADA'));
+
+			expect(error).toHaveBeenCalledOnce();
+			await expect(userRow(ada.id)).resolves.toMatchObject({
+				slackUserId: 'U_ADA',
+				role: null,
+			});
+			await expect(grantRows('U_ADA')).resolves.toMatchObject([
+				{ claimedAt: null },
+			]);
+			await expect(listAccessRows()).resolves.toContainEqual(
+				expect.objectContaining({ kind: 'user', id: ada.id, stranded: true }),
+			);
+		} finally {
+			await trigger.remove();
+			error.mockRestore();
+		}
 	});
 
 	test('ignores accounts from other providers, and never throws', async () => {

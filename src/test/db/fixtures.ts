@@ -198,25 +198,34 @@ export async function insertPendingGrant(fields: {
  * `afterEach` only truncates, so a test that installs one must remove it.
  */
 export async function failInserts(table: string, when = 'true') {
+	return failWrites(table, 'insert', when);
+}
+
+/** As `failInserts`, for an `update` or `insert` chosen by the caller. */
+export async function failWrites(
+	table: string,
+	statement: 'insert' | 'update',
+	when = 'true',
+) {
 	await db().execute(sql`
-		create or replace function test_fail_insert() returns trigger as $$
+		create or replace function test_fail_write() returns trigger as $$
 		begin
-			raise exception 'insert refused by test';
+			raise exception 'write refused by test';
 		end
 		$$ language plpgsql
 	`);
 	await db().execute(
 		sql.raw(`
-		create trigger test_fail_insert
-		before insert on "${table}"
+		create trigger test_fail_write
+		before ${statement} on "${table}"
 		for each row when (${when})
-		execute function test_fail_insert()
+		execute function test_fail_write()
 	`),
 	);
 	return {
 		remove: () =>
 			db().execute(
-				sql.raw(`drop trigger if exists test_fail_insert on "${table}"`),
+				sql.raw(`drop trigger if exists test_fail_write on "${table}"`),
 			),
 	};
 }
