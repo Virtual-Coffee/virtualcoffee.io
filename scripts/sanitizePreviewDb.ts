@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { getStore } from '@netlify/blobs';
-import { and, eq, isNotNull, like, ne, not, or } from 'drizzle-orm';
+import { and, eq, isNotNull, like, ne, not, or, sql } from 'drizzle-orm';
 
 import {
 	db,
@@ -652,6 +652,11 @@ async function verify(database: Database): Promise<string[]> {
 	const realEmail = (column: Parameters<typeof like>[0]) =>
 		and(isNotNull(column), not(like(column, `%@${FAKE_EMAIL_DOMAIN}`)));
 
+	// `fakeSlackId()` is `U` plus ten upper-case hex digits. A real id starts
+	// with `U` too, so the check has to be on the whole derived shape.
+	const realSlackId = (column: Parameters<typeof like>[0]) =>
+		and(isNotNull(column), sql`${column} !~ '^U[0-9A-F]{10}$'`);
+
 	const checks: Array<[string, () => Promise<number>]> = [
 		[
 			'membership_application has a non-fake email',
@@ -697,21 +702,31 @@ async function verify(database: Database): Promise<string[]> {
 			'user has a non-fake email',
 			() => countWhere(database, user, realEmail(user.email)),
 		],
-		/**
-		 * A sanitized Slack member id always starts `U` and is otherwise ten
-		 * upper-case hex digits, so "does not look sanitized" is `not like 'U%'`
-		 * — a real Slack id starts `U` too, but never with our derived shape.
-		 * These check the cheaper property that the column changed at all, by
-		 * looking for the ids that survived: anything not matching the fake
-		 * pattern.
-		 */
 		[
 			'user.slack_user_id was not sanitized',
+			() => countWhere(database, user, realSlackId(user.slackUserId)),
+		],
+		[
+			'pending_grant.slack_user_id was not sanitized',
+			() =>
+				countWhere(database, pendingGrant, realSlackId(pendingGrant.slackUserId)),
+		],
+		[
+			'volunteer.slack_user_id was not sanitized',
+			() => countWhere(database, volunteer, realSlackId(volunteer.slackUserId)),
+		],
+		[
+			'invite.inviter_slack_user_id was not sanitized',
+			() =>
+				countWhere(database, invite, realSlackId(invite.inviterSlackUserId)),
+		],
+		[
+			'volunteer_invite_ledger.slack_user_id was not sanitized',
 			() =>
 				countWhere(
 					database,
-					user,
-					and(isNotNull(user.slackUserId), not(like(user.slackUserId, 'U%'))),
+					volunteerInviteLedger,
+					realSlackId(volunteerInviteLedger.slackUserId),
 				),
 		],
 		[
