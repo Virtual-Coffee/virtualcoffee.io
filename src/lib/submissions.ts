@@ -1,4 +1,14 @@
-import { and, asc, count, desc, eq, inArray, sql } from 'drizzle-orm';
+import {
+	and,
+	asc,
+	count,
+	desc,
+	eq,
+	inArray,
+	isNull,
+	or,
+	sql,
+} from 'drizzle-orm';
 
 import { PAGE_SIZE } from '@/util/searchParams';
 import {
@@ -129,14 +139,16 @@ export async function getSubmissionHistory(
 }
 
 /**
- * Submissions nobody has been told about: still `new`, and the latest
- * notification attempt failed.
+ * Submissions nobody has been told about: still `new`, and either the latest
+ * notification attempt failed or none was ever recorded.
  *
  * This is what backs the warning banner. A submission that was stored but never
  * announced is the failure mode the persist-then-notify ordering accepts, so it
- * has to be visible rather than merely logged — see docs/adr/0005. Counting
- * rows, not events, and only while `new`: once a maintainer has moved it on
- * they have plainly seen it, and the banner would otherwise never clear.
+ * has to be visible rather than merely logged — see docs/adr/0005. A row with
+ * no notification event at all is the same case: the audit line is written
+ * after the attempt and can be lost (`notifyAndRecord` logs and carries on).
+ * Counting rows, not events, and only while `new`: once a maintainer has moved
+ * it on they have plainly seen it, and the banner would otherwise never clear.
  */
 export async function failedNotifications(
 	kinds: readonly SubmissionKind[],
@@ -164,9 +176,15 @@ export async function failedNotifications(
 			const [row] = await db()
 				.select({ value: count() })
 				.from(table)
-				.innerJoin(latest, eq(latest.submissionId, table.id))
+				.leftJoin(latest, eq(latest.submissionId, table.id))
 				.where(
-					and(eq(table.status, 'new'), eq(latest.type, 'notification_failed')),
+					and(
+						eq(table.status, 'new'),
+						or(
+							eq(latest.type, 'notification_failed'),
+							isNull(latest.submissionId),
+						),
+					),
 				);
 			return [kind, row?.value ?? 0] as const;
 		}),
