@@ -17,53 +17,65 @@ import {
 
 const helper = createColumnHelper<ServerTableFeatures, MembershipApplication>();
 
-const columns = helper.columns([
-	helper.accessor('name', {
-		header: 'Name',
-		cell: ({ row }) => (
-			<div>
-				<div className="fw-semibold">{row.original.name}</div>
-				{row.original.pronouns && (
-					<div className="text-body-secondary small">
-						{row.original.pronouns}
-						{row.original.githubUsername
-							? ` · @${row.original.githubUsername}`
-							: ''}
-					</div>
-				)}
-			</div>
-		),
-	}),
-	helper.accessor('email', {
-		header: 'Email',
-		cell: ({ getValue }) => (
-			<span className="text-body-secondary">{getValue()}</span>
-		),
-	}),
-	helper.accessor('source', {
-		header: 'Source',
-		cell: ({ getValue }) => <SourceBadge source={getValue()} />,
-	}),
-	helper.accessor('status', {
-		header: 'Status',
-		cell: ({ getValue }) => <StatusBadge status={getValue()} />,
-	}),
-	helper.accessor('submittedAt', {
-		header: 'Submitted',
-		cell: ({ getValue }) => (
-			<span className="text-nowrap">{formatDate(getValue())}</span>
-		),
-	}),
-	helper.accessor('journey', {
-		header: 'Journey',
-		enableSorting: false,
-		cell: ({ getValue }) => (
-			<div className="admin-truncate text-body-secondary">
-				{getValue() ?? <span className="fst-italic">No answer</span>}
-			</div>
-		),
-	}),
-]);
+/**
+ * The name is a button so the drawer is reachable from the keyboard; the row
+ * click is the pointer shortcut, not the only way in. Built per open handler,
+ * as the submissions table builds per base path.
+ */
+const buildColumns = (open: (id: string) => void) =>
+	helper.columns([
+		helper.accessor('name', {
+			header: 'Name',
+			cell: ({ row }) => (
+				<div>
+					<button
+						type="button"
+						className="btn btn-link p-0 text-start fw-semibold text-body text-decoration-none"
+						onClick={() => open(row.original.id)}
+					>
+						{row.original.name}
+					</button>
+					{row.original.pronouns && (
+						<div className="text-body-secondary small">
+							{row.original.pronouns}
+							{row.original.githubUsername
+								? ` · @${row.original.githubUsername}`
+								: ''}
+						</div>
+					)}
+				</div>
+			),
+		}),
+		helper.accessor('email', {
+			header: 'Email',
+			cell: ({ getValue }) => (
+				<span className="text-body-secondary">{getValue()}</span>
+			),
+		}),
+		helper.accessor('source', {
+			header: 'Source',
+			cell: ({ getValue }) => <SourceBadge source={getValue()} />,
+		}),
+		helper.accessor('status', {
+			header: 'Status',
+			cell: ({ getValue }) => <StatusBadge status={getValue()} />,
+		}),
+		helper.accessor('submittedAt', {
+			header: 'Submitted',
+			cell: ({ getValue }) => (
+				<span className="text-nowrap">{formatDate(getValue())}</span>
+			),
+		}),
+		helper.accessor('journey', {
+			header: 'Journey',
+			enableSorting: false,
+			cell: ({ getValue }) => (
+				<div className="admin-truncate text-body-secondary">
+					{getValue() ?? <span className="fst-italic">No answer</span>}
+				</div>
+			),
+		}),
+	]);
 
 type Props = {
 	rows: MembershipApplication[];
@@ -83,6 +95,7 @@ export function ApplicationsTable({
 	direction,
 }: Props) {
 	const [openId, setOpenId] = useState<string | null>(null);
+	const columns = useMemo(() => buildColumns(setOpenId), []);
 
 	const { table, pagination } = useServerPagedTable({
 		columns,
@@ -141,7 +154,7 @@ export function ApplicationsTable({
 							<tr
 								key={row.id}
 								className="admin-row"
-								aria-selected={openId === row.original.id}
+								data-open={openId === row.original.id || undefined}
 								onClick={() => setOpenId(row.original.id)}
 							>
 								{row.getAllCells().map((cell) => (

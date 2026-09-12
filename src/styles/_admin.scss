@@ -63,11 +63,12 @@
 }
 
 // Queue rows are clickable, but the row is not a link, so the cursor is the
-// only affordance — keep the hover state obvious.
+// only affordance — keep the hover state obvious. The keyboard path is the
+// name button in the first cell; `data-open` marks the row in the drawer.
 .admin-row {
 	cursor: pointer;
 
-	&[aria-selected='true'] {
+	&[data-open] {
 		background-color: var(--bs-tertiary-bg);
 	}
 }
