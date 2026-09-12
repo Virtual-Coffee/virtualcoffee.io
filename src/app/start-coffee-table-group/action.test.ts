@@ -38,5 +38,12 @@ describe('submitCoffeeTableGroupRequest', () => {
 			formDataWith({ ...base, group_name: 'x'.repeat(201) }),
 		);
 		expect(Object.keys(long?.fieldErrors ?? {})).toEqual(['group_name']);
+
+		// `agree` left off so the valid name stops at validation, not the database.
+		const { agree: _agree, ...unagreed } = base;
+		const fine = await submit(
+			formDataWith({ ...unagreed, group_name: 'x'.repeat(200) }),
+		);
+		expect(Object.keys(fine?.fieldErrors ?? {})).toEqual(['agree']);
 	});
 });
