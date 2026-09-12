@@ -140,8 +140,8 @@ export function SendInviteForm({
 				title="Send this invite?"
 				intro={
 					<>
-						This is exactly what {email.trim()} will receive. It uses one of
-						your invites.
+						This previews what {email.trim()} will receive. The private invite
+						link is hidden until you send it.
 					</>
 				}
 				to={email.trim()}
