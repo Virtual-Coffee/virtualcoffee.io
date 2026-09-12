@@ -70,11 +70,32 @@ describe('sendEmail', () => {
 	});
 
 	test('a rejected recipient: definitely not sent, naming the address', async () => {
-		sendMail.mockResolvedValue({ rejected: ['ada@example.test'] });
+		sendMail.mockResolvedValue({
+			accepted: ['maintainer@example.test'],
+			rejected: ['ada@example.test'],
+		});
 		await expect(sendEmail(input)).resolves.toEqual({
 			ok: false,
 			definitelyNotSent: true,
 			message: 'The mail server rejected ada@example.test.',
+		});
+	});
+
+	/**
+	 * The applicant's copy went; only the maintainer's cc bounced. Calling that
+	 * "nothing was emailed" would have the maintainer retry and email the
+	 * applicant twice — the exact outcome definitelyNotSent exists to prevent.
+	 */
+	test('a rejected cc with the applicant accepted is a success with a warning', async () => {
+		sendMail.mockResolvedValue({
+			accepted: ['ada@example.test'],
+			rejected: ['maintainer@example.test'],
+		});
+		await expect(
+			sendEmail({ ...input, cc: 'maintainer@example.test' }),
+		).resolves.toEqual({
+			ok: true,
+			warning: 'Sent, but the copy to maintainer@example.test was rejected.',
 		});
 	});
 

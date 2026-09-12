@@ -1,6 +1,6 @@
 'use server';
 
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 import {
@@ -48,6 +48,37 @@ async function recordEvent(input: {
 			toStatus: input.toStatus ?? null,
 			body: input.body ?? null,
 		});
+}
+
+/**
+ * Move an application on from the status it was read at.
+ *
+ * Conditional on that status still being current, so two maintainers acting
+ * on the same row within seconds cannot both write — the second finds no row
+ * and is told to reload, instead of overwriting a decline or recording a
+ * second event with a stale `fromStatus`. Same shape as `cancelInvite` and
+ * the maintenance sweep's `expire()`.
+ */
+async function transition(
+	applicationId: string,
+	from: ApplicationStatus,
+	patch: Partial<typeof membershipApplication.$inferInsert>,
+): Promise<boolean> {
+	const moved = await db()
+		.update(membershipApplication)
+		.set(patch)
+		.where(
+			and(
+				eq(membershipApplication.id, applicationId),
+				eq(membershipApplication.status, from),
+			),
+		)
+		.returning({ id: membershipApplication.id });
+	return moved.length > 0;
+}
+
+function changedUnderneath(name: string): string {
+	return `${name}’s application changed while you were looking at it. Reload the page to see where it is now.`;
 }
 
 /**
@@ -106,11 +137,26 @@ export async function sendCoffeeInvite(
 		};
 	}
 
-	const now = new Date();
-	await db()
-		.update(membershipApplication)
-		.set({ status: 'coffee_invited', coffeeInvitedAt: now })
-		.where(eq(membershipApplication.id, applicationId));
+	const moved = await transition(applicationId, 'waitlisted', {
+		status: 'coffee_invited',
+		coffeeInvitedAt: new Date(),
+	});
+
+	if (!moved) {
+		// The email has gone regardless, so the history must say so.
+		await recordEvent({
+			applicationId,
+			actorUserId: actor,
+			type: 'email_sent',
+			body: `Coffee invite emailed to ${application.email}, but the application had already left Waitlisted`,
+		});
+		revalidateApplication(applicationId);
+		return {
+			ok: false,
+			message: changedUnderneath(application.name),
+			emailSent: true,
+		};
+	}
 
 	await recordEvent({
 		applicationId,
@@ -122,7 +168,7 @@ export async function sendCoffeeInvite(
 	});
 
 	revalidateApplication(applicationId);
-	return { ok: true };
+	return { ok: true, message: sent.warning };
 }
 
 export async function recordAttendance(
@@ -144,11 +190,12 @@ export async function recordAttendance(
 		};
 	}
 
-	const now = new Date();
-	await db()
-		.update(membershipApplication)
-		.set({ coffeeAttendedAt: now })
-		.where(eq(membershipApplication.id, applicationId));
+	const recorded = await transition(applicationId, 'coffee_invited', {
+		coffeeAttendedAt: new Date(),
+	});
+	if (!recorded) {
+		return { ok: false, message: changedUnderneath(application.name) };
+	}
 
 	await recordEvent({
 		applicationId,
@@ -232,14 +279,27 @@ export async function approveMembership(
 	}
 
 	const now = new Date();
-	await db()
-		.update(membershipApplication)
-		.set({
-			status: 'member',
-			approvedAt: now,
-			coffeeAttendedAt: application.coffeeAttendedAt ?? now,
-		})
-		.where(eq(membershipApplication.id, applicationId));
+	const approved = await transition(applicationId, 'coffee_invited', {
+		status: 'member',
+		approvedAt: now,
+		coffeeAttendedAt: application.coffeeAttendedAt ?? now,
+	});
+
+	if (!approved) {
+		// Both emails have gone regardless, so the history must say so.
+		await recordEvent({
+			applicationId,
+			actorUserId: actor,
+			type: 'email_sent',
+			body: `Welcome and Slack invite emailed to ${application.email}, but the application had already left Coffee invited`,
+		});
+		revalidateApplication(applicationId);
+		return {
+			ok: false,
+			message: changedUnderneath(application.name),
+			emailSent: true,
+		};
+	}
 
 	// Complete the Invite that produced this application, if any. After the
 	// status change and not fatal: the applicant has already been approved and
@@ -268,7 +328,7 @@ export async function approveMembership(
 	});
 
 	revalidateApplication(applicationId);
-	return { ok: true };
+	return { ok: true, message: welcomeSent.warning ?? slackSent.warning };
 }
 
 async function close(
@@ -299,10 +359,13 @@ async function close(
 		};
 	}
 
-	await db()
-		.update(membershipApplication)
-		.set({ status, closedAt: new Date() })
-		.where(eq(membershipApplication.id, applicationId));
+	const closed = await transition(applicationId, application.status, {
+		status,
+		closedAt: new Date(),
+	});
+	if (!closed) {
+		return { ok: false, message: changedUnderneath(application.name) };
+	}
 
 	await recordEvent({
 		applicationId,

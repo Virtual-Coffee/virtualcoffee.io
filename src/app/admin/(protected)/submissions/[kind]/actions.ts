@@ -1,6 +1,6 @@
 'use server';
 
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 import { db, type SubmissionStatus } from '@/db';
@@ -55,11 +55,7 @@ export async function setSubmissionStatus(
 	if (!isId(id))
 		return { ok: false, message: 'That submission no longer exists.' };
 
-	const [current] = await db()
-		.select({ status: table.status })
-		.from(table)
-		.where(eq(table.id, id))
-		.limit(1);
+	const current = await getSubmission(context.kind, id);
 
 	if (!current)
 		return { ok: false, message: 'That submission no longer exists.' };
@@ -73,10 +69,20 @@ export async function setSubmissionStatus(
 	// it rather than leaving a date that is no longer true.
 	const closed = next === 'resolved' || next === 'dismissed';
 
-	await db()
+	// Conditional on the status still being what was read, so two maintainers
+	// cannot both write the change and both record it from a stale status.
+	const changed = await db()
 		.update(table)
 		.set({ status: next, closedAt: closed ? new Date() : null })
-		.where(eq(table.id, id));
+		.where(and(eq(table.id, id), eq(table.status, current.status)))
+		.returning({ id: table.id });
+	if (changed.length === 0) {
+		return {
+			ok: false,
+			message:
+				'That submission changed while you were looking at it. Reload the page.',
+		};
+	}
 
 	await recordSubmissionEvent({
 		kind: context.kind,

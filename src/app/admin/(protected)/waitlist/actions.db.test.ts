@@ -16,6 +16,25 @@ import {
 const sendEmail = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/email/transport', () => ({ sendEmail }));
 
+/**
+ * Stages the race the conditional updates exist for: the action reads one
+ * status, but the row has already moved on by the time it writes. Set
+ * `readAs` to the status the action should believe it saw.
+ */
+const staleRead = vi.hoisted(() => ({ readAs: null as string | null }));
+vi.mock('@/lib/applications', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/lib/applications')>();
+	return {
+		...actual,
+		getApplication: async (id: string) => {
+			const row = await actual.getApplication(id);
+			return row && staleRead.readAs
+				? { ...row, status: staleRead.readAs }
+				: row;
+		},
+	};
+});
+
 import {
 	addNote,
 	approveMembership,
@@ -27,6 +46,7 @@ import {
 
 beforeEach(() => {
 	sendEmail.mockReset();
+	staleRead.readAs = null;
 	signInAs('admin');
 });
 
@@ -280,5 +300,77 @@ describe('declineApplication and withdrawApplication', () => {
 		});
 		await expect(applicationEvents(id)).resolves.toHaveLength(1);
 		expect(sendEmail).not.toHaveBeenCalled();
+	});
+});
+
+/**
+ * Two maintainers on the same row within seconds. Every transition is a
+ * conditional update on the status that was read, so exactly one of them
+ * writes; the other is told to reload rather than overwriting a decision or
+ * recording a second event from a stale status.
+ */
+describe('a status that changed between the read and the write', () => {
+	test('closing twice at once records one close', async () => {
+		const { id } = await insertApplication({ status: 'waitlisted' });
+		const results = await Promise.all([
+			withdrawApplication(id),
+			declineApplication(id, null),
+		]);
+		expect(results.filter((r) => r.ok)).toHaveLength(1);
+		await expect(applicationEvents(id)).resolves.toHaveLength(1);
+	});
+
+	test('a Coffee invite that raced a decline says the email went anyway', async () => {
+		sendEmail.mockResolvedValue(SENT);
+		const { id } = await insertApplication({ status: 'declined' });
+		staleRead.readAs = 'waitlisted';
+
+		await expect(sendCoffeeInvite(id, false)).resolves.toEqual({
+			ok: false,
+			message: expect.stringContaining('changed while you were looking'),
+			emailSent: true,
+		});
+		expect((await applicationRow(id)).status).toBe('declined');
+		await expect(applicationEvents(id)).resolves.toEqual([
+			expect.objectContaining({
+				type: 'email_sent',
+				body: expect.stringContaining('had already left Waitlisted'),
+			}),
+		]);
+	});
+
+	test('an approval that raced a withdrawal does not make a member', async () => {
+		sendEmail.mockResolvedValue(SENT);
+		const { id } = await insertApplication({ status: 'withdrawn' });
+		staleRead.readAs = 'coffee_invited';
+
+		await expect(approveMembership(id, false)).resolves.toMatchObject({
+			ok: false,
+			emailSent: true,
+		});
+		expect((await applicationRow(id)).status).toBe('withdrawn');
+		expect(sendEmail).toHaveBeenCalledTimes(2);
+	});
+
+	test('attendance cannot be recorded on a row that already moved', async () => {
+		const { id } = await insertApplication({ status: 'member' });
+		staleRead.readAs = 'coffee_invited';
+		await expect(recordAttendance(id)).resolves.toMatchObject({ ok: false });
+		expect((await applicationRow(id)).coffeeAttendedAt).toBeNull();
+	});
+});
+
+describe('a rejected cc', () => {
+	test('is reported as a warning on success, never as a failed send', async () => {
+		sendEmail.mockResolvedValue({
+			ok: true,
+			warning: 'Sent, but the copy to dev@localhost was rejected.',
+		});
+		const { id } = await insertApplication({ status: 'waitlisted' });
+		await expect(sendCoffeeInvite(id, true)).resolves.toEqual({
+			ok: true,
+			message: 'Sent, but the copy to dev@localhost was rejected.',
+		});
+		expect((await applicationRow(id)).status).toBe('coffee_invited');
 	});
 });

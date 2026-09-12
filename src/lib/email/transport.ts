@@ -35,7 +35,12 @@ export type SendFailure = {
 	message: string;
 };
 
-export type SendResult = { ok: true } | SendFailure;
+/**
+ * `warning` is set when the applicant's copy went out but a cc did not. That
+ * is still a success — retrying would email the applicant twice — so it is
+ * reported alongside `ok`, not instead of it.
+ */
+export type SendResult = { ok: true; warning?: string } | SendFailure;
 
 export function emailConfigured(): boolean {
 	return Boolean(
@@ -82,11 +87,22 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 			replyTo: process.env.GOOGLE_SMTP_USER,
 		});
 
-		if (info.rejected?.length) {
+		// nodemailer only resolves with rejections when at least one address
+		// was accepted, so a non-empty list here is a partial delivery. Whether
+		// the *applicant's* copy went is what decides between failure and warning.
+		const rejected = (info.rejected ?? []).map(String);
+		const accepted = (info.accepted ?? []).map(String);
+		if (rejected.length > 0 && !accepted.includes(input.to)) {
 			return {
 				ok: false,
 				definitelyNotSent: true,
-				message: `The mail server rejected ${info.rejected.join(', ')}.`,
+				message: `The mail server rejected ${rejected.join(', ')}.`,
+			};
+		}
+		if (rejected.length > 0) {
+			return {
+				ok: true,
+				warning: `Sent, but the copy to ${rejected.join(', ')} was rejected.`,
 			};
 		}
 

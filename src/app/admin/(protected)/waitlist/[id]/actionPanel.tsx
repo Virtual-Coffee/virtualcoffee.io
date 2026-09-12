@@ -75,6 +75,12 @@ export function ActionPanel(props: Props) {
 				</div>
 			)}
 
+			{result?.ok && result.message && (
+				<div className="alert alert-warning small" role="alert">
+					{result.message}
+				</div>
+			)}
+
 			{!props.emailConfigured && (
 				<div className="alert alert-warning small" role="alert">
 					Email isn&rsquo;t configured, so nothing can be sent from here yet.

@@ -1,10 +1,25 @@
 import { eq } from 'drizzle-orm';
-import { beforeEach, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { cocReport, db, submissionEvent } from '@/db';
 import { signInAs } from '@/test/session';
 
-import { addSubmissionNote } from './actions';
+/** Stages a read that is stale by the time the action writes. */
+const staleRead = vi.hoisted(() => ({ readAs: null as string | null }));
+vi.mock('@/lib/submissions', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/lib/submissions')>();
+	return {
+		...actual,
+		getSubmission: async (...args: Parameters<typeof actual.getSubmission>) => {
+			const row = await actual.getSubmission(...args);
+			return row && staleRead.readAs
+				? { ...row, status: staleRead.readAs }
+				: row;
+		},
+	};
+});
+
+import { addSubmissionNote, setSubmissionStatus } from './actions';
 
 async function insertCocReport() {
 	const [row] = await db()
@@ -41,5 +56,37 @@ describe('addSubmissionNote', () => {
 			ok: false,
 			message: 'That submission no longer exists.',
 		});
+	});
+});
+
+describe('setSubmissionStatus', () => {
+	beforeEach(() => {
+		staleRead.readAs = null;
+		signInAs('coc_reviewer');
+	});
+
+	test('a change that raced another maintainer is refused, not written over', async () => {
+		const id = await insertCocReport();
+		await setSubmissionStatus('coc', id, 'dismissed');
+		// This call read the row before the dismissal landed.
+		staleRead.readAs = 'new';
+
+		await expect(setSubmissionStatus('coc', id, 'resolved')).resolves.toEqual({
+			ok: false,
+			message:
+				'That submission changed while you were looking at it. Reload the page.',
+		});
+		await expect(
+			db()
+				.select({ status: cocReport.status })
+				.from(cocReport)
+				.where(eq(cocReport.id, id)),
+		).resolves.toEqual([{ status: 'dismissed' }]);
+		await expect(
+			db()
+				.select({ type: submissionEvent.type })
+				.from(submissionEvent)
+				.where(eq(submissionEvent.cocReportId, id)),
+		).resolves.toHaveLength(1);
 	});
 });
