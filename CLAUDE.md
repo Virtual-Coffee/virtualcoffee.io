@@ -38,6 +38,7 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Install                                    | `pnpm install` (copy `.env.example` to `.env` first)                                                                                                    |
 | Dev server                                 | `pnpm dev` — runs the codegen, then `npm-watch` + `netlify dev` (site on <http://localhost:9000>, proxying Next on :3000)                               |
+| Dev server on a public URL                 | `pnpm dev:tunnel` — the same behind `netlify dev --live`; sets `NETLIFY_TUNNEL=1`, which gates the tunnel-only settings in `next.config.mjs`            |
 | Next only (no Netlify functions/redirects) | `next dev`                                                                                                                                              |
 | Build                                      | `pnpm build` — `prebuild` runs the codegen first                                                                                                        |
 | Typecheck                                  | `pnpm typecheck` (`next typegen` then `tsc --noEmit`, the native TypeScript 7 binary)                                                                   |
