@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, inviteToken, user } from '@/db';
+import { createSlackInviteToken } from '@/lib/inviteTokens';
 import { NOT_FOUND } from '@/test/next';
 import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/email';
 import { signInAs } from '@/test/session';
@@ -40,6 +41,7 @@ import {
 	approveMembership,
 	declineApplication,
 	recordAttendance,
+	resendSlackInvite,
 	sendCoffeeInvite,
 	withdrawApplication,
 } from './actions';
@@ -372,5 +374,52 @@ describe('a rejected cc', () => {
 			message: 'Sent, but the copy to dev@localhost was rejected.',
 		});
 		expect((await applicationRow(id)).status).toBe('coffee_invited');
+	});
+});
+
+describe('resendSlackInvite', () => {
+	test('mints a second token for a member and records the send', async () => {
+		vi.stubEnv('URL', 'https://virtualcoffee.io');
+		sendEmail.mockResolvedValue(SENT);
+		const { id } = await insertApplication({ status: 'member' });
+		await createSlackInviteToken(id);
+
+		await expect(resendSlackInvite(id, false)).resolves.toEqual({ ok: true });
+
+		const tokens = await db().select().from(inviteToken);
+		expect(tokens).toHaveLength(2);
+		expect(sendEmail).toHaveBeenCalledWith(
+			expect.objectContaining({
+				text: expect.stringContaining('/join-slack?code='),
+			}),
+		);
+		expect((await applicationRow(id)).status).toBe('member');
+		await expect(applicationEvents(id)).resolves.toEqual([
+			expect.objectContaining({
+				type: 'email_sent',
+				body: expect.stringContaining('re-sent'),
+			}),
+		]);
+	});
+
+	test('only for a member; approving sends the first one', async () => {
+		const { id } = await insertApplication({ status: 'coffee_invited' });
+		await expect(resendSlackInvite(id, false)).resolves.toMatchObject({
+			ok: false,
+			emailSent: false,
+		});
+		expect(sendEmail).not.toHaveBeenCalled();
+	});
+
+	test('a failed send is recorded and nothing else changes', async () => {
+		sendEmail.mockResolvedValue(NOT_SENT);
+		const { id } = await insertApplication({ status: 'member' });
+		await expect(resendSlackInvite(id, false)).resolves.toMatchObject({
+			ok: false,
+			emailSent: false,
+		});
+		await expect(applicationEvents(id)).resolves.toEqual([
+			expect.objectContaining({ type: 'email_failed' }),
+		]);
 	});
 });

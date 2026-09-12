@@ -331,6 +331,69 @@ export async function approveMembership(
 	return { ok: true, message: welcomeSent.warning ?? slackSent.warning };
 }
 
+/**
+ * A fresh Slack invite for someone who is already a member: the first link
+ * was consumed by a scanner, expired unread, or went to a spam folder. The
+ * old token is left to expire — it is single-use and harmless. No status
+ * changes, so the send-first rule has nothing to protect; the event is what
+ * records that a second link is out.
+ */
+export async function resendSlackInvite(
+	applicationId: string,
+	copyMe: boolean,
+): Promise<EmailActionResult> {
+	const session = await requirePermission('waitlist', 'manage');
+	const actor = await actorId(session.user.id);
+	const application = await getApplication(applicationId);
+
+	if (!application) {
+		return { ok: false, message: 'Application not found.', emailSent: false };
+	}
+	if (application.status !== 'member') {
+		return {
+			ok: false,
+			message: `Only a member can be sent another Slack invite, not ${application.status}. Approving sends the first one.`,
+			emailSent: false,
+		};
+	}
+
+	const { token } = await createSlackInviteToken(applicationId);
+	const template = slackInviteEmail(
+		application.name,
+		`${siteUrl()}/join-slack?code=${token}`,
+	);
+	const sent = await sendEmail({
+		to: application.email,
+		subject: template.subject,
+		text: template.text,
+		cc: copyMe ? session.user.email : null,
+	});
+
+	if (!sent.ok) {
+		await recordEvent({
+			applicationId,
+			actorUserId: actor,
+			type: 'email_failed',
+			body: `Slack invite re-send to ${application.email} failed: ${sent.message}`,
+		});
+		return {
+			ok: false,
+			message: sent.message,
+			emailSent: sent.definitelyNotSent ? false : 'unknown',
+		};
+	}
+
+	await recordEvent({
+		applicationId,
+		actorUserId: actor,
+		type: 'email_sent',
+		body: `Slack invite re-sent to ${application.email}`,
+	});
+
+	revalidatePath(`/admin/waitlist/${applicationId}`);
+	return { ok: true, message: sent.warning };
+}
+
 async function close(
 	applicationId: string,
 	status: Extract<ApplicationStatus, 'declined' | 'withdrawn'>,

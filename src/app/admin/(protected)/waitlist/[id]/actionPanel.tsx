@@ -8,6 +8,7 @@ import {
 	approveMembership,
 	declineApplication,
 	recordAttendance,
+	resendSlackInvite,
 	sendCoffeeInvite,
 	withdrawApplication,
 } from '../actions';
@@ -31,7 +32,7 @@ type Props = {
 	slackInvite: Template;
 };
 
-type Dialog = 'coffee' | 'approve' | null;
+type Dialog = 'coffee' | 'approve' | 'resend' | null;
 
 export function ActionPanel(props: Props) {
 	const router = useRouter();
@@ -120,6 +121,17 @@ export function ActionPanel(props: Props) {
 					</>
 				)}
 
+				{props.status === 'member' && (
+					<button
+						type="button"
+						className="btn btn-outline-secondary"
+						disabled={pending}
+						onClick={() => setDialog('resend')}
+					>
+						Re-send Slack invite
+					</button>
+				)}
+
 				{props.status !== 'member' && (
 					<>
 						<button
@@ -194,6 +206,28 @@ export function ActionPanel(props: Props) {
 				onCancel={() => setDialog(null)}
 				onConfirm={(copyMe) =>
 					run(() => approveMembership(props.applicationId, copyMe))
+				}
+			/>
+
+			<ConfirmSendDialog
+				open={dialog === 'resend'}
+				title="Re-send Slack invite"
+				intro={
+					<>
+						A new single-use link goes to{' '}
+						<strong>{props.applicantEmail}</strong>. Use this when the first one
+						was opened by a link scanner, expired, or never arrived. Nothing
+						else changes.
+					</>
+				}
+				to={props.applicantEmail}
+				emails={[props.slackInvite]}
+				confirmLabel="Send invite"
+				pending={pending}
+				offerCopy
+				onCancel={() => setDialog(null)}
+				onConfirm={(copyMe) =>
+					run(() => resendSlackInvite(props.applicationId, copyMe))
 				}
 			/>
 		</>

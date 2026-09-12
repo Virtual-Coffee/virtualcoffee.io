@@ -1,8 +1,9 @@
-import { redirect } from 'next/navigation';
-
 import DefaultLayout from '@/components/layouts/DefaultLayout';
-import { redeemSlackInviteToken } from '@/lib/inviteTokens';
+import { slackInviteForToken } from '@/lib/inviteTokens';
 import { single } from '@/util/searchParams';
+
+import { FAILURES } from './copy';
+import { JoinSlackForm } from './form';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,17 +12,13 @@ export const metadata = {
 	robots: { index: false, follow: false },
 };
 
-const FAILURES = {
-	unknown:
-		'We don’t recognise this invite link. It may be from an older invite.',
-	used: 'This invite link has already been used. Invites work once, on purpose.',
-	expired: 'This invite link has expired.',
-};
-
 /**
- * Redeems a Slack invite token and forwards to the workspace join link. The
- * failure page says what went wrong instead of a bare error: the people
- * hitting it are new members who did nothing wrong.
+ * Checks a Slack invite token and offers the button that spends it. The
+ * lookup here writes nothing: this URL is fetched by link scanners and
+ * unfurlers before the person ever sees it, and each of those used to burn
+ * the single-use token. The failure copy says what went wrong instead of a
+ * bare error, because the people hitting it are new members who did nothing
+ * wrong.
  */
 export default async function JoinSlackPage({
 	searchParams,
@@ -30,24 +27,32 @@ export default async function JoinSlackPage({
 }) {
 	const token = single((await searchParams).code);
 
-	const joinLink = process.env.SLACK_JOIN_LINK;
 	let title = 'That invite link didn’t work';
 	let body: string;
 
 	if (!token) {
 		title = 'That link is missing something';
 		body = 'This invite link is incomplete, so we can’t check it.';
-	} else if (!joinLink) {
-		// Checked before redeeming, so a misconfigured deploy does not burn the
-		// single-use token.
+	} else if (!process.env.SLACK_JOIN_LINK) {
 		console.error(
 			'SLACK_JOIN_LINK is not set; cannot complete a Slack invite.',
 		);
 		title = 'Something is misconfigured on our side';
-		body = 'Your invite is valid, but we can’t forward you to Slack right now.';
+		body = FAILURES.misconfigured;
 	} else {
-		const result = await redeemSlackInviteToken(token);
-		if (result.ok) redirect(joinLink);
+		const result = await slackInviteForToken(token);
+		if (result.ok) {
+			return (
+				<DefaultLayout simple>
+					<h1 className="h3">Welcome to Virtual Coffee</h1>
+					<p>
+						Your invite is ready. This link works once, so press the button when
+						you&rsquo;re ready to open Slack.
+					</p>
+					<JoinSlackForm code={token} />
+				</DefaultLayout>
+			);
+		}
 		body = FAILURES[result.reason];
 	}
 

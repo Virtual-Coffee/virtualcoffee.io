@@ -5,7 +5,11 @@ import { z } from 'zod';
 import { db, inviteToken } from '@/db';
 import { insertApplication } from '@/test/db/fixtures';
 
-import { createSlackInviteToken, redeemSlackInviteToken } from './inviteTokens';
+import {
+	createSlackInviteToken,
+	redeemSlackInviteToken,
+	slackInviteForToken,
+} from './inviteTokens';
 
 const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
 
@@ -43,6 +47,33 @@ describe('Slack invite tokens', () => {
 		await expect(redeemSlackInviteToken('never-issued')).resolves.toEqual({
 			ok: false,
 			reason: 'unknown',
+		});
+	});
+
+	/**
+	 * /join-slack is fetched by link scanners before the person clicks, so the
+	 * page must be able to check the token any number of times without
+	 * spending it.
+	 */
+	test('looking a token up does not spend it', async () => {
+		const { id } = await insertApplication({ status: 'coffee_invited' });
+		const { token } = await createSlackInviteToken(id);
+
+		await expect(slackInviteForToken(token)).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
+		await expect(slackInviteForToken(token)).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
+		await expect(redeemSlackInviteToken(token)).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
+		await expect(slackInviteForToken(token)).resolves.toEqual({
+			ok: false,
+			reason: 'used',
 		});
 	});
 
