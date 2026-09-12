@@ -1,6 +1,12 @@
 'use client';
 
-import { useActionState, useMemo } from 'react';
+import {
+	startTransition,
+	useActionState,
+	useCallback,
+	useMemo,
+	type SubmitEvent,
+} from 'react';
 
 import type { FormState, Action } from './types';
 
@@ -12,6 +18,21 @@ export function useFormAction(action: Action) {
 	const [state, formAction] = useActionState<FormState, FormData>(
 		action,
 		initialState,
+	);
+
+	/**
+	 * Submitted through a transition rather than the form's `action` alone:
+	 * React resets an uncontrolled form once a native action completes, which
+	 * wiped everything the person had typed under a validation error. The
+	 * `action` prop stays on the form so it still posts without JavaScript.
+	 */
+	const onSubmit = useCallback(
+		(event: SubmitEvent<HTMLFormElement>) => {
+			event.preventDefault();
+			const formData = new FormData(event.currentTarget);
+			startTransition(() => formAction(formData));
+		},
+		[formAction],
 	);
 
 	return useMemo(() => {
@@ -29,6 +50,11 @@ export function useFormAction(action: Action) {
 
 		const fieldError = (name: string) => state?.fieldErrors?.[name];
 
-		return { formAction, errorContent, fieldError, state };
-	}, [formAction, state]);
+		return {
+			formProps: { action: formAction, onSubmit },
+			errorContent,
+			fieldError,
+			state,
+		};
+	}, [formAction, onSubmit, state]);
 }

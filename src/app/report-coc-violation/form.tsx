@@ -6,11 +6,11 @@ import { useFormAction } from '@/util/forms/useFormAction';
 import { submitCocReport } from './action';
 
 export function Form({ spamToken }: { spamToken: string }) {
-	const { formAction, errorContent, fieldError, state } =
+	const { formProps, errorContent, fieldError, state } =
 		useFormAction(submitCocReport);
 
 	return (
-		<form action={formAction} encType="multipart/form-data">
+		<form {...formProps} encType="multipart/form-data">
 			<fieldset>
 				<div className="mb-form">
 					<label htmlFor="formName">Your Name</label>

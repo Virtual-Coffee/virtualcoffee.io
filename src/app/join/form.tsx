@@ -23,12 +23,12 @@ export function JoinForm({
 	defaultName?: string;
 	defaultEmail?: string;
 }) {
-	const { formAction, errorContent, fieldError, state } = useFormAction(
+	const { formProps, errorContent, fieldError, state } = useFormAction(
 		submitMembershipApplication,
 	);
 
 	return (
-		<form action={formAction} noValidate>
+		<form {...formProps} noValidate>
 			{claimToken && <input type="hidden" name="invite" value={claimToken} />}
 			{errorContent}
 

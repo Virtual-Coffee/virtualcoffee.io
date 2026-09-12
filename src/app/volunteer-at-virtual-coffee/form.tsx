@@ -24,12 +24,12 @@ function Position() {
 }
 
 export function Form({ spamToken }: { spamToken: string }) {
-	const { formAction, errorContent, fieldError, state } = useFormAction(
+	const { formProps, errorContent, fieldError, state } = useFormAction(
 		submitVolunteerSignup,
 	);
 
 	return (
-		<form action={formAction}>
+		<form {...formProps}>
 			<fieldset>
 				<legend>Your Information:</legend>
 				<p className="text-muted">

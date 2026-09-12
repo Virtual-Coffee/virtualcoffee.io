@@ -6,12 +6,12 @@ import { useFormAction } from '@/util/forms/useFormAction';
 import { submitCoffeeTableGroupRequest } from './action';
 
 export function Form({ spamToken }: { spamToken: string }) {
-	const { formAction, errorContent, state } = useFormAction(
+	const { formProps, errorContent, state } = useFormAction(
 		submitCoffeeTableGroupRequest,
 	);
 
 	return (
-		<form action={formAction}>
+		<form {...formProps}>
 			<fieldset>
 				<legend>Your Information:</legend>
 				<p className="text-muted">
