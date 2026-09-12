@@ -16,6 +16,16 @@ Before editing files for a substantial task:
 
 <!-- intent-skills:end -->
 
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+
 ## Overview
 
 virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS/JSON and build-time fetches from GitHub and a Craft CMS, both of which fall back to mock data when credentials are absent. Airtable remains only behind the form submissions, which return an error state without credentials.
@@ -27,7 +37,7 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Task                                       | Command                                                                                                                                                 |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Install                                    | `pnpm install` (copy `.env.example` to `.env` first)                                                                                                    |
-| Dev server                                 | `pnpm dev` — runs the codegen, then `npm-watch` + `netlify dev` (site on http://localhost:9000, proxying Next on :3000)                                 |
+| Dev server                                 | `pnpm dev` — runs the codegen, then `npm-watch` + `netlify dev` (site on <http://localhost:9000>, proxying Next on :3000)                               |
 | Next only (no Netlify functions/redirects) | `next dev`                                                                                                                                              |
 | Build                                      | `pnpm build` — `prebuild` runs the codegen first                                                                                                        |
 | Typecheck                                  | `pnpm typecheck` (`next typegen` then `tsc --noEmit`, the native TypeScript 7 binary)                                                                   |
@@ -39,6 +49,9 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Regenerate Undraw aspect ratios            | `pnpm build-undraw-ratios`                                                                                                                              |
 | Regenerate the bot list                    | `pnpm build-bot-list` (fetches the release pinned in `.botlist-version.json`)                                                                           |
 | Check the bot matcher                      | `pnpm check-bot-matching` (just `src/data/botMatcher.test.ts`; `pnpm test` covers it, this alias is for `refresh-bot-list.yml`)                         |
+| Generate a DB migration                    | `pnpm db:generate --name=<hyphenated-slug>` (drizzle-kit writes into `drizzle/`)                                                                        |
+| Apply migrations locally                   | `pnpm db:migrate` (needs `netlify dev` running)                                                                                                         |
+| Apply migrations on a deploy               | `pnpm db:migrate:deploy` — what `netlify.toml` runs after `next build`; reads `NETLIFY_DB_URL`                                                          |
 
 `.github/workflows/ci.yml` runs four jobs on every pull request — `format`, `lint`, `typecheck`, `test`. Netlify still owns `pnpm build`; CI does not build. CodeQL (`.github/workflows/codeql.yml`, advanced setup — leave the repository's default-setup toggle off) scans `javascript-typescript` and `actions` on pull requests, pushes to `main` and weekly; its findings go to the Security tab and are not a required check.
 
@@ -52,9 +65,11 @@ The `format` job auto-commits Prettier fixes, but only on branches in this repo,
 
 ### Testing
 
-Tests are Vitest (`vitest.config.mts`), colocated as `*.test.ts` beside the module, in a plain `node` environment with explicit `import { test, expect } from 'vitest'` — no globals, no jsdom, no React Testing Library. They cover the pure modules: the HTML allowlist, the markdown renderer, the `remark-toc` plugin, date and URL helpers, the mock gate, the bot matcher. `@/` is an alias in the Vitest config, not a tsconfig-paths plugin. `tsconfig.json` already includes `**/*.ts`, so `pnpm typecheck` sees test files, and `@vitest/eslint-plugin`'s recommended rules apply to them (no focused or skipped tests).
+Tests are Vitest (`vitest.config.mts`), colocated as `*.test.ts` beside the module, in a plain `node` environment with explicit `import { test, expect } from 'vitest'` — no globals, no jsdom, no React Testing Library. Two projects: `unit` (`*.test.ts` under `src/`, `scripts/` and `netlify/`; `pnpm test --project unit` is the fast loop) and `db` (`*.db.test.ts`, anything that touches the database). `@/` is an alias in the Vitest config, not a tsconfig-paths plugin. `tsconfig.json` already includes `**/*.ts`, so `pnpm typecheck` sees test files, and `@vitest/eslint-plugin`'s recommended rules apply to them (no focused or skipped tests).
 
-Async Server Components can't be rendered by a unit runner (Next's own guidance), so pages are not unit-tested; Netlify's deploy preview is still what exercises rendering. The config declares a second project, `db`, matching `*.db.test.ts` and empty for now: when the first database-backed test lands it gets a `globalSetup` on `@netlify/database-dev` — the in-memory PGlite engine `netlify dev` already runs — so those tests will need neither `netlify dev` nor Docker. Keep the `.db.test.ts` suffix for anything that touches the database.
+Async Server Components can't be rendered by a unit runner (Next's own guidance), so pages are not unit-tested; Netlify's deploy preview is still what exercises rendering. Server actions _are_ tested, by calling them: `'use server'` is inert under Node, `db()` and `auth` are lazy, so an action that fails validation returns its `fieldErrors` without a database, and `redirect()`/`notFound()` are asserted on the thrown digest (`src/test/next.ts`). The zod schemas stay private to their action files on purpose.
+
+The `db` project runs against `@netlify/database-dev` — the in-memory PGlite engine `netlify dev` uses, behind a Postgres wire server — started once per run by `src/test/db/globalSetup.ts`, which applies `drizzle/` with drizzle's migrator; `src/test/db/setup.ts` points `NETLIFY_DB_URL` at it before anything calls `db()`, mocks `next/cache` (`revalidatePath` throws outside a request), and truncates every schema table after each test. No `netlify dev`, no Docker, nothing extra in CI. PGlite is one session, so a race between two transactions cannot be staged — idempotency is shown by calling twice. **Tests authenticate through the dev bypass, not by mocking auth:** `signInAs(roles, slackId)` in `src/test/session.ts` stubs `ADMIN_DEV_BYPASS`, so `requirePermission()` and `requireVolunteer()` run for real. Fixtures are in `src/test/db/fixtures.ts`.
 
 `@/*` maps to `./src/*`.
 
@@ -66,14 +81,28 @@ Two TypeScript packages are installed on purpose: `typescript` is aliased to `@t
 
 Every external data source lives in `src/data/` and degrades to mocks when its env var is missing:
 
-| Source                                         | File                          | Env var                  | Fallback                               |
-| ---------------------------------------------- | ----------------------------- | ------------------------ | -------------------------------------- |
-| Member GitHub profiles                         | `src/data/members/index.ts`   | `GITHUB_TOKEN`           | `src/data/mocks/memberData.js` (faker) |
-| GitHub Sponsors                                | `src/data/sponsors.ts`        | `GITHUB_TOKEN`           | `src/data/mocks/sponsors.ts`           |
-| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`          | `CMS_URL`, `CMS_TOKEN`   | `src/data/mocks/events.ts`             |
-| Form submissions (server actions)              | `src/util/airtable/action.ts` | `FORMS_AIRTABLE_API_KEY` | error state returned to the form       |
+| Source                                         | File                          | Env var                  | Fallback                                 |
+| ---------------------------------------------- | ----------------------------- | ------------------------ | ---------------------------------------- |
+| Member GitHub profiles                         | `src/data/members/index.ts`   | `GITHUB_TOKEN`           | `src/data/mocks/memberData.js` (faker)   |
+| GitHub Sponsors                                | `src/data/sponsors.ts`        | `GITHUB_TOKEN`           | `src/data/mocks/sponsors.ts`             |
+| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`          | `CMS_URL`, `CMS_TOKEN`   | `src/data/mocks/events.ts`               |
+| Form submissions (server actions)              | `src/util/airtable/action.ts` | `FORMS_AIRTABLE_API_KEY` | error state returned to the form         |
+| Slack member directory (`/admin` grant picker) | `src/data/slackMembers.ts`    | `SLACK_BOT_TOKEN`        | `src/data/mocks/slackMembers.ts` (faker) |
+| Membership applications (`/join`, `/admin`)    | `src/db/`                     | none (auto-provisioned)  | local Postgres from `netlify dev`        |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. Any new external fetch should follow this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`. Fetches are wrapped in `unstable_cache` with a tag (`members`, `events`, `mdx-routes`); `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates on demand and a daily GitHub Action triggers a Netlify rebuild.
+
+### Membership pipeline (Postgres)
+
+Membership Applications live in Netlify Database and `/admin` is where maintainers work them. The panel is organised by section: `/admin` is a dashboard scoped to what the viewer may see, and `/admin/user-management` manages who has access. A new section is a new segment beside `user-management/`, with its routes and its own components under it — `(protected)/presentation.tsx` is the only shared piece. Adding a Section is a type error in `CARDS` (`src/lib/dashboard.ts`) until you decide whether it gets a dashboard card. Vocabulary is in `CONTEXT.md` (a **Member Profile** in `src/content/members/` is unrelated to a **Membership Application**); decisions are in `docs/adr/` — the rules below are the ones that bite, each with its ADR.
+
+- **Access to `/admin` is per-section** (`src/lib/permissions.ts`). The `(protected)` layout only checks that the viewer holds _some_ section — **each page must gate itself with `requirePermission()`, and each server action must re-check independently.** A section with no check of its own is reachable by every role. `docs/adr/0006`.
+- A **Pending Grant** (`pending_grant`, `src/lib/pendingGrants.ts`) pre-provisions roles for a Slack member id. Matching is **never on email**. `docs/adr/0009`.
+- Schema is Drizzle **v1** in `src/db/schema.ts`; migrations are `drizzle/<timestamp>_<slug>/`, generated with `pnpm db:generate --name=<hyphenated-slug>` and applied by `pnpm db:migrate:deploy` in the build command — Netlify's own migration step is not used. The `snapshot.json` beside each `migration.sql` is committed on purpose. **Never edit a migration that has already deployed.** `docs/adr/0001`.
+- **Primary keys are UUIDv7** (`newId()` in `src/db/ids.ts`); the sequential `reference` integer is for display and **must never appear in a URL**. Every route reading an id from the URL passes it through `isId()` first — a malformed literal against a `uuid` column throws instead of 404ing. `docs/adr/0008`.
+- One-off scripts go through `scripts/with-local-netlify.ts`, which supplies the local connection string and Blobs sandbox and refuses anything non-local.
+- Auth is Better Auth with Slack OAuth (`src/lib/auth.ts`); 1.7.3 has no `team` option, so the workspace check is in `mapProfileToUser`. `ADMIN_DEV_BYPASS=true` unblocks `/admin` locally without Slack credentials.
+- Deploy previews get a fork of production's database, which `pnpm db:sanitize-preview` scrubs as the last step of the build; `PREVIEW_ADMIN_BYPASS=true` is only safe because of that. **A new table or column fails that build until it is listed in `scripts/lib/schemaCoverage.ts`** — that list is where you decide what the sanitizer does with it. `docs/adr/0007`.
 
 Podcast episodes are a checked-in JSON snapshot (`src/data/podcast/episodes.json`) copied from the `vc-data` repo; the update procedure is in the comment at the top of `src/data/podcast.ts`. Newsletters are local JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
 
@@ -83,6 +112,7 @@ Podcast episodes are a checked-in JSON snapshot (`src/data/podcast/episodes.json
 - The filename and the exported identifier are both pinned to the `MemberObject`'s `github` field by `vc/member-file-identity` (`eslint-rules/`). `github` is the lookup key — `getMembers()` returns `null` for a name GitHub doesn't know, silently dropping that member — and the export name is the key of the namespace object `src/data/members/index.ts` iterates, so two files exporting the same name make it ambiguous under `export *`. The filename match is case-insensitive (`getMembers()` lowercases); the identifier is exact, with `-` becoming `_` and a leading digit gaining an `_` prefix.
 - `scripts/loadMemberFiles.ts` generates `src/data/members/core.ts` and `src/data/members/members.ts` as barrel re-exports. **These two files are gitignored and generated — never hand-edit them; run `pnpm build-member-files` after adding a member.**
 - The other codegen is `scripts/loadUndrawAspectRatios.ts`, which reads the `viewBox` of every SVG in `public/assets/svg` into the gitignored `src/data/undrawAspectRatios.ts`. `UndrawIllustration` renders through `next/image`, which needs concrete dimensions, and a hand-maintained map had drifted to covering barely half the files. Run `pnpm build-undraw-ratios` after adding an SVG.
+- `getMembers()` merges the local overrides with GitHub GraphQL data (batched 15 logins per query) and team membership from `src/content/members/teams.ts`.
 
 ### The bot list (generated, but checked in)
 
@@ -94,7 +124,6 @@ Unlike the other codegen it is **checked in**, so it is not part of `pnpm codege
 - **`src/data/botOverrides.ts`** holds every policy decision: which upstream categories map to the allowed tier, tokens always allowed or always blocked, scrapers upstream doesn't track, and the robots.txt-only signals. The generator exits non-zero if an override doesn't reach the tier it names, and warns if upstream has dropped one.
 - **`.github/workflows/refresh-bot-list.yml`** regenerates and opens a PR: on push to `main` when the pin changes (Renovate can't run the generator itself — `postUpgradeTasks` is blocked on the hosted app), and weekly as a safety net. A weekly run that produces a diff means the committed file drifted from the overrides, and the PR says so.
 - **`src/data/botMatcher.ts`** is shared by the edge function and `src/data/botMatcher.test.ts`; `createBotPolicy()` there is the precedence rule (an allowed token wins over a blocked one), so the test exercises what the edge function runs. Matching is fenced by token boundaries, not `includes`: upstream carries tokens like `Code` (GitHub Copilot), and a substring match on it also catches `vscode`.
-- `getMembers()` merges the local overrides with GitHub GraphQL data (batched 15 logins per query) and team membership from `src/content/members/teams.ts`.
 
 ### MDX content pipeline
 
@@ -123,13 +152,3 @@ Unlike the other codegen it is **checked in**, so it is not part of `pnpm codege
 - Monthly challenges: prose lives in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`. Follow the process in the VC Community Building Resources "Monthly Challenge Technical Guidelines" linked from the README. The entry data for past challenges is a frozen snapshot in `src/data/monthlyChallenges/data/*.json` — see `docs/adr/0004` for why it is JSON and not a live fetch.
 - Member emoji must be standard Unicode; maintainers reject PRs otherwise.
 - PRs should link an issue (`Closes #123`); the PR template asks for Description and Methodology sections.
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->

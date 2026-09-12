@@ -1,5 +1,9 @@
 [build]
-	command   = "pnpm build"
+	# Migrations are applied here, by drizzle-kit, not by Netlify — its own
+	# applier only runs after the build, too late for the sanitizer. See
+	# docs/adr/0001. `db:sanitize-preview` self-gates on CONTEXT and is a no-op
+	# outside a deploy preview or branch deploy. See docs/adr/0007.
+	command   = "pnpm build && pnpm db:migrate:deploy && pnpm db:sanitize-preview"
 	functions = "netlify/functions"
 	publish   = ".next"
 
