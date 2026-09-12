@@ -1,6 +1,6 @@
 import type { EdgeFunction } from '@netlify/edge-functions';
 import { allowedUas, blockedUas } from '../../src/data/bots.ts';
-import { createBotMatcher } from '../../src/data/botMatcher.ts';
+import { createBotPolicy } from '../../src/data/botMatcher.ts';
 
 // Netlify reports one of these as `context.deploy.context` on a real deploy,
 // and `dev` under `netlify dev`. Test for a deploy positively — there is
@@ -11,21 +11,19 @@ import { createBotMatcher } from '../../src/data/botMatcher.ts';
 // fail closed on every production request.
 const deployContexts = ['production', 'deploy-preview', 'branch-deploy'];
 
-// Built once at module load rather than per request.
-const isAllowed = createBotMatcher(allowedUas);
-const isBlocked = createBotMatcher(blockedUas);
+// Built once at module load rather than per request. The precedence rule
+// (allowed wins) lives with the matcher so `botMatcher.test.ts` exercises the
+// same function this runs.
+const policy = createBotPolicy(allowedUas, blockedUas);
 
 // Returning undefined bypasses the edge function, so there is nothing here to
 // await.
 const blockBots: EdgeFunction = (request, context) => {
 	const ua = request.headers.get('user-agent') ?? '';
 
-	// Allowed wins. An agent fetching a page because someone asked for it is a
-	// person reading the site through a different client, and several of them
-	// name openai.com or a sibling crawler in the same string.
-	if (isAllowed(ua)) return;
-	const token = isBlocked(ua);
-	if (token === null) return;
+	const decision = policy(ua);
+	if (decision.verdict === 'allow') return;
+	const { token } = decision;
 
 	// Matching runs before the deploy gate so that local dev still reports what
 	// production would refuse, just under a different tag.

@@ -18,22 +18,29 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Build                                      | `pnpm build` — `prebuild` runs the codegen first                                                                                                        |
 | Typecheck                                  | `pnpm typecheck` (`next typegen` then `tsc --noEmit`, the native TypeScript 7 binary)                                                                   |
 | Lint                                       | `pnpm lint` (ESLint flat config: `next/core-web-vitals` + `next/typescript`; `netlify/**` is ignored)                                                   |
+| Test                                       | `pnpm test` (Vitest, run once; `pnpm test:watch` to watch, `pnpm test:coverage` for a v8 report; CI posts totals to the job summary and a PR comment)   |
 | Format                                     | `pnpm format` (Prettier: tabs, single quotes, trailing commas; CI auto-commits fixes on same-repo PR branches only; there is no husky/lint-staged hook) |
 | Regenerate all codegen                     | `pnpm codegen` (member barrels + Undraw aspect ratios; **not** the bot list, which is checked in)                                                       |
 | Regenerate member barrels                  | `pnpm build-member-files`                                                                                                                               |
 | Regenerate Undraw aspect ratios            | `pnpm build-undraw-ratios`                                                                                                                              |
 | Regenerate the bot list                    | `pnpm build-bot-list` (fetches the release pinned in `.botlist-version.json`)                                                                           |
-| Check the bot matcher                      | `pnpm check-bot-matching` (runs in CI's `lint` job)                                                                                                     |
+| Check the bot matcher                      | `pnpm check-bot-matching` (just `src/data/botMatcher.test.ts`; `pnpm test` covers it, this alias is for `refresh-bot-list.yml`)                         |
 
-There is no test suite and no test runner. `.github/workflows/ci.yml` runs three jobs on every pull request — `format`, `lint`, `typecheck`. Netlify still owns `pnpm build`; CI does not build.
+`.github/workflows/ci.yml` runs four jobs on every pull request — `format`, `lint`, `typecheck`, `test`. Netlify still owns `pnpm build`; CI does not build. CodeQL (`.github/workflows/codeql.yml`, advanced setup — leave the repository's default-setup toggle off) scans `javascript-typescript` and `actions` on pull requests, pushes to `main` and weekly; its findings go to the Security tab and are not a required check.
 
-The `lint` and `typecheck` jobs run `pnpm codegen` first, because `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm codegen && pnpm typecheck && pnpm lint` before finishing a change.
+The `lint`, `typecheck` and `test` jobs run `pnpm codegen` first, because `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test` before finishing a change.
 
 Neither CI nor those checks run `next build`, so nothing before Netlify's deploy preview exercises prerendering. Run `pnpm build` locally when a change can only fail there — anything touching MDX frontmatter, `generateStaticParams`, or a component that pages render at build time.
 
 `typecheck` shells out to `next typegen` before `tsc` because `next-env.d.ts` is gitignored (Next's docs require this) and is what declares non-code imports like `*.png`. Without it a clean checkout fails on any image import. `typegen` also writes `.next/types/`, so `tsc` validates typed routes without a full build.
 
 The `format` job auto-commits Prettier fixes, but only on branches in this repo, and never on `renovate[bot]`/`dependabot[bot]` branches (a foreign commit stops Renovate rebasing). Fork PRs get no secrets, so they fall back to `prettier --check` and fail with the file list in the job summary — the contributor runs `pnpm format` themselves.
+
+### Testing
+
+Tests are Vitest (`vitest.config.mts`), colocated as `*.test.ts` beside the module, in a plain `node` environment with explicit `import { test, expect } from 'vitest'` — no globals, no jsdom, no React Testing Library. They cover the pure modules: the HTML allowlist, the markdown renderer, the `remark-toc` plugin, date and URL helpers, the mock gate, the bot matcher. `@/` is an alias in the Vitest config, not a tsconfig-paths plugin. `tsconfig.json` already includes `**/*.ts`, so `pnpm typecheck` sees test files, and `@vitest/eslint-plugin`'s recommended rules apply to them (no focused or skipped tests).
+
+Async Server Components can't be rendered by a unit runner (Next's own guidance), so pages are not unit-tested; Netlify's deploy preview is still what exercises rendering. The config declares a second project, `db`, matching `*.db.test.ts` and empty for now: when the first database-backed test lands it gets a `globalSetup` on `@netlify/database-dev` — the in-memory PGlite engine `netlify dev` already runs — so those tests will need neither `netlify dev` nor Docker. Keep the `.db.test.ts` suffix for anything that touches the database.
 
 `@/*` maps to `./src/*`.
 
@@ -73,7 +80,7 @@ Unlike the other codegen it is **checked in**, so it is not part of `pnpm codege
 - **`.botlist-version.json`** pins the upstream release, so two runs a week apart produce the same file. Renovate bumps it through the `jsonata` custom manager in `renovate.json` — a structural query on the `version` field, rather than a regex, because Renovate reports a non-matching manager as "no dependency found" rather than as an error.
 - **`src/data/botOverrides.ts`** holds every policy decision: which upstream categories map to the allowed tier, tokens always allowed or always blocked, scrapers upstream doesn't track, and the robots.txt-only signals. The generator exits non-zero if an override doesn't reach the tier it names, and warns if upstream has dropped one.
 - **`.github/workflows/refresh-bot-list.yml`** regenerates and opens a PR: on push to `main` when the pin changes (Renovate can't run the generator itself — `postUpgradeTasks` is blocked on the hosted app), and weekly as a safety net. A weekly run that produces a diff means the committed file drifted from the overrides, and the PR says so.
-- **`src/data/botMatcher.ts`** is shared by the edge function and `scripts/checkBotMatching.ts`. Matching is fenced by token boundaries, not `includes`: upstream carries tokens like `Code` (GitHub Copilot), and a substring match on it also catches `vscode`.
+- **`src/data/botMatcher.ts`** is shared by the edge function and `src/data/botMatcher.test.ts`; `createBotPolicy()` there is the precedence rule (an allowed token wins over a blocked one), so the test exercises what the edge function runs. Matching is fenced by token boundaries, not `includes`: upstream carries tokens like `Code` (GitHub Copilot), and a substring match on it also catches `vscode`.
 - `getMembers()` merges the local overrides with GitHub GraphQL data (batched 15 logins per query) and team membership from `src/content/members/teams.ts`.
 
 ### MDX content pipeline

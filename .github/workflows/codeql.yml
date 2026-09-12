@@ -1,0 +1,65 @@
+name: CodeQL
+
+# Advanced setup, on purpose: a pinned, reviewable workflow like the others
+# here, and Renovate keeps the action current. The repository's "default
+# setup" toggle must stay off — it rejects results uploaded by a workflow.
+#
+# There is no codeql-config.yml because there is nothing to exclude: no
+# vendored JavaScript under public/, and node_modules is skipped by default.
+#
+# Security queries only (the security-extended suite); quality analysis is
+# not enabled.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Wednesdays 06:00 UTC, so a new query release reaches main without a PR.
+    - cron: '0 6 * * 3'
+
+concurrency:
+  group: codeql-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      # CodeQL query packs are fetched from GitHub Packages.
+      packages: read
+      actions: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: javascript-typescript
+            build-mode: none
+          - language: actions
+            build-mode: none
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # No install and no codegen: with build-mode none the extractor reads
+      # source, and imports it cannot resolve (the gitignored barrels) do not
+      # matter to it.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@4bd7200e1f146b1c937cae12d258b50f41a53cf8 # v4.38.0
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          queries: security-extended
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@4bd7200e1f146b1c937cae12d258b50f41a53cf8 # v4.38.0
+        with:
+          category: /language:${{ matrix.language }}
