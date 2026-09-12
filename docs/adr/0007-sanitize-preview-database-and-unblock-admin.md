@@ -16,9 +16,11 @@ of every build (`netlify.toml`). It is a no-op unless `CONTEXT` is
 `deploy-preview` or `branch-deploy`, and refuses outright if `CONTEXT` is
 `production`. When it does run, it replaces every PII/free-text column across
 the membership pipeline, the volunteer roster and the four submission tables
-with deterministic Faker output, nulls Better Auth's OAuth secrets, deletes
-session/verification/invite-token rows, and repoints any CoC attachment at one shared placeholder
-blob (attachments live in Netlify Blobs, a store shared globally rather than
+with deterministic Faker output (identity values such as Slack member ids are
+hashed with a salt generated per run, so a fake is consistent across tables
+within one sanitize but cannot be recomputed by someone who knows the real id),
+nulls Better Auth's OAuth secrets, deletes session/verification/invite-token
+rows, and repoints any CoC attachment at one shared placeholder blob (attachments live in Netlify Blobs, a store shared globally rather than
 branched per deploy like the database is — a SQL scrub can't reach them, so
 the row has to stop pointing at the real one instead).
 

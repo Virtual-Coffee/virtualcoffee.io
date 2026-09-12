@@ -1,5 +1,7 @@
+import { createHash } from 'node:crypto';
+
 import { faker } from '@faker-js/faker';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 
 import {
 	FAKE_EMAIL_DOMAIN,
@@ -44,6 +46,27 @@ describe('fakeSlackId', () => {
 		expect(fake).toMatch(/^U[0-9A-F]{10}$/);
 		expect(fake).not.toBe('U0AB12CD3');
 	});
+
+	/**
+	 * CWE-200: an unkeyed hash of a known Slack id is recomputable by anyone
+	 * who knows the id, which would let a preview reader find that person's
+	 * sanitized rows. The hash has to be salted.
+	 */
+	test('is not the bare sha256 of the real id', () => {
+		const bare = createHash('sha256').update('U0AB12CD3').digest('hex');
+		expect(fakeSlackId('U0AB12CD3')).not.toBe(
+			`U${bare.slice(0, 10).toUpperCase()}`,
+		);
+		faker.seed(1);
+		expect(fakeEmail('U0AB12CD3')).not.toContain(`.${bare.slice(0, 10)}@`);
+	});
+
+	test('does not survive a fresh run — only within-run consistency is promised', async () => {
+		const first = fakeSlackId('U0AB12CD3');
+		vi.resetModules();
+		const fresh = await import('./previewFakes');
+		expect(fresh.fakeSlackId('U0AB12CD3')).not.toBe(first);
+	});
 });
 
 describe('fakeEmail', () => {
@@ -56,7 +79,7 @@ describe('fakeEmail', () => {
 		expect(FAKE_EMAIL_DOMAIN).toBe('preview.invalid');
 	});
 
-	test('is stable for a given faker seed, which is what makes reruns diffable', () => {
+	test('is stable for a given faker seed within a run', () => {
 		faker.seed(seedFor('rec123'));
 		const first = fakeEmail('rec123');
 		faker.seed(seedFor('rec123'));
