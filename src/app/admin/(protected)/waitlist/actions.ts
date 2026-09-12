@@ -190,6 +190,12 @@ export async function recordAttendance(
 			message: `Can only record attendance after a Coffee invite, not from ${application.status}.`,
 		};
 	}
+	// The status does not change when attendance is recorded, so the status
+	// guard alone lets a second click overwrite the date and write a second
+	// event.
+	if (application.coffeeAttendedAt) {
+		return { ok: false, message: 'Attendance is already recorded.' };
+	}
 
 	const recorded = await transition(applicationId, 'coffee_invited', {
 		coffeeAttendedAt: new Date(),

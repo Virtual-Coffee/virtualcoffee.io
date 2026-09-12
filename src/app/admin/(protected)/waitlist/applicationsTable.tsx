@@ -18,6 +18,22 @@ import {
 const helper = createColumnHelper<ServerTableFeatures, MembershipApplication>();
 
 /**
+ * The line under a name: pronouns, GitHub, both or neither. Shared by the
+ * desktop cell and the mobile card so one cannot hide a value the other shows.
+ */
+function metaLine({
+	pronouns,
+	githubUsername,
+}: Pick<MembershipApplication, 'pronouns' | 'githubUsername'>) {
+	const parts = [pronouns, githubUsername && `@${githubUsername}`].filter(
+		Boolean,
+	);
+	return parts.length > 0 ? (
+		<div className="text-body-secondary small">{parts.join(' · ')}</div>
+	) : null;
+}
+
+/**
  * The name is a button so the drawer is reachable from the keyboard; the row
  * click is the pointer shortcut, not the only way in. Built per open handler,
  * as the submissions table builds per base path.
@@ -35,14 +51,7 @@ const buildColumns = (open: (id: string) => void) =>
 					>
 						{row.original.name}
 					</button>
-					{row.original.pronouns && (
-						<div className="text-body-secondary small">
-							{row.original.pronouns}
-							{row.original.githubUsername
-								? ` · @${row.original.githubUsername}`
-								: ''}
-						</div>
-					)}
+					{metaLine(row.original)}
 				</div>
 			),
 		}),
@@ -202,10 +211,7 @@ export function ApplicationsTable({
 						<div className="d-flex justify-content-between align-items-start gap-2">
 							<div>
 								<div className="fw-semibold">{row.name}</div>
-								<div className="text-body-secondary small">
-									{row.pronouns}
-									{row.githubUsername ? ` · @${row.githubUsername}` : ''}
-								</div>
+								{metaLine(row)}
 							</div>
 							<SourceBadge source={row.source} />
 						</div>

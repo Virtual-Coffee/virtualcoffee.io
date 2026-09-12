@@ -15,7 +15,7 @@ export default function Thanks() {
 		<DefaultLayout simple Hero="UndrawShowingSupport">
 			<div className="prose">
 				<div className="lead">
-					<h2>You&rsquo;re on the list</h2>
+					<h1>You&rsquo;re on the list</h1>
 					<p>
 						We read applications in batches, usually weekly. When a spot opens
 						we&rsquo;ll email you an invite to a Coffee — that&rsquo;s a casual
