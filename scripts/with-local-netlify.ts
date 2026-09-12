@@ -122,9 +122,15 @@ async function startBlobs(): Promise<LocalBlobs | null> {
 		return null;
 	}
 
-	const { siteId } = JSON.parse(readFileSync(STATE_FILE, 'utf8')) as {
-		siteId?: string;
-	};
+	let siteId: string | undefined;
+	try {
+		({ siteId } = JSON.parse(readFileSync(STATE_FILE, 'utf8')) as {
+			siteId?: string;
+		});
+	} catch {
+		// A half-written or hand-edited state file is the same situation as
+		// none: blobs are best-effort here, and the CLI will rewrite it.
+	}
 
 	if (!siteId) {
 		console.warn(
