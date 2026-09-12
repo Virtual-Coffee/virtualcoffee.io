@@ -102,14 +102,16 @@ export function ActionPanel(props: Props) {
 						>
 							Approve membership
 						</button>
-						<button
-							type="button"
-							className="btn btn-outline-secondary"
-							disabled={pending}
-							onClick={() => run(() => recordAttendance(props.applicationId))}
-						>
-							Record attendance
-						</button>
+						{!props.attendedAt && (
+							<button
+								type="button"
+								className="btn btn-outline-secondary"
+								disabled={pending}
+								onClick={() => run(() => recordAttendance(props.applicationId))}
+							>
+								Record attendance
+							</button>
+						)}
 					</>
 				)}
 

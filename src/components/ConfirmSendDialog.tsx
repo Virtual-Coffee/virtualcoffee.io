@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 
 import { useModalDialog } from '@/util/useModalDialog';
 
@@ -36,6 +36,10 @@ export function ConfirmSendDialog({
 	onConfirm: (copyMe: boolean) => void;
 }) {
 	const [copyMe, setCopyMe] = useState(false);
+	// Several of these can be mounted at once (the waitlist action panel has
+	// three), and a closed native dialog is still in the DOM, so a fixed id
+	// would let one label toggle another dialog's checkbox.
+	const copyId = useId();
 
 	// A click on the backdrop cancels, which is the safe direction: nothing is
 	// sent, and the dialog is reopened by the same button that opened it. Not
@@ -82,11 +86,11 @@ export function ConfirmSendDialog({
 						<input
 							className="form-check-input"
 							type="checkbox"
-							id="copy-me"
+							id={copyId}
 							checked={copyMe}
 							onChange={(event) => setCopyMe(event.target.checked)}
 						/>
-						<label className="form-check-label" htmlFor="copy-me">
+						<label className="form-check-label" htmlFor={copyId}>
 							Copy me on this email
 						</label>
 					</div>
