@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { db, volunteerSignup } from '@/db';
 import { notifySlack, volunteerSignupMessage } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import { fieldErrorsFrom } from '@/util/forms/parse';
-import { looksLikeSpam } from '@/util/forms/spamGuard';
+import { githubUsername, invalidFields, staleForm } from '@/util/forms/parse';
+import { checkSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
 const schema = z.object({
@@ -15,18 +15,7 @@ const schema = z.object({
 	email: z.email('That doesn’t look like an email address.').max(320),
 	// Required in the browser, so required here too — server validation that is
 	// laxer than the form's own `required` attributes is validation in name only.
-	github_username: z
-		.string()
-		.trim()
-		.min(1, 'Please give us your GitHub username.')
-		.max(100)
-		// Accept a pasted profile URL or an @handle as well as a bare username.
-		.transform((value) =>
-			value
-				.replace(/^https?:\/\/(www\.)?github\.com\//i, '')
-				.replace(/^@/, '')
-				.replace(/\/$/, ''),
-		),
+	github_username: githubUsername('Please give us your GitHub username.'),
 	position: z
 		.string()
 		.trim()
@@ -46,9 +35,9 @@ export async function submitVolunteerSignup(
 	_state: FormState,
 	formData: FormData,
 ): Promise<FormState> {
-	if (looksLikeSpam(formData)) {
-		redirect('/volunteer-at-virtual-coffee/thanks');
-	}
+	const guard = checkSpam(formData);
+	if (guard === 'stale') return staleForm();
+	if (guard !== 'ok') redirect('/volunteer-at-virtual-coffee/thanks');
 
 	const parsed = schema.safeParse({
 		name: formData.get('name') ?? '',
@@ -60,11 +49,7 @@ export async function submitVolunteerSignup(
 	});
 
 	if (!parsed.success) {
-		return {
-			is_error: true,
-			message: 'Please check the highlighted fields.',
-			fieldErrors: fieldErrorsFrom(parsed.error),
-		};
+		return invalidFields(parsed.error);
 	}
 
 	const saved = await persistSubmission(

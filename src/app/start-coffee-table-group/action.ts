@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { coffeeTableGroupRequest, db } from '@/db';
 import { coffeeTableGroupMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import { fieldErrorsFrom } from '@/util/forms/parse';
-import { looksLikeSpam } from '@/util/forms/spamGuard';
+import { invalidFields, staleForm } from '@/util/forms/parse';
+import { checkSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
 const schema = z.object({
@@ -33,9 +33,9 @@ export async function submitCoffeeTableGroupRequest(
 	_state: FormState,
 	formData: FormData,
 ): Promise<FormState> {
-	if (looksLikeSpam(formData)) {
-		redirect('/start-coffee-table-group/thanks');
-	}
+	const guard = checkSpam(formData);
+	if (guard === 'stale') return staleForm();
+	if (guard !== 'ok') redirect('/start-coffee-table-group/thanks');
 
 	const parsed = schema.safeParse({
 		name: formData.get('name') ?? '',
@@ -46,11 +46,7 @@ export async function submitCoffeeTableGroupRequest(
 	});
 
 	if (!parsed.success) {
-		return {
-			is_error: true,
-			message: 'Please check the highlighted fields.',
-			fieldErrors: fieldErrorsFrom(parsed.error),
-		};
+		return invalidFields(parsed.error);
 	}
 
 	const saved = await persistSubmission(

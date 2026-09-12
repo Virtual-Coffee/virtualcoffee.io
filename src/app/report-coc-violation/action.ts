@@ -7,8 +7,8 @@ import { cocReport, db } from '@/db';
 import { storeAttachment, type StoredAttachment } from '@/lib/attachments';
 import { cocReportMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import { formValue, fieldErrorsFrom } from '@/util/forms/parse';
-import { looksLikeSpam } from '@/util/forms/spamGuard';
+import { formValue, invalidFields, staleForm } from '@/util/forms/parse';
+import { checkSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
 /**
@@ -46,11 +46,12 @@ export async function submitCocReport(
 	_state: FormState,
 	formData: FormData,
 ): Promise<FormState> {
-	// Dropped silently, and deliberately reported back as success: telling a bot
-	// which check caught it only helps it try again.
-	if (looksLikeSpam(formData)) {
-		redirect('/report-coc-violation/thanks');
-	}
+	// A bot is dropped silently and deliberately shown success: telling it which
+	// check caught it only helps it try again. A stale token is a person who
+	// wrote this slowly, and a CoC report is the last thing to lose that way.
+	const guard = checkSpam(formData);
+	if (guard === 'stale') return staleForm();
+	if (guard !== 'ok') redirect('/report-coc-violation/thanks');
 
 	const parsed = schema.safeParse({
 		name: formValue(formData, 'name'),
@@ -63,11 +64,7 @@ export async function submitCocReport(
 	});
 
 	if (!parsed.success) {
-		return {
-			is_error: true,
-			message: 'Please check the highlighted fields.',
-			fieldErrors: fieldErrorsFrom(parsed.error),
-		};
+		return invalidFields(parsed.error);
 	}
 
 	// The upload is validated before the row is written, so a rejected file is a
@@ -79,11 +76,7 @@ export async function submitCocReport(
 		const result = await storeAttachment(upload);
 
 		if ('error' in result) {
-			return {
-				is_error: true,
-				message: 'Please check the highlighted fields.',
-				fieldErrors: { uploadedFiles: result.error },
-			};
+			return invalidFields({ uploadedFiles: result.error });
 		}
 
 		attachment = result;

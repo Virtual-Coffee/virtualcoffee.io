@@ -7,8 +7,14 @@ import { z } from 'zod';
 import { applicationEvent, db, invite, membershipApplication } from '@/db';
 import { hashClaimToken } from '@/lib/invites';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
-import { formValue, fieldErrorsFrom } from '@/util/forms/parse';
-import { looksLikeSpam } from '@/util/forms/spamGuard';
+import {
+	formError,
+	formValue,
+	githubUsername,
+	invalidFields,
+	staleForm,
+} from '@/util/forms/parse';
+import { checkSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
 /** What redeeming a Claim Link yields, or null when there was nothing to redeem. */
@@ -22,18 +28,7 @@ const schema = z.object({
 	name: z.string().trim().min(1, 'Please tell us your name.').max(200),
 	email: z.email('That doesn’t look like an email address.').max(320),
 	pronouns: z.string().trim().max(100).optional(),
-	githubUsername: z
-		.string()
-		.trim()
-		.max(100)
-		// Accept a pasted profile URL or an @handle as well as a bare username.
-		.transform((value) =>
-			value
-				.replace(/^https?:\/\/(www\.)?github\.com\//i, '')
-				.replace(/^@/, '')
-				.replace(/\/$/, ''),
-		)
-		.optional(),
+	githubUsername: githubUsername().optional(),
 	howDidYouHear: z.string().trim().max(5000).optional(),
 	journey: z.string().trim().max(5000).optional(),
 	codeInterests: z.string().trim().max(5000).optional(),
@@ -47,11 +42,11 @@ export async function submitMembershipApplication(
 	_state: FormState,
 	formData: FormData,
 ): Promise<FormState> {
-	// Same silent success the four submission forms give a bot: it sees the
-	// thank-you page and nothing is written.
-	if (looksLikeSpam(formData)) {
-		redirect('/join/thank-you');
-	}
+	// Same treatment the four submission forms give: a bot sees the thank-you
+	// page and nothing is written; a stale token is asked to submit again.
+	const guard = checkSpam(formData);
+	if (guard === 'stale') return staleForm();
+	if (guard !== 'ok') redirect('/join/thank-you');
 
 	const parsed = schema.safeParse({
 		name: formData.get('name') ?? '',
@@ -66,11 +61,7 @@ export async function submitMembershipApplication(
 	});
 
 	if (!parsed.success) {
-		return {
-			is_error: true,
-			message: 'Please check the highlighted fields.',
-			fieldErrors: fieldErrorsFrom(parsed.error),
-		};
+		return invalidFields(parsed.error);
 	}
 
 	const now = new Date();
@@ -160,11 +151,9 @@ export async function submitMembershipApplication(
 		// Deliberately not surfaced to the applicant: the upstream message can
 		// name tables and columns, and there is nothing they could do with it.
 		console.error('Membership application failed to save', error);
-		return {
-			is_error: true,
-			message:
-				'Something went wrong saving your application. Please try again, or email hello@virtualcoffee.io.',
-		};
+		return formError(
+			'Something went wrong saving your application. Please try again, or email hello@virtualcoffee.io.',
+		);
 	}
 
 	/**

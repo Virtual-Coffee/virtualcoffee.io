@@ -10,6 +10,7 @@ import {
 	type SubmissionKind,
 } from '@/lib/submissions';
 import type { NotifyResult } from '@/lib/slack/notify';
+import { formError } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
 
 /**
@@ -72,7 +73,7 @@ export async function persistSubmission(
 		return { id };
 	} catch (error) {
 		console.error(`${SUBMISSION_KINDS[kind].singular} failed to save`, error);
-		return { error: { is_error: true, message: copy.failed } };
+		return { error: formError(copy.failed) };
 	}
 }
 

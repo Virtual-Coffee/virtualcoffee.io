@@ -6,7 +6,7 @@ import { useFormAction } from '@/util/forms/useFormAction';
 import { submitCocReport } from './action';
 
 export function Form({ spamToken }: { spamToken: string }) {
-	const { formAction, errorContent, fieldError } =
+	const { formAction, errorContent, fieldError, state } =
 		useFormAction(submitCocReport);
 
 	return (
@@ -140,7 +140,7 @@ export function Form({ spamToken }: { spamToken: string }) {
 			</fieldset>
 
 			<CodeOfConduct />
-			<SpamGuardFields token={spamToken} />
+			<SpamGuardFields token={state?.spamToken ?? spamToken} />
 			{errorContent}
 			<Submit />
 		</form>

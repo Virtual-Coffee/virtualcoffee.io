@@ -9,18 +9,23 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
  * they are aimed at the drive-by form bots that make up nearly all of it, and
  * they cost the person filling the form in nothing.
  *
- * A submission that fails either check is dropped silently: telling a bot which
- * check caught it only helps it try again.
+ * A submission that fails the honeypot or carries a forged token is dropped
+ * silently: telling a bot which check caught it only helps it try again. A
+ * token that is merely *old* is different — that is a person who left the tab
+ * open — so it comes back as `stale` and the action asks them to submit again
+ * with a fresh token, rather than thanking them for a report it never saved.
  */
 
 export const HONEYPOT_FIELD = 'website';
 export const TIMESTAMP_FIELD = 'rendered_at';
 
 /** Nothing legitimate is filled in and submitted this fast. */
-const MIN_ELAPSED_MS = 2_000;
+export const MIN_ELAPSED_MS = 2_000;
 
-/** A form left open all day is a real person coming back to it, not a bot. */
-const MAX_ELAPSED_MS = 12 * 60 * 60 * 1000;
+/** A form left open overnight is a real person coming back to it, not a bot. */
+export const MAX_ELAPSED_MS = 24 * 60 * 60 * 1000;
+
+export type SpamCheck = 'ok' | 'honeypot' | 'invalid' | 'stale';
 
 /**
  * Signed so the timestamp cannot simply be back-dated in the payload.
@@ -43,11 +48,25 @@ export function issueTimestamp(now = Date.now()): string {
 	return `${value}.${sign(value)}`;
 }
 
-function verifyTimestamp(token: string | null, now = Date.now()): boolean {
-	if (!token) return false;
+/**
+ * A replacement token for a form that is being re-rendered after an error.
+ *
+ * Back-dated by the minimum elapsed time, because the person has already
+ * spent that long on the form: making them wait another two seconds before
+ * the retry counts would drop an immediate resubmit as a bot.
+ */
+export function reissueTimestamp(now = Date.now()): string {
+	return issueTimestamp(now - MIN_ELAPSED_MS);
+}
+
+function verifyTimestamp(
+	token: string | null,
+	now = Date.now(),
+): 'ok' | 'invalid' | 'stale' {
+	if (!token) return 'invalid';
 
 	const separator = token.lastIndexOf('.');
-	if (separator === -1) return false;
+	if (separator === -1) return 'invalid';
 
 	const value = token.slice(0, separator);
 	const signature = token.slice(separator + 1);
@@ -63,8 +82,8 @@ function verifyTimestamp(token: string | null, now = Date.now()): boolean {
 	 * false, and the crash surfaces as a 500 rather than the silent drop this
 	 * file promises.
 	 */
-	if (!/^[0-9a-f]+$/.test(signature)) return false;
-	if (signature.length !== expected.length) return false;
+	if (!/^[0-9a-f]+$/.test(signature)) return 'invalid';
+	if (signature.length !== expected.length) return 'invalid';
 
 	if (
 		!timingSafeEqual(
@@ -72,31 +91,30 @@ function verifyTimestamp(token: string | null, now = Date.now()): boolean {
 			Buffer.from(expected, 'hex'),
 		)
 	) {
-		return false;
+		return 'invalid';
 	}
 
 	const issued = Number(value);
-	if (!Number.isFinite(issued)) return false;
+	if (!Number.isFinite(issued)) return 'invalid';
 
 	const elapsed = now - issued;
-	return elapsed >= MIN_ELAPSED_MS && elapsed <= MAX_ELAPSED_MS;
+	if (elapsed < MIN_ELAPSED_MS) return 'invalid';
+	return elapsed <= MAX_ELAPSED_MS ? 'ok' : 'stale';
 }
 
 /**
- * Whether a submission looks like a bot.
+ * Whether a submission looks like a bot, and if so which way.
  *
  * The honeypot is a field a person never sees and never fills in; anything in
- * it is automated. The timestamp catches the rest.
+ * it is automated. The timestamp catches the rest. Callers drop `honeypot` and
+ * `invalid` silently and hand `stale` back to the form.
  */
-export function looksLikeSpam(formData: FormData, now = Date.now()): boolean {
+export function checkSpam(formData: FormData, now = Date.now()): SpamCheck {
 	const honeypot = formData.get(HONEYPOT_FIELD);
 	if (typeof honeypot === 'string' && honeypot.trim().length > 0) {
-		return true;
+		return 'honeypot';
 	}
 
 	const timestamp = formData.get(TIMESTAMP_FIELD);
-	return !verifyTimestamp(
-		typeof timestamp === 'string' ? timestamp : null,
-		now,
-	);
+	return verifyTimestamp(typeof timestamp === 'string' ? timestamp : null, now);
 }

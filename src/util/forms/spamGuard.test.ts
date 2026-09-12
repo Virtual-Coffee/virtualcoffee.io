@@ -1,9 +1,11 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import {
+	checkSpam,
 	HONEYPOT_FIELD,
 	issueTimestamp,
-	looksLikeSpam,
+	MIN_ELAPSED_MS,
+	reissueTimestamp,
 	TIMESTAMP_FIELD,
 } from './spamGuard';
 
@@ -24,37 +26,41 @@ function submission(
 	return formData;
 }
 
-describe('looksLikeSpam', () => {
+describe('checkSpam', () => {
 	afterEach(() => vi.unstubAllEnvs());
 
 	test('a form filled in at a human pace passes', () => {
-		expect(looksLikeSpam(submission(), RENDERED_AT + 3 * SECOND)).toBe(false);
-		expect(looksLikeSpam(submission(), RENDERED_AT + 11 * HOUR)).toBe(false);
+		expect(checkSpam(submission(), RENDERED_AT + 3 * SECOND)).toBe('ok');
+		expect(checkSpam(submission(), RENDERED_AT + 23 * HOUR)).toBe('ok');
 	});
 
-	test('the window is closed at both ends: under 2 s and over 12 h', () => {
-		expect(looksLikeSpam(submission(), RENDERED_AT + 1_999)).toBe(true);
-		expect(looksLikeSpam(submission(), RENDERED_AT + 2_000)).toBe(false);
-		expect(looksLikeSpam(submission(), RENDERED_AT + 12 * HOUR)).toBe(false);
-		expect(looksLikeSpam(submission(), RENDERED_AT + 12 * HOUR + 1)).toBe(true);
+	test('under 2 s is a bot; over 24 h is a person who left the tab open', () => {
+		expect(checkSpam(submission(), RENDERED_AT + 1_999)).toBe('invalid');
+		expect(checkSpam(submission(), RENDERED_AT + 2_000)).toBe('ok');
+		expect(checkSpam(submission(), RENDERED_AT + 24 * HOUR)).toBe('ok');
+		expect(checkSpam(submission(), RENDERED_AT + 24 * HOUR + 1)).toBe('stale');
 	});
 
 	test('a submission from before the form was rendered is spam', () => {
-		expect(looksLikeSpam(submission(), RENDERED_AT - SECOND)).toBe(true);
+		expect(checkSpam(submission(), RENDERED_AT - SECOND)).toBe('invalid');
 	});
 
 	test('anything in the honeypot is spam, whitespace is not', () => {
 		const now = RENDERED_AT + 5 * SECOND;
 		expect(
-			looksLikeSpam(submission({ [HONEYPOT_FIELD]: 'https://x.test' }), now),
-		).toBe(true);
-		expect(looksLikeSpam(submission({ [HONEYPOT_FIELD]: '   ' }), now)).toBe(
-			false,
-		);
+			checkSpam(submission({ [HONEYPOT_FIELD]: 'https://x.test' }), now),
+		).toBe('honeypot');
+		expect(checkSpam(submission({ [HONEYPOT_FIELD]: '   ' }), now)).toBe('ok');
+	});
+
+	test('a stale token with something in the honeypot is still a bot', () => {
+		expect(
+			checkSpam(submission({ [HONEYPOT_FIELD]: 'x' }), RENDERED_AT + 25 * HOUR),
+		).toBe('honeypot');
 	});
 
 	/**
-	 * Every malformed token must come back as `true`, never throw: the file
+	 * Every malformed token must come back as `invalid`, never throw: the file
 	 * promises a silent drop, and `timingSafeEqual` throws on a length mismatch
 	 * if the alphabet check before it is ever lost.
 	 */
@@ -70,7 +76,7 @@ describe('looksLikeSpam', () => {
 		const formData = submission();
 		if (token === undefined) formData.delete(TIMESTAMP_FIELD);
 		else formData.set(TIMESTAMP_FIELD, token);
-		expect(looksLikeSpam(formData, RENDERED_AT + 5 * SECOND)).toBe(true);
+		expect(checkSpam(formData, RENDERED_AT + 5 * SECOND)).toBe('invalid');
 	});
 
 	test('back-dating the value breaks the signature', () => {
@@ -78,16 +84,16 @@ describe('looksLikeSpam', () => {
 		const formData = submission({
 			[TIMESTAMP_FIELD]: `${RENDERED_AT - HOUR}.${signature}`,
 		});
-		expect(looksLikeSpam(formData, RENDERED_AT + 5 * SECOND)).toBe(true);
+		expect(checkSpam(formData, RENDERED_AT + 5 * SECOND)).toBe('invalid');
 	});
 
 	test('a token signed under one secret is rejected under another', () => {
 		vi.stubEnv('BETTER_AUTH_SECRET', 'secret-a');
 		const formData = submission();
-		expect(looksLikeSpam(formData, RENDERED_AT + 5 * SECOND)).toBe(false);
+		expect(checkSpam(formData, RENDERED_AT + 5 * SECOND)).toBe('ok');
 
 		vi.stubEnv('BETTER_AUTH_SECRET', 'secret-b');
-		expect(looksLikeSpam(formData, RENDERED_AT + 5 * SECOND)).toBe(true);
+		expect(checkSpam(formData, RENDERED_AT + 5 * SECOND)).toBe('invalid');
 	});
 });
 
@@ -95,6 +101,17 @@ describe('issueTimestamp', () => {
 	test('is the millisecond timestamp and a hex HMAC, dot-separated', () => {
 		expect(issueTimestamp(RENDERED_AT)).toMatch(
 			new RegExp(`^${RENDERED_AT}\\.[0-9a-f]{64}$`),
+		);
+	});
+});
+
+describe('reissueTimestamp', () => {
+	test('a form re-rendered after an error can be resubmitted at once', () => {
+		const formData = submission();
+		formData.set(TIMESTAMP_FIELD, reissueTimestamp(RENDERED_AT));
+		expect(checkSpam(formData, RENDERED_AT)).toBe('ok');
+		expect(reissueTimestamp(RENDERED_AT)).toBe(
+			issueTimestamp(RENDERED_AT - MIN_ELAPSED_MS),
 		);
 	});
 });

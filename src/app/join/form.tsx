@@ -23,7 +23,7 @@ export function JoinForm({
 	defaultName?: string;
 	defaultEmail?: string;
 }) {
-	const { formAction, errorContent, fieldError } = useFormAction(
+	const { formAction, errorContent, fieldError, state } = useFormAction(
 		submitMembershipApplication,
 	);
 
@@ -107,7 +107,7 @@ export function JoinForm({
 					{fieldError('agree')}
 				</p>
 			)}
-			<SpamGuardFields token={spamToken} />
+			<SpamGuardFields token={state?.spamToken ?? spamToken} />
 
 			<Submit />
 		</form>

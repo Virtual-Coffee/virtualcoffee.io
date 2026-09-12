@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { fieldErrors, formDataWith } from '@/test/forms';
+import { fieldErrors, formDataWith, staleFormState } from '@/test/forms';
 import { redirectTo } from '@/test/next';
 
 import { submitCocReport } from './action';
@@ -19,6 +19,14 @@ describe('submitCocReport', () => {
 		await expect(
 			submit(formDataWith(valid, { spam: true })),
 		).rejects.toMatchObject(redirectTo('/report-coc-violation/thanks'));
+	});
+
+	test('a form left open too long is asked to submit again, not thanked', async () => {
+		// Returned before anything is validated or written, so no database is
+		// needed to prove nothing was saved.
+		await expect(submit(formDataWith(valid, { stale: true }))).resolves.toEqual(
+			staleFormState(),
+		);
 	});
 
 	test('name and email are optional — anonymous reports are the point', async () => {

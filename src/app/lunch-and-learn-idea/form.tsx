@@ -6,7 +6,9 @@ import { useFormAction } from '@/util/forms/useFormAction';
 import { submitLunchAndLearnIdea } from './action';
 
 export function Form({ spamToken }: { spamToken: string }) {
-	const { formAction, errorContent } = useFormAction(submitLunchAndLearnIdea);
+	const { formAction, errorContent, state } = useFormAction(
+		submitLunchAndLearnIdea,
+	);
 
 	return (
 		<form action={formAction}>
@@ -93,7 +95,7 @@ export function Form({ spamToken }: { spamToken: string }) {
 			</fieldset>
 
 			<CodeOfConduct />
-			<SpamGuardFields token={spamToken} />
+			<SpamGuardFields token={state?.spamToken ?? spamToken} />
 			{errorContent}
 			<Submit />
 		</form>

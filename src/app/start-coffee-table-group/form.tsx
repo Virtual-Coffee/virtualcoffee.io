@@ -6,7 +6,7 @@ import { useFormAction } from '@/util/forms/useFormAction';
 import { submitCoffeeTableGroupRequest } from './action';
 
 export function Form({ spamToken }: { spamToken: string }) {
-	const { formAction, errorContent } = useFormAction(
+	const { formAction, errorContent, state } = useFormAction(
 		submitCoffeeTableGroupRequest,
 	);
 
@@ -75,7 +75,7 @@ export function Form({ spamToken }: { spamToken: string }) {
 			</fieldset>
 
 			<CodeOfConduct />
-			<SpamGuardFields token={spamToken} />
+			<SpamGuardFields token={state?.spamToken ?? spamToken} />
 			{errorContent}
 			<Submit />
 		</form>

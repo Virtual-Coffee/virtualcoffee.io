@@ -24,7 +24,7 @@ function Position() {
 }
 
 export function Form({ spamToken }: { spamToken: string }) {
-	const { formAction, errorContent, fieldError } = useFormAction(
+	const { formAction, errorContent, fieldError, state } = useFormAction(
 		submitVolunteerSignup,
 	);
 
@@ -103,7 +103,7 @@ export function Form({ spamToken }: { spamToken: string }) {
 			</fieldset>
 
 			<CodeOfConduct />
-			<SpamGuardFields token={spamToken} />
+			<SpamGuardFields token={state?.spamToken ?? spamToken} />
 			{errorContent}
 			<Submit />
 		</form>

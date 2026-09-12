@@ -6,9 +6,10 @@ import { HONEYPOT_FIELD, TIMESTAMP_FIELD } from './spamGuard';
  * The token is passed in rather than generated here: these are client
  * components, and the signing secret must not reach the browser. The page
  * calls `issueTimestamp()` on the server and hands the result down — which is
- * also why the four form pages are `force-dynamic`. Statically prerendering
- * them would bake one token into the cached HTML and every submission after the
- * token expired would be rejected.
+ * also why the form pages are `force-dynamic`. Statically prerendering them
+ * would bake one token into the cached HTML and every submission after the
+ * token aged out would be bounced back for a retry. The form passes the
+ * state's `spamToken` over the page's once an error has re-rendered it.
  *
  * The honeypot is hidden from sight *and* from assistive technology, and taken
  * out of the tab order, so nobody filling the form in can trip it by accident.
