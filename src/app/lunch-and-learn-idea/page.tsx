@@ -1,6 +1,10 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 import { Form } from './form';
+import { issueTimestamp } from '@/util/forms/spamGuard';
+
+// The spam guard signs a per-render token that prerendering would bake in.
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
 	return await createMetaData({
@@ -25,7 +29,7 @@ export default function CocForm() {
 					question and answer, or a combination.
 				</p>
 			</div>
-			<Form />
+			<Form spamToken={issueTimestamp()} />
 		</DefaultLayout>
 	);
 }
