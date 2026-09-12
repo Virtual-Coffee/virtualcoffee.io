@@ -41,6 +41,9 @@ export default defineConfig({
 		],
 		coverage: {
 			provider: 'v8',
+			// `text` for the terminal; the two JSON files are what CI's coverage
+			// report step reads (summary for the totals, final for per-file rows).
+			reporter: ['text', 'json-summary', 'json'],
 			include: ['src/**'],
 			exclude: [
 				// Pages and components: a unit runner cannot render async Server

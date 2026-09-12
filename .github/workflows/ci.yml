@@ -201,6 +201,10 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # For the coverage comment. Fork PRs never get it — see below.
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -225,4 +229,15 @@ jobs:
       # Vitest switches to its github-actions reporter on its own here, so
       # failures annotate the diff without a problem matcher.
       - name: Test
-        run: pnpm test
+        run: pnpm test:coverage
+
+      # Coverage totals in the job summary, plus a comment on the PR listing
+      # the changed files' coverage. A fork PR's token can't write a comment,
+      # so those get the summary only rather than a failing step. Runs after
+      # a red test too — Vitest still writes the report, and that is when it
+      # is most useful.
+      - name: Report coverage
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@c4bbc33a89b7ace0e63d35f1f7d4bcee31155a73 # v2.13.0
+        with:
+          comment-on: ${{ github.event.pull_request.head.repo.full_name == github.repository && 'pr' || 'none' }}
