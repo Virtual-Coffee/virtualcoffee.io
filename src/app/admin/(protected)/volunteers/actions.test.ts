@@ -2,7 +2,7 @@ import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
-import { addVolunteer, adjustBalance } from './actions';
+import { addVolunteer, adjustBalance, setRoleLabels } from './actions';
 
 const VOLUNTEER_ID = '0199404c-2c5e-7000-8000-000000000000';
 
@@ -70,9 +70,40 @@ describe('addVolunteer', () => {
 
 	test('a malformed email is refused before anything is looked up', async () => {
 		signInAs('admin');
-		await expect(addVolunteer('U_ADA', '', 'not-an-email')).resolves.toEqual({
+		await expect(addVolunteer('U_ADA', [], 'not-an-email')).resolves.toEqual({
 			ok: false,
 			message: 'That doesn’t look like an email address.',
+		});
+	});
+
+	test('a role that is not on the list is refused', async () => {
+		signInAs('admin');
+		await expect(
+			addVolunteer('U_ADA', ['VC Host', 'Grand Poobah'], ''),
+		).resolves.toEqual({
+			ok: false,
+			message: 'That isn’t one of the community roles.',
+		});
+	});
+});
+
+describe('setRoleLabels', () => {
+	afterEach(() => vi.unstubAllEnvs());
+
+	test('needs volunteers:manage', async () => {
+		signInAs('waitlist_reviewer');
+		await expect(
+			setRoleLabels(VOLUNTEER_ID, ['VC Host']),
+		).rejects.toMatchObject(NOT_FOUND);
+	});
+
+	test('a role that is not on the list is refused', async () => {
+		signInAs('admin');
+		await expect(
+			setRoleLabels(VOLUNTEER_ID, ['Grand Poobah']),
+		).resolves.toEqual({
+			ok: false,
+			message: 'That isn’t one of the community roles.',
 		});
 	});
 });

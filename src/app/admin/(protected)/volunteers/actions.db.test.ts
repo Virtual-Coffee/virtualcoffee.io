@@ -50,6 +50,7 @@ import {
 	addVolunteer,
 	adjustBalance,
 	resendInvite,
+	setRoleLabels,
 	setVolunteerActive,
 } from './actions';
 
@@ -96,7 +97,11 @@ describe('addVolunteer', () => {
 		});
 
 		await expect(
-			addVolunteer('U_ADA', ' Maintainer ', 'ADA@example.test'),
+			addVolunteer(
+				'U_ADA',
+				['VC Host', 'Notetaker', 'VC Host'],
+				'ADA@example.test',
+			),
 		).resolves.toEqual({
 			ok: true,
 			message: "Ada can now send invites, and we've emailed them.",
@@ -105,7 +110,7 @@ describe('addVolunteer', () => {
 		await expect(volunteerRow('U_ADA')).resolves.toMatchObject({
 			slackDisplayName: 'Ada',
 			slackHandle: 'ada',
-			roleLabels: 'Maintainer',
+			roleLabels: 'Notetaker, VC Host',
 			email: 'ada@example.test',
 			deactivatedAt: null,
 		});
@@ -127,7 +132,7 @@ describe('addVolunteer', () => {
 			role: 'waitlist_reviewer',
 		});
 
-		await expect(addVolunteer('U_ADA', '', '')).resolves.toEqual({
+		await expect(addVolunteer('U_ADA', [], '')).resolves.toEqual({
 			ok: true,
 			message:
 				'Ada can now send invites. Add an email address to let us tell them.',
@@ -146,7 +151,7 @@ describe('addVolunteer', () => {
 	test('a second add is refused by the unique index, and grants nothing', async () => {
 		await insertVolunteer({ slackUserId: 'U_ADA' });
 
-		await expect(addVolunteer('U_ADA', '', '')).resolves.toEqual({
+		await expect(addVolunteer('U_ADA', [], '')).resolves.toEqual({
 			ok: false,
 			message: 'Ada is already a volunteer.',
 		});
@@ -157,7 +162,7 @@ describe('addVolunteer', () => {
 	test('any other failure surfaces rather than posing as a duplicate', async () => {
 		const fault = await failInserts('volunteer');
 		try {
-			await expect(addVolunteer('U_ADA', '', '')).rejects.toThrow(
+			await expect(addVolunteer('U_ADA', [], '')).rejects.toThrow(
 				/insert into "volunteer"/,
 			);
 		} finally {
@@ -174,7 +179,7 @@ describe('addVolunteer', () => {
 		});
 
 		await expect(
-			addVolunteer('U_ADA', '', 'ada@example.test'),
+			addVolunteer('U_ADA', [], 'ada@example.test'),
 		).resolves.toEqual({
 			ok: true,
 			message:
@@ -184,13 +189,13 @@ describe('addVolunteer', () => {
 	});
 
 	test('unknown Slack members and the wrong section are refused', async () => {
-		await expect(addVolunteer('U_NOBODY', '', '')).resolves.toEqual({
+		await expect(addVolunteer('U_NOBODY', [], '')).resolves.toEqual({
 			ok: false,
 			message: 'That Slack member is no longer in the workspace.',
 		});
 
 		signInAs('waitlist_reviewer');
-		await expect(addVolunteer('U_ADA', '', '')).rejects.toMatchObject(
+		await expect(addVolunteer('U_ADA', [], '')).rejects.toMatchObject(
 			NOT_FOUND,
 		);
 		await expect(volunteerRow('U_ADA')).resolves.toBeNull();
@@ -263,7 +268,7 @@ describe('setVolunteerActive', () => {
 	});
 
 	test('restarting someone who never signed in re-creates the withdrawn grant', async () => {
-		await addVolunteer('U_ADA', '', '');
+		await addVolunteer('U_ADA', [], '');
 		const { id } = (await volunteerRow('U_ADA'))!;
 
 		await setVolunteerActive(id, false);
@@ -314,6 +319,40 @@ describe('adjustBalance', () => {
 	test('an unknown volunteer writes nothing', async () => {
 		await expect(
 			adjustBalance('0199404c-2c5e-7000-8000-000000000000', 1, 'ok'),
+		).resolves.toEqual({
+			ok: false,
+			message: 'That volunteer no longer exists.',
+		});
+	});
+});
+
+describe('setRoleLabels', () => {
+	test('writes the list in canonical order, and an empty list clears it', async () => {
+		const { id } = await insertVolunteer({ slackUserId: 'U_ADA' });
+
+		await expect(
+			setRoleLabels(id, ['VC Host', 'Notetaker', 'VC Host']),
+		).resolves.toEqual({ ok: true, message: 'Roles updated.' });
+		await expect(volunteerRow('U_ADA')).resolves.toMatchObject({
+			roleLabels: 'Notetaker, VC Host',
+		});
+
+		await expect(setRoleLabels(id, [])).resolves.toEqual({
+			ok: true,
+			message: 'Roles updated.',
+		});
+		await expect(volunteerRow('U_ADA')).resolves.toMatchObject({
+			roleLabels: null,
+		});
+	});
+
+	test('a malformed or unknown id is a soft failure, not a 22P02', async () => {
+		await expect(setRoleLabels('42', ['VC Host'])).resolves.toEqual({
+			ok: false,
+			message: 'That volunteer no longer exists.',
+		});
+		await expect(
+			setRoleLabels('0199404c-2c5e-7000-8000-000000000000', ['VC Host']),
 		).resolves.toEqual({
 			ok: false,
 			message: 'That volunteer no longer exists.',

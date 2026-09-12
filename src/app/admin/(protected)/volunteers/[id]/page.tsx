@@ -12,12 +12,14 @@ import { formatDate, formatDateTime, ReadOnlyNotice } from '../../presentation';
 import {
 	AdminInviteBadge,
 	LEDGER_LABELS,
+	RoleChips,
 	VolunteerStateBadge,
 } from '../presentation';
 import {
 	ActiveToggle,
 	AdjustBalanceForm,
 	ResendInviteButton,
+	VolunteerRolesEditor,
 } from '../volunteerControls';
 
 export const dynamic = 'force-dynamic';
@@ -71,11 +73,13 @@ export default async function VolunteerDetailPage({
 				<h1 className="h4 mb-0">{volunteer.slackDisplayName}</h1>
 				<VolunteerStateBadge deactivatedAt={volunteer.deactivatedAt} />
 			</div>
-			<p className="text-body-secondary">
+			<p className="text-body-secondary mb-2">
 				{volunteer.slackHandle ? `@${volunteer.slackHandle}` : 'No handle'}
-				{volunteer.roleLabels && ` · ${volunteer.roleLabels}`}
 				{volunteer.userId === null && ' · hasn’t signed in yet'}
 			</p>
+			<div className="mb-4">
+				<RoleChips roleLabels={volunteer.roleLabels} />
+			</div>
 
 			<div className="row g-4">
 				<div className="col-lg-7">
@@ -185,6 +189,23 @@ export default async function VolunteerDetailPage({
 							<p className="display-6 mb-3">{balance}</p>
 							{canManage ? (
 								<AdjustBalanceForm volunteerId={volunteer.id} />
+							) : (
+								<ReadOnlyNotice />
+							)}
+						</div>
+					</div>
+
+					<div className="card mb-4">
+						<div className="card-body">
+							<h2 className="h6 text-body-secondary">Community roles</h2>
+							<p className="small text-body-secondary">
+								Just a note for other maintainers. These grant nothing.
+							</p>
+							{canManage ? (
+								<VolunteerRolesEditor
+									volunteerId={volunteer.id}
+									roleLabels={volunteer.roleLabels}
+								/>
 							) : (
 								<ReadOnlyNotice />
 							)}

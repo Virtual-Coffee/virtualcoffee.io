@@ -3,11 +3,18 @@
 import { useState } from 'react';
 
 import { filterSlackMembers, type SlackMember } from '@/lib/slackMemberPicker';
+import {
+	COMMUNITY_ROLES,
+	type CommunityRole,
+	parseRoleLabels,
+} from '@/lib/volunteerRoles';
 import { useAction } from '@/util/forms/useAction';
+import { useDropdown } from '../useDropdown';
 import {
 	addVolunteer,
 	adjustBalance,
 	resendInvite,
+	setRoleLabels,
 	setVolunteerActive,
 } from './actions';
 
@@ -23,7 +30,7 @@ export function AddVolunteerForm({
 	const { run, pending, feedback } = useAction();
 	const [query, setQuery] = useState('');
 	const [selected, setSelected] = useState<string | null>(null);
-	const [roleLabels, setRoleLabels] = useState('');
+	const [roleLabels, setRoleLabels] = useState<CommunityRole[]>([]);
 	const [email, setEmail] = useState('');
 
 	const matches = filterSlackMembers(candidates, query);
@@ -98,16 +105,15 @@ export function AddVolunteerForm({
 				</div>
 
 				<div className="mb-3">
-					<label className="form-label" htmlFor="volunteer-roles">
+					<div className="form-label" id="volunteer-roles-label">
 						Community roles{' '}
 						<span className="text-body-secondary">(optional)</span>
-					</label>
-					<input
+					</div>
+					<CommunityRolesDropdown
 						id="volunteer-roles"
-						className="form-control"
-						value={roleLabels}
-						onChange={(event) => setRoleLabels(event.target.value)}
-						placeholder="VC Host, Notetaker"
+						selected={roleLabels}
+						disabled={pending}
+						onChange={setRoleLabels}
 					/>
 					<div className="form-text">
 						Just a note for other maintainers. These grant nothing.
@@ -123,7 +129,7 @@ export function AddVolunteerForm({
 						run(() => addVolunteer(selected, roleLabels, email));
 						setSelected(null);
 						setQuery('');
-						setRoleLabels('');
+						setRoleLabels([]);
 						setEmail('');
 					}}
 				>
@@ -133,6 +139,143 @@ export function AddVolunteerForm({
 				{feedback}
 			</div>
 		</div>
+	);
+}
+
+/**
+ * The Airtable roles list as a dropdown of checkboxes, the same shape as the
+ * User Management `RolesDropdown` minus the Save step: this is form state, and
+ * the enclosing form's button is the commit. `id` prefixes every element id,
+ * so two on one page do not collide.
+ */
+function CommunityRolesDropdown({
+	id,
+	selected,
+	disabled,
+	size,
+	onChange,
+}: {
+	id: string;
+	selected: CommunityRole[];
+	disabled: boolean;
+	size?: 'sm';
+	onChange: (roles: CommunityRole[]) => void;
+}) {
+	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
+		HTMLDivElement,
+		HTMLButtonElement
+	>();
+	const menuId = `${id}-menu`;
+
+	return (
+		<div className="dropdown" ref={wrapperRef}>
+			<button
+				type="button"
+				ref={toggleRef}
+				className={`btn btn-outline-secondary dropdown-toggle${
+					size === 'sm' ? ' btn-sm' : ''
+				}`}
+				aria-labelledby={`${id}-label`}
+				aria-expanded={open}
+				aria-haspopup="true"
+				aria-controls={menuId}
+				disabled={disabled}
+				onClick={() => setOpen((wasOpen) => !wasOpen)}
+			>
+				{selected.length === 0 ? 'Pick roles' : selected.join(', ')}
+			</button>
+
+			{open && (
+				<ul
+					id={menuId}
+					className="dropdown-menu show py-1 overflow-auto"
+					style={
+						{
+							'--bs-dropdown-font-size': '0.8125rem',
+							maxHeight: '18rem',
+						} as React.CSSProperties
+					}
+				>
+					{COMMUNITY_ROLES.map((role) => {
+						const inputId = `${id}-${role.replace(/[^a-z0-9]+/gi, '-')}`;
+						return (
+							<li key={role} className="px-3">
+								<div className="form-check py-1 mb-0 lh-sm">
+									<input
+										className="form-check-input"
+										type="checkbox"
+										id={inputId}
+										checked={selected.includes(role)}
+										onChange={() =>
+											onChange(
+												selected.includes(role)
+													? selected.filter((entry) => entry !== role)
+													: [...selected, role],
+											)
+										}
+									/>
+									<label className="form-check-label" htmlFor={inputId}>
+										{role}
+									</label>
+								</div>
+							</li>
+						);
+					})}
+				</ul>
+			)}
+		</div>
+	);
+}
+
+/** A known role is one on the list; the column can hold others, which Save drops. */
+function knownRoles(roleLabels: string | null): CommunityRole[] {
+	return parseRoleLabels(roleLabels).filter((label): label is CommunityRole =>
+		(COMMUNITY_ROLES as readonly string[]).includes(label),
+	);
+}
+
+export function VolunteerRolesEditor({
+	volunteerId,
+	roleLabels,
+}: {
+	volunteerId: string;
+	roleLabels: string | null;
+}) {
+	const { run, pending, feedback } = useAction();
+	const saved = knownRoles(roleLabels);
+	const [draft, setDraft] = useState<CommunityRole[]>(saved);
+
+	const dirty =
+		draft.length !== saved.length ||
+		draft.some((role) => !saved.includes(role));
+
+	return (
+		<form
+			onSubmit={(event) => {
+				event.preventDefault();
+				run(() => setRoleLabels(volunteerId, draft));
+			}}
+		>
+			{/* The card heading already says it; this only names the toggle. */}
+			<div className="visually-hidden" id="edit-roles-label">
+				Community roles
+			</div>
+			<CommunityRolesDropdown
+				id="edit-roles"
+				size="sm"
+				selected={draft}
+				disabled={pending}
+				onChange={setDraft}
+			/>
+			<button
+				type="submit"
+				className="btn btn-sm btn-outline-primary mt-2"
+				disabled={pending || !dirty}
+			>
+				{pending ? 'Saving…' : 'Save roles'}
+			</button>
+			{feedback}
+		</form>
 	);
 }
 
