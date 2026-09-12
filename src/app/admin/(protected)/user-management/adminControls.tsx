@@ -26,14 +26,6 @@ import {
 } from './actions';
 
 /**
- * Labels for the summary badges, read from every role rather than from
- * `GRANTABLE_ROLES`. The checkboxes below still offer only the grantable ones,
- * but someone can hold a role this screen does not grant — `volunteer` is
- * granted from /admin/volunteers — and it should not render as a blank badge.
- */
-const LABELS = new Map(Object.entries(ROLE_LABELS) as [RoleName, string][]);
-
-/**
  * The roles one person holds, as a dropdown of checkboxes.
  *
  * Changes are staged in the menu and written together on Save, as the whole
@@ -246,7 +238,7 @@ export function RolesDropdown({
 										onChange={() => toggleDraft(role.name)}
 									/>
 									<label className="form-check-label" htmlFor={inputId}>
-										{role.label}
+										{ROLE_LABELS[role.name]}
 										{/*
 										 * Was a `title` attribute, which never shows on touch.
 										 * `.small` works here where it did not on the menu
@@ -313,7 +305,7 @@ export function RolesDropdown({
 				) : (
 					roles.map((role) => (
 						<span className="badge text-bg-light border" key={role}>
-							{LABELS.get(role) ?? role}
+							{ROLE_LABELS[role]}
 						</span>
 					))
 				)}
@@ -502,7 +494,7 @@ export function GrantAccessForm({
 			>
 				{GRANTABLE_ROLES.map((option) => (
 					<option key={option.name} value={option.name}>
-						{option.label}
+						{ROLE_LABELS[option.name]}
 					</option>
 				))}
 			</select>

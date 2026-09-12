@@ -11,7 +11,6 @@ import { isId } from '@/db/ids';
 import {
 	DEFAULT_ROLE,
 	GRANTABLE_ROLE_NAMES,
-	grantedRoles,
 	parseRoles,
 	roles as ROLE_DEFINITIONS,
 	serialiseRoles,
@@ -35,11 +34,11 @@ function isRoleName(value: string): value is RoleName {
  * from /admin/volunteers alongside a `volunteer` row; dropping it here would
  * leave that row active and accruing invites its owner can no longer spend.
  */
-function preserveUngrantedRoles(
+function preserveUnparseRoles(
 	current: string | null | undefined,
 	requested: RoleName[],
 ): RoleName[] {
-	const kept = grantedRoles(current).filter(
+	const kept = parseRoles(current).filter(
 		(role) => !GRANTABLE_ROLE_NAMES.has(role),
 	);
 	return [...new Set([...requested, ...kept])];
@@ -117,7 +116,7 @@ export async function setUserRoles(
 		};
 	}
 
-	const resulting = preserveUngrantedRoles(target.role, requested);
+	const resulting = preserveUnparseRoles(target.role, requested);
 	const granting = resulting.length > 0;
 
 	const result = await db()
@@ -244,7 +243,7 @@ export async function setPendingGrantRoles(
 
 	// Judged on what would be stored, not what was asked for: a Volunteer's
 	// grant with its last grantable role unticked still holds `volunteer`.
-	const resulting = preserveUngrantedRoles(grant.role, validated.roles);
+	const resulting = preserveUnparseRoles(grant.role, validated.roles);
 
 	if (resulting.length === 0) {
 		return {
@@ -307,7 +306,7 @@ export async function revokePendingGrant(
 	 * Grant carrying `volunteer` belongs to a `volunteer` row created in the
 	 * same transaction; deleting it here would leave that row behind.
 	 */
-	const ungranted = grantedRoles(grant.role).filter(
+	const ungranted = parseRoles(grant.role).filter(
 		(role) => !GRANTABLE_ROLE_NAMES.has(role),
 	);
 

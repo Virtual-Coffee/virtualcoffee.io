@@ -170,7 +170,7 @@ function sessionRoles(session: Session | null): RoleName[] {
  */
 export function sessionCan(
 	session: Session | null,
-	section: Section | 'dashboard',
+	section: Section,
 	action: 'read' | 'manage' = 'read',
 ): boolean {
 	return sessionRoles(session).some(

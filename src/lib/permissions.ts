@@ -15,7 +15,6 @@ import { adminAc, defaultStatements } from 'better-auth/plugins/admin/access';
  */
 export const statement = {
 	...defaultStatements,
-	dashboard: ['read'],
 	waitlist: ['read', 'manage'],
 	coc: ['read', 'manage'],
 	volunteerSignups: ['read', 'manage'],
@@ -47,7 +46,6 @@ export type Section = (typeof SECTIONS)[number];
  */
 export const admin = ac.newRole({
 	...adminAc.statements,
-	dashboard: ['read'],
 	waitlist: ['read', 'manage'],
 	coc: ['read', 'manage'],
 	volunteerSignups: ['read', 'manage'],
@@ -61,19 +59,9 @@ export const admin = ac.newRole({
 export const user = ac.newRole({});
 
 /**
- * Someone trusted to give out Invites. Grants no Section at all, deliberately.
- *
- * This looks like a mistake and is not. A Volunteer has no business in /admin:
- * `visibleSections()` is empty for them, so `requireSession()` turns them away
- * exactly as it turns away anyone holding nothing. What the role buys is a
- * *name* — `grantedRoles()` reports it, so User Management can show that this
- * person holds something, Pending Grants pre-provision it like any other role,
- * and `requireVolunteer()` in `volunteerAccess.ts` has one thing to ask about.
- *
- * The alternative was a Section for /invites, which would have put a
- * volunteer-facing page inside the admin boundary — and inside
- * `adminRoutesEnabled()`, which 404s that whole tree on deploy previews. See
- * docs/adr/0010.
+ * Someone trusted to give out Invites. Grants no Section on purpose: /invites
+ * lives outside /admin and asks `requireVolunteer()` for this role by name.
+ * See docs/adr/0010.
  */
 export const volunteer = ac.newRole({});
 
@@ -85,27 +73,22 @@ export const volunteer = ac.newRole({});
  * volunteer_coordinator must not be able to ban or impersonate users.
  */
 export const waitlist_reviewer = ac.newRole({
-	dashboard: ['read'],
 	waitlist: ['read', 'manage'],
 });
 
 export const coc_reviewer = ac.newRole({
-	dashboard: ['read'],
 	coc: ['read', 'manage'],
 });
 
 export const volunteer_coordinator = ac.newRole({
-	dashboard: ['read'],
 	volunteerSignups: ['read', 'manage'],
 });
 
 export const lunch_and_learn_organizer = ac.newRole({
-	dashboard: ['read'],
 	lunchAndLearn: ['read', 'manage'],
 });
 
 export const coffee_table_organizer = ac.newRole({
-	dashboard: ['read'],
 	coffeeTables: ['read', 'manage'],
 });
 
@@ -122,17 +105,7 @@ export const roles = {
 
 export type RoleName = keyof typeof roles;
 
-/**
- * A label for every role, including the ones nobody grants from User
- * Management.
- *
- * `GRANTABLE_ROLES` below is the picker's list, and reading labels off it means
- * any role missing from it renders as a blank badge. `volunteer` is exactly
- * that: it is granted from /admin/volunteers, because a Volunteer needs a
- * `volunteer` row as well as the role and creating one without the other
- * produces someone who can spend nothing or someone who accrues invites they
- * cannot reach.
- */
+/** A label for every role, including the ones User Management does not grant. */
 export const ROLE_LABELS: Record<RoleName, string> = {
 	admin: 'Admin',
 	user: 'No access',
@@ -145,55 +118,29 @@ export const ROLE_LABELS: Record<RoleName, string> = {
 };
 
 /**
- * Roles that can be granted in /admin/user-management, with the label the
- * UI shows.
+ * Roles that can be granted in /admin/user-management.
  *
- * `user` is excluded: it is the default, and is what revoking everything
- * leaves behind rather than something anyone is given. `volunteer` is excluded
- * for a different reason — it is granted from /admin/volunteers, which creates
- * the `volunteer` row in the same transaction. Offering it here as well would
- * be a second way to make half a Volunteer.
+ * `user` is the default and is what revoking everything leaves behind.
+ * `volunteer` is granted from /admin/volunteers, which writes the `volunteer`
+ * row in the same transaction; offering it here would be a second way to make
+ * half a Volunteer.
  */
 export const GRANTABLE_ROLES = [
-	{
-		name: 'admin',
-		label: 'Admin',
-		description: 'Full access to every section',
-	},
+	{ name: 'admin', description: 'Full access to every section' },
 	{
 		name: 'waitlist_reviewer',
-		label: 'Waitlist reviewer',
 		description: 'The membership queue and archive',
 	},
-	{
-		name: 'coc_reviewer',
-		label: 'CoC reviewer',
-		description: 'Code of Conduct reports',
-	},
-	{
-		name: 'volunteer_coordinator',
-		label: 'Volunteer coordinator',
-		description: 'Volunteer signups',
-	},
-	{
-		name: 'lunch_and_learn_organizer',
-		label: 'Lunch & Learn organiser',
-		description: 'Lunch & Learn ideas',
-	},
+	{ name: 'coc_reviewer', description: 'Code of Conduct reports' },
+	{ name: 'volunteer_coordinator', description: 'Volunteer signups' },
+	{ name: 'lunch_and_learn_organizer', description: 'Lunch & Learn ideas' },
 	{
 		name: 'coffee_table_organizer',
-		label: 'Coffee Table organiser',
 		description: 'Coffee Table group requests',
 	},
-] as const satisfies ReadonlyArray<{
-	name: RoleName;
-	label: string;
-	description: string;
-}>;
+] as const satisfies ReadonlyArray<{ name: RoleName; description: string }>;
 
 /**
- * The role names /admin/user-management is allowed to set.
- *
  * Checked on the server, not just used to render the checkboxes: a role that is
  * granted elsewhere has to be un-settable here, or a forged request — or the
  * "Revoke all" item, which sends an empty set — would strip it. See
@@ -208,32 +155,25 @@ export const DEFAULT_ROLE = 'user';
 /**
  * Better Auth stores roles as a comma-separated string in `user.role` and
  * authorises if *any* of them grants the permission (`hasPermission` in
- * `better-auth/plugins/admin` splits on ","). These helpers are the only
- * places that encoding is known about.
+ * `better-auth/plugins/admin` splits on ","). These two are the only places
+ * that encoding is known about.
+ *
+ * `parseRoles` drops the default: `user` grants nothing, so "holds nothing" is
+ * `parseRoles(role).length === 0`. `serialiseRoles` writes it back for an
+ * empty set, because the column is what Better Auth reads.
  */
 export function parseRoles(role: string | null | undefined): RoleName[] {
 	if (!role) return [];
 	return role
 		.split(',')
 		.map((entry) => entry.trim())
-		.filter((entry): entry is RoleName => Object.hasOwn(roles, entry));
+		.filter(
+			(entry): entry is RoleName =>
+				Object.hasOwn(roles, entry) && entry !== DEFAULT_ROLE,
+		);
 }
 
 export function serialiseRoles(names: readonly RoleName[]): string {
 	const unique = [...new Set(names)].filter((name) => name !== DEFAULT_ROLE);
 	return unique.length > 0 ? unique.join(',') : DEFAULT_ROLE;
-}
-
-/**
- * The roles that actually grant something.
- *
- * `serialiseRoles` writes the default role for an empty selection, but
- * `parseRoles` reads it straight back as a role like any other — so
- * `parseRoles('user')` is `['user']`, not `[]`, and "holds nothing" is not
- * `parseRoles(...).length === 0`. Ask through here instead: `user` is
- * `ac.newRole({})` and grants nothing, so it never belongs in a list of what
- * someone can do.
- */
-export function grantedRoles(role: string | null | undefined): RoleName[] {
-	return parseRoles(role).filter((name) => name !== DEFAULT_ROLE);
 }

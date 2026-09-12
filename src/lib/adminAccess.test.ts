@@ -149,7 +149,7 @@ describe('sessionCan and visibleSections', () => {
 		expect(visibleSections(sessionWith(null))).toEqual([]);
 		expect(visibleSections(sessionWith('user'))).toEqual([]);
 		expect(visibleSections(sessionWith('volunteer'))).toEqual([]);
-		expect(sessionCan(null, 'dashboard')).toBe(false);
+		expect(sessionCan(null, 'waitlist')).toBe(false);
 	});
 
 	test('admin sees every section in nav order', () => {

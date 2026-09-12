@@ -2,7 +2,7 @@ import { and, eq, isNotNull, isNull, ne, or } from 'drizzle-orm';
 
 import { db, pendingGrant, user } from '@/db';
 import { getSlackMembers, type SlackMember } from '@/data/slackMembers';
-import { DEFAULT_ROLE, grantedRoles, type RoleName } from '@/lib/permissions';
+import { DEFAULT_ROLE, parseRoles, type RoleName } from '@/lib/permissions';
 
 /**
  * A row on the User Management screen: everyone who can reach /admin, whether
@@ -85,7 +85,7 @@ export async function listAccessRows(): Promise<AccessRow[]> {
 	const rows: AccessRow[] = [];
 
 	for (const row of userRows) {
-		const roles = grantedRoles(row.role);
+		const roles = parseRoles(row.role);
 
 		rows.push({
 			kind: 'user',
@@ -115,7 +115,7 @@ export async function listAccessRows(): Promise<AccessRow[]> {
 			name: grant.slackDisplayName,
 			email: null,
 			handle: grant.slackHandle,
-			roles: grantedRoles(grant.role),
+			roles: parseRoles(grant.role),
 			stranded: false,
 			grantedAt: grant.grantedAt,
 			grantedBy: grant.grantedBy,

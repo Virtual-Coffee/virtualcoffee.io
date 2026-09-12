@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 
 import { getSession } from '@/lib/adminAccess';
 import { type Session } from '@/lib/auth';
-import { grantedRoles } from '@/lib/permissions';
+import { parseRoles } from '@/lib/permissions';
 
 /**
  * The authorization boundary for /invites.
@@ -26,7 +26,7 @@ import { grantedRoles } from '@/lib/permissions';
  * docs/adr/0010.
  */
 export function isVolunteer(session: Session | null): boolean {
-	return grantedRoles(
+	return parseRoles(
 		(session?.user as { role?: string | null } | undefined)?.role,
 	).includes('volunteer');
 }
