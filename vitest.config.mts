@@ -44,6 +44,9 @@ export default defineConfig({
 			// `text` for the terminal; the two JSON files are what CI's coverage
 			// report step reads (summary for the totals, final for per-file rows).
 			reporter: ['text', 'json-summary', 'json'],
+			// Off by default, but a red run is exactly when CI's report step (which
+			// runs regardless) needs the files to exist.
+			reportOnFailure: true,
 			include: ['src/**'],
 			exclude: [
 				// Pages and components: a unit runner cannot render async Server
