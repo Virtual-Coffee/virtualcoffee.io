@@ -6,6 +6,55 @@ like to join" to "I'm in the Slack" — along with the **Submissions** the site'
 other public forms produce, and the **access** model that decides who can work
 on either.
 
+## Membership
+
+**Membership Application**:
+One person's request to join, and the record of its progress through the
+pipeline. Carries the applicant's details and their long-form answers.
+_Avoid_: Signup, registration, membership form, member record
+
+**Waitlist**:
+The live queue of applications awaiting a first decision. It is a working queue,
+not an archive — historical applications are not on it.
+_Avoid_: Waiting list, backlog
+
+**Coffee Invite**:
+The first of two approvals. The applicant is taken off the Waitlist and emailed
+a link to a Coffee.
+_Avoid_: Approval, first approval, invite
+
+**Membership Approval**:
+The second of two approvals, granted after the applicant attends a Coffee. Sends
+the welcome email and the Slack invite.
+_Avoid_: Approval, final approval, acceptance
+
+**Invite**:
+A referral from a **Volunteer**, spent from their **Invite Allowance** and sent
+as a **Claim Link**. An application arising from one enters the Waitlist with
+priority. An Invite nobody claims eventually lapses, and the Volunteer gets it
+back.
+_Avoid_: Referral, nomination
+
+**Invite Allowance**:
+How many Invites a Volunteer may currently give out. It grows a little each
+month and is spent one Invite at a time.
+_Avoid_: Quota, credits, balance
+
+**Claim Link**:
+The single-use link an Invite sends to the person being invited. It carries them
+to the ordinary join form, where they still answer every question and agree to
+the Code of Conduct themselves.
+_Avoid_: Invite link, referral link, token
+
+**Lapsed**:
+An application that went cold without anyone deciding on it. Distinct from
+**Declined**, which records a decision a maintainer actually made.
+
+**Coffee**:
+The weekly hour-long Zoom chat. Attending one is the step between a Coffee
+Invite and a Membership Approval.
+_Avoid_: Meeting, call, event
+
 ## People
 
 **Member**:
