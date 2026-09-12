@@ -1,78 +1,62 @@
 'use client';
 
-import { Submit, CodeOfConduct } from '@/components/forms';
-import { createCoffeeTableGroup } from '@/util/airtable/action';
-import { useAirtableForm } from '@/util/airtable/useAirtableForm';
+import { CodeOfConduct, Field, Submit, TextArea } from '@/components/forms';
+import { SpamGuardFields } from '@/util/forms/SpamGuardFields';
+import { useFormAction } from '@/util/forms/useFormAction';
+import { submitCoffeeTableGroupRequest } from './action';
 
-export function Form() {
-	const { formAction, errorContent } = useAirtableForm(createCoffeeTableGroup);
+export function Form({ spamToken }: { spamToken: string }) {
+	const { formProps, errorContent, fieldError, state } = useFormAction(
+		submitCoffeeTableGroupRequest,
+	);
 
 	return (
-		<form action={formAction}>
-			<input type="hidden" name="form-name" value="start-coffee-table-group" />
+		<form {...formProps}>
 			<fieldset>
 				<legend>Your Information:</legend>
 				<p className="text-muted">
 					Just a couple quick pieces of info that we'll need:
 				</p>
-				<div className="mb-form">
-					<label htmlFor="formName">Your Name</label>
-					<input
-						type="text"
-						className="form-control"
-						id="formName"
-						name="name"
-						aria-describedby="nameHelp"
-						required
-					/>
-					<small id="nameHelp" className="form-text text-muted">
-						Required
-					</small>
-				</div>
-				<div className="mb-form">
-					<label htmlFor="formEmail">Email</label>
-					<input
-						type="email"
-						className="form-control"
-						id="formEmail"
-						name="email"
-						aria-describedby="emailHelp"
-						required
-					/>
-					<small id="emailHelp" className="form-text text-muted">
-						Required. We'll never share your email with anyone else.
-					</small>
-				</div>
+				<Field
+					id="formName"
+					name="name"
+					label="Your Name"
+					help="Required"
+					error={fieldError('name')}
+					required
+				/>
+				<Field
+					id="formEmail"
+					name="email"
+					type="email"
+					label="Email"
+					help="Required. We'll never share your email with anyone else."
+					error={fieldError('email')}
+					required
+				/>
 			</fieldset>
 			<fieldset>
 				<legend>Group Details:</legend>
-				<div className="mb-form">
-					<label htmlFor="group_name">Name of the Coffee Table Group</label>
-					<input
-						type="text"
-						className="form-control"
-						id="group_name"
-						name="group_name"
-						required
-					/>
-				</div>
-				<div className="mb-form">
-					<label htmlFor="description">Group Description</label>
-					<textarea
-						className="form-control"
-						required
-						id="description"
-						name="description"
-						rows={3}
-						aria-describedby="descriptionHelp"
-					></textarea>
-					<small id="descriptionHelp" className="form-text text-muted">
-						Tell us all about your group idea!
-					</small>
-				</div>
+				<Field
+					id="group_name"
+					name="group_name"
+					label="Name of the Coffee Table Group"
+					error={fieldError('group_name')}
+					required
+				/>
+				<TextArea
+					id="description"
+					name="description"
+					label="Group Description"
+					help="Tell us all about your group idea!"
+					error={fieldError('description')}
+					rows={3}
+					required
+				/>
 			</fieldset>
 
-			<CodeOfConduct />
+			<CodeOfConduct error={fieldError('agree')} />
+			<SpamGuardFields token={state?.spamToken ?? spamToken} />
 			{errorContent}
 			<Submit />
 		</form>
