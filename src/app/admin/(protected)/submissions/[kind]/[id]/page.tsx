@@ -49,13 +49,11 @@ export default async function SubmissionDetailPage({
 		'manage',
 	);
 
-	// Checked before the query: a malformed literal against a uuid column raises.
-	const submissionId = id;
-	if (!isId(submissionId)) notFound();
+	if (!isId(id)) notFound();
 
 	const [submission, history] = await Promise.all([
-		getSubmission(kind, submissionId),
-		getSubmissionHistory(kind, submissionId),
+		getSubmission(kind, id),
+		getSubmissionHistory(kind, id),
 	]);
 
 	if (!submission) notFound();
