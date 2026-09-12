@@ -6,7 +6,6 @@ import {
 	inviteClaimedMessage,
 	lunchAndLearnMessage,
 	notifySlack,
-	slackConfigured,
 	volunteerSignupMessage,
 } from './notify';
 
@@ -25,15 +24,9 @@ describe('notifySlack', () => {
 		vi.unstubAllEnvs();
 	});
 
-	test('slackConfigured is per channel', () => {
-		expect(slackConfigured('coc')).toBe(true);
-		expect(slackConfigured('membership')).toBe(false);
-	});
-
 	test('a missing webhook is a skip, not an error, and nothing is fetched', async () => {
 		await expect(notifySlack('membership', 'hi')).resolves.toEqual({
 			ok: false,
-			skipped: true,
 			message:
 				'SLACK_WEBHOOK_MEMBERSHIP is not set, so nothing was posted to Slack.',
 		});
@@ -42,7 +35,10 @@ describe('notifySlack', () => {
 
 	test('posts the text as JSON to the channel’s own webhook', async () => {
 		fetch.mockResolvedValue(new Response('ok', { status: 200 }));
-		await expect(notifySlack('coc', '*hi*')).resolves.toEqual({ ok: true });
+		await expect(notifySlack('coc', '*hi*')).resolves.toEqual({
+			ok: true,
+			message: 'Posted to Slack.',
+		});
 
 		const [url, init] = fetch.mock.calls[0];
 		expect(url).toBe('https://hooks.slack.test/coc');

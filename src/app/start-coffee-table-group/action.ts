@@ -84,7 +84,7 @@ export async function submitCoffeeTableGroupRequest(
 	}
 
 	await notifyAndRecord('coffee-tables', requestId, async () => {
-		const result = await notifySlack(
+		return notifySlack(
 			'coffee-tables',
 			coffeeTableGroupMessage({
 				name: parsed.data.name,
@@ -93,10 +93,6 @@ export async function submitCoffeeTableGroupRequest(
 				description: parsed.data.description,
 			}),
 		);
-
-		return result.ok
-			? { ok: true, detail: 'Posted to Slack.' }
-			: { ok: false, detail: result.message };
 	});
 
 	redirect('/start-coffee-table-group/thanks');

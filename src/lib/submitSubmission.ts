@@ -9,6 +9,7 @@ import {
 	type SubmissionEventKey,
 	type SubmissionKind,
 } from '@/lib/submissions';
+import type { NotifyResult } from '@/lib/slack/notify';
 
 /**
  * The event-writing half of a Submission, shared by all four forms. Which
@@ -43,9 +44,6 @@ export async function recordSubmissionEvent(input: {
 		});
 }
 
-export type NotifyOutcome =
-	{ ok: true; detail: string } | { ok: false; detail: string };
-
 /**
  * Announce a Submission, and record what happened either way.
  *
@@ -59,16 +57,16 @@ export type NotifyOutcome =
 export async function notifyAndRecord(
 	kind: SubmissionKind,
 	submissionId: string,
-	notify: () => Promise<NotifyOutcome>,
+	notify: () => Promise<NotifyResult>,
 ): Promise<void> {
-	let outcome: NotifyOutcome;
+	let outcome: NotifyResult;
 
 	try {
 		outcome = await notify();
 	} catch (error) {
 		outcome = {
 			ok: false,
-			detail:
+			message:
 				error instanceof Error
 					? error.message
 					: 'The notification threw unexpectedly.',
@@ -80,7 +78,7 @@ export async function notifyAndRecord(
 			kind,
 			submissionId,
 			type: outcome.ok ? 'notification_sent' : 'notification_failed',
-			body: outcome.detail,
+			body: outcome.message,
 		});
 	} catch (error) {
 		// The submission itself is safe; only the audit line was lost.

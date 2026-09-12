@@ -1,7 +1,7 @@
-import { createHash, randomBytes } from 'crypto';
 import { and, eq, isNull } from 'drizzle-orm';
 
 import { db, inviteToken } from '@/db';
+import { hashToken, newToken } from '@/lib/tokens';
 
 /**
  * Single-use, expiring Slack invite tokens.
@@ -14,22 +14,17 @@ import { db, inviteToken } from '@/db';
 
 const TOKEN_TTL_DAYS = 30;
 
-function hash(token: string): string {
-	return createHash('sha256').update(token).digest('hex');
-}
-
 export async function createSlackInviteToken(
 	applicationId: string,
 ): Promise<{ token: string; expiresAt: Date }> {
-	const token = randomBytes(32).toString('base64url');
-	const expiresAt = new Date(Date.now() + TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000);
+	const { token, expiresAt } = newToken(TOKEN_TTL_DAYS);
 
 	await db()
 		.insert(inviteToken)
 		.values({
 			applicationId,
 			purpose: 'slack',
-			tokenHash: hash(token),
+			tokenHash: hashToken(token),
 			expiresAt,
 		});
 
@@ -48,7 +43,7 @@ export async function redeemSlackInviteToken(
 	token: string,
 ): Promise<TokenRedemption> {
 	const database = db();
-	const tokenHash = hash(token);
+	const tokenHash = hashToken(token);
 
 	const [row] = await database
 		.select({

@@ -12,10 +12,8 @@
  * #lunch-and-learn (C022SHKKQG2) and three private groups.
  */
 
-export type NotifyResult =
-	| { ok: true }
-	| { ok: false; skipped: true; message: string }
-	| { ok: false; skipped?: false; message: string };
+/** What happened, in a sentence — recorded as the event body either way. */
+export type NotifyResult = { ok: boolean; message: string };
 
 /**
  * One webhook per destination, so a missing one only silences its own form.
@@ -39,10 +37,6 @@ const WEBHOOK_ENV = {
 
 export type NotifyChannel = keyof typeof WEBHOOK_ENV;
 
-export function slackConfigured(channel: NotifyChannel): boolean {
-	return Boolean(process.env[WEBHOOK_ENV[channel]]);
-}
-
 const TIMEOUT_MS = 10_000;
 
 /**
@@ -62,7 +56,6 @@ export async function notifySlack(
 	if (!url) {
 		return {
 			ok: false,
-			skipped: true,
 			message: `${WEBHOOK_ENV[channel]} is not set, so nothing was posted to Slack.`,
 		};
 	}
@@ -86,7 +79,7 @@ export async function notifySlack(
 			};
 		}
 
-		return { ok: true };
+		return { ok: true, message: 'Posted to Slack.' };
 	} catch (error) {
 		return {
 			ok: false,

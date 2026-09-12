@@ -36,7 +36,7 @@ async function submit() {
 
 describe('submitCoffeeTableGroupRequest', () => {
 	test('writes the request, then posts it to Slack', async () => {
-		notifySlack.mockResolvedValue({ ok: true });
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 
 		const { row, events } = await submit();
 

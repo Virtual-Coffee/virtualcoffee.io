@@ -26,9 +26,7 @@ const LABEL = 'Lunch & Learn';
 const ASSIGNEES = ['shelleymcq', 'meg-gutshall'];
 
 export type CreateIssueResult =
-	| { ok: true; url: string }
-	| { ok: false; skipped: true; message: string }
-	| { ok: false; skipped?: false; message: string };
+	{ ok: true; url: string } | { ok: false; message: string };
 
 export function githubAppConfigured(): boolean {
 	return Boolean(
@@ -134,7 +132,6 @@ export async function createLunchAndLearnIssue(idea: {
 	if (!githubAppConfigured()) {
 		return {
 			ok: false,
-			skipped: true,
 			message:
 				'GITHUB_APP_CLIENT_ID / GITHUB_APP_PRIVATE_KEY are not set, so no GitHub issue was opened.',
 		};

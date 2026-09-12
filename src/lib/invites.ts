@@ -1,4 +1,3 @@
-import { createHash, randomBytes } from 'crypto';
 import { desc, eq, sql } from 'drizzle-orm';
 
 import {
@@ -14,25 +13,16 @@ import type {
 	InviteStatus,
 	Volunteer,
 } from '@/db/schema';
+import { hashToken, newToken } from '@/lib/tokens';
 
 /**
  * How long a Claim Link lives. After this the daily job marks the Invite
  * `expired` and gives the Volunteer their allowance back.
  */
-export const CLAIM_TOKEN_TTL_DAYS = 90;
+const CLAIM_TOKEN_TTL_DAYS = 90;
 
-export function hashClaimToken(token: string): string {
-	return createHash('sha256').update(token).digest('hex');
-}
-
-export function newClaimToken(): { token: string; expiresAt: Date } {
-	return {
-		token: randomBytes(32).toString('base64url'),
-		expiresAt: new Date(
-			Date.now() + CLAIM_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000,
-		),
-	};
-}
+export const hashClaimToken = hashToken;
+export const newClaimToken = () => newToken(CLAIM_TOKEN_TTL_DAYS);
 
 /**
  * Statuses that make an email ineligible for an Invite.

@@ -123,12 +123,12 @@ export async function submitLunchAndLearnIdea(
 		);
 
 		if (issue.ok && slack.ok) {
-			return { ok: true, detail: `Posted to Slack, opened ${issue.url}` };
+			return { ok: true, message: `Posted to Slack, opened ${issue.url}` };
 		}
 
 		return {
 			ok: false,
-			detail: [
+			message: [
 				issue.ok ? `Opened ${issue.url}` : issue.message,
 				slack.ok ? 'Posted to Slack.' : slack.message,
 			].join(' '),

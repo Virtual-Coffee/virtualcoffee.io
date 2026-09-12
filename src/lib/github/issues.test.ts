@@ -63,7 +63,7 @@ describe('createLunchAndLearnIssue', () => {
 
 		await expect(createLunchAndLearnIssue(idea)).resolves.toMatchObject({
 			ok: false,
-			skipped: true,
+			message: expect.stringContaining('not set'),
 		});
 		expect(octokit.constructed).toEqual([]);
 	});

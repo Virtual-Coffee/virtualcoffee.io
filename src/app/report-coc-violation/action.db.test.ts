@@ -44,7 +44,7 @@ beforeEach(() => {
 
 describe('submitCocReport', () => {
 	test('an anonymous report is stored with no name or email, and announced', async () => {
-		notifySlack.mockResolvedValue({ ok: true });
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 
 		const { row, events } = await submit(valid);
 
@@ -90,7 +90,7 @@ describe('submitCocReport', () => {
 	});
 
 	test('an attachment is stored before the row, and the row points at it', async () => {
-		notifySlack.mockResolvedValue({ ok: true });
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 		const png = new File(
 			[new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])],
 			'screenshot.png',
