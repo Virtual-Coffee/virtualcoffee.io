@@ -82,6 +82,7 @@
 	"devDependencies": {
 		"@eslint/compat": "^2.1.1",
 		"@faker-js/faker": "^10.6.0",
+		"@netlify/database-dev": "^1.0.1",
 		"@netlify/edge-functions": "^4.0.0",
 		"@types/leaflet": "^1.9.22",
 		"@types/leaflet.markercluster": "^1.5.6",

@@ -242,6 +242,9 @@ importers:
       '@faker-js/faker':
         specifier: ^10.6.0
         version: 10.6.0
+      '@netlify/database-dev':
+        specifier: ^1.0.1
+        version: 1.0.1
       '@netlify/edge-functions':
         specifier: ^4.0.0
         version: 4.0.0
