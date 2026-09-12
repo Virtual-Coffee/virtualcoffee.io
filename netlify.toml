@@ -1,5 +1,7 @@
 [build]
-	command   = "pnpm build"
+	# `db:sanitize-preview` self-gates on CONTEXT and is a no-op outside a
+	# deploy preview or branch deploy. See docs/adr/0007.
+	command   = "pnpm build && pnpm db:sanitize-preview"
 	functions = "netlify/functions"
 	publish   = ".next"
 
