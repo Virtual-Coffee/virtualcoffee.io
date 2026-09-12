@@ -12,7 +12,7 @@ rather than `declined`. This file is only about running them.
 | Script                  | Reads                                                  | Writes                                                                                                                        | Key                           | Wrapper        |
 | ----------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | -------------- |
 | `importMembership.ts`   | base `appGHm8ztVWug6UxH`: `membership_form`, `Invites` | `membership_application`, `invite`, `application_event`                                                                       | `MEMBERSHIP_AIRTABLE_API_KEY` | yes            |
-| `importVolunteers.ts`   | base `appGHm8ztVWug6UxH`: `Volunteers`                 | `volunteer`, `volunteer_invite_ledger`, `user.role`, `pending_grant`                                                          | `MEMBERSHIP_AIRTABLE_API_KEY` | `--apply` only |
+| `importVolunteers.ts`   | base `appGHm8ztVWug6UxH`: `Volunteers`, `Roles`        | `volunteer`, `volunteer_invite_ledger`, `user.role`, `pending_grant`                                                          | `MEMBERSHIP_AIRTABLE_API_KEY` | `--apply` only |
 | `importSubmissions.ts`  | base `appZ4d2Q9K0IepQnA`: four tables                  | `volunteer_signup`, `coc_report`, `lunch_and_learn_idea`, `coffee_table_group_request`, `submission_event`, `coc-attachments` | `FORMS_AIRTABLE_API_KEY`      | yes            |
 | `snapshotChallenges.ts` | bases `appJStQemmYeoRcox`, `app10kd5ewHiLTjxn`         | five JSON files in `src/data/monthlyChallenges/data/`                                                                         | `PUBLIC_AIRTABLE_API_KEY`     | no             |
 
@@ -151,12 +151,16 @@ it goes through the wrapper like the other imports.
 
 **The mapping file is gitignored on purpose.** It pairs real names with Slack
 member ids, and it is a working artefact of one migration rather than something
-the site reads. `--propose` overwrites it, so do not re-run that after editing.
+the site reads. Re-running `--propose` keeps every `slackUserId` already set in
+the file and proposes only for rows that are still blank or new, so the review
+survives a re-run; a row cleared by hand is proposed again.
 
 **`slackUserId` is the only field you edit.** `--propose` fills it in where one
-candidate scores at least 50 and beats every other; everything else arrives
-blank with up to five scored `candidates` beside it for reference. **Leaving it
-blank is a valid answer** — that volunteer is skipped, and their Invites keep
+candidate scores at least 50 and beats every other, and also where a row has
+exactly one candidate at any score — the summary counts those separately as
+`sole candidate` because the match can be as thin as a name prefix, so read
+those rows hardest. Everything else arrives blank with up to five scored
+`candidates` beside it for reference. **Leaving it blank is a valid answer** — that volunteer is skipped, and their Invites keep
 `inviter_name` and stay unattributed, which is the honest result rather than a
 guess. Two rows mapped to the same Slack member abort the run before anything
 is written.
@@ -183,7 +187,8 @@ and unrecorded), so there is nothing to replay. One `imported` ledger row saying
 what Airtable said is the honest version of a number nobody can explain further.
 
 **Re-running is safe.** Volunteers key on `airtable_record_id` and insert with
-`onConflictDoNothing`; the balance is only written for a Volunteer with no
+`onConflictDoNothing`, with one exception: `role_labels` is descriptive only
+and is refreshed on rows already present. The balance is only written for a Volunteer with no
 ledger rows at all, because an append-only ledger would otherwise double every
 balance on a second run. The role is merged into whatever a person already
 holds rather than duplicated, so a second run also backfills grants for rows an

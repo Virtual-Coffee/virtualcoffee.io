@@ -42,6 +42,8 @@ import { CONFIDENT_SCORE, score, type Candidate } from './match';
 
 const BASE_ID = 'appGHm8ztVWug6UxH';
 const VOLUNTEERS_TABLE = 'Volunteers';
+/** `Volunteers.Roles` links here; the API returns only the record ids. */
+const ROLES_TABLE = 'Roles';
 
 /** Not committed — see `.gitignore` and this file's header. */
 const MAPPING_PATH = resolve(import.meta.dirname, 'volunteerSlackMapping.json');
@@ -105,19 +107,6 @@ function first(value: unknown): string | null {
 	return text.length > 0 ? text : null;
 }
 
-function names(value: unknown): string | null {
-	if (!Array.isArray(value)) return first(value);
-	const list = value
-		.map((entry) =>
-			entry && typeof entry === 'object' && 'name' in entry
-				? String((entry as { name: unknown }).name)
-				: String(entry),
-		)
-		.map((entry) => entry.trim())
-		.filter(Boolean);
-	return list.length > 0 ? list.join(', ') : null;
-}
-
 function linkedIds(value: unknown): string[] {
 	if (!Array.isArray(value)) return [];
 	return value
@@ -129,18 +118,51 @@ function linkedIds(value: unknown): string[] {
 		.filter((entry) => entry.startsWith('rec'));
 }
 
+/** The reviewed ids from an earlier run, so re-proposing does not undo the review. */
+function reviewedIds(): Map<string, string> {
+	try {
+		const previous = JSON.parse(
+			readFileSync(MAPPING_PATH, 'utf8'),
+		) as MappingEntry[];
+		return new Map(
+			previous
+				.filter((entry) => entry.slackUserId.trim().length > 0)
+				.map((entry) => [entry.airtableRecordId, entry.slackUserId.trim()]),
+		);
+	} catch {
+		return new Map();
+	}
+}
+
 async function propose(apiKey: string) {
-	const [rows, members] = await Promise.all([
+	const [rows, roles, members] = await Promise.all([
 		fetchAll(VOLUNTEERS_TABLE, apiKey),
+		fetchAll(ROLES_TABLE, apiKey),
 		fetchSlackMembers(),
 	]);
 
 	console.log(
-		`Fetched ${rows.length} volunteers and ${members.length} Slack members.\n`,
+		`Fetched ${rows.length} volunteers, ${roles.length} roles and ${members.length} Slack members.\n`,
 	);
+
+	const roleNames = new Map(
+		roles.map((role) => [role.id, first(role.fields.Name)] as const),
+	);
+	const unresolvedRoles = new Set<string>();
+
+	const reviewed = reviewedIds();
+	let carried = 0;
+	let confident = 0;
+	let sole = 0;
 
 	const entries: MappingEntry[] = rows.map((row) => {
 		const balance = row.fields['Invites Available'];
+
+		const labels = linkedIds(row.fields.Roles).flatMap((id) => {
+			const name = roleNames.get(id);
+			if (!name) unresolvedRoles.add(id);
+			return name ? [name] : [];
+		});
 
 		const entry: MappingEntry = {
 			airtableRecordId: row.id,
@@ -150,7 +172,7 @@ async function propose(apiKey: string) {
 			email: first(row.fields.Email),
 			active: row.fields.Active === true,
 			invitesAvailable: typeof balance === 'number' ? balance : null,
-			roleLabels: names(row.fields.Roles),
+			roleLabels: labels.length > 0 ? labels.join(', ') : null,
 			inviteRecordIds: linkedIds(row.fields.Invites),
 			slackUserId: '',
 			candidates: [],
@@ -162,13 +184,22 @@ async function propose(apiKey: string) {
 			.sort((a, b) => b.score - a.score)
 			.slice(0, 5);
 
+		const previous = reviewed.get(row.id);
 		const [best, runnerUp] = entry.candidates;
-		if (
+		if (previous) {
+			entry.slackUserId = previous;
+			carried += 1;
+		} else if (
 			best &&
 			best.score >= CONFIDENT_SCORE &&
 			best.score > (runnerUp?.score ?? 0)
 		) {
 			entry.slackUserId = best.slackUserId;
+			confident += 1;
+		} else if (best && entry.candidates.length === 1) {
+			// Possibly only a name prefix; the review is what makes this safe.
+			entry.slackUserId = best.slackUserId;
+			sole += 1;
 		}
 
 		return entry;
@@ -176,7 +207,12 @@ async function propose(apiKey: string) {
 
 	writeFileSync(MAPPING_PATH, `${JSON.stringify(entries, null, '\t')}\n`);
 
-	const matched = entries.filter((entry) => entry.slackUserId).length;
+	if (unresolvedRoles.size > 0) {
+		console.log(
+			`Roles not found in ${ROLES_TABLE}, dropped: ${[...unresolvedRoles].join(', ')}\n`,
+		);
+	}
+
 	const ambiguous = entries.filter(
 		(entry) => !entry.slackUserId && entry.candidates.length > 0,
 	).length;
@@ -195,9 +231,11 @@ async function propose(apiKey: string) {
 	report('without balance', withoutBalance, EXPECTED.withoutBalance);
 
 	console.log(`\nProposed matches:`);
-	console.log(`  confident      ${matched}`);
-	console.log(`  needs a human  ${ambiguous}`);
-	console.log(`  no candidates  ${none.length}`);
+	console.log(`  kept from review  ${carried}`);
+	console.log(`  confident         ${confident}`);
+	console.log(`  sole candidate    ${sole}   (any score — check these)`);
+	console.log(`  needs a human     ${ambiguous}`);
+	console.log(`  no candidates     ${none.length}`);
 
 	if (none.length > 0) {
 		console.log(
@@ -326,6 +364,7 @@ async function apply(dryRun: boolean) {
 	}
 
 	let created = 0;
+	let relabelled = 0;
 	let granted = 0;
 	let credited = 0;
 	let attributed = 0;
@@ -356,7 +395,16 @@ async function apply(dryRun: boolean) {
 			.onConflictDoNothing({ target: volunteer.airtableRecordId })
 			.returning({ id: volunteer.id });
 
-		if (row) created += 1;
+		if (row) {
+			created += 1;
+		} else {
+			// Descriptive only, so a re-run may refresh it; the identity may not.
+			await database
+				.update(volunteer)
+				.set({ roleLabels: entry.roleLabels })
+				.where(eq(volunteer.airtableRecordId, entry.airtableRecordId));
+			relabelled += 1;
+		}
 
 		/**
 		 * The other half of a Volunteer. Only for the active ones — the paused
@@ -426,6 +474,7 @@ async function apply(dryRun: boolean) {
 	console.log(
 		`Created ${created} volunteers (${mapped.length - created} already present).`,
 	);
+	console.log(`Refreshed role labels on ${relabelled} already present.`);
 	console.log(`Granted the volunteer role to ${granted}.`);
 	console.log(`Wrote ${credited} imported balances.`);
 	console.log(`Attributed ${attributed} invites.`);
