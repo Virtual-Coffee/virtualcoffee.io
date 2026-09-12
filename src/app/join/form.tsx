@@ -1,12 +1,9 @@
 'use client';
 
-import { useActionState } from 'react';
-
 import { CodeOfConduct, Submit } from '@/components/forms';
 import { SpamGuardFields } from '@/util/forms/SpamGuardFields';
-import { submitMembershipApplication, type JoinFormState } from './action';
-
-const initialState: JoinFormState = { is_error: false };
+import { useFormAction } from '@/util/forms/useFormAction';
+import { submitMembershipApplication } from './action';
 
 /**
  * `claimToken` rides along in a hidden field rather than being read from the URL
@@ -26,24 +23,14 @@ export function JoinForm({
 	defaultName?: string;
 	defaultEmail?: string;
 }) {
-	const [state, formAction] = useActionState<JoinFormState, FormData>(
+	const { formAction, errorContent, fieldError } = useFormAction(
 		submitMembershipApplication,
-		initialState,
 	);
-
-	const fieldErrors = state?.fieldErrors ?? {};
 
 	return (
 		<form action={formAction} noValidate>
 			{claimToken && <input type="hidden" name="invite" value={claimToken} />}
-			{state?.is_error && (
-				<div className="alert alert-danger" role="alert">
-					<h2 className="h5 alert-heading">
-						There was an issue submitting your form.
-					</h2>
-					<p className="mb-0">{state.message}</p>
-				</div>
-			)}
+			{errorContent}
 
 			<fieldset>
 				<legend>About you</legend>
@@ -53,7 +40,7 @@ export function JoinForm({
 					name="name"
 					label="Your name"
 					help="Required."
-					error={fieldErrors.name}
+					error={fieldError('name')}
 					defaultValue={defaultName}
 					required
 				/>
@@ -63,7 +50,7 @@ export function JoinForm({
 					type="email"
 					label="Email"
 					help="Required. We’ll never share it."
-					error={fieldErrors.email}
+					error={fieldError('email')}
 					defaultValue={defaultEmail}
 					required
 				/>
@@ -71,13 +58,13 @@ export function JoinForm({
 					id="joinPronouns"
 					name="pronouns"
 					label="Pronouns"
-					error={fieldErrors.pronouns}
+					error={fieldError('pronouns')}
 				/>
 				<Field
 					id="joinGithub"
 					name="githubUsername"
 					label="GitHub username"
-					error={fieldErrors.githubUsername}
+					error={fieldError('githubUsername')}
 				/>
 			</fieldset>
 
@@ -92,32 +79,32 @@ export function JoinForm({
 					id="joinHeard"
 					name="howDidYouHear"
 					label="How did you hear about us?"
-					error={fieldErrors.howDidYouHear}
+					error={fieldError('howDidYouHear')}
 				/>
 				<TextArea
 					id="joinJourney"
 					name="journey"
 					label="Tell us about your coding journey"
-					error={fieldErrors.journey}
+					error={fieldError('journey')}
 				/>
 				<TextArea
 					id="joinInterests"
 					name="codeInterests"
 					label="What are your coding interests?"
-					error={fieldErrors.codeInterests}
+					error={fieldError('codeInterests')}
 				/>
 				<TextArea
 					id="joinHoping"
 					name="virtualCoffee"
 					label="What are you hoping to get from Virtual Coffee?"
-					error={fieldErrors.virtualCoffee}
+					error={fieldError('virtualCoffee')}
 				/>
 			</fieldset>
 
 			<CodeOfConduct />
-			{fieldErrors.agree && (
+			{fieldError('agree') && (
 				<p className="text-danger" role="alert">
-					{fieldErrors.agree}
+					{fieldError('agree')}
 				</p>
 			)}
 			<SpamGuardFields token={spamToken} />

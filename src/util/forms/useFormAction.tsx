@@ -20,9 +20,9 @@ export function useFormAction(action: Action) {
 				// `alert-danger`, not `alert-success` — the old Airtable version used
 				// the success colour for its error banner.
 				<div className="alert alert-danger" role="alert">
-					<h4 className="alert-heading">
+					<h2 className="h5 alert-heading">
 						There was an issue submitting your form.
-					</h4>
+					</h2>
 					<p className="mb-0">{state.message}</p>
 				</div>
 			) : null;

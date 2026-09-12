@@ -9,6 +9,7 @@ import { hashClaimToken } from '@/lib/invites';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
 import { formValue, fieldErrorsFrom } from '@/util/forms/parse';
 import { looksLikeSpam } from '@/util/forms/spamGuard';
+import type { FormState } from '@/util/forms/types';
 
 /** What redeeming a Claim Link yields, or null when there was nothing to redeem. */
 type ClaimedInvite = {
@@ -16,13 +17,6 @@ type ClaimedInvite = {
 	inviterName: string | null;
 	inviterSlackUserId: string | null;
 } | null;
-
-export type JoinFormState = null | {
-	is_error: boolean;
-	message?: string;
-	/** Field name -> first error, so inputs can be marked individually. */
-	fieldErrors?: Record<string, string>;
-};
 
 const schema = z.object({
 	name: z.string().trim().min(1, 'Please tell us your name.').max(200),
@@ -50,9 +44,9 @@ const schema = z.object({
 });
 
 export async function submitMembershipApplication(
-	_state: JoinFormState,
+	_state: FormState,
 	formData: FormData,
-): Promise<JoinFormState> {
+): Promise<FormState> {
 	// Same silent success the four submission forms give a bot: it sees the
 	// thank-you page and nothing is written.
 	if (looksLikeSpam(formData)) {
