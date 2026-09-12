@@ -37,12 +37,4 @@ export function InviteStatusBadge({ status }: { status: InviteStatus }) {
 	);
 }
 
-/** Matches the admin screens' date formatting, so the site reads as one thing. */
-export function formatDate(value: Date | null): string {
-	if (!value) return '—';
-	return new Intl.DateTimeFormat('en-US', {
-		day: 'numeric',
-		month: 'short',
-		year: 'numeric',
-	}).format(value);
-}
+export { formatDate } from '@/app/admin/(protected)/presentation';

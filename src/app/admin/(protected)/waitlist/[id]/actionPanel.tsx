@@ -12,7 +12,7 @@ import {
 	withdrawApplication,
 	type ActionResult,
 } from '../actions';
-import { ConfirmSendDialog } from './confirmSendDialog';
+import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
 
 type Template = { subject: string; text: string };
 
@@ -151,6 +151,7 @@ export function ActionPanel(props: Props) {
 				emails={[props.coffeeInvite]}
 				confirmLabel="Send invite"
 				pending={pending}
+				offerCopy
 				onCancel={() => setDialog(null)}
 				onConfirm={(copyMe) =>
 					run(() => sendCoffeeInvite(props.applicationId, copyMe))
@@ -175,6 +176,7 @@ export function ActionPanel(props: Props) {
 				emails={[props.welcome, props.slackInvite]}
 				confirmLabel="Approve &amp; send Slack invite"
 				pending={pending}
+				offerCopy
 				onCancel={() => setDialog(null)}
 				onConfirm={(copyMe) =>
 					run(() => approveMembership(props.applicationId, copyMe))

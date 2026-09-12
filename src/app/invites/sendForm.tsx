@@ -3,58 +3,50 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useModalDialog } from '@/util/useModalDialog';
-import { previewInvite, sendInvite } from './actions';
-
-type Preview = { to: string; subject: string; text: string };
+import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
+import { volunteerInviteEmail } from '@/lib/email/templates';
+import { sendInvite } from './actions';
 
 /**
- * Invite someone, with the real email shown before it goes.
- *
- * The same idea as the waitlist's `ConfirmSendDialog` — show the words, not an
- * "are you sure?" — but built here rather than imported from it. That component
- * lives inside the admin tree and carries a "Copy me on this email" checkbox
- * that means nothing here, and /invites deliberately does not depend on /admin:
- * that whole tree 404s on deploy previews.
- *
- * The preview is fetched from the server because the text depends on a name the
- * Volunteer has only just typed, so it cannot be rendered ahead of time the way
- * the waitlist templates are.
+ * Invite someone, with the real email shown before it goes. The preview is
+ * the template rendered here with the link elided — the token is minted at
+ * send time, and a working invite has no business in a dialog nobody has
+ * confirmed yet.
  */
-export function SendInviteForm({ balance }: { balance: number }) {
+export function SendInviteForm({
+	balance,
+	inviterName,
+	claimUrlPreview,
+}: {
+	balance: number;
+	inviterName: string;
+	claimUrlPreview: string;
+}) {
 	const router = useRouter();
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
-	const [preview, setPreview] = useState<Preview | null>(null);
+	const [reviewing, setReviewing] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [notice, setNotice] = useState<string | null>(null);
 	const [pending, startTransition] = useTransition();
-	// A click on the backdrop discards the preview and sends nothing.
-	const dialog = useModalDialog(preview !== null, () => setPreview(null));
 
 	const spent = balance < 1;
+	const preview = volunteerInviteEmail(
+		inviterName,
+		name.trim(),
+		claimUrlPreview,
+	);
 
 	function review() {
 		setError(null);
 		setNotice(null);
-		startTransition(async () => {
-			const result = await previewInvite(name, email);
-			if (result.ok) {
-				setPreview({
-					to: result.to,
-					subject: result.subject,
-					text: result.text,
-				});
-			} else {
-				setError(result.message);
-			}
-		});
+		setReviewing(true);
 	}
 
 	function confirm() {
 		startTransition(async () => {
 			const result = await sendInvite(name, email);
-			setPreview(null);
+			setReviewing(false);
 
 			if (result.ok) {
 				setName('');
@@ -97,7 +89,6 @@ export function SendInviteForm({ balance }: { balance: number }) {
 							event.preventDefault();
 							review();
 						}}
-						noValidate
 					>
 						<div className="mb-3">
 							<label className="form-label" htmlFor="invitee-name">
@@ -144,51 +135,22 @@ export function SendInviteForm({ balance }: { balance: number }) {
 				)}
 			</div>
 
-			<dialog {...dialog} className="admin-dialog">
-				<div className="p-3 border-bottom d-flex justify-content-between align-items-start gap-3">
-					<h2 className="h5 mb-0">Send this invite?</h2>
-					<button
-						type="button"
-						className="btn-close"
-						aria-label="Close"
-						onClick={() => setPreview(null)}
-					/>
-				</div>
-
-				<div className="p-3">
-					<p>
-						This is exactly what {preview?.to} will receive. It uses one of your
-						invites.
-					</p>
-					{preview && (
-						<div className="border rounded p-3 bg-body-tertiary">
-							<p className="small text-body-secondary mb-2">
-								To: {preview.to} · Subject: {preview.subject}
-							</p>
-							<p className="admin-answer small mb-0">{preview.text}</p>
-						</div>
-					)}
-				</div>
-
-				<div className="p-3 border-top d-flex justify-content-end gap-2">
-					<button
-						type="button"
-						className="btn btn-outline-secondary"
-						onClick={() => setPreview(null)}
-						disabled={pending}
-					>
-						Cancel
-					</button>
-					<button
-						type="button"
-						className="btn btn-primary"
-						onClick={confirm}
-						disabled={pending}
-					>
-						{pending ? 'Sending…' : 'Send invite'}
-					</button>
-				</div>
-			</dialog>
+			<ConfirmSendDialog
+				open={reviewing}
+				title="Send this invite?"
+				intro={
+					<>
+						This is exactly what {email.trim()} will receive. It uses one of
+						your invites.
+					</>
+				}
+				to={email.trim()}
+				emails={[preview]}
+				confirmLabel="Send invite"
+				pending={pending}
+				onCancel={() => setReviewing(false)}
+				onConfirm={confirm}
+			/>
 		</div>
 	);
 }
