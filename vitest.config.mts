@@ -26,7 +26,11 @@ export default defineConfig({
 			{
 				test: {
 					name: 'unit',
-					include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
+					include: [
+						'src/**/*.test.ts',
+						'scripts/**/*.test.ts',
+						'netlify/**/*.test.ts',
+					],
 					exclude: [...configDefaults.exclude, '**/*.db.test.ts'],
 				},
 			},
