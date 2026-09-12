@@ -45,14 +45,9 @@ export async function recordSubmissionEvent(input: {
 }
 
 /**
- * Announce a Submission, and record what happened either way.
- *
- * Called *after* the row is committed. The ordering is deliberate and inverts
- * the "send first, then write" rule CLAUDE.md states for admin actions: that
- * rule exists so an applicant is never emailed twice, whereas here the risk
- * runs the other way and losing a CoC report because Slack was unreachable is
- * the worse failure. A failure is therefore recorded and surfaced, never
- * raised. See docs/adr/0005.
+ * Announce a Submission, and record what happened either way. Called *after*
+ * the row is committed — persist first, notify second — and never throws.
+ * See docs/adr/0005.
  */
 export async function notifyAndRecord(
 	kind: SubmissionKind,

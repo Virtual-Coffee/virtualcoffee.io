@@ -10,18 +10,12 @@ import type {
 } from '@tanstack/react-table';
 
 /**
- * URL state for the admin list screens whose filtering, sorting and paging all
- * happen in SQL.
- *
- * The query string owns those slices, not the table: a filtered view is then
- * bookmarkable and can be pasted to another maintainer, and the server returns
- * exactly the page it is asked for. The table is told so with `manualSorting`
- * and `manualPagination`, which do not sort or slice anything themselves —
- * they only stop the client row models from re-processing a page that is
- * already correct.
- *
- * Both handlers below are `on[State]Change` for a slice held in `state`, so
- * each has to resolve the value-or-updater form the table may pass.
+ * URL state for the admin list screens whose filtering, sorting and paging
+ * happen in SQL. The query string owns those slices, so a filtered view is
+ * bookmarkable; the table is told with `manualSorting`/`manualPagination`,
+ * which only stop the client row models from re-processing a page that is
+ * already correct. The handlers resolve the value-or-updater form the table
+ * may pass.
  */
 export function useTableUrlState({
 	sorting,

@@ -32,7 +32,7 @@ function isRoleName(value: string): value is RoleName {
  * from /admin/volunteers alongside a `volunteer` row; dropping it here would
  * leave that row active and accruing invites its owner can no longer spend.
  */
-function preserveUnparseRoles(
+function preserveUngrantedRoles(
 	current: string | null | undefined,
 	requested: RoleName[],
 ): RoleName[] {
@@ -71,14 +71,7 @@ function revalidate() {
 	revalidatePath('/admin');
 }
 
-/**
- * Replace someone's roles outright.
- *
- * Roles live comma-separated in `user.role`; `serialiseRoles` is the only place
- * that encoding is written, and it collapses an empty selection back to the
- * default role rather than leaving a null the admin plugin would have to guess
- * about.
- */
+/** Replace someone's roles outright; `serialiseRoles` owns the encoding. */
 export async function setUserRoles(
 	userId: string,
 	next: string[],
@@ -114,7 +107,7 @@ export async function setUserRoles(
 		};
 	}
 
-	const resulting = preserveUnparseRoles(target.role, requested);
+	const resulting = preserveUngrantedRoles(target.role, requested);
 	const granting = resulting.length > 0;
 
 	const result = await db()
@@ -214,8 +207,6 @@ export async function setPendingGrantRoles(
 ): Promise<ActionResult> {
 	await requirePermission('admins', 'manage');
 
-	// Postgres raises 22P02 on a malformed literal against a uuid column, so an
-	// unchecked id throws rather than matching nothing. See docs/adr/0008.
 	if (!isId(grantId)) {
 		return {
 			ok: false,
@@ -241,7 +232,7 @@ export async function setPendingGrantRoles(
 
 	// Judged on what would be stored, not what was asked for: a Volunteer's
 	// grant with its last grantable role unticked still holds `volunteer`.
-	const resulting = preserveUnparseRoles(grant.role, validated.roles);
+	const resulting = preserveUngrantedRoles(grant.role, validated.roles);
 
 	if (resulting.length === 0) {
 		return {

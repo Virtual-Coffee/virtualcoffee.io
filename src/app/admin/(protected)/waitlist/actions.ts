@@ -242,15 +242,9 @@ export async function approveMembership(
 		})
 		.where(eq(membershipApplication.id, applicationId));
 
-	/**
-	 * Close the loop on the Invite that produced this application, if there was
-	 * one. `completed` is what tells the Volunteer their invite actually worked —
-	 * it is the only status change they ever see that is not their own doing.
-	 *
-	 * After the status change rather than before, and not fatal: an application
-	 * that has been approved and emailed must not be reported as a failure
-	 * because a second row would not update.
-	 */
+	// Complete the Invite that produced this application, if any. After the
+	// status change and not fatal: the applicant has already been approved and
+	// emailed.
 	if (application.inviteId) {
 		try {
 			await db()

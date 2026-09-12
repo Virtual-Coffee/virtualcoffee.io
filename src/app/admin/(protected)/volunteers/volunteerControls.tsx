@@ -12,13 +12,7 @@ import {
 } from './actions';
 import type { ActionResult } from '@/lib/actionResult';
 
-/**
- * A tiny wrapper around the four actions on this screen.
- *
- * They all return the same shape and all want the same treatment — run, show
- * the message, refresh — so the alternative was the same eight lines four
- * times.
- */
+/** Run an action, show its message, refresh — shared by the four buttons here. */
 function useAction() {
 	const router = useRouter();
 	const [result, setResult] = useState<ActionResult | null>(null);
@@ -45,13 +39,8 @@ function useAction() {
 }
 
 /**
- * Make someone a Volunteer, picked out of the Slack directory.
- *
- * The same picker idea as User Management's "Grant access", and the same reason
- * for it: a maintainer should be choosing a person from a list rather than
- * copying an opaque `U…` out of Slack's profile pane. People who are already
- * Volunteers are shown disabled with the reason, rather than hidden — a name
- * that is simply missing looks like a bug.
+ * Make someone a Volunteer, picked out of the Slack directory. Existing
+ * Volunteers are shown disabled with the reason rather than hidden.
  */
 export function AddVolunteerForm({
 	candidates,

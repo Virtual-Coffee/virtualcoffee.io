@@ -26,24 +26,12 @@ import {
 import type { ActionResult } from '@/lib/actionResult';
 
 /**
- * The roles one person holds, as a dropdown of checkboxes.
- *
- * Changes are staged in the menu and written together on Save, as the whole
- * grantable set rather than one toggle at a time: swapping one role for
- * another is one write, and the server never has to merge a stale client view
- * with what is actually stored. Cancel, Escape and clicking away all discard
- * the draft. Only the grantable set is sent: a role this screen does not grant
- * (`volunteer`) is carried over from what is stored by
- * `preserveUngrantedRoles` in the actions.
- *
- * The held roles are also summarised under the toggle. Six identical "Roles"
- * buttons would otherwise tell a maintainer scanning this table nothing about
- * who can do what.
- *
- * A row is backed either by a user or by a Pending Grant, and the control is
- * identical for both — only the action differs, because the roles live in a
- * different row. Dispatching here rather than rendering two near-identical
- * dropdowns keeps the "Access" column one thing.
+ * The roles one person holds, as a dropdown of checkboxes. Changes are staged
+ * and written together on Save as the whole grantable set, so the server never
+ * merges a stale client view; Cancel, Escape and clicking away discard the
+ * draft. `volunteer` is not grantable here and is carried over by
+ * `preserveUngrantedRoles`. A row is backed by a user or a Pending Grant —
+ * same control, different action.
  */
 export function RolesDropdown({
 	kind,
@@ -66,15 +54,8 @@ export function RolesDropdown({
 		HTMLButtonElement
 	>();
 
-	/**
-	 * The menu is positioned `fixed` rather than left to sit under the toggle.
-	 *
-	 * This table lives in `.table-responsive`, which sets `overflow-x: auto` —
-	 * and because one axis is non-visible the other computes to `auto` too, so an
-	 * absolutely positioned menu is clipped by that scroll container. Taking it
-	 * out of flow and anchoring it to the toggle's rect is what Popper would do
-	 * if it were loaded.
-	 */
+	// Positioned `fixed` and anchored to the toggle's rect: the table's
+	// `.table-responsive` scroll container would clip an absolute menu.
 	const [anchor, setAnchor] = useState<{ top: number; left: number } | null>(
 		null,
 	);
@@ -197,13 +178,7 @@ export function RolesDropdown({
 							left: anchor?.left ?? 0,
 							// Hidden until measured, so it never flashes at the top-left.
 							visibility: anchor ? 'visible' : 'hidden',
-							/**
-							 * Six roles each carrying a description make a tall menu at
-							 * this theme's 18px root. A `.small` class cannot shrink it:
-							 * `.dropdown-menu` sets `font-size` from this variable at the
-							 * same specificity and later in Bootstrap's source order, so it
-							 * wins. Overriding the variable is the way in.
-							 */
+							// `.small` loses to `.dropdown-menu`'s own font-size; the variable wins.
 							'--bs-dropdown-font-size': '0.8125rem',
 						} as React.CSSProperties
 					}
@@ -216,14 +191,8 @@ export function RolesDropdown({
 						const inputId = `${id}-${role.name}`;
 
 						return (
-							/**
-							 * The inset lives on the `li`, not on the `.form-check`.
-							 * Bootstrap pairs `.form-check`'s `padding-left: 1.5em` with
-							 * `margin-left: -1.5em` on the input, so overriding that padding
-							 * with a `px-*` utility leaves the input pulled further left
-							 * than the padding it is cancelling — the checkbox ends up
-							 * outside the menu's border.
-							 */
+							// Inset on the `li`: `.form-check`'s padding pairs with a negative
+							// margin on the input, so a `px-*` there pushes the box outside.
 							<li key={role.name} className="px-3">
 								<div className="form-check py-1 mb-0 lh-sm">
 									<input
@@ -236,12 +205,6 @@ export function RolesDropdown({
 									/>
 									<label className="form-check-label" htmlFor={inputId}>
 										{ROLE_LABELS[role.name]}
-										{/*
-										 * Was a `title` attribute, which never shows on touch.
-										 * `.small` works here where it did not on the menu
-										 * itself: nothing competes to set a font-size on this
-										 * span, so its 0.875em applies to the menu's own size.
-										 */}
 										<span className="d-block small text-body-secondary">
 											{role.description}
 										</span>
@@ -318,14 +281,9 @@ export function RolesDropdown({
 }
 
 /**
- * Pre-provision a Role for someone in the Slack workspace.
- *
- * Candidates come from Slack, not from `user`: the whole point is to give
- * access to someone who has never visited the site, and the only identifier
- * they have here is a Slack member id.
- *
- * A combobox rather than the `<select>` this used to be — that listed only the
- * handful of people who had signed in, where this lists the workspace.
+ * Pre-provision a Role for someone in the Slack workspace. Candidates come
+ * from Slack, not `user`: the point is to give access to someone who has
+ * never visited the site.
  */
 export function GrantAccessForm({
 	candidates,

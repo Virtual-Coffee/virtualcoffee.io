@@ -41,12 +41,7 @@ export function statusLabel(status: ApplicationStatus) {
 }
 
 /**
- * The same words `SourceBadge` uses, without the badge.
- *
- * For the plain-text rows in a details list, where a coloured pill next to
- * ordinary values would look like a mistake — and where the alternative was
- * rendering the raw enum, which is how `volunteer_invite` was reaching the
- * screen.
+ * The same words `SourceBadge` uses, without the badge, for details lists.
  */
 export function sourceLabel(source: ApplicationSource) {
 	return source === 'volunteer_invite' ? 'Volunteer invite' : 'Waitlist signup';

@@ -43,16 +43,9 @@ Virtual Coffee`,
 }
 
 /**
- * The Claim Link a Volunteer sends.
- *
- * Names the Volunteer, because an email from an address the recipient does not
- * recognise is one they delete. There is deliberately no free-text field for
- * the Volunteer to fill in: this goes out as hello@virtualcoffee.io, and
- * nothing anyone types should leave under the community's name unread.
- *
- * Reply-To is left as the sending address rather than pointed at the Volunteer.
- * A reply is as likely to be "what is this?" as a question for the person who
- * sent it, and hello@ is where someone is actually watching.
+ * The Claim Link a Volunteer sends. Names the Volunteer so the recipient
+ * recognises it, but carries no free text of theirs: it goes out under
+ * hello@virtualcoffee.io, and Reply-To stays there too.
  */
 export function volunteerInviteEmail(
 	inviterName: string,
@@ -79,12 +72,8 @@ Virtual Coffee`,
 }
 
 /**
- * Told once, when someone is made a Volunteer.
- *
- * A capability nobody is told about is a capability nobody uses, and this one
- * is invisible: most Volunteers are pre-provisioned by Slack member id and have
- * never seen `/invites`, so without this the first they would hear of it is a
- * monthly balance email for a page they do not know exists.
+ * Sent once, when someone is made a Volunteer — most are pre-provisioned and
+ * would otherwise first hear of /invites from a balance email.
  */
 export function volunteerGrantEmail(
 	name: string,
@@ -108,14 +97,7 @@ Virtual Coffee`,
 	};
 }
 
-/**
- * The monthly nudge that a Volunteer has invites to give.
- *
- * Airtable sent one of these whenever a balance changed, because the balance
- * lived somewhere the Volunteer could not see. They can see it now, so this is
- * a prompt rather than a statement of record: an unused invite helps nobody,
- * and the whole point of a monthly drip is that it keeps arriving.
- */
+/** The monthly nudge that a Volunteer has invites to give. */
 export function volunteerAccrualEmail(
 	name: string,
 	balance: number,

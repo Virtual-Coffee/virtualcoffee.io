@@ -3,11 +3,7 @@ import { createMetaData } from '@/util/createMetaData.server';
 import { Form } from './form';
 import { issueTimestamp } from '@/util/forms/spamGuard';
 
-/**
- * Dynamic so the spam guard's signed token is generated per request. Statically
- * prerendering this page would bake one token into the cached HTML, and every
- * submission after it expired would be silently rejected.
- */
+// The spam guard signs a per-render token that prerendering would bake in.
 export const dynamic = 'force-dynamic';
 
 const DESCRIPTION = `If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.`;

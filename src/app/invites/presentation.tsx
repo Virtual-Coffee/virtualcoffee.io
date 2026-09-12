@@ -1,14 +1,8 @@
 import type { InviteStatus } from '@/db/schema';
 
-/**
- * How an Invite reads to the Volunteer who sent it.
- *
- * A sibling of `/admin/(protected)/presentation.tsx`, not a reuse of it: these
- * are the *Volunteer's* words for their own Invites, and they are deliberately
- * vaguer than the admin vocabulary. "Applied" covers everything between the
- * application arriving and a decision being made, so a decline never surfaces
- * here as a decline.
- */
+// The Volunteer's words for their own Invites, deliberately vaguer than the
+// admin's: "Applied" covers everything up to a decision, so a decline never
+// surfaces here as a decline.
 const STATUS_LABELS: Record<InviteStatus, string> = {
 	pending: 'Sent',
 	accepted: 'Applied',

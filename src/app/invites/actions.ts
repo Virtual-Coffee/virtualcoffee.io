@@ -228,8 +228,6 @@ export async function cancelInvite(
 	const { session, slackUserId } = await requireVolunteer();
 	const actor = await actorId(session.user.id);
 
-	// Postgres raises 22P02 on a malformed literal against a uuid column, so an
-	// unchecked id throws rather than matching nothing. See docs/adr/0008.
 	if (!isId(inviteId)) {
 		return {
 			ok: false,

@@ -21,14 +21,9 @@ import { useTableUrlState } from '../../tableUrlState';
 import { SubmissionStatusBadge } from './presentation';
 
 /**
- * One row as this screen needs it, flattened by the server page.
- *
- * A Submission row is `Record<string, unknown>` with four guaranteed keys —
- * the columns genuinely differ per kind — and the title and subtitle come from
- * `SUBMISSION_DISPLAY`, which lives in a module that imports drizzle and so
- * cannot be reached from a client component at all. Flattening on the server
- * settles both: the bundle stays free of the schema, and the column helper
- * gets a real type to infer from instead of an index signature.
+ * One row, flattened by the server page: the raw row is `Record<string,
+ * unknown>` and its display comes from a module that imports drizzle, which
+ * a client component cannot reach.
  */
 export type SubmissionListRow = {
 	id: string;
@@ -39,11 +34,8 @@ export type SubmissionListRow = {
 	submittedAt: Date;
 };
 
-/**
- * Same shape as the waitlist queue: both features registered so the header and
- * footer have their APIs, neither row model registered because the server
- * already ordered and sliced this page.
- */
+// As the waitlist queue: features for their APIs, no row models — the server
+// already ordered and sliced this page.
 const features = tableFeatures({ rowSortingFeature, rowPaginationFeature });
 
 const helper = createColumnHelper<typeof features, SubmissionListRow>();

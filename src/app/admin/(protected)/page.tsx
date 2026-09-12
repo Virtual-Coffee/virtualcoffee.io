@@ -85,11 +85,6 @@ export default async function AdminDashboardPage() {
 									<h2 className="h6 card-title text-body-secondary">
 										{card.label}
 									</h2>
-									{/*
-									 * Side by side rather than stacked, so a card with two
-									 * figures is still one glance. `gap-4` keeps them from
-									 * reading as a single number at the display size.
-									 */}
 									<div className="d-flex flex-wrap gap-4">
 										{card.figures.map((figure) => (
 											<div key={figure.label}>

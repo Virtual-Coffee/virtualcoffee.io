@@ -24,11 +24,6 @@ export type JoinFormState = null | {
 	fieldErrors?: Record<string, string>;
 };
 
-/**
- * Replaces the hand-rolled `isValidRecord` used by the Airtable forms, which
- * built its object from a fixed key list and then checked that the keys were
- * in that list — a condition that is always true. Nothing was ever validated.
- */
 const schema = z.object({
 	name: z.string().trim().min(1, 'Please tell us your name.').max(200),
 	email: z.email('That doesn’t look like an email address.').max(320),
@@ -150,8 +145,6 @@ export async function submitMembershipApplication(
 					isPriority: Boolean(claimed),
 					inviteId: claimed ? claimed.id : null,
 					referrer: claimed ? claimed.inviterName : null,
-					// The old form required this checkbox in the browser and then threw
-					// the answer away. Now the consent is actually recorded.
 					agreedToCocAt: now,
 					submittedAt: now,
 					waitlistedAt: now,

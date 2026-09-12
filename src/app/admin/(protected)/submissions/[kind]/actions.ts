@@ -51,8 +51,6 @@ export async function setSubmissionStatus(
 	const next = status as SubmissionStatus;
 	const { table } = SUBMISSION_KINDS[context.kind];
 
-	// The id comes from the client, not a URL, but the 22P02 hazard is the
-	// same: Postgres throws on a malformed literal against a uuid column.
 	if (!isId(id))
 		return { ok: false, message: 'That submission no longer exists.' };
 

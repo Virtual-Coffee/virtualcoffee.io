@@ -20,17 +20,9 @@ import { SortableHeader } from '../sortableHeader';
 import { TablePager } from '../tablePager';
 import { useTableUrlState } from '../tableUrlState';
 
-/**
- * Sorting and pagination are registered, but neither row model is: the server
- * does that work and the table is told so with `manualSorting` /
- * `manualPagination` below. Adding `createSortedRowModel()` or
- * `createPaginatedRowModel()` here would quietly re-sort and re-slice the 50
- * rows on screen and present the result as if the whole 2,547 had been ordered.
- *
- * The features are still registered, because that is what installs
- * `getPageCount()`, `getCanNextPage()` and the sorting handlers this table
- * renders its header and footer from.
- */
+// Features registered for their header/footer APIs, row models deliberately
+// not: the server sorts and pages, and a client row model would re-sort the
+// 50 rows on screen as if it had ordered them all. See `useTableUrlState`.
 const features = tableFeatures({ rowSortingFeature, rowPaginationFeature });
 
 const helper = createColumnHelper<typeof features, MembershipApplication>();
@@ -123,11 +115,6 @@ export function ApplicationsTable({
 		features,
 		columns,
 		data: rows,
-		// Both features are manual: the server returns one already-ordered page
-		// and the table trusts it. Neither flag asks anything of a backend and
-		// neither one sorts or slices — they only stop the client row models from
-		// re-processing rows that are already correct, which is what would let
-		// this table imply it had ordered or counted the other 2,500.
 		manualSorting: true,
 		manualPagination: true,
 		// Without the total, "is there a next page" cannot be answered.

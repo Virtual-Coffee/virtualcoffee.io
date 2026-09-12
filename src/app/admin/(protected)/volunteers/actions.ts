@@ -98,14 +98,8 @@ export async function addVolunteer(
 
 	revalidate();
 
-	/**
-	 * Tell them, after the writes and outside the transaction.
-	 *
-	 * Deliberately not fatal, and deliberately last: they *are* a Volunteer by
-	 * this point, and reporting a failed email as a failed grant would send a
-	 * maintainer round again to create a row that already exists. The message
-	 * says which half happened.
-	 */
+	// Tell them, after the writes and not fatal: they are a Volunteer by now,
+	// and a failed email must not read as a failed grant.
 	const address = email.trim();
 	if (!address) {
 		return {

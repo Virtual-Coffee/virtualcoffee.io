@@ -34,18 +34,11 @@ export default async function VolunteerDetailPage({
 }) {
 	const session = await requirePermission('volunteers', 'read');
 
-	/**
-	 * The roster is admin-only today, and an admin holds every Section — but the
-	 * link below goes to a different Section's screen, and rendering a link that
-	 * 404s is the kind of thing that only shows up after someone widens who can
-	 * see this page. Ask, rather than assume.
-	 */
+	// The link goes to another Section's screen; ask rather than assume.
 	const canOpenApplications = sessionCan(session, 'waitlist', 'read');
 
 	const { id } = await params;
 
-	// Postgres raises 22P02 on a malformed literal against a uuid column, so an
-	// unchecked param throws rather than 404ing. See docs/adr/0008.
 	if (!isId(id)) notFound();
 
 	const volunteer = await getVolunteerById(id);

@@ -30,14 +30,7 @@ export async function generateMetadata({
 	};
 }
 
-/**
- * One list screen for all four Submission kinds.
- *
- * A dynamic `[kind]` segment rather than four sibling directories: the URLs are
- * the same either way, the screens differ only in which fields they show, and
- * each kind is still gated on its own permission below. `SUBMISSION_KINDS` is
- * where a fifth kind would be added.
- */
+/** One list screen for all four Submission kinds, each gated on its own permission. */
 export default async function SubmissionListPage({
 	params,
 	searchParams,

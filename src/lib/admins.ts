@@ -5,13 +5,8 @@ import { getSlackMembers, type SlackMember } from '@/data/slackMembers';
 import { DEFAULT_ROLE, parseRoles, type RoleName } from '@/lib/permissions';
 
 /**
- * A row on the User Management screen: everyone who can reach /admin, whether
- * or not they have ever signed in.
- *
- * One union rather than two tables because "who can see CoC reports?" is a
- * single question, and answering it from two lists is how a maintainer misses
- * someone. `kind` is what the row's controls dispatch on — a user's roles live
- * in `user.role`, a pending one's in the Grant.
+ * A row on the User Management screen: everyone who can reach /admin, signed
+ * in or not. `kind` is what the row's controls dispatch on.
  */
 export type AccessRow = {
 	/** A user id for `kind: 'user'`, a Pending Grant id otherwise. */
