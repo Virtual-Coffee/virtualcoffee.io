@@ -9,7 +9,7 @@ import {
 import { ApplicationsTable } from './applicationsTable';
 import { QueueSearch } from './queueSearch';
 import { parseSearchParams } from './searchParams';
-import type { RawSearchParams } from '@/util/searchParams';
+import { listHref, oneOf, type RawSearchParams } from '@/util/searchParams';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,11 +40,25 @@ export default async function AdminQueuePage({
 	const filters = parseSearchParams(params, QUEUE_STATUSES);
 
 	const [{ rows, rowCount }, counts] = await Promise.all([
-		listApplications(filters),
+		// Volunteer invites sort to the front of the queue no matter what else
+		// is applied; that priority is the point of the invite. Only here: the
+		// archive is history, sorted by whatever column was chosen.
+		listApplications({ ...filters, priorityFirst: true }),
 		statusCounts(),
 	]);
 
-	const active = (params.status as string | undefined) ?? 'queue';
+	const active = oneOf(params.status, [...QUEUE_STATUSES, 'all']) ?? 'queue';
+	// The chips are filters, so they reset the page — but keep everything else
+	// the maintainer set: the search, the other chip group and the sort.
+	const chipHref = (changes: { status?: string; source?: string | null }) =>
+		listHref('/admin/waitlist', {
+			status: active === 'queue' ? null : active,
+			source: filters.source ?? null,
+			q: filters.search ?? null,
+			sort: filters.sort === 'submittedAt' ? null : filters.sort,
+			dir: filters.direction === 'desc' ? null : filters.direction,
+			...changes,
+		});
 	const chips = [
 		{ key: 'waitlisted', label: 'Waitlisted', count: counts.waitlisted ?? 0 },
 		{
@@ -73,7 +87,7 @@ export default async function AdminQueuePage({
 					{chips.map((chip) => (
 						<Link
 							key={chip.key}
-							href={`/admin/waitlist?status=${chip.key}`}
+							href={chipHref({ status: chip.key })}
 							className={`btn btn-sm ${
 								active === chip.key ? 'btn-primary' : 'btn-outline-secondary'
 							}`}
@@ -90,13 +104,9 @@ export default async function AdminQueuePage({
 					{SOURCE_FILTERS.map((option) => (
 						<Link
 							key={option.label}
-							href={
-								option.value
-									? `/admin/waitlist?status=${active}&source=${option.value}`
-									: `/admin/waitlist?status=${active}`
-							}
+							href={chipHref({ source: option.value })}
 							className={`btn btn-sm ${
-								(params.source ?? null) === option.value
+								(filters.source ?? null) === option.value
 									? 'btn-secondary'
 									: 'btn-outline-secondary'
 							}`}
