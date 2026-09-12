@@ -13,10 +13,12 @@ import {
 } from '../actions';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
+import { ReadOnlyNotice } from '../../presentation';
 
 type Template = { subject: string; text: string };
 
 type Props = {
+	canManage: boolean;
 	applicationId: string;
 	applicantName: string;
 	applicantEmail: string;
@@ -49,6 +51,8 @@ export function ActionPanel(props: Props) {
 			}
 		});
 	}
+
+	if (!props.canManage) return <ReadOnlyNotice />;
 
 	return (
 		<>

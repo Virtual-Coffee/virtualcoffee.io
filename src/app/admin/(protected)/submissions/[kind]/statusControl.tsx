@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import type { SubmissionStatus } from '@/db';
 import { setSubmissionStatus } from './actions';
 import { STATUS_ORDER, submissionStatusLabel } from './presentation';
+import { ReadOnlyNotice } from '../../presentation';
 
 export function StatusControl({
 	kind,
@@ -22,13 +23,7 @@ export function StatusControl({
 	const [error, setError] = useState<string | null>(null);
 	const [pending, startTransition] = useTransition();
 
-	if (!canManage) {
-		return (
-			<p className="small text-body-secondary mb-0">
-				You have read-only access to this section.
-			</p>
-		);
-	}
+	if (!canManage) return <ReadOnlyNotice />;
 
 	return (
 		<div>

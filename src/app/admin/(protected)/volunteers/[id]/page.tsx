@@ -8,7 +8,7 @@ import {
 	volunteerInvites,
 	volunteerLedger,
 } from '@/lib/volunteers';
-import { formatDate, formatDateTime } from '../../presentation';
+import { formatDate, formatDateTime, ReadOnlyNotice } from '../../presentation';
 import {
 	AdminInviteBadge,
 	LEDGER_LABELS,
@@ -36,6 +36,9 @@ export default async function VolunteerDetailPage({
 
 	// The link goes to another Section's screen; ask rather than assume.
 	const canOpenApplications = sessionCan(session, 'waitlist', 'read');
+	// The actions re-check for themselves; this only keeps a read-only viewer
+	// from being shown controls that would 404 on them.
+	const canManage = sessionCan(session, 'volunteers', 'manage');
 
 	const { id } = await params;
 
@@ -122,13 +125,16 @@ export default async function VolunteerDetailPage({
 												<AdminInviteBadge status={row.status} />
 											</td>
 											<td className="text-end">
-												{row.status === 'pending' && row.inviteeEmail && (
-													<ResendInviteButton
-														inviteId={row.id}
-														volunteerId={volunteer.id}
-														inviteeEmail={row.inviteeEmail}
-													/>
-												)}
+												{canManage &&
+													row.status === 'pending' &&
+													row.inviteeEmail &&
+													row.tokenExpiresAt && (
+														<ResendInviteButton
+															inviteId={row.id}
+															volunteerId={volunteer.id}
+															inviteeEmail={row.inviteeEmail}
+														/>
+													)}
 											</td>
 										</tr>
 									))}
@@ -177,7 +183,11 @@ export default async function VolunteerDetailPage({
 						<div className="card-body">
 							<h2 className="h6 text-body-secondary">Invites available</h2>
 							<p className="display-6 mb-3">{balance}</p>
-							<AdjustBalanceForm volunteerId={volunteer.id} />
+							{canManage ? (
+								<AdjustBalanceForm volunteerId={volunteer.id} />
+							) : (
+								<ReadOnlyNotice />
+							)}
 						</div>
 					</div>
 
@@ -188,11 +198,15 @@ export default async function VolunteerDetailPage({
 								Pausing removes their access to /invites and stops the monthly
 								invite. Their balance and history are kept.
 							</p>
-							<ActiveToggle
-								volunteerId={volunteer.id}
-								name={volunteer.slackDisplayName}
-								active={volunteer.deactivatedAt === null}
-							/>
+							{canManage ? (
+								<ActiveToggle
+									volunteerId={volunteer.id}
+									name={volunteer.slackDisplayName}
+									active={volunteer.deactivatedAt === null}
+								/>
+							) : (
+								<ReadOnlyNotice />
+							)}
 						</div>
 					</div>
 				</div>

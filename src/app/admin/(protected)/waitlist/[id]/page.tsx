@@ -58,6 +58,9 @@ export default async function ApplicationDetailPage({
 	// A `waitlist_reviewer` holds this Section and not the roster, so the link
 	// would 404 for them.
 	const canOpenVolunteers = sessionCan(session, 'volunteers', 'read');
+	// The actions re-check for themselves; this only keeps a read-only viewer
+	// from being shown buttons that would 404 on them.
+	const canManage = sessionCan(session, 'waitlist', 'manage');
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -163,6 +166,7 @@ export default async function ApplicationDetailPage({
 						<div className="card-body">
 							<h2 className="h6 card-title">Actions</h2>
 							<ActionPanel
+								canManage={canManage}
 								applicationId={application.id}
 								applicantName={application.name}
 								applicantEmail={application.email}
@@ -186,7 +190,9 @@ export default async function ApplicationDetailPage({
 
 					<section>
 						<h2 className="h6">History</h2>
-						<NoteComposer onSubmit={addNote.bind(null, application.id)} />
+						{canManage && (
+							<NoteComposer onSubmit={addNote.bind(null, application.id)} />
+						)}
 						<div className="mt-3">
 							<HistoryTimeline history={history} />
 						</div>

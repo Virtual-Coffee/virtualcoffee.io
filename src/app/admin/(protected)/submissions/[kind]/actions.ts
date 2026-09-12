@@ -9,6 +9,7 @@ import type { ActionResult } from '@/lib/actionResult';
 import { actorId, requirePermission } from '@/lib/adminAccess';
 import type { Session } from '@/lib/auth';
 import {
+	getSubmission,
 	isSubmissionKind,
 	SUBMISSION_KINDS,
 	type SubmissionKind,
@@ -104,7 +105,9 @@ export async function addSubmissionNote(
 
 	const trimmed = body.trim();
 	if (!trimmed) return { ok: false, message: 'A note needs some text.' };
-	if (!isId(id))
+	// Looked up first: recordSubmissionEvent() would otherwise throw on the
+	// foreign key for a well-formed id that was deleted underneath the page.
+	if (!isId(id) || !(await getSubmission(context.kind, id)))
 		return { ok: false, message: 'That submission no longer exists.' };
 
 	await recordSubmissionEvent({

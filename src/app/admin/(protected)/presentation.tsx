@@ -107,3 +107,12 @@ const DATE_TIME_FORMAT = new Intl.DateTimeFormat('en-US', {
 export function formatDateTime(value: Date | null) {
 	return value ? DATE_TIME_FORMAT.format(value) : '—';
 }
+
+/** Shown where a control would be, for a viewer who holds `read` but not `manage`. */
+export function ReadOnlyNotice() {
+	return (
+		<p className="small text-body-secondary mb-0">
+			You have read-only access to this section.
+		</p>
+	);
+}
