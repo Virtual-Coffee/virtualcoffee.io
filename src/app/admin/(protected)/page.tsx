@@ -56,8 +56,9 @@ export default async function AdminDashboardPage() {
 						Some submissions were never announced
 					</h2>
 					<p className="mb-2">
-						These were saved successfully, but notifying Slack failed. Nobody
-						will have seen them come in.
+						These were saved, but the automatic announcement (Slack, and the
+						GitHub issue for Lunch &amp; Learn ideas) did not go through, so
+						nobody may have seen them come in.
 					</p>
 					<ul className="mb-0">
 						{failureEntries.map(([kind, total]) => (
