@@ -24,7 +24,10 @@ export default async function InvitesPage() {
 	]);
 
 	return (
-		<div className="container-fluid px-3 px-lg-4 py-4">
+		<main
+			id="maincontent"
+			className="container-fluid flex-grow-1 px-3 px-lg-4 py-4"
+		>
 			<div className="d-flex flex-wrap align-items-start gap-3 mb-4">
 				<div className="me-auto">
 					<h1 className="h4 mb-1">Your invites</h1>
@@ -154,6 +157,6 @@ export default async function InvitesPage() {
 			<p className="mt-4 mb-0">
 				<Link href="/">Back to virtualcoffee.io</Link>
 			</p>
-		</div>
+		</main>
 	);
 }

@@ -17,13 +17,11 @@ export const metadata = {
  *
  * It is also not wrapped in `DefaultLayout`: that carries the site nav and hero,
  * which belong to the public marketing pages. This is a small signed-in tool.
+ * The sign-in page does use `DefaultLayout`, so `<main>` is each page's to
+ * render — one here would nest inside that one.
  */
 export default function InvitesLayout({ children }: { children: ReactNode }) {
 	return (
-		<div className="d-flex flex-column min-vh-100">
-			<main id="maincontent" className="flex-grow-1">
-				{children}
-			</main>
-		</div>
+		<div className="d-flex flex-column min-vh-100">{children}</div>
 	);
 }
