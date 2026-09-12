@@ -322,9 +322,7 @@ async function sanitizePendingGrants(database: Database): Promise<void> {
 	});
 }
 
-async function sanitizeCocReports(
-	database: Database,
-): Promise<Map<string, string>> {
+async function sanitizeCocReports(database: Database): Promise<void> {
 	const rows = await database
 		.select({
 			id: cocReport.id,
@@ -334,15 +332,12 @@ async function sanitizeCocReports(
 		})
 		.from(cocReport);
 
-	const emailById = new Map<string, string>();
-
 	await inBatches(rows, async (row) => {
 		faker.seed(seedFor(row.id));
 		// Name/email are nullable — reporters can stay anonymous. Only fake
 		// what was actually collected, so a sanitized report doesn't claim an
 		// identity the real reporter deliberately withheld.
 		const email = row.email ? fakeEmail(row.id) : null;
-		if (email) emailById.set(row.id, email);
 
 		await database
 			.update(cocReport)
@@ -358,13 +353,9 @@ async function sanitizeCocReports(
 			})
 			.where(eq(cocReport.id, row.id));
 	});
-
-	return emailById;
 }
 
-async function sanitizeVolunteerSignups(
-	database: Database,
-): Promise<Map<string, string>> {
+async function sanitizeVolunteerSignups(database: Database): Promise<void> {
 	const rows = await database
 		.select({
 			id: volunteerSignup.id,
@@ -374,12 +365,9 @@ async function sanitizeVolunteerSignups(
 		})
 		.from(volunteerSignup);
 
-	const emailById = new Map<string, string>();
-
 	await inBatches(rows, async (row) => {
 		faker.seed(seedFor(row.id));
 		const email = fakeEmail(row.id);
-		emailById.set(row.id, email);
 
 		await database
 			.update(volunteerSignup)
@@ -394,13 +382,9 @@ async function sanitizeVolunteerSignups(
 			})
 			.where(eq(volunteerSignup.id, row.id));
 	});
-
-	return emailById;
 }
 
-async function sanitizeLunchAndLearnIdeas(
-	database: Database,
-): Promise<Map<string, string>> {
+async function sanitizeLunchAndLearnIdeas(database: Database): Promise<void> {
 	const rows = await database
 		.select({
 			id: lunchAndLearnIdea.id,
@@ -410,12 +394,9 @@ async function sanitizeLunchAndLearnIdeas(
 		})
 		.from(lunchAndLearnIdea);
 
-	const emailById = new Map<string, string>();
-
 	await inBatches(rows, async (row) => {
 		faker.seed(seedFor(row.id));
 		const email = fakeEmail(row.id);
-		emailById.set(row.id, email);
 
 		await database
 			.update(lunchAndLearnIdea)
@@ -433,13 +414,11 @@ async function sanitizeLunchAndLearnIdeas(
 			})
 			.where(eq(lunchAndLearnIdea.id, row.id));
 	});
-
-	return emailById;
 }
 
 async function sanitizeCoffeeTableGroupRequests(
 	database: Database,
-): Promise<Map<string, string>> {
+): Promise<void> {
 	const rows = await database
 		.select({
 			id: coffeeTableGroupRequest.id,
@@ -448,12 +427,9 @@ async function sanitizeCoffeeTableGroupRequests(
 		})
 		.from(coffeeTableGroupRequest);
 
-	const emailById = new Map<string, string>();
-
 	await inBatches(rows, async (row) => {
 		faker.seed(seedFor(row.id));
 		const email = fakeEmail(row.id);
-		emailById.set(row.id, email);
 
 		await database
 			.update(coffeeTableGroupRequest)
@@ -465,28 +441,14 @@ async function sanitizeCoffeeTableGroupRequests(
 			})
 			.where(eq(coffeeTableGroupRequest.id, row.id));
 	});
-
-	return emailById;
 }
 
-async function sanitizeSubmissionEvents(
-	database: Database,
-	emailByKind: {
-		coc: Map<string, string>;
-		volunteer: Map<string, string>;
-		lunchAndLearn: Map<string, string>;
-		coffeeTable: Map<string, string>;
-	},
-): Promise<void> {
+async function sanitizeSubmissionEvents(database: Database): Promise<void> {
 	const rows = await database
 		.select({
 			id: submissionEvent.id,
 			type: submissionEvent.type,
 			body: submissionEvent.body,
-			cocReportId: submissionEvent.cocReportId,
-			volunteerSignupId: submissionEvent.volunteerSignupId,
-			lunchAndLearnIdeaId: submissionEvent.lunchAndLearnIdeaId,
-			coffeeTableGroupRequestId: submissionEvent.coffeeTableGroupRequestId,
 		})
 		.from(submissionEvent);
 
@@ -494,21 +456,9 @@ async function sanitizeSubmissionEvents(
 		if (row.body === null) return;
 
 		faker.seed(seedFor(row.id));
-		const email =
-			(row.cocReportId !== null
-				? emailByKind.coc.get(row.cocReportId)
-				: undefined) ??
-			(row.volunteerSignupId !== null
-				? emailByKind.volunteer.get(row.volunteerSignupId)
-				: undefined) ??
-			(row.lunchAndLearnIdeaId !== null
-				? emailByKind.lunchAndLearn.get(row.lunchAndLearnIdeaId)
-				: undefined) ??
-			(row.coffeeTableGroupRequestId !== null
-				? emailByKind.coffeeTable.get(row.coffeeTableGroupRequestId)
-				: undefined) ??
-			fakeEmail(row.id);
 
+		// The actions write a fixed sentence or the notifier's own message; a
+		// note is the only free text. Nothing here carries the submitter's email.
 		const body = ((): string => {
 			switch (row.type) {
 				case 'submitted':
@@ -516,9 +466,9 @@ async function sanitizeSubmissionEvents(
 				case 'status_changed':
 					return 'Status changed';
 				case 'notification_sent':
-					return `Notification sent to ${email}`;
+					return 'Posted to Slack.';
 				case 'notification_failed':
-					return `Notification delivery failed for ${email}`;
+					return 'Notification delivery failed.';
 				case 'imported':
 					return 'Imported from Airtable';
 				case 'note':
@@ -639,13 +589,6 @@ async function sanitizeAuthTables(database: Database): Promise<void> {
 /* Verification                                                              */
 /* -------------------------------------------------------------------------- */
 
-async function countWhere(
-	database: Database,
-	...args: Parameters<typeof database.$count>
-): Promise<number> {
-	return database.$count(...args);
-}
-
 async function verify(database: Database): Promise<string[]> {
 	const failures: string[] = [];
 
@@ -661,96 +604,78 @@ async function verify(database: Database): Promise<string[]> {
 		[
 			'membership_application has a non-fake email',
 			() =>
-				countWhere(
-					database,
+				database.$count(
 					membershipApplication,
 					realEmail(membershipApplication.email),
 				),
 		],
 		[
 			'invite has a non-fake invitee_email',
-			() => countWhere(database, invite, realEmail(invite.inviteeEmail)),
+			() => database.$count(invite, realEmail(invite.inviteeEmail)),
 		],
 		[
 			'coc_report has a non-fake email',
-			() => countWhere(database, cocReport, realEmail(cocReport.email)),
+			() => database.$count(cocReport, realEmail(cocReport.email)),
 		],
 		[
 			'volunteer_signup has a non-fake email',
-			() =>
-				countWhere(database, volunteerSignup, realEmail(volunteerSignup.email)),
+			() => database.$count(volunteerSignup, realEmail(volunteerSignup.email)),
 		],
 		[
 			'lunch_and_learn_idea has a non-fake email',
 			() =>
-				countWhere(
-					database,
-					lunchAndLearnIdea,
-					realEmail(lunchAndLearnIdea.email),
-				),
+				database.$count(lunchAndLearnIdea, realEmail(lunchAndLearnIdea.email)),
 		],
 		[
 			'coffee_table_group_request has a non-fake email',
 			() =>
-				countWhere(
-					database,
+				database.$count(
 					coffeeTableGroupRequest,
 					realEmail(coffeeTableGroupRequest.email),
 				),
 		],
 		[
 			'user has a non-fake email',
-			() => countWhere(database, user, realEmail(user.email)),
+			() => database.$count(user, realEmail(user.email)),
 		],
 		[
 			'user.slack_user_id was not sanitized',
-			() => countWhere(database, user, realSlackId(user.slackUserId)),
+			() => database.$count(user, realSlackId(user.slackUserId)),
 		],
 		[
 			'pending_grant.slack_user_id was not sanitized',
 			() =>
-				countWhere(
-					database,
-					pendingGrant,
-					realSlackId(pendingGrant.slackUserId),
-				),
+				database.$count(pendingGrant, realSlackId(pendingGrant.slackUserId)),
 		],
 		[
 			'volunteer.slack_user_id was not sanitized',
-			() => countWhere(database, volunteer, realSlackId(volunteer.slackUserId)),
+			() => database.$count(volunteer, realSlackId(volunteer.slackUserId)),
 		],
 		[
 			'invite.inviter_slack_user_id was not sanitized',
-			() =>
-				countWhere(database, invite, realSlackId(invite.inviterSlackUserId)),
+			() => database.$count(invite, realSlackId(invite.inviterSlackUserId)),
 		],
 		[
 			'volunteer_invite_ledger.slack_user_id was not sanitized',
 			() =>
-				countWhere(
-					database,
+				database.$count(
 					volunteerInviteLedger,
 					realSlackId(volunteerInviteLedger.slackUserId),
 				),
 		],
 		[
 			'volunteer has a non-fake email',
-			() => countWhere(database, volunteer, realEmail(volunteer.email)),
+			() => database.$count(volunteer, realEmail(volunteer.email)),
 		],
 		[
 			'pending_grant still names a real grantor',
 			() =>
-				countWhere(
-					database,
-					pendingGrant,
-					ne(pendingGrant.grantedBy, 'sanitized'),
-				),
+				database.$count(pendingGrant, ne(pendingGrant.grantedBy, 'sanitized')),
 		],
 		[
 			'volunteer_invite_ledger body has a non-fake email',
 			() =>
-				countWhere(
-					database,
+				database.$count(
 					volunteerInviteLedger,
 					and(
 						isNotNull(volunteerInviteLedger.body),
@@ -761,13 +686,12 @@ async function verify(database: Database): Promise<string[]> {
 		],
 		[
 			'invite still carries a claim token',
-			() => countWhere(database, invite, isNotNull(invite.tokenHash)),
+			() => database.$count(invite, isNotNull(invite.tokenHash)),
 		],
 		[
 			'account still has an OAuth secret',
 			() =>
-				countWhere(
-					database,
+				database.$count(
 					account,
 					or(
 						isNotNull(account.accessToken),
@@ -777,20 +701,13 @@ async function verify(database: Database): Promise<string[]> {
 					),
 				),
 		],
-		['session rows were not cleared', () => countWhere(database, session)],
-		[
-			'verification rows were not cleared',
-			() => countWhere(database, verification),
-		],
-		[
-			'invite_token rows were not cleared',
-			() => countWhere(database, inviteToken),
-		],
+		['session rows were not cleared', () => database.$count(session)],
+		['verification rows were not cleared', () => database.$count(verification)],
+		['invite_token rows were not cleared', () => database.$count(inviteToken)],
 		[
 			'coc_report has an attachment key other than the placeholder',
 			() =>
-				countWhere(
-					database,
+				database.$count(
 					cocReport,
 					and(
 						isNotNull(cocReport.attachmentBlobKey),
@@ -834,16 +751,11 @@ async function main() {
 	await sanitizeApplicationEvents(database, applicationEmailById);
 	await sanitizeInvites(database);
 
-	const cocEmailById = await sanitizeCocReports(database);
-	const volunteerEmailById = await sanitizeVolunteerSignups(database);
-	const lunchEmailById = await sanitizeLunchAndLearnIdeas(database);
-	const coffeeEmailById = await sanitizeCoffeeTableGroupRequests(database);
-	await sanitizeSubmissionEvents(database, {
-		coc: cocEmailById,
-		volunteer: volunteerEmailById,
-		lunchAndLearn: lunchEmailById,
-		coffeeTable: coffeeEmailById,
-	});
+	await sanitizeCocReports(database);
+	await sanitizeVolunteerSignups(database);
+	await sanitizeLunchAndLearnIdeas(database);
+	await sanitizeCoffeeTableGroupRequests(database);
+	await sanitizeSubmissionEvents(database);
 
 	await sanitizeCocAttachments(database);
 	await sanitizeVolunteers(database);

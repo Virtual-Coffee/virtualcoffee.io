@@ -8,18 +8,13 @@ import {
 	sessionCan,
 	visibleSections,
 } from './adminAccess';
+import { NOT_FOUND, redirectTo } from '@/test/next';
 import type { Session } from './auth';
 import { SECTIONS } from './permissions';
 
 function sessionWith(role: string | null): Session {
 	return { user: { role } } as unknown as Session;
 }
-
-/** `redirect()` and `notFound()` throw; the digest says where to. */
-const redirectTo = (path: string) => ({
-	digest: expect.stringMatching(`^NEXT_REDIRECT;[a-z]+;${path};`),
-});
-const notFound = { digest: 'NEXT_HTTP_ERROR_FALLBACK;404' };
 
 const unset = {
 	CONTEXT: undefined,
@@ -184,7 +179,7 @@ describe('requireSession and requirePermission', () => {
 			ADMIN_DEV_BYPASS: 'true',
 			ADMIN_DEV_BYPASS_ROLES: 'volunteer_coordinator',
 		});
-		await expect(requirePermission('coc')).rejects.toMatchObject(notFound);
+		await expect(requirePermission('coc')).rejects.toMatchObject(NOT_FOUND);
 		await expect(
 			requirePermission('volunteerSignups', 'manage'),
 		).resolves.toMatchObject({ user: { role: 'volunteer_coordinator' } });
@@ -192,6 +187,6 @@ describe('requireSession and requirePermission', () => {
 
 	test('the whole tree 404s on a preview without the bypass', async () => {
 		env({ ADMIN_DEV_BYPASS: 'true', CONTEXT: 'deploy-preview' });
-		await expect(requireSession()).rejects.toMatchObject(notFound);
+		await expect(requireSession()).rejects.toMatchObject(NOT_FOUND);
 	});
 });
