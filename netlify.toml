@@ -204,12 +204,6 @@
 	to     = "/.netlify/functions/join-coffee"
 
 [[redirects]]
-	from   = "/join-slack"
-	query  = { code = ":code" }
-	status = 200
-	to     = "/.netlify/functions/join-slack"
-
-[[redirects]]
 	force  = true
 	from   = "/bots/*"
 	status = 200

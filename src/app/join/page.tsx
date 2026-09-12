@@ -1,9 +1,14 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
+import { inviteForClaimToken } from '@/lib/invites';
 import { createMetaData } from '@/util/createMetaData.server';
+import { issueTimestamp } from '@/util/forms/spamGuard';
+import { single } from '@/util/searchParams';
 import Link from 'next/link';
 
-// ISR: Revalidate every 24 hours
-export const revalidate = 86400;
+import { JoinForm } from './form';
+
+// The spam guard signs a per-render token that prerendering would bake in.
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
 	return await createMetaData({
@@ -13,7 +18,21 @@ export async function generateMetadata() {
 	});
 }
 
-export default function Join() {
+export default async function Join({
+	searchParams,
+}: {
+	searchParams: Promise<{ invite?: string | string[] }>;
+}) {
+	const invite = single((await searchParams).invite);
+
+	/**
+	 * Looking the Claim Link up here does not spend it — someone can open the
+	 * link, close the tab and come back. An unknown, used or expired token
+	 * resolves to null and the page is the ordinary waitlist form, which is also
+	 * what the action falls back to.
+	 */
+	const claimed = invite ? await inviteForClaimToken(invite) : null;
+
 	return (
 		<DefaultLayout
 			simple
@@ -31,12 +50,10 @@ export default function Join() {
 						contribution for everyone.
 					</p>
 					<p>
-						We intentionally keep our group small to preserve what makes Virtual
-						Coffee special and support our existing members. We&apos; love to
-						have everyone as a part of Virtual Coffee, but we prioritize the
-						intimacy and closeness of the group. Our community is currently
-						accepting members on a limited basis. As new membership becomes
-						available, we&apos;ll reach out to those on the waitlist to join.
+						We keep the group small on purpose, so there&rsquo;s a waitlist. We
+						intentionally keep it that way to preserve what makes Virtual Coffee
+						special and support our existing members. As new membership becomes
+						available, we&rsquo;ll reach out to those on the waitlist to join.
 					</p>
 					<p>
 						In the meantime, feel free to check out the{' '}
@@ -45,15 +62,34 @@ export default function Join() {
 						</Link>
 						.
 					</p>
-					<div className="mt-5 text-center">
-						<a
-							href="https://airtable.com/shrWOl22B5iKYADub"
-							className="btn btn-primary btn-lg"
-						>
-							Join the Waitlist
-						</a>
-					</div>
 				</div>
+
+				{claimed ? (
+					<>
+						<h2>You&rsquo;ve been invited</h2>
+						<p>
+							{claimed.inviterName ?? 'A Virtual Coffee volunteer'} invited you,
+							so you skip the waitlist — we&rsquo;ll look at your answers first.
+							We still need them, and we still need you to read the Code of
+							Conduct.
+						</p>
+					</>
+				) : (
+					<>
+						<h2>Join the waitlist</h2>
+						<p>
+							Tell us a bit about you and we&rsquo;ll be in touch when a spot
+							opens.
+						</p>
+					</>
+				)}
+
+				<JoinForm
+					spamToken={issueTimestamp()}
+					claimToken={claimed ? invite : undefined}
+					defaultName={claimed?.inviteeName ?? undefined}
+					defaultEmail={claimed?.inviteeEmail ?? undefined}
+				/>
 			</div>
 		</DefaultLayout>
 	);
