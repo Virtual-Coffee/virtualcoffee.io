@@ -11,7 +11,7 @@ import {
 	sendCoffeeInvite,
 	withdrawApplication,
 } from '../actions';
-import type { EmailActionResult } from '@/lib/actionResult';
+import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
 
 type Template = { subject: string; text: string };
@@ -34,10 +34,12 @@ type Dialog = 'coffee' | 'approve' | null;
 export function ActionPanel(props: Props) {
 	const router = useRouter();
 	const [dialog, setDialog] = useState<Dialog>(null);
-	const [result, setResult] = useState<EmailActionResult | null>(null);
+	const [result, setResult] = useState<ActionResult | EmailActionResult | null>(
+		null,
+	);
 	const [pending, startTransition] = useTransition();
 
-	function run(action: () => Promise<EmailActionResult>) {
+	function run(action: () => Promise<ActionResult | EmailActionResult>) {
 		startTransition(async () => {
 			const outcome = await action();
 			setResult(outcome);
@@ -57,13 +59,15 @@ export function ActionPanel(props: Props) {
 					{/* Whether anything was emailed is the thing the maintainer needs
 					    in order to decide about retrying, so it is stated outright
 					    rather than left to be inferred. */}
-					<p className="mb-0 small">
-						{result.emailSent === false
-							? `${props.applicantName} is still ${props.statusText} and nothing was emailed — safe to try again.`
-							: result.emailSent === 'unknown'
-								? `We can’t confirm whether the email went out. Check with ${props.applicantEmail} before retrying, or you may email them twice.`
-								: 'An email was already sent — read the message above before retrying.'}
-					</p>
+					{'emailSent' in result && (
+						<p className="mb-0 small">
+							{result.emailSent === false
+								? `${props.applicantName} is still ${props.statusText} and nothing was emailed — safe to try again.`
+								: result.emailSent === 'unknown'
+									? `We can’t confirm whether the email went out. Check with ${props.applicantEmail} before retrying, or you may email them twice.`
+									: 'An email was already sent — read the message above before retrying.'}
+						</p>
+					)}
 				</div>
 			)}
 

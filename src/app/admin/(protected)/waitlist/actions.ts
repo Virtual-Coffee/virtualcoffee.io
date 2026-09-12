@@ -10,7 +10,7 @@ import {
 	membershipApplication,
 	type ApplicationStatus,
 } from '@/db';
-import type { EmailActionResult } from '@/lib/actionResult';
+import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { actorId, requirePermission } from '@/lib/adminAccess';
 import { sendEmail } from '@/lib/email/transport';
 import {
@@ -127,13 +127,13 @@ export async function sendCoffeeInvite(
 
 export async function recordAttendance(
 	applicationId: string,
-): Promise<EmailActionResult> {
+): Promise<ActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
 
 	if (!application) {
-		return { ok: false, message: 'Application not found.', emailSent: false };
+		return { ok: false, message: 'Application not found.' };
 	}
 	// The panel only offers this from coffee_invited, but a server action is
 	// reachable without the panel.
@@ -141,7 +141,6 @@ export async function recordAttendance(
 		return {
 			ok: false,
 			message: `Can only record attendance after a Coffee invite, not from ${application.status}.`,
-			emailSent: false,
 		};
 	}
 
@@ -276,13 +275,13 @@ async function close(
 	applicationId: string,
 	status: Extract<ApplicationStatus, 'declined' | 'withdrawn'>,
 	note: string | null,
-): Promise<EmailActionResult> {
+): Promise<ActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
 
 	if (!application) {
-		return { ok: false, message: 'Application not found.', emailSent: false };
+		return { ok: false, message: 'Application not found.' };
 	}
 	// The panel hides these buttons for a member, but a server action is
 	// reachable without the panel. Closing twice would also write a second
@@ -291,14 +290,12 @@ async function close(
 		return {
 			ok: false,
 			message: 'A member cannot be declined or withdrawn.',
-			emailSent: false,
 		};
 	}
 	if (application.status === 'declined' || application.status === 'withdrawn') {
 		return {
 			ok: false,
 			message: `Already ${application.status}.`,
-			emailSent: false,
 		};
 	}
 
@@ -323,31 +320,31 @@ async function close(
 export async function declineApplication(
 	applicationId: string,
 	note: string | null,
-): Promise<EmailActionResult> {
+): Promise<ActionResult> {
 	return close(applicationId, 'declined', note);
 }
 
 export async function withdrawApplication(
 	applicationId: string,
-): Promise<EmailActionResult> {
+): Promise<ActionResult> {
 	return close(applicationId, 'withdrawn', null);
 }
 
 export async function addNote(
 	applicationId: string,
 	body: string,
-): Promise<EmailActionResult> {
+): Promise<ActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
 
 	if (!application) {
-		return { ok: false, message: 'Application not found.', emailSent: false };
+		return { ok: false, message: 'Application not found.' };
 	}
 
 	const trimmed = body.trim();
 	if (!trimmed) {
-		return { ok: false, message: 'A note cannot be empty.', emailSent: false };
+		return { ok: false, message: 'A note cannot be empty.' };
 	}
 
 	await recordEvent({

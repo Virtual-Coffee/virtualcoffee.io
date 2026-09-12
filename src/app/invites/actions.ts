@@ -11,7 +11,7 @@ import {
 	volunteerInviteLedger,
 	type Transaction,
 } from '@/db';
-import type { EmailActionResult } from '@/lib/actionResult';
+import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { isId } from '@/db/ids';
 import { volunteerInviteEmail } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
@@ -215,9 +215,7 @@ export async function sendInvite(
  * cannot produce two refunds even before the ledger's partial unique index on
  * invite_id over both refund reasons refuses the second row.
  */
-export async function cancelInvite(
-	inviteId: string,
-): Promise<EmailActionResult> {
+export async function cancelInvite(inviteId: string): Promise<ActionResult> {
 	const { session, slackUserId } = await requireVolunteer();
 	const actor = await actorId(session.user.id);
 
@@ -225,7 +223,6 @@ export async function cancelInvite(
 		return {
 			ok: false,
 			message: 'That invite no longer exists. Reload the page.',
-			emailSent: false,
 		};
 	}
 
@@ -266,7 +263,6 @@ export async function cancelInvite(
 			ok: false,
 			message:
 				'That invite can’t be cancelled — it may already have been used. Reload the page.',
-			emailSent: false,
 		};
 	}
 
