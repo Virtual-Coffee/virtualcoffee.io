@@ -1,89 +1,67 @@
 # Sanitize preview database branches, then unblock /admin on previews
 
-0001 noted, as a selling point, that Netlify gives every deploy preview an
-isolated database branch "seeded from production." `adminAccess.ts` then had
-to turn that selling point into a guard: `/admin` 404s unconditionally on
-every deploy preview, because that seeded branch carries real applicants'
-emails and personal writing, CoC report contents, and real maintainers' Slack
-OAuth tokens, behind a preview URL that is public and shareable. Reviewing an
-`/admin` change meant doing it locally against 12 hand-written rows from
-`scripts/seedDev.ts` — nothing close to production shape or volume.
+## Context
 
-## The approach
+Every deploy preview gets a database branch forked from production (0001).
+That branch carries real applicants' emails and personal writing, CoC report
+contents, and real maintainers' Slack OAuth tokens, behind a preview URL that
+is public and shareable. So `/admin` 404s unconditionally on previews, and
+reviewing an `/admin` change meant doing it locally against a dozen
+hand-written rows from `scripts/seedDev.ts` — nothing close to production
+shape or volume.
+
+## Decision
 
 `db:sanitize-preview` (`scripts/sanitizePreviewDb.ts`) runs as the last step
-of every build (`netlify.toml`). It is a no-op unless `CONTEXT` is
-`deploy-preview` or `branch-deploy`, and refuses outright if `CONTEXT` is
-`production`. When it does run, it replaces every PII/free-text column across
-the membership pipeline, the volunteer roster and the four submission tables
-with deterministic Faker output (identity values such as Slack member ids are
-hashed with a salt generated per run, so a fake is consistent across tables
-within one sanitize but cannot be recomputed by someone who knows the real id),
-nulls Better Auth's OAuth secrets, deletes session/verification/invite-token
-rows, and repoints any CoC attachment at one shared placeholder blob (attachments live in Netlify Blobs, a store shared globally rather than
-branched per deploy like the database is — a SQL scrub can't reach them, so
-the row has to stop pointing at the real one instead).
+of every build (`netlify.toml`), after `db:migrate:deploy` has brought the
+branch up to this commit's schema, so it always sees the migrated schema. It
+is a no-op unless `CONTEXT` is `deploy-preview` or `branch-deploy`, and refuses
+outright on `production`. When it runs, it replaces every PII and free-text
+column across the membership pipeline, the volunteer roster and the four
+submission tables with deterministic Faker output, nulls Better Auth's OAuth
+secrets, deletes session, verification and invite-token rows, and repoints any
+CoC attachment at one shared placeholder blob — attachments live in Netlify
+Blobs, a store shared globally rather than branched per deploy, so a SQL scrub
+cannot reach them and the row has to stop pointing at the real one instead.
 
-`PREVIEW_ADMIN_BYPASS=true` (off by default, same shape as the existing
-`ADMIN_DEV_BYPASS`) then lets `adminRoutesEnabled()` serve `/admin` on a
-preview instead of 404ing. This is a real trade-off, made deliberately: it
-turns every preview URL into a standing admin session for anyone holding the
-link. It is only acceptable because the data behind it is no longer real.
+Identity values such as Slack member ids are hashed with a salt generated per
+run: a fake is consistent across tables within one sanitize, so joins still
+work and volunteers still have balances and invites, but cannot be recomputed
+by someone who knows the real id.
 
-## Fail closed via the build, not a runtime check
+`PREVIEW_ADMIN_BYPASS=true` (off by default, same shape as `ADMIN_DEV_BYPASS`)
+then lets `adminRoutesEnabled()` serve `/admin` on a preview instead of
+404ing. This turns every preview URL into a standing admin session for anyone
+holding the link, and is only acceptable because the data behind it is no
+longer real.
 
-An alternative design queries a "sanitization complete" marker on every
-`/admin` request, so a build that silently sanitized nothing still fails
-closed at request time. We didn't build that. Instead the sanitize script
-verifies its own work — re-querying every table it touched and asserting
-nothing still looks real (every email ends in `@preview.invalid`, no OAuth
-secret survives, no attachment key other than the placeholder) — and exits
-non-zero if any of that fails. A non-zero exit fails the whole Netlify build,
-so a preview that didn't get sanitized never publishes, and `/admin` is
-never reachable on it regardless of `PREVIEW_ADMIN_BYPASS`. Simpler than a
-per-request database round trip, at the cost of depending on the build step
-never succeeding while silently leaving bad data — which is exactly what the
-verification pass exists to rule out.
+### Fail closed via the build, not a runtime check
 
-## What this doesn't fix
+The alternative — querying a "sanitization complete" marker on every `/admin`
+request — was not built. Instead the script verifies its own work: it
+re-queries every table it touched, asserts nothing still looks real (every
+email ends in `@preview.invalid`, no OAuth secret survives, no attachment key
+other than the placeholder), and exits non-zero otherwise. A non-zero exit
+fails the whole Netlify build, so a preview that did not get sanitized never
+publishes and `/admin` is never reachable on it regardless of the flag.
 
-The real CoC attachments are never deleted — they still sit in the shared
-Blobs store under their original keys, just no longer referenced by any
-sanitized `coc_report` row. That's an existing property of production access
-to that store, not something a preview-focused change should be reaching
-into.
+### Coverage is enforced, not remembered
 
-Whether Netlify's own automatic migration step for deploy previews runs
-before or after our custom build command is not documented anywhere we could
-find. The sanitize script depends on the schema already existing by the time
-it runs; if that ordering ever turns out to be the other way round, the
-script will simply fail (and fail the build) rather than silently doing
-nothing — but it was worth spiking on a real PR before relying on it, and is
-worth re-checking if Netlify ever changes the build lifecycle.
+The script is an allowlist of columns it knows to scrub, so a table added
+later would publish in full until somebody remembered this file — and that
+happened. The verification pass therefore compares `information_schema`
+against `SANITIZED_COLUMNS` in `scripts/lib/schemaCoverage.ts`, every column
+the script has made a decision about, and a live table or column missing from
+the list fails the build exactly as a real email left behind would. The list
+is checked the other way too, so a dropped column cannot leave a stale entry.
 
-## Every new table has to be added to it
+## Consequences
 
-The script is an allowlist of things it knows to scrub, not a rule that catches
-new columns, so a table added later is published in full until somebody
-remembers this file. That has already happened twice: `pending_grant` shipped
-after this ADR and carried real Slack display names, handles and member ids to
-every preview URL, and `user.slack_user_id` was left behind while
-`account.account_id` beside it was rewritten. Both were fixed when Volunteer
-Invites added `volunteer` and `volunteer_invite_ledger` — the latter records
-`Invited {name} <{email}>` in its `body`, which is about as direct a leak as
-this codebase has.
-
-Since the third time it is enforced rather than remembered. The verification
-pass compares `information_schema` against `SANITIZED_COLUMNS` in
-`scripts/lib/schemaCoverage.ts` — every column, table by table, that the
-script has made a decision about — and a table or column missing from the
-list fails the build, exactly as a real email left behind would. Adding a
-column to the schema therefore means adding it to that list, which is the
-moment to decide what the sanitizer does with it. The list is checked the
-other way too, so a dropped column cannot leave a stale entry behind.
-
-Slack member ids are rewritten through one shared derivation, because the same
-id joins `user`, `pending_grant`, `volunteer`, `volunteer_invite_ledger` and
-`invite`. Faking each occurrence separately would leave a preview whose
-volunteers have no balances and no invites — a broken `/admin` rather than a
-sanitized one.
+- **Adding a table or column means adding it to `schemaCoverage.ts`**, which is
+  the moment to decide what the sanitizer does with it. `pnpm test` runs the
+  same check against the migrated schema, so the build is not the first place
+  it fails.
+- The real CoC attachments are never deleted — they still sit in the shared
+  Blobs store under their original keys, no longer referenced by any sanitized
+  row. That is an existing property of production access to that store, not
+  something a preview-focused change should reach into.
