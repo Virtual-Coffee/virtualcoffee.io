@@ -40,7 +40,7 @@ pre-provisioning on Slack member ids so that access can be given to someone who
 has never signed in, and volunteering is exactly that case: the Airtable import
 brings 91 people across, of whom most have never touched the site.
 
-So `volunteer` is a Role like any other. It is in `roles`, `grantedRoles()`
+So `volunteer` is a Role like any other. It is in `roles`, `parseRoles()`
 reports it, `serialiseRoles()` writes it, a Pending Grant carries it, and
 `claimPendingGrant()` applies it. It simply authorises nothing inside `/admin`,
 which falls out of the existing checks with no special cases:

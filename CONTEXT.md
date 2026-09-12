@@ -62,9 +62,10 @@ Someone whose Membership Application reached `member` status. Membership is
 about access to the community, not about appearing on the website.
 
 **Volunteer**:
-A Member trusted to give out Invites. Being one is exactly holding that access:
-there is no separate idea of an "active" Volunteer, and someone who steps back
-simply stops being one until they come back.
+A Member trusted to give out Invites. A Volunteer can be paused
+(`deactivated_at`): the row and its history stay, but they stop accruing and
+lose the `volunteer` role until they are reactivated. Imported volunteers who
+were inactive in Airtable arrive paused (ADR 0012).
 _Avoid_: Volunteer signup (that is the form), referrer, sponsor
 
 **Member Profile**:

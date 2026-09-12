@@ -74,10 +74,12 @@ have an account?", "whose grant is this?" — becomes a single-table lookup on a
 unique, indexed column instead of a join against `account` filtered by
 `provider_id`.
 
-The migration backfills it from `account` before adding the unique constraint.
-Without that step every pre-existing user is `NULL`, and the "already signed in?"
-check answers _no_ for all of them — which would let a maintainer create a grant
-that can never be claimed, for someone who already has access.
+`claimPendingGrant()` writes it on every Slack sign-in, grant or no grant, so
+it is never `NULL` for anyone who has signed in since the column existed. There
+is no backfill: the baseline migration creates `user`, `account` and this column
+together, so no user predates it. If that ever changes, the "already signed in?"
+check answers _no_ for every unbackfilled user — which would let a maintainer
+create a grant that can never be claimed, for someone who already has access.
 
 ## Roles now live in two places, briefly
 

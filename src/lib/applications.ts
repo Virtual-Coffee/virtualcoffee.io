@@ -174,10 +174,12 @@ export type ApplicationInviter = {
 /**
  * Who invited this applicant, for an application that came from an Invite.
  *
- * Not the `referrer` column. That is free text from the join form — "a friend
- * told me", a name typed by the applicant — and the Airtable import fills it
- * from Airtable's own `referrer` field, which is empty for most rows. The
- * inviter is a different fact entirely, and lives on the Invite.
+ * Not the `referrer` column. That is display text for the detail page's
+ * "Referrer" row: Airtable's own free-text `referrer` for imported rows
+ * ("Podcast", "a friend"), and the inviter's name for an application that
+ * came in through a Claim Link, so the row reads the same for historic and
+ * new applications. The join form has no referrer field. The inviter as a
+ * fact — who, and which Invite — lives on the Invite, and is read from here.
  *
  * Prefers the Volunteer's current display name over `invite.inviter_name`,
  * which is a snapshot taken when the Invite was created and goes stale on a
