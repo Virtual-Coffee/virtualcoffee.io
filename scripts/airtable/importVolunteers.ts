@@ -232,8 +232,25 @@ async function apply(dryRun: boolean) {
 		process.exit(1);
 	}
 
-	const mapped = entries.filter((entry) => entry.slackUserId.trim().length > 0);
+	// Trimmed once, here: the id is written to `volunteer`, `pending_grant`,
+	// the ledger and `invite`, and the joins between them are exact.
+	const mapped = entries
+		.map((entry) => ({ ...entry, slackUserId: entry.slackUserId.trim() }))
+		.filter((entry) => entry.slackUserId.length > 0);
 	const skipped = entries.length - mapped.length;
+
+	const malformed = mapped.filter(
+		(entry) => !/^[UW][A-Z0-9]+$/.test(entry.slackUserId),
+	);
+	if (malformed.length > 0) {
+		console.error(
+			'These are not Slack member ids (a handle or an email, probably). Fix the file first:',
+		);
+		for (const entry of malformed) {
+			console.error(`  ${entry.name} -> ${entry.slackUserId}`);
+		}
+		process.exit(1);
+	}
 
 	const seen = new Set<string>();
 	const duplicates = mapped.filter((entry) => {
