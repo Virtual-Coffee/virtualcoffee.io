@@ -48,6 +48,8 @@ export async function insertApplication(fields: {
 	name?: string;
 	email?: string;
 	inviteId?: string | null;
+	/** Defaults to whether there is an Invite, as the join action sets it. */
+	isPriority?: boolean;
 }) {
 	const n = next();
 	const [row] = await db()
@@ -57,7 +59,7 @@ export async function insertApplication(fields: {
 			email: fields.email ?? `applicant-${n}@example.test`,
 			status: fields.status ?? 'waitlisted',
 			source: fields.inviteId ? 'volunteer_invite' : 'waitlist_signup',
-			isPriority: Boolean(fields.inviteId),
+			isPriority: fields.isPriority ?? Boolean(fields.inviteId),
 			inviteId: fields.inviteId ?? null,
 			waitlistedAt: new Date(),
 		})
