@@ -108,7 +108,7 @@ Every external data source lives in `src/data/` and degrades to mocks when its e
 
 ### Submissions (Postgres)
 
-The four public forms — `/report-coc-violation`, `/volunteer-at-virtual-coffee`, `/lunch-and-learn-idea`, `/start-coffee-table-group` — each have a zod-validated server action writing to their own table, with a shared `submission_event` log. They **persist first and notify second**, deliberately inverting the "send first, then write" rule below; `docs/adr/0005` explains why, and it will look like a bug without it. The `action.db.test.ts` beside each form pins the ordering.
+The four public forms — `/report-coc-violation`, `/volunteer-at-virtual-coffee`, `/lunch-and-learn-idea`, `/start-coffee-table-group` — each have a zod-validated server action writing to their own table, with a shared `submission_event` log. They **persist first and notify second**, deliberately inverting the admin actions' "send first, then write" rule; it looks like a bug without `docs/adr/0005`. The `action.db.test.ts` beside each form pins the ordering.
 
 All four — and `/join` — are `force-dynamic` because the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token — prerendering would bake one into the cached HTML and reject every submission once it expired. CoC attachments go to Netlify Blobs and are served only through a route that checks `coc:read`.
 
