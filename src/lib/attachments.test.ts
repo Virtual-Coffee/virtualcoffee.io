@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { z } from 'zod';
 
 const blobs = vi.hoisted(() => {
 	const set = vi.fn();
@@ -65,7 +66,7 @@ describe('storeAttachment accepts by leading bytes, not by declaration', () => {
 		// Declared as something else entirely; the bytes decide.
 		const result = await storeAttachment(file(bytes, name, 'text/plain'));
 		expect(result).toEqual({
-			key: expect.stringMatching(/^[0-9a-f-]{36}$/),
+			key: expect.schemaMatching(z.uuid()),
 			filename,
 			contentType,
 			size: bytes.length,

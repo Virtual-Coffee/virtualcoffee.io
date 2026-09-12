@@ -1,10 +1,13 @@
 import { eq } from 'drizzle-orm';
 import { describe, expect, test } from 'vitest';
+import { z } from 'zod';
 
 import { db, inviteToken } from '@/db';
 import { insertApplication } from '@/test/db/fixtures';
 
 import { createSlackInviteToken, redeemSlackInviteToken } from './inviteTokens';
+
+const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
 
 describe('Slack invite tokens', () => {
 	test('only the hash is stored, and it expires in 30 days', async () => {
@@ -14,12 +17,14 @@ describe('Slack invite tokens', () => {
 		const { token, expiresAt } = await createSlackInviteToken(id);
 
 		const [row] = await db().select().from(inviteToken);
-		expect(row.tokenHash).toMatch(/^[0-9a-f]{64}$/);
+		expect(row).toMatchObject({
+			tokenHash: expect.schemaMatching(z.hash('sha256')),
+			applicationId: id,
+			usedAt: null,
+		});
 		expect(row.tokenHash).not.toBe(token);
-		expect(row.applicationId).toBe(id);
-		expect(row.usedAt).toBeNull();
-		expect(expiresAt.getTime() - before).toBeGreaterThanOrEqual(
-			30 * 24 * 60 * 60 * 1000,
+		expect(expiresAt).toEqual(
+			expect.schemaMatching(z.date().min(new Date(before + THIRTY_DAYS))),
 		);
 	});
 

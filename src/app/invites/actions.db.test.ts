@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { z } from 'zod';
 
 import { db, invite } from '@/db';
 import { volunteerBalance } from '@/lib/invites';
@@ -65,9 +66,9 @@ describe('sendInvite', () => {
 			inviteeName: 'Ada Lovelace',
 			inviteeEmail: 'ada@example.test',
 			status: 'pending',
+			tokenHash: expect.schemaMatching(z.hash('sha256')),
+			tokenExpiresAt: expect.schemaMatching(z.date().min(new Date())),
 		});
-		expect(row.tokenHash).toMatch(/^[0-9a-f]{64}$/);
-		expect(row.tokenExpiresAt!.getTime()).toBeGreaterThan(Date.now());
 
 		const [{ text, to }] = sendEmail.mock.calls[0];
 		expect(to).toBe('ada@example.test');

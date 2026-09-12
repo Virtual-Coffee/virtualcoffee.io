@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { z } from 'zod';
 
 import { volunteerBalance } from '@/lib/invites';
 import {
@@ -107,7 +108,13 @@ describe('accrual', () => {
 			),
 		});
 		expect(sendEmail).toHaveBeenCalledWith(
-			expect.objectContaining({ to: 'ada-account@example.test' }),
+			expect.schemaMatching(
+				z.object({
+					to: z.literal('ada-account@example.test'),
+					subject: z.string().min(1),
+					text: z.string().includes('/invites'),
+				}),
+			),
 		);
 	});
 

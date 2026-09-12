@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
+import { z } from 'zod';
 
 import { CLAIM_TOKEN_TTL_DAYS, hashClaimToken, newClaimToken } from './invites';
 
@@ -19,7 +20,7 @@ describe('newClaimToken', () => {
 		vi.useFakeTimers({ now: Date.parse('2026-09-12T00:00:00Z') });
 
 		const { token, expiresAt } = newClaimToken();
-		expect(token).toMatch(/^[A-Za-z0-9_-]{43}$/);
+		expect(token).toEqual(expect.schemaMatching(z.base64url().length(43)));
 		expect(expiresAt.toISOString()).toBe('2026-12-11T00:00:00.000Z');
 		expect(CLAIM_TOKEN_TTL_DAYS).toBe(90);
 	});
