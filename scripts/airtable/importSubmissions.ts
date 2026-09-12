@@ -26,9 +26,9 @@ import { ATTACHMENT_STORE } from '../../src/lib/attachments';
  *     Netlify Forms, and most rows share a bulk `createdTime` of 2024-09-25.
  *     Preferring `createdTime` would misdate almost every historical row.
  *   - Four CoC reports carry attachment metadata pointing at
- *     d33wubrfki0l68.cloudfront.net, Netlify's legacy asset CDN. Those URLs
- *     still resolve, so the files are fetched into Netlify Blobs here rather
- *     than left as a dead link.
+ *     `LEGACY_CDN_HOST`, Netlify's legacy asset CDN. Those URLs still resolve,
+ *     so the files are fetched into Netlify Blobs here rather than left as a
+ *     dead link.
  *
  * A dry run needs only the Airtable key. A real run also needs a blob store,
  * because storing those four attachments happens outside the Netlify runtime —
@@ -45,6 +45,9 @@ import { ATTACHMENT_STORE } from '../../src/lib/attachments';
  */
 
 const BASE_ID = 'appZ4d2Q9K0IepQnA';
+
+/** The only place a legacy attachment lives; anything else is not fetched. */
+const LEGACY_CDN_HOST = 'd33wubrfki0l68.cloudfront.net';
 
 /** Read from Airtable on 2026-09-09; a dry run prints these alongside what it found. */
 const EXPECTED: Record<string, number> = {
@@ -199,8 +202,16 @@ async function rehost(
 	attachment: LegacyAttachment,
 	dryRun: boolean,
 ): Promise<StoredLegacy | null> {
+	const url = URL.parse(attachment.url);
+	if (url?.protocol !== 'https:' || url.hostname !== LEGACY_CDN_HOST) {
+		console.warn(
+			`  ! ${attachment.filename}: ${attachment.url} is not on ${LEGACY_CDN_HOST}; skipping the file.`,
+		);
+		return null;
+	}
+
 	try {
-		const response = await fetch(attachment.url, {
+		const response = await fetch(url, {
 			signal: AbortSignal.timeout(30_000),
 		});
 
@@ -299,23 +310,27 @@ async function main() {
 			}
 
 			// `onConflictDoNothing` on the unique airtable_record_id is what makes
-			// a re-run safe.
-			const [created] = await db()
-				.insert(table)
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				.values(values as any)
-				.onConflictDoNothing({ target: table.airtableRecordId })
-				.returning({ id: table.id });
+			// a re-run safe — which is also why the row and its `imported` event
+			// commit together: a re-run would never come back for the event.
+			const created = await db().transaction(async (tx) => {
+				const [stored] = await tx
+					.insert(table)
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					.values(values as any)
+					.onConflictDoNothing({ target: table.airtableRecordId })
+					.returning({ id: table.id });
 
-			if (!created) continue;
+				if (!stored) return false;
 
-			await db()
-				.insert(submissionEvent)
-				.values({
-					[eventKey]: created.id,
+				await tx.insert(submissionEvent).values({
+					[eventKey]: stored.id,
 					type: 'imported',
 					body: `Imported from Airtable (${row.id})`,
 				});
+				return true;
+			});
+
+			if (!created) continue;
 
 			inserted++;
 		}
