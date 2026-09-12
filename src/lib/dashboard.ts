@@ -1,8 +1,24 @@
-import { count, desc, eq, inArray, sql } from 'drizzle-orm';
+import { count, desc, eq, inArray, isNotNull, or, sql } from 'drizzle-orm';
 
-import { applicationEvent, db, membershipApplication, user } from '@/db';
+import {
+	applicationEvent,
+	cocReport,
+	coffeeTableGroupRequest,
+	db,
+	lunchAndLearnIdea,
+	membershipApplication,
+	submissionEvent,
+	user,
+	volunteerSignup,
+} from '@/db';
 import { QUEUE_STATUSES } from '@/lib/applications';
 import type { Section } from '@/lib/permissions';
+import {
+	openCount,
+	SUBMISSION_KINDS,
+	visibleSubmissionKinds,
+	type SubmissionKind,
+} from '@/lib/submissions';
 
 /** One number on a card. Most sections have a single one; the queue has two. */
 export type DashboardFigure = {
@@ -64,6 +80,16 @@ async function waitlistCard(): Promise<DashboardCard> {
 	};
 }
 
+function submissionCard(kind: SubmissionKind): () => Promise<DashboardCard> {
+	const { section, label } = SUBMISSION_KINDS[kind];
+	return async () => ({
+		section,
+		label,
+		href: `/admin/submissions/${kind}`,
+		figures: [{ count: await openCount(kind), label: 'awaiting a response' }],
+	});
+}
+
 /**
  * One card per Section, or null for a Section that is a list of people rather
  * than a queue of work. Keyed on `Section` so that adding one without deciding
@@ -74,10 +100,10 @@ async function waitlistCard(): Promise<DashboardCard> {
  */
 const CARDS: Record<Section, (() => Promise<DashboardCard>) | null> = {
 	waitlist: waitlistCard,
-	coc: null,
-	volunteerSignups: null,
-	lunchAndLearn: null,
-	coffeeTables: null,
+	coc: submissionCard('coc'),
+	volunteerSignups: submissionCard('volunteers'),
+	lunchAndLearn: submissionCard('lunch-and-learn'),
+	coffeeTables: submissionCard('coffee-tables'),
 	volunteers: null,
 	admins: null,
 };
@@ -103,11 +129,10 @@ const ACTIVITY_LIMIT = 15;
 /**
  * The most recent events across everything the viewer can see.
  *
- * Each Section that keeps an event log contributes its rows here, merged in
- * JavaScript rather than as a SQL UNION: the event tables have different
- * shapes and different foreign keys, and at fifteen rows the cost of
+ * Merged in JavaScript rather than as a SQL UNION: the two event tables have
+ * different shapes and different foreign keys, and at fifteen rows the cost of
  * over-fetching a little from each is irrelevant next to the complexity of
- * keeping a union in step with all of them.
+ * keeping a union in step with both.
  */
 export async function recentActivity(
 	sections: readonly Section[],
@@ -145,6 +170,74 @@ export async function recentActivity(
 				actorName: row.actorName,
 				href: `/admin/waitlist/${row.applicationId}`,
 				subject: row.subject ?? `Application ${row.reference}`,
+			});
+		}
+	}
+
+	const visibleKinds = visibleSubmissionKinds(sections);
+
+	if (visibleKinds.length > 0) {
+		// One query across every visible kind: the columns are shared, only which
+		// foreign key is set differs.
+		const rows = await db()
+			.select({
+				id: submissionEvent.id,
+				cocReportId: submissionEvent.cocReportId,
+				volunteerSignupId: submissionEvent.volunteerSignupId,
+				lunchAndLearnIdeaId: submissionEvent.lunchAndLearnIdeaId,
+				coffeeTableGroupRequestId: submissionEvent.coffeeTableGroupRequestId,
+				type: sql<string>`${submissionEvent.type}`,
+				body: submissionEvent.body,
+				createdAt: submissionEvent.createdAt,
+				actorName: user.name,
+				// The kinds are mutually exclusive, so exactly one of these is set.
+				reference: sql<number>`coalesce(${cocReport.reference}, ${volunteerSignup.reference}, ${lunchAndLearnIdea.reference}, ${coffeeTableGroupRequest.reference})`,
+			})
+			.from(submissionEvent)
+			.leftJoin(user, eq(submissionEvent.actorUserId, user.id))
+			.leftJoin(cocReport, eq(submissionEvent.cocReportId, cocReport.id))
+			.leftJoin(
+				volunteerSignup,
+				eq(submissionEvent.volunteerSignupId, volunteerSignup.id),
+			)
+			.leftJoin(
+				lunchAndLearnIdea,
+				eq(submissionEvent.lunchAndLearnIdeaId, lunchAndLearnIdea.id),
+			)
+			.leftJoin(
+				coffeeTableGroupRequest,
+				eq(
+					submissionEvent.coffeeTableGroupRequestId,
+					coffeeTableGroupRequest.id,
+				),
+			)
+			.where(
+				or(
+					...visibleKinds.map((kind) =>
+						isNotNull(SUBMISSION_KINDS[kind].eventColumn),
+					),
+				),
+			)
+			.orderBy(desc(submissionEvent.createdAt), desc(submissionEvent.id))
+			.limit(ACTIVITY_LIMIT);
+
+		for (const row of rows) {
+			const kind = visibleKinds.find(
+				(candidate) => row[SUBMISSION_KINDS[candidate].eventKey] !== null,
+			);
+
+			if (!kind) continue;
+
+			const submissionId = row[SUBMISSION_KINDS[kind].eventKey];
+
+			entries.push({
+				key: `submission-${row.id}`,
+				createdAt: row.createdAt,
+				type: row.type,
+				body: row.body,
+				actorName: row.actorName,
+				href: `/admin/submissions/${kind}/${submissionId}`,
+				subject: `${SUBMISSION_KINDS[kind].singular} ${row.reference}`,
 			});
 		}
 	}

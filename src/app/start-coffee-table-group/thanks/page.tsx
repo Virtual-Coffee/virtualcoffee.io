@@ -3,9 +3,9 @@ import { createMetaData } from '@/util/createMetaData.server';
 
 export async function generateMetadata() {
 	return await createMetaData({
-		title: 'Volunteer Application Received!',
-		description: `Thank you so much for your willingness to help at VC!`,
-		Hero: 'UndrawPowerful',
+		title: 'Coffee Table Group Idea Received!',
+		description: `Thank you for submitting your Coffee Table Group idea!`,
+		Hero: 'UndrawConversation',
 	});
 }
 
@@ -13,11 +13,11 @@ export default function Thanks() {
 	return (
 		<DefaultLayout
 			simple
-			Hero="UndrawPowerful"
-			heroHeader="Volunteer Application Received!"
+			Hero="UndrawConversation"
+			heroHeader="Coffee Table Group Idea Received!"
 		>
 			<div className="lead mb-5">
-				<h2>Thank you so much for your willingness to help at VC!</h2>
+				<h2>Thank you for submitting your Coffee Table Group idea!</h2>
 				<p>One of our team members will get back to you shortly.</p>
 			</div>
 		</DefaultLayout>
