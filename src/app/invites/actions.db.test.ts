@@ -19,6 +19,17 @@ import {
 const sendEmail = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/email/transport', () => ({ sendEmail }));
 
+/** Set to skip the friendly pre-check, so the index has to do the work. */
+const preCheck = vi.hoisted(() => ({ skip: false }));
+vi.mock('@/lib/invites', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/lib/invites')>();
+	return {
+		...actual,
+		blockingInvite: async (email: string) =>
+			preCheck.skip ? null : actual.blockingInvite(email),
+	};
+});
+
 import { cancelInvite, sendInvite } from './actions';
 
 const GRACE = 'U_GRACE';
@@ -33,6 +44,7 @@ async function volunteerWithBalance(balance: number) {
 beforeEach(() => {
 	sendEmail.mockReset();
 	sendEmail.mockResolvedValue(SENT);
+	preCheck.skip = false;
 	signInAs('volunteer', GRACE);
 	vi.stubEnv('URL', 'https://virtualcoffee.io');
 });
@@ -137,6 +149,66 @@ describe('sendInvite', () => {
 			message: 'Invite sent to again@example.test.',
 		});
 		await expect(volunteerBalance(GRACE)).resolves.toBe(2);
+	});
+
+	test('someone another volunteer already invited is not invited again', async () => {
+		await volunteerWithBalance(3);
+		await insertInvite({
+			inviterSlackUserId: 'U_OTHER',
+			inviteeEmail: 'Ada@Example.test',
+		});
+
+		await expect(sendInvite('Ada', 'ada@example.test')).resolves.toEqual({
+			ok: false,
+			message:
+				'Ada already has an invite waiting at ada@example.test. Nothing has been sent and your invite is untouched.',
+			emailSent: false,
+		});
+		await expect(volunteerBalance(GRACE)).resolves.toBe(3);
+		expect(sendEmail).not.toHaveBeenCalled();
+	});
+
+	test('a cancelled or imported invite does not block the email', async () => {
+		await volunteerWithBalance(3);
+		await insertInvite({
+			inviterSlackUserId: 'U_OTHER',
+			inviteeEmail: 'ada@example.test',
+			status: 'cancelled',
+		});
+		await db().insert(invite).values({
+			inviterName: 'Someone, years ago',
+			inviteeName: 'Ada',
+			inviteeEmail: 'ada@example.test',
+			status: 'pending',
+			airtableRecordId: 'recOLD',
+		});
+
+		await expect(sendInvite('Ada', 'ada@example.test')).resolves.toEqual({
+			ok: true,
+			message: 'Invite sent to ada@example.test.',
+		});
+	});
+
+	/**
+	 * Two Volunteers inviting the same person at the same moment both pass the
+	 * pre-check. The partial unique index is what stops the second from being
+	 * charged, and it surfaces as the same message.
+	 */
+	test('the index catches what the pre-check raced past, and nothing is charged', async () => {
+		await volunteerWithBalance(3);
+		await insertInvite({
+			inviterSlackUserId: 'U_OTHER',
+			inviteeEmail: 'ada@example.test',
+		});
+		preCheck.skip = true;
+
+		await expect(sendInvite('Ada', 'ada@example.test')).resolves.toMatchObject({
+			ok: false,
+			message: expect.stringContaining('already has an invite waiting'),
+		});
+		await expect(volunteerBalance(GRACE)).resolves.toBe(3);
+		await expect(ledgerFor(GRACE)).resolves.toHaveLength(1);
+		expect(sendEmail).not.toHaveBeenCalled();
 	});
 
 	/** ADR 0011: a definite failure is cancelled and refunded, in that order. */

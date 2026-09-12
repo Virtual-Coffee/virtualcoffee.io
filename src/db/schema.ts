@@ -263,42 +263,55 @@ export const applicationEventType = pgEnum('application_event_type', [
 
 export const inviteTokenPurpose = pgEnum('invite_token_purpose', ['slack']);
 
-export const invite = pgTable('invite', {
-	id: uuid('id').primaryKey().$defaultFn(newId),
-	// Nullable: imported rows predate any user account, and only carry a name.
-	inviterUserId: text('inviter_user_id').references(() => user.id, {
-		onDelete: 'set null',
-	}),
-	inviterName: text('inviter_name'),
-	/**
-	 * The identifier the allowance is actually keyed on, and the reason this
-	 * column exists next to `inviter_user_id` rather than instead of it.
-	 *
-	 * Spend has to be counted against the same key the ledger credits, or a
-	 * Volunteer whose `user` row is replaced — the foreign key above is
-	 * `ON DELETE SET NULL` — silently loses their history and is handed their
-	 * invites back. Imported rows have neither identifier and keep only
-	 * `inviter_name`; the reviewed mapping file fills this in where it can.
-	 */
-	inviterSlackUserId: text('inviter_slack_user_id'),
-	inviteeName: text('invitee_name'),
-	inviteeEmail: text('invitee_email'),
-	status: inviteStatus('status').notNull().default('pending'),
-	/**
-	 * The Claim Link, stored the way `invite_token` stores its own: hash only,
-	 * so a database leak does not hand out working invites. Deliberately not
-	 * reusing `invite_token` — that table's `application_id` is NOT NULL, and a
-	 * Claim Link points at an Invite precisely because the application does not
-	 * exist yet.
-	 */
-	tokenHash: text('token_hash').unique(),
-	tokenExpiresAt: timestamp('token_expires_at', { withTimezone: true }),
-	claimedAt: timestamp('claimed_at', { withTimezone: true }),
-	airtableRecordId: text('airtable_record_id').unique(),
-	createdAt: timestamp('created_at', { withTimezone: true })
-		.notNull()
-		.defaultNow(),
-});
+export const invite = pgTable(
+	'invite',
+	{
+		id: uuid('id').primaryKey().$defaultFn(newId),
+		// Nullable: imported rows predate any user account, and only carry a name.
+		inviterUserId: text('inviter_user_id').references(() => user.id, {
+			onDelete: 'set null',
+		}),
+		inviterName: text('inviter_name'),
+		/**
+		 * The identifier the allowance is actually keyed on, and the reason this
+		 * column exists next to `inviter_user_id` rather than instead of it.
+		 *
+		 * Spend has to be counted against the same key the ledger credits, or a
+		 * Volunteer whose `user` row is replaced — the foreign key above is
+		 * `ON DELETE SET NULL` — silently loses their history and is handed their
+		 * invites back. Imported rows have neither identifier and keep only
+		 * `inviter_name`; the reviewed mapping file fills this in where it can.
+		 */
+		inviterSlackUserId: text('inviter_slack_user_id'),
+		inviteeName: text('invitee_name'),
+		inviteeEmail: text('invitee_email'),
+		status: inviteStatus('status').notNull().default('pending'),
+		/**
+		 * The Claim Link, stored the way `invite_token` stores its own: hash only,
+		 * so a database leak does not hand out working invites. Deliberately not
+		 * reusing `invite_token` — that table's `application_id` is NOT NULL, and a
+		 * Claim Link points at an Invite precisely because the application does not
+		 * exist yet.
+		 */
+		tokenHash: text('token_hash').unique(),
+		tokenExpiresAt: timestamp('token_expires_at', { withTimezone: true }),
+		claimedAt: timestamp('claimed_at', { withTimezone: true }),
+		airtableRecordId: text('airtable_record_id').unique(),
+		createdAt: timestamp('created_at', { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+	},
+	(table) => [
+		/**
+		 * One live Claim Link per email. Two Volunteers inviting the same person
+		 * would otherwise each spend an allowance on them. Imported rows have no
+		 * token and are left out, since Airtable did hold duplicates.
+		 */
+		uniqueIndex('invite_pending_email_idx')
+			.on(sql`lower(${table.inviteeEmail})`)
+			.where(sql`status = 'pending' and token_hash is not null`),
+	],
+);
 
 /* -------------------------------------------------------------------------- */
 /* Volunteers and Invite Allowance                                            */

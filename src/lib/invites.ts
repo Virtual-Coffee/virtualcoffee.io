@@ -1,4 +1,4 @@
-import { desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, isNotNull, sql } from 'drizzle-orm';
 
 import {
 	db,
@@ -38,30 +38,44 @@ const BLOCKING_STATUSES: ApplicationStatus[] = [
 ];
 
 /**
- * Whether this email already has an application that an Invite should not
- * duplicate, and which kind.
+ * Why this email should not be sent an Invite, if it should not.
  *
  * There is no unique constraint on `membership_application.email` and the
  * import brought duplicates across, so this is a code-level guard over possibly
  * several rows — `member` wins over a live application, because "they're
- * already in" is the more useful thing to be told.
+ * already in" is the more useful thing to be told. An unclaimed Claim Link
+ * from any Volunteer blocks too; `invite_pending_email_idx` is the guarantee
+ * behind that check, this is the friendly message ahead of it.
  */
-export async function applicationBlockingInvite(
+export async function blockingInvite(
 	email: string,
-): Promise<'member' | 'in_progress' | null> {
-	const rows = await db()
-		.select({ status: membershipApplication.status })
-		.from(membershipApplication)
-		.where(
-			sql`lower(${membershipApplication.email}) = ${email.trim().toLowerCase()}`,
-		);
+): Promise<'member' | 'in_progress' | 'invited' | null> {
+	const normalised = email.trim().toLowerCase();
+	const [applications, pending] = await Promise.all([
+		db()
+			.select({ status: membershipApplication.status })
+			.from(membershipApplication)
+			.where(sql`lower(${membershipApplication.email}) = ${normalised}`),
+		db()
+			.select({ id: invite.id })
+			.from(invite)
+			.where(
+				and(
+					sql`lower(${invite.inviteeEmail}) = ${normalised}`,
+					eq(invite.status, 'pending'),
+					isNotNull(invite.tokenHash),
+				),
+			)
+			.limit(1),
+	]);
 
-	const blocking = rows
+	const blocking = applications
 		.map((row) => row.status)
 		.filter((status) => BLOCKING_STATUSES.includes(status));
 
-	if (blocking.length === 0) return null;
-	return blocking.includes('member') ? 'member' : 'in_progress';
+	if (blocking.includes('member')) return 'member';
+	if (blocking.length > 0) return 'in_progress';
+	return pending.length > 0 ? 'invited' : null;
 }
 
 /**

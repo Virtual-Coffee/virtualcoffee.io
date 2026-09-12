@@ -12,11 +12,12 @@ import {
 	type Transaction,
 } from '@/db';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
+import { isUniqueViolation } from '@/db/errors';
 import { isId } from '@/db/ids';
 import { volunteerInviteEmail } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
 import {
-	applicationBlockingInvite,
+	blockingInvite,
 	hashClaimToken,
 	newClaimToken,
 	volunteerBalance,
@@ -59,7 +60,14 @@ export async function sendInvite(
 	}
 	const { name, email } = parsed.data;
 
-	const blocking = await applicationBlockingInvite(email);
+	const blocking = await blockingInvite(email);
+	if (blocking === 'invited') {
+		return {
+			ok: false,
+			message: `${name} already has an invite waiting at ${email}. Nothing has been sent and your invite is untouched.`,
+			emailSent: false,
+		};
+	}
 	if (blocking === 'member') {
 		return {
 			ok: false,
@@ -140,6 +148,15 @@ export async function sendInvite(
 			return {
 				ok: false,
 				message: 'You have no invites left. You get one more on the 1st.',
+				emailSent: false,
+			};
+		}
+		// Another Volunteer invited the same person between the check above and
+		// this write. The index is what makes that impossible to charge for.
+		if (isUniqueViolation(error, 'invite_pending_email_idx')) {
+			return {
+				ok: false,
+				message: `${name} already has an invite waiting at ${email}. Nothing has been sent and your invite is untouched.`,
 				emailSent: false,
 			};
 		}
