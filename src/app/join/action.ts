@@ -1,11 +1,12 @@
 'use server';
 
-import { and, eq, gt } from 'drizzle-orm';
+import { and, eq, gt, inArray, sql } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { applicationEvent, db, invite, membershipApplication } from '@/db';
 import { hashClaimToken } from '@/lib/invites';
+import { QUEUE_STATUSES } from '@/lib/applications';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
 import {
 	formError,
@@ -60,6 +61,34 @@ export async function submitMembershipApplication(
 	let result: { applicationId: string; claimed: ClaimedInvite };
 
 	try {
+		/**
+		 * One application per person in the pipeline. Someone who was declined,
+		 * withdrew or lapsed can apply again; someone already waiting, invited or
+		 * a member gets told so instead of a second row for a reviewer to notice.
+		 *
+		 * Checked before the transaction, so nothing is written and a Claim Link
+		 * is not burned. Deliberately a lookup and not a unique index: the imported
+		 * history holds duplicates, and this is a courtesy rather than a boundary —
+		 * two submissions racing each other can still both land, and the spam
+		 * guard's own scope (drive-by bots, not a determined sender) is unchanged.
+		 */
+		const [existing] = await db()
+			.select({ id: membershipApplication.id })
+			.from(membershipApplication)
+			.where(
+				and(
+					sql`lower(${membershipApplication.email}) = ${parsed.data.email.toLowerCase()}`,
+					inArray(membershipApplication.status, [...QUEUE_STATUSES, 'member']),
+				),
+			)
+			.limit(1);
+		if (existing) {
+			return invalidFields({
+				email:
+					'There’s already an application for this email address. If that’s a surprise, email hello@virtualcoffee.io.',
+			});
+		}
+
 		result = await db().transaction(async (tx) => {
 			let claimed: ClaimedInvite = null;
 			/**
