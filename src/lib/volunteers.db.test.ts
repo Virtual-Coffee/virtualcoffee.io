@@ -49,11 +49,12 @@ describe('volunteerInvites', () => {
 		await insertVolunteer({ slackUserId: 'U_A' });
 		const { id } = await insertInvite({ inviterSlackUserId: 'U_A' });
 		await insertApplication({ inviteId: id });
-		await insertApplication({ inviteId: id });
+		const newest = await insertApplication({ inviteId: id });
 		await insertInvite({ inviterSlackUserId: 'U_SOMEONE_ELSE' });
 
 		const rows = await volunteerInvites('U_A');
 		expect(rows).toHaveLength(1);
-		expect(rows[0]).toMatchObject({ id, applicationId: expect.any(String) });
+		// Deterministic, not whichever row the planner happened to return first.
+		expect(rows[0]).toMatchObject({ id, applicationId: newest.id });
 	});
 });

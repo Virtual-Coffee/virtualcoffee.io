@@ -160,7 +160,9 @@ export async function volunteerInvites(
 			eq(membershipApplication.inviteId, invite.id),
 		)
 		.where(eq(invite.inviterSlackUserId, slackUserId))
-		.orderBy(desc(invite.createdAt));
+		// The second key decides which application survives the dedupe below:
+		// the newest, since ids are v7 (ADR 0008).
+		.orderBy(desc(invite.createdAt), desc(membershipApplication.id));
 
 	const seen = new Set<string>();
 	const unique: AdminInviteRow[] = [];
