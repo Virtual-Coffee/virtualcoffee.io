@@ -1,9 +1,14 @@
 import { describe, expect, test, vi } from 'vitest';
 
 import { db, membershipApplication } from '@/db';
-import { formDataWith } from '@/test/forms';
+import { fieldErrors, formDataWith } from '@/test/forms';
 import { redirectTo } from '@/test/next';
-import { applicationEvents, insertInvite, inviteRow } from '@/test/db/fixtures';
+import {
+	applicationEvents,
+	insertApplication,
+	insertInvite,
+	inviteRow,
+} from '@/test/db/fixtures';
 
 const notifySlack = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/slack/notify', async (importOriginal) => ({
@@ -51,6 +56,24 @@ describe('submitMembershipApplication', () => {
 			{ type: 'submitted', body: 'Application submitted', actorUserId: null },
 		]);
 		expect(notifySlack).not.toHaveBeenCalled();
+	});
+
+	test('an email already in the pipeline is refused; a closed one may apply again', async () => {
+		await insertApplication({ email: 'Ada@Example.test', status: 'member' });
+
+		await expect(
+			submitMembershipApplication(null, formDataWith(valid)),
+		).resolves.toEqual(
+			fieldErrors({ email: expect.stringContaining('already an application') }),
+		);
+		expect(await db().select().from(membershipApplication)).toHaveLength(1);
+
+		await db().update(membershipApplication).set({ status: 'declined' });
+		await submit(valid);
+		const statuses = (await db().select().from(membershipApplication)).map(
+			(row) => row.status,
+		);
+		expect(statuses.sort()).toEqual(['declined', 'waitlisted']);
 	});
 
 	test('a valid Claim Link makes a priority application and kills the link', async () => {
