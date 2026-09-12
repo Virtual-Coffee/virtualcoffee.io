@@ -102,20 +102,26 @@ describe('createLunchAndLearnIssue', () => {
 			].join('\n'),
 			labels: ['Lunch & Learn'],
 			assignees: ['shelleymcq', 'meg-gutshall'],
+			request: { signal: expect.any(AbortSignal) },
 		});
 	});
 
-	test('the installation token is narrowed to issues on that one repo, and the PEM is un-escaped', async () => {
+	test('the App is identified by appId, the token narrowed to issues on that one repo, and the PEM un-escaped', async () => {
 		const { createLunchAndLearnIssue } = await load();
 		await createLunchAndLearnIssue(idea);
 
 		expect(octokit.getRepoInstallation).toHaveBeenCalledWith({
 			owner: 'Virtual-Coffee',
 			repo: 'VC-Community-Docs',
+			request: { signal: expect.any(AbortSignal) },
+		});
+		// `appId` is what `createAppAuth` checks for; it throws without it.
+		expect(octokit.constructed[0]).toMatchObject({
+			auth: { appId: 'Iv1.test' },
 		});
 		expect(octokit.constructed[1]).toMatchObject({
 			auth: {
-				clientId: 'Iv1.test',
+				appId: 'Iv1.test',
 				privateKey: 'line1\nline2',
 				installationId: 4242,
 				repositoryNames: ['VC-Community-Docs'],
