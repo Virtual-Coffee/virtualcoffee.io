@@ -7,6 +7,8 @@ import {
 	db,
 	submissionEvent,
 	volunteerSignup,
+	type Database,
+	type Transaction,
 } from '@/db';
 
 import { failInserts } from '@/test/db/fixtures';
@@ -18,8 +20,8 @@ import {
 	recordSubmissionEvent,
 } from './submitSubmission';
 
-async function insertCocReport() {
-	const [row] = await db()
+async function insertCocReport(executor: Database | Transaction = db()) {
+	const [row] = await executor
 		.insert(cocReport)
 		.values({
 			reporteeName: 'Someone',
@@ -102,6 +104,16 @@ describe('notifyAndRecord', () => {
 	});
 
 	/**
+	 * The audit line is written after the attempt, and losing it is tolerated
+	 * (below). A `new` row with no notification event is therefore one nobody
+	 * can vouch for, and the banner has to count it rather than assume the best.
+	 */
+	test('a submission with no notification event at all is counted', async () => {
+		await insertCocReport();
+		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
+	});
+
+	/**
 	 * The banner says "nobody will have seen them come in". Once a maintainer
 	 * has moved the submission on, or a later attempt got through, that is
 	 * no longer true — and a count that never clears is one nobody reads.
@@ -151,17 +163,7 @@ describe('persistSubmission', () => {
 	test('writes the row and its `submitted` event', async () => {
 		const saved = await persistSubmission(
 			'coc',
-			async (tx) => {
-				const [row] = await tx
-					.insert(cocReport)
-					.values({
-						reporteeName: 'Someone',
-						timeLocation: 'x',
-						description: 'x',
-					})
-					.returning({ id: cocReport.id });
-				return row;
-			},
+			(tx) => insertCocReport(tx).then((id) => ({ id })),
 			copy,
 		);
 		expect(saved).toEqual({ id: expect.any(String) });
@@ -182,7 +184,7 @@ describe('persistSubmission', () => {
 			await expect(
 				persistSubmission(
 					'coc',
-					() => insertCocReport().then((id) => ({ id })),
+					(tx) => insertCocReport(tx).then((id) => ({ id })),
 					copy,
 				),
 			).resolves.toEqual({
