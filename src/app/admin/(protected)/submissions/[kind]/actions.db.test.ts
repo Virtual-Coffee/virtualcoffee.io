@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { cocReport, db, submissionEvent } from '@/db';
+import { failInserts } from '@/test/db/fixtures';
 import { signInAs } from '@/test/session';
 
 /** Stages a read that is stale by the time the action writes. */
@@ -63,6 +64,30 @@ describe('setSubmissionStatus', () => {
 	beforeEach(() => {
 		staleRead.readAs = null;
 		signInAs('coc_reviewer');
+	});
+
+	test('a status change whose event fails to write is rolled back with it', async () => {
+		const id = await insertCocReport();
+		const fault = await failInserts('submission_event');
+		try {
+			await expect(
+				setSubmissionStatus('coc', id, 'resolved'),
+			).rejects.toThrow();
+		} finally {
+			await fault.remove();
+		}
+		await expect(
+			db()
+				.select({ status: cocReport.status })
+				.from(cocReport)
+				.where(eq(cocReport.id, id)),
+		).resolves.toEqual([{ status: 'new' }]);
+		await expect(
+			db()
+				.select({ type: submissionEvent.type })
+				.from(submissionEvent)
+				.where(eq(submissionEvent.cocReportId, id)),
+		).resolves.toEqual([]);
 	});
 
 	test('a change that raced another maintainer is refused, not written over', async () => {
