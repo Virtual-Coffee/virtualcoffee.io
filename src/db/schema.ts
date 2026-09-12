@@ -379,14 +379,7 @@ export const volunteer = pgTable('volunteer', {
 
 /**
  * Every movement of a Volunteer's Invite Allowance. Append-only: nothing here is
- * ever updated or deleted, and the balance is `SUM(delta)`.
- *
- * A stored integer that went up and down would be smaller and faster, and would
- * also be unable to answer the only question anyone actually asks — "why do I
- * have four?". See docs/adr/0011.
- *
- * The two unique indexes are where the correctness lives. Neither double-accrual
- * nor double-refund is prevented by careful code; both are unrepresentable.
+ * ever updated or deleted, and the balance is `SUM(delta)`. See docs/adr/0011.
  */
 export const volunteerInviteLedger = pgTable(
 	'volunteer_invite_ledger',
@@ -422,12 +415,7 @@ export const volunteerInviteLedger = pgTable(
 		uniqueIndex('volunteer_invite_ledger_accrual_period_idx')
 			.on(table.slackUserId, table.periodKey)
 			.where(sql`reason = 'monthly_accrual'`),
-		/**
-		 * An Invite is charged exactly once and refunded at most once. One index
-		 * over (invite_id, reason) would allow a `refund_cancelled` *and* a
-		 * `refund_expired` for the same Invite; grouping both refund reasons is
-		 * what says "at most once". See docs/adr/0011.
-		 */
+		/** Charged exactly once, refunded at most once (docs/adr/0011). */
 		uniqueIndex('volunteer_invite_ledger_spend_idx')
 			.on(table.inviteId)
 			.where(sql`reason = 'spend'`),

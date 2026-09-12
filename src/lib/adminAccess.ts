@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 
@@ -123,7 +124,13 @@ function previewBypassSession(): Session | null {
 	});
 }
 
-export async function getSession(): Promise<Session | null> {
+/**
+ * Wrapped in React's `cache()` so the layout, the page and any action
+ * rendered for one request share a single session lookup instead of each
+ * hitting the database. Not Better Auth's cookie cache: a role change must
+ * apply on the next request, not when a cookie expires.
+ */
+export const getSession = cache(async (): Promise<Session | null> => {
 	const devBypass = devBypassSession();
 	if (devBypass) return devBypass;
 
@@ -131,7 +138,7 @@ export async function getSession(): Promise<Session | null> {
 	if (previewBypass) return previewBypass;
 
 	return getAuth().api.getSession({ headers: await headers() });
-}
+});
 
 /** The roles on the session's user. */
 export function sessionRoles(session: Session | null): RoleName[] {
@@ -163,15 +170,7 @@ export function visibleSections(session: Session | null): Section[] {
 	return SECTIONS.filter((section) => sessionCan(session, section, 'read'));
 }
 
-/**
- * The authorization boundary for /admin.
- *
- * Deliberately here and in each server action rather than in `proxy.ts`:
- * Next.js 16 renamed middleware to Proxy and its docs say Proxy "should not be
- * used as a full session management or authorization solution". Server actions
- * re-check independently rather than trusting the route they were reached from.
- * See docs/adr/0003.
- */
+/** The authorization boundary for /admin — here, not in proxy.ts (docs/adr/0003). */
 export async function requireSession(): Promise<Session> {
 	if (!adminRoutesEnabled()) {
 		notFound();
@@ -214,11 +213,11 @@ export async function requirePermission(
  * bypass session's events land with no actor rather than not at all. Every
  * server action that records an event should get its actor from here.
  */
-export async function actorId(userId: string): Promise<string | null> {
+export const actorId = cache(async (userId: string): Promise<string | null> => {
 	const [row] = await db()
 		.select({ id: user.id })
 		.from(user)
 		.where(eq(user.id, userId))
 		.limit(1);
 	return row?.id ?? null;
-}
+});

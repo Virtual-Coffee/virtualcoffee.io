@@ -89,11 +89,12 @@ function createAuth() {
 		},
 		plugins: [
 			/**
-			 * `adminRoles` deliberately stays `['admin']`. It gates the plugin's own
-			 * user-management endpoints — ban, impersonate, set-role — which only
-			 * /admin/user-management uses. The narrow roles in `roles` grant a
-			 * section and nothing else; a volunteer_coordinator must not be able
-			 * to ban anyone.
+			 * Supplies `role` on the session and registers the `ac`/`roles` objects
+			 * `sessionCan()` evaluates. None of its endpoints — ban, impersonate,
+			 * set-role — are called: every role write is Drizzle, in
+			 * src/lib/pendingGrants.ts and user-management/actions.ts. `adminRoles`
+			 * stays `['admin']` so that, if one ever is, a section role cannot
+			 * reach it.
 			 */
 			admin({ ac, roles, defaultRole: DEFAULT_ROLE, adminRoles: ['admin'] }),
 			devtools({ enabled: true }),
