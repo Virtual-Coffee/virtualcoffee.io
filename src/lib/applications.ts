@@ -21,6 +21,7 @@ import {
 	type MembershipApplication,
 } from '@/db';
 import { isId } from '@/db/ids';
+import { countByStatus } from '@/lib/statusCounts';
 
 export const QUEUE_STATUSES: ApplicationStatus[] = [
 	'waitlisted',
@@ -130,22 +131,7 @@ export async function listApplications(
 
 /** Counts for the queue's filter chips. */
 export async function statusCounts(): Promise<Record<string, number>> {
-	const rows = await db()
-		.select({
-			status: membershipApplication.status,
-			value: count(),
-		})
-		.from(membershipApplication)
-		.groupBy(membershipApplication.status);
-
-	const counts: Record<string, number> = {};
-	let total = 0;
-	for (const row of rows) {
-		counts[row.status] = row.value;
-		total += row.value;
-	}
-	counts.all = total;
-	return counts;
+	return countByStatus(membershipApplication);
 }
 
 /**

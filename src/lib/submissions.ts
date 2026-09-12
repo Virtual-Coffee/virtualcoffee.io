@@ -11,6 +11,8 @@ import {
 	type SubmissionStatus,
 } from '@/db';
 import { isId } from '@/db/ids';
+import type { Section } from '@/lib/permissions';
+import { countByStatus } from '@/lib/statusCounts';
 
 /**
  * The four Submission kinds, keyed by the URL segment they live at.
@@ -63,6 +65,15 @@ export type SubmissionEventKey =
 export const SUBMISSION_KEYS = Object.keys(
 	SUBMISSION_KINDS,
 ) as SubmissionKind[];
+
+/** The kinds whose section is among the ones the viewer holds. */
+export function visibleSubmissionKinds(
+	sections: readonly Section[],
+): SubmissionKind[] {
+	return SUBMISSION_KEYS.filter((kind) =>
+		sections.includes(SUBMISSION_KINDS[kind].section),
+	);
+}
 
 /** `new` and `in_progress` are the two a maintainer still has to do something about. */
 export const OPEN_STATUSES: SubmissionStatus[] = ['new', 'in_progress'];
@@ -312,19 +323,5 @@ export async function getSubmission(
 export async function submissionStatusCounts(
 	kind: SubmissionKind,
 ): Promise<Record<string, number>> {
-	const { table } = SUBMISSION_KINDS[kind];
-
-	const rows = await db()
-		.select({ status: table.status, value: count() })
-		.from(table)
-		.groupBy(table.status);
-
-	const counts: Record<string, number> = {};
-	let total = 0;
-	for (const row of rows) {
-		counts[row.status] = row.value;
-		total += row.value;
-	}
-	counts.all = total;
-	return counts;
+	return countByStatus(SUBMISSION_KINDS[kind].table);
 }

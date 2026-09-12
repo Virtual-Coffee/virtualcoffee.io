@@ -5,6 +5,7 @@ import { dashboardCards, recentActivity } from '@/lib/dashboard';
 import {
 	failedNotifications,
 	SUBMISSION_KINDS,
+	visibleSubmissionKinds,
 	type SubmissionKind,
 } from '@/lib/submissions';
 import { ActivityFeed } from './activityFeed';
@@ -27,9 +28,7 @@ export default async function AdminDashboardPage() {
 	const session = await requireSession();
 	const sections = visibleSections(session);
 
-	const visibleKinds = (
-		Object.keys(SUBMISSION_KINDS) as SubmissionKind[]
-	).filter((kind) => sections.includes(SUBMISSION_KINDS[kind].section));
+	const visibleKinds = visibleSubmissionKinds(sections);
 
 	const [cards, activity, failures] = await Promise.all([
 		dashboardCards(sections),

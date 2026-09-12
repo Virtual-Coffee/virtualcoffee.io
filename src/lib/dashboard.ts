@@ -17,6 +17,7 @@ import type { Section } from '@/lib/permissions';
 import {
 	openCount,
 	SUBMISSION_KINDS,
+	visibleSubmissionKinds,
 	type SubmissionKind,
 } from '@/lib/submissions';
 
@@ -177,9 +178,7 @@ export async function recentActivity(
 		}
 	}
 
-	const visibleKinds = (
-		Object.keys(SUBMISSION_KINDS) as SubmissionKind[]
-	).filter((kind) => sections.includes(SUBMISSION_KINDS[kind].section));
+	const visibleKinds = visibleSubmissionKinds(sections);
 
 	if (visibleKinds.length > 0) {
 		// One query across every visible kind: the columns are shared, only which
