@@ -53,3 +53,8 @@ next-env.d.ts
 
 # generated Undraw aspect ratios (pnpm build-undraw-ratios)
 /src/data/undrawAspectRatios.ts
+
+# The reviewed Airtable -> Slack volunteer mapping. A working artefact of one
+# migration that pairs real names with Slack member ids; the site never reads it.
+# See scripts/airtable/README.md.
+scripts/airtable/volunteerSlackMapping.json
