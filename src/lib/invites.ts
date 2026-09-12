@@ -6,6 +6,8 @@ import {
 	membershipApplication,
 	volunteer,
 	volunteerInviteLedger,
+	type Database,
+	type Transaction,
 } from '@/db';
 import type {
 	ApplicationStatus,
@@ -104,9 +106,15 @@ export async function inviteForClaimToken(token: string): Promise<{
 // Keyed on the Slack member id, because a Volunteer can hold a balance before
 // they have signed in (docs/adr/0009); the balance is a sum (docs/adr/0011).
 
-/** How many Invites this Volunteer may give out right now. */
-export async function volunteerBalance(slackUserId: string): Promise<number> {
-	const [row] = await db()
+/**
+ * How many Invites this Volunteer may give out right now. Takes the caller's
+ * transaction where the answer has to hold for a write in the same one.
+ */
+export async function volunteerBalance(
+	slackUserId: string,
+	executor: Database | Transaction = db(),
+): Promise<number> {
+	const [row] = await executor
 		.select({
 			// `sum()` is numeric, which the pg driver hands back as a string, and
 			// it is null rather than 0 when the Volunteer has no ledger rows yet.

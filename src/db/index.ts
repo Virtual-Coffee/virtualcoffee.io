@@ -17,6 +17,9 @@ interface SharedQueryResultHKT extends PgQueryResultHKT {
 
 export type Database = PgAsyncDatabase<SharedQueryResultHKT>;
 
+/** The handle `db().transaction()` passes to its callback. */
+export type Transaction = Parameters<Parameters<Database['transaction']>[0]>[0];
+
 function createDatabase(): Database {
 	// `getDatabase()` picks the driver from `NETLIFY_DB_DRIVER` and returns the
 	// client shape the adapter accepts. It is still worth going through rather

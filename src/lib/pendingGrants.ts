@@ -1,6 +1,6 @@
 import { and, eq, isNull } from 'drizzle-orm';
 
-import { db, pendingGrant, user, volunteer, type Database } from '@/db';
+import { db, pendingGrant, user, volunteer, type Transaction } from '@/db';
 import { parseRoles, serialiseRoles, type RoleName } from '@/lib/permissions';
 
 /**
@@ -33,9 +33,6 @@ type RoleUpdate = {
 	roleGrantedBy: string;
 	roleGrantedAt: Date;
 };
-
-/** The handle `db().transaction()` passes to its callback. */
-type Transaction = Parameters<Parameters<Database['transaction']>[0]>[0];
 
 /** Add `volunteer` to whatever someone already holds, without dropping any of it. */
 export function withVolunteerRole(current: string | null | undefined): string {

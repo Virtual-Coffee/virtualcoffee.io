@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq, sql } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
@@ -9,7 +9,7 @@ import {
 	invite,
 	volunteer,
 	volunteerInviteLedger,
-	type Database,
+	type Transaction,
 } from '@/db';
 import type { EmailActionResult } from '@/lib/actionResult';
 import { isId } from '@/db/ids';
@@ -19,13 +19,11 @@ import {
 	applicationBlockingInvite,
 	hashClaimToken,
 	newClaimToken,
+	volunteerBalance,
 } from '@/lib/invites';
 import { actorId } from '@/lib/adminAccess';
 import { requireVolunteer } from '@/lib/volunteerAccess';
 import { siteUrl } from '@/util/url.server';
-
-/** The handle `db().transaction()` passes to its callback. */
-type Transaction = Parameters<Parameters<Database['transaction']>[0]>[0];
 
 const schema = z.object({
 	name: z.string().trim().min(1, 'Please give their name.').max(200),
@@ -98,14 +96,9 @@ export async function sendInvite(
 
 			if (!held) throw new Error('NO_VOLUNTEER_ROW');
 
-			const [totals] = await tx
-				.select({
-					total: sql<string | null>`sum(${volunteerInviteLedger.delta})`,
-				})
-				.from(volunteerInviteLedger)
-				.where(eq(volunteerInviteLedger.slackUserId, slackUserId));
-
-			if (Number(totals?.total ?? 0) < 1) throw new Error('NO_BALANCE');
+			if ((await volunteerBalance(slackUserId, tx)) < 1) {
+				throw new Error('NO_BALANCE');
+			}
 
 			const [row] = await tx
 				.insert(invite)
