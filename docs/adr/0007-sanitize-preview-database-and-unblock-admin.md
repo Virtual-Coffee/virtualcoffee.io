@@ -73,6 +73,15 @@ Invites added `volunteer` and `volunteer_invite_ledger` — the latter records
 `Invited {name} <{email}>` in its `body`, which is about as direct a leak as
 this codebase has.
 
+Since the third time it is enforced rather than remembered. The verification
+pass compares `information_schema` against `SANITIZED_COLUMNS` in
+`scripts/lib/schemaCoverage.ts` — every column, table by table, that the
+script has made a decision about — and a table or column missing from the
+list fails the build, exactly as a real email left behind would. Adding a
+column to the schema therefore means adding it to that list, which is the
+moment to decide what the sanitizer does with it. The list is checked the
+other way too, so a dropped column cannot leave a stale entry behind.
+
 Slack member ids are rewritten through one shared derivation, because the same
 id joins `user`, `pending_grant`, `volunteer`, `volunteer_invite_ledger` and
 `invite`. Faking each occurrence separately would leave a preview whose

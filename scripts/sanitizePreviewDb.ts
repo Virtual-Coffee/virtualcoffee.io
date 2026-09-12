@@ -21,6 +21,7 @@ import {
 	pendingGrant,
 	volunteer,
 	volunteerInviteLedger,
+	devtoolsUser,
 } from '../src/db';
 import { ATTACHMENT_STORE } from '../src/lib/attachments';
 import {
@@ -29,6 +30,7 @@ import {
 	fakeSlackId,
 	seedFor,
 } from './lib/previewFakes';
+import { coverageFailures } from './lib/schemaCoverage';
 
 /**
  * Scrub a deploy-preview database branch down to fake data.
@@ -580,9 +582,12 @@ async function sanitizeAuthTables(database: Database): Promise<void> {
 
 	// Nothing needs a preview to carry over real sessions, invite tokens, or
 	// pending verification codes — the preview admin bypass mints its own.
+	// `devtools_user` is empty outside development; deleting it costs nothing
+	// and means the coverage check can say so without a caveat.
 	await database.delete(session);
 	await database.delete(verification);
 	await database.delete(inviteToken);
+	await database.delete(devtoolsUser);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -705,6 +710,10 @@ async function verify(database: Database): Promise<string[]> {
 		['verification rows were not cleared', () => database.$count(verification)],
 		['invite_token rows were not cleared', () => database.$count(inviteToken)],
 		[
+			'devtools_user rows were not cleared',
+			() => database.$count(devtoolsUser),
+		],
+		[
 			'coc_report has an attachment key other than the placeholder',
 			() =>
 				database.$count(
@@ -723,6 +732,11 @@ async function verify(database: Database): Promise<string[]> {
 			failures.push(`${label} (${count} row${count === 1 ? '' : 's'})`);
 		}
 	}
+
+	// The checks above only know the columns this script knows. This one
+	// fails closed on the ones it doesn't: a table or column the schema has
+	// gained that nobody has decided about is a leak until proven otherwise.
+	failures.push(...(await coverageFailures(database)));
 
 	return failures;
 }
