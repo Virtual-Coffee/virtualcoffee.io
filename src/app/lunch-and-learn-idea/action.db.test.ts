@@ -43,7 +43,7 @@ async function submit() {
 describe('submitLunchAndLearnIdea', () => {
 	test('opens the issue first and threads its URL into the Slack message', async () => {
 		createLunchAndLearnIssue.mockResolvedValue({ ok: true, url: ISSUE });
-		notifySlack.mockResolvedValue({ ok: true });
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 
 		const { row, events } = await submit();
 
@@ -67,7 +67,7 @@ describe('submitLunchAndLearnIdea', () => {
 			ok: false,
 			message: 'Could not open the GitHub issue: Not Found',
 		});
-		notifySlack.mockResolvedValue({ ok: true });
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 
 		const { row, events } = await submit();
 

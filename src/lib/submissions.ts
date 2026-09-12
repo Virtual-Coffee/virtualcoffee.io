@@ -16,9 +16,10 @@ import { isId } from '@/db/ids';
  * The four Submission kinds, keyed by the URL segment they live at.
  *
  * Everything that varies between them is declared here once — the table, the
- * event table's foreign key, the permission that guards it, and how a row is
- * summarised in a list. The admin screens are then written once against this
- * table rather than four times.
+ * event table's foreign key (as a column for queries and as a key for rows),
+ * the permission that guards it, and how a row is summarised in a list. The
+ * admin screens are then written once against this table rather than four
+ * times.
  */
 export const SUBMISSION_KINDS = {
 	coc: {
@@ -27,6 +28,7 @@ export const SUBMISSION_KINDS = {
 		section: 'coc',
 		table: cocReport,
 		eventColumn: submissionEvent.cocReportId,
+		eventKey: 'cocReportId',
 	},
 	volunteers: {
 		label: 'Volunteer signups',
@@ -34,6 +36,7 @@ export const SUBMISSION_KINDS = {
 		section: 'volunteerSignups',
 		table: volunteerSignup,
 		eventColumn: submissionEvent.volunteerSignupId,
+		eventKey: 'volunteerSignupId',
 	},
 	'lunch-and-learn': {
 		label: 'Lunch & Learn',
@@ -41,6 +44,7 @@ export const SUBMISSION_KINDS = {
 		section: 'lunchAndLearn',
 		table: lunchAndLearnIdea,
 		eventColumn: submissionEvent.lunchAndLearnIdeaId,
+		eventKey: 'lunchAndLearnIdeaId',
 	},
 	'coffee-tables': {
 		label: 'Coffee Tables',
@@ -48,10 +52,13 @@ export const SUBMISSION_KINDS = {
 		section: 'coffeeTables',
 		table: coffeeTableGroupRequest,
 		eventColumn: submissionEvent.coffeeTableGroupRequestId,
+		eventKey: 'coffeeTableGroupRequestId',
 	},
 } as const;
 
 export type SubmissionKind = keyof typeof SUBMISSION_KINDS;
+export type SubmissionEventKey =
+	(typeof SUBMISSION_KINDS)[SubmissionKind]['eventKey'];
 
 export const SUBMISSION_KEYS = Object.keys(
 	SUBMISSION_KINDS,

@@ -37,8 +37,6 @@ export function JoinForm({
 		<form action={formAction} noValidate>
 			{claimToken && <input type="hidden" name="invite" value={claimToken} />}
 			{state?.is_error && (
-				// The existing Airtable forms render their error banner with
-				// `alert-success`, so failures show up green. This one is red.
 				<div className="alert alert-danger" role="alert">
 					<h2 className="h5 alert-heading">
 						There was an issue submitting your form.

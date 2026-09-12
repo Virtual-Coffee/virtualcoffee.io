@@ -29,7 +29,7 @@ async function submit(fields: Record<string, string>) {
 
 describe('submitMembershipApplication', () => {
 	test('writes a waitlisted application and records the consent', async () => {
-		notifySlack.mockResolvedValue({ ok: true });
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 		const row = await submit({
 			...valid,
 			githubUsername: 'https://github.com/AdaL/',
@@ -54,7 +54,7 @@ describe('submitMembershipApplication', () => {
 	});
 
 	test('a valid Claim Link makes a priority application and kills the link', async () => {
-		notifySlack.mockResolvedValue({ ok: true });
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 		const { id, token } = await insertInvite({
 			inviterSlackUserId: 'U_GRACE',
 			inviterName: 'Grace Hopper',
@@ -105,7 +105,7 @@ describe('submitMembershipApplication', () => {
 	});
 
 	test('a link works once', async () => {
-		notifySlack.mockResolvedValue({ ok: true });
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 		const { id, token } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
 
 		await submit({ ...valid, invite: token });

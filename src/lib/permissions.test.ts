@@ -4,7 +4,6 @@ import {
 	DEFAULT_ROLE,
 	GRANTABLE_ROLE_NAMES,
 	GRANTABLE_ROLES,
-	grantedRoles,
 	parseRoles,
 	ROLE_LABELS,
 	roles,
@@ -14,7 +13,7 @@ import {
 	type Section,
 } from './permissions';
 
-function can(role: RoleName, section: Section | 'dashboard', action: string) {
+function can(role: RoleName, section: Section, action: string) {
 	return (
 		roles[role].authorize({ [section]: [action] } as never).success === true
 	);
@@ -39,10 +38,10 @@ describe('the role string', () => {
 		expect(serialiseRoles([])).toBe(DEFAULT_ROLE);
 	});
 
-	test('grantedRoles is the one that answers "holds nothing"', () => {
-		expect(parseRoles('user')).toEqual(['user']);
-		expect(grantedRoles('user')).toEqual([]);
-		expect(grantedRoles('user,volunteer')).toEqual(['volunteer']);
+	test('the default role is not a role anyone holds', () => {
+		expect(parseRoles('user')).toEqual([]);
+		expect(parseRoles('user,volunteer')).toEqual(['volunteer']);
+		expect(parseRoles('constructor,admin')).toEqual(['admin']);
 	});
 });
 
@@ -63,7 +62,6 @@ describe('what each role grants', () => {
 		expect(grants('admin')).toEqual(
 			Object.fromEntries(SECTIONS.map((section) => [section, [true, true]])),
 		);
-		expect(can('admin', 'dashboard', 'read')).toBe(true);
 	});
 
 	test.each<[RoleName, Section]>([
@@ -72,16 +70,13 @@ describe('what each role grants', () => {
 		['volunteer_coordinator', 'volunteerSignups'],
 		['lunch_and_learn_organizer', 'lunchAndLearn'],
 		['coffee_table_organizer', 'coffeeTables'],
-	])('%s holds %s and the dashboard, nothing else', (role, own) => {
-		expect(can(role, 'dashboard', 'read')).toBe(true);
+	])('%s holds %s, nothing else', (role, own) => {
 		expect(grants(role)).toEqual({ ...NONE, [own]: [true, true] });
 	});
 
 	test('user and volunteer grant no section at all — volunteer on purpose', () => {
 		expect(Object.values(NONE).flat()).not.toContain(true);
 		expect(grants('volunteer')).toEqual(NONE);
-		expect(can('user', 'dashboard', 'read')).toBe(false);
-		expect(can('volunteer', 'dashboard', 'read')).toBe(false);
 	});
 
 	test('only admin carries the built-in user-management statements', () => {

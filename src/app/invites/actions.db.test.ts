@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { db, invite } from '@/db';
 import { volunteerBalance } from '@/lib/invites';
 import { redirectTo } from '@/test/next';
+import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/email';
 import { signInAs } from '@/test/session';
 import {
 	failLedgerInserts,
@@ -21,18 +22,6 @@ vi.mock('@/lib/email/transport', () => ({ sendEmail }));
 import { cancelInvite, sendInvite } from './actions';
 
 const GRACE = 'U_GRACE';
-
-const SENT = { ok: true };
-const NOT_SENT = {
-	ok: false,
-	definitelyNotSent: true,
-	message: 'The mail server rejected ada@example.test.',
-};
-const MAYBE_SENT = {
-	ok: false,
-	definitelyNotSent: false,
-	message: 'Connection timed out.',
-};
 
 async function volunteerWithBalance(balance: number) {
 	await insertVolunteer({ slackUserId: GRACE, name: 'Grace Hopper' });

@@ -11,7 +11,6 @@ import { isId } from '@/db/ids';
 import {
 	DEFAULT_ROLE,
 	GRANTABLE_ROLE_NAMES,
-	grantedRoles,
 	parseRoles,
 	roles as ROLE_DEFINITIONS,
 	serialiseRoles,
@@ -19,10 +18,8 @@ import {
 } from '@/lib/permissions';
 import type { ActionResult } from '@/lib/actionResult';
 
-export type AdminActionResult = ActionResult;
-
 function isRoleName(value: string): value is RoleName {
-	return value in ROLE_DEFINITIONS && value !== DEFAULT_ROLE;
+	return Object.hasOwn(ROLE_DEFINITIONS, value) && value !== DEFAULT_ROLE;
 }
 
 /**
@@ -39,7 +36,7 @@ function preserveUngrantedRoles(
 	current: string | null | undefined,
 	requested: RoleName[],
 ): RoleName[] {
-	const kept = grantedRoles(current).filter(
+	const kept = parseRoles(current).filter(
 		(role) => !GRANTABLE_ROLE_NAMES.has(role),
 	);
 	return [...new Set([...requested, ...kept])];
@@ -74,18 +71,11 @@ function revalidate() {
 	revalidatePath('/admin');
 }
 
-/**
- * Replace someone's roles outright.
- *
- * Roles live comma-separated in `user.role`; `serialiseRoles` is the only place
- * that encoding is written, and it collapses an empty selection back to the
- * default role rather than leaving a null the admin plugin would have to guess
- * about.
- */
+/** Replace someone's roles outright; `serialiseRoles` owns the encoding. */
 export async function setUserRoles(
 	userId: string,
 	next: string[],
-): Promise<AdminActionResult> {
+): Promise<ActionResult> {
 	const session = await requirePermission('admins', 'manage');
 
 	const validated = validateRoles(next);
@@ -151,7 +141,7 @@ export async function setUserRoles(
 export async function grantPendingAccess(
 	slackUserId: string,
 	next: string[],
-): Promise<AdminActionResult> {
+): Promise<ActionResult> {
 	const session = await requirePermission('admins', 'manage');
 
 	const validated = validateRoles(next);
@@ -214,11 +204,9 @@ export async function grantPendingAccess(
 export async function setPendingGrantRoles(
 	grantId: string,
 	next: string[],
-): Promise<AdminActionResult> {
+): Promise<ActionResult> {
 	await requirePermission('admins', 'manage');
 
-	// Postgres raises 22P02 on a malformed literal against a uuid column, so an
-	// unchecked id throws rather than matching nothing. See docs/adr/0008.
 	if (!isId(grantId)) {
 		return {
 			ok: false,
@@ -278,7 +266,7 @@ export async function setPendingGrantRoles(
  */
 export async function revokePendingGrant(
 	grantId: string,
-): Promise<AdminActionResult> {
+): Promise<ActionResult> {
 	await requirePermission('admins', 'manage');
 
 	if (!isId(grantId)) {
@@ -307,7 +295,7 @@ export async function revokePendingGrant(
 	 * Grant carrying `volunteer` belongs to a `volunteer` row created in the
 	 * same transaction; deleting it here would leave that row behind.
 	 */
-	const ungranted = grantedRoles(grant.role).filter(
+	const ungranted = parseRoles(grant.role).filter(
 		(role) => !GRANTABLE_ROLE_NAMES.has(role),
 	);
 

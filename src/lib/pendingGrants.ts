@@ -1,7 +1,7 @@
 import { and, eq, isNull } from 'drizzle-orm';
 
 import { db, pendingGrant, user, volunteer, type Database } from '@/db';
-import { grantedRoles, serialiseRoles, type RoleName } from '@/lib/permissions';
+import { parseRoles, serialiseRoles, type RoleName } from '@/lib/permissions';
 
 /**
  * Pending Grants: a Role assigned to a Slack member id before that person has
@@ -39,14 +39,14 @@ type Transaction = Parameters<Parameters<Database['transaction']>[0]>[0];
 
 /** Add `volunteer` to whatever someone already holds, without dropping any of it. */
 export function withVolunteerRole(current: string | null | undefined): string {
-	const held = grantedRoles(current);
+	const held = parseRoles(current);
 	return serialiseRoles([...new Set<RoleName>([...held, 'volunteer'])]);
 }
 
 export function withoutVolunteerRole(
 	current: string | null | undefined,
 ): string {
-	return serialiseRoles(grantedRoles(current).filter((r) => r !== 'volunteer'));
+	return serialiseRoles(parseRoles(current).filter((r) => r !== 'volunteer'));
 }
 
 /**
@@ -125,16 +125,10 @@ export async function grantVolunteerRole(
 
 /**
  * Copy the Slack member id onto the user and apply whatever was pre-provisioned
- * for it.
+ * for it. Called from `databaseHooks.account.create.after` (docs/adr/0009).
  *
- * Called from `databaseHooks.account.create.after`, not from the user hook: the
- * Slack member id only exists on the account, and a field Better Auth declares
- * `input: false` cannot be filled by `mapProfileToUser` — the same reason `role`
- * has never been set there either.
- *
- * Deliberately never throws. A failed claim must not fail sign-in; the grant is
- * left unclaimed, and `listAccessRows()` surfaces the person anyway so a
- * maintainer can set their roles by hand.
+ * Deliberately never throws: a failed claim must not fail sign-in. The grant
+ * stays unclaimed and `listAccessRows()` surfaces the person anyway.
  */
 export async function claimPendingGrant(account: {
 	providerId: string;
@@ -160,7 +154,7 @@ export async function claimPendingGrant(account: {
 			 * environment variable, or from a grant that predates that decision —
 			 * would be a silent demotion.
 			 */
-			const holdsNothing = grantedRoles(existing.role).length === 0;
+			const holdsNothing = parseRoles(existing.role).length === 0;
 
 			let roleUpdate: RoleUpdate | null = null;
 			let claimedGrantId: string | null = null;

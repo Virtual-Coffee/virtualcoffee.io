@@ -1,4 +1,3 @@
-import { createHash, randomBytes } from 'crypto';
 import { desc, eq, sql } from 'drizzle-orm';
 
 import {
@@ -14,34 +13,21 @@ import type {
 	InviteStatus,
 	Volunteer,
 } from '@/db/schema';
+import { hashToken, newToken } from '@/lib/tokens';
 
 /**
  * How long a Claim Link lives. After this the daily job marks the Invite
  * `expired` and gives the Volunteer their allowance back.
  */
-export const CLAIM_TOKEN_TTL_DAYS = 90;
+const CLAIM_TOKEN_TTL_DAYS = 90;
 
-export function hashClaimToken(token: string): string {
-	return createHash('sha256').update(token).digest('hex');
-}
-
-export function newClaimToken(): { token: string; expiresAt: Date } {
-	return {
-		token: randomBytes(32).toString('base64url'),
-		expiresAt: new Date(
-			Date.now() + CLAIM_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000,
-		),
-	};
-}
+export const hashClaimToken = hashToken;
+export const newClaimToken = () => newToken(CLAIM_TOKEN_TTL_DAYS);
 
 /**
- * Statuses that make an email ineligible for an Invite.
- *
- * `lapsed`, `declined` and `withdrawn` are deliberately absent. `lapsed` means
- * nobody ever decided — the Airtable import alone put roughly 1,378 rows into
- * it — and treating that as a veto would make about fourteen hundred people
- * permanently un-invitable on the strength of a decision that was never made.
- * See docs/adr/0004 for why the word means what it means.
+ * Statuses that make an email ineligible for an Invite. `lapsed`, `declined`
+ * and `withdrawn` are deliberately absent — `lapsed` in particular means
+ * nobody ever decided (see `applicationStatus`).
  */
 const BLOCKING_STATUSES: ApplicationStatus[] = [
 	'waitlisted',
@@ -115,14 +101,8 @@ export async function inviteForClaimToken(token: string): Promise<{
 	};
 }
 
-/**
- * Reading a Volunteer's Invite Allowance and the Invites they have sent.
- *
- * Everything here keys on the Slack member id rather than a user id, because a
- * Volunteer can hold a balance before they have ever signed in. See
- * `docs/adr/0009` for why that is the identifier, and `docs/adr/0011` for why
- * the balance is a sum rather than a stored number.
- */
+// Keyed on the Slack member id, because a Volunteer can hold a balance before
+// they have signed in (docs/adr/0009); the balance is a sum (docs/adr/0011).
 
 /** How many Invites this Volunteer may give out right now. */
 export async function volunteerBalance(slackUserId: string): Promise<number> {

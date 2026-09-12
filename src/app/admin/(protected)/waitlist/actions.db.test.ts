@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, inviteToken, user } from '@/db';
 import { NOT_FOUND } from '@/test/next';
+import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/email';
 import { signInAs } from '@/test/session';
 import {
 	applicationEvents,
@@ -23,18 +24,6 @@ import {
 	sendCoffeeInvite,
 	withdrawApplication,
 } from './actions';
-
-const SENT = { ok: true };
-const NOT_SENT = {
-	ok: false,
-	definitelyNotSent: true,
-	message: 'The mail server rejected ada@example.test.',
-};
-const MAYBE_SENT = {
-	ok: false,
-	definitelyNotSent: false,
-	message: 'Connection timed out.',
-};
 
 beforeEach(() => {
 	sendEmail.mockReset();

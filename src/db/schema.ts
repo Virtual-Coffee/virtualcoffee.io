@@ -39,14 +39,9 @@ export const user = pgTable('user', {
 	roleGrantedBy: text('role_granted_by'),
 	roleGrantedAt: timestamp('role_granted_at', { withTimezone: true }),
 	/**
-	 * Ours: the Slack member id, copied from `account.account_id` the first time
-	 * a Slack account is linked (see `claimPendingGrant`). Declared to Better
-	 * Auth as an `input: false` additional field, so nothing user-facing can
-	 * write it — only our own Drizzle writes do.
-	 *
-	 * It duplicates `account.account_id` on purpose: matching a Pending Grant
-	 * and answering "has this Slack member signed in?" are both single-table
-	 * lookups because of it, on a column that is unique and indexed.
+	 * Ours: the Slack member id, copied from `account.account_id` by
+	 * `claimPendingGrant()`. Declared to Better Auth as `input: false`, so only
+	 * our own Drizzle writes can set it. See docs/adr/0009.
 	 */
 	slackUserId: text('slack_user_id').unique(),
 	createdAt: timestamp('created_at', { withTimezone: true })
@@ -329,49 +324,22 @@ export const volunteerLedgerReason = pgEnum('volunteer_ledger_reason', [
 ]);
 
 /**
- * Someone trusted to give out Invites.
- *
- * Keyed on the Slack member id for the same reason `pending_grant` is (see
- * docs/adr/0009): a Volunteer can be designated — and carry an imported balance
- * — before they have ever signed in, and the Slack member id is the only
- * identifier that exists at that point and still matches at sign-in.
- *
- * This table is deliberately mutable while `volunteer_invite_ledger` is
- * append-only. Identity and accounting are different concerns: a display name
- * gets re-snapshotted, a `user_id` is backfilled at first sign-in, someone is
- * deactivated and later comes back — none of which should be expressible as a
- * movement of invites.
- *
- * Whether a Volunteer may *spend* is not stored here at all: that is the
- * `volunteer` role in `user.role`, and nothing else.
+ * Someone trusted to give out Invites. Keyed on the Slack member id because a
+ * Volunteer can be designated before they have signed in (docs/adr/0009).
+ * Mutable, unlike the ledger: identity and accounting are different concerns.
+ * Whether they may *spend* is the `volunteer` role in `user.role`, not here.
  */
 export const volunteer = pgTable('volunteer', {
 	id: uuid('id').primaryKey().$defaultFn(newId),
 	slackUserId: text('slack_user_id').notNull().unique(),
-	/**
-	 * Snapshotted at designation, not looked up on render — the same trade
-	 * `pending_grant` makes, and for the same reasons: the roster has to be
-	 * readable when Slack is unreachable and on a clone that only has mocks, and
-	 * someone who has left the workspace would otherwise render as a bare
-	 * `U0123ABCD`. A later rename goes unnoticed until someone re-syncs.
-	 */
+	/** Snapshotted, the same trade as `pending_grant.slack_display_name`. */
 	slackDisplayName: text('slack_display_name').notNull(),
 	slackHandle: text('slack_handle'),
 	/** Backfilled by `claimPendingGrant()` the first time they sign in. */
 	userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
 	/**
-	 * Where to write to them, and the reason this is not just read off `user`.
-	 *
-	 * A Volunteer can be designated long before they sign in — that is what
-	 * Pending Grants are for — so for most of the roster there is no `user` row
-	 * to join to. Without an address of its own, the two emails this feature
-	 * sends ("you can now give out invites", "you have another one this month")
-	 * would reach only the people who least need telling.
-	 *
-	 * Nullable because Slack's directory does not carry one without the
-	 * `users:read.email` scope, so a Volunteer added from the picker may have
-	 * none until someone types it. The Airtable import fills it in for the 91
-	 * rows it brings across.
+	 * Not read off `user`: most of the roster has no `user` row yet. Nullable
+	 * because Slack's directory omits it without the `users:read.email` scope.
 	 */
 	email: text('email'),
 	/**
@@ -442,14 +410,10 @@ export const volunteerInviteLedger = pgTable(
 			.on(table.slackUserId, table.periodKey)
 			.where(sql`reason = 'monthly_accrual'`),
 		/**
-		 * An Invite is charged exactly once and refunded at most once.
-		 *
-		 * Two indexes rather than one over (invite_id, reason), which was the first
-		 * attempt and was wrong: it permits a `refund_cancelled` *and* a
-		 * `refund_expired` for the same Invite, which nets the Volunteer an extra
-		 * invite out of nothing. Grouping both refund reasons under one index is
-		 * what actually says "at most once". The status guards in the cancel and
-		 * expiry paths make it hard to reach; these make it impossible.
+		 * An Invite is charged exactly once and refunded at most once. One index
+		 * over (invite_id, reason) would allow a `refund_cancelled` *and* a
+		 * `refund_expired` for the same Invite; grouping both refund reasons is
+		 * what says "at most once". See docs/adr/0011.
 		 */
 		uniqueIndex('volunteer_invite_ledger_spend_idx')
 			.on(table.inviteId)
@@ -474,10 +438,8 @@ export type InviteStatus = (typeof inviteStatus.enumValues)[number];
 export const membershipApplication = pgTable(
 	'membership_application',
 	{
-		// Two identifiers, deliberately. `id` is opaque because it appears in
-		// /admin URLs; `reference` is the number the detail screen shows
-		// ("Application 1842") and maintainers refer to out loud. Never put
-		// `reference` in a URL — it is the guessable one. See docs/adr/0008.
+		// `id` is opaque because it appears in /admin URLs; `reference` is the
+		// number the screen shows. Never put `reference` in a URL. See docs/adr/0008.
 		id: uuid('id').primaryKey().$defaultFn(newId),
 		reference: integer('reference').notNull().generatedAlwaysAsIdentity(),
 		status: applicationStatus('status').notNull().default('waitlisted'),
@@ -628,11 +590,9 @@ export const submissionEventType = pgEnum('submission_event_type', [
  * on the resulting table.
  */
 const submissionColumns = {
-	// `id` is opaque because it appears in /admin URLs; `reference` is the number
-	// the detail screen shows ("CoC Report 42"). Never put `reference` in a URL.
-	// Unlike `airtableRecordId` below, an identity column is safe to spread: the
-	// sequence name is derived per table at generate time, not once on the
-	// builder. See docs/adr/0008.
+	// Same pair as `membership_application`. Unlike `airtableRecordId` below,
+	// an identity column is safe to spread: the sequence name is derived per
+	// table at generate time, not once on the builder.
 	id: uuid('id').primaryKey().$defaultFn(newId),
 	reference: integer('reference').notNull().generatedAlwaysAsIdentity(),
 	status: submissionStatus('status').notNull().default('new'),

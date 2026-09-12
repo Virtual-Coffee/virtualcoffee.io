@@ -11,7 +11,8 @@ import {
 	SUBMISSION_KINDS,
 } from '@/lib/submissions';
 import { formatDateTime } from '../../../presentation';
-import { SubmissionNoteComposer } from '../noteComposer';
+import { NoteComposer } from '../../../noteComposer';
+import { addSubmissionNote } from '../actions';
 import { SubmissionStatusBadge } from '../presentation';
 import { StatusControl } from '../statusControl';
 import { HistoryTimeline } from './historyTimeline';
@@ -48,13 +49,11 @@ export default async function SubmissionDetailPage({
 		'manage',
 	);
 
-	// Checked before the query: a malformed literal against a uuid column raises.
-	const submissionId = id;
-	if (!isId(submissionId)) notFound();
+	if (!isId(id)) notFound();
 
 	const [submission, history] = await Promise.all([
-		getSubmission(kind, submissionId),
-		getSubmissionHistory(kind, submissionId),
+		getSubmission(kind, id),
+		getSubmissionHistory(kind, id),
 	]);
 
 	if (!submission) notFound();
@@ -131,7 +130,9 @@ export default async function SubmissionDetailPage({
 					<HistoryTimeline history={history} />
 
 					{canManage && (
-						<SubmissionNoteComposer kind={kind} id={submission.id} />
+						<NoteComposer
+							onSubmit={addSubmissionNote.bind(null, kind, submission.id)}
+						/>
 					)}
 				</div>
 			</div>

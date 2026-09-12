@@ -4,27 +4,23 @@ import {
 	type SubmissionEventType,
 	type SubmissionStatus,
 } from '@/db';
-import type { SubmissionKind } from '@/lib/submissions';
-import { SUBMISSION_KINDS } from '@/lib/submissions';
+import {
+	SUBMISSION_KINDS,
+	type SubmissionEventKey,
+	type SubmissionKind,
+} from '@/lib/submissions';
+import type { NotifyResult } from '@/lib/slack/notify';
 
 /**
- * The event-writing half of a Submission, shared by all four forms.
- *
- * Which foreign key to set is the only thing that varies, and getting it wrong
- * trips the `submission_event_exactly_one_subject` CHECK rather than writing a
- * bad row.
+ * The event-writing half of a Submission, shared by all four forms. Which
+ * foreign key to set is the only thing that varies; the wrong one trips the
+ * `submission_event_exactly_one_subject` CHECK rather than writing a bad row.
  */
-function subjectColumn(kind: SubmissionKind, id: string) {
-	switch (kind) {
-		case 'coc':
-			return { cocReportId: id };
-		case 'volunteers':
-			return { volunteerSignupId: id };
-		case 'lunch-and-learn':
-			return { lunchAndLearnIdeaId: id };
-		case 'coffee-tables':
-			return { coffeeTableGroupRequestId: id };
-	}
+function subjectColumn(
+	kind: SubmissionKind,
+	id: string,
+): Partial<Record<SubmissionEventKey, string>> {
+	return { [SUBMISSION_KINDS[kind].eventKey]: id };
 }
 
 export async function recordSubmissionEvent(input: {
@@ -48,32 +44,24 @@ export async function recordSubmissionEvent(input: {
 		});
 }
 
-export type NotifyOutcome =
-	{ ok: true; detail: string } | { ok: false; detail: string };
-
 /**
- * Announce a Submission, and record what happened either way.
- *
- * Called *after* the row is committed. The ordering is deliberate and inverts
- * the "send first, then write" rule CLAUDE.md states for admin actions: that
- * rule exists so an applicant is never emailed twice, whereas here the risk
- * runs the other way and losing a CoC report because Slack was unreachable is
- * the worse failure. A failure is therefore recorded and surfaced, never
- * raised. See docs/adr/0005.
+ * Announce a Submission, and record what happened either way. Called *after*
+ * the row is committed — persist first, notify second — and never throws.
+ * See docs/adr/0005.
  */
 export async function notifyAndRecord(
 	kind: SubmissionKind,
 	submissionId: string,
-	notify: () => Promise<NotifyOutcome>,
+	notify: () => Promise<NotifyResult>,
 ): Promise<void> {
-	let outcome: NotifyOutcome;
+	let outcome: NotifyResult;
 
 	try {
 		outcome = await notify();
 	} catch (error) {
 		outcome = {
 			ok: false,
-			detail:
+			message:
 				error instanceof Error
 					? error.message
 					: 'The notification threw unexpectedly.',
@@ -85,7 +73,7 @@ export async function notifyAndRecord(
 			kind,
 			submissionId,
 			type: outcome.ok ? 'notification_sent' : 'notification_failed',
-			body: outcome.detail,
+			body: outcome.message,
 		});
 	} catch (error) {
 		// The submission itself is safe; only the audit line was lost.

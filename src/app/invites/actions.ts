@@ -33,48 +33,6 @@ const schema = z.object({
 });
 
 /**
- * The exact email that will go out, for the confirmation dialog.
- *
- * The waitlist screens render their templates on the server and hand them down
- * as props, because the recipient is already known. Here the Volunteer types
- * the invitee's name, so the text cannot exist until they have — this is the
- * same idea reached by a round trip rather than a prop.
- *
- * The Claim Link is shown elided. The real token is minted at send time and
- * would be a working invite sitting in a dialog nobody has confirmed yet.
- */
-export async function previewInvite(
-	rawName: string,
-	rawEmail: string,
-): Promise<
-	| { ok: true; to: string; subject: string; text: string }
-	| { ok: false; message: string }
-> {
-	const { session } = await requireVolunteer();
-
-	const parsed = schema.safeParse({ name: rawName, email: rawEmail });
-	if (!parsed.success) {
-		return {
-			ok: false,
-			message: parsed.error.issues[0]?.message ?? 'Please check the form.',
-		};
-	}
-
-	const template = volunteerInviteEmail(
-		session.user.name || 'A Virtual Coffee volunteer',
-		parsed.data.name,
-		`${siteUrl()}/join?invite=…`,
-	);
-
-	return {
-		ok: true,
-		to: parsed.data.email,
-		subject: template.subject,
-		text: template.text,
-	};
-}
-
-/**
  * Send an Invite.
  *
  * The write has to come first: the Claim Link carries a token that must exist
@@ -270,8 +228,6 @@ export async function cancelInvite(
 	const { session, slackUserId } = await requireVolunteer();
 	const actor = await actorId(session.user.id);
 
-	// Postgres raises 22P02 on a malformed literal against a uuid column, so an
-	// unchecked id throws rather than matching nothing. See docs/adr/0008.
 	if (!isId(inviteId)) {
 		return {
 			ok: false,

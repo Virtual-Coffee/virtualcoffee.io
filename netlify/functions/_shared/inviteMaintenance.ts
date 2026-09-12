@@ -8,18 +8,15 @@ import {
 	volunteerInviteLedger,
 } from '../../../src/db/index.ts';
 import { volunteerAccrualEmail } from '../../../src/lib/email/templates.ts';
+import { volunteerBalance } from '../../../src/lib/invites.ts';
 import { sendEmail } from '../../../src/lib/email/transport.ts';
 import { siteUrl } from '../../../src/util/url.server.ts';
 
 /**
  * The daily upkeep behind Volunteer Invites: accrue this month's Invite, expire
- * Claim Links nobody used, and tell Volunteers what they have.
- *
- * Lives under `netlify/functions/_shared/` rather than in `src/lib/` so it can
- * be imported by both the scheduled function and a local script with plain
- * relative paths. Nothing under `netlify/` uses the `@/` alias, and there is no
- * evidence it resolves inside a bundled function — the edge function reaches
- * into `src/` the same way, with an explicit `.ts` extension.
+ * Claim Links nobody used, and tell Volunteers what they have. Lives under
+ * `_shared/` with relative `.ts` imports because the `@/` alias is not known
+ * to resolve inside a bundled function.
  */
 
 export type MaintenanceReport = {
@@ -36,18 +33,11 @@ export function periodKey(now: Date): string {
 }
 
 /**
- * Give every active Volunteer this month's Invite.
- *
- * Written as "ensure this month's row exists" rather than "run on the 1st", so
- * the job is self-healing: a run that fails or is skipped on the 1st is made
- * good by the next day's, and running it ten times over changes nothing. The
- * partial unique index on (slack_user_id, period_key) for `monthly_accrual`
- * rows is what makes that true — `onConflictDoNothing` is leaning on the
- * database, not hoping.
- *
- * Volunteers with `deactivated_at` set are skipped. Without that, someone who
- * stepped back two years ago quietly banks twenty-four invites and returns
- * holding a supply nobody reviewed.
+ * Give every active Volunteer this month's Invite. "Ensure this month's row
+ * exists", not "run on the 1st": the partial unique index on
+ * (slack_user_id, period_key) makes `onConflictDoNothing` idempotent.
+ * Deactivated Volunteers are skipped, or someone who stepped back two years
+ * ago would return holding twenty-four invites nobody reviewed.
  */
 async function accrue(now: Date): Promise<string[]> {
 	const period = periodKey(now);
@@ -145,18 +135,11 @@ async function expire(now: Date): Promise<number> {
 }
 
 /**
- * Tell the Volunteers who accrued something what they now hold.
- *
- * Prefers the address on the roster over the one on the `user` row. Most
- * Volunteers are pre-provisioned by Slack member id and have never signed in,
- * so a `user` row is the exception rather than the rule — the Airtable import
- * fills `volunteer.email` in for all 91. A Volunteer with neither is skipped
- * and sees the balance the first time they visit.
- *
- * A failure here is logged and swallowed. The accrual has already happened and
- * is the thing that matters; failing the run would only mean the next day's
- * tries to write a row the unique index refuses, and reports an error for
- * something that already succeeded.
+ * Tell the Volunteers who accrued something what they now hold. Prefers the
+ * roster address over the `user` row's (most have never signed in); one with
+ * neither is skipped. A failure is logged and swallowed — the accrual already
+ * happened, and failing the run would only make tomorrow's report an error
+ * for something that succeeded.
  */
 async function notify(slackUserIds: string[]): Promise<{
 	emailed: number;
@@ -181,30 +164,13 @@ async function notify(slackUserIds: string[]): Promise<{
 				.where(eq(volunteer.slackUserId, slackUserId))
 				.limit(1);
 
-			/**
-			 * A separate query rather than a subquery beside the row above.
-			 *
-			 * An inline correlated subquery has to be raw `sql`, and drizzle renders
-			 * an interpolated column unqualified — `volunteer` and
-			 * `volunteer_invite_ledger` share a `slack_user_id`, so the inner one
-			 * shadows the outer, the predicate is always true, and every Volunteer
-			 * would be emailed the sum of the whole ledger. This runs once per
-			 * Volunteer who actually accrued, which is a handful a month.
-			 */
-			const [totals] = await database
-				.select({
-					total: sql<string | null>`sum(${volunteerInviteLedger.delta})`,
-				})
-				.from(volunteerInviteLedger)
-				.where(eq(volunteerInviteLedger.slackUserId, slackUserId));
-
 			if (!row) continue;
 			const address = row.email ?? row.accountEmail;
 			if (!address) continue;
 
 			const template = volunteerAccrualEmail(
 				row.name,
-				Number(totals?.total ?? 0),
+				await volunteerBalance(slackUserId),
 				`${siteUrl()}/invites`,
 			);
 

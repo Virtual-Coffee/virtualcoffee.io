@@ -1,33 +1,17 @@
 /**
- * Slack notifications for inbound Submissions.
- *
- * These replace four Airtable automations that fired on record creation and
- * posted into specific channels. Airtable was never just storage: it was the
- * only thing telling maintainers a CoC report had arrived. Moving the data
- * without moving the notification would have made those reports land silently.
- *
- * Incoming webhooks rather than a bot token: each one is bound to the channel
- * it was created for, so there is no channel ID in the code and no bot to
- * invite to the two private groups. The channels the automations posted to were
- * #lunch-and-learn (C022SHKKQG2) and three private groups.
+ * Slack notifications for inbound Submissions. Incoming webhooks rather than a
+ * bot token: each is bound to its channel, so no channel id lives in the code
+ * and no bot needs inviting to the private groups.
  */
 
-export type NotifyResult =
-	| { ok: true }
-	| { ok: false; skipped: true; message: string }
-	| { ok: false; skipped?: false; message: string };
+/** What happened, in a sentence — recorded as the event body either way. */
+export type NotifyResult = { ok: boolean; message: string };
 
 /**
  * One webhook per destination, so a missing one only silences its own form.
- *
- * The first four are the Submission kinds and share their keys with
- * `SUBMISSION_KINDS`. `membership` is not a Submission kind — it is the
- * membership pipeline, which had no Slack notification at all until Volunteer
- * Invites needed one. It is named for the pipeline rather than for invites so
- * the next thing the queue wants to announce does not need a sixth variable.
- * Reach it through `notifySlack` directly: `notifyAndRecord` is keyed on
- * `SubmissionKind` and records into `submission_event`, which is the wrong table
- * for an application.
+ * The first four share their keys with `SUBMISSION_KINDS`. `membership` is
+ * the membership pipeline, not a Submission kind: reach it through
+ * `notifySlack` directly, since `notifyAndRecord` writes `submission_event`.
  */
 const WEBHOOK_ENV = {
 	coc: 'SLACK_WEBHOOK_COC',
@@ -39,19 +23,11 @@ const WEBHOOK_ENV = {
 
 export type NotifyChannel = keyof typeof WEBHOOK_ENV;
 
-export function slackConfigured(channel: NotifyChannel): boolean {
-	return Boolean(process.env[WEBHOOK_ENV[channel]]);
-}
-
 const TIMEOUT_MS = 10_000;
 
 /**
- * Post a message, returning rather than throwing.
- *
- * Callers have already written the submission to the database by this point, so
- * a failure here must never propagate — losing a CoC report because Slack was
- * unreachable is far worse than a report nobody was pinged about. The caller
- * records the outcome as an event either way. See docs/adr/0005.
+ * Post a message, returning rather than throwing: the submission is already
+ * written, and the caller records the outcome either way. See docs/adr/0005.
  */
 export async function notifySlack(
 	channel: NotifyChannel,
@@ -62,7 +38,6 @@ export async function notifySlack(
 	if (!url) {
 		return {
 			ok: false,
-			skipped: true,
 			message: `${WEBHOOK_ENV[channel]} is not set, so nothing was posted to Slack.`,
 		};
 	}
@@ -86,7 +61,7 @@ export async function notifySlack(
 			};
 		}
 
-		return { ok: true };
+		return { ok: true, message: 'Posted to Slack.' };
 	} catch (error) {
 		return {
 			ok: false,

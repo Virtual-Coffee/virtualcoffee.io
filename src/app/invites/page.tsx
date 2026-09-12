@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { SignOutButton } from '@/app/admin/sign-in/buttons';
 import { getVolunteer, listInvitesFor, volunteerBalance } from '@/lib/invites';
 import { requireVolunteer } from '@/lib/volunteerAccess';
+import { siteUrl } from '@/util/url.server';
 import { CancelInviteButton } from './cancelButton';
 import { formatDate, InviteStatusBadge } from './presentation';
 import { SendInviteForm } from './sendForm';
@@ -67,7 +68,13 @@ export default async function InvitesPage() {
 						</div>
 					</div>
 
-					{volunteer && <SendInviteForm balance={balance} />}
+					{volunteer && (
+						<SendInviteForm
+							balance={balance}
+							inviterName={session.user.name || 'A Virtual Coffee volunteer'}
+							claimUrlPreview={`${siteUrl()}/join?invite=…`}
+						/>
+					)}
 				</div>
 
 				<div className="col-lg-7">

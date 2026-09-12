@@ -1,12 +1,7 @@
 import type { InviteStatus, VolunteerLedgerReason } from '@/db/schema';
 
-/**
- * The admin vocabulary for Invites and ledger movements.
- *
- * A sibling of the volunteer-facing `/invites/presentation.tsx`, not a shared
- * module with it, and deliberately blunter: a maintainer wants the real state,
- * where a Volunteer gets a softened one. "Applied" there is "Claimed" here.
- */
+// The admin vocabulary for Invites and ledger movements — blunter than the
+// Volunteer's own in `/invites/presentation.tsx`, on purpose.
 const INVITE_LABELS: Record<InviteStatus, string> = {
 	pending: 'Unclaimed',
 	accepted: 'Claimed',

@@ -97,12 +97,8 @@ export async function submitLunchAndLearnIdea(
 		};
 	}
 
-	/**
-	 * The GitHub issue is the artefact maintainers actually work from, and the
-	 * Slack message links it — so the issue is created first and its URL is
-	 * threaded into the message, exactly as the Airtable automation did.
-	 * Neither failing loses the idea.
-	 */
+	// The issue is created first so the Slack message can link it; neither
+	// failing loses the idea.
 	await notifyAndRecord('lunch-and-learn', ideaId, async () => {
 		const issue = await createLunchAndLearnIssue(idea);
 
@@ -123,12 +119,12 @@ export async function submitLunchAndLearnIdea(
 		);
 
 		if (issue.ok && slack.ok) {
-			return { ok: true, detail: `Posted to Slack, opened ${issue.url}` };
+			return { ok: true, message: `Posted to Slack, opened ${issue.url}` };
 		}
 
 		return {
 			ok: false,
-			detail: [
+			message: [
 				issue.ok ? `Opened ${issue.url}` : issue.message,
 				slack.ok ? 'Posted to Slack.' : slack.message,
 			].join(' '),

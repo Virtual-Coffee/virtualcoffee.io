@@ -15,16 +15,8 @@ export const metadata = {
 };
 
 /**
- * Sign-in for /invites.
- *
- * A near-twin of /admin/sign-in, and separate from it on purpose. That page
- * begins `if (!adminRoutesEnabled()) notFound()`, which 404s the whole admin
- * tree on deploy previews — so routing Volunteers through it would make this
- * feature unreviewable before production. It also greets people as maintainers,
- * which a Volunteer is not.
- *
- * The sign-in flow itself is shared: the same button, the same Slack provider,
- * the same callback handler. Only the destination differs.
+ * Sign-in for /invites. Separate from /admin/sign-in, which 404s on deploy
+ * previews via `adminRoutesEnabled()`; the Slack flow itself is shared.
  */
 export default async function VolunteerSignInPage({
 	searchParams,

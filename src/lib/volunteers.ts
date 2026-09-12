@@ -9,13 +9,7 @@ import {
 } from '@/db';
 import type { InviteStatus, VolunteerLedgerReason } from '@/db/schema';
 
-/**
- * The roster behind /admin/volunteers.
- *
- * Reading side only — the writes live in that screen's `actions.ts`, which has
- * to re-check its own permission anyway (docs/adr/0006) and would gain nothing
- * from being one import further away.
- */
+/** The roster behind /admin/volunteers — reads only; writes are in its `actions.ts`. */
 
 export type VolunteerRow = {
 	id: string;
@@ -32,24 +26,14 @@ export type VolunteerRow = {
 };
 
 /**
- * Every Volunteer with their balance and how many Invites they have sent, in
- * one query.
+ * Every Volunteer with their balance and sent count, in one query.
  *
- * The two aggregates are **pre-aggregated subqueries joined on**, not
- * correlated subqueries written inline. That is not a style preference:
- *
- *   - A correlated subquery has to be spelled in raw `sql`, and drizzle renders
- *     an interpolated column *unqualified*. `volunteer` and
- *     `volunteer_invite_ledger` both have a `slack_user_id`, so
- *     `where ${ledger.slackUserId} = ${volunteer.slackUserId}` becomes
- *     `where "slack_user_id" = "slack_user_id"` — the inner column shadows the
- *     outer one, the predicate is always true, and every Volunteer is handed
- *     the sum of the entire ledger. It reads correctly and is silently wrong.
- *   - Joining the *tables* directly would be wrong a different way: two
- *     one-to-many joins at once multiply the rows and inflate both aggregates.
- *
- * Grouping first fixes both. Each subquery is already one row per Slack member,
- * so the joins cannot fan out, and drizzle aliases them so nothing is shadowed.
+ * The aggregates are pre-grouped subqueries joined on, not inline correlated
+ * subqueries: drizzle renders an interpolated column in raw `sql` unqualified,
+ * and both tables have a `slack_user_id`, so `where "slack_user_id" =
+ * "slack_user_id"` is always true and every Volunteer gets the whole ledger's
+ * sum. Joining the tables directly would fan out instead. Grouping first
+ * avoids both.
  */
 export async function listVolunteers(): Promise<VolunteerRow[]> {
 	const database = db();
@@ -156,19 +140,11 @@ export type AdminInviteRow = {
 };
 
 /**
- * Invites this Volunteer has sent, and where each one led.
- *
- * Unlike the Volunteer's own view this is not narrowed for privacy — a
- * maintainer can already open the application itself, which is the point of
- * joining it on here.
- *
- * The join runs from `membership_application.invite_id`, which is the direction
- * the foreign key points: an application knows the Invite it came from, not the
- * other way round. Nothing stops two applications naming one Invite — the
- * column has no unique constraint, and the Airtable import sets it from a
- * `from_invite_id` this codebase never wrote — so the rows are deduplicated
- * rather than trusted to be one-to-one. A fan-out would otherwise list the same
- * Invite twice.
+ * Invites this Volunteer has sent, and where each one led. Not narrowed for
+ * privacy like the Volunteer's own view — a maintainer can open the
+ * application anyway. `membership_application.invite_id` has no unique
+ * constraint (the Airtable import sets it), so rows are deduplicated rather
+ * than trusted to be one-to-one.
  */
 export async function volunteerInvites(
 	slackUserId: string,

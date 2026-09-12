@@ -11,11 +11,7 @@ const WAITLIST_SECTIONS = [
 	{ href: '/admin/waitlist/archive', label: 'Archive' },
 ] as const;
 
-/**
- * The four Submission kinds, each gated on its own permission. A volunteer who
- * holds one of them sees a dropdown with one item rather than a dropdown that
- * advertises three sections they cannot open.
- */
+// The four Submission kinds, each gated on its own permission.
 const SUBMISSION_SECTIONS = [
 	{ href: '/admin/submissions/coc', label: 'CoC reports', section: 'coc' },
 	{
@@ -40,13 +36,9 @@ const SUBMISSION_SECTIONS = [
 }>;
 
 /**
- * A dropdown whose open/close is hand-rolled — see `useDropdown`.
- *
- * Without Popper there is no `data-bs-popper` attribute and therefore no
- * `top: 100%` rule; the menu lands under the toggle because an absolutely
- * positioned box with `auto` offsets sits at its static position, which is
- * directly below the button it follows in the markup. Nothing clips it here,
- * unlike the User Management table's menu.
+ * A dropdown whose open/close is hand-rolled (`useDropdown`). Without Popper
+ * there is no `top: 100%` rule; the menu sits at its static position, which
+ * is directly below the toggle.
  */
 function NavDropdown({
 	label,
@@ -97,12 +89,7 @@ function NavDropdown({
 	);
 }
 
-/**
- * The section nav is a client component because the layout rendering it is an
- * async server component — it awaits the session — and marking the current
- * section needs `usePathname()`. The layout passes down which sections the
- * viewer may see; this component never decides that for itself.
- */
+/** Client-side for `usePathname()`; the layout decides which sections to pass. */
 export function AdminNav({ sections }: { sections: readonly Section[] }) {
 	const pathname = usePathname();
 

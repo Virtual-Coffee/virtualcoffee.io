@@ -17,6 +17,7 @@ import {
 } from '../src/db';
 import type { InviteStatus, SubmissionStatus } from '../src/db/schema';
 import { serialiseRoles } from '../src/lib/permissions';
+import type { SubmissionEventKey } from '../src/lib/submissions';
 
 /**
  * Seed the local development database.
@@ -514,6 +515,87 @@ async function seedVolunteers(database: ReturnType<typeof db>) {
 	return invitesByEmail;
 }
 
+type SubmissionSeed = {
+	status: SubmissionStatus;
+	daysAgo: number;
+	note?: string;
+};
+
+/**
+ * Insert one kind of Submission with the timeline the real actions would
+ * have written: `submitted`, then a status change for anything past `new`,
+ * with `closedAt` set for the closed ones. A note, when present, lands
+ * before the status settles — the maintainer talks to someone first.
+ */
+async function seedSubmissions<S extends SubmissionSeed>(
+	database: ReturnType<typeof db>,
+	table:
+		| typeof cocReport
+		| typeof volunteerSignup
+		| typeof lunchAndLearnIdea
+		| typeof coffeeTableGroupRequest,
+	eventKey: SubmissionEventKey,
+	seeds: S[],
+	toValues: (seed: S, submittedAt: Date) => Record<string, unknown>,
+	extras?: (seed: S, id: string, submittedAt: Date) => Promise<void>,
+) {
+	for (const seed of seeds) {
+		const submittedAt = daysAgo(seed.daysAgo);
+
+		const [row] = await database
+			.insert(table)
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			.values(toValues(seed, submittedAt) as any)
+			.returning({ id: table.id });
+
+		await database.insert(submissionEvent).values({
+			[eventKey]: row.id,
+			type: 'submitted',
+			toStatus: 'new',
+			createdAt: submittedAt,
+		});
+
+		if (seed.note) {
+			await database.insert(submissionEvent).values({
+				[eventKey]: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'note',
+				body: seed.note,
+				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
+			});
+		}
+
+		if (seed.status === 'in_progress') {
+			await database.insert(submissionEvent).values({
+				[eventKey]: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'status_changed',
+				fromStatus: 'new',
+				toStatus: 'in_progress',
+				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
+			});
+		}
+
+		if (seed.status === 'resolved' || seed.status === 'dismissed') {
+			const closedAt = daysAgo(Math.max(seed.daysAgo - (seed.note ? 2 : 1), 1));
+			await database.insert(submissionEvent).values({
+				[eventKey]: row.id,
+				actorUserId: 'dev-bypass',
+				type: 'status_changed',
+				fromStatus: 'new',
+				toStatus: seed.status,
+				createdAt: closedAt,
+			});
+			await database
+				.update(table)
+				.set({ closedAt })
+				.where(eq(table.id, row.id));
+		}
+
+		await extras?.(seed, row.id, submittedAt);
+	}
+}
+
 /**
  * CoC Reports: one per status. Includes the two states an admin cannot
  * produce by hand — an anonymous report (`name`/`email` both null, a form
@@ -595,84 +677,38 @@ const COC_REPORT_SEEDS: CocReportSeed[] = [
 ];
 
 async function seedCocReports(database: ReturnType<typeof db>) {
-	for (const seed of COC_REPORT_SEEDS) {
-		const submittedAt = daysAgo(seed.daysAgo);
-
-		const [row] = await database
-			.insert(cocReport)
-			.values({
-				status: seed.status,
-				submittedAt,
-				name: seed.name,
-				email: seed.email,
-				reporteeName: seed.reporteeName,
-				timeLocation: seed.timeLocation,
-				description: seed.description,
-				anyoneElseInvolved: seed.anyoneElseInvolved ?? null,
-				attachmentBlobKey: seed.attachment?.blobKey ?? null,
-				attachmentFilename: seed.attachment?.filename ?? null,
-				attachmentContentType: seed.attachment?.contentType ?? null,
-				attachmentSize: seed.attachment?.size ?? null,
-			})
-			.returning({ id: cocReport.id });
-
-		await database.insert(submissionEvent).values({
-			cocReportId: row.id,
-			type: 'submitted',
-			toStatus: 'new',
-			createdAt: submittedAt,
-		});
-
-		// A note, when present, happens before the status settles — the
-		// maintainer talks to the reportee first, then closes it out.
-		if (seed.note) {
-			await database.insert(submissionEvent).values({
-				cocReportId: row.id,
-				actorUserId: 'dev-bypass',
-				type: 'note',
-				body: seed.note,
-				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
-			});
-		}
-
-		if (seed.status === 'in_progress') {
-			await database.insert(submissionEvent).values({
-				cocReportId: row.id,
-				actorUserId: 'dev-bypass',
-				type: 'status_changed',
-				fromStatus: 'new',
-				toStatus: 'in_progress',
-				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
-			});
-		}
-
-		if (seed.status === 'resolved' || seed.status === 'dismissed') {
-			const closedAt = daysAgo(Math.max(seed.daysAgo - (seed.note ? 2 : 1), 1));
-			await database.insert(submissionEvent).values({
-				cocReportId: row.id,
-				actorUserId: 'dev-bypass',
-				type: 'status_changed',
-				fromStatus: 'new',
-				toStatus: seed.status,
-				createdAt: closedAt,
-			});
-			await database
-				.update(cocReport)
-				.set({ closedAt })
-				.where(eq(cocReport.id, row.id));
-		}
-
-		// Anonymous report: the Slack post to the private CoC channel failed —
-		// the state that lights up the failed-notification warning banner.
-		if (seed.status === 'new' && seed.name === null) {
-			await database.insert(submissionEvent).values({
-				cocReportId: row.id,
-				type: 'notification_failed',
-				body: 'Slack notification failed: channel not found.',
-				createdAt: submittedAt,
-			});
-		}
-	}
+	await seedSubmissions(
+		database,
+		cocReport,
+		'cocReportId',
+		COC_REPORT_SEEDS,
+		(seed, submittedAt) => ({
+			status: seed.status,
+			submittedAt,
+			name: seed.name,
+			email: seed.email,
+			reporteeName: seed.reporteeName,
+			timeLocation: seed.timeLocation,
+			description: seed.description,
+			anyoneElseInvolved: seed.anyoneElseInvolved ?? null,
+			attachmentBlobKey: seed.attachment?.blobKey ?? null,
+			attachmentFilename: seed.attachment?.filename ?? null,
+			attachmentContentType: seed.attachment?.contentType ?? null,
+			attachmentSize: seed.attachment?.size ?? null,
+		}),
+		async (seed, id, submittedAt) => {
+			// Anonymous report: the Slack post to the private CoC channel failed —
+			// the state that lights up the failed-notification warning banner.
+			if (seed.status === 'new' && seed.name === null) {
+				await database.insert(submissionEvent).values({
+					cocReportId: id,
+					type: 'notification_failed',
+					body: 'Slack notification failed: channel not found.',
+					createdAt: submittedAt,
+				});
+			}
+		},
+	);
 }
 
 /** Volunteer Signups: one per status, including one with no `position` given. */
@@ -730,56 +766,21 @@ const VOLUNTEER_SIGNUP_SEEDS: VolunteerSignupSeed[] = [
 ];
 
 async function seedVolunteerSignups(database: ReturnType<typeof db>) {
-	for (const seed of VOLUNTEER_SIGNUP_SEEDS) {
-		const submittedAt = daysAgo(seed.daysAgo);
-
-		const [row] = await database
-			.insert(volunteerSignup)
-			.values({
-				status: seed.status,
-				submittedAt,
-				name: seed.name,
-				email: seed.email,
-				githubUsername: seed.githubUsername,
-				position: seed.position,
-				description: seed.description,
-			})
-			.returning({ id: volunteerSignup.id });
-
-		await database.insert(submissionEvent).values({
-			volunteerSignupId: row.id,
-			type: 'submitted',
-			toStatus: 'new',
-			createdAt: submittedAt,
-		});
-
-		if (seed.status === 'in_progress') {
-			await database.insert(submissionEvent).values({
-				volunteerSignupId: row.id,
-				actorUserId: 'dev-bypass',
-				type: 'status_changed',
-				fromStatus: 'new',
-				toStatus: 'in_progress',
-				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
-			});
-		}
-
-		if (seed.status === 'resolved' || seed.status === 'dismissed') {
-			const closedAt = daysAgo(Math.max(seed.daysAgo - 1, 1));
-			await database.insert(submissionEvent).values({
-				volunteerSignupId: row.id,
-				actorUserId: 'dev-bypass',
-				type: 'status_changed',
-				fromStatus: 'new',
-				toStatus: seed.status,
-				createdAt: closedAt,
-			});
-			await database
-				.update(volunteerSignup)
-				.set({ closedAt })
-				.where(eq(volunteerSignup.id, row.id));
-		}
-	}
+	await seedSubmissions(
+		database,
+		volunteerSignup,
+		'volunteerSignupId',
+		VOLUNTEER_SIGNUP_SEEDS,
+		(seed, submittedAt) => ({
+			status: seed.status,
+			submittedAt,
+			name: seed.name,
+			email: seed.email,
+			githubUsername: seed.githubUsername,
+			position: seed.position,
+			description: seed.description,
+		}),
+	);
 }
 
 /**
@@ -853,58 +854,23 @@ const LUNCH_AND_LEARN_IDEA_SEEDS: LunchAndLearnIdeaSeed[] = [
 ];
 
 async function seedLunchAndLearnIdeas(database: ReturnType<typeof db>) {
-	for (const seed of LUNCH_AND_LEARN_IDEA_SEEDS) {
-		const submittedAt = daysAgo(seed.daysAgo);
-
-		const [row] = await database
-			.insert(lunchAndLearnIdea)
-			.values({
-				status: seed.status,
-				submittedAt,
-				name: seed.name,
-				email: seed.email,
-				topic: seed.topic,
-				description: seed.description,
-				format: seed.format,
-				timing: seed.timing,
-				githubIssueUrl: seed.githubIssueUrl,
-			})
-			.returning({ id: lunchAndLearnIdea.id });
-
-		await database.insert(submissionEvent).values({
-			lunchAndLearnIdeaId: row.id,
-			type: 'submitted',
-			toStatus: 'new',
-			createdAt: submittedAt,
-		});
-
-		if (seed.status === 'in_progress') {
-			await database.insert(submissionEvent).values({
-				lunchAndLearnIdeaId: row.id,
-				actorUserId: 'dev-bypass',
-				type: 'status_changed',
-				fromStatus: 'new',
-				toStatus: 'in_progress',
-				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
-			});
-		}
-
-		if (seed.status === 'resolved' || seed.status === 'dismissed') {
-			const closedAt = daysAgo(Math.max(seed.daysAgo - 1, 1));
-			await database.insert(submissionEvent).values({
-				lunchAndLearnIdeaId: row.id,
-				actorUserId: 'dev-bypass',
-				type: 'status_changed',
-				fromStatus: 'new',
-				toStatus: seed.status,
-				createdAt: closedAt,
-			});
-			await database
-				.update(lunchAndLearnIdea)
-				.set({ closedAt })
-				.where(eq(lunchAndLearnIdea.id, row.id));
-		}
-	}
+	await seedSubmissions(
+		database,
+		lunchAndLearnIdea,
+		'lunchAndLearnIdeaId',
+		LUNCH_AND_LEARN_IDEA_SEEDS,
+		(seed, submittedAt) => ({
+			status: seed.status,
+			submittedAt,
+			name: seed.name,
+			email: seed.email,
+			topic: seed.topic,
+			description: seed.description,
+			format: seed.format,
+			timing: seed.timing,
+			githubIssueUrl: seed.githubIssueUrl,
+		}),
+	);
 }
 
 /** Coffee Table Group Requests: one per status, including a null `groupName`. */
@@ -957,55 +923,20 @@ const COFFEE_TABLE_GROUP_REQUEST_SEEDS: CoffeeTableGroupRequestSeed[] = [
 ];
 
 async function seedCoffeeTableGroupRequests(database: ReturnType<typeof db>) {
-	for (const seed of COFFEE_TABLE_GROUP_REQUEST_SEEDS) {
-		const submittedAt = daysAgo(seed.daysAgo);
-
-		const [row] = await database
-			.insert(coffeeTableGroupRequest)
-			.values({
-				status: seed.status,
-				submittedAt,
-				name: seed.name,
-				email: seed.email,
-				groupName: seed.groupName,
-				description: seed.description,
-			})
-			.returning({ id: coffeeTableGroupRequest.id });
-
-		await database.insert(submissionEvent).values({
-			coffeeTableGroupRequestId: row.id,
-			type: 'submitted',
-			toStatus: 'new',
-			createdAt: submittedAt,
-		});
-
-		if (seed.status === 'in_progress') {
-			await database.insert(submissionEvent).values({
-				coffeeTableGroupRequestId: row.id,
-				actorUserId: 'dev-bypass',
-				type: 'status_changed',
-				fromStatus: 'new',
-				toStatus: 'in_progress',
-				createdAt: daysAgo(Math.max(seed.daysAgo - 1, 1)),
-			});
-		}
-
-		if (seed.status === 'resolved' || seed.status === 'dismissed') {
-			const closedAt = daysAgo(Math.max(seed.daysAgo - 1, 1));
-			await database.insert(submissionEvent).values({
-				coffeeTableGroupRequestId: row.id,
-				actorUserId: 'dev-bypass',
-				type: 'status_changed',
-				fromStatus: 'new',
-				toStatus: seed.status,
-				createdAt: closedAt,
-			});
-			await database
-				.update(coffeeTableGroupRequest)
-				.set({ closedAt })
-				.where(eq(coffeeTableGroupRequest.id, row.id));
-		}
-	}
+	await seedSubmissions(
+		database,
+		coffeeTableGroupRequest,
+		'coffeeTableGroupRequestId',
+		COFFEE_TABLE_GROUP_REQUEST_SEEDS,
+		(seed, submittedAt) => ({
+			status: seed.status,
+			submittedAt,
+			name: seed.name,
+			email: seed.email,
+			groupName: seed.groupName,
+			description: seed.description,
+		}),
+	);
 }
 
 async function main() {

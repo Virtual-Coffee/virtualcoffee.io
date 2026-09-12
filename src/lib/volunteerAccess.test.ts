@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
+import { redirectTo } from '@/test/next';
 import type { Session } from './auth';
 import {
 	isVolunteer,
@@ -10,10 +11,6 @@ import {
 function sessionWith(user: Record<string, unknown>): Session {
 	return { user } as unknown as Session;
 }
-
-const redirectTo = (path: string) => ({
-	digest: expect.stringMatching(`^NEXT_REDIRECT;[a-z]+;${path};`),
-});
 
 describe('isVolunteer', () => {
 	test('asks about the role by name, wherever it sits in the string', () => {

@@ -5,13 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { cancelInvite } from './actions';
 
-/**
- * Give an unclaimed Invite back.
- *
- * Exists because the most likely mistake in this whole feature is a mistyped
- * email address, and without it the only remedy is waiting ninety days for the
- * expiry sweep.
- */
+/** Give an unclaimed Invite back — the remedy for a mistyped address. */
 export function CancelInviteButton({
 	inviteId,
 	inviteeName,

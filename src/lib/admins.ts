@@ -2,16 +2,11 @@ import { and, eq, isNotNull, isNull, ne, or } from 'drizzle-orm';
 
 import { db, pendingGrant, user } from '@/db';
 import { getSlackMembers, type SlackMember } from '@/data/slackMembers';
-import { DEFAULT_ROLE, grantedRoles, type RoleName } from '@/lib/permissions';
+import { DEFAULT_ROLE, parseRoles, type RoleName } from '@/lib/permissions';
 
 /**
- * A row on the User Management screen: everyone who can reach /admin, whether
- * or not they have ever signed in.
- *
- * One union rather than two tables because "who can see CoC reports?" is a
- * single question, and answering it from two lists is how a maintainer misses
- * someone. `kind` is what the row's controls dispatch on — a user's roles live
- * in `user.role`, a pending one's in the Grant.
+ * A row on the User Management screen: everyone who can reach /admin, signed
+ * in or not. `kind` is what the row's controls dispatch on.
  */
 export type AccessRow = {
 	/** A user id for `kind: 'user'`, a Pending Grant id otherwise. */
@@ -85,7 +80,7 @@ export async function listAccessRows(): Promise<AccessRow[]> {
 	const rows: AccessRow[] = [];
 
 	for (const row of userRows) {
-		const roles = grantedRoles(row.role);
+		const roles = parseRoles(row.role);
 
 		rows.push({
 			kind: 'user',
@@ -115,7 +110,7 @@ export async function listAccessRows(): Promise<AccessRow[]> {
 			name: grant.slackDisplayName,
 			email: null,
 			handle: grant.slackHandle,
-			roles: grantedRoles(grant.role),
+			roles: parseRoles(grant.role),
 			stranded: false,
 			grantedAt: grant.grantedAt,
 			grantedBy: grant.grantedBy,

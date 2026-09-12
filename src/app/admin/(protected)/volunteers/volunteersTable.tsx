@@ -17,18 +17,9 @@ import { formatDate } from '../presentation';
 import { SortableHeader } from '../sortableHeader';
 import { VolunteerStateBadge } from './presentation';
 
-/**
- * Sorts in the browser, like the User Management table and unlike the queues.
- *
- * `listVolunteers()` returns the whole roster in one query — ninety-odd rows,
- * with the balance and the sent count as correlated subqueries — so the
- * component holds the complete set and a client-side sort orders all of it.
- * There is no larger result behind it for a header to misrepresent, and no
- * pagination to reset.
- *
- * Only the three sort functions the columns name are registered; importing the
- * whole `sortFns` registry would bundle every built-in.
- */
+// Sorts in the browser: `listVolunteers()` returns the whole roster. Only the
+// sort functions the columns name are registered; the whole `sortFns`
+// registry would bundle every built-in.
 const features = tableFeatures({
 	rowSortingFeature,
 	sortedRowModel: createSortedRowModel(),
@@ -41,13 +32,8 @@ const features = tableFeatures({
 
 const helper = createColumnHelper<typeof features, VolunteerRow>();
 
-/**
- * Columns whose header and cells both sit right.
- *
- * Keyed on the column id rather than carried in `columnDef.meta`: typing meta
- * means augmenting `ColumnMeta` module-wide for one alignment class, and the
- * header and the cell are rendered by two separate loops that both need it.
- */
+// Right-aligned columns, by id rather than `columnDef.meta` (typing meta means
+// augmenting `ColumnMeta` module-wide for one class).
 const NUMERIC_COLUMNS = new Set(['balance', 'invitesSent']);
 
 const columns = helper.columns([

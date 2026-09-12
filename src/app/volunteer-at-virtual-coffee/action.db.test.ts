@@ -37,7 +37,7 @@ async function submit() {
 
 describe('submitVolunteerSignup', () => {
 	test('writes the signup, then posts it to Slack', async () => {
-		notifySlack.mockResolvedValue({ ok: true });
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 
 		const { row, events } = await submit();
 

@@ -16,7 +16,8 @@ import {
 import { emailConfigured } from '@/lib/email/transport';
 import { ActionPanel } from './actionPanel';
 import { HistoryTimeline } from './historyTimeline';
-import { NoteComposer } from './noteComposer';
+import { NoteComposer } from '../../noteComposer';
+import { addNote } from '../actions';
 import {
 	SourceBadge,
 	StatusBadge,
@@ -40,8 +41,6 @@ export default async function ApplicationDetailPage({
 
 	const { id: applicationId } = await params;
 
-	// Checked before the query, not for politeness: Postgres raises on a
-	// malformed literal against a uuid column rather than matching nothing.
 	if (!isId(applicationId)) {
 		notFound();
 	}
@@ -56,11 +55,8 @@ export default async function ApplicationDetailPage({
 		getApplicationInviter(application.inviteId),
 	]);
 
-	/**
-	 * A `waitlist_reviewer` holds this Section and not the roster, so the link
-	 * below would 404 for them. Unlike the mirror of this link on the volunteer
-	 * screen, that is a live case rather than a precaution.
-	 */
+	// A `waitlist_reviewer` holds this Section and not the roster, so the link
+	// would 404 for them.
 	const canOpenVolunteers = sessionCan(session, 'volunteers', 'read');
 
 	return (
@@ -121,13 +117,8 @@ export default async function ApplicationDetailPage({
 					<dl className="row small mb-0">
 						<dt className="col-sm-4">Source</dt>
 						<dd className="col-sm-8">{sourceLabel(application.source)}</dd>
-						{/*
-						 * Only for an invited application, and separate from Referrer
-						 * below: that is free text the applicant typed, while this is the
-						 * Volunteer who spent an Invite on them. The two are different
-						 * facts and were being confused for one another, which is why an
-						 * invited applicant showed no referrer at all.
-						 */}
+						{/* Separate from Referrer below: that is free text the applicant
+						 * typed, this is the Volunteer who spent an Invite on them. */}
 						{application.source === 'volunteer_invite' && (
 							<>
 								<dt className="col-sm-4">Invited by</dt>
@@ -195,7 +186,7 @@ export default async function ApplicationDetailPage({
 
 					<section>
 						<h2 className="h6">History</h2>
-						<NoteComposer applicationId={application.id} />
+						<NoteComposer onSubmit={addNote.bind(null, application.id)} />
 						<div className="mt-3">
 							<HistoryTimeline history={history} />
 						</div>

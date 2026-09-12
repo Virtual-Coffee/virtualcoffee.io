@@ -8,6 +8,9 @@ import { useModalDialog } from '@/util/useModalDialog';
  * Shows the actual email that is about to go out, rather than asking "are you
  * sure?". The recipient address is repeated above the body because sending to
  * the wrong person is the mistake this dialog exists to catch.
+ *
+ * `offerCopy` adds a "Copy me" checkbox; the admin screens want it, the
+ * Volunteer's own invites do not.
  */
 export function ConfirmSendDialog({
 	open,
@@ -17,6 +20,7 @@ export function ConfirmSendDialog({
 	emails,
 	confirmLabel,
 	pending,
+	offerCopy = false,
 	onCancel,
 	onConfirm,
 }: {
@@ -27,6 +31,7 @@ export function ConfirmSendDialog({
 	emails: { subject: string; text: string }[];
 	confirmLabel: string;
 	pending: boolean;
+	offerCopy?: boolean;
 	onCancel: () => void;
 	onConfirm: (copyMe: boolean) => void;
 }) {
@@ -59,18 +64,20 @@ export function ConfirmSendDialog({
 					</div>
 				))}
 
-				<div className="form-check">
-					<input
-						className="form-check-input"
-						type="checkbox"
-						id="copy-me"
-						checked={copyMe}
-						onChange={(event) => setCopyMe(event.target.checked)}
-					/>
-					<label className="form-check-label" htmlFor="copy-me">
-						Copy me on this email
-					</label>
-				</div>
+				{offerCopy && (
+					<div className="form-check">
+						<input
+							className="form-check-input"
+							type="checkbox"
+							id="copy-me"
+							checked={copyMe}
+							onChange={(event) => setCopyMe(event.target.checked)}
+						/>
+						<label className="form-check-label" htmlFor="copy-me">
+							Copy me on this email
+						</label>
+					</div>
+				)}
 			</div>
 
 			<div className="p-3 border-top d-flex justify-content-end gap-2">

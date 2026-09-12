@@ -128,7 +128,7 @@ export async function submitCocReport(
 	}
 
 	await notifyAndRecord('coc', reportId, async () => {
-		const result = await notifySlack(
+		return notifySlack(
 			'coc',
 			cocReportMessage({
 				name: parsed.data.name ?? null,
@@ -140,10 +140,6 @@ export async function submitCocReport(
 				hasAttachment: attachment !== null,
 			}),
 		);
-
-		return result.ok
-			? { ok: true, detail: 'Posted to Slack.' }
-			: { ok: false, detail: result.message };
 	});
 
 	redirect('/report-coc-violation/thanks');

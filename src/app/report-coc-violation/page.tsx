@@ -3,32 +3,26 @@ import { createMetaData } from '@/util/createMetaData.server';
 import { Form } from './form';
 import { issueTimestamp } from '@/util/forms/spamGuard';
 
-/**
- * Dynamic so the spam guard's signed token is generated per request. Statically
- * prerendering this page would bake one token into the cached HTML, and every
- * submission after it expired would be silently rejected.
- */
+// The spam guard signs a per-render token that prerendering would bake in.
 export const dynamic = 'force-dynamic';
+
+const DESCRIPTION = `If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.`;
 
 export async function generateMetadata() {
 	return await createMetaData({
 		title: 'Report a Code of Conduct Violation',
-		description: `If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.`,
+		description: DESCRIPTION,
 	});
 }
 
-export default async function CocForm() {
-	const metadata = await createMetaData({
-		title: 'Report a Code of Conduct Violation',
-		description: `If you have experienced or witnessed violations to Virtual Coffee's Code of Conduct, we need to know about it.`,
-	});
+export default function CocForm() {
 	return (
 		<DefaultLayout
 			simple
 			heroHeader="Report a Code of Conduct Violation"
 			heroSubheader={
 				<>
-					<p>{metadata.description}</p>
+					<p>{DESCRIPTION}</p>
 					<p>
 						Your privacy and security will be respected, but if you wish to
 						remain anonymous, we will still accept and review your report.

@@ -37,7 +37,7 @@ describe('notifyAndRecord', () => {
 		const id = await insertCocReport();
 		await notifyAndRecord('coc', id, async () => ({
 			ok: true,
-			detail: 'Posted to #coc',
+			message: 'Posted to #coc',
 		}));
 		await expect(eventsFor(id)).resolves.toEqual([
 			{ type: 'notification_sent', body: 'Posted to #coc' },
@@ -54,7 +54,7 @@ describe('notifyAndRecord', () => {
 		await expect(
 			notifyAndRecord('coc', id, async () => ({
 				ok: false,
-				detail: 'Slack rejected the message (404).',
+				message: 'Slack rejected the message (404).',
 			})),
 		).resolves.toBeUndefined();
 		await expect(eventsFor(id)).resolves.toEqual([
@@ -82,9 +82,12 @@ describe('notifyAndRecord', () => {
 		const fine = await insertCocReport();
 		await notifyAndRecord('coc', failed, async () => ({
 			ok: false,
-			detail: 'x',
+			message: 'x',
 		}));
-		await notifyAndRecord('coc', fine, async () => ({ ok: true, detail: 'x' }));
+		await notifyAndRecord('coc', fine, async () => ({
+			ok: true,
+			message: 'x',
+		}));
 
 		// Kinds with nothing failed are omitted, so the banner has nothing to say.
 		await expect(failedNotifications(['coc', 'volunteers'])).resolves.toEqual({
@@ -101,7 +104,7 @@ describe('notifyAndRecord', () => {
 				'0199404c-2c5e-7000-8000-000000000000',
 				async () => ({
 					ok: true,
-					detail: 'x',
+					message: 'x',
 				}),
 			),
 		).resolves.toBeUndefined();

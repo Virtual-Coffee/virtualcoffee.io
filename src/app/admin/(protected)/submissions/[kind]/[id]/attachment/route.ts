@@ -25,11 +25,9 @@ export async function GET(
 
 	await requirePermission('coc', 'read');
 
-	// Checked before the query: a malformed literal against a uuid column raises.
-	const submissionId = id;
-	if (!isId(submissionId)) notFound();
+	if (!isId(id)) notFound();
 
-	const report = await getSubmission('coc', submissionId);
+	const report = await getSubmission('coc', id);
 	const key = report?.attachmentBlobKey as string | null | undefined;
 
 	if (!key) notFound();

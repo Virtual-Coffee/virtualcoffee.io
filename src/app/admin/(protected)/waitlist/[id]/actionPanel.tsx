@@ -10,9 +10,9 @@ import {
 	recordAttendance,
 	sendCoffeeInvite,
 	withdrawApplication,
-	type ActionResult,
 } from '../actions';
-import { ConfirmSendDialog } from './confirmSendDialog';
+import type { EmailActionResult } from '@/lib/actionResult';
+import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
 
 type Template = { subject: string; text: string };
 
@@ -34,10 +34,10 @@ type Dialog = 'coffee' | 'approve' | null;
 export function ActionPanel(props: Props) {
 	const router = useRouter();
 	const [dialog, setDialog] = useState<Dialog>(null);
-	const [result, setResult] = useState<ActionResult | null>(null);
+	const [result, setResult] = useState<EmailActionResult | null>(null);
 	const [pending, startTransition] = useTransition();
 
-	function run(action: () => Promise<ActionResult>) {
+	function run(action: () => Promise<EmailActionResult>) {
 		startTransition(async () => {
 			const outcome = await action();
 			setResult(outcome);
@@ -151,6 +151,7 @@ export function ActionPanel(props: Props) {
 				emails={[props.coffeeInvite]}
 				confirmLabel="Send invite"
 				pending={pending}
+				offerCopy
 				onCancel={() => setDialog(null)}
 				onConfirm={(copyMe) =>
 					run(() => sendCoffeeInvite(props.applicationId, copyMe))
@@ -175,6 +176,7 @@ export function ActionPanel(props: Props) {
 				emails={[props.welcome, props.slackInvite]}
 				confirmLabel="Approve &amp; send Slack invite"
 				pending={pending}
+				offerCopy
 				onCancel={() => setDialog(null)}
 				onConfirm={(copyMe) =>
 					run(() => approveMembership(props.applicationId, copyMe))

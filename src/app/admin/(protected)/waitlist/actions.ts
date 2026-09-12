@@ -22,9 +22,6 @@ import { createSlackInviteToken } from '@/lib/inviteTokens';
 import { getApplication } from '@/lib/applications';
 import { siteUrl } from '@/util/url.server';
 
-/** Every action here can email, so all of them report `emailSent`. */
-export type ActionResult = EmailActionResult;
-
 async function recordEvent(input: {
 	applicationId: string;
 	actorUserId: string | null;
@@ -67,7 +64,7 @@ function revalidateApplication(applicationId: string) {
 export async function sendCoffeeInvite(
 	applicationId: string,
 	copyMe: boolean,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
@@ -130,7 +127,7 @@ export async function sendCoffeeInvite(
 
 export async function recordAttendance(
 	applicationId: string,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
@@ -168,7 +165,7 @@ export async function recordAttendance(
 export async function approveMembership(
 	applicationId: string,
 	copyMe: boolean,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
@@ -245,15 +242,9 @@ export async function approveMembership(
 		})
 		.where(eq(membershipApplication.id, applicationId));
 
-	/**
-	 * Close the loop on the Invite that produced this application, if there was
-	 * one. `completed` is what tells the Volunteer their invite actually worked —
-	 * it is the only status change they ever see that is not their own doing.
-	 *
-	 * After the status change rather than before, and not fatal: an application
-	 * that has been approved and emailed must not be reported as a failure
-	 * because a second row would not update.
-	 */
+	// Complete the Invite that produced this application, if any. After the
+	// status change and not fatal: the applicant has already been approved and
+	// emailed.
 	if (application.inviteId) {
 		try {
 			await db()
@@ -285,7 +276,7 @@ async function close(
 	applicationId: string,
 	status: Extract<ApplicationStatus, 'declined' | 'withdrawn'>,
 	note: string | null,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
@@ -332,20 +323,20 @@ async function close(
 export async function declineApplication(
 	applicationId: string,
 	note: string | null,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	return close(applicationId, 'declined', note);
 }
 
 export async function withdrawApplication(
 	applicationId: string,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	return close(applicationId, 'withdrawn', null);
 }
 
 export async function addNote(
 	applicationId: string,
 	body: string,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);

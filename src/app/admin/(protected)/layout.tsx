@@ -18,10 +18,7 @@ export default async function AdminLayout({
 }: {
 	children: ReactNode;
 }) {
-	// The authorization boundary: holding a permission on at least one section
-	// is what gets you in here. Each section gates itself again, and server
-	// actions re-check independently rather than trusting that they were
-	// reached from inside this layout.
+	// Holding some section gets you in; each page and action re-checks its own.
 	const session = await requireSession();
 	const sections = visibleSections(session);
 

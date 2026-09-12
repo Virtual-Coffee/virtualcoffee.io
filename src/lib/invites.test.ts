@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
-import { CLAIM_TOKEN_TTL_DAYS, hashClaimToken, newClaimToken } from './invites';
+import { hashClaimToken, newClaimToken } from './invites';
 
 describe('hashClaimToken', () => {
 	test('is a stable sha256 hex digest', () => {
@@ -21,8 +21,8 @@ describe('newClaimToken', () => {
 
 		const { token, expiresAt } = newClaimToken();
 		expect(token).toEqual(expect.schemaMatching(z.base64url().length(43)));
+		// Ninety days on.
 		expect(expiresAt.toISOString()).toBe('2026-12-11T00:00:00.000Z');
-		expect(CLAIM_TOKEN_TTL_DAYS).toBe(90);
 	});
 
 	test('two tokens differ', () => {

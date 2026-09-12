@@ -16,16 +16,9 @@ import { AccessStateBadge, formatDate } from '../presentation';
 import { SortableHeader } from '../sortableHeader';
 import { RolesDropdown } from './adminControls';
 
-/**
- * Unlike the queue tables, this one really does sort in the browser.
- *
- * `listAccessRows()` returns everyone in a single unpaginated query, so the
- * component holds the whole set and a client-side sort orders all of it —
- * there is no larger result behind it for the header to misrepresent.
- *
- * Only the two sort functions the columns name are registered; importing the
- * whole `sortFns` registry would bundle every built-in.
- */
+// Sorts in the browser: `listAccessRows()` returns everyone, unpaginated.
+// Only the sort functions the columns name are registered; the whole
+// `sortFns` registry would bundle every built-in.
 const features = tableFeatures({
 	rowSortingFeature,
 	sortedRowModel: createSortedRowModel(),
@@ -34,12 +27,8 @@ const features = tableFeatures({
 
 const helper = createColumnHelper<typeof features, AccessRow>();
 
-/**
- * Two columns need to know who is looking, so the definitions cannot sit at
- * module scope like the other tables'. They are built once per viewer and
- * memoized instead — `columns` is a model input, and a fresh array on every
- * render is not compensated for by the state subscriptions.
- */
+// Two columns need to know who is looking, so these are built per viewer and
+// memoized: a fresh `columns` array every render would re-run the row model.
 function buildColumns(currentUserId: string | null) {
 	return helper.columns([
 		helper.accessor('name', {
@@ -122,7 +111,8 @@ export function AdminsTable({
 	});
 
 	return (
-		<div className="table-responsive">
+		// No `.table-responsive`: its scroll container would clip the roles menu.
+		<div>
 			<table className="table align-middle">
 				<thead>
 					{table.getHeaderGroups().map((group) => (

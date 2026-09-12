@@ -2,22 +2,13 @@ import { createAppAuth } from '@octokit/auth-app';
 import { Octokit } from '@octokit/rest';
 
 /**
- * Opening the Lunch & Learn issue that the Airtable automation used to open.
+ * Opens the Lunch & Learn issue — the working artefact; the Slack message
+ * just links it.
  *
- * The issue is the working artefact — the Slack message just links it — so
- * dropping it would have quietly removed two maintainers' workflow.
- *
- * Authenticates as `GITHUB_APP_CLIENT_ID` / `GITHUB_APP_PRIVATE_KEY`.
- *
- * This is the same GitHub App that CI uses, but the names differ by
- * environment: the workflows read it from the Actions secrets `CI_APP_CLIENT_ID`
- * and `CI_APP_PRIVATE_KEY` (`.github/workflows/ci.yml`), while the site's
- * runtime reads the `GITHUB_APP_*` variables above. Same App and same values,
- * two namespaces.
- *
- * The read-only `GITHUB_TOKEN` used by /members and sponsors is deliberately
- * untouched: it is a permission-less PAT that contributors are told to create
- * with every scope box unchecked, and widening it would defeat that.
+ * Authenticates as `GITHUB_APP_CLIENT_ID` / `GITHUB_APP_PRIVATE_KEY`: the
+ * same App CI uses as `CI_APP_CLIENT_ID` / `CI_APP_PRIVATE_KEY`, under a
+ * different name per environment. Do not widen the read-only `GITHUB_TOKEN`
+ * for this — contributors are told to create it with every scope unchecked.
  */
 
 const OWNER = 'Virtual-Coffee';
@@ -26,9 +17,7 @@ const LABEL = 'Lunch & Learn';
 const ASSIGNEES = ['shelleymcq', 'meg-gutshall'];
 
 export type CreateIssueResult =
-	| { ok: true; url: string }
-	| { ok: false; skipped: true; message: string }
-	| { ok: false; skipped?: false; message: string };
+	{ ok: true; url: string } | { ok: false; message: string };
 
 export function githubAppConfigured(): boolean {
 	return Boolean(
@@ -134,7 +123,6 @@ export async function createLunchAndLearnIssue(idea: {
 	if (!githubAppConfigured()) {
 		return {
 			ok: false,
-			skipped: true,
 			message:
 				'GITHUB_APP_CLIENT_ID / GITHUB_APP_PRIVATE_KEY are not set, so no GitHub issue was opened.',
 		};

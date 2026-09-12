@@ -8,7 +8,8 @@ import {
 } from '@/lib/applications';
 import { ApplicationsTable } from '../applicationsTable';
 import { QueueSearch } from '../queueSearch';
-import { parseSearchParams, type RawSearchParams } from '../searchParams';
+import { parseSearchParams } from '../searchParams';
+import type { RawSearchParams } from '../../searchParams';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,9 +39,7 @@ export default async function ArchivePage({
 	await requirePermission('waitlist', 'read');
 
 	const params = await searchParams;
-	const parsed = parseSearchParams(params, {
-		defaultStatuses: ARCHIVE_STATUSES,
-	});
+	const parsed = parseSearchParams(params, ARCHIVE_STATUSES);
 	// "All statuses" here means all *archive* statuses. Queue rows belong on the
 	// queue; `?status=all` clears the filter in `parseSearchParams`, so it is
 	// put back rather than letting the archive list the Waitlist as well.

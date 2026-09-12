@@ -5,11 +5,7 @@ import { issueTimestamp } from '@/util/forms/spamGuard';
 import LeadText from '@/components/content/LeadText';
 import Link from 'next/link';
 
-/**
- * Dynamic so the spam guard's signed token is generated per request. Statically
- * prerendering this page would bake one token into the cached HTML, and every
- * submission after it expired would be silently rejected.
- */
+// The spam guard signs a per-render token that prerendering would bake in.
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {

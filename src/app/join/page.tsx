@@ -6,9 +6,7 @@ import Link from 'next/link';
 
 import { JoinForm } from './form';
 
-// The form posts to a server action, so this page can't be statically cached
-// the way it was when it only linked out to a hosted Airtable form — and the
-// spam guard signs a per-render token that prerendering would bake in.
+// The spam guard signs a per-render token that prerendering would bake in.
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
