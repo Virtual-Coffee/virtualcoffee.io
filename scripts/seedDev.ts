@@ -367,6 +367,8 @@ const INVITE_SEEDS: {
 		status: 'pending',
 		daysAgo: 2,
 	},
+	// The claimed ones each have their application in SEEDS, so the chain from
+	// Invite to application renders end to end; the dates sit before it.
 	{
 		inviteeName: 'Priya Raman',
 		inviteeEmail: 'priya@example.com',
@@ -374,14 +376,26 @@ const INVITE_SEEDS: {
 		daysAgo: 4,
 	},
 	{
-		inviteeName: 'Ade Balogun',
-		inviteeEmail: 'ade@example.com',
-		status: 'completed',
-		daysAgo: 40,
-	},
-	{
 		inviteeName: 'Sam Whitfield',
 		inviteeEmail: 'sam@example.com',
+		status: 'accepted',
+		daysAgo: 35,
+	},
+	{
+		inviteeName: 'Rowan Hale',
+		inviteeEmail: 'rowan@example.com',
+		status: 'completed',
+		daysAgo: 70,
+	},
+	{
+		inviteeName: 'Hector Ramos',
+		inviteeEmail: 'hector@example.com',
+		status: 'accepted',
+		daysAgo: 730,
+	},
+	{
+		inviteeName: 'Noor Haddad',
+		inviteeEmail: 'noor@example.com',
 		status: 'expired',
 		daysAgo: 120,
 	},
@@ -397,8 +411,8 @@ const INVITE_SEEDS: {
  * Volunteers, their allowance history, and the Invites they have sent.
  *
  * The balance is not stored anywhere — it is the sum of the ledger — so seeding
- * it means seeding the movements that produce it. This adds up to 4 for the dev
- * bypass Volunteer: six imported, one accrued, five spent, two given back.
+ * it means seeding the movements that produce it. This adds up to 2 for the dev
+ * bypass Volunteer: six imported, one accrued, seven spent, two given back.
  */
 async function seedVolunteers(database: ReturnType<typeof db>) {
 	const period = new Date().toISOString().slice(0, 7);
@@ -985,6 +999,15 @@ async function main() {
 				: null;
 		const attendedAt =
 			seed.status === 'member' ? daysAgo(Math.max(seed.daysAgo - 17, 1)) : null;
+		// Both terminal states close the row and get the event that closed it.
+		// A withdrawal is recent by construction; a lapse is an application that
+		// went cold with nobody deciding on it, months after it came in.
+		const closedAt =
+			seed.status === 'withdrawn'
+				? daysAgo(1)
+				: seed.status === 'lapsed'
+					? daysAgo(Math.max(seed.daysAgo - 90, 1))
+					: null;
 
 		const [row] = await database
 			.insert(membershipApplication)
@@ -996,9 +1019,9 @@ async function main() {
 				status: seed.status,
 				source: seed.source,
 				isPriority: seed.source === 'volunteer_invite',
-				// Links the two invited applications back to the Invite that produced
-				// them, so /admin/waitlist shows a real chain rather than an orphaned
-				// "Volunteer invite" badge.
+				// Links each volunteer-invited application back to the Invite that
+				// produced it, so /admin/waitlist shows a real chain rather than an
+				// orphaned "Volunteer invite" badge.
 				inviteId: invitesByEmail.get(seed.email) ?? null,
 				referrer: seed.referrer ?? null,
 				howDidYouHear: seed.howDidYouHear,
@@ -1011,7 +1034,7 @@ async function main() {
 				coffeeInvitedAt: invitedAt,
 				coffeeAttendedAt: attendedAt,
 				approvedAt: attendedAt,
-				closedAt: seed.status === 'withdrawn' ? daysAgo(1) : null,
+				closedAt,
 			})
 			.returning({ id: membershipApplication.id });
 
@@ -1042,6 +1065,20 @@ async function main() {
 				toStatus: 'member',
 				body: `Membership approved; Slack invite emailed to ${seed.email}`,
 				createdAt: attendedAt,
+			});
+		}
+
+		if (closedAt && (seed.status === 'withdrawn' || seed.status === 'lapsed')) {
+			await database.insert(applicationEvent).values({
+				applicationId: row.id,
+				type: seed.status,
+				fromStatus: invitedAt ? 'coffee_invited' : 'waitlisted',
+				toStatus: seed.status,
+				body:
+					seed.status === 'withdrawn'
+						? 'Withdrawn at the applicant’s request'
+						: 'Went cold with no decision',
+				createdAt: closedAt,
 			});
 		}
 	}
