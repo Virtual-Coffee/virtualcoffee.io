@@ -19,7 +19,7 @@ export type MemberArticle = {
 	'Date Published': string;
 };
 
-export async function getChallengeData() {
+export function getChallengeData() {
 	const tableRows = rows as MemberArticle[];
 
 	const totalCount = tableRows.reduce((total, row) => {

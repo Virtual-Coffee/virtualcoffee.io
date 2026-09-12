@@ -14,6 +14,6 @@ export type HacktoberfestRepo = {
 	Maintainer: string;
 };
 
-export async function getChallengeData(): Promise<HacktoberfestRepo[]> {
+export function getChallengeData(): HacktoberfestRepo[] {
 	return rows as HacktoberfestRepo[];
 }

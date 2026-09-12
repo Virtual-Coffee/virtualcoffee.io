@@ -42,7 +42,7 @@ type PostMap = Record<
 	}
 >;
 
-export async function getWritingChallengeData(year: WritingChallengeYear) {
+export function getWritingChallengeData(year: WritingChallengeYear) {
 	const tableRows = ENTRIES[year];
 
 	const totalCount = tableRows.reduce((total, row) => {
