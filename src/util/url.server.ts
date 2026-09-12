@@ -12,16 +12,19 @@ type BuildUrls = {
 	DEPLOY_PRIME_URL?: string;
 };
 
-// buildUrls is created in scripts/buildUrls.js at build-time
-export function qualifiedUrl(path = '') {
-	if (!buildUrls.NETLIFY) {
-		return buildUrls.URL ? buildUrls.URL + path : path;
-	}
-
-	const baseUrl =
-		buildUrls.CONTEXT === 'production'
-			? buildUrls.URL
-			: buildUrls.DEPLOY_PRIME_URL;
-
-	return baseUrl ? baseUrl + path : path;
+/**
+ * The site's own origin for links in emails, with no trailing slash.
+ *
+ * `URL` is the site's main address on every Netlify deploy — the production
+ * domain, even on a deploy preview — so a preview prefers `DEPLOY_PRIME_URL`,
+ * which is the preview's own address; otherwise a Claim Link minted on a
+ * preview would land on production. Locally `.env.example` sets `URL`, so a
+ * Coffee invite sent from `netlify dev` links back to localhost.
+ */
+export function siteUrl(): string {
+	const context = process.env.CONTEXT;
+	const preview = context === 'deploy-preview' || context === 'branch-deploy';
+	const origin =
+		(preview ? process.env.DEPLOY_PRIME_URL : undefined) ?? process.env.URL;
+	return origin?.replace(/\/$/, '') ?? 'https://virtualcoffee.io';
 }
