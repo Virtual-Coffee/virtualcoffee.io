@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { getSlackMembers } from '@/data/slackMembers';
-import { requirePermission } from '@/lib/adminAccess';
+import { requirePermission, sessionCan } from '@/lib/adminAccess';
 import { listVolunteers } from '@/lib/volunteers';
 import { matchesState, parseVolunteerState } from './searchParams';
 import { AddVolunteerForm } from './volunteerControls';
@@ -26,7 +26,10 @@ export default async function VolunteersPage({
 }: {
 	searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-	await requirePermission('volunteers', 'read');
+	const session = await requirePermission('volunteers', 'read');
+	// The action re-checks; this only spares a read-only viewer a form that
+	// would fail on submit.
+	const canManage = sessionCan(session, 'volunteers', 'manage');
 
 	const params = await searchParams;
 	const state = parseVolunteerState(params);
@@ -103,9 +106,11 @@ export default async function VolunteersPage({
 					<VolunteersTable rows={rows} emptyMessage={EMPTY_MESSAGE[state]} />
 				</div>
 
-				<div className="col-lg-4">
-					<AddVolunteerForm candidates={candidates} />
-				</div>
+				{canManage && (
+					<div className="col-lg-4">
+						<AddVolunteerForm candidates={candidates} />
+					</div>
+				)}
 			</div>
 		</div>
 	);

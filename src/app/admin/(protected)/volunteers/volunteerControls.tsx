@@ -173,13 +173,17 @@ export function ActiveToggle({
 export function AdjustBalanceForm({ volunteerId }: { volunteerId: string }) {
 	const { run, pending, feedback } = useAction();
 	const [delta, setDelta] = useState('1');
+	// The action refuses anything else; the button just says so first.
+	const parsedDelta = Number(delta.trim());
+	const validDelta =
+		delta.trim() !== '' && Number.isInteger(parsedDelta) && parsedDelta !== 0;
 	const [reason, setReason] = useState('');
 
 	return (
 		<form
 			onSubmit={(event) => {
 				event.preventDefault();
-				run(() => adjustBalance(volunteerId, Number(delta), reason));
+				run(() => adjustBalance(volunteerId, parsedDelta, reason));
 				setReason('');
 			}}
 		>
@@ -191,6 +195,7 @@ export function AdjustBalanceForm({ volunteerId }: { volunteerId: string }) {
 					<input
 						id="delta"
 						type="number"
+						step={1}
 						className="form-control form-control-sm"
 						value={delta}
 						onChange={(event) => setDelta(event.target.value)}
@@ -212,7 +217,7 @@ export function AdjustBalanceForm({ volunteerId }: { volunteerId: string }) {
 			<button
 				type="submit"
 				className="btn btn-sm btn-outline-primary mt-2"
-				disabled={pending || !reason.trim() || !delta.trim()}
+				disabled={pending || !reason.trim() || !validDelta}
 			>
 				{pending ? 'Saving…' : 'Adjust balance'}
 			</button>
