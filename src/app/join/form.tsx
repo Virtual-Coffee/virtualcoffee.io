@@ -1,6 +1,6 @@
 'use client';
 
-import { CodeOfConduct, Submit } from '@/components/forms';
+import { CodeOfConduct, Field, Submit, TextArea } from '@/components/forms';
 import { SpamGuardFields } from '@/util/forms/SpamGuardFields';
 import { useFormAction } from '@/util/forms/useFormAction';
 import { submitMembershipApplication } from './action';
@@ -101,80 +101,10 @@ export function JoinForm({
 				/>
 			</fieldset>
 
-			<CodeOfConduct />
-			{fieldError('agree') && (
-				<p className="text-danger" role="alert">
-					{fieldError('agree')}
-				</p>
-			)}
+			<CodeOfConduct error={fieldError('agree')} />
 			<SpamGuardFields token={state?.spamToken ?? spamToken} />
 
 			<Submit />
 		</form>
-	);
-}
-
-function Field({
-	id,
-	name,
-	label,
-	help,
-	error,
-	type = 'text',
-	required = false,
-	defaultValue,
-}: {
-	id: string;
-	name: string;
-	label: string;
-	help?: string;
-	error?: string;
-	type?: string;
-	required?: boolean;
-	defaultValue?: string;
-}) {
-	return (
-		<div className="mb-form">
-			<label htmlFor={id}>{label}</label>
-			<input
-				type={type}
-				id={id}
-				name={name}
-				className={`form-control${error ? ' is-invalid' : ''}`}
-				aria-describedby={`${id}Help`}
-				aria-invalid={error ? true : undefined}
-				required={required}
-				defaultValue={defaultValue}
-			/>
-			<small id={`${id}Help`} className="form-text text-muted">
-				{error ? <span className="text-danger">{error}</span> : help}
-			</small>
-		</div>
-	);
-}
-
-function TextArea({
-	id,
-	name,
-	label,
-	error,
-}: {
-	id: string;
-	name: string;
-	label: string;
-	error?: string;
-}) {
-	return (
-		<div className="mb-form">
-			<label htmlFor={id}>{label}</label>
-			<textarea
-				id={id}
-				name={name}
-				rows={4}
-				className={`form-control${error ? ' is-invalid' : ''}`}
-				aria-invalid={error ? true : undefined}
-			/>
-			{error && <small className="form-text text-danger">{error}</small>}
-		</div>
 	);
 }

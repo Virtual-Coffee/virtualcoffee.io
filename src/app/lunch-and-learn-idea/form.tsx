@@ -1,12 +1,12 @@
 'use client';
 
-import { Submit, CodeOfConduct } from '@/components/forms';
+import { CodeOfConduct, Field, Submit, TextArea } from '@/components/forms';
 import { SpamGuardFields } from '@/util/forms/SpamGuardFields';
 import { useFormAction } from '@/util/forms/useFormAction';
 import { submitLunchAndLearnIdea } from './action';
 
 export function Form({ spamToken }: { spamToken: string }) {
-	const { formProps, errorContent, state } = useFormAction(
+	const { formProps, errorContent, fieldError, state } = useFormAction(
 		submitLunchAndLearnIdea,
 	);
 
@@ -17,84 +17,57 @@ export function Form({ spamToken }: { spamToken: string }) {
 				<p className="text-muted">
 					Just a couple quick pieces of info that we'll need:
 				</p>
-				<div className="mb-form">
-					<label htmlFor="formName">Your Name</label>
-					<input
-						type="text"
-						className="form-control"
-						id="formName"
-						name="Name"
-						aria-describedby="nameHelp"
-						required
-					/>
-					<small id="nameHelp" className="form-text text-muted">
-						Required
-					</small>
-				</div>
-				<div className="mb-form">
-					<label htmlFor="formEmail">Email</label>
-					<input
-						type="email"
-						className="form-control"
-						id="formEmail"
-						name="Email"
-						aria-describedby="emailHelp"
-						required
-					/>
-					<small id="emailHelp" className="form-text text-muted">
-						Required. We'll never share your email with anyone else.
-					</small>
-				</div>
+				<Field
+					id="formName"
+					name="Name"
+					label="Your Name"
+					help="Required"
+					error={fieldError('Name')}
+					required
+				/>
+				<Field
+					id="formEmail"
+					name="Email"
+					type="email"
+					label="Email"
+					help="Required. We'll never share your email with anyone else."
+					error={fieldError('Email')}
+					required
+				/>
 			</fieldset>
 			<fieldset>
 				<legend>Your Lunch & Learn Idea:</legend>
-				<div className="mb-form">
-					<label htmlFor="topicTitle">Title of the Lunch & Learn</label>
-					<input
-						type="text"
-						className="form-control"
-						id="topicTitle"
-						name="Topic"
-						required
-					/>
-				</div>
-				<div className="mb-form">
-					<label htmlFor="topicIdea">
-						Description we can share on the event page.
-					</label>
-					<textarea
-						className="form-control"
-						required
-						id="topicIdea"
-						name="Description"
-						rows={3}
-					></textarea>
-				</div>
-				<div className="mb-form">
-					<label htmlFor="format">
-						What is the format of your talk (question and answer,
-						conference-style, etc.) and will you have slides?
-					</label>
-					<input
-						type="text"
-						className="form-control"
-						id="format"
-						name="Format"
-					/>
-				</div>
-				<div className="mb-form">
-					<label htmlFor="date-time">What date and time works for you?</label>
-					<input
-						type="text"
-						className="form-control"
-						id="date-time"
-						name="Timing"
-						required
-					/>
-				</div>
+				<Field
+					id="topicTitle"
+					name="Topic"
+					label="Title of the Lunch & Learn"
+					error={fieldError('Topic')}
+					required
+				/>
+				<TextArea
+					id="topicIdea"
+					name="Description"
+					label="Description we can share on the event page."
+					error={fieldError('Description')}
+					rows={3}
+					required
+				/>
+				<Field
+					id="format"
+					name="Format"
+					label="What is the format of your talk (question and answer, conference-style, etc.) and will you have slides?"
+					error={fieldError('Format')}
+				/>
+				<Field
+					id="date-time"
+					name="Timing"
+					label="What date and time works for you?"
+					error={fieldError('Timing')}
+					required
+				/>
 			</fieldset>
 
-			<CodeOfConduct />
+			<CodeOfConduct error={fieldError('agree')} />
 			<SpamGuardFields token={state?.spamToken ?? spamToken} />
 			{errorContent}
 			<Submit />

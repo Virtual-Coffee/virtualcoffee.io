@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import { useFormStatus } from 'react-dom';
 
 export function Submit({ text = 'Submit', loadingText = 'Submitting...' }) {
@@ -15,7 +16,7 @@ export function Submit({ text = 'Submit', loadingText = 'Submitting...' }) {
 	);
 }
 
-export function CodeOfConduct() {
+export function CodeOfConduct({ error }: { error?: string }) {
 	return (
 		<fieldset>
 			<p className="lead">
@@ -31,7 +32,8 @@ export function CodeOfConduct() {
 				<input
 					type="checkbox"
 					name="agree"
-					className="form-check-input"
+					className={`form-check-input${error ? ' is-invalid' : ''}`}
+					aria-invalid={error ? true : undefined}
 					required
 					value="agree"
 				/>
@@ -39,7 +41,120 @@ export function CodeOfConduct() {
 					I've read the Code of Conduct and understand my responsibilities as a
 					member of the Virtual Coffee community
 				</span>
+				{error && (
+					<div className="invalid-feedback" role="alert">
+						{error}
+					</div>
+				)}
 			</label>
 		</fieldset>
+	);
+}
+
+type FieldChrome = {
+	id: string;
+	name: string;
+	label: string;
+	help?: string;
+	/** The server's message for this field; outlines the control and shows it beneath. */
+	error?: string;
+};
+
+/**
+ * One labelled Bootstrap control for the public forms. Uncontrolled on
+ * purpose: the value lives in the DOM so the form posts without JavaScript
+ * and `useFormAction` never has to mirror it.
+ */
+export function Field({
+	id,
+	name,
+	label,
+	help,
+	error,
+	className,
+	...input
+}: FieldChrome & Omit<ComponentProps<'input'>, 'id' | 'name'>) {
+	const described = describedBy(id, help, error);
+	return (
+		<div className="mb-form">
+			<label htmlFor={id}>{label}</label>
+			<input
+				type="text"
+				{...input}
+				id={id}
+				name={name}
+				className={controlClass(className, error)}
+				aria-invalid={error ? true : undefined}
+				aria-describedby={described}
+			/>
+			<Feedback id={id} help={help} error={error} />
+		</div>
+	);
+}
+
+export function TextArea({
+	id,
+	name,
+	label,
+	help,
+	error,
+	className,
+	rows = 4,
+	...textarea
+}: FieldChrome & Omit<ComponentProps<'textarea'>, 'id' | 'name'>) {
+	const described = describedBy(id, help, error);
+	return (
+		<div className="mb-form">
+			<label htmlFor={id}>{label}</label>
+			<textarea
+				{...textarea}
+				id={id}
+				name={name}
+				rows={rows}
+				className={controlClass(className, error)}
+				aria-invalid={error ? true : undefined}
+				aria-describedby={described}
+			/>
+			<Feedback id={id} help={help} error={error} />
+		</div>
+	);
+}
+
+function controlClass(
+	className: string | undefined,
+	error: string | undefined,
+) {
+	return ['form-control', error && 'is-invalid', className]
+		.filter(Boolean)
+		.join(' ');
+}
+
+function describedBy(id: string, help?: string, error?: string) {
+	const ids = [error && `${id}Error`, help && `${id}Help`].filter(Boolean);
+	return ids.length > 0 ? ids.join(' ') : undefined;
+}
+
+function Feedback({
+	id,
+	help,
+	error,
+}: {
+	id: string;
+	help?: string;
+	error?: string;
+}) {
+	return (
+		<>
+			{error && (
+				<div id={`${id}Error`} className="invalid-feedback">
+					{error}
+				</div>
+			)}
+			{help && (
+				<small id={`${id}Help`} className="form-text text-muted">
+					{help}
+				</small>
+			)}
+		</>
 	);
 }
