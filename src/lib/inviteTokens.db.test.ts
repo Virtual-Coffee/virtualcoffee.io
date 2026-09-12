@@ -83,6 +83,29 @@ describe('Slack invite tokens', () => {
 		});
 	});
 
+	test('a new token supersedes the previous unused one', async () => {
+		const { id } = await insertApplication({ status: 'member' });
+		const other = await insertApplication({ status: 'member' });
+		const { token: first } = await createSlackInviteToken(id);
+		const { token: theirs } = await createSlackInviteToken(other.id);
+
+		const { token: second } = await createSlackInviteToken(id);
+
+		await expect(slackInviteForToken(first)).resolves.toEqual({
+			ok: false,
+			reason: 'expired',
+		});
+		await expect(redeemSlackInviteToken(second)).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
+		// Another application's token is not touched.
+		await expect(slackInviteForToken(theirs)).resolves.toEqual({
+			ok: true,
+			applicationId: other.id,
+		});
+	});
+
 	test('an expired token is refused and stays unused', async () => {
 		const { id } = await insertApplication({ status: 'coffee_invited' });
 		const { token } = await createSlackInviteToken(id);
