@@ -185,10 +185,9 @@ const HERE = 'scripts/lib/schemaCoverage.ts';
  * has is a stale decision — harmless, but the list is only trustworthy if
  * it is kept exact.
  *
- * Only `public`, and not migration bookkeeping: the local runner keeps its
- * ledger in a `netlify` schema, and whatever the deploy-time runner does,
- * this check is about our tables — a platform table appearing here must
- * not fail every preview build.
+ * Only `public`: drizzle keeps its migration ledger in the `drizzle` schema,
+ * so it never appears here. The name check is belt and braces for any other
+ * tool's bookkeeping — this check is about our tables.
  */
 export async function coverageFailures(database: Database): Promise<string[]> {
 	const rows = await database

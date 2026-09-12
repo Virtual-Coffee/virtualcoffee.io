@@ -26,7 +26,8 @@
 		"watch": "npm-watch",
 		"dev": "pnpm codegen && concurrently \"pnpm watch\" \"pnpm local-dev\"",
 		"db:generate": "drizzle-kit generate",
-		"db:migrate": "netlify database migrations apply",
+		"db:migrate": "tsx scripts/with-local-netlify.ts drizzle-kit migrate",
+		"db:migrate:deploy": "drizzle-kit migrate",
 		"db:sanitize-preview": "tsx scripts/sanitizePreviewDb.ts"
 	},
 	"watch": {

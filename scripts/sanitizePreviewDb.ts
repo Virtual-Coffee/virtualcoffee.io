@@ -38,7 +38,8 @@ import { coverageFailures } from './lib/schemaCoverage';
  * Netlify forks every deploy preview's Postgres branch from production, so
  * without this, real applicant emails, CoC report contents and maintainers'
  * Slack OAuth tokens all land on a preview build. This runs as the last step
- * of the build (see netlify.toml) and is the thing that makes it safe for
+ * of the build, after `db:migrate:deploy` has brought the branch up to this
+ * commit's schema (see netlify.toml), and is the thing that makes it safe for
  * `PREVIEW_ADMIN_BYPASS` to unblock /admin on a preview at all — see
  * docs/adr/0007. It is a no-op everywhere except CONTEXT=deploy-preview or
  * branch-deploy.
