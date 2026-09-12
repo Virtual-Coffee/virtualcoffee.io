@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 import {
 	applicationEvent,
@@ -187,4 +187,33 @@ export async function insertPendingGrant(fields: {
 		})
 		.returning({ id: pendingGrant.id });
 	return row;
+}
+
+/**
+ * Make every ledger insert with this reason fail, until `remove()` is called.
+ *
+ * A trigger rather than a mock, so the failure happens inside the real
+ * transaction and what the test observes is Postgres rolling it back.
+ * `afterEach` only truncates, so a test that installs one must remove it.
+ */
+export async function failLedgerInserts(reason: VolunteerLedgerReason) {
+	await db().execute(sql`
+		create or replace function test_fail_ledger_insert() returns trigger as $$
+		begin
+			raise exception 'ledger insert refused by test';
+		end
+		$$ language plpgsql
+	`);
+	await db().execute(sql`
+		create trigger test_fail_ledger_insert
+		before insert on volunteer_invite_ledger
+		for each row when (new.reason = ${sql.raw(`'${reason}'`)})
+		execute function test_fail_ledger_insert()
+	`);
+	return {
+		remove: () =>
+			db().execute(
+				sql`drop trigger if exists test_fail_ledger_insert on volunteer_invite_ledger`,
+			),
+	};
 }

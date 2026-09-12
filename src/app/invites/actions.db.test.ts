@@ -6,6 +6,7 @@ import { volunteerBalance } from '@/lib/invites';
 import { redirectTo } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
+	failLedgerInserts,
 	insertApplication,
 	insertInvite,
 	insertVolunteer,
@@ -278,6 +279,32 @@ describe('cancelInvite', () => {
 		).rejects.toMatchObject({
 			cause: { constraint: 'volunteer_invite_ledger_spend_idx' },
 		});
+	});
+
+	test('a refund that fails leaves the invite pending, so it can be retried', async () => {
+		await volunteerWithBalance(1);
+		const { id } = await insertInvite({ inviterSlackUserId: GRACE });
+		await ledgerRow({
+			slackUserId: GRACE,
+			delta: -1,
+			reason: 'spend',
+			inviteId: id,
+		});
+
+		const fault = await failLedgerInserts('refund_cancelled');
+		try {
+			await expect(cancelInvite(id)).rejects.toThrow(/volunteer_invite_ledger/);
+			await expect(inviteRow(id)).resolves.toMatchObject({
+				status: 'pending',
+			});
+			await expect(volunteerBalance(GRACE)).resolves.toBe(0);
+		} finally {
+			await fault.remove();
+		}
+
+		await expect(cancelInvite(id)).resolves.toMatchObject({ ok: true });
+		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'cancelled' });
+		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
 	});
 
 	test('only the inviter can cancel, and only while it is pending', async () => {

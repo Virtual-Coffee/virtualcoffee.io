@@ -117,23 +117,28 @@ async function expire(now: Date): Promise<number> {
 		);
 
 	for (const row of due) {
-		await database
-			.update(invite)
-			.set({ status: 'expired', tokenHash: null })
-			.where(and(eq(invite.id, row.id), eq(invite.status, 'pending')));
+		// One transaction per Invite: once the row is no longer `pending` the
+		// next sweep will never see it again, so the refund must land with the
+		// status change or not at all.
+		await database.transaction(async (tx) => {
+			await tx
+				.update(invite)
+				.set({ status: 'expired', tokenHash: null })
+				.where(and(eq(invite.id, row.id), eq(invite.status, 'pending')));
 
-		if (row.slackUserId && row.spendId) {
-			await database
-				.insert(volunteerInviteLedger)
-				.values({
-					slackUserId: row.slackUserId,
-					delta: 1,
-					reason: 'refund_expired',
-					inviteId: row.id,
-					body: 'Invite expired unclaimed',
-				})
-				.onConflictDoNothing();
-		}
+			if (row.slackUserId && row.spendId) {
+				await tx
+					.insert(volunteerInviteLedger)
+					.values({
+						slackUserId: row.slackUserId,
+						delta: 1,
+						reason: 'refund_expired',
+						inviteId: row.id,
+						body: 'Invite expired unclaimed',
+					})
+					.onConflictDoNothing();
+			}
+		});
 	}
 
 	return due.length;

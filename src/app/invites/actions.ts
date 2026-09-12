@@ -4,7 +4,13 @@ import { and, eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-import { db, invite, volunteer, volunteerInviteLedger } from '@/db';
+import {
+	db,
+	invite,
+	volunteer,
+	volunteerInviteLedger,
+	type Database,
+} from '@/db';
 import type { EmailActionResult } from '@/lib/actionResult';
 import { isId } from '@/db/ids';
 import { volunteerInviteEmail } from '@/lib/email/templates';
@@ -17,6 +23,9 @@ import {
 import { actorId } from '@/lib/adminAccess';
 import { requireVolunteer } from '@/lib/volunteerAccess';
 import { siteUrl } from '@/util/url.server';
+
+/** The handle `db().transaction()` passes to its callback. */
+type Transaction = Parameters<Parameters<Database['transaction']>[0]>[0];
 
 const schema = z.object({
 	name: z.string().trim().min(1, 'Please give their name.').max(200),
@@ -212,18 +221,21 @@ export async function sendInvite(
 			 * refund index would refuse the second credit, an Invite nobody can ever
 			 * claim has no business sitting in the Volunteer's list as "Sent".
 			 */
-			await db()
-				.update(invite)
-				.set({ status: 'cancelled', tokenHash: null, tokenExpiresAt: null })
-				.where(eq(invite.id, inviteId));
+			await db().transaction(async (tx) => {
+				await tx
+					.update(invite)
+					.set({ status: 'cancelled', tokenHash: null, tokenExpiresAt: null })
+					.where(eq(invite.id, inviteId));
 
-			await refund(
-				inviteId,
-				slackUserId,
-				actor,
-				'refund_cancelled',
-				`Send to ${email} failed: ${sent.message}`,
-			);
+				await refund(
+					tx,
+					inviteId,
+					slackUserId,
+					actor,
+					'refund_cancelled',
+					`Send to ${email} failed: ${sent.message}`,
+				);
+			});
 
 			revalidatePath('/invites');
 			return {
@@ -268,21 +280,39 @@ export async function cancelInvite(
 		};
 	}
 
-	const cancelled = await db()
-		.update(invite)
-		.set({ status: 'cancelled', tokenHash: null, tokenExpiresAt: null })
-		.where(
-			and(
-				eq(invite.id, inviteId),
-				// Scoped to the caller: an id from someone else's list is not theirs
-				// to cancel, and this is the only place that is enforced.
-				eq(invite.inviterSlackUserId, slackUserId),
-				eq(invite.status, 'pending'),
-			),
-		)
-		.returning({ id: invite.id });
+	// The status change and the refund commit together: an Invite that is no
+	// longer `pending` is invisible to the expiry sweep, so a refund that failed
+	// after the flip would never be made good.
+	const cancelled = await db().transaction(async (tx) => {
+		const rows = await tx
+			.update(invite)
+			.set({ status: 'cancelled', tokenHash: null, tokenExpiresAt: null })
+			.where(
+				and(
+					eq(invite.id, inviteId),
+					// Scoped to the caller: an id from someone else's list is not theirs
+					// to cancel, and this is the only place that is enforced.
+					eq(invite.inviterSlackUserId, slackUserId),
+					eq(invite.status, 'pending'),
+				),
+			)
+			.returning({ id: invite.id });
 
-	if (cancelled.length === 0) {
+		if (rows.length > 0) {
+			await refund(
+				tx,
+				inviteId,
+				slackUserId,
+				actor,
+				'refund_cancelled',
+				'Cancelled',
+			);
+		}
+
+		return rows.length > 0;
+	});
+
+	if (!cancelled) {
 		return {
 			ok: false,
 			message:
@@ -290,8 +320,6 @@ export async function cancelInvite(
 			emailSent: false,
 		};
 	}
-
-	await refund(inviteId, slackUserId, actor, 'refund_cancelled', 'Cancelled');
 
 	revalidatePath('/invites');
 	return { ok: true, message: 'Invite cancelled and given back.' };
@@ -306,13 +334,14 @@ export async function cancelInvite(
  * silently dropped rather than doubling the allowance.
  */
 async function refund(
+	tx: Transaction,
 	inviteId: string,
 	slackUserId: string,
 	actorUserId: string | null,
 	reason: 'refund_cancelled' | 'refund_expired',
 	body: string,
 ): Promise<void> {
-	await db()
+	await tx
 		.insert(volunteerInviteLedger)
 		.values({ slackUserId, delta: 1, reason, inviteId, actorUserId, body })
 		.onConflictDoNothing();

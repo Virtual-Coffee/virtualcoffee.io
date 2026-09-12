@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { volunteerBalance } from '@/lib/invites';
 import {
+	failLedgerInserts,
 	insertInvite,
 	insertUser,
 	insertVolunteer,
@@ -201,6 +202,42 @@ describe('expiry', () => {
 			expired: 0,
 		});
 		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'pending' });
+	});
+
+	test('a refund that fails leaves the invite pending for the next sweep', async () => {
+		await insertVolunteer({ slackUserId: 'U_A' });
+		const { id } = await insertInvite({
+			inviterSlackUserId: 'U_A',
+			expiresAt: new Date('2026-01-10T00:00:00Z'),
+		});
+		await ledgerRow({
+			slackUserId: 'U_A',
+			delta: -1,
+			reason: 'spend',
+			inviteId: id,
+		});
+
+		const fault = await failLedgerInserts('refund_expired');
+		try {
+			await expect(runInviteMaintenance(JAN)).rejects.toThrow(
+				/volunteer_invite_ledger/,
+			);
+			// Rolled back together: still pending, so the next run picks it up.
+			await expect(inviteRow(id)).resolves.toMatchObject({
+				status: 'pending',
+			});
+		} finally {
+			await fault.remove();
+		}
+
+		await expect(runInviteMaintenance(JAN)).resolves.toMatchObject({
+			expired: 1,
+		});
+		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'expired' });
+		const refunds = (await ledgerFor('U_A')).filter(
+			(r) => r.reason === 'refund_expired',
+		);
+		expect(refunds).toHaveLength(1);
 	});
 
 	test('an expired invite that was never charged is not refunded', async () => {
