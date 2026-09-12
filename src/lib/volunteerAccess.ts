@@ -35,9 +35,11 @@ export function isVolunteer(session: Session | null): boolean {
  * The Slack member id everything about an allowance is keyed on.
  *
  * Read off the session rather than looked up, so a page render costs no query.
- * The dev and preview bypass sessions carry `ADMIN_DEV_BYPASS_SLACK_ID` here;
- * without it they would authenticate as a Volunteer and then match no
- * `volunteer` row, which looks like a bug and is really a missing env var.
+ * The dev and preview bypass sessions always carry one here —
+ * `ADMIN_DEV_BYPASS_SLACK_ID`, or the `U_DEV_BYPASS` fallback that `pnpm
+ * db:seed` creates a Volunteer for (`adminAccess.ts`) — so a bypass session
+ * that authenticates as a Volunteer and then matches no `volunteer` row is a
+ * seed or override mismatch, never a missing id.
  */
 export function sessionSlackUserId(session: Session | null): string | null {
 	return (
@@ -68,10 +70,12 @@ export async function requireVolunteer(): Promise<VolunteerSession> {
 
 	if (!slackUserId) {
 		/**
-		 * Only reachable for a user whose Slack account was never linked, or a
-		 * bypass session with no `ADMIN_DEV_BYPASS_SLACK_ID`. There is nothing the
-		 * viewer can do about either, so this is the one case that shows an
-		 * explanation instead of a sign-in button.
+		 * Only reachable for a real signed-in user whose account never got a Slack
+		 * member id — not a bypass session, which always falls back to
+		 * `U_DEV_BYPASS`/`U_PREVIEW_BYPASS` (`adminAccess.ts`;
+		 * `volunteerAccess.test.ts` pins it). There is nothing the viewer can do
+		 * about it, so this is the one case that shows an explanation instead of a
+		 * sign-in button.
 		 */
 		redirect('/invites/sign-in?problem=no-slack-id');
 	}
