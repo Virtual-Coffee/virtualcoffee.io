@@ -11,6 +11,7 @@ import {
 	type ApplicationStatus,
 } from '@/db';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
+import { checkNote } from '@/lib/notes';
 import { actorId, requirePermission } from '@/lib/adminAccess';
 import { sendEmail } from '@/lib/email/transport';
 import {
@@ -468,16 +469,14 @@ export async function addNote(
 		return { ok: false, message: 'Application not found.' };
 	}
 
-	const trimmed = body.trim();
-	if (!trimmed) {
-		return { ok: false, message: 'A note cannot be empty.' };
-	}
+	const note = checkNote(body);
+	if (!note.ok) return note;
 
 	await recordEvent({
 		applicationId,
 		actorUserId: actor,
 		type: 'note',
-		body: trimmed,
+		body: note.body,
 	});
 
 	revalidatePath(`/admin/waitlist/${applicationId}`);

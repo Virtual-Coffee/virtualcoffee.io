@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { db, type SubmissionStatus } from '@/db';
 import { isId } from '@/db/ids';
 import type { ActionResult } from '@/lib/actionResult';
+import { checkNote } from '@/lib/notes';
 import { actorId, requirePermission } from '@/lib/adminAccess';
 import type { Session } from '@/lib/auth';
 import {
@@ -109,8 +110,8 @@ export async function addSubmissionNote(
 	const context = await authorise(kind);
 	if (!context) return { ok: false, message: 'Unknown submission type.' };
 
-	const trimmed = body.trim();
-	if (!trimmed) return { ok: false, message: 'A note needs some text.' };
+	const note = checkNote(body);
+	if (!note.ok) return note;
 	// Looked up first: recordSubmissionEvent() would otherwise throw on the
 	// foreign key for a well-formed id that was deleted underneath the page.
 	if (!isId(id) || !(await getSubmission(context.kind, id)))
@@ -120,7 +121,7 @@ export async function addSubmissionNote(
 		kind: context.kind,
 		submissionId: id,
 		type: 'note',
-		body: trimmed,
+		body: note.body,
 		actorUserId: await actorId(context.session.user.id),
 	});
 

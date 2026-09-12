@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import type { ActionResult } from '@/lib/actionResult';
+import { MAX_NOTE_LENGTH } from '@/lib/notes';
 import { useAction } from '@/util/forms/useAction';
 
 /** A note on a detail screen; `onSubmit` is the section's own action, bound to its row. */
@@ -29,6 +30,7 @@ export function NoteComposer({
 				id="note"
 				className="form-control form-control-sm"
 				rows={2}
+				maxLength={MAX_NOTE_LENGTH}
 				value={body}
 				onChange={(event) => setBody(event.target.value)}
 				placeholder="Context for whoever picks this up next"
