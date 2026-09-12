@@ -341,7 +341,8 @@ export async function approveMembership(
 /**
  * A fresh Slack invite for someone who is already a member: the first link
  * was consumed by a scanner, expired unread, or went to a spam folder. The
- * old token is left to expire — it is single-use and harmless. No status
+ * previous link stops working — minting the new token expires it — so a
+ * link that went astray cannot be redeemed by whoever finds it. No status
  * changes, so the send-first rule has nothing to protect; the event is what
  * records that a second link is out.
  */
