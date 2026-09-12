@@ -76,6 +76,35 @@ someone into one Section and nowhere else.
 _Avoid_: Moderator, staff, maintainer (a maintainer is a community role, which
 does not by itself confer admin access)
 
+## Submissions
+
+**Submission**:
+Something a non-member sends through a public form on the site that a maintainer
+has to act on. Four kinds, below. Distinct from a **Membership Application**,
+which is a request to join and has a pipeline of its own.
+_Avoid_: Form submission, enquiry, ticket, request
+
+**CoC Report**:
+A report that someone breached the Code of Conduct. May be anonymous — the form
+asks for a name and email and says to skip both if the reporter prefers.
+Deliberately readable by fewer people than the other kinds.
+_Avoid_: Complaint, incident, violation
+
+**Volunteer Signup**:
+A form submission from someone offering to help with a role or initiative. It is
+how someone might _become_ a **Volunteer**, and is not one — a Volunteer is a
+person who can give out Invites, and most have never filled this in.
+_Avoid_: Application (a Membership Application is a different thing), Volunteer
+
+**Lunch & Learn Idea**:
+A proposed talk. Becomes an issue in the community docs repo, which is where the
+work of scheduling it actually happens.
+_Avoid_: Talk submission, proposal
+
+**Coffee Table Group Request**:
+A proposal for a new small special-interest group.
+_Avoid_: Group application
+
 ## Access
 
 **Section**:
