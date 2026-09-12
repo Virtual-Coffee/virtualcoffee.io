@@ -43,7 +43,7 @@ export function SendInviteForm({
 	}
 
 	function confirm() {
-		run(() => sendInvite(name, email), {
+		run(() => sendInvite(name, email.trim()), {
 			settle: () => setReviewing(false),
 			onSuccess: () => {
 				setName('');

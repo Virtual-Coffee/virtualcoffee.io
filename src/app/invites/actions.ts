@@ -50,7 +50,10 @@ export async function sendInvite(
 	const { session, slackUserId } = await requireVolunteer();
 	const actor = await actorId(session.user.id);
 
-	const parsed = schema.safeParse({ name: rawName, email: rawEmail });
+	// Trimmed here too, not only in the form: the preview the Volunteer
+	// confirmed showed the trimmed address, and `z.email()` would refuse a
+	// pasted trailing space.
+	const parsed = schema.safeParse({ name: rawName, email: rawEmail.trim() });
 	if (!parsed.success) {
 		return {
 			ok: false,

@@ -50,6 +50,19 @@ beforeEach(() => {
 });
 
 describe('sendInvite', () => {
+	test('the address is trimmed, as the preview showed it', async () => {
+		await volunteerWithBalance(1);
+		sendEmail.mockResolvedValue(SENT);
+
+		await expect(sendInvite('Ada', '  ada@example.test ')).resolves.toEqual({
+			ok: true,
+			message: 'Invite sent to ada@example.test.',
+		});
+		expect(sendEmail).toHaveBeenCalledWith(
+			expect.objectContaining({ to: 'ada@example.test' }),
+		);
+	});
+
 	test('spends one invite, writes the Invite with only the hash, and emails the link', async () => {
 		await volunteerWithBalance(2);
 
