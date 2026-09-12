@@ -80,6 +80,16 @@ function getTransporter(): Transporter {
 
 const TIMEOUT_CODES = new Set(['ETIMEDOUT', 'ECONNRESET', 'ESOCKET']);
 
+/**
+ * The address alone, lower-cased: nodemailer reports what the server accepted
+ * in its own spelling, and mistaking "Name <addr>" or a capital letter for
+ * "the applicant's copy was refused" would cancel and refund a send that went.
+ */
+function bareAddress(value: string): string {
+	const match = /<([^>]+)>/.exec(value);
+	return (match ? match[1] : value).trim().toLowerCase();
+}
+
 export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 	if (!emailConfigured()) {
 		return {
@@ -106,8 +116,8 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 		// was accepted, so a non-empty list here is a partial delivery. Whether
 		// the *applicant's* copy went is what decides between failure and warning.
 		const rejected = (info.rejected ?? []).map(String);
-		const accepted = (info.accepted ?? []).map(String);
-		if (rejected.length > 0 && !accepted.includes(input.to)) {
+		const accepted = (info.accepted ?? []).map(String).map(bareAddress);
+		if (rejected.length > 0 && !accepted.includes(bareAddress(input.to))) {
 			return {
 				ok: false,
 				definitelyNotSent: true,

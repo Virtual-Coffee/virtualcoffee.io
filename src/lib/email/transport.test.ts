@@ -110,6 +110,16 @@ describe('sendEmail', () => {
 		});
 	});
 
+	test('the applicant is matched by address, not by spelling', async () => {
+		sendMail.mockResolvedValue({
+			accepted: ['Ada <ADA@example.test>'],
+			rejected: ['maintainer@example.test'],
+		});
+		await expect(
+			sendEmail({ ...input, cc: 'maintainer@example.test' }),
+		).resolves.toMatchObject({ ok: true });
+	});
+
 	test.each(['EAUTH', 'EENVELOPE', 'ECONNECTION', undefined])(
 		'an error with code %s: definitely not sent',
 		async (code) => {
