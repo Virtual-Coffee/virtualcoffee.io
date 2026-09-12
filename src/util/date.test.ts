@@ -1,4 +1,5 @@
-import { describe, expect, test } from 'vitest';
+import { Settings } from 'luxon';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 import { dateForDisplay } from './date';
 
 describe('dateForDisplay', () => {
@@ -20,11 +21,22 @@ describe('dateForDisplay', () => {
 		);
 	});
 
-	test("defaults to luxon's 'fff': medium date and time with the zone", () => {
-		// 'fff' is locale-formatted, so match the New York time and zone rather
-		// than the exact string — en-GB writes 23:30 where en-US writes 11:30 PM.
-		expect(dateForDisplay('2026-07-02T03:30:00Z')).toMatch(
-			/^.*2026.*(11:30 PM|23:30) EDT$/,
-		);
+	describe("with the default 'fff' format", () => {
+		// 'fff' is locale-formatted (date order, 12/24-hour clock, zone name),
+		// so pin the locale rather than inherit the runner's.
+		let previousLocale: string;
+		beforeAll(() => {
+			previousLocale = Settings.defaultLocale;
+			Settings.defaultLocale = 'en-US';
+		});
+		afterAll(() => {
+			Settings.defaultLocale = previousLocale;
+		});
+
+		test('renders a medium date and time with the zone', () => {
+			expect(dateForDisplay('2026-07-02T03:30:00Z')).toBe(
+				'July 1, 2026 at 11:30 PM EDT',
+			);
+		});
 	});
 });
