@@ -195,6 +195,9 @@ export async function pendingInvite(inviteId: string) {
 			inviteeEmail: invite.inviteeEmail,
 			inviterName: invite.inviterName,
 			inviterSlackUserId: invite.inviterSlackUserId,
+			// The hash is what the resend swaps against, so two resends cannot both
+			// report success with different links.
+			tokenHash: invite.tokenHash,
 			tokenExpiresAt: invite.tokenExpiresAt,
 		})
 		.from(invite)
