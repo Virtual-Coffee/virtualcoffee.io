@@ -3,9 +3,27 @@ import { describe, expect, test } from 'vitest';
 import { filterSlackMembers, type SlackMember } from './slackMemberPicker';
 
 const members: SlackMember[] = [
-	{ id: 'U1', name: 'Grace Hopper', displayName: 'Grace', handle: 'ghopper' },
-	{ id: 'U2', name: 'Ada Lovelace', displayName: 'Ada', handle: 'ada' },
-	{ id: 'U3', name: 'Alan Turing', displayName: 'Alan', handle: 'turing' },
+	{
+		id: 'U1',
+		name: 'Grace Hopper',
+		displayName: 'Grace',
+		handle: 'ghopper',
+		email: null,
+	},
+	{
+		id: 'U2',
+		name: 'Ada Lovelace',
+		displayName: 'Ada',
+		handle: 'ada',
+		email: null,
+	},
+	{
+		id: 'U3',
+		name: 'Alan Turing',
+		displayName: 'Alan',
+		handle: 'turing',
+		email: null,
+	},
 ];
 
 describe('filterSlackMembers', () => {

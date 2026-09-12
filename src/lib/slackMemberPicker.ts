@@ -13,6 +13,12 @@ export type SlackMember = {
 	displayName: string;
 	/** The `@handle`, without the `@`. */
 	handle: string;
+	/**
+	 * `profile.email`, which `users.list` returns when the bot token carries
+	 * `users:read.email` and the workspace's Email Display setting allows it.
+	 * `null` when either is off — the row is still usable, just not prefillable.
+	 */
+	email: string | null;
 };
 
 /**
