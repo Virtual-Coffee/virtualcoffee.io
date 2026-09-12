@@ -38,6 +38,7 @@ describe('accrual', () => {
 			period: '2026-01',
 			accrued: 2,
 			expired: 0,
+			expiryFailures: 0,
 			emailed: 2,
 			emailFailures: 0,
 		});
@@ -269,8 +270,8 @@ describe('expiry', () => {
 		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'pending' });
 	});
 
-	test('a refund that fails leaves the invite pending for the next sweep', async () => {
-		await insertVolunteer({ slackUserId: 'U_A' });
+	test('a refund that fails leaves the invite pending for the next sweep, and the run goes on', async () => {
+		await insertVolunteer({ slackUserId: 'U_A', email: 'a@example.test' });
 		const { id } = await insertInvite({
 			inviterSlackUserId: 'U_A',
 			expiresAt: new Date('2026-01-10T00:00:00Z'),
@@ -284,9 +285,14 @@ describe('expiry', () => {
 
 		const fault = await failLedgerInserts('refund_expired');
 		try {
-			await expect(runInviteMaintenance(JAN)).rejects.toThrow(
-				/volunteer_invite_ledger/,
-			);
+			// Counted, not thrown: the accrual has already happened and is not
+			// repeated tomorrow, so this run is the only one that can announce it.
+			await expect(runInviteMaintenance(JAN)).resolves.toMatchObject({
+				accrued: 1,
+				expired: 0,
+				expiryFailures: 1,
+				emailed: 1,
+			});
 			// Rolled back together: still pending, so the next run picks it up.
 			await expect(inviteRow(id)).resolves.toMatchObject({
 				status: 'pending',
@@ -297,6 +303,7 @@ describe('expiry', () => {
 
 		await expect(runInviteMaintenance(JAN)).resolves.toMatchObject({
 			expired: 1,
+			expiryFailures: 0,
 		});
 		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'expired' });
 		const refunds = (await ledgerFor('U_A')).filter(

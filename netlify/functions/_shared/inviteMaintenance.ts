@@ -23,6 +23,8 @@ export type MaintenanceReport = {
 	period: string;
 	accrued: number;
 	expired: number;
+	/** Invites still `pending` because their expiry transaction failed. */
+	expiryFailures: number;
 	emailed: number;
 	emailFailures: number;
 };
@@ -81,7 +83,9 @@ async function accrue(now: Date): Promise<string[]> {
  *     Invite that was never charged, which would invent allowance out of
  *     nothing.
  */
-async function expire(now: Date): Promise<number> {
+async function expire(
+	now: Date,
+): Promise<{ expired: number; failures: number }> {
 	const database = db();
 
 	const due = await database
@@ -107,40 +111,52 @@ async function expire(now: Date): Promise<number> {
 		);
 
 	let expired = 0;
+	let failures = 0;
 
 	for (const row of due) {
 		// One transaction per Invite: once the row is no longer `pending` the
 		// next sweep will never see it again, so the refund must land with the
-		// status change or not at all.
-		await database.transaction(async (tx) => {
-			// Conditional on `pending` again: the Invite may have been claimed or
-			// cancelled since the select above. Then it is neither expired nor
-			// refunded, and it is not counted.
-			const flipped = await tx
-				.update(invite)
-				.set({ status: 'expired', tokenHash: null })
-				.where(and(eq(invite.id, row.id), eq(invite.status, 'pending')))
-				.returning({ id: invite.id });
+		// status change or not at all. And one Invite's failure is its own:
+		// the row stays `pending` for tomorrow's sweep, and the rest of the
+		// run — the other expiries, and telling Volunteers what they accrued —
+		// still happens. The caller decides what to do with the count.
+		try {
+			const flipped = await database.transaction(async (tx) => {
+				// Conditional on `pending` again: the Invite may have been claimed
+				// or cancelled since the select above. Then it is neither expired
+				// nor refunded, and it is not counted.
+				const rows = await tx
+					.update(invite)
+					.set({ status: 'expired', tokenHash: null })
+					.where(and(eq(invite.id, row.id), eq(invite.status, 'pending')))
+					.returning({ id: invite.id });
 
-			if (flipped.length === 0) return;
-			expired += 1;
+				if (rows.length === 0) return false;
 
-			if (row.slackUserId && row.spendId) {
-				await tx
-					.insert(volunteerInviteLedger)
-					.values({
-						slackUserId: row.slackUserId,
-						delta: 1,
-						reason: 'refund_expired',
-						inviteId: row.id,
-						body: 'Invite expired unclaimed',
-					})
-					.onConflictDoNothing();
-			}
-		});
+				if (row.slackUserId && row.spendId) {
+					await tx
+						.insert(volunteerInviteLedger)
+						.values({
+							slackUserId: row.slackUserId,
+							delta: 1,
+							reason: 'refund_expired',
+							inviteId: row.id,
+							body: 'Invite expired unclaimed',
+						})
+						.onConflictDoNothing();
+				}
+
+				return true;
+			});
+
+			if (flipped) expired += 1;
+		} catch (error) {
+			failures += 1;
+			console.error('Invite expiry failed', { inviteId: row.id, error });
+		}
 	}
 
-	return expired;
+	return { expired, failures };
 }
 
 /** How many accrual emails are in flight at once, and how long each may take. */
@@ -237,13 +253,14 @@ export async function runInviteMaintenance(
 	now = new Date(),
 ): Promise<MaintenanceReport> {
 	const accruedFor = await accrue(now);
-	const expired = await expire(now);
+	const { expired, failures: expiryFailures } = await expire(now);
 	const { emailed, failures } = await notify(accruedFor);
 
 	return {
 		period: periodKey(now),
 		accrued: accruedFor.length,
 		expired,
+		expiryFailures,
 		emailed,
 		emailFailures: failures,
 	};

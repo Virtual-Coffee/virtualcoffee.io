@@ -21,10 +21,11 @@ async function main() {
 	console.log(`Period:          ${report.period}`);
 	console.log(`Accrued:         ${report.accrued}`);
 	console.log(`Expired:         ${report.expired}`);
+	console.log(`Expiry failures: ${report.expiryFailures}`);
 	console.log(`Emailed:         ${report.emailed}`);
 	console.log(`Email failures:  ${report.emailFailures}`);
 
-	process.exit(0);
+	process.exit(report.expiryFailures > 0 ? 1 : 0);
 }
 
 main().catch((error) => {
