@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "invite_pending_email_idx" ON "invite" (lower("invitee_email")) WHERE status = 'pending' and token_hash is not null;

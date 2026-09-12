@@ -77,6 +77,9 @@ const nextConfig = {
 		reactDebugChannel: false,
 		serverActions: {
 			allowedOrigins: devTunnelOrigins,
+			// Next caps action bodies at 1MB by default; the CoC form accepts a
+			// 10MB attachment (MAX_ATTACHMENT_BYTES), plus the multipart overhead.
+			bodySizeLimit: '11mb',
 		},
 	},
 	allowedDevOrigins: devTunnelOrigins,
