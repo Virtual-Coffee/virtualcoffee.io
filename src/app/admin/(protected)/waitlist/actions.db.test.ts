@@ -261,6 +261,23 @@ describe('recordAttendance and addNote', () => {
 		});
 	});
 
+	test('attendance is recorded once; a second click changes nothing', async () => {
+		const { id } = await insertApplication({ status: 'coffee_invited' });
+		await expect(recordAttendance(id)).resolves.toEqual({ ok: true });
+		const { coffeeAttendedAt } = await applicationRow(id);
+
+		await expect(recordAttendance(id)).resolves.toEqual({
+			ok: false,
+			message: 'Attendance is already recorded.',
+		});
+		expect((await applicationRow(id)).coffeeAttendedAt).toEqual(
+			coffeeAttendedAt,
+		);
+		await expect(applicationEvents(id)).resolves.toEqual([
+			expect.objectContaining({ type: 'attendance_recorded' }),
+		]);
+	});
+
 	test('a note on a malformed or unknown id is a soft failure, not a 22P02', async () => {
 		await expect(addNote('not-a-uuid', 'hello')).resolves.toMatchObject({
 			ok: false,

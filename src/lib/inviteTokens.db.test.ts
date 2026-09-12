@@ -19,6 +19,7 @@ describe('Slack invite tokens', () => {
 		const before = Date.now();
 
 		const { token, expiresAt } = await createSlackInviteToken(id);
+		const after = Date.now();
 
 		const [row] = await db().select().from(inviteToken);
 		expect(row).toMatchObject({
@@ -28,7 +29,12 @@ describe('Slack invite tokens', () => {
 		});
 		expect(row.tokenHash).not.toBe(token);
 		expect(expiresAt).toEqual(
-			expect.schemaMatching(z.date().min(new Date(before + THIRTY_DAYS))),
+			expect.schemaMatching(
+				z
+					.date()
+					.min(new Date(before + THIRTY_DAYS))
+					.max(new Date(after + THIRTY_DAYS)),
+			),
 		);
 	});
 
