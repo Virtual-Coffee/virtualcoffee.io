@@ -2,13 +2,9 @@ name: CI
 
 on:
   pull_request:
-  # Pushes to main only matter to the test job: GitHub's coverage comment on
-  # a PR compares against the default branch, so main needs an upload too.
-  push:
-    branches: [main]
 
 concurrency:
-  group: ci-${{ github.event.pull_request.number || github.ref }}
+  group: ci-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 permissions:
@@ -205,9 +201,6 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      code-quality: write
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -232,17 +225,4 @@ jobs:
       # Vitest switches to its github-actions reporter on its own here, so
       # failures annotate the diff without a problem matcher.
       - name: Test
-        run: pnpm test:coverage
-
-      # GitHub Code Quality's own coverage: a PR comment with the line
-      # coverage against main and a per-file table. Fork PRs get a read-only
-      # token, so they skip the upload rather than fail on it, and the upload
-      # itself is advisory — a hiccup in GitHub's API must not block a PR.
-      - name: Upload coverage
-        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-        uses: actions/upload-code-coverage@d8e329117199404bba6fc81efe8093dc7c015e34 # v1.4.2
-        with:
-          file: coverage/cobertura-coverage.xml
-          language: TypeScript
-          label: code-coverage/vitest
-          fail-on-error: false
+        run: pnpm test

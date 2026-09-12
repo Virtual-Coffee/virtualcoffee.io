@@ -7,10 +7,10 @@ name: CodeQL
 # There is no codeql-config.yml because there is nothing to exclude: no
 # vendored JavaScript under public/, and node_modules is skipped by default.
 #
-# Security queries only for now. Code Quality's findings come from a second
-# analysis kind (`analysis-kinds: code-scanning,code-quality`) that the action
-# still marks internal and that needs Code Quality enabled in the repository
-# settings; add it once that is confirmed live.
+# Security queries only. The action's `code-quality` analysis kind feeds
+# GitHub Code Quality, which is a paid product the org has decided against —
+# the coverage upload that went with it was removed from ci.yml for the same
+# reason. Code scanning itself is free for public repositories.
 
 on:
   pull_request:
