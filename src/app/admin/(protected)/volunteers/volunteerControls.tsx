@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { filterSlackMembers, type SlackMember } from '@/data/slackMembers';
+import { filterSlackMembers, type SlackMember } from '@/lib/slackMemberPicker';
 import { useAction } from '@/util/forms/useAction';
 import {
 	addVolunteer,
