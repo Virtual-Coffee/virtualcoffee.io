@@ -2,6 +2,7 @@
 
 import { and, eq, isNull } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
 import {
 	db,
@@ -22,11 +23,7 @@ import {
 } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
 import { newClaimToken, hashClaimToken } from '@/lib/invites';
-import {
-	grantVolunteerRole,
-	withVolunteerRole,
-	withoutVolunteerRole,
-} from '@/lib/pendingGrants';
+import { grantVolunteerRole, withoutVolunteerRole } from '@/lib/pendingGrants';
 import { parseRoles } from '@/lib/permissions';
 import { pendingInvite } from '@/lib/volunteers';
 import { siteUrl } from '@/util/url.server';
@@ -36,6 +33,12 @@ function revalidate(volunteerId?: string) {
 	revalidatePath('/admin');
 	if (volunteerId) revalidatePath(`/admin/volunteers/${volunteerId}`);
 }
+
+// The form's input is `type="email"`, but it submits through a button's
+// onClick, so the browser never runs that check.
+const emailSchema = z
+	.email('That doesn’t look like an email address.')
+	.max(320);
 
 /**
  * Make someone a Volunteer.
@@ -57,6 +60,17 @@ export async function addVolunteer(
 ): Promise<ActionResult> {
 	const session = await requirePermission('volunteers', 'manage');
 
+	const address = email.trim().toLowerCase();
+	if (address) {
+		const checked = emailSchema.safeParse(address);
+		if (!checked.success) {
+			return {
+				ok: false,
+				message: checked.error.issues[0]?.message ?? 'Please check the email.',
+			};
+		}
+	}
+
 	const members = await getSlackMembers();
 	const member = members.find((entry) => entry.id === slackUserId);
 
@@ -74,7 +88,7 @@ export async function addVolunteer(
 				slackDisplayName: member.displayName,
 				slackHandle: member.handle,
 				roleLabels: roleLabels.trim() || null,
-				email: email.trim().toLowerCase() || null,
+				email: address || null,
 			});
 
 			await grantVolunteerRole(
@@ -101,7 +115,6 @@ export async function addVolunteer(
 
 	// Tell them, after the writes and not fatal: they are a Volunteer by now,
 	// and a failed email must not read as a failed grant.
-	const address = email.trim();
 	if (!address) {
 		return {
 			ok: true,
@@ -139,6 +152,10 @@ export async function addVolunteer(
  *
  * The ledger is untouched. It is append-only and it is the record of what
  * happened; a returning Volunteer picks up the balance they left with.
+ *
+ * A restart is the same grant `addVolunteer` makes, so it goes through
+ * `grantVolunteerRole`: a pause withdraws a Pending Grant that carried only
+ * `volunteer`, and someone who never signed in has nothing else to update.
  */
 export async function setVolunteerActive(
 	volunteerId: string,
@@ -151,7 +168,11 @@ export async function setVolunteerActive(
 	}
 
 	const [row] = await db()
-		.select({ slackUserId: volunteer.slackUserId })
+		.select({
+			slackUserId: volunteer.slackUserId,
+			slackDisplayName: volunteer.slackDisplayName,
+			slackHandle: volunteer.slackHandle,
+		})
 		.from(volunteer)
 		.where(eq(volunteer.id, volunteerId))
 		.limit(1);
@@ -166,6 +187,15 @@ export async function setVolunteerActive(
 			.set({ deactivatedAt: active ? null : new Date() })
 			.where(eq(volunteer.id, volunteerId));
 
+		if (active) {
+			await grantVolunteerRole(
+				tx,
+				row,
+				session.user.name || session.user.email,
+			);
+			return;
+		}
+
 		const [account] = await tx
 			.select({ id: user.id, role: user.role })
 			.from(user)
@@ -177,15 +207,7 @@ export async function setVolunteerActive(
 			// a role away, so it leaves those alone; only a restart is a grant.
 			await tx
 				.update(user)
-				.set(
-					active
-						? {
-								role: withVolunteerRole(account.role),
-								roleGrantedAt: new Date(),
-								roleGrantedBy: session.user.name || session.user.email,
-							}
-						: { role: withoutVolunteerRole(account.role) },
-				)
+				.set({ role: withoutVolunteerRole(account.role) })
 				.where(eq(user.id, account.id));
 		}
 
@@ -201,9 +223,7 @@ export async function setVolunteerActive(
 			.limit(1);
 
 		if (grant) {
-			const role = active
-				? withVolunteerRole(grant.role)
-				: withoutVolunteerRole(grant.role);
+			const role = withoutVolunteerRole(grant.role);
 			// A grant that would carry nothing is withdrawn, as User Management
 			// would have done: it never took effect, and an empty grant is one
 			// setPendingGrantRoles() refuses to write.
@@ -313,7 +333,7 @@ export async function resendInvite(
 	}
 	// An invite imported from Airtable never had a Claim Link (no token, no
 	// expiry); minting one now would email a years-old invitee a live link.
-	if (!row.tokenExpiresAt) {
+	if (!row.tokenExpiresAt || !row.tokenHash) {
 		return {
 			ok: false,
 			message:
@@ -325,19 +345,26 @@ export async function resendInvite(
 
 	// Written before the send on purpose: the link in the email must already
 	// redeem, and a failed send is reported as such. See docs/adr/0011.
-	// Conditional on `pending` again, and checked: the invite may have been
-	// claimed or cancelled since the read above, and a link to a dead invite
-	// must not go out as "re-sent".
+	// Conditional on `pending` and on the token we read, and checked: the
+	// invite may have been claimed, cancelled or re-sent by someone else since
+	// the read above, and a link that is not the one in the row must not go
+	// out as "re-sent".
 	const replaced = await db()
 		.update(invite)
 		.set({ tokenHash: hashClaimToken(token), tokenExpiresAt: expiresAt })
-		.where(and(eq(invite.id, inviteId), eq(invite.status, 'pending')))
+		.where(
+			and(
+				eq(invite.id, inviteId),
+				eq(invite.status, 'pending'),
+				eq(invite.tokenHash, row.tokenHash),
+			),
+		)
 		.returning({ id: invite.id });
 	if (replaced.length === 0) {
 		return {
 			ok: false,
 			message:
-				'That invite was claimed or cancelled just now. Reload the page.',
+				'That invite was claimed, cancelled or re-sent just now. Reload the page.',
 		};
 	}
 
