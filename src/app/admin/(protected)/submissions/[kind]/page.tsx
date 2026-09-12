@@ -22,10 +22,12 @@ export async function generateMetadata({
 	params: Promise<{ kind: string }>;
 }) {
 	const { kind } = await params;
+	if (!isSubmissionKind(kind)) notFound();
+	// Metadata resolves independently of the page, so the title is gated the
+	// same way — or the 404 would carry the section name it exists to hide.
+	await requirePermission(SUBMISSION_KINDS[kind].section, 'read');
 	return {
-		title: isSubmissionKind(kind)
-			? SUBMISSION_KINDS[kind].label
-			: 'Submissions',
+		title: SUBMISSION_KINDS[kind].label,
 		robots: { index: false, follow: false },
 	};
 }
