@@ -106,15 +106,24 @@ async function expire(now: Date): Promise<number> {
 			),
 		);
 
+	let expired = 0;
+
 	for (const row of due) {
 		// One transaction per Invite: once the row is no longer `pending` the
 		// next sweep will never see it again, so the refund must land with the
 		// status change or not at all.
 		await database.transaction(async (tx) => {
-			await tx
+			// Conditional on `pending` again: the Invite may have been claimed or
+			// cancelled since the select above. Then it is neither expired nor
+			// refunded, and it is not counted.
+			const flipped = await tx
 				.update(invite)
 				.set({ status: 'expired', tokenHash: null })
-				.where(and(eq(invite.id, row.id), eq(invite.status, 'pending')));
+				.where(and(eq(invite.id, row.id), eq(invite.status, 'pending')))
+				.returning({ id: invite.id });
+
+			if (flipped.length === 0) return;
+			expired += 1;
 
 			if (row.slackUserId && row.spendId) {
 				await tx
@@ -131,7 +140,7 @@ async function expire(now: Date): Promise<number> {
 		});
 	}
 
-	return due.length;
+	return expired;
 }
 
 /**

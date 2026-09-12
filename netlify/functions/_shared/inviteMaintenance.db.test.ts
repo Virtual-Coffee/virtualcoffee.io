@@ -188,6 +188,36 @@ describe('expiry', () => {
 	});
 
 	/**
+	 * `pending` is the guard, not the date. PGlite cannot stage the race where
+	 * an Invite is claimed between the sweep's select and its update, but the
+	 * update is conditional on `pending` for that reason, and this pins the
+	 * outcome it guards: a claimed Invite past its date is not expired, not
+	 * refunded and not counted.
+	 */
+	test('a claimed invite past its date is neither swept nor refunded', async () => {
+		await insertVolunteer({ slackUserId: 'U_A' });
+		const { id } = await insertInvite({
+			inviterSlackUserId: 'U_A',
+			expiresAt: new Date('2026-01-10T00:00:00Z'),
+			status: 'accepted',
+		});
+		await ledgerRow({
+			slackUserId: 'U_A',
+			delta: -1,
+			reason: 'spend',
+			inviteId: id,
+		});
+
+		await expect(runInviteMaintenance(JAN)).resolves.toMatchObject({
+			expired: 0,
+		});
+		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'accepted' });
+		expect(
+			(await ledgerFor('U_A')).filter((r) => r.reason === 'refund_expired'),
+		).toHaveLength(0);
+	});
+
+	/**
 	 * Imported Invites are `pending` forever, never had a Claim Link, and were
 	 * never charged — expiring them would invent allowance out of nothing.
 	 */
