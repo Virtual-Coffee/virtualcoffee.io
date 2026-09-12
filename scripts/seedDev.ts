@@ -520,8 +520,8 @@ async function seedVolunteers(database: ReturnType<typeof db>) {
  * convention, not a schema constraint) and a failed Slack notification (the
  * warning banner on the CoC list) — plus one maintainer note, so the history
  * timeline has a real note to render, and one attachment, so the "has
- * attachment" link renders (it 404s locally with no real blob behind it,
- * which is an accepted tradeoff — see the plan, not a bug to chase).
+ * attachment" link renders (it 404s locally with no real blob behind it —
+ * accepted, not a bug to chase).
  */
 type CocReportSeed = {
 	status: SubmissionStatus;

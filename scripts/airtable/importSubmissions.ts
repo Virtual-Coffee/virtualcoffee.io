@@ -38,8 +38,7 @@ import { ATTACHMENT_STORE } from '../../src/lib/attachments';
  *
  * Full runbook: scripts/airtable/README.md.
  *
- *   FORMS_AIRTABLE_API_KEY=… pnpm exec tsx scripts/with-local-netlify.ts \
- *     tsx scripts/airtable/importSubmissions.ts --dry-run
+ *   FORMS_AIRTABLE_API_KEY=… pnpm exec tsx scripts/airtable/importSubmissions.ts --dry-run
  *
  *   FORMS_AIRTABLE_API_KEY=… pnpm exec tsx scripts/with-local-netlify.ts \
  *     tsx scripts/airtable/importSubmissions.ts

@@ -62,9 +62,8 @@
 	overflow: hidden;
 }
 
-// Queue rows are clickable, but the row itself must not be a link: it contains
-// its own buttons. The cursor is the only affordance, so keep the hover state
-// obvious.
+// Queue rows are clickable, but the row is not a link, so the cursor is the
+// only affordance — keep the hover state obvious.
 .admin-row {
 	cursor: pointer;
 

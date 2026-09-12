@@ -27,7 +27,7 @@ import { bool, classify, date, str } from './classify';
  *
  * Idempotent: rows are keyed on `airtable_record_id`, so a re-run inserts only
  * what is missing. Run with `--dry-run` first and check the cohort counts
- * against the numbers in the plan.
+ * against the ones in scripts/airtable/README.md.
  */
 
 const BASE_ID = 'appGHm8ztVWug6UxH';

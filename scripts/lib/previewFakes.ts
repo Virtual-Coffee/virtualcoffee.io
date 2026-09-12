@@ -64,7 +64,7 @@ export function fakeSlackId(realId: string): string {
  */
 const SALT = randomBytes(16);
 
-/** The first 40 bits of a salted sha256, as hex: distinct for any two real ids. */
+/** A salted sha256 as hex; callers take the prefix they need. */
 function digest(id: string | number): string {
 	return createHash('sha256').update(SALT).update(String(id)).digest('hex');
 }

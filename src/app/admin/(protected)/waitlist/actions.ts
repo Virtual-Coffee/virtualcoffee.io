@@ -87,7 +87,7 @@ export async function sendCoffeeInvite(
 
 	// Send BEFORE the status change. If this is reversed, a failed send leaves
 	// the applicant marked as invited with no email, and the maintainer has no
-	// way to tell. See wireframe 1i.
+	// way to tell.
 	const sent = await sendEmail({
 		to: application.email,
 		subject: template.subject,

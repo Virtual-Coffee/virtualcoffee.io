@@ -1,6 +1,6 @@
 # Airtable scripts
 
-The four one-off scripts that carried this site off Airtable. None of them run
+The one-off scripts that carried this site off Airtable. None of them run
 in a build or in CI, and nothing on the site reads Airtable at runtime any more.
 They are kept for provenance, for re-verification, and because the production
 membership import is not yet confirmed complete.
@@ -9,11 +9,12 @@ membership import is not yet confirmed complete.
 typed tables per submission kind, committed JSON for the challenges, `lapsed`
 rather than `declined`. This file is only about running them.
 
-| Script                  | Reads                                                  | Writes                                                                                                                        | Key                           | Wrapper |
-| ----------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ------- |
-| `importMembership.ts`   | base `appGHm8ztVWug6UxH`: `membership_form`, `Invites` | `membership_application`, `invite`, `application_event`                                                                       | `MEMBERSHIP_AIRTABLE_API_KEY` | yes     |
-| `importSubmissions.ts`  | base `appZ4d2Q9K0IepQnA`: four tables                  | `volunteer_signup`, `coc_report`, `lunch_and_learn_idea`, `coffee_table_group_request`, `submission_event`, `coc-attachments` | `FORMS_AIRTABLE_API_KEY`      | yes     |
-| `snapshotChallenges.ts` | bases `appJStQemmYeoRcox`, `app10kd5ewHiLTjxn`         | five JSON files in `src/data/monthlyChallenges/data/`                                                                         | `PUBLIC_AIRTABLE_API_KEY`     | no      |
+| Script                  | Reads                                                  | Writes                                                                                                                        | Key                           | Wrapper        |
+| ----------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | -------------- |
+| `importMembership.ts`   | base `appGHm8ztVWug6UxH`: `membership_form`, `Invites` | `membership_application`, `invite`, `application_event`                                                                       | `MEMBERSHIP_AIRTABLE_API_KEY` | yes            |
+| `importVolunteers.ts`   | base `appGHm8ztVWug6UxH`: `Volunteers`                 | `volunteer`, `volunteer_invite_ledger`, `user.role`, `pending_grant`                                                          | `MEMBERSHIP_AIRTABLE_API_KEY` | `--apply` only |
+| `importSubmissions.ts`  | base `appZ4d2Q9K0IepQnA`: four tables                  | `volunteer_signup`, `coc_report`, `lunch_and_learn_idea`, `coffee_table_group_request`, `submission_event`, `coc-attachments` | `FORMS_AIRTABLE_API_KEY`      | yes            |
+| `snapshotChallenges.ts` | bases `appJStQemmYeoRcox`, `app10kd5ewHiLTjxn`         | five JSON files in `src/data/monthlyChallenges/data/`                                                                         | `PUBLIC_AIRTABLE_API_KEY`     | no             |
 
 ## Before you run anything
 
@@ -42,7 +43,7 @@ Netlify Blobs server over `netlify dev`'s own sandbox directory. So:
 ## `importMembership.ts`
 
 Imports the membership base. Invites first, so `from_invite_id` on each
-application can be resolved to the new integer `invite.id`.
+application can be resolved to the new `invite.id`.
 
 Airtable carried application state in three loose flags; the script translates
 them into the status enum:
@@ -96,11 +97,10 @@ cutoff the comparison is suppressed, since the numbers no longer apply.
 
 - **A different `--cutoff-days` reclassifies nothing already imported.** The
   cutoff only affects rows on the run that first inserts them.
-- **A partial run followed by a re-run can lose application→invite links.** The
-  Airtable-id → invite-id map is built only from invites actually inserted, so on
-  a second run it is empty, and an application inserted then gets a null
-  `invite_id` even though the invite is in the database. If a first run died
-  part-way, prefer starting from a clean database over re-running on top of it.
+- **A re-run after a partial failure keeps application→invite links.** The
+  Airtable-id → invite-id map is built from every invite in the database, not
+  just the ones this run inserted, so applications written on the second run
+  still resolve their `invite_id`.
 
 **Data quirks worth knowing.** `approved_at` is null for 553 of the 1,099
 approved rows — it postdates them — so absence of the timestamp says nothing
@@ -200,9 +200,9 @@ kind, each inserted row also getting an `imported` row in `submission_event`.
 **Flag:** `--dry-run` only.
 
 ```bash
-# dry run: fetches everything, including the attachments, and writes nothing
-FORMS_AIRTABLE_API_KEY=… pnpm exec tsx scripts/with-local-netlify.ts \
-  tsx scripts/airtable/importSubmissions.ts --dry-run
+# dry run: fetches everything, including the attachments, and writes nothing —
+# no database or blob store, so no wrapper
+FORMS_AIRTABLE_API_KEY=… pnpm exec tsx scripts/airtable/importSubmissions.ts --dry-run
 
 # real run
 FORMS_AIRTABLE_API_KEY=… pnpm exec tsx scripts/with-local-netlify.ts \

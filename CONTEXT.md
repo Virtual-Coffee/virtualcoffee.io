@@ -115,7 +115,7 @@ _Avoid_: Group application
 
 **Section**:
 One area of `/admin` — the Waitlist, each kind of Submission, the Volunteers
-roster, or the Admins screen. A Permission is always over a Section.
+roster, or User Management. A Permission is always over a Section.
 
 **Permission**:
 A capability over one Section: `read` to see it, `manage` to change anything in
