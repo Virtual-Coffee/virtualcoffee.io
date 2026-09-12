@@ -4,27 +4,22 @@ import {
 	type SubmissionEventType,
 	type SubmissionStatus,
 } from '@/db';
-import type { SubmissionKind } from '@/lib/submissions';
-import { SUBMISSION_KINDS } from '@/lib/submissions';
+import {
+	SUBMISSION_KINDS,
+	type SubmissionEventKey,
+	type SubmissionKind,
+} from '@/lib/submissions';
 
 /**
- * The event-writing half of a Submission, shared by all four forms.
- *
- * Which foreign key to set is the only thing that varies, and getting it wrong
- * trips the `submission_event_exactly_one_subject` CHECK rather than writing a
- * bad row.
+ * The event-writing half of a Submission, shared by all four forms. Which
+ * foreign key to set is the only thing that varies; the wrong one trips the
+ * `submission_event_exactly_one_subject` CHECK rather than writing a bad row.
  */
-function subjectColumn(kind: SubmissionKind, id: string) {
-	switch (kind) {
-		case 'coc':
-			return { cocReportId: id };
-		case 'volunteers':
-			return { volunteerSignupId: id };
-		case 'lunch-and-learn':
-			return { lunchAndLearnIdeaId: id };
-		case 'coffee-tables':
-			return { coffeeTableGroupRequestId: id };
-	}
+function subjectColumn(
+	kind: SubmissionKind,
+	id: string,
+): Partial<Record<SubmissionEventKey, string>> {
+	return { [SUBMISSION_KINDS[kind].eventKey]: id };
 }
 
 export async function recordSubmissionEvent(input: {

@@ -52,88 +52,79 @@ export type ActivityEntry = {
 	subject: string;
 };
 
-const SUBMISSION_SECTIONS = Object.fromEntries(
-	(Object.keys(SUBMISSION_KINDS) as SubmissionKind[]).map((kind) => [
-		SUBMISSION_KINDS[kind].section,
-		kind,
-	]),
-) as Record<string, SubmissionKind>;
+async function waitlistCard(): Promise<DashboardCard> {
+	// Grouped rather than two counts: the two figures are halves of the same
+	// set, and one query cannot disagree with itself about a row that changed
+	// status between them.
+	const rows = await db()
+		.select({
+			status: membershipApplication.status,
+			value: count(),
+		})
+		.from(membershipApplication)
+		.where(inArray(membershipApplication.status, QUEUE_STATUSES))
+		.groupBy(membershipApplication.status);
+
+	const byStatus = new Map(rows.map((row) => [row.status, row.value]));
+
+	return {
+		section: 'waitlist',
+		label: 'Waitlist',
+		href: '/admin/waitlist',
+		figures: [
+			// Awaiting a first decision — nobody has looked at them yet.
+			{ count: byStatus.get('waitlisted') ?? 0, label: 'waiting' },
+			// Sent a Coffee invite, awaiting a Membership Approval after it.
+			{ count: byStatus.get('coffee_invited') ?? 0, label: 'pending' },
+		],
+	};
+}
+
+function submissionCard(kind: SubmissionKind): () => Promise<DashboardCard> {
+	const { section, label } = SUBMISSION_KINDS[kind];
+	return async () => ({
+		section,
+		label,
+		href: `/admin/submissions/${kind}`,
+		figures: [{ count: await openCount(kind), label: 'awaiting a response' }],
+	});
+}
 
 /**
- * One card per section the viewer holds `read` on.
- *
- * Built from the caller's already-computed section list rather than re-deriving
- * it, so the dashboard can never show a card the nav hides.
+ * One card per Section, or null for a Section that is a list of people rather
+ * than a queue of work. Keyed on `Section` so that adding one without deciding
+ * its card is a type error rather than a card that silently never renders.
+ */
+const CARDS: Record<Section, (() => Promise<DashboardCard>) | null> = {
+	waitlist: waitlistCard,
+	coc: submissionCard('coc'),
+	volunteerSignups: submissionCard('volunteers'),
+	lunchAndLearn: submissionCard('lunch-and-learn'),
+	coffeeTables: submissionCard('coffee-tables'),
+	// A roster, not a queue: how many can currently give out Invites.
+	volunteers: async () => ({
+		section: 'volunteers',
+		label: 'Volunteers',
+		href: '/admin/volunteers',
+		figures: [{ count: await activeVolunteerCount(), label: 'active' }],
+	}),
+	admins: null,
+};
+
+/**
+ * One card per section the viewer holds `read` on. Built from the caller's
+ * already-computed section list, so the dashboard can never show a card the
+ * nav hides.
  */
 export async function dashboardCards(
 	sections: readonly Section[],
 ): Promise<DashboardCard[]> {
-	const cards = await Promise.all(
-		sections.map(async (section): Promise<DashboardCard | null> => {
-			if (section === 'waitlist') {
-				/**
-				 * Grouped rather than two counts, because the two figures are the two
-				 * halves of the same set — one query, and they cannot disagree about
-				 * a row that changed status between them.
-				 */
-				const rows = await db()
-					.select({
-						status: membershipApplication.status,
-						value: count(),
-					})
-					.from(membershipApplication)
-					.where(inArray(membershipApplication.status, QUEUE_STATUSES))
-					.groupBy(membershipApplication.status);
-
-				const byStatus = new Map(rows.map((row) => [row.status, row.value]));
-
-				return {
-					section,
-					label: 'Waitlist',
-					href: '/admin/waitlist',
-					figures: [
-						// Awaiting a first decision — nobody has looked at them yet.
-						{ count: byStatus.get('waitlisted') ?? 0, label: 'waiting' },
-						// Sent a Coffee invite, awaiting a Membership Approval after it.
-						{ count: byStatus.get('coffee_invited') ?? 0, label: 'pending' },
-					],
-				};
-			}
-
-			/**
-			 * Volunteers are a roster, not a queue, so the count is how many can
-			 * currently give out Invites rather than how much work is waiting.
-			 * A new Section that is neither the waitlist nor a Submission kind
-			 * falls through to `SUBMISSION_SECTIONS` below and silently produces no
-			 * card at all, which is why this branch has to exist.
-			 */
-			if (section === 'volunteers') {
-				return {
-					section,
-					label: 'Volunteers',
-					href: '/admin/volunteers',
-					figures: [{ count: await activeVolunteerCount(), label: 'active' }],
-				};
-			}
-
-			// The User Management screen is a list of people, not a queue of work.
-			if (section === 'admins') return null;
-
-			const kind = SUBMISSION_SECTIONS[section];
-			if (!kind) return null;
-
-			return {
-				section,
-				label: SUBMISSION_KINDS[kind].label,
-				href: `/admin/submissions/${kind}`,
-				figures: [
-					{ count: await openCount(kind), label: 'awaiting a response' },
-				],
-			};
+	return Promise.all(
+		sections.flatMap((section) => {
+			const build = CARDS[section];
+			return build ? [build()] : [];
 		}),
 	);
-
-	return cards.filter((card): card is DashboardCard => card !== null);
 }
 
 const ACTIVITY_LIMIT = 15;
@@ -236,26 +227,13 @@ export async function recentActivity(
 			.limit(ACTIVITY_LIMIT);
 
 		for (const row of rows) {
-			const kind = visibleKinds.find((candidate) => {
-				switch (candidate) {
-					case 'coc':
-						return row.cocReportId !== null;
-					case 'volunteers':
-						return row.volunteerSignupId !== null;
-					case 'lunch-and-learn':
-						return row.lunchAndLearnIdeaId !== null;
-					case 'coffee-tables':
-						return row.coffeeTableGroupRequestId !== null;
-				}
-			});
+			const kind = visibleKinds.find(
+				(candidate) => row[SUBMISSION_KINDS[candidate].eventKey] !== null,
+			);
 
 			if (!kind) continue;
 
-			const submissionId =
-				row.cocReportId ??
-				row.volunteerSignupId ??
-				row.lunchAndLearnIdeaId ??
-				row.coffeeTableGroupRequestId;
+			const submissionId = row[SUBMISSION_KINDS[kind].eventKey];
 
 			entries.push({
 				key: `submission-${row.id}`,
