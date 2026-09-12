@@ -73,9 +73,28 @@ export async function notifySlack(
 	}
 }
 
+/**
+ * Slack reads `&`, `<` and `>` as control characters — `<!channel>` in a
+ * form field would page the whole channel — so every value a person typed
+ * is escaped before it is interpolated. Slack's own list, and only those
+ * three: entity-encoding anything else shows up literally.
+ */
+function escape(value: string): string {
+	return value
+		.replaceAll('&', '&amp;')
+		.replaceAll('<', '&lt;')
+		.replaceAll('>', '&gt;');
+}
+
+/** A free-text block as typed, or a dash for nothing. */
+function block(value: string | null | undefined): string {
+	const trimmed = value?.trim();
+	return trimmed ? escape(trimmed) : '—';
+}
+
 /** `*bold*` is Slack's mrkdwn, not Markdown's `**bold**`. */
 function field(label: string, value: string | null | undefined): string {
-	return `*${label}:* ${value?.trim() || '—'}`;
+	return `*${label}:* ${block(value)}`;
 }
 
 export function cocReportMessage(report: {
@@ -96,10 +115,10 @@ export function cocReportMessage(report: {
 		field('Time/Location', report.timeLocation),
 		'',
 		'*Description:*',
-		report.description,
+		block(report.description),
 		'',
 		'*Anyone else involved:*',
-		report.anyoneElseInvolved?.trim() || '—',
+		block(report.anyoneElseInvolved),
 		report.hasAttachment
 			? '\n_A file was attached; open the report to view it._'
 			: '',
@@ -122,7 +141,7 @@ export function volunteerSignupMessage(signup: {
 		field('Position', signup.position),
 		'',
 		'*Description:*',
-		signup.description?.trim() || '—',
+		block(signup.description),
 	].join('\n');
 }
 
@@ -131,7 +150,7 @@ export function lunchAndLearnMessage(idea: {
 	name: string;
 	issueUrl: string | null;
 }): string {
-	const lead = `New Lunch & Learn Submission: ${idea.topic} by ${idea.name}`;
+	const lead = `New Lunch & Learn Submission: ${escape(idea.topic)} by ${escape(idea.name)}`;
 	return idea.issueUrl ? `${lead}\n\nGitHub Link: ${idea.issueUrl}` : lead;
 }
 
@@ -173,6 +192,6 @@ export function coffeeTableGroupMessage(request: {
 		field('Group name', request.groupName),
 		'',
 		'*Description:*',
-		request.description?.trim() || '—',
+		block(request.description),
 	].join('\n');
 }
