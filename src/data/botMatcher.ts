@@ -40,3 +40,24 @@ export function createBotMatcher(tokens: string[]) {
 			: (byLowerCase.get(hit.toLowerCase()) ?? null);
 	};
 }
+
+export type BotVerdict =
+	{ verdict: 'allow' } | { verdict: 'block'; token: string };
+
+/**
+ * The edge function's decision, given both lists. Allowed wins: an agent
+ * fetching a page because someone asked for it is a person reading the site
+ * through a different client, and several of them name openai.com or a
+ * sibling crawler in the same string. A block carries the list entry that
+ * fired, spelled as it is in the list, for the log line.
+ */
+export function createBotPolicy(allowed: string[], blocked: string[]) {
+	const isAllowed = createBotMatcher(allowed);
+	const isBlocked = createBotMatcher(blocked);
+
+	return (userAgent: string): BotVerdict => {
+		if (isAllowed(userAgent)) return { verdict: 'allow' };
+		const token = isBlocked(userAgent);
+		return token === null ? { verdict: 'allow' } : { verdict: 'block', token };
+	};
+}
