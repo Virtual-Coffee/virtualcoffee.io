@@ -36,9 +36,21 @@ export function ConfirmSendDialog({
 	onConfirm: (copyMe: boolean) => void;
 }) {
 	const [copyMe, setCopyMe] = useState(false);
+
 	// A click on the backdrop cancels, which is the safe direction: nothing is
-	// sent, and the dialog is reopened by the same button that opened it.
-	const dialog = useModalDialog(open, onCancel);
+	// sent, and the dialog is reopened by the same button that opened it. Not
+	// while sending, though — closing then would only hide the outcome, and
+	// the Cancel button below is disabled for the same reason. Every close,
+	// programmatic ones included, comes through here, so this is also where
+	// the next confirmation starts unticked: the choice belongs to one email.
+	const dialog = useModalDialog(
+		open,
+		() => {
+			setCopyMe(false);
+			if (!pending) onCancel();
+		},
+		pending,
+	);
 
 	return (
 		<dialog {...dialog} className="admin-dialog">
@@ -49,6 +61,7 @@ export function ConfirmSendDialog({
 					className="btn-close"
 					aria-label="Close"
 					onClick={onCancel}
+					disabled={pending}
 				/>
 			</div>
 
