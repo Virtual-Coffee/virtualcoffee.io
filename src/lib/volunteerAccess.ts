@@ -17,10 +17,7 @@ export function isVolunteer(session: Session | null): boolean {
 
 /** Read off the session rather than looked up, so a page render costs no query. */
 export function sessionSlackUserId(session: Session | null): string | null {
-	return (
-		(session?.user as { slackUserId?: string | null } | undefined)
-			?.slackUserId ?? null
-	);
+	return session?.user.slackUserId ?? null;
 }
 
 export type VolunteerSession = { session: Session; slackUserId: string };
