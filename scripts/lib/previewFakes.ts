@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 import { faker } from '@faker-js/faker';
 
 /**
@@ -11,6 +13,13 @@ import { faker } from '@faker-js/faker';
 /** RFC 2606 reserved, never resolves; the verification pass matches on it. */
 export const FAKE_EMAIL_DOMAIN = 'preview.invalid';
 
+/**
+ * Seeds faker for a row, so the random-looking name and local part are the
+ * same on every run. Faker only takes a 32-bit seed, which is why identity
+ * values below do not go through this: a 32-bit hash collides — the Slack ids
+ * `UAOABCDEF` and `UB0ABCDEF` share one — and a collision would merge two
+ * people's rows or trip a unique constraint mid-sanitize.
+ */
 export function seedFor(id: string | number): number {
 	const str = String(id);
 	let hash = 0;
@@ -29,10 +38,15 @@ export function seedFor(id: string | number): number {
  * each occurrence independently and a preview's volunteers lose their balances
  * and their invites, which is a broken /admin rather than a sanitized one.
  *
- * `U` plus base36 keeps the shape recognisable without being a real id.
+ * `U` plus ten hex digits keeps the shape recognisable without being a real id.
  */
 export function fakeSlackId(realId: string): string {
-	return `U${seedFor(realId).toString(36).toUpperCase().padStart(8, '0')}`;
+	return `U${digest(realId).slice(0, 10).toUpperCase()}`;
+}
+
+/** The first 40 bits of a sha256, as hex: distinct for any two real ids. */
+function digest(id: string | number): string {
+	return createHash('sha256').update(String(id)).digest('hex');
 }
 
 /**
@@ -50,5 +64,5 @@ export function fakeEmail(id: string | number): string {
 		.username()
 		.toLowerCase()
 		.replace(/[^a-z0-9._-]/g, '');
-	return `${local}.${seedFor(id).toString(36)}@${FAKE_EMAIL_DOMAIN}`;
+	return `${local}.${digest(id).slice(0, 10)}@${FAKE_EMAIL_DOMAIN}`;
 }

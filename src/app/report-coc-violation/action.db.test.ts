@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { cocReport, db, submissionEvent } from '@/db';
 import { failedNotifications } from '@/lib/submissions';
@@ -36,6 +36,11 @@ async function submit(fields: Record<string, string | File>) {
 		.orderBy(submissionEvent.createdAt);
 	return { row, events };
 }
+
+beforeEach(() => {
+	notifySlack.mockReset();
+	blobs.set.mockReset();
+});
 
 describe('submitCocReport', () => {
 	test('an anonymous report is stored with no name or email, and announced', async () => {
@@ -108,5 +113,25 @@ describe('submitCocReport', () => {
 			'coc',
 			expect.stringContaining('A file was attached'),
 		);
+	});
+
+	/**
+	 * The upload is validated and stored before the row is written, so a store
+	 * that is down means no half-saved report — the error surfaces instead.
+	 */
+	test('a blob store failure leaves no report behind', async () => {
+		blobs.set.mockRejectedValueOnce(new Error('blobs unavailable'));
+		const png = new File(
+			[new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])],
+			'screenshot.png',
+			{ type: 'image/png' },
+		);
+
+		await expect(
+			submitCocReport(null, formDataWith({ ...valid, uploadedFiles: png })),
+		).rejects.toThrow('blobs unavailable');
+
+		await expect(db().select().from(cocReport)).resolves.toEqual([]);
+		expect(notifySlack).not.toHaveBeenCalled();
 	});
 });

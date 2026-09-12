@@ -5,10 +5,7 @@ import Airtable from 'airtable';
 import { eq, inArray } from 'drizzle-orm';
 
 import { db, invite, volunteer, volunteerInviteLedger } from '../../src/db';
-import {
-	fetchSlackMembers,
-	type SlackMember,
-} from '../../src/data/slackMembers';
+import { fetchSlackMembers } from '../../src/data/slackMembers';
 import { grantVolunteerRole } from '../../src/lib/pendingGrants';
 import { CONFIDENT_SCORE, score, type Candidate } from './match';
 

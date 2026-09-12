@@ -29,7 +29,7 @@ const templates: Array<[string, Template, string | null]> = [
 	['slackInviteEmail', slackInviteEmail('Ada Lovelace', URL), URL],
 ];
 
-describe.each(templates)('%s', (_name, template, link) => {
+describe.each(templates)('%s', (_name, template) => {
 	test('has a subject, greets by first name, and signs off', () => {
 		expect(template.subject.length).toBeGreaterThan(0);
 		expect(template.text).toMatch(/^Hi Ada,\n/);

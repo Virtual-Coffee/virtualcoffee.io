@@ -1,4 +1,3 @@
-import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, inviteToken, user } from '@/db';

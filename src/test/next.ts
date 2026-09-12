@@ -8,9 +8,12 @@ import { expect } from 'vitest';
 /** What `notFound()` throws — the 404 a wrong-section role gets. */
 export const NOT_FOUND = { digest: 'NEXT_HTTP_ERROR_FALLBACK;404' };
 
+const escapeForRegExp = (value: string) =>
+	value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 /** What `redirect(path)` throws. */
 export const redirectTo = (path: string) => ({
 	digest: expect.stringMatching(
-		`^NEXT_REDIRECT;[a-z]+;${path.replace(/[?]/g, '\\?')};`,
+		`^NEXT_REDIRECT;[a-z]+;${escapeForRegExp(path)};`,
 	),
 });

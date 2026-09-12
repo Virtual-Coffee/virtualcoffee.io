@@ -30,21 +30,28 @@ describe('fakeSlackId', () => {
 		expect(fakeSlackId('U0AB12CD3')).not.toBe(fakeSlackId('U0AB12CD4'));
 	});
 
+	test('two real ids that collide in the faker seed still get distinct fakes', () => {
+		expect(seedFor('UAOABCDEF')).toBe(seedFor('UB0ABCDEF'));
+		expect(fakeSlackId('UAOABCDEF')).not.toBe(fakeSlackId('UB0ABCDEF'));
+		faker.seed(1);
+		const a = fakeEmail('UAOABCDEF');
+		faker.seed(1);
+		expect(fakeEmail('UB0ABCDEF')).not.toBe(a);
+	});
+
 	test('keeps the Slack shape without being the real id', () => {
 		const fake = fakeSlackId('U0AB12CD3');
-		expect(fake).toMatch(/^U[0-9A-Z]{8,}$/);
+		expect(fake).toMatch(/^U[0-9A-F]{10}$/);
 		expect(fake).not.toBe('U0AB12CD3');
 	});
 });
 
 describe('fakeEmail', () => {
-	test('ends in the reserved domain and carries the id-derived suffix', () => {
+	test('ends in the reserved domain and carries a suffix derived from the id', () => {
 		faker.seed(1);
 		const email = fakeEmail('rec123');
 		expect(email).toMatch(
-			new RegExp(
-				`^[a-z0-9._-]+\\.${seedFor('rec123').toString(36)}@${FAKE_EMAIL_DOMAIN}$`,
-			),
+			new RegExp(`^[a-z0-9._-]+\\.[0-9a-f]{10}@${FAKE_EMAIL_DOMAIN}$`),
 		);
 		expect(FAKE_EMAIL_DOMAIN).toBe('preview.invalid');
 	});
