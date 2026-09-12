@@ -8,6 +8,7 @@ import {
 	volunteerInviteLedger,
 } from '@/db';
 import type { InviteStatus, VolunteerLedgerReason } from '@/db/schema';
+import { balancesBySlackUser } from '@/lib/invites';
 
 /** The roster behind /admin/volunteers — reads only; writes are in its `actions.ts`. */
 
@@ -38,14 +39,7 @@ export type VolunteerRow = {
 export async function listVolunteers(): Promise<VolunteerRow[]> {
 	const database = db();
 
-	const balances = database
-		.select({
-			slackUserId: volunteerInviteLedger.slackUserId,
-			total: sql<string>`sum(${volunteerInviteLedger.delta})`.as('total'),
-		})
-		.from(volunteerInviteLedger)
-		.groupBy(volunteerInviteLedger.slackUserId)
-		.as('balances');
+	const balances = balancesBySlackUser(database);
 
 	const sent = database
 		.select({

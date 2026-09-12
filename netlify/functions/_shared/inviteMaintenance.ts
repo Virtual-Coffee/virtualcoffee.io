@@ -1,4 +1,4 @@
-import { and, eq, isNotNull, isNull, lt, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNotNull, isNull, lt, sql } from 'drizzle-orm';
 
 import {
 	db,
@@ -8,7 +8,7 @@ import {
 	volunteerInviteLedger,
 } from '../../../src/db/index.ts';
 import { volunteerAccrualEmail } from '../../../src/lib/email/templates.ts';
-import { volunteerBalance } from '../../../src/lib/invites.ts';
+import { balancesBySlackUser } from '../../../src/lib/invites.ts';
 import { sendEmail } from '../../../src/lib/email/transport.ts';
 import { siteUrl } from '../../../src/util/url.server.ts';
 
@@ -143,12 +143,20 @@ async function expire(now: Date): Promise<number> {
 	return expired;
 }
 
+/** How many accrual emails are in flight at once, and how long each may take. */
+const SEND_CONCURRENCY = 4;
+const SEND_TIMEOUT_MS = 10_000;
+
 /**
  * Tell the Volunteers who accrued something what they now hold. Prefers the
  * roster address over the `user` row's (most have never signed in); one with
  * neither is skipped. A failure is logged and swallowed — the accrual already
  * happened, and failing the run would only make tomorrow's report an error
  * for something that succeeded.
+ *
+ * One query for everyone, then sends a few at a time with a timeout each: a
+ * scheduled function has seconds, not minutes, and one hung SMTP exchange
+ * must cost one email, not the rest of the roster's.
  */
 async function notify(slackUserIds: string[]): Promise<{
 	emailed: number;
@@ -157,53 +165,72 @@ async function notify(slackUserIds: string[]): Promise<{
 	if (slackUserIds.length === 0) return { emailed: 0, failures: 0 };
 
 	const database = db();
+	const balances = balancesBySlackUser(database);
+	const rows = await database
+		.select({
+			slackUserId: volunteer.slackUserId,
+			name: volunteer.slackDisplayName,
+			email: volunteer.email,
+			accountEmail: user.email,
+			balance: balances.total,
+		})
+		.from(volunteer)
+		.leftJoin(user, eq(volunteer.userId, user.id))
+		.leftJoin(balances, eq(balances.slackUserId, volunteer.slackUserId))
+		.where(inArray(volunteer.slackUserId, slackUserIds));
+
 	let emailed = 0;
 	let failures = 0;
 
-	for (const slackUserId of slackUserIds) {
+	const send = async (row: (typeof rows)[number]) => {
+		const address = row.email ?? row.accountEmail;
+		if (!address) return;
+
 		try {
-			const [row] = await database
-				.select({
-					name: volunteer.slackDisplayName,
-					email: volunteer.email,
-					accountEmail: user.email,
-				})
-				.from(volunteer)
-				.leftJoin(user, eq(volunteer.userId, user.id))
-				.where(eq(volunteer.slackUserId, slackUserId))
-				.limit(1);
-
-			if (!row) continue;
-			const address = row.email ?? row.accountEmail;
-			if (!address) continue;
-
 			const template = volunteerAccrualEmail(
 				row.name,
-				await volunteerBalance(slackUserId),
+				Number(row.balance ?? 0),
 				`${siteUrl()}/invites`,
 			);
-
-			const sent = await sendEmail({
-				to: address,
-				subject: template.subject,
-				text: template.text,
-			});
+			const sent = await withTimeout(
+				sendEmail({
+					to: address,
+					subject: template.subject,
+					text: template.text,
+				}),
+				SEND_TIMEOUT_MS,
+			);
 
 			if (sent.ok) emailed += 1;
 			else {
 				failures += 1;
 				console.error('Accrual email failed', {
-					slackUserId,
+					slackUserId: row.slackUserId,
 					message: sent.message,
 				});
 			}
 		} catch (error) {
 			failures += 1;
-			console.error('Accrual email threw', { slackUserId, error });
+			console.error('Accrual email threw', {
+				slackUserId: row.slackUserId,
+				error,
+			});
 		}
+	};
+
+	for (let i = 0; i < rows.length; i += SEND_CONCURRENCY) {
+		await Promise.all(rows.slice(i, i + SEND_CONCURRENCY).map(send));
 	}
 
 	return { emailed, failures };
+}
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+	let timer: ReturnType<typeof setTimeout>;
+	const timeout = new Promise<never>((_, reject) => {
+		timer = setTimeout(() => reject(new Error(`Timed out after ${ms}ms`)), ms);
+	});
+	return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
 }
 
 export async function runInviteMaintenance(

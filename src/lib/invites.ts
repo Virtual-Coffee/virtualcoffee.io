@@ -124,6 +124,21 @@ export async function inviteForClaimToken(token: string): Promise<{
  * How many Invites this Volunteer may give out right now. Takes the caller's
  * transaction where the answer has to hold for a write in the same one.
  */
+/**
+ * Every Volunteer's balance as a subquery, for screens and jobs that need
+ * many at once; `volunteerBalance()` below is the one-row form.
+ */
+export function balancesBySlackUser(executor: Database | Transaction = db()) {
+	return executor
+		.select({
+			slackUserId: volunteerInviteLedger.slackUserId,
+			total: sql<string>`sum(${volunteerInviteLedger.delta})`.as('total'),
+		})
+		.from(volunteerInviteLedger)
+		.groupBy(volunteerInviteLedger.slackUserId)
+		.as('balances');
+}
+
 export async function volunteerBalance(
 	slackUserId: string,
 	executor: Database | Transaction = db(),

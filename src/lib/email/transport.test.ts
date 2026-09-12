@@ -5,7 +5,7 @@ const createTransport = vi.hoisted(() => vi.fn(() => ({ sendMail })));
 
 vi.mock('nodemailer', () => ({ default: { createTransport } }));
 
-import { emailConfigured, sendEmail } from './transport';
+import { emailConfigured, sendEmail, TRANSPORT_OPTIONS } from './transport';
 
 const input = {
 	to: 'ada@example.test',
@@ -42,6 +42,17 @@ describe('sendEmail', () => {
 			subject: input.subject,
 			text: input.text,
 			replyTo: 'hello@virtualcoffee.io',
+		});
+	});
+
+	test('the transport is pooled and every phase has a timeout', () => {
+		// The transporter is a module singleton, so the options are asserted
+		// directly rather than off a createTransport call some earlier test made.
+		expect(TRANSPORT_OPTIONS).toMatchObject({
+			pool: true,
+			connectionTimeout: expect.any(Number),
+			greetingTimeout: expect.any(Number),
+			socketTimeout: expect.any(Number),
 		});
 	});
 

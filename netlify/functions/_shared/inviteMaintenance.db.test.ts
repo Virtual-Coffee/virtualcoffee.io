@@ -136,6 +136,41 @@ describe('accrual', () => {
 		await expect(volunteerBalance('U_A')).resolves.toBe(1);
 		error.mockRestore();
 	});
+
+	test('one send that hangs costs one email, not the rest of the roster', async () => {
+		vi.useFakeTimers({ shouldAdvanceTime: true });
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+		sendEmail.mockImplementation(async ({ to }: { to: string }) => {
+			if (to === 'hung@example.test') return new Promise(() => {});
+			return { ok: true };
+		});
+		await insertVolunteer({ slackUserId: 'U_A', email: 'a@example.test' });
+		await insertVolunteer({
+			slackUserId: 'U_HUNG',
+			email: 'hung@example.test',
+		});
+		await insertVolunteer({ slackUserId: 'U_B', email: 'b@example.test' });
+
+		try {
+			const run = runInviteMaintenance(JAN);
+			// The database work runs on real time; the send timeout is a fake one.
+			await vi.waitFor(() => expect(sendEmail).toHaveBeenCalledTimes(3));
+			await vi.advanceTimersByTimeAsync(11_000);
+
+			await expect(run).resolves.toMatchObject({
+				accrued: 3,
+				emailed: 2,
+				emailFailures: 1,
+			});
+			expect(error).toHaveBeenCalledWith(
+				'Accrual email threw',
+				expect.objectContaining({ slackUserId: 'U_HUNG' }),
+			);
+		} finally {
+			error.mockRestore();
+			vi.useRealTimers();
+		}
+	}, 15_000);
 });
 
 describe('expiry', () => {

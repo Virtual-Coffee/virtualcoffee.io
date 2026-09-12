@@ -50,11 +50,26 @@ export function emailConfigured(): boolean {
 
 let transporter: Transporter | undefined;
 
+/**
+ * Pooled, so the daily accrual run reuses a connection across its sends
+ * instead of a fresh connect + STARTTLS + AUTH per Volunteer, and bounded by
+ * timeouts, so a hung SMTP server surfaces as a failed send rather than a
+ * function that runs out of time with the rest of its work undone.
+ */
+export const TRANSPORT_OPTIONS = {
+	host: 'smtp.gmail.com',
+	port: 587,
+	secure: false,
+	pool: true,
+	maxConnections: 2,
+	connectionTimeout: 10_000,
+	greetingTimeout: 10_000,
+	socketTimeout: 30_000,
+} as const;
+
 function getTransporter(): Transporter {
 	transporter ??= nodemailer.createTransport({
-		host: 'smtp.gmail.com',
-		port: 587,
-		secure: false,
+		...TRANSPORT_OPTIONS,
 		auth: {
 			user: process.env.GOOGLE_SMTP_USER,
 			pass: process.env.GOOGLE_SMTP_APP_PASSWORD,
