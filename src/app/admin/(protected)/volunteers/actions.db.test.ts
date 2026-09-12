@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { db, pendingGrant, user, volunteer } from '@/db';
+import { db, invite, pendingGrant, user, volunteer } from '@/db';
 import { hashClaimToken, volunteerBalance } from '@/lib/invites';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
@@ -17,6 +17,23 @@ import {
 
 const sendEmail = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/email/transport', () => ({ sendEmail }));
+
+/** Runs between resendInvite()'s read and its write, to stage a race. */
+const afterRead = vi.hoisted(() => ({
+	run: null as null | (() => Promise<void>),
+}));
+vi.mock('@/lib/volunteers', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@/lib/volunteers')>();
+	return {
+		...actual,
+		pendingInvite: async (inviteId: string) => {
+			const row = await actual.pendingInvite(inviteId);
+			await afterRead.run?.();
+			afterRead.run = null;
+			return row;
+		},
+	};
+});
 
 vi.mock('@/data/slackMembers', () => ({
 	getSlackMembers: async () => [
@@ -205,9 +222,10 @@ describe('setVolunteerActive', () => {
 			message: 'Volunteering paused.',
 		});
 		expect((await volunteerRow('U_ADA'))?.deactivatedAt).toBeInstanceOf(Date);
+		// A pause is not a grant, so it does not claim the grantor's name.
 		await expect(roleOf(ada.id)).resolves.toEqual({
 			role: 'coc_reviewer',
-			roleGrantedBy: 'Local dev',
+			roleGrantedBy: null,
 		});
 		await expect(grantRole('U_ADA')).resolves.toEqual(['waitlist_reviewer']);
 		// Nobody else's row moved.
@@ -220,6 +238,7 @@ describe('setVolunteerActive', () => {
 		expect((await volunteerRow('U_ADA'))?.deactivatedAt).toBeNull();
 		await expect(roleOf(ada.id)).resolves.toMatchObject({
 			role: 'coc_reviewer,volunteer',
+			roleGrantedBy: 'Local dev',
 		});
 		await expect(grantRole('U_ADA')).resolves.toEqual([
 			'waitlist_reviewer,volunteer',
@@ -233,6 +252,15 @@ describe('setVolunteerActive', () => {
 		await setVolunteerActive(id, false);
 
 		await expect(roleOf(ada.id)).resolves.toMatchObject({ role: 'user' });
+	});
+
+	test('a grant that only carried volunteer is withdrawn rather than left empty', async () => {
+		await insertPendingGrant({ slackUserId: 'U_ADA', role: 'volunteer' });
+		const { id } = await insertVolunteer({ slackUserId: 'U_ADA' });
+
+		await setVolunteerActive(id, false);
+
+		await expect(grantRole('U_ADA')).resolves.toEqual([]);
 	});
 
 	test('a malformed or unknown id is a soft failure, not a 22P02', async () => {
@@ -337,6 +365,53 @@ describe('resendInvite', () => {
 				'The mail server rejected ada@example.test. The previous link has stopped working, so try again or cancel the invite.',
 		});
 		expect((await inviteRow(id)).tokenHash).not.toBe(hashClaimToken(oldToken));
+	});
+
+	test('an invite imported from Airtable has no link to re-send', async () => {
+		const { id: volunteerId } = await insertVolunteer({
+			slackUserId: 'U_GRACE',
+		});
+		const [{ id }] = await db()
+			.insert(invite)
+			.values({
+				inviterSlackUserId: 'U_GRACE',
+				inviterName: 'Grace',
+				inviteeName: 'Ada',
+				inviteeEmail: 'ada@example.test',
+				status: 'pending',
+				airtableRecordId: 'recIMPORTED',
+			})
+			.returning({ id: invite.id });
+
+		await expect(resendInvite(id, volunteerId)).resolves.toEqual({
+			ok: false,
+			message:
+				'This invite was imported from Airtable and has no claim link to re-send.',
+		});
+		expect((await inviteRow(id)).tokenHash).toBeNull();
+		expect(sendEmail).not.toHaveBeenCalled();
+	});
+
+	test('an invite claimed between the read and the write is not emailed', async () => {
+		const { id: volunteerId } = await insertVolunteer({
+			slackUserId: 'U_GRACE',
+		});
+		const { id } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
+		// The read sees `pending`; the claim lands before the write.
+		afterRead.run = async () => {
+			await db()
+				.update(invite)
+				.set({ status: 'accepted', tokenHash: null })
+				.where(eq(invite.id, id));
+		};
+
+		await expect(resendInvite(id, volunteerId)).resolves.toEqual({
+			ok: false,
+			message:
+				'That invite was claimed or cancelled just now. Reload the page.',
+		});
+		expect(sendEmail).not.toHaveBeenCalled();
+		expect((await inviteRow(id)).status).toBe('accepted');
 	});
 
 	test('only a pending invite with an email can be re-sent', async () => {

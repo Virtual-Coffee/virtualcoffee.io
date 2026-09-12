@@ -27,6 +27,7 @@ import {
 	withVolunteerRole,
 	withoutVolunteerRole,
 } from '@/lib/pendingGrants';
+import { parseRoles } from '@/lib/permissions';
 import { pendingInvite } from '@/lib/volunteers';
 import { siteUrl } from '@/util/url.server';
 
@@ -172,15 +173,19 @@ export async function setVolunteerActive(
 			.limit(1);
 
 		if (account) {
+			// `roleGrantedAt/By` record who gave access and when. A pause takes
+			// a role away, so it leaves those alone; only a restart is a grant.
 			await tx
 				.update(user)
-				.set({
-					role: active
-						? withVolunteerRole(account.role)
-						: withoutVolunteerRole(account.role),
-					roleGrantedAt: new Date(),
-					roleGrantedBy: session.user.name || session.user.email,
-				})
+				.set(
+					active
+						? {
+								role: withVolunteerRole(account.role),
+								roleGrantedAt: new Date(),
+								roleGrantedBy: session.user.name || session.user.email,
+							}
+						: { role: withoutVolunteerRole(account.role) },
+				)
 				.where(eq(user.id, account.id));
 		}
 
@@ -196,14 +201,20 @@ export async function setVolunteerActive(
 			.limit(1);
 
 		if (grant) {
-			await tx
-				.update(pendingGrant)
-				.set({
-					role: active
-						? withVolunteerRole(grant.role)
-						: withoutVolunteerRole(grant.role),
-				})
-				.where(eq(pendingGrant.id, grant.id));
+			const role = active
+				? withVolunteerRole(grant.role)
+				: withoutVolunteerRole(grant.role);
+			// A grant that would carry nothing is withdrawn, as User Management
+			// would have done: it never took effect, and an empty grant is one
+			// setPendingGrantRoles() refuses to write.
+			if (parseRoles(role).length === 0) {
+				await tx.delete(pendingGrant).where(eq(pendingGrant.id, grant.id));
+			} else {
+				await tx
+					.update(pendingGrant)
+					.set({ role })
+					.where(eq(pendingGrant.id, grant.id));
+			}
 		}
 	});
 
@@ -300,15 +311,35 @@ export async function resendInvite(
 			message: 'Only an unclaimed invite with an email address can be re-sent.',
 		};
 	}
+	// An invite imported from Airtable never had a Claim Link (no token, no
+	// expiry); minting one now would email a years-old invitee a live link.
+	if (!row.tokenExpiresAt) {
+		return {
+			ok: false,
+			message:
+				'This invite was imported from Airtable and has no claim link to re-send.',
+		};
+	}
 
 	const { token, expiresAt } = newClaimToken();
 
 	// Written before the send on purpose: the link in the email must already
 	// redeem, and a failed send is reported as such. See docs/adr/0011.
-	await db()
+	// Conditional on `pending` again, and checked: the invite may have been
+	// claimed or cancelled since the read above, and a link to a dead invite
+	// must not go out as "re-sent".
+	const replaced = await db()
 		.update(invite)
 		.set({ tokenHash: hashClaimToken(token), tokenExpiresAt: expiresAt })
-		.where(and(eq(invite.id, inviteId), eq(invite.status, 'pending')));
+		.where(and(eq(invite.id, inviteId), eq(invite.status, 'pending')))
+		.returning({ id: invite.id });
+	if (replaced.length === 0) {
+		return {
+			ok: false,
+			message:
+				'That invite was claimed or cancelled just now. Reload the page.',
+		};
+	}
 
 	const template = volunteerInviteEmail(
 		row.inviterName || 'A Virtual Coffee volunteer',
