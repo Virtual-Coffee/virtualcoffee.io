@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS/JSON and build-time fetches from GitHub, a Craft CMS, and Airtable (forms only), all of which fall back to mock data when credentials are absent.
+virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS/JSON and build-time fetches from GitHub and a Craft CMS, both of which fall back to mock data when credentials are absent. Airtable remains only behind the form submissions, which return an error state without credentials.
 
 ## Commands
 
