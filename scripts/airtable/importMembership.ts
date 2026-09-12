@@ -258,22 +258,28 @@ async function main() {
 			airtableRecordId: row.id,
 		};
 
-		const [inserted] = await database
-			.insert(membershipApplication)
-			.values(values)
-			.onConflictDoNothing({ target: membershipApplication.airtableRecordId })
-			.returning({ id: membershipApplication.id });
+		// One transaction: a row without its `imported` event has no history,
+		// and the conflict target means a re-run would never come back for it.
+		const inserted = await database.transaction(async (tx) => {
+			const [created] = await tx
+				.insert(membershipApplication)
+				.values(values)
+				.onConflictDoNothing({ target: membershipApplication.airtableRecordId })
+				.returning({ id: membershipApplication.id });
 
-		if (!inserted) continue;
+			if (!created) return false;
 
-		insertedCount += 1;
-		await database.insert(applicationEvent).values({
-			applicationId: inserted.id,
-			type: 'imported',
-			toStatus: classified.status,
-			body: `Imported from Airtable (${row.id})`,
-			createdAt: submittedAt,
+			await tx.insert(applicationEvent).values({
+				applicationId: created.id,
+				type: 'imported',
+				toStatus: classified.status,
+				body: `Imported from Airtable (${row.id})`,
+				createdAt: submittedAt,
+			});
+			return true;
 		});
+
+		if (inserted) insertedCount += 1;
 	}
 
 	console.log(
