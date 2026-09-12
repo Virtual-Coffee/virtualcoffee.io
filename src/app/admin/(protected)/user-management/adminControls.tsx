@@ -1,7 +1,6 @@
 'use client';
 
-import { useMemo, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 
 import { filterSlackMembers } from '@/data/slackMembers';
 import type { GrantCandidate } from '@/lib/admins';
@@ -11,6 +10,7 @@ import {
 	ROLE_LABELS,
 	type RoleName,
 } from '@/lib/permissions';
+import { useAction } from '@/util/forms/useAction';
 import { useDropdown } from '../useDropdown';
 import {
 	grantPendingAccess,
@@ -18,7 +18,6 @@ import {
 	setPendingGrantRoles,
 	setUserRoles,
 } from './actions';
-import type { ActionResult } from '@/lib/actionResult';
 
 /**
  * The roles one person holds, as a dropdown of checkboxes. Changes are staged
@@ -41,9 +40,7 @@ export function RolesDropdown({
 	roles: RoleName[];
 	isSelf: boolean;
 }) {
-	const router = useRouter();
-	const [error, setError] = useState<string | null>(null);
-	const [pending, startTransition] = useTransition();
+	const { run, pending, error } = useAction();
 	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
 		HTMLDivElement,
 		HTMLButtonElement
@@ -70,20 +67,6 @@ export function RolesDropdown({
 		);
 	}
 
-	function run(action: () => Promise<ActionResult>, onSuccess?: () => void) {
-		startTransition(async () => {
-			const result = await action();
-
-			if (result.ok) {
-				setError(null);
-				onSuccess?.();
-				router.refresh();
-			} else {
-				setError(result.message);
-			}
-		});
-	}
-
 	/**
 	 * The menu stays open on failure: the error renders under the chips, and
 	 * the draft is still there to fix and retry.
@@ -94,7 +77,7 @@ export function RolesDropdown({
 				kind === 'user'
 					? setUserRoles(id, draft)
 					: setPendingGrantRoles(id, draft),
-			() => setOpen(false),
+			{ onSuccess: () => setOpen(false) },
 		);
 	}
 
@@ -255,12 +238,10 @@ export function GrantAccessForm({
 }: {
 	candidates: GrantCandidate[];
 }) {
-	const router = useRouter();
 	const [query, setQuery] = useState('');
 	const [selected, setSelected] = useState<GrantCandidate | null>(null);
 	const [role, setRole] = useState<RoleName>('admin');
-	const [error, setError] = useState<string | null>(null);
-	const [pending, startTransition] = useTransition();
+	const { run, pending, error, clear } = useAction();
 	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
 		HTMLDivElement,
 		HTMLInputElement
@@ -274,28 +255,22 @@ export function GrantAccessForm({
 	function choose(candidate: GrantCandidate) {
 		setSelected(candidate);
 		setQuery(candidate.displayName);
-		setError(null);
+		clear();
 		setOpen(false);
 	}
 
+	// The error the hook keeps is load-bearing here: picking someone who has
+	// already signed in is refused, and a silent refusal reads as the button
+	// being broken.
 	function submit(event: React.FormEvent) {
 		event.preventDefault();
 		if (!selected) return;
 
-		startTransition(async () => {
-			const result = await grantPendingAccess(selected.id, [role]);
-
-			if (result.ok) {
+		run(() => grantPendingAccess(selected.id, [role]), {
+			onSuccess: () => {
 				setSelected(null);
 				setQuery('');
-				setError(null);
-				router.refresh();
-			} else {
-				// Surfacing this is load-bearing: picking someone who has already
-				// signed in is refused, and a silent refusal reads as the button
-				// being broken.
-				setError(result.message);
-			}
+			},
 		});
 	}
 

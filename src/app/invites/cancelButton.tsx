@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useAction } from '@/util/forms/useAction';
 
 import { cancelInvite } from './actions';
 
@@ -13,9 +12,7 @@ export function CancelInviteButton({
 	inviteId: string;
 	inviteeName: string;
 }) {
-	const router = useRouter();
-	const [error, setError] = useState<string | null>(null);
-	const [pending, startTransition] = useTransition();
+	const { run, pending, error } = useAction();
 
 	return (
 		<>
@@ -32,15 +29,7 @@ export function CancelInviteButton({
 						return;
 					}
 
-					startTransition(async () => {
-						const result = await cancelInvite(inviteId);
-						if (result.ok) {
-							setError(null);
-							router.refresh();
-						} else {
-							setError(result.message);
-						}
-					});
+					run(() => cancelInvite(inviteId));
 				}}
 			>
 				{pending ? 'Cancelling…' : 'Cancel'}

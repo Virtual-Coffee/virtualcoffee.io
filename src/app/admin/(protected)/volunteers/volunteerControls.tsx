@@ -1,42 +1,15 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import { filterSlackMembers, type SlackMember } from '@/data/slackMembers';
+import { useAction } from '@/util/forms/useAction';
 import {
 	addVolunteer,
 	adjustBalance,
 	resendInvite,
 	setVolunteerActive,
 } from './actions';
-import type { ActionResult } from '@/lib/actionResult';
-
-/** Run an action, show its message, refresh — shared by the four buttons here. */
-function useAction() {
-	const router = useRouter();
-	const [result, setResult] = useState<ActionResult | null>(null);
-	const [pending, startTransition] = useTransition();
-
-	function run(action: () => Promise<ActionResult>) {
-		startTransition(async () => {
-			const outcome = await action();
-			setResult(outcome);
-			if (outcome.ok) router.refresh();
-		});
-	}
-
-	const feedback = result && (
-		<div
-			className={`alert ${result.ok ? 'alert-success' : 'alert-danger'} mt-3`}
-			role={result.ok ? 'status' : 'alert'}
-		>
-			{result.message}
-		</div>
-	);
-
-	return { run, pending, feedback };
-}
 
 /**
  * Make someone a Volunteer, picked out of the Slack directory. Existing

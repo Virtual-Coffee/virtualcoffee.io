@@ -1,34 +1,25 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+import type { ActionResult } from '@/lib/actionResult';
+import { useAction } from '@/util/forms/useAction';
 
 /** A note on a detail screen; `onSubmit` is the section's own action, bound to its row. */
 export function NoteComposer({
 	onSubmit,
 }: {
-	onSubmit: (body: string) => Promise<{ ok: boolean; message?: string }>;
+	onSubmit: (body: string) => Promise<ActionResult>;
 }) {
-	const router = useRouter();
 	const [body, setBody] = useState('');
-	const [error, setError] = useState<string | null>(null);
-	const [pending, startTransition] = useTransition();
+	const { run, pending, error } = useAction();
 
 	return (
 		<form
 			className="mt-2"
 			onSubmit={(event) => {
 				event.preventDefault();
-				startTransition(async () => {
-					const result = await onSubmit(body);
-					if (result.ok) {
-						setBody('');
-						setError(null);
-						router.refresh();
-					} else {
-						setError(result.message ?? 'Could not save the note.');
-					}
-				});
+				run(() => onSubmit(body), { onSuccess: () => setBody('') });
 			}}
 		>
 			<label className="form-label small" htmlFor="note">

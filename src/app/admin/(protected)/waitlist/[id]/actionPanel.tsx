@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import type { ApplicationStatus } from '@/db';
 import {
@@ -14,6 +13,7 @@ import {
 } from '../actions';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
+import { useAction } from '@/util/forms/useAction';
 import { ReadOnlyNotice } from '../../presentation';
 
 type Template = { subject: string; text: string };
@@ -35,23 +35,15 @@ type Props = {
 type Dialog = 'coffee' | 'approve' | 'resend' | null;
 
 export function ActionPanel(props: Props) {
-	const router = useRouter();
 	const [dialog, setDialog] = useState<Dialog>(null);
-	const [result, setResult] = useState<ActionResult | EmailActionResult | null>(
-		null,
-	);
-	const [pending, startTransition] = useTransition();
+	const {
+		run: runAction,
+		pending,
+		result,
+	} = useAction<ActionResult | EmailActionResult>();
 
-	function run(action: () => Promise<ActionResult | EmailActionResult>) {
-		startTransition(async () => {
-			const outcome = await action();
-			setResult(outcome);
-			if (outcome.ok) {
-				setDialog(null);
-				router.refresh();
-			}
-		});
-	}
+	const run = (action: () => Promise<ActionResult | EmailActionResult>) =>
+		runAction(action, { onSuccess: () => setDialog(null) });
 
 	if (!props.canManage) return <ReadOnlyNotice />;
 

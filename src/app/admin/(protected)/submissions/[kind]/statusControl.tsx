@@ -1,9 +1,7 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
-
 import type { SubmissionStatus } from '@/db';
+import { useAction } from '@/util/forms/useAction';
 import { setSubmissionStatus } from './actions';
 import { STATUS_ORDER, submissionStatusLabel } from './presentation';
 import { ReadOnlyNotice } from '../../presentation';
@@ -19,9 +17,7 @@ export function StatusControl({
 	status: SubmissionStatus;
 	canManage: boolean;
 }) {
-	const router = useRouter();
-	const [error, setError] = useState<string | null>(null);
-	const [pending, startTransition] = useTransition();
+	const { run, pending, error } = useAction();
 
 	if (!canManage) return <ReadOnlyNotice />;
 
@@ -37,17 +33,7 @@ export function StatusControl({
 						}`}
 						disabled={pending || status === value}
 						aria-pressed={status === value}
-						onClick={() =>
-							startTransition(async () => {
-								const result = await setSubmissionStatus(kind, id, value);
-								if (result.ok) {
-									setError(null);
-									router.refresh();
-								} else {
-									setError(result.message);
-								}
-							})
-						}
+						onClick={() => run(() => setSubmissionStatus(kind, id, value))}
 					>
 						{submissionStatusLabel(value)}
 					</button>

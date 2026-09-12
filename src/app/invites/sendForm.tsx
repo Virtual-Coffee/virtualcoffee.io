@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
+import type { EmailActionResult } from '@/lib/actionResult';
+import { useAction } from '@/util/forms/useAction';
 import { volunteerInviteEmail } from '@/lib/email/templates';
 import { sendInvite } from './actions';
 
@@ -22,13 +23,12 @@ export function SendInviteForm({
 	inviterName: string;
 	claimUrlPreview: string;
 }) {
-	const router = useRouter();
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [reviewing, setReviewing] = useState(false);
-	const [error, setError] = useState<string | null>(null);
-	const [notice, setNotice] = useState<string | null>(null);
-	const [pending, startTransition] = useTransition();
+	const { run, pending, result, clear } = useAction<EmailActionResult>();
+	const error = result && !result.ok ? result.message : null;
+	const notice = result?.ok ? (result.message ?? 'Invite sent.') : null;
 
 	const spent = balance < 1;
 	const preview = volunteerInviteEmail(
@@ -38,27 +38,20 @@ export function SendInviteForm({
 	);
 
 	function review() {
-		setError(null);
-		setNotice(null);
+		clear();
 		setReviewing(true);
 	}
 
 	function confirm() {
-		startTransition(async () => {
-			const result = await sendInvite(name, email);
-			setReviewing(false);
-
-			if (result.ok) {
+		run(() => sendInvite(name, email), {
+			settle: () => setReviewing(false),
+			onSuccess: () => {
 				setName('');
 				setEmail('');
-				setNotice(result.message ?? 'Invite sent.');
-				router.refresh();
-			} else {
-				setError(result.message);
-				// A definitely-failed send gives the invite back, so the balance on
-				// screen is stale either way.
-				router.refresh();
-			}
+			},
+			// A definitely-failed send gives the invite back, so the balance on
+			// screen is stale either way.
+			refresh: 'always',
 		});
 	}
 
