@@ -698,11 +698,12 @@ async function verify(database: Database): Promise<string[]> {
 			() => countWhere(database, user, realEmail(user.email)),
 		],
 		/**
-		 * A sanitized Slack member id always starts `U` and is otherwise base36
-		 * upper-case, so "does not look sanitized" is `not like 'U%'` — a real
-		 * Slack id starts `U` too, but never with our derived shape. These check
-		 * the cheaper property that the column changed at all, by looking for the
-		 * ids that survived: anything not matching the fake pattern.
+		 * A sanitized Slack member id always starts `U` and is otherwise ten
+		 * upper-case hex digits, so "does not look sanitized" is `not like 'U%'`
+		 * — a real Slack id starts `U` too, but never with our derived shape.
+		 * These check the cheaper property that the column changed at all, by
+		 * looking for the ids that survived: anything not matching the fake
+		 * pattern.
 		 */
 		[
 			'user.slack_user_id was not sanitized',

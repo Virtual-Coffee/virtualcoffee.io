@@ -20,9 +20,6 @@ export default defineConfig({
 	},
 	test: {
 		environment: 'node',
-		// Root-level on purpose: per-project it does not cover `--project db`
-		// while that project is still empty.
-		passWithNoTests: true,
 		projects: [
 			{
 				test: {
