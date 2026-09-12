@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { ActionDialog } from '@/components/ActionDialog';
 import type { GrantCandidate } from '@/lib/access/admins';
@@ -13,7 +13,7 @@ import {
 } from '@/lib/access/permissions';
 import { useAction } from '@/util/forms/useAction';
 import { type CheckboxMenuOption, RoleCheckboxMenu } from '../roleCheckboxMenu';
-import { useDropdown } from '../useDropdown';
+import { SlackMemberCombobox } from '../slackMemberCombobox';
 import {
 	grantPendingAccess,
 	resendPendingGrantDm,
@@ -247,26 +247,9 @@ export function GrantAccessForm({
 }: {
 	candidates: GrantCandidate[];
 }) {
-	const [query, setQuery] = useState('');
 	const [selected, setSelected] = useState<GrantCandidate | null>(null);
 	const [role, setRole] = useState<RoleName>('admin');
 	const { run, pending, error, result, clear } = useAction();
-	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
-		HTMLDivElement,
-		HTMLInputElement
-	>();
-
-	const matches = useMemo(
-		() => filterSlackMembers(candidates, query),
-		[candidates, query],
-	);
-
-	function choose(candidate: GrantCandidate) {
-		setSelected(candidate);
-		setQuery(candidate.displayName);
-		clear();
-		setOpen(false);
-	}
 
 	// The error the hook keeps is load-bearing here: the server can still
 	// refuse (a sign-in or a grant that landed since the page loaded), and a
@@ -276,10 +259,7 @@ export function GrantAccessForm({
 		if (!selected) return;
 
 		run(() => grantPendingAccess(selected.id, [role]), {
-			onSuccess: () => {
-				setSelected(null);
-				setQuery('');
-			},
+			onSuccess: () => setSelected(null),
 		});
 	}
 
@@ -288,99 +268,33 @@ export function GrantAccessForm({
 			className="d-flex flex-wrap gap-2 align-items-start"
 			onSubmit={submit}
 		>
-			<div className="dropdown" ref={wrapperRef}>
-				<label className="visually-hidden" htmlFor="grant-person">
-					Person to grant access to
-				</label>
-				<input
-					id="grant-person"
-					ref={toggleRef}
-					type="text"
-					className="form-control form-control-sm"
-					role="combobox"
-					aria-expanded={open}
-					aria-controls="grant-person-listbox"
-					aria-autocomplete="list"
-					autoComplete="off"
-					placeholder="Search Slack…"
-					value={query}
-					onChange={(event) => {
-						setQuery(event.target.value);
-						setSelected(null);
-						setOpen(true);
-					}}
-					onFocus={() => setOpen(true)}
-				/>
-
-				{open && (
-					<ul
-						id="grant-person-listbox"
-						className="dropdown-menu show py-1"
-						role="listbox"
-						style={
-							{
-								maxHeight: '18rem',
-								overflowY: 'auto',
-								'--bs-dropdown-font-size': '0.8125rem',
-							} as React.CSSProperties
-						}
-					>
-						{matches.length === 0 && (
-							<li className="px-3 py-1 text-body-secondary small">
-								Nobody in Slack matches that.
-							</li>
-						)}
-
-						{matches.map((candidate) => {
-							/**
-							 * Someone already in the table is edited there. Shown rather
-							 * than omitted: a maintainer searching for a name they know is
-							 * in Slack should find them and be told why they cannot be
-							 * picked here, not find nothing. Someone who signed in holding
-							 * nothing is not in the table, so they are offered here and
-							 * granted directly rather than pre-provisioned.
-							 */
-							const unavailable =
-								candidate.account === 'hasRoles' || candidate.hasPendingGrant;
-							const note = candidate.hasPendingGrant
-								? 'already has access pending'
-								: candidate.account === 'hasRoles'
-									? 'has signed in — set their roles below'
-									: candidate.account === 'noRoles'
-										? 'signed in — granted immediately'
-										: null;
-
-							return (
-								<li key={candidate.id}>
-									<button
-										type="button"
-										role="option"
-										aria-selected={selected?.id === candidate.id}
-										className="dropdown-item d-flex justify-content-between gap-3"
-										disabled={unavailable}
-										onClick={() => choose(candidate)}
-									>
-										<span>
-											{candidate.displayName}
-											{candidate.handle && (
-												<span className="text-body-secondary">
-													{' '}
-													@{candidate.handle}
-												</span>
-											)}
-										</span>
-										{note && (
-											<span className="text-body-secondary small text-nowrap">
-												{note}
-											</span>
-										)}
-									</button>
-								</li>
-							);
-						})}
-					</ul>
-				)}
-			</div>
+			<SlackMemberCombobox
+				id="grant-person"
+				label="Person to grant access to"
+				hideLabel
+				size="sm"
+				candidates={candidates}
+				selected={selected}
+				onSelect={(candidate) => {
+					setSelected(candidate);
+					clear();
+				}}
+				// Someone already in the table is edited there.
+				unavailable={(candidate) =>
+					candidate.hasPendingGrant
+						? 'already has access pending'
+						: candidate.account === 'hasRoles'
+							? 'has signed in — set their roles below'
+							: null
+				}
+				// Not in the table, so offered here — and granted directly rather
+				// than pre-provisioned, which is worth saying before they click.
+				note={(candidate) =>
+					candidate.account === 'noRoles'
+						? 'signed in — granted immediately'
+						: null
+				}
+			/>
 
 			<label className="visually-hidden" htmlFor="grant-role">
 				Role to grant
