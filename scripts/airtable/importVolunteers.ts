@@ -287,6 +287,44 @@ async function apply(dryRun: boolean) {
 	}
 
 	const database = db();
+
+	/**
+	 * A re-run is for backfilling, not for correcting. The `volunteer` insert
+	 * below keeps the stored Slack id on conflict while the grant, the ledger
+	 * and the Invites would follow the file's, splitting one person across two
+	 * identities. A changed mapping is a migration of its own; refuse it here.
+	 */
+	const stored = await database
+		.select({
+			airtableRecordId: volunteer.airtableRecordId,
+			slackUserId: volunteer.slackUserId,
+		})
+		.from(volunteer)
+		.where(
+			inArray(
+				volunteer.airtableRecordId,
+				mapped.map((entry) => entry.airtableRecordId),
+			),
+		);
+	const storedBy = new Map(
+		stored.map((row) => [row.airtableRecordId, row.slackUserId]),
+	);
+	const remapped = mapped.filter((entry) => {
+		const existing = storedBy.get(entry.airtableRecordId);
+		return existing !== undefined && existing !== entry.slackUserId;
+	});
+	if (remapped.length > 0) {
+		console.error(
+			'These volunteers are already imported under a different Slack member. A re-run cannot move them; nothing was written:',
+		);
+		for (const entry of remapped) {
+			console.error(
+				`  ${entry.name} -> ${entry.slackUserId} (stored: ${storedBy.get(entry.airtableRecordId)})`,
+			);
+		}
+		process.exit(1);
+	}
+
 	let created = 0;
 	let granted = 0;
 	let credited = 0;
