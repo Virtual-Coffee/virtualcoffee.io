@@ -15,6 +15,8 @@ const OWNER = 'Virtual-Coffee';
 const REPO = 'VC-Community-Docs';
 const LABEL = 'Lunch & Learn';
 const ASSIGNEES = ['shelleymcq', 'meg-gutshall'];
+/** Per request, as `@octokit/request` only honours `request.signal`, not `timeout`. */
+const TIMEOUT_MS = 10_000;
 
 export type CreateIssueResult =
 	{ ok: true; url: string } | { ok: false; message: string };
@@ -49,10 +51,12 @@ let cached: Octokit | undefined;
 async function client(): Promise<Octokit> {
 	if (cached) return cached;
 
+	// `appId` is the option auth-app requires; a Client ID string is accepted
+	// there, and `clientId` on its own is only for OAuth flows.
 	const appOctokit = new Octokit({
 		authStrategy: createAppAuth,
 		auth: {
-			clientId: process.env.GITHUB_APP_CLIENT_ID,
+			appId: process.env.GITHUB_APP_CLIENT_ID,
 			privateKey: privateKey(),
 		},
 	});
@@ -61,13 +65,14 @@ async function client(): Promise<Octokit> {
 		{
 			owner: OWNER,
 			repo: REPO,
+			request: { signal: AbortSignal.timeout(TIMEOUT_MS) },
 		},
 	);
 
 	cached = new Octokit({
 		authStrategy: createAppAuth,
 		auth: {
-			clientId: process.env.GITHUB_APP_CLIENT_ID,
+			appId: process.env.GITHUB_APP_CLIENT_ID,
 			privateKey: privateKey(),
 			installationId: installation.id,
 			repositoryNames: [REPO],
@@ -143,6 +148,9 @@ export async function createLunchAndLearnIssue(idea: {
 			body: issueBody(idea),
 			labels: [LABEL],
 			assignees: ASSIGNEES,
+			// The installation-token exchange inside auth-app's hook is not
+			// covered by a per-request signal; the two visible requests are.
+			request: { signal: AbortSignal.timeout(TIMEOUT_MS) },
 		});
 
 		return { ok: true, url: data.html_url };
