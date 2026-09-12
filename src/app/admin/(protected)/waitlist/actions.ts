@@ -9,6 +9,8 @@ import {
 	invite,
 	membershipApplication,
 	type ApplicationStatus,
+	type Database,
+	type Transaction,
 } from '@/db';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { checkNote } from '@/lib/notes';
@@ -23,7 +25,7 @@ import { createSlackInviteToken } from '@/lib/inviteTokens';
 import { getApplication } from '@/lib/applications';
 import { siteUrl } from '@/util/url.server';
 
-async function recordEvent(input: {
+type EventInput = {
 	applicationId: string;
 	actorUserId: string | null;
 	type:
@@ -38,17 +40,20 @@ async function recordEvent(input: {
 	fromStatus?: ApplicationStatus | null;
 	toStatus?: ApplicationStatus | null;
 	body?: string | null;
-}) {
-	await db()
-		.insert(applicationEvent)
-		.values({
-			applicationId: input.applicationId,
-			actorUserId: input.actorUserId,
-			type: input.type,
-			fromStatus: input.fromStatus ?? null,
-			toStatus: input.toStatus ?? null,
-			body: input.body ?? null,
-		});
+};
+
+async function recordEvent(
+	input: EventInput,
+	executor: Database | Transaction = db(),
+) {
+	await executor.insert(applicationEvent).values({
+		applicationId: input.applicationId,
+		actorUserId: input.actorUserId,
+		type: input.type,
+		fromStatus: input.fromStatus ?? null,
+		toStatus: input.toStatus ?? null,
+		body: input.body ?? null,
+	});
 }
 
 /**
@@ -64,8 +69,9 @@ async function transition(
 	applicationId: string,
 	from: ApplicationStatus,
 	patch: Partial<typeof membershipApplication.$inferInsert>,
+	executor: Database | Transaction = db(),
 ): Promise<boolean> {
-	const moved = await db()
+	const moved = await executor
 		.update(membershipApplication)
 		.set(patch)
 		.where(
@@ -76,6 +82,25 @@ async function transition(
 		)
 		.returning({ id: membershipApplication.id });
 	return moved.length > 0;
+}
+
+/**
+ * A status change and the event that records it commit together, so a failed
+ * event insert cannot leave a row that moved with no history saying who moved
+ * it. False means the transition did not apply and nothing was written.
+ */
+async function transitionAndRecord(
+	applicationId: string,
+	from: ApplicationStatus,
+	patch: Partial<typeof membershipApplication.$inferInsert>,
+	event: Omit<EventInput, 'applicationId'>,
+): Promise<boolean> {
+	return db().transaction(async (tx) => {
+		const moved = await transition(applicationId, from, patch, tx);
+		if (!moved) return false;
+		await recordEvent({ applicationId, ...event }, tx);
+		return true;
+	});
 }
 
 function changedUnderneath(name: string): string {
@@ -138,10 +163,18 @@ export async function sendCoffeeInvite(
 		};
 	}
 
-	const moved = await transition(applicationId, 'waitlisted', {
-		status: 'coffee_invited',
-		coffeeInvitedAt: new Date(),
-	});
+	const moved = await transitionAndRecord(
+		applicationId,
+		'waitlisted',
+		{ status: 'coffee_invited', coffeeInvitedAt: new Date() },
+		{
+			actorUserId: actor,
+			type: 'coffee_invited',
+			fromStatus: 'waitlisted',
+			toStatus: 'coffee_invited',
+			body: `Coffee invite emailed to ${application.email}`,
+		},
+	);
 
 	if (!moved) {
 		// The email has gone regardless, so the history must say so.
@@ -158,15 +191,6 @@ export async function sendCoffeeInvite(
 			emailSent: true,
 		};
 	}
-
-	await recordEvent({
-		applicationId,
-		actorUserId: actor,
-		type: 'coffee_invited',
-		fromStatus: 'waitlisted',
-		toStatus: 'coffee_invited',
-		body: `Coffee invite emailed to ${application.email}`,
-	});
 
 	revalidateApplication(applicationId);
 	return { ok: true, message: sent.warning };
@@ -197,19 +221,19 @@ export async function recordAttendance(
 		return { ok: false, message: 'Attendance is already recorded.' };
 	}
 
-	const recorded = await transition(applicationId, 'coffee_invited', {
-		coffeeAttendedAt: new Date(),
-	});
+	const recorded = await transitionAndRecord(
+		applicationId,
+		'coffee_invited',
+		{ coffeeAttendedAt: new Date() },
+		{
+			actorUserId: actor,
+			type: 'attendance_recorded',
+			body: 'Attended a Coffee',
+		},
+	);
 	if (!recorded) {
 		return { ok: false, message: changedUnderneath(application.name) };
 	}
-
-	await recordEvent({
-		applicationId,
-		actorUserId: actor,
-		type: 'attendance_recorded',
-		body: 'Attended a Coffee',
-	});
 
 	revalidatePath(`/admin/waitlist/${applicationId}`);
 	return { ok: true };
@@ -286,11 +310,22 @@ export async function approveMembership(
 	}
 
 	const now = new Date();
-	const approved = await transition(applicationId, 'coffee_invited', {
-		status: 'member',
-		approvedAt: now,
-		coffeeAttendedAt: application.coffeeAttendedAt ?? now,
-	});
+	const approved = await transitionAndRecord(
+		applicationId,
+		'coffee_invited',
+		{
+			status: 'member',
+			approvedAt: now,
+			coffeeAttendedAt: application.coffeeAttendedAt ?? now,
+		},
+		{
+			actorUserId: actor,
+			type: 'approved',
+			fromStatus: 'coffee_invited',
+			toStatus: 'member',
+			body: `Membership approved; welcome and Slack invite emailed to ${application.email}`,
+		},
+	);
 
 	if (!approved) {
 		// Both emails have gone regardless, so the history must say so.
@@ -324,15 +359,6 @@ export async function approveMembership(
 			});
 		}
 	}
-
-	await recordEvent({
-		applicationId,
-		actorUserId: actor,
-		type: 'approved',
-		fromStatus: 'coffee_invited',
-		toStatus: 'member',
-		body: `Membership approved; welcome and Slack invite emailed to ${application.email}`,
-	});
 
 	revalidateApplication(applicationId);
 	return { ok: true, message: welcomeSent.warning ?? slackSent.warning };
@@ -440,22 +466,21 @@ async function close(
 		body = checked.body;
 	}
 
-	const closed = await transition(applicationId, application.status, {
-		status,
-		closedAt: new Date(),
-	});
+	const closed = await transitionAndRecord(
+		applicationId,
+		application.status,
+		{ status, closedAt: new Date() },
+		{
+			actorUserId: actor,
+			type: status === 'declined' ? 'declined' : 'withdrawn',
+			fromStatus: application.status,
+			toStatus: status,
+			body,
+		},
+	);
 	if (!closed) {
 		return { ok: false, message: changedUnderneath(application.name) };
 	}
-
-	await recordEvent({
-		applicationId,
-		actorUserId: actor,
-		type: status === 'declined' ? 'declined' : 'withdrawn',
-		fromStatus: application.status,
-		toStatus: status,
-		body,
-	});
 
 	revalidateApplication(applicationId);
 	return { ok: true };
