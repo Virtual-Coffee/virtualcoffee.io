@@ -10,10 +10,13 @@
 		"preinstall": "npx only-allow pnpm",
 		"format": "prettier --write --ignore-unknown --list-different .",
 		"lint": "eslint",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage",
 		"build-member-files": "tsx scripts/loadMemberFiles.ts",
 		"build-undraw-ratios": "tsx scripts/loadUndrawAspectRatios.ts",
 		"build-bot-list": "tsx scripts/loadBotList.ts",
-		"check-bot-matching": "tsx scripts/checkBotMatching.ts",
+		"check-bot-matching": "vitest run --project unit src/data/botMatcher.test.ts",
 		"codegen": "pnpm build-member-files && pnpm build-undraw-ratios",
 		"local-dev": "cross-env NODE_ENV=development pnpm netlify dev",
 		"build": "next build",
@@ -89,6 +92,8 @@
 		"@types/react-dom": "^19.2.7",
 		"@types/sanitize-html": "^2.16.1",
 		"@typescript/native": "npm:typescript@^7.0.2",
+		"@vitest/coverage-v8": "^5.0.0",
+		"@vitest/eslint-plugin": "^1.6.27",
 		"concurrently": "^10.0.5",
 		"cross-env": "^10.1.0",
 		"drizzle-kit": "1.0.0-rc.4",
@@ -99,7 +104,8 @@
 		"prettier": "^3.9.6",
 		"sass": "^1.104.0",
 		"tsx": "^4.23.13",
-		"typescript": "npm:@typescript/typescript6@^6.0.2"
+		"typescript": "npm:@typescript/typescript6@^6.0.2",
+		"vitest": "^5.0.0"
 	},
 	"overrides": {},
 	"intent": {
