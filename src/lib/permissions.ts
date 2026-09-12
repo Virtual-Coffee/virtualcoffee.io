@@ -216,7 +216,7 @@ export function parseRoles(role: string | null | undefined): RoleName[] {
 	return role
 		.split(',')
 		.map((entry) => entry.trim())
-		.filter((entry): entry is RoleName => entry in roles);
+		.filter((entry): entry is RoleName => Object.hasOwn(roles, entry));
 }
 
 export function serialiseRoles(names: readonly RoleName[]): string {

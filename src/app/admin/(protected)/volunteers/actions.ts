@@ -311,6 +311,8 @@ export async function resendInvite(
 
 	const { token, expiresAt } = newClaimToken();
 
+	// Written before the send on purpose: the link in the email must already
+	// redeem, and a failed send is reported as such. See docs/adr/0011.
 	await db()
 		.update(invite)
 		.set({ tokenHash: hashClaimToken(token), tokenExpiresAt: expiresAt })

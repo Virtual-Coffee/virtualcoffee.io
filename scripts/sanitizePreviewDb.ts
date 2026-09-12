@@ -709,7 +709,11 @@ async function verify(database: Database): Promise<string[]> {
 		[
 			'pending_grant.slack_user_id was not sanitized',
 			() =>
-				countWhere(database, pendingGrant, realSlackId(pendingGrant.slackUserId)),
+				countWhere(
+					database,
+					pendingGrant,
+					realSlackId(pendingGrant.slackUserId),
+				),
 		],
 		[
 			'volunteer.slack_user_id was not sanitized',

@@ -21,7 +21,5 @@ export const metadata = {
  * render — one here would nest inside that one.
  */
 export default function InvitesLayout({ children }: { children: ReactNode }) {
-	return (
-		<div className="d-flex flex-column min-vh-100">{children}</div>
-	);
+	return <div className="d-flex flex-column min-vh-100">{children}</div>;
 }

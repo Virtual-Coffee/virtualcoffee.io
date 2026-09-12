@@ -41,8 +41,8 @@ export type TokenRedemption =
 	| { ok: false; reason: 'unknown' | 'used' | 'expired' };
 
 /**
- * Redeem a token, marking it used in the same statement that checks it so two
- * concurrent requests can't both succeed.
+ * Redeem a token. The read is a plain select; the conditional update below is
+ * what stops two concurrent requests from both succeeding.
  */
 export async function redeemSlackInviteToken(
 	token: string,
