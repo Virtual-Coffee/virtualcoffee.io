@@ -1,14 +1,5 @@
 @use 'sass:map';
 
-:root {
-	font-family: 'Inter', sans-serif;
-}
-@supports (font-variation-settings: normal) {
-	:root {
-		font-family: 'Inter var', sans-serif;
-	}
-}
-
 html {
 	font-size: 18px;
 	scroll-padding-top: 100px;
@@ -81,12 +72,12 @@ h3 {
 	background-image: $gradient-primary;
 }
 
-.btn {
+// Only the filled variants carry white text, and only over a dark fill does a
+// shadow help. This used to sit on bare `.btn`, so every outline button got a
+// black smear under dark-on-white text and looked out of focus.
+.btn-primary,
+.btn-secondary {
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-}
-
-.btn.btn-link {
-	text-shadow: none;
 }
 
 .gradient-text-primary {
