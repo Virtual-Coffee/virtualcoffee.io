@@ -285,3 +285,10 @@ Archiving needs base-creator rights, and nothing on the site breaks when it
 happens — but every script here stops working, and two pieces of content still
 point at Airtable: the `/member-survey` redirect in `netlify.toml`, and the entry
 links on the November 2023 and 2024 challenge pages. See ADR 0004.
+
+## Shared modules
+
+`classify.ts` (how an Airtable membership row maps onto an application status)
+and `match.ts` (scoring a volunteer against the Slack directory) sit beside the
+scripts so they can be imported without running an import: each script executes
+`main()` on load. Their tests are the `*.test.ts` files next to them.

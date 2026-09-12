@@ -23,6 +23,12 @@ import {
 	volunteerInviteLedger,
 } from '../src/db';
 import { ATTACHMENT_STORE } from '../src/lib/attachments';
+import {
+	FAKE_EMAIL_DOMAIN,
+	fakeEmail,
+	fakeSlackId,
+	seedFor,
+} from './lib/previewFakes';
 
 /**
  * Scrub a deploy-preview database branch down to fake data.
@@ -42,7 +48,6 @@ import { ATTACHMENT_STORE } from '../src/lib/attachments';
  * sanitized never publishes.
  */
 
-const FAKE_EMAIL_DOMAIN = 'preview.invalid';
 const PLACEHOLDER_ATTACHMENT_KEY = 'preview-sanitized-placeholder';
 const BATCH_SIZE = 20;
 
@@ -62,45 +67,6 @@ function base64ToArrayBuffer(base64: string): ArrayBuffer {
 const PLACEHOLDER_PNG = base64ToArrayBuffer(
 	'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
 );
-
-function seedFor(id: string | number): number {
-	const str = String(id);
-	let hash = 0;
-	for (let i = 0; i < str.length; i++) {
-		hash = (hash * 31 + str.charCodeAt(i)) | 0;
-	}
-	return Math.abs(hash);
-}
-
-/**
- * Deterministic per-id fake email so re-running the sanitizer on the same
- * branch (every push to the same PR) produces stable, diffable output. The
- * `@preview.invalid` suffix (RFC 2606 reserved, never resolves) is what makes
- * the verification pass below a trivial pattern match, and the id-derived
- * suffix guarantees uniqueness even if the random local part ever collided.
- */
-/**
- * A fake Slack member id, derived from the real one.
- *
- * Deterministic on purpose. The same Slack id appears on `user`,
- * `pending_grant`, `volunteer`, `volunteer_invite_ledger` and `invite` and is
- * what joins them — an Invite Allowance is keyed on it (docs/adr/0009). Fake
- * each occurrence independently and a preview's volunteers lose their balances
- * and their invites, which is a broken /admin rather than a sanitized one.
- *
- * `U` plus base36 keeps the shape recognisable without being a real id.
- */
-function fakeSlackId(realId: string): string {
-	return `U${seedFor(realId).toString(36).toUpperCase().padStart(8, '0')}`;
-}
-
-function fakeEmail(id: string | number): string {
-	const local = faker.internet
-		.username()
-		.toLowerCase()
-		.replace(/[^a-z0-9._-]/g, '');
-	return `${local}.${seedFor(id).toString(36)}@${FAKE_EMAIL_DOMAIN}`;
-}
 
 async function inBatches<T>(
 	items: readonly T[],
