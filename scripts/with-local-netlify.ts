@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 
 import { BlobsServer } from '@netlify/blobs/server';
 
+import { isLocalDatabaseUrl } from './lib/localOnly';
+
 /**
  * Run a command against the local Netlify Database and a local Netlify Blobs
  * store.
@@ -91,7 +93,7 @@ function localDatabaseUrl(): string {
 		);
 	}
 
-	if (!url.includes('localhost') && !url.includes('127.0.0.1')) {
+	if (!isLocalDatabaseUrl(url)) {
 		fail(
 			'Refusing to run: the connection string is not local.',
 			'This guard exists so a seed or import can never hit production.',
