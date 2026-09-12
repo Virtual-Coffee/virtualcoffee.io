@@ -86,10 +86,18 @@ export const EVENT_LABELS: Record<string, string> = {
 	notification_failed: 'Slack notification failed',
 };
 
+/**
+ * Pinned to UTC, and the time says so. These run on the server for the
+ * detail pages and in the browser for the tables and timelines, and a format
+ * that follows the local zone renders differently in each — a hydration
+ * mismatch at best, and a date that moves by a day for a maintainer west of
+ * Greenwich at worst.
+ */
 const DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
 	day: 'numeric',
 	month: 'short',
 	year: 'numeric',
+	timeZone: 'UTC',
 });
 
 export function formatDate(value: Date | null) {
@@ -102,6 +110,8 @@ const DATE_TIME_FORMAT = new Intl.DateTimeFormat('en-US', {
 	year: 'numeric',
 	hour: 'numeric',
 	minute: '2-digit',
+	timeZone: 'UTC',
+	timeZoneName: 'short',
 });
 
 export function formatDateTime(value: Date | null) {
