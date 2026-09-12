@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { NOT_FOUND, signInAs } from '@/test/session';
+import { NOT_FOUND } from '@/test/next';
+import { signInAs } from '@/test/session';
 import { adjustBalance } from './actions';
 
 const VOLUNTEER_ID = '0199404c-2c5e-7000-8000-000000000000';

@@ -55,7 +55,9 @@ export default defineConfig({
 			exclude: [
 				// Pages and components: a unit runner cannot render async Server
 				// Components (Next's own guidance), so listing them is only noise.
-				'src/app/**',
+				// Pages and routes render; the server actions are logic and are
+				// exercised through their tests.
+				'src/app/**/!(action|actions).*',
 				'src/test/**',
 				'**/*.tsx',
 				// Codegen (gitignored) and the generated, checked-in bot list.
