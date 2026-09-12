@@ -13,6 +13,7 @@ import {
 } from '../actions';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
+import { CloseDialog } from './closeDialog';
 import { useAction } from '@/util/forms/useAction';
 import { ReadOnlyNotice } from '../../presentation';
 
@@ -32,7 +33,7 @@ type Props = {
 	slackInvite: Template;
 };
 
-type Dialog = 'coffee' | 'approve' | 'resend' | null;
+type Dialog = 'coffee' | 'approve' | 'resend' | 'decline' | 'withdraw' | null;
 
 export function ActionPanel(props: Props) {
 	const [dialog, setDialog] = useState<Dialog>(null);
@@ -132,9 +133,7 @@ export function ActionPanel(props: Props) {
 							type="button"
 							className="btn btn-outline-danger"
 							disabled={pending}
-							onClick={() =>
-								run(() => declineApplication(props.applicationId, null))
-							}
+							onClick={() => setDialog('decline')}
 						>
 							Decline
 						</button>
@@ -142,9 +141,7 @@ export function ActionPanel(props: Props) {
 							type="button"
 							className="btn btn-outline-secondary"
 							disabled={pending}
-							onClick={() =>
-								run(() => withdrawApplication(props.applicationId))
-							}
+							onClick={() => setDialog('withdraw')}
 						>
 							Mark withdrawn
 						</button>
@@ -200,6 +197,28 @@ export function ActionPanel(props: Props) {
 				onCancel={() => setDialog(null)}
 				onConfirm={(copyMe) =>
 					run(() => approveMembership(props.applicationId, copyMe))
+				}
+			/>
+
+			<CloseDialog
+				open={dialog === 'decline'}
+				verb="decline"
+				applicantName={props.applicantName}
+				pending={pending}
+				onCancel={() => setDialog(null)}
+				onConfirm={(note) =>
+					run(() => declineApplication(props.applicationId, note))
+				}
+			/>
+
+			<CloseDialog
+				open={dialog === 'withdraw'}
+				verb="withdraw"
+				applicantName={props.applicantName}
+				pending={pending}
+				onCancel={() => setDialog(null)}
+				onConfirm={(note) =>
+					run(() => withdrawApplication(props.applicationId, note))
 				}
 			/>
 

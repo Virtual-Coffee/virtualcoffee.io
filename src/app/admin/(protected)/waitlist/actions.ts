@@ -429,6 +429,16 @@ async function close(
 		};
 	}
 
+	// The note is optional, but one that is given is held to the same rules
+	// as a History note — checked before the status changes, so an over-long
+	// reason is refused rather than closing the application without it.
+	let body: string | null = null;
+	if (note?.trim()) {
+		const checked = checkNote(note);
+		if (!checked.ok) return checked;
+		body = checked.body;
+	}
+
 	const closed = await transition(applicationId, application.status, {
 		status,
 		closedAt: new Date(),
@@ -443,7 +453,7 @@ async function close(
 		type: status === 'declined' ? 'declined' : 'withdrawn',
 		fromStatus: application.status,
 		toStatus: status,
-		body: note,
+		body,
 	});
 
 	revalidateApplication(applicationId);
@@ -459,8 +469,9 @@ export async function declineApplication(
 
 export async function withdrawApplication(
 	applicationId: string,
+	note: string | null,
 ): Promise<ActionResult> {
-	return close(applicationId, 'withdrawn', null);
+	return close(applicationId, 'withdrawn', note);
 }
 
 export async function addNote(

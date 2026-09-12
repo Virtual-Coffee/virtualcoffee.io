@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, inviteToken, user } from '@/db';
 import { createSlackInviteToken } from '@/lib/inviteTokens';
+import { MAX_NOTE_LENGTH } from '@/lib/notes';
 import { NOT_FOUND } from '@/test/next';
 import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/email';
 import { signInAs } from '@/test/session';
@@ -304,6 +305,26 @@ describe('declineApplication and withdrawApplication', () => {
 		]);
 	});
 
+	test('a blank note is recorded as none; an over-long one is refused first', async () => {
+		const blank = await insertApplication({ status: 'waitlisted' });
+		await expect(withdrawApplication(blank.id, '   ')).resolves.toEqual({
+			ok: true,
+		});
+		await expect(applicationEvents(blank.id)).resolves.toEqual([
+			expect.objectContaining({ type: 'withdrawn', body: null }),
+		]);
+
+		const { id } = await insertApplication({ status: 'waitlisted' });
+		await expect(
+			declineApplication(id, 'x'.repeat(MAX_NOTE_LENGTH + 1)),
+		).resolves.toMatchObject({
+			ok: false,
+			message: expect.stringContaining('at most'),
+		});
+		expect((await applicationRow(id)).status).toBe('waitlisted');
+		await expect(applicationEvents(id)).resolves.toEqual([]);
+	});
+
 	test('a member cannot be declined or withdrawn, and closing twice is refused', async () => {
 		const member = await insertApplication({ status: 'member' });
 		await expect(declineApplication(member.id, null)).resolves.toMatchObject({
@@ -312,8 +333,8 @@ describe('declineApplication and withdrawApplication', () => {
 		});
 
 		const { id } = await insertApplication({ status: 'coffee_invited' });
-		await withdrawApplication(id);
-		await expect(withdrawApplication(id)).resolves.toMatchObject({
+		await withdrawApplication(id, null);
+		await expect(withdrawApplication(id, null)).resolves.toMatchObject({
 			ok: false,
 			message: 'Already withdrawn.',
 		});
@@ -332,7 +353,7 @@ describe('a status that changed between the read and the write', () => {
 	test('closing twice at once records one close', async () => {
 		const { id } = await insertApplication({ status: 'waitlisted' });
 		const results = await Promise.all([
-			withdrawApplication(id),
+			withdrawApplication(id, null),
 			declineApplication(id, null),
 		]);
 		expect(results.filter((r) => r.ok)).toHaveLength(1);
