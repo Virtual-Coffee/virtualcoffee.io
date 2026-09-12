@@ -1,0 +1,117 @@
+[
+	{
+		"Pairing Participants": "Imani\nAlex Curtis-Slep\nJustin Noel",
+		"Topic": "React useEffect",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Drew Pate, Ryan Kahn",
+		"Topic": "JavaScript / React Animation ",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Kirk Shillingford\nAndrew Harper\nAlexis Carr\nRad Turkin",
+		"Topic": "Python Application Review",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Jörn Bernhardt\nAmy Shackles",
+		"Topic": "https://github.com/Narigo/regex-game",
+		"Pairing Sessions": 3
+	},
+	{
+		"Pairing Participants": "Meg Gutshall\nJörn Bernhardt",
+		"Topic": "Meg doing column-count layouting in multiple places",
+		"Pairing Sessions": 2
+	},
+	{
+		"Pairing Participants": "Agi\nMeg Gutshall\nSadie J\nRad Turkin\nJörn Bernhardt",
+		"Topic": "Frontend Friday Folks vs CSSBattles.dev + work related CSS issues",
+		"Pairing Sessions": 2
+	},
+	{
+		"Pairing Participants": "Kirk Shillingford\nAlexis Carr",
+		"Topic": "git, devops, gpg",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Rad \nKirk",
+		"Topic": "gathering data from an API, using Python when there is not a good API",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Kirk Shillingford\nRad Turkin",
+		"Topic": "Data fetching with Python",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "@Jörn Bernhardt\n@AmyShackles",
+		"Topic": "Regex Game: https://github.com/Narigo/regex-game",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Dan\nLex\nMeg\nJörn\nRad",
+		"Topic": "CSS Battles!",
+		"Pairing Sessions": 2
+	},
+	{
+		"Pairing Participants": "Dan\nKirk",
+		"Topic": "Getting Kirk up and going on a new project!",
+		"Pairing Sessions": 2
+	},
+	{
+		"Pairing Participants": "Meg Gutshall\nRaynald Mirville\nAishwarya Mali",
+		"Topic": "CSS Battle https://cssbattle.dev/play/8",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Ramón Huidobro\nChad R. Stewart",
+		"Topic": "We did talk practice with Rizèl Scarlett: \nhttps://www.youtube.com/watch?v=IFPH9ImjmuA",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "BekahHW\nNick Taylor",
+		"Topic": "OpenSauced chrome ext",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Carmen Kolohe\nKirk Shillingford",
+		"Topic": "WEBPACK",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Meg Gutshall\nRaynald Mirville\nPiotrek\nAishwarya Mali\nRay Deck",
+		"Topic": "CSS Battle: https://cssbattle.dev/play/9",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "David Alpert\nMeg Gutshall\nPiotrek Szymaniec\nLex Carr",
+		"Topic": "fixing my blog's gemfile",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Meg Gutshall\nPiotrek",
+		"Topic": "Virtual Coffee .github repository – Add Discussion Category Form for CSS Battles Discussions Issue",
+		"Pairing Sessions": 3
+	},
+	{
+		"Pairing Participants": "Piotr Szymaniec\nMeg Gutshall\nRoger Gentry\nAndrew Harper-TA\nDan Ott\nJörn Bernhardt",
+		"Topic": "Frontend Friday folks fighting CSSBattle.dev",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "BekahHW\nAyu",
+		"Topic": "Intro to Open Source issue",
+		"Pairing Sessions": 1
+	},
+	{
+		"Pairing Participants": "Piotr Szymaniec\nAishwarya Mali",
+		"Topic": "CSS Battle: https://cssbattle.dev/play/10",
+		"Pairing Sessions": 2
+	},
+	{
+		"Pairing Participants": "David Alpert\nPiotrek Szymaniec",
+		"Topic": "1. explanation of promises, and examples of it with typescript\n2. one advent of code problem",
+		"Pairing Sessions": 1
+	}
+]

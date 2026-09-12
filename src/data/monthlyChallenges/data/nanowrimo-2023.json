@@ -1,0 +1,901 @@
+[
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "BekahHW",
+		"EntryTitle": "Blogging 2023 Monthly Challenge!",
+		"EntryUrl": "https://dev.to/virtualcoffee/blogging-2023-monthly-challenge-3kng",
+		"EntryDate": "2023-11-01",
+		"WordCount": 534,
+		"ShortDescription": "Our blog post sharing the challenge with the Dev audience.\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "BekahHW",
+		"EntryTitle": "How to Get Your Pull Request Reviewed",
+		"EntryUrl": "https://dev.to/opensauced/how-to-get-your-pull-request-reviewed-kgd",
+		"EntryDate": "2023-11-02",
+		"WordCount": 689,
+		"Topics": "opensource",
+		"ShortDescription": "Reading documentation, testing your contributions, and effectively using PR templates will increase your chances of having your PR reviewed.\n"
+	},
+	{
+		"Name": "Nick Taylor",
+		"GitHubUsername": "nickytonline",
+		"EntryTitle": "GitHub Actions: A Maintainer's Best Friend",
+		"EntryUrl": "https://dev.to/opensauced/github-actions-a-maintainers-best-friend-488n",
+		"EntryDate": "2023-10-31",
+		"WordCount": 752,
+		"Topics": "github action.automation,open source,productivity",
+		"ShortDescription": "As developers, it’s in our best interest to automate things. The less we have to do in a manual way, the better. As soon as manual intervention is required, there is potential for failure or a mishap. Aside from that, it’s your time as a maintainer that could be spent elsewhere.\n"
+	},
+	{
+		"Name": "Jessica Wilkins",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "How to Find Discipline in Coding",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/how-to-find-discipline-in-coding/",
+		"EntryDate": "2023-11-02",
+		"WordCount": 602,
+		"Topics": "tech, discipline, career",
+		"ShortDescription": "One of the common struggles for those learning to code is finding the discipline to keep going. Here is how I used my music background to create discipline in coding.\n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "How to Survive a Tech Layoff",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/how-to-survive-a-tech-layoff/",
+		"EntryDate": "2023-11-02",
+		"WordCount": 967,
+		"Topics": "mental health, career, tech, ",
+		"ShortDescription": "In August 2023, I was laid off from my job as a software engineer. I wanted to write about my experience and share some tips for anyone else who might be going through the same thing.\n"
+	},
+	{
+		"Name": "Wonuola",
+		"GitHubUsername": "harshleey",
+		"EntryTitle": "Demystifying the Internet",
+		"EntryUrl": "https://harshleey.hashnode.dev/demystifying-the-internet",
+		"EntryDate": "2023-11-03",
+		"WordCount": 3516,
+		"Topics": "programming-blog, internet",
+		"ShortDescription": "### **The beginners' guide to how the Internet works**\n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "How to Get Involved with Twitter Spaces",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/how-to-get-involved-with-twitter-spaces/",
+		"EntryDate": "2023-11-03",
+		"WordCount": 948,
+		"Topics": "twitter, networking, career, tech",
+		"ShortDescription": "Twitter Spaces are live audio events held on Twitter and they are a great way to grow your tech network.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "HacktoberFest Wrap Up",
+		"EntryUrl": "https://dev.to/jarvisscript/hacktoberfest-wrap-up-4ama",
+		"EntryDate": "2023-11-02",
+		"WordCount": 270,
+		"Topics": "Hacktoberfest",
+		"ShortDescription": "My 2023 HacktoberFest experience. \n"
+	},
+	{
+		"Name": "Amy Shackles",
+		"GitHubUsername": "AmyShackles",
+		"EntryTitle": "Triangles Made of Borders?",
+		"EntryUrl": "https://blog.amyshackles.com/triangles-made-of-borders",
+		"EntryDate": "2023-11-04",
+		"WordCount": 1359,
+		"Topics": "css",
+		"ShortDescription": "You can create triangles in CSS using borders?  Heck yes you can.\n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "Should you pay for programming courses?",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/should-you-pay-for-programming-courses/",
+		"EntryDate": "2023-11-05",
+		"WordCount": 850,
+		"Topics": "courses, programming, tech",
+		"ShortDescription": "There always seems to be a debate on whether paid programming courses are worth it or not. So I figured I would share my thoughts on the matter.\n"
+	},
+	{
+		"Name": "James Curran",
+		"GitHubUsername": "jamescurran",
+		"EntryTitle": "What is (was) Beta Software?",
+		"EntryUrl": "https://honestillusion.com/blog/2023/11/05/what-is-beta-software/",
+		"EntryDate": "2023-11-05",
+		"WordCount": 467,
+		"Topics": "code,programming,retro,history",
+		"ShortDescription": "History of the term \"Beta Software\"\n"
+	},
+	{
+		"Name": "Nick Taylor",
+		"GitHubUsername": "nickytonline",
+		"EntryTitle": "TypeScript and React: Enforcing Props for Accessibility",
+		"EntryUrl": "https://dev.to/nickytonline/typescript-and-react-enforcing-props-for-accessibility-2h49",
+		"EntryDate": "2023-11-06",
+		"WordCount": 1162,
+		"Topics": "react,typescript,a11y",
+		"ShortDescription": "I used TypeScript to enforce a label on a component using `aria-label` or `aria-labelledby`, but not both.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "What are your goal for the week of Nov 6?",
+		"EntryUrl": "https://dev.to/jarvisscript/what-are-your-goals-for-the-week-of-nov-6-4cn7",
+		"EntryDate": "2023-11-06",
+		"WordCount": 220,
+		"Topics": "Motivation",
+		"ShortDescription": "Accountability post asking readers what are ther plans for the week. \n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "Should you expect 100k for your first job?",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/100k-first-job/",
+		"EntryDate": "2023-11-06",
+		"WordCount": 597,
+		"Topics": "career, tect",
+		"ShortDescription": "A few days ago, this [Tweet](https://twitter.com/ambertakahashi/status/1720156928658096169) went viral telling new developers not to expect 100k for their first job. This prompted a lot of people to comment and re tweet with their thoughts and first salaries online.\nI read through a lot of the discussions online and I thought I’d share my thoughts on the topic.\n"
+	},
+	{
+		"Name": "Tammy Miller",
+		"GitHubUsername": "tgmiller5",
+		"EntryTitle": "Free Course Weekend: Strategies and Insights from VueSchool",
+		"EntryUrl": "https://developbit.com/free-course-weekend-strategies-and-insights-from-vueschool/",
+		"EntryDate": "2023-11-06",
+		"WordCount": 423,
+		"Topics": "VueSchool, free-course-weekend, Jest, testing",
+		"ShortDescription": "This blog post is about strategies and lessons learned from taking courses over the weekend and sharing my experience about it. \n"
+	},
+	{
+		"Name": "James Curran",
+		"GitHubUsername": "jamescurran",
+		"EntryTitle": "The Oregon Trail Project - Part 0 - Intro",
+		"EntryUrl": "https://honestillusion.com/blog/2023/11/07/oregon-trail-project-intro/",
+		"EntryDate": "2023-11-07",
+		"WordCount": 880,
+		"Topics": "code,programming,retro,history",
+		"ShortDescription": "The Introduction of the project to convert the 70s game Oregon Trail to C#.\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "BekahHW",
+		"EntryTitle": "A Complete Guide to Getting Started in Open Source",
+		"EntryUrl": "https://dev.to/opensauced/a-complete-guide-to-getting-started-in-open-source-2449",
+		"EntryDate": "2023-11-07",
+		"WordCount": 842,
+		"ShortDescription": "It can be hard getting started in Open Source. Here's a complete guide.\n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "Should you take DSA style interviews?",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/should-you-take-dsa-style-interviews/",
+		"EntryDate": "2023-11-08",
+		"WordCount": 1245,
+		"Topics": "DSA, interviews, tech, career",
+		"ShortDescription": "Danny Thompson recently posted a story about a CS student struggling with DSA interviews and it sparked a lot of discussion about the nature of tech interviews. Here are my thoughts on the matter.\n"
+	},
+	{
+		"Name": "Eva Yu-Hwa Chen",
+		"GitHubUsername": "yuhwaa",
+		"EntryTitle": "Troubleshooting Vite Deployment Issues on Netlify",
+		"EntryUrl": "https://dev.to/eva_dev/troubleshooting-vite-deployment-issues-on-netlify-2ohf",
+		"EntryDate": "2023-11-08",
+		"WordCount": 297,
+		"ShortDescription": "Troubleshooting Vite Deployment Issues on Netlify\n"
+	},
+	{
+		"Name": "Dan Ott",
+		"GitHubUsername": "danieltott",
+		"EntryTitle": "Virtual Coffee Hacktoberfest 2023 Roundup",
+		"EntryUrl": "https://dev.to/virtualcoffee/virtual-coffee-hacktoberfest-2023-roundup-18cj",
+		"EntryDate": "2023-11-09",
+		"WordCount": 597,
+		"ShortDescription": "Roundup of VCHI 2023!\n"
+	},
+	{
+		"Name": "Meg Divringi",
+		"GitHubUsername": "Meg-Div",
+		"EntryTitle": "Why I Love Interviewing And How You Can Too",
+		"EntryUrl": "https://dev.to/megdiv/why-i-love-to-interview-and-how-you-can-too-4ma3",
+		"EntryDate": "2023-11-09",
+		"WordCount": 905,
+		"Topics": "Technical interviews and interviewing",
+		"ShortDescription": "How to love technical interviews\n"
+	},
+	{
+		"Name": "Eva Yu-Hwa Chen",
+		"GitHubUsername": "yuhwaa",
+		"EntryTitle": "The User Manual",
+		"EntryUrl": "https://dev.to/eva_dev/the-user-manual-46b1",
+		"EntryDate": "2023-11-09",
+		"WordCount": 171,
+		"ShortDescription": "Intro post for my blog\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "I want a new Rubber Duck",
+		"EntryUrl": "https://dev.to/jarvisscript/i-want-a-new-rubber-duck-31mb",
+		"EntryDate": "2023-11-10",
+		"WordCount": 900,
+		"Topics": "CSS, developer stories,",
+		"ShortDescription": "A rubber duck made with CSS.\n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "How to avoid these Pull Request mistakes",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/how-to-avoid-pr-mistakes/",
+		"EntryDate": "2023-11-11",
+		"WordCount": 1417,
+		"Topics": "git, github, pull request, open source",
+		"ShortDescription": "I have been involved with tons of code reviews lately and have seen a trend of mistakes that new developers make when creating pull requests. I wanted to share some tips on how to create a strong pull request that will help you get your code merged faster.\n"
+	},
+	{
+		"Name": "Klesta Luli",
+		"GitHubUsername": "klezi10",
+		"EntryTitle": "Volunteering as a Developer: Win-Win for You and the Tech Community",
+		"EntryUrl": "https://klescode.hashnode.dev/volunteering-as-a-developer",
+		"EntryDate": "2023-11-13",
+		"WordCount": 1164,
+		"Topics": " opensource, softwaredevelopment, webdev, learning, volunteering",
+		"ShortDescription": "The blog post discusses my volunteer experience and benefits of volunteering as a developer. It also gives some advice on volunteering roles for developers and how it benefits the volunteer and the tech community.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "What are your goals for the week of Nov 13?",
+		"EntryUrl": "https://dev.to/jarvisscript/what-are-your-goals-for-the-week-of-nov-13-599a",
+		"EntryDate": "2023-11-13",
+		"WordCount": 259,
+		"Topics": "Motivation",
+		"ShortDescription": "Weekly goal setting and motivation.\n"
+	},
+	{
+		"Name": "Christine Belzie ",
+		"GitHubUsername": "CBID2",
+		"EntryTitle": "How to Write Commit Messages that Project Maintainers Will Appreciate",
+		"EntryUrl": "https://www.freecodecamp.org/news/how-to-write-commit-messages-maintainers-will-like/",
+		"EntryDate": "2023-11-11",
+		"WordCount": 824,
+		"Topics": "Git, commit messages, open source ",
+		"ShortDescription": "This is a beginner-friendly article on how open source contributors can create effective commit messages when pushing their contributions to a OSS's codebase. \n"
+	},
+	{
+		"Name": "Nick Taylor",
+		"GitHubUsername": "nickytonline",
+		"EntryTitle": "Boost productivity with the GitHub CLI",
+		"EntryUrl": "https://dev.to/opensauced/boost-productivity-with-the-github-cli-2mne",
+		"EntryDate": "2023-11-14",
+		"WordCount": 1429,
+		"Topics": "git,githubcli,productivity,github",
+		"ShortDescription": "The [GitHub CLI](https://cli.github.com/) is an indispensable tool as a project maintainer or contributor on GitHub. It can boost your productivity when getting things done.\n"
+	},
+	{
+		"Name": "ethan freire",
+		"GitHubUsername": "ethanfreire",
+		"EntryTitle": "JavaScript Callback Functions: A Beginner's Guide",
+		"EntryUrl": "https://techieengineer5.hashnode.dev/javascript-callback-functions-beginners-guide",
+		"EntryDate": "2023-11-14",
+		"WordCount": 895,
+		"Topics": "JavaScript, BeginnersGuide, WebDevelopment",
+		"ShortDescription": "Dive into the world of JavaScript callback functions! Learn what they are, why they're essential, and how to use them effectively. \n"
+	},
+	{
+		"Name": "Jessica Wilkins",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "Should you work remotely in Tech?",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/should-you-work-remotely/",
+		"EntryDate": "2023-11-14",
+		"WordCount": 829,
+		"Topics": "career, tech, remote work",
+		"ShortDescription": "I recently ran across a Twitter post by Mike Tomasello on remote work and was inspired to write about my own experience working remotely in tech.\n"
+	},
+	{
+		"Name": "Raynaldo Sutisna",
+		"GitHubUsername": "raaynaldo",
+		"EntryTitle": "Binary Search Finding Max/Min Template in Javascript ",
+		"EntryUrl": "https://dev.to/raaynaldo/binary-search-finding-maxmin-template-in-javascript-1de7",
+		"EntryDate": "2023-11-15",
+		"WordCount": 1322,
+		"Topics": "Algorithm, Binary Search, Javascript, Tutorial",
+		"ShortDescription": "Understanding my binary search on solutions spaces approach and template\n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "How to find good OSS issues",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/how-to-find-good-oss-issues/",
+		"EntryDate": "2023-11-15",
+		"WordCount": 836,
+		"Topics": "open source",
+		"ShortDescription": "A lot of new contributors to open source, will say that it is hard to find good issues to contribute to. I have been contributing to open source for a few years now, and I have a few tips on how to find good issues.\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "bekahhw",
+		"EntryTitle": "Our Hacktoberfest Success Story",
+		"EntryUrl": "https://opensauced.pizza/blog/our-hacktoberfest-success-story",
+		"EntryDate": "2023-11-15",
+		"WordCount": 837,
+		"ShortDescription": "Hacktoberfest 2023 brought new contributors to OpenSauced and continued contributions, leading to a successful year.\n"
+	},
+	{
+		"Name": "Abbey Perini ",
+		"GitHubUsername": "abbeyperini",
+		"EntryTitle": "12 Tips for Attending a Tech Conference",
+		"EntryUrl": "https://dev.to/abbeyperini/12-tips-for-attending-a-tech-conference-14mp",
+		"EntryDate": "2023-11-15",
+		"WordCount": 902,
+		"ShortDescription": "Conferences are filled with fun and opportunities. Do a little prep beforehand to set yourself up for success.\n"
+	},
+	{
+		"Name": "Teri Eyenike",
+		"GitHubUsername": "terieyenike",
+		"EntryTitle": "Shield Your Thoughts: Building an Encrypted Note App with React and Pangea Authentication",
+		"EntryUrl": "https://terieyenike.hashnode.dev/encrypted-note-app",
+		"EntryDate": "2023-11-16",
+		"WordCount": 1900,
+		"Topics": "React",
+		"ShortDescription": "Have you ever considered the safety of your users in securing the app they use? If you're seeking a solution without needing to develop one from the ground up, Pangea AuthN facilitates seamless integration into applications.\n"
+	},
+	{
+		"Name": "David Akim",
+		"GitHubUsername": "david-001",
+		"EntryTitle": "Using Plotly.js with React",
+		"EntryUrl": "https://medium.com/@davidjohnakim/using-plotly-js-with-react-f792ab426248",
+		"EntryDate": "2023-11-17",
+		"WordCount": 860,
+		"Topics": "React, Plotly",
+		"ShortDescription": "Plotting a simple graph using Plotly in React\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "Darkmode Duck and other CSS Ducks",
+		"EntryUrl": "https://dev.to/jarvisscript/dark-mode-duck-and-other-css-ducks-4oag",
+		"EntryDate": "2023-11-17",
+		"WordCount": 590,
+		"Topics": "CSS, ",
+		"ShortDescription": "Rubber Ducks made with CSS. Brief Overview of how I made them\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "bekahhw",
+		"EntryTitle": "Hiring, Firing, and Becoming Indispensable",
+		"EntryUrl": "https://dev.to/bekahhw/hiring-firing-and-becoming-indispensable-kfe",
+		"EntryDate": "2023-11-17",
+		"WordCount": 3009,
+		"ShortDescription": "The tech landscape is as much about the art of adaptation as it is about innovation.\n"
+	},
+	{
+		"Name": "Satoshi S.",
+		"GitHubUsername": "Satoshi-Sh",
+		"EntryTitle": "Luck = [Doing Things] x [Telling People]",
+		"EntryUrl": "https://dev.to/satoshi-sh/luck-doing-things-x-telling-people-17kl",
+		"EntryDate": "2023-11-17",
+		"WordCount": 349,
+		"Topics": "community,writing,developer",
+		"ShortDescription": "I wrote a post about what I thought after attending the \"How to Write a Technical Blog\"  workshop by Mike Courtermarsh.\n"
+	},
+	{
+		"Name": "Tamara and Jörn",
+		"GitHubUsername": "compose-us",
+		"EntryTitle": "Finding a Name and Building a Prototype",
+		"EntryUrl": "https://github.com/compose-us/build-in-public/blob/main/updates/2023-11-09%20Finding%20a%20Name%20and%20Building%20a%20Prototype/README.md",
+		"EntryDate": "2023-11-09",
+		"WordCount": 973,
+		"Topics": "build-in-public,webrtc,decision making",
+		"ShortDescription": "One of our #BuildInPublic updates, explaining our thought process regarding the name and what we've used to create a prototype.\n"
+	},
+	{
+		"Name": "Tamara and Jörn",
+		"GitHubUsername": "compose-us",
+		"EntryTitle": "Hackathon Update",
+		"EntryUrl": "https://github.com/compose-us/build-in-public/blob/main/updates/2023-11-17%20Hackathon%20Update/README.md",
+		"EntryDate": "2023-11-17",
+		"WordCount": 1035,
+		"Topics": "build-in-public,hackathon,prototyping",
+		"ShortDescription": "Our next update for #BuildInPublic, this time showcasing what we did at the Bayerwald Hackathon and how the user flow of our prototype works now\n"
+	},
+	{
+		"Name": "Michael Jolley",
+		"GitHubUsername": "michaeljolley",
+		"EntryTitle": "Using Primary Constructors in C# 12 & .NET 8",
+		"EntryUrl": "https://baldbeardedbuilder.com/blog/primary-constructors-in-csharp-12-dotnet/",
+		"EntryDate": "2023-11-15",
+		"WordCount": 771,
+		"Topics": "csharp,dotnet",
+		"ShortDescription": "The new class and struct primary constructors introduced in C# 12 are a welcome addition to our syntax and allow us to write cleaner & more concise code, but for those with experience using primary constructors with record types, you’ll need to be aware of some key differences.\n"
+	},
+	{
+		"Name": "Michael Jolley",
+		"GitHubUsername": "michaeljolley",
+		"EntryTitle": "Alias any Type with C# 12",
+		"EntryUrl": "https://baldbeardedbuilder.com/blog/alias-any-type-in-csharp-12/",
+		"EntryDate": "2023-11-15",
+		"WordCount": 331,
+		"Topics": "dotnet,csharp",
+		"ShortDescription": "With C# 12, you can now alias type, including tuples, array, pointer, and unsafe types.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "What are your Goals for the week of Nov 20?",
+		"EntryUrl": "https://dev.to/jarvisscript/what-are-your-goals-for-the-week-of-nov-20-9b2",
+		"EntryDate": "2023-11-20",
+		"WordCount": 373,
+		"Topics": "Motivation, accountablity",
+		"ShortDescription": "Weekly motivation\n"
+	},
+	{
+		"Name": "Raynaldo Sutisna",
+		"GitHubUsername": "raaynaldo",
+		"EntryTitle": "Leetcode Heap (Priority Queue) in JavaScript ",
+		"EntryUrl": "https://dev.to/raaynaldo/leetcode-heap-priority-queue-in-javascript-4f25",
+		"EntryDate": "2023-11-20",
+		"WordCount": 1646,
+		"Topics": "algorithm, heap, priority queue, javascript",
+		"ShortDescription": "How to use the Javascript heap package in Leetcode for Javascript\n"
+	},
+	{
+		"Name": "Nick Taylor",
+		"GitHubUsername": "nickytonline",
+		"EntryTitle": "Infer Types to Avoid Explicit Types",
+		"EntryUrl": "https://dev.to/nickytonline/infer-types-to-avoid-explicit-types-1pnn",
+		"EntryDate": "2023-11-21",
+		"WordCount": 1321,
+		"Topics": "typescript",
+		"ShortDescription": "Types are great, and so is TypeScript, but that doesn't mean you need to type everything.\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "bekahhw",
+		"EntryTitle": "So You're Interested in Being an Open Source Maintainer",
+		"EntryUrl": "https://dev.to/opensauced/so-youre-interested-in-being-an-open-source-maintainer-5bb2",
+		"EntryDate": "2023-11-21",
+		"WordCount": 1933,
+		"ShortDescription": "There’s no one direct path to maintainership, but one of the pieces of advice I give contributors who are interested in that path is to understand the role before taking it on.\n"
+	},
+	{
+		"Name": "Ayu Adiati",
+		"GitHubUsername": "adiati98",
+		"EntryTitle": "Building Your Brand as a Developer Through Open Source",
+		"EntryUrl": "https://dev.to/adiatiayu/building-your-brand-as-a-developer-through-open-source-djl",
+		"EntryDate": "2023-11-21",
+		"WordCount": 1206,
+		"ShortDescription": "This article shares ways to build a personal brand through open source.\n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "How to Build a Visualization for Leetcode's Two Sum Problem – HTML, CSS, & JavaScript Project",
+		"EntryUrl": "https://www.freecodecamp.org/news/build-a-visualization-for-leetcode-two-sum-problem/",
+		"EntryDate": "2023-11-21",
+		"WordCount": 4801,
+		"Topics": "html, css, javascript ",
+		"ShortDescription": "In this tutorial, we will build out a [visualization](https://codepen.io/Jessica-Wilkins-the-decoder/full/eYxVyKN) showing a couple of approaches to a popular LeetCode problem called [Two Sum](https://leetcode.com/problems/two-sum/). We will use vanilla HTML, CSS, and JavaScript to build this project out.\n"
+	},
+	{
+		"Name": "Ayu Adiati",
+		"GitHubUsername": "adiati98",
+		"EntryTitle": "How to Resolve Merge Conflicts Using the Merge Editor Feature on VS Code",
+		"EntryUrl": "https://dev.to/adiatiayu/how-to-resolve-merge-conflicts-using-the-merge-editor-feature-on-vs-code-pic",
+		"EntryDate": "2023-11-22",
+		"WordCount": 857,
+		"ShortDescription": "A tutorial of VS Code's Merge Editor feature\n"
+	},
+	{
+		"Name": "Lucia Cerchie",
+		"GitHubUsername": "Cerchie",
+		"EntryTitle": "What I Learned By Building An Educational Static Site",
+		"EntryUrl": "https://cerchie.github.io/what-is-the-lsp/",
+		"EntryDate": "2023-11-22",
+		"WordCount": 787,
+		"Topics": "static sites, learning in public",
+		"ShortDescription": "A write-up of what I learned by building <https://what-is-the-lsp.netlify.app/> \n"
+	},
+	{
+		"Name": "Ayu Adiati",
+		"GitHubUsername": "adiati98",
+		"EntryTitle": "How to Keep Branches Up-to-Date and Resolve Merge Conflicts in GitHub and VS Code",
+		"EntryUrl": "https://www.freecodecamp.org/news/keep-branches-up-to-date-resolve-merge-conflicts/",
+		"EntryDate": "2023-11-23",
+		"WordCount": 1437,
+		"ShortDescription": "A tutorial to keeping branches up-to-date and resolving conflicts on GitHub and VS Code.\n"
+	},
+	{
+		"Name": "Oluwatobi Sofela",
+		"GitHubUsername": "oluwatobiss",
+		"EntryTitle": "How to Become a Modern Developer by Learning Soft Skills",
+		"EntryUrl": "https://codesweetly.com/blog/become-a-modern-developer",
+		"EntryDate": "2023-11-23",
+		"WordCount": 1505,
+		"Topics": "modern-developer,soft-skills,collaboration,pair-programming,remote-team-experience",
+		"ShortDescription": "I recently completed my first web dev team project, where I collaborated on a real project with a remote team. This article is the gist of my journey—a reflection of how I developed from a solo developer to a versatile team player.\n"
+	},
+	{
+		"Name": "Aishwarya Mali",
+		"GitHubUsername": "aishwarya-mali",
+		"EntryTitle": "How to convert an Object into an array?",
+		"EntryUrl": "https://dev.to/aishwaryamali24/how-to-convert-an-object-into-an-array-7hl",
+		"EntryDate": "2023-11-24",
+		"WordCount": 502,
+		"Topics": "javasript,webdev,programming",
+		"ShortDescription": "Wrote about methods used to convert an Object into an array.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": " 2023 Black Friday & Cyber Monday for Developers",
+		"EntryUrl": "https://dev.to/jarvisscript/2023-black-friday-cyber-monday-for-developers-92p",
+		"EntryDate": "2023-11-22",
+		"WordCount": 594,
+		"Topics": "deals,",
+		"ShortDescription": "Black Friday deals for developers.\n"
+	},
+	{
+		"Name": "Victoria Lo",
+		"GitHubUsername": "victoria-lo",
+		"EntryTitle": "5 Benefits of Joining an Offline Tech Community",
+		"EntryUrl": "https://lo-victoria.com/5-benefits-of-joining-an-offline-tech-community",
+		"EntryDate": "2023-11-21",
+		"WordCount": 1000,
+		"Topics": "community, tech communities",
+		"ShortDescription": "What are some of the benefits to join an in-person community? Let's find out!\n"
+	},
+	{
+		"Name": "James Curran",
+		"GitHubUsername": "jamescurran",
+		"EntryTitle": "The Oregon Trail Project - Part 1 - Text (Markdig.SpectreConsole)",
+		"EntryUrl": "https://honestillusion.com/blog/2023/11/26/oregon-trail-project-1-text/",
+		"EntryDate": "2023-11-07",
+		"WordCount": 678,
+		"Topics": "code,programming,retro,history",
+		"ShortDescription": "A console MarkDown parser for my Oregon Trail project.\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "BekahHW",
+		"EntryTitle": "The Evolving Landscape of DevRel: Trends and Predictions for 2023",
+		"EntryUrl": "https://dev.to/bekahhw/the-evolving-landscape-of-devrel-trends-and-predictions-for-2023-3lp4",
+		"EntryDate": "2023-11-26",
+		"WordCount": 3759,
+		"ShortDescription": "This blog post is an exploration of the field, some of the changes and challenges we face, and where I think we’re headed.\n\n"
+	},
+	{
+		"Name": "James Curran",
+		"GitHubUsername": "jamescurran",
+		"EntryTitle": "The Oregon Trail Project - Part 2 - Dates",
+		"EntryUrl": "https://honestillusion.com/blog/2023/11/27/oregon-trail-project-2-date/",
+		"EntryDate": "2023-11-27",
+		"WordCount": 255,
+		"Topics": "code,programming,retro,history,dates",
+		"ShortDescription": "Next step in the project.  Formatting dates\n"
+	},
+	{
+		"Name": "Mike Street",
+		"GitHubUsername": "mikestreety",
+		"EntryTitle": "Login with Puppeteer and re-use cookies for another window",
+		"EntryUrl": "https://www.mikestreety.co.uk/blog/login-with-puppeteer-and-re-use-cookies-for-another-window/",
+		"EntryDate": "2023-11-23",
+		"WordCount": 716,
+		"Topics": "npm, automation",
+		"ShortDescription": "Using Puppeteer, login to a website and store the cookies for use with another session or script\n"
+	},
+	{
+		"Name": "Klesta",
+		"GitHubUsername": "klezi10",
+		"EntryTitle": "Git Basics: Git Commands and How to Use Them",
+		"EntryUrl": "https://dev.to/klesand/git-basics-git-commands-and-how-to-use-them-5718",
+		"EntryDate": "2023-11-27",
+		"WordCount": 620,
+		"ShortDescription": "An introduction to the most common git commands\n"
+	},
+	{
+		"Name": "Teri Eyenike",
+		"GitHubUsername": "terieyenike",
+		"EntryTitle": "Bright Data Success Stories: Realizing the Impact of Ethical Web Scraping",
+		"EntryUrl": "https://terieyenike.hashnode.dev/ethical-web-scraping",
+		"EntryDate": "2023-11-28",
+		"WordCount": 774,
+		"Topics": "web scraping, bright data",
+		"ShortDescription": "The relevance of web scraping deals with the rights to publicly access or extract data strictly from websites with the primary purpose of not breaching privacy set out by businesses or companies. These guidelines are laws or rules that protect customers’ data, and Bright Data is a GDPR and CCPA complaint.\n"
+	},
+	{
+		"Name": "Oluwatobi Sofela",
+		"GitHubUsername": "oluwatobiss",
+		"EntryTitle": "Responsive Web Design – How to Create Responsive Web Apps",
+		"EntryUrl": "https://codesweetly.com/responsive-web-design-explained",
+		"EntryDate": "2023-11-28",
+		"WordCount": 836,
+		"Topics": "webdev,responsive-design,css,html",
+		"ShortDescription": "This article discusses what responsive web design is and some features you can use to make your web pages naturally responsive.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "What are your goals for the week of November 27? ",
+		"EntryUrl": "https://dev.to/jarvisscript/what-are-your-goals-for-the-week-of-nov-27-4b9a",
+		"EntryDate": "2023-11-27",
+		"WordCount": 447,
+		"Topics": "Motivation, accountablity",
+		"ShortDescription": "Weekly accountability and encouragement post.\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "BekahHW",
+		"EntryTitle": "Strategies for Successful Contributor Onboarding",
+		"EntryUrl": "https://dev.to/opensauced/strategies-for-successful-contributor-onboarding-3066",
+		"EntryDate": "2023-11-28",
+		"WordCount": 1944,
+		"ShortDescription": "Explore effective strategies for onboarding new contributors in open source projects. Learn how to create a welcoming environment, provide mentorship, and recognize diverse contributions to foster a thriving open source community.\n"
+	},
+	{
+		"Name": "David Akim",
+		"GitHubUsername": "david-001",
+		"EntryTitle": "Creating a movie finder app with Streamlit and OMDb API",
+		"EntryUrl": "https://dev.to/david001/creating-a-movie-finder-app-with-streamlit-and-omdb-api-2fak",
+		"EntryDate": "2023-11-28",
+		"WordCount": 1300,
+		"Topics": "streamlit, python",
+		"ShortDescription": "This blog goes through the process of creating a movie finder app with Streamlit and OMDb API. It also demonstrates how to run the app locally.\n"
+	},
+	{
+		"Name": "Wonuola",
+		"GitHubUsername": "harshleey",
+		"EntryTitle": "How to use Postman for API documentation",
+		"EntryUrl": "https://harshleey.hashnode.dev/how-to-use-postman-for-api-documentation",
+		"EntryDate": "2023-11-28",
+		"WordCount": 1169,
+		"Topics": "Api-building, postman, api-documentation",
+		"ShortDescription": "Master Postman's robust documentation features for streamlined API management. Learn to document requests and responses and enhance your development workflow\n"
+	},
+	{
+		"Name": "James Curran",
+		"GitHubUsername": "jamescurran",
+		"EntryTitle": "The Oregon Trail Project - Part 3 - Data",
+		"EntryUrl": "https://honestillusion.com/blog/2023/11/29/oregon-trail-project-3-data/",
+		"EntryDate": "2023-11-29",
+		"WordCount": 1347,
+		"Topics": "code programming retro history opensource ",
+		"ShortDescription": "Part 3, the one where I talk about variables.\n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "How to network on Twitch",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/how-to-network-on-twitch/",
+		"EntryDate": "2023-11-29",
+		"WordCount": 760,
+		"Topics": "twitch, career, networking",
+		"ShortDescription": "A lot of people will suggest using networking as a way to build connections in the industry. But how can you do that on Twitch?\n"
+	},
+	{
+		"Name": "Raynaldo Sutisna",
+		"GitHubUsername": "raaynaldo",
+		"EntryTitle": "📚 RTK Query: Understanding useQuery hook ",
+		"EntryUrl": "https://dev.to/raaynaldo/rtk-query-understanding-usequery-hook-36bo",
+		"EntryDate": "2023-11-29",
+		"WordCount": 1917,
+		"Topics": "redux, react, RTK Query, tutorial, javascript",
+		"ShortDescription": "understanding the useQuery hook from RTK Query specifically about the UseQueryOptions and UseQueryResult\n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "My Thoughts on Danny's Paid Courses List",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/my-thoughts-on-dannys-paid-courses/",
+		"EntryDate": "2023-11-29",
+		"WordCount": 1302,
+		"Topics": "career, tech, courses",
+		"ShortDescription": "Recently, Danny Thompson posted a list of paid tech courses to check out and I wanted to share my thoughts on it.\n"
+	},
+	{
+		"Name": "Mike Street",
+		"GitHubUsername": "mikestreety",
+		"EntryTitle": "Accessing iframe content and JavaScript variables from Puppeteer",
+		"EntryUrl": "https://www.mikestreety.co.uk/blog/accessing-iframe-content-and-javascript-variables-from-puppeteer/",
+		"EntryDate": "2023-11-29",
+		"WordCount": 679,
+		"Topics": "npm, node",
+		"ShortDescription": "Access the contents of an iframe including any JavaScript variables set\n"
+	},
+	{
+		"Name": "Nick Taylor",
+		"GitHubUsername": "nickytonline",
+		"EntryTitle": "HTML Data Attributes: One of the Original State Management Libraries",
+		"EntryUrl": "https://dev.to/nickytonline/html-data-attributes-one-of-the-original-state-management-libraries-8bf",
+		"EntryDate": "2023-11-29",
+		"WordCount": 780,
+		"Topics": "html,javascript",
+		"ShortDescription": "HTML attributes are super useful and may be something you could leverage in your existing or next project.\n"
+	},
+	{
+		"Name": "Anshuman Sathua",
+		"GitHubUsername": "anshumanSathua",
+		"EntryTitle": "Understanding the Document Object Model (DOM) in Frontend Development",
+		"EntryUrl": "https://dev.to/anshu21/understanding-the-document-object-model-dom-in-frontend-development-2h17",
+		"EntryDate": "2023-11-30",
+		"WordCount": 636,
+		"Topics": "Javascript, webdev, DOM",
+		"ShortDescription": "While exploring the world of frontend development, the term \"DOM\" frequently surfaces. Let's understand it. The DOM, or Document Object Model, is pivotal in creating dynamic and interactive web pages.\n"
+	},
+	{
+		"Name": "Jessica Wilkins ",
+		"GitHubUsername": "jdwilkin4",
+		"EntryTitle": "Should you do Take Home Assignments?",
+		"EntryUrl": "https://from-mozart-to-javascript.dev/posts/should-you-do-take-home-assignments/",
+		"EntryDate": "2023-11-29",
+		"WordCount": 845,
+		"Topics": "interviews, career, tech",
+		"ShortDescription": "One alternative to traditional DSA interviews are take-home assignments. But are they any better?\n"
+	},
+	{
+		"Name": "David Akim",
+		"GitHubUsername": "david-001",
+		"EntryTitle": "Create an Agebot in Slack using Python",
+		"EntryUrl": "https://dev.to/david001/create-an-agebot-in-slack-41j5",
+		"EntryDate": "2023-11-30",
+		"WordCount": 920,
+		"Topics": "python,slack",
+		"ShortDescription": "Creating a bot in Slack which automatically determines the user's age based on the user's input.\n"
+	},
+	{
+		"Name": "Oluwatobi Sofela",
+		"GitHubUsername": "oluwatobiss",
+		"EntryTitle": "Closures in JavaScript Explained – Complete Guide to JavaScript Closures",
+		"EntryUrl": "https://codesweetly.com/javascript-closures-explained",
+		"EntryDate": "2023-11-30",
+		"WordCount": 2210,
+		"Topics": "closure,javascript,programming,wedev",
+		"ShortDescription": "This article uses examples to explain how closures work in JavaScript.\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "BekahHW",
+		"EntryTitle": "What to do when your PR fails",
+		"EntryUrl": "https://dev.to/opensauced/what-to-do-when-your-pr-fails-bl1",
+		"EntryDate": "2023-11-30",
+		"WordCount": 762,
+		"ShortDescription": "So your pull request has failed. What do you do next? This blog post gives insight into steps you can take to get your PR passing.\n"
+	},
+	{
+		"Name": "Ayu Adiati",
+		"GitHubUsername": "adiati98",
+		"EntryTitle": "How to Become a Better Open Source Maintainer",
+		"EntryUrl": "https://dev.to/adiatiayu/how-to-become-a-better-open-source-maintainer-464f",
+		"EntryDate": "2023-11-30",
+		"WordCount": 1128,
+		"ShortDescription": "Tips of how to become a better open source maintainer\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "BekahHW",
+		"EntryTitle": "Job Seekers Worksheet: Build Your Resume with Open Source",
+		"EntryUrl": "https://dev.to/opensauced/job-seekers-worksheet-build-your-resume-with-open-source-5am5",
+		"EntryDate": "2023-11-30",
+		"WordCount": 552,
+		"ShortDescription": "Are you looking for a job? This post will help you to use open source to land that next job.\n"
+	},
+	{
+		"Name": "James Curran",
+		"GitHubUsername": "jamescurran",
+		"EntryTitle": "The Oregon Trail Project - Part 4 - Trail Events",
+		"EntryUrl": "https://honestillusion.com/blog/2023/11/30/oregon-trail-project-4-events/",
+		"EntryDate": "2023-11-30",
+		"WordCount": 949,
+		"Topics": "code,programming,retro,history,MEF",
+		"ShortDescription": "Over-engineering adding the things that happen to you along the way.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "2023 Devloper Advent Calendars",
+		"EntryUrl": "https://dev.to/jarvisscript/2023-developer-advent-calendars-2ijp",
+		"EntryDate": "2023-11-29",
+		"WordCount": 851,
+		"Topics": "code challenges, css, javascript, ",
+		"ShortDescription": "A list of 2023 advent calendars for developers.\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "BekahHW",
+		"EntryTitle": "Join Virtual Coffee in the Creative Community Monthly Challenge!",
+		"EntryUrl": "https://dev.to/virtualcoffee/join-virtual-coffee-in-the-creative-community-monthly-challenge-44d5?preview=1915937bfaddd231a989f8d4f4f99215178b688fe8eb5cd6533fd81a188698c0ec971b8bcad6e4b34cb65930afb4cdb718543ce10b9d3ad83c51bf1c",
+		"EntryDate": "2023-11-30",
+		"WordCount": 392,
+		"ShortDescription": "VC monthly challenge page.\n"
+	},
+	{
+		"Name": "Ayu Adiati",
+		"GitHubUsername": "adiati98",
+		"EntryTitle": "How to Add a Table of Contents to Your Article on Ghost",
+		"EntryUrl": "https://www.freecodecamp.org/news/p/e6fab2b3-1c23-4770-8f04-41004e993ace/",
+		"EntryDate": "2023-11-30",
+		"WordCount": 1752,
+		"ShortDescription": "A tutorial of how to add a table of contents to an article on Ghost\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "Ugky Sweater: Millennium Falcon",
+		"EntryUrl": "https://dev.to/jarvisscript/ugly-sweater-millennium-falcon-46na",
+		"EntryDate": "2023-11-30",
+		"WordCount": 1013,
+		"Topics": "CSS art, Star Wars, ",
+		"ShortDescription": "How I made the LEGO Millennium Falcon ugly sweater with CSS\n"
+	},
+	{
+		"Name": "Amy Shackles",
+		"GitHubUsername": "amyshackles",
+		"EntryTitle": "Your Go-To Regular Expression Reference",
+		"EntryUrl": "https://blog.amyshackles.com/your-go-to-regular-expression-reference?showSharer=true",
+		"EntryDate": "2023-11-30",
+		"WordCount": 2272,
+		"Topics": "regex",
+		"ShortDescription": "The beginning of a descent into madness, regular expression reference style.\n"
+	},
+	{
+		"Name": "Amy Shackles",
+		"GitHubUsername": "amyshackles",
+		"EntryTitle": "Your Go-To Regular Expression Reference: Control Characters",
+		"EntryUrl": "https://blog.amyshackles.com/your-go-to-regular-expression-reference-control-characters",
+		"EntryDate": "2023-11-30",
+		"WordCount": 270,
+		"Topics": "regex",
+		"ShortDescription": "Continuation of descent into madness, regex style.\n"
+	},
+	{
+		"Name": "Amy Shackles",
+		"GitHubUsername": "amyshackles",
+		"EntryTitle": "Your Go-To Regular Expression Reference: Hexadecimals",
+		"EntryUrl": "https://blog.amyshackles.com/your-go-to-regular-expression-reference-hexadecimals",
+		"EntryDate": "2023-11-30",
+		"WordCount": 1693,
+		"Topics": "regex",
+		"ShortDescription": "Hexadecimal reference for JavaScript flavored regular expressions\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "BekahHW",
+		"EntryTitle": "A Year in Review: Celebrating the Virtual Coffee Community",
+		"EntryUrl": "https://dev.to/virtualcoffee/a-year-in-review-celebrating-the-virtual-coffee-community-4fgj",
+		"EntryDate": "2023-11-30",
+		"WordCount": 1807,
+		"ShortDescription": "VC 2023\n"
+	},
+	{
+		"Name": "Alex Curtis-Slep",
+		"GitHubUsername": "alexvcs",
+		"EntryTitle": "Lessons from Starting an Open Source Project",
+		"EntryUrl": "https://dev.to/alexcurtisslep/lessons-from-starting-an-open-source-project-2g3l",
+		"EntryDate": "2023-11-30",
+		"WordCount": 314,
+		"Topics": "open source,lessons",
+		"ShortDescription": "Starting [my own open source project](https://github.com/AlexVCS/Duguetia) has taught me a lot. While the project isn't mature, it's shifting my perspective on coding and how I approach each task. Read the article to explore what I've learned.\n"
+	},
+	{
+		"Name": "Amy Shackles",
+		"GitHubUsername": "amyshackles",
+		"EntryTitle": "Your Go-To Regular Expression Reference: Unicode Part I",
+		"EntryUrl": "https://blog.amyshackles.com/your-go-to-regular-expression-reference-unicode-part-i",
+		"EntryDate": "2023-11-30",
+		"WordCount": 53423,
+		"Topics": "regex, unicode",
+		"ShortDescription": "The values for unicode \\0000 to \\u0fff\n"
+	},
+	{
+		"Name": "Tamara and Jörn",
+		"GitHubUsername": "compose-us",
+		"EntryTitle": "Gathering Feedback",
+		"EntryUrl": "https://github.com/compose-us/build-in-public/blob/main/updates/2023-12-01%20Gathering%20Feedback/README.md",
+		"EntryDate": "2023-12-01",
+		"WordCount": 1324,
+		"Topics": "build-in-public,feedback,user-interviews",
+		"ShortDescription": "What kind of feedback we got for our #BuildInPublic initiative, how we approach potential users and what we're doing with their feedback.\n"
+	}
+]

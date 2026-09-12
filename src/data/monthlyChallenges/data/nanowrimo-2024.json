@@ -1,0 +1,297 @@
+[
+	{
+		"Name": "Ayu Adiati",
+		"GitHubUsername": "adiati98",
+		"EntryTitle": "Hacktoberfest 2024: My 2nd Year Experience as A Maintainer",
+		"EntryUrl": "https://dev.to/adiatiayu/hacktoberfest-2024-my-2nd-year-experience-as-a-maintainer-n7f",
+		"EntryDate": "2024-11-03",
+		"WordCount": 951,
+		"ShortDescription": "Ayu shares her experience in maintaining open-source projects for the 2nd year during Hacktoberfest.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "HacktoberFest: Animation",
+		"EntryUrl": "https://dev.to/jarvisscript/hacktoberfest-animation-21l3",
+		"EntryDate": "2024-11-03",
+		"WordCount": 625,
+		"Topics": "Hacktoberfest, CSS",
+		"ShortDescription": "Description of my HacktoberFest Contributions. \n"
+	},
+	{
+		"Name": "Victoria Lo",
+		"GitHubUsername": "victoria-lo",
+		"EntryTitle": "The Ultimate Networking Guide for Programmers",
+		"EntryUrl": "https://lo-victoria.com/the-ultimate-networking-guide-for-programmers",
+		"EntryDate": "2024-11-04",
+		"WordCount": 2800,
+		"Topics": "networking, programmers",
+		"ShortDescription": "My friend just had a talk on Networking for Techies. I was inspired by her and my own experiences as an introvert, and decide to write this article! —and no, this isn't about IP addresses. It's about how do we build and maintain genuine connections? Let's crack the code to networking!\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "What are your goals for week 45 of 2024?",
+		"EntryUrl": "https://dev.to/jarvisscript/what-are-your-goals-for-week-45-of-2024-4jig",
+		"EntryDate": "2024-11-04",
+		"WordCount": 410,
+		"Topics": "Motivation, accounatblity",
+		"ShortDescription": "Set your weekly goals and get support,\n"
+	},
+	{
+		"Name": "BekahHW",
+		"GitHubUsername": "BekahHW",
+		"EntryTitle": "Five Lessons for Five Years in Tech",
+		"EntryUrl": "https://dev.to/bekahhw/five-lessons-for-five-years-in-tech-37i9",
+		"EntryDate": "2024-11-08",
+		"WordCount": 1296,
+		"Topics": "career",
+		"ShortDescription": "I've been in tech for 5 years! This post talks about some of the things that have helped me in this journey.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "Monthly Challenge: 50,000 Word Blogging Challenge",
+		"EntryUrl": "https://dev.to/virtualcoffee/monthly-challenge-blogging-challenge-35o4",
+		"EntryDate": "2024-11-01",
+		"WordCount": 589,
+		"Topics": "Blogging, writing, monthly challenge",
+		"ShortDescription": "Announcing our 2024 blogging challenge\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "What are your goals for week 46 of 2024?",
+		"EntryUrl": "https://dev.to/jarvisscript/what-are-your-goals-for-week-46-of-2024-305d",
+		"EntryDate": "2024-11-11",
+		"WordCount": 532,
+		"Topics": "motivation, goals, ",
+		"ShortDescription": "Listing and following up on goals, \n"
+	},
+	{
+		"Name": "Neha Maity",
+		"GitHubUsername": "nehamaity",
+		"EntryTitle": "How I Spent My Time After Getting Laid Off – Security+, Python, and a career shift! ",
+		"EntryUrl": "https://dev.to/nehamaity/how-i-spent-my-time-after-getting-laid-off-security-python-and-a-career-shift-3cpf",
+		"EntryDate": "2024-11-11",
+		"WordCount": 800,
+		"Topics": "layoff, career, unemployment",
+		"ShortDescription": "I talk about my experience getting laid off as well as what I did after I was laid off. I study for my Security+ certification as well as refresh my skills in Python. A LinkedIn message leads to a career shift.\n"
+	},
+	{
+		"Name": "Victoria Lo",
+		"GitHubUsername": "victoria-lo",
+		"EntryTitle": "GitHub Models: An Overview of AI Prototyping",
+		"EntryUrl": "https://lo-victoria.com/github-models-an-overview-of-ai-prototyping",
+		"EntryDate": "2024-11-13",
+		"WordCount": 1400,
+		"Topics": "machine learning, github, models",
+		"ShortDescription": "This series will guide you through using GitHub Models to enhance development workflows by integrating AI into projects. We'll explore key features, learn to prototype AI models, integrate them into workflows, and cover best practices. By the end, you’ll be ready to leverage GitHub Models effectively!\n"
+	},
+	{
+		"Name": "Moronfolu Olufunke",
+		"GitHubUsername": "MoeRayo",
+		"EntryTitle": "Optimizing Payment Orchestration for Subscription-Based Businesses",
+		"EntryUrl": "https://medium.com/@moronfolu.motunrayo1/optimizing-payment-orchestration-for-subscription-based-businesses-c9a9adc3c641",
+		"EntryDate": "2024-11-13",
+		"WordCount": 1413,
+		"Topics": "payments",
+		"ShortDescription": "From Netflix to Salesforce, subscription businesses are thriving, with the 2023 Business of Apps survey reporting approximately $45.6 billion in revenue from subscription-based businesses.\n\nThis blog post is a guide on using Juspay's payment orchestration solution to optimize subscription businesses, driving both efficiency and growth.\n"
+	},
+	{
+		"Name": "Cris Crawford",
+		"GitHubUsername": "cmcrawford2",
+		"EntryTitle": "ChatGPT is my first mentor",
+		"EntryUrl": "https://dev.to/cmcrawford2/chatgpt-is-my-first-mentor-3hja",
+		"EntryDate": "2024-11-15",
+		"WordCount": 663,
+		"ShortDescription": "Explained why ChatGPT is a good mentor for me, who has never had a mentor before.\n"
+	},
+	{
+		"Name": "James Curran",
+		"GitHubUsername": "jamescurran",
+		"EntryTitle": "Percentage --- Simplifying Progress Reporting",
+		"EntryUrl": "https://honestillusion.com/blog/2024/11/18/percentage-simplifying-progress-reporting/",
+		"EntryDate": "2024-11-18",
+		"WordCount": 256,
+		"Topics": "csharp, programming, code",
+		"ShortDescription": "A C# class to aid reporting progress during a lengthy task.\n"
+	},
+	{
+		"Name": "Satoshi S.",
+		"GitHubUsername": "Satoshi-Sh",
+		"EntryTitle": "DevOps Practical Experience with Home Lab",
+		"EntryUrl": "https://dev.to/wdp/devops-practical-experience-with-home-lab-379p",
+		"EntryDate": "2024-11-18",
+		"WordCount": 365,
+		"Topics": "devops,linux,python",
+		"ShortDescription": "I share my journey in the MLH x Meta program, building DevOps skills, a home server, and a CI/CD pipeline, with plans to enhance my portfolio and Linux expertise.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "What are your goals for week 47 of 2024?",
+		"EntryUrl": "https://dev.to/jarvisscript/what-are-your-goals-for-week-47-of-2024-513l",
+		"EntryDate": "2024-11-18",
+		"WordCount": 337,
+		"Topics": "Goal Setting, motivation",
+		"ShortDescription": "Weekly goal setting and self motivation\n"
+	},
+	{
+		"Name": "Ayu Adiati",
+		"GitHubUsername": "adiati98",
+		"EntryTitle": "Open Source is For Everyone: First Experience in Non-Code Contribution to Mautic during Hacktoberfest 2024",
+		"EntryUrl": "https://dev.to/adiatiayu/open-source-is-for-everyone-first-experience-in-non-code-contribution-to-mautic-during-4oph",
+		"EntryDate": "2024-11-19",
+		"WordCount": 1080,
+		"ShortDescription": "Open source is for everyone, regardless of their technical background. In this post, Ayu shared her experience contributing non-code by updating the website's content at Mautic during Hacktoberfest.\n"
+	},
+	{
+		"Name": "Sarah Dye",
+		"GitHubUsername": "BritishPandaChick",
+		"EntryTitle": "2024 Recap: Why Accessibility is Important",
+		"EntryUrl": "https://dev.to/theoriginalbpc/2024-recap-why-accessibility-is-important-43n9",
+		"EntryDate": "2024-11-19",
+		"WordCount": 1525,
+		"Topics": "accessibility, design",
+		"ShortDescription": "A brie update on what I've been doing for the last few months and a reminder to all developers on why accessibility is so important and shouldn't be ignored.\n"
+	},
+	{
+		"Name": "Bradston Henry ",
+		"GitHubUsername": "Bradstondevcode",
+		"EntryTitle": "My AI Blindspot: I Wasn't Convinced, Then the Llama LLM Changed Everything",
+		"EntryUrl": "https://dev.to/bradstondev/my-ai-blindspot-i-wasnt-convinced-then-the-llama-llm-changed-everything-about-my-development-4la2",
+		"EntryDate": "2024-11-19",
+		"WordCount": 3818,
+		"Topics": "LLM, ai, llama, productivity, coding",
+		"ShortDescription": "In this blog, I share what my journey with AI has taught me and how it has evolved my development workflow. I share 3 examples of how it helps and I share how to self-host Meta's Llama LLM on your local machine.\n"
+	},
+	{
+		"Name": "Victoria Lo",
+		"GitHubUsername": "victoria-lo",
+		"EntryTitle": "GitHub Models: Integrating AI Models into Development Workflows ",
+		"EntryUrl": "https://lo-victoria.com/github-models-integrating-ai-models-into-development-workflows",
+		"EntryDate": "2024-11-21",
+		"WordCount": 789,
+		"Topics": "machine learning, AI, models, github",
+		"ShortDescription": "In [Part 1: An Overview of AI Prototyping](https://lo-victoria.com/github-models-an-overview-of-ai-prototyping), we explored the basics of GitHub Models and how to get started with prototyping. Now, in Part 2, we’ll look at how to integrate these AI models directly into your development workflows. For this example, we’ll walk through building a simple FAQ bot using GitHub Models, showing you how to streamline tasks, automate responses, and save time.\n"
+	},
+	{
+		"Name": "David Akim",
+		"GitHubUsername": "david-001",
+		"EntryTitle": "Sophisticated Speech-to-Text Application",
+		"EntryUrl": "https://dev.to/david001/sophisticated-speech-to-text-47jm",
+		"EntryDate": "2024-11-24",
+		"WordCount": 185,
+		"Topics": "speech-to-text",
+		"ShortDescription": "This Speech-to-Text application, developed in Taipy and powered by AssemblyAI's Universal-2 model, offers a range of features including the ability to transcribe spoken words into written text, detect multiple speakers within an audio file and transcribe what each speaker said, summarize the audio content with key takeaways, and export the results to a text file.\n"
+	},
+	{
+		"Name": "Richard",
+		"GitHubUsername": "choir241",
+		"EntryTitle": "Zero to Hero: Building a Full-Stack App with PropelAuth, Vite, Typescript, Express, and MongoDB",
+		"EntryUrl": "https://dev.to/choir241/zero-to-hero-building-a-full-stack-app-with-propelauth-vite-typescript-express-and-mongodb-234d",
+		"EntryDate": "2024-11-26",
+		"WordCount": 1607,
+		"Topics": "typescript, mongodb, express, vite, propelauth",
+		"ShortDescription": "How to build a simple Full Stack Vite application using PropelAuth\n"
+	},
+	{
+		"Name": "Richard",
+		"GitHubUsername": "choir241",
+		"EntryTitle": "My thoughts on Pieces",
+		"EntryUrl": "https://dev.to/choir241/my-thoughts-on-pieces-3cmc",
+		"EntryDate": "2024-11-26",
+		"WordCount": 1003,
+		"Topics": "pieces, AI ",
+		"ShortDescription": "My thoughts on Pieces for developers AI tool\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "What are your goals for week 48 of 2024?",
+		"EntryUrl": "https://dev.to/jarvisscript/what-are-your-goals-for-week-48-of-2024-4mlo",
+		"EntryDate": "2024-11-25",
+		"WordCount": 427,
+		"Topics": "motivation",
+		"ShortDescription": "Motivation and accountability post. \n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "What a busted water heater and wet boxes taught me about flexbox",
+		"EntryUrl": "https://dev.to/jarvisscript/what-wet-boxes-taught-me-about-flexbox-4ngi",
+		"EntryDate": "2024-11-26",
+		"WordCount": 774,
+		"Topics": "CSS, Flexbox",
+		"ShortDescription": "Introduction to flexbox\n"
+	},
+	{
+		"Name": "Victoria Lo",
+		"GitHubUsername": "victoria-lo",
+		"EntryTitle": "Responsible Use of GitHub Models and Best Practices",
+		"EntryUrl": "https://lo-victoria.com/github-models-responsible-use-of-github-models-and-best-practices",
+		"EntryDate": "2024-11-27",
+		"WordCount": 800,
+		"ShortDescription": "## Adopting Best Practices for GitHub Models Usage\n"
+	},
+	{
+		"Name": "Micha Rodriguez",
+		"GitHubUsername": "michaella23",
+		"EntryTitle": "Lessons, Growth, and Goodbyes: My Time with the Scrimba Bootcamp",
+		"EntryUrl": "https://dev.to/michaella23/lessons-growth-and-goodbyes-my-time-with-scrimba-bootcamp-1787",
+		"EntryDate": "2024-11-29",
+		"WordCount": 754,
+		"Topics": "career change, career growth, learning to code, mentoring, personal development",
+		"ShortDescription": "I talk about my journey with Scrimba - from learning to code with their platform, to becoming a code reviewer, to leading the bootcamp and helping other students as they learned web development.\n"
+	},
+	{
+		"Name": "Ayu Adiati",
+		"GitHubUsername": "adiati98",
+		"EntryTitle": "Monthly Challenge: Creative Community Challenge!",
+		"EntryUrl": "https://dev.to/virtualcoffee/monthly-challenge-creative-community-challenge-273l",
+		"EntryDate": "2024-11-30",
+		"WordCount": 459,
+		"ShortDescription": "This blog post is introducing and promoting Virtual Coffee's December challenge, the Creative Community Challenge.\n"
+	},
+	{
+		"Name": "James Emmanuel",
+		"GitHubUsername": "madefromjames",
+		"EntryTitle": "The First Teacher: Why Code Errors Matter",
+		"EntryUrl": "https://dev.to/madefromjames/the-first-teacher-why-code-errors-matter-562i",
+		"EntryDate": "2024-11-30",
+		"WordCount": 890,
+		"Topics": "debugging, AI, coding, errors, learning, programming, development",
+		"ShortDescription": "A deep dive into the importance of code errors as learning opportunities. Explore how debugging skills, reinforced by AI, can improve programming expertise and confidence. With insights on common errors, troubleshooting techniques, and the role of AI in the process.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "2024 Black Friday and Cyber Monday deals for Developers.",
+		"EntryUrl": "https://dev.to/jarvisscript/2024-black-friday-and-cyber-monday-deals-for-developers-4mlo",
+		"EntryDate": "2024-11-27",
+		"WordCount": 872,
+		"Topics": "learning",
+		"ShortDescription": "list of developer related deals.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "2024 Developer Advent Calendars ",
+		"EntryUrl": "https://dev.to/jarvisscript/2024-developer-advent-calendars-1b0n",
+		"EntryDate": "2024-11-30",
+		"WordCount": 648,
+		"Topics": "code challenges, blog posts",
+		"ShortDescription": "A list of developer related advent calendars featuring code challenges.\n"
+	},
+	{
+		"Name": "Chris Jarvis",
+		"GitHubUsername": "ClJarvis",
+		"EntryTitle": "Making the Most of it.",
+		"EntryUrl": "https://dev.to/jarvisscript/making-the-most-of-it-4h3j",
+		"EntryDate": "2024-11-30",
+		"WordCount": 354,
+		"Topics": "journaling, office set up",
+		"ShortDescription": "my workspace\n"
+	}
+]

@@ -1,82 +1,33 @@
-import Airtable from 'airtable';
+import entries2023 from './data/nanowrimo-2023.json';
+import entries2024 from './data/nanowrimo-2024.json';
 
-type NovRow = {
+/**
+ * The November writing challenges, frozen as snapshots.
+ *
+ * These used to be one Airtable table read through a per-year view, which is
+ * why the cohorts arrive here as separate files: the year is not recorded on
+ * the rows themselves, only in which view returned them.
+ *
+ * Snapshot: `scripts/airtable/snapshotChallenges.ts`.
+ */
+
+export type WritingChallengeEntry = {
 	Name: string;
 	GitHubUsername: string;
 	EntryTitle: string;
 	EntryUrl: string;
-	EntryDate: string;
+	EntryDate?: string;
 	WordCount: number;
-	Topics: string;
-	ShortDescription: string;
-	created_at: string;
+	Topics?: string;
+	ShortDescription?: string;
 };
 
-async function fetchRecords(viewName: string) {
-	if (process.env.PUBLIC_AIRTABLE_API_KEY) {
-		const base = new Airtable({
-			apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
-		}).base('app10kd5ewHiLTjxn');
+export type WritingChallengeYear = 2023 | 2024;
 
-		const result = await base<NovRow>('NaNoWriMo')
-			.select({
-				view: viewName,
-			})
-			.all();
-
-		return result.map((r) => r.fields);
-	}
-
-	return [
-		{
-			id: 'sdfsdfsd',
-			fields: {
-				Name: 'Dan Ott',
-				GitHubUsername: 'danieltott',
-				EntryTitle: `How I'm awesome`,
-				EntryUrl: `https://danott.dev`,
-				EntryDate: `10/31/2023`,
-				WordCount: 9000,
-				Topics: 'awesomeness,me',
-				ShortDescription:
-					'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin augue nisi, fermentum vitae, imperdiet a, auctor eu, mi. Nulla imperdiet molestie purus. Duis arcu dui, pretium in, molestie id, convallis eget, orci. Praesent eget purus. Nullam sed nunc. Etiam quis orci ac metus consectetuer consequat. Sed pulvinar aliquam sem. Vestibulum convallis. Pellentesque vestibulum dapibus est. Morbi iaculis. Morbi molestie molestie libero. Ut metus. Phasellus pulvinar. Aenean rutrum tristique neque. Morbi vulputate. Curabitur pretium, arcu a accumsan pretium, augue mi ullamcorper ligula, at tristique ligula purus quis mi. Etiam blandit arcu et lorem. Nam ligula. Aliquam nisi sem, euismod id, pharetra vitae, ullamcorper et, pede.',
-				created_at: `10/31/2023 11:14am`,
-			},
-			createdTime: '2021-11-01T16:19:16.000Z',
-		},
-		{
-			id: 'sdfsdfsd',
-			fields: {
-				Name: 'Dan Ott',
-				GitHubUsername: 'danieltott',
-				EntryTitle: `I'm still awesome`,
-				EntryUrl: `https://danott.dev`,
-				EntryDate: `10/30/2023`,
-				WordCount: 10834,
-				Topics: 'dan,ott',
-				ShortDescription:
-					'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin augue nisi, fermentum vitae, imperdiet a, auctor eu, mi. Nulla imperdiet molestie purus. Duis arcu dui, pretium in, molestie id, convallis eget, orci. Praesent eget purus. Nullam sed nunc. Etiam quis orci ac metus consectetuer consequat. Sed pulvinar aliquam sem. Vestibulum convallis. Pellentesque vestibulum dapibus est. Morbi iaculis. Morbi molestie molestie libero. Ut metus. Phasellus pulvinar. Aenean rutrum tristique neque. Morbi vulputate. Curabitur pretium, arcu a accumsan pretium, augue mi ullamcorper ligula, at tristique ligula purus quis mi. Etiam blandit arcu et lorem. Nam ligula. Aliquam nisi sem, euismod id, pharetra vitae, ullamcorper et, pede.',
-				created_at: `10/31/2023 11:25am`,
-			},
-			createdTime: '2021-11-01T16:19:16.000Z',
-		},
-		{
-			id: 'sdfsdfsd',
-			fields: {
-				Name: 'Someone else',
-				GitHubUsername: 'someone',
-				EntryTitle: `Another blog`,
-				EntryUrl: `https://virtualcoffee.io`,
-				EntryDate: `10/20/2023`,
-				WordCount: 234,
-				Topics: `something`,
-				ShortDescription: `Blah blah blah dsfksjd kjsd s sdfsdf.`,
-				created_at: `10/31/2023 11:26am`,
-			},
-			createdTime: '2021-11-01T16:19:16.000Z',
-		},
-	].map((r) => r.fields);
-}
+const ENTRIES: Record<WritingChallengeYear, WritingChallengeEntry[]> = {
+	2023: entries2023 as WritingChallengeEntry[],
+	2024: entries2024 as WritingChallengeEntry[],
+};
 
 type PostMap = Record<
 	string,
@@ -91,8 +42,8 @@ type PostMap = Record<
 	}
 >;
 
-export async function getWritingChallengeData(viewName: string) {
-	const tableRows = await fetchRecords(viewName);
+export function getWritingChallengeData(year: WritingChallengeYear) {
+	const tableRows = ENTRIES[year];
 
 	const totalCount = tableRows.reduce((total, row) => {
 		return total + row.WordCount;
