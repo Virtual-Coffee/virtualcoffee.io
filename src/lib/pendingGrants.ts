@@ -159,13 +159,7 @@ export async function claimPendingGrant(account: {
 			let roleUpdate: RoleUpdate | null = null;
 			let claimedGrantId: string | null = null;
 
-			if (holdsNothing && bootstrapAdminSlackIds().has(account.accountId)) {
-				roleUpdate = {
-					role: 'admin',
-					roleGrantedBy: 'ADMIN_BOOTSTRAP_SLACK_IDS',
-					roleGrantedAt: new Date(),
-				};
-			} else if (holdsNothing) {
+			if (holdsNothing) {
 				const [grant] = await tx
 					.select()
 					.from(pendingGrant)
@@ -177,10 +171,20 @@ export async function claimPendingGrant(account: {
 					)
 					.limit(1);
 
+				// Both can apply at once — a bootstrap admin who was also given
+				// `volunteer` from /admin/volunteers before signing in. The grant is
+				// claimed either way, or it would sit unclaimed forever and show as
+				// stranded in User Management.
+				const bootstrapAdmin = bootstrapAdminSlackIds().has(account.accountId);
+				const granted: RoleName[] = [
+					...(bootstrapAdmin ? (['admin'] as const) : []),
+					...parseRoles(grant?.role),
+				];
+
 				if (grant) {
 					claimedGrantId = grant.id;
 					roleUpdate = {
-						role: grant.role,
+						role: serialiseRoles(granted),
 						/**
 						 * The grantor and the moment they decided, not the moment this
 						 * person got round to signing in. "Granted" then means the same
@@ -189,6 +193,12 @@ export async function claimPendingGrant(account: {
 						 */
 						roleGrantedBy: grant.grantedBy,
 						roleGrantedAt: grant.grantedAt,
+					};
+				} else if (bootstrapAdmin) {
+					roleUpdate = {
+						role: serialiseRoles(granted),
+						roleGrantedBy: 'ADMIN_BOOTSTRAP_SLACK_IDS',
+						roleGrantedAt: new Date(),
 					};
 				}
 			}

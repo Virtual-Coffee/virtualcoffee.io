@@ -105,6 +105,30 @@ describe('claimPendingGrant', () => {
 		});
 	});
 
+	test('a bootstrap admin who was also pre-provisioned gets both, and the grant is claimed', async () => {
+		vi.stubEnv('ADMIN_BOOTSTRAP_SLACK_IDS', 'U_BOTH');
+		const grantedAt = new Date('2026-08-01T12:00:00Z');
+		await db().insert(pendingGrant).values({
+			slackUserId: 'U_BOTH',
+			slackDisplayName: 'Both',
+			role: 'volunteer',
+			grantedBy: 'user-admin',
+			grantedAt,
+		});
+		const both = await insertUser({});
+
+		await claimPendingGrant(slackAccount(both.id, 'U_BOTH'));
+
+		await expect(userRow(both.id)).resolves.toMatchObject({
+			role: 'admin,volunteer',
+			roleGrantedBy: 'user-admin',
+			roleGrantedAt: grantedAt,
+		});
+		const [grant] = await grantRows('U_BOTH');
+		expect(grant.claimedAt).toBeInstanceOf(Date);
+		expect(grant.claimedUserId).toBe(both.id);
+	});
+
 	test('links a pre-provisioned Volunteer row to its owner, grant or no grant', async () => {
 		await insertVolunteer({ slackUserId: 'U_GRACE' });
 		const grace = await insertUser({ role: 'admin' });
