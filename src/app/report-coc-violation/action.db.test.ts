@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { cocReport, db, submissionEvent } from '@/db';
 import { failedNotifications } from '@/lib/submissions';
 import { failInserts } from '@/test/db/fixtures';
-import { formDataWith } from '@/test/forms';
+import { fieldErrors, formDataWith } from '@/test/forms';
 import { redirectTo } from '@/test/next';
 
 const notifySlack = vi.hoisted(() => vi.fn());
@@ -119,9 +119,11 @@ describe('submitCocReport', () => {
 
 	/**
 	 * The upload is validated and stored before the row is written, so a store
-	 * that is down means no half-saved report — the error surfaces instead.
+	 * that is down means no half-saved report — the reporter gets a field
+	 * error on the file and keeps everything else they typed.
 	 */
-	test('a blob store failure leaves no report behind', async () => {
+	test('a blob store failure is a form error that leaves no report behind', async () => {
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
 		blobs.set.mockRejectedValueOnce(new Error('blobs unavailable'));
 		const png = new File(
 			[new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])],
@@ -131,7 +133,12 @@ describe('submitCocReport', () => {
 
 		await expect(
 			submitCocReport(null, formDataWith({ ...valid, uploadedFiles: png })),
-		).rejects.toThrow('blobs unavailable');
+		).resolves.toEqual(
+			fieldErrors({
+				uploadedFiles: expect.stringContaining('store the attachment'),
+			}),
+		);
+		error.mockRestore();
 
 		await expect(db().select().from(cocReport)).resolves.toEqual([]);
 		expect(notifySlack).not.toHaveBeenCalled();
