@@ -30,8 +30,6 @@ import {
 import { pendingInvite } from '@/lib/volunteers';
 import { siteUrl } from '@/util/url.server';
 
-export type VolunteerActionResult = ActionResult;
-
 function revalidate(volunteerId?: string) {
 	revalidatePath('/admin/volunteers');
 	revalidatePath('/admin');
@@ -55,7 +53,7 @@ export async function addVolunteer(
 	slackUserId: string,
 	roleLabels: string,
 	email: string,
-): Promise<VolunteerActionResult> {
+): Promise<ActionResult> {
 	const session = await requirePermission('volunteers', 'manage');
 
 	const members = await getSlackMembers();
@@ -150,7 +148,7 @@ export async function addVolunteer(
 export async function setVolunteerActive(
 	volunteerId: string,
 	active: boolean,
-): Promise<VolunteerActionResult> {
+): Promise<ActionResult> {
 	const session = await requirePermission('volunteers', 'manage');
 
 	if (!isId(volunteerId)) {
@@ -233,7 +231,7 @@ export async function adjustBalance(
 	volunteerId: string,
 	delta: number,
 	reason: string,
-): Promise<VolunteerActionResult> {
+): Promise<ActionResult> {
 	const session = await requirePermission('volunteers', 'manage');
 
 	if (!isId(volunteerId)) {
@@ -293,7 +291,7 @@ export async function adjustBalance(
 export async function resendInvite(
 	inviteId: string,
 	volunteerId: string,
-): Promise<VolunteerActionResult> {
+): Promise<ActionResult> {
 	await requirePermission('volunteers', 'manage');
 
 	if (!isId(inviteId)) {

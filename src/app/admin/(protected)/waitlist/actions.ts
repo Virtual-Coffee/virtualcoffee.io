@@ -22,9 +22,6 @@ import { createSlackInviteToken } from '@/lib/inviteTokens';
 import { getApplication } from '@/lib/applications';
 import { siteUrl } from '@/util/url.server';
 
-/** Every action here can email, so all of them report `emailSent`. */
-export type ActionResult = EmailActionResult;
-
 async function recordEvent(input: {
 	applicationId: string;
 	actorUserId: string | null;
@@ -67,7 +64,7 @@ function revalidateApplication(applicationId: string) {
 export async function sendCoffeeInvite(
 	applicationId: string,
 	copyMe: boolean,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
@@ -130,7 +127,7 @@ export async function sendCoffeeInvite(
 
 export async function recordAttendance(
 	applicationId: string,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
@@ -168,7 +165,7 @@ export async function recordAttendance(
 export async function approveMembership(
 	applicationId: string,
 	copyMe: boolean,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
@@ -285,7 +282,7 @@ async function close(
 	applicationId: string,
 	status: Extract<ApplicationStatus, 'declined' | 'withdrawn'>,
 	note: string | null,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
@@ -332,20 +329,20 @@ async function close(
 export async function declineApplication(
 	applicationId: string,
 	note: string | null,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	return close(applicationId, 'declined', note);
 }
 
 export async function withdrawApplication(
 	applicationId: string,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	return close(applicationId, 'withdrawn', null);
 }
 
 export async function addNote(
 	applicationId: string,
 	body: string,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);

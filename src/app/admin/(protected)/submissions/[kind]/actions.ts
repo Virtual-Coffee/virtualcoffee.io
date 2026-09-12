@@ -14,6 +14,7 @@ import {
 	type SubmissionKind,
 } from '@/lib/submissions';
 import { recordSubmissionEvent } from '@/lib/submitSubmission';
+import { STATUS_ORDER } from './presentation';
 
 /**
  * Every action re-checks `manage` on the kind's own section rather than
@@ -35,13 +36,6 @@ async function authorise(
 	return { kind, session };
 }
 
-const VALID_STATUSES: SubmissionStatus[] = [
-	'new',
-	'in_progress',
-	'resolved',
-	'dismissed',
-];
-
 export async function setSubmissionStatus(
 	kind: string,
 	id: string,
@@ -50,7 +44,7 @@ export async function setSubmissionStatus(
 	const context = await authorise(kind);
 	if (!context) return { ok: false, message: 'Unknown submission type.' };
 
-	if (!VALID_STATUSES.includes(status as SubmissionStatus)) {
+	if (!STATUS_ORDER.includes(status as SubmissionStatus)) {
 		return { ok: false, message: 'Unknown status.' };
 	}
 

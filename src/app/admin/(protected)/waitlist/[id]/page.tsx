@@ -16,7 +16,8 @@ import {
 import { emailConfigured } from '@/lib/email/transport';
 import { ActionPanel } from './actionPanel';
 import { HistoryTimeline } from './historyTimeline';
-import { NoteComposer } from './noteComposer';
+import { NoteComposer } from '../../noteComposer';
+import { addNote } from '../actions';
 import {
 	SourceBadge,
 	StatusBadge,
@@ -195,7 +196,7 @@ export default async function ApplicationDetailPage({
 
 					<section>
 						<h2 className="h6">History</h2>
-						<NoteComposer applicationId={application.id} />
+						<NoteComposer onSubmit={addNote.bind(null, application.id)} />
 						<div className="mt-3">
 							<HistoryTimeline history={history} />
 						</div>

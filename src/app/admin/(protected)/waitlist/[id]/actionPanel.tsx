@@ -10,8 +10,8 @@ import {
 	recordAttendance,
 	sendCoffeeInvite,
 	withdrawApplication,
-	type ActionResult,
 } from '../actions';
+import type { EmailActionResult } from '@/lib/actionResult';
 import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
 
 type Template = { subject: string; text: string };
@@ -34,10 +34,10 @@ type Dialog = 'coffee' | 'approve' | null;
 export function ActionPanel(props: Props) {
 	const router = useRouter();
 	const [dialog, setDialog] = useState<Dialog>(null);
-	const [result, setResult] = useState<ActionResult | null>(null);
+	const [result, setResult] = useState<EmailActionResult | null>(null);
 	const [pending, startTransition] = useTransition();
 
-	function run(action: () => Promise<ActionResult>) {
+	function run(action: () => Promise<EmailActionResult>) {
 		startTransition(async () => {
 			const outcome = await action();
 			setResult(outcome);

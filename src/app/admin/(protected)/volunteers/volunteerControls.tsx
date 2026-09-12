@@ -9,8 +9,8 @@ import {
 	adjustBalance,
 	resendInvite,
 	setVolunteerActive,
-	type VolunteerActionResult,
 } from './actions';
+import type { ActionResult } from '@/lib/actionResult';
 
 /**
  * A tiny wrapper around the four actions on this screen.
@@ -21,10 +21,10 @@ import {
  */
 function useAction() {
 	const router = useRouter();
-	const [result, setResult] = useState<VolunteerActionResult | null>(null);
+	const [result, setResult] = useState<ActionResult | null>(null);
 	const [pending, startTransition] = useTransition();
 
-	function run(action: () => Promise<VolunteerActionResult>) {
+	function run(action: () => Promise<ActionResult>) {
 		startTransition(async () => {
 			const outcome = await action();
 			setResult(outcome);

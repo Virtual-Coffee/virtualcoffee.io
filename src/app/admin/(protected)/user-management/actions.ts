@@ -18,10 +18,8 @@ import {
 } from '@/lib/permissions';
 import type { ActionResult } from '@/lib/actionResult';
 
-export type AdminActionResult = ActionResult;
-
 function isRoleName(value: string): value is RoleName {
-	return value in ROLE_DEFINITIONS && value !== DEFAULT_ROLE;
+	return Object.hasOwn(ROLE_DEFINITIONS, value) && value !== DEFAULT_ROLE;
 }
 
 /**
@@ -84,7 +82,7 @@ function revalidate() {
 export async function setUserRoles(
 	userId: string,
 	next: string[],
-): Promise<AdminActionResult> {
+): Promise<ActionResult> {
 	const session = await requirePermission('admins', 'manage');
 
 	const validated = validateRoles(next);
@@ -150,7 +148,7 @@ export async function setUserRoles(
 export async function grantPendingAccess(
 	slackUserId: string,
 	next: string[],
-): Promise<AdminActionResult> {
+): Promise<ActionResult> {
 	const session = await requirePermission('admins', 'manage');
 
 	const validated = validateRoles(next);
@@ -213,7 +211,7 @@ export async function grantPendingAccess(
 export async function setPendingGrantRoles(
 	grantId: string,
 	next: string[],
-): Promise<AdminActionResult> {
+): Promise<ActionResult> {
 	await requirePermission('admins', 'manage');
 
 	// Postgres raises 22P02 on a malformed literal against a uuid column, so an
@@ -277,7 +275,7 @@ export async function setPendingGrantRoles(
  */
 export async function revokePendingGrant(
 	grantId: string,
-): Promise<AdminActionResult> {
+): Promise<ActionResult> {
 	await requirePermission('admins', 'manage');
 
 	if (!isId(grantId)) {

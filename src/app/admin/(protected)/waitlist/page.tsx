@@ -1,10 +1,15 @@
 import Link from 'next/link';
 
 import { requirePermission } from '@/lib/adminAccess';
-import { listApplications, statusCounts } from '@/lib/applications';
+import {
+	listApplications,
+	QUEUE_STATUSES,
+	statusCounts,
+} from '@/lib/applications';
 import { ApplicationsTable } from './applicationsTable';
 import { QueueSearch } from './queueSearch';
-import { parseSearchParams, type RawSearchParams } from './searchParams';
+import { parseSearchParams } from './searchParams';
+import type { RawSearchParams } from '../searchParams';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,11 +35,9 @@ export default async function AdminQueuePage({
 	await requirePermission('waitlist', 'read');
 
 	const params = await searchParams;
-	const filters = parseSearchParams(params, {
-		// The queue defaults to the two statuses that need a human decision.
-		// "Everything" is available as a chip but is not what this screen is for.
-		defaultStatuses: ['waitlisted', 'coffee_invited'],
-	});
+	// The queue defaults to the two statuses that need a human decision.
+	// "Everything" is available as a chip but is not what this screen is for.
+	const filters = parseSearchParams(params, QUEUE_STATUSES);
 
 	const [{ rows, rowCount }, counts] = await Promise.all([
 		listApplications(filters),

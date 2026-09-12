@@ -22,8 +22,8 @@ import {
 	revokePendingGrant,
 	setPendingGrantRoles,
 	setUserRoles,
-	type AdminActionResult,
 } from './actions';
+import type { ActionResult } from '@/lib/actionResult';
 
 /**
  * The roles one person holds, as a dropdown of checkboxes.
@@ -119,10 +119,7 @@ export function RolesDropdown({
 		);
 	}
 
-	function run(
-		action: () => Promise<AdminActionResult>,
-		onSuccess?: () => void,
-	) {
+	function run(action: () => Promise<ActionResult>, onSuccess?: () => void) {
 		startTransition(async () => {
 			const result = await action();
 
