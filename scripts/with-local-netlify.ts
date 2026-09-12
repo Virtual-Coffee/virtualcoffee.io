@@ -19,6 +19,7 @@ import { isLocalDatabaseUrl } from './lib/localOnly';
  * ambiently, and this wrapper supplies both —
  *
  *   DATABASE_URL           read from the CLI, refused unless it is local
+ *   NETLIFY_DB_URL         the same string, so an inherited one cannot win
  *   NETLIFY_BLOBS_CONTEXT  a second blob server over `netlify dev`'s own files
  *
  * Requires `netlify dev` to already be running in another terminal.
@@ -211,6 +212,10 @@ async function main() {
 
 	const code = await run(command, args, {
 		DATABASE_URL: databaseUrl,
+		// `src/db/index.ts` prefers NETLIFY_DB_URL, and the child inherits this
+		// shell's environment: set it too, or an exported one points the seed
+		// at whatever it names.
+		NETLIFY_DB_URL: databaseUrl,
 		...(blobs ? { NETLIFY_BLOBS_CONTEXT: blobs.context } : {}),
 	});
 
