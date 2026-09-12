@@ -1,8 +1,10 @@
 import {
 	db,
 	submissionEvent,
+	type Database,
 	type SubmissionEventType,
 	type SubmissionStatus,
+	type Transaction,
 } from '@/db';
 import {
 	SUBMISSION_KINDS,
@@ -25,25 +27,26 @@ function subjectColumn(
 	return { [SUBMISSION_KINDS[kind].eventKey]: id };
 }
 
-export async function recordSubmissionEvent(input: {
-	kind: SubmissionKind;
-	submissionId: string;
-	type: SubmissionEventType;
-	body?: string | null;
-	actorUserId?: string | null;
-	fromStatus?: SubmissionStatus | null;
-	toStatus?: SubmissionStatus | null;
-}) {
-	await db()
-		.insert(submissionEvent)
-		.values({
-			...subjectColumn(input.kind, input.submissionId),
-			type: input.type,
-			body: input.body ?? null,
-			actorUserId: input.actorUserId ?? null,
-			fromStatus: input.fromStatus ?? null,
-			toStatus: input.toStatus ?? null,
-		});
+export async function recordSubmissionEvent(
+	input: {
+		kind: SubmissionKind;
+		submissionId: string;
+		type: SubmissionEventType;
+		body?: string | null;
+		actorUserId?: string | null;
+		fromStatus?: SubmissionStatus | null;
+		toStatus?: SubmissionStatus | null;
+	},
+	executor: Database | Transaction = db(),
+) {
+	await executor.insert(submissionEvent).values({
+		...subjectColumn(input.kind, input.submissionId),
+		type: input.type,
+		body: input.body ?? null,
+		actorUserId: input.actorUserId ?? null,
+		fromStatus: input.fromStatus ?? null,
+		toStatus: input.toStatus ?? null,
+	});
 }
 
 /**
@@ -52,22 +55,33 @@ export async function recordSubmissionEvent(input: {
  * see docs/adr/0005 — so the caller only reaches `notifyAndRecord()` with an
  * id that is already committed.
  *
+ * Row and event commit together. The submitter is told to try again on any
+ * failure, so a row that made it without its event would be duplicated by
+ * the retry.
+ *
  * The upstream error is deliberately not surfaced: its message can name
  * tables and columns, and there is nothing the submitter could do with it.
  */
 export async function persistSubmission(
 	kind: SubmissionKind,
-	insertRow: () => Promise<{ id: string }>,
+	insertRow: (tx: Transaction) => Promise<{ id: string }>,
 	copy: { submitted: string; failed: string },
 ): Promise<{ id: string } | { error: FormState }> {
 	try {
-		const { id } = await insertRow();
+		const id = await db().transaction(async (tx) => {
+			const { id } = await insertRow(tx);
 
-		await recordSubmissionEvent({
-			kind,
-			submissionId: id,
-			type: 'submitted',
-			body: copy.submitted,
+			await recordSubmissionEvent(
+				{
+					kind,
+					submissionId: id,
+					type: 'submitted',
+					body: copy.submitted,
+				},
+				tx,
+			);
+
+			return id;
 		});
 
 		return { id };

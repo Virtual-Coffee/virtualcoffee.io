@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-import { cocReport, db } from '@/db';
+import { cocReport } from '@/db';
 import {
 	discardAttachment,
 	storeAttachment,
@@ -80,8 +80,8 @@ export async function submitCocReport(
 
 	const saved = await persistSubmission(
 		'coc',
-		async () => {
-			const [row] = await db()
+		async (tx) => {
+			const [row] = await tx
 				.insert(cocReport)
 				.values({
 					name: parsed.data.name ?? null,

@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-import { db, volunteerSignup } from '@/db';
+import { volunteerSignup } from '@/db';
 import { notifySlack, volunteerSignupMessage } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import {
@@ -52,8 +52,8 @@ export async function submitVolunteerSignup(
 
 	const saved = await persistSubmission(
 		'volunteers',
-		async () => {
-			const [row] = await db()
+		async (tx) => {
+			const [row] = await tx
 				.insert(volunteerSignup)
 				.values({
 					name: parsed.data.name,

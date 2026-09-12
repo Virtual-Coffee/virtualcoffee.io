@@ -9,8 +9,14 @@ import {
 	volunteerSignup,
 } from '@/db';
 
+import { failInserts } from '@/test/db/fixtures';
+
 import { failedNotifications } from './submissions';
-import { notifyAndRecord, recordSubmissionEvent } from './submitSubmission';
+import {
+	notifyAndRecord,
+	persistSubmission,
+	recordSubmissionEvent,
+} from './submitSubmission';
 
 async function insertCocReport() {
 	const [row] = await db()
@@ -136,6 +142,57 @@ describe('notifyAndRecord', () => {
 		).resolves.toBeUndefined();
 		expect(error).toHaveBeenCalledOnce();
 		error.mockRestore();
+	});
+});
+
+describe('persistSubmission', () => {
+	const copy = { submitted: 'Report submitted', failed: 'Try again.' };
+
+	test('writes the row and its `submitted` event', async () => {
+		const saved = await persistSubmission(
+			'coc',
+			async (tx) => {
+				const [row] = await tx
+					.insert(cocReport)
+					.values({
+						reporteeName: 'Someone',
+						timeLocation: 'x',
+						description: 'x',
+					})
+					.returning({ id: cocReport.id });
+				return row;
+			},
+			copy,
+		);
+		expect(saved).toEqual({ id: expect.any(String) });
+		if ('error' in saved) throw new Error('unreachable');
+		await expect(eventsFor(saved.id)).resolves.toEqual([
+			{ type: 'submitted', body: 'Report submitted' },
+		]);
+	});
+
+	/**
+	 * The submitter is told to try again on failure, so a row that outlived
+	 * its failed event would be duplicated by that retry.
+	 */
+	test('a row whose event fails is rolled back with it', async () => {
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+		const fault = await failInserts('submission_event');
+		try {
+			await expect(
+				persistSubmission(
+					'coc',
+					() => insertCocReport().then((id) => ({ id })),
+					copy,
+				),
+			).resolves.toEqual({
+				error: expect.objectContaining({ is_error: true }),
+			});
+		} finally {
+			await fault.remove();
+			error.mockRestore();
+		}
+		await expect(db().select().from(cocReport)).resolves.toEqual([]);
 	});
 });
 

@@ -63,8 +63,8 @@ export async function submitLunchAndLearnIdea(
 
 	const saved = await persistSubmission(
 		'lunch-and-learn',
-		async () => {
-			const [row] = await db()
+		async (tx) => {
+			const [row] = await tx
 				.insert(lunchAndLearnIdea)
 				.values(idea)
 				.returning({ id: lunchAndLearnIdea.id });

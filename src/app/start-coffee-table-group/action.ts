@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-import { coffeeTableGroupRequest, db } from '@/db';
+import { coffeeTableGroupRequest } from '@/db';
 import { coffeeTableGroupMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import { formObject, invalidFields, staleForm } from '@/util/forms/parse';
@@ -45,8 +45,8 @@ export async function submitCoffeeTableGroupRequest(
 
 	const saved = await persistSubmission(
 		'coffee-tables',
-		async () => {
-			const [row] = await db()
+		async (tx) => {
+			const [row] = await tx
 				.insert(coffeeTableGroupRequest)
 				.values({
 					name: parsed.data.name,
