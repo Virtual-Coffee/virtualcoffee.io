@@ -1,7 +1,10 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, inviteToken, user } from '@/db';
-import { createSlackInviteToken } from '@/lib/inviteTokens';
+import {
+	createSlackInviteToken,
+	slackInviteForToken,
+} from '@/lib/inviteTokens';
 import { MAX_NOTE_LENGTH } from '@/lib/notes';
 import { NOT_FOUND } from '@/test/next';
 import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/email';
@@ -416,16 +419,20 @@ describe('a rejected cc', () => {
 });
 
 describe('resendSlackInvite', () => {
-	test('mints a second token for a member and records the send', async () => {
+	test('mints a second token for a member, retiring the first, and records the send', async () => {
 		vi.stubEnv('URL', 'https://virtualcoffee.io');
 		sendEmail.mockResolvedValue(SENT);
 		const { id } = await insertApplication({ status: 'member' });
-		await createSlackInviteToken(id);
+		const { token: first } = await createSlackInviteToken(id);
 
 		await expect(resendSlackInvite(id, false)).resolves.toEqual({ ok: true });
 
 		const tokens = await db().select().from(inviteToken);
 		expect(tokens).toHaveLength(2);
+		await expect(slackInviteForToken(first)).resolves.toEqual({
+			ok: false,
+			reason: 'expired',
+		});
 		expect(sendEmail).toHaveBeenCalledWith(
 			expect.objectContaining({
 				text: expect.stringContaining('/join-slack?code='),

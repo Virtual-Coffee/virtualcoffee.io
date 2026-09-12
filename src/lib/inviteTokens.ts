@@ -1,4 +1,4 @@
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, gt, isNull } from 'drizzle-orm';
 
 import { db, inviteToken } from '@/db';
 import { hashToken, newToken } from '@/lib/tokens';
@@ -14,19 +14,39 @@ import { hashToken, newToken } from '@/lib/tokens';
 
 const TOKEN_TTL_DAYS = 30;
 
+/**
+ * Mint a Slack invite token, superseding any still-live one for the same
+ * application. One working link at a time: a re-send is for a link that was
+ * lost, and a lost link is one somebody else may be holding — for up to 30
+ * days, if it were left to expire on its own. The old link then reads as
+ * expired on /join-slack, which is also what it is.
+ */
 export async function createSlackInviteToken(
 	applicationId: string,
 ): Promise<{ token: string; expiresAt: Date }> {
 	const { token, expiresAt } = newToken(TOKEN_TTL_DAYS);
+	const now = new Date();
 
-	await db()
-		.insert(inviteToken)
-		.values({
+	await db().transaction(async (tx) => {
+		await tx
+			.update(inviteToken)
+			.set({ expiresAt: now })
+			.where(
+				and(
+					eq(inviteToken.applicationId, applicationId),
+					eq(inviteToken.purpose, 'slack'),
+					isNull(inviteToken.usedAt),
+					gt(inviteToken.expiresAt, now),
+				),
+			);
+
+		await tx.insert(inviteToken).values({
 			applicationId,
 			purpose: 'slack',
 			tokenHash: hashToken(token),
 			expiresAt,
 		});
+	});
 
 	return { token, expiresAt };
 }
