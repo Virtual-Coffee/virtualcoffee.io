@@ -68,6 +68,23 @@ describe('notifySlack', () => {
 });
 
 describe('the messages', () => {
+	test('what a person typed cannot page the channel or break the markup', () => {
+		const text = volunteerSignupMessage({
+			name: '<!channel>',
+			email: 'a&b@example.test',
+			position: null,
+			description: '<https://evil.example|click>',
+		});
+		expect(text).toContain('*Name:* &lt;!channel&gt;');
+		expect(text).toContain('*Email:* a&amp;b@example.test');
+		expect(text).toContain('&lt;https://evil.example|click&gt;');
+		expect(text).not.toContain('<!channel>');
+
+		expect(
+			lunchAndLearnMessage({ topic: '<!here>', name: 'A & B', issueUrl: null }),
+		).toBe('New Lunch & Learn Submission: &lt;!here&gt; by A &amp; B');
+	});
+
 	test('a CoC report shows who, where, and whether there is a file to open', () => {
 		const text = cocReportMessage({
 			name: 'Ada',
