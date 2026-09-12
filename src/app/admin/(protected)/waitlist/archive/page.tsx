@@ -9,7 +9,7 @@ import {
 import { ApplicationsTable } from '../applicationsTable';
 import { QueueSearch } from '../queueSearch';
 import { parseSearchParams } from '../searchParams';
-import type { RawSearchParams } from '@/util/searchParams';
+import { listHref, oneOf, type RawSearchParams } from '@/util/searchParams';
 
 export const dynamic = 'force-dynamic';
 
@@ -54,7 +54,16 @@ export default async function ArchivePage({
 		(sum, status) => sum + (counts[status] ?? 0),
 		0,
 	);
-	const active = (params.status as string | undefined) ?? 'all';
+	const active = oneOf(params.status, [...ARCHIVE_STATUSES, 'all']) ?? 'all';
+	// A status chip is a filter, so it resets the page — and keeps the search
+	// and the sort the maintainer set.
+	const chipHref = (status: string) =>
+		listHref('/admin/waitlist/archive', {
+			status,
+			q: filters.search ?? null,
+			sort: filters.sort === 'submittedAt' ? null : filters.sort,
+			dir: filters.direction === 'desc' ? null : filters.direction,
+		});
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -77,7 +86,7 @@ export default async function ArchivePage({
 				{STATUS_FILTERS.map((option) => (
 					<Link
 						key={option.value}
-						href={`/admin/waitlist/archive?status=${option.value}`}
+						href={chipHref(option.value)}
 						className={`btn btn-sm ${
 							active === option.value ? 'btn-primary' : 'btn-outline-secondary'
 						}`}

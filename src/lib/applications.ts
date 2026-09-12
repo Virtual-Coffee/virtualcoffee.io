@@ -49,6 +49,8 @@ export type ListFilters = {
 	pageSize: number;
 	sort: SortField;
 	direction: 'asc' | 'desc';
+	/** Priority (invited) applications first, ahead of the column sort. */
+	priorityFirst?: boolean;
 };
 
 const SORT_COLUMNS = {
@@ -107,12 +109,12 @@ export async function listApplications(
 			.select()
 			.from(membershipApplication)
 			.where(where)
-			// Volunteer invites sort to the front of the queue no matter what else
-			// is applied; that priority is the point of the invite.
 			// The id is the tie-break (ADR 0008): `submittedAt` is not unique, and
 			// without a total order a row can straddle two pages of the queue.
 			.orderBy(
-				desc(membershipApplication.isPriority),
+				...(filters.priorityFirst
+					? [desc(membershipApplication.isPriority)]
+					: []),
 				order(SORT_COLUMNS[filters.sort]),
 				desc(membershipApplication.id),
 			)
