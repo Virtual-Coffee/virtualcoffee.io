@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
-import { filterSlackMembers } from '@/data/slackMembers';
+import { filterSlackMembers } from '@/lib/slackMemberPicker';
 import type { GrantCandidate } from '@/lib/admins';
 import {
 	GRANTABLE_ROLE_NAMES,

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { filterSlackMembers, type SlackMember } from './slackMembers';
+import { filterSlackMembers, type SlackMember } from './slackMemberPicker';
 
 const members: SlackMember[] = [
 	{ id: 'U1', name: 'Grace Hopper', displayName: 'Grace', handle: 'ghopper' },
