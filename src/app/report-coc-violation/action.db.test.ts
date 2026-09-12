@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { cocReport, db, submissionEvent } from '@/db';
 import { failedNotifications } from '@/lib/submissions';
+import { failInserts } from '@/test/db/fixtures';
 import { formDataWith } from '@/test/forms';
 import { redirectTo } from '@/test/next';
 
@@ -12,7 +13,7 @@ vi.mock('@/lib/slack/notify', async (importOriginal) => ({
 	notifySlack,
 }));
 
-const blobs = vi.hoisted(() => ({ set: vi.fn() }));
+const blobs = vi.hoisted(() => ({ set: vi.fn(), delete: vi.fn() }));
 vi.mock('@netlify/blobs', () => ({ getStore: () => blobs }));
 
 import { submitCocReport } from './action';
@@ -40,6 +41,7 @@ async function submit(fields: Record<string, string | File>) {
 beforeEach(() => {
 	notifySlack.mockReset();
 	blobs.set.mockReset();
+	blobs.delete.mockReset();
 });
 
 describe('submitCocReport', () => {
@@ -131,6 +133,33 @@ describe('submitCocReport', () => {
 			submitCocReport(null, formDataWith({ ...valid, uploadedFiles: png })),
 		).rejects.toThrow('blobs unavailable');
 
+		await expect(db().select().from(cocReport)).resolves.toEqual([]);
+		expect(notifySlack).not.toHaveBeenCalled();
+	});
+
+	/**
+	 * The other order of failure: the blob went in, the row did not. The form
+	 * error is what the reporter sees; the blob nothing points at is deleted
+	 * rather than left holding CoC evidence nobody can reach.
+	 */
+	test('a row that fails to save takes its stored attachment with it', async () => {
+		const png = new File(
+			[new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])],
+			'screenshot.png',
+			{ type: 'image/png' },
+		);
+
+		const fault = await failInserts('coc_report');
+		try {
+			await expect(
+				submitCocReport(null, formDataWith({ ...valid, uploadedFiles: png })),
+			).resolves.toMatchObject({ is_error: true });
+		} finally {
+			await fault.remove();
+		}
+
+		const [key] = blobs.set.mock.calls[0];
+		expect(blobs.delete).toHaveBeenCalledWith(key);
 		await expect(db().select().from(cocReport)).resolves.toEqual([]);
 		expect(notifySlack).not.toHaveBeenCalled();
 	});

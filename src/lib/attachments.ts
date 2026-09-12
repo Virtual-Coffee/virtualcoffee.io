@@ -107,6 +107,22 @@ export async function storeAttachment(
 	};
 }
 
+/**
+ * Drop a stored attachment whose report never got written. Best-effort: the
+ * report has already failed, and an orphaned blob is a leak to note, not a
+ * reason to hide the form error behind a second one.
+ */
+export async function discardAttachment(key: string): Promise<void> {
+	try {
+		await getStore(ATTACHMENT_STORE).delete(key);
+	} catch (error) {
+		console.error('Orphaned CoC attachment could not be deleted', {
+			key,
+			error,
+		});
+	}
+}
+
 export async function readAttachment(
 	key: string,
 ): Promise<{ body: ArrayBuffer; metadata: Record<string, unknown> } | null> {

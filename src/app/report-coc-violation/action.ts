@@ -4,7 +4,11 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { cocReport, db } from '@/db';
-import { storeAttachment, type StoredAttachment } from '@/lib/attachments';
+import {
+	discardAttachment,
+	storeAttachment,
+	type StoredAttachment,
+} from '@/lib/attachments';
 import { cocReportMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import { formObject, invalidFields, staleForm } from '@/util/forms/parse';
@@ -100,7 +104,11 @@ export async function submitCocReport(
 				'Something went wrong saving your report. Please try again, or email hello@virtualcoffee.io.',
 		},
 	);
-	if ('error' in saved) return saved.error;
+	if ('error' in saved) {
+		// Nothing points at the blob now, and a retry stores its own copy.
+		if (attachment) await discardAttachment(attachment.key);
+		return saved.error;
+	}
 
 	await notifyAndRecord('coc', saved.id, async () => {
 		return notifySlack(
