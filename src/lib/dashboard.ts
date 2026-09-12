@@ -12,6 +12,7 @@ import {
 	volunteerSignup,
 } from '@/db';
 import { QUEUE_STATUSES } from '@/lib/applications';
+import { activeVolunteerCount } from '@/lib/volunteers';
 import type { Section } from '@/lib/permissions';
 import {
 	openCount,
@@ -94,9 +95,6 @@ function submissionCard(kind: SubmissionKind): () => Promise<DashboardCard> {
  * One card per Section, or null for a Section that is a list of people rather
  * than a queue of work. Keyed on `Section` so that adding one without deciding
  * its card is a type error rather than a card that silently never renders.
- *
- * A Section whose pages have not landed yet is null too, and gets its card in
- * the same change as its pages.
  */
 const CARDS: Record<Section, (() => Promise<DashboardCard>) | null> = {
 	waitlist: waitlistCard,
@@ -104,7 +102,13 @@ const CARDS: Record<Section, (() => Promise<DashboardCard>) | null> = {
 	volunteerSignups: submissionCard('volunteers'),
 	lunchAndLearn: submissionCard('lunch-and-learn'),
 	coffeeTables: submissionCard('coffee-tables'),
-	volunteers: null,
+	// A roster, not a queue: how many can currently give out Invites.
+	volunteers: async () => ({
+		section: 'volunteers',
+		label: 'Volunteers',
+		href: '/admin/volunteers',
+		figures: [{ count: await activeVolunteerCount(), label: 'active' }],
+	}),
 	admins: null,
 };
 

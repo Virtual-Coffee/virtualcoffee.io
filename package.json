@@ -28,6 +28,8 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "tsx scripts/with-local-netlify.ts drizzle-kit migrate",
 		"db:migrate:deploy": "drizzle-kit migrate",
+		"db:seed": "tsx scripts/with-local-netlify.ts tsx scripts/seedDev.ts",
+		"invite-maintenance": "tsx scripts/with-local-netlify.ts tsx scripts/runInviteMaintenance.ts",
 		"db:sanitize-preview": "tsx scripts/sanitizePreviewDb.ts"
 	},
 	"watch": {
