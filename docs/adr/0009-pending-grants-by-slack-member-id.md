@@ -71,8 +71,9 @@ access again without colliding with their own history.
 
 ### The picker needs a bot token
 
-`users.list` needs `users:read` on a bot token; the OAuth credentials that
-sign maintainers in request only `openid`, `profile` and `email`.
+`users.list` needs `users:read` on a bot token (`users:read.email` too, for
+the address the Volunteers picker prefills); the OAuth credentials that sign
+maintainers in request only `openid`, `profile` and `email`.
 `SLACK_BOT_TOKEN` is therefore a separate credential, and
 `src/data/slackMembers.ts` follows the mock gate every other source in
 `src/data/` uses.
