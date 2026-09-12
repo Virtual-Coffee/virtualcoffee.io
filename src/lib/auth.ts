@@ -4,25 +4,12 @@ import { admin } from 'better-auth/plugins';
 import { nextCookies } from 'better-auth/next-js';
 import { devtools } from 'better-auth-devtools';
 
-import { db, type Database } from '@/db';
+import { db } from '@/db';
 import * as schema from '@/db/schema';
 import { ac, DEFAULT_ROLE, roles } from '@/lib/permissions';
 import { claimPendingGrant } from '@/lib/pendingGrants';
 
 const SLACK_TEAM_ID_CLAIM = 'https://slack.com/team_id';
-
-/**
- * Defer opening a connection until a query actually runs. Not sufficient on
- * its own — see `createAuth` below — but it keeps the database out of module
- * evaluation for every other consumer.
- */
-const lazyDatabase = new Proxy({} as Database, {
-	get(_target, property, receiver) {
-		const database = db() as unknown as Record<PropertyKey, unknown>;
-		const value = Reflect.get(database, property, receiver);
-		return typeof value === 'function' ? value.bind(database) : value;
-	},
-});
 
 const slackClientId = process.env.SLACK_CLIENT_ID;
 const slackClientSecret = process.env.SLACK_CLIENT_SECRET;
@@ -37,7 +24,7 @@ export const slackAuthConfigured = Boolean(slackClientId && slackClientSecret);
 
 function createAuth() {
 	return betterAuth({
-		database: drizzleAdapter(lazyDatabase, {
+		database: drizzleAdapter(db(), {
 			provider: 'pg',
 			schema,
 		}),
@@ -124,28 +111,14 @@ let cached: Auth | undefined;
  * Built on first use, not at module load.
  *
  * `drizzleAdapter()` inspects the database instance while `betterAuth()` is
- * constructing, so the lazy database proxy alone isn't enough — it fires
- * during module evaluation. Next imports this module while collecting page
- * data at build time, where there is no database, and the build fails with
- * MissingDatabaseConnectionError. Making the whole instance lazy defers all of
- * it to the first request.
+ * constructing, which opens a connection. Next imports this module while
+ * collecting page data at build time, where there is no database, and the
+ * build fails with MissingDatabaseConnectionError. Building the instance on
+ * the first request is what keeps `db()` out of module evaluation.
  */
 export function getAuth(): Auth {
 	cached ??= createAuth();
 	return cached;
 }
-
-/**
- * Convenience wrapper so callers can write `auth.api.getSession(...)`. The
- * property access happens inside request handlers, which is when the instance
- * gets built.
- */
-export const auth = new Proxy({} as Auth, {
-	get(_target, property, receiver) {
-		const instance = getAuth() as unknown as Record<PropertyKey, unknown>;
-		const value = Reflect.get(instance, property, receiver);
-		return typeof value === 'function' ? value.bind(instance) : value;
-	},
-});
 
 export type Session = Auth['$Infer']['Session'];

@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
 
 import { db, user } from '@/db';
-import { auth, type Session } from '@/lib/auth';
+import { getAuth, type Session } from '@/lib/auth';
 import {
 	parseRoles,
 	roles,
@@ -30,30 +30,60 @@ export function adminRoutesEnabled(): boolean {
 	return process.env.PREVIEW_ADMIN_BYPASS === 'true';
 }
 
-/**
- * A stand-in admin session for local development.
- *
- * Slack sign-in needs OAuth credentials and a registered redirect URI, which a
- * contributor working from a fork has no way to get. Without this, /admin is
- * unreachable for exactly the people most likely to want to change it.
- *
- * `ADMIN_DEV_BYPASS_ROLES` narrows what the bypass session holds, so the narrow
- * roles can be exercised locally without a database. It defaults to `admin`.
- *
- * Three conditions must all hold, and each is independently sufficient to
- * disable it in any deployed environment:
- *   - `ADMIN_DEV_BYPASS` is explicitly `true` (opt-in, not a default)
- *   - `NODE_ENV` is not production (every Netlify build sets it)
- *   - `CONTEXT` is not a deployed context. Note `netlify dev` sets
- *     `CONTEXT=dev`, so this checks for the three deployed values rather than
- *     for the variable being absent.
- */
 const DEPLOYED_CONTEXTS = new Set([
 	'production',
 	'deploy-preview',
 	'branch-deploy',
 ]);
 
+/** A session that exists only in memory: no `user` row, no account. */
+function bypassSession(fields: {
+	id: string;
+	name: string;
+	email: string;
+	role: string;
+	slackUserId: string;
+}): Session {
+	const now = new Date();
+	return {
+		session: {
+			id: fields.id,
+			token: fields.id,
+			userId: fields.id,
+			createdAt: now,
+			updatedAt: now,
+			expiresAt: new Date(now.getTime() + 60 * 60 * 1000),
+		},
+		user: {
+			id: fields.id,
+			name: fields.name,
+			email: fields.email,
+			emailVerified: true,
+			image: null,
+			role: fields.role,
+			slackUserId: fields.slackUserId,
+			createdAt: now,
+			updatedAt: now,
+		},
+	} as unknown as Session;
+}
+
+/**
+ * A stand-in admin session for local development.
+ *
+ * Slack sign-in needs OAuth credentials and a registered redirect URI, which a
+ * contributor working from a fork has no way to get. Three conditions must all
+ * hold, and each is independently sufficient to disable it in any deployed
+ * environment: `ADMIN_DEV_BYPASS` is explicitly `true`, `NODE_ENV` is not
+ * production, and `CONTEXT` is not a deployed context — `netlify dev` sets
+ * `CONTEXT=dev`, so this checks for the three deployed values rather than for
+ * the variable being absent.
+ *
+ * `ADMIN_DEV_BYPASS_ROLES` narrows what the session holds (default `admin`).
+ * `ADMIN_DEV_BYPASS_SLACK_ID` is what an Invite Allowance is keyed on;
+ * `pnpm db:seed` creates a Volunteer for the default, so
+ * `ADMIN_DEV_BYPASS_ROLES=volunteer` works with no further setup.
+ */
 function devBypassSession(): Session | null {
 	const enabled =
 		process.env.ADMIN_DEV_BYPASS === 'true' &&
@@ -62,49 +92,23 @@ function devBypassSession(): Session | null {
 
 	if (!enabled) return null;
 
-	const role = process.env.ADMIN_DEV_BYPASS_ROLES?.trim() || 'admin';
-
-	return {
-		session: {
-			id: 'dev-bypass',
-			token: 'dev-bypass',
-			userId: 'dev-bypass',
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			expiresAt: new Date(Date.now() + 60 * 60 * 1000),
-		},
-		user: {
-			id: 'dev-bypass',
-			name: 'Local dev',
-			email: 'dev@localhost',
-			emailVerified: true,
-			image: null,
-			role,
-			/**
-			 * Everything about an Invite Allowance is keyed on the Slack member id,
-			 * so a bypass session without one authenticates as a Volunteer and then
-			 * matches no `volunteer` row. `pnpm db:seed` creates a Volunteer for the
-			 * default below, so `ADMIN_DEV_BYPASS_ROLES=volunteer` works with no
-			 * further setup; override it to act as a different one.
-			 */
-			slackUserId:
-				process.env.ADMIN_DEV_BYPASS_SLACK_ID?.trim() || 'U_DEV_BYPASS',
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		},
-	} as unknown as Session;
+	return bypassSession({
+		id: 'dev-bypass',
+		name: 'Local dev',
+		email: 'dev@localhost',
+		role: process.env.ADMIN_DEV_BYPASS_ROLES?.trim() || 'admin',
+		slackUserId:
+			process.env.ADMIN_DEV_BYPASS_SLACK_ID?.trim() || 'U_DEV_BYPASS',
+	});
 }
 
 /**
- * A stand-in admin session for reviewing /admin on a sanitized deploy preview.
- *
- * The mirror image of `devBypassSession()`: it only fires in a *deployed*
+ * The mirror image for a sanitized deploy preview: fires only in a *deployed*
  * preview context, never locally or in production. Anyone with the preview
- * link gets this session, so it only exists because `db:sanitize-preview`
- * has already scrubbed the branch by the time the deploy is live — see
- * `adminRoutesEnabled()` above and docs/adr/0007. `adminRoutesEnabled()`
- * already gates the route on the same two conditions, but this checks them
- * again independently rather than trusting the caller.
+ * link gets this session, which is safe only because `db:sanitize-preview`
+ * has scrubbed the branch by the time the deploy is live (docs/adr/0007).
+ * `adminRoutesEnabled()` gates the route on the same conditions; this checks
+ * them again rather than trusting the caller.
  */
 const PREVIEW_BYPASS_CONTEXTS = new Set(['deploy-preview', 'branch-deploy']);
 
@@ -115,32 +119,14 @@ function previewBypassSession(): Session | null {
 
 	if (!enabled) return null;
 
-	const role = process.env.PREVIEW_ADMIN_BYPASS_ROLES?.trim() || 'admin';
-
-	return {
-		session: {
-			id: 'preview-bypass',
-			token: 'preview-bypass',
-			userId: 'preview-bypass',
-			createdAt: new Date(),
-			updatedAt: new Date(),
-			expiresAt: new Date(Date.now() + 60 * 60 * 1000),
-		},
-		user: {
-			id: 'preview-bypass',
-			name: 'Preview reviewer',
-			email: 'preview-bypass@preview.invalid',
-			emailVerified: true,
-			image: null,
-			role,
-			// See the note on the dev bypass; the preview database is seeded from
-			// production and then sanitized, so this matches nothing by design.
-			slackUserId:
-				process.env.PREVIEW_ADMIN_BYPASS_SLACK_ID?.trim() || 'U_PREVIEW_BYPASS',
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		},
-	} as unknown as Session;
+	return bypassSession({
+		id: 'preview-bypass',
+		name: 'Preview reviewer',
+		email: 'preview-bypass@preview.invalid',
+		role: process.env.PREVIEW_ADMIN_BYPASS_ROLES?.trim() || 'admin',
+		slackUserId:
+			process.env.PREVIEW_ADMIN_BYPASS_SLACK_ID?.trim() || 'U_PREVIEW_BYPASS',
+	});
 }
 
 export async function getSession(): Promise<Session | null> {
@@ -150,7 +136,7 @@ export async function getSession(): Promise<Session | null> {
 	const previewBypass = previewBypassSession();
 	if (previewBypass) return previewBypass;
 
-	return auth.api.getSession({ headers: await headers() });
+	return getAuth().api.getSession({ headers: await headers() });
 }
 
 function sessionRoles(session: Session | null): RoleName[] {
