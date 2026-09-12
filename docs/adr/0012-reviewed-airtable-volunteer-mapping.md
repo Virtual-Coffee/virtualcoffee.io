@@ -27,11 +27,13 @@ undecided applications as `lapsed` rather than `declined`.
 
 ### What the scoring is for
 
-`--propose` fills `slackUserId` in only where one candidate scores at least 50
-and beats every other; everything else arrives blank with up to five scored
-candidates and the reasons each matched. The score orders a list a human
-reads; it decides nothing. Weights put an identifier above a name, and
-normalisation trims and strips punctuation.
+`--propose` fills `slackUserId` in where one candidate scores at least 50 and
+beats every other, and where a row has exactly one candidate at all — reported
+separately, since that match can rest on nothing more than a name prefix.
+Everything else arrives blank with up to five scored candidates and the reasons
+each matched. The score orders a list a human reads; it decides nothing, and a
+re-run keeps whatever the review already set. Weights put an identifier above
+a name, and normalisation trims and strips punctuation.
 
 **Email is used here.** 0009's rule is about authorisation at sign-in, where a
 mismatch grants nothing and reports nothing. This is a one-off migration in
