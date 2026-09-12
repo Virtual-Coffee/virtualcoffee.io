@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { redeemSlackInviteToken } from '@/lib/inviteTokens';
+import { single } from '@/util/searchParams';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,8 +28,7 @@ export default async function JoinSlackPage({
 }: {
 	searchParams: Promise<{ code?: string | string[] }>;
 }) {
-	const { code } = await searchParams;
-	const token = Array.isArray(code) ? code[0] : code;
+	const token = single((await searchParams).code);
 
 	const joinLink = process.env.SLACK_JOIN_LINK;
 	let title = 'That invite link didn’t work';

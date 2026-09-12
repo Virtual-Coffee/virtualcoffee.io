@@ -2,6 +2,7 @@ import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { inviteForClaimToken } from '@/lib/invites';
 import { createMetaData } from '@/util/createMetaData.server';
 import { issueTimestamp } from '@/util/forms/spamGuard';
+import { single } from '@/util/searchParams';
 import Link from 'next/link';
 
 import { JoinForm } from './form';
@@ -20,9 +21,9 @@ export async function generateMetadata() {
 export default async function Join({
 	searchParams,
 }: {
-	searchParams: Promise<{ invite?: string }>;
+	searchParams: Promise<{ invite?: string | string[] }>;
 }) {
-	const { invite } = await searchParams;
+	const invite = single((await searchParams).invite);
 
 	/**
 	 * Looking the Claim Link up here does not spend it — someone can open the

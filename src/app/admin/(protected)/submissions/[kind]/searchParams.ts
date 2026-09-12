@@ -8,7 +8,7 @@ import {
 	pageIndex,
 	sortDirection,
 	type RawSearchParams,
-} from '../../searchParams';
+} from '@/util/searchParams';
 import { STATUS_ORDER } from './presentation';
 
 export type SubmissionFilters = {

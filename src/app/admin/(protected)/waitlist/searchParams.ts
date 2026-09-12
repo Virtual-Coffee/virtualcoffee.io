@@ -1,4 +1,4 @@
-import { applicationStatus, type ApplicationStatus } from '@/db';
+import type { ApplicationStatus } from '@/db';
 import {
 	PAGE_SIZE,
 	type ListFilters,
@@ -10,7 +10,7 @@ import {
 	single,
 	sortDirection,
 	type RawSearchParams,
-} from '../searchParams';
+} from '@/util/searchParams';
 
 const SORT_FIELDS: SortField[] = [
 	'name',
@@ -25,8 +25,9 @@ export function parseSearchParams(
 	defaultStatuses: ApplicationStatus[],
 ): ListFilters {
 	const status = single(params.status);
-	// Read off the pgEnum so a new status is accepted here without a second edit.
-	const chosen = oneOf(status, applicationStatus.enumValues);
+	// Only the page's own statuses: the archive must not list the live queue
+	// because someone pasted `?status=waitlisted`, nor the queue the archive.
+	const chosen = oneOf(status, defaultStatuses);
 
 	return {
 		statuses:

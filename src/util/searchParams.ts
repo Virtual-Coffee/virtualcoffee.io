@@ -1,8 +1,11 @@
 /**
- * List state lives in the URL, so a filtered view is bookmarkable and can be
- * pasted to another maintainer. Every value reaches SQL, so each section's
- * parser whitelists what it accepts and falls back to a default otherwise.
- * These are the pieces they share.
+ * Reading `searchParams` safely. Next hands a repeated key over as an array,
+ * so nothing here trusts a value to be a string.
+ *
+ * In /admin, list state lives in the URL so a filtered view is bookmarkable
+ * and can be pasted to another maintainer. Every value reaches SQL, so each
+ * section's parser whitelists what it accepts and falls back to a default
+ * otherwise. These are the pieces they share.
  */
 
 export type RawSearchParams = Record<string, string | string[] | undefined>;

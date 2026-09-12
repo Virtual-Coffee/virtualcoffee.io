@@ -1,4 +1,4 @@
-import { oneOf, type RawSearchParams } from '../searchParams';
+import { oneOf, type RawSearchParams } from '@/util/searchParams';
 
 export const VOLUNTEER_STATES = ['active', 'paused', 'all'] as const;
 

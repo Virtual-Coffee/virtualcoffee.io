@@ -9,7 +9,7 @@ import {
 import { ApplicationsTable } from '../applicationsTable';
 import { QueueSearch } from '../queueSearch';
 import { parseSearchParams } from '../searchParams';
-import type { RawSearchParams } from '../../searchParams';
+import type { RawSearchParams } from '@/util/searchParams';
 
 export const dynamic = 'force-dynamic';
 
