@@ -124,6 +124,31 @@ describe('sendInvite', () => {
 		await expect(volunteerBalance(GRACE)).resolves.toBe(3);
 	});
 
+	/**
+	 * The import left duplicate rows per email, so the guard reads several:
+	 * `member` wins over a live application, and a closed one is no veto at all.
+	 */
+	test('among several rows for one email, member wins; closed ones do not count', async () => {
+		await volunteerWithBalance(3);
+		await insertApplication({
+			status: 'waitlisted',
+			email: 'ada@example.test',
+		});
+		await insertApplication({ status: 'member', email: 'ADA@example.test' });
+		for (const status of ['lapsed', 'declined', 'withdrawn'] as const) {
+			await insertApplication({ status, email: 'again@example.test' });
+		}
+
+		await expect(sendInvite('Ada', 'ada@example.test')).resolves.toMatchObject({
+			message: 'Ada is already a member of Virtual Coffee — no invite needed.',
+		});
+		await expect(sendInvite('Bob', 'again@example.test')).resolves.toEqual({
+			ok: true,
+			message: 'Invite sent to again@example.test.',
+		});
+		await expect(volunteerBalance(GRACE)).resolves.toBe(2);
+	});
+
 	/** ADR 0011: a definite failure is cancelled and refunded, in that order. */
 	test('a definite send failure cancels the Invite and gives the allowance back', async () => {
 		await volunteerWithBalance(1);
