@@ -1,4 +1,4 @@
-import type { ComponentProps } from 'react';
+import { useId, type ComponentProps } from 'react';
 import { useFormStatus } from 'react-dom';
 
 export function Submit({ text = 'Submit', loadingText = 'Submitting...' }) {
@@ -17,6 +17,7 @@ export function Submit({ text = 'Submit', loadingText = 'Submitting...' }) {
 }
 
 export function CodeOfConduct({ error }: { error?: string }) {
+	const errorId = useId();
 	return (
 		<fieldset>
 			<p className="lead">
@@ -34,6 +35,7 @@ export function CodeOfConduct({ error }: { error?: string }) {
 					name="agree"
 					className={`form-check-input${error ? ' is-invalid' : ''}`}
 					aria-invalid={error ? true : undefined}
+					aria-describedby={error ? errorId : undefined}
 					required
 					value="agree"
 				/>
@@ -42,7 +44,7 @@ export function CodeOfConduct({ error }: { error?: string }) {
 					member of the Virtual Coffee community
 				</span>
 				{error && (
-					<div className="invalid-feedback" role="alert">
+					<div id={errorId} className="invalid-feedback" role="alert">
 						{error}
 					</div>
 				)}
