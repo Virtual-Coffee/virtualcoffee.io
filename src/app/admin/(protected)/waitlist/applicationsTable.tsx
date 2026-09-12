@@ -113,13 +113,26 @@ export function ApplicationsTable({
 	);
 
 	if (rows.length === 0) {
+		// An empty page of a non-empty result (a stale `?page=` after rows moved
+		// on) still gets the pager, or there is no way back.
 		return (
-			<div className="text-center py-5">
-				<h2 className="h5">Nothing here</h2>
-				<p className="text-body-secondary mb-0">
-					No applications match these filters.
-				</p>
-			</div>
+			<>
+				<div className="text-center py-5">
+					<h2 className="h5">Nothing here</h2>
+					<p className="text-body-secondary mb-0">
+						{rowCount > 0
+							? 'Nothing on this page.'
+							: 'No applications match these filters.'}
+					</p>
+				</div>
+				{rowCount > 0 && (
+					<TablePager
+						table={table}
+						pagination={pagination}
+						rowCount={rowCount}
+					/>
+				)}
+			</>
 		);
 	}
 

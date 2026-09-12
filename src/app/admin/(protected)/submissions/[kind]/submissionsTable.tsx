@@ -101,7 +101,22 @@ export function SubmissionsTable({
 	});
 
 	if (rows.length === 0) {
-		return <p className="text-body-secondary">Nothing here yet.</p>;
+		// An empty page of a non-empty result (a stale `?page=` after rows moved
+		// on) still gets the pager, or there is no way back.
+		return (
+			<>
+				<p className="text-body-secondary">
+					{rowCount > 0 ? 'Nothing on this page.' : 'Nothing here yet.'}
+				</p>
+				{rowCount > 0 && (
+					<TablePager
+						table={table}
+						pagination={pagination}
+						rowCount={rowCount}
+					/>
+				)}
+			</>
+		);
 	}
 
 	return (

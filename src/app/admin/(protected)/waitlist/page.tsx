@@ -107,7 +107,13 @@ export default async function AdminQueuePage({
 				</div>
 			</div>
 
-			{rowCount === 0 && !filters.search ? (
+			{/* "Clear" means the whole queue, not just this search, source or
+			    status chip — with a filter on, an empty result is the table's
+			    own "nothing matches". */}
+			{rowCount === 0 &&
+			!filters.search &&
+			!filters.source &&
+			!params.status ? (
 				<div className="text-center py-5">
 					<h2 className="h5">Queue&rsquo;s clear</h2>
 					<p className="text-body-secondary">
