@@ -7,7 +7,7 @@ import { cocReport, db } from '@/db';
 import { storeAttachment, type StoredAttachment } from '@/lib/attachments';
 import { cocReportMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import { formValue, invalidFields, staleForm } from '@/util/forms/parse';
+import { formObject, invalidFields, staleForm } from '@/util/forms/parse';
 import { checkSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
@@ -53,15 +53,7 @@ export async function submitCocReport(
 	if (guard === 'stale') return staleForm();
 	if (guard !== 'ok') redirect('/report-coc-violation/thanks');
 
-	const parsed = schema.safeParse({
-		name: formValue(formData, 'name'),
-		email: formValue(formData, 'email'),
-		reportee_name: formData.get('reportee_name') ?? '',
-		time_location: formData.get('time_location') ?? '',
-		description: formData.get('description') ?? '',
-		anyone_else_involved: formValue(formData, 'anyone_else_involved'),
-		agree: formData.get('agree') ?? '',
-	});
+	const parsed = schema.safeParse(formObject(formData, schema));
 
 	if (!parsed.success) {
 		return invalidFields(parsed.error);

@@ -15,6 +15,29 @@ export function formValue(formData: FormData, key: string): string | undefined {
 }
 
 /**
+ * Every key of `schema.shape` read from the form: a required field as the
+ * submitted string (blank when missing, so its own `min(1)` message fires),
+ * an optional one through `formValue` so blank means "not given". Keys the
+ * schema doesn't name — a file, a hidden token — are left for the action.
+ */
+export function formObject(
+	formData: FormData,
+	schema: z.ZodObject,
+): Record<string, string | undefined> {
+	const values: Record<string, string | undefined> = {};
+	for (const [key, field] of Object.entries(schema.shape)) {
+		const optional = field.safeParse(undefined).success;
+		if (optional) {
+			values[key] = formValue(formData, key);
+		} else {
+			const raw = formData.get(key);
+			values[key] = typeof raw === 'string' ? raw : '';
+		}
+	}
+	return values;
+}
+
+/**
  * Field name -> first error, the shape `FormState.fieldErrors` carries so
  * inputs can be marked individually. The first issue per field wins, because
  * a `min(1)` and a `max(200)` on the same field never both need saying.

@@ -4,6 +4,7 @@ import { z } from 'zod';
 import {
 	fieldErrorsFrom,
 	formError,
+	formObject,
 	formValue,
 	githubUsername,
 	invalidFields,
@@ -22,6 +23,40 @@ describe('formValue', () => {
 		expect(formValue(formData, 'blank')).toBeUndefined();
 		expect(formValue(formData, 'missing')).toBeUndefined();
 		expect(formValue(formData, 'file')).toBeUndefined();
+	});
+});
+
+describe('formObject', () => {
+	const schema = z.object({
+		name: z.string().trim().min(1, 'Required'),
+		pronouns: z.string().trim().optional(),
+		agree: z.literal('agree'),
+	});
+
+	test('reads every schema key, blank optional fields as not given', () => {
+		const formData = new FormData();
+		formData.set('name', '  Ada ');
+		formData.set('pronouns', '   ');
+		formData.set('agree', 'agree');
+		formData.set('uploadedFiles', new File(['x'], 'x.png'));
+
+		expect(formObject(formData, schema)).toEqual({
+			name: '  Ada ',
+			pronouns: undefined,
+			agree: 'agree',
+		});
+	});
+
+	test('a missing or file-valued required field is an empty string', () => {
+		const formData = new FormData();
+		formData.set('name', new File(['x'], 'x.png'));
+
+		expect(formObject(formData, schema)).toEqual({
+			name: '',
+			pronouns: undefined,
+			agree: '',
+		});
+		expect(schema.safeParse(formObject(formData, schema)).success).toBe(false);
 	});
 });
 

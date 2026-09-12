@@ -9,6 +9,7 @@ import { hashClaimToken } from '@/lib/invites';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
 import {
 	formError,
+	formObject,
 	formValue,
 	githubUsername,
 	invalidFields,
@@ -48,17 +49,7 @@ export async function submitMembershipApplication(
 	if (guard === 'stale') return staleForm();
 	if (guard !== 'ok') redirect('/join/thank-you');
 
-	const parsed = schema.safeParse({
-		name: formData.get('name') ?? '',
-		email: formData.get('email') ?? '',
-		pronouns: formValue(formData, 'pronouns'),
-		githubUsername: formValue(formData, 'githubUsername'),
-		howDidYouHear: formValue(formData, 'howDidYouHear'),
-		journey: formValue(formData, 'journey'),
-		codeInterests: formValue(formData, 'codeInterests'),
-		virtualCoffee: formValue(formData, 'virtualCoffee'),
-		agree: formData.get('agree') ?? '',
-	});
+	const parsed = schema.safeParse(formObject(formData, schema));
 
 	if (!parsed.success) {
 		return invalidFields(parsed.error);

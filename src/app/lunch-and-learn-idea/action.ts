@@ -8,7 +8,7 @@ import { db, lunchAndLearnIdea } from '@/db';
 import { createLunchAndLearnIssue } from '@/lib/github/issues';
 import { lunchAndLearnMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import { formValue, invalidFields, staleForm } from '@/util/forms/parse';
+import { formObject, invalidFields, staleForm } from '@/util/forms/parse';
 import { checkSpam } from '@/util/forms/spamGuard';
 import { siteUrl } from '@/util/url.server';
 import type { FormState } from '@/util/forms/types';
@@ -46,15 +46,7 @@ export async function submitLunchAndLearnIdea(
 	if (guard === 'stale') return staleForm();
 	if (guard !== 'ok') redirect('/lunch-and-learn-idea/thanks');
 
-	const parsed = schema.safeParse({
-		Name: formData.get('Name') ?? '',
-		Email: formData.get('Email') ?? '',
-		Topic: formData.get('Topic') ?? '',
-		Description: formData.get('Description') ?? '',
-		Format: formValue(formData, 'Format'),
-		Timing: formData.get('Timing') ?? '',
-		agree: formData.get('agree') ?? '',
-	});
+	const parsed = schema.safeParse(formObject(formData, schema));
 
 	if (!parsed.success) {
 		return invalidFields(parsed.error);

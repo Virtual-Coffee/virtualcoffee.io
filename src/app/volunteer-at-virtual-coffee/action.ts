@@ -6,7 +6,12 @@ import { z } from 'zod';
 import { db, volunteerSignup } from '@/db';
 import { notifySlack, volunteerSignupMessage } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import { githubUsername, invalidFields, staleForm } from '@/util/forms/parse';
+import {
+	formObject,
+	githubUsername,
+	invalidFields,
+	staleForm,
+} from '@/util/forms/parse';
 import { checkSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
@@ -39,14 +44,7 @@ export async function submitVolunteerSignup(
 	if (guard === 'stale') return staleForm();
 	if (guard !== 'ok') redirect('/volunteer-at-virtual-coffee/thanks');
 
-	const parsed = schema.safeParse({
-		name: formData.get('name') ?? '',
-		email: formData.get('email') ?? '',
-		github_username: formData.get('github_username') ?? '',
-		position: formData.get('position') ?? '',
-		description: formData.get('description') ?? '',
-		agree: formData.get('agree') ?? '',
-	});
+	const parsed = schema.safeParse(formObject(formData, schema));
 
 	if (!parsed.success) {
 		return invalidFields(parsed.error);

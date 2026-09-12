@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { coffeeTableGroupRequest, db } from '@/db';
 import { coffeeTableGroupMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import { invalidFields, staleForm } from '@/util/forms/parse';
+import { formObject, invalidFields, staleForm } from '@/util/forms/parse';
 import { checkSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
@@ -37,13 +37,7 @@ export async function submitCoffeeTableGroupRequest(
 	if (guard === 'stale') return staleForm();
 	if (guard !== 'ok') redirect('/start-coffee-table-group/thanks');
 
-	const parsed = schema.safeParse({
-		name: formData.get('name') ?? '',
-		email: formData.get('email') ?? '',
-		group_name: formData.get('group_name') ?? '',
-		description: formData.get('description') ?? '',
-		agree: formData.get('agree') ?? '',
-	});
+	const parsed = schema.safeParse(formObject(formData, schema));
 
 	if (!parsed.success) {
 		return invalidFields(parsed.error);
