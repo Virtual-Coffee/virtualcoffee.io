@@ -10,6 +10,7 @@ import {
 	type SubmissionKind,
 } from '@/lib/submissions';
 import type { NotifyResult } from '@/lib/slack/notify';
+import type { FormState } from '@/util/forms/types';
 
 /**
  * The event-writing half of a Submission, shared by all four forms. Which
@@ -42,6 +43,37 @@ export async function recordSubmissionEvent(input: {
 			fromStatus: input.fromStatus ?? null,
 			toStatus: input.toStatus ?? null,
 		});
+}
+
+/**
+ * The write half of a Submission: insert the row, log `submitted`, and turn a
+ * failure into the form state to hand back. Persist first, notify second —
+ * see docs/adr/0005 — so the caller only reaches `notifyAndRecord()` with an
+ * id that is already committed.
+ *
+ * The upstream error is deliberately not surfaced: its message can name
+ * tables and columns, and there is nothing the submitter could do with it.
+ */
+export async function persistSubmission(
+	kind: SubmissionKind,
+	insertRow: () => Promise<{ id: string }>,
+	copy: { submitted: string; failed: string },
+): Promise<{ id: string } | { error: FormState }> {
+	try {
+		const { id } = await insertRow();
+
+		await recordSubmissionEvent({
+			kind,
+			submissionId: id,
+			type: 'submitted',
+			body: copy.submitted,
+		});
+
+		return { id };
+	} catch (error) {
+		console.error(`${SUBMISSION_KINDS[kind].singular} failed to save`, error);
+		return { error: { is_error: true, message: copy.failed } };
+	}
 }
 
 /**

@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { coffeeTableGroupRequest, db } from '@/db';
 import { coffeeTableGroupMessage, notifySlack } from '@/lib/slack/notify';
-import { notifyAndRecord, recordSubmissionEvent } from '@/lib/submitSubmission';
+import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import { fieldErrorsFrom } from '@/util/forms/parse';
 import { looksLikeSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
@@ -53,37 +53,29 @@ export async function submitCoffeeTableGroupRequest(
 		};
 	}
 
-	let requestId: string;
-
-	try {
-		const [row] = await db()
-			.insert(coffeeTableGroupRequest)
-			.values({
-				name: parsed.data.name,
-				email: parsed.data.email,
-				groupName: parsed.data.group_name,
-				description: parsed.data.description,
-			})
-			.returning({ id: coffeeTableGroupRequest.id });
-
-		requestId = row.id;
-
-		await recordSubmissionEvent({
-			kind: 'coffee-tables',
-			submissionId: requestId,
-			type: 'submitted',
-			body: 'Request submitted',
-		});
-	} catch (error) {
-		console.error('Coffee Table group request failed to save', error);
-		return {
-			is_error: true,
-			message:
+	const saved = await persistSubmission(
+		'coffee-tables',
+		async () => {
+			const [row] = await db()
+				.insert(coffeeTableGroupRequest)
+				.values({
+					name: parsed.data.name,
+					email: parsed.data.email,
+					groupName: parsed.data.group_name,
+					description: parsed.data.description,
+				})
+				.returning({ id: coffeeTableGroupRequest.id });
+			return row;
+		},
+		{
+			submitted: 'Request submitted',
+			failed:
 				'Something went wrong saving your form. Please try again, or email hello@virtualcoffee.io.',
-		};
-	}
+		},
+	);
+	if ('error' in saved) return saved.error;
 
-	await notifyAndRecord('coffee-tables', requestId, async () => {
+	await notifyAndRecord('coffee-tables', saved.id, async () => {
 		return notifySlack(
 			'coffee-tables',
 			coffeeTableGroupMessage({

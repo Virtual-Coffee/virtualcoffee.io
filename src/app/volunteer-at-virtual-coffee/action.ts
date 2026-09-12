@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { db, volunteerSignup } from '@/db';
 import { notifySlack, volunteerSignupMessage } from '@/lib/slack/notify';
-import { notifyAndRecord, recordSubmissionEvent } from '@/lib/submitSubmission';
+import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import { fieldErrorsFrom } from '@/util/forms/parse';
 import { looksLikeSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
@@ -67,38 +67,30 @@ export async function submitVolunteerSignup(
 		};
 	}
 
-	let signupId: string;
-
-	try {
-		const [row] = await db()
-			.insert(volunteerSignup)
-			.values({
-				name: parsed.data.name,
-				email: parsed.data.email,
-				githubUsername: parsed.data.github_username,
-				position: parsed.data.position,
-				description: parsed.data.description,
-			})
-			.returning({ id: volunteerSignup.id });
-
-		signupId = row.id;
-
-		await recordSubmissionEvent({
-			kind: 'volunteers',
-			submissionId: signupId,
-			type: 'submitted',
-			body: 'Signup submitted',
-		});
-	} catch (error) {
-		console.error('Volunteer signup failed to save', error);
-		return {
-			is_error: true,
-			message:
+	const saved = await persistSubmission(
+		'volunteers',
+		async () => {
+			const [row] = await db()
+				.insert(volunteerSignup)
+				.values({
+					name: parsed.data.name,
+					email: parsed.data.email,
+					githubUsername: parsed.data.github_username,
+					position: parsed.data.position,
+					description: parsed.data.description,
+				})
+				.returning({ id: volunteerSignup.id });
+			return row;
+		},
+		{
+			submitted: 'Signup submitted',
+			failed:
 				'Something went wrong saving your form. Please try again, or email hello@virtualcoffee.io.',
-		};
-	}
+		},
+	);
+	if ('error' in saved) return saved.error;
 
-	await notifyAndRecord('volunteers', signupId, async () => {
+	await notifyAndRecord('volunteers', saved.id, async () => {
 		return notifySlack(
 			'volunteers',
 			volunteerSignupMessage({

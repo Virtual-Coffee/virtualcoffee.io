@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { cocReport, db } from '@/db';
 import { storeAttachment, type StoredAttachment } from '@/lib/attachments';
 import { cocReportMessage, notifySlack } from '@/lib/slack/notify';
-import { notifyAndRecord, recordSubmissionEvent } from '@/lib/submitSubmission';
+import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import { formValue, fieldErrorsFrom } from '@/util/forms/parse';
 import { looksLikeSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
@@ -89,45 +89,35 @@ export async function submitCocReport(
 		attachment = result;
 	}
 
-	let reportId: string;
-
-	try {
-		const [row] = await db()
-			.insert(cocReport)
-			.values({
-				name: parsed.data.name ?? null,
-				email: parsed.data.email ?? null,
-				reporteeName: parsed.data.reportee_name,
-				timeLocation: parsed.data.time_location,
-				description: parsed.data.description,
-				anyoneElseInvolved: parsed.data.anyone_else_involved ?? null,
-				attachmentBlobKey: attachment?.key ?? null,
-				attachmentFilename: attachment?.filename ?? null,
-				attachmentContentType: attachment?.contentType ?? null,
-				attachmentSize: attachment?.size ?? null,
-			})
-			.returning({ id: cocReport.id });
-
-		reportId = row.id;
-
-		await recordSubmissionEvent({
-			kind: 'coc',
-			submissionId: reportId,
-			type: 'submitted',
-			body: 'Report submitted',
-		});
-	} catch (error) {
-		// Deliberately not surfaced: the upstream message can name tables and
-		// columns, and there is nothing the reporter could do with it.
-		console.error('CoC report failed to save', error);
-		return {
-			is_error: true,
-			message:
+	const saved = await persistSubmission(
+		'coc',
+		async () => {
+			const [row] = await db()
+				.insert(cocReport)
+				.values({
+					name: parsed.data.name ?? null,
+					email: parsed.data.email ?? null,
+					reporteeName: parsed.data.reportee_name,
+					timeLocation: parsed.data.time_location,
+					description: parsed.data.description,
+					anyoneElseInvolved: parsed.data.anyone_else_involved ?? null,
+					attachmentBlobKey: attachment?.key ?? null,
+					attachmentFilename: attachment?.filename ?? null,
+					attachmentContentType: attachment?.contentType ?? null,
+					attachmentSize: attachment?.size ?? null,
+				})
+				.returning({ id: cocReport.id });
+			return row;
+		},
+		{
+			submitted: 'Report submitted',
+			failed:
 				'Something went wrong saving your report. Please try again, or email hello@virtualcoffee.io.',
-		};
-	}
+		},
+	);
+	if ('error' in saved) return saved.error;
 
-	await notifyAndRecord('coc', reportId, async () => {
+	await notifyAndRecord('coc', saved.id, async () => {
 		return notifySlack(
 			'coc',
 			cocReportMessage({

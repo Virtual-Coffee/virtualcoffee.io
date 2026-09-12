@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { db, lunchAndLearnIdea } from '@/db';
 import { createLunchAndLearnIssue } from '@/lib/github/issues';
 import { lunchAndLearnMessage, notifySlack } from '@/lib/slack/notify';
-import { notifyAndRecord, recordSubmissionEvent } from '@/lib/submitSubmission';
+import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import { formValue, fieldErrorsFrom } from '@/util/forms/parse';
 import { looksLikeSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
@@ -72,41 +72,33 @@ export async function submitLunchAndLearnIdea(
 		timing: parsed.data.Timing,
 	};
 
-	let ideaId: string;
-
-	try {
-		const [row] = await db()
-			.insert(lunchAndLearnIdea)
-			.values(idea)
-			.returning({ id: lunchAndLearnIdea.id });
-
-		ideaId = row.id;
-
-		await recordSubmissionEvent({
-			kind: 'lunch-and-learn',
-			submissionId: ideaId,
-			type: 'submitted',
-			body: 'Idea submitted',
-		});
-	} catch (error) {
-		console.error('Lunch & Learn idea failed to save', error);
-		return {
-			is_error: true,
-			message:
+	const saved = await persistSubmission(
+		'lunch-and-learn',
+		async () => {
+			const [row] = await db()
+				.insert(lunchAndLearnIdea)
+				.values(idea)
+				.returning({ id: lunchAndLearnIdea.id });
+			return row;
+		},
+		{
+			submitted: 'Idea submitted',
+			failed:
 				'Something went wrong saving your form. Please try again, or email hello@virtualcoffee.io.',
-		};
-	}
+		},
+	);
+	if ('error' in saved) return saved.error;
 
 	// The issue is created first so the Slack message can link it; neither
 	// failing loses the idea.
-	await notifyAndRecord('lunch-and-learn', ideaId, async () => {
+	await notifyAndRecord('lunch-and-learn', saved.id, async () => {
 		const issue = await createLunchAndLearnIssue(idea);
 
 		if (issue.ok) {
 			await db()
 				.update(lunchAndLearnIdea)
 				.set({ githubIssueUrl: issue.url })
-				.where(eq(lunchAndLearnIdea.id, ideaId));
+				.where(eq(lunchAndLearnIdea.id, saved.id));
 		}
 
 		const slack = await notifySlack(
