@@ -132,7 +132,18 @@ export function ApplicationsTable({
 						{table.getHeaderGroups().map((group) => (
 							<tr key={group.id}>
 								{group.headers.map((header) => (
-									<th key={header.id} scope="col" className="small">
+									<th
+										key={header.id}
+										scope="col"
+										className="small"
+										aria-sort={
+											header.column.getIsSorted() === 'asc'
+												? 'ascending'
+												: header.column.getIsSorted() === 'desc'
+													? 'descending'
+													: undefined
+										}
+									>
 										{header.isPlaceholder ? null : header.column.getCanSort() ? (
 											<SortableHeader
 												sorted={header.column.getIsSorted()}

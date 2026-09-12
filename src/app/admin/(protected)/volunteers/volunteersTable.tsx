@@ -127,6 +127,13 @@ export function VolunteersTable({
 									<th
 										key={header.id}
 										scope="col"
+										aria-sort={
+											header.column.getIsSorted() === 'asc'
+												? 'ascending'
+												: header.column.getIsSorted() === 'desc'
+													? 'descending'
+													: undefined
+										}
 										className={
 											NUMERIC_COLUMNS.has(header.column.id)
 												? 'text-end'
