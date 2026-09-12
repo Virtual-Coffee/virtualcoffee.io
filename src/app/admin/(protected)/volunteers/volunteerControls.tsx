@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-import type { SlackMember } from '@/data/slackMembers';
+import { filterSlackMembers, type SlackMember } from '@/data/slackMembers';
 import {
 	addVolunteer,
 	adjustBalance,
@@ -53,13 +53,7 @@ export function AddVolunteerForm({
 	const [roleLabels, setRoleLabels] = useState('');
 	const [email, setEmail] = useState('');
 
-	const matches = candidates
-		.filter((member) =>
-			`${member.displayName} ${member.name} ${member.handle}`
-				.toLowerCase()
-				.includes(query.trim().toLowerCase()),
-		)
-		.slice(0, 50);
+	const matches = filterSlackMembers(candidates, query);
 
 	return (
 		<div className="card">

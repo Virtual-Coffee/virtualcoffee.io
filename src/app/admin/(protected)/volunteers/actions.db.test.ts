@@ -42,7 +42,6 @@ vi.mock('@/data/slackMembers', () => ({
 			name: 'Ada Lovelace',
 			displayName: 'Ada',
 			handle: 'ada',
-			image: null,
 		},
 	],
 }));

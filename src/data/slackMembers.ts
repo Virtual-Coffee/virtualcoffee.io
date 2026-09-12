@@ -25,8 +25,28 @@ export type SlackMember = {
 	displayName: string;
 	/** The `@handle`, without the `@`. */
 	handle: string;
-	image: string | null;
 };
+
+/**
+ * The rows a picker shows for what someone typed: a substring match over the
+ * three names, capped so the list scrolls rather than renders the workspace.
+ * Shared by the roster and User Management pickers.
+ */
+export function filterSlackMembers<T extends SlackMember>(
+	members: readonly T[],
+	query: string,
+	limit = 50,
+): T[] {
+	const needle = query.trim().toLowerCase();
+	const pool = needle
+		? members.filter((member) =>
+				`${member.displayName} ${member.name} ${member.handle}`
+					.toLowerCase()
+					.includes(needle),
+			)
+		: members;
+	return pool.slice(0, limit);
+}
 
 /** Slack's own bot, which `is_bot` does not cover. */
 const SLACKBOT_ID = 'USLACKBOT';
@@ -87,7 +107,6 @@ export async function fetchSlackMembers(): Promise<SlackMember[]> {
 				name: realName || handle,
 				displayName,
 				handle,
-				image: member.profile?.image_192 ?? null,
 			});
 		}
 

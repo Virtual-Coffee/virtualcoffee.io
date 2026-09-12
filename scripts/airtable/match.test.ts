@@ -8,7 +8,6 @@ const member: SlackMember = {
 	name: 'Grace Hopper',
 	displayName: 'Grace',
 	handle: 'gracehopper',
-	image: null,
 };
 
 const nobody = {

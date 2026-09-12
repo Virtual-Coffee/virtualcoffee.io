@@ -26,7 +26,6 @@ export function createSlackMembers(count = 40): SlackMember[] {
 			name,
 			displayName: name,
 			handle,
-			image: faker.image.avatar(),
 		};
 	}).sort((a, b) => a.displayName.localeCompare(b.displayName));
 }

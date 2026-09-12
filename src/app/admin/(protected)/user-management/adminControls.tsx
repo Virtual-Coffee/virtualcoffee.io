@@ -3,6 +3,7 @@
 import { useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
+import { filterSlackMembers } from '@/data/slackMembers';
 import type { GrantCandidate } from '@/lib/admins';
 import {
 	GRANTABLE_ROLE_NAMES,
@@ -265,20 +266,10 @@ export function GrantAccessForm({
 		HTMLInputElement
 	>();
 
-	const matches = useMemo(() => {
-		const needle = query.trim().toLowerCase();
-		const pool = needle
-			? candidates.filter((candidate) =>
-					`${candidate.displayName} ${candidate.name} ${candidate.handle}`
-						.toLowerCase()
-						.includes(needle),
-				)
-			: candidates;
-
-		// Enough to scroll, few enough to render: the workspace is far larger
-		// than anyone scrolls through, and the search is what narrows it.
-		return pool.slice(0, 50);
-	}, [candidates, query]);
+	const matches = useMemo(
+		() => filterSlackMembers(candidates, query),
+		[candidates, query],
+	);
 
 	function choose(candidate: GrantCandidate) {
 		setSelected(candidate);
