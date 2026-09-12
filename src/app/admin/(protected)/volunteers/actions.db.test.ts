@@ -115,7 +115,7 @@ describe('addVolunteer', () => {
 		});
 		await expect(grantRole('U_ADA')).resolves.toEqual([]);
 		expect(sendEmail).toHaveBeenCalledWith({
-			to: 'ADA@example.test',
+			to: 'ada@example.test',
 			subject: 'You can now invite people to Virtual Coffee',
 			text: expect.stringContaining('https://virtualcoffee.io/invites'),
 		});
@@ -239,9 +239,9 @@ describe('setVolunteerActive', () => {
 			role: 'coc_reviewer,volunteer',
 			roleGrantedBy: 'Local dev',
 		});
-		await expect(grantRole('U_ADA')).resolves.toEqual([
-			'waitlist_reviewer,volunteer',
-		]);
+		// A restart is the grant addVolunteer makes: once an account exists it
+		// is the authority, and a leftover grant is not written to as well.
+		await expect(grantRole('U_ADA')).resolves.toEqual(['waitlist_reviewer']);
 	});
 
 	test('someone whose only role was volunteer is left with the default', async () => {
@@ -260,6 +260,21 @@ describe('setVolunteerActive', () => {
 		await setVolunteerActive(id, false);
 
 		await expect(grantRole('U_ADA')).resolves.toEqual([]);
+	});
+
+	test('restarting someone who never signed in re-creates the withdrawn grant', async () => {
+		await addVolunteer('U_ADA', '', '');
+		const { id } = (await volunteerRow('U_ADA'))!;
+
+		await setVolunteerActive(id, false);
+		await expect(grantRole('U_ADA')).resolves.toEqual([]);
+
+		await expect(setVolunteerActive(id, true)).resolves.toEqual({
+			ok: true,
+			message: 'Volunteering restarted.',
+		});
+		expect((await volunteerRow('U_ADA'))?.deactivatedAt).toBeNull();
+		await expect(grantRole('U_ADA')).resolves.toEqual(['volunteer']);
 	});
 
 	test('a malformed or unknown id is a soft failure, not a 22P02', async () => {
@@ -407,10 +422,33 @@ describe('resendInvite', () => {
 		await expect(resendInvite(id, volunteerId)).resolves.toEqual({
 			ok: false,
 			message:
-				'That invite was claimed or cancelled just now. Reload the page.',
+				'That invite was claimed, cancelled or re-sent just now. Reload the page.',
 		});
 		expect(sendEmail).not.toHaveBeenCalled();
 		expect((await inviteRow(id)).status).toBe('accepted');
+	});
+
+	test('a resend that lost the race to another resend is not emailed', async () => {
+		const { id: volunteerId } = await insertVolunteer({
+			slackUserId: 'U_GRACE',
+		});
+		const { id } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
+		// Still `pending`, but the other maintainer's token is already in the row.
+		const theirs = hashClaimToken('the-other-resend');
+		afterRead.run = async () => {
+			await db()
+				.update(invite)
+				.set({ tokenHash: theirs })
+				.where(eq(invite.id, id));
+		};
+
+		await expect(resendInvite(id, volunteerId)).resolves.toEqual({
+			ok: false,
+			message:
+				'That invite was claimed, cancelled or re-sent just now. Reload the page.',
+		});
+		expect(sendEmail).not.toHaveBeenCalled();
+		expect((await inviteRow(id)).tokenHash).toBe(theirs);
 	});
 
 	test('only a pending invite with an email can be re-sent', async () => {
