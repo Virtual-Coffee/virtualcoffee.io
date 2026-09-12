@@ -1,69 +1,73 @@
 # Netlify Database for the membership pipeline
 
-We are retiring Airtable. The membership pipeline needs a relational store with
-a UI we control, and the site is a Next.js SSR app deployed on Netlify.
-We chose **Netlify Database** (Postgres): `@netlify/database` provisions it
-automatically, gives every deploy preview an isolated branch seeded from
-production, and applies SQL migrations from `netlify/database/migrations/` on
-deploy — so there are no connection strings to manage and no separate dashboard.
+## Context
+
+We are retiring Airtable (0004). The membership pipeline needs a relational
+store with a UI we control, and the site is a Next.js SSR app deployed on
+Netlify. Every deploy preview needs a database it can write to without
+touching production data.
+
+## Decision
+
+**Netlify Database** (Postgres). `@netlify/database` provisions it
+automatically and gives every deploy preview an isolated branch forked from
+production, so there are no connection strings to manage and no separate
+dashboard. Because that fork carries real data, every preview branch is
+sanitized before it publishes (0007).
+
+**The ORM is Drizzle v1**, pinned to an exact release candidate rather than the
+`0.45` line npm tags `latest`. Netlify's own Drizzle guide says to install
+`drizzle-orm@rc` with `@netlify/database`, because v1 ships the first-party
+`drizzle-orm/netlify-db` adapter that picks the Postgres driver by runtime. An
+RC on the production data path is acceptable while three things hold, and the
+choice should be revisited if any stops:
+
+- Netlify recommends it, and the adapter is theirs to maintain.
+- Better Auth declares `>=1.0.0-rc.1 <2.0.0` as a supported peer, so the auth
+  adapter is sanctioned, not tolerated.
+- This codebase uses none of the APIs v1 broke: no relational queries, no
+  reliance on global `casing`, no `drizzle-zod`.
+
+The version is pinned without a caret so Renovate proposes each RC bump as a
+reviewable diff.
+
+### Migrations
+
+**drizzle-kit owns migrations end to end, and we apply them ourselves.**
+`pnpm db:generate --name=<hyphenated-slug>` writes
+`drizzle/<YYYYMMDDHHmmss>_<slug>/migration.sql` plus the `snapshot.json` the
+next `generate` diffs against — both committed, neither hand-edited. The
+Netlify build runs `pnpm db:migrate:deploy` (`drizzle-kit migrate`) after
+`next build` and before the preview sanitizer, on every deploy context; locally
+`pnpm db:migrate` does the same through `scripts/with-local-netlify.ts`, and the
+`db` test project applies the same folders with drizzle's migrator. The ledger
+is `drizzle.__drizzle_migrations`.
+
+Netlify's own migration step (anything under `netlify/database/migrations/`)
+is deliberately not used. It runs _after_ the build command, which is too late
+for the sanitizer: on a fresh branch the sanitizer would see production's
+schema and either miss new tables or fail on them. Netlify's docs support
+choosing your own migration system and applying it in the build command, and
+the constraint is the same either way: production has no publish hook, so a
+migration runs while the previous deploy is still live and must be
+backwards-compatible with it.
 
 ## Considered options
 
-**Cloudflare D1**, explored in issue #1521 ("Research Spike: Evaluate
-Cloudflare's Utility"), where a maintainer had already converted four form
-submissions and the events list to D1. Reaching D1 from this site means the
-`vinext`/Cloudflare rewrite of PR #1522, which was merged and reverted the same
-day by #1523. That spike predates Netlify shipping a database offering, and the
-platform question it was answering no longer has the same answer.
-
-The `/bots/*` path still proxies to a Cloudflare Worker (`vc-bots`), and that
-stays where it is. This decision is about the membership data, not about
+**Cloudflare D1**, explored in #1521, where a maintainer had converted four
+form submissions and the events list. Reaching D1 from this site means the
+`vinext`/Cloudflare rewrite of #1522 (merged and reverted the same day), and
+the spike predates Netlify offering a database at all. `/bots/*` still proxies
+to a Cloudflare Worker; this decision is about the membership data, not about
 removing Cloudflare from the stack.
 
-## Amendment (2026-09-10): Drizzle v1 and the shared migration directory
+## Consequences
 
-The ORM is Drizzle, and as of this amendment it is Drizzle **v1**, pinned to an
-exact release candidate rather than the `0.45` line that npm still tags
-`latest`. Netlify's own Drizzle guide now says to install `drizzle-orm@rc` with
-`@netlify/database`, because v1 ships a first-party `drizzle-orm/netlify-db`
-adapter that picks the Postgres driver by runtime — the thing `src/db/index.ts`
-was hand-rolling.
-
-An RC on the production data path is acceptable here for three reasons, and
-the decision should be revisited if any of them stops holding:
-
-- Netlify recommends it, and the adapter is theirs to maintain.
-- Better Auth already declares `>=1.0.0-rc.1 <2.0.0` as a supported peer, so
-  the auth adapter is sanctioned, not tolerated.
-- This codebase uses none of the APIs v1 actually broke: no relational queries
-  (the whole of RQB v1 was removed), no reliance on global `casing` (every
-  column names itself), no `drizzle-zod`.
-
-The version is pinned exactly, without a caret, so Renovate proposes each RC
-bump as a reviewable diff instead of the lockfile drifting on its own.
-
-**The migration directory is shared.** Before v1, drizzle-kit wrote
-`drizzle/0000_name.sql` plus a journal, Netlify rejected the `0000` prefix as
-"out of order", and `scripts/syncMigrations.ts` existed to restamp and copy each
-file into `netlify/database/migrations/`. v1 removed the journal and now names
-each migration `<YYYYMMDDHHmmss>_<name>/migration.sql` — Netlify's layout —
-so `out` points straight at `netlify/database/migrations/` and the script is
-gone. Two consequences that look odd without this context:
-
-- Each folder also carries a `snapshot.json`. That is drizzle-kit's diff base
-  for the next `generate`; it is committed, and Netlify ignores it (verified by
-  applying a migration locally with the file present).
-- `generate` must always be given `--name=<hyphenated-slug>`. drizzle's
-  auto-generated names use underscores, and Netlify's slug rule is lowercase
-  alphanumerics and hyphens only.
-
-The seven migrations that had accumulated on the feature branch were squashed
-into a single baseline at the same time. None of them had reached production —
-`main` had no `netlify/database/migrations/` at all — so the "never edit a
-deployed migration" rule did not bind. The one database that _had_ run the
-old seven was the branch's deploy-preview database, and that has to be deleted
-by hand (on the Netlify website; the CLI cannot) before the next preview
-deploy, so it is re-created from production and replays the baseline from an
-empty schema. Netlify's applier passes the baseline's newer timestamp straight
-through onto a populated schema otherwise, and fails on the first
-`CREATE TYPE`.
+- **Never edit a migration that has already deployed.** Generate a new one.
+- A branch database whose schema was applied under a different ledger, or by
+  hand, is deleted on the Netlify website rather than repaired — the CLI cannot
+  — so the next deploy re-forks it from production and replays the migrations
+  from the baseline.
+- `@netlify/database` reads `NETLIFY_DB_URL`; one-off scripts run outside the
+  Netlify runtime and pass `DATABASE_URL` instead (`scripts/with-local-netlify.ts`,
+  which refuses anything non-local).
