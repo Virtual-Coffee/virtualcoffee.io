@@ -12,6 +12,7 @@ import { signInAs } from '@/test/session';
 import {
 	applicationEvents,
 	applicationRow,
+	failInserts,
 	insertApplication,
 	insertInvite,
 	insertUser,
@@ -306,6 +307,18 @@ describe('declineApplication and withdrawApplication', () => {
 		await expect(applicationEvents(id)).resolves.toEqual([
 			expect.objectContaining({ type: 'declined', body: 'Not a developer.' }),
 		]);
+	});
+
+	test('a status change whose event fails to write is rolled back with it', async () => {
+		const { id } = await insertApplication({ status: 'waitlisted' });
+		const fault = await failInserts('application_event');
+		try {
+			await expect(declineApplication(id, null)).rejects.toThrow();
+		} finally {
+			await fault.remove();
+		}
+		expect((await applicationRow(id)).status).toBe('waitlisted');
+		await expect(applicationEvents(id)).resolves.toEqual([]);
 	});
 
 	test('a blank note is recorded as none; an over-long one is refused first', async () => {
