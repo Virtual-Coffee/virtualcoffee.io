@@ -44,7 +44,12 @@ export function AddVolunteerForm({ candidates }: { candidates: Candidate[] }) {
 						candidates={candidates}
 						selected={selected}
 						disabled={pending}
-						onSelect={setSelected}
+						onSelect={(member) => {
+							setSelected(member);
+							// Prefilled, not locked: Slack's address is a good guess, and
+							// the maintainer can still type over it.
+							if (member?.email) setEmail(member.email);
+						}}
 						unavailable={(member) =>
 							member.alreadyVolunteer ? 'already a volunteer' : null
 						}
@@ -63,8 +68,9 @@ export function AddVolunteerForm({ candidates }: { candidates: Candidate[] }) {
 						onChange={(event) => setEmail(event.target.value)}
 					/>
 					<div className="form-text">
-						Slack doesn&rsquo;t give us addresses, so without one we can&rsquo;t
-						tell them they can invite people, or nudge them each month.
+						Filled in from their Slack profile when it has one. Without an
+						address we can&rsquo;t tell them they can invite people, or nudge
+						them each month.
 					</div>
 				</div>
 
