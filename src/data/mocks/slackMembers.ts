@@ -26,6 +26,7 @@ export function createSlackMembers(count = 40): SlackMember[] {
 			name,
 			displayName: name,
 			handle,
+			email: faker.internet.email({ firstName: handle }).toLowerCase(),
 		};
 	}).sort((a, b) => a.displayName.localeCompare(b.displayName));
 }

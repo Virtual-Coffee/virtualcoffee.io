@@ -6,8 +6,9 @@
  * maintainer should be picking a person out of a list rather than copying an
  * opaque `U…` out of Slack's profile pane.
  *
- * This needs a bot token with `users:read`, which is a different credential
- * from the OAuth client that signs maintainers in: those scopes are OIDC-only
+ * This needs a bot token with `users:read` (and `users:read.email` for the
+ * address `/admin/volunteers` prefills), which is a different credential from
+ * the OAuth client that signs maintainers in: those scopes are OIDC-only
  * (`openid`, `profile`, `email`), so the access token Better Auth already
  * stores on `account` cannot call `users.list`.
  */
@@ -79,6 +80,7 @@ export async function fetchSlackMembers(): Promise<SlackMember[]> {
 				name: realName || handle,
 				displayName,
 				handle,
+				email: member.profile?.email || null,
 			});
 		}
 
