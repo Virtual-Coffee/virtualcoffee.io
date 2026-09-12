@@ -1,8 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { getSession } from '@/lib/adminAccess';
+import { getSession, sessionRoles } from '@/lib/adminAccess';
 import { type Session } from '@/lib/auth';
-import { parseRoles } from '@/lib/permissions';
 
 /**
  * The authorization boundary for /invites (docs/adr/0010). Two things it must
@@ -13,9 +12,7 @@ import { parseRoles } from '@/lib/permissions';
  * `getSession()` is shared, so `ADMIN_DEV_BYPASS_ROLES=volunteer` works here.
  */
 export function isVolunteer(session: Session | null): boolean {
-	return parseRoles(
-		(session?.user as { role?: string | null } | undefined)?.role,
-	).includes('volunteer');
+	return sessionRoles(session).includes('volunteer');
 }
 
 /** Read off the session rather than looked up, so a page render costs no query. */

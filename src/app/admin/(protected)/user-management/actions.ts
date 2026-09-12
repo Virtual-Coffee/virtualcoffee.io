@@ -5,22 +5,17 @@ import { revalidatePath } from 'next/cache';
 
 import { db, isUniqueViolation, pendingGrant, user } from '@/db';
 import { getSlackMembers } from '@/data/slackMembers';
-import { requirePermission } from '@/lib/adminAccess';
+import { requirePermission, sessionRoles } from '@/lib/adminAccess';
 import { userForSlackId } from '@/lib/admins';
 import { isId } from '@/db/ids';
 import {
-	DEFAULT_ROLE,
 	GRANTABLE_ROLE_NAMES,
+	isRoleName,
 	parseRoles,
-	roles as ROLE_DEFINITIONS,
 	serialiseRoles,
 	type RoleName,
 } from '@/lib/permissions';
 import type { ActionResult } from '@/lib/actionResult';
-
-function isRoleName(value: string): value is RoleName {
-	return Object.hasOwn(ROLE_DEFINITIONS, value) && value !== DEFAULT_ROLE;
-}
 
 /**
  * Carry over any role this screen does not grant.
@@ -88,7 +83,7 @@ export async function setUserRoles(
 	 * lock everyone out of /admin with no way back short of a SQL console.
 	 */
 	if (userId === session.user.id) {
-		const current = parseRoles((session.user as { role?: string | null }).role);
+		const current = sessionRoles(session);
 		if (current.includes('admin') && !requested.includes('admin')) {
 			return { ok: false, message: 'You cannot revoke your own admin access.' };
 		}

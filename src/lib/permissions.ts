@@ -167,10 +167,12 @@ export function parseRoles(role: string | null | undefined): RoleName[] {
 	return role
 		.split(',')
 		.map((entry) => entry.trim())
-		.filter(
-			(entry): entry is RoleName =>
-				Object.hasOwn(roles, entry) && entry !== DEFAULT_ROLE,
-		);
+		.filter(isRoleName);
+}
+
+/** A Role that grants something — never the default. */
+export function isRoleName(value: string): value is RoleName {
+	return Object.hasOwn(roles, value) && value !== DEFAULT_ROLE;
 }
 
 export function serialiseRoles(names: readonly RoleName[]): string {

@@ -133,7 +133,12 @@ export async function getSession(): Promise<Session | null> {
 	return getAuth().api.getSession({ headers: await headers() });
 }
 
-function sessionRoles(session: Session | null): RoleName[] {
+/**
+ * The roles on the session's user. Better Auth's `Session` type does not carry
+ * the admin plugin's `role` column, hence the cast; this is the one place it
+ * is read.
+ */
+export function sessionRoles(session: Session | null): RoleName[] {
 	return parseRoles(
 		(session?.user as { role?: string | null } | undefined)?.role,
 	);
