@@ -33,12 +33,15 @@ const localMdxPlugin = (relPath, options = {}) => {
 // Server Action CSRF check compares `origin` to the forwarded host and aborts
 // on the mismatch, and its dev-resource guard blocks the tunnel the same way.
 // The subdomain differs per developer (`--live=<name>`), so allow the zone
-// rather than one host — in dev only; both lists are empty in every deployed
-// environment. `*` matches exactly one DNS label, so `*.netlify.live` is the
-// only pattern that matches `<sub>--<site>.netlify.live`.
-// NETLIFY_DEV is set by the CLI for the process it spawns.
-const devTunnelOrigins =
-	process.env.NETLIFY_DEV === 'true' ? ['*.netlify.live'] : [];
+// rather than one host. `*` matches exactly one DNS label, so `*.netlify.live`
+// is the only pattern that matches `<sub>--<site>.netlify.live`.
+//
+// The CLI sets NETLIFY_DEV for both plain `netlify dev` and `--live`, and
+// nothing tells the framework which one it is under, so `pnpm dev:tunnel`
+// sets NETLIFY_TUNNEL=1 itself. Both lists are empty everywhere else,
+// including every deployed environment.
+const isTunnel = process.env.NETLIFY_TUNNEL === '1';
+const devTunnelOrigins = isTunnel ? ['*.netlify.live'] : [];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -71,11 +74,10 @@ const nextConfig = {
 	// arrive. Behind `netlify dev --live` the socket connects and the server
 	// sends every chunk, but they never reach the browser, so every client-side
 	// navigation suspends forever: the RSC response is a clean 200, nothing
-	// throws, nothing is logged, and the page simply never changes. Defaults to
-	// true; disabling it costs richer dev stack traces and nothing else. Set it
-	// back to `true` if you never use the live tunnel and want them.
+	// throws, nothing is logged, and the page simply never changes. Off under
+	// the tunnel only; the cost is richer dev stack traces and nothing else.
 	experimental: {
-		reactDebugChannel: false,
+		reactDebugChannel: !isTunnel,
 		serverActions: {
 			allowedOrigins: devTunnelOrigins,
 			// Next caps action bodies at 1MB by default; the CoC form accepts a
