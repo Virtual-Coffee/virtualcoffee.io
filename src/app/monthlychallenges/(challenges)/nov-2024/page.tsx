@@ -23,7 +23,7 @@ export const metadata = handle.meta;
 async function getData() {
 	const { title } = handle.meta;
 
-	const data = await getWritingChallengeData('NaNoWriMo 2024');
+	const data = await getWritingChallengeData(2024);
 
 	const description = `Current status: ${data.totals.totalCount.toLocaleString()} out of ${
 		data.currentGoal?.title

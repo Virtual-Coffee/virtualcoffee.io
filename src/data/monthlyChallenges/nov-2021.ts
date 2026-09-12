@@ -1,59 +1,26 @@
 import slugify from '@sindresorhus/slugify';
-import Airtable from 'airtable';
 
-type MemberArticle = {
+import rows from './data/member-articles.json';
+
+/**
+ * The November 2021 writing challenge, frozen as a snapshot of the Airtable
+ * "Member Articles" table.
+ *
+ * Snapshot: `scripts/airtable/snapshotChallenges.ts`.
+ */
+
+export type MemberArticle = {
+	'Member Name': string;
 	GitHubUsername: string;
+	TwitterUsername?: string;
 	Title: string;
 	Url: string;
-	'Member Name': string;
 	'Word Count': number;
 	'Date Published': string;
-	TwitterUsername: string;
 };
 
-async function fetchRecords() {
-	if (process.env.PUBLIC_AIRTABLE_API_KEY) {
-		const base = new Airtable({
-			apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
-		}).base('appJStQemmYeoRcox');
-
-		const result = await base<MemberArticle>('Member Articles').select().all();
-
-		return result.map((r) => r.fields);
-	}
-
-	return [
-		{
-			id: 'recGDimb5snYUS0fc',
-			fields: {
-				GitHubUsername: 'BekahHW',
-				Title: "Hot Take: Saying 'In the Spirit of Hacktoberfest' is Gatekeepy",
-				Url: 'https://dev.to/bekahhw/hot-take-saying-in-the-spirit-of-hacktoberfest-is-gatekeepy-57n2',
-				'Member Name': 'BekahHW',
-				'Word Count': 911,
-				'Date Published': '2021-11-01',
-				TwitterUsername: 'bekahhw',
-			},
-			createdTime: '2021-11-01T16:19:16.000Z',
-		},
-		{
-			id: 'rec2h9stGXAce8a6X',
-			fields: {
-				GitHubUsername: 'tkshill',
-				Title: 'A Most Magic TicTacToe solution with React and TS',
-				Url: 'https://dev.to/kirkcodes/a-most-magic-tictactoe-solution-with-react-and-ts-4pje',
-				'Member Name': 'Kirk Shillingford',
-				'Word Count': 2000,
-				'Date Published': '2021-11-02',
-				TwitterUsername: 'KirkCodes',
-			},
-			createdTime: '2021-11-02T18:25:38.000Z',
-		},
-	].map((r) => r.fields);
-}
-
 export async function getChallengeData() {
-	const tableRows = await fetchRecords();
+	const tableRows = rows as MemberArticle[];
 
 	const totalCount = tableRows.reduce((total, row) => {
 		return total + row['Word Count'];

@@ -1,33 +1,33 @@
-import Airtable from 'airtable';
+import rows from './data/pairing-challenge-2023.json';
 
-const currentYear = new Date().getFullYear().toString();
+/**
+ * The Pairing challenge, frozen at its final 2023 result.
+ *
+ * This used to read Airtable through a view name built from the current year
+ * (`${year} Pairing Challenge Results`). Only the 2022 and 2023 views were ever
+ * created, so from 1 January 2024 every render asked for a view that does not
+ * exist — and with no `try`/`catch`, that threw. The challenge has not run
+ * since, so the honest fix is to record what it finished on rather than to keep
+ * presenting a live counter.
+ *
+ * Snapshot: `scripts/airtable/snapshotChallenges.ts`.
+ */
 
-type ChallengeRow = {
+export type PairingChallengeRow = {
 	'Pairing Participants': string;
-	Topic: string;
+	Topic?: string;
 	'Pairing Sessions': number;
-	Created: string;
-	Year: string | number;
 };
 
-export async function getPairingChallengeData(year: string = currentYear) {
-	Airtable.configure({
-		endpointUrl: 'https://api.airtable.com',
-		apiKey: process.env.PUBLIC_AIRTABLE_API_KEY,
-	});
-	const base = Airtable.base('app10kd5ewHiLTjxn');
+export const pairingChallengeYear = 2023;
 
-	const result = await base<ChallengeRow>('Pairing Challenge')
-		.select({
-			view: `${year} Pairing Challenge Results`,
-		})
-		.all();
-
-	return result.map((r) => r.fields);
+export function getPairingChallengeData(): PairingChallengeRow[] {
+	return rows as PairingChallengeRow[];
 }
 
-export async function getTotalPairingSessions(year: string = currentYear) {
-	const allRows = await getPairingChallengeData(year);
-
-	return allRows.reduce((acc, curr) => acc + curr['Pairing Sessions'], 0);
+export function getTotalPairingSessions(): number {
+	return getPairingChallengeData().reduce(
+		(total, row) => total + row['Pairing Sessions'],
+		0,
+	);
 }

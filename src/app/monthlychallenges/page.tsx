@@ -1,5 +1,8 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
-import { getTotalPairingSessions } from '@/data/monthlyChallenges/pairing-challenge';
+import {
+	getTotalPairingSessions,
+	pairingChallengeYear,
+} from '@/data/monthlyChallenges/pairing-challenge';
 import { createMetaData } from '@/util/createMetaData.server';
 import Link from 'next/link';
 
@@ -497,48 +500,28 @@ const challengeList: Challenge[] = [
 	{
 		title: 'Pairing',
 		subtitle: `Pairing is more than just coding with someone else. Pairing is about communication, teaching, learning, positive reinforcements, and growing.`,
-		renderDescription: (challengeData: unknown) => {
-			let totalSessions: number = 0;
-			if (typeof challengeData === 'number') {
-				totalSessions = challengeData;
-			}
-			return (
-				<>
-					<p>
-						For this community challenge, we&apos;re trying to hit 30 pairing
-						sessions by the end of the month. Some ways to get started pairing
-						are by working on an open-source issue, a LeetCode problem, or a
-						project you need help on. Check out{' '}
-						<a href="https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c">
-							The Power of Pair Programming: Benefits, Types, and Tips
-						</a>{' '}
-						for more on why you should pair up with us this May!
-					</p>
-					<p>
-						This challenge is sponsored by{' '}
-						<a href="https://tuple.app/">Tuple</a>, the remote pair programming
-						app on macOS and Linux.
-					</p>
-					<h3 className="display-3">
-						Current status: {totalSessions.toLocaleString()} out of 50 pairing
-						sessions
-					</h3>
-
-					<div className="progress my-4" style={{ height: '3em' }}>
-						<div
-							className="progress-bar progress-bar progress-bar-striped"
-							role="progressbar"
-							style={{ width: `${(totalSessions / 50) * 100}%` }}
-							aria-valuenow={totalSessions}
-							aria-valuemin={0}
-							aria-valuemax={50}
-						>
-							{totalSessions.toLocaleString()} Pairing Sessions
-						</div>
-					</div>
-				</>
-			);
-		},
+		description: (
+			<>
+				<p>
+					For this community challenge, we set out to hit 30 pairing sessions
+					before the end of the month. Some ways to get started pairing are by
+					working on an open-source issue, a LeetCode problem, or a project you
+					need help on. Check out{' '}
+					<a href="https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c">
+						The Power of Pair Programming: Benefits, Types, and Tips
+					</a>{' '}
+					for more on why you should pair up with us.
+				</p>
+				<p>
+					This challenge was sponsored by <a href="https://tuple.app/">Tuple</a>
+					, the remote pair programming app on macOS and Linux.
+				</p>
+				<h3 className="display-3">
+					Final result: {getTotalPairingSessions().toLocaleString()} pairing
+					sessions in {pairingChallengeYear}
+				</h3>
+			</>
+		),
 		links: [
 			{
 				href: '/monthlychallenges/feb-2022',
@@ -549,10 +532,6 @@ const challengeList: Challenge[] = [
 				title: 'December, 2020',
 			},
 		],
-		loaderData: async (): Promise<number> => {
-			const allPairingSesions = await getTotalPairingSessions();
-			return allPairingSesions;
-		},
 	},
 	{
 		title: 'Month of Feedback',
