@@ -189,21 +189,38 @@ export async function sendInvite(
 			 * refund index would refuse the second credit, an Invite nobody can ever
 			 * claim has no business sitting in the Volunteer's list as "Sent".
 			 */
-			await db().transaction(async (tx) => {
-				await tx
-					.update(invite)
-					.set({ status: 'cancelled', tokenHash: null, tokenExpiresAt: null })
-					.where(eq(invite.id, inviteId));
+			try {
+				await db().transaction(async (tx) => {
+					await tx
+						.update(invite)
+						.set({ status: 'cancelled', tokenHash: null, tokenExpiresAt: null })
+						.where(eq(invite.id, inviteId));
 
-				await refund(
-					tx,
+					await refund(
+						tx,
+						inviteId,
+						slackUserId,
+						actor,
+						'refund_cancelled',
+						`Send to ${email} failed: ${sent.message}`,
+					);
+				});
+			} catch (error) {
+				// The one fact the Volunteer needs is that nothing went out. The
+				// Invite is still `pending` and charged, and Cancel on the list is
+				// the same transaction again.
+				console.error('Failed to give back an unsent invite', {
 					inviteId,
 					slackUserId,
-					actor,
-					'refund_cancelled',
-					`Send to ${email} failed: ${sent.message}`,
-				);
-			});
+					error,
+				});
+				revalidatePath('/invites');
+				return {
+					ok: false,
+					message: `${sent.message} Nothing was emailed, but we couldn’t give the invite back automatically — cancel it from your list to get it back.`,
+					emailSent: false,
+				};
+			}
 
 			revalidatePath('/invites');
 			return {

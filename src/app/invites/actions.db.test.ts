@@ -240,6 +240,30 @@ describe('sendInvite', () => {
 		]);
 	});
 
+	test('a definite send failure whose refund fails is still reported as unsent', async () => {
+		await volunteerWithBalance(1);
+		sendEmail.mockResolvedValue(NOT_SENT);
+
+		const fault = await failLedgerInserts('refund_cancelled');
+		try {
+			await expect(sendInvite('Ada', 'ada@example.test')).resolves.toEqual({
+				ok: false,
+				message: `${NOT_SENT.message} Nothing was emailed, but we couldn’t give the invite back automatically — cancel it from your list to get it back.`,
+				emailSent: false,
+			});
+		} finally {
+			await fault.remove();
+		}
+
+		// Rolled back together: still pending and still charged, so Cancel on
+		// the list can give it back.
+		const [row] = await db().select().from(invite);
+		expect(row).toMatchObject({ status: 'pending' });
+		await expect(volunteerBalance(GRACE)).resolves.toBe(0);
+		await expect(cancelInvite(row.id)).resolves.toMatchObject({ ok: true });
+		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
+	});
+
 	test('a failure we cannot be sure about stays spent', async () => {
 		await volunteerWithBalance(1);
 		sendEmail.mockResolvedValue(MAYBE_SENT);
