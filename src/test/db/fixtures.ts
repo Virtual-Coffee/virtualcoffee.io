@@ -147,7 +147,8 @@ export async function insertInvite(fields: {
 	expiresAt?: Date | null;
 	status?: 'pending' | 'accepted' | 'completed' | 'expired' | 'cancelled';
 }) {
-	const token = fields.token ?? `claim-${next()}`;
+	const n = next();
+	const token = fields.token ?? `claim-${n}`;
 	const [row] = await db()
 		.insert(invite)
 		.values({
@@ -155,7 +156,8 @@ export async function insertInvite(fields: {
 			inviterName: fields.inviterName ?? 'Grace',
 			inviterUserId: fields.inviterUserId ?? null,
 			inviteeName: 'Ada',
-			inviteeEmail: fields.inviteeEmail ?? 'ada@example.test',
+			// Unique per row: one live Claim Link per email is enforced.
+			inviteeEmail: fields.inviteeEmail ?? `ada-${n}@example.test`,
 			status: fields.status ?? 'pending',
 			tokenHash: hashClaimToken(token),
 			tokenExpiresAt:
