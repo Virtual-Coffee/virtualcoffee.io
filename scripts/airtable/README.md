@@ -189,6 +189,12 @@ balance on a second run. The role is merged into whatever a person already
 holds rather than duplicated, so a second run also backfills grants for rows an
 earlier run imported.
 
+**Re-running does not correct a mapping.** A row that is already imported under
+a different Slack member id stops the run before anything is written: the
+`volunteer` row would keep the old id while the grant, ledger and Invites
+followed the new one. Move that person by hand (or delete their `volunteer`
+row and ledger rows, then re-run) — the script will not guess which id is right.
+
 Run `importMembership.ts` **first**. This script attributes Invites that script
 creates; with an empty `invite` table it will report `Attributed 0`.
 
