@@ -120,11 +120,16 @@ $grid-gutter-width: 60px;
 
 // Typography
 // ----------
-// Keep this a single flat list. Composing it as `'Inter var', $stack` nests the
+// Keep this a single flat list. Composing it as `$inter, $stack` nests the
 // list, and v5 emits that into --bs-body-font-family verbatim as
-// `"Inter var", (-apple-system, ...)`, which is invalid CSS.
+// `var(--font-inter), (-apple-system, ...)`, which is invalid CSS.
+//
+// --font-inter is declared by next/font in src/app/layout.tsx. The 'Inter'
+// fallback inside var() is load-bearing: an undefined custom property makes the
+// whole font-family declaration invalid at computed-value time, so the rest of
+// this stack would NOT act as a backstop — every element would just inherit.
 $font-family-sans-serif:
-	'Inter var',
+	var(--font-inter, 'Inter'),
 	-apple-system,
 	BlinkMacSystemFont,
 	'Segoe UI',
