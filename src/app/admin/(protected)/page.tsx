@@ -7,7 +7,7 @@ import {
 	SUBMISSION_KINDS,
 	type SubmissionKind,
 } from '@/lib/submissions';
-import { ActivityTable } from './activityTable';
+import { ActivityFeed } from './activityFeed';
 
 export const dynamic = 'force-dynamic';
 
@@ -110,7 +110,7 @@ export default async function AdminDashboardPage() {
 			)}
 
 			<h2 className="h5">Recent activity</h2>
-			<ActivityTable entries={activity} />
+			<ActivityFeed entries={activity} />
 		</div>
 	);
 }
