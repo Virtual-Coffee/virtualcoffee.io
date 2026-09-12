@@ -95,6 +95,32 @@ describe('notifyAndRecord', () => {
 		});
 	});
 
+	/**
+	 * The banner says "nobody will have seen them come in". Once a maintainer
+	 * has moved the submission on, or a later attempt got through, that is
+	 * no longer true — and a count that never clears is one nobody reads.
+	 */
+	test('the banner clears when someone acts on it, or a later attempt succeeds', async () => {
+		const seen = await insertCocReport();
+		const retried = await insertCocReport();
+		const fail = async () => ({ ok: false, message: 'x' });
+		await notifyAndRecord('coc', seen, fail);
+		await notifyAndRecord('coc', retried, fail);
+		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });
+
+		await db()
+			.update(cocReport)
+			.set({ status: 'in_progress' })
+			.where(eq(cocReport.id, seen));
+		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
+
+		await notifyAndRecord('coc', retried, async () => ({
+			ok: true,
+			message: 'x',
+		}));
+		await expect(failedNotifications(['coc'])).resolves.toEqual({});
+	});
+
 	test('losing the audit line does not lose the submission', async () => {
 		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
 		// An id no row has: the event insert fails its foreign key.

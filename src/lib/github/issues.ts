@@ -78,21 +78,25 @@ async function client(): Promise<Octokit> {
 	return cached;
 }
 
+/**
+ * The issue is public, and the form promises never to share the email. It
+ * lives on the Submission in /admin, which the issue links to instead.
+ */
 function issueBody(idea: {
 	name: string;
-	email: string;
 	topic: string;
 	description: string | null;
 	format: string | null;
 	timing: string | null;
+	adminUrl: string;
 }): string {
 	return [
 		'## Submitted Info:',
 		'**Name:**',
 		idea.name,
 		'',
-		'**Email:**',
-		idea.email,
+		'**Contact details:**',
+		idea.adminUrl,
 		'',
 		'**Title of the Lunch & Learn:**',
 		idea.topic,
@@ -114,11 +118,12 @@ function issueBody(idea: {
  */
 export async function createLunchAndLearnIssue(idea: {
 	name: string;
-	email: string;
 	topic: string;
 	description: string | null;
 	format: string | null;
 	timing: string | null;
+	/** The Submission's /admin page, where the email lives. */
+	adminUrl: string;
 }): Promise<CreateIssueResult> {
 	if (!githubAppConfigured()) {
 		return {

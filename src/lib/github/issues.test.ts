@@ -18,11 +18,11 @@ vi.mock('@octokit/auth-app', () => ({ createAppAuth: () => () => ({}) }));
 
 const idea = {
 	name: 'Ada',
-	email: 'ada@example.test',
 	topic: 'Property testing',
 	description: 'Why and how.',
 	format: null,
 	timing: 'Any Friday',
+	adminUrl: 'https://virtualcoffee.io/admin/submissions/lunch-and-learn/abc',
 };
 
 /** `client()` caches its Octokit in module state, so each case loads afresh. */
@@ -84,8 +84,9 @@ describe('createLunchAndLearnIssue', () => {
 				'**Name:**',
 				'Ada',
 				'',
-				'**Email:**',
-				'ada@example.test',
+				// The issue is public; the email stays in /admin.
+				'**Contact details:**',
+				'https://virtualcoffee.io/admin/submissions/lunch-and-learn/abc',
 				'',
 				'**Title of the Lunch & Learn:**',
 				'Property testing',

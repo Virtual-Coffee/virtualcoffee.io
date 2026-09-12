@@ -1,4 +1,4 @@
-import { asc, count, desc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, inArray, sql } from 'drizzle-orm';
 
 import {
 	cocReport,
@@ -130,11 +130,14 @@ export async function getSubmissionHistory(
 }
 
 /**
- * Submissions whose most recent notification attempt failed.
+ * Submissions nobody has been told about: still `new`, and the latest
+ * notification attempt failed.
  *
  * This is what backs the warning banner. A submission that was stored but never
  * announced is the failure mode the persist-then-notify ordering accepts, so it
- * has to be visible rather than merely logged — see docs/adr/0005.
+ * has to be visible rather than merely logged — see docs/adr/0005. Counting
+ * rows, not events, and only while `new`: once a maintainer has moved it on
+ * they have plainly seen it, and the banner would otherwise never clear.
  */
 export async function failedNotifications(
 	kinds: readonly SubmissionKind[],
@@ -143,12 +146,28 @@ export async function failedNotifications(
 
 	const results = await Promise.all(
 		kinds.map(async (kind) => {
-			const { eventColumn } = SUBMISSION_KINDS[kind];
-			const [row] = await db()
-				.select({ value: count() })
+			const { table, eventColumn } = SUBMISSION_KINDS[kind];
+			const latest = db()
+				.selectDistinctOn([eventColumn], {
+					submissionId: eventColumn,
+					type: submissionEvent.type,
+				})
 				.from(submissionEvent)
 				.where(
-					sql`${submissionEvent.type} = 'notification_failed' and ${eventColumn} is not null`,
+					sql`${eventColumn} is not null and ${submissionEvent.type} in ('notification_sent', 'notification_failed')`,
+				)
+				.orderBy(
+					eventColumn,
+					desc(submissionEvent.createdAt),
+					desc(submissionEvent.id),
+				)
+				.as('latest');
+			const [row] = await db()
+				.select({ value: count() })
+				.from(table)
+				.innerJoin(latest, eq(latest.submissionId, table.id))
+				.where(
+					and(eq(table.status, 'new'), eq(latest.type, 'notification_failed')),
 				);
 			return [kind, row?.value ?? 0] as const;
 		}),

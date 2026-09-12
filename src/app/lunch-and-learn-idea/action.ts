@@ -10,6 +10,7 @@ import { lunchAndLearnMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import { formValue, invalidFields, staleForm } from '@/util/forms/parse';
 import { checkSpam } from '@/util/forms/spamGuard';
+import { siteUrl } from '@/util/url.server';
 import type { FormState } from '@/util/forms/types';
 
 const schema = z.object({
@@ -88,7 +89,10 @@ export async function submitLunchAndLearnIdea(
 	// The issue is created first so the Slack message can link it; neither
 	// failing loses the idea.
 	await notifyAndRecord('lunch-and-learn', saved.id, async () => {
-		const issue = await createLunchAndLearnIssue(idea);
+		const issue = await createLunchAndLearnIssue({
+			...idea,
+			adminUrl: `${siteUrl()}/admin/submissions/lunch-and-learn/${saved.id}`,
+		});
 
 		if (issue.ok) {
 			await db()
