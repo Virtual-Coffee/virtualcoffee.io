@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 
 import {
 	db,
+	isUniqueViolation,
 	invite,
 	pendingGrant,
 	user,
@@ -87,9 +88,10 @@ export async function addVolunteer(
 				session.user.name || session.user.email,
 			);
 		});
-	} catch {
+	} catch (error) {
 		// The unique index on volunteer.slack_user_id is the authority here, so a
 		// race lands in this branch rather than creating a second row.
+		if (!isUniqueViolation(error)) throw error;
 		return {
 			ok: false,
 			message: `${member.displayName} is already a volunteer.`,

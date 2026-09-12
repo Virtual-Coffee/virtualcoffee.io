@@ -3,7 +3,7 @@
 import { and, eq, isNull } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
-import { db, pendingGrant, user } from '@/db';
+import { db, isUniqueViolation, pendingGrant, user } from '@/db';
 import { getSlackMembers } from '@/data/slackMembers';
 import { requirePermission } from '@/lib/adminAccess';
 import { userForSlackId } from '@/lib/admins';
@@ -196,9 +196,10 @@ export async function grantPendingAccess(
 				role: serialiseRoles(requested),
 				grantedBy: session.user.name || session.user.email,
 			});
-	} catch {
+	} catch (error) {
 		// The partial unique index is the authority on one-unclaimed-grant-each,
 		// so a race lands here rather than creating a second row.
+		if (!isUniqueViolation(error)) throw error;
 		return {
 			ok: false,
 			message: `${member.displayName} already has access pending. Edit it in the table below.`,

@@ -6,6 +6,7 @@ import { hashClaimToken, volunteerBalance } from '@/lib/invites';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
+	failInserts,
 	insertInvite,
 	insertPendingGrant,
 	insertUser,
@@ -135,6 +136,18 @@ describe('addVolunteer', () => {
 		});
 		await expect(grantRole('U_ADA')).resolves.toEqual([]);
 		expect(sendEmail).not.toHaveBeenCalled();
+	});
+
+	test('any other failure surfaces rather than posing as a duplicate', async () => {
+		const fault = await failInserts('volunteer');
+		try {
+			await expect(addVolunteer('U_ADA', '', '')).rejects.toThrow(
+				/insert into "volunteer"/,
+			);
+		} finally {
+			await fault.remove();
+		}
+		await expect(volunteerRow('U_ADA')).resolves.toBeFalsy();
 	});
 
 	test('a failed email still reports the grant as done', async () => {

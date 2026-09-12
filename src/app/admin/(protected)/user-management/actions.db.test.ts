@@ -3,7 +3,11 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, pendingGrant, user } from '@/db';
 import { signInAs } from '@/test/session';
-import { insertPendingGrant, insertUser } from '@/test/db/fixtures';
+import {
+	failInserts,
+	insertPendingGrant,
+	insertUser,
+} from '@/test/db/fixtures';
 
 vi.mock('@/data/slackMembers', () => ({
 	getSlackMembers: async () => [
@@ -134,6 +138,16 @@ describe('grantPendingAccess', () => {
 				grantedBy: 'Local dev',
 			}),
 		]);
+	});
+	test('any other failure surfaces rather than posing as a duplicate', async () => {
+		const fault = await failInserts('pending_grant');
+		try {
+			await expect(
+				grantPendingAccess('U_ADA', ['coc_reviewer']),
+			).rejects.toThrow(/insert into "pending_grant"/);
+		} finally {
+			await fault.remove();
+		}
 	});
 });
 

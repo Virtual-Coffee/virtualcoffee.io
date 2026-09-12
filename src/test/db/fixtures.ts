@@ -190,30 +190,37 @@ export async function insertPendingGrant(fields: {
 }
 
 /**
- * Make every ledger insert with this reason fail, until `remove()` is called.
+ * Make every insert into a table fail — optionally only rows matching a
+ * `when` clause over `new` — until `remove()` is called.
  *
  * A trigger rather than a mock, so the failure happens inside the real
  * transaction and what the test observes is Postgres rolling it back.
  * `afterEach` only truncates, so a test that installs one must remove it.
  */
-export async function failLedgerInserts(reason: VolunteerLedgerReason) {
+export async function failInserts(table: string, when = 'true') {
 	await db().execute(sql`
-		create or replace function test_fail_ledger_insert() returns trigger as $$
+		create or replace function test_fail_insert() returns trigger as $$
 		begin
-			raise exception 'ledger insert refused by test';
+			raise exception 'insert refused by test';
 		end
 		$$ language plpgsql
 	`);
-	await db().execute(sql`
-		create trigger test_fail_ledger_insert
-		before insert on volunteer_invite_ledger
-		for each row when (new.reason = ${sql.raw(`'${reason}'`)})
-		execute function test_fail_ledger_insert()
-	`);
+	await db().execute(
+		sql.raw(`
+		create trigger test_fail_insert
+		before insert on "${table}"
+		for each row when (${when})
+		execute function test_fail_insert()
+	`),
+	);
 	return {
 		remove: () =>
 			db().execute(
-				sql`drop trigger if exists test_fail_ledger_insert on volunteer_invite_ledger`,
+				sql.raw(`drop trigger if exists test_fail_insert on "${table}"`),
 			),
 	};
+}
+
+export function failLedgerInserts(reason: VolunteerLedgerReason) {
+	return failInserts('volunteer_invite_ledger', `new.reason = '${reason}'`);
 }

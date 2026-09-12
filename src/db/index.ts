@@ -46,3 +46,4 @@ export function db(): Database {
 }
 
 export * from './schema';
+export { isUniqueViolation } from './errors';
