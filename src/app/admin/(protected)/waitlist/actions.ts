@@ -138,6 +138,15 @@ export async function recordAttendance(
 	if (!application) {
 		return { ok: false, message: 'Application not found.', emailSent: false };
 	}
+	// The panel only offers this from coffee_invited, but a server action is
+	// reachable without the panel.
+	if (application.status !== 'coffee_invited') {
+		return {
+			ok: false,
+			message: `Can only record attendance after a Coffee invite, not from ${application.status}.`,
+			emailSent: false,
+		};
+	}
 
 	const now = new Date();
 	await db()
@@ -339,6 +348,11 @@ export async function addNote(
 ): Promise<ActionResult> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
+	const application = await getApplication(applicationId);
+
+	if (!application) {
+		return { ok: false, message: 'Application not found.', emailSent: false };
+	}
 
 	const trimmed = body.trim();
 	if (!trimmed) {

@@ -16,8 +16,10 @@ const sendEmail = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/email/transport', () => ({ sendEmail }));
 
 import {
+	addNote,
 	approveMembership,
 	declineApplication,
+	recordAttendance,
 	sendCoffeeInvite,
 	withdrawApplication,
 } from './actions';
@@ -227,6 +229,35 @@ describe('approveMembership', () => {
 		await expect(inviteRow(inviteId)).resolves.toMatchObject({
 			status: 'completed',
 		});
+	});
+});
+
+describe('recordAttendance and addNote', () => {
+	test('attendance is only recorded after a Coffee invite', async () => {
+		const invited = await insertApplication({ status: 'coffee_invited' });
+		await expect(recordAttendance(invited.id)).resolves.toEqual({ ok: true });
+		await expect(applicationRow(invited.id)).resolves.toMatchObject({
+			coffeeAttendedAt: expect.any(Date),
+		});
+
+		const declined = await insertApplication({ status: 'declined' });
+		await expect(recordAttendance(declined.id)).resolves.toMatchObject({
+			ok: false,
+			message: expect.stringContaining('not from declined'),
+		});
+		await expect(applicationRow(declined.id)).resolves.toMatchObject({
+			coffeeAttendedAt: null,
+		});
+	});
+
+	test('a note on a malformed or unknown id is a soft failure, not a 22P02', async () => {
+		await expect(addNote('not-a-uuid', 'hello')).resolves.toMatchObject({
+			ok: false,
+			message: 'Application not found.',
+		});
+		await expect(
+			addNote('01930000-0000-7000-8000-000000000000', 'hello'),
+		).resolves.toMatchObject({ ok: false, message: 'Application not found.' });
 	});
 });
 
