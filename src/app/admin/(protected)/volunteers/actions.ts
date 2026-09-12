@@ -25,6 +25,7 @@ import { sendEmail } from '@/lib/email/transport';
 import { newClaimToken, hashClaimToken } from '@/lib/invites';
 import { grantVolunteerRole, withoutVolunteerRole } from '@/lib/pendingGrants';
 import { parseRoles } from '@/lib/permissions';
+import { COMMUNITY_ROLES, formatRoleLabels } from '@/lib/volunteerRoles';
 import { pendingInvite } from '@/lib/volunteers';
 import { siteUrl } from '@/util/url.server';
 
@@ -39,6 +40,10 @@ function revalidate(volunteerId?: string) {
 const emailSchema = z
 	.email('That doesn’t look like an email address.')
 	.max(320);
+
+const roleLabelsSchema = z
+	.array(z.enum(COMMUNITY_ROLES, 'That isn’t one of the community roles.'))
+	.max(COMMUNITY_ROLES.length);
 
 /**
  * Make someone a Volunteer.
@@ -55,10 +60,19 @@ const emailSchema = z
  */
 export async function addVolunteer(
 	slackUserId: string,
-	roleLabels: string,
+	roleLabels: string[],
 	email: string,
 ): Promise<ActionResult> {
 	const session = await requirePermission('volunteers', 'manage');
+
+	const roles = roleLabelsSchema.safeParse(roleLabels);
+	if (!roles.success) {
+		return {
+			ok: false,
+			message:
+				roles.error.issues[0]?.message ?? 'Please check the community roles.',
+		};
+	}
 
 	const address = email.trim().toLowerCase();
 	if (address) {
@@ -87,7 +101,7 @@ export async function addVolunteer(
 				slackUserId: member.id,
 				slackDisplayName: member.displayName,
 				slackHandle: member.handle,
-				roleLabels: roleLabels.trim() || null,
+				roleLabels: formatRoleLabels(roles.data),
 				email: address || null,
 			});
 
@@ -157,6 +171,40 @@ export async function addVolunteer(
  * `grantVolunteerRole`: a pause withdraws a Pending Grant that carried only
  * `volunteer`, and someone who never signed in has nothing else to update.
  */
+/** Descriptive only, so no transaction, ledger row or grant — just the column. */
+export async function setRoleLabels(
+	volunteerId: string,
+	roleLabels: string[],
+): Promise<ActionResult> {
+	await requirePermission('volunteers', 'manage');
+
+	if (!isId(volunteerId)) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	const roles = roleLabelsSchema.safeParse(roleLabels);
+	if (!roles.success) {
+		return {
+			ok: false,
+			message:
+				roles.error.issues[0]?.message ?? 'Please check the community roles.',
+		};
+	}
+
+	const [row] = await db()
+		.update(volunteer)
+		.set({ roleLabels: formatRoleLabels(roles.data) })
+		.where(eq(volunteer.id, volunteerId))
+		.returning({ id: volunteer.id });
+
+	if (!row) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	revalidate(volunteerId);
+	return { ok: true, message: 'Roles updated.' };
+}
+
 export async function setVolunteerActive(
 	volunteerId: string,
 	active: boolean,

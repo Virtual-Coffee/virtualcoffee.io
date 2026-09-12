@@ -1,4 +1,5 @@
 import type { InviteStatus, VolunteerLedgerReason } from '@/db/schema';
+import { parseRoleLabels } from '@/lib/volunteerRoles';
 
 // The admin vocabulary for Invites and ledger movements — blunter than the
 // Volunteer's own in `/invites/presentation.tsx`, on purpose.
@@ -46,5 +47,21 @@ export function VolunteerStateBadge({
 		<span className="badge text-bg-light border">Paused</span>
 	) : (
 		<span className="badge text-bg-success">Active</span>
+	);
+}
+
+export function RoleChips({ roleLabels }: { roleLabels: string | null }) {
+	const labels = parseRoleLabels(roleLabels);
+	if (labels.length === 0) return null;
+	return (
+		<ul className="list-unstyled d-flex flex-wrap gap-1 mb-0">
+			{labels.map((label) => (
+				<li key={label}>
+					<span className="badge rounded-pill text-bg-light border fw-normal">
+						{label}
+					</span>
+				</li>
+			))}
+		</ul>
 	);
 }
