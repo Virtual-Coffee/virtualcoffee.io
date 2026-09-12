@@ -139,4 +139,22 @@ describe('githubUsername', () => {
 		expect(githubUsername('Give us one.').safeParse('').success).toBe(false);
 		expect(githubUsername().optional().safeParse(undefined).success).toBe(true);
 	});
+
+	test.each([
+		['a sub-page of a profile', 'https://github.com/octocat/followers'],
+		['a query string', 'octocat?tab=repositories'],
+		['a fragment', 'octocat#readme'],
+		['a leading hyphen', '-octocat'],
+		['a double hyphen', 'octo--cat'],
+		['an email', 'octocat@example.test'],
+		['forty characters', 'a'.repeat(40)],
+	])('refuses %s after normalising', (_label, input) => {
+		expect(githubUsername().safeParse(input).success).toBe(false);
+	});
+
+	test('a hyphenated name of the maximum length is fine', () => {
+		expect(githubUsername().parse('octo-cat-' + 'x'.repeat(30))).toBe(
+			'octo-cat-' + 'x'.repeat(30),
+		);
+	});
 });

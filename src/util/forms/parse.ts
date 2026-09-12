@@ -79,16 +79,29 @@ export function staleForm(): NonNullable<FormState> {
 }
 
 /**
+ * GitHub's own rule: alphanumerics and single hyphens, not at either end, at
+ * most 39 characters. Checked *after* the normalisation below, so a pasted
+ * `github.com/octocat/followers` or `octocat?tab=repos` is refused rather
+ * than stored as a username that resolves to something else.
+ */
+const GITHUB_USERNAME = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+
+/**
  * A GitHub username field. Accepts a pasted profile URL or an @handle as well
  * as a bare username. `required` is the message for a blank value; leave it
  * out and append `.optional()` for a field that may be skipped.
  */
 export function githubUsername(required?: string) {
 	const base = z.string().trim();
-	return (required ? base.min(1, required) : base).max(100).transform((value) =>
-		value
-			.replace(/^https?:\/\/(www\.)?github\.com\//i, '')
-			.replace(/^@/, '')
-			.replace(/\/$/, ''),
-	);
+	return (required ? base.min(1, required) : base)
+		.max(100)
+		.transform((value) =>
+			value
+				.replace(/^https?:\/\/(www\.)?github\.com\//i, '')
+				.replace(/^@/, '')
+				.replace(/\/$/, ''),
+		)
+		.refine((value) => value === '' || GITHUB_USERNAME.test(value), {
+			message: 'That doesn’t look like a GitHub username.',
+		});
 }
