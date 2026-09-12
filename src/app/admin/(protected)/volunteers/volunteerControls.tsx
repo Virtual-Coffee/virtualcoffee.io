@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 
-import { filterSlackMembers, type SlackMember } from '@/lib/slackMemberPicker';
+import type { SlackMember } from '@/lib/slackMemberPicker';
 import {
 	COMMUNITY_ROLES,
 	type CommunityRole,
 	parseRoleLabels,
 } from '@/lib/volunteerRoles';
 import { useAction } from '@/util/forms/useAction';
+import { SlackMemberCombobox } from '../slackMemberCombobox';
 import { useDropdown } from '../useDropdown';
 import {
 	addVolunteer,
@@ -18,22 +19,17 @@ import {
 	setVolunteerActive,
 } from './actions';
 
+type Candidate = SlackMember & { alreadyVolunteer: boolean };
+
 /**
  * Make someone a Volunteer, picked out of the Slack directory. Existing
  * Volunteers are shown disabled with the reason rather than hidden.
  */
-export function AddVolunteerForm({
-	candidates,
-}: {
-	candidates: (SlackMember & { alreadyVolunteer: boolean })[];
-}) {
+export function AddVolunteerForm({ candidates }: { candidates: Candidate[] }) {
 	const { run, pending, feedback } = useAction();
-	const [query, setQuery] = useState('');
-	const [selected, setSelected] = useState<string | null>(null);
+	const [selected, setSelected] = useState<Candidate | null>(null);
 	const [roleLabels, setRoleLabels] = useState<CommunityRole[]>([]);
 	const [email, setEmail] = useState('');
-
-	const matches = filterSlackMembers(candidates, query);
 
 	return (
 		<div className="card">
@@ -41,51 +37,19 @@ export function AddVolunteerForm({
 				<h2 className="h6 text-body-secondary">Add a volunteer</h2>
 
 				<div className="mb-3">
-					<label className="form-label" htmlFor="volunteer-search">
-						Search Slack
-					</label>
-					<input
+					<SlackMemberCombobox
 						id="volunteer-search"
-						className="form-control"
-						value={query}
-						onChange={(event) => {
-							setQuery(event.target.value);
-							setSelected(null);
-						}}
+						label="Search Slack"
 						placeholder="Name or @handle"
+						candidates={candidates}
+						selected={selected}
+						disabled={pending}
+						onSelect={setSelected}
+						unavailable={(member) =>
+							member.alreadyVolunteer ? 'already a volunteer' : null
+						}
 					/>
 				</div>
-
-				{query.trim() && (
-					<ul
-						className="list-unstyled border rounded mb-3 overflow-auto"
-						style={{ maxHeight: '14rem' }}
-					>
-						{matches.length === 0 && (
-							<li className="px-3 py-2 text-body-secondary small">
-								Nobody matches that.
-							</li>
-						)}
-						{matches.map((member) => (
-							<li key={member.id} className="border-bottom">
-								<button
-									type="button"
-									className={`btn btn-link text-decoration-none text-start w-100 px-3 py-2${
-										selected === member.id ? ' fw-semibold' : ''
-									}`}
-									disabled={member.alreadyVolunteer || pending}
-									onClick={() => setSelected(member.id)}
-								>
-									{member.displayName}
-									<span className="d-block small text-body-secondary">
-										@{member.handle}
-										{member.alreadyVolunteer && ' · already a volunteer'}
-									</span>
-								</button>
-							</li>
-						))}
-					</ul>
-				)}
 
 				<div className="mb-3">
 					<label className="form-label" htmlFor="volunteer-email">
@@ -126,11 +90,13 @@ export function AddVolunteerForm({
 					disabled={!selected || pending}
 					onClick={() => {
 						if (!selected) return;
-						run(() => addVolunteer(selected, roleLabels, email));
-						setSelected(null);
-						setQuery('');
-						setRoleLabels([]);
-						setEmail('');
+						run(() => addVolunteer(selected.id, roleLabels, email), {
+							onSuccess: () => {
+								setSelected(null);
+								setRoleLabels([]);
+								setEmail('');
+							},
+						});
 					}}
 				>
 					{pending ? 'Adding…' : 'Add volunteer'}
