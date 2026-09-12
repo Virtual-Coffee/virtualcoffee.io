@@ -5,10 +5,11 @@ import { configDefaults, defineConfig } from 'vitest/config';
  * Two projects, told apart by filename:
  *
  * - `unit` is every `*.test.ts` that needs nothing running. The default.
- * - `db` is reserved for `*.db.test.ts`. It is empty today; when the first one
- *   lands it gets a `globalSetup` that starts `@netlify/database-dev` (the
- *   PGlite engine `netlify dev` already uses) and applies the migrations, and a
- *   setup file that points `NETLIFY_DB_URL` at it. Nothing else has to change.
+ * - `db` is every `*.db.test.ts`. Its `globalSetup` starts
+ *   `@netlify/database-dev` (the PGlite engine `netlify dev` already uses)
+ *   and applies the migrations; its setup file points `NETLIFY_DB_URL` at it
+ *   and truncates the tables between tests. Tests authenticate through the
+ *   dev-bypass session (`src/test/session.ts`), not by mocking auth.
  *
  * `@/` is resolved here rather than through vite-tsconfig-paths — it is the
  * only alias, and one line beats a dependency.
@@ -19,14 +20,15 @@ export default defineConfig({
 	},
 	test: {
 		environment: 'node',
-		// Root-level on purpose: per-project it does not cover `--project db`
-		// while that project is still empty.
-		passWithNoTests: true,
 		projects: [
 			{
 				test: {
 					name: 'unit',
-					include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'],
+					include: [
+						'src/**/*.test.ts',
+						'scripts/**/*.test.ts',
+						'netlify/**/*.test.ts',
+					],
 					exclude: [...configDefaults.exclude, '**/*.db.test.ts'],
 				},
 			},
@@ -34,6 +36,8 @@ export default defineConfig({
 				test: {
 					name: 'db',
 					include: ['**/*.db.test.ts'],
+					globalSetup: ['./src/test/db/globalSetup.ts'],
+					setupFiles: ['./src/test/db/setup.ts'],
 					// One in-memory database per run, so files must not race.
 					fileParallelism: false,
 				},
@@ -51,7 +55,10 @@ export default defineConfig({
 			exclude: [
 				// Pages and components: a unit runner cannot render async Server
 				// Components (Next's own guidance), so listing them is only noise.
-				'src/app/**',
+				// Pages and routes render; the server actions are logic and are
+				// exercised through their tests.
+				'src/app/**/!(action|actions).*',
+				'src/test/**',
 				'**/*.tsx',
 				// Codegen (gitignored) and the generated, checked-in bot list.
 				'src/data/members/core.ts',
