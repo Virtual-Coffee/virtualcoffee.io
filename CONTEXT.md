@@ -120,8 +120,9 @@ _Avoid_: Group application
 ## Events
 
 **Events Calendar**:
-The single public calendar that holds every Series and Event the community
-runs. Anyone can subscribe to it; the site and the Slack bots read it.
+The single calendar that holds every Series and Event the community runs.
+Readable by everyone in the virtualcoffee.io Google Workspace, and by the site
+and the Slack bots through one service account; not public.
 _Avoid_: Calendar, Google Calendar, CMS
 
 **Series**:
@@ -138,6 +139,12 @@ _Avoid_: Meeting, session, instance, occurrence, calendar event
 The URL people follow to attend an Event. The same for every Event of a
 Series unless one Event's is changed.
 _Avoid_: Zoom link, location, join URL
+
+**Host Code**:
+The Zoom host key for an Event, kept on the Events Calendar where only the
+admin page can set it. The Slack bots show it to the host; a Zoom Event has
+one or the bots will not announce it.
+_Avoid_: Host key, hostCode, Zoom key, password
 
 **Cancel**:
 Declare that one Event will not happen. The Series continues.

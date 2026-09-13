@@ -54,6 +54,8 @@ export type Series = {
 	/** As stored: plain text or HTML, whichever the maintainer wrote. */
 	description: string;
 	joinLink: string;
+	/** `extendedProperties.private.hostCode`; '' when there is none. */
+	hostCode: string;
 	recurrence: Recurrence;
 	recurrenceText: string;
 	/** The first Event, in the display zone. */
@@ -82,6 +84,7 @@ export type SeriesInput = {
 	title: string;
 	description: string;
 	joinLink: string;
+	hostCode: string;
 	date: string;
 	startTime: string;
 	endTime: string;
@@ -112,6 +115,34 @@ export class CalendarConflictError extends Error {
  */
 export function isCalendarEventId(value: string): boolean {
 	return /^[A-Za-z0-9_@.-]{5,1024}$/.test(value);
+}
+
+/**
+ * The same test the bots apply (`src/zoom/join-link.ts` in vc-bots): a Zoom
+ * join URL is what makes a Host Code mandatory, because the bots refuse to
+ * announce a Zoom Event without one.
+ */
+export function isZoomJoinLink(url: string): boolean {
+	return /zoom\.us\/j\/(\d{9,11})(?:[/?#]|$)/.test(url);
+}
+
+/** The Host Code as the bots read it: trimmed, empty is none. */
+function hostCodeOf(event: calendar_v3.Schema$Event): string {
+	return event.extendedProperties?.private?.hostCode?.trim() ?? '';
+}
+
+/**
+ * Private properties are per calendar copy and the Google UI cannot edit
+ * them, so the admin page owns `hostCode` (docs/adr/0014). The map is
+ * replaced whole on a patch, so whatever else is there is carried over.
+ */
+function withHostCode(
+	existing: calendar_v3.Schema$Event | null,
+	hostCode: string,
+): Pick<calendar_v3.Schema$Event, 'extendedProperties'> {
+	const current = existing?.extendedProperties?.private ?? {};
+	if (!existing && !hostCode) return {};
+	return { extendedProperties: { private: { ...current, hostCode } } };
 }
 
 function isConflict(error: unknown): boolean {
@@ -217,6 +248,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 			title: event.summary ?? '',
 			description: event.description ?? '',
 			joinLink: event.location ?? '',
+			hostCode: hostCodeOf(event),
 			recurrence,
 			recurrenceText: describeRecurrence(recurrence),
 			date: start.date,
@@ -400,6 +432,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 			sendUpdates: 'none',
 			requestBody: {
 				...body(input),
+				...withHostCode(null, input.hostCode),
 				recurrence: [serializeRecurrence(input.recurrence)],
 			},
 		});
@@ -415,6 +448,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		const existing = await current(id, etag);
 		await patch(id, etag, {
 			...body(input),
+			...withHostCode(existing, input.hostCode),
 			...(input.recurrence
 				? {
 						recurrence: withRule(
@@ -468,7 +502,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		const { data } = await client.events.insert({
 			calendarId,
 			sendUpdates: 'none',
-			requestBody: body(input),
+			requestBody: { ...body(input), ...withHostCode(null, input.hostCode) },
 		});
 		return data.id ?? '';
 	}
