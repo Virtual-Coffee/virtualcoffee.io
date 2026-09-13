@@ -12,6 +12,7 @@ import {
 	withdrawApplication,
 } from '../actions';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
+import { ARCHIVE_STATUSES } from '@/lib/applications';
 import type { EmailStatus } from '@/lib/email/transport';
 import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
 import { CloseDialog } from './closeDialog';
@@ -126,7 +127,8 @@ export function ActionPanel(props: Props) {
 					</button>
 				)}
 
-				{props.status !== 'member' && (
+				{/* The archive links here too; a closed application has nothing left to close. */}
+				{!ARCHIVE_STATUSES.includes(props.status) && (
 					<>
 						<button
 							type="button"
