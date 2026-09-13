@@ -40,12 +40,16 @@ properties at all.
 and the bots read the same Events Calendar with the same service account;
 `/admin/events` is a client of the Calendar API and stores nothing of its
 own. Recurrence, exceptions, Cancels and Reschedules are Google's, so the
-admin page exposes them rather than reimplementing them: a Cancel or Restore
-is the instance's `status`, a Reschedule is the instance's `start`/`end`,
-and a Series edit is a patch of the recurring event — applied to every
-Event of it, past ones included, with Google keeping the exceptions. "This
-and following", which Google does by splitting the Series, stays in Google's
-UI.
+admin page exposes them rather than reimplementing them: a Cancel is the
+instance's `status`, a Reschedule is the instance's `start`/`end`, a Restore
+puts both back (`confirmed`, at `originalStartTime` with the Series'
+duration), and a Series edit is a patch of the recurring event — applied to
+every Event of it, past ones included, with Google keeping the exceptions.
+The Series page lists the Series' Cancelled and Rescheduled Events for the
+next twelve months from `events.instances` and can Cancel any Event in that
+window, so a holiday is Cancelled when it is planned rather than when it
+reaches the thirty-day list. "This and following", which Google does by
+splitting the Series, stays in Google's UI.
 
 **The Join Link is the event's `location`.** It is the field Google shows
 and lets a maintainer edit, and it is what every Series already carries. The

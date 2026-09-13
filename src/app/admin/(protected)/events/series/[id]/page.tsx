@@ -6,6 +6,7 @@ import { connectEventsCalendar, isCalendarEventId } from '@/lib/eventsCalendar';
 import { EventsBreadcrumb } from '../../breadcrumb';
 import { EndSeriesSection } from '../../endSeriesSection';
 import { NotConfigured } from '../../presentation';
+import { SeriesChangedEvents } from '../../seriesChangedEvents';
 import { SeriesForm } from '../../seriesForm';
 
 export const dynamic = 'force-dynamic';
@@ -40,6 +41,7 @@ export default async function EditSeriesPage({
 		throw error;
 	});
 	if (!series) notFound();
+	const events = await calendar.listSeriesEvents(id, { months: 12 });
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -57,10 +59,15 @@ export default async function EditSeriesPage({
 					</a>
 				)}
 			</div>
-			<div className="col-lg-7">
-				{/* Keyed on the etag so a refresh after a save resets the draft. */}
-				<SeriesForm key={series.etag} series={series} />
-				<EndSeriesSection series={series} />
+			<div className="row g-4">
+				<div className="col-lg-7">
+					{/* Keyed on the etag so a refresh after a save resets the draft. */}
+					<SeriesForm key={series.etag} series={series} />
+					<EndSeriesSection series={series} />
+				</div>
+				<div className="col-lg-5">
+					<SeriesChangedEvents events={events} />
+				</div>
 			</div>
 		</div>
 	);
