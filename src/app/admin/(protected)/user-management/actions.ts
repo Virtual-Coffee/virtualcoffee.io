@@ -66,6 +66,14 @@ function revalidate() {
 	revalidatePath('/admin');
 }
 
+const STALE_ROLES =
+	'Their roles changed while you were editing. Reload the page.';
+
+/** `user.role` is nullable, and `eq(column, null)` never matches. */
+function sameRole(column: typeof user.role, value: string | null) {
+	return value === null ? isNull(column) : eq(column, value);
+}
+
 /** Replace someone's roles outright; `serialiseRoles` owns the encoding. */
 export async function setUserRoles(
 	userId: string,
@@ -105,6 +113,11 @@ export async function setUserRoles(
 	const resulting = preserveUngrantedRoles(target.role, requested);
 	const granting = resulting.length > 0;
 
+	/**
+	 * Pinned to the role string that was read. `resulting` was computed from it,
+	 * and `grantVolunteerRole` writes the same column from its own transaction;
+	 * an unpinned update would overwrite a `volunteer` added in between.
+	 */
 	const result = await db()
 		.update(user)
 		.set({
@@ -112,15 +125,12 @@ export async function setUserRoles(
 			roleGrantedAt: granting ? new Date() : null,
 			roleGrantedBy: granting ? session.user.name || session.user.email : null,
 		})
-		.where(eq(user.id, userId));
+		.where(and(eq(user.id, userId), sameRole(user.role, target.role)));
 
-	// An id that matches nobody is a stale page, not a success — saying "ok"
-	// would leave the maintainer believing they had granted something.
+	// A row that no longer matches is a stale page, not a success — saying
+	// "ok" would leave the maintainer believing they had granted something.
 	if (result.rowCount === 0) {
-		return {
-			ok: false,
-			message: 'That person no longer exists. Reload the page.',
-		};
+		return { ok: false, message: STALE_ROLES };
 	}
 
 	revalidate();
@@ -236,16 +246,20 @@ export async function setPendingGrantRoles(
 		};
 	}
 
+	// Pinned to the role that was read, for the same reason as `setUserRoles`.
 	const result = await db()
 		.update(pendingGrant)
 		.set({ role: serialiseRoles(resulting) })
-		.where(and(eq(pendingGrant.id, grantId), isNull(pendingGrant.claimedAt)));
+		.where(
+			and(
+				eq(pendingGrant.id, grantId),
+				isNull(pendingGrant.claimedAt),
+				eq(pendingGrant.role, grant.role),
+			),
+		);
 
 	if (result.rowCount === 0) {
-		return {
-			ok: false,
-			message: 'That grant has already been claimed. Reload the page.',
-		};
+		return { ok: false, message: STALE_ROLES };
 	}
 
 	revalidate();
@@ -302,15 +316,19 @@ export async function revokePendingGrant(
 		};
 	}
 
+	// The role check above only holds for the role that was read.
 	const result = await db()
 		.delete(pendingGrant)
-		.where(and(eq(pendingGrant.id, grantId), isNull(pendingGrant.claimedAt)));
+		.where(
+			and(
+				eq(pendingGrant.id, grantId),
+				isNull(pendingGrant.claimedAt),
+				eq(pendingGrant.role, grant.role),
+			),
+		);
 
 	if (result.rowCount === 0) {
-		return {
-			ok: false,
-			message: 'That grant has already been claimed. Reload the page.',
-		};
+		return { ok: false, message: STALE_ROLES };
 	}
 
 	revalidate();
