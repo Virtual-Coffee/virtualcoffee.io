@@ -12,6 +12,7 @@ export function TextField({
 	onChange,
 	type = 'text',
 	required,
+	inputMode,
 }: {
 	id: string;
 	label: string;
@@ -20,6 +21,7 @@ export function TextField({
 	onChange: (value: string) => void;
 	type?: 'text' | 'url';
 	required?: boolean;
+	inputMode?: 'numeric';
 }) {
 	return (
 		<div className="mb-3">
@@ -32,10 +34,36 @@ export function TextField({
 				className="form-control form-control-sm"
 				value={value}
 				required={required}
+				inputMode={inputMode}
 				onChange={(event) => onChange(event.target.value)}
 			/>
 			{help && <div className="form-text">{help}</div>}
 		</div>
+	);
+}
+
+/**
+ * The Zoom host key, kept on the Events Calendar for the Slack bots. The
+ * Google UI cannot edit it, so this field is the only place it is set.
+ */
+export function HostCodeField({
+	id,
+	value,
+	onChange,
+}: {
+	id: string;
+	value: string;
+	onChange: (value: string) => void;
+}) {
+	return (
+		<TextField
+			id={id}
+			label="Zoom host code"
+			value={value}
+			onChange={onChange}
+			inputMode="numeric"
+			help="Required for a Zoom Join Link. The Slack bots show it to the host; anyone who can read the calendar through the API can see it."
+		/>
 	);
 }
 

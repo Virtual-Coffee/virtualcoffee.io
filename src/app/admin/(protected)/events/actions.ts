@@ -10,6 +10,7 @@ import {
 	CalendarConflictError,
 	connectEventsCalendar,
 	isCalendarEventId,
+	isZoomJoinLink,
 	type EventsCalendar,
 } from '@/lib/eventsCalendar';
 import { calendarDelivery, deployContext } from '@/lib/outbound';
@@ -39,11 +40,22 @@ const timeInputSchema = z
 		path: ['endTime'],
 	});
 
-const eventInputSchema = timeInputSchema.safeExtend({
-	title: z.string().trim().min(1, 'Give it a title.').max(200),
-	description: z.string().max(8000, 'The description is too long.'),
-	joinLink: z.url('The Join Link has to be a full URL.').max(2000),
-});
+const eventInputSchema = timeInputSchema
+	.safeExtend({
+		title: z.string().trim().min(1, 'Give it a title.').max(200),
+		description: z.string().max(8000, 'The description is too long.'),
+		joinLink: z.url('The Join Link has to be a full URL.').max(2000),
+		hostCode: z
+			.string()
+			.trim()
+			.regex(/^(\d{6,10})?$/, 'A Zoom host code is 6–10 digits.'),
+	})
+	// The bots refuse to announce a Zoom Event without its Host Code.
+	.refine((value) => !isZoomJoinLink(value.joinLink) || value.hostCode, {
+		message:
+			'A Zoom Join Link needs its host code, or the Slack bots cannot announce it.',
+		path: ['hostCode'],
+	});
 
 const endsSchema = z.discriminatedUnion('kind', [
 	z.object({ kind: z.literal('never') }),
@@ -117,15 +129,18 @@ function revalidate() {
 
 /**
  * Every write goes through here: the Delivery Mode first (docs/adr/0013),
- * then the calendar, then the caches. `describe` is the log line and the
- * captured message; `write` returns the success message.
+ * then the calendar, then the caches. `label` is a literal naming the
+ * operation — the only thing logged, so nothing a maintainer typed reaches
+ * the log; `describe` names the target in the captured message; `write`
+ * returns the success message.
  */
 async function write(
+	label: string,
 	describe: string,
 	write: (calendar: EventsCalendar) => Promise<string>,
 ): Promise<ActionResult> {
 	if (calendarDelivery() === 'captured') {
-		console.info(`[calendar captured] ${describe}`);
+		console.info(`[calendar captured] ${label}`);
 		return {
 			ok: true,
 			message: `Captured (${deployContext()}): ${describe} — nothing was written to the Events Calendar.`,
@@ -158,10 +173,14 @@ export async function createSeries(input: unknown): Promise<ActionResult> {
 	if (!parsed.success) return firstIssue(parsed.error, 'Check the Series.');
 	const { recurrence, ...rest } = parsed.data;
 	if (!recurrence) return { ok: false, message: 'Say how the Series repeats.' };
-	return write(`create Series “${parsed.data.title}”`, async (calendar) => {
-		await calendar.createSeries({ ...rest, recurrence });
-		return `“${parsed.data.title}” is on the Events Calendar.`;
-	});
+	return write(
+		'create Series',
+		`create Series “${parsed.data.title}”`,
+		async (calendar) => {
+			await calendar.createSeries({ ...rest, recurrence });
+			return `“${parsed.data.title}” is on the Events Calendar.`;
+		},
+	);
 }
 
 export async function updateSeries(
@@ -174,7 +193,7 @@ export async function updateSeries(
 	if (missing) return missing;
 	const parsed = seriesUpdateSchema.safeParse(input);
 	if (!parsed.success) return firstIssue(parsed.error, 'Check the Series.');
-	return write(`update Series ${id}`, async (calendar) => {
+	return write('update Series', `update Series ${id}`, async (calendar) => {
 		await calendar.updateSeries(id, etag, parsed.data);
 		return `“${parsed.data.title}” is updated, every Event of it.`;
 	});
@@ -187,7 +206,7 @@ export async function endSeries(
 	await requirePermission('events', 'manage');
 	const missing = target(id, etag);
 	if (missing) return missing;
-	return write(`end Series ${id}`, async (calendar) => {
+	return write('end Series', `end Series ${id}`, async (calendar) => {
 		const outcome = await calendar.endSeries(id, etag);
 		return outcome === 'deleted'
 			? 'The Series never ran, so it was removed from the Events Calendar.'
@@ -199,10 +218,14 @@ export async function createEvent(input: unknown): Promise<ActionResult> {
 	await requirePermission('events', 'manage');
 	const parsed = eventInputSchema.safeParse(input);
 	if (!parsed.success) return firstIssue(parsed.error, 'Check the Event.');
-	return write(`create Event “${parsed.data.title}”`, async (calendar) => {
-		await calendar.createEvent(parsed.data);
-		return `“${parsed.data.title}” is on the Events Calendar.`;
-	});
+	return write(
+		'create Event',
+		`create Event “${parsed.data.title}”`,
+		async (calendar) => {
+			await calendar.createEvent(parsed.data);
+			return `“${parsed.data.title}” is on the Events Calendar.`;
+		},
+	);
 }
 
 export async function cancelEvent(
@@ -212,7 +235,7 @@ export async function cancelEvent(
 	await requirePermission('events', 'manage');
 	const missing = target(id, etag);
 	if (missing) return missing;
-	return write(`cancel Event ${id}`, async (calendar) => {
+	return write('cancel Event', `cancel Event ${id}`, async (calendar) => {
 		await calendar.cancelEvent(id, etag);
 		return 'Cancelled. It stays listed here so it can be restored.';
 	});
@@ -225,7 +248,7 @@ export async function restoreEvent(
 	await requirePermission('events', 'manage');
 	const missing = target(id, etag);
 	if (missing) return missing;
-	return write(`restore Event ${id}`, async (calendar) => {
+	return write('restore Event', `restore Event ${id}`, async (calendar) => {
 		await calendar.restoreEvent(id, etag);
 		return 'Restored.';
 	});
@@ -241,8 +264,12 @@ export async function rescheduleEvent(
 	if (missing) return missing;
 	const parsed = timeInputSchema.safeParse(when);
 	if (!parsed.success) return firstIssue(parsed.error, 'Check the time.');
-	return write(`reschedule Event ${id}`, async (calendar) => {
-		await calendar.rescheduleEvent(id, etag, parsed.data);
-		return 'Rescheduled.';
-	});
+	return write(
+		'reschedule Event',
+		`reschedule Event ${id}`,
+		async (calendar) => {
+			await calendar.rescheduleEvent(id, etag, parsed.data);
+			return 'Rescheduled.';
+		},
+	);
 }
