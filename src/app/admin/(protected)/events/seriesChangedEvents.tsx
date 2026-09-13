@@ -8,7 +8,7 @@ import { useAction } from '@/util/forms/useAction';
 
 import { cancelEvent } from './actions';
 import { RowActions } from './eventsTable';
-import { EventStatusBadge, eventWhen } from './presentation';
+import { EventStatusBadge, EventWhen, eventWhen } from './presentation';
 
 /**
  * The Events of one Series that no longer follow its rule — Cancelled or
@@ -56,11 +56,11 @@ export function SeriesChangedEvents({ events }: { events: AdminEvent[] }) {
 										className={cancelled ? 'text-body-tertiary' : ''}
 									>
 										<td className="small">
-											{cancelled ? (
-												<s>{eventWhen(event.start, event.end)}</s>
-											) : (
-												eventWhen(event.start, event.end)
-											)}
+											<EventWhen
+												start={event.start}
+												end={event.end}
+												struck={cancelled}
+											/>
 											{event.rescheduled && event.originalStart && (
 												<div className="text-body-secondary">
 													Was{' '}

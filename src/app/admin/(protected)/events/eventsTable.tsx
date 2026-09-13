@@ -7,7 +7,7 @@ import type { AdminEvent } from '@/lib/eventsCalendar';
 import { useAction } from '@/util/forms/useAction';
 
 import { cancelEvent, rescheduleEvent, restoreEvent } from './actions';
-import { EventStatusBadge, eventWhen } from './presentation';
+import { EventStatusBadge, EventWhen, eventWhen } from './presentation';
 import { RescheduleDialog } from './rescheduleDialog';
 
 /**
@@ -123,11 +123,11 @@ export function EventsTable({
 								className={cancelled ? 'text-body-tertiary' : ''}
 							>
 								<td className="small text-nowrap">
-									{cancelled ? (
-										<s>{eventWhen(event.start, event.end)}</s>
-									) : (
-										eventWhen(event.start, event.end)
-									)}
+									<EventWhen
+										start={event.start}
+										end={event.end}
+										struck={cancelled}
+									/>
 								</td>
 								<td>
 									{event.seriesId && canManage ? (
