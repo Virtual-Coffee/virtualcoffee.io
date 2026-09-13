@@ -30,9 +30,10 @@ declare namespace NodeJS {
 		// production's OAuth callback, and this encrypts what crosses over.
 		OAUTH_PROXY_SECRET?: string;
 
-		// Transactional email via Google Workspace SMTP
+		// Transactional email via Google Workspace SMTP, XOAUTH2 as a service
+		// account (the JSON key file, whole) impersonating the user.
 		GOOGLE_SMTP_USER?: string;
-		GOOGLE_SMTP_APP_PASSWORD?: string;
+		GMAIL_SERVICE_ACCOUNT_KEY?: string;
 		// Delivery Mode outside production (docs/adr/0013): email is captured
 		// unless redirected to this one address; Slack/GitHub are captured
 		// unless this is the literal `true`.

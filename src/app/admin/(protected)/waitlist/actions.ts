@@ -14,11 +14,10 @@ import { checkNote } from '@/lib/admin/notes';
 import { actorId, requirePermission } from '@/lib/access/adminAccess';
 import type { Session } from '@/lib/access/auth';
 import { sendEmail } from '@/lib/email/transport';
-import {
-	coffeeInviteEmail,
-	slackInviteEmail,
-	welcomeEmail,
-} from '@/lib/email/templates';
+import { renderEmail, type RenderedEmail } from '@/lib/email/render';
+import { coffeeInvite } from '@/emails/coffeeInvite';
+import { slackInvite } from '@/emails/slackInvite';
+import { welcome } from '@/emails/welcome';
 import {
 	createSlackInviteToken,
 	expireSlackInviteToken,
@@ -103,15 +102,14 @@ async function emailApplicant(
 	opened: OpenedOk,
 	copyMe: boolean,
 	what: string,
-	template: { subject: string; text: string },
+	email: RenderedEmail,
 	rollback?: () => Promise<unknown>,
 ): Promise<Outbound> {
 	const { session, actor, application, subject } = opened;
 
 	const sent = await sendEmail({
 		to: application.email,
-		subject: template.subject,
-		text: template.text,
+		...email,
 		cc: copyMe ? session.user.email : null,
 	});
 	if (sent.ok) return sent;
@@ -197,7 +195,7 @@ export async function sendCoffeeInvite(
 		opened,
 		copyMe,
 		'Coffee invite',
-		coffeeInviteEmail(application.name),
+		await renderEmail(coffeeInvite, { name: application.name }),
 	);
 	if (!sent.ok) return emailFailed(sent);
 
@@ -287,7 +285,7 @@ export async function approveMembership(
 		opened,
 		copyMe,
 		'Welcome email',
-		welcomeEmail(application.name),
+		await renderEmail(welcome, { name: application.name }),
 		expireToken,
 	);
 	if (!welcomeSent.ok) return emailFailed(welcomeSent);
@@ -296,7 +294,10 @@ export async function approveMembership(
 		opened,
 		copyMe,
 		'Slack invite',
-		slackInviteEmail(application.name, `${siteUrl()}/join-slack?code=${token}`),
+		await renderEmail(slackInvite, {
+			name: application.name,
+			inviteUrl: `${siteUrl()}/join-slack?code=${token}`,
+		}),
 		expireToken,
 	);
 	if (!slackSent.ok) {
@@ -375,10 +376,10 @@ export async function resendSlackInvite(
 		opened,
 		copyMe,
 		'Slack invite re-send',
-		slackInviteEmail(
-			application.name,
-			`${siteUrl()}/join-slack?code=${minted.token}`,
-		),
+		await renderEmail(slackInvite, {
+			name: application.name,
+			inviteUrl: `${siteUrl()}/join-slack?code=${minted.token}`,
+		}),
 		// Only this request's link: the previous one is still the one the
 		// member holds.
 		() => expireSlackInviteToken(minted.id, new Date()),

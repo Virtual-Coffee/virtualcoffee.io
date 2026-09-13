@@ -116,8 +116,14 @@ describe('accrual', () => {
 		expect(sendEmail).toHaveBeenCalledWith({
 			to: 'grace@example.test',
 			subject: 'You have 3 Virtual Coffee invites',
-			text: expect.stringMatching(
-				/^Hi Grace,[\s\S]*https:\/\/virtualcoffee\.io\/invites/,
+			html: expect.schemaMatching(
+				z.string().includes('href="https://virtualcoffee.io/invites"'),
+			),
+			text: expect.schemaMatching(
+				z
+					.string()
+					.startsWith('Hi Grace,')
+					.includes('https://virtualcoffee.io/invites'),
 			),
 		});
 		expect(sendEmail).toHaveBeenCalledWith(
@@ -125,6 +131,7 @@ describe('accrual', () => {
 				z.object({
 					to: z.literal('ada-account@example.test'),
 					subject: z.string().min(1),
+					html: z.string().includes('/invites'),
 					text: z.string().includes('/invites'),
 				}),
 			),

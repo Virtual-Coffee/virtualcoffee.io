@@ -8,13 +8,11 @@ import {
 	getApplication,
 	getApplicationInviter,
 } from '@/lib/waitlist/applications';
+import { coffeeInvite } from '@/emails/coffeeInvite';
+import { slackInvite } from '@/emails/slackInvite';
+import { welcome } from '@/emails/welcome';
 import { ARCHIVE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import { history } from '@/lib/history/eventLog';
-import {
-	coffeeInviteEmail,
-	slackInviteEmail,
-	welcomeEmail,
-} from '@/lib/email/templates';
 import { emailStatus } from '@/lib/email/transport';
 import { ActionPanel } from './actionPanel';
 import { HistoryTimeline } from '../../historyTimeline';
@@ -183,12 +181,28 @@ export default async function ApplicationDetailPage({
 										: null
 								}
 								emailStatus={emailStatus()}
-								coffeeInvite={coffeeInviteEmail(application.name)}
-								welcome={welcomeEmail(application.name)}
-								slackInvite={slackInviteEmail(
-									application.name,
-									'https://virtualcoffee.io/join-slack?code=…',
-								)}
+								coffeeInvite={{
+									subject: coffeeInvite.subject({ name: application.name }),
+									body: <coffeeInvite.Content name={application.name} />,
+								}}
+								welcome={{
+									subject: welcome.subject({ name: application.name }),
+									body: <welcome.Content name={application.name} />,
+								}}
+								slackInvite={{
+									subject: slackInvite.subject({
+										name: application.name,
+										inviteUrl: '',
+									}),
+									// The real link is minted at send time; a placeholder
+									// stands in so the preview reads as it will.
+									body: (
+										<slackInvite.Content
+											name={application.name}
+											inviteUrl="https://virtualcoffee.io/join-slack?code=…"
+										/>
+									),
+								}}
 							/>
 						</div>
 					</section>
