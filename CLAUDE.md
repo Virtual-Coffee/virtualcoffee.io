@@ -18,7 +18,7 @@ Before editing files for a substantial task:
 
 ## Overview
 
-virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS/JSON and build-time fetches from GitHub and a Craft CMS, both of which fall back to mock data when credentials are absent. Airtable remains only behind the form submissions, which return an error state without credentials.
+virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS/JSON and build-time fetches from GitHub and Google Calendar, both of which fall back to mock data when credentials are absent. Airtable remains only behind the form submissions, which return an error state without credentials.
 
 ## Commands
 
