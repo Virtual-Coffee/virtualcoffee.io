@@ -102,7 +102,11 @@ export async function inviteForClaimToken(token: string): Promise<{
 
 	if (!row) return null;
 	if (row.status !== 'pending') return null;
-	if (row.tokenExpiresAt && row.tokenExpiresAt < new Date()) return null;
+	// The same predicate the redemption UPDATE uses (`gt(tokenExpiresAt, now)`,
+	// which a NULL never satisfies): a hash with no expiry is not a live link,
+	// and showing "you've been invited" for one would then write an ordinary
+	// signup.
+	if (!row.tokenExpiresAt || row.tokenExpiresAt < new Date()) return null;
 
 	return {
 		id: row.id,
