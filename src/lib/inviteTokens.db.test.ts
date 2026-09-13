@@ -106,6 +106,19 @@ describe('Slack invite tokens', () => {
 		});
 	});
 
+	test('a superseded token redeems as expired, not used, and stays unused', async () => {
+		const { id } = await insertApplication({ status: 'member' });
+		const { token: first } = await createSlackInviteToken(id);
+		await createSlackInviteToken(id);
+
+		await expect(redeemSlackInviteToken(first)).resolves.toEqual({
+			ok: false,
+			reason: 'expired',
+		});
+		const rows = await db().select().from(inviteToken);
+		expect(rows.map((row) => row.usedAt)).toEqual([null, null]);
+	});
+
 	test('an expired token is refused and stays unused', async () => {
 		const { id } = await insertApplication({ status: 'coffee_invited' });
 		const { token } = await createSlackInviteToken(id);
