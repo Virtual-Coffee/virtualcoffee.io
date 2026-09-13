@@ -1,6 +1,6 @@
 import { and, eq, gt, isNull } from 'drizzle-orm';
 
-import { db, inviteToken } from '@/db';
+import { db, inviteToken, type Transaction } from '@/db';
 import { hashToken, newToken } from '@/lib/tokens';
 
 /**
@@ -28,17 +28,7 @@ export async function createSlackInviteToken(
 	const now = new Date();
 
 	await db().transaction(async (tx) => {
-		await tx
-			.update(inviteToken)
-			.set({ expiresAt: now })
-			.where(
-				and(
-					eq(inviteToken.applicationId, applicationId),
-					eq(inviteToken.purpose, 'slack'),
-					isNull(inviteToken.usedAt),
-					gt(inviteToken.expiresAt, now),
-				),
-			);
+		await expireSlackInviteTokens(applicationId, now, tx);
 
 		await tx.insert(inviteToken).values({
 			applicationId,
@@ -49,6 +39,31 @@ export async function createSlackInviteToken(
 	});
 
 	return { token, expiresAt };
+}
+
+/**
+ * Expire every live Slack token for an application, as of `now`. Minting
+ * calls this to supersede; approval calls it when the status change lost a
+ * race after the invite email had already gone, so the link in that email
+ * stops working rather than admitting someone the panel no longer shows as
+ * approved.
+ */
+export async function expireSlackInviteTokens(
+	applicationId: string,
+	now: Date,
+	tx: Transaction | ReturnType<typeof db> = db(),
+): Promise<void> {
+	await tx
+		.update(inviteToken)
+		.set({ expiresAt: now })
+		.where(
+			and(
+				eq(inviteToken.applicationId, applicationId),
+				eq(inviteToken.purpose, 'slack'),
+				isNull(inviteToken.usedAt),
+				gt(inviteToken.expiresAt, now),
+			),
+		);
 }
 
 export type TokenRedemption =
@@ -109,14 +124,31 @@ export async function redeemSlackInviteToken(
 	const found = await lookup(token);
 	if (!('row' in found)) return found;
 
-	// Conditional update: only the request that flips usedAt from null wins.
+	// Conditional update: only the request that flips usedAt from null wins, and
+	// only while the token is still live — a re-send between the lookup and
+	// here supersedes it, and the superseded link must not admit anyone.
+	const redeemedAt = new Date();
 	const claimed = await db()
 		.update(inviteToken)
-		.set({ usedAt: new Date() })
-		.where(and(eq(inviteToken.id, found.row.id), isNull(inviteToken.usedAt)))
+		.set({ usedAt: redeemedAt })
+		.where(
+			and(
+				eq(inviteToken.id, found.row.id),
+				isNull(inviteToken.usedAt),
+				gt(inviteToken.expiresAt, redeemedAt),
+			),
+		)
 		.returning({ id: inviteToken.id });
 
-	if (claimed.length === 0) return { ok: false, reason: 'used' };
+	if (claimed.length > 0) {
+		return { ok: true, applicationId: found.row.applicationId };
+	}
 
-	return { ok: true, applicationId: found.row.applicationId };
+	// Lost to either a concurrent redemption or a supersession; the row says which.
+	const [current] = await db()
+		.select({ usedAt: inviteToken.usedAt })
+		.from(inviteToken)
+		.where(eq(inviteToken.id, found.row.id))
+		.limit(1);
+	return { ok: false, reason: current?.usedAt ? 'used' : 'expired' };
 }
