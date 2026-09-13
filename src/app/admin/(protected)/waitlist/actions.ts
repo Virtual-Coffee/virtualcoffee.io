@@ -199,7 +199,7 @@ export async function sendCoffeeInvite(
 		opened,
 		copyMe,
 		'Coffee invite',
-		await renderEmail(coffeeInvite, { name: application.name }),
+		await renderEmail(coffeeInvite, {}),
 	);
 	if (!sent.ok) return emailFailed(sent);
 

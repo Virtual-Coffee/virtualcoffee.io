@@ -95,7 +95,7 @@ describe('sendCoffeeInvite', () => {
 			to: 'ada@example.test',
 			subject: 'You’re invited to a Virtual Coffee',
 			html: expect.schemaMatching(z.string().startsWith('<!DOCTYPE html')),
-			text: expect.schemaMatching(z.string().startsWith('Hi Ada,')),
+			text: expect.schemaMatching(z.string().startsWith('Hello there!')),
 			cc: admin.email,
 		});
 		const row = await applicationRow(id);
