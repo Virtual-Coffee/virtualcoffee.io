@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { ActionDialog } from '@/components/ActionDialog';
 import { EmailPreview } from '@/components/EmailPreview';
-import { volunteerInviteEmail } from '@/lib/email/templates';
+import { volunteerInvite } from '@/emails/volunteerInvite';
 import { sendInvite } from './actions';
 
 /**
@@ -29,11 +29,15 @@ export function SendInviteForm({
 	const [notice, setNotice] = useState<string | null>(null);
 
 	const spent = balance < 1;
-	const preview = volunteerInviteEmail(
+	const previewProps = {
 		inviterName,
-		name.trim(),
-		claimUrlPreview,
-	);
+		inviteeName: name.trim(),
+		claimUrl: claimUrlPreview,
+	};
+	const preview = {
+		subject: volunteerInvite.subject(previewProps),
+		body: <volunteerInvite.Content {...previewProps} />,
+	};
 
 	return (
 		<div className="card">
