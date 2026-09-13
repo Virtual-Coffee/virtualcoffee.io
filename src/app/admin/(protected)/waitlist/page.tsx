@@ -35,9 +35,11 @@ export default async function AdminQueuePage({
 	await requirePermission('waitlist', 'read');
 
 	const params = await searchParams;
-	// The queue defaults to the two statuses that need a human decision.
-	// "Everything" is available as a chip but is not what this screen is for.
-	const filters = parseSearchParams(params, QUEUE_STATUSES);
+	const parsed = parseSearchParams(params, QUEUE_STATUSES);
+	// "Everything" is the whole queue, never the archive. `?status=all` lifts
+	// the filter in `parseSearchParams`, so it is put back here, as the archive
+	// does with its own statuses.
+	const filters = { ...parsed, statuses: parsed.statuses ?? QUEUE_STATUSES };
 
 	const [{ rows, rowCount }, counts] = await Promise.all([
 		// Volunteer invites sort to the front of the queue no matter what else
@@ -47,10 +49,13 @@ export default async function AdminQueuePage({
 		statusCounts(),
 	]);
 
-	const active = oneOf(params.status, [...QUEUE_STATUSES, 'all']) ?? 'queue';
+	const active = oneOf(params.status, QUEUE_STATUSES) ?? 'queue';
 	// The chips are filters, so they reset the page — but keep everything else
 	// the maintainer set: the search, the other chip group and the sort.
-	const chipHref = (changes: { status?: string; source?: string | null }) =>
+	const chipHref = (changes: {
+		status?: string | null;
+		source?: string | null;
+	}) =>
 		listHref('/admin/waitlist', {
 			status: active === 'queue' ? null : active,
 			source: filters.source ?? null,
@@ -59,6 +64,7 @@ export default async function AdminQueuePage({
 			dir: filters.direction === 'desc' ? null : filters.direction,
 			...changes,
 		});
+	// "Everything" is the default view, so its link carries no status at all.
 	const chips = [
 		{ key: 'waitlisted', label: 'Waitlisted', count: counts.waitlisted ?? 0 },
 		{
@@ -66,7 +72,11 @@ export default async function AdminQueuePage({
 			label: 'Coffee invited',
 			count: counts.coffee_invited ?? 0,
 		},
-		{ key: 'all', label: 'Everything', count: counts.all ?? 0 },
+		{
+			key: 'queue',
+			label: 'Everything',
+			count: (counts.waitlisted ?? 0) + (counts.coffee_invited ?? 0),
+		},
 	];
 
 	return (
@@ -87,7 +97,9 @@ export default async function AdminQueuePage({
 					{chips.map((chip) => (
 						<Link
 							key={chip.key}
-							href={chipHref({ status: chip.key })}
+							href={chipHref({
+								status: chip.key === 'queue' ? null : chip.key,
+							})}
 							className={`btn btn-sm ${
 								active === chip.key ? 'btn-primary' : 'btn-outline-secondary'
 							}`}
