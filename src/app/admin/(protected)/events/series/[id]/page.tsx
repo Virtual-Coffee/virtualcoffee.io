@@ -4,6 +4,7 @@ import { requirePermission } from '@/lib/adminAccess';
 import { connectEventsCalendar, isCalendarEventId } from '@/lib/eventsCalendar';
 
 import { EventsBreadcrumb } from '../../breadcrumb';
+import { EndSeriesSection } from '../../endSeriesSection';
 import { NotConfigured } from '../../presentation';
 import { SeriesForm } from '../../seriesForm';
 
@@ -59,6 +60,7 @@ export default async function EditSeriesPage({
 			<div className="col-lg-7">
 				{/* Keyed on the etag so a refresh after a save resets the draft. */}
 				<SeriesForm key={series.etag} series={series} />
+				<EndSeriesSection series={series} />
 			</div>
 		</div>
 	);
