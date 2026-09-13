@@ -192,6 +192,31 @@ describe('listSeries', () => {
 	});
 });
 
+describe('getSeries', () => {
+	test('opens a legacy HTML description as Markdown', async () => {
+		const { cal } = fakeClient({
+			get: {
+				coffee: {
+					...series,
+					description: '<p>Come <em>hang out</em></p><p>Bring coffee</p>',
+				},
+			},
+		});
+		await expect(cal.getSeries('coffee')).resolves.toMatchObject({
+			description: 'Come *hang out*\n\nBring coffee',
+		});
+	});
+
+	test('leaves a Markdown description as it is', async () => {
+		const { cal } = fakeClient({
+			get: { coffee: { ...series, description: 'Come *hang out*' } },
+		});
+		await expect(cal.getSeries('coffee')).resolves.toMatchObject({
+			description: 'Come *hang out*',
+		});
+	});
+});
+
 describe('listUpcomingEvents', () => {
 	test('expands instances over the window, cancelled ones included', async () => {
 		const { cal, calls } = fakeClient({
