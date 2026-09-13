@@ -186,8 +186,7 @@ const HERE = 'scripts/lib/schemaCoverage.ts';
  * it is kept exact.
  *
  * Only `public`: drizzle keeps its migration ledger in the `drizzle` schema,
- * so it never appears here. The name check is belt and braces for any other
- * tool's bookkeeping — this check is about our tables.
+ * so it never appears here.
  */
 export async function coverageFailures(database: Database): Promise<string[]> {
 	const rows = await database
@@ -198,7 +197,6 @@ export async function coverageFailures(database: Database): Promise<string[]> {
 
 	const live = new Map<string, Set<string>>();
 	for (const row of rows) {
-		if (row.table.includes('migration')) continue;
 		live.set(row.table, (live.get(row.table) ?? new Set()).add(row.column));
 	}
 
