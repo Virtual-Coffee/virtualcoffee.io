@@ -1,17 +1,48 @@
 import type { AdminEvent } from '@/lib/eventsCalendar';
 import { dateForDisplay } from '@/util/date';
 
+/** "Tue, Sep 15" — always the display zone. */
+export function eventDate(start: string): string {
+	return dateForDisplay(start, 'EEE, LLL d');
+}
+
 /**
- * "Tue, Sep 15 · 9:00 AM–10:00 AM EDT" — always the display zone. An Event
- * that crosses local midnight names the end's day too.
+ * "9:00 AM–10:00 AM EDT". An Event that crosses local midnight names the
+ * end's day too.
  */
-export function eventWhen(start: string, end: string): string {
+export function eventTime(start: string, end: string): string {
 	const sameDay =
 		dateForDisplay(start, 'yyyy-LL-dd') === dateForDisplay(end, 'yyyy-LL-dd');
 	const endLabel = sameDay
 		? dateForDisplay(end, 't ZZZZ')
-		: `${dateForDisplay(end, 'EEE, LLL d')} ${dateForDisplay(end, 't ZZZZ')}`;
-	return `${dateForDisplay(start, 'EEE, LLL d')} · ${dateForDisplay(start, 't')}–${endLabel}`;
+		: `${eventDate(end)} ${dateForDisplay(end, 't ZZZZ')}`;
+	return `${dateForDisplay(start, 't')}–${endLabel}`;
+}
+
+/** "Tue, Sep 15 · 9:00 AM–10:00 AM EDT", for a select option or a confirm. */
+export function eventWhen(start: string, end: string): string {
+	return `${eventDate(start)} · ${eventTime(start, end)}`;
+}
+
+/** The same, stacked: the date, the time as subtext. */
+export function EventWhen({
+	start,
+	end,
+	struck,
+}: {
+	start: string;
+	end: string;
+	struck?: boolean;
+}) {
+	const Text = struck ? 's' : 'span';
+	return (
+		<>
+			<Text>{eventDate(start)}</Text>
+			<div className="small text-body-secondary">
+				<Text>{eventTime(start, end)}</Text>
+			</div>
+		</>
+	);
 }
 
 export function EventStatusBadge({
