@@ -1,8 +1,11 @@
 declare namespace NodeJS {
 	interface ProcessEnv {
-		// Google Calendar (events)
+		// Google Calendar (events). Reads always hit the calendar; writes from
+		// /admin/events are captured outside production unless this is the
+		// literal `true` (docs/adr/0013, 0014).
 		GOOGLE_SERVICE_ACCOUNT_KEY?: string;
 		GOOGLE_CALENDAR_ID?: string;
+		CALENDAR_LIVE_OUTSIDE_PRODUCTION?: string;
 
 		// Slack
 		SLACK_JOIN_LINK?: string;
