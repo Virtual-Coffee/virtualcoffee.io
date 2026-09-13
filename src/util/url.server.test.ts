@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { siteUrl } from './url.server';
 
@@ -8,6 +8,11 @@ import { siteUrl } from './url.server';
  * the production-only analytics tag in the root layout.)
  */
 describe('siteUrl', () => {
+	// A shell with Netlify's variables in it must not tilt the first test.
+	beforeEach(() => {
+		vi.stubEnv('CONTEXT', undefined);
+		vi.stubEnv('DEPLOY_PRIME_URL', undefined);
+	});
 	afterEach(() => vi.unstubAllEnvs());
 
 	test('is the site URL Netlify sets, without a trailing slash', () => {
