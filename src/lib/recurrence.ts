@@ -101,8 +101,23 @@ function untilDate(line: string): string | null {
 	return at.toISODate();
 }
 
+/**
+ * `rrule`'s text, with `UNTIL` named as the display-zone date. Left to its
+ * own devices `toText()` formats the token's UTC components, and
+ * `20261231T045959Z` reads "December 31" for a Series that ends the 30th.
+ */
 function describe(rrule: string): string {
-	return RRule.fromString(rrule).toText();
+	const until = untilDate(rrule);
+	return RRule.fromString(rrule).toText(
+		undefined,
+		undefined,
+		until
+			? () =>
+					DateTime.fromISO(until, { zone: DISPLAY_ZONE }).toFormat(
+						'MMMM d, yyyy',
+					)
+			: undefined,
+	);
 }
 
 /**
@@ -123,7 +138,7 @@ export function parseRecurrence(lines: readonly string[]): Recurrence {
 	const custom = (): CustomRecurrence => ({
 		kind: 'custom',
 		rrule: line,
-		text: rule.toText(),
+		text: describe(line),
 	});
 
 	const options = rule.origOptions;

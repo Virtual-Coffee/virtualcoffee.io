@@ -24,7 +24,7 @@ function EndButton({ series }: { series: Series }) {
 					) {
 						return;
 					}
-					run(() => endSeries(series.id, series.etag));
+					run(() => endSeries(series.id, series.etag), { refresh: 'always' });
 				}}
 			>
 				{pending ? '…' : 'End'}

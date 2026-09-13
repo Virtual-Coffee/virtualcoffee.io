@@ -1,9 +1,17 @@
 import type { AdminEvent } from '@/lib/eventsCalendar';
 import { dateForDisplay } from '@/util/date';
 
-/** "Tue, Sep 15 · 9:00 AM–10:00 AM EDT" — always the display zone. */
+/**
+ * "Tue, Sep 15 · 9:00 AM–10:00 AM EDT" — always the display zone. An Event
+ * that crosses local midnight names the end's day too.
+ */
 export function eventWhen(start: string, end: string): string {
-	return `${dateForDisplay(start, 'EEE, LLL d')} · ${dateForDisplay(start, 't')}–${dateForDisplay(end, 't ZZZZ')}`;
+	const sameDay =
+		dateForDisplay(start, 'yyyy-LL-dd') === dateForDisplay(end, 'yyyy-LL-dd');
+	const endLabel = sameDay
+		? dateForDisplay(end, 't ZZZZ')
+		: `${dateForDisplay(end, 'EEE, LLL d')} ${dateForDisplay(end, 't ZZZZ')}`;
+	return `${dateForDisplay(start, 'EEE, LLL d')} · ${dateForDisplay(start, 't')}–${endLabel}`;
 }
 
 export function EventStatusBadge({
