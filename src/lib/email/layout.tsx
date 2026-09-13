@@ -16,11 +16,15 @@ import { styles } from './styles';
 /**
  * The wordmark is `src/svg/VirtualCoffeeFull.tsx` rasterised once to a PNG
  * (`rsvg-convert -w 480`): Gmail and Outlook render neither inline SVG nor
- * SVG images. The URL is production's on purpose — an email outlives the
+ * SVG images. The origin is production's on purpose — an email outlives the
  * preview that sent it, and previews are captured anyway (docs/adr/0013).
+ * `EMAIL_ASSET_ORIGIN` overrides it for `pnpm email:dev`, which serves the
+ * copy in `src/emails/static/` itself.
  */
-const WORDMARK_URL =
-	'https://virtualcoffee.io/assets/images/email/wordmark@2x.png';
+const ASSET_BASE = process.env.EMAIL_ASSET_ORIGIN
+	? `${process.env.EMAIL_ASSET_ORIGIN}/static`
+	: 'https://virtualcoffee.io/assets/images/email';
+const WORDMARK_URL = `${ASSET_BASE}/wordmark@2x.png`;
 
 /**
  * The shell every message shares. Templates render their `Content` inside

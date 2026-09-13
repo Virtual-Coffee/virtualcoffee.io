@@ -56,6 +56,9 @@ describe.each(templates)('%s', (_name, template, props, link) => {
 					html: z
 						.string()
 						.startsWith('<!DOCTYPE html')
+						.includes(
+							'src="https://virtualcoffee.io/assets/images/email/wordmark@2x.png"',
+						)
 						.includes('alt="Virtual Coffee"'),
 				}),
 			),
