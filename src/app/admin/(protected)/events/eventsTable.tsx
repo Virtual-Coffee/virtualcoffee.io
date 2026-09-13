@@ -10,7 +10,11 @@ import { cancelEvent, rescheduleEvent, restoreEvent } from './actions';
 import { EventStatusBadge, eventWhen } from './presentation';
 import { RescheduleDialog } from './rescheduleDialog';
 
-function RowActions({ event }: { event: AdminEvent }) {
+/**
+ * Reschedule and Cancel while the Event stands; Restore once it has been
+ * Cancelled or Rescheduled. Shared with the Series page's Changed Events.
+ */
+export function RowActions({ event }: { event: AdminEvent }) {
 	const { run, pending, feedback } = useAction();
 	const [rescheduling, setRescheduling] = useState(false);
 	const cancelled = event.status === 'cancelled';
@@ -28,29 +32,41 @@ function RowActions({ event }: { event: AdminEvent }) {
 						Reschedule
 					</button>
 				)}
-				<button
-					type="button"
-					className={`btn btn-sm ${cancelled ? 'btn-outline-primary' : 'btn-outline-danger'}`}
-					disabled={pending}
-					onClick={() => {
-						if (cancelled) {
+				{(cancelled || event.rescheduled) && (
+					<button
+						type="button"
+						className="btn btn-sm btn-outline-primary"
+						disabled={pending}
+						onClick={() =>
 							run(() => restoreEvent(event.id, event.etag), {
 								refresh: 'always',
+							})
+						}
+					>
+						{pending ? '…' : 'Restore'}
+					</button>
+				)}
+				{!cancelled && (
+					<button
+						type="button"
+						className="btn btn-sm btn-outline-danger"
+						disabled={pending}
+						onClick={() => {
+							if (
+								!window.confirm(
+									`Cancel “${event.title}” on ${eventWhen(event.start, event.end)}? It can be restored from here.`,
+								)
+							) {
+								return;
+							}
+							run(() => cancelEvent(event.id, event.etag), {
+								refresh: 'always',
 							});
-							return;
-						}
-						if (
-							!window.confirm(
-								`Cancel “${event.title}” on ${eventWhen(event.start, event.end)}? It can be restored from here.`,
-							)
-						) {
-							return;
-						}
-						run(() => cancelEvent(event.id, event.etag), { refresh: 'always' });
-					}}
-				>
-					{pending ? '…' : cancelled ? 'Restore' : 'Cancel'}
-				</button>
+						}}
+					>
+						{pending ? '…' : 'Cancel'}
+					</button>
+				)}
 			</div>
 			{feedback}
 			{rescheduling && (
