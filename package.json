@@ -39,6 +39,7 @@
 		"build-undraw-ratios": "public/assets/svg/*.svg"
 	},
 	"dependencies": {
+		"@googleapis/calendar": "^16.0.0",
 		"@imgix/js-core": "^3.8.0",
 		"@mdx-js/loader": "^3.1.1",
 		"@netlify/blobs": "^11.0.3",
