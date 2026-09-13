@@ -1,38 +1,8 @@
-'use client';
-
 import Link from 'next/link';
 
 import type { Series } from '@/lib/eventsCalendar';
-import { useAction } from '@/util/forms/useAction';
 
-import { endSeries } from './actions';
 import { eventWhen, sentence } from './presentation';
-
-function EndButton({ series }: { series: Series }) {
-	const { run, pending, feedback } = useAction();
-	return (
-		<>
-			<button
-				type="button"
-				className="btn btn-sm btn-outline-danger"
-				disabled={pending}
-				onClick={() => {
-					if (
-						!window.confirm(
-							`End “${series.title}”? No more Events will be scheduled. Past ones stay on the calendar.`,
-						)
-					) {
-						return;
-					}
-					run(() => endSeries(series.id, series.etag), { refresh: 'always' });
-				}}
-			>
-				{pending ? '…' : 'End'}
-			</button>
-			{feedback}
-		</>
-	);
-}
 
 export function SeriesTable({
 	rows,
@@ -57,11 +27,6 @@ export function SeriesTable({
 						<th scope="col">Repeats</th>
 						<th scope="col">Next Event</th>
 						<th scope="col">Join Link</th>
-						{canManage && (
-							<th scope="col">
-								<span className="visually-hidden">Actions</span>
-							</th>
-						)}
 					</tr>
 				</thead>
 				<tbody>
@@ -92,11 +57,6 @@ export function SeriesTable({
 									{series.joinLink.replace(/^https?:\/\//, '')}
 								</a>
 							</td>
-							{canManage && (
-								<td className="text-end text-nowrap">
-									<EndButton series={series} />
-								</td>
-							)}
 						</tr>
 					))}
 				</tbody>
