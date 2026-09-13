@@ -66,12 +66,12 @@ Two TypeScript packages are installed on purpose: `typescript` is aliased to `@t
 
 Every external data source lives in `src/data/` and degrades to mocks when its env var is missing:
 
-| Source                                           | File                              | Env var                                            | Fallback                               |
-| ------------------------------------------------ | --------------------------------- | -------------------------------------------------- | -------------------------------------- |
-| Member GitHub profiles                           | `src/data/members/index.ts`       | `GITHUB_TOKEN`                                     | `src/data/mocks/memberData.js` (faker) |
-| GitHub Sponsors                                  | `src/data/sponsors.ts`            | `GITHUB_TOKEN`                                     | `src/data/mocks/sponsors.ts`           |
-| Events (Google Calendar API via service account) | `src/data/events.ts`              | `GOOGLE_SERVICE_ACCOUNT_KEY`, `GOOGLE_CALENDAR_ID` | `src/data/mocks/events.ts`             |
-| Form submissions (server actions)                | `src/util/airtable/action.ts`     | `FORMS_AIRTABLE_API_KEY`                           | error state returned to the form       |
+| Source                                           | File                          | Env var                                            | Fallback                               |
+| ------------------------------------------------ | ----------------------------- | -------------------------------------------------- | -------------------------------------- |
+| Member GitHub profiles                           | `src/data/members/index.ts`   | `GITHUB_TOKEN`                                     | `src/data/mocks/memberData.js` (faker) |
+| GitHub Sponsors                                  | `src/data/sponsors.ts`        | `GITHUB_TOKEN`                                     | `src/data/mocks/sponsors.ts`           |
+| Events (Google Calendar API via service account) | `src/data/events.ts`          | `GOOGLE_SERVICE_ACCOUNT_KEY`, `GOOGLE_CALENDAR_ID` | `src/data/mocks/events.ts`             |
+| Form submissions (server actions)                | `src/util/airtable/action.ts` | `FORMS_AIRTABLE_API_KEY`                           | error state returned to the form       |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. Any new external fetch should follow this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`. Fetches are wrapped in `unstable_cache` with a tag (`members`, `events`, `mdx-routes`); `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates on demand and a daily GitHub Action triggers a Netlify rebuild.
 
