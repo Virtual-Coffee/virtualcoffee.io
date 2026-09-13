@@ -1,6 +1,8 @@
 import { createAppAuth } from '@octokit/auth-app';
 import { Octokit } from '@octokit/rest';
 
+import { deployContext, notifyDelivery } from '@/lib/outbound';
+
 /**
  * Opens the Lunch & Learn issue — the working artefact; the Slack message
  * just links it.
@@ -18,8 +20,10 @@ const ASSIGNEES = ['shelleymcq', 'meg-gutshall'];
 /** Per request, as `@octokit/request` only honours `request.signal`, not `timeout`. */
 const TIMEOUT_MS = 10_000;
 
+/** `url` is null when the issue was captured rather than opened (docs/adr/0013). */
 export type CreateIssueResult =
-	{ ok: true; url: string } | { ok: false; message: string };
+	| { ok: true; url: string | null; message: string }
+	| { ok: false; message: string };
 
 export function githubAppConfigured(): boolean {
 	return Boolean(
@@ -130,6 +134,20 @@ export async function createLunchAndLearnIssue(idea: {
 	/** The Submission's /admin page, where the email lives. */
 	adminUrl: string;
 }): Promise<CreateIssueResult> {
+	// Captured before the App is looked at, so a preview without credentials
+	// is quiet rather than "never announced".
+	if (notifyDelivery() === 'captured') {
+		console.info(
+			`[github issue captured] ${deployContext()} ${OWNER}/${REPO}`,
+			`\nLunch & Learn: ${idea.topic}\n\n${issueBody(idea)}`,
+		);
+		return {
+			ok: true,
+			url: null,
+			message: `Captured, no GitHub issue opened (${deployContext()}).`,
+		};
+	}
+
 	if (!githubAppConfigured()) {
 		return {
 			ok: false,
@@ -153,7 +171,11 @@ export async function createLunchAndLearnIssue(idea: {
 			request: { signal: AbortSignal.timeout(TIMEOUT_MS) },
 		});
 
-		return { ok: true, url: data.html_url };
+		return {
+			ok: true,
+			url: data.html_url,
+			message: `Opened ${data.html_url}`,
+		};
 	} catch (error) {
 		// A failed installation lookup means the App is not installed on
 		// VC-Community-Docs, or lacks the issues permission. Both are setup

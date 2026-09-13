@@ -42,7 +42,11 @@ async function submit() {
 
 describe('submitLunchAndLearnIdea', () => {
 	test('opens the issue first and threads its URL into the Slack message', async () => {
-		createLunchAndLearnIssue.mockResolvedValue({ ok: true, url: ISSUE });
+		createLunchAndLearnIssue.mockResolvedValue({
+			ok: true,
+			url: ISSUE,
+			message: `Opened ${ISSUE}`,
+		});
 		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 
 		const { row, events } = await submit();
@@ -58,7 +62,7 @@ describe('submitLunchAndLearnIdea', () => {
 		);
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Idea submitted' },
-			{ type: 'notification_sent', body: `Posted to Slack, opened ${ISSUE}` },
+			{ type: 'notification_sent', body: `Opened ${ISSUE} Posted to Slack.` },
 		]);
 	});
 
@@ -85,8 +89,36 @@ describe('submitLunchAndLearnIdea', () => {
 		]);
 	});
 
+	test('a captured issue leaves no URL on the row and is still a success', async () => {
+		createLunchAndLearnIssue.mockResolvedValue({
+			ok: true,
+			url: null,
+			message: 'Captured, no GitHub issue opened (deploy-preview).',
+		});
+		notifySlack.mockResolvedValue({
+			ok: true,
+			message: 'Captured, not posted to Slack (deploy-preview).',
+		});
+
+		const { row, events } = await submit();
+
+		expect(row.githubIssueUrl).toBeNull();
+		expect(notifySlack).toHaveBeenCalledWith(
+			'lunch-and-learn',
+			'New Lunch & Learn Submission: Property testing by Ada',
+		);
+		expect(events[1]).toEqual({
+			type: 'notification_sent',
+			body: 'Captured, no GitHub issue opened (deploy-preview). Captured, not posted to Slack (deploy-preview).',
+		});
+	});
+
 	test('the issue URL is kept even when Slack then fails', async () => {
-		createLunchAndLearnIssue.mockResolvedValue({ ok: true, url: ISSUE });
+		createLunchAndLearnIssue.mockResolvedValue({
+			ok: true,
+			url: ISSUE,
+			message: `Opened ${ISSUE}`,
+		});
 		notifySlack.mockResolvedValue({
 			ok: false,
 			message: 'Could not reach Slack.',
