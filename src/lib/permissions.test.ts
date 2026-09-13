@@ -70,6 +70,7 @@ describe('what each role grants', () => {
 		['volunteer_coordinator', 'volunteerSignups'],
 		['lunch_and_learn_organizer', 'lunchAndLearn'],
 		['coffee_table_organizer', 'coffeeTables'],
+		['event_organizer', 'events'],
 	])('%s holds %s, nothing else', (role, own) => {
 		expect(grants(role)).toEqual({ ...NONE, [own]: [true, true] });
 	});

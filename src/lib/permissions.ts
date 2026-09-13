@@ -21,6 +21,7 @@ export const statement = {
 	lunchAndLearn: ['read', 'manage'],
 	coffeeTables: ['read', 'manage'],
 	volunteers: ['read', 'manage'],
+	events: ['read', 'manage'],
 	admins: ['read', 'manage'],
 } as const;
 
@@ -34,6 +35,7 @@ export const SECTIONS = [
 	'lunchAndLearn',
 	'coffeeTables',
 	'volunteers',
+	'events',
 	'admins',
 ] as const;
 
@@ -52,6 +54,7 @@ export const admin = ac.newRole({
 	lunchAndLearn: ['read', 'manage'],
 	coffeeTables: ['read', 'manage'],
 	volunteers: ['read', 'manage'],
+	events: ['read', 'manage'],
 	admins: ['read', 'manage'],
 });
 
@@ -92,6 +95,10 @@ export const coffee_table_organizer = ac.newRole({
 	coffeeTables: ['read', 'manage'],
 });
 
+export const event_organizer = ac.newRole({
+	events: ['read', 'manage'],
+});
+
 export const roles = {
 	admin,
 	user,
@@ -101,6 +108,7 @@ export const roles = {
 	volunteer_coordinator,
 	lunch_and_learn_organizer,
 	coffee_table_organizer,
+	event_organizer,
 };
 
 export type RoleName = keyof typeof roles;
@@ -115,6 +123,7 @@ export const ROLE_LABELS: Record<RoleName, string> = {
 	volunteer_coordinator: 'Volunteer coordinator',
 	lunch_and_learn_organizer: 'Lunch & Learn organiser',
 	coffee_table_organizer: 'Coffee Table organiser',
+	event_organizer: 'Event organiser',
 };
 
 /**
@@ -137,6 +146,10 @@ export const GRANTABLE_ROLES = [
 	{
 		name: 'coffee_table_organizer',
 		description: 'Coffee Table group requests',
+	},
+	{
+		name: 'event_organizer',
+		description: 'The Events Calendar: Series and one-off Events',
 	},
 ] as const satisfies ReadonlyArray<{ name: RoleName; description: string }>;
 
