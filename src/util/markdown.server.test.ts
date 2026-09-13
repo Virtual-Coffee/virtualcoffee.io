@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { parseMarkdown } from './markdown.server';
+import { htmlToMarkdown, parseMarkdown } from './markdown.server';
 
 describe('parseMarkdown', () => {
 	test('renders markdown to HTML', async () => {
@@ -19,5 +19,23 @@ describe('parseMarkdown', () => {
 		expect(await parseMarkdown('[x](javascript:alert(1))')).toBe(
 			'<p><a>x</a></p>',
 		);
+	});
+});
+
+describe('htmlToMarkdown', () => {
+	test('turns the HTML Craft left behind into Markdown', async () => {
+		expect(
+			await htmlToMarkdown(
+				'<p>Come <strong>hang out</strong> on <a href="https://example.com">Zoom</a>.</p><ul><li>Bring coffee</li><li>Or tea</li></ul>',
+			),
+		).toBe(
+			'Come **hang out** on [Zoom](https://example.com).\n\n- Bring coffee\n- Or tea',
+		);
+	});
+
+	test('keeps the text of what Markdown cannot say', async () => {
+		expect(
+			await htmlToMarkdown('<div><span class="x">Plain</span> words</div>'),
+		).toBe('Plain words');
 	});
 });

@@ -7,13 +7,8 @@ import type { Series } from '@/lib/eventsCalendar';
 import { useAction } from '@/util/forms/useAction';
 
 import { createSeries, updateSeries } from './actions';
-import {
-	HostCodeField,
-	TextAreaField,
-	TextField,
-	TimeFields,
-	type TimeDraft,
-} from './fields';
+import { DescriptionField } from './descriptionField';
+import { HostCodeField, TextField, TimeFields, type TimeDraft } from './fields';
 import { sentence } from './presentation';
 import {
 	draftFromRecurrence,
@@ -117,12 +112,13 @@ export function SeriesForm({ series }: { series?: Series }) {
 					value={hostCode}
 					onChange={setHostCode}
 				/>
-				<TextAreaField
+				<DescriptionField
 					id={`${id}-description`}
 					label="Description"
 					value={description}
 					onChange={setDescription}
-					help="Markdown. Shown on /events under every Event of the Series."
+					disabled={pending || Boolean(created)}
+					help="Shown on /events under every Event of the Series."
 				/>
 			</fieldset>
 

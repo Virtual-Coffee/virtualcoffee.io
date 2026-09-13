@@ -6,13 +6,8 @@ import { useId, useState } from 'react';
 import { useAction } from '@/util/forms/useAction';
 
 import { createEvent } from './actions';
-import {
-	HostCodeField,
-	TextAreaField,
-	TextField,
-	TimeFields,
-	type TimeDraft,
-} from './fields';
+import { DescriptionField } from './descriptionField';
+import { HostCodeField, TextField, TimeFields, type TimeDraft } from './fields';
 
 /** A one-off Event: everything a Series has except the rule. */
 export function EventForm() {
@@ -62,12 +57,13 @@ export function EventForm() {
 					value={hostCode}
 					onChange={setHostCode}
 				/>
-				<TextAreaField
+				<DescriptionField
 					id={`${id}-description`}
 					label="Description"
 					value={description}
 					onChange={setDescription}
-					help="Markdown. Shown on /events."
+					disabled={pending || Boolean(created)}
+					help="Shown on /events."
 				/>
 			</fieldset>
 

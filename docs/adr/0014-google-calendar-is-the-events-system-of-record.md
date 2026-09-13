@@ -66,9 +66,12 @@ calendar through the API can read the code — the workspace — and that
 exposure is accepted; the calendar is not public.
 
 **Descriptions are Markdown.** The bots render them for Slack with
-`slackify-markdown`; the site renders them with its own Markdown pipeline. A
-description that still carries HTML tags — the shape Craft left behind — is
-rendered as HTML until the calendar is migrated.
+`slackify-markdown`; the site renders them with its own Markdown pipeline;
+the admin page edits them as rich text (MDXEditor, loaded on the client
+only) and still submits a Markdown string. A description that still carries
+HTML tags — the shape Craft left behind — is rendered as HTML by the site
+until the calendar is migrated, and the admin page migrates it: it opens as
+a best-effort Markdown conversion and is Markdown once saved.
 
 **Writes are conditional.** The admin page sends the `etag` it loaded as
 `If-Match` on every update and asks the maintainer to reload on a `412`, so
