@@ -67,7 +67,8 @@ export async function setSubmissionStatus(
 	const actor = await actorId(context.session.user.id);
 
 	// `closedAt` records when it stopped needing attention, so reopening clears
-	// it rather than leaving a date that is no longer true.
+	// it rather than leaving a date that is no longer true, and moving between
+	// the two closed statuses keeps the original.
 	const closed = next === 'resolved' || next === 'dismissed';
 
 	// Conditional on the status still being what was read, so two maintainers
@@ -76,7 +77,10 @@ export async function setSubmissionStatus(
 	const changed = await db().transaction(async (tx) => {
 		const rows = await tx
 			.update(table)
-			.set({ status: next, closedAt: closed ? new Date() : null })
+			.set({
+				status: next,
+				closedAt: closed ? (current.closedAt ?? new Date()) : null,
+			})
 			.where(and(eq(table.id, id), eq(table.status, current.status)))
 			.returning({ id: table.id });
 		if (rows.length === 0) return false;

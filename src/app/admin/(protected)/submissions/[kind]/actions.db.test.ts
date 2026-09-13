@@ -90,6 +90,27 @@ describe('setSubmissionStatus', () => {
 		).resolves.toEqual([]);
 	});
 
+	test('moving between the closed statuses keeps the original closedAt; reopening clears it', async () => {
+		const id = await insertCocReport();
+		const closedAt = async () => {
+			const [row] = await db()
+				.select({ closedAt: cocReport.closedAt })
+				.from(cocReport)
+				.where(eq(cocReport.id, id));
+			return row.closedAt;
+		};
+
+		await setSubmissionStatus('coc', id, 'resolved');
+		const resolvedAt = await closedAt();
+		expect(resolvedAt).toBeInstanceOf(Date);
+
+		await setSubmissionStatus('coc', id, 'dismissed');
+		await expect(closedAt()).resolves.toEqual(resolvedAt);
+
+		await setSubmissionStatus('coc', id, 'in_progress');
+		await expect(closedAt()).resolves.toBeNull();
+	});
+
 	test('a change that raced another maintainer is refused, not written over', async () => {
 		const id = await insertCocReport();
 		await setSubmissionStatus('coc', id, 'dismissed');
