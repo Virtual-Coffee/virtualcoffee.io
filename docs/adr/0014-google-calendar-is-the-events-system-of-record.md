@@ -99,6 +99,11 @@ edited in Google.
   `location` on the two Virtual Coffee Series whose old `joinLink` property
   disagrees with it, clear `joinLink`, keep `hostCode`, and convert the
   descriptions from HTML to Markdown.
+- Ending a Series, or splitting one in Google's UI, leaves Google returning a
+  cancelled placeholder (`showDeleted` only) for every slot the truncated rule
+  no longer generates — an instance-shaped id with no Series behind it. The
+  admin read drops them: nothing was Cancelled and there is nothing to
+  Restore.
 - The site is a client of Google for events: an outage there is an outage
   here. `/events` stays cached for twelve hours and fails a production build
   loudly rather than rendering an empty list, as before.

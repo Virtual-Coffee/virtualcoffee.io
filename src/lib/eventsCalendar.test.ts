@@ -208,6 +208,25 @@ describe('listUpcomingEvents', () => {
 							start: { date: '2026-09-20' },
 							end: { date: '2026-09-21' },
 						},
+						// Google's placeholder for a slot an Ended or split Series no
+						// longer generates: an instance-shaped id, no Series behind it.
+						{
+							id: 'old_20260921T130000Z',
+							etag: '"t"',
+							status: 'cancelled',
+							summary: 'CANCELLED',
+							created: '0000-12-31T00:00:00.000Z',
+							start: { dateTime: '2026-09-21T09:00:00-04:00', timeZone: 'UTC' },
+							end: { dateTime: '2026-09-21T10:00:00-04:00', timeZone: 'UTC' },
+						},
+						{
+							id: 'oneoff',
+							etag: '"o"',
+							status: 'cancelled',
+							summary: 'Retro',
+							start: { dateTime: '2026-09-23T15:00:00-04:00' },
+							end: { dateTime: '2026-09-23T16:00:00-04:00' },
+						},
 					],
 				},
 			],
@@ -241,7 +260,11 @@ describe('listUpcomingEvents', () => {
 				seriesId: 'coffee',
 			},
 			{ id: 'coffee_20260922T130000Z', status: 'confirmed', rescheduled: true },
+			{ id: 'oneoff', status: 'cancelled', title: 'Retro', seriesId: null },
 		]);
+		expect(result.map((event) => event.id)).not.toContain(
+			'old_20260921T130000Z',
+		);
 		// The bare cancelled row was filled from its Series, fetched once.
 		expect(calls.filter((call) => call.method === 'get')).toHaveLength(1);
 	});
