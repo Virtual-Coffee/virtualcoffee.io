@@ -86,32 +86,23 @@ export async function submitLunchAndLearnIdea(
 			adminUrl: `${siteUrl()}/admin/submissions/lunch-and-learn/${saved.id}`,
 		});
 
-		if (issue.ok) {
+		// A captured issue has no URL to keep (docs/adr/0013).
+		const issueUrl = issue.ok ? issue.url : null;
+		if (issueUrl) {
 			await db()
 				.update(lunchAndLearnIdea)
-				.set({ githubIssueUrl: issue.url })
+				.set({ githubIssueUrl: issueUrl })
 				.where(eq(lunchAndLearnIdea.id, saved.id));
 		}
 
 		const slack = await notifySlack(
 			'lunch-and-learn',
-			lunchAndLearnMessage({
-				topic: idea.topic,
-				name: idea.name,
-				issueUrl: issue.ok ? issue.url : null,
-			}),
+			lunchAndLearnMessage({ topic: idea.topic, name: idea.name, issueUrl }),
 		);
 
-		if (issue.ok && slack.ok) {
-			return { ok: true, message: `Posted to Slack, opened ${issue.url}` };
-		}
-
 		return {
-			ok: false,
-			message: [
-				issue.ok ? `Opened ${issue.url}` : issue.message,
-				slack.ok ? 'Posted to Slack.' : slack.message,
-			].join(' '),
+			ok: issue.ok && slack.ok,
+			message: `${issue.message} ${slack.message}`,
 		};
 	});
 

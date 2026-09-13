@@ -32,6 +32,9 @@ async function load() {
 }
 
 beforeEach(() => {
+	// Live only in production (docs/adr/0013).
+	vi.stubEnv('CONTEXT', 'production');
+	vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', undefined);
 	vi.stubEnv('GITHUB_APP_CLIENT_ID', 'Iv1.test');
 	vi.stubEnv('GITHUB_APP_PRIVATE_KEY', 'line1\\nline2');
 	octokit.getRepoInstallation.mockReset();
@@ -57,6 +60,36 @@ describe('githubAppConfigured', () => {
 });
 
 describe('createLunchAndLearnIssue', () => {
+	test('outside production: captured, with no client built, credentials or not', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('GITHUB_APP_CLIENT_ID', undefined);
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+		const { createLunchAndLearnIssue } = await load();
+
+		await expect(createLunchAndLearnIssue(idea)).resolves.toEqual({
+			ok: true,
+			url: null,
+			message: 'Captured, no GitHub issue opened (deploy-preview).',
+		});
+		expect(octokit.constructed).toEqual([]);
+		expect(info).toHaveBeenCalledWith(
+			'[github issue captured] deploy-preview Virtual-Coffee/VC-Community-Docs',
+			expect.stringContaining('Lunch & Learn: Property testing'),
+		);
+		info.mockRestore();
+	});
+
+	test('NOTIFY_LIVE_OUTSIDE_PRODUCTION=true opens it for real from a preview', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', 'true');
+		const { createLunchAndLearnIssue } = await load();
+
+		await expect(createLunchAndLearnIssue(idea)).resolves.toMatchObject({
+			ok: true,
+			url: 'https://github.com/Virtual-Coffee/VC-Community-Docs/issues/9',
+		});
+	});
+
 	test('unconfigured: a skip, with no client built', async () => {
 		vi.stubEnv('GITHUB_APP_CLIENT_ID', undefined);
 		const { createLunchAndLearnIssue } = await load();
@@ -74,6 +107,8 @@ describe('createLunchAndLearnIssue', () => {
 		await expect(createLunchAndLearnIssue(idea)).resolves.toEqual({
 			ok: true,
 			url: 'https://github.com/Virtual-Coffee/VC-Community-Docs/issues/9',
+			message:
+				'Opened https://github.com/Virtual-Coffee/VC-Community-Docs/issues/9',
 		});
 		expect(octokit.create).toHaveBeenCalledWith({
 			owner: 'Virtual-Coffee',
