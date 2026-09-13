@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { emailDelivery, notifyDelivery } from './outbound';
+import { capture, emailDelivery, notifyDelivery } from './outbound';
 
 afterEach(() => vi.unstubAllEnvs());
 
@@ -64,5 +64,26 @@ describe('notifyDelivery', () => {
 		vi.stubEnv('CONTEXT', undefined);
 		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', '1');
 		expect(notifyDelivery()).toBe('captured');
+	});
+});
+
+describe('capture', () => {
+	test('names the kind, deploy and target, then the whole body', () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+		capture('slack', 'membership', 'hi');
+		expect(info).toHaveBeenLastCalledWith(
+			'[slack captured] deploy-preview membership',
+			'\nhi',
+		);
+
+		capture('email', 'a@example.test', 'body', { subject: 'Hello' });
+		expect(info).toHaveBeenLastCalledWith(
+			'[email captured] deploy-preview a@example.test',
+			{ subject: 'Hello' },
+			'\nbody',
+		);
+		info.mockRestore();
 	});
 });
