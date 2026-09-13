@@ -49,6 +49,9 @@ export async function GET(
 		headers: {
 			'content-type': contentType,
 			'content-disposition': `attachment; filename="${filename.replace(/"/g, '')}"`,
+			// The bytes and the type both came from the reporter; never let a
+			// browser second-guess the type into something it would execute.
+			'x-content-type-options': 'nosniff',
 			// Never let a shared cache hold a CoC attachment.
 			'cache-control': 'private, no-store',
 		},
