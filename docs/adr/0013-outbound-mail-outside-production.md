@@ -26,6 +26,15 @@ sends, and it decides on `CONTEXT` alone:
   function log and returns `ok: true` with a warning naming the deploy, so the
   status change, the `email_sent` event and the notice the maintainer sees are
   exactly what production would do. The credentials are not read at all.
+- The Captured sink is the function log: the `netlify dev` terminal locally,
+  the deploy's function log on a preview. Netlify shows that log to site team
+  members only — the same people who can read every environment variable,
+  including `SLACK_JOIN_LINK`, and the preview's copy of the database. The
+  body goes in whole, invite links included, on purpose: a walkthrough checks
+  what would have been sent and follows the link. Logging metadata alone would
+  be Refusing with a friendlier return value, which is the option this
+  decision rejected. `capture()` in `outbound.ts` is the one place that writes
+  it, so every sender logs the same way.
 - `EMAIL_REDIRECT_TO=<address>` turns Captured into **Redirected**: delivered
   for real, to that one address, with the intended recipient in the subject
   and an `X-Original-To` header and no cc. Production ignores it.
@@ -47,6 +56,10 @@ mechanism.
   a "captured on this deploy" notice so a reviewer knows why nothing arrived.
 - Testing real delivery from a preview means setting `EMAIL_REDIRECT_TO` on
   that branch's context and reading one inbox.
+- A captured message is visible to the whole Netlify team for as long as
+  Netlify keeps function logs. Preview data is already scrubbed (docs/adr/0007),
+  so the only real address that can reach a preview log is one a tester typed
+  into a form there — use a test address.
 - Anything new that sends outward goes through `outbound.ts` first. A sender
   that checks its own credentials before the mode is the bug this file exists
   to prevent.

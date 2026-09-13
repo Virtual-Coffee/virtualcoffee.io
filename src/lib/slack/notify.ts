@@ -4,7 +4,7 @@
  * and no bot needs inviting to the private groups.
  */
 
-import { deployContext, notifyDelivery } from '@/lib/outbound';
+import { capture, deployContext, notifyDelivery } from '@/lib/outbound';
 
 /** What happened, in a sentence — recorded as the event body either way. */
 export type NotifyResult = { ok: boolean; message: string };
@@ -40,7 +40,7 @@ export async function notifySlack(
 	text: string,
 ): Promise<NotifyResult> {
 	if (notifyDelivery() === 'captured') {
-		console.info(`[slack captured] ${deployContext()} ${channel}`, `\n${text}`);
+		capture('slack', channel, text);
 		return {
 			ok: true,
 			message: `Captured, not posted to Slack (${deployContext()}).`,

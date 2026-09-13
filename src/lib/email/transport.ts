@@ -1,6 +1,6 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 
-import { emailDelivery, type EmailDelivery } from '@/lib/outbound';
+import { capture, emailDelivery, type EmailDelivery } from '@/lib/outbound';
 
 /**
  * Transactional mail for the membership pipeline, sent through Google
@@ -104,23 +104,14 @@ function bareAddress(value: string): string {
 	return (match ? match[1] : value).trim().toLowerCase();
 }
 
-/**
- * The Captured sink: the whole message, on the function log. Locally that is
- * the `netlify dev` terminal; on a preview, the deploy's function log.
- */
-function capture(input: SendEmailInput, context: string): void {
-	console.info(
-		`[email captured] ${context}`,
-		{ to: input.to, cc: input.cc || undefined, subject: input.subject },
-		`\n${input.text}`,
-	);
-}
-
 export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 	const delivery = emailDelivery();
 
 	if (delivery.mode === 'captured') {
-		capture(input, delivery.context);
+		capture('email', input.to, input.text, {
+			cc: input.cc || undefined,
+			subject: input.subject,
+		});
 		return {
 			ok: true,
 			warning: `Captured, not delivered (${delivery.context}): nothing leaves this deploy.`,

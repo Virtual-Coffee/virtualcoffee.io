@@ -20,6 +20,26 @@ export function deployContext(): string {
 	return process.env.CONTEXT || 'local';
 }
 
+/**
+ * The Captured sink: the whole message, on the function log — the `netlify dev`
+ * terminal locally, the deploy's function log on a preview. The body goes in
+ * on purpose, invite links included: a walkthrough checks what would have been
+ * sent and follows the link. docs/adr/0013 says who can read the log and why
+ * that is acceptable.
+ */
+export function capture(
+	kind: 'email' | 'slack' | 'github issue',
+	target: string,
+	body: string,
+	details?: Record<string, string | undefined>,
+): void {
+	console.info(
+		`[${kind} captured] ${deployContext()} ${target}`,
+		...(details ? [details] : []),
+		`\n${body}`,
+	);
+}
+
 export type EmailDelivery =
 	| { mode: 'live' }
 	| { mode: 'captured'; context: string }

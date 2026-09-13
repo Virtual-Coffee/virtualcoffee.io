@@ -183,8 +183,8 @@ describe('delivery modes', () => {
 		expect(createTransport.mock.calls.length).toBe(before);
 		expect(sendMail).not.toHaveBeenCalled();
 		expect(info).toHaveBeenCalledWith(
-			'[email captured] deploy-preview',
-			{ to: input.to, cc: 'maintainer@example.test', subject: input.subject },
+			`[email captured] deploy-preview ${input.to}`,
+			{ cc: 'maintainer@example.test', subject: input.subject },
 			`\n${input.text}`,
 		);
 		info.mockRestore();
