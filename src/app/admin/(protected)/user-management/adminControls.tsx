@@ -91,7 +91,7 @@ export function RolesDropdown({
 	 * grant still holds `volunteer` after that and is not empty.
 	 */
 	function revokeAll() {
-		if (!window.confirm(`Revoke all access for ${name}?`)) return;
+		if (!window.confirm(`Revoke every /admin role for ${name}?`)) return;
 
 		run(() =>
 			kind === 'user' ? setUserRoles(id, []) : revokePendingGrant(id),
@@ -199,7 +199,7 @@ export function RolesDropdown({
 										revokeAll();
 									}}
 								>
-									Revoke all
+									Revoke /admin roles
 								</button>
 							</li>
 						</>
