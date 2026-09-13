@@ -112,7 +112,9 @@
 	"overrides": {},
 	"intent": {
 		"skills": [
-			"*"
+			"@tanstack/*",
+			"drizzle-kit",
+			"dotenv"
 		]
 	}
 }
