@@ -18,9 +18,13 @@ const slackTeamId = process.env.SLACK_TEAM_ID;
 /**
  * Whether Slack sign-in can work at all. False on a fresh clone, where the
  * sign-in page reads this to explain itself rather than offering a button
- * that 500s.
+ * that 500s. The team id is part of the condition: without it the workspace
+ * check in `mapProfileToUser` would have nothing to compare against, and any
+ * Slack account anywhere could create a user.
  */
-export const slackAuthConfigured = Boolean(slackClientId && slackClientSecret);
+export const slackAuthConfigured = Boolean(
+	slackClientId && slackClientSecret && slackTeamId,
+);
 
 function createAuth() {
 	return betterAuth({
@@ -44,7 +48,7 @@ function createAuth() {
 						mapProfileToUser: (profile) => {
 							const team = profile[SLACK_TEAM_ID_CLAIM];
 
-							if (slackTeamId && team !== slackTeamId) {
+							if (team !== slackTeamId) {
 								throw new Error(
 									'This Slack account is not in the Virtual Coffee workspace.',
 								);
