@@ -151,7 +151,7 @@ export async function addVolunteer(
 	return {
 		ok: true,
 		message: sent.ok
-			? `${member.displayName} can now send invites, and we've emailed them.`
+			? `${member.displayName} can now send invites, and we've emailed them.${sent.warning ? ` ${sent.warning}` : ''}`
 			: `${member.displayName} can now send invites, but the email didn't send: ${sent.message}`,
 	};
 }
@@ -443,5 +443,10 @@ export async function resendInvite(
 		};
 	}
 
-	return { ok: true, message: `Invite re-sent to ${row.inviteeEmail}.` };
+	return {
+		ok: true,
+		message: sent.warning
+			? `Invite re-sent to ${row.inviteeEmail}. ${sent.warning}`
+			: `Invite re-sent to ${row.inviteeEmail}.`,
+	};
 }

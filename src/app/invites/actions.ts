@@ -242,7 +242,12 @@ export async function sendInvite(
 	}
 
 	revalidatePath('/invites');
-	return { ok: true, message: `Invite sent to ${email}.` };
+	return {
+		ok: true,
+		message: sent.warning
+			? `Invite sent to ${email}. ${sent.warning}`
+			: `Invite sent to ${email}.`,
+	};
 }
 
 /**
