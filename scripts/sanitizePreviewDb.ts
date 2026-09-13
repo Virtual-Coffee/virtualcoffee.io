@@ -837,35 +837,46 @@ async function main() {
 			`DEPLOY_ID=${process.env.DEPLOY_ID ?? '(unset)'})`,
 	);
 
-	const database = db();
+	/**
+	 * One transaction, or nothing. `fakeSlackId()` salts per process, so a run
+	 * that died between two tables and was retried would hash the already-faked
+	 * ids and the still-real ones differently, and `verify()` — which checks
+	 * shape, not linkage — would pass a preview whose Slack-id joins no longer
+	 * meet. The preview branch database persists across deploys, so that retry
+	 * is a real one. `inBatches` is serialised on the transaction's single
+	 * connection; fine at this size. The placeholder attachment blob is written
+	 * outside any transaction and is idempotent.
+	 */
+	await db().transaction(async (database) => {
+		await phase('membership pipeline', async () => {
+			const applicationEmailById =
+				await sanitizeMembershipApplications(database);
+			await sanitizeApplicationEvents(database, applicationEmailById);
+			await sanitizeInvites(database);
+			await sanitizeVolunteers(database);
+			await sanitizePendingGrants(database);
+		});
 
-	await phase('membership pipeline', async () => {
-		const applicationEmailById = await sanitizeMembershipApplications(database);
-		await sanitizeApplicationEvents(database, applicationEmailById);
-		await sanitizeInvites(database);
-		await sanitizeVolunteers(database);
-		await sanitizePendingGrants(database);
+		await phase('submissions', async () => {
+			await sanitizeCocReports(database);
+			await sanitizeVolunteerSignups(database);
+			await sanitizeLunchAndLearnIdeas(database);
+			await sanitizeCoffeeTableGroupRequests(database);
+			await sanitizeSubmissionEvents(database);
+			await sanitizeCocAttachments(database);
+		});
+
+		await phase('auth tables', () => sanitizeAuthTables(database));
+
+		const failures = await phase('verification', () => verify(database));
+
+		if (failures.length > 0) {
+			console.error('[db:sanitize-preview] verification failed:');
+			for (const failure of failures) console.error(`  - ${failure}`);
+			// Thrown rather than reported so the transaction rolls back.
+			throw new Error(`verification failed: ${failures.length} check(s)`);
+		}
 	});
-
-	await phase('submissions', async () => {
-		await sanitizeCocReports(database);
-		await sanitizeVolunteerSignups(database);
-		await sanitizeLunchAndLearnIdeas(database);
-		await sanitizeCoffeeTableGroupRequests(database);
-		await sanitizeSubmissionEvents(database);
-		await sanitizeCocAttachments(database);
-	});
-
-	await phase('auth tables', () => sanitizeAuthTables(database));
-
-	const failures = await phase('verification', () => verify(database));
-
-	if (failures.length > 0) {
-		console.error('[db:sanitize-preview] verification failed:');
-		for (const failure of failures) console.error(`  - ${failure}`);
-		process.exitCode = 1;
-		return;
-	}
 
 	log(`preview branch sanitized successfully in ${elapsed(started)}.`);
 }
