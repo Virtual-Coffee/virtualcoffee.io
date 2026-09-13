@@ -181,6 +181,13 @@ describe('validation', () => {
 				endTime: '10:00',
 			}),
 		).resolves.toEqual({ ok: false, message: 'Pick a date.' });
+		await expect(
+			rescheduleEvent(ID, ETAG, {
+				date: '2026-09-17',
+				startTime: '25:00',
+				endTime: '26:00',
+			}),
+		).resolves.toEqual({ ok: false, message: 'Pick a real time.' });
 	});
 });
 
@@ -219,7 +226,7 @@ describe('writing', () => {
 		await expect(cancelEvent(ID, ETAG)).resolves.toEqual({
 			ok: false,
 			message:
-				'This changed in Google Calendar since you loaded it. Reload the page and try again.',
+				'This changed in Google Calendar since you loaded it. Check the current details and try again.',
 		});
 		expect(revalidateTag).not.toHaveBeenCalled();
 	});

@@ -339,7 +339,9 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 						? {
 								start: item.originalStartTime.dateTime,
 								end:
-									DateTime.fromISO(item.originalStartTime.dateTime)
+									DateTime.fromISO(item.originalStartTime.dateTime, {
+										setZone: true,
+									})
 										.plus(
 											DateTime.fromISO(from.end?.dateTime ?? '').diff(
 												DateTime.fromISO(from.start?.dateTime ?? ''),
