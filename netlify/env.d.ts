@@ -39,6 +39,9 @@ declare namespace NodeJS {
 		// unless this is the literal `true`.
 		EMAIL_REDIRECT_TO?: string;
 		NOTIFY_LIVE_OUTSIDE_PRODUCTION?: string;
+		// Set by `pnpm email:dev` only: where the templates' images load from
+		// while the preview server, not production, is serving them.
+		EMAIL_ASSET_ORIGIN?: string;
 
 		// Slack notifications for inbound Submissions. One incoming webhook per
 		// destination, so a missing one only silences its own form.
