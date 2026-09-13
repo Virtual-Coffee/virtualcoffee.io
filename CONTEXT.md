@@ -150,8 +150,9 @@ Move one Event to a different time. The Series is unchanged.
 _Avoid_: Move, edit time, exception
 
 **Restore**:
-Take back a Cancel: the Event will happen after all.
-_Avoid_: Un-cancel, reinstate, undelete
+Take back a Cancel or a Reschedule: the Event happens, at the time its
+Series' rule gives it.
+_Avoid_: Un-cancel, reinstate, undelete, move back
 
 **End**:
 Declare that a Series has no further Events. Its past Events remain on the

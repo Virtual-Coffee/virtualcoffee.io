@@ -56,11 +56,16 @@ type Call = {
 function fakeClient(canned: {
 	list?: calendar_v3.Schema$Events[];
 	get?: Record<string, calendar_v3.Schema$Event>;
-	instances?: Record<string, calendar_v3.Schema$Events>;
+	/** One page, or the pages in order for a call that follows `nextPageToken`. */
+	instances?: Record<
+		string,
+		calendar_v3.Schema$Events | calendar_v3.Schema$Events[]
+	>;
 	patchError?: unknown;
 }) {
 	const calls: Call[] = [];
 	let page = 0;
+	const instancePages = new Map<string, number>();
 	const client: CalendarClient = {
 		events: {
 			async list(params) {
@@ -75,9 +80,12 @@ function fakeClient(canned: {
 			},
 			async instances(params) {
 				calls.push({ method: 'instances', params });
-				return {
-					data: canned.instances?.[params.eventId ?? ''] ?? { items: [] },
-				};
+				const id = params.eventId ?? '';
+				const canned_ = canned.instances?.[id] ?? { items: [] };
+				if (!Array.isArray(canned_)) return { data: canned_ };
+				const index = instancePages.get(id) ?? 0;
+				instancePages.set(id, index + 1);
+				return { data: canned_[index] ?? { items: [] } };
 			},
 			async insert(params) {
 				calls.push({ method: 'insert', params });
@@ -270,6 +278,77 @@ describe('listUpcomingEvents', () => {
 	});
 });
 
+describe('listSeriesEvents', () => {
+	test("pages one Series' next months, cancelled ones included", async () => {
+		const { cal, calls } = fakeClient({
+			instances: {
+				coffee: [
+					{
+						items: [
+							instance('coffee', '2026-09-15'),
+							instance('coffee', '2026-11-26', {
+								status: 'cancelled',
+								summary: undefined,
+								location: undefined,
+								start: undefined,
+								end: undefined,
+							}),
+						],
+						nextPageToken: 'p2',
+					},
+					{
+						items: [
+							instance('coffee', '2026-12-24', {
+								start: { dateTime: '2026-12-23T09:00:00-05:00' },
+								end: { dateTime: '2026-12-23T10:00:00-05:00' },
+							}),
+						],
+					},
+				],
+			},
+			get: { coffee: series },
+		});
+		const result = await cal.listSeriesEvents('coffee', { months: 12 });
+		expect(calls.filter((call) => call.method === 'instances')).toMatchObject([
+			{
+				params: {
+					eventId: 'coffee',
+					showDeleted: true,
+					timeZone: 'America/New_York',
+					timeMin: '2026-09-14T12:00:00.000-04:00',
+					timeMax: '2027-09-14T12:00:00.000-04:00',
+					maxResults: 250,
+					pageToken: undefined,
+				},
+			},
+			{ params: { eventId: 'coffee', pageToken: 'p2' } },
+		]);
+		expect(result).toMatchObject([
+			{
+				id: 'coffee_20260915T130000Z',
+				status: 'confirmed',
+				rescheduled: false,
+				originalStart: '2026-09-15T09:00:00-04:00',
+			},
+			{
+				id: 'coffee_20261126T130000Z',
+				status: 'cancelled',
+				title: 'Virtual Coffee',
+				start: '2026-11-26T09:00:00-04:00',
+				end: '2026-11-26T10:00:00.000-04:00',
+				seriesId: 'coffee',
+			},
+			{
+				id: 'coffee_20261224T130000Z',
+				status: 'confirmed',
+				rescheduled: true,
+				start: '2026-12-23T09:00:00-05:00',
+				originalStart: '2026-12-24T09:00:00-04:00',
+			},
+		]);
+	});
+});
+
 describe('writes', () => {
 	const input: SeriesInput = {
 		title: 'Feelings Friday',
@@ -450,10 +529,9 @@ describe('writes', () => {
 		});
 	});
 
-	test('cancel, restore and reschedule patch one Event', async () => {
+	test('cancel and reschedule patch one Event', async () => {
 		const { cal, calls } = fakeClient({});
 		await cal.cancelEvent('e1', '"a"');
-		await cal.restoreEvent('e1', '"b"');
 		await cal.rescheduleEvent('e1', '"c"', {
 			date: '2026-09-16',
 			startTime: '10:30',
@@ -463,10 +541,6 @@ describe('writes', () => {
 			{
 				params: { eventId: 'e1', requestBody: { status: 'cancelled' } },
 				options: { headers: { 'If-Match': '"a"' } },
-			},
-			{
-				params: { eventId: 'e1', requestBody: { status: 'confirmed' } },
-				options: { headers: { 'If-Match': '"b"' } },
 			},
 			{
 				params: {
@@ -485,6 +559,61 @@ describe('writes', () => {
 				options: { headers: { 'If-Match': '"c"' } },
 			},
 		]);
+	});
+
+	test('restore takes back a Cancel', async () => {
+		const id = 'coffee_20260917T130000Z';
+		const { cal, calls } = fakeClient({
+			get: { [id]: instance('coffee', '2026-09-17', { status: 'cancelled' }) },
+		});
+		await cal.restoreEvent(id, '"coffee-2026-09-17"');
+		expect(calls.filter((call) => call.method === 'patch')).toMatchObject([
+			{
+				params: { eventId: id, requestBody: { status: 'confirmed' } },
+				options: { headers: { 'If-Match': '"coffee-2026-09-17"' } },
+			},
+		]);
+		expect(calls.filter((call) => call.method === 'get')).toHaveLength(1);
+	});
+
+	test("restore takes back a Reschedule, with the Series' duration", async () => {
+		const id = 'coffee_20260922T130000Z';
+		const { cal, calls } = fakeClient({
+			get: {
+				[id]: instance('coffee', '2026-09-22', {
+					start: { dateTime: '2026-09-23T11:00:00-04:00' },
+					end: { dateTime: '2026-09-23T12:30:00-04:00' },
+				}),
+				coffee: series,
+			},
+		});
+		await cal.restoreEvent(id, '"coffee-2026-09-22"');
+		expect(calls.filter((call) => call.method === 'patch')).toMatchObject([
+			{
+				params: {
+					eventId: id,
+					requestBody: {
+						status: 'confirmed',
+						start: {
+							dateTime: '2026-09-22T09:00:00.000-04:00',
+							timeZone: 'America/New_York',
+						},
+						end: {
+							dateTime: '2026-09-22T10:00:00.000-04:00',
+							timeZone: 'America/New_York',
+						},
+					},
+				},
+				options: { headers: { 'If-Match': '"coffee-2026-09-22"' } },
+			},
+		]);
+	});
+
+	test('restore of an Event that moved on is a conflict', async () => {
+		const { cal } = fakeClient({ get: { e1: { id: 'e1', etag: '"new"' } } });
+		await expect(cal.restoreEvent('e1', '"old"')).rejects.toBeInstanceOf(
+			CalendarConflictError,
+		);
 	});
 });
 
