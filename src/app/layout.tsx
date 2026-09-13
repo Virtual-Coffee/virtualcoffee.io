@@ -1,5 +1,6 @@
 import Nav from '@/components/Nav';
 import Link from 'next/link';
+import { Inter } from 'next/font/google';
 import '@/styles/main.scss';
 
 import Image from 'next/image';
@@ -7,6 +8,19 @@ import Image from 'next/image';
 import { buildUrls } from '@/util/url.server';
 import { createMetaData } from '@/util/createMetaData.server';
 import Script from 'next/script';
+
+// Self-hosted at build time, so the browser never talks to Google. `variable`
+// only declares --font-inter rather than setting font-family, which keeps
+// $font-family-sans-serif (-> --bs-body-font-family) the one place the stack is
+// defined. Inter is a variable font, so the whole 100-900 wght axis arrives in
+// a single file — the styles ask for 300/500/600/700/900 and every one of them
+// was being synthesised from the system fallback before this. adjustFontFallback
+// defaults to true and emits a metric-matched fallback face to hold down CLS.
+const inter = Inter({
+	subsets: ['latin'],
+	display: 'swap',
+	variable: '--font-inter',
+});
 
 export async function generateMetadata() {
 	return await createMetaData({
@@ -23,7 +37,11 @@ export default function RootLayout({
 }) {
 	return (
 		<>
-			<html lang="en" className="h-full bg-gray-100">
+			<html
+				lang="en"
+				className={`h-full bg-gray-100 ${inter.variable}`}
+				data-scroll-behavior="smooth"
+			>
 				<head>
 					{buildUrls.NETLIFY && buildUrls.CONTEXT === 'production' && (
 						<Script

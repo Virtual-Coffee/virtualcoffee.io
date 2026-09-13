@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 import path from 'path';
 import { createHash } from 'crypto';
 import { readFileSync } from 'fs';
@@ -28,8 +27,28 @@ const localMdxPlugin = (relPath, options = {}) => {
 	return [absPath, { ...options, pluginVersion }];
 };
 
+// `netlify dev --live` serves the site from a per-developer tunnel host but
+// proxies to :9000, and sets `x-forwarded-host` to that local port. Next's
+// Server Action CSRF check compares `origin` to the forwarded host and aborts
+// on the mismatch, and its dev-resource guard blocks the tunnel the same way.
+// The subdomain differs per developer (`--live=<name>`), so allow the zone
+// rather than one host — in dev only; both lists are empty in every deployed
+// environment. `*` matches exactly one DNS label, so `*.netlify.live` is the
+// only pattern that matches `<sub>--<site>.netlify.live`.
+// NETLIFY_DEV is set by the CLI for the process it spawns.
+const devTunnelOrigins =
+	process.env.NETLIFY_DEV === 'true' ? ['*.netlify.live'] : [];
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
+	// `netlify dev` routes every request through the block-bots edge function
+	// (netlify.toml declares it on /*), and the local Deno runtime gunzips the
+	// upstream body while passing Next's `content-encoding: gzip` header through
+	// untouched — the browser then fails with ERR_CONTENT_DECODING_FAILED. Netlify's
+	// CDN compresses in production, so let the proxy own compression locally.
+	// NETLIFY_DEV is set by the CLI for the process it spawns.
+	compress: process.env.NETLIFY_DEV !== 'true',
 	sassOptions: {
 		includePaths: [path.join(__dirname, 'node_modules')],
 		// Bootstrap 5.3's own Sass triggers if-function and global-builtin
@@ -45,6 +64,22 @@ const nextConfig = {
 		],
 	},
 	pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+	// Next 16 streams React's dev-only debug info (owner stacks, component
+	// origins) to the browser over the `/_next/hmr` websocket, keyed by request
+	// id, and the client router *blocks* the Flight decode until those chunks
+	// arrive. Behind `netlify dev --live` the socket connects and the server
+	// sends every chunk, but they never reach the browser, so every client-side
+	// navigation suspends forever: the RSC response is a clean 200, nothing
+	// throws, nothing is logged, and the page simply never changes. Defaults to
+	// true; disabling it costs richer dev stack traces and nothing else. Set it
+	// back to `true` if you never use the live tunnel and want them.
+	experimental: {
+		reactDebugChannel: false,
+		serverActions: {
+			allowedOrigins: devTunnelOrigins,
+		},
+	},
+	allowedDevOrigins: devTunnelOrigins,
 };
 
 const withMDX = createMDX({

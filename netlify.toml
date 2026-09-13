@@ -1,232 +1,232 @@
 [build]
-  command = "pnpm build"
-  functions = "netlify/functions"
-  publish = ".next"
+	command   = "pnpm build"
+	functions = "netlify/functions"
+	publish   = ".next"
 
 [[edge_functions]]
-  function = "block-bots"
-  path = "/*"
+	function = "block-bots"
+	path     = "/*"
 
 [dev]
-  command = "next dev"
-  port = 9000
-  targetPort = 3000
-  autoLaunch = false
-  framework="next"
+	autoLaunch = false
+	command    = "next dev"
+	framework  = "#auto"
+	port       = 9000
+	targetPort = 3000
 
 [[headers]]
-  for = "/_next/static/*"
-  [headers.values]
-    "Cache-Control" = "public, max-age=31536000, s-maxage=31536000"
+	for = "/_next/static/*"
+	[headers.values]
+		"Cache-Control" = "public, max-age=31536000, s-maxage=31536000"
 
 [[redirects]]
-  from = "/volunteer"
-  to = "/resources/virtual-coffee-handbook/get-involved"
-  status = 301
+	from   = "/volunteer"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/get-involved"
 
 [[redirects]]
-  from = "/members/map"
-  to = "/members"
-  status = 301
+	from   = "/members/map"
+	status = 301
+	to     = "/members"
 
 [[redirects]]
-  from = "/member-survey"
-  to = "https://airtable.com/appGHm8ztVWug6UxH/pagKrtAhS4jnRhtYD/form"
-  status = 301
+	from   = "/member-survey"
+	status = 301
+	to     = "https://airtable.com/appGHm8ztVWug6UxH/pagKrtAhS4jnRhtYD/form"
 
 [[redirects]]
-  from = "/netlify-forms"
-  to = "/"
-  status = 200
+	from   = "/netlify-forms"
+	status = 200
+	to     = "/"
 
 [[redirects]]
-  from = "/report-coc-violation-success"
-  to = "/"
-  status = 200
+	from   = "/report-coc-violation-success"
+	status = 200
+	to     = "/"
 
 [[redirects]]
-  from = "/sponsorship"
-  to = "https://github.com/sponsors/Virtual-Coffee"
-  status = 302
+	from   = "/sponsorship"
+	status = 302
+	to     = "https://github.com/sponsors/Virtual-Coffee"
 
 [[redirects]]
-  from = "/brownbag-idea"
-  to = "/lunch-and-learn-idea"
-  status = 301
-  force = true
+	force  = true
+	from   = "/brownbag-idea"
+	status = 301
+	to     = "/lunch-and-learn-idea"
 
 [[redirects]]
-  from = "/brownbag-idea-thanks"
-  to = "/lunch-and-learn-idea-thanks"
-  status = 301
-  force = true
+	force  = true
+	from   = "/brownbag-idea-thanks"
+	status = 301
+	to     = "/lunch-and-learn-idea-thanks"
 
 [[redirects]]
-  from = "/member-resources"
-  to = "/resources"
-  status = 301
-  force = true
+	force  = true
+	from   = "/member-resources"
+	status = 301
+	to     = "/resources"
 
 [[redirects]]
-  from = "/member-resources/oss-maintainer-checklist"
-  to = "/resources/developer-resources/open-source/maintainer-guide#repository-checklist"
-  status = 301
-  force = true
+	force  = true
+	from   = "/member-resources/oss-maintainer-checklist"
+	status = 301
+	to     = "/resources/developer-resources/open-source/maintainer-guide#repository-checklist"
 
 [[redirects]]
-  from = "/member-resources/oss-writing-issues"
-  to = "/resources/developer-resources/open-source/contributor-guide#guide-to-writing-issues"
-  status = 301
-  force = true
+	force  = true
+	from   = "/member-resources/oss-writing-issues"
+	status = 301
+	to     = "/resources/developer-resources/open-source/contributor-guide#guide-to-writing-issues"
 
 [[redirects]]
-  from = "/member-resources/guide-to-vc"
-  to = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee"
-  status = 301
-  force = true
+	force  = true
+	from   = "/member-resources/guide-to-vc"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee"
 
 [[redirects]]
-  from = "/member-resources/join-virtual-coffee"
-  to = "/resources/virtual-coffee-handbook/join-virtual-coffee"
-  status = 301
-  force = true
+	force  = true
+	from   = "/member-resources/join-virtual-coffee"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/join-virtual-coffee"
 
 [[redirects]]
-  from = "/member-resources/slack-channel-guide"
-  to = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide"
-  status = 301
-  force = true
+	force  = true
+	from   = "/member-resources/slack-channel-guide"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide"
 
 [[redirects]]
-  from = "/resources/open-source/oss-writing-issues"
-  to = "/resources/developer-resources/open-source/contributor-guide#guide-to-writing-issues"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/open-source/oss-writing-issues"
+	status = 301
+	to     = "/resources/developer-resources/open-source/contributor-guide#guide-to-writing-issues"
 
 [[redirects]]
-  from = "/resources/open-source/oss-maintainer-checklist"
-  to = "/resources/developer-resources/open-source/maintainer-guide#repository-checklist"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/open-source/oss-maintainer-checklist"
+	status = 301
+	to     = "/resources/developer-resources/open-source/maintainer-guide#repository-checklist"
 
 [[redirects]]
-  from = "/resources/open-source"
-  to = "/resources/developer-resources/open-source"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/open-source"
+	status = 301
+	to     = "/resources/developer-resources/open-source"
 
 [[redirects]]
-  from = "/resources/open-source/about-open-source"
-  to = "/resources/developer-resources/open-source/about-open-source"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/open-source/about-open-source"
+	status = 301
+	to     = "/resources/developer-resources/open-source/about-open-source"
 
 [[redirects]]
-  from = "/resources/open-source/git-101"
-  to = "/resources/developer-resources/open-source/git-101"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/open-source/git-101"
+	status = 301
+	to     = "/resources/developer-resources/open-source/git-101"
 
 [[redirects]]
-  from = "/resources/open-source/contributor-guide"
-  to = "/resources/developer-resources/open-source/contributor-guide"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/open-source/contributor-guide"
+	status = 301
+	to     = "/resources/developer-resources/open-source/contributor-guide"
 
 [[redirects]]
-  from = "/resources/open-source/maintainer-guide"
-  to = "/resources/developer-resources/open-source/maintainer-guide"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/open-source/maintainer-guide"
+	status = 301
+	to     = "/resources/developer-resources/open-source/maintainer-guide"
 
 [[redirects]]
-  from = "/resources/virtual-coffee"
-  to = "/resources/virtual-coffee-handbook"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/virtual-coffee"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook"
 
 [[redirects]]
-  from = "/resources/virtual-coffee/get-involved"
-  to = "/resources/virtual-coffee-handbook/get-involved"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/virtual-coffee/get-involved"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/get-involved"
 
 [[redirects]]
-  from = "/resources/virtual-coffee/get-involved/paths-to-leadership"
-  to = "/resources/virtual-coffee-handbook/get-involved/paths-to-leadership"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/virtual-coffee/get-involved/paths-to-leadership"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/get-involved/paths-to-leadership"
 
 [[redirects]]
-  from = "/resources/virtual-coffee/get-involved/coffee-table-groups"
-  to = "/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/virtual-coffee/get-involved/coffee-table-groups"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups"
 
 [[redirects]]
-  from = "/resources/virtual-coffee/get-involved/lunch-and-learns"
-  to = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee/lunch-and-learns"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/virtual-coffee/get-involved/lunch-and-learns"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee/lunch-and-learns"
 
 [[redirects]]
-  from = "/resources/virtual-coffee/join-virtual-coffee"
-  to = "/resources/virtual-coffee-handbook/join-virtual-coffee"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/virtual-coffee/join-virtual-coffee"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/join-virtual-coffee"
 
 [[redirects]]
-  from = "/resources/virtual-coffee/guide-to-vc"
-  to = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/virtual-coffee/guide-to-vc"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee"
 
 [[redirects]]
-  from = "/resources/virtual-coffee/slack-channel-guide"
-  to = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/virtual-coffee/slack-channel-guide"
+	status = 301
+	to     = "/resources/virtual-coffee-handbook/guides-to-virtual-coffee/slack-channels-guide"
 
 [[redirects]]
-  from = "/resources/virtual-coffee/coding-questions-guide"
-  to = "/resources/developer-resources/developer-tips/asking-coding-questions"
-  status = 301
-  force = true
+	force  = true
+	from   = "/resources/virtual-coffee/coding-questions-guide"
+	status = 301
+	to     = "/resources/developer-resources/developer-tips/asking-coding-questions"
 
 [[redirects]]
-  from = "/join-coffee"
-  query = {day = ":day", code = ":code"}
-  to = "/.netlify/functions/join-coffee"
-  status = 200
+	from   = "/join-coffee"
+	query  = { day = ":day", code = ":code" }
+	status = 200
+	to     = "/.netlify/functions/join-coffee"
 
 [[redirects]]
-  from = "/join-slack"
-  query = { code = ":code"}
-  to = "/.netlify/functions/join-slack"
-  status = 200
+	from   = "/join-slack"
+	query  = { code = ":code" }
+	status = 200
+	to     = "/.netlify/functions/join-slack"
 
 [[redirects]]
-  from = "/bots/*"
-  to = "https://vc-bots.lucky-art-2f02.workers.dev/:splat"
-  status = 200
-  force = true
+	force  = true
+	from   = "/bots/*"
+	status = 200
+	to     = "https://vc-bots.lucky-art-2f02.workers.dev/:splat"
 
 [[redirects]]
-  from = "/plausible/js/script.js"
-  to = "https://plausible.io/js/script.js"
-  status = 200
+	from   = "/plausible/js/script.js"
+	status = 200
+	to     = "https://plausible.io/js/script.js"
 
 [[redirects]]
-  from = "/plausible/api/event"
-  to = "https://plausible.io/api/event"
-  status = 200
+	from   = "/plausible/api/event"
+	status = 200
+	to     = "https://plausible.io/api/event"
 
 [[redirects]]
-  from = "/l/vc-conf-survey"
-  to = "https://docs.google.com/forms/d/e/1FAIpQLSd3l-YJIhA-lAAkWqEP5qbWGUPg8_HtKOfIN5M_NKYfStv4nA/viewform"
-  status = 302
+	from   = "/l/vc-conf-survey"
+	status = 302
+	to     = "https://docs.google.com/forms/d/e/1FAIpQLSd3l-YJIhA-lAAkWqEP5qbWGUPg8_HtKOfIN5M_NKYfStv4nA/viewform"
 
 [[redirects]]
-  from = "/l/vc-conf-cfp-form"
-  to = "https://docs.google.com/forms/d/e/1FAIpQLSc_F6A6hhOO8PNgRoR32sxKnIePZdHY7gMTK-nD0yGCFuClCQ/viewform"
-  status = 302
+	from   = "/l/vc-conf-cfp-form"
+	status = 302
+	to     = "https://docs.google.com/forms/d/e/1FAIpQLSc_F6A6hhOO8PNgRoR32sxKnIePZdHY7gMTK-nD0yGCFuClCQ/viewform"

@@ -10,20 +10,6 @@
 	filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));
 }
 
-.nav-item {
-	font-weight: 600;
-	font-size: 1.1rem;
-	line-height: 1;
-
-	.nav-link {
-		text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-	}
-}
-
-.nav-item.active {
-	font-weight: 700;
-}
-
 .navbar {
 	background-image: $gradient-primary;
 
@@ -31,8 +17,25 @@
 		z-index: $zindex-fixed + 2;
 	}
 
+	// Scoped to .navbar deliberately: `.nav-item` / `.nav-link` are plain
+	// Bootstrap classes, so any other nav on the site (`.nav-pills`, tabs)
+	// inherited both this type ramp and the text-shadow. Dark-on-light links
+	// with a black shadow read as blurry; the shadow only earns its place over
+	// the gradient.
 	.nav-item {
+		font-weight: 600;
+		font-size: 1.1rem;
+		line-height: 1;
 		text-align: right;
+
+		&.active {
+			font-weight: 700;
+		}
+
+		.nav-link {
+			text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+		}
+
 		svg {
 			fill: currentColor;
 			filter: drop-shadow(0px 1px 1px rgba(0, 0, 0, 0.5));

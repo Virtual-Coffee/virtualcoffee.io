@@ -2,9 +2,23 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+<!-- intent-skills:start -->
+
+## Skill Loading
+
+Before editing files for a substantial task:
+
+- Run `pnpx @tanstack/intent@latest list` from the workspace root to see available local skills.
+- If a listed skill matches the task, run `pnpx @tanstack/intent@latest load <package>#<skill>` before changing files.
+- Use the loaded `SKILL.md` guidance while making the change.
+- Monorepos: when working across packages, run the skill check from the workspace root and prefer the local skill for the package being changed.
+- Multiple matches: prefer the most specific local skill for the package or concern you are changing; load additional skills only when the task spans multiple packages or concerns.
+
+<!-- intent-skills:end -->
+
 ## Overview
 
-virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS and build-time fetches from GitHub, a Google Calendar, and Airtable; the GitHub and Calendar fetches fall back to mock data when credentials are absent, while the Airtable-backed features degrade to empty data or an error state (see the table below).
+virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS/JSON and build-time fetches from GitHub and a Craft CMS, both of which fall back to mock data when credentials are absent. Airtable remains only behind the form submissions, which return an error state without credentials.
 
 ## Commands
 
@@ -57,7 +71,6 @@ Every external data source lives in `src/data/` and degrades to mocks when its e
 | Member GitHub profiles                           | `src/data/members/index.ts`       | `GITHUB_TOKEN`                                     | `src/data/mocks/memberData.js` (faker) |
 | GitHub Sponsors                                  | `src/data/sponsors.ts`            | `GITHUB_TOKEN`                                     | `src/data/mocks/sponsors.ts`           |
 | Events (Google Calendar API via service account) | `src/data/events.ts`              | `GOOGLE_SERVICE_ACCOUNT_KEY`, `GOOGLE_CALENDAR_ID` | `src/data/mocks/events.ts`             |
-| Monthly challenge counters                       | `src/data/monthlyChallenges/*.ts` | `PUBLIC_AIRTABLE_API_KEY`                          | empty data                             |
 | Form submissions (server actions)                | `src/util/airtable/action.ts`     | `FORMS_AIRTABLE_API_KEY`                           | error state returned to the form       |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. Any new external fetch should follow this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`. Fetches are wrapped in `unstable_cache` with a tag (`members`, `events`, `mdx-routes`); `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates on demand and a daily GitHub Action triggers a Netlify rebuild.
@@ -107,7 +120,7 @@ Unlike the other codegen it is **checked in**, so it is not part of `pnpm codege
 
 ## Content conventions
 
-- Monthly challenges: prose lives in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`. Follow the process in the VC Community Building Resources "Monthly Challenge Technical Guidelines" linked from the README.
+- Monthly challenges: prose lives in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`. Follow the process in the VC Community Building Resources "Monthly Challenge Technical Guidelines" linked from the README. The entry data for past challenges is a frozen snapshot in `src/data/monthlyChallenges/data/*.json` — see `docs/adr/0004` for why it is JSON and not a live fetch.
 - Member emoji must be standard Unicode; maintainers reject PRs otherwise.
 - PRs should link an issue (`Closes #123`); the PR template asks for Description and Methodology sections.
 
