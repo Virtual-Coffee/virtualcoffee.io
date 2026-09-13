@@ -1,7 +1,7 @@
 import { createAppAuth } from '@octokit/auth-app';
 import { Octokit } from '@octokit/rest';
 
-import { deployContext, notifyDelivery } from '@/lib/outbound';
+import { capture, deployContext, notifyDelivery } from '@/lib/outbound';
 
 /**
  * Opens the Lunch & Learn issue — the working artefact; the Slack message
@@ -137,9 +137,10 @@ export async function createLunchAndLearnIssue(idea: {
 	// Captured before the App is looked at, so a preview without credentials
 	// is quiet rather than "never announced".
 	if (notifyDelivery() === 'captured') {
-		console.info(
-			`[github issue captured] ${deployContext()} ${OWNER}/${REPO}`,
-			`\nLunch & Learn: ${idea.topic}\n\n${issueBody(idea)}`,
+		capture(
+			'github issue',
+			`${OWNER}/${REPO}`,
+			`Lunch & Learn: ${idea.topic}\n\n${issueBody(idea)}`,
 		);
 		return {
 			ok: true,
