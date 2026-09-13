@@ -88,11 +88,23 @@ export async function submitLunchAndLearnIdea(
 
 		// A captured issue has no URL to keep (docs/adr/0013).
 		const issueUrl = issue.ok ? issue.url : null;
+		// Slack does not depend on the row carrying the URL, so a failed update is
+		// noted in the event (whose body already names the issue) rather than
+		// allowed to skip the announcement.
+		let unsaved = '';
 		if (issueUrl) {
-			await db()
-				.update(lunchAndLearnIdea)
-				.set({ githubIssueUrl: issueUrl })
-				.where(eq(lunchAndLearnIdea.id, saved.id));
+			try {
+				await db()
+					.update(lunchAndLearnIdea)
+					.set({ githubIssueUrl: issueUrl })
+					.where(eq(lunchAndLearnIdea.id, saved.id));
+			} catch (error) {
+				console.error(
+					`Could not save the issue URL on Lunch & Learn idea ${saved.id}`,
+					error,
+				);
+				unsaved = ' The issue link could not be saved to the submission.';
+			}
 		}
 
 		const slack = await notifySlack(
@@ -102,7 +114,7 @@ export async function submitLunchAndLearnIdea(
 
 		return {
 			ok: issue.ok && slack.ok,
-			message: `${issue.message} ${slack.message}`,
+			message: `${issue.message}${unsaved} ${slack.message}`,
 		};
 	});
 

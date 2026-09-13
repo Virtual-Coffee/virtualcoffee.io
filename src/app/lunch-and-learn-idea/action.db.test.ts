@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { describe, expect, test, vi } from 'vitest';
 
 import { db, lunchAndLearnIdea, submissionEvent } from '@/db';
+import { failWrites } from '@/test/db/fixtures';
 import { formDataWith } from '@/test/forms';
 import { redirectTo } from '@/test/next';
 
@@ -110,6 +111,35 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(events[1]).toEqual({
 			type: 'notification_sent',
 			body: 'Captured, no GitHub issue opened (deploy-preview). Captured, not posted to Slack (deploy-preview).',
+		});
+	});
+
+	test('failing to save the issue URL does not stop the Slack message', async () => {
+		createLunchAndLearnIssue.mockResolvedValue({
+			ok: true,
+			url: ISSUE,
+			message: `Opened ${ISSUE}`,
+		});
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		const fault = await failWrites('lunch_and_learn_idea', 'update');
+		let result;
+		try {
+			result = await submit();
+		} finally {
+			await fault.remove();
+			error.mockRestore();
+		}
+
+		expect(result.row.githubIssueUrl).toBeNull();
+		expect(notifySlack).toHaveBeenCalledWith(
+			'lunch-and-learn',
+			`New Lunch & Learn Submission: Property testing by Ada\n\nGitHub Link: ${ISSUE}`,
+		);
+		expect(result.events[1]).toEqual({
+			type: 'notification_sent',
+			body: `Opened ${ISSUE} The issue link could not be saved to the submission. Posted to Slack.`,
 		});
 	});
 
