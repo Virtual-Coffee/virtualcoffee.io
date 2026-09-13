@@ -41,7 +41,8 @@ const {
 const series = {
 	title: 'Virtual Coffee',
 	description: 'Come hang out',
-	joinLink: 'https://zoom.example/j/1',
+	joinLink: 'https://meet.example/coffee',
+	hostCode: '',
 	date: '2026-09-15', // a Tuesday
 	startTime: '09:00',
 	endTime: '10:00',
@@ -91,6 +92,16 @@ describe('validation', () => {
 			'The Join Link has to be a full URL.',
 		],
 		[
+			'a Zoom Join Link without a host code',
+			{ ...series, joinLink: 'https://us02web.zoom.us/j/12345678901' },
+			'A Zoom Join Link needs its host code, or the Slack bots cannot announce it.',
+		],
+		[
+			'a host code that is not 6–10 digits',
+			{ ...series, hostCode: 'abc' },
+			'A Zoom host code is 6–10 digits.',
+		],
+		[
 			'an end before the start',
 			{ ...series, endTime: '08:00' },
 			'The end has to be after the start, on the same day.',
@@ -124,6 +135,19 @@ describe('validation', () => {
 	])('createSeries refuses %s', async (_what, input, message) => {
 		await expect(createSeries(input)).resolves.toEqual({ ok: false, message });
 		expect(calendar.createSeries).not.toHaveBeenCalled();
+	});
+
+	test('a Zoom Join Link with its host code is accepted', async () => {
+		await expect(
+			createSeries({
+				...series,
+				joinLink: 'https://us02web.zoom.us/j/12345678901?pwd=x',
+				hostCode: ' 123456 ',
+			}),
+		).resolves.toMatchObject({ ok: true });
+		expect(calendar.createSeries).toHaveBeenCalledWith(
+			expect.objectContaining({ hostCode: '123456' }),
+		);
 	});
 
 	test('updateSeries accepts a null rule and leaves it alone', async () => {
@@ -222,7 +246,8 @@ describe('Delivery Mode', () => {
 			ok: true,
 			message: `Captured (local): cancel Event ${ID} — nothing was written to the Events Calendar.`,
 		});
-		expect(info).toHaveBeenCalledWith(`[calendar captured] cancel Event ${ID}`);
+		// The log line is the constant label; the id is only in the message.
+		expect(info).toHaveBeenCalledWith('[calendar captured] cancel Event');
 		expect(connectEventsCalendar).not.toHaveBeenCalled();
 		expect(revalidateTag).not.toHaveBeenCalled();
 		info.mockRestore();

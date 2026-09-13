@@ -9,25 +9,30 @@ link, a Zoom host code, a Slack channel — that the Slack bots
 edited all of it in Craft's admin. Retiring Craft meant choosing where a
 Series lives and where those extra fields go.
 
-The community already keeps the Events Calendar on Google, publicly readable
-and subscribable, and maintainers edit it from Google's own UI, phones
-included. With the CMS gone the site (0004) holds everything else in Netlify
-Database, so a Postgres `series` table with the calendar as a projection was
-the obvious alternative: private fields stay private, and the admin page is
-an ordinary form. It would also have made the site the owner of recurrence,
-exceptions and cancellations — the exact machinery Google runs for us and
-pushes notifications about — and turned every edit made in Google's UI into
-a sync conflict.
+The community already keeps the Events Calendar on Google. Its ACL is the
+maintainers as owners, one service account as owner, and the
+`virtualcoffee.io` Google Workspace as reader; there is no public entry, so
+the calendar is readable by anyone in the workspace and by the site and the
+bots through that one service account, and by nobody else. Maintainers edit
+it from Google's own UI, phones included. With the CMS gone the site (0004)
+holds everything else in Netlify Database, so a Postgres `series` table with
+the calendar as a projection was the obvious alternative: the admin page is
+an ordinary form and every field is ours. It would also have made the site
+the owner of recurrence, exceptions and cancellations — the exact machinery
+Google runs for us and pushes notifications about — and turned every edit
+made in Google's UI into a sync conflict.
 
-The bots' Google Calendar branch had kept the extra fields on the calendar as
-`extendedProperties.private`, on the understanding that `private` hides them
-from subscribers. Google's own documentation scopes private properties to
-_the calendar's copy of the event_, not to the application that wrote them: a
-public calendar has one copy, so any API reader with the calendar id sees
-them, Zoom host code included. And the host code is not an Event fact at
-all: Zoom's host key belongs to the Zoom user, every Virtual Coffee event
-runs under the one Zoom account, and the bots already hold credentials for
-it.
+The host code was the awkward field. It is Zoom's per-user host key, and the
+first version of this decision had the bots fetch it from Zoom at send time
+so the calendar would carry nothing sensitive. That cannot be built: Zoom
+removed `host_key` from every API response in 2022 "for security reasons"
+(<https://devforum.zoom.us/t/get-a-users-host-key-via-api/79004>), a live
+probe with the admin user scopes confirmed no user returns one, and Zoom's
+own advice is to keep your own datastore. Google's `extendedProperties.private`
+is scoped to the calendar's copy of the event, not to the application that
+wrote it, so whoever can read the calendar through the API can read a
+private property — the workspace, here. Google's UI cannot edit extended
+properties at all.
 
 ## Decision
 
@@ -43,11 +48,23 @@ and following", which Google does by splitting the Series, stays in Google's
 UI.
 
 **The Join Link is the event's `location`.** It is the field Google shows
-and lets a maintainer edit, and it is what every Series already carries.
-Nothing is written to or read from `extendedProperties`.
+and lets a maintainer edit, and it is what every Series already carries. The
+`joinLink` and `slackChannelId` private properties the bots once read are
+retired.
 
-**The Zoom host code is not an Event field.** The bots read the host key
-from Zoom for the event-admin mirror; the calendar never carries it.
+**The Host Code is `extendedProperties.private.hostCode`.** It is an Event
+field, kept where the bots read it (vc-bots ADR 0001): the admin page is the
+only writer, since Google's UI cannot set it; the bots show it in their
+event-admin mirror and refuse to announce a Zoom Event without one, so the
+admin page requires it whenever the Join Link is a Zoom join URL. The site's
+public read never touches extended properties. Anyone who can read the
+calendar through the API can read the code — the workspace — and that
+exposure is accepted; the calendar is not public.
+
+**Descriptions are Markdown.** The bots render them for Slack with
+`slackify-markdown`; the site renders them with its own Markdown pipeline. A
+description that still carries HTML tags — the shape Craft left behind — is
+rendered as HTML until the calendar is migrated.
 
 **Writes are conditional.** The admin page sends the `etag` it loaded as
 `If-Match` on every update and asks the maintainer to reload on a `412`, so
@@ -72,19 +89,19 @@ edited in Google.
 
 ## Consequences
 
-- Nothing on the Events Calendar is private, by design. Anything that must
-  not be public does not go on it — there is no second, hidden field set to
-  reach for.
+- Anything on the Events Calendar is visible to the whole workspace through
+  the API, private properties included. That is the bar for what may go on
+  it; a Host Code clears it, a password would not.
+- Rotating a Host Code is an edit on `/admin/events`, and nowhere else.
 - A Series' standing description and Join Link live on the recurring event
   in Google, where the site and the bots both read them.
-- The `vc-bots` Google source drops its `extendedProperties` fallback chain
-  and fetches the host key from Zoom (`Virtual-Coffee/vc-bots#14`).
+- The calendar itself needs a one-off migration on the bots' side: set
+  `location` on the two Virtual Coffee Series whose old `joinLink` property
+  disagrees with it, clear `joinLink`, keep `hostCode`, and convert the
+  descriptions from HTML to Markdown.
 - The site is a client of Google for events: an outage there is an outage
   here. `/events` stays cached for twelve hours and fails a production build
   loudly rather than rendering an empty list, as before.
 - The service account's scope is `calendar.events` — one client for reads
   and writes — and each admin write revalidates the `events` cache tag and
   the pages that read it.
-- Nothing the admin page does is private either: `event_organizer` is a
-  Role over a public calendar, so the permission protects the calendar's
-  integrity, not its contents.
