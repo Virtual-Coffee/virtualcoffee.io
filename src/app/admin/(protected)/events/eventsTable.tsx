@@ -34,7 +34,9 @@ function RowActions({ event }: { event: AdminEvent }) {
 					disabled={pending}
 					onClick={() => {
 						if (cancelled) {
-							run(() => restoreEvent(event.id, event.etag));
+							run(() => restoreEvent(event.id, event.etag), {
+								refresh: 'always',
+							});
 							return;
 						}
 						if (
@@ -44,7 +46,7 @@ function RowActions({ event }: { event: AdminEvent }) {
 						) {
 							return;
 						}
-						run(() => cancelEvent(event.id, event.etag));
+						run(() => cancelEvent(event.id, event.etag), { refresh: 'always' });
 					}}
 				>
 					{pending ? '…' : cancelled ? 'Restore' : 'Cancel'}
@@ -60,6 +62,7 @@ function RowActions({ event }: { event: AdminEvent }) {
 					onConfirm={(when) =>
 						run(() => rescheduleEvent(event.id, event.etag, when), {
 							settle: () => setRescheduling(false),
+							refresh: 'always',
 						})
 					}
 				/>

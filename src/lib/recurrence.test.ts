@@ -170,6 +170,21 @@ describe('describeRecurrence', () => {
 		);
 	});
 
+	test('UNTIL is named as the display-zone date, not the UTC token', () => {
+		expect(
+			describeRecurrence({
+				...weekly,
+				ends: { kind: 'until', date: '2026-12-30' },
+			}),
+		).toBe('every week on Tuesday, Thursday until December 30, 2026');
+		expect(
+			parseRecurrence(['RRULE:FREQ=DAILY;INTERVAL=2;UNTIL=20261231T045959Z']),
+		).toMatchObject({
+			kind: 'custom',
+			text: 'every 2 days until December 30, 2026',
+		});
+	});
+
 	test('custom rules keep their text', () => {
 		expect(
 			describeRecurrence({ kind: 'custom', rrule: 'x', text: 'every day' }),
