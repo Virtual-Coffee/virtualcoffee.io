@@ -1,7 +1,10 @@
 import { unified } from 'unified';
+import rehypeParse from 'rehype-parse';
+import rehypeRemark from 'rehype-remark';
+import rehypeStringify from 'rehype-stringify';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
-import rehypeStringify from 'rehype-stringify';
+import remarkStringify from 'remark-stringify';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
 
 /**
@@ -20,4 +23,20 @@ export async function parseMarkdown(markdown: string) {
 		.process(markdown);
 
 	return sanitizeHtml(String(file));
+}
+
+/**
+ * A best-effort Markdown rendering of legacy HTML — what the admin page's
+ * editor opens when a description still carries the shape Craft left behind
+ * (docs/adr/0014). Whatever Markdown cannot express, `rehype-remark` keeps
+ * as text or drops; the maintainer sees the result before saving it.
+ */
+export async function htmlToMarkdown(html: string) {
+	const file = await unified()
+		.use(rehypeParse, { fragment: true })
+		.use(rehypeRemark)
+		.use(remarkStringify, { bullet: '-' })
+		.process(html);
+
+	return String(file).trim();
 }
