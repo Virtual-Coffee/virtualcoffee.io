@@ -277,6 +277,7 @@ export type SubmissionRow = Record<string, unknown> & {
 	reference: number;
 	status: SubmissionStatus;
 	submittedAt: Date;
+	closedAt: Date | null;
 };
 
 /**
