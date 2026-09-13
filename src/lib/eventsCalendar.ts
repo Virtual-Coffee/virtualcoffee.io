@@ -76,6 +76,8 @@ export type AdminEvent = {
 	seriesId: string | null;
 	/** An Event of a Series that no longer sits where the rule put it. */
 	rescheduled: boolean;
+	/** Where the rule put an Event of a Series, whether or not it still sits there. */
+	originalStart: string | null;
 	joinLink: string;
 	htmlLink: string | null;
 };
@@ -208,6 +210,22 @@ function isTombstone(event: calendar_v3.Schema$Event) {
 	);
 }
 
+/** Whether an Event of a Series sits somewhere other than where the rule put it. */
+function moved(originalStart: string | null, start: string): boolean {
+	return (
+		originalStart !== null &&
+		DateTime.fromISO(originalStart).toMillis() !==
+			DateTime.fromISO(start).toMillis()
+	);
+}
+
+/** How long a Series' Events run, from the Series itself. */
+function duration(series: calendar_v3.Schema$Event) {
+	return DateTime.fromISO(series.end?.dateTime ?? '').diff(
+		DateTime.fromISO(series.start?.dateTime ?? ''),
+	);
+}
+
 function timed(event: calendar_v3.Schema$Event) {
 	return typeof event.start?.dateTime === 'string' &&
 		typeof event.end?.dateTime === 'string'
@@ -306,25 +324,13 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 	}
 
 	/**
-	 * The next `days` of Events in start order, cancelled ones included. A
-	 * cancelled Event of a Series is only guaranteed its id, its Series and its
-	 * original start; the rest is filled from the Series.
+	 * Google's items as Events, cancelled ones included. A cancelled Event of a
+	 * Series is only guaranteed its id, its Series and its original start; the
+	 * rest is filled from the Series, fetched once per Series.
 	 */
-	async function listUpcomingEvents({
-		days,
-	}: {
-		days: number;
-	}): Promise<AdminEvent[]> {
-		const now = DateTime.now().setZone(DISPLAY_ZONE);
-		const items = await listAll({
-			singleEvents: true,
-			showDeleted: true,
-			orderBy: 'startTime',
-			timeZone: DISPLAY_ZONE,
-			timeMin: iso(now.startOf('day')),
-			timeMax: iso(now.startOf('day').plus({ days })),
-		});
-
+	async function toAdminEvents(
+		items: calendar_v3.Schema$Event[],
+	): Promise<AdminEvent[]> {
 		const parents = new Map<string, Promise<calendar_v3.Schema$Event>>();
 		const parent = (id: string) => {
 			let pending = parents.get(id);
@@ -342,25 +348,21 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 				if (!item.id || !item.etag || isTombstone(item)) return null;
 				const cancelled = item.status === 'cancelled';
 				const seriesId = item.recurringEventId ?? null;
+				const originalStart = item.originalStartTime?.dateTime ?? null;
 				const from =
 					cancelled && seriesId && (!item.summary || !timed(item))
 						? await parent(seriesId)
 						: null;
 				const when =
 					timed(item) ??
-					(item.originalStartTime?.dateTime && from
+					(originalStart && from
 						? {
-								start: item.originalStartTime.dateTime,
-								end:
-									DateTime.fromISO(item.originalStartTime.dateTime, {
-										setZone: true,
-									})
-										.plus(
-											DateTime.fromISO(from.end?.dateTime ?? '').diff(
-												DateTime.fromISO(from.start?.dateTime ?? ''),
-											),
-										)
-										.toISO() ?? item.originalStartTime.dateTime,
+								start: originalStart,
+								end: iso(
+									DateTime.fromISO(originalStart, { setZone: true }).plus(
+										duration(from),
+									),
+								),
 							}
 						: null);
 				if (!when) return null;
@@ -372,11 +374,8 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 					end: when.end,
 					status: cancelled ? 'cancelled' : 'confirmed',
 					seriesId,
-					rescheduled:
-						!cancelled &&
-						typeof item.originalStartTime?.dateTime === 'string' &&
-						DateTime.fromISO(item.originalStartTime.dateTime).toMillis() !==
-							DateTime.fromISO(when.start).toMillis(),
+					rescheduled: !cancelled && moved(originalStart, when.start),
+					originalStart,
 					joinLink: item.location ?? from?.location ?? '',
 					htmlLink: item.htmlLink ?? null,
 				};
@@ -387,25 +386,52 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 			.sort((a, b) => a.start.localeCompare(b.start));
 	}
 
-	async function getEvent(id: string): Promise<AdminEvent | null> {
-		const { data } = await client.events.get({ calendarId, eventId: id });
-		const when = timed(data);
-		if (!data.id || !data.etag || !when) return null;
-		return {
-			id: data.id,
-			etag: data.etag,
-			title: data.summary ?? '',
-			start: when.start,
-			end: when.end,
-			status: data.status === 'cancelled' ? 'cancelled' : 'confirmed',
-			seriesId: data.recurringEventId ?? null,
-			rescheduled:
-				typeof data.originalStartTime?.dateTime === 'string' &&
-				DateTime.fromISO(data.originalStartTime.dateTime).toMillis() !==
-					DateTime.fromISO(when.start).toMillis(),
-			joinLink: data.location ?? '',
-			htmlLink: data.htmlLink ?? null,
-		};
+	/** The next `days` of Events in start order, cancelled ones included. */
+	async function listUpcomingEvents({
+		days,
+	}: {
+		days: number;
+	}): Promise<AdminEvent[]> {
+		const now = DateTime.now().setZone(DISPLAY_ZONE);
+		return toAdminEvents(
+			await listAll({
+				singleEvents: true,
+				showDeleted: true,
+				orderBy: 'startTime',
+				timeZone: DISPLAY_ZONE,
+				timeMin: iso(now.startOf('day')),
+				timeMax: iso(now.startOf('day').plus({ days })),
+			}),
+		);
+	}
+
+	/**
+	 * The next `months` of one Series' Events, cancelled ones included, for the
+	 * Series page. Bounded because a Series that never ends never runs out of
+	 * pages; Google returns at most 250 an instances call.
+	 */
+	async function listSeriesEvents(
+		seriesId: string,
+		{ months }: { months: number },
+	): Promise<AdminEvent[]> {
+		const now = DateTime.now().setZone(DISPLAY_ZONE);
+		const items: calendar_v3.Schema$Event[] = [];
+		let pageToken: string | undefined;
+		do {
+			const { data } = await client.events.instances({
+				calendarId,
+				eventId: seriesId,
+				showDeleted: true,
+				timeZone: DISPLAY_ZONE,
+				timeMin: iso(now),
+				timeMax: iso(now.plus({ months })),
+				maxResults: 250,
+				pageToken,
+			});
+			items.push(...(data.items ?? []));
+			pageToken = data.nextPageToken ?? undefined;
+		} while (pageToken);
+		return toAdminEvents(items);
 	}
 
 	function body(input: EventInput | SeriesInput): calendar_v3.Schema$Event {
@@ -526,8 +552,34 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		await patch(id, etag, { status: 'cancelled' });
 	}
 
+	/**
+	 * Takes back a Cancel and a Reschedule alike: the Event happens, at the
+	 * time its Series' rule gives it (with the Series' duration — a Reschedule
+	 * may have changed that too).
+	 */
 	async function restoreEvent(id: string, etag: string): Promise<void> {
-		await patch(id, etag, { status: 'confirmed' });
+		const existing = await current(id, etag);
+		const originalStart = existing.originalStartTime?.dateTime ?? null;
+		const start = existing.start?.dateTime;
+		if (
+			!originalStart ||
+			!start ||
+			!existing.recurringEventId ||
+			!moved(originalStart, start)
+		) {
+			await patch(id, etag, { status: 'confirmed' });
+			return;
+		}
+		const { data: series } = await client.events.get({
+			calendarId,
+			eventId: existing.recurringEventId,
+		});
+		const at = DateTime.fromISO(originalStart, { setZone: true });
+		await patch(id, etag, {
+			status: 'confirmed',
+			start: { dateTime: iso(at), timeZone: DISPLAY_ZONE },
+			end: { dateTime: iso(at.plus(duration(series))), timeZone: DISPLAY_ZONE },
+		});
 	}
 
 	async function rescheduleEvent(
@@ -545,7 +597,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		listSeries,
 		getSeries,
 		listUpcomingEvents,
-		getEvent,
+		listSeriesEvents,
 		createSeries,
 		updateSeries,
 		endSeries,
