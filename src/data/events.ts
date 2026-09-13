@@ -25,9 +25,13 @@ export interface EventItem {
 }
 export type EventsResponse = Array<EventItem>;
 
-const SCOPES = ['https://www.googleapis.com/auth/calendar.events.readonly'];
-// Matches the zone that `dateForDisplay` renders in (src/util/date.ts).
-const DISPLAY_ZONE = 'America/New_York';
+// Read and write: the same client serves /admin/events (docs/adr/0014).
+const SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
+/**
+ * The zone events are displayed and edited in. Matches `dateForDisplay`
+ * (src/util/date.ts) and is the zone every Series expands in.
+ */
+export const DISPLAY_ZONE = 'America/New_York';
 
 /**
  * Builds an authenticated Calendar client from `GOOGLE_SERVICE_ACCOUNT_KEY`,
@@ -36,7 +40,7 @@ const DISPLAY_ZONE = 'America/New_York';
  * throw here with the fix in the message, because the alternative is an opaque
  * auth error much later in the request.
  */
-function createCalendarClient(): calendar_v3.Calendar {
+export function createCalendarClient(): calendar_v3.Calendar {
 	let credentials: { client_email?: string; private_key?: string };
 	try {
 		credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY ?? '');
