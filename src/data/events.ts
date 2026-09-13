@@ -1,5 +1,3 @@
-'use server';
-
 import { unstable_cache } from 'next/cache';
 import { calendar, auth, type calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
@@ -72,18 +70,87 @@ function createCalendarClient(): calendar_v3.Calendar {
  * which would collapse into a single line, so turn those into `<br />`.
  * `sanitizeHtml` handles anything unsafe either way.
  */
-function normalizeDescription(raw: string): string {
+export function normalizeDescription(raw: string): string {
 	if (/<[a-z][\s\S]*>/i.test(raw)) return raw;
 	return raw.replace(/\r?\n/g, '<br />');
 }
 
+/** A calendar entry with everything the events UI renders. */
+export type DisplayableEvent = calendar_v3.Schema$Event & {
+	id: string;
+	summary: string;
+	start: { dateTime: string };
+	end: { dateTime: string };
+};
+
 /**
- * Upcoming events for the next 30 days, in start order. Recurring events are
- * expanded into their individual instances; cancelled entries and all-day
- * events are dropped, the latter because the UI always shows a clock time.
- * Without Google credentials this returns mock data, and a failed fetch
- * rethrows wherever mocks are disallowed (production) so a broken build fails
- * loudly instead of shipping an empty events page.
+ * Whether an entry can be shown at all. Cancelled entries and anything without
+ * an id are out; so are all-day events (only `start.date`, but the UI always
+ * shows a clock time) and untitled ones, which would render as an empty heading.
+ */
+export function isDisplayableEvent(
+	event: calendar_v3.Schema$Event,
+): event is DisplayableEvent {
+	return (
+		event.status !== 'cancelled' &&
+		typeof event.id === 'string' &&
+		typeof event.summary === 'string' &&
+		event.summary.trim() !== '' &&
+		typeof event.start?.dateTime === 'string' &&
+		typeof event.end?.dateTime === 'string'
+	);
+}
+
+/** The one call `listDisplayableEvents` makes, so tests can hand it a stub. */
+export interface CalendarEventsClient {
+	events: {
+		list(
+			params: calendar_v3.Params$Resource$Events$List,
+		): Promise<{ data: calendar_v3.Schema$Events }>;
+	};
+}
+
+/**
+ * The first `limit` displayable events in the window, in start order.
+ * Recurring events are expanded into their individual instances. Pages are
+ * followed until `limit` is met or the window runs out: Google may return a
+ * page shorter than `maxResults` even when more events match, and the filter
+ * runs after the fetch, so a single page of `limit` is not enough.
+ */
+export async function listDisplayableEvents(
+	client: CalendarEventsClient,
+	{
+		calendarId,
+		timeMin,
+		timeMax,
+		limit,
+	}: { calendarId: string; timeMin: string; timeMax: string; limit: number },
+): Promise<DisplayableEvent[]> {
+	const events: DisplayableEvent[] = [];
+	let pageToken: string | undefined;
+
+	do {
+		const { data } = await client.events.list({
+			calendarId,
+			timeMin,
+			timeMax,
+			singleEvents: true,
+			orderBy: 'startTime',
+			timeZone: DISPLAY_ZONE,
+			pageToken,
+		});
+		events.push(...(data.items ?? []).filter(isDisplayableEvent));
+		pageToken = data.nextPageToken ?? undefined;
+	} while (pageToken && events.length < limit);
+
+	return events.slice(0, limit);
+}
+
+/**
+ * Upcoming events for the next 30 days, in start order, filtered by
+ * `isDisplayableEvent`. Without Google credentials this returns mock data, and
+ * a failed fetch rethrows wherever mocks are disallowed (production) so a
+ * broken build fails loudly instead of shipping an empty events page.
  */
 export const getEvents = unstable_cache(
 	async ({ limit }: { limit: number }): Promise<EventsResponse> => {
@@ -108,36 +175,16 @@ export const getEvents = unstable_cache(
 		}
 
 		try {
-			const client = createCalendarClient();
-			const { data } = await client.events.list({
+			const items = await listDisplayableEvents(createCalendarClient(), {
 				calendarId: process.env.GOOGLE_CALENDAR_ID,
 				timeMin: rangeStart,
 				timeMax: rangeEnd,
-				// Expand recurring events into individual instances (required for orderBy: startTime).
-				singleEvents: true,
-				orderBy: 'startTime',
-				maxResults: limit,
-				timeZone: DISPLAY_ZONE,
+				limit,
 			});
-
-			const items = (data.items ?? []).filter(
-				(
-					event,
-				): event is calendar_v3.Schema$Event & {
-					id: string;
-					start: { dateTime: string };
-					end: { dateTime: string };
-				} =>
-					event.status !== 'cancelled' &&
-					typeof event.id === 'string' &&
-					// All-day events only have `start.date`; the UI shows clock times, so skip them.
-					typeof event.start?.dateTime === 'string' &&
-					typeof event.end?.dateTime === 'string',
-			);
 
 			return await Promise.all(
 				items.map(async (event) => {
-					const title = event.summary ?? '';
+					const title = event.summary;
 					const start = event.start.dateTime;
 					const end = event.end.dateTime;
 					const description = await sanitizeHtml(
