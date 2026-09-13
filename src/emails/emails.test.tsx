@@ -12,7 +12,13 @@ import { welcome } from './welcome';
 
 const URL = 'https://virtualcoffee.io/join?invite=abc';
 
-type Case<P extends object> = [string, EmailTemplate<P>, P, string | null];
+type Case<P extends object> = [
+	string,
+	EmailTemplate<P>,
+	P,
+	string,
+	string | null,
+];
 
 /**
  * A maintainer signs off on the Content in the confirmation dialog, so the
@@ -20,39 +26,48 @@ type Case<P extends object> = [string, EmailTemplate<P>, P, string | null];
  * The plain-text part is derived from the same tree as the HTML.
  */
 const templates = [
-	['coffeeInvite', coffeeInvite, { name: 'Ada Lovelace' }, null],
-	['welcome', welcome, { name: 'Ada Lovelace' }, null],
+	['coffeeInvite', coffeeInvite, {}, 'Hello there! 👋\n', null],
+	['welcome', welcome, { name: 'Ada Lovelace' }, 'Hi Ada,\n', null],
 	[
 		'volunteerInvite',
 		volunteerInvite,
 		{ inviterName: 'Grace', inviteeName: 'Ada Lovelace', claimUrl: URL },
+		'Hi Ada,\n',
 		URL,
 	],
 	[
 		'volunteerGrant',
 		volunteerGrant,
 		{ name: 'Ada Lovelace', balance: 2, invitesUrl: URL },
+		'Hi Ada,\n',
 		URL,
 	],
 	[
 		'volunteerAccrual',
 		volunteerAccrual,
 		{ name: 'Ada Lovelace', balance: 3, invitesUrl: URL },
+		'Hi Ada,\n',
 		URL,
 	],
-	['slackInvite', slackInvite, { name: 'Ada Lovelace', inviteUrl: URL }, URL],
+	[
+		'slackInvite',
+		slackInvite,
+		{ name: 'Ada Lovelace', inviteUrl: URL },
+		'Hi Ada,\n',
+		URL,
+	],
 ] as unknown as Case<never>[];
 
-describe.each(templates)('%s', (_name, template, props, link) => {
-	test('has a subject, greets by first name, signs off, and is a full document', async () => {
+describe.each(templates)('%s', (_name, template, props, greeting, link) => {
+	test('has a subject, greets, signs off as the maintainers, and is a full document', async () => {
 		await expect(renderEmail(template, props)).resolves.toEqual(
 			expect.schemaMatching(
 				z.object({
 					subject: z.string().min(1),
 					text: z
 						.string()
-						.startsWith('Hi Ada,\n')
-						.includes('\nVirtual Coffee\n'),
+						.startsWith(greeting)
+						.includes('\n~ Virtual Coffee Maintainer Team\n'),
 					html: z
 						.string()
 						.startsWith('<!DOCTYPE html')
@@ -92,6 +107,29 @@ describe('Content', () => {
 		);
 		await expect(render(element, { plainText: true })).resolves.toEqual(
 			expect.schemaMatching(z.string().startsWith('Hi Ada,')),
+		);
+	});
+});
+
+describe('coffeeInvite', () => {
+	test('links both meetings and the maintainers address', async () => {
+		await expect(renderEmail(coffeeInvite, {})).resolves.toEqual(
+			expect.schemaMatching(
+				z.object({
+					html: z
+						.string()
+						.includes('href="https://virtualcoffee.io/join-coffee?day=tuesday"')
+						.includes(
+							'href="https://virtualcoffee.io/join-coffee?day=thursday"',
+						)
+						.includes('href="mailto:hello@virtualcoffee.io"'),
+					text: z
+						.string()
+						.includes('https://virtualcoffee.io/join-coffee?day=tuesday')
+						.includes('https://virtualcoffee.io/join-coffee?day=thursday')
+						.includes('hello@virtualcoffee.io'),
+				}),
+			),
 		);
 	});
 });
