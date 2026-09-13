@@ -107,3 +107,9 @@
 	min-height: 8rem;
 	padding: 0.5rem 0.75rem;
 }
+
+// Hour / minute / AM-PM selects: let the arrows breathe at their widths.
+.admin-time-select .form-select {
+	padding-right: 1.75rem;
+	min-width: 0;
+}
