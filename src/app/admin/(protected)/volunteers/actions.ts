@@ -17,10 +17,9 @@ import { getSlackMembers } from '@/data/slackMembers';
 import type { ActionResult } from '@/lib/admin/actionResult';
 import { actorId, requirePermission } from '@/lib/access/adminAccess';
 import { userForSlackId } from '@/lib/access/admins';
-import {
-	volunteerGrantEmail,
-	volunteerInviteEmail,
-} from '@/lib/email/templates';
+import { volunteerGrant } from '@/emails/volunteerGrant';
+import { volunteerInvite } from '@/emails/volunteerInvite';
+import { renderEmail } from '@/lib/email/render';
 import { sendEmail } from '@/lib/email/transport';
 import { recordOutcome } from '@/lib/history/eventLog';
 import {
@@ -182,16 +181,13 @@ export async function addVolunteer(
 		};
 	}
 
-	const template = volunteerGrantEmail(
-		member.displayName,
-		0,
-		`${siteUrl()}/invites`,
-	);
-
 	const sent = await sendEmail({
 		to: address,
-		subject: template.subject,
-		text: template.text,
+		...(await renderEmail(volunteerGrant, {
+			name: member.displayName,
+			balance: 0,
+			invitesUrl: `${siteUrl()}/invites`,
+		})),
 	});
 	await recordOutcome(subject, {
 		channel: 'email',
@@ -530,16 +526,13 @@ export async function resendInvite(
 		};
 	}
 
-	const template = volunteerInviteEmail(
-		row.inviterName || 'A Virtual Coffee volunteer',
-		row.inviteeName || 'there',
-		`${siteUrl()}/join?invite=${token}`,
-	);
-
 	const sent = await sendEmail({
 		to: row.inviteeEmail,
-		subject: template.subject,
-		text: template.text,
+		...(await renderEmail(volunteerInvite, {
+			inviterName: row.inviterName || 'A Virtual Coffee volunteer',
+			inviteeName: row.inviteeName || 'there',
+			claimUrl: `${siteUrl()}/join?invite=${token}`,
+		})),
 	});
 	// On the inviter's History, when the inviter is a Volunteer here at all.
 	const inviter = row.inviterSlackUserId

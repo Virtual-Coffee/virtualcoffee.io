@@ -122,6 +122,7 @@ describe('addVolunteer', () => {
 		expect(sendEmail).toHaveBeenCalledWith({
 			to: 'ada@example.test',
 			subject: 'You can now invite people to Virtual Coffee',
+			html: expect.stringContaining('href="https://virtualcoffee.io/invites"'),
 			text: expect.stringContaining('https://virtualcoffee.io/invites'),
 		});
 		// Already signed in — nobody left to tell to come claim anything.

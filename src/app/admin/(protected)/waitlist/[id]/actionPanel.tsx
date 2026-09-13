@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 
 import type { ApplicationStatus } from '@/db';
 import {
@@ -19,7 +19,8 @@ import { MAX_NOTE_LENGTH } from '@/lib/admin/notes';
 import { useAction } from '@/util/forms/useAction';
 import { ReadOnlyNotice } from '../../presentation';
 
-type Template = { subject: string; text: string };
+/** A template's subject and its `Content`, rendered by the server page. */
+type Template = { subject: string; body: ReactNode };
 
 type Props = {
 	canManage: boolean;
