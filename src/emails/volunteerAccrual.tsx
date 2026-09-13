@@ -35,8 +35,7 @@ export function Content({ name, balance, invitesUrl }: VolunteerAccrualProps) {
 			</Text>
 			<Text style={styles.text}>
 				Thanks for everything you do here,
-				<br />
-				Virtual Coffee
+				<br />~ Virtual Coffee Maintainer Team
 			</Text>
 		</>
 	);

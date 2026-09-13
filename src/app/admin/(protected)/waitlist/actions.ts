@@ -149,7 +149,7 @@ export async function sendCoffeeInvite(
 	// way to tell.
 	const sent = await sendEmail({
 		to: application.email,
-		...(await renderEmail(coffeeInvite, { name: application.name })),
+		...(await renderEmail(coffeeInvite, {})),
 		cc: copyMe ? session.user.email : null,
 	});
 

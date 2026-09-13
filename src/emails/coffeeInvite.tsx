@@ -1,11 +1,11 @@
-import { Button, Text } from 'react-email';
+import { Button, Link, Text } from 'react-email';
 
 import { Layout } from '@/lib/email/layout';
-import { firstName } from '@/lib/email/name';
 import type { EmailTemplate } from '@/lib/email/render';
 import { styles } from '@/lib/email/styles';
 
-export type CoffeeInviteProps = { name: string };
+/** Deliberately unaddressed: the maintainers' copy greets everyone alike. */
+export type CoffeeInviteProps = Record<never, never>;
 
 const TUESDAY = 'https://virtualcoffee.io/join-coffee?day=tuesday';
 const THURSDAY = 'https://virtualcoffee.io/join-coffee?day=thursday';
@@ -14,44 +14,62 @@ export function subject(): string {
 	return 'You’re invited to a Virtual Coffee';
 }
 
-export function Content({ name }: CoffeeInviteProps) {
+export function Content() {
 	return (
 		<>
-			<Text style={styles.text}>Hi {firstName(name)},</Text>
+			<Text style={styles.text}>Hello there! 👋</Text>
 			<Text style={styles.text}>
-				Thanks for your patience on the waitlist. We&rsquo;d love to have you at
-				a Coffee &mdash; that&rsquo;s a casual hour on Zoom with a handful of
-				members, and it&rsquo;s the last step before joining the community.
+				Thank you for your interest in Virtual Coffee. You are officially off
+				the waiting list and can take the next steps to becoming a member!
 			</Text>
-			<Text style={styles.text}>Come to whichever suits you:</Text>
+			<Text style={styles.text}>
+				The final step is to attend a Virtual Coffee meeting! After you&rsquo;ve
+				attended a meeting, we&rsquo;ll send you an invite to our Slack channel,
+				giving you access to Slack and all of our other member-only events.
+			</Text>
+			<Text style={styles.text}>
+				Virtual Coffee meetings are one hour long and are held on Zoom twice per
+				week:
+			</Text>
 			<Text style={styles.text}>
 				<Button href={TUESDAY} style={styles.button}>
-					Tuesdays, 9:00am ET
+					Tuesdays at 9:00 AM Eastern
 				</Button>
 			</Text>
 			<Text style={styles.text}>
 				<Button href={THURSDAY} style={styles.button}>
-					Thursdays, 12:00pm ET
+					Thursdays at 12:00 PM Eastern (Noon)
 				</Button>
 			</Text>
 			<Text style={styles.text}>
-				See you there,
-				<br />
-				Virtual Coffee
+				When you attend, please let your Notetaker know that this is your first
+				Virtual Coffee! After the meeting, your Notetaker will let the
+				Maintainers know that you&rsquo;ve attended, and you&rsquo;ll receive an
+				email with additional instructions for joining Slack and becoming a full
+				member!
+			</Text>
+			<Text style={styles.text}>
+				Please direct any questions you have to{' '}
+				<Link href="mailto:hello@virtualcoffee.io">hello@virtualcoffee.io</Link>
+				.
+			</Text>
+			<Text style={styles.text}>
+				<strong>Thanks, and we can&rsquo;t wait to meet you!</strong> ♥️
+				<br />~ Virtual Coffee Maintainer Team
 			</Text>
 		</>
 	);
 }
 
-export default function Email(props: CoffeeInviteProps) {
+export default function Email() {
 	return (
-		<Layout preview="Come to a Coffee — the last step before joining.">
-			<Content {...props} />
+		<Layout preview="You’re off the waiting list — the last step is a Virtual Coffee meeting.">
+			<Content />
 		</Layout>
 	);
 }
 
-Email.PreviewProps = { name: 'Ada Lovelace' } satisfies CoffeeInviteProps;
+Email.PreviewProps = {} satisfies CoffeeInviteProps;
 
 export const coffeeInvite: EmailTemplate<CoffeeInviteProps> = {
 	subject,

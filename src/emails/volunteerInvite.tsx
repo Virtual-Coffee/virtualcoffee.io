@@ -52,8 +52,7 @@ export function Content({
 			</Text>
 			<Text style={styles.text}>
 				Hope to see you there,
-				<br />
-				Virtual Coffee
+				<br />~ Virtual Coffee Maintainer Team
 			</Text>
 		</>
 	);
