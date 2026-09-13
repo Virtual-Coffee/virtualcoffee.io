@@ -10,6 +10,8 @@ import { DateTime } from 'luxon';
 
 import { createCalendarClient } from '@/data/events';
 import { DISPLAY_ZONE } from '@/util/date';
+import { looksLikeHtml } from '@/util/descriptionFormat';
+import { htmlToMarkdown } from '@/util/markdown.server';
 import {
 	describeRecurrence,
 	parseRecurrence,
@@ -51,7 +53,7 @@ export type Series = {
 	id: string;
 	etag: string;
 	title: string;
-	/** As stored: plain text or HTML, whichever the maintainer wrote. */
+	/** Markdown; a legacy HTML description is converted on the way in. */
 	description: string;
 	joinLink: string;
 	/** `extendedProperties.private.hostCode`; '' when there is none. */
@@ -265,19 +267,22 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		return first ? timed(first) : null;
 	}
 
-	function toSeries(
+	async function toSeries(
 		event: calendar_v3.Schema$Event,
 		next: Series['nextEvent'],
-	): Series | null {
+	): Promise<Series | null> {
 		const start = fromEventDateTime(event.start);
 		const end = fromEventDateTime(event.end);
 		if (!event.id || !event.etag || !start || !end || !start.date) return null;
 		const recurrence = parseRecurrence(event.recurrence ?? []);
+		const description = event.description ?? '';
 		return {
 			id: event.id,
 			etag: event.etag,
 			title: event.summary ?? '',
-			description: event.description ?? '',
+			description: looksLikeHtml(description)
+				? await htmlToMarkdown(description)
+				: description,
 			joinLink: event.location ?? '',
 			hostCode: hostCodeOf(event),
 			recurrence,

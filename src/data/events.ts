@@ -2,6 +2,7 @@ import { unstable_cache } from 'next/cache';
 import { calendar, auth, type calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
 import { DISPLAY_ZONE } from '@/util/date';
+import { looksLikeHtml } from '@/util/descriptionFormat';
 import { parseMarkdown } from '@/util/markdown.server';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
 import { assertMocksAllowed, mocksAllowed } from './mocks';
@@ -74,7 +75,7 @@ export function createCalendarClient(): calendar_v3.Calendar {
  * paths end in `sanitizeHtml`.
  */
 export async function renderDescription(raw: string): Promise<string> {
-	if (/<[a-z][\s\S]*>/i.test(raw)) return sanitizeHtml(raw);
+	if (looksLikeHtml(raw)) return sanitizeHtml(raw);
 	return parseMarkdown(raw);
 }
 
