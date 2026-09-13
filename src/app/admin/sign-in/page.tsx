@@ -70,8 +70,8 @@ export default async function AdminSignInPage() {
 								Slack sign-in isn&rsquo;t configured
 							</h2>
 							<p className="mb-0">
-								<code>SLACK_CLIENT_ID</code> and{' '}
-								<code>SLACK_CLIENT_SECRET</code> are not set, so there&rsquo;s
+								<code>SLACK_CLIENT_ID</code>, <code>SLACK_CLIENT_SECRET</code>{' '}
+								and <code>SLACK_TEAM_ID</code> are not all set, so there&rsquo;s
 								nothing to sign in to. This is expected on a fresh clone — see{' '}
 								<code>.env.example</code>.
 							</p>
