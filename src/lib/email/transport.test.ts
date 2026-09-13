@@ -5,7 +5,12 @@ const createTransport = vi.hoisted(() => vi.fn(() => ({ sendMail })));
 
 vi.mock('nodemailer', () => ({ default: { createTransport } }));
 
-import { emailConfigured, sendEmail, TRANSPORT_OPTIONS } from './transport';
+import {
+	emailConfigured,
+	emailStatus,
+	sendEmail,
+	TRANSPORT_OPTIONS,
+} from './transport';
 
 const input = {
 	to: 'ada@example.test',
@@ -14,6 +19,10 @@ const input = {
 };
 
 beforeEach(() => {
+	// Live delivery is production only; every case below is about what a
+	// live send does. The non-production modes have their own describe.
+	vi.stubEnv('CONTEXT', 'production');
+	vi.stubEnv('EMAIL_REDIRECT_TO', undefined);
 	vi.stubEnv('GOOGLE_SMTP_USER', 'hello@virtualcoffee.io');
 	vi.stubEnv('GOOGLE_SMTP_APP_PASSWORD', 'app-password');
 	sendMail.mockReset();
@@ -150,6 +159,124 @@ describe('sendEmail', () => {
 			ok: false,
 			definitelyNotSent: true,
 			message: 'The mail server errored.',
+		});
+	});
+});
+
+/**
+ * Outside production the credentials are irrelevant: Captured never touches
+ * them, and Redirected uses them to reach one maintainer. docs/adr/0013.
+ */
+describe('delivery modes', () => {
+	test('captured: no transport, no send, and a success the pipeline proceeds on', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+		const before = createTransport.mock.calls.length;
+
+		await expect(
+			sendEmail({ ...input, cc: 'maintainer@example.test' }),
+		).resolves.toEqual({
+			ok: true,
+			warning:
+				'Captured, not delivered (deploy-preview): nothing leaves this deploy.',
+		});
+		expect(createTransport.mock.calls.length).toBe(before);
+		expect(sendMail).not.toHaveBeenCalled();
+		expect(info).toHaveBeenCalledWith(
+			'[email captured] deploy-preview',
+			{ to: input.to, cc: 'maintainer@example.test', subject: input.subject },
+			`\n${input.text}`,
+		);
+		info.mockRestore();
+	});
+
+	test('captured even when nothing is configured, and locally with no CONTEXT at all', async () => {
+		vi.stubEnv('CONTEXT', undefined);
+		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+
+		await expect(sendEmail(input)).resolves.toMatchObject({
+			ok: true,
+			warning: expect.stringContaining('(local)'),
+		});
+		expect(sendMail).not.toHaveBeenCalled();
+	});
+
+	test('redirected: one address gets it, the recipient is named, and no cc goes', async () => {
+		vi.stubEnv('CONTEXT', 'branch-deploy');
+		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+
+		await expect(
+			sendEmail({ ...input, cc: 'someone-else@example.test' }),
+		).resolves.toEqual({
+			ok: true,
+			warning:
+				'Redirected to maintainer@example.test (branch-deploy) instead of ada@example.test.',
+		});
+		expect(sendMail).toHaveBeenCalledWith({
+			from: 'Virtual Coffee <hello@virtualcoffee.io>',
+			to: 'maintainer@example.test',
+			cc: undefined,
+			subject: '[to: ada@example.test] Hello',
+			text: input.text,
+			replyTo: 'hello@virtualcoffee.io',
+			headers: { 'X-Original-To': 'ada@example.test' },
+		});
+	});
+
+	test('redirected still needs the credentials', async () => {
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+		vi.stubEnv('GOOGLE_SMTP_APP_PASSWORD', undefined);
+
+		await expect(sendEmail(input)).resolves.toMatchObject({
+			ok: false,
+			definitelyNotSent: true,
+		});
+		expect(sendMail).not.toHaveBeenCalled();
+	});
+
+	test('a redirect target the server rejects is a failure, judged on that address', async () => {
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+		sendMail.mockResolvedValue({
+			accepted: [],
+			rejected: ['maintainer@example.test'],
+		});
+
+		await expect(sendEmail(input)).resolves.toMatchObject({
+			ok: false,
+			definitelyNotSent: true,
+		});
+	});
+
+	test('production ignores EMAIL_REDIRECT_TO', async () => {
+		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+		await expect(sendEmail(input)).resolves.toEqual({ ok: true });
+		expect(sendMail).toHaveBeenLastCalledWith(
+			expect.objectContaining({ to: input.to, subject: input.subject }),
+		);
+	});
+});
+
+describe('emailStatus', () => {
+	test('reports the mode and whether credentials exist, separately', () => {
+		expect(emailStatus()).toEqual({ mode: 'live', configured: true });
+
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
+		expect(emailStatus()).toEqual({
+			mode: 'captured',
+			context: 'deploy-preview',
+			configured: false,
+		});
+
+		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+		expect(emailStatus()).toEqual({
+			mode: 'redirected',
+			context: 'deploy-preview',
+			redirectTo: 'maintainer@example.test',
+			configured: false,
 		});
 	});
 });
