@@ -1,7 +1,8 @@
 import { count, desc, eq, inArray, isNotNull, or, sql } from 'drizzle-orm';
 import { DateTime } from 'luxon';
 
-import { getEvents, DISPLAY_ZONE } from '@/data/events';
+import { getEvents } from '@/data/events';
+import { DISPLAY_ZONE } from '@/util/date';
 import {
 	applicationEvent,
 	cocReport,
