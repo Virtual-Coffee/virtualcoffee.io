@@ -22,7 +22,7 @@ import {
 } from '@/lib/recurrence';
 
 const CONFLICT =
-	'This changed in Google Calendar since you loaded it. Reload the page and try again.';
+	'This changed in Google Calendar since you loaded it. Check the current details and try again.';
 const NOT_CONFIGURED =
 	'The Events Calendar is not configured: GOOGLE_SERVICE_ACCOUNT_KEY and GOOGLE_CALENDAR_ID are needed.';
 const GONE = 'That no longer exists on the Events Calendar.';
@@ -31,7 +31,13 @@ const dateSchema = z
 	.string()
 	.regex(/^\d{4}-\d{2}-\d{2}$/, 'Pick a date.')
 	.refine((value) => DateTime.fromISO(value).isValid, 'Pick a real date.');
-const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, 'Pick a time.');
+const timeSchema = z
+	.string()
+	.regex(/^\d{2}:\d{2}$/, 'Pick a time.')
+	.refine(
+		(value) => DateTime.fromFormat(value, 'HH:mm').isValid,
+		'Pick a real time.',
+	);
 
 const timeInputSchema = z
 	.object({ date: dateSchema, startTime: timeSchema, endTime: timeSchema })
