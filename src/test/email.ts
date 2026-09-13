@@ -10,3 +10,9 @@ export const MAYBE_SENT = {
 	definitelyNotSent: false,
 	message: 'Connection timed out.',
 };
+/** Sent as far as the pipeline is concerned, but on a non-production deploy (docs/adr/0013). */
+export const CAPTURED = {
+	ok: true,
+	warning:
+		'Captured, not delivered (deploy-preview): nothing leaves this deploy.',
+};

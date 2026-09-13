@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { db, invite } from '@/db';
 import { volunteerBalance } from '@/lib/invites';
 import { redirectTo } from '@/test/next';
-import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/email';
+import { CAPTURED, MAYBE_SENT, NOT_SENT, SENT } from '@/test/email';
 import { signInAs } from '@/test/session';
 import {
 	failLedgerInserts,
@@ -95,6 +95,17 @@ describe('sendInvite', () => {
 			expect.objectContaining({ delta: 2, reason: 'imported' }),
 			{ delta: -1, reason: 'spend', periodKey: null, inviteId: row.id },
 		]);
+	});
+
+	test('a captured send is still spent, and the Volunteer is told where it went', async () => {
+		await volunteerWithBalance(2);
+		sendEmail.mockResolvedValue(CAPTURED);
+
+		await expect(sendInvite('Ada', 'ada@example.test')).resolves.toEqual({
+			ok: true,
+			message: `Invite sent to ada@example.test. ${CAPTURED.warning}`,
+		});
+		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
 	});
 
 	test('no balance, no invite, nothing sent', async () => {
