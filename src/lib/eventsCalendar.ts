@@ -195,6 +195,19 @@ function endedRule(line: string, now: DateTime): string {
 	return `${stripped};UNTIL=${now.toUTC().toFormat("yyyyLLdd'T'HHmmss'Z'")}`;
 }
 
+/**
+ * Google's placeholder for a slot a Series no longer generates (an Ended or
+ * split Series): an instance-shaped id with no Series behind it. Not an Event
+ * anyone Cancelled, so not a row. ADR 0014.
+ */
+function isTombstone(event: calendar_v3.Schema$Event) {
+	return (
+		event.status === 'cancelled' &&
+		!event.recurringEventId &&
+		/_\d{8}T\d{6}Z$/.test(event.id ?? '')
+	);
+}
+
 function timed(event: calendar_v3.Schema$Event) {
 	return typeof event.start?.dateTime === 'string' &&
 		typeof event.end?.dateTime === 'string'
@@ -326,7 +339,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 
 		const events = await Promise.all(
 			items.map(async (item): Promise<AdminEvent | null> => {
-				if (!item.id || !item.etag) return null;
+				if (!item.id || !item.etag || isTombstone(item)) return null;
 				const cancelled = item.status === 'cancelled';
 				const seriesId = item.recurringEventId ?? null;
 				const from =
