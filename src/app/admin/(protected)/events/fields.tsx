@@ -131,6 +131,7 @@ export function TimeFields({
 				<input
 					id={`${id}-start`}
 					type="time"
+					step={300}
 					className="form-control form-control-sm"
 					value={draft.startTime}
 					required
@@ -146,6 +147,7 @@ export function TimeFields({
 				<input
 					id={`${id}-end`}
 					type="time"
+					step={300}
 					className="form-control form-control-sm"
 					value={draft.endTime}
 					required
