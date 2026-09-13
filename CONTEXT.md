@@ -3,8 +3,8 @@
 The public website for Virtual Coffee, a deliberately small developer community.
 This glossary covers the **membership pipeline** — how someone gets from "I'd
 like to join" to "I'm in the Slack" — along with the **Submissions** the site's
-other public forms produce, and the **access** model that decides who can work
-on either.
+other public forms produce, the **Events** the community runs, and the
+**access** model that decides who can work on any of them.
 
 ## Membership
 
@@ -111,6 +111,36 @@ _Avoid_: Talk submission, proposal
 **Coffee Table Group Request**:
 A proposal for a new small special-interest group.
 _Avoid_: Group application
+
+## Events
+
+**Events Calendar**:
+The single public calendar that holds every Series and Event the community
+runs. Anyone can subscribe to it; the site and the Slack bots read it.
+_Avoid_: Calendar, Google Calendar, CMS
+
+**Series**:
+A recurring entry on the Events Calendar. Owns the standing description and
+the Join Link that each of its Events inherits.
+_Avoid_: Recurring event, schedule, meeting
+
+**Event**:
+One dated occurrence, of a Series or on its own. What `/events` lists and the
+bots announce.
+_Avoid_: Meeting, session, instance, occurrence, calendar event
+
+**Join Link**:
+The URL people follow to attend an Event. The same for every Event of a
+Series unless one Event's is changed.
+_Avoid_: Zoom link, location, join URL
+
+**Cancel**:
+Declare that one Event will not happen. The Series continues.
+_Avoid_: Delete, remove
+
+**Reschedule**:
+Move one Event to a different time. The Series is unchanged.
+_Avoid_: Move, edit time, exception
 
 ## Access
 
