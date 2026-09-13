@@ -1,6 +1,6 @@
 /**
  * Delivery Mode for anything the site sends out — email, Slack posts, GitHub
- * issues. Live delivery is production only; everywhere else is Captured
+ * issues, writes to the Events Calendar. Live delivery is production only; everywhere else is Captured
  * (built and logged, the caller carries on as though it went) unless an opt-in
  * says otherwise. Email's opt-in is Local (`SMTP_HOST`, a local-only sink such
  * as Mailpit), honoured on a checkout only. See docs/adr/0013.
@@ -102,6 +102,19 @@ export function emailDelivery(): EmailDelivery {
 export function notifyDelivery(): 'live' | 'captured' {
 	if (isProduction()) return 'live';
 	return process.env.NOTIFY_LIVE_OUTSIDE_PRODUCTION === 'true'
+		? 'live'
+		: 'captured';
+}
+
+/**
+ * Writes to the Events Calendar (`/admin/events`) are the same shape: there is
+ * one real calendar, so the opt-in `CALENDAR_LIVE_OUTSIDE_PRODUCTION=true` is
+ * meant to be paired with a `GOOGLE_CALENDAR_ID` that names a scratch calendar
+ * the service account can edit. Reads are never gated.
+ */
+export function calendarDelivery(): 'live' | 'captured' {
+	if (isProduction()) return 'live';
+	return process.env.CALENDAR_LIVE_OUTSIDE_PRODUCTION === 'true'
 		? 'live'
 		: 'captured';
 }
