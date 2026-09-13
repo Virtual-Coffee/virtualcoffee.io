@@ -31,7 +31,15 @@ export function useAction<
 		} = {},
 	) {
 		startTransition(async () => {
-			const outcome = await action();
+			let outcome: R;
+			try {
+				outcome = await action();
+			} catch (error) {
+				// A thrown action still closes the dialog, then reaches the error
+				// boundary as it would have anyway.
+				options.settle?.();
+				throw error;
+			}
 			setResult(outcome);
 			options.settle?.();
 			if (outcome.ok) {
