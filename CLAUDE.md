@@ -67,6 +67,8 @@ Every external data source lives in `src/data/` and degrades to a mock when its 
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. A new external fetch follows this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`, and wrap the fetch in `unstable_cache` with a tag so `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) can revalidate it.
 
+Events are read from the public Google Events Calendar, which is the system of record: the Join Link is the event's `location`, `extendedProperties` are never read or written, and nothing on the calendar is private. `docs/adr/0014`.
+
 ### Membership pipeline (Postgres)
 
 Before touching `src/db`, `src/lib/access`, `src/lib/history`, `src/app/join` or `src/app/admin`, read `CONTEXT.md` for the vocabulary. Each rule below cites the ADR that decided it; open the ADR before changing the rule.
