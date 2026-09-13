@@ -183,17 +183,25 @@ function run(command: string, args: string[], env: Record<string, string>) {
 			stdio: 'inherit',
 		});
 
-		// Ctrl-C reaches the child too, so wait for it to exit and clean up after
-		// it rather than tearing this process down first.
-		const ignore = () => {};
-		process.on('SIGINT', ignore);
-		process.on('SIGTERM', ignore);
+		// Ctrl-C reaches the child through the process group; a signal aimed at
+		// this process alone (a supervisor's `kill`) would not, so pass it on and
+		// keep waiting for the child rather than tearing this process down first.
+		const forward = (signal: NodeJS.Signals) => {
+			child.kill(signal);
+		};
+		process.on('SIGINT', forward);
+		process.on('SIGTERM', forward);
+		const finish = (code: number) => {
+			process.off('SIGINT', forward);
+			process.off('SIGTERM', forward);
+			settle(code);
+		};
 
 		child.on('error', (error) => {
 			console.error(`Could not run \`${command}\`: ${error.message}`);
-			settle(1);
+			finish(1);
 		});
-		child.on('exit', (code) => settle(code ?? 1));
+		child.on('exit', (code) => finish(code ?? 1));
 	});
 }
 
