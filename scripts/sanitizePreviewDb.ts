@@ -764,6 +764,11 @@ async function verify(database: Database): Promise<string[]> {
 					),
 				),
 		],
+		[
+			'account.account_id was not sanitized',
+			() =>
+				database.$count(account, not(like(account.accountId, 'sanitized-%'))),
+		],
 		['session rows were not cleared', () => database.$count(session)],
 		['verification rows were not cleared', () => database.$count(verification)],
 		['invite_token rows were not cleared', () => database.$count(inviteToken)],
