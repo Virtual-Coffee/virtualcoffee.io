@@ -99,3 +99,14 @@ site. Applied the first time they do, after which the Grant is _claimed_ and
 their Role is authoritative. Unrelated to an **Invite**, which is a volunteer's
 referral into the Waitlist.
 _Avoid_: Invite, pre-provision, reservation
+
+## Outbound
+
+**Delivery Mode**:
+What happens to an email, Slack post, or GitHub issue the site sends. **Live**
+delivers it to the intended recipient, and only the production site does that.
+**Captured** builds and logs it and the pipeline carries on as though it went,
+but nothing leaves the deploy — the default everywhere else. **Redirected**
+delivers it for real, to a single maintainer address in place of the recipient,
+with the intended recipient named.
+_Avoid_: Dry run, suppressed, sandbox, test mode

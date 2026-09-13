@@ -12,6 +12,7 @@ import {
 	withdrawApplication,
 } from '../actions';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
+import type { EmailStatus } from '@/lib/email/transport';
 import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
 import { CloseDialog } from './closeDialog';
 import { useAction } from '@/util/forms/useAction';
@@ -27,7 +28,7 @@ type Props = {
 	status: ApplicationStatus;
 	statusText: string;
 	attendedAt: string | null;
-	emailConfigured: boolean;
+	emailStatus: EmailStatus;
 	coffeeInvite: Template;
 	welcome: Template;
 	slackInvite: Template;
@@ -75,11 +76,7 @@ export function ActionPanel(props: Props) {
 				</div>
 			)}
 
-			{!props.emailConfigured && (
-				<div className="alert alert-warning small" role="alert">
-					Email isn&rsquo;t configured, so nothing can be sent from here yet.
-				</div>
-			)}
+			<DeliveryNotice status={props.emailStatus} />
 
 			<div className="d-grid gap-2">
 				{props.status === 'waitlisted' && (
@@ -245,4 +242,42 @@ export function ActionPanel(props: Props) {
 			/>
 		</>
 	);
+}
+
+/**
+ * Which Delivery Mode this deploy is in, when it is not the ordinary one.
+ * Captured and Redirected are the non-production modes (docs/adr/0013);
+ * missing credentials only matter when a send would actually go out.
+ */
+function DeliveryNotice({ status }: { status: EmailStatus }) {
+	if (status.mode === 'captured') {
+		return (
+			<div className="alert alert-info small" role="status">
+				Email is captured on this deploy ({status.context}): every send is
+				logged and recorded as sent, and nothing reaches an inbox.
+			</div>
+		);
+	}
+
+	if (status.mode === 'redirected') {
+		return (
+			<div className="alert alert-info small" role="status">
+				Email from this deploy ({status.context}) is redirected to{' '}
+				{status.redirectTo}
+				{!status.configured &&
+					' — but email isn’t configured, so nothing can be sent yet'}
+				.
+			</div>
+		);
+	}
+
+	if (!status.configured) {
+		return (
+			<div className="alert alert-warning small" role="alert">
+				Email isn&rsquo;t configured, so nothing can be sent from here yet.
+			</div>
+		);
+	}
+
+	return null;
 }
