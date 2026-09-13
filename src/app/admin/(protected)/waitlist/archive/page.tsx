@@ -75,7 +75,11 @@ export default async function ArchivePage({
 						{counts.member ?? 0} members
 					</p>
 				</div>
-				<QueueSearch initialValue={filters.search ?? ''} />
+				{/* Keyed on the URL's term so Back/Forward remounts the input with it. */}
+				<QueueSearch
+					key={filters.search ?? ''}
+					initialValue={filters.search ?? ''}
+				/>
 			</div>
 
 			<div
