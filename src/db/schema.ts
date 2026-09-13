@@ -101,7 +101,15 @@ export const account = pgTable(
 			.notNull()
 			.defaultNow(),
 	},
-	(table) => [index('account_user_id_idx').on(table.userId)],
+	(table) => [
+		index('account_user_id_idx').on(table.userId),
+		// Better Auth checks for an existing link before inserting one, but not
+		// atomically; two concurrent first sign-ins would otherwise both land.
+		uniqueIndex('account_provider_identity_idx').on(
+			table.providerId,
+			table.accountId,
+		),
+	],
 );
 
 export const verification = pgTable(
