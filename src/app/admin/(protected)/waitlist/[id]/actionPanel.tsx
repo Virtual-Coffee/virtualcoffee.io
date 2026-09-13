@@ -44,8 +44,10 @@ export function ActionPanel(props: Props) {
 		result,
 	} = useAction<ActionResult | EmailActionResult>();
 
+	// Closed on either outcome: the failure alert below sits behind the
+	// dialog, and a maintainer must read it before deciding on a retry.
 	const run = (action: () => Promise<ActionResult | EmailActionResult>) =>
-		runAction(action, { onSuccess: () => setDialog(null) });
+		runAction(action, { settle: () => setDialog(null) });
 
 	if (!props.canManage) return <ReadOnlyNotice />;
 
