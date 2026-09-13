@@ -19,6 +19,11 @@ export default async function AdminsPage() {
 		grantCandidates(),
 	]);
 
+	// Pending grants and stranded users are listed too, but cannot sign in to
+	// /admin today.
+	const active = rows.filter(
+		(row) => row.kind === 'user' && !row.stranded,
+	).length;
 	const pending = rows.filter((row) => row.kind === 'pending').length;
 
 	return (
@@ -27,8 +32,8 @@ export default async function AdminsPage() {
 				<div>
 					<h1 className="h4 mb-1">User Management</h1>
 					<p className="text-body-secondary mb-0 small">
-						{rows.length} {rows.length === 1 ? 'person' : 'people'} can reach
-						/admin. A role grants one section; Admin grants all of them.
+						{active} {active === 1 ? 'person' : 'people'} can reach /admin
+						today. A role grants one section; Admin grants all of them.
 						{pending > 0 && (
 							<>
 								{' '}
