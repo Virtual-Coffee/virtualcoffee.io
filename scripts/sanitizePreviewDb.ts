@@ -80,6 +80,29 @@ async function inBatches<T>(
 	}
 }
 
+// Every line carries the same prefix so the block is greppable in a Netlify
+// build log, where this runs after `next build` and the migrator.
+function log(line: string): void {
+	console.log(`[db:sanitize-preview] ${line}`);
+}
+
+/** One line per table, indented under its phase. */
+function report(table: string, count: number, what = 'rows rewritten'): void {
+	log(`  ${table}: ${count} ${what}`);
+}
+
+function elapsed(since: number): string {
+	return `${((performance.now() - since) / 1000).toFixed(1)}s`;
+}
+
+async function phase<T>(label: string, fn: () => Promise<T>): Promise<T> {
+	log(`${label}…`);
+	const started = performance.now();
+	const result = await fn();
+	log(`${label} done in ${elapsed(started)}`);
+	return result;
+}
+
 /* -------------------------------------------------------------------------- */
 /* Membership pipeline                                                       */
 /* -------------------------------------------------------------------------- */
@@ -129,6 +152,7 @@ async function sanitizeMembershipApplications(
 			.where(eq(membershipApplication.id, row.id));
 	});
 
+	report('membership_application', rows.length);
 	return emailById;
 }
 
@@ -146,11 +170,10 @@ async function sanitizeApplicationEvents(
 			type: applicationEvent.type,
 			body: applicationEvent.body,
 		})
-		.from(applicationEvent);
+		.from(applicationEvent)
+		.where(isNotNull(applicationEvent.body));
 
 	await inBatches(rows, async (row) => {
-		if (row.body === null) return;
-
 		faker.seed(seedFor(row.id));
 		const email = emailById.get(row.applicationId) ?? fakeEmail(row.id);
 		const body = ((): string => {
@@ -188,6 +211,8 @@ async function sanitizeApplicationEvents(
 			.set({ body })
 			.where(eq(applicationEvent.id, row.id));
 	});
+
+	report('application_event', rows.length);
 }
 
 async function sanitizeInvites(database: Database): Promise<void> {
@@ -226,6 +251,8 @@ async function sanitizeInvites(database: Database): Promise<void> {
 			})
 			.where(eq(invite.id, row.id));
 	});
+
+	report('invite', rows.length);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -268,6 +295,8 @@ async function sanitizeVolunteers(database: Database): Promise<void> {
 			.where(eq(volunteer.id, row.id));
 	});
 
+	report('volunteer', rows.length);
+
 	const entries = await database
 		.select({
 			id: volunteerInviteLedger.id,
@@ -292,6 +321,8 @@ async function sanitizeVolunteers(database: Database): Promise<void> {
 			})
 			.where(eq(volunteerInviteLedger.id, row.id));
 	});
+
+	report('volunteer_invite_ledger', entries.length);
 }
 
 /**
@@ -323,6 +354,8 @@ async function sanitizePendingGrants(database: Database): Promise<void> {
 			})
 			.where(eq(pendingGrant.id, row.id));
 	});
+
+	report('pending_grant', rows.length);
 }
 
 async function sanitizeCocReports(database: Database): Promise<void> {
@@ -356,6 +389,8 @@ async function sanitizeCocReports(database: Database): Promise<void> {
 			})
 			.where(eq(cocReport.id, row.id));
 	});
+
+	report('coc_report', rows.length);
 }
 
 async function sanitizeVolunteerSignups(database: Database): Promise<void> {
@@ -385,6 +420,8 @@ async function sanitizeVolunteerSignups(database: Database): Promise<void> {
 			})
 			.where(eq(volunteerSignup.id, row.id));
 	});
+
+	report('volunteer_signup', rows.length);
 }
 
 async function sanitizeLunchAndLearnIdeas(database: Database): Promise<void> {
@@ -417,6 +454,8 @@ async function sanitizeLunchAndLearnIdeas(database: Database): Promise<void> {
 			})
 			.where(eq(lunchAndLearnIdea.id, row.id));
 	});
+
+	report('lunch_and_learn_idea', rows.length);
 }
 
 async function sanitizeCoffeeTableGroupRequests(
@@ -444,6 +483,8 @@ async function sanitizeCoffeeTableGroupRequests(
 			})
 			.where(eq(coffeeTableGroupRequest.id, row.id));
 	});
+
+	report('coffee_table_group_request', rows.length);
 }
 
 async function sanitizeSubmissionEvents(database: Database): Promise<void> {
@@ -453,11 +494,10 @@ async function sanitizeSubmissionEvents(database: Database): Promise<void> {
 			type: submissionEvent.type,
 			body: submissionEvent.body,
 		})
-		.from(submissionEvent);
+		.from(submissionEvent)
+		.where(isNotNull(submissionEvent.body));
 
 	await inBatches(rows, async (row) => {
-		if (row.body === null) return;
-
 		faker.seed(seedFor(row.id));
 
 		// The actions write a fixed sentence or the notifier's own message; a
@@ -485,6 +525,8 @@ async function sanitizeSubmissionEvents(database: Database): Promise<void> {
 			.set({ body })
 			.where(eq(submissionEvent.id, row.id));
 	});
+
+	report('submission_event', rows.length);
 }
 
 /**
@@ -500,7 +542,10 @@ async function sanitizeCocAttachments(database: Database): Promise<void> {
 		.from(cocReport)
 		.where(isNotNull(cocReport.attachmentBlobKey));
 
-	if (rows.length === 0) return;
+	if (rows.length === 0) {
+		report('coc_report', 0, 'attachments to repoint');
+		return;
+	}
 
 	await getStore(ATTACHMENT_STORE).set(
 		PLACEHOLDER_ATTACHMENT_KEY,
@@ -521,6 +566,8 @@ async function sanitizeCocAttachments(database: Database): Promise<void> {
 			})
 			.where(eq(cocReport.id, row.id));
 	});
+
+	report('coc_report', rows.length, 'attachments repointed at the placeholder');
 }
 
 /* -------------------------------------------------------------------------- */
@@ -565,6 +612,8 @@ async function sanitizeAuthTables(database: Database): Promise<void> {
 			.where(eq(user.id, row.id));
 	});
 
+	report('user', users.length);
+
 	const accounts = await database.select({ id: account.id }).from(account);
 
 	await inBatches(accounts, async (row) => {
@@ -581,14 +630,22 @@ async function sanitizeAuthTables(database: Database): Promise<void> {
 			.where(eq(account.id, row.id));
 	});
 
+	report('account', accounts.length);
+
 	// Nothing needs a preview to carry over real sessions, invite tokens, or
 	// pending verification codes — the preview admin bypass mints its own.
 	// `devtools_user` is empty outside development; deleting it costs nothing
 	// and means the coverage check can say so without a caveat.
-	await database.delete(session);
-	await database.delete(verification);
-	await database.delete(inviteToken);
-	await database.delete(devtoolsUser);
+	const cleared = [
+		['session', session],
+		['verification', verification],
+		['invite_token', inviteToken],
+		['devtools_user', devtoolsUser],
+	] as const;
+	for (const [name, table] of cleared) {
+		const { rowCount } = await database.delete(table);
+		report(name, rowCount ?? 0, 'rows deleted');
+	}
 }
 
 /* -------------------------------------------------------------------------- */
@@ -733,11 +790,22 @@ async function verify(database: Database): Promise<string[]> {
 			failures.push(`${label} (${count} row${count === 1 ? '' : 's'})`);
 		}
 	}
+	report(
+		'column checks',
+		checks.length - failures.length,
+		`of ${checks.length} passed`,
+	);
 
 	// The checks above only know the columns this script knows. This one
 	// fails closed on the ones it doesn't: a table or column the schema has
 	// gained that nobody has decided about is a leak until proven otherwise.
-	failures.push(...(await coverageFailures(database)));
+	const uncovered = await coverageFailures(database);
+	log(
+		uncovered.length === 0
+			? '  schema coverage audit passed'
+			: `  schema coverage audit found ${uncovered.length} unlisted table(s)/column(s)`,
+	);
+	failures.push(...uncovered);
 
 	return failures;
 }
@@ -754,42 +822,50 @@ async function main() {
 	}
 
 	if (context !== 'deploy-preview' && context !== 'branch-deploy') {
-		console.log(
-			`db:sanitize-preview: CONTEXT=${context ?? '(unset)'}, nothing to do.`,
-		);
+		log(`CONTEXT=${context ?? '(unset)'}, nothing to do.`);
 		return;
 	}
 
+	const started = performance.now();
+	log(
+		`starting (CONTEXT=${context}, BRANCH=${process.env.BRANCH ?? '(unset)'}, ` +
+			`DEPLOY_ID=${process.env.DEPLOY_ID ?? '(unset)'})`,
+	);
+
 	const database = db();
 
-	const applicationEmailById = await sanitizeMembershipApplications(database);
-	await sanitizeApplicationEvents(database, applicationEmailById);
-	await sanitizeInvites(database);
+	await phase('membership pipeline', async () => {
+		const applicationEmailById = await sanitizeMembershipApplications(database);
+		await sanitizeApplicationEvents(database, applicationEmailById);
+		await sanitizeInvites(database);
+		await sanitizeVolunteers(database);
+		await sanitizePendingGrants(database);
+	});
 
-	await sanitizeCocReports(database);
-	await sanitizeVolunteerSignups(database);
-	await sanitizeLunchAndLearnIdeas(database);
-	await sanitizeCoffeeTableGroupRequests(database);
-	await sanitizeSubmissionEvents(database);
+	await phase('submissions', async () => {
+		await sanitizeCocReports(database);
+		await sanitizeVolunteerSignups(database);
+		await sanitizeLunchAndLearnIdeas(database);
+		await sanitizeCoffeeTableGroupRequests(database);
+		await sanitizeSubmissionEvents(database);
+		await sanitizeCocAttachments(database);
+	});
 
-	await sanitizeCocAttachments(database);
-	await sanitizeVolunteers(database);
-	await sanitizePendingGrants(database);
-	await sanitizeAuthTables(database);
+	await phase('auth tables', () => sanitizeAuthTables(database));
 
-	const failures = await verify(database);
+	const failures = await phase('verification', () => verify(database));
 
 	if (failures.length > 0) {
-		console.error('db:sanitize-preview: verification failed:');
+		console.error('[db:sanitize-preview] verification failed:');
 		for (const failure of failures) console.error(`  - ${failure}`);
 		process.exitCode = 1;
 		return;
 	}
 
-	console.log('db:sanitize-preview: preview branch sanitized successfully.');
+	log(`preview branch sanitized successfully in ${elapsed(started)}.`);
 }
 
 main().catch((error) => {
-	console.error('db:sanitize-preview: failed:', error);
+	console.error('[db:sanitize-preview] failed:', error);
 	process.exitCode = 1;
 });
