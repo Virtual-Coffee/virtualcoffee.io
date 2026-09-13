@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { z } from 'zod';
 
 import { db, inviteToken } from '@/db';
 import {
@@ -114,7 +115,8 @@ describe('sendCoffeeInvite', () => {
 		expect(sendEmail).toHaveBeenCalledWith({
 			to: 'ada@example.test',
 			subject: 'You’re invited to a Virtual Coffee',
-			text: expect.stringMatching(/^Hi Ada,/),
+			html: expect.schemaMatching(z.string().startsWith('<!DOCTYPE html')),
+			text: expect.schemaMatching(z.string().startsWith('Hi Ada,')),
 			cc: admin.email,
 		});
 		const row = await applicationRow(id);

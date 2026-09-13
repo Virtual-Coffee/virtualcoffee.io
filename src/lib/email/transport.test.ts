@@ -15,8 +15,18 @@ import {
 const input = {
 	to: 'ada@example.test',
 	subject: 'Hello',
+	html: '<p>Body</p>',
 	text: 'Body',
 };
+
+/** The shape of a downloaded service-account key file, PEM collapsed as Netlify's UI does. */
+const KEY = JSON.stringify({
+	type: 'service_account',
+	client_id: '113600000000000000000',
+	client_email: 'mail@vc.iam.gserviceaccount.com',
+	private_key:
+		'-----BEGIN PRIVATE KEY-----\\nMIIE\\n-----END PRIVATE KEY-----\\n',
+});
 
 beforeEach(() => {
 	// Live delivery is production only; every case below is about what a
@@ -24,7 +34,7 @@ beforeEach(() => {
 	vi.stubEnv('CONTEXT', 'production');
 	vi.stubEnv('EMAIL_REDIRECT_TO', undefined);
 	vi.stubEnv('GOOGLE_SMTP_USER', 'hello@virtualcoffee.io');
-	vi.stubEnv('GOOGLE_SMTP_APP_PASSWORD', 'app-password');
+	vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', KEY);
 	sendMail.mockReset();
 	sendMail.mockResolvedValue({ rejected: [] });
 });
@@ -32,9 +42,9 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllEnvs());
 
 describe('emailConfigured', () => {
-	test('needs both the user and the app password', () => {
+	test('needs both the user and the service account key', () => {
 		expect(emailConfigured()).toBe(true);
-		vi.stubEnv('GOOGLE_SMTP_APP_PASSWORD', undefined);
+		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
 		expect(emailConfigured()).toBe(false);
 	});
 });
@@ -49,10 +59,38 @@ describe('sendEmail', () => {
 			to: input.to,
 			cc: undefined,
 			subject: input.subject,
+			html: input.html,
 			text: input.text,
 			replyTo: 'hello@virtualcoffee.io',
 		});
+		// The transporter is a module singleton, built on this first send:
+		// XOAUTH2 as the service account impersonating hello@, with the PEM's
+		// collapsed newlines restored.
+		expect(createTransport).toHaveBeenCalledWith(
+			expect.objectContaining({
+				auth: {
+					type: 'OAuth2',
+					user: 'hello@virtualcoffee.io',
+					serviceClient: '113600000000000000000',
+					privateKey:
+						'-----BEGIN PRIVATE KEY-----\nMIIE\n-----END PRIVATE KEY-----\n',
+				},
+			}),
+		);
 	});
+
+	test.each(['not json', '{"client_id":"x"}', '[]'])(
+		'a key that is not a service account file (%s) is definitely not sent',
+		async (key) => {
+			vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', key);
+			await expect(sendEmail(input)).resolves.toMatchObject({
+				ok: false,
+				definitelyNotSent: true,
+				message: expect.stringContaining('not a service account key file'),
+			});
+			expect(sendMail).not.toHaveBeenCalled();
+		},
+	);
 
 	test('the transport is pooled and every phase has a timeout', () => {
 		// The transporter is a module singleton, so the options are asserted
@@ -218,6 +256,7 @@ describe('delivery modes', () => {
 			to: 'maintainer@example.test',
 			cc: undefined,
 			subject: '[to: ada@example.test] Hello',
+			html: input.html,
 			text: input.text,
 			replyTo: 'hello@virtualcoffee.io',
 			headers: { 'X-Original-To': 'ada@example.test' },
@@ -227,7 +266,7 @@ describe('delivery modes', () => {
 	test('redirected still needs the credentials', async () => {
 		vi.stubEnv('CONTEXT', 'dev');
 		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
-		vi.stubEnv('GOOGLE_SMTP_APP_PASSWORD', undefined);
+		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
 
 		await expect(sendEmail(input)).resolves.toMatchObject({
 			ok: false,

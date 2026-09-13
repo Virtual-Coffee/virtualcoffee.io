@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
 import type { EmailActionResult } from '@/lib/actionResult';
 import { useAction } from '@/util/forms/useAction';
-import { volunteerInviteEmail } from '@/lib/email/templates';
+import { volunteerInvite } from '@/emails/volunteerInvite';
 import { sendInvite } from './actions';
 
 /**
@@ -31,11 +31,15 @@ export function SendInviteForm({
 	const notice = result?.ok ? (result.message ?? 'Invite sent.') : null;
 
 	const spent = balance < 1;
-	const preview = volunteerInviteEmail(
+	const previewProps = {
 		inviterName,
-		name.trim(),
-		claimUrlPreview,
-	);
+		inviteeName: name.trim(),
+		claimUrl: claimUrlPreview,
+	};
+	const preview = {
+		subject: volunteerInvite.subject(previewProps),
+		body: <volunteerInvite.Content {...previewProps} />,
+	};
 
 	function review() {
 		clear();

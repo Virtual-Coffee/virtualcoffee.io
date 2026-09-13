@@ -7,8 +7,9 @@ import {
 	volunteer,
 	volunteerInviteLedger,
 } from '../../../src/db/index.ts';
-import { volunteerAccrualEmail } from '../../../src/lib/email/templates.ts';
+import { volunteerAccrual } from '../../../src/emails/volunteerAccrual.tsx';
 import { balancesBySlackUser } from '../../../src/lib/invites.ts';
+import { renderEmail } from '../../../src/lib/email/render.ts';
 import { sendEmail } from '../../../src/lib/email/transport.ts';
 import { siteUrl } from '../../../src/util/url.server.ts';
 
@@ -203,17 +204,13 @@ async function notify(slackUserIds: string[]): Promise<{
 		if (!address) return;
 
 		try {
-			const template = volunteerAccrualEmail(
-				row.name,
-				Number(row.balance ?? 0),
-				`${siteUrl()}/invites`,
-			);
+			const rendered = await renderEmail(volunteerAccrual, {
+				name: row.name,
+				balance: Number(row.balance ?? 0),
+				invitesUrl: `${siteUrl()}/invites`,
+			});
 			const sent = await withTimeout(
-				sendEmail({
-					to: address,
-					subject: template.subject,
-					text: template.text,
-				}),
+				sendEmail({ to: address, ...rendered }),
 				SEND_TIMEOUT_MS,
 			);
 

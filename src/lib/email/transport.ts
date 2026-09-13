@@ -10,6 +10,14 @@ import { capture, emailDelivery, type EmailDelivery } from '@/lib/outbound';
  * no static outbound addresses, so there is nothing to allowlist. Port 587 is
  * open from that runtime.
  *
+ * Authenticates with XOAUTH2 as a service account granted domain-wide
+ * delegation over hello@ (scope `https://mail.google.com/`), so there is no
+ * App Password to rotate and no consent-screen refresh token to expire.
+ * `GMAIL_SERVICE_ACCOUNT_KEY` is the downloaded JSON key file, whole — its
+ * `client_id` and `private_key` are what nodemailer needs. Mail-scoped on
+ * purpose: the events calendar uses a different service account under
+ * `GOOGLE_SERVICE_ACCOUNT_KEY`.
+ *
  * Outside production nothing reaches SMTP unless `EMAIL_REDIRECT_TO` is set —
  * `emailDelivery()` decides, and `sendEmail` consults it before it so much as
  * reads the credentials. See docs/adr/0013.
@@ -18,6 +26,8 @@ import { capture, emailDelivery, type EmailDelivery } from '@/lib/outbound';
 export type SendEmailInput = {
 	to: string;
 	subject: string;
+	/** Both parts of one `renderEmail()` — never one without the other. */
+	html: string;
 	text: string;
 	/** Copies the acting admin, per the "Copy me on this email" checkbox. */
 	cc?: string | null;
@@ -51,8 +61,32 @@ export type SendResult = { ok: true; warning?: string } | SendFailure;
 
 export function emailConfigured(): boolean {
 	return Boolean(
-		process.env.GOOGLE_SMTP_USER && process.env.GOOGLE_SMTP_APP_PASSWORD,
+		process.env.GOOGLE_SMTP_USER && process.env.GMAIL_SERVICE_ACCOUNT_KEY,
 	);
+}
+
+/**
+ * Netlify's UI collapses a pasted PEM onto one line inside the JSON, so
+ * `\n` escapes in the key are restored — a key with literal backslash-n
+ * fails signing with an opaque error.
+ */
+function serviceAccount(): { clientId: string; privateKey: string } | null {
+	try {
+		const parsed: unknown = JSON.parse(
+			process.env.GMAIL_SERVICE_ACCOUNT_KEY ?? '',
+		);
+		if (typeof parsed !== 'object' || parsed === null) return null;
+		const { client_id, private_key } = parsed as Record<string, unknown>;
+		if (typeof client_id !== 'string' || typeof private_key !== 'string') {
+			return null;
+		}
+		return {
+			clientId: client_id,
+			privateKey: private_key.replace(/\\n/g, '\n'),
+		};
+	} catch {
+		return null;
+	}
 }
 
 /** What the admin UI shows above the send buttons. */
@@ -81,12 +115,17 @@ export const TRANSPORT_OPTIONS = {
 	socketTimeout: 30_000,
 } as const;
 
-function getTransporter(): Transporter {
+function getTransporter(account: {
+	clientId: string;
+	privateKey: string;
+}): Transporter {
 	transporter ??= nodemailer.createTransport({
 		...TRANSPORT_OPTIONS,
 		auth: {
+			type: 'OAuth2',
 			user: process.env.GOOGLE_SMTP_USER,
-			pass: process.env.GOOGLE_SMTP_APP_PASSWORD,
+			serviceClient: account.clientId,
+			privateKey: account.privateKey,
 		},
 	});
 	return transporter;
@@ -123,7 +162,17 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 			ok: false,
 			definitelyNotSent: true,
 			message:
-				'Email is not configured (GOOGLE_SMTP_USER / GOOGLE_SMTP_APP_PASSWORD).',
+				'Email is not configured (GOOGLE_SMTP_USER / GMAIL_SERVICE_ACCOUNT_KEY).',
+		};
+	}
+
+	const account = serviceAccount();
+	if (!account) {
+		return {
+			ok: false,
+			definitelyNotSent: true,
+			message:
+				'GMAIL_SERVICE_ACCOUNT_KEY is not a service account key file (expected JSON with client_id and private_key).',
 		};
 	}
 
@@ -140,11 +189,12 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 			: input.subject;
 
 	try {
-		const info = await getTransporter().sendMail({
+		const info = await getTransporter(account).sendMail({
 			from,
 			to,
 			cc,
 			subject,
+			html: input.html,
 			text: input.text,
 			replyTo: process.env.GOOGLE_SMTP_USER,
 			...(delivery.mode === 'redirected'

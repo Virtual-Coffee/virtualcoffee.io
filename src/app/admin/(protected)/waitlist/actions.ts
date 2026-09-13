@@ -16,11 +16,10 @@ import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { checkNote } from '@/lib/notes';
 import { actorId, requirePermission } from '@/lib/adminAccess';
 import { sendEmail } from '@/lib/email/transport';
-import {
-	coffeeInviteEmail,
-	slackInviteEmail,
-	welcomeEmail,
-} from '@/lib/email/templates';
+import { renderEmail } from '@/lib/email/render';
+import { coffeeInvite } from '@/emails/coffeeInvite';
+import { slackInvite } from '@/emails/slackInvite';
+import { welcome } from '@/emails/welcome';
 import {
 	createSlackInviteToken,
 	expireSlackInviteToken,
@@ -145,15 +144,12 @@ export async function sendCoffeeInvite(
 		};
 	}
 
-	const template = coffeeInviteEmail(application.name);
-
 	// Send BEFORE the status change. If this is reversed, a failed send leaves
 	// the applicant marked as invited with no email, and the maintainer has no
 	// way to tell.
 	const sent = await sendEmail({
 		to: application.email,
-		subject: template.subject,
-		text: template.text,
+		...(await renderEmail(coffeeInvite, { name: application.name })),
 		cc: copyMe ? session.user.email : null,
 	});
 
@@ -276,11 +272,9 @@ export async function approveMembership(
 	const { id: tokenId, token } = await createSlackInviteToken(applicationId);
 	const inviteUrl = `${siteUrl()}/join-slack?code=${token}`;
 
-	const welcome = welcomeEmail(application.name);
 	const welcomeSent = await sendEmail({
 		to: application.email,
-		subject: welcome.subject,
-		text: welcome.text,
+		...(await renderEmail(welcome, { name: application.name })),
 		cc: copyMe ? session.user.email : null,
 	});
 
@@ -299,11 +293,9 @@ export async function approveMembership(
 		};
 	}
 
-	const slack = slackInviteEmail(application.name, inviteUrl);
 	const slackSent = await sendEmail({
 		to: application.email,
-		subject: slack.subject,
-		text: slack.text,
+		...(await renderEmail(slackInvite, { name: application.name, inviteUrl })),
 		cc: copyMe ? session.user.email : null,
 	});
 
@@ -413,14 +405,12 @@ export async function resendSlackInvite(
 	}
 
 	const minted = await createSlackInviteToken(applicationId);
-	const template = slackInviteEmail(
-		application.name,
-		`${siteUrl()}/join-slack?code=${minted.token}`,
-	);
 	const sent = await sendEmail({
 		to: application.email,
-		subject: template.subject,
-		text: template.text,
+		...(await renderEmail(slackInvite, {
+			name: application.name,
+			inviteUrl: `${siteUrl()}/join-slack?code=${minted.token}`,
+		})),
 		cc: copyMe ? session.user.email : null,
 	});
 
