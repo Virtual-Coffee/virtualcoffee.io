@@ -2,6 +2,7 @@ import { unstable_cache } from 'next/cache';
 import { calendar, auth, type calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
 import { DISPLAY_ZONE } from '@/util/date';
+import { parseMarkdown } from '@/util/markdown.server';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
 import { assertMocksAllowed, mocksAllowed } from './mocks';
 import { ics, google, outlook } from 'calendar-link';
@@ -64,15 +65,17 @@ export function createCalendarClient(): calendar_v3.Calendar {
 }
 
 /**
- * Google returns descriptions as HTML: text is already entity-encoded
- * (`&#39;`, `&quot;`, `&amp;`) whether or not it contains tags, so it must not
- * be escaped again. Tag-free descriptions use newlines for paragraph breaks,
- * which would collapse into a single line, so turn those into `<br />`.
- * `sanitizeHtml` handles anything unsafe either way.
+ * Descriptions are Markdown (docs/adr/0014; the bots render the same text
+ * for Slack). Google entity-encodes the text it returns (`&#39;`, `&amp;`)
+ * whether or not it holds tags; Markdown decodes entity references, so that
+ * is not a double escape. A description that still carries HTML tags — the
+ * shape Craft left behind, until the calendar is migrated — is kept as HTML,
+ * because `parseMarkdown` drops raw HTML rather than rendering it. Both
+ * paths end in `sanitizeHtml`.
  */
-export function normalizeDescription(raw: string): string {
-	if (/<[a-z][\s\S]*>/i.test(raw)) return raw;
-	return raw.replace(/\r?\n/g, '<br />');
+export async function renderDescription(raw: string): Promise<string> {
+	if (/<[a-z][\s\S]*>/i.test(raw)) return sanitizeHtml(raw);
+	return parseMarkdown(raw);
 }
 
 /** A calendar entry with everything the events UI renders. */
@@ -187,9 +190,7 @@ export const getEvents = unstable_cache(
 					const title = event.summary;
 					const start = event.start.dateTime;
 					const end = event.end.dateTime;
-					const description = await sanitizeHtml(
-						normalizeDescription(event.description ?? ''),
-					);
+					const description = await renderDescription(event.description ?? '');
 					const linkDetails = { title, start, end, description };
 
 					return {

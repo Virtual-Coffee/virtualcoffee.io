@@ -5,6 +5,7 @@ import {
 	CalendarConflictError,
 	eventsCalendar,
 	isCalendarEventId,
+	isZoomJoinLink,
 	type CalendarClient,
 	type SeriesInput,
 } from './eventsCalendar';
@@ -18,6 +19,7 @@ const series: calendar_v3.Schema$Event = {
 	summary: 'Virtual Coffee',
 	description: 'Come hang out',
 	location: 'https://zoom.example/j/1',
+	extendedProperties: { private: { hostCode: ' 123456 ', joinLink: 'old' } },
 	start: {
 		dateTime: '2026-01-06T09:00:00-05:00',
 		timeZone: 'America/New_York',
@@ -142,6 +144,7 @@ describe('listSeries', () => {
 				title: 'Virtual Coffee',
 				description: 'Come hang out',
 				joinLink: 'https://zoom.example/j/1',
+				hostCode: '123456',
 				recurrence: {
 					kind: 'weekly',
 					interval: 1,
@@ -249,6 +252,7 @@ describe('writes', () => {
 		title: 'Feelings Friday',
 		description: 'Talk it out',
 		joinLink: 'https://zoom.example/j/2',
+		hostCode: '654321',
 		date: '2026-09-18',
 		startTime: '12:00',
 		endTime: '13:00',
@@ -281,10 +285,20 @@ describe('writes', () => {
 						dateTime: '2026-09-18T13:00:00.000-04:00',
 						timeZone: 'America/New_York',
 					},
+					extendedProperties: { private: { hostCode: '654321' } },
 					recurrence: ['RRULE:FREQ=MONTHLY;BYDAY=1FR,3FR'],
 				},
 			},
 		});
+	});
+
+	test('no Host Code on create writes no property at all', async () => {
+		const { cal, calls } = fakeClient({});
+		await cal.createEvent({ ...input, hostCode: '' });
+		expect(
+			(calls[0].params as calendar_v3.Params$Resource$Events$Insert)
+				.requestBody,
+		).not.toHaveProperty('extendedProperties');
 	});
 
 	test('updateSeries patches with If-Match and keeps the EXDATE lines', async () => {
@@ -307,6 +321,10 @@ describe('writes', () => {
 				sendUpdates: 'none',
 				requestBody: {
 					summary: 'Feelings Friday',
+					// The map is replaced whole, so the legacy key rides along.
+					extendedProperties: {
+						private: { hostCode: '654321', joinLink: 'old' },
+					},
 					recurrence: [
 						'EXDATE;TZID=America/New_York:20260917T090000',
 						'RRULE:FREQ=MONTHLY;BYDAY=1FR,3FR',
@@ -314,6 +332,18 @@ describe('writes', () => {
 				},
 			},
 			options: { headers: { 'If-Match': '"1"' } },
+		});
+	});
+
+	test('clearing the Host Code on update writes an empty one', async () => {
+		const { cal, calls } = fakeClient({ get: { coffee: series } });
+		await cal.updateSeries('coffee', '"1"', { ...input, hostCode: '' });
+		expect(calls[1]).toMatchObject({
+			params: {
+				requestBody: {
+					extendedProperties: { private: { hostCode: '', joinLink: 'old' } },
+				},
+			},
 		});
 	});
 
@@ -432,6 +462,18 @@ describe('writes', () => {
 				options: { headers: { 'If-Match': '"c"' } },
 			},
 		]);
+	});
+});
+
+describe('isZoomJoinLink', () => {
+	test.each([
+		['https://us02web.zoom.us/j/12345678901?pwd=abc', true],
+		['https://zoom.us/j/123456789', true],
+		['https://zoom.us/j/12345', false],
+		['https://meet.google.com/abc-defg-hij', false],
+		['https://zoom.example/j/1', false],
+	])('%s → %s', (url, ok) => {
+		expect(isZoomJoinLink(url)).toBe(ok);
 	});
 });
 

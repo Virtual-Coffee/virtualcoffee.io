@@ -7,7 +7,13 @@ import type { Series } from '@/lib/eventsCalendar';
 import { useAction } from '@/util/forms/useAction';
 
 import { createSeries, updateSeries } from './actions';
-import { TextAreaField, TextField, TimeFields, type TimeDraft } from './fields';
+import {
+	HostCodeField,
+	TextAreaField,
+	TextField,
+	TimeFields,
+	type TimeDraft,
+} from './fields';
 import { sentence } from './presentation';
 import {
 	draftFromRecurrence,
@@ -29,6 +35,7 @@ export function SeriesForm({ series }: { series?: Series }) {
 
 	const [title, setTitle] = useState(series?.title ?? '');
 	const [joinLink, setJoinLink] = useState(series?.joinLink ?? '');
+	const [hostCode, setHostCode] = useState(series?.hostCode ?? '');
 	const [description, setDescription] = useState(series?.description ?? '');
 	const [when, setWhen] = useState<TimeDraft>({
 		date: series?.date ?? '',
@@ -51,7 +58,14 @@ export function SeriesForm({ series }: { series?: Series }) {
 		<form
 			onSubmit={(event) => {
 				event.preventDefault();
-				const input = { title, joinLink, description, ...when, recurrence };
+				const input = {
+					title,
+					joinLink,
+					hostCode,
+					description,
+					...when,
+					recurrence,
+				};
 				run(() =>
 					series
 						? updateSeries(series.id, series.etag, input)
@@ -98,12 +112,17 @@ export function SeriesForm({ series }: { series?: Series }) {
 					help="Where people go to attend. The same for every Event of the Series."
 					required
 				/>
+				<HostCodeField
+					id={`${id}-host`}
+					value={hostCode}
+					onChange={setHostCode}
+				/>
 				<TextAreaField
 					id={`${id}-description`}
 					label="Description"
 					value={description}
 					onChange={setDescription}
-					help="Shown on /events under every Event of the Series. Plain text or HTML."
+					help="Markdown. Shown on /events under every Event of the Series."
 				/>
 			</fieldset>
 

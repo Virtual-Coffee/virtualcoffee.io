@@ -4,7 +4,7 @@ import {
 	type CalendarEventsClient,
 	isDisplayableEvent,
 	listDisplayableEvents,
-	normalizeDescription,
+	renderDescription,
 } from './events';
 
 /**
@@ -36,15 +36,30 @@ function stubClient(pages: calendar_v3.Schema$Events[]) {
 	return { client, calls };
 }
 
-describe('normalizeDescription', () => {
-	test('leaves HTML alone', () => {
-		const html = '<p>line one\nline two</p>';
-		expect(normalizeDescription(html)).toBe(html);
+describe('renderDescription', () => {
+	test('keeps HTML as HTML, through the allowlist', async () => {
+		await expect(
+			renderDescription('<p>line one</p><script>x()</script>'),
+		).resolves.toBe('<p>line one</p>');
 	});
 
-	test('turns newlines in plain text into line breaks', () => {
-		expect(normalizeDescription('one\ntwo\r\nthree')).toBe(
-			'one<br />two<br />three',
+	test('renders Markdown', async () => {
+		await expect(
+			renderDescription('Come **hang out**\n\n- coffee\n- code'),
+		).resolves.toBe(
+			'<p>Come <strong>hang out</strong></p>\n<ul>\n<li>coffee</li>\n<li>code</li>\n</ul>',
+		);
+	});
+
+	test("Google's entity encoding is decoded once, not escaped again", async () => {
+		await expect(
+			renderDescription('it&#39;s Tuesday &amp; sunny'),
+		).resolves.toBe("<p>it's Tuesday &amp; sunny</p>");
+	});
+
+	test('a plain two-line description is two paragraphs', async () => {
+		await expect(renderDescription('one\n\ntwo')).resolves.toBe(
+			'<p>one</p>\n<p>two</p>',
 		);
 	});
 });
