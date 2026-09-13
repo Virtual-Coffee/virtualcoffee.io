@@ -395,7 +395,8 @@ describe('a status that changed between the read and the write', () => {
 		]);
 	});
 
-	test('an approval that raced a withdrawal does not make a member', async () => {
+	test('an approval that raced a withdrawal does not make a member, and the emailed Slack link is dead', async () => {
+		vi.stubEnv('URL', 'https://virtualcoffee.io');
 		sendEmail.mockResolvedValue(SENT);
 		const { id } = await insertApplication({ status: 'withdrawn' });
 		staleRead.readAs = 'coffee_invited';
@@ -406,6 +407,17 @@ describe('a status that changed between the read and the write', () => {
 		});
 		expect((await applicationRow(id)).status).toBe('withdrawn');
 		expect(sendEmail).toHaveBeenCalledTimes(2);
+
+		const [, slackInvite] = sendEmail.mock.calls;
+		const code = new URL(
+			/https:\/\/virtualcoffee\.io\/join-slack\?code=\S+/.exec(
+				slackInvite[0].text,
+			)![0],
+		).searchParams.get('code')!;
+		await expect(slackInviteForToken(code)).resolves.toEqual({
+			ok: false,
+			reason: 'expired',
+		});
 	});
 
 	test('attendance cannot be recorded on a row that already moved', async () => {

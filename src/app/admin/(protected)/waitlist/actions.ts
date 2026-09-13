@@ -21,7 +21,10 @@ import {
 	slackInviteEmail,
 	welcomeEmail,
 } from '@/lib/email/templates';
-import { createSlackInviteToken } from '@/lib/inviteTokens';
+import {
+	createSlackInviteToken,
+	expireSlackInviteTokens,
+} from '@/lib/inviteTokens';
 import { getApplication } from '@/lib/applications';
 import { siteUrl } from '@/util/url.server';
 
@@ -328,12 +331,15 @@ export async function approveMembership(
 	);
 
 	if (!approved) {
-		// Both emails have gone regardless, so the history must say so.
+		// Both emails have gone regardless, so the history must say so — and the
+		// Slack link in one of them must stop working, since the person is not
+		// being made a member.
+		await expireSlackInviteTokens(applicationId, new Date());
 		await recordEvent({
 			applicationId,
 			actorUserId: actor,
 			type: 'email_sent',
-			body: `Welcome and Slack invite emailed to ${application.email}, but the application had already left Coffee invited`,
+			body: `Welcome and Slack invite emailed to ${application.email}, but the application had already left Coffee invited; the Slack link has been invalidated`,
 		});
 		revalidateApplication(applicationId);
 		return {
