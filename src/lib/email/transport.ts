@@ -1,5 +1,7 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 
+import { emailDelivery, type EmailDelivery } from '@/lib/outbound';
+
 /**
  * Transactional mail for the membership pipeline, sent through Google
  * Workspace over SMTP as hello@virtualcoffee.io.
@@ -7,6 +9,10 @@ import nodemailer, { type Transporter } from 'nodemailer';
  * SMTP AUTH rather than IP allowlisting: Netlify Functions run on Lambda with
  * no static outbound addresses, so there is nothing to allowlist. Port 587 is
  * open from that runtime.
+ *
+ * Outside production nothing reaches SMTP unless `EMAIL_REDIRECT_TO` is set —
+ * `emailDelivery()` decides, and `sendEmail` consults it before it so much as
+ * reads the credentials. See docs/adr/0013.
  */
 
 export type SendEmailInput = {
@@ -36,9 +42,10 @@ export type SendFailure = {
 };
 
 /**
- * `warning` is set when the applicant's copy went out but a cc did not. That
- * is still a success — retrying would email the applicant twice — so it is
- * reported alongside `ok`, not instead of it.
+ * `warning` is set when the send succeeded but not as asked: the applicant's
+ * copy went out but a cc did not, or the message was Captured or Redirected
+ * on a non-production deploy. Each is still a success — retrying would email
+ * the applicant twice — so it is reported alongside `ok`, not instead of it.
  */
 export type SendResult = { ok: true; warning?: string } | SendFailure;
 
@@ -46,6 +53,13 @@ export function emailConfigured(): boolean {
 	return Boolean(
 		process.env.GOOGLE_SMTP_USER && process.env.GOOGLE_SMTP_APP_PASSWORD,
 	);
+}
+
+/** What the admin UI shows above the send buttons. */
+export type EmailStatus = EmailDelivery & { configured: boolean };
+
+export function emailStatus(): EmailStatus {
+	return { ...emailDelivery(), configured: emailConfigured() };
 }
 
 let transporter: Transporter | undefined;
@@ -90,7 +104,29 @@ function bareAddress(value: string): string {
 	return (match ? match[1] : value).trim().toLowerCase();
 }
 
+/**
+ * The Captured sink: the whole message, on the function log. Locally that is
+ * the `netlify dev` terminal; on a preview, the deploy's function log.
+ */
+function capture(input: SendEmailInput, context: string): void {
+	console.info(
+		`[email captured] ${context}`,
+		{ to: input.to, cc: input.cc || undefined, subject: input.subject },
+		`\n${input.text}`,
+	);
+}
+
 export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
+	const delivery = emailDelivery();
+
+	if (delivery.mode === 'captured') {
+		capture(input, delivery.context);
+		return {
+			ok: true,
+			warning: `Captured, not delivered (${delivery.context}): nothing leaves this deploy.`,
+		};
+	}
+
 	if (!emailConfigured()) {
 		return {
 			ok: false,
@@ -102,14 +138,27 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 
 	const from = `Virtual Coffee <${process.env.GOOGLE_SMTP_USER}>`;
 
+	// Redirected: one address gets everything, the intended recipient is named
+	// in the subject and a header, and no cc — the point is that only the
+	// maintainer who set EMAIL_REDIRECT_TO receives anything.
+	const to = delivery.mode === 'redirected' ? delivery.redirectTo : input.to;
+	const cc = delivery.mode === 'redirected' ? undefined : input.cc || undefined;
+	const subject =
+		delivery.mode === 'redirected'
+			? `[to: ${input.to}] ${input.subject}`
+			: input.subject;
+
 	try {
 		const info = await getTransporter().sendMail({
 			from,
-			to: input.to,
-			cc: input.cc || undefined,
-			subject: input.subject,
+			to,
+			cc,
+			subject,
 			text: input.text,
 			replyTo: process.env.GOOGLE_SMTP_USER,
+			...(delivery.mode === 'redirected'
+				? { headers: { 'X-Original-To': input.to } }
+				: {}),
 		});
 
 		// nodemailer only resolves with rejections when at least one address
@@ -117,7 +166,7 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 		// the *applicant's* copy went is what decides between failure and warning.
 		const rejected = (info.rejected ?? []).map(String);
 		const accepted = (info.accepted ?? []).map(String).map(bareAddress);
-		if (rejected.length > 0 && !accepted.includes(bareAddress(input.to))) {
+		if (rejected.length > 0 && !accepted.includes(bareAddress(to))) {
 			return {
 				ok: false,
 				definitelyNotSent: true,
@@ -131,6 +180,12 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 			};
 		}
 
+		if (delivery.mode === 'redirected') {
+			return {
+				ok: true,
+				warning: `Redirected to ${delivery.redirectTo} (${delivery.context}) instead of ${input.to}.`,
+			};
+		}
 		return { ok: true };
 	} catch (error) {
 		const code =

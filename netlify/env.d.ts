@@ -33,6 +33,11 @@ declare namespace NodeJS {
 		// Transactional email via Google Workspace SMTP
 		GOOGLE_SMTP_USER?: string;
 		GOOGLE_SMTP_APP_PASSWORD?: string;
+		// Delivery Mode outside production (docs/adr/0013): email is captured
+		// unless redirected to this one address; Slack/GitHub are captured
+		// unless this is the literal `true`.
+		EMAIL_REDIRECT_TO?: string;
+		NOTIFY_LIVE_OUTSIDE_PRODUCTION?: string;
 
 		// Slack notifications for inbound Submissions. One incoming webhook per
 		// destination, so a missing one only silences its own form.

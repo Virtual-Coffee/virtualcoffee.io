@@ -13,7 +13,7 @@ import {
 	slackInviteEmail,
 	welcomeEmail,
 } from '@/lib/email/templates';
-import { emailConfigured } from '@/lib/email/transport';
+import { emailStatus } from '@/lib/email/transport';
 import { ActionPanel } from './actionPanel';
 import { HistoryTimeline } from './historyTimeline';
 import { NoteComposer } from '../../noteComposer';
@@ -178,7 +178,7 @@ export default async function ApplicationDetailPage({
 										? formatDate(application.coffeeAttendedAt)
 										: null
 								}
-								emailConfigured={emailConfigured()}
+								emailStatus={emailStatus()}
 								coffeeInvite={coffeeInviteEmail(application.name)}
 								welcome={welcomeEmail(application.name)}
 								slackInvite={slackInviteEmail(

@@ -4,6 +4,8 @@
  * and no bot needs inviting to the private groups.
  */
 
+import { deployContext, notifyDelivery } from '@/lib/outbound';
+
 /** What happened, in a sentence — recorded as the event body either way. */
 export type NotifyResult = { ok: boolean; message: string };
 
@@ -28,11 +30,23 @@ const TIMEOUT_MS = 10_000;
 /**
  * Post a message, returning rather than throwing: the submission is already
  * written, and the caller records the outcome either way. See docs/adr/0005.
+ *
+ * Outside production the post is Captured — logged, reported as posted — so a
+ * preview never reaches a real channel. Decided before the webhook is looked
+ * at: a preview without webhooks is quiet, not "never announced". docs/adr/0013.
  */
 export async function notifySlack(
 	channel: NotifyChannel,
 	text: string,
 ): Promise<NotifyResult> {
+	if (notifyDelivery() === 'captured') {
+		console.info(`[slack captured] ${deployContext()} ${channel}`, `\n${text}`);
+		return {
+			ok: true,
+			message: `Captured, not posted to Slack (${deployContext()}).`,
+		};
+	}
+
 	const url = process.env[WEBHOOK_ENV[channel]];
 
 	if (!url) {

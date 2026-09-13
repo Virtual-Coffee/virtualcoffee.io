@@ -15,6 +15,9 @@ describe('notifySlack', () => {
 	beforeEach(() => {
 		vi.stubGlobal('fetch', fetch);
 		fetch.mockReset();
+		// Live posting is production only (docs/adr/0013).
+		vi.stubEnv('CONTEXT', 'production');
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', undefined);
 		vi.stubEnv('SLACK_WEBHOOK_COC', 'https://hooks.slack.test/coc');
 		vi.stubEnv('SLACK_WEBHOOK_MEMBERSHIP', undefined);
 	});
@@ -22,6 +25,34 @@ describe('notifySlack', () => {
 	afterEach(() => {
 		vi.unstubAllGlobals();
 		vi.unstubAllEnvs();
+	});
+
+	test('outside production the post is captured before the webhook is even read', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+		await expect(notifySlack('membership', 'hi')).resolves.toEqual({
+			ok: true,
+			message: 'Captured, not posted to Slack (deploy-preview).',
+		});
+		expect(fetch).not.toHaveBeenCalled();
+		expect(info).toHaveBeenCalledWith(
+			'[slack captured] deploy-preview membership',
+			'\nhi',
+		);
+		info.mockRestore();
+	});
+
+	test('NOTIFY_LIVE_OUTSIDE_PRODUCTION=true posts for real from a preview', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', 'true');
+		fetch.mockResolvedValue(new Response('ok', { status: 200 }));
+
+		await expect(notifySlack('coc', 'hi')).resolves.toEqual({
+			ok: true,
+			message: 'Posted to Slack.',
+		});
+		expect(fetch).toHaveBeenCalledOnce();
 	});
 
 	test('a missing webhook is a skip, not an error, and nothing is fetched', async () => {
