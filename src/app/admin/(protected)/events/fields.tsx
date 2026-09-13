@@ -97,6 +97,93 @@ export function TextAreaField({
 	);
 }
 
+const MINUTES = [
+	'00',
+	'05',
+	'10',
+	'15',
+	'20',
+	'25',
+	'30',
+	'35',
+	'40',
+	'45',
+	'50',
+	'55',
+];
+const HOURS = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+
+/**
+ * A clock time as hour, minute and half of the day, in five-minute steps —
+ * the browser's own picker offers every minute whatever `step` says. The
+ * value stays the `HH:mm` the actions validate; a stray minute from a time
+ * Google wrote is kept until the maintainer picks another.
+ */
+function TimeSelect({
+	id,
+	label,
+	value,
+	onChange,
+}: {
+	id: string;
+	label: string;
+	value: string;
+	onChange: (value: string) => void;
+}) {
+	const [hh = '09', mm = '00'] = value.split(':');
+	const hour24 = Number(hh);
+	const pm = hour24 >= 12;
+	const hour12 = String(hour24 % 12 || 12);
+	const set = (hour: string, minute: string, isPm: boolean) => {
+		const h = (Number(hour) % 12) + (isPm ? 12 : 0);
+		onChange(`${String(h).padStart(2, '0')}:${minute}`);
+	};
+	const minutes = MINUTES.includes(mm) ? MINUTES : [...MINUTES, mm].sort();
+	return (
+		<div
+			className="input-group input-group-sm admin-time-select"
+			role="group"
+			aria-label={label}
+		>
+			<select
+				id={id}
+				className="form-select"
+				aria-label={`${label} hour`}
+				value={hour12}
+				onChange={(event) => set(event.target.value, mm, pm)}
+			>
+				{HOURS.map((hour) => (
+					<option value={hour} key={hour}>
+						{hour}
+					</option>
+				))}
+			</select>
+			<span className="input-group-text px-1">:</span>
+			<select
+				className="form-select"
+				aria-label={`${label} minute`}
+				value={mm}
+				onChange={(event) => set(hour12, event.target.value, pm)}
+			>
+				{minutes.map((minute) => (
+					<option value={minute} key={minute}>
+						{minute}
+					</option>
+				))}
+			</select>
+			<select
+				className="form-select"
+				aria-label={`${label} AM or PM`}
+				value={pm ? 'PM' : 'AM'}
+				onChange={(event) => set(hour12, mm, event.target.value === 'PM')}
+			>
+				<option value="AM">AM</option>
+				<option value="PM">PM</option>
+			</select>
+		</div>
+	);
+}
+
 /** Date and clock times, always Eastern — the zone the community runs in. */
 export function TimeFields({
 	id,
@@ -111,7 +198,7 @@ export function TimeFields({
 }) {
 	return (
 		<div className="row g-2 mb-3">
-			<div className="col-sm-5">
+			<div className="col-sm-12 col-md-4">
 				<label className="form-label small fw-semibold" htmlFor={`${id}-date`}>
 					{dateLabel}
 				</label>
@@ -124,36 +211,26 @@ export function TimeFields({
 					onChange={(event) => onChange({ ...draft, date: event.target.value })}
 				/>
 			</div>
-			<div className="col-sm">
+			<div className="col-6 col-md-4">
 				<label className="form-label small fw-semibold" htmlFor={`${id}-start`}>
 					Starts
 				</label>
-				<input
+				<TimeSelect
 					id={`${id}-start`}
-					type="time"
-					step={300}
-					className="form-control form-control-sm"
+					label="Starts"
 					value={draft.startTime}
-					required
-					onChange={(event) =>
-						onChange({ ...draft, startTime: event.target.value })
-					}
+					onChange={(startTime) => onChange({ ...draft, startTime })}
 				/>
 			</div>
-			<div className="col-sm">
+			<div className="col-6 col-md-4">
 				<label className="form-label small fw-semibold" htmlFor={`${id}-end`}>
 					Ends
 				</label>
-				<input
+				<TimeSelect
 					id={`${id}-end`}
-					type="time"
-					step={300}
-					className="form-control form-control-sm"
+					label="Ends"
 					value={draft.endTime}
-					required
-					onChange={(event) =>
-						onChange({ ...draft, endTime: event.target.value })
-					}
+					onChange={(endTime) => onChange({ ...draft, endTime })}
 				/>
 			</div>
 			<div className="form-text col-12 mt-1">Eastern time.</div>
