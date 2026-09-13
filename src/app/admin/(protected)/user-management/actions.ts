@@ -7,6 +7,7 @@ import { db, isUniqueViolation, pendingGrant, user } from '@/db';
 import { getSlackMembers } from '@/data/slackMembers';
 import { requirePermission, sessionRoles } from '@/lib/adminAccess';
 import { userForSlackId } from '@/lib/admins';
+import { claimPendingGrant } from '@/lib/pendingGrants';
 import { isId } from '@/db/ids';
 import {
 	GRANTABLE_ROLE_NAMES,
@@ -199,6 +200,21 @@ export async function grantPendingAccess(
 			ok: false,
 			message: `${member.displayName} already has access pending. Edit it in the table below.`,
 		};
+	}
+
+	/**
+	 * Their first sign-in may have landed between the check above and the
+	 * insert, in which case `claimPendingGrant` ran against no grant. Their
+	 * Slack id is written before that claim looks for one, so whichever order
+	 * the two commits took, one of the two claims sees the other's write.
+	 */
+	const signedIn = await userForSlackId(member.id);
+	if (signedIn) {
+		await claimPendingGrant({
+			providerId: 'slack',
+			accountId: member.id,
+			userId: signedIn.id,
+		});
 	}
 
 	revalidate();
