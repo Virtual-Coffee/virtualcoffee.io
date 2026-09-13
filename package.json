@@ -34,7 +34,7 @@
 		"db:migrate:deploy": "drizzle-kit migrate",
 		"db:seed": "tsx scripts/with-local-netlify.ts tsx scripts/seedDev.ts",
 		"invite-maintenance": "tsx scripts/with-local-netlify.ts tsx scripts/runInviteMaintenance.ts",
-		"email:dev": "email dev --dir src/emails --port 3010"
+		"email:dev": "cross-env EMAIL_ASSET_ORIGIN=http://localhost:3010 email dev --dir src/emails --port 3010"
 	},
 	"watch": {
 		"build-member-files": "src/content/members/**/*.ts",
