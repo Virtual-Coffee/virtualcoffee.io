@@ -42,8 +42,7 @@ export function Content({ name, balance, invitesUrl }: VolunteerGrantProps) {
 			</Text>
 			<Text style={styles.text}>
 				Thank you,
-				<br />
-				Virtual Coffee
+				<br />~ Virtual Coffee Maintainer Team
 			</Text>
 		</>
 	);

@@ -30,8 +30,7 @@ export function Content({ name, inviteUrl }: SlackInviteProps) {
 			</Text>
 			<Text style={styles.text}>
 				See you in there,
-				<br />
-				Virtual Coffee
+				<br />~ Virtual Coffee Maintainer Team
 			</Text>
 		</>
 	);

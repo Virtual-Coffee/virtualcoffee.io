@@ -29,8 +29,7 @@ export function Content({ name }: WelcomeProps) {
 			</Text>
 			<Text style={styles.text}>
 				Welcome in,
-				<br />
-				Virtual Coffee
+				<br />~ Virtual Coffee Maintainer Team
 			</Text>
 		</>
 	);

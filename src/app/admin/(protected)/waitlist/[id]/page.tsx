@@ -182,8 +182,8 @@ export default async function ApplicationDetailPage({
 								}
 								emailStatus={emailStatus()}
 								coffeeInvite={{
-									subject: coffeeInvite.subject({ name: application.name }),
-									body: <coffeeInvite.Content name={application.name} />,
+									subject: coffeeInvite.subject({}),
+									body: <coffeeInvite.Content />,
 								}}
 								welcome={{
 									subject: welcome.subject({ name: application.name }),
