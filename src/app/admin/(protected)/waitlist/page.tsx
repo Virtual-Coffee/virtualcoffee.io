@@ -89,7 +89,11 @@ export default async function AdminQueuePage({
 						{counts.coffee_invited ?? 0} invited to a Coffee
 					</p>
 				</div>
-				<QueueSearch initialValue={filters.search ?? ''} />
+				{/* Keyed on the URL's term so Back/Forward remounts the input with it. */}
+				<QueueSearch
+					key={filters.search ?? ''}
+					initialValue={filters.search ?? ''}
+				/>
 			</div>
 
 			<div className="d-flex flex-wrap gap-3 align-items-center mb-3">
