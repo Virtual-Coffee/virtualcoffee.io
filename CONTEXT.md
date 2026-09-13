@@ -142,11 +142,21 @@ _Avoid_: Delete, remove
 Move one Event to a different time. The Series is unchanged.
 _Avoid_: Move, edit time, exception
 
+**Restore**:
+Take back a Cancel: the Event will happen after all.
+_Avoid_: Un-cancel, reinstate, undelete
+
+**End**:
+Declare that a Series has no further Events. Its past Events remain on the
+Events Calendar.
+_Avoid_: Delete, remove, stop, archive
+
 ## Access
 
 **Section**:
 One area of `/admin` — the Waitlist, each kind of Submission, the Volunteers
-roster, or User Management. A Permission is always over a Section.
+roster, the Events Calendar, or User Management. A Permission is always over a
+Section.
 
 **Permission**:
 A capability over one Section: `read` to see it, `manage` to change anything in
