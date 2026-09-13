@@ -26,7 +26,6 @@ export function SeriesTable({
 						<th scope="col">Series</th>
 						<th scope="col">Repeats</th>
 						<th scope="col">Next Event</th>
-						<th scope="col">Join Link</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -46,16 +45,6 @@ export function SeriesTable({
 								{series.nextEvent
 									? eventWhen(series.nextEvent.start, series.nextEvent.end)
 									: '—'}
-							</td>
-							<td className="small">
-								<a
-									href={series.joinLink}
-									className="text-break"
-									target="_blank"
-									rel="noreferrer"
-								>
-									{series.joinLink.replace(/^https?:\/\//, '')}
-								</a>
 							</td>
 						</tr>
 					))}
