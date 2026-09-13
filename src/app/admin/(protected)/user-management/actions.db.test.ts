@@ -9,15 +9,27 @@ import {
 	insertUser,
 } from '@/test/db/fixtures';
 
+/**
+ * `grantPendingAccess` awaits the member lookup between its "has this person
+ * signed in?" check and the insert, so a test can land a sign-in in that
+ * window from inside the mock.
+ */
+const lookup = vi.hoisted(() => ({
+	during: undefined as (() => Promise<void>) | undefined,
+}));
+
 vi.mock('@/data/slackMembers', () => ({
-	getSlackMembers: async () => [
-		{
-			id: 'U_ADA',
-			name: 'Ada',
-			displayName: 'Ada',
-			handle: 'ada',
-		},
-	],
+	getSlackMembers: async () => {
+		await lookup.during?.();
+		return [
+			{
+				id: 'U_ADA',
+				name: 'Ada',
+				displayName: 'Ada',
+				handle: 'ada',
+			},
+		];
+	},
 }));
 
 import {
@@ -43,7 +55,10 @@ async function grantRole(id: string) {
 	return row?.role ?? null;
 }
 
-beforeEach(() => signInAs('admin'));
+beforeEach(() => {
+	lookup.during = undefined;
+	signInAs('admin');
+});
 
 describe('setUserRoles', () => {
 	test('replaces the grantable set and records who granted it', async () => {
@@ -138,6 +153,27 @@ describe('grantPendingAccess', () => {
 			}),
 		]);
 	});
+	test('a first sign-in that lands mid-action still claims the grant', async () => {
+		let ada: { id: string } | undefined;
+		lookup.during = async () => {
+			ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
+		};
+
+		await expect(
+			grantPendingAccess('U_ADA', ['coc_reviewer']),
+		).resolves.toEqual({ ok: true });
+
+		await expect(roleOf(ada!.id)).resolves.toEqual({
+			role: 'coc_reviewer',
+			roleGrantedBy: 'Local dev',
+		});
+		const [grant] = await db().select().from(pendingGrant);
+		expect(grant).toMatchObject({
+			slackUserId: 'U_ADA',
+			claimedAt: expect.any(Date),
+		});
+	});
+
 	test('any other failure surfaces rather than posing as a duplicate', async () => {
 		const fault = await failInserts('pending_grant');
 		try {
