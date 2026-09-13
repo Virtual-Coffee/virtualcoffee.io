@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache';
 import { calendar, auth, type calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
+import { DISPLAY_ZONE } from '@/util/date';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
 import { assertMocksAllowed, mocksAllowed } from './mocks';
 import { ics, google, outlook } from 'calendar-link';
@@ -27,11 +28,6 @@ export type EventsResponse = Array<EventItem>;
 
 // Read and write: the same client serves /admin/events (docs/adr/0014).
 const SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
-/**
- * The zone events are displayed and edited in. Matches `dateForDisplay`
- * (src/util/date.ts) and is the zone every Series expands in.
- */
-export const DISPLAY_ZONE = 'America/New_York';
 
 /**
  * Builds an authenticated Calendar client from `GOOGLE_SERVICE_ACCOUNT_KEY`,
