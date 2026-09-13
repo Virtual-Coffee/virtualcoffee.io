@@ -183,16 +183,18 @@ function run(command: string, args: string[], env: Record<string, string>) {
 			stdio: 'inherit',
 		});
 
-		// Ctrl-C reaches the child through the process group; a signal aimed at
-		// this process alone (a supervisor's `kill`) would not, so pass it on and
-		// keep waiting for the child rather than tearing this process down first.
-		const forward = (signal: NodeJS.Signals) => {
-			child.kill(signal);
+		// Ctrl-C reaches the child through the shared process group, so it is
+		// only waited on — forwarding it would deliver it twice. A supervisor's
+		// `kill` targets this process alone, so SIGTERM is passed on. Either way
+		// the child exits first and this process cleans up after it.
+		const wait = () => {};
+		const forward = () => {
+			child.kill('SIGTERM');
 		};
-		process.on('SIGINT', forward);
+		process.on('SIGINT', wait);
 		process.on('SIGTERM', forward);
 		const finish = (code: number) => {
-			process.off('SIGINT', forward);
+			process.off('SIGINT', wait);
 			process.off('SIGTERM', forward);
 			settle(code);
 		};
