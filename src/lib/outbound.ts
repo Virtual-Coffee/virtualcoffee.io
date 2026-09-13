@@ -113,6 +113,19 @@ export function notifyDelivery(): 'live' | 'captured' {
 }
 
 /**
+ * Writes to the Events Calendar (`/admin/events`) are the same shape: there is
+ * one real calendar, so the opt-in `CALENDAR_LIVE_OUTSIDE_PRODUCTION=true` is
+ * meant to be paired with a `GOOGLE_CALENDAR_ID` that names a scratch calendar
+ * the service account can edit. Reads are never gated.
+ */
+export function calendarDelivery(): 'live' | 'captured' {
+	if (isProduction()) return 'live';
+	return process.env.CALENDAR_LIVE_OUTSIDE_PRODUCTION === 'true'
+		? 'live'
+		: 'captured';
+}
+
+/**
  * A Slack DM is addressed to a stored member id, and on a preview that is a
  * real person (docs/adr/0007) — there is no test channel to point it at, so
  * no variable opts it in.

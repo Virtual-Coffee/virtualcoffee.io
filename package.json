@@ -82,6 +82,7 @@
 		"remark-frontmatter": "^5.0.0",
 		"remark-parse": "^11.0.0",
 		"remark-rehype": "^11.1.2",
+		"rrule": "2.8.1",
 		"sanitize-html": "^2.17.7",
 		"unified": "^11.0.5",
 		"uuid": "^14.0.2",
