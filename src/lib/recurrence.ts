@@ -9,7 +9,7 @@
 import { DateTime } from 'luxon';
 import { RRule, type Options } from 'rrule';
 
-import { DISPLAY_ZONE } from '@/data/events';
+import { DISPLAY_ZONE } from '@/util/date';
 
 export const WEEKDAYS = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'] as const;
 export type Weekday = (typeof WEEKDAYS)[number];
@@ -248,6 +248,9 @@ export function firstOccurrenceMatches(
 ): boolean {
 	const at = DateTime.fromISO(date, { zone: 'utc' });
 	if (!at.isValid) return false;
+	if (form.kind === 'weekly' ? !form.weekdays.length : !form.ordinals.length) {
+		return false;
+	}
 	const dtstart = at.toJSDate();
 	const rule = RRule.fromString(
 		`DTSTART:${at.toFormat("yyyyLLdd'T'HHmmss'Z'")}\n${serializeRecurrence({

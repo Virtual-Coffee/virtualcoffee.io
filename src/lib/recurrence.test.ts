@@ -204,6 +204,15 @@ describe('firstOccurrenceMatches', () => {
 		).toBe(true);
 	});
 
+	test('a rule with no days never matches', () => {
+		expect(
+			firstOccurrenceMatches({ ...weekly, weekdays: [] }, '2026-09-15'),
+		).toBe(false);
+		expect(
+			firstOccurrenceMatches({ ...firstAndThird, ordinals: [] }, '2026-10-02'),
+		).toBe(false);
+	});
+
 	test('a malformed date never matches', () => {
 		expect(firstOccurrenceMatches(weekly, 'yesterday')).toBe(false);
 	});

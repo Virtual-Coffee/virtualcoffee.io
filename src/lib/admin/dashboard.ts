@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 
-import { getEvents, DISPLAY_ZONE } from '@/data/events';
+import { getEvents } from '@/data/events';
+import { DISPLAY_ZONE } from '@/util/date';
 import { statusCounts } from '@/lib/waitlist/applications';
 import { recentEvents } from '@/lib/history/eventLog';
 import { activeVolunteerCount } from '@/lib/volunteers/volunteers';

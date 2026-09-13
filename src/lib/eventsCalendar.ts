@@ -8,7 +8,8 @@
 import type { calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
 
-import { createCalendarClient, DISPLAY_ZONE } from '@/data/events';
+import { createCalendarClient } from '@/data/events';
+import { DISPLAY_ZONE } from '@/util/date';
 import {
 	describeRecurrence,
 	parseRecurrence,
@@ -85,6 +86,11 @@ export type SeriesInput = {
 	startTime: string;
 	endTime: string;
 	recurrence: RecurrenceForm;
+};
+
+/** An update may leave a rule the form cannot edit (`custom`) as it is. */
+export type SeriesUpdate = Omit<SeriesInput, 'recurrence'> & {
+	recurrence: RecurrenceForm | null;
 };
 
 export type EventInput = Omit<SeriesInput, 'recurrence'>;
@@ -404,15 +410,19 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 	async function updateSeries(
 		id: string,
 		etag: string,
-		input: SeriesInput,
+		input: SeriesUpdate,
 	): Promise<void> {
 		const existing = await current(id, etag);
 		await patch(id, etag, {
 			...body(input),
-			recurrence: withRule(
-				existing.recurrence,
-				serializeRecurrence(input.recurrence),
-			),
+			...(input.recurrence
+				? {
+						recurrence: withRule(
+							existing.recurrence,
+							serializeRecurrence(input.recurrence),
+						),
+					}
+				: {}),
 		});
 	}
 

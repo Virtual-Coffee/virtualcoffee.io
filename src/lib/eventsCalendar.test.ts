@@ -317,6 +317,17 @@ describe('writes', () => {
 		});
 	});
 
+	test('a null recurrence leaves a custom rule as it is', async () => {
+		const { cal, calls } = fakeClient({
+			get: { coffee: { ...series, recurrence: ['RRULE:FREQ=DAILY'] } },
+		});
+		await cal.updateSeries('coffee', '"1"', { ...input, recurrence: null });
+		expect(calls[1]).toMatchObject({ method: 'patch' });
+		expect(
+			(calls[1].params as calendar_v3.Params$Resource$Events$Patch).requestBody,
+		).not.toHaveProperty('recurrence');
+	});
+
 	test('an etag that moved on is a conflict before anything is written', async () => {
 		const { cal, calls } = fakeClient({
 			get: { coffee: { ...series, etag: '"2"' } },
