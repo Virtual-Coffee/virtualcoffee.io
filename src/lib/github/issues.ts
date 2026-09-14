@@ -157,11 +157,9 @@ export async function createLunchAndLearnIssue(idea: {
 	// Captured before the App is looked at, so a preview without credentials
 	// is quiet rather than "never announced".
 	if (notifyDelivery() === 'captured') {
-		capture(
-			'github issue',
-			`${OWNER}/${REPO}`,
-			`Lunch & Learn: ${idea.topic}\n\n${issueBody(idea)}`,
-		);
+		capture('github issue', `${OWNER}/${REPO}`, issueBody(idea), {
+			title: `Lunch & Learn: ${idea.topic}`,
+		});
 		return {
 			ok: true,
 			url: null,

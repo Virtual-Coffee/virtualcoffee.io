@@ -72,9 +72,12 @@ describe('createLunchAndLearnIssue', () => {
 			message: 'Captured, no GitHub issue opened (deploy-preview).',
 		});
 		expect(octokit.constructed).toEqual([]);
+		// The shape of a deploy's capture line is outbound.test.ts's; this pins
+		// that the issue goes through it, titled.
 		expect(info).toHaveBeenCalledWith(
 			'[github issue captured] deploy-preview Virtual-Coffee/VC-Community-Docs',
-			expect.stringContaining('Lunch & Learn: Property testing'),
+			{ title: 'Lunch & Learn: Property testing' },
+			expect.stringMatching(/^\nhttps?:\/\//),
 		);
 		info.mockRestore();
 	});

@@ -18,12 +18,12 @@ import { capture, emailDelivery, type EmailDelivery } from '@/lib/outbound';
  * purpose: the events calendar uses a different service account under
  * `GOOGLE_SERVICE_ACCOUNT_KEY`.
  *
- * Outside production nothing reaches SMTP unless `EMAIL_REDIRECT_TO` or
- * `SMTP_HOST` is set — `emailDelivery()` decides, and `sendEmail` consults it
- * before it so much as reads the credentials. `SMTP_HOST` points at a
- * local-only sink such as Mailpit instead of Gmail: no Google credentials are
- * read, mail is addressed exactly as production would address it, and
- * nothing leaves the machine. See docs/adr/0013.
+ * Outside production nothing reaches SMTP unless `SMTP_HOST` is set —
+ * `emailDelivery()` decides, and `sendEmail` consults it before it so much as
+ * reads the credentials. `SMTP_HOST` points at a local-only sink such as
+ * Mailpit instead of Gmail: no Google credentials are read, mail is addressed
+ * exactly as production would address it, and nothing leaves the machine.
+ * See docs/adr/0013.
  */
 
 export type SendEmailInput = {
@@ -56,8 +56,8 @@ export type SendFailure = {
 
 /**
  * `warning` is set when the send succeeded but not as asked: the applicant's
- * copy went out but a cc did not, or the message was Captured, Redirected, or
- * sent Local on a non-production deploy. Each is still a success — retrying
+ * copy went out but a cc did not, or the message was Captured or sent Local
+ * on a non-production deploy. Each is still a success — retrying
  * would email the applicant twice — so it is reported alongside `ok`, not
  * instead of it.
  */
@@ -206,30 +206,20 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 
 	const from = `Virtual Coffee <${process.env.GOOGLE_SMTP_USER || 'dev@localhost'}>`;
 
-	// Redirected: one address gets everything, the intended recipient is named
-	// in the subject and a header, and no cc — the point is that only the
-	// maintainer who set EMAIL_REDIRECT_TO receives anything. Local addresses
-	// exactly as Live would: the point of a local sink is seeing what
-	// production would actually send.
-	const to = delivery.mode === 'redirected' ? delivery.redirectTo : input.to;
-	const cc = delivery.mode === 'redirected' ? undefined : input.cc || undefined;
-	const subject =
-		delivery.mode === 'redirected'
-			? `[to: ${input.to}] ${input.subject}`
-			: input.subject;
+	// Local addresses exactly as Live would: the point of a local sink is
+	// seeing what production would actually send.
+	const to = input.to;
+	const cc = input.cc || undefined;
 
 	try {
 		const info = await sendingTransporter.sendMail({
 			from,
 			to,
 			cc,
-			subject,
+			subject: input.subject,
 			html: input.html,
 			text: input.text,
 			replyTo: process.env.GOOGLE_SMTP_USER || undefined,
-			...(delivery.mode === 'redirected'
-				? { headers: { 'X-Original-To': input.to } }
-				: {}),
 		});
 
 		// nodemailer only resolves with rejections when at least one address
@@ -251,12 +241,6 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 			};
 		}
 
-		if (delivery.mode === 'redirected') {
-			return {
-				ok: true,
-				warning: `Redirected to ${delivery.redirectTo} (${delivery.context}) instead of ${input.to}.`,
-			};
-		}
 		if (delivery.mode === 'local') {
 			return {
 				ok: true,
