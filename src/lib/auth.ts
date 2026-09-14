@@ -1,6 +1,6 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { admin, oAuthProxy } from 'better-auth/plugins';
+import { admin, oAuthProxy, testUtils } from 'better-auth/plugins';
 import { nextCookies } from 'better-auth/next-js';
 import { devtools } from 'better-auth-devtools';
 
@@ -122,6 +122,12 @@ function createAuth() {
 				secret: process.env.OAUTH_PROXY_SECRET,
 			}),
 			devtools(devtoolsConfig),
+			/**
+			 * How the test suite signs in (`src/test/session.ts`): helpers on
+			 * `$context.test` that mint a session without an OAuth round trip.
+			 * Registers no route or endpoint.
+			 */
+			testUtils(),
 			// Must stay last: it wraps the others to set cookies from server actions.
 			nextCookies(),
 		],
