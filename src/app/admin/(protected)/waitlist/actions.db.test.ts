@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { db, inviteToken, user } from '@/db';
+import { db, inviteToken } from '@/db';
 import {
 	createSlackInviteToken,
 	slackInviteForToken,
@@ -51,10 +51,12 @@ import {
 	withdrawApplication,
 } from './actions';
 
-beforeEach(() => {
+let admin: Awaited<ReturnType<typeof signInAs>>;
+
+beforeEach(async () => {
 	sendEmail.mockReset();
 	staleRead.readAs = null;
-	signInAs('admin');
+	admin = await signInAs('admin');
 });
 
 /** The single-use code carried by a Slack invite email. */
@@ -113,7 +115,7 @@ describe('sendCoffeeInvite', () => {
 			to: 'ada@example.test',
 			subject: 'You’re invited to a Virtual Coffee',
 			text: expect.stringMatching(/^Hi Ada,/),
-			cc: 'dev@localhost',
+			cc: admin.email,
 		});
 		const row = await applicationRow(id);
 		expect(row.status).toBe('coffee_invited');
@@ -122,26 +124,8 @@ describe('sendCoffeeInvite', () => {
 			{
 				type: 'coffee_invited',
 				body: 'Coffee invite emailed to ada@example.test',
-				// The bypass session has no user row, so the event has no actor.
-				actorUserId: null,
+				actorUserId: admin.userId,
 			},
-		]);
-	});
-
-	test('the actor is recorded when the session belongs to a real user', async () => {
-		sendEmail.mockResolvedValue(SENT);
-		// The bypass session's user id is `dev-bypass`; give it a row.
-		await db().insert(user).values({
-			id: 'dev-bypass',
-			name: 'Local dev',
-			email: 'dev@localhost',
-			role: 'admin',
-		});
-		const { id } = await insertApplication({ status: 'waitlisted' });
-
-		await sendCoffeeInvite(id, false);
-		await expect(applicationEvents(id)).resolves.toEqual([
-			expect.objectContaining({ actorUserId: 'dev-bypass' }),
 		]);
 	});
 
@@ -161,7 +145,7 @@ describe('sendCoffeeInvite', () => {
 		});
 		expect(sendEmail).not.toHaveBeenCalled();
 
-		signInAs('coc_reviewer');
+		await signInAs('coc_reviewer');
 		await expect(sendCoffeeInvite(id, false)).rejects.toMatchObject(NOT_FOUND);
 	});
 });
