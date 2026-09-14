@@ -159,7 +159,7 @@ describe('listSeries', () => {
 					weekdays: ['TU', 'TH'],
 					ends: { kind: 'never' },
 				},
-				recurrenceText: 'every week on Tuesday, Thursday',
+				recurrenceText: 'Every week on Tuesday, Thursday',
 				date: '2026-01-06',
 				startTime: '09:00',
 				endTime: '10:00',
