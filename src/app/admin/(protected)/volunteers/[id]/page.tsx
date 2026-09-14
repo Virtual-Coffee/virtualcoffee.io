@@ -8,7 +8,12 @@ import {
 	volunteerInvites,
 	volunteerLedger,
 } from '@/lib/volunteers';
-import { formatDate, formatDateTime, ReadOnlyNotice } from '../../presentation';
+import {
+	Breadcrumb,
+	formatDate,
+	formatDateTime,
+	ReadOnlyNotice,
+} from '../../presentation';
 import {
 	AdminInviteBadge,
 	LEDGER_LABELS,
@@ -58,16 +63,10 @@ export default async function VolunteerDetailPage({
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
-			<nav aria-label="Breadcrumb">
-				<ol className="breadcrumb mb-0 small">
-					<li className="breadcrumb-item">
-						<Link href="/admin/volunteers">Volunteers</Link>
-					</li>
-					<li className="breadcrumb-item active" aria-current="page">
-						{volunteer.slackDisplayName}
-					</li>
-				</ol>
-			</nav>
+			<Breadcrumb
+				parent={{ href: '/admin/volunteers', label: 'Volunteers' }}
+				current={volunteer.slackDisplayName}
+			/>
 
 			<div className="d-flex flex-wrap align-items-center gap-2 mb-1">
 				<h1 className="h4 mb-0">{volunteer.slackDisplayName}</h1>
