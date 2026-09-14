@@ -23,7 +23,7 @@ import {
 } from '@/lib/email/templates';
 import {
 	createSlackInviteToken,
-	expireSlackInviteTokens,
+	expireSlackInviteToken,
 } from '@/lib/inviteTokens';
 import { getApplication } from '@/lib/applications';
 import { siteUrl } from '@/util/url.server';
@@ -263,7 +263,11 @@ export async function approveMembership(
 
 	// The token has to exist before the email that carries it. An unsent token
 	// is harmless: it is single-use and expires on its own.
-	const { token } = await createSlackInviteToken(applicationId);
+	// Not superseding: another approval may be racing this one, and its link
+	// must survive if it wins. The loser expires its own below.
+	const { id: tokenId, token } = await createSlackInviteToken(applicationId, {
+		supersede: false,
+	});
 	const inviteUrl = `${siteUrl()}/join-slack?code=${token}`;
 
 	const welcome = welcomeEmail(application.name);
@@ -332,9 +336,10 @@ export async function approveMembership(
 
 	if (!approved) {
 		// Both emails have gone regardless, so the history must say so — and the
-		// Slack link in one of them must stop working, since the person is not
-		// being made a member.
-		await expireSlackInviteTokens(applicationId, new Date());
+		// Slack link in one of them must stop working, since this request is not
+		// making anyone a member. Only this request's link: if the race was lost
+		// to another approval, that one's link is the member's way in.
+		await expireSlackInviteToken(tokenId, new Date());
 		await recordEvent({
 			applicationId,
 			actorUserId: actor,
