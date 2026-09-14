@@ -820,12 +820,6 @@ async function verify(database: Database): Promise<string[]> {
 async function main() {
 	const context = process.env.CONTEXT;
 
-	if (context === 'production') {
-		throw new Error(
-			'Refusing to run: db:sanitize-preview must never touch the production database.',
-		);
-	}
-
 	if (context !== 'deploy-preview' && context !== 'branch-deploy') {
 		log(`CONTEXT=${context ?? '(unset)'}, nothing to do.`);
 		return;
