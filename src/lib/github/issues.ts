@@ -17,8 +17,20 @@ const OWNER = 'Virtual-Coffee';
 const REPO = 'VC-Community-Docs';
 const LABEL = 'Lunch & Learn';
 const ASSIGNEES = ['shelleymcq', 'meg-gutshall'];
-/** Per request, as `@octokit/request` only honours `request.signal`, not `timeout`. */
+/**
+ * Applied per request through the client's `fetch`, so it also covers the
+ * installation-token exchange inside auth-app's hook, which a `request.signal`
+ * on the visible calls never reaches.
+ */
 const TIMEOUT_MS = 10_000;
+
+const timedFetch: typeof fetch = (input, init) => {
+	const timeout = AbortSignal.timeout(TIMEOUT_MS);
+	return fetch(input, {
+		...init,
+		signal: init?.signal ? AbortSignal.any([init.signal, timeout]) : timeout,
+	});
+};
 
 /** `url` is null when the issue was captured rather than opened (docs/adr/0013). */
 export type CreateIssueResult =
@@ -63,14 +75,11 @@ async function client(): Promise<Octokit> {
 			appId: process.env.GITHUB_APP_CLIENT_ID,
 			privateKey: privateKey(),
 		},
+		request: { fetch: timedFetch },
 	});
 
 	const { data: installation } = await appOctokit.rest.apps.getRepoInstallation(
-		{
-			owner: OWNER,
-			repo: REPO,
-			request: { signal: AbortSignal.timeout(TIMEOUT_MS) },
-		},
+		{ owner: OWNER, repo: REPO },
 	);
 
 	cached = new Octokit({
@@ -82,6 +91,7 @@ async function client(): Promise<Octokit> {
 			repositoryNames: [REPO],
 			permissions: { issues: 'write' },
 		},
+		request: { fetch: timedFetch },
 	});
 
 	return cached;
@@ -167,9 +177,6 @@ export async function createLunchAndLearnIssue(idea: {
 			body: issueBody(idea),
 			labels: [LABEL],
 			assignees: ASSIGNEES,
-			// The installation-token exchange inside auth-app's hook is not
-			// covered by a per-request signal; the two visible requests are.
-			request: { signal: AbortSignal.timeout(TIMEOUT_MS) },
 		});
 
 		return {
