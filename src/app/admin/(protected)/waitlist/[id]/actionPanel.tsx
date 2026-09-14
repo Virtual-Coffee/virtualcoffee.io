@@ -12,7 +12,7 @@ import {
 	withdrawApplication,
 } from '../actions';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
-import { ARCHIVE_STATUSES } from '@/lib/applications';
+import { ARCHIVE_STATUSES } from '@/lib/applicationStatuses';
 import type { EmailStatus } from '@/lib/email/transport';
 import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
 import { CloseDialog } from './closeDialog';

@@ -2,12 +2,8 @@ import { describe, expect, test } from 'vitest';
 
 import { insertApplication } from '@/test/db/fixtures';
 
-import {
-	ARCHIVE_STATUSES,
-	listApplications,
-	QUEUE_STATUSES,
-	type ListFilters,
-} from './applications';
+import { listApplications, type ListFilters } from './applications';
+import { ARCHIVE_STATUSES, QUEUE_STATUSES } from './applicationStatuses';
 
 const byName: ListFilters = {
 	page: 0,

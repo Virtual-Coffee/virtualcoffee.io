@@ -23,22 +23,6 @@ import {
 import { isId } from '@/db/ids';
 import { countByStatus } from '@/lib/statusCounts';
 
-export const QUEUE_STATUSES: ApplicationStatus[] = [
-	'waitlisted',
-	'coffee_invited',
-];
-
-/**
- * Everything the queue is not. The Waitlist is a working queue and the Archive
- * is its history (CONTEXT.md), so the two never show the same row.
- */
-export const ARCHIVE_STATUSES: ApplicationStatus[] = [
-	'member',
-	'lapsed',
-	'declined',
-	'withdrawn',
-];
-
 export type SortField = 'name' | 'email' | 'status' | 'source' | 'submittedAt';
 
 export type ListFilters = {
