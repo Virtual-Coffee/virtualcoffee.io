@@ -29,8 +29,7 @@
 		"dev:tunnel": "pnpm codegen && concurrently \"pnpm watch\" \"pnpm local-dev:tunnel\"",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "tsx scripts/with-local-netlify.ts drizzle-kit migrate",
-		"db:migrate:deploy": "drizzle-kit migrate",
-		"db:sanitize-preview": "tsx scripts/sanitizePreviewDb.ts"
+		"db:migrate:deploy": "drizzle-kit migrate"
 	},
 	"watch": {
 		"build-member-files": "src/content/members/**/*.ts",
