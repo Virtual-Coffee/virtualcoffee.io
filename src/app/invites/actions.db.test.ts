@@ -41,11 +41,11 @@ async function volunteerWithBalance(balance: number) {
 	}
 }
 
-beforeEach(() => {
+beforeEach(async () => {
 	sendEmail.mockReset();
 	sendEmail.mockResolvedValue(SENT);
 	preCheck.skip = false;
-	signInAs('volunteer', GRACE);
+	await signInAs('volunteer', GRACE);
 	vi.stubEnv('URL', 'https://virtualcoffee.io');
 });
 
@@ -314,7 +314,7 @@ describe('sendInvite', () => {
 		});
 		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
 
-		signInAs('admin');
+		await signInAs('admin');
 		await expect(sendInvite('Ada', 'ada@example.test')).rejects.toMatchObject(
 			redirectTo('/invites/sign-in'),
 		);
