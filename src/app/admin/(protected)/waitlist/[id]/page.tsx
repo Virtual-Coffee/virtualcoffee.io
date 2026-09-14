@@ -8,6 +8,7 @@ import {
 	getApplicationHistory,
 	getApplicationInviter,
 } from '@/lib/applications';
+import { ARCHIVE_STATUSES } from '@/lib/applicationStatuses';
 import {
 	coffeeInviteEmail,
 	slackInviteEmail,
@@ -63,12 +64,17 @@ export default async function ApplicationDetailPage({
 	// The actions re-check for themselves; this only keeps a read-only viewer
 	// from being shown buttons that would 404 on them.
 	const canManage = sessionCan(session, 'waitlist', 'manage');
+	const isArchived = ARCHIVE_STATUSES.includes(application.status);
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
 			<Breadcrumb
 				className="mb-3"
-				parent={{ href: '/admin/waitlist', label: 'Queue' }}
+				parent={
+					isArchived
+						? { href: '/admin/waitlist/archive', label: 'Archive' }
+						: { href: '/admin/waitlist', label: 'Queue' }
+				}
 				current={`Application ${application.reference}`}
 			/>
 
