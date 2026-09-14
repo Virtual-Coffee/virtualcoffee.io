@@ -57,8 +57,8 @@ const series = {
 const ID = 'coffee_20260915T130000Z';
 const ETAG = '"1"';
 
-beforeEach(() => {
-	signInAs('event_organizer');
+beforeEach(async () => {
+	await signInAs('event_organizer');
 	vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', 'true');
 	connectEventsCalendar.mockReturnValue(calendar);
 	for (const fn of Object.values(calendar)) fn.mockReset();
@@ -77,7 +77,7 @@ describe('access', () => {
 		['restoreEvent', () => restoreEvent(ID, ETAG)],
 		['rescheduleEvent', () => rescheduleEvent(ID, ETAG, series)],
 	])('%s needs events:manage', async (_name, call) => {
-		signInAs('waitlist_reviewer');
+		await signInAs('waitlist_reviewer');
 		await expect(call()).rejects.toMatchObject(NOT_FOUND);
 		expect(connectEventsCalendar).not.toHaveBeenCalled();
 	});
