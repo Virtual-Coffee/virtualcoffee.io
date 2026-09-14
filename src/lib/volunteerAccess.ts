@@ -4,12 +4,10 @@ import { getSession, sessionRoles } from '@/lib/adminAccess';
 import { type Session } from '@/lib/auth';
 
 /**
- * The authorization boundary for /invites (docs/adr/0010). Two things it must
- * never do:
- *   - call `adminRoutesEnabled()` — that 404s previews, and /invites has to
- *     work in production and be reviewable on a preview regardless;
- *   - ask `visibleSections()` — `volunteer` grants no Section on purpose.
- * `getSession()` is shared, so `ADMIN_DEV_BYPASS_ROLES=volunteer` works here.
+ * The authorization boundary for /invites (docs/adr/0010). It must never ask
+ * `visibleSections()` or `requirePermission()` — `volunteer` grants no Section
+ * on purpose. `getSession()` is shared, so `ADMIN_DEV_BYPASS_ROLES=volunteer`
+ * works here.
  */
 export function isVolunteer(session: Session | null): boolean {
 	return sessionRoles(session).includes('volunteer');

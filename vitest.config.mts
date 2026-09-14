@@ -11,6 +11,9 @@ import { configDefaults, defineConfig } from 'vitest/config';
  *   and truncates the tables between tests. Tests authenticate through the
  *   dev-bypass session (`src/test/session.ts`), not by mocking auth.
  *
+ * Both mock `next/headers` (`src/test/setup.ts`): `headers()` throws outside
+ * a request, and every authorization check reads it.
+ *
  * `@/` is resolved here rather than through vite-tsconfig-paths — it is the
  * only alias, and one line beats a dependency.
  */
@@ -30,6 +33,7 @@ export default defineConfig({
 						'netlify/**/*.test.ts',
 					],
 					exclude: [...configDefaults.exclude, '**/*.db.test.ts'],
+					setupFiles: ['./src/test/setup.ts'],
 				},
 			},
 			{
@@ -37,7 +41,7 @@ export default defineConfig({
 					name: 'db',
 					include: ['**/*.db.test.ts'],
 					globalSetup: ['./src/test/db/globalSetup.ts'],
-					setupFiles: ['./src/test/db/setup.ts'],
+					setupFiles: ['./src/test/setup.ts', './src/test/db/setup.ts'],
 					// One in-memory database per run, so files must not race.
 					fileParallelism: false,
 				},
