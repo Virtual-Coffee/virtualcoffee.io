@@ -20,6 +20,7 @@ import { NoteComposer } from '../../noteComposer';
 import { addNote } from '../actions';
 import {
 	Answer,
+	Breadcrumb,
 	SourceBadge,
 	StatusBadge,
 	formatDate,
@@ -65,16 +66,11 @@ export default async function ApplicationDetailPage({
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
-			<nav aria-label="Breadcrumb" className="mb-3">
-				<ol className="breadcrumb mb-0 small">
-					<li className="breadcrumb-item">
-						<Link href="/admin/waitlist">Queue</Link>
-					</li>
-					<li className="breadcrumb-item active" aria-current="page">
-						Application {application.reference}
-					</li>
-				</ol>
-			</nav>
+			<Breadcrumb
+				className="mb-3"
+				parent={{ href: '/admin/waitlist', label: 'Queue' }}
+				current={`Application ${application.reference}`}
+			/>
 
 			<div className="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
 				<div>
