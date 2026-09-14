@@ -15,8 +15,9 @@ export const metadata = {
 };
 
 /**
- * Sign-in for /invites. Separate from /admin/sign-in, which 404s on deploy
- * previews via `adminRoutesEnabled()`; the Slack flow itself is shared.
+ * Sign-in for /invites. Separate from /admin/sign-in so a Volunteer is never
+ * sent to a page titled for maintainers; the Slack flow itself is shared.
+ * docs/adr/0010.
  */
 export default async function VolunteerSignInPage({
 	searchParams,
