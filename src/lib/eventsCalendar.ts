@@ -10,8 +10,7 @@ import { DateTime } from 'luxon';
 
 import { createCalendarClient } from '@/data/events';
 import { DISPLAY_ZONE } from '@/util/date';
-import { looksLikeHtml } from '@/util/descriptionFormat';
-import { htmlToMarkdown } from '@/util/markdown.server';
+import { htmlToMarkdown, looksLikeHtml } from '@/util/markdown.server';
 import {
 	describeRecurrence,
 	parseRecurrence,

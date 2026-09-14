@@ -1,5 +1,9 @@
 import { describe, expect, test } from 'vitest';
-import { htmlToMarkdown, parseMarkdown } from './markdown.server';
+import {
+	htmlToMarkdown,
+	looksLikeHtml,
+	parseMarkdown,
+} from './markdown.server';
 
 describe('parseMarkdown', () => {
 	test('renders markdown to HTML', async () => {
@@ -38,4 +42,13 @@ describe('htmlToMarkdown', () => {
 			await htmlToMarkdown('<div><span class="x">Plain</span> words</div>'),
 		).toBe('Plain words');
 	});
+});
+
+test.each([
+	['<p>Hello</p>', true],
+	['Line one<br>line two', true],
+	['Plain **Markdown** with a < b', false],
+	['', false],
+])('looksLikeHtml(%j) is %s', (raw, expected) => {
+	expect(looksLikeHtml(raw)).toBe(expected);
 });
