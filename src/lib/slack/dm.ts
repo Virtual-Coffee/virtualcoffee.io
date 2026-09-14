@@ -11,8 +11,8 @@ const TIMEOUT_MS = 10_000;
  * DM a specific Slack member — distinct from `notifySlack()`, which posts to a
  * fixed channel via an incoming webhook and cannot reach an arbitrary person.
  * Needs the same `SLACK_BOT_TOKEN` as the member directory
- * (`src/data/slackMembers.ts`), with `chat:write` added to its `users:read`
- * scope so it can open a DM and post to it.
+ * (`src/data/slackMembers.ts`), with `im:write` and `chat:write` added to its
+ * `users:read` scope so it can open a DM and post to it.
  *
  * Same contract as `notifySlack()`: never throws, and outside production the
  * send is Captured rather than reaching a real person. See docs/adr/0013.
