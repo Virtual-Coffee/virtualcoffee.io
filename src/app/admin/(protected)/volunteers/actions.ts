@@ -305,7 +305,10 @@ export async function setVolunteerActive(
 	// Best-effort, after the transaction commits: the restart already stands,
 	// and a maintainer can retry it with "Resend DM" in /admin/user-management.
 	if (active && !signedIn) {
-		await sendSlackDm(row.slackUserId, grantDmMessage({ roles: ['volunteer'] }));
+		await sendSlackDm(
+			row.slackUserId,
+			grantDmMessage({ roles: ['volunteer'] }),
+		);
 	}
 
 	revalidate(volunteerId);
