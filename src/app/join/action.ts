@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { applicationEvent, db, invite, membershipApplication } from '@/db';
 import { hashClaimToken } from '@/lib/invites';
-import { QUEUE_STATUSES } from '@/lib/applications';
+import { QUEUE_STATUSES } from '@/lib/applicationStatuses';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
 import {
 	formError,

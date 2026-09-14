@@ -1,11 +1,8 @@
 import Link from 'next/link';
 
 import { requirePermission } from '@/lib/adminAccess';
-import {
-	ARCHIVE_STATUSES,
-	listApplications,
-	statusCounts,
-} from '@/lib/applications';
+import { listApplications, statusCounts } from '@/lib/applications';
+import { ARCHIVE_STATUSES } from '@/lib/applicationStatuses';
 import { ApplicationsTable } from '../applicationsTable';
 import { QueueSearch } from '../queueSearch';
 import { parseSearchParams } from '../searchParams';
