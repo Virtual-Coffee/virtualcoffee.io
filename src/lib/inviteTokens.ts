@@ -119,7 +119,8 @@ async function lookup(
 
 	if (!row) return { ok: false, reason: 'unknown' };
 	if (row.usedAt) return { ok: false, reason: 'used' };
-	if (row.expiresAt < new Date()) return { ok: false, reason: 'expired' };
+	// Expired at `expiresAt` itself, matching the `gt()` the redeem uses.
+	if (row.expiresAt <= new Date()) return { ok: false, reason: 'expired' };
 	return { row };
 }
 
