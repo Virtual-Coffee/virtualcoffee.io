@@ -15,8 +15,9 @@ shape or volume.
 `db:sanitize-preview` (`scripts/sanitizePreviewDb.ts`) runs as the last step
 of every build (`netlify.toml`), after `db:migrate:deploy` has brought the
 branch up to this commit's schema, so it always sees the migrated schema. It
-is a no-op unless `CONTEXT` is `deploy-preview` or `branch-deploy`, and refuses
-outright on `production`. When it runs, it replaces every PII and free-text
+is a no-op unless `CONTEXT` is `deploy-preview` or `branch-deploy` — `production`
+included, so a production build never fails on it. When it runs, it replaces
+every PII and free-text
 column across the membership pipeline, the volunteer roster and the four
 submission tables with deterministic Faker output, nulls Better Auth's OAuth
 secrets, deletes session, verification and invite-token rows, and repoints any
