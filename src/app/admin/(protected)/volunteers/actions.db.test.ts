@@ -85,15 +85,33 @@ async function grantRole(slackUserId: string) {
 	return rows.map((r) => r.role);
 }
 
-beforeEach(() => {
+const VOLUNTEER_ID = '0199404c-2c5e-7000-8000-000000000000';
+
+beforeEach(async () => {
 	sendEmail.mockReset();
 	sendEmail.mockResolvedValue({ ok: true });
 	sendSlackDm.mockReset().mockResolvedValue({ ok: true, message: 'DM sent.' });
 	vi.stubEnv('URL', 'https://virtualcoffee.io');
-	signInAs('admin');
+	await signInAs('admin');
 });
 
 describe('addVolunteer', () => {
+	test('a malformed email is refused before anything is looked up', async () => {
+		await expect(addVolunteer('U_ADA', [], 'not-an-email')).resolves.toEqual({
+			ok: false,
+			message: 'That doesn’t look like an email address.',
+		});
+	});
+
+	test('a role that is not on the list is refused', async () => {
+		await expect(
+			addVolunteer('U_ADA', ['VC Host', 'Grand Poobah'], ''),
+		).resolves.toEqual({
+			ok: false,
+			message: 'That isn’t one of the community roles.',
+		});
+	});
+
 	/**
 	 * The row and the role together, or neither (docs/adr/0010). Which half
 	 * carries the role depends on whether they have signed in yet.
@@ -208,7 +226,7 @@ describe('addVolunteer', () => {
 			message: 'That Slack member is no longer in the workspace.',
 		});
 
-		signInAs('waitlist_reviewer');
+		await signInAs('waitlist_reviewer');
 		await expect(addVolunteer('U_ADA', [], '')).rejects.toMatchObject(
 			NOT_FOUND,
 		);
@@ -309,9 +327,7 @@ describe('setVolunteerActive', () => {
 			ok: false,
 			message: 'That volunteer no longer exists.',
 		});
-		await expect(
-			setVolunteerActive('0199404c-2c5e-7000-8000-000000000000', false),
-		).resolves.toEqual({
+		await expect(setVolunteerActive(VOLUNTEER_ID, false)).resolves.toEqual({
 			ok: false,
 			message: 'That volunteer no longer exists.',
 		});
@@ -319,6 +335,60 @@ describe('setVolunteerActive', () => {
 });
 
 describe('adjustBalance', () => {
+	test('needs volunteers:manage', async () => {
+		await signInAs('waitlist_reviewer');
+		await expect(
+			adjustBalance(VOLUNTEER_ID, 1, 'because'),
+		).rejects.toMatchObject(NOT_FOUND);
+	});
+
+	test.each([
+		['a malformed id', '42', 1, 'ok', 'That volunteer no longer exists.'],
+		[
+			'a fraction',
+			VOLUNTEER_ID,
+			0.5,
+			'ok',
+			'Give a whole number of invites, not zero.',
+		],
+		[
+			'zero',
+			VOLUNTEER_ID,
+			0,
+			'ok',
+			'Give a whole number of invites, not zero.',
+		],
+		[
+			'too many',
+			VOLUNTEER_ID,
+			51,
+			'ok',
+			'That is more invites than anyone needs.',
+		],
+		[
+			'too many back',
+			VOLUNTEER_ID,
+			-51,
+			'ok',
+			'That is more invites than anyone needs.',
+		],
+		[
+			'no reason',
+			VOLUNTEER_ID,
+			1,
+			'  ',
+			'Say why — the ledger is the audit trail.',
+		],
+	])(
+		'refuses %s before touching the ledger',
+		async (_label, id, delta, reason, message) => {
+			await expect(adjustBalance(id, delta, reason)).resolves.toEqual({
+				ok: false,
+				message,
+			});
+		},
+	);
+
 	test('appends a signed ledger row with the reason, and the balance follows', async () => {
 		const { id } = await insertVolunteer({ slackUserId: 'U_ADA' });
 
@@ -339,9 +409,7 @@ describe('adjustBalance', () => {
 	});
 
 	test('an unknown volunteer writes nothing', async () => {
-		await expect(
-			adjustBalance('0199404c-2c5e-7000-8000-000000000000', 1, 'ok'),
-		).resolves.toEqual({
+		await expect(adjustBalance(VOLUNTEER_ID, 1, 'ok')).resolves.toEqual({
 			ok: false,
 			message: 'That volunteer no longer exists.',
 		});
@@ -349,6 +417,22 @@ describe('adjustBalance', () => {
 });
 
 describe('setRoleLabels', () => {
+	test('needs volunteers:manage', async () => {
+		await signInAs('waitlist_reviewer');
+		await expect(
+			setRoleLabels(VOLUNTEER_ID, ['VC Host']),
+		).rejects.toMatchObject(NOT_FOUND);
+	});
+
+	test('a role that is not on the list is refused', async () => {
+		await expect(
+			setRoleLabels(VOLUNTEER_ID, ['Grand Poobah']),
+		).resolves.toEqual({
+			ok: false,
+			message: 'That isn’t one of the community roles.',
+		});
+	});
+
 	test('writes the list in canonical order, and an empty list clears it', async () => {
 		const { id } = await insertVolunteer({ slackUserId: 'U_ADA' });
 
@@ -373,9 +457,7 @@ describe('setRoleLabels', () => {
 			ok: false,
 			message: 'That volunteer no longer exists.',
 		});
-		await expect(
-			setRoleLabels('0199404c-2c5e-7000-8000-000000000000', ['VC Host']),
-		).resolves.toEqual({
+		await expect(setRoleLabels(VOLUNTEER_ID, ['VC Host'])).resolves.toEqual({
 			ok: false,
 			message: 'That volunteer no longer exists.',
 		});
