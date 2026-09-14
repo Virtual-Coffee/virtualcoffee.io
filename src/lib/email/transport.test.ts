@@ -296,6 +296,62 @@ describe('delivery modes', () => {
 			expect.objectContaining({ to: input.to, subject: input.subject }),
 		);
 	});
+
+	test('local: no Google credentials needed, addressed exactly as production would', async () => {
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		vi.stubEnv('SMTP_PORT', '1025');
+		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
+		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
+
+		await expect(
+			sendEmail({ ...input, cc: 'maintainer@example.test' }),
+		).resolves.toEqual({
+			ok: true,
+			warning:
+				'Sent to local SMTP sink at localhost:1025 (dev) — not delivered outside this machine.',
+		});
+		expect(sendMail).toHaveBeenCalledWith({
+			from: 'Virtual Coffee <dev@localhost>',
+			to: input.to,
+			cc: 'maintainer@example.test',
+			subject: input.subject,
+			html: input.html,
+			text: input.text,
+			replyTo: undefined,
+		});
+		expect(createTransport).toHaveBeenLastCalledWith({
+			host: 'localhost',
+			port: 1025,
+			secure: false,
+			ignoreTLS: true,
+		});
+	});
+
+	test('local defaults SMTP_PORT to 1025', async () => {
+		// The local transporter is a module singleton like the Gmail one, so this
+		// asserts on the warning (built fresh every call) rather than a
+		// createTransport call an earlier test may already have made.
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		vi.stubEnv('SMTP_PORT', undefined);
+
+		await expect(sendEmail(input)).resolves.toMatchObject({
+			ok: true,
+			warning: expect.stringContaining('localhost:1025'),
+		});
+	});
+
+	test('SMTP_HOST is ignored in production', async () => {
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		await expect(sendEmail(input)).resolves.toEqual({ ok: true });
+		expect(sendMail).toHaveBeenLastCalledWith(
+			expect.objectContaining({
+				from: 'Virtual Coffee <hello@virtualcoffee.io>',
+				to: input.to,
+			}),
+		);
+	});
 });
 
 describe('emailStatus', () => {
@@ -316,6 +372,14 @@ describe('emailStatus', () => {
 			context: 'deploy-preview',
 			redirectTo: 'maintainer@example.test',
 			configured: false,
+		});
+
+		vi.stubEnv('EMAIL_REDIRECT_TO', undefined);
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		expect(emailStatus()).toEqual({
+			mode: 'local',
+			context: 'deploy-preview',
+			configured: true,
 		});
 	});
 });

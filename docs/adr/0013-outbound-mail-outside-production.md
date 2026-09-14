@@ -38,6 +38,13 @@ sends, and it decides on `CONTEXT` alone:
 - `EMAIL_REDIRECT_TO=<address>` turns Captured into **Redirected**: delivered
   for real, to that one address, with the intended recipient in the subject
   and an `X-Original-To` header and no cc. Production ignores it.
+- `SMTP_HOST=<host>` (with an optional `SMTP_PORT`, default `1025`) turns
+  Captured into **Local** instead: delivered for real, addressed exactly as
+  production would address it, to a local-only SMTP sink such as
+  [Mailpit](https://mailpit.axllent.org/). No Google credentials are read —
+  there is nothing to redirect to, since the sink never leaves the machine.
+  `EMAIL_REDIRECT_TO` wins if both are set. Production ignores it, same as
+  `EMAIL_REDIRECT_TO`.
 - Slack posts and GitHub issues are Captured on the same rule, opted out of by
   `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true` — they have no address to redirect to,
   so the opt-in pairs with per-context webhook and App values that point at a
@@ -56,6 +63,9 @@ mechanism.
   a "captured on this deploy" notice so a reviewer knows why nothing arrived.
 - Testing real delivery from a preview means setting `EMAIL_REDIRECT_TO` on
   that branch's context and reading one inbox.
+- Testing real delivery locally needs no credentials at all: run a local SMTP
+  sink and set `SMTP_HOST` (`EMAIL_REDIRECT_TO` is for a preview's real
+  Gmail credentials — different lever, different purpose).
 - A captured message on a preview names a real applicant, address and all,
   and is visible to the whole Netlify team for as long as Netlify keeps
   function logs. That audience already has the preview's database and
