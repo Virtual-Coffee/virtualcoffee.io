@@ -3,18 +3,18 @@ import { Button, Link, Text } from 'react-email';
 import { Layout } from '@/lib/email/layout';
 import type { EmailTemplate } from '@/lib/email/render';
 import { styles } from '@/lib/email/styles';
+import { siteUrl } from '@/util/url.server';
 
 /** Deliberately unaddressed: the maintainers' copy greets everyone alike. */
 export type CoffeeInviteProps = Record<never, never>;
-
-const TUESDAY = 'https://virtualcoffee.io/join-coffee?day=tuesday';
-const THURSDAY = 'https://virtualcoffee.io/join-coffee?day=thursday';
 
 export function subject(): string {
 	return 'You’re invited to a Virtual Coffee';
 }
 
 export function Content() {
+	const tuesday = `${siteUrl()}/join-coffee?day=tuesday`;
+	const thursday = `${siteUrl()}/join-coffee?day=thursday`;
 	return (
 		<>
 			<Text style={styles.text}>Hello there! 👋</Text>
@@ -32,12 +32,12 @@ export function Content() {
 				week:
 			</Text>
 			<Text style={styles.text}>
-				<Button href={TUESDAY} style={styles.button}>
+				<Button href={tuesday} style={styles.button}>
 					Tuesdays at 9:00 AM Eastern
 				</Button>
 			</Text>
 			<Text style={styles.text}>
-				<Button href={THURSDAY} style={styles.button}>
+				<Button href={thursday} style={styles.button}>
 					Thursdays at 12:00 PM Eastern (Noon)
 				</Button>
 			</Text>

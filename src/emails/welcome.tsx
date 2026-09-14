@@ -4,16 +4,16 @@ import { Layout } from '@/lib/email/layout';
 import { firstName } from '@/lib/email/name';
 import type { EmailTemplate } from '@/lib/email/render';
 import { styles } from '@/lib/email/styles';
+import { siteUrl } from '@/util/url.server';
 
 export type WelcomeProps = { name: string };
-
-const HANDBOOK = 'https://virtualcoffee.io/resources/virtual-coffee-handbook';
 
 export function subject(): string {
 	return 'Welcome to Virtual Coffee';
 }
 
 export function Content({ name }: WelcomeProps) {
+	const handbook = `${siteUrl()}/resources/virtual-coffee-handbook`;
 	return (
 		<>
 			<Text style={styles.text}>Hi {firstName(name)},</Text>
@@ -23,7 +23,7 @@ export function Content({ name }: WelcomeProps) {
 				best place to start:
 			</Text>
 			<Text style={styles.text}>
-				<Button href={HANDBOOK} style={styles.button}>
+				<Button href={handbook} style={styles.button}>
 					Read the handbook
 				</Button>
 			</Text>
