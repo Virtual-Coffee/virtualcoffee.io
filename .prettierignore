@@ -23,4 +23,4 @@ node_modules
 /app/_generatedData
 
 # drizzle-kit writes these in its own format; Prettier fights it on every db:generate
-/netlify/database/migrations/*/snapshot.json
+/drizzle/*/snapshot.json

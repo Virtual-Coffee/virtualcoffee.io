@@ -123,6 +123,14 @@ You should see something like 'Server now ready on http://localhost:9000' below,
 
 Use `ctrl-c` to quit the server when you're done.
 
+### `pnpm dev:tunnel`
+
+```shell
+pnpm dev:tunnel
+```
+
+The same as `pnpm dev`, but also served on a public `https://<random>--virtual-coffee-io.netlify.live` URL (printed on start) through [`netlify dev --live`](https://docs.netlify.com/cli/local-development/#share-a-live-development-server). Use it to check the site on a phone or to receive a webhook. It sets `NETLIFY_TUNNEL=1`, which switches on the tunnel-only settings in `next.config.mjs`; plain `pnpm dev` leaves them off because they break hot reloading on localhost.
+
 ### `pnpm build`
 
 ```shell

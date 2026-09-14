@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "account_provider_identity_idx" ON "account" ("provider_id","account_id");
