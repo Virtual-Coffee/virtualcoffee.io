@@ -13,8 +13,6 @@ import {
 	type Weekday,
 } from '@/lib/recurrence';
 
-import { sentence } from './presentation';
-
 /** The controls' state: strings where the user types, so a half-typed number survives. */
 export type RecurrenceDraft = {
 	kind: 'weekly' | 'monthly';
@@ -277,7 +275,7 @@ export function RecurrenceFields({
 
 			<p className="form-text mb-0" aria-live="polite">
 				{form
-					? sentence(describeRecurrence(form))
+					? describeRecurrence(form)
 					: 'Pick the days for a rule to appear here.'}
 			</p>
 		</fieldset>
