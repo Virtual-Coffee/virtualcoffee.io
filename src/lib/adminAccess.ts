@@ -2,6 +2,7 @@ import { cache } from 'react';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 
+import { getSessionCookie } from 'better-auth/cookies';
 import { eq } from 'drizzle-orm';
 
 import { db, user } from '@/db';
@@ -13,17 +14,6 @@ import {
 	type Section,
 	type RoleName,
 } from '@/lib/permissions';
-
-/**
- * Whether /admin should render at all on this deploy. Previews 404 unless
- * `PREVIEW_ADMIN_BYPASS=true`, which is safe only because `db:sanitize-preview`
- * scrubbed the branch during the build. See docs/adr/0007.
- */
-export function adminRoutesEnabled(): boolean {
-	const context = process.env.CONTEXT;
-	if (context !== 'deploy-preview' && context !== 'branch-deploy') return true;
-	return process.env.PREVIEW_ADMIN_BYPASS === 'true';
-}
 
 const DEPLOYED_CONTEXTS = new Set([
 	'production',
@@ -78,6 +68,8 @@ function bypassSession(fields: {
  * `ADMIN_DEV_BYPASS_SLACK_ID` is what an Invite Allowance is keyed on;
  * `pnpm db:seed` creates a Volunteer for the default, so
  * `ADMIN_DEV_BYPASS_ROLES=volunteer` works with no further setup.
+ *
+ * A real session cookie takes precedence over it — see `getSession()`.
  */
 function devBypassSession(): Session | null {
 	const enabled =
@@ -98,46 +90,25 @@ function devBypassSession(): Session | null {
 }
 
 /**
- * The mirror image for a sanitized deploy preview: fires only in a *deployed*
- * preview context, never locally or in production. Anyone with the preview
- * link gets this session, which is safe only because `db:sanitize-preview`
- * has scrubbed the branch by the time the deploy is live (docs/adr/0007).
- * `adminRoutesEnabled()` gates the route on the same conditions; this checks
- * them again rather than trusting the caller.
- */
-const PREVIEW_BYPASS_CONTEXTS = new Set(['deploy-preview', 'branch-deploy']);
-
-function previewBypassSession(): Session | null {
-	const enabled =
-		process.env.PREVIEW_ADMIN_BYPASS === 'true' &&
-		PREVIEW_BYPASS_CONTEXTS.has(process.env.CONTEXT ?? '');
-
-	if (!enabled) return null;
-
-	return bypassSession({
-		id: 'preview-bypass',
-		name: 'Preview reviewer',
-		email: 'preview-bypass@preview.invalid',
-		role: process.env.PREVIEW_ADMIN_BYPASS_ROLES?.trim() || 'admin',
-		slackUserId:
-			process.env.PREVIEW_ADMIN_BYPASS_SLACK_ID?.trim() || 'U_PREVIEW_BYPASS',
-	});
-}
-
-/**
  * Wrapped in React's `cache()` so the layout, the page and any action
  * rendered for one request share a single session lookup instead of each
  * hitting the database. Not Better Auth's cookie cache: a role change must
  * apply on the next request, not when a cookie expires.
+ *
+ * A real session cookie wins over the dev bypass: it is what the devtools
+ * panel's "switch user" sets, and it has to take effect while the bypass is
+ * on. A cookie whose session is gone falls back to the bypass, so signing the
+ * switched user out returns to the bypass identity rather than locking the
+ * developer out.
  */
 export const getSession = cache(async (): Promise<Session | null> => {
-	const devBypass = devBypassSession();
-	if (devBypass) return devBypass;
+	const requestHeaders = await headers();
+	const bypass = devBypassSession();
 
-	const previewBypass = previewBypassSession();
-	if (previewBypass) return previewBypass;
+	if (bypass && !getSessionCookie(requestHeaders)) return bypass;
 
-	return getAuth().api.getSession({ headers: await headers() });
+	const real = await getAuth().api.getSession({ headers: requestHeaders });
+	return real ?? bypass;
 });
 
 /** The roles on the session's user. */
@@ -172,10 +143,6 @@ export function visibleSections(session: Session | null): Section[] {
 
 /** The authorization boundary for /admin — here, not in proxy.ts (docs/adr/0003). */
 export async function requireSession(): Promise<Session> {
-	if (!adminRoutesEnabled()) {
-		notFound();
-	}
-
 	const session = await getSession();
 
 	if (visibleSections(session).length === 0) {
@@ -206,8 +173,8 @@ export async function requirePermission(
 /**
  * The actor to record on an audit row for this session, or null.
  *
- * The dev bypass and the preview bypass sessions above have no `user` row, and
- * every `*_event.actor_user_id` is a foreign key — so writing the session's id
+ * The dev bypass session above has no `user` row, and every
+ * `*_event.actor_user_id` is a foreign key — so writing the session's id
  * straight in would throw on the event insert, after the status change it was
  * meant to record had already been written. Looking the row up is what makes a
  * bypass session's events land with no actor rather than not at all. Every

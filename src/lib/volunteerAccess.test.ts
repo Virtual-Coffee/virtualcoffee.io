@@ -36,7 +36,6 @@ describe('requireVolunteer', () => {
 	function bypass(values: Record<string, string | undefined>) {
 		vi.stubEnv('ADMIN_DEV_BYPASS', 'true');
 		vi.stubEnv('CONTEXT', undefined);
-		vi.stubEnv('PREVIEW_ADMIN_BYPASS', undefined);
 		for (const [key, value] of Object.entries(values)) vi.stubEnv(key, value);
 	}
 
@@ -64,21 +63,6 @@ describe('requireVolunteer', () => {
 		});
 		await expect(requireVolunteer()).resolves.toMatchObject({
 			slackUserId: 'U_DEV_BYPASS',
-		});
-	});
-
-	/**
-	 * The ADR 0010 point: /invites never consults `adminRoutesEnabled()`, so a
-	 * deploy preview reviews it without PREVIEW_ADMIN_BYPASS. The dev bypass is
-	 * off in that context, so this goes through the preview bypass session.
-	 */
-	test('works on a deploy preview where /admin would 404', async () => {
-		vi.stubEnv('ADMIN_DEV_BYPASS', undefined);
-		vi.stubEnv('CONTEXT', 'deploy-preview');
-		vi.stubEnv('PREVIEW_ADMIN_BYPASS', 'true');
-		vi.stubEnv('PREVIEW_ADMIN_BYPASS_ROLES', 'volunteer');
-		await expect(requireVolunteer()).resolves.toMatchObject({
-			slackUserId: 'U_PREVIEW_BYPASS',
 		});
 	});
 });

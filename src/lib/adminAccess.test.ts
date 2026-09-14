@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import {
-	adminRoutesEnabled,
 	getSession,
 	requirePermission,
 	requireSession,
@@ -9,8 +8,15 @@ import {
 	visibleSections,
 } from './adminAccess';
 import { NOT_FOUND, redirectTo } from '@/test/next';
+import { requestHeaders } from '@/test/requestHeaders';
 import type { Session } from './auth';
 import { SECTIONS } from './permissions';
+
+const betterAuthSession = vi.fn<() => Promise<Session | null>>();
+
+vi.mock('./auth', () => ({
+	getAuth: () => ({ api: { getSession: betterAuthSession } }),
+}));
 
 function sessionWith(role: string | null): Session {
 	return { user: { role } } as unknown as Session;
@@ -18,8 +24,6 @@ function sessionWith(role: string | null): Session {
 
 const unset = {
 	CONTEXT: undefined,
-	PREVIEW_ADMIN_BYPASS: undefined,
-	PREVIEW_ADMIN_BYPASS_ROLES: undefined,
 	ADMIN_DEV_BYPASS: undefined,
 	ADMIN_DEV_BYPASS_ROLES: undefined,
 	ADMIN_DEV_BYPASS_SLACK_ID: undefined,
@@ -31,31 +35,12 @@ function env(values: Record<string, string | undefined>) {
 	}
 }
 
-beforeEach(() => env({}));
-afterEach(() => vi.unstubAllEnvs());
-
-describe('adminRoutesEnabled', () => {
-	test('is always on in production and locally', () => {
-		env({ CONTEXT: 'production' });
-		expect(adminRoutesEnabled()).toBe(true);
-		env({ CONTEXT: 'dev' });
-		expect(adminRoutesEnabled()).toBe(true);
-		env({ CONTEXT: undefined });
-		expect(adminRoutesEnabled()).toBe(true);
-	});
-
-	test.each(['deploy-preview', 'branch-deploy'])(
-		'on a %s it needs PREVIEW_ADMIN_BYPASS=true exactly',
-		(context) => {
-			env({ CONTEXT: context });
-			expect(adminRoutesEnabled()).toBe(false);
-			env({ CONTEXT: context, PREVIEW_ADMIN_BYPASS: '1' });
-			expect(adminRoutesEnabled()).toBe(false);
-			env({ CONTEXT: context, PREVIEW_ADMIN_BYPASS: 'true' });
-			expect(adminRoutesEnabled()).toBe(true);
-		},
-	);
+beforeEach(() => {
+	env({});
+	betterAuthSession.mockReset();
+	betterAuthSession.mockResolvedValue(null);
 });
+afterEach(() => vi.unstubAllEnvs());
 
 describe('the dev bypass session', () => {
 	test('is an admin with the seeded Slack id by default', async () => {
@@ -101,41 +86,45 @@ describe('the dev bypass session', () => {
 		],
 	])('is off when %s', async (_label, values) => {
 		env(values);
-		// With no bypass, getSession() goes to Better Auth, which needs a
-		// request; requireSession() reaching that far is the observable.
-		await expect(getSession()).rejects.toThrow();
+		await expect(getSession()).resolves.toBeNull();
+		expect(betterAuthSession).toHaveBeenCalledOnce();
 	});
 
 	test('netlify dev sets CONTEXT=dev, and that still counts as local', async () => {
 		env({ ADMIN_DEV_BYPASS: 'true', CONTEXT: 'dev' });
 		expect((await getSession())?.user).toMatchObject({ id: 'dev-bypass' });
 	});
-});
 
-describe('the preview bypass session', () => {
-	test('only fires in a deployed preview context', async () => {
-		env({ PREVIEW_ADMIN_BYPASS: 'true', CONTEXT: 'deploy-preview' });
-		expect((await getSession())?.user).toMatchObject({
-			id: 'preview-bypass',
-			role: 'admin',
-			slackUserId: 'U_PREVIEW_BYPASS',
-		});
-
-		env({
-			PREVIEW_ADMIN_BYPASS: 'true',
-			PREVIEW_ADMIN_BYPASS_ROLES: 'volunteer',
-			CONTEXT: 'branch-deploy',
-		});
-		expect((await getSession())?.user).toMatchObject({ role: 'volunteer' });
+	test('is not consulted without a session cookie', async () => {
+		env({ ADMIN_DEV_BYPASS: 'true' });
+		await getSession();
+		expect(betterAuthSession).not.toHaveBeenCalled();
 	});
 
-	test.each(['production', 'dev', undefined])(
-		'never locally or in production (CONTEXT=%s)',
-		async (context) => {
-			env({ PREVIEW_ADMIN_BYPASS: 'true', CONTEXT: context });
-			await expect(getSession()).rejects.toThrow();
-		},
-	);
+	/**
+	 * The devtools panel's "switch user" sets a real session cookie; it has to
+	 * win while the bypass is on, or the switch does nothing visible.
+	 */
+	test('yields to a real session when the request carries one', async () => {
+		env({ ADMIN_DEV_BYPASS: 'true' });
+		const real = sessionWith('coc_reviewer');
+		betterAuthSession.mockResolvedValue(real);
+		requestHeaders.current = new Headers({
+			cookie: 'better-auth.session_token=abc.def',
+		});
+
+		await expect(getSession()).resolves.toBe(real);
+	});
+
+	test('is the fallback for a cookie whose session is gone', async () => {
+		env({ ADMIN_DEV_BYPASS: 'true' });
+		requestHeaders.current = new Headers({
+			cookie: '__Secure-better-auth.session_token=abc.def',
+		});
+
+		expect((await getSession())?.user).toMatchObject({ id: 'dev-bypass' });
+		expect(betterAuthSession).toHaveBeenCalledOnce();
+	});
 });
 
 describe('sessionCan and visibleSections', () => {
@@ -185,8 +174,9 @@ describe('requireSession and requirePermission', () => {
 		).resolves.toMatchObject({ user: { role: 'volunteer_coordinator' } });
 	});
 
-	test('the whole tree 404s on a preview without the bypass', async () => {
-		env({ ADMIN_DEV_BYPASS: 'true', CONTEXT: 'deploy-preview' });
-		await expect(requireSession()).rejects.toMatchObject(NOT_FOUND);
+	test('nobody signed in is sent to sign in', async () => {
+		await expect(requireSession()).rejects.toMatchObject(
+			redirectTo('/admin/sign-in'),
+		);
 	});
 });

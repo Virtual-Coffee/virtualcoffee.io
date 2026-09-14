@@ -24,13 +24,11 @@ declare namespace NodeJS {
 		// The Slack member id the dev bypass acts as. Everything about an Invite
 		// Allowance keys on it, so /invites needs one to find a volunteer row.
 		ADMIN_DEV_BYPASS_SLACK_ID?: string;
-		// The deploy-preview equivalents, read by the same module.
-		PREVIEW_ADMIN_BYPASS?: string;
-		PREVIEW_ADMIN_BYPASS_ROLES?: string;
-		PREVIEW_ADMIN_BYPASS_SLACK_ID?: string;
 		ADMIN_BOOTSTRAP_SLACK_IDS?: string;
 		BETTER_AUTH_SECRET?: string;
-		BETTER_AUTH_URL?: string;
+		// Shared by every deploy context: a preview signs in through
+		// production's OAuth callback, and this encrypts what crosses over.
+		OAUTH_PROXY_SECRET?: string;
 
 		// Transactional email via Google Workspace SMTP
 		GOOGLE_SMTP_USER?: string;
