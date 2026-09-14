@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { render } from 'react-email';
 import { z } from 'zod';
 
@@ -11,6 +11,18 @@ import { volunteerInvite } from './volunteerInvite';
 import { welcome } from './welcome';
 
 const URL = 'https://virtualcoffee.io/join?invite=abc';
+
+/**
+ * The wordmark and every link back to the site follow `siteUrl()`, so a
+ * shell with Netlify's variables in it must not tilt these against the
+ * hardcoded production URL the assertions below expect.
+ */
+beforeEach(() => {
+	vi.stubEnv('URL', undefined);
+	vi.stubEnv('CONTEXT', undefined);
+	vi.stubEnv('DEPLOY_PRIME_URL', undefined);
+});
+afterEach(() => vi.unstubAllEnvs());
 
 type Case<P extends object> = [
 	string,
