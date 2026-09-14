@@ -223,22 +223,38 @@ function timed(event: calendar_v3.Schema$Event) {
 }
 
 export function eventsCalendar(client: CalendarClient, calendarId: string) {
-	async function listAll(
-		params: Omit<calendar_v3.Params$Resource$Events$List, 'calendarId'>,
+	/** Every item of a paged listing, following `nextPageToken` to the end. */
+	async function paginate(
+		fetchPage: (
+			pageToken: string | undefined,
+		) => Promise<{ data: calendar_v3.Schema$Events }>,
 	) {
 		const items: calendar_v3.Schema$Event[] = [];
 		let pageToken: string | undefined;
 		do {
-			const { data } = await client.events.list({
-				calendarId,
-				maxResults: 250,
-				...params,
-				pageToken,
-			});
+			const { data } = await fetchPage(pageToken);
 			items.push(...(data.items ?? []));
 			pageToken = data.nextPageToken ?? undefined;
 		} while (pageToken);
 		return items;
+	}
+
+	/** A write against the etag that was loaded; a 412 is a conflict. */
+	async function conditional<T>(call: () => Promise<T>): Promise<T> {
+		try {
+			return await call();
+		} catch (error) {
+			if (isConflict(error)) throw new CalendarConflictError();
+			throw error;
+		}
+	}
+
+	function listAll(
+		params: Omit<calendar_v3.Params$Resource$Events$List, 'calendarId'>,
+	) {
+		return paginate((pageToken) =>
+			client.events.list({ calendarId, maxResults: 250, ...params, pageToken }),
+		);
 	}
 
 	async function nextEvent(seriesId: string, now: DateTime) {
@@ -407,10 +423,8 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		{ months }: { months: number },
 	): Promise<AdminEvent[]> {
 		const now = DateTime.now().setZone(DISPLAY_ZONE);
-		const items: calendar_v3.Schema$Event[] = [];
-		let pageToken: string | undefined;
-		do {
-			const { data } = await client.events.instances({
+		const items = await paginate((pageToken) =>
+			client.events.instances({
 				calendarId,
 				eventId: seriesId,
 				showDeleted: true,
@@ -419,10 +433,8 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 				timeMax: iso(now.plus({ months })),
 				maxResults: 250,
 				pageToken,
-			});
-			items.push(...(data.items ?? []));
-			pageToken = data.nextPageToken ?? undefined;
-		} while (pageToken);
+			}),
+		);
 		return toAdminEvents(items);
 	}
 
@@ -436,20 +448,17 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		};
 	}
 
-	async function patch(
+	function patch(
 		eventId: string,
 		etag: string,
 		requestBody: calendar_v3.Schema$Event,
 	) {
-		try {
-			return await client.events.patch(
+		return conditional(() =>
+			client.events.patch(
 				{ calendarId, eventId, sendUpdates: 'none', requestBody },
 				{ headers: { 'If-Match': etag } },
-			);
-		} catch (error) {
-			if (isConflict(error)) throw new CalendarConflictError();
-			throw error;
-		}
+			),
+		);
 	}
 
 	/** The event as it is now, or a conflict if it is not what was loaded. */
@@ -510,15 +519,12 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 			maxResults: 1,
 		});
 		if (!(past.items ?? []).length) {
-			try {
-				await client.events.delete(
+			await conditional(() =>
+				client.events.delete(
 					{ calendarId, eventId: id, sendUpdates: 'none' },
 					{ headers: { 'If-Match': etag } },
-				);
-			} catch (error) {
-				if (isConflict(error)) throw new CalendarConflictError();
-				throw error;
-			}
+				),
+			);
 			return 'deleted';
 		}
 		const rule = (existing.recurrence ?? []).find((line) =>
