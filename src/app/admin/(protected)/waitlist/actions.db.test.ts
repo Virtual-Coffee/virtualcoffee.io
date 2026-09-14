@@ -57,6 +57,12 @@ beforeEach(() => {
 	signInAs('admin');
 });
 
+/** The single-use code carried by a Slack invite email. */
+function codeIn(text: string): string {
+	const url = /https:\/\/virtualcoffee\.io\/join-slack\?code=\S+/.exec(text);
+	return new URL(url![0]).searchParams.get('code')!;
+}
+
 describe('sendCoffeeInvite', () => {
 	/**
 	 * Send first, then write. Reversed, a failed send leaves an applicant
@@ -409,12 +415,34 @@ describe('a status that changed between the read and the write', () => {
 		expect(sendEmail).toHaveBeenCalledTimes(2);
 
 		const [, slackInvite] = sendEmail.mock.calls;
-		const code = new URL(
-			/https:\/\/virtualcoffee\.io\/join-slack\?code=\S+/.exec(
-				slackInvite[0].text,
-			)![0],
-		).searchParams.get('code')!;
-		await expect(slackInviteForToken(code)).resolves.toEqual({
+		await expect(
+			slackInviteForToken(codeIn(slackInvite[0].text)),
+		).resolves.toEqual({
+			ok: false,
+			reason: 'expired',
+		});
+	});
+
+	test("a second approval that lost the race does not kill the first one's link", async () => {
+		vi.stubEnv('URL', 'https://virtualcoffee.io');
+		sendEmail.mockResolvedValue(SENT);
+		const { id } = await insertApplication({ status: 'coffee_invited' });
+
+		await expect(approveMembership(id, false)).resolves.toEqual({ ok: true });
+		// The other maintainer read Coffee invited before the first approval
+		// committed.
+		staleRead.readAs = 'coffee_invited';
+		await expect(approveMembership(id, false)).resolves.toMatchObject({
+			ok: false,
+			emailSent: true,
+		});
+
+		const [, winner, , loser] = sendEmail.mock.calls;
+		await expect(slackInviteForToken(codeIn(winner[0].text))).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
+		await expect(slackInviteForToken(codeIn(loser[0].text))).resolves.toEqual({
 			ok: false,
 			reason: 'expired',
 		});

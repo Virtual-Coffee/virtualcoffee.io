@@ -7,6 +7,7 @@ import { insertApplication } from '@/test/db/fixtures';
 
 import {
 	createSlackInviteToken,
+	expireSlackInviteToken,
 	redeemSlackInviteToken,
 	slackInviteForToken,
 } from './inviteTokens';
@@ -117,6 +118,28 @@ describe('Slack invite tokens', () => {
 		});
 		const rows = await db().select().from(inviteToken);
 		expect(rows.map((row) => row.usedAt)).toEqual([null, null]);
+	});
+
+	test('supersede: false leaves the previous token live; expiring by id takes only that one', async () => {
+		const { id } = await insertApplication({ status: 'member' });
+		const first = await createSlackInviteToken(id, { supersede: false });
+		const second = await createSlackInviteToken(id, { supersede: false });
+
+		await expect(slackInviteForToken(first.token)).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
+
+		await expireSlackInviteToken(second.id, new Date());
+
+		await expect(slackInviteForToken(second.token)).resolves.toEqual({
+			ok: false,
+			reason: 'expired',
+		});
+		await expect(redeemSlackInviteToken(first.token)).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
 	});
 
 	test('an expired token is refused and stays unused', async () => {
