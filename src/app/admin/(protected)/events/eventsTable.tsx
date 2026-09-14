@@ -12,9 +12,9 @@ import { RescheduleDialog } from './rescheduleDialog';
 
 /**
  * Reschedule and Cancel while the Event stands; Restore once it has been
- * Cancelled or Rescheduled. Shared with the Series page's Changed Events.
+ * Cancelled or Rescheduled.
  */
-export function RowActions({ event }: { event: AdminEvent }) {
+function RowActions({ event }: { event: AdminEvent }) {
 	const { run, pending, feedback } = useAction();
 	const [rescheduling, setRescheduling] = useState(false);
 	const cancelled = event.status === 'cancelled';
@@ -87,15 +87,23 @@ export function RowActions({ event }: { event: AdminEvent }) {
 	);
 }
 
+/**
+ * The Events list, and — without `titles`, where every row is of the one
+ * Series named above it — the Series page's Changed Events.
+ */
 export function EventsTable({
 	rows,
 	canManage,
+	titles = true,
+	empty = 'Nothing in the next 30 days.',
 }: {
 	rows: AdminEvent[];
 	canManage: boolean;
+	titles?: boolean;
+	empty?: string;
 }) {
 	if (rows.length === 0) {
-		return <p className="text-body-secondary">Nothing in the next 30 days.</p>;
+		return <p className="text-body-secondary">{empty}</p>;
 	}
 	return (
 		<div className="table-responsive">
@@ -103,7 +111,7 @@ export function EventsTable({
 				<thead>
 					<tr>
 						<th scope="col">When</th>
-						<th scope="col">Event</th>
+						{titles && <th scope="col">Event</th>}
 						<th scope="col">
 							<span className="visually-hidden">Status</span>
 						</th>
@@ -127,24 +135,29 @@ export function EventsTable({
 										start={event.start}
 										end={event.end}
 										struck={cancelled}
+										originalStart={
+											event.rescheduled ? event.originalStart : null
+										}
 									/>
 								</td>
-								<td>
-									{event.seriesId && canManage ? (
-										<Link
-											href={`/admin/events/series/${event.seriesId}`}
-											className={
-												cancelled ? 'text-decoration-line-through' : ''
-											}
-										>
-											{event.title}
-										</Link>
-									) : cancelled ? (
-										<s>{event.title}</s>
-									) : (
-										event.title
-									)}
-								</td>
+								{titles && (
+									<td>
+										{event.seriesId && canManage ? (
+											<Link
+												href={`/admin/events/series/${event.seriesId}`}
+												className={
+													cancelled ? 'text-decoration-line-through' : ''
+												}
+											>
+												{event.title}
+											</Link>
+										) : cancelled ? (
+											<s>{event.title}</s>
+										) : (
+											event.title
+										)}
+									</td>
+								)}
 								<td>
 									<EventStatusBadge event={event} />
 								</td>

@@ -3,12 +3,11 @@
 import { useId, useState } from 'react';
 
 import type { AdminEvent } from '@/lib/eventsCalendar';
-import { dateForDisplay } from '@/util/date';
 import { useAction } from '@/util/forms/useAction';
 
 import { cancelEvent } from './actions';
-import { RowActions } from './eventsTable';
-import { EventStatusBadge, EventWhen, eventWhen } from './presentation';
+import { EventsTable } from './eventsTable';
+import { eventWhen } from './presentation';
 
 /**
  * The Events of one Series that no longer follow its rule — Cancelled or
@@ -31,59 +30,7 @@ export function SeriesChangedEvents({ events }: { events: AdminEvent[] }) {
 			<p className="small text-body-secondary">
 				Cancelled or rescheduled Events of this Series in the next 12 months.
 			</p>
-			{changed.length === 0 ? (
-				<p className="small text-body-secondary">None.</p>
-			) : (
-				<div className="table-responsive">
-					<table className="table table-sm align-middle mb-0">
-						<thead>
-							<tr>
-								<th scope="col">When</th>
-								<th scope="col">
-									<span className="visually-hidden">Status</span>
-								</th>
-								<th scope="col">
-									<span className="visually-hidden">Actions</span>
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							{changed.map((event) => {
-								const cancelled = event.status === 'cancelled';
-								return (
-									<tr
-										key={event.id}
-										className={cancelled ? 'text-body-tertiary' : ''}
-									>
-										<td className="small">
-											<EventWhen
-												start={event.start}
-												end={event.end}
-												struck={cancelled}
-											/>
-											{event.rescheduled && event.originalStart && (
-												<div className="text-body-secondary">
-													Was{' '}
-													{dateForDisplay(
-														event.originalStart,
-														'EEE, LLL d · t',
-													)}
-												</div>
-											)}
-										</td>
-										<td>
-											<EventStatusBadge event={event} />
-										</td>
-										<td className="text-end">
-											<RowActions event={event} />
-										</td>
-									</tr>
-								);
-							})}
-						</tbody>
-					</table>
-				</div>
-			)}
+			<EventsTable rows={changed} canManage titles={false} empty="None." />
 			<CancelUpcoming events={standing} />
 		</section>
 	);
