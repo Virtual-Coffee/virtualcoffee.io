@@ -9,7 +9,7 @@ import type { calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
 
 import { createCalendarClient } from '@/data/events';
-import { DISPLAY_ZONE } from '@/util/date';
+import { DISPLAY_ZONE, displayParts } from '@/util/date';
 import { htmlToMarkdown, looksLikeHtml } from '@/util/markdown.server';
 import {
 	describeRecurrence,
@@ -177,10 +177,7 @@ function toEventDateTime(
 function fromEventDateTime(
 	value: calendar_v3.Schema$EventDateTime | undefined,
 ) {
-	const at = DateTime.fromISO(value?.dateTime ?? '', { zone: DISPLAY_ZONE });
-	return at.isValid
-		? { date: at.toISODate(), time: at.toFormat('HH:mm'), iso: at.toISO() }
-		: null;
+	return displayParts(value?.dateTime ?? '');
 }
 
 /** `RRULE` lines aside, a `recurrence` array carries EXDATE/RDATE lines to keep. */
@@ -272,7 +269,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 	): Promise<Series | null> {
 		const start = fromEventDateTime(event.start);
 		const end = fromEventDateTime(event.end);
-		if (!event.id || !event.etag || !start || !end || !start.date) return null;
+		if (!event.id || !event.etag || !start || !end) return null;
 		const recurrence = parseRecurrence(event.recurrence ?? []);
 		const description = event.description ?? '';
 		return {
