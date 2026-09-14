@@ -66,7 +66,7 @@ export type SendResult = { ok: true; warning?: string } | SendFailure;
 export function emailConfigured(): boolean {
 	return Boolean(
 		process.env.SMTP_HOST ||
-			(process.env.GOOGLE_SMTP_USER && process.env.GMAIL_SERVICE_ACCOUNT_KEY),
+		(process.env.GOOGLE_SMTP_USER && process.env.GMAIL_SERVICE_ACCOUNT_KEY),
 	);
 }
 
