@@ -1,12 +1,9 @@
-import { z } from 'zod';
-
 /**
  * Delivery Mode for anything the site sends out — email, Slack posts and DMs,
  * GitHub issues. Live delivery is production only; everywhere else is Captured
  * (built and logged, the caller carries on as though it went) unless an opt-in
- * says otherwise — and a Slack DM has no opt-in. Email has two such opt-ins:
- * Redirected (`EMAIL_REDIRECT_TO`) and Local (`SMTP_HOST`, a local-only sink
- * such as Mailpit). See docs/adr/0013.
+ * says otherwise — and a Slack DM has no opt-in. Email's opt-in is Local
+ * (`SMTP_HOST`, a local-only sink such as Mailpit). See docs/adr/0013.
  *
  * `CONTEXT` is Netlify's: `production`, `deploy-preview`, `branch-deploy`, or
  * `dev` under `netlify dev`. Plain `next dev` has none, which is non-production
@@ -28,12 +25,34 @@ export function deployContext(): string {
 	return process.env.CONTEXT || 'local';
 }
 
+/** Whether a deploy is one of Netlify's, as opposed to a checkout. */
+function isDeployed(): boolean {
+	return Boolean(process.env.CONTEXT) && process.env.CONTEXT !== 'dev';
+}
+
+/** `ada@example.test` → `a•••@example.test`; a Slack channel is left alone. */
+export function maskAddress(target: string): string {
+	const at = target.indexOf('@');
+	if (at < 1) return target;
+	return `${target[0]}•••${target.slice(at)}`;
+}
+
+/** Every link in a message, so a walkthrough can still follow the one it sent. */
+export function linksIn(body: string): string[] {
+	const links = (body.match(/https?:\/\/[^\s<>"')]+/g) ?? []).map((link) =>
+		// A link at the end of a sentence carries the full stop with it.
+		link.replace(/[.,;:!?]+$/, ''),
+	);
+	return [...new Set(links)];
+}
+
 /**
- * The Captured sink: the whole message, on the function log — the `netlify dev`
- * terminal locally, the deploy's function log on a preview. The body goes in
- * on purpose, invite links included: a walkthrough checks what would have been
- * sent and follows the link. docs/adr/0013 says who can read the log and why
- * that is acceptable.
+ * The Captured sink is the function log — the `netlify dev` terminal locally,
+ * the deploy's function log on a preview. Locally the whole message goes in.
+ * On a deploy the message is about a real person (docs/adr/0007) and the log
+ * outlives the walkthrough, so only what the walkthrough needs is written:
+ * whom it was for, masked; what it was; and its links, which is how a
+ * reviewer follows an invite. docs/adr/0013.
  */
 export function capture(
 	kind: OutboundKind,
@@ -41,6 +60,15 @@ export function capture(
 	body: string,
 	details?: Record<string, string | undefined>,
 ): void {
+	if (isDeployed()) {
+		console.info(
+			`[${kind} captured] ${deployContext()} ${maskAddress(target)}`,
+			...(details ? [details] : []),
+			...linksIn(body).map((link) => `\n${link}`),
+		);
+		return;
+	}
+
 	console.info(
 		`[${kind} captured] ${deployContext()} ${target}`,
 		...(details ? [details] : []),
@@ -51,42 +79,16 @@ export function capture(
 export type EmailDelivery =
 	| { mode: 'live' }
 	| { mode: 'captured'; context: string }
-	| { mode: 'redirected'; context: string; redirectTo: string }
 	| { mode: 'local'; context: string };
 
 /**
- * `EMAIL_REDIRECT_TO` turns Captured into Redirected: everything is delivered
- * for real, to that one address. It is read only outside production — a
- * redirect there would silently divert real applicants' mail.
- *
- * Validated as exactly one mailbox: nodemailer parses a comma- or
- * semicolon-separated `to` as multiple recipients, so a malformed value would
- * silently multi-deliver captured applicant content instead of failing
- * closed. A value that doesn't parse is treated as unset.
- *
- * `SMTP_HOST` turns Captured into Local instead: delivered for real, exactly
- * as production would address it, to a local-only SMTP sink such as Mailpit —
- * no Google credentials needed. It never leaves the machine, so unlike
- * `EMAIL_REDIRECT_TO` it needs no redirect address; `EMAIL_REDIRECT_TO` still
- * wins if both are set.
+ * `SMTP_HOST` turns Captured into Local: delivered for real, exactly as
+ * production would address it, to a local-only SMTP sink such as Mailpit — no
+ * Google credentials needed. It never leaves the machine, so no redirect
+ * address is involved.
  */
 export function emailDelivery(): EmailDelivery {
 	if (isProduction()) return { mode: 'live' };
-
-	const raw = process.env.EMAIL_REDIRECT_TO?.trim();
-	if (raw) {
-		const parsed = z.email().safeParse(raw);
-		if (parsed.success) {
-			return {
-				mode: 'redirected',
-				context: deployContext(),
-				redirectTo: parsed.data,
-			};
-		}
-		console.warn(
-			`EMAIL_REDIRECT_TO is not a single valid address (${JSON.stringify(raw)}); ignoring it.`,
-		);
-	}
 
 	if (process.env.SMTP_HOST?.trim()) {
 		return { mode: 'local', context: deployContext() };

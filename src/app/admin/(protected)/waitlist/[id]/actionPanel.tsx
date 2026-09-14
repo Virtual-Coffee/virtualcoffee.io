@@ -299,8 +299,8 @@ function CloseBody({
 
 /**
  * Which Delivery Mode this deploy is in, when it is not the ordinary one.
- * Captured and Redirected are the non-production modes (docs/adr/0013);
- * missing credentials only matter when a send would actually go out.
+ * Captured is the non-production mode (docs/adr/0013); missing credentials
+ * only matter when a send would actually go out.
  */
 function DeliveryNotice({ status }: { status: EmailStatus }) {
 	if (status.mode === 'captured') {
@@ -308,18 +308,6 @@ function DeliveryNotice({ status }: { status: EmailStatus }) {
 			<div className="alert alert-info small" role="status">
 				Email is captured on this deploy ({status.context}): every send is
 				logged and recorded as sent, and nothing reaches an inbox.
-			</div>
-		);
-	}
-
-	if (status.mode === 'redirected') {
-		return (
-			<div className="alert alert-info small" role="status">
-				Email from this deploy ({status.context}) is redirected to{' '}
-				{status.redirectTo}
-				{!status.configured &&
-					' — but email isn’t configured, so nothing can be sent yet'}
-				.
 			</div>
 		);
 	}

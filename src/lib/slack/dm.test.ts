@@ -50,9 +50,9 @@ describe('sendSlackDm', () => {
 			warning: 'Captured, not sent as a Slack DM (deploy-preview).',
 		});
 		expect(conversationsOpen).not.toHaveBeenCalled();
+		// On a deploy the text is not logged (outbound.test.ts has the shape).
 		expect(info).toHaveBeenCalledWith(
 			'[slack dm captured] deploy-preview U123',
-			`\n${JSON.stringify(HI, null, 2)}`,
 		);
 		info.mockRestore();
 	});

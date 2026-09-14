@@ -23,12 +23,12 @@ import {
  * purpose: the events calendar uses a different service account under
  * `GOOGLE_SERVICE_ACCOUNT_KEY`.
  *
- * Outside production nothing reaches SMTP unless `EMAIL_REDIRECT_TO` or
- * `SMTP_HOST` is set — `deliver()` decides, and only calls back here once the
- * mode is not Captured, so the credentials are never read first. `SMTP_HOST`
- * points at a local-only sink such as Mailpit instead of Gmail: no Google
- * credentials are read, mail is addressed exactly as production would address
- * it, and nothing leaves the machine. See docs/adr/0013.
+ * Outside production nothing reaches SMTP unless `SMTP_HOST` is set —
+ * `deliver()` decides, and only calls back here once the mode is not
+ * Captured, so the credentials are never read first. `SMTP_HOST` points at a
+ * local-only sink such as Mailpit instead of Gmail: no Google credentials are
+ * read, mail is addressed exactly as production would address it, and
+ * nothing leaves the machine. See docs/adr/0013.
  */
 
 export type SendEmailInput = {
@@ -203,29 +203,19 @@ async function send(
 
 	const from = `Virtual Coffee <${process.env.GOOGLE_SMTP_USER || 'dev@localhost'}>`;
 
-	// Redirected: one address gets everything, the intended recipient is named
-	// in the subject and a header, and no cc — the point is that only the
-	// maintainer who set EMAIL_REDIRECT_TO receives anything. Local addresses
-	// exactly as Live would: the point of a local sink is seeing what
-	// production would actually send.
-	const to = delivery.mode === 'redirected' ? delivery.redirectTo : input.to;
-	const cc = delivery.mode === 'redirected' ? undefined : input.cc || undefined;
-	const subject =
-		delivery.mode === 'redirected'
-			? `[to: ${input.to}] ${input.subject}`
-			: input.subject;
+	// Local addresses exactly as Live would: the point of a local sink is
+	// seeing what production would actually send.
+	const to = input.to;
+	const cc = input.cc || undefined;
 
 	const info = await sendingTransporter.sendMail({
 		from,
 		to,
 		cc,
-		subject,
+		subject: input.subject,
 		html: input.html,
 		text: input.text,
 		replyTo: process.env.GOOGLE_SMTP_USER || undefined,
-		...(delivery.mode === 'redirected'
-			? { headers: { 'X-Original-To': input.to } }
-			: {}),
 	});
 
 	// nodemailer only resolves with rejections when at least one address
@@ -248,13 +238,6 @@ async function send(
 		};
 	}
 
-	if (delivery.mode === 'redirected') {
-		return {
-			ok: true,
-			message: 'Sent.',
-			warning: `Redirected to ${delivery.redirectTo} (${delivery.context}) instead of ${input.to}.`,
-		};
-	}
 	if (delivery.mode === 'local') {
 		return {
 			ok: true,
