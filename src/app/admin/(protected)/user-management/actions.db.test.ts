@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, pendingGrant, user } from '@/db';
+import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
 	failInserts,
@@ -55,12 +56,48 @@ async function grantRole(id: string) {
 	return row?.role ?? null;
 }
 
-beforeEach(() => {
+let admin: Awaited<ReturnType<typeof signInAs>>;
+
+beforeEach(async () => {
 	lookup.during = undefined;
-	signInAs('admin');
+	admin = await signInAs('admin');
 });
 
 describe('setUserRoles', () => {
+	test('needs admins:manage, and 404s otherwise', async () => {
+		await signInAs('volunteer_coordinator');
+		await expect(setUserRoles('someone', ['admin'])).rejects.toMatchObject(
+			NOT_FOUND,
+		);
+	});
+
+	test('refuses a role it does not recognise', async () => {
+		await expect(setUserRoles('someone', ['superuser'])).resolves.toEqual({
+			ok: false,
+			message: 'That is not a role we recognise.',
+		});
+	});
+
+	test('refuses the default role by name: it is what revoking leaves, not a grant', async () => {
+		await expect(setUserRoles('someone', ['user'])).resolves.toEqual({
+			ok: false,
+			message: 'That is not a role we recognise.',
+		});
+	});
+
+	test('an admin cannot revoke their own admin access', async () => {
+		await expect(setUserRoles(admin.userId, [])).resolves.toEqual({
+			ok: false,
+			message: 'You cannot revoke your own admin access.',
+		});
+		await expect(setUserRoles(admin.userId, ['coc_reviewer'])).resolves.toEqual(
+			{
+				ok: false,
+				message: 'You cannot revoke your own admin access.',
+			},
+		);
+	});
+
 	test('replaces the grantable set and records who granted it', async () => {
 		const ada = await insertUser({ role: 'coc_reviewer' });
 
