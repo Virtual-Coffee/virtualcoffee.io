@@ -2,6 +2,7 @@
 
 import { useId, useState, type ReactNode } from 'react';
 
+import { AdminDialog } from '@/components/AdminDialog';
 import { useModalDialog } from '@/util/useModalDialog';
 
 /**
@@ -57,55 +58,12 @@ export function ConfirmSendDialog({
 	);
 
 	return (
-		<dialog {...dialog} className="admin-dialog">
-			<div className="p-3 border-bottom d-flex justify-content-between align-items-start gap-3">
-				<h2 className="h5 mb-0">{title}</h2>
-				<button
-					type="button"
-					className="btn-close"
-					aria-label="Close"
-					onClick={onCancel}
-					disabled={pending}
-				/>
-			</div>
-
-			<div className="p-3">
-				<p>{intro}</p>
-
-				{emails.map((email, index) => (
-					<div key={index} className="border rounded p-3 mb-3 bg-body-tertiary">
-						<p className="small text-body-secondary mb-2">
-							To: {to} · Subject: {email.subject}
-						</p>
-						<p className="admin-answer small mb-0">{email.text}</p>
-					</div>
-				))}
-
-				{offerCopy && (
-					<div className="form-check">
-						<input
-							className="form-check-input"
-							type="checkbox"
-							id={copyId}
-							checked={copyMe}
-							onChange={(event) => setCopyMe(event.target.checked)}
-						/>
-						<label className="form-check-label" htmlFor={copyId}>
-							Copy me on this email
-						</label>
-					</div>
-				)}
-			</div>
-
-			<div className="p-3 border-top d-flex justify-content-end gap-2">
-				<button
-					type="button"
-					className="btn btn-outline-secondary"
-					onClick={onCancel}
-					disabled={pending}
-				>
-					Cancel
-				</button>
+		<AdminDialog
+			dialog={dialog}
+			title={title}
+			pending={pending}
+			onCancel={onCancel}
+			confirm={
 				<button
 					type="button"
 					className="btn btn-primary"
@@ -114,7 +72,33 @@ export function ConfirmSendDialog({
 				>
 					{pending ? 'Sending…' : confirmLabel}
 				</button>
-			</div>
-		</dialog>
+			}
+		>
+			<p>{intro}</p>
+
+			{emails.map((email, index) => (
+				<div key={index} className="border rounded p-3 mb-3 bg-body-tertiary">
+					<p className="small text-body-secondary mb-2">
+						To: {to} · Subject: {email.subject}
+					</p>
+					<p className="admin-answer small mb-0">{email.text}</p>
+				</div>
+			))}
+
+			{offerCopy && (
+				<div className="form-check">
+					<input
+						className="form-check-input"
+						type="checkbox"
+						id={copyId}
+						checked={copyMe}
+						onChange={(event) => setCopyMe(event.target.checked)}
+					/>
+					<label className="form-check-label" htmlFor={copyId}>
+						Copy me on this email
+					</label>
+				</div>
+			)}
+		</AdminDialog>
 	);
 }
