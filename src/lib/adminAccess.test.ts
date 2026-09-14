@@ -8,7 +8,6 @@ import {
 	visibleSections,
 } from './adminAccess';
 import { NOT_FOUND, redirectTo } from '@/test/next';
-import { requestHeaders } from '@/test/requestHeaders';
 import type { Session } from './auth';
 import { SECTIONS } from './permissions';
 
@@ -101,30 +100,7 @@ describe('the dev bypass session', () => {
 		expect(betterAuthSession).not.toHaveBeenCalled();
 	});
 
-	/**
-	 * The devtools panel's "switch user" sets a real session cookie; it has to
-	 * win while the bypass is on, or the switch does nothing visible.
-	 */
-	test('yields to a real session when the request carries one', async () => {
-		env({ ADMIN_DEV_BYPASS: 'true' });
-		const real = sessionWith('coc_reviewer');
-		betterAuthSession.mockResolvedValue(real);
-		requestHeaders.current = new Headers({
-			cookie: 'better-auth.session_token=abc.def',
-		});
-
-		await expect(getSession()).resolves.toBe(real);
-	});
-
-	test('is the fallback for a cookie whose session is gone', async () => {
-		env({ ADMIN_DEV_BYPASS: 'true' });
-		requestHeaders.current = new Headers({
-			cookie: '__Secure-better-auth.session_token=abc.def',
-		});
-
-		expect((await getSession())?.user).toMatchObject({ id: 'dev-bypass' });
-		expect(betterAuthSession).toHaveBeenCalledOnce();
-	});
+	// A request that does carry a cookie is `adminAccess.db.test.ts`'s.
 });
 
 describe('sessionCan and visibleSections', () => {

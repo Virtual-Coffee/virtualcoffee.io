@@ -1,17 +1,43 @@
-import { vi } from 'vitest';
+import { getAuth } from '@/lib/auth';
+import { insertUser } from '@/test/db/fixtures';
+import { requestHeaders } from '@/test/requestHeaders';
 
 /**
- * Authenticate a test through the dev-bypass session.
+ * Sign a test in as a real user: a `user` row holding `roles`, a `session`
+ * row minted by Better Auth's `testUtils` plugin (`src/lib/auth.ts`), and
+ * the session cookie on the mocked request (`src/test/setup.ts`), so
+ * `getSession()` and everything
+ * above it — `requirePermission()`, `requireVolunteer()`, `actorId()` — run
+ * exactly as they do for a signed-in maintainer. Needs the `db` project.
  *
- * The mocked request (`src/test/setup.ts`) carries no session cookie, so
- * `getSession()` in `src/lib/adminAccess.ts` returns this session without
- * asking Better Auth, and the real `requirePermission()` and
- * `requireVolunteer()` run against the roles named here. Pair with
- * `vi.unstubAllEnvs()` in an `afterEach`.
+ * Every call is a new user: email and Slack id are unique columns, and a test
+ * that signs in twice is switching identity. The name is the dev bypass's, so
+ * what an action records as the actor reads the same either way.
  */
-export function signInAs(roles: string, slackUserId = 'U_TEST_ACTOR'): void {
-	vi.stubEnv('CONTEXT', undefined);
-	vi.stubEnv('ADMIN_DEV_BYPASS', 'true');
-	vi.stubEnv('ADMIN_DEV_BYPASS_ROLES', roles);
-	vi.stubEnv('ADMIN_DEV_BYPASS_SLACK_ID', slackUserId);
+export async function signInAs(
+	roles: string,
+	slackUserId?: string,
+): Promise<{ userId: string; email: string; slackUserId: string }> {
+	if (!process.env.NETLIFY_DB_URL) {
+		throw new Error(
+			'signInAs() mints a real session and needs the db project (*.db.test.ts).',
+		);
+	}
+
+	const n = ++actors;
+	const actor = {
+		email: `actor-${n}@localhost`,
+		slackUserId: slackUserId ?? `U_TEST_ACTOR_${n}`,
+	};
+	const { id: userId } = await insertUser({
+		role: roles,
+		name: 'Local dev',
+		...actor,
+	});
+	const { test } = await getAuth().$context;
+	requestHeaders.current = await test.getAuthHeaders({ userId });
+
+	return { userId, ...actor };
 }
+
+let actors = 0;
