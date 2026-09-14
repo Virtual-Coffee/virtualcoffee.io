@@ -2,69 +2,82 @@ import { eq, sql } from 'drizzle-orm';
 
 import {
 	applicationEvent,
+	cocReport,
 	db,
+	devtoolsUser,
 	invite,
+	inviteToken,
 	membershipApplication,
 	pendingGrant,
 	user,
 	volunteer,
 	volunteerInviteLedger,
-	type ApplicationStatus,
 	type VolunteerLedgerReason,
 } from '@/db';
 import { hashClaimToken } from '@/lib/invites';
+import { SUBMISSION_KINDS, type SubmissionKind } from '@/lib/submissions';
+import { hashToken } from '@/lib/tokens';
 
 /**
- * Small inserters for the db tests. Each returns what a test needs to refer
- * to the row again, and nothing is shared between tests — the setup file
- * truncates everything after each one.
+ * Small inserters for the db tests and for `scripts/seedDev.ts`. Each returns
+ * what a caller needs to refer to the row again. The defaults are what a test
+ * wants (a counter keeps them unique; the setup file truncates everything
+ * after each test); the seed passes every column it cares about.
  */
 
 let counter = 0;
 const next = () => ++counter;
 
-export async function insertUser(fields: {
-	role?: string | null;
-	slackUserId?: string | null;
-	name?: string;
-	email?: string;
-}) {
+/** Drops `undefined` so a caller's partial row never overwrites a default. */
+function given<T extends object>(fields: T): Partial<T> {
+	return Object.fromEntries(
+		Object.entries(fields).filter(([, value]) => value !== undefined),
+	) as Partial<T>;
+}
+
+export async function insertUser(
+	fields: Partial<typeof user.$inferInsert> = {},
+) {
 	const n = next();
 	const [row] = await db()
 		.insert(user)
 		.values({
 			id: `user-${n}`,
-			name: fields.name ?? `User ${n}`,
-			email: fields.email ?? `user-${n}@example.test`,
-			role: fields.role ?? null,
-			slackUserId: fields.slackUserId ?? null,
+			name: `User ${n}`,
+			email: `user-${n}@example.test`,
+			role: null,
+			slackUserId: null,
+			...given(fields),
 		})
 		.returning({ id: user.id });
 	return row;
 }
 
-export async function insertApplication(fields: {
-	status?: ApplicationStatus;
-	name?: string;
-	email?: string;
-	inviteId?: string | null;
-	/** Defaults to whether there is an Invite, as the join action sets it. */
-	isPriority?: boolean;
-}) {
+export async function insertApplication(
+	fields: Partial<typeof membershipApplication.$inferInsert> = {},
+) {
 	const n = next();
 	const [row] = await db()
 		.insert(membershipApplication)
 		.values({
-			name: fields.name ?? `Applicant ${n}`,
-			email: fields.email ?? `applicant-${n}@example.test`,
-			status: fields.status ?? 'waitlisted',
+			name: `Applicant ${n}`,
+			email: `applicant-${n}@example.test`,
+			status: 'waitlisted',
 			source: fields.inviteId ? 'volunteer_invite' : 'waitlist_signup',
-			isPriority: fields.isPriority ?? Boolean(fields.inviteId),
-			inviteId: fields.inviteId ?? null,
+			// Defaults to whether there is an Invite, as the join action sets it.
+			isPriority: Boolean(fields.inviteId),
+			inviteId: null,
 			waitlistedAt: new Date(),
+			...given(fields),
 		})
 		.returning({ id: membershipApplication.id });
 	return row;
+}
+
+export async function applicationEventRow(
+	fields: typeof applicationEvent.$inferInsert,
+) {
+	await db().insert(applicationEvent).values(fields);
 }
 
 export async function applicationRow(id: string) {
@@ -87,43 +100,33 @@ export async function applicationEvents(applicationId: string) {
 		.orderBy(applicationEvent.createdAt);
 }
 
-export async function insertVolunteer(fields: {
-	slackUserId: string;
-	active?: boolean;
-	userId?: string | null;
-	email?: string | null;
-	name?: string;
-}) {
+export async function insertVolunteer(
+	fields: { slackUserId: string; active?: boolean; name?: string } & Partial<
+		typeof volunteer.$inferInsert
+	>,
+) {
+	const { active, name, ...rest } = fields;
 	const [row] = await db()
 		.insert(volunteer)
 		.values({
 			slackUserId: fields.slackUserId,
-			slackDisplayName: fields.name ?? `Volunteer ${fields.slackUserId}`,
+			slackDisplayName: name ?? `Volunteer ${fields.slackUserId}`,
 			slackHandle: fields.slackUserId.toLowerCase(),
-			userId: fields.userId ?? null,
-			email: fields.email ?? null,
-			deactivatedAt: fields.active === false ? new Date() : null,
+			userId: null,
+			email: null,
+			deactivatedAt: active === false ? new Date() : null,
+			...given(rest),
 		})
 		.returning({ id: volunteer.id });
 	return row;
 }
 
-export async function ledgerRow(fields: {
-	slackUserId: string;
-	delta: number;
-	reason: VolunteerLedgerReason;
-	periodKey?: string;
-	inviteId?: string;
-}) {
-	await db()
-		.insert(volunteerInviteLedger)
-		.values({
-			slackUserId: fields.slackUserId,
-			delta: fields.delta,
-			reason: fields.reason,
-			periodKey: fields.periodKey ?? null,
-			inviteId: fields.inviteId ?? null,
-		});
+export async function ledgerRow(
+	fields: {
+		reason: VolunteerLedgerReason;
+	} & typeof volunteerInviteLedger.$inferInsert,
+) {
+	await db().insert(volunteerInviteLedger).values(fields);
 }
 
 export async function ledgerFor(slackUserId: string) {
@@ -139,33 +142,47 @@ export async function ledgerFor(slackUserId: string) {
 		.orderBy(volunteerInviteLedger.createdAt);
 }
 
-/** A pending Invite with a live Claim Link; returns the plaintext token too. */
-export async function insertInvite(fields: {
-	inviterSlackUserId: string;
-	inviterName?: string;
-	inviterUserId?: string | null;
-	inviteeEmail?: string;
-	token?: string;
-	expiresAt?: Date | null;
-	status?: 'pending' | 'accepted' | 'completed' | 'expired' | 'cancelled';
-}) {
+type InviteFields = Omit<
+	Partial<typeof invite.$inferInsert>,
+	'tokenHash' | 'tokenExpiresAt'
+> & { expiresAt?: Date | null };
+
+/**
+ * A pending Invite with a live Claim Link; returns the plaintext token too.
+ * `token: null` seeds one whose link is gone (claimed, cancelled or swept).
+ */
+export async function insertInvite(
+	fields: InviteFields & { token?: string },
+): Promise<{ id: string; token: string }>;
+export async function insertInvite(
+	fields: InviteFields & { token: null },
+): Promise<{ id: string; token: null }>;
+export async function insertInvite(
+	fields: InviteFields & { token?: string | null },
+): Promise<{ id: string; token: string | null }>;
+export async function insertInvite(
+	fields: InviteFields & { token?: string | null },
+) {
 	const n = next();
-	const token = fields.token ?? `claim-${n}`;
+	const { token: givenToken, expiresAt, ...rest } = fields;
+	const token = givenToken === undefined ? `claim-${n}` : givenToken;
 	const [row] = await db()
 		.insert(invite)
 		.values({
-			inviterSlackUserId: fields.inviterSlackUserId,
-			inviterName: fields.inviterName ?? 'Grace',
-			inviterUserId: fields.inviterUserId ?? null,
+			inviterName: 'Grace',
+			inviterUserId: null,
 			inviteeName: 'Ada',
 			// Unique per row: one live Claim Link per email is enforced.
-			inviteeEmail: fields.inviteeEmail ?? `ada-${n}@example.test`,
-			status: fields.status ?? 'pending',
-			tokenHash: hashClaimToken(token),
+			inviteeEmail: `ada-${n}@example.test`,
+			status: 'pending',
+			tokenHash: token === null ? null : hashClaimToken(token),
 			tokenExpiresAt:
-				fields.expiresAt === undefined
-					? new Date(Date.now() + 24 * 60 * 60 * 1000)
-					: fields.expiresAt,
+				token === null
+					? null
+					: expiresAt === undefined
+						? new Date(Date.now() + 24 * 60 * 60 * 1000)
+						: expiresAt,
+			...given(rest),
 		})
 		.returning({ id: invite.id });
 	return { id: row.id, token };
@@ -176,20 +193,91 @@ export async function inviteRow(id: string) {
 	return row;
 }
 
-export async function insertPendingGrant(fields: {
-	slackUserId: string;
-	role: string;
-	grantedBy?: string;
-}) {
+/** A Slack invite token for an approved application; returns the plaintext. */
+export async function insertInviteToken(
+	fields: { applicationId: string; token?: string } & Omit<
+		Partial<typeof inviteToken.$inferInsert>,
+		'tokenHash'
+	>,
+) {
+	const { token: givenToken, ...rest } = fields;
+	const token = givenToken ?? `slack-${next()}`;
+	const [row] = await db()
+		.insert(inviteToken)
+		.values({
+			applicationId: fields.applicationId,
+			purpose: 'slack',
+			expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+			...given(rest),
+			tokenHash: hashToken(token),
+		})
+		.returning({ id: inviteToken.id });
+	return { id: row.id, token };
+}
+
+export async function insertPendingGrant(
+	fields: { slackUserId: string; role: string } & Partial<
+		typeof pendingGrant.$inferInsert
+	>,
+) {
 	const [row] = await db()
 		.insert(pendingGrant)
 		.values({
 			slackUserId: fields.slackUserId,
-			slackDisplayName: `Member ${fields.slackUserId}`,
 			role: fields.role,
-			grantedBy: fields.grantedBy ?? 'user-admin',
+			slackDisplayName: `Member ${fields.slackUserId}`,
+			grantedBy: 'user-admin',
+			...given(fields),
 		})
 		.returning({ id: pendingGrant.id });
+	return row;
+}
+
+/**
+ * Register a user with the devtools panel so "switch user" offers it. The
+ * library has no API for this outside its own endpoints, so the row is
+ * written directly; `email` is unique and follows the pattern the panel
+ * itself generates (`<templateKey>+<suffix>@test.local`).
+ */
+export async function insertDevtoolsUser(fields: {
+	userId: string;
+	templateKey: string;
+	label: string;
+	email?: string;
+	id?: string;
+}) {
+	const now = new Date();
+	await db()
+		.insert(devtoolsUser)
+		.values({
+			id: fields.id ?? `devtools-${next()}`,
+			userId: fields.userId,
+			templateKey: fields.templateKey,
+			label: fields.label,
+			email:
+				fields.email ?? `${fields.templateKey}+${fields.userId}@test.local`,
+			createdAt: now,
+			updatedAt: now,
+		});
+}
+
+type SubmissionInsert<K extends SubmissionKind> =
+	(typeof SUBMISSION_KINDS)[K]['table']['$inferInsert'];
+
+/**
+ * One row of any Submission kind. `insert()` does not take a union of tables,
+ * so the call is typed as the CoC table and `values` is checked against the
+ * real kind.
+ */
+export async function insertSubmission<K extends SubmissionKind>(
+	kind: K,
+	values: SubmissionInsert<K>,
+) {
+	const table = SUBMISSION_KINDS[kind].table as typeof cocReport;
+	const [row] = await db()
+		.insert(table)
+		.values(values as typeof cocReport.$inferInsert)
+		.returning({ id: table.id });
 	return row;
 }
 
