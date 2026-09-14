@@ -39,6 +39,11 @@ declare namespace NodeJS {
 		// unless this is the literal `true`.
 		EMAIL_REDIRECT_TO?: string;
 		NOTIFY_LIVE_OUTSIDE_PRODUCTION?: string;
+		// Or captured unless sent to a local-only SMTP sink such as Mailpit —
+		// no Google credentials read, addressed exactly as production would.
+		// Takes SMTP_PORT (default 1025); EMAIL_REDIRECT_TO wins if both are set.
+		SMTP_HOST?: string;
+		SMTP_PORT?: string;
 		// Set by `pnpm email:dev` only: where the templates' images load from
 		// while the preview server, not production, is serving them.
 		EMAIL_ASSET_ORIGIN?: string;

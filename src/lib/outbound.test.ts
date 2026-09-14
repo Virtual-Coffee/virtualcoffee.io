@@ -59,6 +59,42 @@ describe('emailDelivery', () => {
 		expect(warn).toHaveBeenCalledOnce();
 		warn.mockRestore();
 	});
+
+	test('SMTP_HOST is local outside production', () => {
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		expect(emailDelivery()).toEqual({ mode: 'local', context: 'dev' });
+	});
+
+	test('EMAIL_REDIRECT_TO wins over SMTP_HOST when both are set', () => {
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		expect(emailDelivery()).toEqual({
+			mode: 'redirected',
+			context: 'dev',
+			redirectTo: 'maintainer@example.test',
+		});
+	});
+
+	test('a malformed EMAIL_REDIRECT_TO still falls through to SMTP_HOST', () => {
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv(
+			'EMAIL_REDIRECT_TO',
+			'maintainer@example.test, other@example.test',
+		);
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+		expect(emailDelivery()).toEqual({ mode: 'local', context: 'dev' });
+		warn.mockRestore();
+	});
+
+	test('SMTP_HOST is ignored in production', () => {
+		vi.stubEnv('CONTEXT', 'production');
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		expect(emailDelivery()).toEqual({ mode: 'live' });
+	});
 });
 
 describe('notifyDelivery', () => {
