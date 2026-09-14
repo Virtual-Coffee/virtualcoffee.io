@@ -1,6 +1,6 @@
 import { requirePermission } from '@/lib/adminAccess';
 
-import { EventsBreadcrumb } from '../../breadcrumb';
+import { Breadcrumb } from '../../../presentation';
 import { SeriesForm } from '../../seriesForm';
 
 export const dynamic = 'force-dynamic';
@@ -14,7 +14,10 @@ export default async function NewSeriesPage() {
 	await requirePermission('events', 'manage');
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
-			<EventsBreadcrumb current="New Series" />
+			<Breadcrumb
+				parent={{ href: '/admin/events', label: 'Events' }}
+				current="New Series"
+			/>
 			<h1 className="h4 mb-3">New Series</h1>
 			<div className="col-lg-7">
 				<SeriesForm />
