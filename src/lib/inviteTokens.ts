@@ -15,39 +15,65 @@ import { hashToken, newToken } from '@/lib/tokens';
 const TOKEN_TTL_DAYS = 30;
 
 /**
- * Mint a Slack invite token, superseding any still-live one for the same
- * application. One working link at a time: a re-send is for a link that was
- * lost, and a lost link is one somebody else may be holding — for up to 30
- * days, if it were left to expire on its own. The old link then reads as
+ * Mint a Slack invite token. By default it supersedes any still-live one for
+ * the same application — one working link at a time: a re-send is for a link
+ * that was lost, and a lost link is one somebody else may be holding, for up
+ * to 30 days if it were left to expire on its own. The old link then reads as
  * expired on /join-slack, which is also what it is.
+ *
+ * Approval passes `supersede: false`. Two maintainers approving the same
+ * person at once each mint before the status change decides who won, and the
+ * loser must not have killed the winner's link on the way in; the loser
+ * expires its own with `expireSlackInviteToken` instead.
  */
 export async function createSlackInviteToken(
 	applicationId: string,
-): Promise<{ token: string; expiresAt: Date }> {
+	{ supersede = true }: { supersede?: boolean } = {},
+): Promise<{ id: string; token: string; expiresAt: Date }> {
 	const { token, expiresAt } = newToken(TOKEN_TTL_DAYS);
 	const now = new Date();
 
-	await db().transaction(async (tx) => {
-		await expireSlackInviteTokens(applicationId, now, tx);
+	const id = await db().transaction(async (tx) => {
+		if (supersede) await expireSlackInviteTokens(applicationId, now, tx);
 
-		await tx.insert(inviteToken).values({
-			applicationId,
-			purpose: 'slack',
-			tokenHash: hashToken(token),
-			expiresAt,
-		});
+		const [row] = await tx
+			.insert(inviteToken)
+			.values({
+				applicationId,
+				purpose: 'slack',
+				tokenHash: hashToken(token),
+				expiresAt,
+			})
+			.returning({ id: inviteToken.id });
+		return row.id;
 	});
 
-	return { token, expiresAt };
+	return { id, token, expiresAt };
 }
 
 /**
- * Expire every live Slack token for an application, as of `now`. Minting
- * calls this to supersede; approval calls it when the status change lost a
- * race after the invite email had already gone, so the link in that email
- * stops working rather than admitting someone the panel no longer shows as
- * approved.
+ * Expire one token, by id, as of `now`: an approval that lost the race after
+ * its invite email had gone kills the link in that email, and only that one,
+ * so it stops admitting someone the panel no longer shows as approved while
+ * the winning approval's link keeps working.
  */
+export async function expireSlackInviteToken(
+	id: string,
+	now: Date,
+): Promise<void> {
+	await db()
+		.update(inviteToken)
+		.set({ expiresAt: now })
+		.where(
+			and(
+				eq(inviteToken.id, id),
+				isNull(inviteToken.usedAt),
+				gt(inviteToken.expiresAt, now),
+			),
+		);
+}
+
+/** Expire every live Slack token for an application, as of `now` — the supersession. */
 export async function expireSlackInviteTokens(
 	applicationId: string,
 	now: Date,
