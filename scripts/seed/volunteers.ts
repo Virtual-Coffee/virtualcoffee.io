@@ -1,10 +1,17 @@
 import type { InviteStatus } from '@/db';
-import { insertInvite, insertVolunteer, ledgerRow } from '@/test/db/fixtures';
+import { serialiseRoles } from '@/lib/permissions';
+import {
+	insertInvite,
+	insertPendingGrant,
+	insertVolunteer,
+	ledgerRow,
+} from '@/test/db/fixtures';
 
 import {
 	ADMIN,
 	CLAIM_TOKEN,
 	FORMER_VOLUNTEER_SLACK_ID,
+	NEW_VOLUNTEER,
 	VOLUNTEER,
 	daysAgo,
 	daysAhead,
@@ -75,7 +82,8 @@ const INVITE_SEEDS: {
  * The balance is not stored anywhere — it is the sum of the ledger — so seeding
  * it means seeding the movements that produce it. This adds up to 2 for the dev
  * bypass Volunteer (six imported, one accrued, seven spent, two given back) and
- * 6 for the Volunteer-only user (three imported, two granted, one accrued).
+ * 6 for the Volunteer-only user (three imported, two granted, one accrued). The
+ * not-yet-signed-in Volunteer holds only this month's accrual, 1.
  *
  * Returns the Invite id for each claimed invitee email, for the applications.
  */
@@ -98,6 +106,23 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 		roleLabels: 'Lunch & Learn Team',
 		email: VOLUNTEER.email,
 		userId: VOLUNTEER.id,
+	});
+	// What /admin/volunteers writes for someone who has never signed in: the
+	// roster row and a Pending Grant, no `userId` until the claim.
+	await insertVolunteer({
+		slackUserId: NEW_VOLUNTEER.slackUserId,
+		name: NEW_VOLUNTEER.name,
+		slackHandle: NEW_VOLUNTEER.slackHandle,
+		roleLabels: 'Notetaker',
+		email: NEW_VOLUNTEER.email,
+	});
+	await insertPendingGrant({
+		slackUserId: NEW_VOLUNTEER.slackUserId,
+		slackDisplayName: NEW_VOLUNTEER.name,
+		slackHandle: NEW_VOLUNTEER.slackHandle,
+		role: serialiseRoles(['volunteer']),
+		grantedBy: ADMIN.name,
+		grantedAt: daysAgo(3),
 	});
 	await insertVolunteer({
 		slackUserId: FORMER_VOLUNTEER_SLACK_ID,
@@ -139,6 +164,12 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 	});
 	await ledgerRow({
 		slackUserId: VOLUNTEER.slackUserId,
+		delta: 1,
+		reason: 'monthly_accrual',
+		periodKey: period,
+	});
+	await ledgerRow({
+		slackUserId: NEW_VOLUNTEER.slackUserId,
 		delta: 1,
 		reason: 'monthly_accrual',
 		periodKey: period,

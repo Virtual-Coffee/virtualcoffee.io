@@ -3,12 +3,18 @@ import { PgTable, isPgEnum, type PgEnum } from 'drizzle-orm/pg-core';
 import { describe, expect, test } from 'vitest';
 
 import * as schema from '@/db/schema';
-import { db, devtoolsUser, volunteer, volunteerInviteLedger } from '@/db';
+import {
+	db,
+	devtoolsUser,
+	pendingGrant,
+	volunteer,
+	volunteerInviteLedger,
+} from '@/db';
 import { inviteForClaimToken, volunteerBalance } from '@/lib/invites';
 import { slackInviteForToken } from '@/lib/inviteTokens';
 
 import { seedDev } from './seed';
-import { ATTACHMENT } from './seed/shared';
+import { ATTACHMENT, NEW_VOLUNTEER } from './seed/shared';
 
 /**
  * The seed's promise is coverage: every status, reason and event type the
@@ -194,6 +200,23 @@ describe('seedDev', () => {
 			);
 		expect(roster).toBeDefined();
 		expect(await volunteerBalance(roster.slackUserId)).toBeGreaterThan(0);
+	});
+
+	test('a Volunteer who has not signed in has a roster row and an unclaimed grant', async () => {
+		await seedDev({ attachmentStore: null });
+
+		const [roster] = await db()
+			.select({ userId: volunteer.userId })
+			.from(volunteer)
+			.where(eq(volunteer.slackUserId, NEW_VOLUNTEER.slackUserId));
+		expect(roster).toEqual({ userId: null });
+
+		const grants = await db()
+			.select({ role: pendingGrant.role, claimedAt: pendingGrant.claimedAt })
+			.from(pendingGrant)
+			.where(eq(pendingGrant.slackUserId, NEW_VOLUNTEER.slackUserId));
+		expect(grants).toEqual([{ role: 'volunteer', claimedAt: null }]);
+		expect(await volunteerBalance(NEW_VOLUNTEER.slackUserId)).toBe(1);
 	});
 
 	test('a second run reproduces the same rows and references', async () => {
