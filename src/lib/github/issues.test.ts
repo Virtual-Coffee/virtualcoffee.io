@@ -137,7 +137,6 @@ describe('createLunchAndLearnIssue', () => {
 			].join('\n'),
 			labels: ['Lunch & Learn'],
 			assignees: ['shelleymcq', 'meg-gutshall'],
-			request: { signal: expect.any(AbortSignal) },
 		});
 	});
 
@@ -148,7 +147,6 @@ describe('createLunchAndLearnIssue', () => {
 		expect(octokit.getRepoInstallation).toHaveBeenCalledWith({
 			owner: 'Virtual-Coffee',
 			repo: 'VC-Community-Docs',
-			request: { signal: expect.any(AbortSignal) },
 		});
 		// `appId` is what `createAppAuth` checks for; it throws without it.
 		expect(octokit.constructed[0]).toMatchObject({
@@ -163,6 +161,32 @@ describe('createLunchAndLearnIssue', () => {
 				permissions: { issues: 'write' },
 			},
 		});
+	});
+
+	test("every request is time-limited through the clients' fetch, a fresh signal each", async () => {
+		const fetch = vi.fn().mockResolvedValue(new Response('{}'));
+		vi.stubGlobal('fetch', fetch);
+		const { createLunchAndLearnIssue } = await load();
+		await createLunchAndLearnIssue(idea);
+
+		// Both clients, so the auth hook's token exchange is covered on each.
+		const clients = octokit.constructed as {
+			request: { fetch: typeof fetch };
+		}[];
+		expect(clients).toHaveLength(2);
+		for (const client of clients) {
+			await client.request.fetch('https://api.github.com/a', {
+				method: 'POST',
+			});
+			await client.request.fetch('https://api.github.com/b');
+		}
+
+		const signals = fetch.mock.calls.map(([, init]) => init.signal);
+		expect(signals).toHaveLength(4);
+		expect(signals.every((s) => s instanceof AbortSignal)).toBe(true);
+		expect(new Set(signals).size).toBe(4);
+		expect(fetch.mock.calls[0][1]).toMatchObject({ method: 'POST' });
+		vi.unstubAllGlobals();
 	});
 
 	test('the client is reused across calls, and dropped after a failure', async () => {
