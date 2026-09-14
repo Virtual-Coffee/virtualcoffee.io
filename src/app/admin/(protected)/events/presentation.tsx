@@ -24,15 +24,20 @@ export function eventWhen(start: string, end: string): string {
 	return `${eventDate(start)} · ${eventTime(start, end)}`;
 }
 
-/** The same, stacked: the date, the time as subtext. */
+/**
+ * The same, stacked: the date, the time as subtext, and where the Event was
+ * moved from when `originalStart` is given.
+ */
 export function EventWhen({
 	start,
 	end,
 	struck,
+	originalStart,
 }: {
 	start: string;
 	end: string;
 	struck?: boolean;
+	originalStart?: string | null;
 }) {
 	const Text = struck ? 's' : 'span';
 	return (
@@ -41,6 +46,11 @@ export function EventWhen({
 			<div className="small text-body-secondary">
 				<Text>{eventTime(start, end)}</Text>
 			</div>
+			{originalStart && (
+				<div className="small text-body-secondary">
+					Was {eventDate(originalStart)} · {dateForDisplay(originalStart, 't')}
+				</div>
+			)}
 		</>
 	);
 }
