@@ -1,5 +1,10 @@
 import { APPLICATION_COUNT, seedApplications } from './applications';
-import { SEED_PNG, writeAttachment, type AttachmentStore } from './attachment';
+import {
+	FALLBACK_PNG,
+	writeAttachment,
+	type AttachmentBytes,
+	type AttachmentStore,
+} from './attachment';
 import { reset } from './reset';
 import { CLAIM_TOKEN } from './shared';
 import { SUBMISSION_COUNT, seedSubmissions } from './submissions';
@@ -27,16 +32,19 @@ export type SeedReport = {
  */
 export async function seedDev({
 	attachmentStore,
+	attachment = FALLBACK_PNG,
 }: {
 	/** Where the CoC attachment goes; `null` leaves the row pointing at nothing. */
 	attachmentStore: AttachmentStore | null;
+	/** The file itself; the CLI fetches a placeholder image. */
+	attachment?: AttachmentBytes;
 }): Promise<SeedReport> {
 	await reset();
 	await seedUsers();
 	const invitesByEmail = await seedVolunteers();
 	const { slackToken } = await seedApplications(invitesByEmail);
-	await seedSubmissions(SEED_PNG.byteLength);
-	if (attachmentStore) await writeAttachment(attachmentStore);
+	await seedSubmissions(attachment.byteLength);
+	if (attachmentStore) await writeAttachment(attachmentStore, attachment);
 
 	return {
 		claimToken: CLAIM_TOKEN,

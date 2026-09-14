@@ -4,6 +4,7 @@ import { ATTACHMENT_STORE } from '@/lib/attachments';
 import { siteUrl } from '@/util/url.server';
 
 import { seedDev } from './seed';
+import { fetchPlaceholder } from './seed/attachment';
 
 /**
  * Seed the local development database — `pnpm db:seed`, which runs this
@@ -34,7 +35,10 @@ async function main() {
 		);
 	}
 
-	const report = await seedDev({ attachmentStore });
+	const report = await seedDev({
+		attachmentStore,
+		attachment: attachmentStore ? await fetchPlaceholder() : undefined,
+	});
 
 	console.log(
 		`Seeded ${report.applications} membership applications, 3 volunteers, 7 invites, ` +
