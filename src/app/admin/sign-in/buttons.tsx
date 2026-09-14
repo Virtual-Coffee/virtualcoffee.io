@@ -12,8 +12,10 @@ import { signIn, signOut } from '@/lib/auth-client';
  */
 export function SignInButton({
 	callbackURL = '/admin',
+	teamId,
 }: {
 	callbackURL?: string;
+	teamId?: string;
 }) {
 	const [pending, setPending] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -35,6 +37,9 @@ export function SignInButton({
 					const result = await signIn.social({
 						provider: 'slack',
 						callbackURL,
+						// Slack's workspace picker otherwise shows before login;
+						// `team` sends the user straight to this workspace's sign-in.
+						...(teamId && { additionalParams: { team: teamId } }),
 					});
 					if (result?.error) {
 						// Most likely cause is a Slack account outside the Virtual Coffee
