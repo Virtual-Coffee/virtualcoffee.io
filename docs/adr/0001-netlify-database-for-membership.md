@@ -12,8 +12,8 @@ touching production data.
 **Netlify Database** (Postgres). `@netlify/database` provisions it
 automatically and gives every deploy preview an isolated branch forked from
 production, so there are no connection strings to manage and no separate
-dashboard. Because that fork carries real data, every preview branch is
-sanitized before it publishes (0007).
+dashboard. That fork carries real data, so a preview's `/admin` is behind the
+same Slack sign-in and roles as production (0007).
 
 **The ORM is Drizzle v1**, pinned to an exact release candidate rather than the
 `0.45` line npm tags `latest`. Netlify's own Drizzle guide says to install
@@ -38,19 +38,18 @@ reviewable diff.
 `drizzle/<YYYYMMDDHHmmss>_<slug>/migration.sql` plus the `snapshot.json` the
 next `generate` diffs against — both committed, neither hand-edited. The
 Netlify build runs `pnpm db:migrate:deploy` (`drizzle-kit migrate`) after
-`next build` and before the preview sanitizer, on every deploy context; locally
-`pnpm db:migrate` does the same through `scripts/with-local-netlify.ts`, and the
-`db` test project applies the same folders with drizzle's migrator. The ledger
-is `drizzle.__drizzle_migrations`.
+`next build`, on every deploy context; locally `pnpm db:migrate` does the same
+through `scripts/with-local-netlify.ts`, and the `db` test project applies the
+same folders with drizzle's migrator. The ledger is
+`drizzle.__drizzle_migrations`.
 
 Netlify's own migration step (anything under `netlify/database/migrations/`)
-is deliberately not used. It runs _after_ the build command, which is too late
-for the sanitizer: on a fresh branch the sanitizer would see production's
-schema and either miss new tables or fail on them. Netlify's docs support
-choosing your own migration system and applying it in the build command, and
-the constraint is the same either way: production has no publish hook, so a
-migration runs while the previous deploy is still live and must be
-backwards-compatible with it.
+is deliberately not used: it would be a second applier over the same folders,
+running after the build command under Netlify's rules rather than drizzle's,
+with its own ledger. Netlify's docs support choosing your own migration system
+and applying it in the build command, and the constraint is the same either
+way: production has no publish hook, so a migration runs while the previous
+deploy is still live and must be backwards-compatible with it.
 
 ## Considered options
 
