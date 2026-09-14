@@ -13,7 +13,7 @@ const SLACK_TEAM_ID_CLAIM = 'https://slack.com/team_id';
 
 const slackClientId = process.env.SLACK_CLIENT_ID;
 const slackClientSecret = process.env.SLACK_CLIENT_SECRET;
-const slackTeamId = process.env.SLACK_TEAM_ID;
+export const slackTeamId = process.env.SLACK_TEAM_ID;
 
 /**
  * Whether Slack sign-in can work at all. False on a fresh clone, where the
