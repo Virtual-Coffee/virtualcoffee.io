@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { requirePermission } from '@/lib/adminAccess';
 import { connectEventsCalendar, isCalendarEventId } from '@/lib/eventsCalendar';
 
-import { EventsBreadcrumb } from '../../breadcrumb';
+import { Breadcrumb } from '../../../presentation';
 import { EndSeriesSection } from '../../endSeriesSection';
 import { NotConfigured } from '../../presentation';
 import { SeriesChangedEvents } from '../../seriesChangedEvents';
@@ -29,7 +29,10 @@ export default async function EditSeriesPage({
 	if (!calendar) {
 		return (
 			<div className="container-fluid px-3 px-lg-4 py-4">
-				<EventsBreadcrumb current="Series" />
+				<Breadcrumb
+					parent={{ href: '/admin/events', label: 'Events' }}
+					current="Series"
+				/>
 				<NotConfigured />
 			</div>
 		);
@@ -45,7 +48,10 @@ export default async function EditSeriesPage({
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
-			<EventsBreadcrumb current={series.title} />
+			<Breadcrumb
+				parent={{ href: '/admin/events', label: 'Events' }}
+				current={series.title}
+			/>
 			<div className="d-flex flex-wrap align-items-center gap-3 mb-3">
 				<h1 className="h4 mb-0">{series.title}</h1>
 				{series.htmlLink && (
