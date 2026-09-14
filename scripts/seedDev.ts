@@ -41,8 +41,8 @@ async function main() {
 	});
 
 	console.log(
-		`Seeded ${report.applications} membership applications, 3 volunteers, 7 invites, ` +
-			`${report.submissions} submissions across 4 kinds, 4 users and 3 pending grants.\n\n` +
+		`Seeded ${report.applications} membership applications, 4 volunteers, 7 invites, ` +
+			`${report.submissions} submissions across 4 kinds, 4 users and 4 pending grants.\n\n` +
 			`Claim an Invite:   ${siteUrl()}/join?invite=${report.claimToken}\n` +
 			`Join Slack:        ${siteUrl()}/join-slack?code=${report.slackToken}`,
 	);
