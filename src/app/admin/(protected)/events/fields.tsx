@@ -1,8 +1,10 @@
 'use client';
 
+import type { TimeInput } from '@/lib/eventsCalendar';
+
 /** The admin-styled controls the three Events forms share. */
 
-export type TimeDraft = { date: string; startTime: string; endTime: string };
+export type { TimeInput };
 
 export function TextField({
 	id,
@@ -193,8 +195,8 @@ export function TimeFields({
 }: {
 	id: string;
 	dateLabel: string;
-	draft: TimeDraft;
-	onChange: (draft: TimeDraft) => void;
+	draft: TimeInput;
+	onChange: (draft: TimeInput) => void;
 }) {
 	return (
 		<div className="row g-2 mb-3">

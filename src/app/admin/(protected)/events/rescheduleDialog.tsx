@@ -1,22 +1,21 @@
 'use client';
 
 import { useId, useState } from 'react';
-import { DateTime } from 'luxon';
 
 import { AdminDialog } from '@/components/AdminDialog';
 import type { AdminEvent } from '@/lib/eventsCalendar';
-import { DISPLAY_ZONE } from '@/util/date';
+import { displayParts } from '@/util/date';
 import { useModalDialog } from '@/util/useModalDialog';
 
-import { TimeFields, type TimeDraft } from './fields';
+import { TimeFields, type TimeInput } from './fields';
 
-function draftFrom(event: AdminEvent): TimeDraft {
-	const start = DateTime.fromISO(event.start).setZone(DISPLAY_ZONE);
-	const end = DateTime.fromISO(event.end).setZone(DISPLAY_ZONE);
+function draftFrom(event: AdminEvent): TimeInput {
+	const start = displayParts(event.start);
+	const end = displayParts(event.end);
 	return {
-		date: start.toISODate() ?? '',
-		startTime: start.toFormat('HH:mm'),
-		endTime: end.toFormat('HH:mm'),
+		date: start?.date ?? '',
+		startTime: start?.time ?? '',
+		endTime: end?.time ?? '',
 	};
 }
 
@@ -32,10 +31,10 @@ export function RescheduleDialog({
 	open: boolean;
 	pending: boolean;
 	onCancel: () => void;
-	onConfirm: (when: TimeDraft) => void;
+	onConfirm: (when: TimeInput) => void;
 }) {
 	const id = useId();
-	const [when, setWhen] = useState<TimeDraft>(() => draftFrom(event));
+	const [when, setWhen] = useState<TimeInput>(() => draftFrom(event));
 	const dialog = useModalDialog(
 		open,
 		() => {

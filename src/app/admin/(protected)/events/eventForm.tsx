@@ -7,7 +7,7 @@ import { useAction } from '@/util/forms/useAction';
 
 import { createEvent } from './actions';
 import { DescriptionField } from './descriptionField';
-import { HostCodeField, TextField, TimeFields, type TimeDraft } from './fields';
+import { HostCodeField, TextField, TimeFields, type TimeInput } from './fields';
 
 /** A one-off Event: everything a Series has except the rule. */
 export function EventForm() {
@@ -18,7 +18,7 @@ export function EventForm() {
 	const [joinLink, setJoinLink] = useState('');
 	const [hostCode, setHostCode] = useState('');
 	const [description, setDescription] = useState('');
-	const [when, setWhen] = useState<TimeDraft>({
+	const [when, setWhen] = useState<TimeInput>({
 		date: '',
 		startTime: '09:00',
 		endTime: '10:00',

@@ -96,3 +96,16 @@ export function dateForDisplay(
 		.setZone(DISPLAY_ZONE)
 		.toFormat(format, resolvedOptions) as FormattedDate;
 }
+
+/**
+ * An instant as the display-zone `date` and `HH:mm` the Events forms edit —
+ * what `/admin/events` reads off a calendar Event and hands back to it.
+ */
+export function displayParts(
+	iso: string,
+): { date: string; time: string } | null {
+	const at = DateTime.fromISO(iso).setZone(DISPLAY_ZONE);
+	return at.isValid
+		? { date: at.toISODate(), time: at.toFormat('HH:mm') }
+		: null;
+}
