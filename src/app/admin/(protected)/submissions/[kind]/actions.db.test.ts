@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { cocReport, db, submissionEvent } from '@/db';
 import { failInserts } from '@/test/db/fixtures';
+import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 
 /** Stages a read that is stale by the time the action writes. */
@@ -34,6 +35,41 @@ async function insertCocReport() {
 	return row.id;
 }
 
+describe('authorisation is per kind', () => {
+	test('an unknown kind is refused before any permission check', async () => {
+		// No session at all: reaching requirePermission() would redirect.
+		await expect(setSubmissionStatus('nope', 'x', 'new')).resolves.toEqual({
+			ok: false,
+			message: 'Unknown submission type.',
+		});
+		await expect(addSubmissionNote('nope', 'x', 'hi')).resolves.toEqual({
+			ok: false,
+			message: 'Unknown submission type.',
+		});
+	});
+
+	test('a role for one section 404s on another', async () => {
+		await signInAs('volunteer_coordinator');
+		await expect(
+			setSubmissionStatus('coc', 'x', 'resolved'),
+		).rejects.toMatchObject(NOT_FOUND);
+	});
+
+	test('the status and the id are checked before the database', async () => {
+		await signInAs('coc_reviewer');
+		await expect(setSubmissionStatus('coc', 'x', 'done')).resolves.toEqual({
+			ok: false,
+			message: 'Unknown status.',
+		});
+		await expect(
+			setSubmissionStatus('coc', 'not-an-id', 'resolved'),
+		).resolves.toEqual({
+			ok: false,
+			message: 'That submission no longer exists.',
+		});
+	});
+});
+
 describe('addSubmissionNote', () => {
 	beforeEach(() => signInAs('coc_reviewer'));
 
@@ -61,9 +97,9 @@ describe('addSubmissionNote', () => {
 });
 
 describe('setSubmissionStatus', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		staleRead.readAs = null;
-		signInAs('coc_reviewer');
+		await signInAs('coc_reviewer');
 	});
 
 	test('a status change whose event fails to write is rolled back with it', async () => {

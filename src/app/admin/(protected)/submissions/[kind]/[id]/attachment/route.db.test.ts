@@ -34,8 +34,8 @@ const get = (kind: string, id: string) =>
 	});
 
 describe('GET /admin/submissions/coc/[id]/attachment', () => {
-	beforeEach(() => {
-		signInAs('coc_reviewer');
+	beforeEach(async () => {
+		await signInAs('coc_reviewer');
 		readAttachment.mockReset();
 	});
 
