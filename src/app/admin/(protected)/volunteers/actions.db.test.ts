@@ -18,6 +18,12 @@ import {
 const sendEmail = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/email/transport', () => ({ sendEmail }));
 
+const sendSlackDm = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/slack/dm', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/slack/dm')>()),
+	sendSlackDm,
+}));
+
 /** Runs between resendInvite()'s read and its write, to stage a race. */
 const afterRead = vi.hoisted(() => ({
 	run: null as null | (() => Promise<void>),
@@ -82,6 +88,7 @@ async function grantRole(slackUserId: string) {
 beforeEach(() => {
 	sendEmail.mockReset();
 	sendEmail.mockResolvedValue({ ok: true });
+	sendSlackDm.mockReset().mockResolvedValue({ ok: true, message: 'DM sent.' });
 	vi.stubEnv('URL', 'https://virtualcoffee.io');
 	signInAs('admin');
 });
@@ -125,6 +132,8 @@ describe('addVolunteer', () => {
 			subject: 'You can now invite people to Virtual Coffee',
 			text: expect.stringContaining('https://virtualcoffee.io/invites'),
 		});
+		// Already signed in — nobody left to tell to come claim anything.
+		expect(sendSlackDm).not.toHaveBeenCalled();
 	});
 
 	test('someone who has never signed in gets a Pending Grant, merged into any existing one', async () => {
@@ -147,6 +156,10 @@ describe('addVolunteer', () => {
 			'waitlist_reviewer,volunteer',
 		]);
 		expect(sendEmail).not.toHaveBeenCalled();
+		expect(sendSlackDm).toHaveBeenCalledWith(
+			'U_ADA',
+			expect.stringContaining('Volunteer'),
+		);
 	});
 
 	test('a second add is refused by the unique index, and grants nothing', async () => {
@@ -248,6 +261,8 @@ describe('setVolunteerActive', () => {
 		// A restart is the grant addVolunteer makes: once an account exists it
 		// is the authority, and a leftover grant is not written to as well.
 		await expect(grantRole('U_ADA')).resolves.toEqual(['waitlist_reviewer']);
+		// Already signed in throughout — no DM either time.
+		expect(sendSlackDm).not.toHaveBeenCalled();
 	});
 
 	test('someone whose only role was volunteer is left with the default', async () => {
@@ -275,12 +290,18 @@ describe('setVolunteerActive', () => {
 		await setVolunteerActive(id, false);
 		await expect(grantRole('U_ADA')).resolves.toEqual([]);
 
+		sendSlackDm.mockClear();
 		await expect(setVolunteerActive(id, true)).resolves.toEqual({
 			ok: true,
 			message: 'Volunteering restarted.',
 		});
 		expect((await volunteerRow('U_ADA'))?.deactivatedAt).toBeNull();
 		await expect(grantRole('U_ADA')).resolves.toEqual(['volunteer']);
+		// Still never signed in, so the restart DMs them again.
+		expect(sendSlackDm).toHaveBeenCalledWith(
+			'U_ADA',
+			expect.stringContaining('Volunteer'),
+		);
 	});
 
 	test('a malformed or unknown id is a soft failure, not a 22P02', async () => {

@@ -17,6 +17,7 @@ import { isId } from '@/db/ids';
 import { getSlackMembers } from '@/data/slackMembers';
 import type { ActionResult } from '@/lib/actionResult';
 import { actorId, requirePermission } from '@/lib/adminAccess';
+import { userForSlackId } from '@/lib/admins';
 import {
 	volunteerGrantEmail,
 	volunteerInviteEmail,
@@ -25,6 +26,7 @@ import { sendEmail } from '@/lib/email/transport';
 import { newClaimToken, hashClaimToken } from '@/lib/invites';
 import { grantVolunteerRole, withoutVolunteerRole } from '@/lib/pendingGrants';
 import { parseRoles } from '@/lib/permissions';
+import { grantDmMessage, sendSlackDm } from '@/lib/slack/dm';
 import { COMMUNITY_ROLES, formatRoleLabels } from '@/lib/volunteerRoles';
 import { pendingInvite } from '@/lib/volunteers';
 import { siteUrl } from '@/util/url.server';
@@ -95,6 +97,10 @@ export async function addVolunteer(
 		};
 	}
 
+	// Someone who has already signed in is a Volunteer immediately — nobody
+	// left to tell to come claim anything.
+	const signedIn = await userForSlackId(member.id);
+
 	try {
 		await db().transaction(async (tx) => {
 			await tx.insert(volunteer).values({
@@ -126,6 +132,12 @@ export async function addVolunteer(
 	}
 
 	revalidate();
+
+	// Best-effort, same as the email below: the grant already stands, and a
+	// maintainer can retry it with "Resend DM" in /admin/user-management.
+	if (!signedIn) {
+		await sendSlackDm(member.id, grantDmMessage({ roles: ['volunteer'] }));
+	}
 
 	// Tell them, after the writes and not fatal: they are a Volunteer by now,
 	// and a failed email must not read as a failed grant.
@@ -229,6 +241,10 @@ export async function setVolunteerActive(
 		return { ok: false, message: 'That volunteer no longer exists.' };
 	}
 
+	// Checked before the transaction: whether a restart DMs anyone depends on
+	// whether they have signed in, not on anything the transaction changes.
+	const signedIn = active ? await userForSlackId(row.slackUserId) : null;
+
 	await db().transaction(async (tx) => {
 		await tx
 			.update(volunteer)
@@ -285,6 +301,12 @@ export async function setVolunteerActive(
 			}
 		}
 	});
+
+	// Best-effort, after the transaction commits: the restart already stands,
+	// and a maintainer can retry it with "Resend DM" in /admin/user-management.
+	if (active && !signedIn) {
+		await sendSlackDm(row.slackUserId, grantDmMessage({ roles: ['volunteer'] }));
+	}
 
 	revalidate(volunteerId);
 	return {
