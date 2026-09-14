@@ -1,7 +1,11 @@
 import { describe, expect, test } from 'vitest';
+import { DateTime } from 'luxon';
+
+import { DISPLAY_ZONE } from '@/util/date';
 
 import {
 	describeRecurrence,
+	endRule,
 	endsBeforeStart,
 	firstOccurrenceMatches,
 	parseRecurrence,
@@ -230,5 +234,30 @@ describe('firstOccurrenceMatches', () => {
 
 	test('a malformed date never matches', () => {
 		expect(firstOccurrenceMatches(weekly, 'yesterday')).toBe(false);
+	});
+});
+
+describe('endRule', () => {
+	const now = DateTime.fromISO('2026-09-13T12:00:00', { zone: DISPLAY_ZONE });
+	test.each([
+		[
+			'RRULE:FREQ=WEEKLY;BYDAY=TU',
+			'RRULE:FREQ=WEEKLY;BYDAY=TU;UNTIL=20260913T160000Z',
+		],
+		[
+			'RRULE:FREQ=WEEKLY;BYDAY=TU;UNTIL=20271231T045959Z',
+			'RRULE:FREQ=WEEKLY;BYDAY=TU;UNTIL=20260913T160000Z',
+		],
+		[
+			'RRULE:UNTIL=20271231T045959Z;FREQ=WEEKLY;BYDAY=TU',
+			'RRULE:FREQ=WEEKLY;BYDAY=TU;UNTIL=20260913T160000Z',
+		],
+		[
+			'RRULE:FREQ=WEEKLY;COUNT=10;BYDAY=TU',
+			'RRULE:FREQ=WEEKLY;BYDAY=TU;UNTIL=20260913T160000Z',
+		],
+		['RRULE:COUNT=10;FREQ=WEEKLY', 'RRULE:FREQ=WEEKLY;UNTIL=20260913T160000Z'],
+	])('%s', (line, expected) => {
+		expect(endRule(line, now)).toBe(expected);
 	});
 });
