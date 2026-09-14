@@ -1,16 +1,11 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { SignInButton, SignOutButton } from '@/app/admin/sign-in/buttons';
-import {
-	adminRoutesEnabled,
-	getSession,
-	visibleSections,
-} from '@/lib/adminAccess';
+import { getSession, visibleSections } from '@/lib/adminAccess';
 import { slackAuthConfigured, slackTeamId } from '@/lib/auth';
 import { isVolunteer } from '@/lib/volunteerAccess';
-import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,10 +15,6 @@ export const metadata = {
 };
 
 export default async function AdminSignInPage() {
-	if (!adminRoutesEnabled()) {
-		notFound();
-	}
-
 	const session = await getSession();
 
 	// Holding a permission on any section is enough to get in — a maintainer who
