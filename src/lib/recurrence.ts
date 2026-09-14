@@ -219,11 +219,24 @@ export function parseRecurrence(lines: readonly string[]): Recurrence {
 	return custom();
 }
 
+/** An iCalendar UTC timestamp, as `UNTIL` and `DTSTART` carry it. */
+const ICAL_UTC = "yyyyLLdd'T'HHmmss'Z'";
+
 function untilToken(date: string): string {
 	return DateTime.fromISO(date, { zone: DISPLAY_ZONE })
 		.endOf('day')
 		.toUTC()
-		.toFormat("yyyyLLdd'T'HHmmss'Z'");
+		.toFormat(ICAL_UTC);
+}
+
+/** The rule with its end replaced by `UNTIL=<now>`, whatever shape it has. */
+export function endRule(line: string, now: DateTime): string {
+	const stripped = line
+		.replace(/;UNTIL=[^;]*/g, '')
+		.replace(/;COUNT=[^;]*/g, '')
+		.replace(/RRULE:UNTIL=[^;]*;?/, 'RRULE:')
+		.replace(/RRULE:COUNT=[^;]*;?/, 'RRULE:');
+	return `${stripped};UNTIL=${now.toUTC().toFormat(ICAL_UTC)}`;
 }
 
 /** The `RRULE:` line for Google's `recurrence` array. */
@@ -270,7 +283,7 @@ export function firstOccurrenceMatches(
 	}
 	const dtstart = at.toJSDate();
 	const rule = RRule.fromString(
-		`DTSTART:${at.toFormat("yyyyLLdd'T'HHmmss'Z'")}\n${serializeRecurrence({
+		`DTSTART:${at.toFormat(ICAL_UTC)}\n${serializeRecurrence({
 			...form,
 			ends: { kind: 'never' },
 		})}`,
