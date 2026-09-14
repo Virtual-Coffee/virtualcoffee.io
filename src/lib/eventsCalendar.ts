@@ -13,6 +13,7 @@ import { DISPLAY_ZONE, displayParts } from '@/util/date';
 import { htmlToMarkdown, looksLikeHtml } from '@/util/markdown.server';
 import {
 	describeRecurrence,
+	endRule,
 	parseRecurrence,
 	serializeRecurrence,
 	type Recurrence,
@@ -183,16 +184,6 @@ function fromEventDateTime(
 /** `RRULE` lines aside, a `recurrence` array carries EXDATE/RDATE lines to keep. */
 function withRule(lines: readonly string[] | null | undefined, rule: string) {
 	return [...(lines ?? []).filter((line) => !line.startsWith('RRULE:')), rule];
-}
-
-/** The rule with its end replaced by `UNTIL=<now>`, whatever shape it has. */
-function endedRule(line: string, now: DateTime): string {
-	const stripped = line
-		.replace(/;UNTIL=[^;]*/g, '')
-		.replace(/;COUNT=[^;]*/g, '')
-		.replace(/RRULE:UNTIL=[^;]*;?/, 'RRULE:')
-		.replace(/RRULE:COUNT=[^;]*;?/, 'RRULE:');
-	return `${stripped};UNTIL=${now.toUTC().toFormat("yyyyLLdd'T'HHmmss'Z'")}`;
 }
 
 /**
@@ -535,7 +526,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		);
 		if (!rule) throw new Error(`Series ${id} has no RRULE line`);
 		await patch(id, etag, {
-			recurrence: withRule(existing.recurrence, endedRule(rule, now)),
+			recurrence: withRule(existing.recurrence, endRule(rule, now)),
 		});
 		return 'ended';
 	}
