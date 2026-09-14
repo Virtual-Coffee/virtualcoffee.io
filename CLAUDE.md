@@ -53,7 +53,7 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Generate a DB migration                    | `pnpm db:generate --name=<hyphenated-slug>` (drizzle-kit writes into `drizzle/`)                                                                        |
 | Apply migrations locally                   | `pnpm db:migrate` (needs `netlify dev` running)                                                                                                         |
 | Apply migrations on a deploy               | `pnpm db:migrate:deploy` — what `netlify.toml` runs after `next build`; reads `NETLIFY_DB_URL`                                                          |
-| Seed local sample applications             | `pnpm db:seed` (also seeds Volunteers, ledger rows and Invites)                                                                                         |
+| Seed local sample data                     | `pnpm db:seed` (every table and enum value, a devtools user per role, one CoC attachment; prints a live Claim Link and Slack join link)                 |
 | Run the daily invite upkeep by hand        | `pnpm invite-maintenance` (accrual and expiry; the scheduled function itself answers no requests)                                                       |
 
 `.github/workflows/ci.yml` runs four jobs on every pull request — `format`, `lint`, `typecheck`, `test`. Netlify still owns `pnpm build`; CI does not build. CodeQL (`.github/workflows/codeql.yml`, advanced setup — leave the repository's default-setup toggle off) scans `javascript-typescript` and `actions` on pull requests, pushes to `main` and weekly; its findings go to the Security tab and are not a required check.
