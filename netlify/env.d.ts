@@ -34,14 +34,12 @@ declare namespace NodeJS {
 		// account (the JSON key file, whole) impersonating the user.
 		GOOGLE_SMTP_USER?: string;
 		GMAIL_SERVICE_ACCOUNT_KEY?: string;
-		// Delivery Mode outside production (docs/adr/0013): email is captured
-		// unless redirected to this one address; Slack/GitHub are captured
-		// unless this is the literal `true`.
-		EMAIL_REDIRECT_TO?: string;
+		// Delivery Mode outside production (docs/adr/0013): Slack/GitHub are
+		// captured unless this is the literal `true`.
 		NOTIFY_LIVE_OUTSIDE_PRODUCTION?: string;
-		// Or captured unless sent to a local-only SMTP sink such as Mailpit —
-		// no Google credentials read, addressed exactly as production would.
-		// Takes SMTP_PORT (default 1025); EMAIL_REDIRECT_TO wins if both are set.
+		// Email is captured unless sent to a local-only SMTP sink such as
+		// Mailpit — no Google credentials read, addressed exactly as production
+		// would. Takes SMTP_PORT (default 1025).
 		SMTP_HOST?: string;
 		SMTP_PORT?: string;
 		// Set by `pnpm email:dev` only: where the templates' images load from

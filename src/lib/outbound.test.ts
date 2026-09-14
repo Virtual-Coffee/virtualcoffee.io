@@ -9,7 +9,6 @@ describe('emailDelivery', () => {
 		'CONTEXT=%s is captured',
 		(context) => {
 			vi.stubEnv('CONTEXT', context);
-			vi.stubEnv('EMAIL_REDIRECT_TO', undefined);
 			expect(emailDelivery()).toEqual({
 				mode: 'captured',
 				context: context ?? 'local',
@@ -22,72 +21,10 @@ describe('emailDelivery', () => {
 		expect(emailDelivery()).toEqual({ mode: 'live' });
 	});
 
-	test('EMAIL_REDIRECT_TO redirects outside production', () => {
-		vi.stubEnv('CONTEXT', 'deploy-preview');
-		vi.stubEnv('EMAIL_REDIRECT_TO', ' maintainer@example.test ');
-		expect(emailDelivery()).toEqual({
-			mode: 'redirected',
-			context: 'deploy-preview',
-			redirectTo: 'maintainer@example.test',
-		});
-	});
-
-	test('EMAIL_REDIRECT_TO is ignored in production', () => {
-		vi.stubEnv('CONTEXT', 'production');
-		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
-		expect(emailDelivery()).toEqual({ mode: 'live' });
-	});
-
-	test('a blank EMAIL_REDIRECT_TO is no redirect', () => {
-		vi.stubEnv('CONTEXT', 'dev');
-		vi.stubEnv('EMAIL_REDIRECT_TO', '  ');
-		expect(emailDelivery()).toMatchObject({ mode: 'captured' });
-	});
-
-	test('a multi-address EMAIL_REDIRECT_TO is captured, not redirected', () => {
-		vi.stubEnv('CONTEXT', 'deploy-preview');
-		vi.stubEnv(
-			'EMAIL_REDIRECT_TO',
-			'maintainer@example.test, other@example.test',
-		);
-		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-		expect(emailDelivery()).toEqual({
-			mode: 'captured',
-			context: 'deploy-preview',
-		});
-		expect(warn).toHaveBeenCalledOnce();
-		warn.mockRestore();
-	});
-
 	test('SMTP_HOST is local outside production', () => {
 		vi.stubEnv('CONTEXT', 'dev');
 		vi.stubEnv('SMTP_HOST', 'localhost');
 		expect(emailDelivery()).toEqual({ mode: 'local', context: 'dev' });
-	});
-
-	test('EMAIL_REDIRECT_TO wins over SMTP_HOST when both are set', () => {
-		vi.stubEnv('CONTEXT', 'dev');
-		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
-		vi.stubEnv('SMTP_HOST', 'localhost');
-		expect(emailDelivery()).toEqual({
-			mode: 'redirected',
-			context: 'dev',
-			redirectTo: 'maintainer@example.test',
-		});
-	});
-
-	test('a malformed EMAIL_REDIRECT_TO still falls through to SMTP_HOST', () => {
-		vi.stubEnv('CONTEXT', 'dev');
-		vi.stubEnv(
-			'EMAIL_REDIRECT_TO',
-			'maintainer@example.test, other@example.test',
-		);
-		vi.stubEnv('SMTP_HOST', 'localhost');
-		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-		expect(emailDelivery()).toEqual({ mode: 'local', context: 'dev' });
-		warn.mockRestore();
 	});
 
 	test('SMTP_HOST is ignored in production', () => {
@@ -120,24 +57,60 @@ describe('notifyDelivery', () => {
 });
 
 describe('capture', () => {
-	test('names the kind, deploy and target, then the whole body', () => {
-		vi.stubEnv('CONTEXT', 'deploy-preview');
-		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+	const body = [
+		'Hello Ada,',
+		'Your invite: https://virtualcoffee.io/join-slack?code=abc123.',
+		'Questions? https://virtualcoffee.io/faq and https://virtualcoffee.io/faq again.',
+	].join('\n');
 
-		capture('slack', 'membership', 'hi');
-		expect(info).toHaveBeenLastCalledWith(
-			'[slack captured] deploy-preview membership',
-			'\nhi',
-		);
+	test.each(['dev', undefined])(
+		'locally (CONTEXT=%s) the whole body goes to the log',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 
-		capture('email', 'a@example.test', 'body', { subject: 'Hello' });
-		expect(info).toHaveBeenLastCalledWith(
-			'[email captured] deploy-preview a@example.test',
-			{ subject: 'Hello' },
-			'\nbody',
-		);
-		info.mockRestore();
-	});
+			capture('slack', 'membership', 'hi');
+			expect(info).toHaveBeenLastCalledWith(
+				`[slack captured] ${context ?? 'local'} membership`,
+				'\nhi',
+			);
+
+			capture('email', 'ada@example.test', body, { subject: 'Hello' });
+			expect(info).toHaveBeenLastCalledWith(
+				`[email captured] ${context ?? 'local'} ada@example.test`,
+				{ subject: 'Hello' },
+				`\n${body}`,
+			);
+			info.mockRestore();
+		},
+	);
+
+	/**
+	 * A deploy's message is about a real person and the log outlives the
+	 * walkthrough (docs/adr/0007), so it gets the address masked, the details,
+	 * and each link once — enough to follow the invite, nothing to read.
+	 */
+	test.each(['deploy-preview', 'branch-deploy'])(
+		'on a deploy (CONTEXT=%s) only the masked target, details and links',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+			capture('email', 'ada@example.test', body, { subject: 'Hello' });
+			expect(info).toHaveBeenLastCalledWith(
+				`[email captured] ${context} a•••@example.test`,
+				{ subject: 'Hello' },
+				'\nhttps://virtualcoffee.io/join-slack?code=abc123',
+				'\nhttps://virtualcoffee.io/faq',
+			);
+
+			capture('slack', 'C0123', 'A new report from Ada');
+			expect(info).toHaveBeenLastCalledWith(
+				`[slack captured] ${context} C0123`,
+			);
+			info.mockRestore();
+		},
+	);
 });
 
 describe('deliver', () => {
@@ -168,10 +141,10 @@ describe('deliver', () => {
 			warning: 'Captured, not posted to Slack (deploy-preview).',
 		});
 		expect(live).not.toHaveBeenCalled();
+		// A deploy's line names nobody and carries no body; `capture` pins that.
 		expect(info).toHaveBeenCalledWith(
 			'[slack captured] deploy-preview membership',
 			{ subject: 'Hello' },
-			'\nhi',
 		);
 		info.mockRestore();
 	});
@@ -245,7 +218,7 @@ describe('deliver', () => {
 		expect(live).toHaveBeenCalledWith({ mode: 'live' });
 
 		vi.stubEnv('CONTEXT', 'dev');
-		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+		vi.stubEnv('SMTP_HOST', 'localhost');
 		await deliver({
 			kind: 'email',
 			target: 'a@example.test',
@@ -253,11 +226,7 @@ describe('deliver', () => {
 			unreachable: 'the mail server',
 			live,
 		});
-		expect(live).toHaveBeenLastCalledWith({
-			mode: 'redirected',
-			context: 'dev',
-			redirectTo: 'maintainer@example.test',
-		});
+		expect(live).toHaveBeenLastCalledWith({ mode: 'local', context: 'dev' });
 	});
 
 	test('a throw from live is a failure naming what could not be reached', async () => {
