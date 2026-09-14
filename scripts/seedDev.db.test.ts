@@ -133,7 +133,15 @@ describe('seedDev', () => {
 
 	test('writes the CoC attachment under the key its row names', async () => {
 		const store = fakeStore();
-		await seedDev({ attachmentStore: store });
+		// Stands in for the placeholder the CLI fetches: PNG magic, then noise.
+		const attachment = Uint8Array.from([
+			0x89,
+			0x50,
+			0x4e,
+			0x47,
+			...Array(500).fill(7),
+		]);
+		await seedDev({ attachmentStore: store, attachment });
 
 		const [row] = await db()
 			.select({
@@ -146,6 +154,7 @@ describe('seedDev', () => {
 		expect(store.writes[0].key).toBe(row.key);
 		expect(store.writes[0].key).toBe(ATTACHMENT.key);
 		expect(store.writes[0].bytes.byteLength).toBe(row.size);
+		expect(row.size).toBe(504);
 		// PNG magic, which `sniff()` in src/lib/attachments.ts requires.
 		expect([...store.writes[0].bytes.slice(0, 4)]).toEqual([
 			0x89, 0x50, 0x4e, 0x47,
