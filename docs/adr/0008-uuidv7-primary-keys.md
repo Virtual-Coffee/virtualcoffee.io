@@ -7,8 +7,8 @@ the detail screen shows the number ("Application 1842") and maintainers say it
 out loud. The same number was also the URL: `/admin/submissions/coc/42` hands
 anyone holding one link the ability to guess its neighbours and discloses how
 many reports exist. For CoC reports — the most sensitive rows in the database,
-reachable on deploy previews (0007) — a guessable counter is the wrong
-identity even setting the URL aside.
+present in full on every deploy preview (0007) — a guessable counter is the
+wrong identity even setting the URL aside.
 
 ## Decision
 
