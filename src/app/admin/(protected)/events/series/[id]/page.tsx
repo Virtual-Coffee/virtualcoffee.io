@@ -4,10 +4,9 @@ import { requirePermission } from '@/lib/adminAccess';
 import { connectEventsCalendar, isCalendarEventId } from '@/lib/eventsCalendar';
 
 import { Breadcrumb } from '../../../presentation';
-import { EndSeriesSection } from '../../endSeriesSection';
 import { NotConfigured } from '../../presentation';
 import { SeriesChangedEvents } from '../../seriesChangedEvents';
-import { SeriesForm } from '../../seriesForm';
+import { EndSeriesSection, SeriesForm } from '../../seriesForm';
 
 export const dynamic = 'force-dynamic';
 
