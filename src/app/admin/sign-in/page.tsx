@@ -8,7 +8,7 @@ import {
 	getSession,
 	visibleSections,
 } from '@/lib/adminAccess';
-import { slackAuthConfigured } from '@/lib/auth';
+import { slackAuthConfigured, slackTeamId } from '@/lib/auth';
 import { isVolunteer } from '@/lib/volunteerAccess';
 import { redirect } from 'next/navigation';
 
@@ -63,7 +63,7 @@ export default async function AdminSignInPage() {
 					<h1 className="h3">Maintainer sign-in</h1>
 					<p>Admin uses your Virtual Coffee Slack account.</p>
 					{slackAuthConfigured ? (
-						<SignInButton />
+						<SignInButton teamId={slackTeamId} />
 					) : (
 						<div className="alert alert-warning" role="alert">
 							<h2 className="h6 alert-heading">
