@@ -2,6 +2,7 @@
 
 import { useId, useState } from 'react';
 
+import { AdminDialog } from '@/components/AdminDialog';
 import { MAX_NOTE_LENGTH } from '@/lib/notes';
 import { useModalDialog } from '@/util/useModalDialog';
 
@@ -57,47 +58,12 @@ export function CloseDialog({
 	);
 
 	return (
-		<dialog {...dialog} className="admin-dialog">
-			<div className="p-3 border-bottom d-flex justify-content-between align-items-start gap-3">
-				<h2 className="h5 mb-0">{copy.title}</h2>
-				<button
-					type="button"
-					className="btn-close"
-					aria-label="Close"
-					onClick={onCancel}
-					disabled={pending}
-				/>
-			</div>
-
-			<div className="p-3">
-				<p>
-					{applicantName} will be <strong>{copy.outcome}</strong> and moved to
-					the archive. This can&rsquo;t be undone; they would have to apply
-					again.
-				</p>
-				<label className="form-label small" htmlFor={noteId}>
-					Why? <span className="text-body-secondary">(optional)</span>
-				</label>
-				<textarea
-					id={noteId}
-					className="form-control form-control-sm"
-					rows={3}
-					maxLength={MAX_NOTE_LENGTH}
-					value={note}
-					onChange={(event) => setNote(event.target.value)}
-					placeholder="Recorded in the history alongside the decision"
-				/>
-			</div>
-
-			<div className="p-3 border-top d-flex justify-content-end gap-2">
-				<button
-					type="button"
-					className="btn btn-outline-secondary"
-					onClick={onCancel}
-					disabled={pending}
-				>
-					Cancel
-				</button>
+		<AdminDialog
+			dialog={dialog}
+			title={copy.title}
+			pending={pending}
+			onCancel={onCancel}
+			confirm={
 				<button
 					type="button"
 					className="btn btn-danger"
@@ -106,7 +72,24 @@ export function CloseDialog({
 				>
 					{pending ? 'Working…' : copy.confirm}
 				</button>
-			</div>
-		</dialog>
+			}
+		>
+			<p>
+				{applicantName} will be <strong>{copy.outcome}</strong> and moved to the
+				archive. This can&rsquo;t be undone; they would have to apply again.
+			</p>
+			<label className="form-label small" htmlFor={noteId}>
+				Why? <span className="text-body-secondary">(optional)</span>
+			</label>
+			<textarea
+				id={noteId}
+				className="form-control form-control-sm"
+				rows={3}
+				maxLength={MAX_NOTE_LENGTH}
+				value={note}
+				onChange={(event) => setNote(event.target.value)}
+				placeholder="Recorded in the history alongside the decision"
+			/>
+		</AdminDialog>
 	);
 }
