@@ -1,8 +1,12 @@
 'use client';
 
-import { BetterAuthDevtools } from 'better-auth-devtools/react';
+import {
+	BetterAuthDevtools,
+	type BetterAuthDevtoolsProps,
+} from 'better-auth-devtools/react';
 
-export function DevtoolsPanel() {
+/** Props come from `createDevtoolsPanelProps(devtoolsConfig)` in the layout. */
+export function DevtoolsPanel(props: BetterAuthDevtoolsProps) {
 	if (process.env.NODE_ENV === 'production') return null;
-	return <BetterAuthDevtools />;
+	return <BetterAuthDevtools {...props} />;
 }
