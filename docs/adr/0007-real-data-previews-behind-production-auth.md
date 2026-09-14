@@ -32,9 +32,9 @@ it back to the preview, which creates the user and session in its own branch.
 Production writes nothing. The secret has to be the same in every Netlify
 context, and `BETTER_AUTH_SECRET` deliberately is not: a session token is
 signed with the latter, so a token copied out of one branch is worthless
-against another. Where the current origin is `URL` itself — production, and
-locally, where `URL` is `localhost` — the plugin does nothing, so a local
-callback stays on the Slack app's registered `localhost` URI.
+against another. A local checkout takes the same route: a maintainer signing
+in locally puts the same secret in `.env`, and the Slack app needs no
+`localhost` redirect URI.
 
 **Nothing a preview would send is delivered** — outbound mail and
 notifications are captured outside production — and every `/admin` page says
