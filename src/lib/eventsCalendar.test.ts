@@ -1,12 +1,13 @@
 import type { calendar_v3 } from '@googleapis/calendar';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
+import { fakeCalendarClient } from '@/test/calendar';
+
 import {
 	CalendarConflictError,
 	eventsCalendar,
 	isCalendarEventId,
 	isZoomJoinLink,
-	type CalendarClient,
 	type SeriesInput,
 } from './eventsCalendar';
 
@@ -46,62 +47,8 @@ const instance = (
 	...extra,
 });
 
-type Call = {
-	method: keyof CalendarClient['events'];
-	params: unknown;
-	options?: unknown;
-};
-
-/** A client that answers from canned data and records every call it gets. */
-function fakeClient(canned: {
-	list?: calendar_v3.Schema$Events[];
-	get?: Record<string, calendar_v3.Schema$Event>;
-	/** One page, or the pages in order for a call that follows `nextPageToken`. */
-	instances?: Record<
-		string,
-		calendar_v3.Schema$Events | calendar_v3.Schema$Events[]
-	>;
-	patchError?: unknown;
-}) {
-	const calls: Call[] = [];
-	let page = 0;
-	const instancePages = new Map<string, number>();
-	const client: CalendarClient = {
-		events: {
-			async list(params) {
-				calls.push({ method: 'list', params });
-				return { data: canned.list?.[page++] ?? {} };
-			},
-			async get(params) {
-				calls.push({ method: 'get', params });
-				const data = canned.get?.[params.eventId ?? ''];
-				if (!data) throw Object.assign(new Error('not found'), { status: 404 });
-				return { data };
-			},
-			async instances(params) {
-				calls.push({ method: 'instances', params });
-				const id = params.eventId ?? '';
-				const canned_ = canned.instances?.[id] ?? { items: [] };
-				if (!Array.isArray(canned_)) return { data: canned_ };
-				const index = instancePages.get(id) ?? 0;
-				instancePages.set(id, index + 1);
-				return { data: canned_[index] ?? { items: [] } };
-			},
-			async insert(params) {
-				calls.push({ method: 'insert', params });
-				return { data: { id: 'new-id' } };
-			},
-			async patch(params, options) {
-				calls.push({ method: 'patch', params, options });
-				if (canned.patchError) throw canned.patchError;
-				return { data: params.requestBody ?? {} };
-			},
-			async delete(params, options) {
-				calls.push({ method: 'delete', params, options });
-				return {};
-			},
-		},
-	};
+function fakeClient(canned: Parameters<typeof fakeCalendarClient>[0]) {
+	const { client, calls } = fakeCalendarClient(canned);
 	return { client, calls, cal: eventsCalendar(client, 'cal@test') };
 }
 

@@ -8,7 +8,7 @@
 import type { calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
 
-import { createCalendarClient } from '@/data/events';
+import { createCalendarClient, type CalendarEventsClient } from '@/data/events';
 import { DISPLAY_ZONE, displayParts } from '@/util/date';
 import { htmlToMarkdown, looksLikeHtml } from '@/util/markdown.server';
 import {
@@ -24,11 +24,8 @@ import {
 export type WriteOptions = { headers: { 'If-Match': string } };
 
 /** The calls this module makes, so tests can hand it a fake. */
-export interface CalendarClient {
-	events: {
-		list(
-			params: calendar_v3.Params$Resource$Events$List,
-		): Promise<{ data: calendar_v3.Schema$Events }>;
+export interface CalendarClient extends CalendarEventsClient {
+	events: CalendarEventsClient['events'] & {
 		get(
 			params: calendar_v3.Params$Resource$Events$Get,
 		): Promise<{ data: calendar_v3.Schema$Event }>;

@@ -1,7 +1,8 @@
 import { describe, expect, test } from 'vitest';
 import type { calendar_v3 } from '@googleapis/calendar';
+import { fakeCalendarClient } from '@/test/calendar';
+
 import {
-	type CalendarEventsClient,
 	isDisplayableEvent,
 	listDisplayableEvents,
 	renderDescription,
@@ -20,20 +21,12 @@ const timed: calendar_v3.Schema$Event = {
 	end: { dateTime: '2026-09-15T10:00:00-04:00' },
 };
 
-/** A client that serves `pages` in order and remembers what it was asked. */
+/** A client serving `pages` in order; `listed()` is the params it was asked with. */
 function stubClient(pages: calendar_v3.Schema$Events[]) {
-	const calls: calendar_v3.Params$Resource$Events$List[] = [];
-	const client: CalendarEventsClient = {
-		events: {
-			async list(params) {
-				calls.push(params);
-				const data = pages[calls.length - 1];
-				if (!data) throw new Error(`no page ${calls.length}`);
-				return { data };
-			},
-		},
-	};
-	return { client, calls };
+	const { client, calls } = fakeCalendarClient({ list: pages });
+	const listed = () =>
+		calls.flatMap((call) => (call.method === 'list' ? [call.params] : []));
+	return { client, listed };
 }
 
 describe('renderDescription', () => {
@@ -99,10 +92,10 @@ describe('listDisplayableEvents', () => {
 	};
 
 	test('asks for expanded instances in start order, without a page size tied to the limit', async () => {
-		const { client, calls } = stubClient([{ items: [timed] }]);
+		const { client, listed } = stubClient([{ items: [timed] }]);
 		await listDisplayableEvents(client, { ...window, limit: 5 });
 
-		expect(calls).toEqual([
+		expect(listed()).toEqual([
 			{
 				...window,
 				singleEvents: true,
@@ -114,7 +107,7 @@ describe('listDisplayableEvents', () => {
 	});
 
 	test('follows nextPageToken until the limit is met', async () => {
-		const { client, calls } = stubClient([
+		const { client, listed } = stubClient([
 			{ items: [{ ...timed, id: '1' }], nextPageToken: 'p2' },
 			{ items: [{ ...timed, id: '2' }], nextPageToken: 'p3' },
 			{ items: [{ ...timed, id: '3' }] },
@@ -122,11 +115,11 @@ describe('listDisplayableEvents', () => {
 		const events = await listDisplayableEvents(client, { ...window, limit: 2 });
 
 		expect(events.map((e) => e.id)).toEqual(['1', '2']);
-		expect(calls.map((c) => c.pageToken)).toEqual([undefined, 'p2']);
+		expect(listed().map((c) => c.pageToken)).toEqual([undefined, 'p2']);
 	});
 
 	test('stops at the last page when the window has fewer events than the limit', async () => {
-		const { client, calls } = stubClient([
+		const { client, listed } = stubClient([
 			{ items: [{ ...timed, id: '1' }], nextPageToken: 'p2' },
 			{ items: [{ ...timed, id: '2' }] },
 		]);
@@ -136,7 +129,7 @@ describe('listDisplayableEvents', () => {
 		});
 
 		expect(events.map((e) => e.id)).toEqual(['1', '2']);
-		expect(calls).toHaveLength(2);
+		expect(listed()).toHaveLength(2);
 	});
 
 	test('filtered-out entries do not use up the limit', async () => {
