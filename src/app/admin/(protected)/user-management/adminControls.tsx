@@ -14,6 +14,7 @@ import { useAction } from '@/util/forms/useAction';
 import { useDropdown } from '../useDropdown';
 import {
 	grantPendingAccess,
+	resendPendingGrantDm,
 	revokePendingGrant,
 	setPendingGrantRoles,
 	setUserRoles,
@@ -40,7 +41,7 @@ export function RolesDropdown({
 	roles: RoleName[];
 	isSelf: boolean;
 }) {
-	const { run, pending, error } = useAction();
+	const { run, pending, error, result } = useAction();
 	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
 		HTMLDivElement,
 		HTMLButtonElement
@@ -96,6 +97,11 @@ export function RolesDropdown({
 		run(() =>
 			kind === 'user' ? setUserRoles(id, []) : revokePendingGrant(id),
 		);
+	}
+
+	/** Only a Pending Grant has anyone left to DM — a `kind:'user'` row has signed in. */
+	function resendDm() {
+		run(() => resendPendingGrantDm(id));
 	}
 
 	const menuId = `${id}-roles-menu`;
@@ -184,6 +190,27 @@ export function RolesDropdown({
 						</button>
 					</li>
 
+					{kind === 'pending' && (
+						<>
+							<li>
+								<hr className="dropdown-divider" />
+							</li>
+							<li>
+								<button
+									type="button"
+									className="dropdown-item"
+									disabled={pending}
+									onClick={() => {
+										setOpen(false);
+										resendDm();
+									}}
+								>
+									Resend DM
+								</button>
+							</li>
+						</>
+					)}
+
 					{!isSelf && roles.length > 0 && (
 						<>
 							<li>
@@ -219,6 +246,12 @@ export function RolesDropdown({
 				)}
 			</div>
 
+			{result?.ok && result.message && (
+				<p className="text-success small mb-0 mt-1" role="status">
+					{result.message}
+				</p>
+			)}
+
 			{error && (
 				<p className="text-danger small mb-0 mt-1" role="alert">
 					{error}
@@ -241,7 +274,7 @@ export function GrantAccessForm({
 	const [query, setQuery] = useState('');
 	const [selected, setSelected] = useState<GrantCandidate | null>(null);
 	const [role, setRole] = useState<RoleName>('admin');
-	const { run, pending, error, clear } = useAction();
+	const { run, pending, error, result, clear } = useAction();
 	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
 		HTMLDivElement,
 		HTMLInputElement
@@ -391,6 +424,12 @@ export function GrantAccessForm({
 			>
 				Grant access
 			</button>
+
+			{result?.ok && result.message && (
+				<p className="text-success small mb-0 w-100" role="status">
+					{result.message}
+				</p>
+			)}
 
 			{error && (
 				<p className="text-danger small mb-0 w-100" role="alert">
