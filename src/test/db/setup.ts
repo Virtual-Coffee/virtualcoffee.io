@@ -17,6 +17,15 @@ process.env.NETLIFY_DB_URL = inject('databaseUrl');
 delete process.env.NETLIFY_DB_DRIVER;
 
 /**
+ * Nothing loads `.env` under Vitest. Better Auth signs session cookies with
+ * the secret, so `signInAs()` needs one that stays put for the run; `URL` is
+ * the base URL, and an `http` origin keeps the cookie un-`Secure`, so the
+ * header a test mints is the one `getSession()` reads.
+ */
+process.env.BETTER_AUTH_SECRET ??= 'vitest-only-secret-0123456789abcdef';
+process.env.URL ??= 'http://localhost:9000';
+
+/**
  * `revalidatePath()` throws outside a Next request ("static generation store
  * missing"), and every admin action calls it after writing.
  */

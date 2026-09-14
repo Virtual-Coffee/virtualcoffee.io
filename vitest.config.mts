@@ -8,8 +8,9 @@ import { configDefaults, defineConfig } from 'vitest/config';
  * - `db` is every `*.db.test.ts`. Its `globalSetup` starts
  *   `@netlify/database-dev` (the PGlite engine `netlify dev` already uses)
  *   and applies the migrations; its setup file points `NETLIFY_DB_URL` at it
- *   and truncates the tables between tests. Tests authenticate through the
- *   dev-bypass session (`src/test/session.ts`), not by mocking auth.
+ *   and truncates the tables between tests. Tests authenticate with a real
+ *   session (`src/test/session.ts`), not by mocking auth — which is why a
+ *   test that signs in is a db test.
  *
  * Both mock `next/headers` (`src/test/setup.ts`): `headers()` throws outside
  * a request, and every authorization check reads it.
