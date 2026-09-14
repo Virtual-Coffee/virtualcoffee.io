@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { ARCHIVE_STATUSES, QUEUE_STATUSES } from '@/lib/applications';
+import { ARCHIVE_STATUSES, QUEUE_STATUSES } from '@/lib/applicationStatuses';
 
 import { parseSearchParams } from './searchParams';
 

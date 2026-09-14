@@ -1,7 +1,7 @@
 import { count, desc, eq, inArray, sql } from 'drizzle-orm';
 
 import { applicationEvent, db, membershipApplication, user } from '@/db';
-import { QUEUE_STATUSES } from '@/lib/applications';
+import { QUEUE_STATUSES } from '@/lib/applicationStatuses';
 import type { Section } from '@/lib/access/permissions';
 
 /** One number on a card. Most sections have a single one; the queue has two. */
