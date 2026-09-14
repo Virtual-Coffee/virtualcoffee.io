@@ -211,7 +211,10 @@ export function RolesDropdown({
 						</>
 					)}
 
-					{!isSelf && roles.length > 0 && (
+					{!isSelf &&
+						(kind === 'user'
+							? grantable.length > 0
+							: roles.length === grantable.length) && (
 						<>
 							<li>
 								<hr className="dropdown-divider" />
