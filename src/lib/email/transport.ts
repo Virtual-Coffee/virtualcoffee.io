@@ -23,9 +23,12 @@ import {
  * purpose: the events calendar uses a different service account under
  * `GOOGLE_SERVICE_ACCOUNT_KEY`.
  *
- * Outside production nothing reaches SMTP unless `EMAIL_REDIRECT_TO` is set —
- * `deliver()` decides, and only calls back here once the mode is not
- * Captured, so the credentials are never read first. See docs/adr/0013.
+ * Outside production nothing reaches SMTP unless `EMAIL_REDIRECT_TO` or
+ * `SMTP_HOST` is set — `deliver()` decides, and only calls back here once the
+ * mode is not Captured, so the credentials are never read first. `SMTP_HOST`
+ * points at a local-only sink such as Mailpit instead of Gmail: no Google
+ * credentials are read, mail is addressed exactly as production would address
+ * it, and nothing leaves the machine. See docs/adr/0013.
  */
 
 export type SendEmailInput = {
@@ -40,7 +43,8 @@ export type SendEmailInput = {
 
 export function emailConfigured(): boolean {
 	return Boolean(
-		process.env.GOOGLE_SMTP_USER && process.env.GMAIL_SERVICE_ACCOUNT_KEY,
+		process.env.SMTP_HOST ||
+		(process.env.GOOGLE_SMTP_USER && process.env.GMAIL_SERVICE_ACCOUNT_KEY),
 	);
 }
 
@@ -76,6 +80,7 @@ export function emailStatus(): EmailStatus {
 }
 
 let transporter: Transporter | undefined;
+let localTransporter: Transporter | undefined;
 
 /**
  * Pooled, so the daily accrual run reuses a connection across its sends
@@ -111,6 +116,20 @@ function getTransporter(account: {
 		},
 	});
 	return transporter;
+}
+
+/**
+ * A local-only SMTP sink such as Mailpit: unauthenticated, no TLS, nothing
+ * else in common with `TRANSPORT_OPTIONS` — that config is Gmail-specific.
+ */
+function getLocalTransporter(): Transporter {
+	localTransporter ??= nodemailer.createTransport({
+		host: process.env.SMTP_HOST,
+		port: Number(process.env.SMTP_PORT) || 1025,
+		secure: false,
+		ignoreTLS: true,
+	});
+	return localTransporter;
 }
 
 /**
@@ -160,25 +179,35 @@ async function send(
 			ok: false,
 			definitelyNotSent: true,
 			message:
-				'Email is not configured (GOOGLE_SMTP_USER / GMAIL_SERVICE_ACCOUNT_KEY).',
+				'Email is not configured (GOOGLE_SMTP_USER / GMAIL_SERVICE_ACCOUNT_KEY, or SMTP_HOST).',
 		};
 	}
 
-	const account = serviceAccount();
-	if (!account) {
-		return {
-			ok: false,
-			definitelyNotSent: true,
-			message:
-				'GMAIL_SERVICE_ACCOUNT_KEY is not a service account key file (expected JSON with client_id and private_key).',
-		};
+	// Local skips Gmail entirely — there is no service account to check, and
+	// GOOGLE_SMTP_USER is only cosmetic (the From address) rather than required.
+	let sendingTransporter: Transporter;
+	if (delivery.mode === 'local') {
+		sendingTransporter = getLocalTransporter();
+	} else {
+		const account = serviceAccount();
+		if (!account) {
+			return {
+				ok: false,
+				definitelyNotSent: true,
+				message:
+					'GMAIL_SERVICE_ACCOUNT_KEY is not a service account key file (expected JSON with client_id and private_key).',
+			};
+		}
+		sendingTransporter = getTransporter(account);
 	}
 
-	const from = `Virtual Coffee <${process.env.GOOGLE_SMTP_USER}>`;
+	const from = `Virtual Coffee <${process.env.GOOGLE_SMTP_USER || 'dev@localhost'}>`;
 
 	// Redirected: one address gets everything, the intended recipient is named
 	// in the subject and a header, and no cc — the point is that only the
-	// maintainer who set EMAIL_REDIRECT_TO receives anything.
+	// maintainer who set EMAIL_REDIRECT_TO receives anything. Local addresses
+	// exactly as Live would: the point of a local sink is seeing what
+	// production would actually send.
 	const to = delivery.mode === 'redirected' ? delivery.redirectTo : input.to;
 	const cc = delivery.mode === 'redirected' ? undefined : input.cc || undefined;
 	const subject =
@@ -186,14 +215,14 @@ async function send(
 			? `[to: ${input.to}] ${input.subject}`
 			: input.subject;
 
-	const info = await getTransporter(account).sendMail({
+	const info = await sendingTransporter.sendMail({
 		from,
 		to,
 		cc,
 		subject,
 		html: input.html,
 		text: input.text,
-		replyTo: process.env.GOOGLE_SMTP_USER,
+		replyTo: process.env.GOOGLE_SMTP_USER || undefined,
 		...(delivery.mode === 'redirected'
 			? { headers: { 'X-Original-To': input.to } }
 			: {}),
@@ -224,6 +253,13 @@ async function send(
 			ok: true,
 			message: 'Sent.',
 			warning: `Redirected to ${delivery.redirectTo} (${delivery.context}) instead of ${input.to}.`,
+		};
+	}
+	if (delivery.mode === 'local') {
+		return {
+			ok: true,
+			message: 'Sent.',
+			warning: `Sent to local SMTP sink at ${process.env.SMTP_HOST}:${Number(process.env.SMTP_PORT) || 1025} (${delivery.context}) — not delivered outside this machine.`,
 		};
 	}
 	return { ok: true, message: 'Sent.' };
