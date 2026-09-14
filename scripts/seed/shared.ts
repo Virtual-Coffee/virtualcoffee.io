@@ -52,6 +52,18 @@ export const STRANDED = {
 	email: 'jordan.lee@example.com',
 } as const;
 
+/**
+ * Added through /admin/volunteers but yet to sign in: a roster row with no
+ * `userId` and an unclaimed Pending Grant carrying only `volunteer`, which
+ * `claimPendingGrant()` links up at their first Slack sign-in.
+ */
+export const NEW_VOLUNTEER = {
+	slackUserId: 'U_DEV_NEW_VOLUNTEER',
+	name: 'Lena Novak',
+	slackHandle: 'lenan',
+	email: 'lena@example.com',
+} as const;
+
 export const FORMER_VOLUNTEER_SLACK_ID = 'U_DEV_FORMER';
 export const PENDING_GRANT_SLACK_ID = 'U_DEV_PENDING_1';
 
@@ -72,6 +84,7 @@ export const SEEDED_SLACK_IDS = [
 	VOLUNTEER.slackUserId,
 	COC_REVIEWER.slackUserId,
 	STRANDED.slackUserId,
+	NEW_VOLUNTEER.slackUserId,
 	FORMER_VOLUNTEER_SLACK_ID,
 	PENDING_GRANT_SLACK_ID,
 ];
