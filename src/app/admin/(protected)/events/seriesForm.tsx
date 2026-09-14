@@ -9,7 +9,6 @@ import { useAction } from '@/util/forms/useAction';
 import { createSeries, updateSeries } from './actions';
 import { DescriptionField } from './descriptionField';
 import { HostCodeField, TextField, TimeFields, type TimeInput } from './fields';
-import { sentence } from './presentation';
 import {
 	draftFromRecurrence,
 	draftToForm,
@@ -85,7 +84,7 @@ export function SeriesForm({ series }: { series?: Series }) {
 				{custom ? (
 					<div className="mb-3">
 						<div className="form-label small fw-semibold mb-1">Repeats</div>
-						<p className="mb-1">{sentence(custom.text)}</p>
+						<p className="mb-1">{custom.text}</p>
 						<div className="form-text">
 							This rule is one this form can’t edit. Change it in Google
 							Calendar; everything else here can be saved.

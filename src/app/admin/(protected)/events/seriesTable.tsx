@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import type { Series } from '@/lib/eventsCalendar';
 
-import { EventWhen, sentence } from './presentation';
+import { EventWhen } from './presentation';
 
 export function SeriesTable({
 	rows,
@@ -42,7 +42,7 @@ export function SeriesTable({
 									series.title
 								)}
 							</td>
-							<td className="small">{sentence(series.recurrenceText)}</td>
+							<td className="small">{series.recurrenceText}</td>
 							<td className="small text-nowrap text-end">
 								{series.nextEvent ? (
 									<EventWhen

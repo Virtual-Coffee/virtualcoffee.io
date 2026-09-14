@@ -82,15 +82,15 @@ describe('parseRecurrence', () => {
 	});
 
 	test.each([
-		['RRULE:FREQ=DAILY', 'every day'],
-		['RRULE:FREQ=MONTHLY;BYMONTHDAY=15', 'every month on the 15th'],
-		['RRULE:FREQ=YEARLY;BYMONTH=6;BYMONTHDAY=1', 'every June on the 1st'],
+		['RRULE:FREQ=DAILY', 'Every day'],
+		['RRULE:FREQ=MONTHLY;BYMONTHDAY=15', 'Every month on the 15th'],
+		['RRULE:FREQ=YEARLY;BYMONTH=6;BYMONTHDAY=1', 'Every June on the 1st'],
 		[
 			'RRULE:FREQ=MONTHLY;BYDAY=1FR,3TU',
-			'every month on the 3rd Tuesday and 1st Friday',
+			'Every month on the 3rd Tuesday and 1st Friday',
 		],
-		['RRULE:FREQ=WEEKLY;BYDAY=1TU', 'every week on the 1st Tuesday'],
-		['RRULE:FREQ=MONTHLY;BYDAY=5FR', 'every month on the 5th Friday'],
+		['RRULE:FREQ=WEEKLY;BYDAY=1TU', 'Every week on the 1st Tuesday'],
+		['RRULE:FREQ=MONTHLY;BYDAY=5FR', 'Every month on the 5th Friday'],
 	])('%s is custom, described as "%s"', (line, text) => {
 		expect(parseRecurrence([line])).toEqual({
 			kind: 'custom',
@@ -164,9 +164,9 @@ describe('serializeRecurrence', () => {
 
 describe('describeRecurrence', () => {
 	test('form shapes', () => {
-		expect(describeRecurrence(weekly)).toBe('every week on Tuesday, Thursday');
+		expect(describeRecurrence(weekly)).toBe('Every week on Tuesday, Thursday');
 		expect(describeRecurrence(firstAndThird)).toBe(
-			'every month on the 1st Friday and 3rd Friday',
+			'Every month on the 1st Friday and 3rd Friday',
 		);
 	});
 
@@ -176,12 +176,12 @@ describe('describeRecurrence', () => {
 				...weekly,
 				ends: { kind: 'until', date: '2026-12-30' },
 			}),
-		).toBe('every week on Tuesday, Thursday until December 30, 2026');
+		).toBe('Every week on Tuesday, Thursday until December 30, 2026');
 		expect(
 			parseRecurrence(['RRULE:FREQ=DAILY;INTERVAL=2;UNTIL=20261231T045959Z']),
 		).toMatchObject({
 			kind: 'custom',
-			text: 'every 2 days until December 30, 2026',
+			text: 'Every 2 days until December 30, 2026',
 		});
 	});
 

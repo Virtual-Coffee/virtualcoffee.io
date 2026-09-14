@@ -62,11 +62,6 @@ export function EventStatusBadge({
 	return null;
 }
 
-/** Sentence case for `rrule`'s lowercase text. */
-export function sentence(text: string): string {
-	return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
 export function NotConfigured() {
 	return (
 		<div className="alert alert-warning" role="status">

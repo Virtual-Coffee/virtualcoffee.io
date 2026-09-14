@@ -102,13 +102,14 @@ function untilDate(line: string): string | null {
 }
 
 /**
- * `rrule`'s text, with `UNTIL` named as the display-zone date. Left to its
- * own devices `toText()` formats the token's UTC components, and
- * `20261231T045959Z` reads "December 31" for a Series that ends the 30th.
+ * `rrule`'s text in sentence case, with `UNTIL` named as the display-zone
+ * date. Left to its own devices `toText()` formats the token's UTC
+ * components, and `20261231T045959Z` reads "December 31" for a Series that
+ * ends the 30th.
  */
 function describe(rrule: string): string {
 	const until = untilDate(rrule);
-	return RRule.fromString(rrule).toText(
+	const text = RRule.fromString(rrule).toText(
 		undefined,
 		undefined,
 		until
@@ -118,6 +119,7 @@ function describe(rrule: string): string {
 					)
 			: undefined,
 	);
+	return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 /**
