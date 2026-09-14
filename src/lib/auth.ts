@@ -6,6 +6,7 @@ import { devtools } from 'better-auth-devtools';
 
 import { db } from '@/db';
 import * as schema from '@/db/schema';
+import { devtoolsConfig } from '@/lib/devtools';
 import { ac, DEFAULT_ROLE, roles } from '@/lib/permissions';
 import { claimPendingGrant } from '@/lib/pendingGrants';
 
@@ -101,7 +102,7 @@ function createAuth() {
 			 * reach it.
 			 */
 			admin({ ac, roles, defaultRole: DEFAULT_ROLE, adminRoles: ['admin'] }),
-			devtools({ enabled: true }),
+			devtools(devtoolsConfig),
 			// Must stay last: it wraps the others to set cookies from server actions.
 			nextCookies(),
 		],
