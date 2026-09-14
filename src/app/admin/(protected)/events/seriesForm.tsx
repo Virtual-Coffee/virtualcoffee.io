@@ -8,7 +8,7 @@ import { useAction } from '@/util/forms/useAction';
 
 import { createSeries, updateSeries } from './actions';
 import { DescriptionField } from './descriptionField';
-import { HostCodeField, TextField, TimeFields, type TimeDraft } from './fields';
+import { HostCodeField, TextField, TimeFields, type TimeInput } from './fields';
 import { sentence } from './presentation';
 import {
 	draftFromRecurrence,
@@ -32,7 +32,7 @@ export function SeriesForm({ series }: { series?: Series }) {
 	const [joinLink, setJoinLink] = useState(series?.joinLink ?? '');
 	const [hostCode, setHostCode] = useState(series?.hostCode ?? '');
 	const [description, setDescription] = useState(series?.description ?? '');
-	const [when, setWhen] = useState<TimeDraft>({
+	const [when, setWhen] = useState<TimeInput>({
 		date: series?.date ?? '',
 		startTime: series?.startTime ?? '09:00',
 		endTime: series?.endTime ?? '10:00',
