@@ -4,10 +4,10 @@
 
 The membership pipeline emails real people: Coffee invites, welcomes, Slack
 invites. Inbound Submissions post to real Slack channels and open real GitHub
-issues. Deploy previews get a copy of production's database (scrubbed to
-`@preview.invalid`, docs/adr/0007), but an address typed into a form on a
-preview is real, and Netlify hands the same environment variables to every
-context unless someone remembers to scope them. A laptop `.env` with the SMTP
+issues. Deploy previews run against a fork of production's database, nothing
+scrubbed (docs/adr/0007), so every address a preview could email is a real
+applicant's, and Netlify hands the same environment variables to every context
+unless someone remembers to scope them. A laptop `.env` with the SMTP
 credentials is one wrong click from an applicant's inbox.
 
 The options were: rely on scoping the secrets per context; refuse to send when
@@ -56,10 +56,11 @@ mechanism.
   a "captured on this deploy" notice so a reviewer knows why nothing arrived.
 - Testing real delivery from a preview means setting `EMAIL_REDIRECT_TO` on
   that branch's context and reading one inbox.
-- A captured message is visible to the whole Netlify team for as long as
-  Netlify keeps function logs. Preview data is already scrubbed (docs/adr/0007),
-  so the only real address that can reach a preview log is one a tester typed
-  into a form there — use a test address.
+- A captured message on a preview names a real applicant, address and all,
+  and is visible to the whole Netlify team for as long as Netlify keeps
+  function logs. That audience already has the preview's database and
+  `/admin` (docs/adr/0007), so the log adds no one; it is still one more copy
+  of the address, which is why nothing about capture is opt-in.
 - Anything new that sends outward goes through `outbound.ts` first. A sender
   that checks its own credentials before the mode is the bug this file exists
   to prevent.
