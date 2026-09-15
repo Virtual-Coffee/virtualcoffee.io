@@ -120,18 +120,20 @@ function linkedIds(value: unknown): string[] {
 
 /** The reviewed ids from an earlier run, so re-proposing does not undo the review. */
 function reviewedIds(): Map<string, string> {
+	let raw: string;
 	try {
-		const previous = JSON.parse(
-			readFileSync(MAPPING_PATH, 'utf8'),
-		) as MappingEntry[];
-		return new Map(
-			previous
-				.filter((entry) => entry.slackUserId.trim().length > 0)
-				.map((entry) => [entry.airtableRecordId, entry.slackUserId.trim()]),
-		);
-	} catch {
-		return new Map();
+		raw = readFileSync(MAPPING_PATH, 'utf8');
+	} catch (error) {
+		if ((error as NodeJS.ErrnoException).code === 'ENOENT') return new Map();
+		throw error;
 	}
+
+	const previous = JSON.parse(raw) as MappingEntry[];
+	return new Map(
+		previous
+			.filter((entry) => (entry.slackUserId ?? '').trim().length > 0)
+			.map((entry) => [entry.airtableRecordId, entry.slackUserId.trim()]),
+	);
 }
 
 async function propose(apiKey: string) {
