@@ -60,7 +60,7 @@ const SEEDS: Seed[] = [
 			'Honestly, people to ask dumb questions to. I have nobody to sanity-check a design decision with before I put it in a PR.',
 	},
 	{
-		name: 'TomÃ¡s Aguilar',
+		name: 'Tomás Aguilar',
 		email: 'tomas@example.com',
 		pronouns: 'he/him',
 		githubUsername: 'taguilar',
@@ -69,7 +69,7 @@ const SEEDS: Seed[] = [
 		referrer: 'Podcast',
 		daysAgo: 7,
 		note: 'Met them at the Thursday coffee — keen, follow up next week.',
-		howDidYouHear: 'The podcast â the episode about maintainer burnout.',
+		howDidYouHear: 'The podcast — the episode about maintainer burnout.',
 		journey:
 			'Twelve years of PHP for a regional newspaper group, which is a sentence that explains a lot. Lately I have been dragged into a TypeScript rewrite and I am enjoying it more than I expected.',
 		codeInterests:
@@ -94,7 +94,7 @@ const SEEDS: Seed[] = [
 			'Peers. I want to be in a room where someone will tell me my approach is wrong before production does.',
 	},
 	{
-		name: 'Marek DvoÅÃ¡k',
+		name: 'Marek Dvořák',
 		email: 'marek@example.com',
 		pronouns: 'he/him',
 		githubUsername: 'mdvorak',
@@ -104,7 +104,7 @@ const SEEDS: Seed[] = [
 		daysAgo: 12,
 		howDidYouHear: 'A friend on my course is already a member.',
 		journey:
-			'Second year CS student, doing a placement at a small agency over summer. Wrote my first real thing â a Discord bot for my climbing club â and it is still running, which surprises me daily.',
+			'Second year CS student, doing a placement at a small agency over summer. Wrote my first real thing — a Discord bot for my climbing club — and it is still running, which surprises me daily.',
 		codeInterests:
 			'Web stuff, and I want to understand databases properly rather than copying whatever the ORM suggests.',
 		virtualCoffee:
@@ -118,7 +118,7 @@ const SEEDS: Seed[] = [
 		status: 'waitlisted',
 		source: 'waitlist_signup',
 		daysAgo: 18,
-		howDidYouHear: 'Found the members page while reading someone elseâs blog.',
+		howDidYouHear: 'Found the members page while reading someone else’s blog.',
 		journey:
 			'Three years in QA, moving toward automation and then toward development proper. I write more Playwright than anything else right now.',
 		codeInterests:
@@ -156,7 +156,7 @@ const SEEDS: Seed[] = [
 		daysAgo: 31,
 		howDidYouHear: 'Ayu invited me after we paired on an open source issue.',
 		journey:
-			'Started with Excel macros, honestly. Ended up automating enough of a finance teamâs month-end that they made me a developer on paper too. Mostly C# and SQL since.',
+			'Started with Excel macros, honestly. Ended up automating enough of a finance team’s month-end that they made me a developer on paper too. Mostly C# and SQL since.',
 		codeInterests:
 			'Data modelling and reporting. I like the part where a messy business rule becomes a clean schema.',
 		virtualCoffee:
@@ -180,7 +180,7 @@ const SEEDS: Seed[] = [
 			'I want to talk to engineers who are not designers about design decisions, and find out where the handoff actually hurts.',
 	},
 	{
-		name: 'Jo BergstrÃ¶m',
+		name: 'Jo Bergström',
 		email: 'jo@example.com',
 		pronouns: 'she/her',
 		githubUsername: 'jobergstrom',
