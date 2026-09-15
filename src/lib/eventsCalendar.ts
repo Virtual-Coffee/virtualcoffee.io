@@ -9,6 +9,7 @@ import type { calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
 
 import { createCalendarClient, type CalendarEventsClient } from '@/data/events';
+import { isEventType, type EventType } from '@/lib/eventTypes';
 import { DISPLAY_ZONE, displayParts } from '@/util/date';
 import { htmlToMarkdown, looksLikeHtml } from '@/util/markdown.server';
 import {
@@ -19,6 +20,13 @@ import {
 	type Recurrence,
 	type RecurrenceForm,
 } from '@/lib/recurrence';
+
+export {
+	EVENT_TYPE_LABELS,
+	EVENT_TYPES,
+	isEventType,
+	type EventType,
+} from '@/lib/eventTypes';
 
 /** A writer must present the etag it read; Google answers 412 if it moved on. */
 export type WriteOptions = { headers: { 'If-Match': string } };
@@ -46,7 +54,8 @@ export interface CalendarClient extends CalendarEventsClient {
 	};
 }
 
-export type Series = {
+/** What a Series and a one-off Event both carry, as read from the calendar. */
+type EventFields = {
 	id: string;
 	etag: string;
 	title: string;
@@ -55,14 +64,24 @@ export type Series = {
 	joinLink: string;
 	/** `extendedProperties.private.hostCode`; '' when there is none. */
 	hostCode: string;
-	recurrence: Recurrence;
-	recurrenceText: string;
-	/** The first Event, in the display zone. */
+	/** `extendedProperties.private.eventType`; null when missing or unknown. */
+	eventType: EventType | null;
+	/** The Event — a Series' first — in the display zone. */
 	date: string;
 	startTime: string;
 	endTime: string;
-	nextEvent: { start: string; end: string } | null;
 	htmlLink: string | null;
+};
+
+export type Series = EventFields & {
+	recurrence: Recurrence;
+	recurrenceText: string;
+	nextEvent: { start: string; end: string } | null;
+};
+
+/** A one-off Event with everything its edit form needs. */
+export type EventDetails = EventFields & {
+	status: 'confirmed' | 'cancelled';
 };
 
 export type AdminEvent = {
@@ -86,6 +105,7 @@ export type SeriesInput = {
 	description: string;
 	joinLink: string;
 	hostCode: string;
+	eventType: EventType;
 	date: string;
 	startTime: string;
 	endTime: string;
@@ -132,18 +152,26 @@ function hostCodeOf(event: calendar_v3.Schema$Event): string {
 	return event.extendedProperties?.private?.hostCode?.trim() ?? '';
 }
 
+/** The Event Type; a key this code does not know is as good as none. */
+function eventTypeOf(event: calendar_v3.Schema$Event): EventType | null {
+	const value = event.extendedProperties?.private?.eventType?.trim();
+	return isEventType(value) ? value : null;
+}
+
 /**
  * Private properties are per calendar copy and the Google UI cannot edit
- * them, so the admin page owns `hostCode` (docs/adr/0014). The map is
- * replaced whole on a patch, so whatever else is there is carried over.
+ * them, so the admin page owns `hostCode` and `eventType` (docs/adr/0014).
+ * The map is replaced whole on a patch, so whatever else is there is
+ * carried over.
  */
-function withHostCode(
+function withPrivateProperties(
 	existing: calendar_v3.Schema$Event | null,
-	hostCode: string,
+	{ hostCode, eventType }: Pick<EventInput, 'hostCode' | 'eventType'>,
 ): Pick<calendar_v3.Schema$Event, 'extendedProperties'> {
 	const current = existing?.extendedProperties?.private ?? {};
-	if (!existing && !hostCode) return {};
-	return { extendedProperties: { private: { ...current, hostCode } } };
+	return {
+		extendedProperties: { private: { ...current, hostCode, eventType } },
+	};
 }
 
 function isConflict(error: unknown): boolean {
@@ -267,14 +295,13 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		return first ? timed(first) : null;
 	}
 
-	async function toSeries(
+	/** The fields a Series and a one-off Event share, or null if not an Event. */
+	async function toEventFields(
 		event: calendar_v3.Schema$Event,
-		next: Series['nextEvent'],
-	): Promise<Series | null> {
+	): Promise<EventFields | null> {
 		const start = fromEventDateTime(event.start);
 		const end = fromEventDateTime(event.end);
 		if (!event.id || !event.etag || !start || !end) return null;
-		const recurrence = parseRecurrence(event.recurrence ?? []);
 		const description = event.description ?? '';
 		return {
 			id: event.id,
@@ -285,13 +312,26 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 				: description,
 			joinLink: event.location ?? '',
 			hostCode: hostCodeOf(event),
-			recurrence,
-			recurrenceText: describeRecurrence(recurrence),
+			eventType: eventTypeOf(event),
 			date: start.date,
 			startTime: start.time,
 			endTime: end.time,
-			nextEvent: next,
 			htmlLink: event.htmlLink ?? null,
+		};
+	}
+
+	async function toSeries(
+		event: calendar_v3.Schema$Event,
+		next: Series['nextEvent'],
+	): Promise<Series | null> {
+		const fields = await toEventFields(event);
+		if (!fields) return null;
+		const recurrence = parseRecurrence(event.recurrence ?? []);
+		return {
+			...fields,
+			recurrence,
+			recurrenceText: describeRecurrence(recurrence),
+			nextEvent: next,
 		};
 	}
 
@@ -326,6 +366,26 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 			data,
 			await nextEvent(id, DateTime.now().setZone(DISPLAY_ZONE)),
 		);
+	}
+
+	/**
+	 * A one-off Event for its edit page. An id that is a Series or an Event of
+	 * one names its Series instead, so the page can send the maintainer there;
+	 * a Cancelled one-off is still returned, since it can be Restored.
+	 */
+	async function getEvent(
+		id: string,
+	): Promise<EventDetails | { seriesId: string } | null> {
+		const { data } = await client.events.get({ calendarId, eventId: id });
+		if ((data.recurrence ?? []).length) return { seriesId: id };
+		if (data.recurringEventId) return { seriesId: data.recurringEventId };
+		if (isTombstone(data)) return null;
+		const fields = await toEventFields(data);
+		if (!fields) return null;
+		return {
+			...fields,
+			status: data.status === 'cancelled' ? 'cancelled' : 'confirmed',
+		};
 	}
 
 	/**
@@ -411,6 +471,27 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 	}
 
 	/**
+	 * Every one-off Event still to come, cancelled ones included, however far
+	 * out. Listed without expanding Series, so the open-ended range is one
+	 * page of parents and one-offs rather than every future Event of every
+	 * Series; the parents and any modified Event of a Series are dropped.
+	 */
+	async function listUpcomingOneOffs(): Promise<AdminEvent[]> {
+		const now = DateTime.now().setZone(DISPLAY_ZONE);
+		const items = await listAll({
+			singleEvents: false,
+			showDeleted: true,
+			timeZone: DISPLAY_ZONE,
+			timeMin: iso(now.startOf('day')),
+		});
+		return toAdminEvents(
+			items.filter(
+				(item) => !(item.recurrence ?? []).length && !item.recurringEventId,
+			),
+		);
+	}
+
+	/**
 	 * The next `months` of one Series' Events, cancelled ones included, for the
 	 * Series page. Bounded because a Series that never ends never runs out of
 	 * pages; Google returns at most 250 an instances call.
@@ -471,7 +552,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 			sendUpdates: 'none',
 			requestBody: {
 				...body(input),
-				...withHostCode(null, input.hostCode),
+				...withPrivateProperties(null, input),
 				recurrence: [serializeRecurrence(input.recurrence)],
 			},
 		});
@@ -487,7 +568,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		const existing = await current(id, etag);
 		await patch(id, etag, {
 			...body(input),
-			...withHostCode(existing, input.hostCode),
+			...withPrivateProperties(existing, input),
 			...(input.recurrence
 				? {
 						recurrence: withRule(
@@ -538,9 +619,21 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		const { data } = await client.events.insert({
 			calendarId,
 			sendUpdates: 'none',
-			requestBody: { ...body(input), ...withHostCode(null, input.hostCode) },
+			requestBody: { ...body(input), ...withPrivateProperties(null, input) },
 		});
 		return data.id ?? '';
+	}
+
+	async function updateEvent(
+		id: string,
+		etag: string,
+		input: EventInput,
+	): Promise<void> {
+		const existing = await current(id, etag);
+		await patch(id, etag, {
+			...body(input),
+			...withPrivateProperties(existing, input),
+		});
 	}
 
 	async function cancelEvent(id: string, etag: string): Promise<void> {
@@ -591,12 +684,15 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 	return {
 		listSeries,
 		getSeries,
+		getEvent,
 		listUpcomingEvents,
+		listUpcomingOneOffs,
 		listSeriesEvents,
 		createSeries,
 		updateSeries,
 		endSeries,
 		createEvent,
+		updateEvent,
 		cancelEvent,
 		restoreEvent,
 		rescheduleEvent,

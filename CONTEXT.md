@@ -146,6 +146,12 @@ admin page can set it. The Slack bots show it to the host; a Zoom Event has
 one or the bots will not announce it.
 _Avoid_: Host key, hostCode, Zoom key, password
 
+**Event Type**:
+Which kind of thing a Series or Event is (Virtual Coffee, Lunch & Learn, …),
+from a fixed list. Set on the admin page, required on every save; the planned
+calendar feed filters on it.
+_Avoid_: Category, tag, kind, label, eventType
+
 **Cancel**:
 Declare that one Event will not happen. The Series continues.
 _Avoid_: Delete, remove

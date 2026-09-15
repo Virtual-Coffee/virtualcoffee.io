@@ -3,34 +3,58 @@
 import Link from 'next/link';
 import { useId, useState } from 'react';
 
+import type { EventDetails, EventType } from '@/lib/eventsCalendar';
 import { useAction } from '@/util/forms/useAction';
 
-import { createEvent } from './actions';
+import { createEvent, updateEvent } from './actions';
 import { DescriptionField } from './descriptionField';
-import { HostCodeField, TextField, TimeFields, type TimeInput } from './fields';
+import {
+	EventTypeField,
+	HostCodeField,
+	TextField,
+	TimeFields,
+	type TimeInput,
+} from './fields';
 
-/** A one-off Event: everything a Series has except the rule. */
-export function EventForm() {
+/**
+ * A one-off Event: everything a Series has except the rule. One form for a
+ * new Event and for editing one; an edit sends the etag the page loaded, so
+ * a change made in Google's UI meanwhile comes back as a conflict rather
+ * than being overwritten (docs/adr/0014).
+ */
+export function EventForm({ event }: { event?: EventDetails }) {
 	const id = useId();
 	const { run, pending, result, feedback } = useAction();
 
-	const [title, setTitle] = useState('');
-	const [joinLink, setJoinLink] = useState('');
-	const [hostCode, setHostCode] = useState('');
-	const [description, setDescription] = useState('');
+	const [title, setTitle] = useState(event?.title ?? '');
+	const [joinLink, setJoinLink] = useState(event?.joinLink ?? '');
+	const [hostCode, setHostCode] = useState(event?.hostCode ?? '');
+	const [eventType, setEventType] = useState<EventType | ''>(
+		event?.eventType ?? '',
+	);
+	const [description, setDescription] = useState(event?.description ?? '');
 	const [when, setWhen] = useState<TimeInput>({
-		date: '',
-		startTime: '09:00',
-		endTime: '10:00',
+		date: event?.date ?? '',
+		startTime: event?.startTime ?? '09:00',
+		endTime: event?.endTime ?? '10:00',
 	});
-	const created = result?.ok;
+	const ready = title.trim() && joinLink && eventType && when.date;
+	const created = !event && result?.ok;
 
 	return (
 		<form
-			onSubmit={(event) => {
-				event.preventDefault();
+			onSubmit={(e) => {
+				e.preventDefault();
+				const input = {
+					title,
+					joinLink,
+					hostCode,
+					eventType,
+					description,
+					...when,
+				};
 				run(() =>
-					createEvent({ title, joinLink, hostCode, description, ...when }),
+					event ? updateEvent(event.id, event.etag, input) : createEvent(input),
 				);
 			}}
 		>
@@ -57,6 +81,12 @@ export function EventForm() {
 					value={hostCode}
 					onChange={setHostCode}
 				/>
+				<EventTypeField
+					id={`${id}-type`}
+					value={eventType}
+					onChange={setEventType}
+					legacy={Boolean(event) && event?.eventType === null}
+				/>
 				<DescriptionField
 					id={`${id}-description`}
 					label="Description"
@@ -72,9 +102,9 @@ export function EventForm() {
 					<button
 						type="submit"
 						className="btn btn-primary btn-sm"
-						disabled={pending || !title.trim() || !joinLink || !when.date}
+						disabled={pending || !ready}
 					>
-						{pending ? 'Saving…' : 'Create Event'}
+						{pending ? 'Saving…' : event ? 'Save Event' : 'Create Event'}
 					</button>
 				)}
 				<Link href="/admin/events" className="btn btn-outline-secondary btn-sm">

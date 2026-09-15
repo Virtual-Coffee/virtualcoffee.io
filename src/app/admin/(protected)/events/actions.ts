@@ -9,6 +9,7 @@ import { requirePermission } from '@/lib/adminAccess';
 import {
 	CalendarConflictError,
 	connectEventsCalendar,
+	EVENT_TYPES,
 	isCalendarEventId,
 	isZoomJoinLink,
 	type EventsCalendar,
@@ -55,6 +56,7 @@ const eventInputSchema = timeInputSchema
 			.string()
 			.trim()
 			.regex(/^(\d{6,10})?$/, 'A Zoom host code is 6–10 digits.'),
+		eventType: z.enum(EVENT_TYPES, { message: 'Pick an Event Type.' }),
 	})
 	// The bots refuse to announce a Zoom Event without its Host Code.
 	.refine((value) => !isZoomJoinLink(value.joinLink) || value.hostCode, {
@@ -232,6 +234,22 @@ export async function createEvent(input: unknown): Promise<ActionResult> {
 			return `“${parsed.data.title}” is on the Events Calendar.`;
 		},
 	);
+}
+
+export async function updateEvent(
+	id: string,
+	etag: string,
+	input: unknown,
+): Promise<ActionResult> {
+	await requirePermission('events', 'manage');
+	const missing = target(id, etag);
+	if (missing) return missing;
+	const parsed = eventInputSchema.safeParse(input);
+	if (!parsed.success) return firstIssue(parsed.error, 'Check the Event.');
+	return write('update Event', `update Event ${id}`, async (calendar) => {
+		await calendar.updateEvent(id, etag, parsed.data);
+		return `“${parsed.data.title}” is updated.`;
+	});
 }
 
 export async function cancelEvent(
