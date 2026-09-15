@@ -20,7 +20,13 @@ const series: calendar_v3.Schema$Event = {
 	summary: 'Virtual Coffee',
 	description: 'Come hang out',
 	location: 'https://zoom.example/j/1',
-	extendedProperties: { private: { hostCode: ' 123456 ', joinLink: 'old' } },
+	extendedProperties: {
+		private: {
+			hostCode: ' 123456 ',
+			eventType: 'virtual-coffee',
+			joinLink: 'old',
+		},
+	},
 	start: {
 		dateTime: '2026-01-06T09:00:00-05:00',
 		timeZone: 'America/New_York',
@@ -46,6 +52,19 @@ const instance = (
 	end: { dateTime: `${day}T10:00:00-04:00` },
 	...extra,
 });
+
+const oneOff: calendar_v3.Schema$Event = {
+	id: 'talk',
+	etag: '"t1"',
+	status: 'confirmed',
+	summary: 'Lunch & Learn: Testing',
+	description: 'Bring questions',
+	location: 'https://zoom.example/j/3',
+	extendedProperties: { private: { hostCode: '111111' } },
+	start: { dateTime: '2026-11-04T12:00:00-05:00' },
+	end: { dateTime: '2026-11-04T13:00:00-05:00' },
+	htmlLink: 'https://calendar.google.com/talk',
+};
 
 function fakeClient(canned: Parameters<typeof fakeCalendarClient>[0]) {
 	const { client, calls } = fakeCalendarClient(canned);
@@ -100,6 +119,7 @@ describe('listSeries', () => {
 				description: 'Come hang out',
 				joinLink: 'https://zoom.example/j/1',
 				hostCode: '123456',
+				eventType: 'virtual-coffee',
 				recurrence: {
 					kind: 'weekly',
 					interval: 1,
@@ -161,6 +181,117 @@ describe('getSeries', () => {
 		await expect(cal.getSeries('coffee')).resolves.toMatchObject({
 			description: 'Come *hang out*',
 		});
+	});
+
+	test.each([
+		['no key', {}],
+		['a key this code does not know', { eventType: 'karaoke' }],
+	])('an Event Type with %s is none', async (_label, extra) => {
+		const { cal } = fakeClient({
+			get: {
+				coffee: {
+					...series,
+					extendedProperties: { private: { hostCode: '1', ...extra } },
+				},
+			},
+		});
+		await expect(cal.getSeries('coffee')).resolves.toMatchObject({
+			eventType: null,
+		});
+	});
+});
+
+describe('getEvent', () => {
+	test('reads a one-off with everything its form edits', async () => {
+		const { cal } = fakeClient({ get: { talk: oneOff } });
+		await expect(cal.getEvent('talk')).resolves.toEqual({
+			id: 'talk',
+			etag: '"t1"',
+			title: 'Lunch & Learn: Testing',
+			description: 'Bring questions',
+			joinLink: 'https://zoom.example/j/3',
+			hostCode: '111111',
+			eventType: null,
+			date: '2026-11-04',
+			startTime: '12:00',
+			endTime: '13:00',
+			status: 'confirmed',
+			htmlLink: 'https://calendar.google.com/talk',
+		});
+	});
+
+	test('a Cancelled one-off is still an Event', async () => {
+		const { cal } = fakeClient({
+			get: { talk: { ...oneOff, status: 'cancelled' } },
+		});
+		await expect(cal.getEvent('talk')).resolves.toMatchObject({
+			status: 'cancelled',
+		});
+	});
+
+	test('a Series, or an Event of one, names its Series instead', async () => {
+		const { cal } = fakeClient({
+			get: {
+				coffee: series,
+				coffee_20260915T130000Z: instance('coffee', '2026-09-15'),
+			},
+		});
+		await expect(cal.getEvent('coffee')).resolves.toEqual({
+			seriesId: 'coffee',
+		});
+		await expect(cal.getEvent('coffee_20260915T130000Z')).resolves.toEqual({
+			seriesId: 'coffee',
+		});
+	});
+
+	test("Google's tombstone for a slot no Series generates is nothing", async () => {
+		const { cal } = fakeClient({
+			get: {
+				old_20260921T130000Z: {
+					...oneOff,
+					id: 'old_20260921T130000Z',
+					status: 'cancelled',
+				},
+			},
+		});
+		await expect(cal.getEvent('old_20260921T130000Z')).resolves.toBeNull();
+	});
+});
+
+describe('listUpcomingOneOffs', () => {
+	test('lists one-offs from today on without expanding Series', async () => {
+		const { cal, calls } = fakeClient({
+			list: [
+				{
+					items: [
+						series,
+						{ ...oneOff, status: 'cancelled' },
+						// A modified Event of a Series shows up unexpanded too.
+						instance('coffee', '2026-09-22', {
+							start: { dateTime: '2026-09-22T11:00:00-04:00' },
+							end: { dateTime: '2026-09-22T12:00:00-04:00' },
+						}),
+						{ ...oneOff, id: 'later', etag: '"l"', summary: 'Retro' },
+					],
+				},
+			],
+		});
+		const result = await cal.listUpcomingOneOffs();
+		expect(calls).toEqual([
+			expect.objectContaining({
+				method: 'list',
+				params: expect.objectContaining({
+					singleEvents: false,
+					showDeleted: true,
+					timeMin: '2026-09-14T00:00:00.000-04:00',
+				}),
+			}),
+		]);
+		expect(calls[0].params).not.toHaveProperty('timeMax');
+		expect(result).toMatchObject([
+			{ id: 'talk', status: 'cancelled', seriesId: null },
+			{ id: 'later', title: 'Retro', status: 'confirmed', seriesId: null },
+		]);
 	});
 });
 
@@ -327,6 +458,7 @@ describe('writes', () => {
 		description: 'Talk it out',
 		joinLink: 'https://zoom.example/j/2',
 		hostCode: '654321',
+		eventType: 'community-event',
 		date: '2026-09-18',
 		startTime: '12:00',
 		endTime: '13:00',
@@ -359,20 +491,26 @@ describe('writes', () => {
 						dateTime: '2026-09-18T13:00:00.000-04:00',
 						timeZone: 'America/New_York',
 					},
-					extendedProperties: { private: { hostCode: '654321' } },
+					extendedProperties: {
+						private: { hostCode: '654321', eventType: 'community-event' },
+					},
 					recurrence: ['RRULE:FREQ=MONTHLY;BYDAY=1FR,3FR'],
 				},
 			},
 		});
 	});
 
-	test('no Host Code on create writes no property at all', async () => {
+	test('no Host Code on create writes an empty one beside the type', async () => {
 		const { cal, calls } = fakeClient({});
 		await cal.createEvent({ ...input, hostCode: '' });
 		expect(
 			(calls[0].params as calendar_v3.Params$Resource$Events$Insert)
 				.requestBody,
-		).not.toHaveProperty('extendedProperties');
+		).toMatchObject({
+			extendedProperties: {
+				private: { hostCode: '', eventType: 'community-event' },
+			},
+		});
 	});
 
 	test('updateSeries patches with If-Match and keeps the EXDATE lines', async () => {
@@ -397,7 +535,11 @@ describe('writes', () => {
 					summary: 'Feelings Friday',
 					// The map is replaced whole, so the legacy key rides along.
 					extendedProperties: {
-						private: { hostCode: '654321', joinLink: 'old' },
+						private: {
+							hostCode: '654321',
+							eventType: 'community-event',
+							joinLink: 'old',
+						},
 					},
 					recurrence: [
 						'EXDATE;TZID=America/New_York:20260917T090000',
@@ -415,7 +557,13 @@ describe('writes', () => {
 		expect(calls[1]).toMatchObject({
 			params: {
 				requestBody: {
-					extendedProperties: { private: { hostCode: '', joinLink: 'old' } },
+					extendedProperties: {
+						private: {
+							hostCode: '',
+							eventType: 'community-event',
+							joinLink: 'old',
+						},
+					},
 				},
 			},
 		});
@@ -499,6 +647,31 @@ describe('writes', () => {
 			},
 			options: { headers: { 'If-Match': '"1"' } },
 		});
+	});
+
+	test('updateEvent patches the whole one-off with If-Match', async () => {
+		const { cal, calls } = fakeClient({ get: { talk: oneOff } });
+		const { recurrence: _rule, ...event } = input;
+		await cal.updateEvent('talk', '"t1"', { ...event, hostCode: '' });
+		expect(calls[1]).toMatchObject({
+			method: 'patch',
+			params: {
+				eventId: 'talk',
+				sendUpdates: 'none',
+				requestBody: {
+					summary: 'Feelings Friday',
+					description: 'Talk it out',
+					location: 'https://zoom.example/j/2',
+					start: { dateTime: '2026-09-18T12:00:00.000-04:00' },
+					end: { dateTime: '2026-09-18T13:00:00.000-04:00' },
+					extendedProperties: {
+						private: { hostCode: '', eventType: 'community-event' },
+					},
+				},
+			},
+			options: { headers: { 'If-Match': '"t1"' } },
+		});
+		expect(calls[1].params).not.toHaveProperty('requestBody.recurrence');
 	});
 
 	test('cancel and reschedule patch one Event', async () => {

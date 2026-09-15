@@ -1,6 +1,12 @@
 'use client';
 
 import type { TimeInput } from '@/lib/eventsCalendar';
+import {
+	EVENT_TYPE_LABELS,
+	EVENT_TYPES,
+	isEventType,
+	type EventType,
+} from '@/lib/eventTypes';
 
 /** The admin-styled controls the three Events forms share. */
 
@@ -66,6 +72,52 @@ export function HostCodeField({
 			inputMode="numeric"
 			help="Required for a Zoom Join Link. The Slack bots show it to the host; anyone who can read the calendar through the API can see it."
 		/>
+	);
+}
+
+/**
+ * The Event Type, kept on the Events Calendar for the planned calendar feed.
+ * `''` is no choice yet: a new form, or a legacy entry saved before there
+ * were types — either way the actions refuse to save without one.
+ */
+export function EventTypeField({
+	id,
+	value,
+	onChange,
+	legacy,
+}: {
+	id: string;
+	value: EventType | '';
+	onChange: (value: EventType | '') => void;
+	/** The entry exists and has no type: say so instead of "Choose". */
+	legacy?: boolean;
+}) {
+	return (
+		<div className="mb-3">
+			<label className="form-label small fw-semibold" htmlFor={id}>
+				Event Type
+			</label>
+			<select
+				id={id}
+				className="form-select form-select-sm"
+				value={value}
+				required
+				onChange={(event) => {
+					const next = event.target.value;
+					onChange(isEventType(next) ? next : '');
+				}}
+			>
+				<option value="" disabled>
+					{legacy ? 'Untyped — choose one' : 'Choose an Event Type'}
+				</option>
+				{EVENT_TYPES.map((type) => (
+					<option value={type} key={type}>
+						{EVENT_TYPE_LABELS[type]}
+					</option>
+				))}
+			</select>
+			<div className="form-text">Groups Events for the calendar feed.</div>
+		</div>
 	);
 }
 
