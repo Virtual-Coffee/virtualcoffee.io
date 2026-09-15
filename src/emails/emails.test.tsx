@@ -39,7 +39,13 @@ type Case<P extends object> = [
  */
 const templates = [
 	['coffeeInvite', coffeeInvite, {}, 'Hello there! 👋\n', null],
-	['welcome', welcome, { name: 'Ada Lovelace' }, 'Hi Ada,\n', null],
+	[
+		'welcome',
+		welcome,
+		{ name: 'Ada Lovelace', inviteUrl: URL },
+		'Hi Ada,\n',
+		URL,
+	],
 	[
 		'volunteerInvite',
 		volunteerInvite,
@@ -108,7 +114,7 @@ describe.each(templates)('%s', (_name, template, props, greeting, link) => {
 
 describe('Content', () => {
 	test('is the body without the shell, so a dialog can render it inline', async () => {
-		const element = <welcome.Content name="Ada Lovelace" />;
+		const element = <welcome.Content name="Ada Lovelace" inviteUrl={URL} />;
 		await expect(render(element)).resolves.toEqual(
 			expect.schemaMatching(
 				z
@@ -148,7 +154,10 @@ describe('coffeeInvite', () => {
 
 describe('names', () => {
 	test('a blank name becomes "there" rather than "Hi ,"', async () => {
-		const { text } = await renderEmail(welcome, { name: '   ' });
+		const { text } = await renderEmail(welcome, {
+			name: '   ',
+			inviteUrl: URL,
+		});
 		expect(text).toEqual(
 			expect.schemaMatching(z.string().startsWith('Hi there,')),
 		);

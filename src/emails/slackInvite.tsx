@@ -16,7 +16,8 @@ export function Content({ name, inviteUrl }: SlackInviteProps) {
 		<>
 			<Text style={styles.text}>Hi {firstName(name)},</Text>
 			<Text style={styles.text}>
-				Here&rsquo;s your invite to the Virtual Coffee Slack:
+				Here&rsquo;s a fresh invite to the Virtual Coffee Slack &mdash; the
+				earlier link no longer works:
 			</Text>
 			<Text style={styles.text}>
 				<Button href={inviteUrl} style={styles.button}>

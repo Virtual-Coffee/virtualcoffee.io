@@ -147,14 +147,17 @@ describe('approveMembership', () => {
 
 		await expect(approveMembership(id, false)).resolves.toEqual({ ok: true });
 
-		expect(tokensWhenSending).toEqual([1, 1]);
-		const [, slackInvite] = sendEmail.mock.calls;
-		expect(slackInvite[0]).toMatchObject({
-			subject: 'Your Virtual Coffee Slack invite',
+		expect(tokensWhenSending).toEqual([1]);
+		const [welcome] = sendEmail.mock.calls;
+		expect(welcome[0]).toMatchObject({
+			subject: 'Welcome to Virtual Coffee',
 			text: expect.stringContaining(
-				'https://virtualcoffee.io/join-slack?code=',
+				'https://virtualcoffee.io/resources/virtual-coffee-handbook',
 			),
 		});
+		expect(welcome[0].text).toContain(
+			'https://virtualcoffee.io/join-slack?code=',
+		);
 		const row = await applicationRow(id);
 		expect(row.status).toBe('member');
 		expect(row.approvedAt).toBeInstanceOf(Date);
@@ -176,46 +179,27 @@ describe('approveMembership', () => {
 		expect(sendEmail).toHaveBeenCalledOnce();
 	});
 
-	test('welcome sent but Slack invite not: says so, and does not make them a member', async () => {
-		sendEmail.mockResolvedValueOnce(SENT).mockResolvedValueOnce(NOT_SENT);
-		const { id } = await insertApplication({
-			status: 'coffee_invited',
-			name: 'Ada Lovelace',
-		});
-
-		await expect(approveMembership(id, false)).resolves.toEqual({
-			ok: false,
-			message: expect.stringMatching(
-				/^The welcome email was sent, but the Slack invite was not: .* Ada Lovelace has not been made a member — approving again will re-send both emails\.$/,
-			),
-			emailSent: true,
-		});
-		await expect(applicationRow(id)).resolves.toMatchObject({
-			status: 'coffee_invited',
-		});
-	});
-
-	test('a Slack invite that timed out may have arrived: its link is dead, and the next approval mints a fresh one', async () => {
+	test('a welcome email that timed out may have arrived: its link is dead, and the next approval mints a fresh one', async () => {
 		vi.stubEnv('URL', 'https://virtualcoffee.io');
-		sendEmail.mockResolvedValueOnce(SENT).mockResolvedValueOnce(MAYBE_SENT);
+		sendEmail.mockResolvedValueOnce(MAYBE_SENT);
 		const { id } = await insertApplication({ status: 'coffee_invited' });
 
 		await expect(approveMembership(id, false)).resolves.toMatchObject({
 			ok: false,
-			emailSent: true,
+			emailSent: 'unknown',
 		});
 		expect((await applicationRow(id)).status).toBe('coffee_invited');
 
 		// /join-slack checks only the token, so a live one here would admit a
 		// non-member.
-		const [, slackInvite] = sendEmail.mock.calls;
-		await expect(
-			slackInviteForToken(codeIn(slackInvite[0].text)),
-		).resolves.toEqual({ ok: false, reason: 'expired' });
+		const [welcome] = sendEmail.mock.calls;
+		await expect(slackInviteForToken(codeIn(welcome[0].text))).resolves.toEqual(
+			{ ok: false, reason: 'expired' },
+		);
 
 		sendEmail.mockResolvedValue(SENT);
 		await expect(approveMembership(id, false)).resolves.toEqual({ ok: true });
-		const [, , , retry] = sendEmail.mock.calls;
+		const [, retry] = sendEmail.mock.calls;
 		await expect(slackInviteForToken(codeIn(retry[0].text))).resolves.toEqual({
 			ok: true,
 			applicationId: id,
@@ -427,15 +411,15 @@ describe('a status that changed between the read and the write', () => {
 			emailSent: true,
 		});
 		expect((await applicationRow(id)).status).toBe('withdrawn');
-		expect(sendEmail).toHaveBeenCalledTimes(2);
+		expect(sendEmail).toHaveBeenCalledOnce();
 
-		const [, slackInvite] = sendEmail.mock.calls;
-		await expect(
-			slackInviteForToken(codeIn(slackInvite[0].text)),
-		).resolves.toEqual({
-			ok: false,
-			reason: 'expired',
-		});
+		const [welcome] = sendEmail.mock.calls;
+		await expect(slackInviteForToken(codeIn(welcome[0].text))).resolves.toEqual(
+			{
+				ok: false,
+				reason: 'expired',
+			},
+		);
 	});
 
 	test("a second approval that lost the race does not kill the first one's link", async () => {
@@ -452,7 +436,7 @@ describe('a status that changed between the read and the write', () => {
 			emailSent: true,
 		});
 
-		const [, winner, , loser] = sendEmail.mock.calls;
+		const [winner, loser] = sendEmail.mock.calls;
 		await expect(slackInviteForToken(codeIn(winner[0].text))).resolves.toEqual({
 			ok: true,
 			applicationId: id,
