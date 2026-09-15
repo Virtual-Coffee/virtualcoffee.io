@@ -289,30 +289,13 @@ export async function approveMembership(
 		opened,
 		copyMe,
 		'Welcome email',
-		await renderEmail(welcome, { name: application.name }),
-		expireToken,
-	);
-	if (!welcomeSent.ok) return emailFailed(welcomeSent);
-
-	const slackSent = await emailApplicant(
-		opened,
-		copyMe,
-		'Slack invite',
-		await renderEmail(slackInvite, {
+		await renderEmail(welcome, {
 			name: application.name,
 			inviteUrl: `${siteUrl()}/join-slack?code=${token}`,
 		}),
 		expireToken,
 	);
-	if (!slackSent.ok) {
-		// The welcome email has already gone out, so this is not a clean retry:
-		// say so rather than implying nothing happened.
-		return {
-			ok: false,
-			message: `The welcome email was sent, but the Slack invite was not: ${slackSent.message} ${application.name} has not been made a member — approving again will re-send both emails.`,
-			emailSent: true,
-		};
-	}
+	if (!welcomeSent.ok) return emailFailed(welcomeSent);
 
 	const now = new Date();
 	const stranded = await transitionAfterSend(
@@ -325,9 +308,9 @@ export async function approveMembership(
 		},
 		{
 			type: 'approved',
-			body: `Membership approved; welcome and Slack invite emailed to ${application.email}`,
+			body: `Membership approved; welcome email with Slack invite sent to ${application.email}`,
 		},
-		`Welcome and Slack invite emailed to ${application.email}, but the application had already left Coffee invited; the Slack link has been invalidated`,
+		`Welcome email with Slack invite sent to ${application.email}, but the application had already left Coffee invited; the Slack link has been invalidated`,
 		expireToken,
 	);
 	if (stranded) return stranded;
@@ -350,7 +333,7 @@ export async function approveMembership(
 	}
 
 	revalidateApplication(applicationId);
-	return { ok: true, message: welcomeSent.warning ?? slackSent.warning };
+	return { ok: true, message: welcomeSent.warning };
 }
 
 /**
