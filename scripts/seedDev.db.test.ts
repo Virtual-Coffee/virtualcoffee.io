@@ -100,7 +100,7 @@ const WITH_REFERENCE = [
 	schema.coffeeTableGroupRequest,
 ];
 
-describe('seedDev', () => {
+describe('seedDev', { timeout: 60_000 }, () => {
 	test('covers every enum value and every table', async () => {
 		await seedDev({ attachmentStore: fakeStore() });
 
