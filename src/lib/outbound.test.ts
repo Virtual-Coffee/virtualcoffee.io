@@ -43,6 +43,22 @@ describe('emailDelivery', () => {
 		vi.stubEnv('EMAIL_REDIRECT_TO', '  ');
 		expect(emailDelivery()).toMatchObject({ mode: 'captured' });
 	});
+
+	test('a multi-address EMAIL_REDIRECT_TO is captured, not redirected', () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv(
+			'EMAIL_REDIRECT_TO',
+			'maintainer@example.test, other@example.test',
+		);
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+		expect(emailDelivery()).toEqual({
+			mode: 'captured',
+			context: 'deploy-preview',
+		});
+		expect(warn).toHaveBeenCalledOnce();
+		warn.mockRestore();
+	});
 });
 
 describe('notifyDelivery', () => {
