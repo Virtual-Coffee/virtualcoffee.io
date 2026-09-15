@@ -261,10 +261,11 @@ export async function approveMembership(
 		};
 	}
 
-	// The token has to exist before the email that carries it. An unsent token
-	// is harmless: it is single-use and expires on its own.
+	// The token has to exist before the email that carries it, so every exit
+	// below that does not make a member expires it: a timed-out send may still
+	// have delivered a working link, and /join-slack checks only the token.
 	// Not superseding: another approval may be racing this one, and its link
-	// must survive if it wins. The loser expires its own below.
+	// must survive if it wins. The loser expires its own.
 	const { id: tokenId, token } = await createSlackInviteToken(applicationId, {
 		supersede: false,
 	});
@@ -279,6 +280,7 @@ export async function approveMembership(
 	});
 
 	if (!welcomeSent.ok) {
+		await expireSlackInviteToken(tokenId, new Date());
 		await recordEvent({
 			applicationId,
 			actorUserId: actor,
@@ -301,6 +303,8 @@ export async function approveMembership(
 	});
 
 	if (!slackSent.ok) {
+		// A timeout may have delivered the link anyway; kill it before saying so.
+		await expireSlackInviteToken(tokenId, new Date());
 		await recordEvent({
 			applicationId,
 			actorUserId: actor,
