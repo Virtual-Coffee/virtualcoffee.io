@@ -142,9 +142,13 @@ export function EventsTable({
 								</td>
 								{titles && (
 									<td>
-										{event.seriesId && canManage ? (
+										{canManage ? (
 											<Link
-												href={`/admin/events/series/${event.seriesId}`}
+												href={
+													event.seriesId
+														? `/admin/events/series/${event.seriesId}`
+														: `/admin/events/${event.id}`
+												}
 												className={
 													cancelled ? 'text-decoration-line-through' : ''
 												}
