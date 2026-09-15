@@ -71,7 +71,11 @@ export function emailDelivery(): EmailDelivery {
 		return { mode: 'captured', context: deployContext() };
 	}
 
-	return { mode: 'redirected', context: deployContext(), redirectTo: parsed.data };
+	return {
+		mode: 'redirected',
+		context: deployContext(),
+		redirectTo: parsed.data,
+	};
 }
 
 /**
