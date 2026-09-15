@@ -214,6 +214,33 @@ describe('approveMembership', () => {
 		});
 	});
 
+	test('a Slack invite that timed out may have arrived: its link is dead, and the next approval mints a fresh one', async () => {
+		vi.stubEnv('URL', 'https://virtualcoffee.io');
+		sendEmail.mockResolvedValueOnce(SENT).mockResolvedValueOnce(MAYBE_SENT);
+		const { id } = await insertApplication({ status: 'coffee_invited' });
+
+		await expect(approveMembership(id, false)).resolves.toMatchObject({
+			ok: false,
+			emailSent: true,
+		});
+		expect((await applicationRow(id)).status).toBe('coffee_invited');
+
+		// /join-slack checks only the token, so a live one here would admit a
+		// non-member.
+		const [, slackInvite] = sendEmail.mock.calls;
+		await expect(
+			slackInviteForToken(codeIn(slackInvite[0].text)),
+		).resolves.toEqual({ ok: false, reason: 'expired' });
+
+		sendEmail.mockResolvedValue(SENT);
+		await expect(approveMembership(id, false)).resolves.toEqual({ ok: true });
+		const [, , , retry] = sendEmail.mock.calls;
+		await expect(slackInviteForToken(codeIn(retry[0].text))).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
+	});
+
 	test('completes the Invite that produced the application', async () => {
 		sendEmail.mockResolvedValue(SENT);
 		const grace = await insertUser({
