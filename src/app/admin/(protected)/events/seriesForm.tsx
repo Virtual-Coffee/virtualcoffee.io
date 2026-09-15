@@ -4,12 +4,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useId, useState } from 'react';
 
-import type { Series } from '@/lib/eventsCalendar';
+import type { EventType, Series } from '@/lib/eventsCalendar';
 import { useAction } from '@/util/forms/useAction';
 
 import { createSeries, endSeries, updateSeries } from './actions';
 import { DescriptionField } from './descriptionField';
-import { HostCodeField, TextField, TimeFields, type TimeInput } from './fields';
+import {
+	EventTypeField,
+	HostCodeField,
+	TextField,
+	TimeFields,
+	type TimeInput,
+} from './fields';
 import {
 	draftFromRecurrence,
 	draftToForm,
@@ -31,6 +37,9 @@ export function SeriesForm({ series }: { series?: Series }) {
 	const [title, setTitle] = useState(series?.title ?? '');
 	const [joinLink, setJoinLink] = useState(series?.joinLink ?? '');
 	const [hostCode, setHostCode] = useState(series?.hostCode ?? '');
+	const [eventType, setEventType] = useState<EventType | ''>(
+		series?.eventType ?? '',
+	);
 	const [description, setDescription] = useState(series?.description ?? '');
 	const [when, setWhen] = useState<TimeInput>({
 		date: series?.date ?? '',
@@ -46,7 +55,12 @@ export function SeriesForm({ series }: { series?: Series }) {
 	);
 
 	const recurrence = custom ? null : draftToForm(rule);
-	const ready = title.trim() && joinLink && when.date && (custom || recurrence);
+	const ready =
+		title.trim() &&
+		joinLink &&
+		eventType &&
+		when.date &&
+		(custom || recurrence);
 	const created = !series && result?.ok;
 
 	return (
@@ -57,6 +71,7 @@ export function SeriesForm({ series }: { series?: Series }) {
 					title,
 					joinLink,
 					hostCode,
+					eventType,
 					description,
 					...when,
 					recurrence,
@@ -111,6 +126,12 @@ export function SeriesForm({ series }: { series?: Series }) {
 					id={`${id}-host`}
 					value={hostCode}
 					onChange={setHostCode}
+				/>
+				<EventTypeField
+					id={`${id}-type`}
+					value={eventType}
+					onChange={setEventType}
+					legacy={Boolean(series) && series?.eventType === null}
 				/>
 				<DescriptionField
 					id={`${id}-description`}

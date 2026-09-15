@@ -65,6 +65,15 @@ public read never touches extended properties. Anyone who can read the
 calendar through the API can read the code — the workspace — and that
 exposure is accepted; the calendar is not public.
 
+**The Event Type is `extendedProperties.private.eventType`.** A key from a
+fixed list in code (`EVENT_TYPES` in `src/lib/eventTypes.ts`) that says
+what kind of thing a Series or one-off Event is — Virtual Coffee, Lunch &
+Learn, and so on. It is written beside the Host Code, the admin page is its
+only writer and requires one on every save, and an entry from before there
+were types has none until it is next saved. The list is code, not data, so
+a new kind is a reviewable diff, and the keys are stable because the planned
+filtered calendar feed will select on them; nothing reads them yet.
+
 **Descriptions are Markdown.** The bots render them for Slack with
 `slackify-markdown`; the site renders them with its own Markdown pipeline;
 the admin page edits them as rich text (MDXEditor, loaded on the client
