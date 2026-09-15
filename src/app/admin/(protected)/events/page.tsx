@@ -23,12 +23,13 @@ export default async function EventsPage() {
 	const calendar = connectEventsCalendar();
 	// Reads are live, not cached: a maintainer here wants the calendar as it
 	// is, and each row's etag is what its Cancel or Reschedule will present.
-	const [series, events] = calendar
+	const [series, oneOffs, events] = calendar
 		? await Promise.all([
 				calendar.listSeries(),
+				calendar.listUpcomingOneOffs(),
 				calendar.listUpcomingEvents({ days: 30 }),
 			])
-		: [[], []];
+		: [[], [], []];
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -62,6 +63,15 @@ export default async function EventsPage() {
 
 			<h2 className="h6 text-uppercase text-body-secondary mt-4">Series</h2>
 			<SeriesTable rows={series} canManage={canManage} />
+
+			<h2 className="h6 text-uppercase text-body-secondary mt-4">
+				One-off Events
+			</h2>
+			<EventsTable
+				rows={oneOffs}
+				canManage={canManage}
+				empty="No one-off Events still to come."
+			/>
 
 			<h2 className="h6 text-uppercase text-body-secondary mt-4">
 				Next 30 days
