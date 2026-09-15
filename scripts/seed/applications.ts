@@ -432,7 +432,7 @@ export async function seedApplications(
 				type: 'approved',
 				fromStatus: 'coffee_invited',
 				toStatus: 'member',
-				body: `Membership approved; welcome and Slack invite emailed to ${seed.email}`,
+				body: `Membership approved; welcome email with Slack invite sent to ${seed.email}`,
 				createdAt: approvedAt,
 			});
 

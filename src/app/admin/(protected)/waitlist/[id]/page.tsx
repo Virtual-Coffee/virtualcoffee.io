@@ -33,6 +33,10 @@ export const metadata = {
 	robots: { index: false, follow: false },
 };
 
+// The real link is minted at send time; this stands in so the previews read
+// as they will.
+const SLACK_LINK_PLACEHOLDER = 'https://virtualcoffee.io/join-slack?code=…';
+
 export default async function ApplicationDetailPage({
 	params,
 }: {
@@ -184,20 +188,26 @@ export default async function ApplicationDetailPage({
 									body: <coffeeInvite.Content />,
 								}}
 								welcome={{
-									subject: welcome.subject({ name: application.name }),
-									body: <welcome.Content name={application.name} />,
+									subject: welcome.subject({
+										name: application.name,
+										inviteUrl: '',
+									}),
+									body: (
+										<welcome.Content
+											name={application.name}
+											inviteUrl={SLACK_LINK_PLACEHOLDER}
+										/>
+									),
 								}}
 								slackInvite={{
 									subject: slackInvite.subject({
 										name: application.name,
 										inviteUrl: '',
 									}),
-									// The real link is minted at send time; a placeholder
-									// stands in so the preview reads as it will.
 									body: (
 										<slackInvite.Content
 											name={application.name}
-											inviteUrl="https://virtualcoffee.io/join-slack?code=…"
+											inviteUrl={SLACK_LINK_PLACEHOLDER}
 										/>
 									),
 								}}
