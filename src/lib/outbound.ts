@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 /**
  * Delivery Mode for anything the site sends out — email, Slack posts, GitHub
  * issues. Live delivery is production only; everywhere else is Captured
@@ -49,15 +51,27 @@ export type EmailDelivery =
  * `EMAIL_REDIRECT_TO` turns Captured into Redirected: everything is delivered
  * for real, to that one address. It is read only outside production — a
  * redirect there would silently divert real applicants' mail.
+ *
+ * Validated as exactly one mailbox: nodemailer parses a comma- or
+ * semicolon-separated `to` as multiple recipients, so a malformed value would
+ * silently multi-deliver captured applicant content instead of failing
+ * closed. A value that doesn't parse is treated as unset.
  */
 export function emailDelivery(): EmailDelivery {
 	if (isProduction()) return { mode: 'live' };
 
-	const redirectTo = process.env.EMAIL_REDIRECT_TO?.trim();
-	if (redirectTo) {
-		return { mode: 'redirected', context: deployContext(), redirectTo };
+	const raw = process.env.EMAIL_REDIRECT_TO?.trim();
+	if (!raw) return { mode: 'captured', context: deployContext() };
+
+	const parsed = z.email().safeParse(raw);
+	if (!parsed.success) {
+		console.warn(
+			`EMAIL_REDIRECT_TO is not a single valid address (${JSON.stringify(raw)}); capturing instead of redirecting.`,
+		);
+		return { mode: 'captured', context: deployContext() };
 	}
-	return { mode: 'captured', context: deployContext() };
+
+	return { mode: 'redirected', context: deployContext(), redirectTo: parsed.data };
 }
 
 /**
