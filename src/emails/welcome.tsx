@@ -6,26 +6,38 @@ import type { EmailTemplate } from '@/lib/email/render';
 import { styles } from '@/lib/email/styles';
 import { siteUrl } from '@/util/url.server';
 
-export type WelcomeProps = { name: string };
+export type WelcomeProps = { name: string; inviteUrl: string };
 
 export function subject(): string {
 	return 'Welcome to Virtual Coffee';
 }
 
-export function Content({ name }: WelcomeProps) {
+export function Content({ name, inviteUrl }: WelcomeProps) {
 	const handbook = `${siteUrl()}/resources/virtual-coffee-handbook`;
 	return (
 		<>
 			<Text style={styles.text}>Hi {firstName(name)},</Text>
 			<Text style={styles.text}>
-				It was good to have you at Coffee. You&rsquo;re a member &mdash; your
-				Slack invite is on its way in a separate email, and the handbook is the
-				best place to start:
+				It was good to have you at Coffee. You&rsquo;re a member &mdash; the
+				handbook is the best place to start:
 			</Text>
 			<Text style={styles.text}>
 				<Button href={handbook} style={styles.button}>
 					Read the handbook
 				</Button>
+			</Text>
+			<Text style={styles.text}>
+				And here&rsquo;s your invite to the Virtual Coffee Slack:
+			</Text>
+			<Text style={styles.text}>
+				<Button href={inviteUrl} style={styles.button}>
+					Join the Slack
+				</Button>
+			</Text>
+			<Text style={styles.text}>
+				This link is for you and works once, so please don&rsquo;t forward it.
+				If it&rsquo;s expired by the time you get to it, reply to this email and
+				we&rsquo;ll send another.
 			</Text>
 			<Text style={styles.text}>
 				Welcome in,
@@ -37,12 +49,15 @@ export function Content({ name }: WelcomeProps) {
 
 export default function Email(props: WelcomeProps) {
 	return (
-		<Layout preview="You’re a member. Your Slack invite is on its way.">
+		<Layout preview="You’re a member. The handbook and your Slack invite are inside.">
 			<Content {...props} />
 		</Layout>
 	);
 }
 
-Email.PreviewProps = { name: 'Ada Lovelace' } satisfies WelcomeProps;
+Email.PreviewProps = {
+	name: 'Ada Lovelace',
+	inviteUrl: 'https://virtualcoffee.io/join-slack?code=example',
+} satisfies WelcomeProps;
 
 export const welcome: EmailTemplate<WelcomeProps> = { subject, Email, Content };

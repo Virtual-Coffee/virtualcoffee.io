@@ -142,7 +142,7 @@ export function ActionPanel(props: Props) {
 							className="btn btn-primary"
 							label="Approve membership"
 							title="Approve membership"
-							confirmLabel="Approve &amp; send Slack invite"
+							confirmLabel="Approve &amp; send welcome"
 							pendingLabel="Sending…"
 							action={() => approveMembership(props.applicationId, copyMe)}
 						>
@@ -150,9 +150,9 @@ export function ActionPanel(props: Props) {
 								{...sendCopy}
 								intro={
 									<>
-										Two things happen and neither can be taken back:{' '}
-										{props.applicantName} gets a welcome email, and a Slack
-										invite goes out to <strong>{props.applicantEmail}</strong>.
+										This can&rsquo;t be taken back: {props.applicantName} gets a
+										welcome email with the handbook and a Slack invite at{' '}
+										<strong>{props.applicantEmail}</strong>.
 										<span className="d-block mt-2 text-body-secondary">
 											Coffee invited → Member
 											{props.attendedAt
@@ -162,7 +162,7 @@ export function ActionPanel(props: Props) {
 									</>
 								}
 								to={props.applicantEmail}
-								emails={[props.welcome, props.slackInvite]}
+								emails={[props.welcome]}
 							/>
 						</ActionDialog>
 						{!props.attendedAt && (
@@ -249,7 +249,7 @@ export function ActionPanel(props: Props) {
 
 			{props.status === 'coffee_invited' && (
 				<p className="text-body-secondary small mt-3 mb-0">
-					Approving also sends the Slack invite.
+					Approving sends the welcome email, which carries the Slack invite.
 				</p>
 			)}
 		</>
