@@ -9,6 +9,7 @@ const calendar = {
 	updateSeries: vi.fn(),
 	endSeries: vi.fn(),
 	createEvent: vi.fn(),
+	updateEvent: vi.fn(),
 	cancelEvent: vi.fn(),
 	restoreEvent: vi.fn(),
 	rescheduleEvent: vi.fn(),
@@ -35,6 +36,7 @@ const {
 	endSeries,
 	rescheduleEvent,
 	restoreEvent,
+	updateEvent,
 	updateSeries,
 } = await import('./actions');
 
@@ -43,6 +45,7 @@ const series = {
 	description: 'Come hang out',
 	joinLink: 'https://meet.example/coffee',
 	hostCode: '',
+	eventType: 'virtual-coffee',
 	date: '2026-09-15', // a Tuesday
 	startTime: '09:00',
 	endTime: '10:00',
@@ -73,6 +76,7 @@ describe('access', () => {
 		['updateSeries', () => updateSeries(ID, ETAG, series)],
 		['endSeries', () => endSeries(ID, ETAG)],
 		['createEvent', () => createEvent(series)],
+		['updateEvent', () => updateEvent(ID, ETAG, series)],
 		['cancelEvent', () => cancelEvent(ID, ETAG)],
 		['restoreEvent', () => restoreEvent(ID, ETAG)],
 		['rescheduleEvent', () => rescheduleEvent(ID, ETAG, series)],
@@ -100,6 +104,12 @@ describe('validation', () => {
 			'a host code that is not 6–10 digits',
 			{ ...series, hostCode: 'abc' },
 			'A Zoom host code is 6–10 digits.',
+		],
+		['no Event Type', { ...series, eventType: '' }, 'Pick an Event Type.'],
+		[
+			'an Event Type this code does not know',
+			{ ...series, eventType: 'karaoke' },
+			'Pick an Event Type.',
 		],
 		[
 			'an end before the start',
@@ -170,7 +180,27 @@ describe('validation', () => {
 			ok: false,
 			message: 'That no longer exists on the Events Calendar.',
 		});
+		await expect(updateEvent(ID, '', series)).resolves.toEqual({
+			ok: false,
+			message: 'That no longer exists on the Events Calendar.',
+		});
 		expect(calendar.cancelEvent).not.toHaveBeenCalled();
+		expect(calendar.updateEvent).not.toHaveBeenCalled();
+	});
+
+	test('updateEvent validates like createEvent and ignores a rule', async () => {
+		await expect(
+			updateEvent(ID, ETAG, { ...series, title: '' }),
+		).resolves.toEqual({
+			ok: false,
+			message: 'Give it a title.',
+		});
+		await expect(updateEvent(ID, ETAG, series)).resolves.toEqual({
+			ok: true,
+			message: '“Virtual Coffee” is updated.',
+		});
+		const { recurrence: _rule, ...event } = series;
+		expect(calendar.updateEvent).toHaveBeenCalledWith(ID, ETAG, event);
 	});
 
 	test('rescheduleEvent checks the time', async () => {
