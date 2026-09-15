@@ -13,6 +13,10 @@
 	function = "limit-action-body"
 	path     = "/*"
 
+[[edge_functions]]
+	function = "rate-limit-join"
+	path     = "/join"
+
 [dev]
 	autoLaunch = false
 	command    = "next dev"
