@@ -9,6 +9,10 @@
 	function = "block-bots"
 	path     = "/*"
 
+[[edge_functions]]
+	function = "rate-limit-join"
+	path     = "/join"
+
 [dev]
 	autoLaunch = false
 	command    = "next dev"
