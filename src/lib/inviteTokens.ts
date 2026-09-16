@@ -1,4 +1,4 @@
-import { and, eq, gt, isNull, lt } from 'drizzle-orm';
+import { and, eq, gt, isNull, lt, or } from 'drizzle-orm';
 
 import { db, inviteToken } from '@/db';
 import { hashToken, newToken } from '@/lib/tokens';
@@ -72,7 +72,9 @@ export async function expireSlackInviteToken(
  * of two concurrent re-sends finishes last; the old link then reads as
  * expired on /join-slack, which is also what it is. Compared in the database
  * — a `created_at` read back into a JS Date loses the microseconds that tell
- * two tokens minted in the same millisecond apart.
+ * two tokens minted in the same millisecond apart — with the id as the
+ * tie-break for two minted in the same instant (docs/adr/0008), or a
+ * double-click on Re-send would leave the first link live.
  */
 export async function supersedeSlackInviteTokens(
 	applicationId: string,
@@ -92,7 +94,10 @@ export async function supersedeSlackInviteTokens(
 				eq(inviteToken.purpose, 'slack'),
 				isNull(inviteToken.usedAt),
 				gt(inviteToken.expiresAt, now),
-				lt(inviteToken.createdAt, kept),
+				or(
+					lt(inviteToken.createdAt, kept),
+					and(eq(inviteToken.createdAt, kept), lt(inviteToken.id, keep.id)),
+				),
 			),
 		);
 }

@@ -109,10 +109,26 @@ describe('Slack invite tokens', () => {
 		});
 	});
 
+	/**
+	 * Both mints are pinned to one instant: a double-click, two maintainers at
+	 * once, or this suite under load. Mint order then rests on the id alone.
+	 */
+	async function mintTwoAtOnce(applicationId: string) {
+		const first = await createSlackInviteToken(applicationId);
+		const second = await createSlackInviteToken(applicationId);
+		await db()
+			.update(inviteToken)
+			.set({ createdAt: new Date('2026-09-16T12:00:00Z') })
+			.where(eq(inviteToken.applicationId, applicationId));
+		return { first, second };
+	}
+
 	test('a superseded token redeems as expired, not used, and stays unused', async () => {
 		const { id } = await insertApplication({ status: 'member' });
-		const { token: first } = await createSlackInviteToken(id);
-		const second = await createSlackInviteToken(id);
+		const {
+			first: { token: first },
+			second,
+		} = await mintTwoAtOnce(id);
 		await supersedeSlackInviteTokens(id, second, new Date());
 
 		await expect(redeemSlackInviteToken(first)).resolves.toEqual({
@@ -127,8 +143,7 @@ describe('Slack invite tokens', () => {
 	// from an older token leaves the newer one alone.
 	test('superseding is by mint order, so a later token is never retired by an earlier one', async () => {
 		const { id } = await insertApplication({ status: 'member' });
-		const first = await createSlackInviteToken(id);
-		const second = await createSlackInviteToken(id);
+		const { first, second } = await mintTwoAtOnce(id);
 
 		await supersedeSlackInviteTokens(id, first, new Date());
 
