@@ -55,6 +55,7 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Apply migrations on a deploy               | `pnpm db:migrate:deploy` — what `netlify.toml` runs after `next build`; reads `NETLIFY_DB_URL`                                                          |
 | Seed local sample data                     | `pnpm db:seed` (every table and enum value, a devtools user per role, one CoC attachment; prints a live Claim Link and Slack join link)                 |
 | Run the daily invite upkeep by hand        | `pnpm invite-maintenance` (accrual and expiry; the scheduled function itself answers no requests)                                                       |
+| Preview the email templates                | `pnpm email:dev` (React Email's preview server on <http://localhost:3010>, reading `src/emails/`)                                                       |
 
 `.github/workflows/ci.yml` runs four jobs on every pull request — `format`, `lint`, `typecheck`, `test`. Netlify still owns `pnpm build`; CI does not build. CodeQL (`.github/workflows/codeql.yml`, advanced setup — leave the repository's default-setup toggle off) scans `javascript-typescript` and `actions` on pull requests, pushes to `main` and weekly; its findings go to the Security tab and are not a required check.
 
@@ -68,7 +69,7 @@ The `format` job auto-commits Prettier fixes, but only on branches in this repo,
 
 ### Testing
 
-Tests are Vitest (`vitest.config.mts`), colocated as `*.test.ts` beside the module, in a plain `node` environment with explicit `import { test, expect } from 'vitest'` — no globals, no jsdom, no React Testing Library. Two projects: `unit` (`*.test.ts` under `src/`, `scripts/` and `netlify/`; `pnpm test --project unit` is the fast loop) and `db` (`*.db.test.ts`, anything that touches the database). `@/` is an alias in the Vitest config, not a tsconfig-paths plugin. `tsconfig.json` already includes `**/*.ts`, so `pnpm typecheck` sees test files, and `@vitest/eslint-plugin`'s recommended rules apply to them (no focused or skipped tests).
+Tests are Vitest (`vitest.config.mts`), colocated as `*.test.ts` beside the module (`*.test.tsx` where the subject is JSX, as in `src/emails/`), in a plain `node` environment with explicit `import { test, expect } from 'vitest'` — no globals, no jsdom, no React Testing Library. Two projects: `unit` (`*.test.ts` under `src/`, `scripts/` and `netlify/`; `pnpm test --project unit` is the fast loop) and `db` (`*.db.test.ts`, anything that touches the database). `@/` is an alias in the Vitest config, not a tsconfig-paths plugin. `tsconfig.json` already includes `**/*.ts`, so `pnpm typecheck` sees test files, and `@vitest/eslint-plugin`'s recommended rules apply to them (no focused or skipped tests).
 
 Async Server Components can't be rendered by a unit runner (Next's own guidance), so pages are not unit-tested; Netlify's deploy preview is still what exercises rendering. Server actions _are_ tested, by calling them: `'use server'` is inert under Node, `db()` and `auth` are lazy, so a submission that fails validation returns its `fieldErrors` without a database, and `redirect()`/`notFound()` are asserted on the thrown digest (`src/test/next.ts`). The zod schemas stay private to their action files on purpose.
 
@@ -91,7 +92,7 @@ Every external data source lives in `src/data/` and degrades to mocks when its e
 | Events (Craft CMS + Solspace Calendar GraphQL)  | `src/data/events.ts`         | `CMS_URL`, `CMS_TOKEN`                            | `src/data/mocks/events.ts`                                        |
 | Submission and membership notifications (Slack) | `src/lib/slack/notify.ts`    | `SLACK_WEBHOOK_*`                                 | failure recorded as an event, shown in `/admin`                   |
 | Lunch & Learn GitHub issue                      | `src/lib/github/issues.ts`   | `GITHUB_APP_CLIENT_ID` / `GITHUB_APP_PRIVATE_KEY` | same; captured outside production                                 |
-| Transactional email (`/admin` actions)          | `src/lib/email/transport.ts` | `GOOGLE_SMTP_USER`, `GOOGLE_SMTP_APP_PASSWORD`    | captured outside production; a failure is an `email_failed` event |
+| Transactional email (`/admin` actions)          | `src/lib/email/transport.ts` | `GOOGLE_SMTP_USER`, `GMAIL_SERVICE_ACCOUNT_KEY`   | captured outside production; a failure is an `email_failed` event |
 | Slack member directory (`/admin` grant picker)  | `src/data/slackMembers.ts`   | `SLACK_BOT_TOKEN`                                 | `src/data/mocks/slackMembers.ts` (faker)                          |
 | Membership applications (`/join`, `/admin`)     | `src/db/`                    | none (auto-provisioned)                           | local Postgres from `netlify dev`                                 |
 
@@ -110,7 +111,7 @@ Every external data source lives in `src/data/` and degrades to mocks when its e
 - Auth is Better Auth with Slack OAuth (`src/lib/auth.ts`); 1.7.3 has no `team` option, so the workspace check is in `mapProfileToUser`. `ADMIN_DEV_BYPASS=true` unblocks `/admin` locally without Slack credentials; a real session cookie (the devtools panel's "switch user") takes precedence over it.
 - Deploy previews get a fork of production's database and sign in through production's Slack OAuth (`oAuthProxy`, so the only registered redirect URI is production's); nothing is scrubbed and there is no preview bypass — a preview's audience is production's. `OAUTH_PROXY_SECRET` must be identical in every Netlify context. `docs/adr/0007`.
 - Any admin action that emails must **send first and only then write the status change**, and report whether anything went out — getting it backwards double-emails applicants. `waitlist/actions.db.test.ts` and `transport.test.ts` pin this.
-- **Nothing is delivered outside `CONTEXT=production`.** `src/lib/outbound.ts` decides the Delivery Mode: email is captured (logged, reported as sent) unless `EMAIL_REDIRECT_TO` redirects it to one address; Slack posts and GitHub issues are captured unless `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true`. A new sender consults `outbound.ts` **before** it checks its own credentials. `docs/adr/0013`.
+- **Nothing is delivered outside `CONTEXT=production`.** `src/lib/outbound.ts` decides the Delivery Mode: email is captured (logged, reported as sent) unless `SMTP_HOST` names a local sink, and only on a checkout — a deploy ignores it; Slack posts and GitHub issues are captured unless `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true`. On a deploy, `capture()` logs the masked recipient, the subject and the links — never the body — because the data is real (`docs/adr/0007`). A new sender consults `outbound.ts` **before** it checks its own credentials. `docs/adr/0013`.
 
 ### Submissions (Postgres)
 

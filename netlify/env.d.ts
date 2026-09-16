@@ -30,14 +30,21 @@ declare namespace NodeJS {
 		// production's OAuth callback, and this encrypts what crosses over.
 		OAUTH_PROXY_SECRET?: string;
 
-		// Transactional email via Google Workspace SMTP
+		// Transactional email via Google Workspace SMTP, XOAUTH2 as a service
+		// account (the JSON key file, whole) impersonating the user.
 		GOOGLE_SMTP_USER?: string;
-		GOOGLE_SMTP_APP_PASSWORD?: string;
-		// Delivery Mode outside production (docs/adr/0013): email is captured
-		// unless redirected to this one address; Slack/GitHub are captured
-		// unless this is the literal `true`.
-		EMAIL_REDIRECT_TO?: string;
+		GMAIL_SERVICE_ACCOUNT_KEY?: string;
+		// Delivery Mode outside production (docs/adr/0013): Slack/GitHub are
+		// captured unless this is the literal `true`.
 		NOTIFY_LIVE_OUTSIDE_PRODUCTION?: string;
+		// Email is captured unless sent to a local-only SMTP sink such as
+		// Mailpit — no Google credentials read, addressed exactly as production
+		// would. Takes SMTP_PORT (default 1025).
+		SMTP_HOST?: string;
+		SMTP_PORT?: string;
+		// Set by `pnpm email:dev` only: where the templates' images load from
+		// while the preview server, not production, is serving them.
+		EMAIL_ASSET_ORIGIN?: string;
 
 		// Slack notifications for inbound Submissions. One incoming webhook per
 		// destination, so a missing one only silences its own form.

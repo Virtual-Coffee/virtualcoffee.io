@@ -36,9 +36,9 @@ describe('notifySlack', () => {
 			message: 'Captured, not posted to Slack (deploy-preview).',
 		});
 		expect(fetch).not.toHaveBeenCalled();
+		// On a deploy the text is not logged (outbound.test.ts has the shape).
 		expect(info).toHaveBeenCalledWith(
 			'[slack captured] deploy-preview membership',
-			'\nhi',
 		);
 		info.mockRestore();
 	});

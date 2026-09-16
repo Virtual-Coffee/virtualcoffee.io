@@ -8,7 +8,9 @@ import { useModalDialog } from '@/util/useModalDialog';
 /**
  * Shows the actual email that is about to go out, rather than asking "are you
  * sure?". The recipient address is repeated above the body because sending to
- * the wrong person is the mistake this dialog exists to catch.
+ * the wrong person is the mistake this dialog exists to catch. `body` is the
+ * template's own `Content` component — the same React tree the sent HTML is
+ * rendered from — so what is shown is what goes.
  *
  * `offerCopy` adds a "Copy me" checkbox; the admin screens want it, the
  * Volunteer's own invites do not.
@@ -29,7 +31,7 @@ export function ConfirmSendDialog({
 	title: string;
 	intro: ReactNode;
 	to: string;
-	emails: { subject: string; text: string }[];
+	emails: { subject: string; body: ReactNode }[];
 	confirmLabel: string;
 	pending: boolean;
 	offerCopy?: boolean;
@@ -81,7 +83,7 @@ export function ConfirmSendDialog({
 					<p className="small text-body-secondary mb-2">
 						To: {to} · Subject: {email.subject}
 					</p>
-					<p className="admin-answer small mb-0">{email.text}</p>
+					<div className="email-preview">{email.body}</div>
 				</div>
 			))}
 

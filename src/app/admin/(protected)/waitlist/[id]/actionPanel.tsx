@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 
 import type { ApplicationStatus } from '@/db';
 import {
@@ -19,7 +19,8 @@ import { CloseDialog } from './closeDialog';
 import { useAction } from '@/util/forms/useAction';
 import { ReadOnlyNotice } from '../../presentation';
 
-type Template = { subject: string; text: string };
+/** A template's subject and its `Content`, rendered by the server page. */
+type Template = { subject: string; body: ReactNode };
 
 type Props = {
 	canManage: boolean;
@@ -152,7 +153,7 @@ export function ActionPanel(props: Props) {
 
 			{props.status === 'coffee_invited' && (
 				<p className="text-body-secondary small mt-3 mb-0">
-					Approving also sends the Slack invite.
+					Approving sends the welcome email, which carries the Slack invite.
 				</p>
 			)}
 
@@ -181,9 +182,9 @@ export function ActionPanel(props: Props) {
 				title="Approve membership"
 				intro={
 					<>
-						Two things happen and neither can be taken back:{' '}
-						{props.applicantName} gets a welcome email, and a Slack invite goes
-						out to <strong>{props.applicantEmail}</strong>.
+						This can&rsquo;t be taken back: {props.applicantName} gets a welcome
+						email with the handbook and a Slack invite at{' '}
+						<strong>{props.applicantEmail}</strong>.
 						<span className="d-block mt-2 text-body-secondary">
 							Coffee invited → Member
 							{props.attendedAt ? ` · Attended ${props.attendedAt}` : ''}
@@ -191,8 +192,8 @@ export function ActionPanel(props: Props) {
 					</>
 				}
 				to={props.applicantEmail}
-				emails={[props.welcome, props.slackInvite]}
-				confirmLabel="Approve &amp; send Slack invite"
+				emails={[props.welcome]}
+				confirmLabel="Approve &amp; send welcome"
 				pending={pending}
 				offerCopy
 				onCancel={() => setDialog(null)}
@@ -250,8 +251,8 @@ export function ActionPanel(props: Props) {
 
 /**
  * Which Delivery Mode this deploy is in, when it is not the ordinary one.
- * Captured and Redirected are the non-production modes (docs/adr/0013);
- * missing credentials only matter when a send would actually go out.
+ * Captured is the non-production mode (docs/adr/0013); missing credentials
+ * only matter when a send would actually go out.
  */
 function DeliveryNotice({ status }: { status: EmailStatus }) {
 	if (status.mode === 'captured') {
@@ -259,18 +260,6 @@ function DeliveryNotice({ status }: { status: EmailStatus }) {
 			<div className="alert alert-info small" role="status">
 				Email is captured on this deploy ({status.context}): every send is
 				logged and recorded as sent, and nothing reaches an inbox.
-			</div>
-		);
-	}
-
-	if (status.mode === 'redirected') {
-		return (
-			<div className="alert alert-info small" role="status">
-				Email from this deploy ({status.context}) is redirected to{' '}
-				{status.redirectTo}
-				{!status.configured &&
-					' — but email isn’t configured, so nothing can be sent yet'}
-				.
 			</div>
 		);
 	}

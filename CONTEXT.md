@@ -25,7 +25,7 @@ _Avoid_: Approval, first approval, invite
 
 **Membership Approval**:
 The second of two approvals, granted after the applicant attends a Coffee. Sends
-the welcome email and the Slack invite.
+the welcome email, which carries the handbook and the Slack invite.
 _Avoid_: Approval, final approval, acceptance
 
 **Invite**:
@@ -142,7 +142,8 @@ _Avoid_: Invite, pre-provision, reservation
 What happens to an email, Slack post, or GitHub issue the site sends. **Live**
 delivers it to the intended recipient, and only the production site does that.
 **Captured** builds and logs it and the pipeline carries on as though it went,
-but nothing leaves the deploy — the default everywhere else. **Redirected**
-delivers it for real, to a single maintainer address in place of the recipient,
-with the intended recipient named.
+but nothing leaves the deploy — the default everywhere else. **Local** delivers
+an email for real, addressed as production would, to a local-only SMTP sink such
+as Mailpit (`SMTP_HOST`); it never leaves the machine, and only a checkout can
+select it — a deploy ignores the variable.
 _Avoid_: Dry run, suppressed, sandbox, test mode

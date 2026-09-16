@@ -15,16 +15,25 @@ import {
 const input = {
 	to: 'ada@example.test',
 	subject: 'Hello',
+	html: '<p>Body</p>',
 	text: 'Body',
 };
+
+/** The shape of a downloaded service-account key file, PEM collapsed as Netlify's UI does. */
+const KEY = JSON.stringify({
+	type: 'service_account',
+	client_id: '113600000000000000000',
+	client_email: 'mail@vc.iam.gserviceaccount.com',
+	private_key:
+		'-----BEGIN PRIVATE KEY-----\\nMIIE\\n-----END PRIVATE KEY-----\\n',
+});
 
 beforeEach(() => {
 	// Live delivery is production only; every case below is about what a
 	// live send does. The non-production modes have their own describe.
 	vi.stubEnv('CONTEXT', 'production');
-	vi.stubEnv('EMAIL_REDIRECT_TO', undefined);
 	vi.stubEnv('GOOGLE_SMTP_USER', 'hello@virtualcoffee.io');
-	vi.stubEnv('GOOGLE_SMTP_APP_PASSWORD', 'app-password');
+	vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', KEY);
 	sendMail.mockReset();
 	sendMail.mockResolvedValue({ rejected: [] });
 });
@@ -32,9 +41,9 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllEnvs());
 
 describe('emailConfigured', () => {
-	test('needs both the user and the app password', () => {
+	test('needs both the user and the service account key', () => {
 		expect(emailConfigured()).toBe(true);
-		vi.stubEnv('GOOGLE_SMTP_APP_PASSWORD', undefined);
+		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
 		expect(emailConfigured()).toBe(false);
 	});
 });
@@ -49,10 +58,38 @@ describe('sendEmail', () => {
 			to: input.to,
 			cc: undefined,
 			subject: input.subject,
+			html: input.html,
 			text: input.text,
 			replyTo: 'hello@virtualcoffee.io',
 		});
+		// The transporter is a module singleton, built on this first send:
+		// XOAUTH2 as the service account impersonating hello@, with the PEM's
+		// collapsed newlines restored.
+		expect(createTransport).toHaveBeenCalledWith(
+			expect.objectContaining({
+				auth: {
+					type: 'OAuth2',
+					user: 'hello@virtualcoffee.io',
+					serviceClient: '113600000000000000000',
+					privateKey:
+						'-----BEGIN PRIVATE KEY-----\nMIIE\n-----END PRIVATE KEY-----\n',
+				},
+			}),
+		);
 	});
+
+	test.each(['not json', '{"client_id":"x"}', '[]'])(
+		'a key that is not a service account file (%s) is definitely not sent',
+		async (key) => {
+			vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', key);
+			await expect(sendEmail(input)).resolves.toMatchObject({
+				ok: false,
+				definitelyNotSent: true,
+				message: expect.stringContaining('not a service account key file'),
+			});
+			expect(sendMail).not.toHaveBeenCalled();
+		},
+	);
 
 	test('the transport is pooled and every phase has a timeout', () => {
 		// The transporter is a module singleton, so the options are asserted
@@ -165,7 +202,7 @@ describe('sendEmail', () => {
 
 /**
  * Outside production the credentials are irrelevant: Captured never touches
- * them, and Redirected uses them to reach one maintainer. docs/adr/0013.
+ * them, and Local sends past them to a sink. docs/adr/0013.
  */
 describe('delivery modes', () => {
 	test('captured: no transport, no send, and a success the pipeline proceeds on', async () => {
@@ -182,10 +219,12 @@ describe('delivery modes', () => {
 		});
 		expect(createTransport.mock.calls.length).toBe(before);
 		expect(sendMail).not.toHaveBeenCalled();
+		// On a deploy the applicant's address is masked and the body is not
+		// logged — `outbound.test.ts` has the shape; this pins that email uses
+		// it, and that the maintainer's cc is masked too.
 		expect(info).toHaveBeenCalledWith(
-			`[email captured] deploy-preview ${input.to}`,
-			{ cc: 'maintainer@example.test', subject: input.subject },
-			`\n${input.text}`,
+			'[email captured] deploy-preview a•••@example.test',
+			{ cc: 'm•••@example.test', subject: input.subject },
 		);
 		info.mockRestore();
 	});
@@ -202,59 +241,59 @@ describe('delivery modes', () => {
 		expect(sendMail).not.toHaveBeenCalled();
 	});
 
-	test('redirected: one address gets it, the recipient is named, and no cc goes', async () => {
-		vi.stubEnv('CONTEXT', 'branch-deploy');
-		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+	test('local: no Google credentials needed, addressed exactly as production would', async () => {
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		vi.stubEnv('SMTP_PORT', '1025');
+		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
+		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
 
 		await expect(
-			sendEmail({ ...input, cc: 'someone-else@example.test' }),
+			sendEmail({ ...input, cc: 'maintainer@example.test' }),
 		).resolves.toEqual({
 			ok: true,
 			warning:
-				'Redirected to maintainer@example.test (branch-deploy) instead of ada@example.test.',
+				'Sent to local SMTP sink at localhost:1025 (dev) — not delivered outside this machine.',
 		});
 		expect(sendMail).toHaveBeenCalledWith({
-			from: 'Virtual Coffee <hello@virtualcoffee.io>',
-			to: 'maintainer@example.test',
-			cc: undefined,
-			subject: '[to: ada@example.test] Hello',
+			from: 'Virtual Coffee <dev@localhost>',
+			to: input.to,
+			cc: 'maintainer@example.test',
+			subject: input.subject,
+			html: input.html,
 			text: input.text,
-			replyTo: 'hello@virtualcoffee.io',
-			headers: { 'X-Original-To': 'ada@example.test' },
+			replyTo: undefined,
+		});
+		expect(createTransport).toHaveBeenLastCalledWith({
+			host: 'localhost',
+			port: 1025,
+			secure: false,
+			ignoreTLS: true,
 		});
 	});
 
-	test('redirected still needs the credentials', async () => {
+	test('local defaults SMTP_PORT to 1025', async () => {
+		// The local transporter is a module singleton like the Gmail one, so this
+		// asserts on the warning (built fresh every call) rather than a
+		// createTransport call an earlier test may already have made.
 		vi.stubEnv('CONTEXT', 'dev');
-		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
-		vi.stubEnv('GOOGLE_SMTP_APP_PASSWORD', undefined);
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		vi.stubEnv('SMTP_PORT', undefined);
 
 		await expect(sendEmail(input)).resolves.toMatchObject({
-			ok: false,
-			definitelyNotSent: true,
-		});
-		expect(sendMail).not.toHaveBeenCalled();
-	});
-
-	test('a redirect target the server rejects is a failure, judged on that address', async () => {
-		vi.stubEnv('CONTEXT', 'dev');
-		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
-		sendMail.mockResolvedValue({
-			accepted: [],
-			rejected: ['maintainer@example.test'],
-		});
-
-		await expect(sendEmail(input)).resolves.toMatchObject({
-			ok: false,
-			definitelyNotSent: true,
+			ok: true,
+			warning: expect.stringContaining('localhost:1025'),
 		});
 	});
 
-	test('production ignores EMAIL_REDIRECT_TO', async () => {
-		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+	test('SMTP_HOST is ignored in production', async () => {
+		vi.stubEnv('SMTP_HOST', 'localhost');
 		await expect(sendEmail(input)).resolves.toEqual({ ok: true });
 		expect(sendMail).toHaveBeenLastCalledWith(
-			expect.objectContaining({ to: input.to, subject: input.subject }),
+			expect.objectContaining({
+				from: 'Virtual Coffee <hello@virtualcoffee.io>',
+				to: input.to,
+			}),
 		);
 	});
 });
@@ -271,12 +310,19 @@ describe('emailStatus', () => {
 			configured: false,
 		});
 
-		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+		// A deploy's SMTP_HOST counts as configured but never as Local.
+		vi.stubEnv('SMTP_HOST', 'localhost');
 		expect(emailStatus()).toEqual({
-			mode: 'redirected',
+			mode: 'captured',
 			context: 'deploy-preview',
-			redirectTo: 'maintainer@example.test',
-			configured: false,
+			configured: true,
+		});
+
+		vi.stubEnv('CONTEXT', 'dev');
+		expect(emailStatus()).toEqual({
+			mode: 'local',
+			context: 'dev',
+			configured: true,
 		});
 	});
 });

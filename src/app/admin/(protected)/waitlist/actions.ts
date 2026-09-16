@@ -16,11 +16,10 @@ import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { checkNote } from '@/lib/notes';
 import { actorId, requirePermission } from '@/lib/adminAccess';
 import { sendEmail } from '@/lib/email/transport';
-import {
-	coffeeInviteEmail,
-	slackInviteEmail,
-	welcomeEmail,
-} from '@/lib/email/templates';
+import { renderEmail } from '@/lib/email/render';
+import { coffeeInvite } from '@/emails/coffeeInvite';
+import { slackInvite } from '@/emails/slackInvite';
+import { welcome } from '@/emails/welcome';
 import {
 	createSlackInviteToken,
 	expireSlackInviteToken,
@@ -145,15 +144,12 @@ export async function sendCoffeeInvite(
 		};
 	}
 
-	const template = coffeeInviteEmail(application.name);
-
 	// Send BEFORE the status change. If this is reversed, a failed send leaves
 	// the applicant marked as invited with no email, and the maintainer has no
 	// way to tell.
 	const sent = await sendEmail({
 		to: application.email,
-		subject: template.subject,
-		text: template.text,
+		...(await renderEmail(coffeeInvite, {})),
 		cc: copyMe ? session.user.email : null,
 	});
 
@@ -276,15 +272,14 @@ export async function approveMembership(
 	const { id: tokenId, token } = await createSlackInviteToken(applicationId);
 	const inviteUrl = `${siteUrl()}/join-slack?code=${token}`;
 
-	const welcome = welcomeEmail(application.name);
 	const welcomeSent = await sendEmail({
 		to: application.email,
-		subject: welcome.subject,
-		text: welcome.text,
+		...(await renderEmail(welcome, { name: application.name, inviteUrl })),
 		cc: copyMe ? session.user.email : null,
 	});
 
 	if (!welcomeSent.ok) {
+		// A timeout may have delivered the link anyway; kill it before saying so.
 		await expireSlackInviteToken(tokenId, new Date());
 		await recordEvent({
 			applicationId,
@@ -296,32 +291,6 @@ export async function approveMembership(
 			ok: false,
 			message: welcomeSent.message,
 			emailSent: welcomeSent.definitelyNotSent ? false : 'unknown',
-		};
-	}
-
-	const slack = slackInviteEmail(application.name, inviteUrl);
-	const slackSent = await sendEmail({
-		to: application.email,
-		subject: slack.subject,
-		text: slack.text,
-		cc: copyMe ? session.user.email : null,
-	});
-
-	if (!slackSent.ok) {
-		// A timeout may have delivered the link anyway; kill it before saying so.
-		await expireSlackInviteToken(tokenId, new Date());
-		await recordEvent({
-			applicationId,
-			actorUserId: actor,
-			type: 'email_failed',
-			body: `Slack invite to ${application.email} failed: ${slackSent.message}`,
-		});
-		// The welcome email has already gone out, so this is not a clean retry:
-		// say so rather than implying nothing happened.
-		return {
-			ok: false,
-			message: `The welcome email was sent, but the Slack invite was not: ${slackSent.message} ${application.name} has not been made a member — approving again will re-send both emails.`,
-			emailSent: true,
 		};
 	}
 
@@ -339,13 +308,13 @@ export async function approveMembership(
 			type: 'approved',
 			fromStatus: 'coffee_invited',
 			toStatus: 'member',
-			body: `Membership approved; welcome and Slack invite emailed to ${application.email}`,
+			body: `Membership approved; welcome email with Slack invite sent to ${application.email}`,
 		},
 	);
 
 	if (!approved) {
-		// Both emails have gone regardless, so the history must say so — and the
-		// Slack link in one of them must stop working, since this request is not
+		// The email has gone regardless, so the history must say so — and the
+		// Slack link in it must stop working, since this request is not
 		// making anyone a member. Only this request's link: if the race was lost
 		// to another approval, that one's link is the member's way in.
 		await expireSlackInviteToken(tokenId, new Date());
@@ -353,7 +322,7 @@ export async function approveMembership(
 			applicationId,
 			actorUserId: actor,
 			type: 'email_sent',
-			body: `Welcome and Slack invite emailed to ${application.email}, but the application had already left Coffee invited; the Slack link has been invalidated`,
+			body: `Welcome email with Slack invite sent to ${application.email}, but the application had already left Coffee invited; the Slack link has been invalidated`,
 		});
 		revalidateApplication(applicationId);
 		return {
@@ -381,7 +350,7 @@ export async function approveMembership(
 	}
 
 	revalidateApplication(applicationId);
-	return { ok: true, message: welcomeSent.warning ?? slackSent.warning };
+	return { ok: true, message: welcomeSent.warning };
 }
 
 /**
@@ -413,14 +382,12 @@ export async function resendSlackInvite(
 	}
 
 	const minted = await createSlackInviteToken(applicationId);
-	const template = slackInviteEmail(
-		application.name,
-		`${siteUrl()}/join-slack?code=${minted.token}`,
-	);
 	const sent = await sendEmail({
 		to: application.email,
-		subject: template.subject,
-		text: template.text,
+		...(await renderEmail(slackInvite, {
+			name: application.name,
+			inviteUrl: `${siteUrl()}/join-slack?code=${minted.token}`,
+		})),
 		cc: copyMe ? session.user.email : null,
 	});
 

@@ -14,7 +14,8 @@ import {
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { isUniqueViolation } from '@/db/errors';
 import { isId } from '@/db/ids';
-import { volunteerInviteEmail } from '@/lib/email/templates';
+import { volunteerInvite } from '@/emails/volunteerInvite';
+import { renderEmail } from '@/lib/email/render';
 import { sendEmail } from '@/lib/email/transport';
 import {
 	blockingInvite,
@@ -172,16 +173,13 @@ export async function sendInvite(
 		};
 	}
 
-	const template = volunteerInviteEmail(
-		session.user.name || 'A Virtual Coffee volunteer',
-		name,
-		`${siteUrl()}/join?invite=${token}`,
-	);
-
 	const sent = await sendEmail({
 		to: email,
-		subject: template.subject,
-		text: template.text,
+		...(await renderEmail(volunteerInvite, {
+			inviterName: session.user.name || 'A Virtual Coffee volunteer',
+			inviteeName: name,
+			claimUrl: `${siteUrl()}/join?invite=${token}`,
+		})),
 	});
 
 	if (!sent.ok) {
