@@ -63,6 +63,7 @@ function buildColumns(currentUserId: string | null) {
 					id={row.original.id}
 					name={row.original.name}
 					roles={row.original.roles}
+					stranded={row.original.stranded}
 					isSelf={row.original.id === currentUserId}
 				/>
 			),

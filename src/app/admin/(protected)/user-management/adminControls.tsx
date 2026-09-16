@@ -26,18 +26,23 @@ import {
  * draft. `volunteer` is not grantable here and is carried over by
  * `preserveUngrantedRoles`. A row is backed by a user or a Pending Grant —
  * same control, different action.
+ *
+ * A stranded row shows the Grant that failed to apply at sign-in; saving it,
+ * changed or not, is what applies it.
  */
 export function RolesDropdown({
 	kind,
 	id,
 	name,
 	roles,
+	stranded,
 	isSelf,
 }: {
 	kind: 'user' | 'pending';
 	id: string;
 	name: string;
 	roles: RoleName[];
+	stranded: boolean;
 	isSelf: boolean;
 }) {
 	const { run, pending, error } = useAction();
@@ -169,10 +174,10 @@ export function RolesDropdown({
 						<button
 							type="button"
 							className="btn btn-sm btn-primary"
-							disabled={pending || !dirty}
+							disabled={pending || (!dirty && !stranded)}
 							onClick={save}
 						>
-							Save
+							{stranded ? 'Apply' : 'Save'}
 						</button>
 						<button
 							type="button"

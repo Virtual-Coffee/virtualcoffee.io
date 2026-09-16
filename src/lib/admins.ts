@@ -7,6 +7,9 @@ import { DEFAULT_ROLE, parseRoles, type RoleName } from '@/lib/permissions';
 /**
  * A row on the User Management screen: everyone who can reach /admin, signed
  * in or not. `kind` is what the row's controls dispatch on.
+ *
+ * `stranded`: signed in, but their Grant failed to apply. `roles`, `grantedAt`
+ * and `grantedBy` are then the Grant's, not the user's.
  */
 export type AccessRow = {
 	/** A user id for `kind: 'user'`, a Pending Grant id otherwise. */
@@ -61,7 +64,12 @@ export async function listAccessRows(): Promise<AccessRow[]> {
 		 * given the access somebody already decided they should have.
 		 */
 		db()
-			.select(USER_COLUMNS)
+			.select({
+				...USER_COLUMNS,
+				grantRole: pendingGrant.role,
+				grantGrantedAt: pendingGrant.grantedAt,
+				grantGrantedBy: pendingGrant.grantedBy,
+			})
 			.from(user)
 			.leftJoin(
 				pendingGrant,
@@ -84,6 +92,8 @@ export async function listAccessRows(): Promise<AccessRow[]> {
 
 	for (const row of userRows) {
 		const roles = parseRoles(row.role);
+		// Somebody pre-provisioned them, but they signed in holding nothing.
+		const stranded = roles.length === 0;
 
 		rows.push({
 			kind: 'user',
@@ -91,11 +101,12 @@ export async function listAccessRows(): Promise<AccessRow[]> {
 			name: row.name,
 			email: row.email,
 			handle: null,
-			roles,
-			// Somebody pre-provisioned them, but they signed in holding nothing.
-			stranded: roles.length === 0,
-			grantedAt: row.roleGrantedAt,
-			grantedBy: row.roleGrantedBy,
+			// A stranded row shows what the Grant holds: that is what a maintainer
+			// applies by saving the row, and there is nothing else to show.
+			roles: stranded ? parseRoles(row.grantRole) : roles,
+			stranded,
+			grantedAt: stranded ? row.grantGrantedAt : row.roleGrantedAt,
+			grantedBy: stranded ? row.grantGrantedBy : row.roleGrantedBy,
 		});
 	}
 
