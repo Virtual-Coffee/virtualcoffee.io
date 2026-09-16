@@ -1,6 +1,10 @@
 import type { SubmissionStatus } from '@/db';
-import { recordSubmissionEvent } from '@/lib/submitSubmission';
-import { SUBMISSION_KINDS, type SubmissionKind } from '@/lib/submissions';
+import { recordEvent, type SubmissionEventInput } from '@/lib/eventLog';
+import {
+	SUBMISSION_KINDS,
+	submissionSubject,
+	type SubmissionKind,
+} from '@/lib/submissions';
 import { insertSubmission } from '@/test/db/fixtures';
 
 import { ADMIN, ATTACHMENT, daysAgo } from './shared';
@@ -51,12 +55,9 @@ async function seedKind<K extends SubmissionKind, S extends SubmissionSeed>(
 			airtableRecordId: seed.airtableRecordId ?? null,
 		} as Parameters<typeof insertSubmission<K>>[1]);
 
-		const event = (
-			fields: Omit<
-				Parameters<typeof recordSubmissionEvent>[0],
-				'kind' | 'submissionId'
-			>,
-		) => recordSubmissionEvent({ kind, submissionId: id, ...fields });
+		const subject = submissionSubject(kind, id);
+		const event = (fields: SubmissionEventInput) =>
+			recordEvent(subject, fields);
 		const by = (fields: Parameters<typeof event>[0]) =>
 			event({ actorUserId: ADMIN.id, ...fields });
 
