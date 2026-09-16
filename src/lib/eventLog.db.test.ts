@@ -1,7 +1,14 @@
 import { eq, isNull } from 'drizzle-orm';
 import { describe, expect, test, vi } from 'vitest';
 
-import { cocReport, db, membershipApplication, submissionEvent } from '@/db';
+import {
+	applicationEvent,
+	cocReport,
+	db,
+	membershipApplication,
+	submissionEvent,
+	volunteerSignup,
+} from '@/db';
 import { newId } from '@/db/ids';
 import {
 	applicationEvents,
@@ -12,7 +19,10 @@ import {
 } from '@/test/db/fixtures';
 
 import {
+	history,
+	recentEvents,
 	recordEvent,
+	recordImport,
 	recordOutcome,
 	transitionAndRecord,
 	type Outcome,
@@ -41,6 +51,19 @@ async function insertCocReport() {
 		id: row.id,
 		table: cocReport,
 		eventKey: 'cocReportId',
+	} as const satisfies SubmissionSubject;
+}
+
+async function insertVolunteerSignup() {
+	const [row] = await db()
+		.insert(volunteerSignup)
+		.values({ name: 'Ada', email: 'ada@example.test' })
+		.returning({ id: volunteerSignup.id });
+	return {
+		kind: 'submission',
+		id: row.id,
+		table: volunteerSignup,
+		eventKey: 'volunteerSignupId',
 	} as const satisfies SubmissionSubject;
 }
 
@@ -96,6 +119,70 @@ describe('recordEvent', () => {
 			volunteerSignupId: null,
 			createdAt: backdated,
 		});
+	});
+});
+
+describe('recordImport', () => {
+	test('backdates the row, names the record and takes the classified status', async () => {
+		const { id } = await insertApplication({});
+		const submittedAt = new Date('2021-05-06T07:08:09Z');
+
+		await recordImport(
+			{ kind: 'application', id },
+			'recABC123',
+			submittedAt,
+			'waitlisted',
+		);
+
+		const [row] = await db()
+			.select({
+				type: applicationEvent.type,
+				body: applicationEvent.body,
+				toStatus: applicationEvent.toStatus,
+				createdAt: applicationEvent.createdAt,
+			})
+			.from(applicationEvent)
+			.where(eq(applicationEvent.applicationId, id));
+		expect(row).toEqual({
+			type: 'imported',
+			body: 'Imported from Airtable (recABC123)',
+			toStatus: 'waitlisted',
+			createdAt: submittedAt,
+		});
+	});
+
+	test('a Submission is imported at whatever status it already had', async () => {
+		const subject = await insertCocReport();
+
+		await recordImport(subject, 'recXYZ789', new Date('2020-01-01T00:00:00Z'));
+
+		expect(await submissionEvents(subject)).toMatchObject([
+			{
+				type: 'imported',
+				body: 'Imported from Airtable (recXYZ789)',
+				fromStatus: null,
+				toStatus: null,
+			},
+		]);
+	});
+
+	test('joins a transaction the caller passes, so a rollback takes it with it', async () => {
+		const { id } = await insertApplication({});
+
+		await expect(
+			db().transaction(async (tx) => {
+				await recordImport(
+					{ kind: 'application', id },
+					'recROLLBACK',
+					new Date(),
+					'waitlisted',
+					tx,
+				);
+				throw new Error('the import failed after the event');
+			}),
+		).rejects.toThrow('the import failed after the event');
+
+		expect(await applicationEvents(id)).toEqual([]);
 	});
 });
 
@@ -306,5 +393,184 @@ describe('transitionAndRecord', () => {
 				{ type: 'declined' },
 			),
 		).toBe(false);
+	});
+});
+
+describe('history', () => {
+	test('newest first, ties broken by the id, with the actor joined', async () => {
+		const { id } = await insertApplication({});
+		const other = await insertApplication({});
+		const actor = await insertUser({ name: 'Grace' });
+		const subject = { kind: 'application', id } as const;
+		const earlier = new Date('2024-03-01T00:00:00Z');
+		const tie = new Date('2024-03-02T00:00:00Z');
+
+		await recordEvent(subject, {
+			type: 'note',
+			body: 'earliest',
+			createdAt: earlier,
+		});
+		await recordEvent(subject, {
+			type: 'note',
+			body: 'tie, written first',
+			createdAt: tie,
+			actorUserId: actor.id,
+		});
+		await recordEvent(subject, {
+			type: 'note',
+			body: 'tie, written second',
+			createdAt: tie,
+		});
+		await recordEvent(
+			{ kind: 'application', id: other.id },
+			{ type: 'note', body: 'another application' },
+		);
+
+		expect(await history(subject)).toMatchObject([
+			{
+				type: 'note',
+				body: 'tie, written second',
+				actorName: null,
+				createdAt: tie,
+			},
+			{ body: 'tie, written first', actorName: 'Grace', createdAt: tie },
+			{ body: 'earliest', actorName: null, createdAt: earlier },
+		]);
+	});
+
+	test('carries the statuses a transition recorded', async () => {
+		const { id } = await insertApplication({ status: 'waitlisted' });
+		const subject = { kind: 'application', id } as const;
+
+		await transitionAndRecord(
+			subject,
+			'waitlisted',
+			{ status: 'coffee_invited' },
+			{
+				type: 'coffee_invited',
+				fromStatus: 'waitlisted',
+				toStatus: 'coffee_invited',
+			},
+		);
+
+		expect(await history(subject)).toMatchObject([
+			{ fromStatus: 'waitlisted', toStatus: 'coffee_invited' },
+		]);
+	});
+
+	test('a Submission reads only the rows on its own key', async () => {
+		const report = await insertCocReport();
+		const signup = await insertVolunteerSignup();
+
+		await recordEvent(report, { type: 'note', body: 'about the report' });
+		await recordEvent(signup, { type: 'note', body: 'about the signup' });
+
+		expect((await history(report)).map((row) => row.body)).toEqual([
+			'about the report',
+		]);
+		expect((await history(signup)).map((row) => row.body)).toEqual([
+			'about the signup',
+		]);
+	});
+});
+
+describe('recentEvents', () => {
+	const at = (day: number) => new Date(`2024-04-0${day}T00:00:00Z`);
+
+	test('merges both tables newest first and stops at the limit', async () => {
+		const application = await insertApplication({});
+		const report = await insertCocReport();
+
+		await recordEvent(
+			{ kind: 'application', id: application.id },
+			{ type: 'note', body: 'oldest', createdAt: at(1) },
+		);
+		await recordEvent(report, {
+			type: 'note',
+			body: 'middle',
+			createdAt: at(2),
+		});
+		await recordEvent(
+			{ kind: 'application', id: application.id },
+			{ type: 'note', body: 'newest', createdAt: at(3) },
+		);
+
+		const rows = await recentEvents({
+			applications: true,
+			submissions: [{ eventKey: 'cocReportId' }],
+			limit: 2,
+		});
+
+		expect(rows.map((row) => [row.kind, row.body])).toEqual([
+			['application', 'newest'],
+			['submission', 'middle'],
+		]);
+	});
+
+	test('carries the reference, and the name where the subject has one', async () => {
+		const application = await insertApplication({ name: 'Ada Lovelace' });
+		const report = await insertCocReport();
+
+		await recordEvent(
+			{ kind: 'application', id: application.id },
+			{ type: 'note' },
+		);
+		await recordEvent(report, { type: 'note' });
+
+		const rows = await recentEvents({
+			applications: true,
+			submissions: [{ eventKey: 'cocReportId' }],
+			limit: 15,
+		});
+		const [reportRow] = await db()
+			.select({ reference: cocReport.reference })
+			.from(cocReport)
+			.where(eq(cocReport.id, report.id));
+
+		expect(rows.find((row) => row.kind === 'application')).toMatchObject({
+			subjectId: application.id,
+			eventKey: null,
+			name: 'Ada Lovelace',
+			reference: (await applicationRow(application.id)).reference,
+		});
+		expect(rows.find((row) => row.kind === 'submission')).toMatchObject({
+			subjectId: report.id,
+			eventKey: 'cocReportId',
+			name: null,
+			reference: reportRow.reference,
+		});
+	});
+
+	test('omits a table, and a Submission kind, the caller did not ask for', async () => {
+		const application = await insertApplication({});
+		const report = await insertCocReport();
+		const signup = await insertVolunteerSignup();
+
+		await recordEvent(
+			{ kind: 'application', id: application.id },
+			{ type: 'note', body: 'application' },
+		);
+		await recordEvent(report, { type: 'note', body: 'coc' });
+		await recordEvent(signup, { type: 'note', body: 'volunteers' });
+
+		const rows = await recentEvents({
+			applications: false,
+			submissions: [{ eventKey: 'cocReportId' }],
+			limit: 15,
+		});
+
+		expect(rows.map((row) => row.body)).toEqual(['coc']);
+	});
+
+	test('asked for nothing, it reads nothing', async () => {
+		const application = await insertApplication({});
+		await recordEvent(
+			{ kind: 'application', id: application.id },
+			{ type: 'note', body: 'application' },
+		);
+
+		expect(
+			await recentEvents({ applications: false, submissions: [], limit: 15 }),
+		).toEqual([]);
 	});
 });

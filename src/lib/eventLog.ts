@@ -1,27 +1,29 @@
-import { and, eq, type SQL } from 'drizzle-orm';
+import { and, desc, eq, isNotNull, or, sql, type SQL } from 'drizzle-orm';
 import type { PgColumn, PgTable } from 'drizzle-orm/pg-core';
 
 import {
 	applicationEvent,
+	cocReport,
+	coffeeTableGroupRequest,
 	db,
+	lunchAndLearnIdea,
 	membershipApplication,
 	submissionEvent,
+	user,
+	volunteerSignup,
 	type ApplicationEventType,
 	type ApplicationStatus,
 	type Database,
 	type SubmissionEventType,
 	type SubmissionStatus,
 	type Transaction,
-	type cocReport,
-	type coffeeTableGroupRequest,
-	type lunchAndLearnIdea,
-	type volunteerSignup,
 } from '@/db';
 
 /**
  * The Event Log: `application_event` and `submission_event` as one concept.
- * Every write to either table comes through here, so what a send outcome or
- * a status change becomes in History is decided once. See CONTEXT.md.
+ * Every read and every write of either table comes through here, so what a
+ * send outcome or a status change becomes in History is decided once, and the
+ * two subjects' timelines cannot drift apart. See CONTEXT.md.
  */
 
 export type SubmissionTable =
@@ -112,12 +114,47 @@ async function writeEvent(
 	});
 }
 
-/** One History row. The only INSERT into either event table. */
+/**
+ * One History row.
+ *
+ * Every INSERT into either event table goes through `writeEvent` — from here,
+ * `recordOutcome`, `recordImport` or `transitionAndRecord` — and nothing
+ * outside this module inserts at all.
+ */
 export async function recordEvent<S extends Subject>(
 	subject: S,
 	event: EventInput<S>,
 	executor: Executor = db(),
 ): Promise<void> {
+	await writeEvent(subject, event, executor);
+}
+
+/**
+ * The History line for a row that came from Airtable, written by the seed and
+ * by the one-off importers.
+ *
+ * Backdated to the row's own submission time so the timeline reads in the
+ * order things actually happened rather than in import order. `toStatus` is the
+ * status the import classified the row into, for a subject whose import decides
+ * one; a Submission is imported at whatever status it already had, so it passes
+ * nothing.
+ */
+export async function recordImport<S extends Subject>(
+	subject: S,
+	airtableRecordId: string,
+	at: Date,
+	toStatus?: StatusOf<S>,
+	executor: Executor = db(),
+): Promise<void> {
+	// `StatusOf<S>` cannot be resolved against either member of the union while
+	// `S` is still generic; the subject is what picks the table, as everywhere.
+	const event = {
+		type: 'imported',
+		body: `Imported from Airtable (${airtableRecordId})`,
+		createdAt: at,
+		...(toStatus ? { toStatus } : {}),
+	} as ApplicationEventInput | SubmissionEventInput;
+
 	await writeEvent(subject, event, executor);
 }
 
@@ -217,4 +254,198 @@ export async function transitionAndRecord<S extends Subject>(
 		await writeEvent(subject, event, tx);
 		return true;
 	});
+}
+
+/**
+ * One row of History, as a detail screen's timeline renders it.
+ *
+ * `type` is widened from the enum on purpose: the timelines are client
+ * components that look the label up in `eventLabels.ts`, so they never switch
+ * on the value and must not carry one subject's enum into the browser bundle.
+ */
+export type HistoryEntry<S extends Subject> = {
+	id: string;
+	type: string;
+	body: string | null;
+	fromStatus: StatusOf<S> | null;
+	toStatus: StatusOf<S> | null;
+	createdAt: Date;
+	actorName: string | null;
+};
+
+/** One subject's History, newest first, with the actor's current name. */
+export async function history<S extends Subject>(
+	subject: S,
+): Promise<HistoryEntry<S>[]> {
+	const rows =
+		subject.kind === 'application'
+			? await db()
+					.select({
+						id: applicationEvent.id,
+						type: sql<string>`${applicationEvent.type}`,
+						body: applicationEvent.body,
+						fromStatus: applicationEvent.fromStatus,
+						toStatus: applicationEvent.toStatus,
+						createdAt: applicationEvent.createdAt,
+						actorName: user.name,
+					})
+					.from(applicationEvent)
+					.leftJoin(user, eq(applicationEvent.actorUserId, user.id))
+					.where(eq(applicationEvent.applicationId, subject.id))
+					// `createdAt` is not unique; the v7 id breaks ties by creation order.
+					.orderBy(desc(applicationEvent.createdAt), desc(applicationEvent.id))
+			: await db()
+					.select({
+						id: submissionEvent.id,
+						type: sql<string>`${submissionEvent.type}`,
+						body: submissionEvent.body,
+						fromStatus: submissionEvent.fromStatus,
+						toStatus: submissionEvent.toStatus,
+						createdAt: submissionEvent.createdAt,
+						actorName: user.name,
+					})
+					.from(submissionEvent)
+					.leftJoin(user, eq(submissionEvent.actorUserId, user.id))
+					.where(eq(submissionEvent[subject.eventKey], subject.id))
+					.orderBy(desc(submissionEvent.createdAt), desc(submissionEvent.id));
+
+	return rows as HistoryEntry<S>[];
+}
+
+/**
+ * One row of recent activity from either table, with enough of its subject to
+ * name and link it. `reference` is the number a screen shows; never put it in
+ * a URL (ADR 0008).
+ */
+export type RecentEvent = {
+	id: string;
+	type: string;
+	body: string | null;
+	createdAt: Date;
+	actorName: string | null;
+	reference: number;
+	/** The subject's own name where it has one; a Submission has none. */
+	name: string | null;
+} & (
+	| { kind: 'application'; subjectId: string; eventKey: null }
+	| { kind: 'submission'; subjectId: string; eventKey: SubmissionEventKey }
+);
+
+/**
+ * The newest events over the tables the caller asks for.
+ *
+ * Merged in JavaScript rather than as a SQL UNION: the two event tables have
+ * different shapes and different foreign keys, and at fifteen rows the cost of
+ * over-fetching a little from each is irrelevant next to the complexity of
+ * keeping a union in step with both.
+ *
+ * The caller says which kinds of Submission to include, because it — not this
+ * module — knows what the viewer may see. `src/lib/submissions.ts` reads from
+ * here, so this module cannot import it back for the mapping.
+ */
+export async function recentEvents(input: {
+	applications: boolean;
+	submissions: readonly { eventKey: SubmissionEventKey }[];
+	limit: number;
+}): Promise<RecentEvent[]> {
+	const { limit } = input;
+	const rows: RecentEvent[] = [];
+
+	if (input.applications) {
+		const found = await db()
+			.select({
+				id: applicationEvent.id,
+				subjectId: applicationEvent.applicationId,
+				type: sql<string>`${applicationEvent.type}`,
+				body: applicationEvent.body,
+				createdAt: applicationEvent.createdAt,
+				actorName: user.name,
+				reference: membershipApplication.reference,
+				name: membershipApplication.name,
+			})
+			.from(applicationEvent)
+			.leftJoin(user, eq(applicationEvent.actorUserId, user.id))
+			// Inner: `application_id` is NOT NULL and cascades, so the row is there.
+			.innerJoin(
+				membershipApplication,
+				eq(applicationEvent.applicationId, membershipApplication.id),
+			)
+			.orderBy(desc(applicationEvent.createdAt), desc(applicationEvent.id))
+			.limit(limit);
+
+		for (const row of found) {
+			rows.push({ ...row, kind: 'application', eventKey: null });
+		}
+	}
+
+	if (input.submissions.length > 0) {
+		// One query across every kind asked for: the columns are shared, only
+		// which foreign key is set differs.
+		const found = await db()
+			.select({
+				id: submissionEvent.id,
+				cocReportId: submissionEvent.cocReportId,
+				volunteerSignupId: submissionEvent.volunteerSignupId,
+				lunchAndLearnIdeaId: submissionEvent.lunchAndLearnIdeaId,
+				coffeeTableGroupRequestId: submissionEvent.coffeeTableGroupRequestId,
+				type: sql<string>`${submissionEvent.type}`,
+				body: submissionEvent.body,
+				createdAt: submissionEvent.createdAt,
+				actorName: user.name,
+				// The kinds are mutually exclusive, so exactly one of these is set.
+				reference: sql<number>`coalesce(${cocReport.reference}, ${volunteerSignup.reference}, ${lunchAndLearnIdea.reference}, ${coffeeTableGroupRequest.reference})`,
+			})
+			.from(submissionEvent)
+			.leftJoin(user, eq(submissionEvent.actorUserId, user.id))
+			.leftJoin(cocReport, eq(submissionEvent.cocReportId, cocReport.id))
+			.leftJoin(
+				volunteerSignup,
+				eq(submissionEvent.volunteerSignupId, volunteerSignup.id),
+			)
+			.leftJoin(
+				lunchAndLearnIdea,
+				eq(submissionEvent.lunchAndLearnIdeaId, lunchAndLearnIdea.id),
+			)
+			.leftJoin(
+				coffeeTableGroupRequest,
+				eq(
+					submissionEvent.coffeeTableGroupRequestId,
+					coffeeTableGroupRequest.id,
+				),
+			)
+			.where(
+				or(
+					...input.submissions.map(({ eventKey }) =>
+						isNotNull(submissionEvent[eventKey]),
+					),
+				),
+			)
+			.orderBy(desc(submissionEvent.createdAt), desc(submissionEvent.id))
+			.limit(limit);
+
+		for (const row of found) {
+			const key = input.submissions.find(
+				({ eventKey }) => row[eventKey] !== null,
+			)?.eventKey;
+			const subjectId = key ? row[key] : null;
+			if (!key || !subjectId) continue;
+
+			rows.push({
+				id: row.id,
+				type: row.type,
+				body: row.body,
+				createdAt: row.createdAt,
+				actorName: row.actorName,
+				reference: row.reference,
+				name: null,
+				kind: 'submission',
+				subjectId,
+				eventKey: key,
+			});
+		}
+	}
+
+	return rows
+		.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+		.slice(0, limit);
 }
