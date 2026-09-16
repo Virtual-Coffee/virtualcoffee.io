@@ -1,7 +1,8 @@
-import { count, desc, eq, inArray, sql } from 'drizzle-orm';
+import { count, inArray } from 'drizzle-orm';
 
-import { applicationEvent, db, membershipApplication, user } from '@/db';
+import { db, membershipApplication } from '@/db';
 import { QUEUE_STATUSES } from '@/lib/applicationStatuses';
+import { recentEvents } from '@/lib/history/eventLog';
 import type { Section } from '@/lib/access/permissions';
 
 /** One number on a card. Most sections have a single one; the queue has two. */
@@ -103,53 +104,26 @@ const ACTIVITY_LIMIT = 15;
 /**
  * The most recent events across everything the viewer can see.
  *
- * Each Section that keeps an event log contributes its rows here, merged in
- * JavaScript rather than as a SQL UNION: the event tables have different
- * shapes and different foreign keys, and at fifteen rows the cost of
- * over-fetching a little from each is irrelevant next to the complexity of
- * keeping a union in step with all of them.
+ * The Event Log reads and merges the rows (`recentEvents`); what is left here
+ * is the part that is the dashboard's own: which Sections the viewer holds,
+ * where an entry links to, and how its subject is named.
  */
 export async function recentActivity(
 	sections: readonly Section[],
 ): Promise<ActivityEntry[]> {
-	const entries: ActivityEntry[] = [];
+	const rows = await recentEvents({
+		applications: sections.includes('waitlist'),
+		submissions: [],
+		limit: ACTIVITY_LIMIT,
+	});
 
-	if (sections.includes('waitlist')) {
-		const rows = await db()
-			.select({
-				id: applicationEvent.id,
-				applicationId: applicationEvent.applicationId,
-				type: sql<string>`${applicationEvent.type}`,
-				body: applicationEvent.body,
-				createdAt: applicationEvent.createdAt,
-				actorName: user.name,
-				subject: membershipApplication.name,
-				reference: membershipApplication.reference,
-			})
-			.from(applicationEvent)
-			.leftJoin(user, eq(applicationEvent.actorUserId, user.id))
-			.leftJoin(
-				membershipApplication,
-				eq(applicationEvent.applicationId, membershipApplication.id),
-			)
-			// `createdAt` is not unique; the v7 id breaks ties by creation order.
-			.orderBy(desc(applicationEvent.createdAt), desc(applicationEvent.id))
-			.limit(ACTIVITY_LIMIT);
-
-		for (const row of rows) {
-			entries.push({
-				key: `application-${row.id}`,
-				createdAt: row.createdAt,
-				type: row.type,
-				body: row.body,
-				actorName: row.actorName,
-				href: `/admin/waitlist/${row.applicationId}`,
-				subject: row.subject ?? `Application ${row.reference}`,
-			});
-		}
-	}
-
-	return entries
-		.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-		.slice(0, ACTIVITY_LIMIT);
+	return rows.map((row) => ({
+		key: `${row.kind}-${row.id}`,
+		createdAt: row.createdAt,
+		type: row.type,
+		body: row.body,
+		actorName: row.actorName,
+		href: `/admin/waitlist/${row.subjectId}`,
+		subject: row.name ?? `Application ${row.reference}`,
+	}));
 }

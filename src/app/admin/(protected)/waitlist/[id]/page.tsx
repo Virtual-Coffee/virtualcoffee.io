@@ -3,12 +3,9 @@ import { notFound } from 'next/navigation';
 
 import { isId } from '@/db/ids';
 import { requirePermission, sessionCan } from '@/lib/adminAccess';
-import {
-	getApplication,
-	getApplicationHistory,
-	getApplicationInviter,
-} from '@/lib/applications';
+import { getApplication, getApplicationInviter } from '@/lib/applications';
 import { ARCHIVE_STATUSES } from '@/lib/applicationStatuses';
+import { history } from '@/lib/eventLog';
 import {
 	coffeeInviteEmail,
 	slackInviteEmail,
@@ -53,8 +50,8 @@ export default async function ApplicationDetailPage({
 		notFound();
 	}
 
-	const [history, inviter] = await Promise.all([
-		getApplicationHistory(applicationId),
+	const [entries, inviter] = await Promise.all([
+		history({ kind: 'application', id: applicationId }),
 		getApplicationInviter(application.inviteId),
 	]);
 
@@ -197,7 +194,7 @@ export default async function ApplicationDetailPage({
 							<NoteComposer onSubmit={addNote.bind(null, application.id)} />
 						)}
 						<div className="mt-3">
-							<HistoryTimeline history={history} />
+							<HistoryTimeline history={entries} />
 						</div>
 					</section>
 				</div>
