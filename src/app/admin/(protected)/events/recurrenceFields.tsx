@@ -4,98 +4,14 @@ import { useId } from 'react';
 
 import {
 	describeRecurrence,
+	draftToForm,
 	ORDINAL_LABELS,
 	ORDINALS,
 	WEEKDAY_LABELS,
 	WEEKDAYS,
-	type Ordinal,
-	type RecurrenceForm,
+	type RecurrenceDraft,
 	type Weekday,
 } from '@/lib/recurrence';
-
-/** The controls' state: strings where the user types, so a half-typed number survives. */
-export type RecurrenceDraft = {
-	kind: 'weekly' | 'monthly';
-	interval: string;
-	weekdays: Weekday[];
-	ordinals: Ordinal[];
-	weekday: Weekday;
-	endsKind: 'never' | 'until' | 'count';
-	untilDate: string;
-	count: string;
-	weekStart?: Weekday;
-};
-
-export const EMPTY_DRAFT: RecurrenceDraft = {
-	kind: 'weekly',
-	interval: '1',
-	weekdays: [],
-	ordinals: [],
-	weekday: 'TU',
-	endsKind: 'never',
-	untilDate: '',
-	count: '10',
-};
-
-export function draftFromRecurrence(form: RecurrenceForm): RecurrenceDraft {
-	const ends = form.ends;
-	const shared = {
-		interval: String(form.interval),
-		endsKind: ends.kind,
-		untilDate: ends.kind === 'until' ? ends.date : '',
-		count: ends.kind === 'count' ? String(ends.count) : '10',
-	};
-	return form.kind === 'weekly'
-		? {
-				...EMPTY_DRAFT,
-				...shared,
-				kind: 'weekly',
-				weekdays: form.weekdays,
-				...(form.weekStart ? { weekStart: form.weekStart } : {}),
-			}
-		: {
-				...EMPTY_DRAFT,
-				...shared,
-				kind: 'monthly',
-				ordinals: form.ordinals,
-				weekday: form.weekday,
-			};
-}
-
-/** Null while the draft is not yet a rule; the action validates the rest. */
-export function draftToForm(draft: RecurrenceDraft): RecurrenceForm | null {
-	const interval = Number(draft.interval);
-	if (!Number.isInteger(interval) || interval < 1) return null;
-	const ends: RecurrenceForm['ends'] | null =
-		draft.endsKind === 'never'
-			? { kind: 'never' }
-			: draft.endsKind === 'until'
-				? draft.untilDate
-					? { kind: 'until', date: draft.untilDate }
-					: null
-				: Number.isInteger(Number(draft.count)) && Number(draft.count) > 0
-					? { kind: 'count', count: Number(draft.count) }
-					: null;
-	if (!ends) return null;
-	if (draft.kind === 'weekly') {
-		if (draft.weekdays.length === 0) return null;
-		return {
-			kind: 'weekly',
-			interval,
-			weekdays: WEEKDAYS.filter((day) => draft.weekdays.includes(day)),
-			ends,
-			...(draft.weekStart ? { weekStart: draft.weekStart } : {}),
-		};
-	}
-	if (draft.ordinals.length === 0) return null;
-	return {
-		kind: 'monthly',
-		interval,
-		ordinals: ORDINALS.filter((n) => draft.ordinals.includes(n)),
-		weekday: draft.weekday,
-		ends,
-	};
-}
 
 function toggle<T>(list: T[], value: T, on: boolean): T[] {
 	return on ? [...list, value] : list.filter((entry) => entry !== value);
