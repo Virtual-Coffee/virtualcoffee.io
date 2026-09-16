@@ -9,9 +9,15 @@ import {
 	membershipApplication,
 	type ApplicationStatus,
 } from '@/db';
-import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
+import {
+	emailFailed,
+	emailWentButRowMoved,
+	type ActionResult,
+	type EmailActionResult,
+} from '@/lib/actionResult';
 import { checkNote } from '@/lib/notes';
 import { actorId, requirePermission } from '@/lib/adminAccess';
+import type { Session } from '@/lib/auth';
 import { sendEmail } from '@/lib/email/transport';
 import {
 	coffeeInviteEmail,
@@ -23,11 +29,12 @@ import {
 	expireSlackInviteToken,
 	supersedeSlackInviteTokens,
 } from '@/lib/inviteTokens';
-import { getApplication } from '@/lib/applications';
+import { applicationSubject, getApplication } from '@/lib/applications';
 import {
 	recordEvent,
 	recordOutcome,
 	transitionAndRecord,
+	type ApplicationSubject,
 } from '@/lib/eventLog';
 import { siteUrl } from '@/util/url.server';
 
@@ -46,18 +53,52 @@ function revalidateApplication(applicationId: string) {
 	revalidatePath(`/admin/waitlist/${applicationId}`);
 }
 
-export async function sendCoffeeInvite(
-	applicationId: string,
-	copyMe: boolean,
-): Promise<EmailActionResult> {
+type Opened =
+	| {
+			ok: true;
+			session: Session;
+			actor: string | null;
+			application: NonNullable<Awaited<ReturnType<typeof getApplication>>>;
+			subject: ApplicationSubject;
+	  }
+	| { ok: false; message: string; emailSent: false };
+
+/**
+ * What every action on an application does before it does its own work: the
+ * permission check, the actor, the row, its Subject.
+ *
+ * Called from each action rather than once for the file on purpose — docs/adr
+ * 0003 and 0006 put the check in the action itself, so a new action that
+ * forgets to call this is refused rather than open to every role. The refusal
+ * it returns is assignable to both `ActionResult` and `EmailActionResult`, so
+ * an action can hand it straight back.
+ */
+async function open(applicationId: string): Promise<Opened> {
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
-	const subject = { kind: 'application', id: applicationId } as const;
 
 	if (!application) {
 		return { ok: false, message: 'Application not found.', emailSent: false };
 	}
+
+	return {
+		ok: true,
+		session,
+		actor,
+		application,
+		subject: applicationSubject(applicationId),
+	};
+}
+
+export async function sendCoffeeInvite(
+	applicationId: string,
+	copyMe: boolean,
+): Promise<EmailActionResult> {
+	const opened = await open(applicationId);
+	if (!opened.ok) return opened;
+	const { session, actor, application, subject } = opened;
+
 	if (application.status !== 'waitlisted') {
 		return {
 			ok: false,
@@ -85,11 +126,7 @@ export async function sendCoffeeInvite(
 			what: `Coffee invite to ${application.email}`,
 			actorUserId: actor,
 		});
-		return {
-			ok: false,
-			message: sent.message,
-			emailSent: sent.definitelyNotSent ? false : 'unknown',
-		};
+		return emailFailed(sent);
 	}
 
 	const moved = await transitionAndRecord(
@@ -113,11 +150,7 @@ export async function sendCoffeeInvite(
 			body: `Coffee invite emailed to ${application.email}, but the application had already left Waitlisted`,
 		});
 		revalidateApplication(applicationId);
-		return {
-			ok: false,
-			message: changedUnderneath(application.name),
-			emailSent: true,
-		};
+		return emailWentButRowMoved(changedUnderneath(application.name));
 	}
 
 	revalidateApplication(applicationId);
@@ -127,14 +160,10 @@ export async function sendCoffeeInvite(
 export async function recordAttendance(
 	applicationId: string,
 ): Promise<ActionResult> {
-	const session = await requirePermission('waitlist', 'manage');
-	const actor = await actorId(session.user.id);
-	const application = await getApplication(applicationId);
-	const subject = { kind: 'application', id: applicationId } as const;
+	const opened = await open(applicationId);
+	if (!opened.ok) return opened;
+	const { actor, application, subject } = opened;
 
-	if (!application) {
-		return { ok: false, message: 'Application not found.' };
-	}
 	// The panel only offers this from coffee_invited, but a server action is
 	// reachable without the panel.
 	if (application.status !== 'coffee_invited') {
@@ -174,14 +203,10 @@ export async function approveMembership(
 	applicationId: string,
 	copyMe: boolean,
 ): Promise<EmailActionResult> {
-	const session = await requirePermission('waitlist', 'manage');
-	const actor = await actorId(session.user.id);
-	const application = await getApplication(applicationId);
-	const subject = { kind: 'application', id: applicationId } as const;
+	const opened = await open(applicationId);
+	if (!opened.ok) return opened;
+	const { session, actor, application, subject } = opened;
 
-	if (!application) {
-		return { ok: false, message: 'Application not found.', emailSent: false };
-	}
 	if (application.status !== 'coffee_invited') {
 		return {
 			ok: false,
@@ -214,11 +239,7 @@ export async function approveMembership(
 			what: `Welcome email to ${application.email}`,
 			actorUserId: actor,
 		});
-		return {
-			ok: false,
-			message: welcomeSent.message,
-			emailSent: welcomeSent.definitelyNotSent ? false : 'unknown',
-		};
+		return emailFailed(welcomeSent);
 	}
 
 	const slack = slackInviteEmail(application.name, inviteUrl);
@@ -277,11 +298,7 @@ export async function approveMembership(
 			body: `Welcome and Slack invite emailed to ${application.email}, but the application had already left Coffee invited; the Slack link has been invalidated`,
 		});
 		revalidateApplication(applicationId);
-		return {
-			ok: false,
-			message: changedUnderneath(application.name),
-			emailSent: true,
-		};
+		return emailWentButRowMoved(changedUnderneath(application.name));
 	}
 
 	// Complete the Invite that produced this application, if any. After the
@@ -318,14 +335,10 @@ export async function resendSlackInvite(
 	applicationId: string,
 	copyMe: boolean,
 ): Promise<EmailActionResult> {
-	const session = await requirePermission('waitlist', 'manage');
-	const actor = await actorId(session.user.id);
-	const application = await getApplication(applicationId);
-	const subject = { kind: 'application', id: applicationId } as const;
+	const opened = await open(applicationId);
+	if (!opened.ok) return opened;
+	const { session, actor, application, subject } = opened;
 
-	if (!application) {
-		return { ok: false, message: 'Application not found.', emailSent: false };
-	}
 	if (application.status !== 'member') {
 		return {
 			ok: false,
@@ -356,11 +369,7 @@ export async function resendSlackInvite(
 			what: `Slack invite re-send to ${application.email}`,
 			actorUserId: actor,
 		});
-		return {
-			ok: false,
-			message: sent.message,
-			emailSent: sent.definitelyNotSent ? false : 'unknown',
-		};
+		return emailFailed(sent);
 	}
 
 	await supersedeSlackInviteTokens(applicationId, minted, new Date());
@@ -380,13 +389,10 @@ async function close(
 	status: Extract<ApplicationStatus, 'declined' | 'withdrawn'>,
 	note: string | null,
 ): Promise<ActionResult> {
-	const session = await requirePermission('waitlist', 'manage');
-	const actor = await actorId(session.user.id);
-	const application = await getApplication(applicationId);
+	const opened = await open(applicationId);
+	if (!opened.ok) return opened;
+	const { actor, application, subject } = opened;
 
-	if (!application) {
-		return { ok: false, message: 'Application not found.' };
-	}
 	// The panel hides these buttons for a member, but a server action is
 	// reachable without the panel. Closing twice would also write a second
 	// event over the first one's timestamp.
@@ -414,7 +420,7 @@ async function close(
 	}
 
 	const closed = await transitionAndRecord(
-		{ kind: 'application', id: applicationId },
+		subject,
 		application.status,
 		{ status, closedAt: new Date() },
 		{
@@ -451,21 +457,18 @@ export async function addNote(
 	applicationId: string,
 	body: string,
 ): Promise<ActionResult> {
-	const session = await requirePermission('waitlist', 'manage');
-	const actor = await actorId(session.user.id);
-	const application = await getApplication(applicationId);
-
-	if (!application) {
-		return { ok: false, message: 'Application not found.' };
-	}
+	const opened = await open(applicationId);
+	if (!opened.ok) return opened;
+	const { actor, subject } = opened;
 
 	const note = checkNote(body);
 	if (!note.ok) return note;
 
-	await recordEvent(
-		{ kind: 'application', id: applicationId },
-		{ actorUserId: actor, type: 'note', body: note.body },
-	);
+	await recordEvent(subject, {
+		actorUserId: actor,
+		type: 'note',
+		body: note.body,
+	});
 
 	revalidatePath(`/admin/waitlist/${applicationId}`);
 	return { ok: true };
