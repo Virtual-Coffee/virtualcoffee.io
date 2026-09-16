@@ -153,6 +153,41 @@ describe('setUserRoles', () => {
 			message: 'That person no longer exists. Reload the page.',
 		});
 	});
+
+	/**
+	 * The recovery for a claim that failed at sign-in. The grant is consumed
+	 * here, or it would sit unclaimed and — once they hold a role — hidden.
+	 */
+	test('recovers a stranded user: applies the roles and claims the grant, keeping its volunteer', async () => {
+		const ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
+		const grant = await insertPendingGrant({
+			slackUserId: 'U_ADA',
+			role: 'coc_reviewer,volunteer',
+		});
+
+		await expect(setUserRoles(ada.id, ['admin'])).resolves.toEqual({
+			ok: true,
+		});
+		await expect(roleOf(ada.id)).resolves.toEqual({
+			role: 'admin,volunteer',
+			roleGrantedBy: 'Local dev',
+		});
+		await expect(
+			db()
+				.select({ claimedUserId: pendingGrant.claimedUserId })
+				.from(pendingGrant)
+				.where(eq(pendingGrant.id, grant.id)),
+		).resolves.toEqual([{ claimedUserId: ada.id }]);
+		await expect(listAccessRows()).resolves.toEqual([
+			expect.objectContaining({
+				kind: 'user',
+				id: ada.id,
+				roles: ['admin', 'volunteer'],
+				stranded: false,
+			}),
+			expect.objectContaining({ kind: 'user', id: admin.userId }),
+		]);
+	});
 });
 
 describe('grantPendingAccess', () => {

@@ -7,7 +7,11 @@ import { db, isUniqueViolation, pendingGrant, user } from '@/db';
 import { getSlackMembers } from '@/data/slackMembers';
 import { requirePermission, sessionRoles } from '@/lib/adminAccess';
 import { userForSlackId } from '@/lib/admins';
-import { lockSlackMember } from '@/lib/pendingGrants';
+import {
+	claimGrant,
+	findUnclaimedGrant,
+	lockSlackMember,
+} from '@/lib/pendingGrants';
 import { isId } from '@/db/ids';
 import {
 	GRANTABLE_ROLE_NAMES,
@@ -98,44 +102,68 @@ export async function setUserRoles(
 		}
 	}
 
-	const [target] = await db()
-		.select({ role: user.role })
-		.from(user)
-		.where(eq(user.id, userId))
-		.limit(1);
+	const result = await db().transaction(async (tx): Promise<ActionResult> => {
+		const [target] = await tx
+			.select({ role: user.role, slackUserId: user.slackUserId })
+			.from(user)
+			.where(eq(user.id, userId))
+			.limit(1);
 
-	if (!target) {
-		return {
-			ok: false,
-			message: 'That person no longer exists. Reload the page.',
-		};
-	}
+		if (!target) {
+			return {
+				ok: false,
+				message: 'That person no longer exists. Reload the page.',
+			};
+		}
 
-	const resulting = preserveUngrantedRoles(target.role, requested);
-	const granting = resulting.length > 0;
+		/**
+		 * A Grant beside a signed-in user is one their first sign-in failed to
+		 * claim; this edit is the recovery. Its roles join what is carried over,
+		 * so a `volunteer` it holds survives the replace, and it is claimed below
+		 * — a Grant left unclaimed would be hidden once they hold a role.
+		 */
+		let grant = null;
+		if (target.slackUserId) {
+			await lockSlackMember(tx, target.slackUserId);
+			grant = await findUnclaimedGrant(tx, target.slackUserId);
+		}
 
-	/**
-	 * Pinned to the role string that was read. `resulting` was computed from it,
-	 * and `grantVolunteerRole` writes the same column from its own transaction;
-	 * an unpinned update would overwrite a `volunteer` added in between.
-	 */
-	const result = await db()
-		.update(user)
-		.set({
-			role: serialiseRoles(resulting),
-			roleGrantedAt: granting ? new Date() : null,
-			roleGrantedBy: granting ? session.user.name || session.user.email : null,
-		})
-		.where(and(eq(user.id, userId), sameRole(user.role, target.role)));
+		const resulting = preserveUngrantedRoles(
+			[target.role, grant?.role].filter(Boolean).join(','),
+			requested,
+		);
+		const granting = resulting.length > 0;
 
-	// A row that no longer matches is a stale page, not a success — saying
-	// "ok" would leave the maintainer believing they had granted something.
-	if (result.rowCount === 0) {
-		return { ok: false, message: STALE_ROLES };
-	}
+		/**
+		 * Pinned to the role string that was read. `resulting` was computed from
+		 * it, and `grantVolunteerRole` writes the same column from its own
+		 * transaction; an unpinned update would overwrite a `volunteer` added in
+		 * between.
+		 */
+		const updated = await tx
+			.update(user)
+			.set({
+				role: serialiseRoles(resulting),
+				roleGrantedAt: granting ? new Date() : null,
+				roleGrantedBy: granting
+					? session.user.name || session.user.email
+					: null,
+			})
+			.where(and(eq(user.id, userId), sameRole(user.role, target.role)));
 
-	revalidate();
-	return { ok: true };
+		// A row that no longer matches is a stale page, not a success — saying
+		// "ok" would leave the maintainer believing they had granted something.
+		if (updated.rowCount === 0) {
+			return { ok: false, message: STALE_ROLES };
+		}
+
+		if (grant) await claimGrant(tx, grant.id, userId);
+
+		return { ok: true };
+	});
+
+	if (result.ok) revalidate();
+	return result;
 }
 
 /**
@@ -199,20 +227,9 @@ export async function grantPendingAccess(
 				};
 			}
 
-			const [pending] = await tx
-				.select({ id: pendingGrant.id })
-				.from(pendingGrant)
-				.where(
-					and(
-						eq(pendingGrant.slackUserId, member.id),
-						isNull(pendingGrant.claimedAt),
-					),
-				)
-				.limit(1);
-
 			// A stranded user is in the table too, with the Grant that failed to
-			// apply; granting over it would leave that Grant unclaimed and hidden.
-			if (pending) return alreadyPending;
+			// apply; it is edited there, which applies the Grant.
+			if (await findUnclaimedGrant(tx, member.id)) return alreadyPending;
 
 			if (existing) {
 				await tx
