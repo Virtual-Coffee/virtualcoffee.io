@@ -298,8 +298,10 @@ export function AdjustBalanceForm({ volunteerId }: { volunteerId: string }) {
 		<form
 			onSubmit={(event) => {
 				event.preventDefault();
-				run(() => adjustBalance(volunteerId, parsedDelta, reason));
-				setReason('');
+				// The reason stays for a retry if the action refuses it.
+				run(() => adjustBalance(volunteerId, parsedDelta, reason), {
+					onSuccess: () => setReason(''),
+				});
 			}}
 		>
 			<div className="row g-2 align-items-end">
