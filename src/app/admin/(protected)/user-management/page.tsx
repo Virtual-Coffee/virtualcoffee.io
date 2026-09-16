@@ -1,5 +1,6 @@
 import { requirePermission } from '@/lib/adminAccess';
 import { grantCandidates, listAccessRows } from '@/lib/admins';
+import { GRANTABLE_ROLE_NAMES } from '@/lib/permissions';
 import { GrantAccessForm } from './adminControls';
 import { AdminsTable } from './adminsTable';
 
@@ -20,9 +21,12 @@ export default async function AdminsPage() {
 	]);
 
 	// Pending grants and stranded users are listed too, but cannot sign in to
-	// /admin today.
+	// /admin today — and neither can a Volunteer, whose Role grants no Section
+	// (docs/adr/0010); they are listed because their grant is edited here.
 	const active = rows.filter(
-		(row) => row.kind === 'user' && !row.stranded,
+		(row) =>
+			row.kind === 'user' &&
+			row.roles.some((role) => GRANTABLE_ROLE_NAMES.has(role)),
 	).length;
 	const pending = rows.filter((row) => row.kind === 'pending').length;
 

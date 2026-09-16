@@ -184,26 +184,29 @@ export function RolesDropdown({
 						</button>
 					</li>
 
-					{!isSelf && roles.length > 0 && (
-						<>
-							<li>
-								<hr className="dropdown-divider" />
-							</li>
-							<li>
-								<button
-									type="button"
-									className="dropdown-item text-danger"
-									disabled={pending}
-									onClick={() => {
-										setOpen(false);
-										revokeAll();
-									}}
-								>
-									Revoke /admin roles
-								</button>
-							</li>
-						</>
-					)}
+					{!isSelf &&
+						(kind === 'user'
+							? grantable.length > 0
+							: roles.length === grantable.length) && (
+							<>
+								<li>
+									<hr className="dropdown-divider" />
+								</li>
+								<li>
+									<button
+										type="button"
+										className="dropdown-item text-danger"
+										disabled={pending}
+										onClick={() => {
+											setOpen(false);
+											revokeAll();
+										}}
+									>
+										Revoke /admin roles
+									</button>
+								</li>
+							</>
+						)}
 				</ul>
 			)}
 
