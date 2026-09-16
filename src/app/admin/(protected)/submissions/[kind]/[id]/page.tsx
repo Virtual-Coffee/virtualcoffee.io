@@ -3,10 +3,11 @@ import { notFound } from 'next/navigation';
 
 import { isId } from '@/db/ids';
 import { requirePermission, sessionCan } from '@/lib/adminAccess';
+import { history } from '@/lib/eventLog';
 import {
 	getSubmission,
-	getSubmissionHistory,
 	isSubmissionKind,
+	submissionSubject,
 	SUBMISSION_DISPLAY,
 	SUBMISSION_KINDS,
 } from '@/lib/submissions';
@@ -51,9 +52,9 @@ export default async function SubmissionDetailPage({
 
 	if (!isId(id)) notFound();
 
-	const [submission, history] = await Promise.all([
+	const [submission, entries] = await Promise.all([
 		getSubmission(kind, id),
-		getSubmissionHistory(kind, id),
+		history(submissionSubject(kind, id)),
 	]);
 
 	if (!submission) notFound();
@@ -127,7 +128,7 @@ export default async function SubmissionDetailPage({
 
 				<div className="col-lg-5">
 					<h2 className="h6">History</h2>
-					<HistoryTimeline history={history} />
+					<HistoryTimeline history={entries} />
 
 					{canManage && (
 						<NoteComposer
