@@ -522,15 +522,46 @@ describe('resendSlackInvite', () => {
 		expect(sendEmail).not.toHaveBeenCalled();
 	});
 
-	test('a failed send is recorded and nothing else changes', async () => {
+	// The old link is retired only once the new one has gone. Superseding at
+	// mint would leave a member whose re-send failed holding no working link.
+	test('a failed send is recorded, the new link is killed and the previous one still works', async () => {
 		sendEmail.mockResolvedValue(NOT_SENT);
 		const { id } = await insertApplication({ status: 'member' });
+		const { token: first } = await createSlackInviteToken(id);
+
 		await expect(resendSlackInvite(id, false)).resolves.toMatchObject({
 			ok: false,
 			emailSent: false,
 		});
+
+		await expect(slackInviteForToken(first)).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
+		const tokens = await db().select().from(inviteToken);
+		expect(tokens).toHaveLength(2);
+		const [minted] = tokens.filter((row) => row.expiresAt <= new Date());
+		expect(minted).toBeDefined();
 		await expect(applicationEvents(id)).resolves.toEqual([
 			expect.objectContaining({ type: 'email_failed' }),
 		]);
+	});
+
+	test("a second re-send retires the first re-send's link too; the newest is the one that works", async () => {
+		vi.stubEnv('URL', 'https://virtualcoffee.io');
+		sendEmail.mockResolvedValue(SENT);
+		const { id } = await insertApplication({ status: 'member' });
+
+		await expect(resendSlackInvite(id, false)).resolves.toEqual({ ok: true });
+		await expect(resendSlackInvite(id, false)).resolves.toEqual({ ok: true });
+
+		const tokens = await db()
+			.select()
+			.from(inviteToken)
+			.orderBy(inviteToken.createdAt);
+		expect(tokens).toHaveLength(2);
+		const now = new Date();
+		expect(tokens[0].expiresAt <= now).toBe(true);
+		expect(tokens[1].expiresAt > now).toBe(true);
 	});
 });

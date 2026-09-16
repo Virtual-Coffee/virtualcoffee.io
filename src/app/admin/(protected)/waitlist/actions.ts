@@ -24,6 +24,7 @@ import {
 import {
 	createSlackInviteToken,
 	expireSlackInviteToken,
+	supersedeSlackInviteTokens,
 } from '@/lib/inviteTokens';
 import { getApplication } from '@/lib/applications';
 import { siteUrl } from '@/util/url.server';
@@ -270,11 +271,9 @@ export async function approveMembership(
 	// The token has to exist before the email that carries it, so every exit
 	// below that does not make a member expires it: a timed-out send may still
 	// have delivered a working link, and /join-slack checks only the token.
-	// Not superseding: another approval may be racing this one, and its link
-	// must survive if it wins. The loser expires its own.
-	const { id: tokenId, token } = await createSlackInviteToken(applicationId, {
-		supersede: false,
-	});
+	// Another approval may be racing this one, and its link must survive if
+	// it wins. The loser expires its own.
+	const { id: tokenId, token } = await createSlackInviteToken(applicationId);
 	const inviteUrl = `${siteUrl()}/join-slack?code=${token}`;
 
 	const welcome = welcomeEmail(application.name);
@@ -387,11 +386,12 @@ export async function approveMembership(
 
 /**
  * A fresh Slack invite for someone who is already a member: the first link
- * was consumed by a scanner, expired unread, or went to a spam folder. The
- * previous link stops working — minting the new token expires it — so a
- * link that went astray cannot be redeemed by whoever finds it. No status
- * changes, so the send-first rule has nothing to protect; the event is what
- * records that a second link is out.
+ * was consumed by a scanner, expired unread, or went to a spam folder. Once
+ * the new link has gone the previous one stops working, so a link that went
+ * astray cannot be redeemed by whoever finds it — but only once it has gone:
+ * superseding before the send would leave a member whose re-send failed with
+ * no working link at all. No status changes, so the send-first rule has
+ * nothing to protect; the event is what records that a second link is out.
  */
 export async function resendSlackInvite(
 	applicationId: string,
@@ -412,10 +412,10 @@ export async function resendSlackInvite(
 		};
 	}
 
-	const { token } = await createSlackInviteToken(applicationId);
+	const minted = await createSlackInviteToken(applicationId);
 	const template = slackInviteEmail(
 		application.name,
-		`${siteUrl()}/join-slack?code=${token}`,
+		`${siteUrl()}/join-slack?code=${minted.token}`,
 	);
 	const sent = await sendEmail({
 		to: application.email,
@@ -425,6 +425,9 @@ export async function resendSlackInvite(
 	});
 
 	if (!sent.ok) {
+		// A timeout may have delivered the new link anyway; kill it, and only
+		// it — the previous link is still the one the member holds.
+		await expireSlackInviteToken(minted.id, new Date());
 		await recordEvent({
 			applicationId,
 			actorUserId: actor,
@@ -438,6 +441,7 @@ export async function resendSlackInvite(
 		};
 	}
 
+	await supersedeSlackInviteTokens(applicationId, minted, new Date());
 	await recordEvent({
 		applicationId,
 		actorUserId: actor,

@@ -10,6 +10,7 @@ import {
 	expireSlackInviteToken,
 	redeemSlackInviteToken,
 	slackInviteForToken,
+	supersedeSlackInviteTokens,
 } from './inviteTokens';
 
 const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
@@ -84,19 +85,20 @@ describe('Slack invite tokens', () => {
 		});
 	});
 
-	test('a new token supersedes the previous unused one', async () => {
+	test("superseding retires the earlier live tokens, and nobody else's", async () => {
 		const { id } = await insertApplication({ status: 'member' });
 		const other = await insertApplication({ status: 'member' });
 		const { token: first } = await createSlackInviteToken(id);
 		const { token: theirs } = await createSlackInviteToken(other.id);
+		const second = await createSlackInviteToken(id);
 
-		const { token: second } = await createSlackInviteToken(id);
+		await supersedeSlackInviteTokens(id, second, new Date());
 
 		await expect(slackInviteForToken(first)).resolves.toEqual({
 			ok: false,
 			reason: 'expired',
 		});
-		await expect(redeemSlackInviteToken(second)).resolves.toEqual({
+		await expect(redeemSlackInviteToken(second.token)).resolves.toEqual({
 			ok: true,
 			applicationId: id,
 		});
@@ -110,7 +112,8 @@ describe('Slack invite tokens', () => {
 	test('a superseded token redeems as expired, not used, and stays unused', async () => {
 		const { id } = await insertApplication({ status: 'member' });
 		const { token: first } = await createSlackInviteToken(id);
-		await createSlackInviteToken(id);
+		const second = await createSlackInviteToken(id);
+		await supersedeSlackInviteTokens(id, second, new Date());
 
 		await expect(redeemSlackInviteToken(first)).resolves.toEqual({
 			ok: false,
@@ -120,10 +123,29 @@ describe('Slack invite tokens', () => {
 		expect(rows.map((row) => row.usedAt)).toEqual([null, null]);
 	});
 
-	test('supersede: false leaves the previous token live; expiring by id takes only that one', async () => {
+	// The newest link survives whichever re-send finishes last: superseding
+	// from an older token leaves the newer one alone.
+	test('superseding is by mint order, so a later token is never retired by an earlier one', async () => {
 		const { id } = await insertApplication({ status: 'member' });
-		const first = await createSlackInviteToken(id, { supersede: false });
-		const second = await createSlackInviteToken(id, { supersede: false });
+		const first = await createSlackInviteToken(id);
+		const second = await createSlackInviteToken(id);
+
+		await supersedeSlackInviteTokens(id, first, new Date());
+
+		await expect(slackInviteForToken(first.token)).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
+		await expect(slackInviteForToken(second.token)).resolves.toEqual({
+			ok: true,
+			applicationId: id,
+		});
+	});
+
+	test('minting leaves the previous token live; expiring by id takes only that one', async () => {
+		const { id } = await insertApplication({ status: 'member' });
+		const first = await createSlackInviteToken(id);
+		const second = await createSlackInviteToken(id);
 
 		await expect(slackInviteForToken(first.token)).resolves.toEqual({
 			ok: true,
