@@ -17,7 +17,6 @@ import {
 	db,
 	lunchAndLearnIdea,
 	submissionEvent,
-	user,
 	volunteerSignup,
 	type SubmissionStatus,
 } from '@/db';
@@ -113,38 +112,6 @@ export async function openCount(kind: SubmissionKind): Promise<number> {
 		.where(inArray(table.status, OPEN_STATUSES));
 
 	return row?.value ?? 0;
-}
-
-export type SubmissionEventEntry = {
-	id: string;
-	type: string;
-	body: string | null;
-	fromStatus: SubmissionStatus | null;
-	toStatus: SubmissionStatus | null;
-	createdAt: Date;
-	actorName: string | null;
-};
-
-export async function getSubmissionHistory(
-	kind: SubmissionKind,
-	submissionId: string,
-): Promise<SubmissionEventEntry[]> {
-	const { eventColumn } = SUBMISSION_KINDS[kind];
-
-	return db()
-		.select({
-			id: submissionEvent.id,
-			type: sql<string>`${submissionEvent.type}`,
-			body: submissionEvent.body,
-			fromStatus: submissionEvent.fromStatus,
-			toStatus: submissionEvent.toStatus,
-			createdAt: submissionEvent.createdAt,
-			actorName: user.name,
-		})
-		.from(submissionEvent)
-		.leftJoin(user, eq(submissionEvent.actorUserId, user.id))
-		.where(eq(eventColumn, submissionId))
-		.orderBy(desc(submissionEvent.createdAt), desc(submissionEvent.id));
 }
 
 /**
