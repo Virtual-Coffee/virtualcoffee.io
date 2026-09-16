@@ -1,6 +1,11 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 
-import { capture, emailDelivery, type EmailDelivery } from '@/lib/outbound';
+import {
+	capture,
+	emailDelivery,
+	maskAddress,
+	type EmailDelivery,
+} from '@/lib/outbound';
 
 /**
  * Transactional mail for the membership pipeline, sent through Google
@@ -167,8 +172,10 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 	const delivery = emailDelivery();
 
 	if (delivery.mode === 'captured') {
+		// The cc is the acting maintainer's address; masked wherever it is
+		// logged, since a deploy's log names nobody (docs/adr/0013).
 		capture('email', input.to, input.text, {
-			cc: input.cc || undefined,
+			cc: input.cc ? maskAddress(input.cc) : undefined,
 			subject: input.subject,
 		});
 		return {
