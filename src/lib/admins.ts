@@ -1,6 +1,6 @@
 import { and, eq, isNotNull, isNull, ne, or } from 'drizzle-orm';
 
-import { db, pendingGrant, user } from '@/db';
+import { db, pendingGrant, user, type Database, type Transaction } from '@/db';
 import { getSlackMembers, type SlackMember } from '@/data/slackMembers';
 import { DEFAULT_ROLE, parseRoles, type RoleName } from '@/lib/permissions';
 
@@ -23,10 +23,13 @@ export type AccessRow = {
 /** A Slack member the "Grant access" picker can offer. */
 export type GrantCandidate = SlackMember & {
 	/**
-	 * They already have a user row, so a Pending Grant would never be claimed.
-	 * Shown but not selectable, so the server's refusal is not a surprise.
+	 * What the site already holds for them. `none`: never signed in, so a grant
+	 * is pre-provisioned as a Pending Grant. `noRoles`: signed in holding
+	 * nothing, so a grant is applied to their user row directly — a Pending
+	 * Grant would never be claimed. `hasRoles`: already in the table, so not
+	 * selectable; their roles are edited there.
 	 */
-	hasAccount: boolean;
+	account: 'none' | 'noRoles' | 'hasRoles';
 	/** An unclaimed Grant already exists — edit it in the table instead. */
 	hasPendingGrant: boolean;
 };
@@ -141,25 +144,38 @@ export async function grantCandidates(): Promise<GrantCandidate[]> {
 	const [members, linked, grants] = await Promise.all([
 		getSlackMembers(),
 		db()
-			.select({ slackUserId: user.slackUserId })
+			.select({ slackUserId: user.slackUserId, role: user.role })
 			.from(user)
 			.where(isNotNull(user.slackUserId)),
 		listPendingGrants(),
 	]);
 
-	const withAccounts = new Set(linked.map((row) => row.slackUserId));
+	const accounts = new Map(
+		linked.map((row) => [
+			row.slackUserId,
+			parseRoles(row.role).length > 0
+				? ('hasRoles' as const)
+				: ('noRoles' as const),
+		]),
+	);
 	const withGrants = new Set(grants.map((grant) => grant.slackUserId));
 
 	return members.map((member) => ({
 		...member,
-		hasAccount: withAccounts.has(member.id),
+		account: accounts.get(member.id) ?? 'none',
 		hasPendingGrant: withGrants.has(member.id),
 	}));
 }
 
-/** The user holding a Slack member id, if that member has ever signed in. */
-export async function userForSlackId(slackUserId: string) {
-	const [row] = await db()
+/**
+ * The user holding a Slack member id, if that member has ever signed in.
+ * Takes the caller's transaction when the answer decides a write.
+ */
+export async function userForSlackId(
+	slackUserId: string,
+	executor: Database | Transaction = db(),
+) {
+	const [row] = await executor
 		.select({ id: user.id, name: user.name, role: user.role })
 		.from(user)
 		.where(eq(user.slackUserId, slackUserId))
