@@ -28,7 +28,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Overview
 
-virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS/JSON and build-time fetches from GitHub and a Craft CMS, both of which fall back to mock data when credentials are absent. Airtable remains only behind the form submissions, which return an error state without credentials.
+virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS/JSON and build-time fetches from GitHub and a Craft CMS, both of which fall back to mock data when credentials are absent. Airtable is retired — see `docs/adr/0004`.
 
 ## Commands
 
@@ -82,22 +82,22 @@ Two TypeScript packages are installed on purpose: `typescript` is aliased to `@t
 
 Every external data source lives in `src/data/` and degrades to mocks when its env var is missing:
 
-| Source                                         | File                          | Env var                                        | Fallback                                                          |
-| ---------------------------------------------- | ----------------------------- | ---------------------------------------------- | ----------------------------------------------------------------- |
-| Member GitHub profiles                         | `src/data/members/index.ts`   | `GITHUB_TOKEN`                                 | `src/data/mocks/memberData.js` (faker)                            |
-| GitHub Sponsors                                | `src/data/sponsors.ts`        | `GITHUB_TOKEN`                                 | `src/data/mocks/sponsors.ts`                                      |
-| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`          | `CMS_URL`, `CMS_TOKEN`                         | `src/data/mocks/events.ts`                                        |
-| Form submissions (server actions)              | `src/util/airtable/action.ts` | `FORMS_AIRTABLE_API_KEY`                       | error state returned to the form                                  |
-| Membership notifications (Slack)               | `src/lib/slack/notify.ts`     | `SLACK_WEBHOOK_MEMBERSHIP`                     | failure logged; the application is still saved                    |
-| Transactional email (`/admin` actions)         | `src/lib/email/transport.ts`  | `GOOGLE_SMTP_USER`, `GOOGLE_SMTP_APP_PASSWORD` | captured outside production; a failure is an `email_failed` event |
-| Slack member directory (`/admin` grant picker) | `src/data/slackMembers.ts`    | `SLACK_BOT_TOKEN`                              | `src/data/mocks/slackMembers.ts` (faker)                          |
-| Membership applications (`/join`, `/admin`)    | `src/db/`                     | none (auto-provisioned)                        | local Postgres from `netlify dev`                                 |
+| Source                                          | File                         | Env var                                           | Fallback                                                          |
+| ----------------------------------------------- | ---------------------------- | ------------------------------------------------- | ----------------------------------------------------------------- |
+| Member GitHub profiles                          | `src/data/members/index.ts`  | `GITHUB_TOKEN`                                    | `src/data/mocks/memberData.js` (faker)                            |
+| GitHub Sponsors                                 | `src/data/sponsors.ts`       | `GITHUB_TOKEN`                                    | `src/data/mocks/sponsors.ts`                                      |
+| Events (Craft CMS + Solspace Calendar GraphQL)  | `src/data/events.ts`         | `CMS_URL`, `CMS_TOKEN`                            | `src/data/mocks/events.ts`                                        |
+| Submission and membership notifications (Slack) | `src/lib/slack/notify.ts`    | `SLACK_WEBHOOK_*`                                 | failure recorded as an event, shown in `/admin`                   |
+| Lunch & Learn GitHub issue                      | `src/lib/github/issues.ts`   | `GITHUB_APP_CLIENT_ID` / `GITHUB_APP_PRIVATE_KEY` | same; captured outside production                                 |
+| Transactional email (`/admin` actions)          | `src/lib/email/transport.ts` | `GOOGLE_SMTP_USER`, `GOOGLE_SMTP_APP_PASSWORD`    | captured outside production; a failure is an `email_failed` event |
+| Slack member directory (`/admin` grant picker)  | `src/data/slackMembers.ts`   | `SLACK_BOT_TOKEN`                                 | `src/data/mocks/slackMembers.ts` (faker)                          |
+| Membership applications (`/join`, `/admin`)     | `src/db/`                    | none (auto-provisioned)                           | local Postgres from `netlify dev`                                 |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. Any new external fetch should follow this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`. Fetches are wrapped in `unstable_cache` with a tag (`members`, `events`, `mdx-routes`); `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates on demand and a daily GitHub Action triggers a Netlify rebuild.
 
 ### Membership pipeline (Postgres)
 
-`/join` writes a Membership Application to Netlify Database and `/admin` is where maintainers work the queue. The panel is organised by section: `/admin` is a dashboard scoped to what the viewer may see, the waitlist owns `/admin/waitlist/*` (queue, `archive/`, and the `[id]` detail page), and `/admin/user-management` manages who has access. A new section is a new segment beside `waitlist/`, with its routes and its own components under it — `(protected)/presentation.tsx` and `timeline.tsx` are the only shared pieces. Adding a Section is a type error in `CARDS` (`src/lib/dashboard.ts`) until you decide whether it gets a dashboard card. Vocabulary is in `CONTEXT.md` (a **Member Profile** in `src/content/members/` is unrelated to a **Membership Application**); decisions are in `docs/adr/` — the rules below are the ones that bite, each with its ADR.
+`/join` writes a Membership Application to Netlify Database and `/admin` is where maintainers work the queue. The panel is organised by section: `/admin` is a dashboard scoped to what the viewer may see, the waitlist owns `/admin/waitlist/*` (queue, `archive/`, and the `[id]` detail page), `/admin/submissions/[kind]/*` covers the four Submission kinds, and `/admin/user-management` manages who has access. A new section is a new segment beside `waitlist/`, with its routes and its own components under it — `(protected)/presentation.tsx` and `timeline.tsx` are the only shared pieces. Adding a Section is a type error in `CARDS` (`src/lib/dashboard.ts`) until you decide whether it gets a dashboard card. Vocabulary is in `CONTEXT.md` (a **Member Profile** in `src/content/members/` is unrelated to a **Membership Application**); decisions are in `docs/adr/` — the rules below are the ones that bite, each with its ADR.
 
 - **Access to `/admin` is per-section** (`src/lib/permissions.ts`). The `(protected)` layout only checks that the viewer holds _some_ section — **each page must gate itself with `requirePermission()`, and each server action must re-check independently.** A section with no check of its own is reachable by every role. `docs/adr/0006`.
 - A **Pending Grant** (`pending_grant`, `src/lib/pendingGrants.ts`) pre-provisions roles for a Slack member id. Matching is **never on email**. `docs/adr/0009`.
@@ -107,9 +107,13 @@ Every external data source lives in `src/data/` and degrades to mocks when its e
 - Auth is Better Auth with Slack OAuth (`src/lib/auth.ts`); 1.7.3 has no `team` option, so the workspace check is in `mapProfileToUser`. `ADMIN_DEV_BYPASS=true` unblocks `/admin` locally without Slack credentials; a real session cookie (the devtools panel's "switch user") takes precedence over it.
 - Deploy previews get a fork of production's database and sign in through production's Slack OAuth (`oAuthProxy`, so the only registered redirect URI is production's); nothing is scrubbed and there is no preview bypass — a preview's audience is production's. `OAUTH_PROXY_SECRET` must be identical in every Netlify context. `docs/adr/0007`.
 - Any admin action that emails must **send first and only then write the status change**, and report whether anything went out — getting it backwards double-emails applicants. `waitlist/actions.db.test.ts` and `transport.test.ts` pin this.
-- **Nothing is delivered outside `CONTEXT=production`.** `src/lib/outbound.ts` decides the Delivery Mode: email is captured (logged, reported as sent) unless `EMAIL_REDIRECT_TO` redirects it to one address; Slack posts are captured unless `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true`. A new sender consults `outbound.ts` **before** it checks its own credentials. `docs/adr/0013`.
+- **Nothing is delivered outside `CONTEXT=production`.** `src/lib/outbound.ts` decides the Delivery Mode: email is captured (logged, reported as sent) unless `EMAIL_REDIRECT_TO` redirects it to one address; Slack posts and GitHub issues are captured unless `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true`. A new sender consults `outbound.ts` **before** it checks its own credentials. `docs/adr/0013`.
 
-`/join` is `force-dynamic` because the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token — prerendering would bake one into the cached HTML and reject every submission once it expired.
+### Submissions (Postgres)
+
+The four public forms — `/report-coc-violation`, `/volunteer-at-virtual-coffee`, `/lunch-and-learn-idea`, `/start-coffee-table-group` — each have a zod-validated server action writing to their own table, with a shared `submission_event` log. They **persist first and notify second**, deliberately inverting the admin actions' "send first, then write" rule; it looks like a bug without `docs/adr/0005`. The `action.db.test.ts` beside each form pins the ordering.
+
+All four — and `/join` — are `force-dynamic` because the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token — prerendering would bake one into the cached HTML and reject every submission once it expired. CoC attachments go to Netlify Blobs and are served only through a route that checks `coc:read`.
 
 Podcast episodes are a checked-in JSON snapshot (`src/data/podcast/episodes.json`) copied from the `vc-data` repo; the update procedure is in the comment at the top of `src/data/podcast.ts`. Newsletters are local JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
 

@@ -92,12 +92,22 @@ export async function storeAttachment(
 	// from the blob name.
 	const key = randomUUID();
 
-	await getStore(ATTACHMENT_STORE).set(key, bytes, {
-		metadata: {
-			filename: safeFilename(file.name, kind.ext),
-			contentType: kind.type,
-		},
-	});
+	// A store that is down is a form error, not a crash: the reporter keeps
+	// what they typed and can retry, or send the report without the file.
+	try {
+		await getStore(ATTACHMENT_STORE).set(key, bytes, {
+			metadata: {
+				filename: safeFilename(file.name, kind.ext),
+				contentType: kind.type,
+			},
+		});
+	} catch (error) {
+		console.error('CoC attachment could not be stored', { key, error });
+		return {
+			error:
+				'We couldn’t store the attachment. Please try again, or send the report without it and email the file to hello@virtualcoffee.io.',
+		};
+	}
 
 	return {
 		key,
