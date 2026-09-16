@@ -53,14 +53,15 @@ export function useAction<
 
 	const error = result && !result.ok ? result.message : null;
 
-	const feedback = result && (
+	// Success may carry no message, and an empty status alert is still announced.
+	const feedback = result?.message ? (
 		<div
 			className={`alert ${result.ok ? 'alert-success' : 'alert-danger'} mt-3`}
 			role={result.ok ? 'status' : 'alert'}
 		>
 			{result.message}
 		</div>
-	);
+	) : null;
 
 	return {
 		run,
