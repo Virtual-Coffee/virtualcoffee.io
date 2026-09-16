@@ -49,7 +49,9 @@ describe('claimPendingGrant', () => {
 		});
 		const ada = await insertUser({ email: 'ada@example.test' });
 
-		await claimPendingGrant(slackAccount(ada.id, 'U_ADA'));
+		await expect(
+			claimPendingGrant(slackAccount(ada.id, 'U_ADA')),
+		).resolves.toBe(true);
 
 		await expect(userRow(ada.id)).resolves.toMatchObject({
 			slackUserId: 'U_ADA',
@@ -156,7 +158,9 @@ describe('claimPendingGrant', () => {
 		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 		try {
-			await claimPendingGrant(slackAccount(ada.id, 'U_ADA'));
+			await expect(
+				claimPendingGrant(slackAccount(ada.id, 'U_ADA')),
+			).resolves.toBe(false);
 
 			expect(error).toHaveBeenCalledOnce();
 			await expect(userRow(ada.id)).resolves.toMatchObject({
@@ -185,16 +189,17 @@ describe('claimPendingGrant', () => {
 		await expect(userRow(ada.id)).resolves.toMatchObject({ slackUserId: null });
 
 		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+		// Nothing to claim is not a failure.
 		await expect(
 			claimPendingGrant(slackAccount('no-such-user', 'U_ADA')),
-		).resolves.toBeUndefined();
+		).resolves.toBe(true);
 		// Two users claiming the same Slack id: the second violates the unique
 		// column, and sign-in must still not fail.
 		await claimPendingGrant(slackAccount(ada.id, 'U_ADA'));
 		const other = await insertUser({});
 		await expect(
 			claimPendingGrant(slackAccount(other.id, 'U_ADA')),
-		).resolves.toBeUndefined();
+		).resolves.toBe(false);
 		expect(error).toHaveBeenCalledOnce();
 		error.mockRestore();
 	});
