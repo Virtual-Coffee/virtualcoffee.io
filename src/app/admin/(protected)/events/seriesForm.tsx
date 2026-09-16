@@ -5,6 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useId, useState } from 'react';
 
 import type { EventType, Series } from '@/lib/eventsCalendar';
+import {
+	draftFromRecurrence,
+	draftToForm,
+	EMPTY_DRAFT,
+	type RecurrenceDraft,
+} from '@/lib/recurrence';
 import { useAction } from '@/util/forms/useAction';
 
 import { createSeries, endSeries, updateSeries } from './actions';
@@ -16,13 +22,7 @@ import {
 	TimeFields,
 	type TimeInput,
 } from './fields';
-import {
-	draftFromRecurrence,
-	draftToForm,
-	EMPTY_DRAFT,
-	RecurrenceFields,
-	type RecurrenceDraft,
-} from './recurrenceFields';
+import { RecurrenceFields } from './recurrenceFields';
 
 /**
  * One form for a new Series and for editing one. An edit sends the etag the
