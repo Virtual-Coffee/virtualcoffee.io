@@ -105,6 +105,7 @@ export function useServerPagedTable<TData extends RowData & { id: string }>({
 	columns: TableOptions<ServerTableFeatures, TData>['columns'];
 	rows: TData[];
 	rowCount: number;
+	/** Zero-based. The URL is one-based; `onPaginationChange` is where they meet. */
 	page: number;
 	pageSize: number;
 	sort: string;
