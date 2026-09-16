@@ -98,8 +98,18 @@ async function client(): Promise<Octokit> {
 }
 
 /**
+ * A zero-width space after every `@` so a form value cannot mention: `@org/team`
+ * in a public issue would notify the team. Renders as typed; the entity is
+ * visible in the raw body and in a diff.
+ */
+function neutralizeMentions(value: string): string {
+	return value.replace(/@/g, '@&#8203;');
+}
+
+/**
  * The issue is public, and the form promises never to share the email. It
- * lives on the Submission in /admin, which the issue links to instead.
+ * lives on the Submission in /admin, which the issue links to instead. The
+ * title is plain text on GitHub, never Markdown, so it needs no neutralising.
  */
 function issueBody(idea: {
 	name: string;
@@ -112,22 +122,22 @@ function issueBody(idea: {
 	return [
 		'## Submitted Info:',
 		'**Name:**',
-		idea.name,
+		neutralizeMentions(idea.name),
 		'',
 		'**Contact details:**',
 		idea.adminUrl,
 		'',
 		'**Title of the Lunch & Learn:**',
-		idea.topic,
+		neutralizeMentions(idea.topic),
 		'',
 		'**Description:**',
-		idea.description ?? '',
+		neutralizeMentions(idea.description ?? ''),
 		'',
 		'**Format:**',
-		idea.format ?? '',
+		neutralizeMentions(idea.format ?? ''),
 		'',
 		'**Timing:**',
-		idea.timing ?? '',
+		neutralizeMentions(idea.timing ?? ''),
 	].join('\n');
 }
 
