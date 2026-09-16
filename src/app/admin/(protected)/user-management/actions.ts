@@ -7,7 +7,7 @@ import { db, isUniqueViolation, pendingGrant, user } from '@/db';
 import { getSlackMembers } from '@/data/slackMembers';
 import { requirePermission, sessionRoles } from '@/lib/adminAccess';
 import { userForSlackId } from '@/lib/admins';
-import { claimPendingGrant } from '@/lib/pendingGrants';
+import { lockSlackMember } from '@/lib/pendingGrants';
 import { isId } from '@/db/ids';
 import {
 	GRANTABLE_ROLE_NAMES,
@@ -139,10 +139,13 @@ export async function setUserRoles(
 }
 
 /**
- * Pre-provision roles for a Slack member who has never signed in.
+ * Give roles to a Slack member: directly on their user row if they have signed
+ * in holding nothing, otherwise as a Pending Grant keyed on their Slack member
+ * id, carrying a snapshot of their name so the row is readable without
+ * reaching Slack again. See `docs/adr/0009`.
  *
- * The Grant is keyed on the Slack member id and carries a snapshot of their
- * name, so the row is readable without reaching Slack again. See `docs/adr/0009`.
+ * Someone already holding a role is in the table, and is edited there — a
+ * one-role picker is the wrong control for changing an existing set.
  */
 export async function grantPendingAccess(
 	slackUserId: string,
@@ -158,19 +161,6 @@ export async function grantPendingAccess(
 		return { ok: false, message: 'Choose at least one role to grant.' };
 	}
 
-	/**
-	 * Someone who has signed in has a user row, and a Grant against their Slack
-	 * id would sit unclaimed forever — `claimPendingGrant` only ever runs when
-	 * an account is first linked. Their roles are set in the table instead.
-	 */
-	const existing = await userForSlackId(slackUserId);
-	if (existing) {
-		return {
-			ok: false,
-			message: `${existing.name} has already signed in — set their roles in the table below.`,
-		};
-	}
-
 	const member = (await getSlackMembers()).find(
 		(candidate) => candidate.id === slackUserId,
 	);
@@ -182,51 +172,80 @@ export async function grantPendingAccess(
 		};
 	}
 
+	const grantedBy = session.user.name || session.user.email;
+	const alreadyPending: ActionResult = {
+		ok: false,
+		message: `${member.displayName} already has access pending. Edit it in the table below.`,
+	};
+
+	let result: ActionResult;
+
 	try {
-		await db()
-			.insert(pendingGrant)
-			.values({
+		/**
+		 * The lock covers "have they signed in?" and the write that depends on
+		 * the answer. `claimPendingGrant` stores the Slack id before it takes
+		 * the same lock, so a first sign-in either lands before this looks and
+		 * is granted directly, or waits on the lock and claims the Grant.
+		 */
+		result = await db().transaction(async (tx): Promise<ActionResult> => {
+			await lockSlackMember(tx, member.id);
+
+			const existing = await userForSlackId(member.id, tx);
+
+			if (existing && parseRoles(existing.role).length > 0) {
+				return {
+					ok: false,
+					message: `${existing.name} has already signed in — set their roles in the table below.`,
+				};
+			}
+
+			const [pending] = await tx
+				.select({ id: pendingGrant.id })
+				.from(pendingGrant)
+				.where(
+					and(
+						eq(pendingGrant.slackUserId, member.id),
+						isNull(pendingGrant.claimedAt),
+					),
+				)
+				.limit(1);
+
+			// A stranded user is in the table too, with the Grant that failed to
+			// apply; granting over it would leave that Grant unclaimed and hidden.
+			if (pending) return alreadyPending;
+
+			if (existing) {
+				await tx
+					.update(user)
+					.set({
+						role: serialiseRoles(requested),
+						roleGrantedAt: new Date(),
+						roleGrantedBy: grantedBy,
+					})
+					.where(eq(user.id, existing.id));
+
+				return { ok: true, message: `${existing.name} has access now.` };
+			}
+
+			await tx.insert(pendingGrant).values({
 				slackUserId: member.id,
 				slackDisplayName: member.displayName,
 				slackHandle: member.handle,
 				role: serialiseRoles(requested),
-				grantedBy: session.user.name || session.user.email,
+				grantedBy,
 			});
-	} catch (error) {
-		// The partial unique index is the authority on one-unclaimed-grant-each,
-		// so a race lands here rather than creating a second row.
-		if (!isUniqueViolation(error)) throw error;
-		return {
-			ok: false,
-			message: `${member.displayName} already has access pending. Edit it in the table below.`,
-		};
-	}
 
-	/**
-	 * Their first sign-in may have landed between the check above and the
-	 * insert, in which case `claimPendingGrant` ran against no grant. Their
-	 * Slack id is written before that claim looks for one, so whichever order
-	 * the two commits took, one of the two claims sees the other's write.
-	 */
-	const signedIn = await userForSlackId(member.id);
-	if (signedIn) {
-		const claimed = await claimPendingGrant({
-			providerId: 'slack',
-			accountId: member.id,
-			userId: signedIn.id,
+			return { ok: true };
 		});
-		if (!claimed) {
-			// The grant is written, so the table shows them as stranded either way.
-			revalidate();
-			return {
-				ok: false,
-				message: `${member.displayName} signed in while this was being saved and the grant could not be applied. They are listed below as stranded — set their roles there.`,
-			};
-		}
+	} catch (error) {
+		// The partial unique index is still the authority on one-unclaimed-grant
+		// each; the check above is what the lock makes reliable.
+		if (!isUniqueViolation(error)) throw error;
+		return alreadyPending;
 	}
 
-	revalidate();
-	return { ok: true };
+	if (result.ok) revalidate();
+	return result;
 }
 
 /** Change the roles on a Grant nobody has claimed yet. */
