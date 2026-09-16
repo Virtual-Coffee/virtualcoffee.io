@@ -140,6 +140,27 @@ describe('createLunchAndLearnIssue', () => {
 		});
 	});
 
+	// The issue is public: a submitted `@org/team` would page the team.
+	test('a mention in a form value is neutralised in the body; the title is plain text', async () => {
+		const { createLunchAndLearnIssue } = await load();
+
+		await createLunchAndLearnIssue({
+			...idea,
+			name: '@Virtual-Coffee/maintainers',
+			topic: 'Ask @octocat',
+			description: 'cc @octocat and hello@example.test',
+		});
+
+		const [call] = octokit.create.mock.calls;
+		expect(call[0].title).toBe('Lunch & Learn: Ask @octocat');
+		expect(call[0].body).toContain('@&#8203;Virtual-Coffee/maintainers');
+		expect(call[0].body).toContain('Ask @&#8203;octocat');
+		expect(call[0].body).toContain(
+			'cc @&#8203;octocat and hello@&#8203;example.test',
+		);
+		expect(call[0].body).not.toMatch(/@(?!&#8203;)/);
+	});
+
 	test('the App is identified by appId, the token narrowed to issues on that one repo, and the PEM un-escaped', async () => {
 		const { createLunchAndLearnIssue } = await load();
 		await createLunchAndLearnIssue(idea);
