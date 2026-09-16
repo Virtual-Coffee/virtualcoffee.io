@@ -110,20 +110,25 @@ export async function submitCocReport(
 		return saved.error;
 	}
 
-	await notifyAndRecord('coc', saved.id, async () => {
-		return notifySlack(
-			'coc',
-			cocReportMessage({
-				name: parsed.data.name ?? null,
-				email: parsed.data.email ?? null,
-				reporteeName: parsed.data.reportee_name,
-				timeLocation: parsed.data.time_location,
-				description: parsed.data.description,
-				anyoneElseInvolved: parsed.data.anyone_else_involved ?? null,
-				hasAttachment: attachment !== null,
-			}),
-		);
-	});
+	await notifyAndRecord(
+		'coc',
+		saved.id,
+		{ channel: 'slack', what: 'Slack notified of a CoC report' },
+		async () => {
+			return notifySlack(
+				'coc',
+				cocReportMessage({
+					name: parsed.data.name ?? null,
+					email: parsed.data.email ?? null,
+					reporteeName: parsed.data.reportee_name,
+					timeLocation: parsed.data.time_location,
+					description: parsed.data.description,
+					anyoneElseInvolved: parsed.data.anyone_else_involved ?? null,
+					hasAttachment: attachment !== null,
+				}),
+			);
+		},
+	);
 
 	redirect('/report-coc-violation/thanks');
 }

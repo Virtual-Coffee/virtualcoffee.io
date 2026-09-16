@@ -38,12 +38,3 @@ export function SubmissionStatusBadge({
 export function submissionStatusLabel(status: SubmissionStatus) {
 	return STATUS_LABELS[status];
 }
-
-export const SUBMISSION_EVENT_LABELS: Record<string, string> = {
-	submitted: 'Submitted',
-	status_changed: 'Status changed',
-	note: 'Note',
-	notification_sent: 'Notified',
-	notification_failed: 'Notification failed',
-	imported: 'Imported from Airtable',
-};

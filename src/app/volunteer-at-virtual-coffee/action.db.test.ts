@@ -53,7 +53,10 @@ describe('submitVolunteerSignup', () => {
 		);
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Signup submitted' },
-			{ type: 'notification_sent', body: 'Posted to Slack.' },
+			{
+				type: 'notification_sent',
+				body: 'Slack notified of a Volunteer signup',
+			},
 		]);
 	});
 
@@ -72,7 +75,7 @@ describe('submitVolunteerSignup', () => {
 			{ type: 'submitted', body: 'Signup submitted' },
 			{
 				type: 'notification_failed',
-				body: 'Could not reach Slack: fetch failed',
+				body: 'Slack notified of a Volunteer signup failed: Could not reach Slack: fetch failed',
 			},
 		]);
 	});
