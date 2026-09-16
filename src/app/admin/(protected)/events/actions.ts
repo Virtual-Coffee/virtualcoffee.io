@@ -14,7 +14,7 @@ import {
 	isZoomJoinLink,
 	type EventsCalendar,
 } from '@/lib/eventsCalendar';
-import { calendarDelivery, deployContext } from '@/lib/outbound';
+import { deliver } from '@/lib/outbound';
 import {
 	endsBeforeStart,
 	firstOccurrenceMatches,
@@ -136,36 +136,37 @@ function revalidate() {
 }
 
 /**
- * Every write goes through here: the Delivery Mode first (docs/adr/0013),
- * then the calendar, then the caches. `label` is a literal naming the
- * operation — the only thing logged, so nothing a maintainer typed reaches
- * the log; `describe` names the target in the captured message; `write`
- * returns the success message.
+ * Every write goes through `deliver()`: the Delivery Mode first
+ * (docs/adr/0013), then the calendar, then the caches. `label` is a literal
+ * naming the operation — the only thing logged, so nothing a maintainer typed
+ * reaches the log; `write` returns the success message.
  */
-async function write(
+function write(
 	label: string,
-	describe: string,
 	write: (calendar: EventsCalendar) => Promise<string>,
 ): Promise<ActionResult> {
-	if (calendarDelivery() === 'captured') {
-		console.info(`[calendar captured] ${label}`);
-		return {
-			ok: true,
-			message: `Captured (${deployContext()}): ${describe} — nothing was written to the Events Calendar.`,
-		};
-	}
-	const calendar = connectEventsCalendar();
-	if (!calendar) return { ok: false, message: NOT_CONFIGURED };
-	try {
-		const message = await write(calendar);
-		revalidate();
-		return { ok: true, message };
-	} catch (error) {
-		if (error instanceof CalendarConflictError) {
-			return { ok: false, message: CONFLICT };
-		}
-		throw error;
-	}
+	return deliver({
+		kind: 'calendar',
+		target: label,
+		body: '',
+		unreachable: 'the Events Calendar',
+		live: async () => {
+			const calendar = connectEventsCalendar();
+			if (!calendar) {
+				return { ok: false, definitelyNotSent: true, message: NOT_CONFIGURED };
+			}
+			try {
+				const message = await write(calendar);
+				revalidate();
+				return { ok: true, message };
+			} catch (error) {
+				if (error instanceof CalendarConflictError) {
+					return { ok: false, definitelyNotSent: true, message: CONFLICT };
+				}
+				throw error;
+			}
+		},
+	});
 }
 
 function target(id: string, etag: string): ActionResult | null {
@@ -181,14 +182,10 @@ export async function createSeries(input: unknown): Promise<ActionResult> {
 	if (!parsed.success) return firstIssue(parsed.error, 'Check the Series.');
 	const { recurrence, ...rest } = parsed.data;
 	if (!recurrence) return { ok: false, message: 'Say how the Series repeats.' };
-	return write(
-		'create Series',
-		`create Series “${parsed.data.title}”`,
-		async (calendar) => {
-			await calendar.createSeries({ ...rest, recurrence });
-			return `“${parsed.data.title}” is on the Events Calendar.`;
-		},
-	);
+	return write('create Series', async (calendar) => {
+		await calendar.createSeries({ ...rest, recurrence });
+		return `“${parsed.data.title}” is on the Events Calendar.`;
+	});
 }
 
 export async function updateSeries(
@@ -201,7 +198,7 @@ export async function updateSeries(
 	if (missing) return missing;
 	const parsed = seriesUpdateSchema.safeParse(input);
 	if (!parsed.success) return firstIssue(parsed.error, 'Check the Series.');
-	return write('update Series', `update Series ${id}`, async (calendar) => {
+	return write('update Series', async (calendar) => {
 		await calendar.updateSeries(id, etag, parsed.data);
 		return `“${parsed.data.title}” is updated, every Event of it.`;
 	});
@@ -214,7 +211,7 @@ export async function endSeries(
 	await requirePermission('events', 'manage');
 	const missing = target(id, etag);
 	if (missing) return missing;
-	return write('end Series', `end Series ${id}`, async (calendar) => {
+	return write('end Series', async (calendar) => {
 		const outcome = await calendar.endSeries(id, etag);
 		return outcome === 'deleted'
 			? 'The Series never ran, so it was removed from the Events Calendar.'
@@ -226,14 +223,10 @@ export async function createEvent(input: unknown): Promise<ActionResult> {
 	await requirePermission('events', 'manage');
 	const parsed = eventInputSchema.safeParse(input);
 	if (!parsed.success) return firstIssue(parsed.error, 'Check the Event.');
-	return write(
-		'create Event',
-		`create Event “${parsed.data.title}”`,
-		async (calendar) => {
-			await calendar.createEvent(parsed.data);
-			return `“${parsed.data.title}” is on the Events Calendar.`;
-		},
-	);
+	return write('create Event', async (calendar) => {
+		await calendar.createEvent(parsed.data);
+		return `“${parsed.data.title}” is on the Events Calendar.`;
+	});
 }
 
 export async function updateEvent(
@@ -246,7 +239,7 @@ export async function updateEvent(
 	if (missing) return missing;
 	const parsed = eventInputSchema.safeParse(input);
 	if (!parsed.success) return firstIssue(parsed.error, 'Check the Event.');
-	return write('update Event', `update Event ${id}`, async (calendar) => {
+	return write('update Event', async (calendar) => {
 		await calendar.updateEvent(id, etag, parsed.data);
 		return `“${parsed.data.title}” is updated.`;
 	});
@@ -259,7 +252,7 @@ export async function cancelEvent(
 	await requirePermission('events', 'manage');
 	const missing = target(id, etag);
 	if (missing) return missing;
-	return write('cancel Event', `cancel Event ${id}`, async (calendar) => {
+	return write('cancel Event', async (calendar) => {
 		await calendar.cancelEvent(id, etag);
 		return 'Cancelled. It stays listed here so it can be restored.';
 	});
@@ -272,7 +265,7 @@ export async function restoreEvent(
 	await requirePermission('events', 'manage');
 	const missing = target(id, etag);
 	if (missing) return missing;
-	return write('restore Event', `restore Event ${id}`, async (calendar) => {
+	return write('restore Event', async (calendar) => {
 		await calendar.restoreEvent(id, etag);
 		return 'Restored.';
 	});
@@ -288,12 +281,8 @@ export async function rescheduleEvent(
 	if (missing) return missing;
 	const parsed = timeInputSchema.safeParse(when);
 	if (!parsed.success) return firstIssue(parsed.error, 'Check the time.');
-	return write(
-		'reschedule Event',
-		`reschedule Event ${id}`,
-		async (calendar) => {
-			await calendar.rescheduleEvent(id, etag, parsed.data);
-			return 'Rescheduled.';
-		},
-	);
+	return write('reschedule Event', async (calendar) => {
+		await calendar.rescheduleEvent(id, etag, parsed.data);
+		return 'Rescheduled.';
+	});
 }

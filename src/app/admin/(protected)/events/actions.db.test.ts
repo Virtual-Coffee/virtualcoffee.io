@@ -255,15 +255,21 @@ describe('writing', () => {
 		calendar.cancelEvent.mockRejectedValue(new CalendarConflictError());
 		await expect(cancelEvent(ID, ETAG)).resolves.toEqual({
 			ok: false,
+			definitelyNotSent: true,
 			message:
 				'This changed in Google Calendar since you loaded it. Check the current details and try again.',
 		});
 		expect(revalidateTag).not.toHaveBeenCalled();
 	});
 
-	test('any other failure propagates', async () => {
+	test('any other failure is a message too, and nothing revalidates', async () => {
 		calendar.restoreEvent.mockRejectedValue(new Error('quota'));
-		await expect(restoreEvent(ID, ETAG)).rejects.toThrow('quota');
+		await expect(restoreEvent(ID, ETAG)).resolves.toEqual({
+			ok: false,
+			definitelyNotSent: true,
+			message: 'Could not reach the Events Calendar: quota',
+		});
+		expect(revalidateTag).not.toHaveBeenCalled();
 	});
 
 	test('an unconfigured calendar says so', async () => {
@@ -279,12 +285,12 @@ describe('Delivery Mode', () => {
 	test('outside production a write is captured: reported, never sent', async () => {
 		vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', undefined);
 		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
-		await expect(cancelEvent(ID, ETAG)).resolves.toEqual({
+		await expect(cancelEvent(ID, ETAG)).resolves.toMatchObject({
 			ok: true,
-			message: `Captured (local): cancel Event ${ID} — nothing was written to the Events Calendar.`,
+			warning: 'Captured, not written to the Events Calendar (local).',
 		});
-		// The log line is the constant label; the id is only in the message.
-		expect(info).toHaveBeenCalledWith('[calendar captured] cancel Event');
+		// The log line is the constant label: nothing a maintainer typed, no id.
+		expect(info).toHaveBeenCalledWith('[calendar captured] local cancel Event');
 		expect(connectEventsCalendar).not.toHaveBeenCalled();
 		expect(revalidateTag).not.toHaveBeenCalled();
 		info.mockRestore();
