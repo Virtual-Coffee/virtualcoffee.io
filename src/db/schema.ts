@@ -578,6 +578,8 @@ export type NewMembershipApplication =
 	typeof membershipApplication.$inferInsert;
 export type ApplicationEvent = typeof applicationEvent.$inferSelect;
 export type ApplicationStatus = (typeof applicationStatus.enumValues)[number];
+export type ApplicationEventType =
+	(typeof applicationEventType.enumValues)[number];
 export type ApplicationSource = (typeof applicationSource.enumValues)[number];
 
 /* -------------------------------------------------------------------------- */
