@@ -112,10 +112,10 @@ export async function submitLunchAndLearnIdea(
 			lunchAndLearnMessage({ topic: idea.topic, name: idea.name, issueUrl }),
 		);
 
-		return {
-			ok: issue.ok && slack.ok,
-			message: `${issue.message}${unsaved} ${slack.message}`,
-		};
+		const message = `${issue.message}${unsaved} ${slack.message}`;
+		return issue.ok && slack.ok
+			? { ok: true, message }
+			: { ok: false, message, definitelyNotSent: true };
 	});
 
 	redirect('/lunch-and-learn-idea/thanks');

@@ -11,7 +11,7 @@ import {
 	type SubmissionEventKey,
 	type SubmissionKind,
 } from '@/lib/submissions';
-import type { NotifyResult } from '@/lib/slack/notify';
+import type { Outbound } from '@/lib/outbound';
 import { formError } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
 
@@ -99,15 +99,16 @@ export async function persistSubmission(
 export async function notifyAndRecord(
 	kind: SubmissionKind,
 	submissionId: string,
-	notify: () => Promise<NotifyResult>,
+	notify: () => Promise<Outbound>,
 ): Promise<void> {
-	let outcome: NotifyResult;
+	let outcome: Outbound;
 
 	try {
 		outcome = await notify();
 	} catch (error) {
 		outcome = {
 			ok: false,
+			definitelyNotSent: true,
 			message:
 				error instanceof Error
 					? error.message
