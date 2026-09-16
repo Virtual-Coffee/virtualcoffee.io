@@ -1,6 +1,6 @@
 'use server';
 
-import { and, eq } from 'drizzle-orm';
+import { and, eq, isNull, type SQL } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 import {
@@ -66,13 +66,15 @@ async function recordEvent(
  * on the same row within seconds cannot both write — the second finds no row
  * and is told to reload, instead of overwriting a decline or recording a
  * second event with a stale `fromStatus`. Same shape as `cancelInvite` and
- * the maintenance sweep's `expire()`.
+ * the maintenance sweep's `expire()`. `guard` narrows it further for a write
+ * that leaves the status alone and so cannot be fenced by it.
  */
 async function transition(
 	applicationId: string,
 	from: ApplicationStatus,
 	patch: Partial<typeof membershipApplication.$inferInsert>,
 	executor: Database | Transaction = db(),
+	guard?: SQL,
 ): Promise<boolean> {
 	const moved = await executor
 		.update(membershipApplication)
@@ -81,6 +83,7 @@ async function transition(
 			and(
 				eq(membershipApplication.id, applicationId),
 				eq(membershipApplication.status, from),
+				guard,
 			),
 		)
 		.returning({ id: membershipApplication.id });
@@ -97,9 +100,10 @@ async function transitionAndRecord(
 	from: ApplicationStatus,
 	patch: Partial<typeof membershipApplication.$inferInsert>,
 	event: Omit<EventInput, 'applicationId'>,
+	guard?: SQL,
 ): Promise<boolean> {
 	return db().transaction(async (tx) => {
-		const moved = await transition(applicationId, from, patch, tx);
+		const moved = await transition(applicationId, from, patch, tx, guard);
 		if (!moved) return false;
 		await recordEvent({ applicationId, ...event }, tx);
 		return true;
@@ -218,12 +222,9 @@ export async function recordAttendance(
 		};
 	}
 	// The status does not change when attendance is recorded, so the status
-	// guard alone lets a second click overwrite the date and write a second
-	// event.
-	if (application.coffeeAttendedAt) {
-		return { ok: false, message: 'Attendance is already recorded.' };
-	}
-
+	// fence alone lets two clicks both overwrite the date and each write an
+	// event. The write itself requires the date to still be unset; a read
+	// beforehand would let two requests both pass it.
 	const recorded = await transitionAndRecord(
 		applicationId,
 		'coffee_invited',
@@ -233,8 +234,13 @@ export async function recordAttendance(
 			type: 'attendance_recorded',
 			body: 'Attended a Coffee',
 		},
+		isNull(membershipApplication.coffeeAttendedAt),
 	);
 	if (!recorded) {
+		const current = await getApplication(applicationId);
+		if (current?.coffeeAttendedAt) {
+			return { ok: false, message: 'Attendance is already recorded.' };
+		}
 		return { ok: false, message: changedUnderneath(application.name) };
 	}
 

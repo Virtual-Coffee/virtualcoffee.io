@@ -283,6 +283,8 @@ describe('recordAttendance and addNote', () => {
 		});
 	});
 
+	// The update itself requires the date to be unset (no read-then-write), so
+	// the second call here is the guard refusing, not a pre-check.
 	test('attendance is recorded once; a second click changes nothing', async () => {
 		const { id } = await insertApplication({ status: 'coffee_invited' });
 		await expect(recordAttendance(id)).resolves.toEqual({ ok: true });
