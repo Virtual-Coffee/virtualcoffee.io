@@ -3,6 +3,7 @@ import nodemailer, { type Transporter } from 'nodemailer';
 import {
 	deliver,
 	emailDelivery,
+	maskAddress,
 	type EmailDelivery,
 	type Outbound,
 } from '@/lib/outbound';
@@ -163,7 +164,12 @@ export function sendEmail(input: SendEmailInput): Promise<Outbound> {
 		kind: 'email',
 		target: input.to,
 		body: input.text,
-		details: { cc: input.cc || undefined, subject: input.subject },
+		// The cc is the acting maintainer's address; masked wherever it is
+		// logged, since a deploy's log names nobody (docs/adr/0013).
+		details: {
+			cc: input.cc ? maskAddress(input.cc) : undefined,
+			subject: input.subject,
+		},
 		unreachable: 'the mail server',
 		isTimeout: isSmtpTimeout,
 		live: (delivery) => send(input, delivery),
