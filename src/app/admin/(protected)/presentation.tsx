@@ -66,28 +66,6 @@ export function AccessStateBadge({ state }: { state: 'pending' | 'stranded' }) {
 }
 
 /**
- * How an application's event log reads on the detail screen. Kept here beside
- * the status labels, and symmetric with `SUBMISSION_EVENT_LABELS` in the
- * submissions section's own presentation module.
- */
-export const EVENT_LABELS: Record<string, string> = {
-	submitted: 'Application submitted',
-	imported: 'Imported from Airtable',
-	waitlisted: 'Added to the waitlist',
-	coffee_invited: 'Sent a Coffee invite',
-	attendance_recorded: 'Recorded attendance',
-	approved: 'Approved membership',
-	declined: 'Declined',
-	withdrawn: 'Marked withdrawn',
-	lapsed: 'Marked lapsed',
-	note: 'added a note',
-	email_sent: 'Email sent',
-	email_failed: 'Email failed',
-	notification_sent: 'Slack notified',
-	notification_failed: 'Slack notification failed',
-};
-
-/**
  * Pinned to UTC, and the time says so. These run on the server for the
  * detail pages and in the browser for the tables and timelines, and a format
  * that follows the local zone renders differently in each — a hydration
