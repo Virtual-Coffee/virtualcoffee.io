@@ -73,17 +73,22 @@ export async function submitVolunteerSignup(
 	);
 	if ('error' in saved) return saved.error;
 
-	await notifyAndRecord('volunteers', saved.id, async () => {
-		return notifySlack(
-			'volunteers',
-			volunteerSignupMessage({
-				name: parsed.data.name,
-				email: parsed.data.email,
-				position: parsed.data.position,
-				description: parsed.data.description,
-			}),
-		);
-	});
+	await notifyAndRecord(
+		'volunteers',
+		saved.id,
+		{ channel: 'slack', what: 'Slack notified of a Volunteer signup' },
+		async () => {
+			return notifySlack(
+				'volunteers',
+				volunteerSignupMessage({
+					name: parsed.data.name,
+					email: parsed.data.email,
+					position: parsed.data.position,
+					description: parsed.data.description,
+				}),
+			);
+		},
+	);
 
 	redirect('/volunteer-at-virtual-coffee/thanks');
 }

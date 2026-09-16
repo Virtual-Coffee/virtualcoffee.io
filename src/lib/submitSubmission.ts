@@ -1,53 +1,18 @@
+import { db, type Transaction } from '@/db';
 import {
-	db,
-	submissionEvent,
-	type Database,
-	type SubmissionEventType,
-	type SubmissionStatus,
-	type Transaction,
-} from '@/db';
+	recordEvent,
+	recordOutcome,
+	type ChannelOf,
+	type SubmissionSubject,
+} from '@/lib/eventLog';
+import type { Outbound } from '@/lib/outbound';
 import {
 	SUBMISSION_KINDS,
-	type SubmissionEventKey,
+	submissionSubject,
 	type SubmissionKind,
 } from '@/lib/submissions';
-import type { Outbound } from '@/lib/outbound';
 import { formError } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
-
-/**
- * The event-writing half of a Submission, shared by all four forms. Which
- * foreign key to set is the only thing that varies; the wrong one trips the
- * `submission_event_exactly_one_subject` CHECK rather than writing a bad row.
- */
-function subjectColumn(
-	kind: SubmissionKind,
-	id: string,
-): Partial<Record<SubmissionEventKey, string>> {
-	return { [SUBMISSION_KINDS[kind].eventKey]: id };
-}
-
-export async function recordSubmissionEvent(
-	input: {
-		kind: SubmissionKind;
-		submissionId: string;
-		type: SubmissionEventType;
-		body?: string | null;
-		actorUserId?: string | null;
-		fromStatus?: SubmissionStatus | null;
-		toStatus?: SubmissionStatus | null;
-	},
-	executor: Database | Transaction = db(),
-) {
-	await executor.insert(submissionEvent).values({
-		...subjectColumn(input.kind, input.submissionId),
-		type: input.type,
-		body: input.body ?? null,
-		actorUserId: input.actorUserId ?? null,
-		fromStatus: input.fromStatus ?? null,
-		toStatus: input.toStatus ?? null,
-	});
-}
 
 /**
  * The write half of a Submission: insert the row, log `submitted`, and turn a
@@ -71,13 +36,9 @@ export async function persistSubmission(
 		const id = await db().transaction(async (tx) => {
 			const { id } = await insertRow(tx);
 
-			await recordSubmissionEvent(
-				{
-					kind,
-					submissionId: id,
-					type: 'submitted',
-					body: copy.submitted,
-				},
+			await recordEvent(
+				submissionSubject(kind, id),
+				{ type: 'submitted', body: copy.submitted },
 				tx,
 			);
 
@@ -99,6 +60,7 @@ export async function persistSubmission(
 export async function notifyAndRecord(
 	kind: SubmissionKind,
 	submissionId: string,
+	input: { channel: ChannelOf<SubmissionSubject>; what: string },
 	notify: () => Promise<Outbound>,
 ): Promise<void> {
 	let outcome: Outbound;
@@ -116,18 +78,9 @@ export async function notifyAndRecord(
 		};
 	}
 
-	try {
-		await recordSubmissionEvent({
-			kind,
-			submissionId,
-			type: outcome.ok ? 'notification_sent' : 'notification_failed',
-			body: outcome.message,
-		});
-	} catch (error) {
-		// The submission itself is safe; only the audit line was lost.
-		console.error(
-			`Could not record the notification outcome for ${SUBMISSION_KINDS[kind].singular} ${submissionId}`,
-			error,
-		);
-	}
+	await recordOutcome(submissionSubject(kind, submissionId), {
+		channel: input.channel,
+		outbound: outcome,
+		what: input.what,
+	});
 }

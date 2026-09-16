@@ -1,12 +1,10 @@
 'use client';
 
+import { eventLabel } from '@/lib/eventLabels';
 import type { SubmissionEventEntry } from '@/lib/submissions';
 import { formatDateTime } from '../../../presentation';
 import { Timeline } from '../../../timeline';
-import {
-	SUBMISSION_EVENT_LABELS,
-	submissionStatusLabel,
-} from '../presentation';
+import { submissionStatusLabel } from '../presentation';
 
 export function HistoryTimeline({
 	history,
@@ -20,7 +18,7 @@ export function HistoryTimeline({
 				<>
 					<div className="d-flex flex-wrap gap-2 align-items-baseline">
 						<span className="badge text-bg-light border">
-							{SUBMISSION_EVENT_LABELS[entry.type] ?? entry.type}
+							{eventLabel(entry.type, 'badge')}
 						</span>
 						{entry.fromStatus && entry.toStatus && (
 							<span className="small text-body-secondary">
