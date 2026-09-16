@@ -1,11 +1,15 @@
 'use client';
 
-import type { HistoryEntry } from '@/lib/applications';
+import type { ApplicationSubject, HistoryEntry } from '@/lib/eventLog';
 import { eventLabel } from '@/lib/eventLabels';
 import { formatDateTime } from '../../presentation';
 import { Timeline } from '../../timeline';
 
-export function HistoryTimeline({ history }: { history: HistoryEntry[] }) {
+export function HistoryTimeline({
+	history,
+}: {
+	history: HistoryEntry<ApplicationSubject>[];
+}) {
 	return (
 		<Timeline
 			entries={history}
