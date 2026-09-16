@@ -1,7 +1,7 @@
 'use client';
 
 import { eventLabel } from '@/lib/eventLabels';
-import type { SubmissionEventEntry } from '@/lib/submissions';
+import type { HistoryEntry, SubmissionSubject } from '@/lib/eventLog';
 import { formatDateTime } from '../../../presentation';
 import { Timeline } from '../../../timeline';
 import { submissionStatusLabel } from '../presentation';
@@ -9,7 +9,7 @@ import { submissionStatusLabel } from '../presentation';
 export function HistoryTimeline({
 	history,
 }: {
-	history: SubmissionEventEntry[];
+	history: HistoryEntry<SubmissionSubject>[];
 }) {
 	return (
 		<Timeline
