@@ -95,7 +95,8 @@ const CARDS: Record<Section, (() => Promise<DashboardCard>) | null> = {
 	// The calendar's own cached read, so a card render costs no API call; every
 	// admin write revalidates the tag, so the count is current after an edit.
 	events: async () => {
-		const weekEnd = DateTime.now().setZone(DISPLAY_ZONE).plus({ days: 7 });
+		const now = DateTime.now().setZone(DISPLAY_ZONE);
+		const weekEnd = now.plus({ days: 7 });
 		const events = await getEvents({ limit: 50 });
 		return {
 			section: 'events',
@@ -103,8 +104,12 @@ const CARDS: Record<Section, (() => Promise<DashboardCard>) | null> = {
 			href: '/admin/events',
 			figures: [
 				{
+					// `getEvents` keeps today's Events all day for the public page;
+					// here one that has ended is not "in the next 7 days".
 					count: events.filter(
-						(event) => DateTime.fromISO(event.start) < weekEnd,
+						(event) =>
+							DateTime.fromISO(event.end) > now &&
+							DateTime.fromISO(event.start) < weekEnd,
 					).length,
 					label: 'in the next 7 days',
 				},
