@@ -109,4 +109,11 @@ describe('grantDmMessage', () => {
 		expect(text).toContain('*Admin, Volunteer*');
 		expect(text).toMatch(/\/admin$/);
 	});
+
+	test('a grant applied directly says the access is active, not waiting to be claimed', () => {
+		const text = grantDmMessage({ roles: ['coc_reviewer'], active: true });
+		expect(text).toContain('*CoC reviewer*');
+		expect(text).toMatch(/active now.*\/admin$/);
+		expect(text).not.toMatch(/sign in/i);
+	});
 });

@@ -231,9 +231,12 @@ describe('grantPendingAccess', () => {
 
 		await expect(
 			grantPendingAccess('U_ADA', ['coc_reviewer']),
-		).resolves.toEqual({ ok: true, message: 'Ada has access now.' });
-		// Not told yet: the Grant DM says "sign in to claim it", which is wrong here.
-		expect(sendSlackDm).not.toHaveBeenCalled();
+		).resolves.toEqual({ ok: true, message: 'Ada has access now. DM sent.' });
+		// Told the access is live, not that there is something to claim.
+		expect(sendSlackDm).toHaveBeenCalledWith(
+			'U_ADA',
+			expect.stringMatching(/CoC reviewer[^]*active now/),
+		);
 
 		await expect(roleOf(ada.id)).resolves.toEqual({
 			role: 'coc_reviewer',
@@ -268,6 +271,25 @@ describe('grantPendingAccess', () => {
 		}
 	});
 
+	test('a DM that fails after a direct grant is reported, and the grant stands', async () => {
+		const ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
+		sendSlackDm.mockResolvedValue({
+			ok: false,
+			message: 'SLACK_BOT_TOKEN is not set, so no DM was sent.',
+		});
+
+		await expect(
+			grantPendingAccess('U_ADA', ['coc_reviewer']),
+		).resolves.toEqual({
+			ok: true,
+			message:
+				'Ada has access now. SLACK_BOT_TOKEN is not set, so no DM was sent.',
+		});
+		await expect(roleOf(ada.id)).resolves.toMatchObject({
+			role: 'coc_reviewer',
+		});
+	});
+
 	test('a stranded user keeps their unclaimed grant rather than being granted over it', async () => {
 		const ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
 		await insertPendingGrant({ slackUserId: 'U_ADA', role: 'admin' });
@@ -289,8 +311,11 @@ describe('grantPendingAccess', () => {
 
 		await expect(
 			grantPendingAccess('U_ADA', ['coc_reviewer']),
-		).resolves.toEqual({ ok: true, message: 'Ada has access now.' });
-		expect(sendSlackDm).not.toHaveBeenCalled();
+		).resolves.toEqual({ ok: true, message: 'Ada has access now. DM sent.' });
+		expect(sendSlackDm).toHaveBeenCalledWith(
+			'U_ADA',
+			expect.stringContaining('active now'),
+		);
 
 		await expect(roleOf(ada!.id)).resolves.toEqual({
 			role: 'coc_reviewer',
