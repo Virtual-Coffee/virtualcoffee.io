@@ -3,7 +3,11 @@ import { notFound } from 'next/navigation';
 
 import { isId } from '@/db/ids';
 import { requirePermission, sessionCan } from '@/lib/adminAccess';
-import { getApplication, getApplicationInviter } from '@/lib/applications';
+import {
+	applicationSubject,
+	getApplication,
+	getApplicationInviter,
+} from '@/lib/applications';
 import { ARCHIVE_STATUSES } from '@/lib/applicationStatuses';
 import { history } from '@/lib/eventLog';
 import {
@@ -51,7 +55,7 @@ export default async function ApplicationDetailPage({
 	}
 
 	const [entries, inviter] = await Promise.all([
-		history({ kind: 'application', id: applicationId }),
+		history(applicationSubject(applicationId)),
 		getApplicationInviter(application.inviteId),
 	]);
 

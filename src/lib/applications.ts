@@ -9,7 +9,13 @@ import {
 	type MembershipApplication,
 } from '@/db';
 import { isId } from '@/db/ids';
+import type { ApplicationSubject } from '@/lib/eventLog';
 import { countByStatus } from '@/lib/statusCounts';
+
+/** The Subject a Membership Application's events are recorded and read against. */
+export function applicationSubject(id: string): ApplicationSubject {
+	return { kind: 'application', id };
+}
 
 export type SortField = 'name' | 'email' | 'status' | 'source' | 'submittedAt';
 

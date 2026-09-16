@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 import { db, invite, membershipApplication } from '@/db';
 import { recordEvent, recordOutcome } from '@/lib/eventLog';
+import { applicationSubject } from '@/lib/applications';
 import { hashClaimToken } from '@/lib/invites';
 import { QUEUE_STATUSES } from '@/lib/applicationStatuses';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
@@ -158,7 +159,7 @@ export async function submitMembershipApplication(
 				.returning({ id: membershipApplication.id });
 
 			await recordEvent(
-				{ kind: 'application', id: row.id },
+				applicationSubject(row.id),
 				{
 					type: 'submitted',
 					toStatus: 'waitlisted',
@@ -198,14 +199,11 @@ export async function submitMembershipApplication(
 			}),
 		);
 
-		await recordOutcome(
-			{ kind: 'application', id: result.applicationId },
-			{
-				channel: 'slack',
-				outbound: notified,
-				what: 'Slack notified of an invited application',
-			},
-		);
+		await recordOutcome(applicationSubject(result.applicationId), {
+			channel: 'slack',
+			outbound: notified,
+			what: 'Slack notified of an invited application',
+		});
 	}
 
 	redirect('/join/thank-you');
