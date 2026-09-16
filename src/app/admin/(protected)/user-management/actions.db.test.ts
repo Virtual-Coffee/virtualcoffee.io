@@ -6,9 +6,11 @@ import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
 	failInserts,
+	failWrites,
 	insertPendingGrant,
 	insertUser,
 } from '@/test/db/fixtures';
+import { listAccessRows } from '@/lib/admins';
 
 /**
  * `grantPendingAccess` awaits the member lookup between its "has this person
@@ -209,6 +211,34 @@ describe('grantPendingAccess', () => {
 			slackUserId: 'U_ADA',
 			claimedAt: expect.any(Date),
 		});
+	});
+
+	test('a recovery claim that fails is reported, not passed off as success', async () => {
+		let ada: { id: string } | undefined;
+		lookup.during = async () => {
+			ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
+		};
+		const fault = await failWrites('pending_grant', 'update');
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		try {
+			await expect(
+				grantPendingAccess('U_ADA', ['coc_reviewer']),
+			).resolves.toMatchObject({
+				ok: false,
+				message: expect.stringContaining('stranded'),
+			});
+
+			await expect(roleOf(ada!.id)).resolves.toMatchObject({ role: null });
+			const [grant] = await db().select().from(pendingGrant);
+			expect(grant).toMatchObject({ slackUserId: 'U_ADA', claimedAt: null });
+			await expect(listAccessRows()).resolves.toContainEqual(
+				expect.objectContaining({ kind: 'user', id: ada!.id, stranded: true }),
+			);
+		} finally {
+			await fault.remove();
+			error.mockRestore();
+		}
 	});
 
 	test('any other failure surfaces rather than posing as a duplicate', async () => {
