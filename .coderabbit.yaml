@@ -5,9 +5,13 @@ reviews:
   profile: chill
   suggested_labels: false
   suggested_reviewers: false
+  estimate_code_review_effort: false
   auto_review:
     enabled: true
     drafts: false
+    # Opt in per PR: only PRs carrying this label are reviewed automatically.
+    labels:
+      - 'coderabbit-review'
   # Generated or frozen files — never review-worthy. Lockfile and drizzle
   # snapshots are committed on purpose (docs/adr/0001); the rest is codegen
   # or a data snapshot (CLAUDE.md "The bot list", "Content conventions").
