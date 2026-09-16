@@ -143,14 +143,17 @@ export async function grantVolunteerRole(
  * for it. Called from `databaseHooks.account.create.after` (docs/adr/0009).
  *
  * Deliberately never throws: a failed claim must not fail sign-in. The grant
- * stays unclaimed and `listAccessRows()` surfaces the person anyway.
+ * stays unclaimed and `listAccessRows()` surfaces the person anyway. Returns
+ * `false` for that case, so a caller that is not the sign-in hook — the
+ * recovery path in `grantPendingAccess` — can say so instead of reporting
+ * success.
  */
 export async function claimPendingGrant(account: {
 	providerId: string;
 	accountId: string;
 	userId: string;
-}): Promise<void> {
-	if (account.providerId !== 'slack') return;
+}): Promise<boolean> {
+	if (account.providerId !== 'slack') return true;
 
 	try {
 		/**
@@ -266,5 +269,7 @@ export async function claimPendingGrant(account: {
 			slackUserId: account.accountId,
 			error,
 		});
+		return false;
 	}
+	return true;
 }
