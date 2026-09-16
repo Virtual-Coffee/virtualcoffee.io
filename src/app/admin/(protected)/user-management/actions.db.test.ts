@@ -33,8 +33,15 @@ vi.mock('@/data/slackMembers', () => ({
 	},
 }));
 
+const sendSlackDm = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/slack/dm', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/slack/dm')>()),
+	sendSlackDm,
+}));
+
 import {
 	grantPendingAccess,
+	resendPendingGrantDm,
 	revokePendingGrant,
 	setPendingGrantRoles,
 	setUserRoles,
@@ -60,6 +67,7 @@ let admin: Awaited<ReturnType<typeof signInAs>>;
 
 beforeEach(async () => {
 	lookup.during = undefined;
+	sendSlackDm.mockReset().mockResolvedValue({ ok: true, message: 'DM sent.' });
 	admin = await signInAs('admin');
 });
 
@@ -158,7 +166,11 @@ describe('grantPendingAccess', () => {
 	test('writes one grant per Slack member, and only for members who have not signed in', async () => {
 		await expect(
 			grantPendingAccess('U_ADA', ['coc_reviewer']),
-		).resolves.toEqual({ ok: true });
+		).resolves.toEqual({ ok: true, message: 'DM sent.' });
+		expect(sendSlackDm).toHaveBeenCalledWith(
+			'U_ADA',
+			expect.stringContaining('CoC reviewer'),
+		);
 		await expect(grantPendingAccess('U_ADA', ['admin'])).resolves.toEqual({
 			ok: false,
 			message: 'Ada already has access pending. Edit it in the table below.',
@@ -199,6 +211,7 @@ describe('grantPendingAccess', () => {
 		await expect(
 			grantPendingAccess('U_ADA', ['coc_reviewer']),
 		).resolves.toEqual({ ok: true });
+		expect(sendSlackDm).not.toHaveBeenCalled();
 
 		await expect(roleOf(ada!.id)).resolves.toEqual({
 			role: 'coc_reviewer',
@@ -220,6 +233,67 @@ describe('grantPendingAccess', () => {
 		} finally {
 			await fault.remove();
 		}
+	});
+});
+
+describe('resendPendingGrantDm', () => {
+	test('a malformed id is a not-found, not a 22P02', async () => {
+		await expect(resendPendingGrantDm('42')).resolves.toEqual({
+			ok: false,
+			message: 'That grant no longer exists. Reload the page.',
+		});
+		expect(sendSlackDm).not.toHaveBeenCalled();
+	});
+
+	test('re-sends to the grant’s Slack member with its current roles', async () => {
+		const { id } = await insertPendingGrant({
+			slackUserId: 'U_GRACE',
+			role: 'coc_reviewer,volunteer',
+		});
+
+		await expect(resendPendingGrantDm(id)).resolves.toEqual({
+			ok: true,
+			message: 'DM sent.',
+		});
+		expect(sendSlackDm).toHaveBeenCalledWith(
+			'U_GRACE',
+			expect.stringContaining('CoC reviewer, Volunteer'),
+		);
+	});
+
+	test('a claimed grant is left alone', async () => {
+		const [claimed] = await db()
+			.insert(pendingGrant)
+			.values({
+				slackUserId: 'U_ADA',
+				slackDisplayName: 'Ada',
+				role: 'admin',
+				grantedBy: 'x',
+				claimedAt: new Date(),
+			})
+			.returning({ id: pendingGrant.id });
+
+		await expect(resendPendingGrantDm(claimed.id)).resolves.toEqual({
+			ok: false,
+			message: 'That grant has already been claimed. Reload the page.',
+		});
+		expect(sendSlackDm).not.toHaveBeenCalled();
+	});
+
+	test('reports rather than throws when the DM fails', async () => {
+		sendSlackDm.mockResolvedValue({
+			ok: false,
+			message: 'SLACK_BOT_TOKEN is not set, so no DM was sent.',
+		});
+		const { id } = await insertPendingGrant({
+			slackUserId: 'U_ADA',
+			role: 'admin',
+		});
+
+		await expect(resendPendingGrantDm(id)).resolves.toEqual({
+			ok: false,
+			message: 'SLACK_BOT_TOKEN is not set, so no DM was sent.',
+		});
 	});
 });
 

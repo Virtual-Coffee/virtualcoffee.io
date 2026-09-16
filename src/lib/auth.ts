@@ -9,7 +9,7 @@ import * as schema from '@/db/schema';
 import { devtoolsConfig } from '@/lib/devtools';
 import { ac, DEFAULT_ROLE, roles } from '@/lib/permissions';
 import { claimPendingGrant } from '@/lib/pendingGrants';
-import { qualifiedUrl } from '@/util/url.server';
+import { siteUrl } from '@/util/url.server';
 
 const SLACK_TEAM_ID_CLAIM = 'https://slack.com/team_id';
 
@@ -33,7 +33,7 @@ function createAuth() {
 		// Production's domain on production, the preview's own address on a
 		// preview, `URL` from .env locally — the rule email links follow, and
 		// what the OAuth proxy compares against to know which side it is on.
-		baseURL: qualifiedUrl(),
+		baseURL: siteUrl(),
 		database: drizzleAdapter(db(), {
 			provider: 'pg',
 			schema,
