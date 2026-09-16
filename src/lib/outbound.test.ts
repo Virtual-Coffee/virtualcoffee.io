@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { capture, emailDelivery, notifyDelivery } from './outbound';
+import {
+	calendarDelivery,
+	capture,
+	emailDelivery,
+	notifyDelivery,
+} from './outbound';
 
 afterEach(() => vi.unstubAllEnvs());
 
@@ -127,4 +132,27 @@ describe('capture', () => {
 			info.mockRestore();
 		},
 	);
+});
+
+describe('calendarDelivery', () => {
+	test('production is live regardless of the flag', () => {
+		vi.stubEnv('CONTEXT', 'production');
+		vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', undefined);
+		expect(calendarDelivery()).toBe('live');
+	});
+
+	test('outside production it is captured unless opted in', () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', undefined);
+		expect(calendarDelivery()).toBe('captured');
+		vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', 'true');
+		expect(calendarDelivery()).toBe('live');
+	});
+
+	test('the Slack/GitHub opt-in does not opt the calendar in', () => {
+		vi.stubEnv('CONTEXT', undefined);
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', 'true');
+		vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', undefined);
+		expect(calendarDelivery()).toBe('captured');
+	});
 });

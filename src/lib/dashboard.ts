@@ -1,5 +1,8 @@
 import { count, desc, eq, inArray, isNotNull, or, sql } from 'drizzle-orm';
+import { DateTime } from 'luxon';
 
+import { getEvents } from '@/data/events';
+import { DISPLAY_ZONE } from '@/util/date';
 import {
 	applicationEvent,
 	cocReport,
@@ -109,6 +112,30 @@ const CARDS: Record<Section, (() => Promise<DashboardCard>) | null> = {
 		href: '/admin/volunteers',
 		figures: [{ count: await activeVolunteerCount(), label: 'active' }],
 	}),
+	// The calendar's own cached read, so a card render costs no API call; every
+	// admin write revalidates the tag, so the count is current after an edit.
+	events: async () => {
+		const now = DateTime.now().setZone(DISPLAY_ZONE);
+		const weekEnd = now.plus({ days: 7 });
+		const events = await getEvents({ limit: 50 });
+		return {
+			section: 'events',
+			label: 'Events',
+			href: '/admin/events',
+			figures: [
+				{
+					// `getEvents` keeps today's Events all day for the public page;
+					// here one that has ended is not "in the next 7 days".
+					count: events.filter(
+						(event) =>
+							DateTime.fromISO(event.end) > now &&
+							DateTime.fromISO(event.start) < weekEnd,
+					).length,
+					label: 'in the next 7 days',
+				},
+			],
+		};
+	},
 	admins: null,
 };
 
