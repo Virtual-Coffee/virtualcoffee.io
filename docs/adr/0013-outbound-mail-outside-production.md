@@ -39,7 +39,9 @@ sends, and it decides on `CONTEXT` alone:
   Captured into **Local**: delivered for real, addressed exactly as production
   would address it, to a local-only SMTP sink such as
   [Mailpit](https://mailpit.axllent.org/). No Google credentials are read, and
-  nothing leaves the machine. Production ignores it.
+  nothing leaves the machine. Only a checkout (`CONTEXT=dev` or none) honours
+  it; production and every Netlify deploy ignore it, because on a deploy the
+  same variable would name a host that real applicants' mail can reach.
 - There is no "redirect everything to one inbox" mode. It existed while
   preview data was fake; against real applicants it would deliver their mail,
   addressed by name, to whoever set a variable.
@@ -64,7 +66,8 @@ mechanism.
 - A captured send looks like success in `/admin`, on purpose. The panel shows
   a "captured on this deploy" notice so a reviewer knows why nothing arrived.
 - Testing real delivery happens locally, with no credentials: run a local
-  SMTP sink and set `SMTP_HOST`. A preview cannot deliver anywhere.
+  SMTP sink and set `SMTP_HOST`. A preview cannot deliver anywhere, whatever
+  variables it is given.
 - A captured line is visible to the Netlify site team for as long as Netlify
   keeps function logs. On a deploy it names nobody; the links it carries are
   single-use and expire.
