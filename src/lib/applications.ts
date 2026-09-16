@@ -1,21 +1,9 @@
-import {
-	and,
-	asc,
-	count,
-	desc,
-	eq,
-	ilike,
-	inArray,
-	or,
-	sql,
-} from 'drizzle-orm';
+import { and, asc, count, desc, eq, ilike, inArray, or } from 'drizzle-orm';
 
 import {
-	applicationEvent,
 	db,
 	invite,
 	membershipApplication,
-	user,
 	volunteer,
 	type ApplicationStatus,
 	type MembershipApplication,
@@ -179,33 +167,4 @@ export async function getApplicationInviter(
 	if (!name) return null;
 
 	return { name, volunteerId: row.volunteerId };
-}
-
-export type HistoryEntry = {
-	id: string;
-	type: string;
-	body: string | null;
-	fromStatus: ApplicationStatus | null;
-	toStatus: ApplicationStatus | null;
-	createdAt: Date;
-	actorName: string | null;
-};
-
-export async function getApplicationHistory(
-	applicationId: string,
-): Promise<HistoryEntry[]> {
-	return db()
-		.select({
-			id: applicationEvent.id,
-			type: sql<string>`${applicationEvent.type}`,
-			body: applicationEvent.body,
-			fromStatus: applicationEvent.fromStatus,
-			toStatus: applicationEvent.toStatus,
-			createdAt: applicationEvent.createdAt,
-			actorName: user.name,
-		})
-		.from(applicationEvent)
-		.leftJoin(user, eq(applicationEvent.actorUserId, user.id))
-		.where(eq(applicationEvent.applicationId, applicationId))
-		.orderBy(desc(applicationEvent.createdAt), desc(applicationEvent.id));
 }
