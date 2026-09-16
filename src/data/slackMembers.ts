@@ -1,8 +1,3 @@
-import { WebClient } from '@slack/web-api';
-import { unstable_cache } from 'next/cache';
-
-import { assertMocksAllowed } from './mocks';
-
 /**
  * The Virtual Coffee Slack workspace directory.
  *
@@ -11,42 +6,20 @@ import { assertMocksAllowed } from './mocks';
  * maintainer should be picking a person out of a list rather than copying an
  * opaque `U…` out of Slack's profile pane.
  *
- * This needs a bot token with `users:read`, which is a different credential
- * from the OAuth client that signs maintainers in: those scopes are OIDC-only
+ * This needs a bot token with `users:read` (and `users:read.email` for the
+ * address `/admin/volunteers` prefills), which is a different credential from
+ * the OAuth client that signs maintainers in: those scopes are OIDC-only
  * (`openid`, `profile`, `email`), so the access token Better Auth already
  * stores on `account` cannot call `users.list`.
  */
-export type SlackMember = {
-	/** The Slack member id — the same value that lands in `account.account_id`. */
-	id: string;
-	/** `real_name`, or the handle when someone has not set one. */
-	name: string;
-	/** What Slack shows in the sidebar: display name if set, otherwise `name`. */
-	displayName: string;
-	/** The `@handle`, without the `@`. */
-	handle: string;
-};
+import { WebClient } from '@slack/web-api';
+import { unstable_cache } from 'next/cache';
 
-/**
- * The rows a picker shows for what someone typed: a substring match over the
- * three names, capped so the list scrolls rather than renders the workspace.
- * Shared by the roster and User Management pickers.
- */
-export function filterSlackMembers<T extends SlackMember>(
-	members: readonly T[],
-	query: string,
-	limit = 50,
-): T[] {
-	const needle = query.trim().toLowerCase();
-	const pool = needle
-		? members.filter((member) =>
-				`${member.displayName} ${member.name} ${member.handle}`
-					.toLowerCase()
-					.includes(needle),
-			)
-		: members;
-	return pool.slice(0, limit);
-}
+import type { SlackMember } from '@/lib/slackMemberPicker';
+
+import { assertMocksAllowed } from './mocks';
+
+export type { SlackMember };
 
 /** Slack's own bot, which `is_bot` does not cover. */
 const SLACKBOT_ID = 'USLACKBOT';
@@ -107,6 +80,7 @@ export async function fetchSlackMembers(): Promise<SlackMember[]> {
 				name: realName || handle,
 				displayName,
 				handle,
+				email: member.profile?.email || null,
 			});
 		}
 

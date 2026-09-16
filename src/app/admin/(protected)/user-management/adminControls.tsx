@@ -1,8 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
-import { filterSlackMembers } from '@/data/slackMembers';
 import type { GrantCandidate } from '@/lib/admins';
 import {
 	GRANTABLE_ROLE_NAMES,
@@ -11,6 +10,7 @@ import {
 	type RoleName,
 } from '@/lib/permissions';
 import { useAction } from '@/util/forms/useAction';
+import { SlackMemberCombobox } from '../slackMemberCombobox';
 import { useDropdown } from '../useDropdown';
 import {
 	grantPendingAccess,
@@ -274,26 +274,9 @@ export function GrantAccessForm({
 }: {
 	candidates: GrantCandidate[];
 }) {
-	const [query, setQuery] = useState('');
 	const [selected, setSelected] = useState<GrantCandidate | null>(null);
 	const [role, setRole] = useState<RoleName>('admin');
 	const { run, pending, error, result, clear } = useAction();
-	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
-		HTMLDivElement,
-		HTMLInputElement
-	>();
-
-	const matches = useMemo(
-		() => filterSlackMembers(candidates, query),
-		[candidates, query],
-	);
-
-	function choose(candidate: GrantCandidate) {
-		setSelected(candidate);
-		setQuery(candidate.displayName);
-		clear();
-		setOpen(false);
-	}
 
 	// The error the hook keeps is load-bearing here: picking someone who has
 	// already signed in is refused, and a silent refusal reads as the button
@@ -303,10 +286,7 @@ export function GrantAccessForm({
 		if (!selected) return;
 
 		run(() => grantPendingAccess(selected.id, [role]), {
-			onSuccess: () => {
-				setSelected(null);
-				setQuery('');
-			},
+			onSuccess: () => setSelected(null),
 		});
 	}
 
@@ -315,94 +295,27 @@ export function GrantAccessForm({
 			className="d-flex flex-wrap gap-2 align-items-start"
 			onSubmit={submit}
 		>
-			<div className="dropdown" ref={wrapperRef}>
-				<label className="visually-hidden" htmlFor="grant-person">
-					Person to grant access to
-				</label>
-				<input
-					id="grant-person"
-					ref={toggleRef}
-					type="text"
-					className="form-control form-control-sm"
-					role="combobox"
-					aria-expanded={open}
-					aria-controls="grant-person-listbox"
-					aria-autocomplete="list"
-					autoComplete="off"
-					placeholder="Search Slack…"
-					value={query}
-					onChange={(event) => {
-						setQuery(event.target.value);
-						setSelected(null);
-						setOpen(true);
-					}}
-					onFocus={() => setOpen(true)}
-				/>
-
-				{open && (
-					<ul
-						id="grant-person-listbox"
-						className="dropdown-menu show py-1"
-						role="listbox"
-						style={
-							{
-								maxHeight: '18rem',
-								overflowY: 'auto',
-								'--bs-dropdown-font-size': '0.8125rem',
-							} as React.CSSProperties
-						}
-					>
-						{matches.length === 0 && (
-							<li className="px-3 py-1 text-body-secondary small">
-								Nobody in Slack matches that.
-							</li>
-						)}
-
-						{matches.map((candidate) => {
-							/**
-							 * Someone who has signed in has a user row, so a Grant against
-							 * their Slack id would never be claimed. Shown rather than
-							 * omitted: a maintainer searching for a name they know is in
-							 * Slack should find them and be told why they cannot be picked
-							 * here, not find nothing.
-							 */
-							const unavailable =
-								candidate.hasAccount || candidate.hasPendingGrant;
-							const reason = candidate.hasAccount
-								? 'has signed in — set their roles below'
-								: 'already has access pending';
-
-							return (
-								<li key={candidate.id}>
-									<button
-										type="button"
-										role="option"
-										aria-selected={selected?.id === candidate.id}
-										className="dropdown-item d-flex justify-content-between gap-3"
-										disabled={unavailable}
-										onClick={() => choose(candidate)}
-									>
-										<span>
-											{candidate.displayName}
-											{candidate.handle && (
-												<span className="text-body-secondary">
-													{' '}
-													@{candidate.handle}
-												</span>
-											)}
-										</span>
-										{unavailable && (
-											<span className="text-body-secondary small text-nowrap">
-												{reason}
-											</span>
-										)}
-									</button>
-								</li>
-							);
-						})}
-					</ul>
-				)}
-			</div>
+			<SlackMemberCombobox
+				id="grant-person"
+				label="Person to grant access to"
+				hideLabel
+				size="sm"
+				candidates={candidates}
+				selected={selected}
+				onSelect={(candidate) => {
+					setSelected(candidate);
+					clear();
+				}}
+				// Someone who has signed in has a user row, so a Grant against
+				// their Slack id would never be claimed.
+				unavailable={(candidate) =>
+					candidate.hasAccount
+						? 'has signed in — set their roles below'
+						: candidate.hasPendingGrant
+							? 'already has access pending'
+							: null
+				}
+			/>
 
 			<label className="visually-hidden" htmlFor="grant-role">
 				Role to grant

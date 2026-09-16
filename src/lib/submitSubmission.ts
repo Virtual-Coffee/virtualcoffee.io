@@ -36,6 +36,8 @@ export async function recordSubmissionEvent(
 		actorUserId?: string | null;
 		fromStatus?: SubmissionStatus | null;
 		toStatus?: SubmissionStatus | null;
+		/** The seed backdates its history; the actions take the default. */
+		createdAt?: Date;
 	},
 	executor: Database | Transaction = db(),
 ) {
@@ -46,6 +48,7 @@ export async function recordSubmissionEvent(
 		actorUserId: input.actorUserId ?? null,
 		fromStatus: input.fromStatus ?? null,
 		toStatus: input.toStatus ?? null,
+		...(input.createdAt ? { createdAt: input.createdAt } : {}),
 	});
 }
 
