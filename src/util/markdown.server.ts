@@ -47,5 +47,6 @@ export async function htmlToMarkdown(html: string) {
  * format; this is the one sniff both the public read and the admin page use.
  */
 export function looksLikeHtml(raw: string): boolean {
-	return /<[a-z][\s\S]*>/i.test(raw);
+	// A tag, not a Markdown autolink like `<https://…>` or `<name@…>`.
+	return /<\/?[a-z][a-z0-9-]*(?:\s[^<>]*?)?\s*\/?>/i.test(raw);
 }

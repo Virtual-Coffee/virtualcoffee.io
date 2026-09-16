@@ -47,6 +47,10 @@ describe('htmlToMarkdown', () => {
 test.each([
 	['<p>Hello</p>', true],
 	['Line one<br>line two', true],
+	['</p>', true],
+	['<a href="https://x">x</a>', true],
+	['<https://example.com>', false],
+	['<name@example.com>', false],
 	['Plain **Markdown** with a < b', false],
 	['', false],
 ])('looksLikeHtml(%j) is %s', (raw, expected) => {
