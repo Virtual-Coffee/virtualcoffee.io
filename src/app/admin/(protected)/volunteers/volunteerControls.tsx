@@ -15,6 +15,7 @@ import {
 	addVolunteer,
 	adjustBalance,
 	resendInvite,
+	setEmail,
 	setRoleLabels,
 	setVolunteerActive,
 } from './actions';
@@ -245,6 +246,48 @@ export function VolunteerRolesEditor({
 				disabled={pending || !dirty}
 			>
 				{pending ? 'Saving…' : 'Save roles'}
+			</button>
+			{feedback}
+		</form>
+	);
+}
+
+export function VolunteerEmailEditor({
+	volunteerId,
+	email,
+}: {
+	volunteerId: string;
+	email: string | null;
+}) {
+	const { run, pending, feedback } = useAction();
+	const saved = email ?? '';
+	const [draft, setDraft] = useState(saved);
+	const dirty = draft.trim().toLowerCase() !== saved;
+
+	return (
+		<form
+			onSubmit={(event) => {
+				event.preventDefault();
+				run(() => setEmail(volunteerId, draft));
+			}}
+		>
+			<label className="form-label small" htmlFor="edit-email">
+				Email
+			</label>
+			<input
+				id="edit-email"
+				type="email"
+				className="form-control form-control-sm"
+				value={draft}
+				disabled={pending}
+				onChange={(event) => setDraft(event.target.value)}
+			/>
+			<button
+				type="submit"
+				className="btn btn-sm btn-outline-primary mt-2"
+				disabled={pending || !dirty}
+			>
+				{pending ? 'Saving…' : 'Save email'}
 			</button>
 			{feedback}
 		</form>
