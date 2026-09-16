@@ -57,6 +57,7 @@ import {
 	addVolunteer,
 	adjustBalance,
 	resendInvite,
+	setEmail,
 	setRoleLabels,
 	setVolunteerActive,
 } from './actions';
@@ -458,6 +459,56 @@ describe('setRoleLabels', () => {
 			message: 'That volunteer no longer exists.',
 		});
 		await expect(setRoleLabels(VOLUNTEER_ID, ['VC Host'])).resolves.toEqual({
+			ok: false,
+			message: 'That volunteer no longer exists.',
+		});
+	});
+});
+
+describe('setEmail', () => {
+	test('needs volunteers:manage', async () => {
+		await signInAs('waitlist_reviewer');
+		await expect(
+			setEmail(VOLUNTEER_ID, 'ada@example.com'),
+		).rejects.toMatchObject(NOT_FOUND);
+	});
+
+	test('a malformed email is refused before anything is looked up', async () => {
+		await expect(setEmail(VOLUNTEER_ID, 'not-an-email')).resolves.toEqual({
+			ok: false,
+			message: 'That doesn’t look like an email address.',
+		});
+	});
+
+	test('writes the address lowercased, and an empty one clears it', async () => {
+		const { id } = await insertVolunteer({
+			slackUserId: 'U_ADA',
+			email: 'old@example.com',
+		});
+
+		await expect(setEmail(id, '  Ada@Example.com ')).resolves.toEqual({
+			ok: true,
+			message: 'Email updated.',
+		});
+		await expect(volunteerRow('U_ADA')).resolves.toMatchObject({
+			email: 'ada@example.com',
+		});
+
+		await expect(setEmail(id, '   ')).resolves.toEqual({
+			ok: true,
+			message: 'Email cleared.',
+		});
+		await expect(volunteerRow('U_ADA')).resolves.toMatchObject({
+			email: null,
+		});
+	});
+
+	test('a malformed or unknown id is a soft failure, not a 22P02', async () => {
+		await expect(setEmail('42', 'ada@example.com')).resolves.toEqual({
+			ok: false,
+			message: 'That volunteer no longer exists.',
+		});
+		await expect(setEmail(VOLUNTEER_ID, 'ada@example.com')).resolves.toEqual({
 			ok: false,
 			message: 'That volunteer no longer exists.',
 		});

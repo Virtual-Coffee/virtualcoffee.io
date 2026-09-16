@@ -24,6 +24,7 @@ import {
 	ActiveToggle,
 	AdjustBalanceForm,
 	ResendInviteButton,
+	VolunteerEmailEditor,
 	VolunteerRolesEditor,
 } from '../volunteerControls';
 
@@ -74,6 +75,8 @@ export default async function VolunteerDetailPage({
 			</div>
 			<p className="text-body-secondary mb-2">
 				{volunteer.slackHandle ? `@${volunteer.slackHandle}` : 'No handle'}
+				{' · '}
+				{volunteer.email ?? 'no email'}
 				{volunteer.userId === null && ' · hasn’t signed in yet'}
 			</p>
 			<div className="mb-4">
@@ -204,6 +207,24 @@ export default async function VolunteerDetailPage({
 								<VolunteerRolesEditor
 									volunteerId={volunteer.id}
 									roleLabels={volunteer.roleLabels}
+								/>
+							) : (
+								<ReadOnlyNotice />
+							)}
+						</div>
+					</div>
+
+					<div className="card mb-4">
+						<div className="card-body">
+							<h2 className="h6 text-body-secondary">Contact</h2>
+							<p className="small text-body-secondary">
+								Where the monthly invite goes. Leave it empty to fall back to
+								the email on their account once they have signed in.
+							</p>
+							{canManage ? (
+								<VolunteerEmailEditor
+									volunteerId={volunteer.id}
+									email={volunteer.email}
 								/>
 							) : (
 								<ReadOnlyNotice />

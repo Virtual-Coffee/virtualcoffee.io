@@ -47,6 +47,22 @@ const roleLabelsSchema = z
 	.array(z.enum(COMMUNITY_ROLES, 'That isn’t one of the community roles.'))
 	.max(COMMUNITY_ROLES.length);
 
+/** Empty clears the address; anything else has to be one. */
+function normaliseEmail(
+	email: string,
+): { ok: true; value: string | null } | (ActionResult & { ok: false }) {
+	const address = email.trim().toLowerCase();
+	if (!address) return { ok: true, value: null };
+	const checked = emailSchema.safeParse(address);
+	if (!checked.success) {
+		return {
+			ok: false,
+			message: checked.error.issues[0]?.message ?? 'Please check the email.',
+		};
+	}
+	return { ok: true, value: address };
+}
+
 /**
  * Make someone a Volunteer.
  *
@@ -76,16 +92,9 @@ export async function addVolunteer(
 		};
 	}
 
-	const address = email.trim().toLowerCase();
-	if (address) {
-		const checked = emailSchema.safeParse(address);
-		if (!checked.success) {
-			return {
-				ok: false,
-				message: checked.error.issues[0]?.message ?? 'Please check the email.',
-			};
-		}
-	}
+	const normalised = normaliseEmail(email);
+	if (!normalised.ok) return normalised;
+	const address = normalised.value;
 
 	const members = await getSlackMembers();
 	const member = members.find((entry) => entry.id === slackUserId);
@@ -108,7 +117,7 @@ export async function addVolunteer(
 				slackDisplayName: member.displayName,
 				slackHandle: member.handle,
 				roleLabels: formatRoleLabels(roles.data),
-				email: address || null,
+				email: address,
 			});
 
 			await grantVolunteerRole(
@@ -215,6 +224,41 @@ export async function setRoleLabels(
 
 	revalidate(volunteerId);
 	return { ok: true, message: 'Roles updated.' };
+}
+
+/**
+ * The roster address is what the grant and accrual emails go to, ahead of the
+ * linked account's, so a wrong one has to be correctable here. Descriptive
+ * only — no event, ledger row or grant.
+ */
+export async function setEmail(
+	volunteerId: string,
+	email: string,
+): Promise<ActionResult> {
+	await requirePermission('volunteers', 'manage');
+
+	if (!isId(volunteerId)) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	const address = normaliseEmail(email);
+	if (!address.ok) return address;
+
+	const [row] = await db()
+		.update(volunteer)
+		.set({ email: address.value })
+		.where(eq(volunteer.id, volunteerId))
+		.returning({ id: volunteer.id });
+
+	if (!row) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	revalidate(volunteerId);
+	return {
+		ok: true,
+		message: address.value ? 'Email updated.' : 'Email cleared.',
+	};
 }
 
 export async function setVolunteerActive(
