@@ -157,7 +157,13 @@ export async function setUserRoles(
 			return { ok: false, message: STALE_ROLES };
 		}
 
-		if (grant) await claimGrant(tx, grant.id, userId);
+		if (grant) {
+			// Claimed only if something was applied. "Revoke all" on a stranded
+			// row withdraws a Grant that never took effect, as it does for a
+			// pending one — a claimed Grant is the record of who granted what.
+			if (granting) await claimGrant(tx, grant.id, userId);
+			else await tx.delete(pendingGrant).where(eq(pendingGrant.id, grant.id));
+		}
 
 		return { ok: true };
 	});
@@ -282,11 +288,7 @@ export async function setPendingGrantRoles(
 	const validated = validateRoles(next);
 	if (!validated.ok) return validated;
 
-	const [grant] = await db()
-		.select({ role: pendingGrant.role })
-		.from(pendingGrant)
-		.where(and(eq(pendingGrant.id, grantId), isNull(pendingGrant.claimedAt)))
-		.limit(1);
+	const grant = await unclaimedGrantById(grantId);
 
 	if (!grant) {
 		return {
@@ -307,16 +309,19 @@ export async function setPendingGrantRoles(
 	}
 
 	// Pinned to the role that was read, for the same reason as `setUserRoles`.
-	const result = await db()
-		.update(pendingGrant)
-		.set({ role: serialiseRoles(resulting) })
-		.where(
-			and(
-				eq(pendingGrant.id, grantId),
-				isNull(pendingGrant.claimedAt),
-				eq(pendingGrant.role, grant.role),
-			),
-		);
+	const result = await db().transaction(async (tx) => {
+		await lockSlackMember(tx, grant.slackUserId);
+		return tx
+			.update(pendingGrant)
+			.set({ role: serialiseRoles(resulting) })
+			.where(
+				and(
+					eq(pendingGrant.id, grantId),
+					isNull(pendingGrant.claimedAt),
+					eq(pendingGrant.role, grant.role),
+				),
+			);
+	});
 
 	if (result.rowCount === 0) {
 		return { ok: false, message: STALE_ROLES };
@@ -324,6 +329,22 @@ export async function setPendingGrantRoles(
 
 	revalidate();
 	return { ok: true };
+}
+
+/**
+ * Read for a write to the Grant itself. The write is pinned to the role read
+ * here and made under `lockSlackMember`, so it cannot land between a claim
+ * reading the Grant and applying it — a claim of roles the Grant no longer
+ * holds, both reporting success.
+ */
+async function unclaimedGrantById(grantId: string) {
+	const [grant] = await db()
+		.select({ role: pendingGrant.role, slackUserId: pendingGrant.slackUserId })
+		.from(pendingGrant)
+		.where(and(eq(pendingGrant.id, grantId), isNull(pendingGrant.claimedAt)))
+		.limit(1);
+
+	return grant ?? null;
 }
 
 /**
@@ -345,11 +366,7 @@ export async function revokePendingGrant(
 		};
 	}
 
-	const [grant] = await db()
-		.select({ role: pendingGrant.role })
-		.from(pendingGrant)
-		.where(and(eq(pendingGrant.id, grantId), isNull(pendingGrant.claimedAt)))
-		.limit(1);
+	const grant = await unclaimedGrantById(grantId);
 
 	if (!grant) {
 		return {
@@ -377,15 +394,18 @@ export async function revokePendingGrant(
 	}
 
 	// The role check above only holds for the role that was read.
-	const result = await db()
-		.delete(pendingGrant)
-		.where(
-			and(
-				eq(pendingGrant.id, grantId),
-				isNull(pendingGrant.claimedAt),
-				eq(pendingGrant.role, grant.role),
-			),
-		);
+	const result = await db().transaction(async (tx) => {
+		await lockSlackMember(tx, grant.slackUserId);
+		return tx
+			.delete(pendingGrant)
+			.where(
+				and(
+					eq(pendingGrant.id, grantId),
+					isNull(pendingGrant.claimedAt),
+					eq(pendingGrant.role, grant.role),
+				),
+			);
+	});
 
 	if (result.rowCount === 0) {
 		return { ok: false, message: STALE_ROLES };

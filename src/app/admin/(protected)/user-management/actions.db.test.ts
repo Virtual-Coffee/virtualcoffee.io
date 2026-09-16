@@ -188,6 +188,21 @@ describe('setUserRoles', () => {
 			expect.objectContaining({ kind: 'user', id: admin.userId }),
 		]);
 	});
+
+	test('revoking everything from a stranded user withdraws the grant rather than claiming it', async () => {
+		const ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
+		await insertPendingGrant({ slackUserId: 'U_ADA', role: 'admin' });
+
+		await expect(setUserRoles(ada.id, [])).resolves.toEqual({ ok: true });
+		await expect(roleOf(ada.id)).resolves.toEqual({
+			role: 'user',
+			roleGrantedBy: null,
+		});
+		await expect(db().select().from(pendingGrant)).resolves.toEqual([]);
+		await expect(listAccessRows()).resolves.toEqual([
+			expect.objectContaining({ kind: 'user', id: admin.userId }),
+		]);
+	});
 });
 
 describe('grantPendingAccess', () => {
