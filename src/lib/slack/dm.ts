@@ -63,20 +63,28 @@ export async function sendSlackDm(
 }
 
 /**
- * What a newly (or re-)granted person is told: which access, and where to sign
- * in to claim it. A grant holding only `volunteer` points at `/invites`, since
- * that role holds no /admin section (docs/adr/0010); anything else points at
- * `/admin`.
+ * What a newly (or re-)granted person is told: which access, and either where
+ * to sign in to claim it (a Pending Grant) or, for a Role applied directly to
+ * someone already signed in, that it is live now. A grant holding only
+ * `volunteer` points at `/invites`, since that role holds no /admin section
+ * (docs/adr/0010); anything else points at `/admin`.
  */
-export function grantDmMessage(grant: { roles: RoleName[] }): string {
+export function grantDmMessage(grant: {
+	roles: RoleName[];
+	/** Already on their account — nothing to claim. Only ever a Pending Grant otherwise. */
+	active?: boolean;
+}): string {
 	const volunteerOnly =
 		grant.roles.length === 1 && grant.roles[0] === 'volunteer';
 	const path = volunteerOnly ? '/invites' : '/admin';
 	const labels = grant.roles.map((role) => ROLE_LABELS[role]).join(', ');
+	const link = `${siteUrl()}${path}`;
 
 	return [
 		`You've been given access to Virtual Coffee's ${volunteerOnly ? 'Invites' : 'admin'} tools: *${labels}*.`,
 		'',
-		`Sign in with Slack to activate it: ${siteUrl()}${path}`,
+		grant.active
+			? `It's active now: ${link}`
+			: `Sign in with Slack to activate it: ${link}`,
 	].join('\n');
 }

@@ -273,17 +273,19 @@ export async function grantPendingAccess(
 	if (!result.ok) return result;
 
 	/**
-	 * Best-effort: the grant already stands regardless of whether the DM lands,
-	 * and a maintainer can retry it with "Resend DM" below. Only for a Grant —
-	 * a direct grant is not told about yet.
+	 * Best-effort: the grant already stands regardless of whether the DM lands.
+	 * A Pending Grant's DM says where to sign in and can be re-sent from the
+	 * table; a direct grant's says the access is live, and its outcome rides
+	 * on the "has access now" line since there is no row action to retry it.
 	 */
-	if (preProvisioned) {
-		const dm = await sendSlackDm(
-			member.id,
-			grantDmMessage({ roles: requested }),
-		);
-		result = { ok: true, message: dm.message };
-	}
+	const dm = await sendSlackDm(
+		member.id,
+		grantDmMessage({ roles: requested, active: !preProvisioned }),
+	);
+	result = {
+		ok: true,
+		message: [result.message, dm.message].filter(Boolean).join(' '),
+	};
 
 	revalidate();
 	return result;
