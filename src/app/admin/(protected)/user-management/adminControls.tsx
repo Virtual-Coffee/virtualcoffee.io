@@ -403,8 +403,9 @@ export function GrantAccessForm({
 				Grant access
 			</button>
 
+			{/* The grant stood either way; the message may still say the DM did not. */}
 			{result?.ok && result.message && (
-				<p className="text-success small mb-0 w-100" role="status">
+				<p className="text-body-secondary small mb-0 w-100" role="status">
 					{result.message}
 				</p>
 			)}
