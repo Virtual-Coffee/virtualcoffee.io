@@ -1,7 +1,7 @@
 import { createAppAuth } from '@octokit/auth-app';
 import { Octokit } from '@octokit/rest';
 
-import { capture, deployContext, notifyDelivery } from '@/lib/outbound';
+import { deliver, type Outbound } from '@/lib/outbound';
 
 /**
  * Opens the Lunch & Learn issue — the working artefact; the Slack message
@@ -31,11 +31,6 @@ const timedFetch: typeof fetch = (input, init) => {
 		signal: init?.signal ? AbortSignal.any([init.signal, timeout]) : timeout,
 	});
 };
-
-/** `url` is null when the issue was captured rather than opened (docs/adr/0013). */
-export type CreateIssueResult =
-	| { ok: true; url: string | null; message: string }
-	| { ok: false; message: string };
 
 export function githubAppConfigured(): boolean {
 	return Boolean(
@@ -143,9 +138,10 @@ function issueBody(idea: {
 
 /**
  * Returns rather than throws: the idea is already saved by the time this runs,
- * and a GitHub outage must not lose it. See docs/adr/0005.
+ * and a GitHub outage must not lose it. See docs/adr/0005. `url` is null when
+ * the issue was Captured rather than opened (docs/adr/0013).
  */
-export async function createLunchAndLearnIssue(idea: {
+export function createLunchAndLearnIssue(idea: {
 	name: string;
 	topic: string;
 	description: string | null;
@@ -153,58 +149,47 @@ export async function createLunchAndLearnIssue(idea: {
 	timing: string | null;
 	/** The Submission's /admin page, where the email lives. */
 	adminUrl: string;
-}): Promise<CreateIssueResult> {
-	// Captured before the App is looked at, so a preview without credentials
-	// is quiet rather than "never announced".
-	if (notifyDelivery() === 'captured') {
-		capture(
-			'github issue',
-			`${OWNER}/${REPO}`,
-			`Lunch & Learn: ${idea.topic}\n\n${issueBody(idea)}`,
-		);
-		return {
-			ok: true,
-			url: null,
-			message: `Captured, no GitHub issue opened (${deployContext()}).`,
-		};
-	}
+}): Promise<Outbound<{ url: string | null }>> {
+	return deliver<'github issue', { url: string | null }>({
+		kind: 'github issue',
+		target: `${OWNER}/${REPO}`,
+		body: `Lunch & Learn: ${idea.topic}\n\n${issueBody(idea)}`,
+		unreachable: 'GitHub',
+		captured: { url: null },
+		live: async () => {
+			if (!githubAppConfigured()) {
+				return {
+					ok: false,
+					definitelyNotSent: true,
+					message:
+						'GITHUB_APP_CLIENT_ID / GITHUB_APP_PRIVATE_KEY are not set, so no GitHub issue was opened.',
+				};
+			}
 
-	if (!githubAppConfigured()) {
-		return {
-			ok: false,
-			message:
-				'GITHUB_APP_CLIENT_ID / GITHUB_APP_PRIVATE_KEY are not set, so no GitHub issue was opened.',
-		};
-	}
+			try {
+				const octokit = await client();
 
-	try {
-		const octokit = await client();
+				const { data } = await octokit.rest.issues.create({
+					owner: OWNER,
+					repo: REPO,
+					title: `Lunch & Learn: ${idea.topic}`,
+					body: issueBody(idea),
+					labels: [LABEL],
+					assignees: ASSIGNEES,
+				});
 
-		const { data } = await octokit.rest.issues.create({
-			owner: OWNER,
-			repo: REPO,
-			title: `Lunch & Learn: ${idea.topic}`,
-			body: issueBody(idea),
-			labels: [LABEL],
-			assignees: ASSIGNEES,
-		});
-
-		return {
-			ok: true,
-			url: data.html_url,
-			message: `Opened ${data.html_url}`,
-		};
-	} catch (error) {
-		// A failed installation lookup means the App is not installed on
-		// VC-Community-Docs, or lacks the issues permission. Both are setup
-		// problems a maintainer has to fix, so say so rather than swallowing it.
-		cached = undefined;
-		return {
-			ok: false,
-			message:
-				error instanceof Error
-					? `Could not open the GitHub issue: ${error.message}`
-					: 'Could not open the GitHub issue.',
-		};
-	}
+				return {
+					ok: true,
+					url: data.html_url,
+					message: `Opened ${data.html_url}`,
+				};
+			} catch (error) {
+				// A failed installation lookup means the App is not installed on
+				// VC-Community-Docs, or lacks the issues permission — a setup problem
+				// a maintainer has to fix, so the next call tries the lookup again.
+				cached = undefined;
+				throw error;
+			}
+		},
+	});
 }
