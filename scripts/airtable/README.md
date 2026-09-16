@@ -186,13 +186,17 @@ running balance with no history behind it (the grants were manual, +5 at a time,
 and unrecorded), so there is nothing to replay. One `imported` ledger row saying
 what Airtable said is the honest version of a number nobody can explain further.
 
-**Re-running is safe.** Volunteers key on `airtable_record_id` and insert with
-`onConflictDoNothing`, with one exception: `role_labels` is descriptive only
-and is refreshed on rows already present. The balance is only written for a Volunteer with no
-ledger rows at all, because an append-only ledger would otherwise double every
-balance on a second run. The role is merged into whatever a person already
-holds rather than duplicated, so a second run also backfills grants for rows an
-earlier run imported.
+**Re-running is safe.** Each Volunteer is one transaction — row, role,
+balance and Invite attribution commit together or not at all — so a run that
+dies halfway leaves nothing for the retry to misread. Volunteers key on
+`airtable_record_id` and insert with `onConflictDoNothing`, with one exception:
+`role_labels` is descriptive only and is refreshed on rows already present. The
+`imported` ledger row is written only in the transaction that creates the
+`volunteer` row, because an append-only ledger would otherwise double every
+balance on a second run; nothing else in the ledger is consulted, so an
+`admin_grant` made between runs neither blocks nor doubles the import. The role
+is merged into whatever a person already holds rather than duplicated, so a
+second run also backfills grants for rows an earlier run imported.
 
 **Re-running does not correct a mapping.** A row that is already imported under
 a different Slack member id stops the run before anything is written: the

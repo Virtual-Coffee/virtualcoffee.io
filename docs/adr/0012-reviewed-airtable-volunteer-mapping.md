@@ -67,9 +67,10 @@ the README says how to regenerate it.
 - **Balances arrive as one net `imported` row** dated when Airtable said it.
   There is no history to replay, and this is why 0011's expiry sweep refuses to
   refund an Invite with no `spend` row.
-- **Re-running is safe.** Volunteers key on `airtable_record_id` with
-  `onConflictDoNothing`, and the balance is written only for a Volunteer with
-  no ledger rows at all.
+- **Re-running is safe.** Each Volunteer is one transaction, keyed on
+  `airtable_record_id` with `onConflictDoNothing`; the `imported` ledger row is
+  written only in the transaction that creates the `volunteer` row, and no
+  other ledger row is taken as evidence the import happened.
 - `importMembership.ts` must run first: this script attributes the Invites
   that one creates, and against an empty `invite` table reports
   `Attributed 0`.
