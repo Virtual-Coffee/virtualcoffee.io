@@ -7,7 +7,7 @@ import {
 } from '@/lib/inviteTokens';
 import { MAX_NOTE_LENGTH } from '@/lib/notes';
 import { NOT_FOUND } from '@/test/next';
-import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/email';
+import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/outbound';
 import { signInAs } from '@/test/session';
 import {
 	applicationEvents,

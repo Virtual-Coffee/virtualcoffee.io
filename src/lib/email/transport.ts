@@ -1,6 +1,11 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 
-import { capture, emailDelivery, type EmailDelivery } from '@/lib/outbound';
+import {
+	deliver,
+	emailDelivery,
+	type EmailDelivery,
+	type Outbound,
+} from '@/lib/outbound';
 
 /**
  * Transactional mail for the membership pipeline, sent through Google
@@ -11,8 +16,8 @@ import { capture, emailDelivery, type EmailDelivery } from '@/lib/outbound';
  * open from that runtime.
  *
  * Outside production nothing reaches SMTP unless `EMAIL_REDIRECT_TO` is set —
- * `emailDelivery()` decides, and `sendEmail` consults it before it so much as
- * reads the credentials. See docs/adr/0013.
+ * `deliver()` decides, and only calls back here once the mode is not
+ * Captured, so the credentials are never read first. See docs/adr/0013.
  */
 
 export type SendEmailInput = {
@@ -22,32 +27,6 @@ export type SendEmailInput = {
 	/** Copies the acting admin, per the "Copy me on this email" checkbox. */
 	cc?: string | null;
 };
-
-/**
- * Whether a failure definitely means nothing was delivered.
- *
- * This distinction is load-bearing rather than cosmetic: the admin UI promises
- * "nothing was emailed — safe to try again", and a maintainer decides whether
- * to retry based on it. Getting it wrong double-emails an applicant.
- *
- * nodemailer only resolves once the SMTP server has accepted the message, so a
- * rejected promise means it was never accepted. The one case we cannot claim
- * certainty about is a connection dropped mid-DATA, which surfaces as a
- * timeout.
- */
-export type SendFailure = {
-	ok: false;
-	definitelyNotSent: boolean;
-	message: string;
-};
-
-/**
- * `warning` is set when the send succeeded but not as asked: the applicant's
- * copy went out but a cc did not, or the message was Captured or Redirected
- * on a non-production deploy. Each is still a success — retrying would email
- * the applicant twice — so it is reported alongside `ok`, not instead of it.
- */
-export type SendResult = { ok: true; warning?: string } | SendFailure;
 
 export function emailConfigured(): boolean {
 	return Boolean(
@@ -92,7 +71,21 @@ function getTransporter(): Transporter {
 	return transporter;
 }
 
+/**
+ * nodemailer only resolves once the SMTP server has accepted the message, so a
+ * rejected promise means it was never accepted — except a connection dropped
+ * mid-DATA, which surfaces as one of these and may have stranded a message.
+ */
 const TIMEOUT_CODES = new Set(['ETIMEDOUT', 'ECONNRESET', 'ESOCKET']);
+
+function isSmtpTimeout(error: unknown): boolean {
+	return (
+		typeof error === 'object' &&
+		error !== null &&
+		'code' in error &&
+		TIMEOUT_CODES.has(String(error.code))
+	);
+}
 
 /**
  * The address alone, lower-cased: nodemailer reports what the server accepted
@@ -104,20 +97,22 @@ function bareAddress(value: string): string {
 	return (match ? match[1] : value).trim().toLowerCase();
 }
 
-export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
-	const delivery = emailDelivery();
+export function sendEmail(input: SendEmailInput): Promise<Outbound> {
+	return deliver({
+		kind: 'email',
+		target: input.to,
+		body: input.text,
+		details: { cc: input.cc || undefined, subject: input.subject },
+		unreachable: 'the mail server',
+		isTimeout: isSmtpTimeout,
+		live: (delivery) => send(input, delivery),
+	});
+}
 
-	if (delivery.mode === 'captured') {
-		capture('email', input.to, input.text, {
-			cc: input.cc || undefined,
-			subject: input.subject,
-		});
-		return {
-			ok: true,
-			warning: `Captured, not delivered (${delivery.context}): nothing leaves this deploy.`,
-		};
-	}
-
+async function send(
+	input: SendEmailInput,
+	delivery: Exclude<EmailDelivery, { mode: 'captured' }>,
+): Promise<Outbound> {
 	if (!emailConfigured()) {
 		return {
 			ok: false,
@@ -139,58 +134,44 @@ export async function sendEmail(input: SendEmailInput): Promise<SendResult> {
 			? `[to: ${input.to}] ${input.subject}`
 			: input.subject;
 
-	try {
-		const info = await getTransporter().sendMail({
-			from,
-			to,
-			cc,
-			subject,
-			text: input.text,
-			replyTo: process.env.GOOGLE_SMTP_USER,
-			...(delivery.mode === 'redirected'
-				? { headers: { 'X-Original-To': input.to } }
-				: {}),
-		});
+	const info = await getTransporter().sendMail({
+		from,
+		to,
+		cc,
+		subject,
+		text: input.text,
+		replyTo: process.env.GOOGLE_SMTP_USER,
+		...(delivery.mode === 'redirected'
+			? { headers: { 'X-Original-To': input.to } }
+			: {}),
+	});
 
-		// nodemailer only resolves with rejections when at least one address
-		// was accepted, so a non-empty list here is a partial delivery. Whether
-		// the *applicant's* copy went is what decides between failure and warning.
-		const rejected = (info.rejected ?? []).map(String);
-		const accepted = (info.accepted ?? []).map(String).map(bareAddress);
-		if (rejected.length > 0 && !accepted.includes(bareAddress(to))) {
-			return {
-				ok: false,
-				definitelyNotSent: true,
-				message: `The mail server rejected ${rejected.join(', ')}.`,
-			};
-		}
-		if (rejected.length > 0) {
-			return {
-				ok: true,
-				warning: `Sent, but the copy to ${rejected.join(', ')} was rejected.`,
-			};
-		}
-
-		if (delivery.mode === 'redirected') {
-			return {
-				ok: true,
-				warning: `Redirected to ${delivery.redirectTo} (${delivery.context}) instead of ${input.to}.`,
-			};
-		}
-		return { ok: true };
-	} catch (error) {
-		const code =
-			typeof error === 'object' && error !== null && 'code' in error
-				? String((error as { code: unknown }).code)
-				: '';
-
+	// nodemailer only resolves with rejections when at least one address
+	// was accepted, so a non-empty list here is a partial delivery. Whether
+	// the *applicant's* copy went is what decides between failure and warning.
+	const rejected = (info.rejected ?? []).map(String);
+	const accepted = (info.accepted ?? []).map(String).map(bareAddress);
+	if (rejected.length > 0 && !accepted.includes(bareAddress(to))) {
 		return {
 			ok: false,
-			// A timeout can strand a message that the server had already begun
-			// accepting, so don't promise it wasn't delivered.
-			definitelyNotSent: !TIMEOUT_CODES.has(code),
-			message:
-				error instanceof Error ? error.message : 'The mail server errored.',
+			definitelyNotSent: true,
+			message: `The mail server rejected ${rejected.join(', ')}.`,
 		};
 	}
+	if (rejected.length > 0) {
+		return {
+			ok: true,
+			message: 'Sent.',
+			warning: `Sent, but the copy to ${rejected.join(', ')} was rejected.`,
+		};
+	}
+
+	if (delivery.mode === 'redirected') {
+		return {
+			ok: true,
+			message: 'Sent.',
+			warning: `Redirected to ${delivery.redirectTo} (${delivery.context}) instead of ${input.to}.`,
+		};
+	}
+	return { ok: true, message: 'Sent.' };
 }

@@ -61,6 +61,8 @@ mechanism.
   function logs. That audience already has the preview's database and
   `/admin` (docs/adr/0007), so the log adds no one; it is still one more copy
   of the address, which is why nothing about capture is opt-in.
-- Anything new that sends outward goes through `outbound.ts` first. A sender
-  that checks its own credentials before the mode is the bug this file exists
-  to prevent.
+- Anything new that sends outward is a `deliver()` call in `outbound.ts`: the
+  sender hands over the message and a `live` callback and gets one `Outbound`
+  result back. The mode is decided, the message captured, and a throw caught
+  before the callback runs, so a sender that checks its own credentials before
+  the mode — the bug this file exists to prevent — has no place to be written.

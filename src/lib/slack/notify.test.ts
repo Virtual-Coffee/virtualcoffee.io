@@ -31,9 +31,9 @@ describe('notifySlack', () => {
 		vi.stubEnv('CONTEXT', 'deploy-preview');
 		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 
-		await expect(notifySlack('membership', 'hi')).resolves.toEqual({
+		await expect(notifySlack('membership', 'hi')).resolves.toMatchObject({
 			ok: true,
-			message: 'Captured, not posted to Slack (deploy-preview).',
+			warning: 'Captured, not posted to Slack (deploy-preview).',
 		});
 		expect(fetch).not.toHaveBeenCalled();
 		expect(info).toHaveBeenCalledWith(
@@ -58,6 +58,7 @@ describe('notifySlack', () => {
 	test('a missing webhook is a skip, not an error, and nothing is fetched', async () => {
 		await expect(notifySlack('membership', 'hi')).resolves.toEqual({
 			ok: false,
+			definitelyNotSent: true,
 			message:
 				'SLACK_WEBHOOK_MEMBERSHIP is not set, so nothing was posted to Slack.',
 		});
@@ -85,6 +86,7 @@ describe('notifySlack', () => {
 		fetch.mockResolvedValue(new Response('no_service', { status: 404 }));
 		await expect(notifySlack('coc', 'hi')).resolves.toEqual({
 			ok: false,
+			definitelyNotSent: true,
 			message: 'Slack rejected the message (404: no_service).',
 		});
 	});
@@ -93,6 +95,7 @@ describe('notifySlack', () => {
 		fetch.mockRejectedValue(new TypeError('fetch failed'));
 		await expect(notifySlack('coc', 'hi')).resolves.toEqual({
 			ok: false,
+			definitelyNotSent: true,
 			message: 'Could not reach Slack: fetch failed',
 		});
 	});

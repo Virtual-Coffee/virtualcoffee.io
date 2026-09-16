@@ -33,9 +33,9 @@ describe('sendSlackDm', () => {
 		vi.stubEnv('SLACK_BOT_TOKEN', undefined);
 		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 
-		await expect(sendSlackDm('U123', 'hi')).resolves.toEqual({
+		await expect(sendSlackDm('U123', 'hi')).resolves.toMatchObject({
 			ok: true,
-			message: 'Captured, not sent to Slack (deploy-preview).',
+			warning: 'Captured, not posted to Slack (deploy-preview).',
 		});
 		expect(conversationsOpen).not.toHaveBeenCalled();
 		expect(info).toHaveBeenCalledWith(
@@ -50,6 +50,7 @@ describe('sendSlackDm', () => {
 
 		await expect(sendSlackDm('U123', 'hi')).resolves.toEqual({
 			ok: false,
+			definitelyNotSent: true,
 			message: 'SLACK_BOT_TOKEN is not set, so no DM was sent.',
 		});
 		expect(conversationsOpen).not.toHaveBeenCalled();
@@ -75,6 +76,7 @@ describe('sendSlackDm', () => {
 
 		await expect(sendSlackDm('U123', 'hi')).resolves.toEqual({
 			ok: false,
+			definitelyNotSent: true,
 			message: 'Could not open a DM with that Slack member.',
 		});
 		expect(chatPostMessage).not.toHaveBeenCalled();
@@ -85,6 +87,7 @@ describe('sendSlackDm', () => {
 
 		await expect(sendSlackDm('U123', 'hi')).resolves.toEqual({
 			ok: false,
+			definitelyNotSent: true,
 			message: 'Could not reach Slack: invalid_auth',
 		});
 	});
