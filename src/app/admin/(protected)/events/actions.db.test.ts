@@ -88,88 +88,46 @@ describe('access', () => {
 });
 
 describe('validation', () => {
-	test.each([
-		['an empty title', { ...series, title: '  ' }, 'Give it a title.'],
+	// The Draft rules and their messages are `src/lib/eventDraft.test.ts`'s;
+	// what matters here is that every action parses before it writes.
+	test.each<[keyof typeof calendar, () => Promise<unknown>, string]>([
 		[
-			'a Join Link that is not a URL',
-			{ ...series, joinLink: 'zoom' },
-			'The Join Link has to be a full URL.',
+			'createSeries',
+			() => createSeries({ ...series, title: '  ' }),
+			'Give it a title.',
 		],
 		[
-			'a Zoom Join Link without a host code',
-			{ ...series, joinLink: 'https://us02web.zoom.us/j/12345678901' },
-			'A Zoom Join Link needs its host code, or the Slack bots cannot announce it.',
-		],
-		[
-			'a host code that is not 6–10 digits',
-			{ ...series, hostCode: 'abc' },
-			'A Zoom host code is 6–10 digits.',
-		],
-		['no Event Type', { ...series, eventType: '' }, 'Pick an Event Type.'],
-		[
-			'an Event Type this code does not know',
-			{ ...series, eventType: 'karaoke' },
-			'Pick an Event Type.',
-		],
-		[
-			'an end before the start',
-			{ ...series, endTime: '08:00' },
-			'The end has to be after the start, on the same day.',
-		],
-		[
-			'a first Event off the rule',
-			{ ...series, date: '2026-09-16' },
+			'updateSeries',
+			() => updateSeries(ID, ETAG, { ...series, date: '2026-09-16' }),
 			'The first Event has to fall on a day the rule repeats on.',
 		],
 		[
-			'a rule that ends before it starts',
-			{
-				...series,
-				recurrence: {
-					...series.recurrence,
-					ends: { kind: 'until', date: '2026-09-01' },
-				},
-			},
-			'The rule ends before its first Event.',
+			'createEvent',
+			() => createEvent({ ...series, eventType: '' }),
+			'Pick an Event Type.',
 		],
 		[
-			'no days',
-			{ ...series, recurrence: { ...series.recurrence, weekdays: [] } },
-			'Pick at least one day.',
+			'updateEvent',
+			() => updateEvent(ID, ETAG, { ...series, joinLink: 'zoom' }),
+			'The Join Link has to be a full URL.',
 		],
 		[
-			'no rule at all',
-			{ ...series, recurrence: null },
-			'Say how the Series repeats.',
+			'rescheduleEvent',
+			() =>
+				rescheduleEvent(ID, ETAG, {
+					date: 'soon',
+					startTime: '09:00',
+					endTime: '10:00',
+				}),
+			'Pick a date.',
 		],
-	])('createSeries refuses %s', async (_what, input, message) => {
-		await expect(createSeries(input)).resolves.toEqual({ ok: false, message });
-		expect(calendar.createSeries).not.toHaveBeenCalled();
-	});
-
-	test('a Zoom Join Link with its host code is accepted', async () => {
-		await expect(
-			createSeries({
-				...series,
-				joinLink: 'https://us02web.zoom.us/j/12345678901?pwd=x',
-				hostCode: ' 123456 ',
-			}),
-		).resolves.toMatchObject({ ok: true });
-		expect(calendar.createSeries).toHaveBeenCalledWith(
-			expect.objectContaining({ hostCode: '123456' }),
-		);
-	});
-
-	test('updateSeries accepts a null rule and leaves it alone', async () => {
-		await expect(
-			updateSeries(ID, ETAG, { ...series, recurrence: null }),
-		).resolves.toMatchObject({ ok: true });
-		expect(calendar.updateSeries).toHaveBeenCalledWith(
-			ID,
-			ETAG,
-			expect.objectContaining({ recurrence: null }),
-		);
-	});
+	])(
+		'%s refuses an invalid input and writes nothing',
+		async (name, call, message) => {
+			await expect(call()).resolves.toEqual({ ok: false, message });
+			expect(calendar[name]).not.toHaveBeenCalled();
+		},
+	);
 
 	test('a malformed id or a blank etag is "no longer exists"', async () => {
 		await expect(cancelEvent('a/b', ETAG)).resolves.toEqual({
@@ -186,38 +144,6 @@ describe('validation', () => {
 		});
 		expect(calendar.cancelEvent).not.toHaveBeenCalled();
 		expect(calendar.updateEvent).not.toHaveBeenCalled();
-	});
-
-	test('updateEvent validates like createEvent and ignores a rule', async () => {
-		await expect(
-			updateEvent(ID, ETAG, { ...series, title: '' }),
-		).resolves.toEqual({
-			ok: false,
-			message: 'Give it a title.',
-		});
-		await expect(updateEvent(ID, ETAG, series)).resolves.toEqual({
-			ok: true,
-			message: '“Virtual Coffee” is updated.',
-		});
-		const { recurrence: _rule, ...event } = series;
-		expect(calendar.updateEvent).toHaveBeenCalledWith(ID, ETAG, event);
-	});
-
-	test('rescheduleEvent checks the time', async () => {
-		await expect(
-			rescheduleEvent(ID, ETAG, {
-				date: 'soon',
-				startTime: '09:00',
-				endTime: '10:00',
-			}),
-		).resolves.toEqual({ ok: false, message: 'Pick a date.' });
-		await expect(
-			rescheduleEvent(ID, ETAG, {
-				date: '2026-09-17',
-				startTime: '25:00',
-				endTime: '26:00',
-			}),
-		).resolves.toEqual({ ok: false, message: 'Pick a real time.' });
 	});
 });
 
@@ -236,6 +162,26 @@ describe('writing', () => {
 			['/admin/events', 'layout'],
 			['/admin'],
 		]);
+	});
+
+	test('updateSeries passes a null rule through, to be left alone', async () => {
+		await expect(
+			updateSeries(ID, ETAG, { ...series, recurrence: null }),
+		).resolves.toMatchObject({ ok: true });
+		expect(calendar.updateSeries).toHaveBeenCalledWith(
+			ID,
+			ETAG,
+			expect.objectContaining({ recurrence: null }),
+		);
+	});
+
+	test('updateEvent writes the Event without the rule it was handed', async () => {
+		await expect(updateEvent(ID, ETAG, series)).resolves.toEqual({
+			ok: true,
+			message: '“Virtual Coffee” is updated.',
+		});
+		const { recurrence: _rule, ...event } = series;
+		expect(calendar.updateEvent).toHaveBeenCalledWith(ID, ETAG, event);
 	});
 
 	test('endSeries reports which of the two things happened', async () => {

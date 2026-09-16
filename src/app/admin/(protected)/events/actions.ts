@@ -1,87 +1,29 @@
 'use server';
 
 import { revalidatePath, revalidateTag } from 'next/cache';
-import { DateTime } from 'luxon';
 import { z } from 'zod';
 
 import type { ActionResult } from '@/lib/actionResult';
 import { requirePermission } from '@/lib/adminAccess';
 import {
+	eventInputSchema,
+	seriesInputSchema,
+	seriesUpdateSchema,
+	timeInputSchema,
+} from '@/lib/eventDraft';
+import {
 	CalendarConflictError,
 	connectEventsCalendar,
-	EVENT_TYPES,
 	isCalendarEventId,
-	isZoomJoinLink,
 	type EventsCalendar,
 } from '@/lib/eventsCalendar';
 import { deliver } from '@/lib/outbound';
-import {
-	dateSchema,
-	endsBeforeStart,
-	firstOccurrenceMatches,
-	recurrenceSchema,
-} from '@/lib/recurrence';
 
 const CONFLICT =
 	'This changed in Google Calendar since you loaded it. Check the current details and try again.';
 const NOT_CONFIGURED =
 	'The Events Calendar is not configured: GOOGLE_SERVICE_ACCOUNT_KEY and GOOGLE_CALENDAR_ID are needed.';
 const GONE = 'That no longer exists on the Events Calendar.';
-
-const timeSchema = z
-	.string()
-	.regex(/^\d{2}:\d{2}$/, 'Pick a time.')
-	.refine(
-		(value) => DateTime.fromFormat(value, 'HH:mm').isValid,
-		'Pick a real time.',
-	);
-
-const timeInputSchema = z
-	.object({ date: dateSchema, startTime: timeSchema, endTime: timeSchema })
-	.refine((value) => value.endTime > value.startTime, {
-		message: 'The end has to be after the start, on the same day.',
-		path: ['endTime'],
-	});
-
-const eventInputSchema = timeInputSchema
-	.safeExtend({
-		title: z.string().trim().min(1, 'Give it a title.').max(200),
-		description: z.string().max(8000, 'The description is too long.'),
-		joinLink: z.url('The Join Link has to be a full URL.').max(2000),
-		hostCode: z
-			.string()
-			.trim()
-			.regex(/^(\d{6,10})?$/, 'A Zoom host code is 6–10 digits.'),
-		eventType: z.enum(EVENT_TYPES, { message: 'Pick an Event Type.' }),
-	})
-	// The bots refuse to announce a Zoom Event without its Host Code.
-	.refine((value) => !isZoomJoinLink(value.joinLink) || value.hostCode, {
-		message:
-			'A Zoom Join Link needs its host code, or the Slack bots cannot announce it.',
-		path: ['hostCode'],
-	});
-
-// A rule the form cannot edit (`custom`) is sent as null and left alone.
-const seriesUpdateSchema = eventInputSchema
-	.safeExtend({ recurrence: recurrenceSchema.nullable() })
-	.refine(
-		(value) =>
-			!value.recurrence || firstOccurrenceMatches(value.recurrence, value.date),
-		{
-			message: 'The first Event has to fall on a day the rule repeats on.',
-			path: ['date'],
-		},
-	)
-	.refine(
-		(value) =>
-			!value.recurrence || !endsBeforeStart(value.recurrence, value.date),
-		{ message: 'The rule ends before its first Event.', path: ['recurrence'] },
-	);
-
-const seriesInputSchema = seriesUpdateSchema.refine(
-	(value) => value.recurrence !== null,
-	{ message: 'Say how the Series repeats.', path: ['recurrence'] },
-);
 
 function firstIssue(error: z.ZodError, fallback: string): ActionResult {
 	return { ok: false, message: error.issues[0]?.message ?? fallback };
@@ -144,10 +86,8 @@ export async function createSeries(input: unknown): Promise<ActionResult> {
 	await requirePermission('events', 'manage');
 	const parsed = seriesInputSchema.safeParse(input);
 	if (!parsed.success) return firstIssue(parsed.error, 'Check the Series.');
-	const { recurrence, ...rest } = parsed.data;
-	if (!recurrence) return { ok: false, message: 'Say how the Series repeats.' };
 	return write('create Series', async (calendar) => {
-		await calendar.createSeries({ ...rest, recurrence });
+		await calendar.createSeries(parsed.data);
 		return `“${parsed.data.title}” is on the Events Calendar.`;
 	});
 }

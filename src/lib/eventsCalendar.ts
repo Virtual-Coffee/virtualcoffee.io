@@ -9,6 +9,14 @@ import type { calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
 
 import { createCalendarClient, type CalendarEventsClient } from '@/data/events';
+// The shape of what a write carries is declared once, with the forms' Draft;
+// type-only, so nothing of that module reaches this one at runtime.
+import type {
+	EventInput,
+	SeriesInput,
+	SeriesUpdate,
+	TimeInput,
+} from '@/lib/eventDraft';
 import { isEventType, type EventType } from '@/lib/eventTypes';
 import { DISPLAY_ZONE, displayParts } from '@/util/date';
 import { htmlToMarkdown, looksLikeHtml } from '@/util/markdown.server';
@@ -18,7 +26,6 @@ import {
 	parseRecurrence,
 	serializeRecurrence,
 	type Recurrence,
-	type RecurrenceForm,
 } from '@/lib/recurrence';
 
 export {
@@ -100,27 +107,6 @@ export type AdminEvent = {
 	htmlLink: string | null;
 };
 
-export type SeriesInput = {
-	title: string;
-	description: string;
-	joinLink: string;
-	hostCode: string;
-	eventType: EventType;
-	date: string;
-	startTime: string;
-	endTime: string;
-	recurrence: RecurrenceForm;
-};
-
-/** An update may leave a rule the form cannot edit (`custom`) as it is. */
-export type SeriesUpdate = Omit<SeriesInput, 'recurrence'> & {
-	recurrence: RecurrenceForm | null;
-};
-
-export type EventInput = Omit<SeriesInput, 'recurrence'>;
-
-export type TimeInput = Pick<SeriesInput, 'date' | 'startTime' | 'endTime'>;
-
 /** The etag the maintainer loaded is no longer the calendar's. */
 export class CalendarConflictError extends Error {
 	constructor() {
@@ -136,15 +122,6 @@ export class CalendarConflictError extends Error {
  */
 export function isCalendarEventId(value: string): boolean {
 	return /^[A-Za-z0-9_@.-]{5,1024}$/.test(value);
-}
-
-/**
- * The same test the bots apply (`src/zoom/join-link.ts` in vc-bots): a Zoom
- * join URL is what makes a Host Code mandatory, because the bots refuse to
- * announce a Zoom Event without one.
- */
-export function isZoomJoinLink(url: string): boolean {
-	return /zoom\.us\/j\/(\d{9,11})(?:[/?#]|$)/.test(url);
 }
 
 /** The Host Code as the bots read it: trimmed, empty is none. */
