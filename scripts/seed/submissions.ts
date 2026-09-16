@@ -1,5 +1,9 @@
 import type { SubmissionStatus } from '@/db';
-import { recordEvent, type SubmissionEventInput } from '@/lib/eventLog';
+import {
+	recordEvent,
+	recordImport,
+	type SubmissionEventInput,
+} from '@/lib/eventLog';
 import {
 	SUBMISSION_KINDS,
 	submissionSubject,
@@ -62,11 +66,7 @@ async function seedKind<K extends SubmissionKind, S extends SubmissionSeed>(
 			event({ actorUserId: ADMIN.id, ...fields });
 
 		if (seed.airtableRecordId) {
-			await event({
-				type: 'imported',
-				body: `Imported from Airtable (${seed.airtableRecordId})`,
-				createdAt: submittedAt,
-			});
+			await recordImport(subject, seed.airtableRecordId, submittedAt);
 		} else {
 			await event({
 				type: 'submitted',

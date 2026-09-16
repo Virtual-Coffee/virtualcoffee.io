@@ -2,12 +2,12 @@ import Airtable from 'airtable';
 import { inArray } from 'drizzle-orm';
 
 import {
-	applicationEvent,
 	db,
 	invite,
 	membershipApplication,
 	type NewMembershipApplication,
 } from '../../src/db';
+import { recordImport } from '../../src/lib/eventLog';
 import { bool, classify, date, str } from './classify';
 
 /**
@@ -269,13 +269,13 @@ async function main() {
 
 			if (!created) return false;
 
-			await tx.insert(applicationEvent).values({
-				applicationId: created.id,
-				type: 'imported',
-				toStatus: classified.status,
-				body: `Imported from Airtable (${row.id})`,
-				createdAt: submittedAt,
-			});
+			await recordImport(
+				{ kind: 'application', id: created.id },
+				row.id,
+				submittedAt,
+				classified.status,
+				tx,
+			);
 			return true;
 		});
 

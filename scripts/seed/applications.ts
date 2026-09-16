@@ -1,9 +1,10 @@
 import type { ApplicationStatus } from '@/db';
 import {
-	applicationEventRow,
-	insertApplication,
-	insertInviteToken,
-} from '@/test/db/fixtures';
+	recordEvent,
+	recordImport,
+	type ApplicationEventInput,
+} from '@/lib/eventLog';
+import { insertApplication, insertInviteToken } from '@/test/db/fixtures';
 
 import { ADMIN, SLACK_TOKEN, daysAgo, daysAhead } from './shared';
 
@@ -349,19 +350,19 @@ export async function seedApplications(
 			airtableRecordId: seed.airtableRecordId ?? null,
 		});
 
-		const event = (
-			fields: Omit<Parameters<typeof applicationEventRow>[0], 'applicationId'>,
-		) => applicationEventRow({ applicationId: id, ...fields });
+		const subject = { kind: 'application', id } as const;
+		const event = (fields: ApplicationEventInput) =>
+			recordEvent(subject, fields);
 		const by = (fields: Parameters<typeof event>[0]) =>
 			event({ actorUserId: ADMIN.id, ...fields });
 
 		if (seed.airtableRecordId) {
-			await event({
-				type: 'imported',
-				toStatus: 'waitlisted',
-				body: `Imported from Airtable (${seed.airtableRecordId})`,
-				createdAt: submittedAt,
-			});
+			await recordImport(
+				subject,
+				seed.airtableRecordId,
+				submittedAt,
+				'waitlisted',
+			);
 			await event({
 				type: 'waitlisted',
 				toStatus: 'waitlisted',

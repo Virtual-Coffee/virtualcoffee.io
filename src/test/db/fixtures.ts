@@ -74,12 +74,6 @@ export async function insertApplication(
 	return row;
 }
 
-export async function applicationEventRow(
-	fields: typeof applicationEvent.$inferInsert,
-) {
-	await db().insert(applicationEvent).values(fields);
-}
-
 export async function applicationRow(id: string) {
 	const [row] = await db()
 		.select()
