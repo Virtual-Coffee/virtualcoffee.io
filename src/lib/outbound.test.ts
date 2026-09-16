@@ -21,17 +21,33 @@ describe('emailDelivery', () => {
 		expect(emailDelivery()).toEqual({ mode: 'live' });
 	});
 
-	test('SMTP_HOST is local outside production', () => {
-		vi.stubEnv('CONTEXT', 'dev');
-		vi.stubEnv('SMTP_HOST', 'localhost');
-		expect(emailDelivery()).toEqual({ mode: 'local', context: 'dev' });
-	});
+	test.each(['dev', undefined])(
+		'SMTP_HOST is local on a checkout (CONTEXT=%s)',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			vi.stubEnv('SMTP_HOST', 'localhost');
+			expect(emailDelivery()).toEqual({
+				mode: 'local',
+				context: context ?? 'local',
+			});
+		},
+	);
 
 	test('SMTP_HOST is ignored in production', () => {
 		vi.stubEnv('CONTEXT', 'production');
 		vi.stubEnv('SMTP_HOST', 'localhost');
 		expect(emailDelivery()).toEqual({ mode: 'live' });
 	});
+
+	// A deploy's SMTP_HOST would be a host real applicants' mail can reach.
+	test.each(['deploy-preview', 'branch-deploy'])(
+		'SMTP_HOST is ignored on a deploy (CONTEXT=%s)',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			vi.stubEnv('SMTP_HOST', 'smtp.example.test');
+			expect(emailDelivery()).toEqual({ mode: 'captured', context });
+		},
+	);
 });
 
 describe('notifyDelivery', () => {

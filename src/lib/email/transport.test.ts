@@ -296,10 +296,18 @@ describe('emailStatus', () => {
 			configured: false,
 		});
 
+		// A deploy's SMTP_HOST counts as configured but never as Local.
 		vi.stubEnv('SMTP_HOST', 'localhost');
 		expect(emailStatus()).toEqual({
-			mode: 'local',
+			mode: 'captured',
 			context: 'deploy-preview',
+			configured: true,
+		});
+
+		vi.stubEnv('CONTEXT', 'dev');
+		expect(emailStatus()).toEqual({
+			mode: 'local',
+			context: 'dev',
 			configured: true,
 		});
 	});
