@@ -513,6 +513,12 @@ async function main() {
 			console.error('MEMBERSHIP_AIRTABLE_API_KEY is not set.');
 			process.exit(1);
 		}
+		// Without the token `fetchSlackMembers()` falls back to faker members
+		// outside production, whose made-up ids would pass `--apply`'s checks.
+		if (!process.env.SLACK_BOT_TOKEN) {
+			console.error('SLACK_BOT_TOKEN is not set; --propose needs the real directory.');
+			process.exit(1);
+		}
 		await propose(apiKey);
 	} else {
 		await apply(process.argv.includes('--dry-run'));
