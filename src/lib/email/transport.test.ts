@@ -215,10 +215,11 @@ describe('delivery modes', () => {
 		expect(createTransport.mock.calls.length).toBe(before);
 		expect(sendMail).not.toHaveBeenCalled();
 		// On a deploy the applicant's address is masked and the body is not
-		// logged — `outbound.test.ts` has the shape; this pins that email uses it.
+		// logged — `outbound.test.ts` has the shape; this pins that email uses
+		// it, and that the maintainer's cc is masked too.
 		expect(info).toHaveBeenCalledWith(
 			'[email captured] deploy-preview a•••@example.test',
-			{ cc: 'maintainer@example.test', subject: input.subject },
+			{ cc: 'm•••@example.test', subject: input.subject },
 		);
 		info.mockRestore();
 	});
