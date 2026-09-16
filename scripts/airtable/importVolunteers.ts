@@ -372,50 +372,56 @@ async function apply(dryRun: boolean) {
 	let attributed = 0;
 
 	for (const entry of mapped) {
-		const [row] = await database
-			.insert(volunteer)
-			.values({
-				slackUserId: entry.slackUserId,
-				// The Airtable name is what a maintainer will recognise. A later
-				// sign-in does not overwrite it; `claimPendingGrant` applies the
-				// Grant written below and fills in the user id.
-				slackDisplayName: entry.profileName ?? entry.name,
-				slackHandle: entry.githubUsername?.trim() || null,
-				roleLabels: entry.roleLabels,
-				// The one place a Volunteer's address comes from in bulk. Slack's
-				// directory does not carry one without `users:read.email`, so without
-				// this the grant and accrual emails reach almost nobody.
-				email: entry.email?.trim().toLowerCase() || null,
-				/**
-				 * Only 25 of the 91 are active. The rest come across so their history
-				 * stays attributable and reactivating them is one click, but they
-				 * arrive paused and with no balance.
-				 */
-				deactivatedAt: entry.active ? null : new Date(),
-				airtableRecordId: entry.airtableRecordId,
-			})
-			.onConflictDoNothing({ target: volunteer.airtableRecordId })
-			.returning({ id: volunteer.id });
-
-		if (row) {
-			created += 1;
-		} else {
-			// Descriptive only, so a re-run may refresh it; the identity may not.
-			await database
-				.update(volunteer)
-				.set({ roleLabels: entry.roleLabels })
-				.where(eq(volunteer.airtableRecordId, entry.airtableRecordId));
-			relabelled += 1;
-		}
-
 		/**
-		 * The other half of a Volunteer. Only for the active ones — the paused
-		 * arrive the way `setVolunteerActive` leaves someone, with no role — and
-		 * not gated on `row`: the helper merges rather than duplicates, so a
-		 * second run over people already imported backfills anyone missed.
+		 * One transaction per person: the row, the role, the balance and the
+		 * attribution commit together or not at all. A run that dies halfway
+		 * leaves nothing behind for the retry to misread — in particular no
+		 * `volunteer` row without its `imported` ledger row.
 		 */
-		if (entry.active) {
-			await database.transaction(async (tx) => {
+		await database.transaction(async (tx) => {
+			const [row] = await tx
+				.insert(volunteer)
+				.values({
+					slackUserId: entry.slackUserId,
+					// The Airtable name is what a maintainer will recognise. A later
+					// sign-in does not overwrite it; `claimPendingGrant` applies the
+					// Grant written below and fills in the user id.
+					slackDisplayName: entry.profileName ?? entry.name,
+					slackHandle: entry.githubUsername?.trim() || null,
+					roleLabels: entry.roleLabels,
+					// The one place a Volunteer's address comes from in bulk. Slack's
+					// directory does not carry one without `users:read.email`, so without
+					// this the grant and accrual emails reach almost nobody.
+					email: entry.email?.trim().toLowerCase() || null,
+					/**
+					 * Only 25 of the 91 are active. The rest come across so their history
+					 * stays attributable and reactivating them is one click, but they
+					 * arrive paused and with no balance.
+					 */
+					deactivatedAt: entry.active ? null : new Date(),
+					airtableRecordId: entry.airtableRecordId,
+				})
+				.onConflictDoNothing({ target: volunteer.airtableRecordId })
+				.returning({ id: volunteer.id });
+
+			if (row) {
+				created += 1;
+			} else {
+				// Descriptive only, so a re-run may refresh it; the identity may not.
+				await tx
+					.update(volunteer)
+					.set({ roleLabels: entry.roleLabels })
+					.where(eq(volunteer.airtableRecordId, entry.airtableRecordId));
+				relabelled += 1;
+			}
+
+			/**
+			 * The other half of a Volunteer. Only for the active ones — the paused
+			 * arrive the way `setVolunteerActive` leaves someone, with no role — and
+			 * not gated on `row`: the helper merges rather than duplicates, so a
+			 * second run over people already imported backfills anyone missed.
+			 */
+			if (entry.active) {
 				await grantVolunteerRole(
 					tx,
 					{
@@ -425,30 +431,26 @@ async function apply(dryRun: boolean) {
 					},
 					'Airtable import',
 				);
-			});
-			granted += 1;
-		}
+				granted += 1;
+			}
 
-		/**
-		 * One net row, not a reconstruction.
-		 *
-		 * Airtable's number is a running balance with no history behind it — the
-		 * grants were manual and unrecorded — so there is nothing to replay. A row
-		 * that says "this is what Airtable said, on this date" is the honest
-		 * version of a number nobody can explain further.
-		 */
-		const credit = entry.active ? (entry.invitesAvailable ?? 0) : 0;
-		if (credit > 0) {
-			const existing = await database
-				.select({ id: volunteerInviteLedger.id })
-				.from(volunteerInviteLedger)
-				.where(eq(volunteerInviteLedger.slackUserId, entry.slackUserId))
-				.limit(1);
-
-			// Re-runnable: the ledger is append-only, so a second import would
-			// otherwise double every balance.
-			if (existing.length === 0) {
-				await database.insert(volunteerInviteLedger).values({
+			/**
+			 * One net row, not a reconstruction.
+			 *
+			 * Airtable's number is a running balance with no history behind it — the
+			 * grants were manual and unrecorded — so there is nothing to replay. A row
+			 * that says "this is what Airtable said, on this date" is the honest
+			 * version of a number nobody can explain further.
+			 *
+			 * Written only alongside the `volunteer` row this run created: the two
+			 * share a transaction, so a person already imported has their row, and
+			 * the ledger is append-only, so a second one would double the balance.
+			 * Nothing else in the ledger is consulted — an `admin_grant` added
+			 * between runs is not evidence the import happened.
+			 */
+			const credit = entry.active ? (entry.invitesAvailable ?? 0) : 0;
+			if (row && credit > 0) {
+				await tx.insert(volunteerInviteLedger).values({
 					slackUserId: entry.slackUserId,
 					delta: credit,
 					reason: 'imported',
@@ -456,21 +458,21 @@ async function apply(dryRun: boolean) {
 				});
 				credited += 1;
 			}
-		}
 
-		/**
-		 * Attribute the Invites `importMembership.ts` already brought across. They
-		 * carry only an `inviter_name`; this is what lets a Volunteer's own list
-		 * and the roster's "sent" count include their history.
-		 */
-		if (entry.inviteRecordIds.length > 0) {
-			const updated = await database
-				.update(invite)
-				.set({ inviterSlackUserId: entry.slackUserId })
-				.where(inArray(invite.airtableRecordId, entry.inviteRecordIds))
-				.returning({ id: invite.id });
-			attributed += updated.length;
-		}
+			/**
+			 * Attribute the Invites `importMembership.ts` already brought across. They
+			 * carry only an `inviter_name`; this is what lets a Volunteer's own list
+			 * and the roster's "sent" count include their history.
+			 */
+			if (entry.inviteRecordIds.length > 0) {
+				const updated = await tx
+					.update(invite)
+					.set({ inviterSlackUserId: entry.slackUserId })
+					.where(inArray(invite.airtableRecordId, entry.inviteRecordIds))
+					.returning({ id: invite.id });
+				attributed += updated.length;
+			}
+		});
 	}
 
 	console.log(
@@ -516,7 +518,9 @@ async function main() {
 		// Without the token `fetchSlackMembers()` falls back to faker members
 		// outside production, whose made-up ids would pass `--apply`'s checks.
 		if (!process.env.SLACK_BOT_TOKEN) {
-			console.error('SLACK_BOT_TOKEN is not set; --propose needs the real directory.');
+			console.error(
+				'SLACK_BOT_TOKEN is not set; --propose needs the real directory.',
+			);
 			process.exit(1);
 		}
 		await propose(apiKey);
