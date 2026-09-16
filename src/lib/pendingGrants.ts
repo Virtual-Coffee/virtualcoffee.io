@@ -48,15 +48,16 @@ export function withoutVolunteerRole(
 
 /**
  * Serialise every grant-or-claim for one Slack member. `grantVolunteerRole`
- * is a check-then-write and `claimPendingGrant` reads what it wrote; without
- * this a first sign-in landing between the check and the write leaves a Grant
- * nothing will ever claim. Transaction-scoped, so it releases with the
- * transaction and cannot leak; a lock rather than `FOR UPDATE` because the row
- * being raced on may not exist yet. Held until commit.
+ * and `grantPendingAccess` are check-then-writes and `claimPendingGrant` reads
+ * what they wrote; without this a first sign-in landing between the check and
+ * the write leaves a Grant nothing will ever claim. Transaction-scoped, so it
+ * releases with the transaction and cannot leak; a lock rather than
+ * `FOR UPDATE` because the row being raced on may not exist yet. Held until
+ * commit.
  */
 const SLACK_MEMBER_LOCK = 0x5143;
 
-function lockSlackMember(tx: Transaction, slackUserId: string) {
+export function lockSlackMember(tx: Transaction, slackUserId: string) {
 	return tx.execute(
 		sql`select pg_advisory_xact_lock(${SLACK_MEMBER_LOCK}, hashtext(${slackUserId}))`,
 	);
@@ -144,9 +145,7 @@ export async function grantVolunteerRole(
  *
  * Deliberately never throws: a failed claim must not fail sign-in. The grant
  * stays unclaimed and `listAccessRows()` surfaces the person anyway. Returns
- * `false` for that case, so a caller that is not the sign-in hook — the
- * recovery path in `grantPendingAccess` — can say so instead of reporting
- * success.
+ * `false` for that case so a test can see it; the sign-in hook ignores it.
  */
 export async function claimPendingGrant(account: {
 	providerId: string;
