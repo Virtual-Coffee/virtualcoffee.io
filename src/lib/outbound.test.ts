@@ -1,6 +1,6 @@
-import { afterEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { capture, emailDelivery, notifyDelivery } from './outbound';
+import { capture, deliver, emailDelivery, notifyDelivery } from './outbound';
 
 afterEach(() => vi.unstubAllEnvs());
 
@@ -101,5 +101,145 @@ describe('capture', () => {
 			'\nbody',
 		);
 		info.mockRestore();
+	});
+});
+
+describe('deliver', () => {
+	const live = vi.fn();
+
+	beforeEach(() => {
+		live.mockReset();
+		live.mockResolvedValue({ ok: true, message: 'Posted.' });
+		vi.stubEnv('CONTEXT', 'production');
+	});
+
+	test('captured: logs the message, never calls live, and is a success with a warning', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'membership',
+				body: 'hi',
+				details: { subject: 'Hello' },
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toEqual({
+			ok: true,
+			message: 'Captured, not posted to Slack (deploy-preview).',
+			warning: 'Captured, not posted to Slack (deploy-preview).',
+		});
+		expect(live).not.toHaveBeenCalled();
+		expect(info).toHaveBeenCalledWith(
+			'[slack captured] deploy-preview membership',
+			{ subject: 'Hello' },
+			'\nhi',
+		);
+		info.mockRestore();
+	});
+
+	test('a captured success carries the extra fields the sender declared', async () => {
+		vi.stubEnv('CONTEXT', undefined);
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+
+		await expect(
+			deliver({
+				kind: 'github issue',
+				target: 'org/repo',
+				body: '',
+				unreachable: 'GitHub',
+				captured: { url: null },
+				live,
+			}),
+		).resolves.toMatchObject({ ok: true, url: null });
+	});
+
+	test('live: hands the resolved mode to the sender and returns its result as-is', async () => {
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'coc',
+				body: 'hi',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toEqual({ ok: true, message: 'Posted.' });
+		expect(live).toHaveBeenCalledWith({ mode: 'live' });
+
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+		await deliver({
+			kind: 'email',
+			target: 'a@example.test',
+			body: 'hi',
+			unreachable: 'the mail server',
+			live,
+		});
+		expect(live).toHaveBeenLastCalledWith({
+			mode: 'redirected',
+			context: 'dev',
+			redirectTo: 'maintainer@example.test',
+		});
+	});
+
+	test('a throw from live is a failure naming what could not be reached', async () => {
+		live.mockRejectedValue(new TypeError('fetch failed'));
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'coc',
+				body: 'hi',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toEqual({
+			ok: false,
+			definitelyNotSent: true,
+			message: 'Could not reach Slack: fetch failed',
+		});
+
+		live.mockRejectedValue('nope');
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'coc',
+				body: 'hi',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toMatchObject({ message: 'Could not reach Slack.' });
+	});
+
+	test('a timeout may have stranded a message the server had begun accepting', async () => {
+		live.mockRejectedValue(new DOMException('timed out', 'TimeoutError'));
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'coc',
+				body: 'hi',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toMatchObject({ ok: false, definitelyNotSent: false });
+
+		live.mockRejectedValue(
+			Object.assign(new Error('late'), { code: 'ETIMEDOUT' }),
+		);
+		await expect(
+			deliver({
+				kind: 'email',
+				target: 'a@example.test',
+				body: 'hi',
+				unreachable: 'the mail server',
+				isTimeout: (error) => (error as { code?: string }).code === 'ETIMEDOUT',
+				live,
+			}),
+		).resolves.toEqual({
+			ok: false,
+			definitelyNotSent: false,
+			message: 'Could not reach the mail server: late',
+		});
 	});
 });
