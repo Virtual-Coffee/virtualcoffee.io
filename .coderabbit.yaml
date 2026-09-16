@@ -9,6 +9,9 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+    # Any target branch, not just main — stacked PRs target their parent layer.
+    base_branches:
+      - '.*'
     # Opt in per PR: only PRs carrying this label are reviewed automatically.
     labels:
       - 'coderabbit-review'
