@@ -3,11 +3,12 @@
 import { useId, useState } from 'react';
 
 import { AdminDialog } from '@/components/AdminDialog';
+import type { TimeInput } from '@/lib/eventDraft';
 import type { AdminEvent } from '@/lib/eventsCalendar';
 import { displayParts } from '@/util/date';
 import { useModalDialog } from '@/util/useModalDialog';
 
-import { TimeFields, type TimeInput } from './fields';
+import { TimeFields } from './fields';
 
 function draftFrom(event: AdminEvent): TimeInput {
 	const start = displayParts(event.start);

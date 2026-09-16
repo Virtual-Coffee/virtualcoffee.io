@@ -3,12 +3,11 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { fakeCalendarClient } from '@/test/calendar';
 
+import type { SeriesInput } from './eventDraft';
 import {
 	CalendarConflictError,
 	eventsCalendar,
 	isCalendarEventId,
-	isZoomJoinLink,
-	type SeriesInput,
 } from './eventsCalendar';
 
 const NOW = '2026-09-14T12:00:00-04:00'; // a Monday, Eastern
@@ -759,18 +758,6 @@ describe('writes', () => {
 		await expect(cal.restoreEvent('e1', '"old"')).rejects.toBeInstanceOf(
 			CalendarConflictError,
 		);
-	});
-});
-
-describe('isZoomJoinLink', () => {
-	test.each([
-		['https://us02web.zoom.us/j/12345678901?pwd=abc', true],
-		['https://zoom.us/j/123456789', true],
-		['https://zoom.us/j/12345', false],
-		['https://meet.google.com/abc-defg-hij', false],
-		['https://zoom.example/j/1', false],
-	])('%s → %s', (url, ok) => {
-		expect(isZoomJoinLink(url)).toBe(ok);
 	});
 });
 

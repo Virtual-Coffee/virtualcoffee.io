@@ -1,6 +1,8 @@
 'use client';
 
-import type { TimeInput } from '@/lib/eventsCalendar';
+import type { ReactNode } from 'react';
+
+import type { Draft, DraftIssue, TimeInput } from '@/lib/eventDraft';
 import {
 	EVENT_TYPE_LABELS,
 	EVENT_TYPES,
@@ -8,9 +10,9 @@ import {
 	type EventType,
 } from '@/lib/eventTypes';
 
-/** The admin-styled controls the three Events forms share. */
+import { DescriptionField } from './descriptionField';
 
-export type { TimeInput };
+/** The admin-styled controls the three Events forms share. */
 
 export function TextField({
 	id,
@@ -117,36 +119,6 @@ export function EventTypeField({
 				))}
 			</select>
 			<div className="form-text">Groups Events for the calendar feed.</div>
-		</div>
-	);
-}
-
-export function TextAreaField({
-	id,
-	label,
-	help,
-	value,
-	onChange,
-}: {
-	id: string;
-	label: string;
-	help?: string;
-	value: string;
-	onChange: (value: string) => void;
-}) {
-	return (
-		<div className="mb-3">
-			<label className="form-label small fw-semibold" htmlFor={id}>
-				{label}
-			</label>
-			<textarea
-				id={id}
-				className="form-control form-control-sm"
-				rows={5}
-				value={value}
-				onChange={(event) => onChange(event.target.value)}
-			/>
-			{help && <div className="form-text">{help}</div>}
 		</div>
 	);
 }
@@ -290,4 +262,98 @@ export function TimeFields({
 			<div className="form-text col-12 mt-1">Eastern time.</div>
 		</div>
 	);
+}
+
+/**
+ * Every field a Series and a one-off Event have in common, read and written
+ * straight on the Draft. `rule` is the slot the Series form fills with its
+ * recurrence controls, or with the text of a rule it cannot edit; the Event
+ * form leaves it empty.
+ */
+export function EventFields({
+	id,
+	draft,
+	set,
+	dateLabel,
+	joinHelp,
+	descriptionHelp,
+	legacy,
+	disabled,
+	rule,
+}: {
+	id: string;
+	draft: Draft;
+	set: (patch: Partial<Draft>) => void;
+	dateLabel: string;
+	joinHelp: string;
+	descriptionHelp: string;
+	/** The entry exists and has no Event Type yet. */
+	legacy: boolean;
+	disabled: boolean;
+	rule?: ReactNode;
+}) {
+	return (
+		<>
+			<TextField
+				id={`${id}-title`}
+				label="Title"
+				value={draft.title}
+				onChange={(title) => set({ title })}
+				required
+			/>
+			<TimeFields
+				id={id}
+				dateLabel={dateLabel}
+				draft={draft}
+				onChange={({ date, startTime, endTime }) =>
+					set({ date, startTime, endTime })
+				}
+			/>
+			{rule}
+			<TextField
+				id={`${id}-join`}
+				label="Join Link"
+				type="url"
+				value={draft.joinLink}
+				onChange={(joinLink) => set({ joinLink })}
+				help={joinHelp}
+				required
+			/>
+			<HostCodeField
+				id={`${id}-host`}
+				value={draft.hostCode}
+				onChange={(hostCode) => set({ hostCode })}
+			/>
+			<EventTypeField
+				id={`${id}-type`}
+				value={draft.eventType}
+				onChange={(eventType) => set({ eventType })}
+				legacy={legacy}
+			/>
+			<DescriptionField
+				id={`${id}-description`}
+				label="Description"
+				value={draft.description}
+				onChange={(description) => set({ description })}
+				disabled={disabled}
+				help={descriptionHelp}
+			/>
+		</>
+	);
+}
+
+/**
+ * Why the save button is disabled — the first thing the Draft is missing,
+ * withheld until the maintainer has touched something, so a new form does not
+ * open already complaining.
+ */
+export function DraftIssueText({
+	issue,
+	touched,
+}: {
+	issue?: DraftIssue;
+	touched: boolean;
+}) {
+	if (!touched || !issue) return null;
+	return <div className="form-text text-danger">{issue.message}</div>;
 }

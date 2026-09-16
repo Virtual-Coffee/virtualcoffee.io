@@ -3,14 +3,43 @@
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 
-import { TextAreaField } from './fields';
-
 const MarkdownEditor = dynamic(() => import('./markdownEditor'), {
 	ssr: false,
 	loading: () => (
 		<textarea className="form-control form-control-sm" rows={5} disabled />
 	),
 });
+
+/** The plain fallback; `fields.tsx` renders this one through DescriptionField. */
+function TextAreaField({
+	id,
+	label,
+	help,
+	value,
+	onChange,
+}: {
+	id: string;
+	label: string;
+	help?: string;
+	value: string;
+	onChange: (value: string) => void;
+}) {
+	return (
+		<div className="mb-3">
+			<label className="form-label small fw-semibold" htmlFor={id}>
+				{label}
+			</label>
+			<textarea
+				id={id}
+				className="form-control form-control-sm"
+				rows={5}
+				value={value}
+				onChange={(event) => onChange(event.target.value)}
+			/>
+			{help && <div className="form-text">{help}</div>}
+		</div>
+	);
+}
 
 /**
  * A Markdown description, edited as rich text (docs/adr/0014). The form still
