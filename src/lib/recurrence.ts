@@ -5,9 +5,15 @@
  * serialising is by hand so the output matches what Google's own UI writes
  * (no `+1FR`, no `INTERVAL=1`). Google expands the rule; nothing here computes
  * occurrences beyond the one check that a first Event lands on the rule.
+ *
+ * Also the rule half of a Draft (`src/lib/eventDraft.ts`): `RecurrenceDraft`
+ * is what the controls hold while it is being typed, and `recurrenceSchema`
+ * is what a save is parsed against. Imported by client components, so nothing
+ * server-only belongs here.
  */
 import { DateTime } from 'luxon';
 import { RRule, type Options } from 'rrule';
+import { z } from 'zod';
 
 import { DISPLAY_ZONE } from '@/util/date';
 
@@ -63,6 +69,128 @@ export type RecurrenceForm =
 export type CustomRecurrence = { kind: 'custom'; rrule: string; text: string };
 
 export type Recurrence = RecurrenceForm | CustomRecurrence;
+
+/** The controls' state: strings where the user types, so a half-typed number survives. */
+export type RecurrenceDraft = {
+	kind: 'weekly' | 'monthly';
+	interval: string;
+	weekdays: Weekday[];
+	ordinals: Ordinal[];
+	weekday: Weekday;
+	endsKind: 'never' | 'until' | 'count';
+	untilDate: string;
+	count: string;
+	weekStart?: Weekday;
+};
+
+export const EMPTY_DRAFT: RecurrenceDraft = {
+	kind: 'weekly',
+	interval: '1',
+	weekdays: [],
+	ordinals: [],
+	weekday: 'TU',
+	endsKind: 'never',
+	untilDate: '',
+	count: '10',
+};
+
+export function draftFromRecurrence(form: RecurrenceForm): RecurrenceDraft {
+	const ends = form.ends;
+	const shared = {
+		interval: String(form.interval),
+		endsKind: ends.kind,
+		untilDate: ends.kind === 'until' ? ends.date : '',
+		count: ends.kind === 'count' ? String(ends.count) : '10',
+	};
+	return form.kind === 'weekly'
+		? {
+				...EMPTY_DRAFT,
+				...shared,
+				kind: 'weekly',
+				weekdays: form.weekdays,
+				...(form.weekStart ? { weekStart: form.weekStart } : {}),
+			}
+		: {
+				...EMPTY_DRAFT,
+				...shared,
+				kind: 'monthly',
+				ordinals: form.ordinals,
+				weekday: form.weekday,
+			};
+}
+
+/** Null while the draft is not yet a rule; `recurrenceSchema` judges the rest. */
+export function draftToForm(draft: RecurrenceDraft): RecurrenceForm | null {
+	const interval = Number(draft.interval);
+	if (!Number.isInteger(interval) || interval < 1) return null;
+	const ends: RecurrenceForm['ends'] | null =
+		draft.endsKind === 'never'
+			? { kind: 'never' }
+			: draft.endsKind === 'until'
+				? draft.untilDate
+					? { kind: 'until', date: draft.untilDate }
+					: null
+				: Number.isInteger(Number(draft.count)) && Number(draft.count) > 0
+					? { kind: 'count', count: Number(draft.count) }
+					: null;
+	if (!ends) return null;
+	if (draft.kind === 'weekly') {
+		if (draft.weekdays.length === 0) return null;
+		return {
+			kind: 'weekly',
+			interval,
+			weekdays: WEEKDAYS.filter((day) => draft.weekdays.includes(day)),
+			ends,
+			...(draft.weekStart ? { weekStart: draft.weekStart } : {}),
+		};
+	}
+	if (draft.ordinals.length === 0) return null;
+	return {
+		kind: 'monthly',
+		interval,
+		ordinals: ORDINALS.filter((n) => draft.ordinals.includes(n)),
+		weekday: draft.weekday,
+		ends,
+	};
+}
+
+/** A display-zone calendar date, as every date a Draft holds is written. */
+export const dateSchema = z
+	.string()
+	.regex(/^\d{4}-\d{2}-\d{2}$/, 'Pick a date.')
+	.refine((value) => DateTime.fromISO(value).isValid, 'Pick a real date.');
+
+const endsSchema = z.discriminatedUnion('kind', [
+	z.object({ kind: z.literal('never') }),
+	z.object({ kind: z.literal('until'), date: dateSchema }),
+	z.object({
+		kind: z.literal('count'),
+		count: z.int().min(1, 'At least one Event.').max(999),
+	}),
+]);
+
+const intervalSchema = z.int().min(1).max(52);
+const weekdaySchema = z.enum(WEEKDAYS);
+
+export const recurrenceSchema = z.discriminatedUnion('kind', [
+	z.object({
+		kind: z.literal('weekly'),
+		interval: intervalSchema,
+		weekdays: z.array(weekdaySchema).min(1, 'Pick at least one day.').max(7),
+		ends: endsSchema,
+		weekStart: weekdaySchema.optional(),
+	}),
+	z.object({
+		kind: z.literal('monthly'),
+		interval: intervalSchema,
+		ordinals: z
+			.array(z.literal(ORDINALS))
+			.min(1, 'Pick at least one week of the month.')
+			.max(5),
+		weekday: weekdaySchema,
+		ends: endsSchema,
+	}),
+]);
 
 const FORM_OPTION_KEYS = new Set<keyof Options>([
 	'freq',

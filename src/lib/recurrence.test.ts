@@ -5,28 +5,35 @@ import { DISPLAY_ZONE } from '@/util/date';
 
 import {
 	describeRecurrence,
+	draftFromRecurrence,
+	draftToForm,
+	EMPTY_DRAFT,
 	endRule,
 	endsBeforeStart,
 	firstOccurrenceMatches,
 	parseRecurrence,
+	recurrenceSchema,
 	serializeRecurrence,
+	type RecurrenceDraft,
 	type RecurrenceForm,
 } from './recurrence';
 
-const weekly: RecurrenceForm = {
+// `satisfies`, not an annotation, so each keeps its own half of the union and
+// a variant below can add `weekStart`.
+const weekly = {
 	kind: 'weekly',
 	interval: 1,
 	weekdays: ['TU', 'TH'],
 	ends: { kind: 'never' },
-};
+} satisfies RecurrenceForm;
 
-const firstAndThird: RecurrenceForm = {
+const firstAndThird = {
 	kind: 'monthly',
 	interval: 1,
 	ordinals: [1, 3],
 	weekday: 'FR',
 	ends: { kind: 'never' },
-};
+} satisfies RecurrenceForm;
 
 describe('parseRecurrence', () => {
 	test('weekly on days', () => {
@@ -259,5 +266,55 @@ describe('endRule', () => {
 		['RRULE:COUNT=10;FREQ=WEEKLY', 'RRULE:FREQ=WEEKLY;UNTIL=20260913T160000Z'],
 	])('%s', (line, expected) => {
 		expect(endRule(line, now)).toBe(expected);
+	});
+});
+
+describe('drafts', () => {
+	const rules: RecurrenceForm[] = [
+		weekly,
+		{ ...weekly, weekStart: 'SU' },
+		{ ...weekly, interval: 3, ends: { kind: 'until', date: '2027-03-14' } },
+		{ ...weekly, weekStart: 'SU', ends: { kind: 'count', count: 4 } },
+		firstAndThird,
+		{
+			...firstAndThird,
+			interval: 2,
+			ends: { kind: 'until', date: '2027-01-01' },
+		},
+		{ ...firstAndThird, ends: { kind: 'count', count: 6 } },
+	];
+
+	test.each(rules)('a rule survives the draft it is edited as: %j', (rule) => {
+		expect(draftToForm(draftFromRecurrence(rule))).toEqual(rule);
+	});
+
+	test.each(rules)('the schema accepts the draft of %j', (rule) => {
+		expect(
+			recurrenceSchema.safeParse(draftToForm(draftFromRecurrence(rule))),
+		).toMatchObject({ success: true });
+	});
+
+	test.each<[string, Partial<RecurrenceDraft>]>([
+		['no days picked', { weekdays: [] }],
+		['no weeks of the month picked', { kind: 'monthly', ordinals: [] }],
+		['a fractional interval', { weekdays: ['TU'], interval: '1.5' }],
+		['an interval of zero', { weekdays: ['TU'], interval: '0' }],
+		['an interval that is not a number', { weekdays: ['TU'], interval: 'two' }],
+		[
+			'an end date left blank',
+			{ weekdays: ['TU'], endsKind: 'until', untilDate: '' },
+		],
+		['a count of zero', { weekdays: ['TU'], endsKind: 'count', count: '0' }],
+	])('%s is not yet a rule', (_what, patch) => {
+		expect(draftToForm({ ...EMPTY_DRAFT, ...patch })).toBeNull();
+	});
+
+	test('days and weeks of the month come back in calendar order', () => {
+		expect(
+			draftToForm({ ...EMPTY_DRAFT, weekdays: ['TH', 'MO', 'SA'] }),
+		).toMatchObject({ weekdays: ['MO', 'TH', 'SA'] });
+		expect(
+			draftToForm({ ...EMPTY_DRAFT, kind: 'monthly', ordinals: [-1, 2, 1] }),
+		).toMatchObject({ ordinals: [1, 2, -1] });
 	});
 });

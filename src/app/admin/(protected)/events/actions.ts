@@ -16,10 +16,10 @@ import {
 } from '@/lib/eventsCalendar';
 import { deliver } from '@/lib/outbound';
 import {
+	dateSchema,
 	endsBeforeStart,
 	firstOccurrenceMatches,
-	ORDINALS,
-	WEEKDAYS,
+	recurrenceSchema,
 } from '@/lib/recurrence';
 
 const CONFLICT =
@@ -28,10 +28,6 @@ const NOT_CONFIGURED =
 	'The Events Calendar is not configured: GOOGLE_SERVICE_ACCOUNT_KEY and GOOGLE_CALENDAR_ID are needed.';
 const GONE = 'That no longer exists on the Events Calendar.';
 
-const dateSchema = z
-	.string()
-	.regex(/^\d{4}-\d{2}-\d{2}$/, 'Pick a date.')
-	.refine((value) => DateTime.fromISO(value).isValid, 'Pick a real date.');
 const timeSchema = z
 	.string()
 	.regex(/^\d{2}:\d{2}$/, 'Pick a time.')
@@ -64,38 +60,6 @@ const eventInputSchema = timeInputSchema
 			'A Zoom Join Link needs its host code, or the Slack bots cannot announce it.',
 		path: ['hostCode'],
 	});
-
-const endsSchema = z.discriminatedUnion('kind', [
-	z.object({ kind: z.literal('never') }),
-	z.object({ kind: z.literal('until'), date: dateSchema }),
-	z.object({
-		kind: z.literal('count'),
-		count: z.int().min(1, 'At least one Event.').max(999),
-	}),
-]);
-
-const intervalSchema = z.int().min(1).max(52);
-const weekdaySchema = z.enum(WEEKDAYS);
-
-const recurrenceSchema = z.discriminatedUnion('kind', [
-	z.object({
-		kind: z.literal('weekly'),
-		interval: intervalSchema,
-		weekdays: z.array(weekdaySchema).min(1, 'Pick at least one day.').max(7),
-		ends: endsSchema,
-		weekStart: weekdaySchema.optional(),
-	}),
-	z.object({
-		kind: z.literal('monthly'),
-		interval: intervalSchema,
-		ordinals: z
-			.array(z.literal(ORDINALS))
-			.min(1, 'Pick at least one week of the month.')
-			.max(5),
-		weekday: weekdaySchema,
-		ends: endsSchema,
-	}),
-]);
 
 // A rule the form cannot edit (`custom`) is sent as null and left alone.
 const seriesUpdateSchema = eventInputSchema
