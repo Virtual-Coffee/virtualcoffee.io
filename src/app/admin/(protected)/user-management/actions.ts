@@ -210,11 +210,19 @@ export async function grantPendingAccess(
 	 */
 	const signedIn = await userForSlackId(member.id);
 	if (signedIn) {
-		await claimPendingGrant({
+		const claimed = await claimPendingGrant({
 			providerId: 'slack',
 			accountId: member.id,
 			userId: signedIn.id,
 		});
+		if (!claimed) {
+			// The grant is written, so the table shows them as stranded either way.
+			revalidate();
+			return {
+				ok: false,
+				message: `${member.displayName} signed in while this was being saved and the grant could not be applied. They are listed below as stranded — set their roles there.`,
+			};
+		}
 	}
 
 	revalidate();
