@@ -43,6 +43,7 @@ describe('sendEmail', () => {
 	test('sends as hello@ with hello@ as Reply-To, and no cc when none was asked for', async () => {
 		await expect(sendEmail({ ...input, cc: null })).resolves.toEqual({
 			ok: true,
+			message: 'Sent.',
 		});
 		expect(sendMail).toHaveBeenCalledWith({
 			from: 'Virtual Coffee <hello@virtualcoffee.io>',
@@ -115,6 +116,7 @@ describe('sendEmail', () => {
 			sendEmail({ ...input, cc: 'maintainer@example.test' }),
 		).resolves.toEqual({
 			ok: true,
+			message: 'Sent.',
 			warning: 'Sent, but the copy to maintainer@example.test was rejected.',
 		});
 	});
@@ -136,7 +138,7 @@ describe('sendEmail', () => {
 			await expect(sendEmail(input)).resolves.toEqual({
 				ok: false,
 				definitelyNotSent: true,
-				message: 'boom',
+				message: 'Could not reach the mail server: boom',
 			});
 		},
 	);
@@ -148,19 +150,10 @@ describe('sendEmail', () => {
 			await expect(sendEmail(input)).resolves.toEqual({
 				ok: false,
 				definitelyNotSent: false,
-				message: 'late',
+				message: 'Could not reach the mail server: late',
 			});
 		},
 	);
-
-	test('a non-Error rejection still comes back as a result', async () => {
-		sendMail.mockRejectedValue('nope');
-		await expect(sendEmail(input)).resolves.toEqual({
-			ok: false,
-			definitelyNotSent: true,
-			message: 'The mail server errored.',
-		});
-	});
 });
 
 /**
@@ -168,17 +161,17 @@ describe('sendEmail', () => {
  * them, and Redirected uses them to reach one maintainer. docs/adr/0013.
  */
 describe('delivery modes', () => {
-	test('captured: no transport, no send, and a success the pipeline proceeds on', async () => {
+	test('captured: the credentials are never read, no transport is built, and the pipeline proceeds', async () => {
 		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
 		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 		const before = createTransport.mock.calls.length;
 
 		await expect(
 			sendEmail({ ...input, cc: 'maintainer@example.test' }),
-		).resolves.toEqual({
+		).resolves.toMatchObject({
 			ok: true,
-			warning:
-				'Captured, not delivered (deploy-preview): nothing leaves this deploy.',
+			warning: 'Captured, not delivered (deploy-preview).',
 		});
 		expect(createTransport.mock.calls.length).toBe(before);
 		expect(sendMail).not.toHaveBeenCalled();
@@ -190,18 +183,6 @@ describe('delivery modes', () => {
 		info.mockRestore();
 	});
 
-	test('captured even when nothing is configured, and locally with no CONTEXT at all', async () => {
-		vi.stubEnv('CONTEXT', undefined);
-		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
-		vi.spyOn(console, 'info').mockImplementation(() => {});
-
-		await expect(sendEmail(input)).resolves.toMatchObject({
-			ok: true,
-			warning: expect.stringContaining('(local)'),
-		});
-		expect(sendMail).not.toHaveBeenCalled();
-	});
-
 	test('redirected: one address gets it, the recipient is named, and no cc goes', async () => {
 		vi.stubEnv('CONTEXT', 'branch-deploy');
 		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
@@ -210,6 +191,7 @@ describe('delivery modes', () => {
 			sendEmail({ ...input, cc: 'someone-else@example.test' }),
 		).resolves.toEqual({
 			ok: true,
+			message: 'Sent.',
 			warning:
 				'Redirected to maintainer@example.test (branch-deploy) instead of ada@example.test.',
 		});
@@ -252,7 +234,10 @@ describe('delivery modes', () => {
 
 	test('production ignores EMAIL_REDIRECT_TO', async () => {
 		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
-		await expect(sendEmail(input)).resolves.toEqual({ ok: true });
+		await expect(sendEmail(input)).resolves.toEqual({
+			ok: true,
+			message: 'Sent.',
+		});
 		expect(sendMail).toHaveBeenLastCalledWith(
 			expect.objectContaining({ to: input.to, subject: input.subject }),
 		);

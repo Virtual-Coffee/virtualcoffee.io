@@ -4,10 +4,7 @@
  * and no bot needs inviting to the private groups.
  */
 
-import { capture, deployContext, notifyDelivery } from '@/lib/outbound';
-
-/** What happened, in a sentence — recorded as the event body either way. */
-export type NotifyResult = { ok: boolean; message: string };
+import { deliver, type Outbound } from '@/lib/outbound';
 
 /**
  * One webhook per destination, so a missing one only silences its own form.
@@ -31,60 +28,52 @@ const TIMEOUT_MS = 10_000;
  * Post a message, returning rather than throwing: the submission is already
  * written, and the caller records the outcome either way. See docs/adr/0005.
  *
- * Outside production the post is Captured — logged, reported as posted — so a
- * preview never reaches a real channel. Decided before the webhook is looked
- * at: a preview without webhooks is quiet, not "never announced". docs/adr/0013.
+ * Outside production `deliver()` Captures the post before the webhook is
+ * looked at, so a preview without webhooks is quiet, not "never announced".
+ * docs/adr/0013.
  */
-export async function notifySlack(
+export function notifySlack(
 	channel: NotifyChannel,
 	text: string,
-): Promise<NotifyResult> {
-	if (notifyDelivery() === 'captured') {
-		capture('slack', channel, text);
-		return {
-			ok: true,
-			message: `Captured, not posted to Slack (${deployContext()}).`,
-		};
-	}
+): Promise<Outbound> {
+	return deliver({
+		kind: 'slack',
+		target: channel,
+		body: text,
+		unreachable: 'Slack',
+		live: async () => {
+			const url = process.env[WEBHOOK_ENV[channel]];
 
-	const url = process.env[WEBHOOK_ENV[channel]];
+			if (!url) {
+				return {
+					ok: false,
+					definitelyNotSent: true,
+					message: `${WEBHOOK_ENV[channel]} is not set, so nothing was posted to Slack.`,
+				};
+			}
 
-	if (!url) {
-		return {
-			ok: false,
-			message: `${WEBHOOK_ENV[channel]} is not set, so nothing was posted to Slack.`,
-		};
-	}
+			const response = await fetch(url, {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ text, unfurl_links: true }),
+				signal: AbortSignal.timeout(TIMEOUT_MS),
+			});
 
-	try {
-		const response = await fetch(url, {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ text, unfurl_links: true }),
-			signal: AbortSignal.timeout(TIMEOUT_MS),
-		});
+			if (!response.ok) {
+				// Slack returns a plain-text reason ("no_service", "invalid_payload").
+				const detail = await response.text().catch(() => '');
+				return {
+					ok: false,
+					definitelyNotSent: true,
+					message: `Slack rejected the message (${response.status}${
+						detail ? `: ${detail.slice(0, 200)}` : ''
+					}).`,
+				};
+			}
 
-		if (!response.ok) {
-			// Slack returns a plain-text reason ("no_service", "invalid_payload").
-			const detail = await response.text().catch(() => '');
-			return {
-				ok: false,
-				message: `Slack rejected the message (${response.status}${
-					detail ? `: ${detail.slice(0, 200)}` : ''
-				}).`,
-			};
-		}
-
-		return { ok: true, message: 'Posted to Slack.' };
-	} catch (error) {
-		return {
-			ok: false,
-			message:
-				error instanceof Error
-					? `Could not reach Slack: ${error.message}`
-					: 'Could not reach Slack.',
-		};
-	}
+			return { ok: true, message: 'Posted to Slack.' };
+		},
+	});
 }
 
 /**

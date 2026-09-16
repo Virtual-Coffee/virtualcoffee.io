@@ -1,9 +1,8 @@
 import { WebClient } from '@slack/web-api';
 
-import { capture, deployContext, notifyDelivery } from '@/lib/outbound';
+import { deliver, type Outbound } from '@/lib/outbound';
 import { ROLE_LABELS, type RoleName } from '@/lib/permissions';
 import { siteUrl } from '@/util/url.server';
-import type { NotifyResult } from './notify';
 
 const TIMEOUT_MS = 10_000;
 
@@ -17,49 +16,41 @@ const TIMEOUT_MS = 10_000;
  * Same contract as `notifySlack()`: never throws, and outside production the
  * send is Captured rather than reaching a real person. See docs/adr/0013.
  */
-export async function sendSlackDm(
+export function sendSlackDm(
 	slackUserId: string,
 	text: string,
-): Promise<NotifyResult> {
-	if (notifyDelivery() === 'captured') {
-		capture('slack', slackUserId, text);
-		return {
-			ok: true,
-			message: `Captured, not sent to Slack (${deployContext()}).`,
-		};
-	}
+): Promise<Outbound> {
+	return deliver({
+		kind: 'slack',
+		target: slackUserId,
+		body: text,
+		unreachable: 'Slack',
+		live: async () => {
+			const token = process.env.SLACK_BOT_TOKEN;
+			if (!token) {
+				return {
+					ok: false,
+					definitelyNotSent: true,
+					message: 'SLACK_BOT_TOKEN is not set, so no DM was sent.',
+				};
+			}
 
-	const token = process.env.SLACK_BOT_TOKEN;
-	if (!token) {
-		return {
-			ok: false,
-			message: 'SLACK_BOT_TOKEN is not set, so no DM was sent.',
-		};
-	}
+			const client = new WebClient(token, { timeout: TIMEOUT_MS });
+			const opened = await client.conversations.open({ users: slackUserId });
+			const channel = opened.channel?.id;
 
-	try {
-		const client = new WebClient(token, { timeout: TIMEOUT_MS });
-		const opened = await client.conversations.open({ users: slackUserId });
-		const channel = opened.channel?.id;
+			if (!channel) {
+				return {
+					ok: false,
+					definitelyNotSent: true,
+					message: 'Could not open a DM with that Slack member.',
+				};
+			}
 
-		if (!channel) {
-			return {
-				ok: false,
-				message: 'Could not open a DM with that Slack member.',
-			};
-		}
-
-		await client.chat.postMessage({ channel, text });
-		return { ok: true, message: 'DM sent.' };
-	} catch (error) {
-		return {
-			ok: false,
-			message:
-				error instanceof Error
-					? `Could not reach Slack: ${error.message}`
-					: 'Could not reach Slack.',
-		};
-	}
+			await client.chat.postMessage({ channel, text });
+			return { ok: true, message: 'DM sent.' };
+		},
+	});
 }
 
 /**
