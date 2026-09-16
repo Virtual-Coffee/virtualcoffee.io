@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: en-US
+
+reviews:
+  profile: chill
+  suggested_labels: false
+  suggested_reviewers: false
+  estimate_code_review_effort: false
+  auto_review:
+    enabled: true
+    drafts: false
+    # Any target branch, not just main — stacked PRs target their parent layer.
+    base_branches:
+      - '.*'
+    # Opt in per PR: only PRs carrying this label are reviewed automatically.
+    labels:
+      - 'coderabbit-review'
+  # Generated or frozen files — never review-worthy. Lockfile and drizzle
+  # snapshots are committed on purpose (docs/adr/0001); the rest is codegen
+  # or a data snapshot (CLAUDE.md "The bot list", "Content conventions").
+  path_filters:
+    - '!pnpm-lock.yaml'
+    - '!drizzle/**/snapshot.json'
+    - '!src/data/bots.ts'
+    - '!src/data/monthlyChallenges/data/**'
+    - '!src/data/podcast/episodes.json'
+  pre_merge_checks:
+    docstrings:
+      mode: off # comments are one-line pointers to ADRs, not doc prose
+  finishing_touches:
+    docstrings:
+      enabled: false
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - '**/CLAUDE.md'
+      - 'CONTEXT.md'
+      - 'docs/adr/**/*.md'
