@@ -3,11 +3,11 @@
  * issues. Live delivery is production only; everywhere else is Captured
  * (built and logged, the caller carries on as though it went) unless an opt-in
  * says otherwise. Email's opt-in is Local (`SMTP_HOST`, a local-only sink such
- * as Mailpit). See docs/adr/0013.
+ * as Mailpit), honoured on a checkout only. See docs/adr/0013.
  *
  * `CONTEXT` is Netlify's: `production`, `deploy-preview`, `branch-deploy`, or
- * `dev` under `netlify dev`. Plain `next dev` has none, which is non-production
- * too — the rule is "production or not", never "deployed or not".
+ * `dev` under `netlify dev`. Plain `next dev` has none. Live is decided on
+ * "production or not"; Local on "a checkout or not" — a deploy is neither.
  */
 
 export type DeliveryMode = 'live' | 'captured';
@@ -81,12 +81,14 @@ export type EmailDelivery =
  * `SMTP_HOST` turns Captured into Local: delivered for real, exactly as
  * production would address it, to a local-only SMTP sink such as Mailpit — no
  * Google credentials needed. It never leaves the machine, so no redirect
- * address is involved.
+ * address is involved. Only a checkout honours it: on a deploy the same
+ * variable would name a host that real applicants' mail can reach, so a
+ * preview stays Captured whatever is set.
  */
 export function emailDelivery(): EmailDelivery {
 	if (isProduction()) return { mode: 'live' };
 
-	if (process.env.SMTP_HOST?.trim()) {
+	if (!isDeployed() && process.env.SMTP_HOST?.trim()) {
 		return { mode: 'local', context: deployContext() };
 	}
 	return { mode: 'captured', context: deployContext() };
