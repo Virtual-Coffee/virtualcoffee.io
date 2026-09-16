@@ -273,13 +273,19 @@ describe('setVolunteerActive', () => {
 			message: 'Volunteering restarted.',
 		});
 		expect((await volunteerRow('U_ADA'))?.deactivatedAt).toBeNull();
+		// A restart is the grant addVolunteer makes, and a Grant beside a
+		// signed-in account is one their sign-in failed to claim: it is applied
+		// with the restart and claimed (docs/adr/0009).
 		await expect(roleOf(ada.id)).resolves.toMatchObject({
-			role: 'coc_reviewer,volunteer',
+			role: 'coc_reviewer,waitlist_reviewer,volunteer',
 			roleGrantedBy: 'Local dev',
 		});
-		// A restart is the grant addVolunteer makes: once an account exists it
-		// is the authority, and a leftover grant is not written to as well.
-		await expect(grantRole('U_ADA')).resolves.toEqual(['waitlist_reviewer']);
+		await expect(
+			db()
+				.select({ claimedUserId: pendingGrant.claimedUserId })
+				.from(pendingGrant)
+				.where(eq(pendingGrant.slackUserId, 'U_ADA')),
+		).resolves.toEqual([{ claimedUserId: ada.id }]);
 		// Already signed in throughout — no DM either time.
 		expect(sendSlackDm).not.toHaveBeenCalled();
 	});
