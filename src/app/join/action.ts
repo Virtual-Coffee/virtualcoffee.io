@@ -4,7 +4,8 @@ import { and, eq, gt, inArray, sql } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-import { applicationEvent, db, invite, membershipApplication } from '@/db';
+import { db, invite, membershipApplication } from '@/db';
+import { recordEvent, recordOutcome } from '@/lib/eventLog';
 import { hashClaimToken } from '@/lib/invites';
 import { QUEUE_STATUSES } from '@/lib/applicationStatuses';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
@@ -156,14 +157,17 @@ export async function submitMembershipApplication(
 				})
 				.returning({ id: membershipApplication.id });
 
-			await tx.insert(applicationEvent).values({
-				applicationId: row.id,
-				type: 'submitted',
-				toStatus: 'waitlisted',
-				body: claimed
-					? `Application submitted from an invite by ${claimed.inviterName ?? 'a volunteer'}`
-					: 'Application submitted',
-			});
+			await recordEvent(
+				{ kind: 'application', id: row.id },
+				{
+					type: 'submitted',
+					toStatus: 'waitlisted',
+					body: claimed
+						? `Application submitted from an invite by ${claimed.inviterName ?? 'a volunteer'}`
+						: 'Application submitted',
+				},
+				tx,
+			);
 
 			return { applicationId: row.id, claimed };
 		});
@@ -194,20 +198,14 @@ export async function submitMembershipApplication(
 			}),
 		);
 
-		try {
-			await db()
-				.insert(applicationEvent)
-				.values({
-					applicationId: result.applicationId,
-					type: notified.ok ? 'notification_sent' : 'notification_failed',
-					body: notified.ok
-						? 'Slack notified of an invited application'
-						: `Slack notification failed: ${notified.message}`,
-				});
-		} catch (error) {
-			// The application is safe; only the audit line was lost.
-			console.error('Failed to record an invite notification', error);
-		}
+		await recordOutcome(
+			{ kind: 'application', id: result.applicationId },
+			{
+				channel: 'slack',
+				outbound: notified,
+				what: 'Slack notified of an invited application',
+			},
+		);
 	}
 
 	redirect('/join/thank-you');
