@@ -62,6 +62,7 @@ describe('notifyAndRecord', () => {
 		await expect(
 			notifyAndRecord('coc', id, async () => ({
 				ok: false,
+				definitelyNotSent: true,
 				message: 'Slack rejected the message (404).',
 			})),
 		).resolves.toBeUndefined();
@@ -90,6 +91,7 @@ describe('notifyAndRecord', () => {
 		const fine = await insertCocReport();
 		await notifyAndRecord('coc', failed, async () => ({
 			ok: false,
+			definitelyNotSent: true,
 			message: 'x',
 		}));
 		await notifyAndRecord('coc', fine, async () => ({
@@ -121,7 +123,11 @@ describe('notifyAndRecord', () => {
 	test('the banner clears when someone acts on it, or a later attempt succeeds', async () => {
 		const seen = await insertCocReport();
 		const retried = await insertCocReport();
-		const fail = async () => ({ ok: false, message: 'x' });
+		const fail = async () => ({
+			ok: false as const,
+			definitelyNotSent: true,
+			message: 'x',
+		});
 		await notifyAndRecord('coc', seen, fail);
 		await notifyAndRecord('coc', retried, fail);
 		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });

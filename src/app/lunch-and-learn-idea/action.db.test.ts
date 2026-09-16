@@ -70,7 +70,8 @@ describe('submitLunchAndLearnIdea', () => {
 	test('a GitHub outage neither loses the idea nor stops the Slack message', async () => {
 		createLunchAndLearnIssue.mockResolvedValue({
 			ok: false,
-			message: 'Could not open the GitHub issue: Not Found',
+			definitelyNotSent: true,
+			message: 'Could not reach GitHub: Not Found',
 		});
 		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 
@@ -85,7 +86,7 @@ describe('submitLunchAndLearnIdea', () => {
 			{ type: 'submitted', body: 'Idea submitted' },
 			{
 				type: 'notification_failed',
-				body: 'Could not open the GitHub issue: Not Found Posted to Slack.',
+				body: 'Could not reach GitHub: Not Found Posted to Slack.',
 			},
 		]);
 	});
@@ -94,7 +95,7 @@ describe('submitLunchAndLearnIdea', () => {
 		createLunchAndLearnIssue.mockResolvedValue({
 			ok: true,
 			url: null,
-			message: 'Captured, no GitHub issue opened (deploy-preview).',
+			message: 'Captured, not opened on GitHub (deploy-preview).',
 		});
 		notifySlack.mockResolvedValue({
 			ok: true,
@@ -110,7 +111,7 @@ describe('submitLunchAndLearnIdea', () => {
 		);
 		expect(events[1]).toEqual({
 			type: 'notification_sent',
-			body: 'Captured, no GitHub issue opened (deploy-preview). Captured, not posted to Slack (deploy-preview).',
+			body: 'Captured, not opened on GitHub (deploy-preview). Captured, not posted to Slack (deploy-preview).',
 		});
 	});
 
@@ -151,6 +152,7 @@ describe('submitLunchAndLearnIdea', () => {
 		});
 		notifySlack.mockResolvedValue({
 			ok: false,
+			definitelyNotSent: true,
 			message: 'Could not reach Slack.',
 		});
 

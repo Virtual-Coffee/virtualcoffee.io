@@ -66,10 +66,10 @@ describe('createLunchAndLearnIssue', () => {
 		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 		const { createLunchAndLearnIssue } = await load();
 
-		await expect(createLunchAndLearnIssue(idea)).resolves.toEqual({
+		await expect(createLunchAndLearnIssue(idea)).resolves.toMatchObject({
 			ok: true,
 			url: null,
-			message: 'Captured, no GitHub issue opened (deploy-preview).',
+			warning: 'Captured, not opened on GitHub (deploy-preview).',
 		});
 		expect(octokit.constructed).toEqual([]);
 		expect(info).toHaveBeenCalledWith(
@@ -219,7 +219,8 @@ describe('createLunchAndLearnIssue', () => {
 		octokit.create.mockRejectedValueOnce(new Error('Not Found'));
 		await expect(createLunchAndLearnIssue(idea)).resolves.toEqual({
 			ok: false,
-			message: 'Could not open the GitHub issue: Not Found',
+			definitelyNotSent: true,
+			message: 'Could not reach GitHub: Not Found',
 		});
 
 		await createLunchAndLearnIssue(idea);
