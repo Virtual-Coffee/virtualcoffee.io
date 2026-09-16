@@ -1,6 +1,6 @@
-import { and, eq, gt, isNull } from 'drizzle-orm';
+import { and, eq, gt, isNull, lt } from 'drizzle-orm';
 
-import { db, inviteToken, type Transaction } from '@/db';
+import { db, inviteToken } from '@/db';
 import { hashToken, newToken } from '@/lib/tokens';
 
 /**
@@ -15,47 +15,37 @@ import { hashToken, newToken } from '@/lib/tokens';
 const TOKEN_TTL_DAYS = 30;
 
 /**
- * Mint a Slack invite token. By default it supersedes any still-live one for
- * the same application — one working link at a time: a re-send is for a link
- * that was lost, and a lost link is one somebody else may be holding, for up
- * to 30 days if it were left to expire on its own. The old link then reads as
- * expired on /join-slack, which is also what it is.
- *
- * Approval passes `supersede: false`. Two maintainers approving the same
- * person at once each mint before the status change decides who won, and the
- * loser must not have killed the winner's link on the way in; the loser
- * expires its own with `expireSlackInviteToken` instead.
+ * Mint a Slack invite token. Minting never touches an earlier one: the email
+ * that carries this token has not gone yet, and until it has, the previous
+ * link is the only one the member holds. Two maintainers approving the same
+ * person at once each mint before the status change decides who won, and
+ * the loser must not have killed the winner's link on the way in — it
+ * expires its own with `expireSlackInviteToken`. A re-send retires the
+ * earlier links with `supersedeSlackInviteTokens` once its email has gone.
  */
 export async function createSlackInviteToken(
 	applicationId: string,
-	{ supersede = true }: { supersede?: boolean } = {},
 ): Promise<{ id: string; token: string; expiresAt: Date }> {
 	const { token, expiresAt } = newToken(TOKEN_TTL_DAYS);
-	const now = new Date();
 
-	const id = await db().transaction(async (tx) => {
-		if (supersede) await expireSlackInviteTokens(applicationId, now, tx);
+	const [row] = await db()
+		.insert(inviteToken)
+		.values({
+			applicationId,
+			purpose: 'slack',
+			tokenHash: hashToken(token),
+			expiresAt,
+		})
+		.returning({ id: inviteToken.id });
 
-		const [row] = await tx
-			.insert(inviteToken)
-			.values({
-				applicationId,
-				purpose: 'slack',
-				tokenHash: hashToken(token),
-				expiresAt,
-			})
-			.returning({ id: inviteToken.id });
-		return row.id;
-	});
-
-	return { id, token, expiresAt };
+	return { id: row.id, token, expiresAt };
 }
 
 /**
- * Expire one token, by id, as of `now`: an approval that lost the race after
- * its invite email had gone kills the link in that email, and only that one,
- * so it stops admitting someone the panel no longer shows as approved while
- * the winning approval's link keeps working.
+ * Expire one token, by id, as of `now`: a send that failed after its token
+ * was minted kills the link that may nonetheless have been delivered — a
+ * timed-out send can still have gone — and only that one, so the link the
+ * member already holds keeps working.
  */
 export async function expireSlackInviteToken(
 	id: string,
@@ -73,13 +63,27 @@ export async function expireSlackInviteToken(
 		);
 }
 
-/** Expire every live Slack token for an application, as of `now` — the supersession. */
-export async function expireSlackInviteTokens(
+/**
+ * The supersession: expire every live Slack token for an application minted
+ * before `keep`, as of `now` — one working link at a time. A re-send is for a
+ * link that was lost, and a lost link is one somebody else may be holding,
+ * for up to 30 days if it were left to expire on its own. By `createdAt`
+ * rather than "all but `keep`" so the newest link always survives, whichever
+ * of two concurrent re-sends finishes last; the old link then reads as
+ * expired on /join-slack, which is also what it is. Compared in the database
+ * — a `created_at` read back into a JS Date loses the microseconds that tell
+ * two tokens minted in the same millisecond apart.
+ */
+export async function supersedeSlackInviteTokens(
 	applicationId: string,
+	keep: { id: string },
 	now: Date,
-	tx: Transaction | ReturnType<typeof db> = db(),
 ): Promise<void> {
-	await tx
+	const kept = db()
+		.select({ createdAt: inviteToken.createdAt })
+		.from(inviteToken)
+		.where(eq(inviteToken.id, keep.id));
+	await db()
 		.update(inviteToken)
 		.set({ expiresAt: now })
 		.where(
@@ -88,6 +92,7 @@ export async function expireSlackInviteTokens(
 				eq(inviteToken.purpose, 'slack'),
 				isNull(inviteToken.usedAt),
 				gt(inviteToken.expiresAt, now),
+				lt(inviteToken.createdAt, kept),
 			),
 		);
 }
