@@ -1,16 +1,13 @@
 'use server';
 
-import { and, eq, isNull, type SQL } from 'drizzle-orm';
+import { eq, isNull } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 import {
-	applicationEvent,
 	db,
 	invite,
 	membershipApplication,
 	type ApplicationStatus,
-	type Database,
-	type Transaction,
 } from '@/db';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
 import { checkNote } from '@/lib/notes';
@@ -27,89 +24,12 @@ import {
 	supersedeSlackInviteTokens,
 } from '@/lib/inviteTokens';
 import { getApplication } from '@/lib/applications';
+import {
+	recordEvent,
+	recordOutcome,
+	transitionAndRecord,
+} from '@/lib/eventLog';
 import { siteUrl } from '@/util/url.server';
-
-type EventInput = {
-	applicationId: string;
-	actorUserId: string | null;
-	type:
-		| 'coffee_invited'
-		| 'attendance_recorded'
-		| 'approved'
-		| 'declined'
-		| 'withdrawn'
-		| 'note'
-		| 'email_sent'
-		| 'email_failed';
-	fromStatus?: ApplicationStatus | null;
-	toStatus?: ApplicationStatus | null;
-	body?: string | null;
-};
-
-async function recordEvent(
-	input: EventInput,
-	executor: Database | Transaction = db(),
-) {
-	await executor.insert(applicationEvent).values({
-		applicationId: input.applicationId,
-		actorUserId: input.actorUserId,
-		type: input.type,
-		fromStatus: input.fromStatus ?? null,
-		toStatus: input.toStatus ?? null,
-		body: input.body ?? null,
-	});
-}
-
-/**
- * Move an application on from the status it was read at.
- *
- * Conditional on that status still being current, so two maintainers acting
- * on the same row within seconds cannot both write — the second finds no row
- * and is told to reload, instead of overwriting a decline or recording a
- * second event with a stale `fromStatus`. Same shape as `cancelInvite` and
- * the maintenance sweep's `expire()`. `guard` narrows it further for a write
- * that leaves the status alone and so cannot be fenced by it.
- */
-async function transition(
-	applicationId: string,
-	from: ApplicationStatus,
-	patch: Partial<typeof membershipApplication.$inferInsert>,
-	executor: Database | Transaction = db(),
-	guard?: SQL,
-): Promise<boolean> {
-	const moved = await executor
-		.update(membershipApplication)
-		.set(patch)
-		.where(
-			and(
-				eq(membershipApplication.id, applicationId),
-				eq(membershipApplication.status, from),
-				guard,
-			),
-		)
-		.returning({ id: membershipApplication.id });
-	return moved.length > 0;
-}
-
-/**
- * A status change and the event that records it commit together, so a failed
- * event insert cannot leave a row that moved with no history saying who moved
- * it. False means the transition did not apply and nothing was written.
- */
-async function transitionAndRecord(
-	applicationId: string,
-	from: ApplicationStatus,
-	patch: Partial<typeof membershipApplication.$inferInsert>,
-	event: Omit<EventInput, 'applicationId'>,
-	guard?: SQL,
-): Promise<boolean> {
-	return db().transaction(async (tx) => {
-		const moved = await transition(applicationId, from, patch, tx, guard);
-		if (!moved) return false;
-		await recordEvent({ applicationId, ...event }, tx);
-		return true;
-	});
-}
 
 function changedUnderneath(name: string): string {
 	return `${name}’s application changed while you were looking at it. Reload the page to see where it is now.`;
@@ -133,6 +53,7 @@ export async function sendCoffeeInvite(
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
+	const subject = { kind: 'application', id: applicationId } as const;
 
 	if (!application) {
 		return { ok: false, message: 'Application not found.', emailSent: false };
@@ -158,11 +79,11 @@ export async function sendCoffeeInvite(
 	});
 
 	if (!sent.ok) {
-		await recordEvent({
-			applicationId,
+		await recordOutcome(subject, {
+			channel: 'email',
+			outbound: sent,
+			what: `Coffee invite to ${application.email}`,
 			actorUserId: actor,
-			type: 'email_failed',
-			body: `Coffee invite to ${application.email} failed: ${sent.message}`,
 		});
 		return {
 			ok: false,
@@ -172,7 +93,7 @@ export async function sendCoffeeInvite(
 	}
 
 	const moved = await transitionAndRecord(
-		applicationId,
+		subject,
 		'waitlisted',
 		{ status: 'coffee_invited', coffeeInvitedAt: new Date() },
 		{
@@ -186,8 +107,7 @@ export async function sendCoffeeInvite(
 
 	if (!moved) {
 		// The email has gone regardless, so the history must say so.
-		await recordEvent({
-			applicationId,
+		await recordEvent(subject, {
 			actorUserId: actor,
 			type: 'email_sent',
 			body: `Coffee invite emailed to ${application.email}, but the application had already left Waitlisted`,
@@ -210,6 +130,7 @@ export async function recordAttendance(
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
+	const subject = { kind: 'application', id: applicationId } as const;
 
 	if (!application) {
 		return { ok: false, message: 'Application not found.' };
@@ -227,7 +148,7 @@ export async function recordAttendance(
 	// event. The write itself requires the date to still be unset; a read
 	// beforehand would let two requests both pass it.
 	const recorded = await transitionAndRecord(
-		applicationId,
+		subject,
 		'coffee_invited',
 		{ coffeeAttendedAt: new Date() },
 		{
@@ -256,6 +177,7 @@ export async function approveMembership(
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
+	const subject = { kind: 'application', id: applicationId } as const;
 
 	if (!application) {
 		return { ok: false, message: 'Application not found.', emailSent: false };
@@ -286,11 +208,11 @@ export async function approveMembership(
 
 	if (!welcomeSent.ok) {
 		await expireSlackInviteToken(tokenId, new Date());
-		await recordEvent({
-			applicationId,
+		await recordOutcome(subject, {
+			channel: 'email',
+			outbound: welcomeSent,
+			what: `Welcome email to ${application.email}`,
 			actorUserId: actor,
-			type: 'email_failed',
-			body: `Welcome email to ${application.email} failed: ${welcomeSent.message}`,
 		});
 		return {
 			ok: false,
@@ -310,11 +232,11 @@ export async function approveMembership(
 	if (!slackSent.ok) {
 		// A timeout may have delivered the link anyway; kill it before saying so.
 		await expireSlackInviteToken(tokenId, new Date());
-		await recordEvent({
-			applicationId,
+		await recordOutcome(subject, {
+			channel: 'email',
+			outbound: slackSent,
+			what: `Slack invite to ${application.email}`,
 			actorUserId: actor,
-			type: 'email_failed',
-			body: `Slack invite to ${application.email} failed: ${slackSent.message}`,
 		});
 		// The welcome email has already gone out, so this is not a clean retry:
 		// say so rather than implying nothing happened.
@@ -327,7 +249,7 @@ export async function approveMembership(
 
 	const now = new Date();
 	const approved = await transitionAndRecord(
-		applicationId,
+		subject,
 		'coffee_invited',
 		{
 			status: 'member',
@@ -349,8 +271,7 @@ export async function approveMembership(
 		// making anyone a member. Only this request's link: if the race was lost
 		// to another approval, that one's link is the member's way in.
 		await expireSlackInviteToken(tokenId, new Date());
-		await recordEvent({
-			applicationId,
+		await recordEvent(subject, {
 			actorUserId: actor,
 			type: 'email_sent',
 			body: `Welcome and Slack invite emailed to ${application.email}, but the application had already left Coffee invited; the Slack link has been invalidated`,
@@ -400,6 +321,7 @@ export async function resendSlackInvite(
 	const session = await requirePermission('waitlist', 'manage');
 	const actor = await actorId(session.user.id);
 	const application = await getApplication(applicationId);
+	const subject = { kind: 'application', id: applicationId } as const;
 
 	if (!application) {
 		return { ok: false, message: 'Application not found.', emailSent: false };
@@ -428,11 +350,11 @@ export async function resendSlackInvite(
 		// A timeout may have delivered the new link anyway; kill it, and only
 		// it — the previous link is still the one the member holds.
 		await expireSlackInviteToken(minted.id, new Date());
-		await recordEvent({
-			applicationId,
+		await recordOutcome(subject, {
+			channel: 'email',
+			outbound: sent,
+			what: `Slack invite re-send to ${application.email}`,
 			actorUserId: actor,
-			type: 'email_failed',
-			body: `Slack invite re-send to ${application.email} failed: ${sent.message}`,
 		});
 		return {
 			ok: false,
@@ -442,11 +364,11 @@ export async function resendSlackInvite(
 	}
 
 	await supersedeSlackInviteTokens(applicationId, minted, new Date());
-	await recordEvent({
-		applicationId,
+	await recordOutcome(subject, {
+		channel: 'email',
+		outbound: sent,
+		what: `Slack invite re-sent to ${application.email}`,
 		actorUserId: actor,
-		type: 'email_sent',
-		body: `Slack invite re-sent to ${application.email}`,
 	});
 
 	revalidatePath(`/admin/waitlist/${applicationId}`);
@@ -492,7 +414,7 @@ async function close(
 	}
 
 	const closed = await transitionAndRecord(
-		applicationId,
+		{ kind: 'application', id: applicationId },
 		application.status,
 		{ status, closedAt: new Date() },
 		{
@@ -540,12 +462,10 @@ export async function addNote(
 	const note = checkNote(body);
 	if (!note.ok) return note;
 
-	await recordEvent({
-		applicationId,
-		actorUserId: actor,
-		type: 'note',
-		body: note.body,
-	});
+	await recordEvent(
+		{ kind: 'application', id: applicationId },
+		{ actorUserId: actor, type: 'note', body: note.body },
+	);
 
 	revalidatePath(`/admin/waitlist/${applicationId}`);
 	return { ok: true };

@@ -1,7 +1,8 @@
 'use client';
 
 import type { HistoryEntry } from '@/lib/applications';
-import { EVENT_LABELS, formatDateTime } from '../../presentation';
+import { eventLabel } from '@/lib/eventLabels';
+import { formatDateTime } from '../../presentation';
 import { Timeline } from '../../timeline';
 
 export function HistoryTimeline({ history }: { history: HistoryEntry[] }) {
@@ -19,7 +20,7 @@ export function HistoryTimeline({ history }: { history: HistoryEntry[] }) {
 						) : (
 							<>
 								{entry.actorName ? <strong>{entry.actorName} </strong> : null}
-								{EVENT_LABELS[entry.type] ?? entry.type}
+								{eventLabel(entry.type, 'sentence')}
 								{entry.body ? (
 									<span className="text-body-secondary"> — {entry.body}</span>
 								) : null}
