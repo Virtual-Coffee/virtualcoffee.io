@@ -63,7 +63,10 @@ describe('submitLunchAndLearnIdea', () => {
 		);
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Idea submitted' },
-			{ type: 'notification_sent', body: `Opened ${ISSUE} Posted to Slack.` },
+			{
+				type: 'notification_sent',
+				body: 'Lunch & Learn issue opened on GitHub',
+			},
 		]);
 	});
 
@@ -86,7 +89,7 @@ describe('submitLunchAndLearnIdea', () => {
 			{ type: 'submitted', body: 'Idea submitted' },
 			{
 				type: 'notification_failed',
-				body: 'Could not reach GitHub: Not Found Posted to Slack.',
+				body: 'Lunch & Learn issue opened on GitHub failed: Could not reach GitHub: Not Found Posted to Slack.',
 			},
 		]);
 	});
@@ -96,10 +99,12 @@ describe('submitLunchAndLearnIdea', () => {
 			ok: true,
 			url: null,
 			message: 'Captured, not opened on GitHub (deploy-preview).',
+			warning: 'Captured, not opened on GitHub (deploy-preview).',
 		});
 		notifySlack.mockResolvedValue({
 			ok: true,
 			message: 'Captured, not posted to Slack (deploy-preview).',
+			warning: 'Captured, not posted to Slack (deploy-preview).',
 		});
 
 		const { row, events } = await submit();
@@ -111,7 +116,7 @@ describe('submitLunchAndLearnIdea', () => {
 		);
 		expect(events[1]).toEqual({
 			type: 'notification_sent',
-			body: 'Captured, not opened on GitHub (deploy-preview). Captured, not posted to Slack (deploy-preview).',
+			body: 'Lunch & Learn issue opened on GitHub — Captured, not opened on GitHub (deploy-preview). Captured, not posted to Slack (deploy-preview).',
 		});
 	});
 
@@ -138,9 +143,10 @@ describe('submitLunchAndLearnIdea', () => {
 			'lunch-and-learn',
 			`New Lunch & Learn Submission: Property testing by Ada\n\nGitHub Link: ${ISSUE}`,
 		);
+		// The row lost the link, so History is the only place that has it.
 		expect(result.events[1]).toEqual({
 			type: 'notification_sent',
-			body: `Opened ${ISSUE} The issue link could not be saved to the submission. Posted to Slack.`,
+			body: `Lunch & Learn issue opened on GitHub — Opened ${ISSUE}. The issue link could not be saved to the submission.`,
 		});
 	});
 
@@ -161,7 +167,7 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(row.githubIssueUrl).toBe(ISSUE);
 		expect(events[1]).toEqual({
 			type: 'notification_failed',
-			body: `Opened ${ISSUE} Could not reach Slack.`,
+			body: `Lunch & Learn issue opened on GitHub failed: Opened ${ISSUE} Could not reach Slack.`,
 		});
 	});
 });

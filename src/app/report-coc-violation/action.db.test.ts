@@ -60,7 +60,7 @@ describe('submitCocReport', () => {
 		expect(row.reference).toBe(1);
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Report submitted' },
-			{ type: 'notification_sent', body: 'Posted to Slack.' },
+			{ type: 'notification_sent', body: 'Slack notified of a CoC report' },
 		]);
 		expect(notifySlack).toHaveBeenCalledWith(
 			'coc',
@@ -85,7 +85,7 @@ describe('submitCocReport', () => {
 			{ type: 'submitted', body: 'Report submitted' },
 			{
 				type: 'notification_failed',
-				body: 'Slack rejected the message (404: no_service).',
+				body: 'Slack notified of a CoC report failed: Slack rejected the message (404: no_service).',
 			},
 		]);
 		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });

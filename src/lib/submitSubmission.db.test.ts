@@ -3,7 +3,6 @@ import { describe, expect, test, vi } from 'vitest';
 
 import {
 	cocReport,
-	coffeeTableGroupRequest,
 	db,
 	submissionEvent,
 	volunteerSignup,
@@ -14,11 +13,9 @@ import {
 import { failInserts } from '@/test/db/fixtures';
 
 import { failedNotifications } from './submissions';
-import {
-	notifyAndRecord,
-	persistSubmission,
-	recordSubmissionEvent,
-} from './submitSubmission';
+import { notifyAndRecord, persistSubmission } from './submitSubmission';
+
+const NOTIFIED = { channel: 'slack' as const, what: 'Notified' };
 
 async function insertCocReport(executor: Database | Transaction = db()) {
 	const [row] = await executor
@@ -43,12 +40,12 @@ async function eventsFor(id: string) {
 describe('notifyAndRecord', () => {
 	test('a delivered notification is recorded as sent', async () => {
 		const id = await insertCocReport();
-		await notifyAndRecord('coc', id, async () => ({
+		await notifyAndRecord('coc', id, NOTIFIED, async () => ({
 			ok: true,
 			message: 'Posted to #coc',
 		}));
 		await expect(eventsFor(id)).resolves.toEqual([
-			{ type: 'notification_sent', body: 'Posted to #coc' },
+			{ type: 'notification_sent', body: 'Notified' },
 		]);
 	});
 
@@ -60,7 +57,7 @@ describe('notifyAndRecord', () => {
 	test('a failed notification is recorded, and never thrown', async () => {
 		const id = await insertCocReport();
 		await expect(
-			notifyAndRecord('coc', id, async () => ({
+			notifyAndRecord('coc', id, NOTIFIED, async () => ({
 				ok: false,
 				definitelyNotSent: true,
 				message: 'Slack rejected the message (404).',
@@ -69,7 +66,7 @@ describe('notifyAndRecord', () => {
 		await expect(eventsFor(id)).resolves.toEqual([
 			{
 				type: 'notification_failed',
-				body: 'Slack rejected the message (404).',
+				body: 'Notified failed: Slack rejected the message (404).',
 			},
 		]);
 	});
@@ -77,24 +74,24 @@ describe('notifyAndRecord', () => {
 	test('a notifier that throws is treated the same as one that fails', async () => {
 		const id = await insertCocReport();
 		await expect(
-			notifyAndRecord('coc', id, async () => {
+			notifyAndRecord('coc', id, NOTIFIED, async () => {
 				throw new Error('fetch failed');
 			}),
 		).resolves.toBeUndefined();
 		await expect(eventsFor(id)).resolves.toEqual([
-			{ type: 'notification_failed', body: 'fetch failed' },
+			{ type: 'notification_failed', body: 'Notified failed: fetch failed' },
 		]);
 	});
 
 	test('what the /admin banner counts', async () => {
 		const failed = await insertCocReport();
 		const fine = await insertCocReport();
-		await notifyAndRecord('coc', failed, async () => ({
+		await notifyAndRecord('coc', failed, NOTIFIED, async () => ({
 			ok: false,
 			definitelyNotSent: true,
 			message: 'x',
 		}));
-		await notifyAndRecord('coc', fine, async () => ({
+		await notifyAndRecord('coc', fine, NOTIFIED, async () => ({
 			ok: true,
 			message: 'x',
 		}));
@@ -128,8 +125,8 @@ describe('notifyAndRecord', () => {
 			definitelyNotSent: true,
 			message: 'x',
 		});
-		await notifyAndRecord('coc', seen, fail);
-		await notifyAndRecord('coc', retried, fail);
+		await notifyAndRecord('coc', seen, NOTIFIED, fail);
+		await notifyAndRecord('coc', retried, NOTIFIED, fail);
 		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });
 
 		await db()
@@ -138,7 +135,7 @@ describe('notifyAndRecord', () => {
 			.where(eq(cocReport.id, seen));
 		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
 
-		await notifyAndRecord('coc', retried, async () => ({
+		await notifyAndRecord('coc', retried, NOTIFIED, async () => ({
 			ok: true,
 			message: 'x',
 		}));
@@ -152,6 +149,7 @@ describe('notifyAndRecord', () => {
 			notifyAndRecord(
 				'coc',
 				'0199404c-2c5e-7000-8000-000000000000',
+				NOTIFIED,
 				async () => ({
 					ok: true,
 					message: 'x',
@@ -207,65 +205,7 @@ describe('persistSubmission', () => {
 /** Drizzle wraps driver errors; the constraint name is on the cause. */
 const violates = (constraint: string) => ({ cause: { constraint } });
 
-describe('recordSubmissionEvent', () => {
-	test('sets the foreign key for its kind, and only that one', async () => {
-		const [signup] = await db()
-			.insert(volunteerSignup)
-			.values({
-				name: 'Ada',
-				email: 'ada@example.test',
-				githubUsername: 'ada',
-				position: 'Any',
-				description: 'x',
-			})
-			.returning({ id: volunteerSignup.id });
-		const [group] = await db()
-			.insert(coffeeTableGroupRequest)
-			.values({
-				name: 'Ada',
-				email: 'ada@example.test',
-				groupName: 'Rust',
-				description: 'x',
-			})
-			.returning({ id: coffeeTableGroupRequest.id });
-
-		await recordSubmissionEvent({
-			kind: 'volunteers',
-			submissionId: signup.id,
-			type: 'submitted',
-		});
-		await recordSubmissionEvent({
-			kind: 'coffee-tables',
-			submissionId: group.id,
-			type: 'submitted',
-		});
-
-		const rows = await db()
-			.select({
-				coc: submissionEvent.cocReportId,
-				volunteers: submissionEvent.volunteerSignupId,
-				lunchAndLearn: submissionEvent.lunchAndLearnIdeaId,
-				coffeeTables: submissionEvent.coffeeTableGroupRequestId,
-			})
-			.from(submissionEvent);
-		expect(rows).toEqual(
-			expect.arrayContaining([
-				{
-					coc: null,
-					volunteers: signup.id,
-					lunchAndLearn: null,
-					coffeeTables: null,
-				},
-				{
-					coc: null,
-					volunteers: null,
-					lunchAndLearn: null,
-					coffeeTables: group.id,
-				},
-			]),
-		);
-	});
-
+describe('submission_event', () => {
 	test('the database refuses an event with two subjects, or none', async () => {
 		const coc = await insertCocReport();
 		const [signup] = await db()

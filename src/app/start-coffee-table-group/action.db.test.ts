@@ -53,7 +53,10 @@ describe('submitCoffeeTableGroupRequest', () => {
 		);
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Request submitted' },
-			{ type: 'notification_sent', body: 'Posted to Slack.' },
+			{
+				type: 'notification_sent',
+				body: 'Slack notified of a Coffee Table group request',
+			},
 		]);
 	});
 
@@ -72,7 +75,7 @@ describe('submitCoffeeTableGroupRequest', () => {
 			{ type: 'submitted', body: 'Request submitted' },
 			{
 				type: 'notification_failed',
-				body: 'Could not reach Slack: fetch failed',
+				body: 'Slack notified of a Coffee Table group request failed: Could not reach Slack: fetch failed',
 			},
 		]);
 	});

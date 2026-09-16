@@ -22,6 +22,7 @@ import {
 	type SubmissionStatus,
 } from '@/db';
 import { isId } from '@/db/ids';
+import type { SubmissionSubject } from '@/lib/eventLog';
 import type { Section } from '@/lib/permissions';
 import { countByStatus } from '@/lib/statusCounts';
 
@@ -70,8 +71,16 @@ export const SUBMISSION_KINDS = {
 } as const;
 
 export type SubmissionKind = keyof typeof SUBMISSION_KINDS;
-export type SubmissionEventKey =
-	(typeof SUBMISSION_KINDS)[SubmissionKind]['eventKey'];
+export type { SubmissionEventKey } from '@/lib/eventLog';
+
+/** The Subject a Submission's events are recorded and read against. */
+export function submissionSubject(
+	kind: SubmissionKind,
+	id: string,
+): SubmissionSubject {
+	const { table, eventKey } = SUBMISSION_KINDS[kind];
+	return { kind: 'submission', id, table, eventKey };
+}
 
 export const SUBMISSION_KEYS = Object.keys(
 	SUBMISSION_KINDS,

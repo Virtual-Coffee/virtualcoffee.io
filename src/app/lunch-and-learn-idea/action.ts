@@ -80,43 +80,58 @@ export async function submitLunchAndLearnIdea(
 
 	// The issue is created first so the Slack message can link it; neither
 	// failing loses the idea.
-	await notifyAndRecord('lunch-and-learn', saved.id, async () => {
-		const issue = await createLunchAndLearnIssue({
-			...idea,
-			adminUrl: `${siteUrl()}/admin/submissions/lunch-and-learn/${saved.id}`,
-		});
+	await notifyAndRecord(
+		'lunch-and-learn',
+		saved.id,
+		{ channel: 'github issue', what: 'Lunch & Learn issue opened on GitHub' },
+		async () => {
+			const issue = await createLunchAndLearnIssue({
+				...idea,
+				adminUrl: `${siteUrl()}/admin/submissions/lunch-and-learn/${saved.id}`,
+			});
 
-		// A captured issue has no URL to keep (docs/adr/0013).
-		const issueUrl = issue.ok ? issue.url : null;
-		// Slack does not depend on the row carrying the URL, so a failed update is
-		// noted in the event (whose body already names the issue) rather than
-		// allowed to skip the announcement.
-		let unsaved = '';
-		if (issueUrl) {
-			try {
-				await db()
-					.update(lunchAndLearnIdea)
-					.set({ githubIssueUrl: issueUrl })
-					.where(eq(lunchAndLearnIdea.id, saved.id));
-			} catch (error) {
-				console.error(
-					`Could not save the issue URL on Lunch & Learn idea ${saved.id}`,
-					error,
-				);
-				unsaved = ' The issue link could not be saved to the submission.';
+			// A captured issue has no URL to keep (docs/adr/0013).
+			const issueUrl = issue.ok ? issue.url : null;
+			// Slack does not depend on the row carrying the URL, so a failed update is
+			// noted in the event (whose body already names the issue) rather than
+			// allowed to skip the announcement.
+			let unsaved = '';
+			if (issueUrl) {
+				try {
+					await db()
+						.update(lunchAndLearnIdea)
+						.set({ githubIssueUrl: issueUrl })
+						.where(eq(lunchAndLearnIdea.id, saved.id));
+				} catch (error) {
+					console.error(
+						`Could not save the issue URL on Lunch & Learn idea ${saved.id}`,
+						error,
+					);
+					unsaved = ' The issue link could not be saved to the submission.';
+				}
 			}
-		}
 
-		const slack = await notifySlack(
-			'lunch-and-learn',
-			lunchAndLearnMessage({ topic: idea.topic, name: idea.name, issueUrl }),
-		);
+			const slack = await notifySlack(
+				'lunch-and-learn',
+				lunchAndLearnMessage({ topic: idea.topic, name: idea.name, issueUrl }),
+			);
 
-		const message = `${issue.message}${unsaved} ${slack.message}`;
-		return issue.ok && slack.ok
-			? { ok: true, message }
-			: { ok: false, message, definitelyNotSent: true };
-	});
+			const message = `${issue.message}${unsaved} ${slack.message}`;
+			if (!issue.ok || !slack.ok) {
+				return { ok: false, message, definitelyNotSent: true };
+			}
+			// What History needs beyond "it went": a Captured note from either
+			// side, and the issue link if the row could not keep it.
+			const warning = [
+				issue.warning,
+				unsaved ? `${issue.message}.${unsaved}` : undefined,
+				slack.warning,
+			]
+				.filter(Boolean)
+				.join(' ');
+			return warning ? { ok: true, message, warning } : { ok: true, message };
+		},
+	);
 
 	redirect('/lunch-and-learn-idea/thanks');
 }

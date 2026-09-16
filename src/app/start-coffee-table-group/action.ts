@@ -65,17 +65,25 @@ export async function submitCoffeeTableGroupRequest(
 	);
 	if ('error' in saved) return saved.error;
 
-	await notifyAndRecord('coffee-tables', saved.id, async () => {
-		return notifySlack(
-			'coffee-tables',
-			coffeeTableGroupMessage({
-				name: parsed.data.name,
-				email: parsed.data.email,
-				groupName: parsed.data.group_name,
-				description: parsed.data.description,
-			}),
-		);
-	});
+	await notifyAndRecord(
+		'coffee-tables',
+		saved.id,
+		{
+			channel: 'slack',
+			what: 'Slack notified of a Coffee Table group request',
+		},
+		async () => {
+			return notifySlack(
+				'coffee-tables',
+				coffeeTableGroupMessage({
+					name: parsed.data.name,
+					email: parsed.data.email,
+					groupName: parsed.data.group_name,
+					description: parsed.data.description,
+				}),
+			);
+		},
+	);
 
 	redirect('/start-coffee-table-group/thanks');
 }
