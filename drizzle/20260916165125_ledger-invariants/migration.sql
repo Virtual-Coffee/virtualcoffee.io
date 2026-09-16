@@ -1,0 +1,3 @@
+ALTER TABLE "volunteer_invite_ledger" DROP CONSTRAINT "volunteer_invite_ledger_invite_id_invite_id_fkey", ADD CONSTRAINT "volunteer_invite_ledger_invite_id_invite_id_fkey" FOREIGN KEY ("invite_id") REFERENCES "invite"("id") ON DELETE RESTRICT;--> statement-breakpoint
+ALTER TABLE "volunteer_invite_ledger" ADD CONSTRAINT "volunteer_invite_ledger_sign_by_reason" CHECK (("reason" IN ('spend', 'admin_revoke') AND "delta" < 0)
+				OR ("reason" NOT IN ('spend', 'admin_revoke') AND "delta" > 0));

@@ -395,7 +395,7 @@ export const volunteerInviteLedger = pgTable(
 		id: uuid('id').primaryKey().$defaultFn(newId),
 		/** Matches `volunteer.slack_user_id`; see the note on `invite.inviter_slack_user_id`. */
 		slackUserId: text('slack_user_id').notNull(),
-		/** Positive credits, negative spends. Never zero. */
+		/** Positive credits, negative spends, never zero — `sign_by_reason` below. */
 		delta: integer('delta').notNull(),
 		reason: volunteerLedgerReason('reason').notNull(),
 		/**
@@ -405,9 +405,13 @@ export const volunteerInviteLedger = pgTable(
 		 * a question the database answers, not one the job asks and then races.
 		 */
 		periodKey: text('period_key'),
-		/** Set on `spend` and both refunds — the Invite the movement is about. */
+		/**
+		 * Set on `spend` and both refunds — the Invite the movement is about.
+		 * `restrict`, not `set null`: the CHECK below requires it on those rows,
+		 * and a ledger row never changes once written.
+		 */
 		inviteId: uuid('invite_id').references(() => invite.id, {
-			onDelete: 'set null',
+			onDelete: 'restrict',
 		}),
 		/** Null for machine-written rows (accrual, expiry, import). */
 		actorUserId: text('actor_user_id').references(() => user.id, {
@@ -440,6 +444,16 @@ export const volunteerInviteLedger = pgTable(
 			sql`(${table.reason} <> 'monthly_accrual' OR ${table.periodKey} IS NOT NULL)
 				AND (${table.reason} <> 'spend' OR ${table.inviteId} IS NOT NULL)
 				AND (${table.reason} NOT IN ('refund_cancelled', 'refund_expired') OR ${table.inviteId} IS NOT NULL)`,
+		),
+		/**
+		 * The balance is `SUM(delta)`, so a positive `spend` or a zero row would
+		 * corrupt it silently. Named to sort after `reason_keys`: Postgres checks
+		 * constraints in name order and reports the first one violated.
+		 */
+		check(
+			'volunteer_invite_ledger_sign_by_reason',
+			sql`(${table.reason} IN ('spend', 'admin_revoke') AND ${table.delta} < 0)
+				OR (${table.reason} NOT IN ('spend', 'admin_revoke') AND ${table.delta} > 0)`,
 		),
 		index('volunteer_invite_ledger_slack_user_id_idx').on(table.slackUserId),
 	],
