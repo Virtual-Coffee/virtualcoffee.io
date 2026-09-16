@@ -139,7 +139,7 @@ const SEEDS: Seed[] = [
 		howDidYouHear:
 			'A colleague who left for a startup would not stop talking about it. She sent me the newsletter and I read about four issues before applying.',
 		journey:
-			'I started in support at a fintech and talked my way into an internal-tools role after automating a chunk of my own job with some very questionable Python. That was four years ago.\n\nI have since done a proper stint on a platform team â Terraform, a lot of YAML, some Go â and I am now the person people come to for CI problems, which is either a promotion or a trap.',
+			'I started in support at a fintech and talked my way into an internal-tools role after automating a chunk of my own job with some very questionable Python. That was four years ago.\n\nI have since done a proper stint on a platform team — Terraform, a lot of YAML, some Go — and I am now the person people come to for CI problems, which is either a promotion or a trap.',
 		codeInterests:
 			'Developer experience, build tooling, and making the slow bits of a workflow less slow. I have been reading about incremental compilation lately without much of a plan for it.',
 		virtualCoffee:
@@ -192,7 +192,7 @@ const SEEDS: Seed[] = [
 		slackInviteResent: true,
 		howDidYouHear: 'Someone shared the handbook in a Slack I am in.',
 		journey:
-			'I run a tiny agency with my sister â two developers, one designer, a lot of WordPress we are slowly escaping.',
+			'I run a tiny agency with my sister — two developers, one designer, a lot of WordPress we are slowly escaping.',
 		codeInterests:
 			'Getting off WordPress, mainly. Also interested in what "good enough" architecture looks like for very small teams.',
 		virtualCoffee:
