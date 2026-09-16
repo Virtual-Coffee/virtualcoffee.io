@@ -1,4 +1,4 @@
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq, isNull, sql } from 'drizzle-orm';
 
 import { db, pendingGrant, user, volunteer, type Transaction } from '@/db';
 import { parseRoles, serialiseRoles, type RoleName } from '@/lib/permissions';
@@ -47,6 +47,22 @@ export function withoutVolunteerRole(
 }
 
 /**
+ * Serialise every grant-or-claim for one Slack member. `grantVolunteerRole`
+ * is a check-then-write and `claimPendingGrant` reads what it wrote; without
+ * this a first sign-in landing between the check and the write leaves a Grant
+ * nothing will ever claim. Transaction-scoped, so it releases with the
+ * transaction and cannot leak; a lock rather than `FOR UPDATE` because the row
+ * being raced on may not exist yet. Held until commit.
+ */
+const SLACK_MEMBER_LOCK = 0x5143;
+
+function lockSlackMember(tx: Transaction, slackUserId: string) {
+	return tx.execute(
+		sql`select pg_advisory_xact_lock(${SLACK_MEMBER_LOCK}, hashtext(${slackUserId}))`,
+	);
+}
+
+/**
  * Give someone the `volunteer` role, the way access is always given: directly
  * on the user if they have signed in, otherwise as a Pending Grant keyed on the
  * Slack member id that `claimPendingGrant()` applies at their first sign-in.
@@ -69,6 +85,8 @@ export async function grantVolunteerRole(
 	},
 	grantedBy: string,
 ): Promise<void> {
+	await lockSlackMember(tx, member.slackUserId);
+
 	const [existing] = await tx
 		.select({ id: user.id, role: user.role })
 		.from(user)
@@ -148,6 +166,8 @@ export async function claimPendingGrant(account: {
 			.where(eq(user.id, account.userId));
 
 		await db().transaction(async (tx) => {
+			await lockSlackMember(tx, account.accountId);
+
 			const [existing] = await tx
 				.select({ role: user.role })
 				.from(user)
