@@ -7,10 +7,14 @@ import {
 	coffeeTableGroupRequest,
 	db,
 	lunchAndLearnIdea,
-	submissionEvent,
 	volunteerSignup,
 } from '../../src/db';
 import { ATTACHMENT_STORE } from '../../src/lib/attachments';
+import {
+	recordImport,
+	type SubmissionEventKey,
+	type SubmissionTable,
+} from '../../src/lib/eventLog';
 
 /**
  * One-off import of the Airtable "Form Submissions" base into Postgres.
@@ -280,16 +284,8 @@ async function main() {
 	async function importRows<T extends Record<string, unknown>>(
 		label: string,
 		rows: AirtableRow[],
-		table:
-			| typeof cocReport
-			| typeof volunteerSignup
-			| typeof lunchAndLearnIdea
-			| typeof coffeeTableGroupRequest,
-		eventKey:
-			| 'cocReportId'
-			| 'volunteerSignupId'
-			| 'lunchAndLearnIdeaId'
-			| 'coffeeTableGroupRequestId',
+		table: SubmissionTable,
+		eventKey: SubmissionEventKey,
 		toValues: (row: AirtableRow) => Promise<T> | T,
 	) {
 		let inserted = 0;
@@ -322,11 +318,13 @@ async function main() {
 
 				if (!stored) return false;
 
-				await tx.insert(submissionEvent).values({
-					[eventKey]: stored.id,
-					type: 'imported',
-					body: `Imported from Airtable (${row.id})`,
-				});
+				await recordImport(
+					{ kind: 'submission', id: stored.id, table, eventKey },
+					row.id,
+					submittedAt(row),
+					undefined,
+					tx,
+				);
 				return true;
 			});
 
