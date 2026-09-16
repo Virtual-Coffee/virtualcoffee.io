@@ -52,7 +52,8 @@ export function sourceLabel(source: ApplicationSource) {
  *
  * `pending` is the normal case — a Pending Grant waiting for its first
  * sign-in. `stranded` is the rare one: they signed in, but the claim did not
- * apply, so the roles somebody chose for them need setting by hand.
+ * apply; the row shows the roles somebody chose for them, and saving it applies
+ * them.
  */
 export function AccessStateBadge({ state }: { state: 'pending' | 'stranded' }) {
 	return state === 'pending' ? (

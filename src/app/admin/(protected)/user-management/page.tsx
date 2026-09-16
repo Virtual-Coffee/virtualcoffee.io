@@ -21,11 +21,13 @@ export default async function AdminsPage() {
 	]);
 
 	// Pending grants and stranded users are listed too, but cannot sign in to
-	// /admin today — and neither can a Volunteer, whose Role grants no Section
+	// /admin today (a stranded row shows the roles its grant holds, not any it
+	// has) — and neither can a Volunteer, whose Role grants no Section
 	// (docs/adr/0010); they are listed because their grant is edited here.
 	const active = rows.filter(
 		(row) =>
 			row.kind === 'user' &&
+			!row.stranded &&
 			row.roles.some((role) => GRANTABLE_ROLE_NAMES.has(role)),
 	).length;
 	const pending = rows.filter((row) => row.kind === 'pending').length;
