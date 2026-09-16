@@ -6,15 +6,14 @@ import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
 	failInserts,
-	failWrites,
 	insertPendingGrant,
 	insertUser,
 } from '@/test/db/fixtures';
 import { listAccessRows } from '@/lib/admins';
 
 /**
- * `grantPendingAccess` awaits the member lookup between its "has this person
- * signed in?" check and the insert, so a test can land a sign-in in that
+ * `grantPendingAccess` looks the member up in Slack before it takes the lock
+ * and asks whether they have signed in, so a test can land a sign-in in that
  * window from inside the mock.
  */
 const lookup = vi.hoisted(() => ({
@@ -157,7 +156,7 @@ describe('setUserRoles', () => {
 });
 
 describe('grantPendingAccess', () => {
-	test('writes one grant per Slack member, and only for members who have not signed in', async () => {
+	test('writes one grant per Slack member who has not signed in', async () => {
 		await expect(
 			grantPendingAccess('U_ADA', ['coc_reviewer']),
 		).resolves.toEqual({ ok: true });
@@ -174,14 +173,6 @@ describe('grantPendingAccess', () => {
 			message: 'Choose at least one role to grant.',
 		});
 
-		const grace = await insertUser({ name: 'Grace', slackUserId: 'U_GRACE' });
-		await expect(grantPendingAccess('U_GRACE', ['admin'])).resolves.toEqual({
-			ok: false,
-			message:
-				'Grace has already signed in — set their roles in the table below.',
-		});
-		expect(grace.id).toBeTruthy();
-
 		const grants = await db().select().from(pendingGrant);
 		expect(grants).toEqual([
 			expect.objectContaining({
@@ -192,7 +183,61 @@ describe('grantPendingAccess', () => {
 			}),
 		]);
 	});
-	test('a first sign-in that lands mid-action still claims the grant', async () => {
+
+	test('someone signed in holding nothing is granted directly, and appears in the table', async () => {
+		const ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
+
+		await expect(
+			grantPendingAccess('U_ADA', ['coc_reviewer']),
+		).resolves.toEqual({ ok: true, message: 'Ada has access now.' });
+
+		await expect(roleOf(ada.id)).resolves.toEqual({
+			role: 'coc_reviewer',
+			roleGrantedBy: 'Local dev',
+		});
+		await expect(db().select().from(pendingGrant)).resolves.toEqual([]);
+		await expect(listAccessRows()).resolves.toContainEqual(
+			expect.objectContaining({
+				kind: 'user',
+				id: ada.id,
+				roles: ['coc_reviewer'],
+				grantedBy: 'Local dev',
+				stranded: false,
+			}),
+		);
+	});
+
+	test('someone already holding a role is edited in the table, not overwritten here', async () => {
+		for (const role of ['admin', 'volunteer']) {
+			const ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA', role });
+
+			await expect(
+				grantPendingAccess('U_ADA', ['coc_reviewer']),
+			).resolves.toEqual({
+				ok: false,
+				message:
+					'Ada has already signed in — set their roles in the table below.',
+			});
+			await expect(roleOf(ada.id)).resolves.toMatchObject({ role });
+
+			await db().delete(user).where(eq(user.id, ada.id));
+		}
+	});
+
+	test('a stranded user keeps their unclaimed grant rather than being granted over it', async () => {
+		const ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
+		await insertPendingGrant({ slackUserId: 'U_ADA', role: 'admin' });
+
+		await expect(
+			grantPendingAccess('U_ADA', ['coc_reviewer']),
+		).resolves.toEqual({
+			ok: false,
+			message: 'Ada already has access pending. Edit it in the table below.',
+		});
+		await expect(roleOf(ada.id)).resolves.toMatchObject({ role: null });
+	});
+
+	test('a first sign-in that lands mid-action is granted directly', async () => {
 		let ada: { id: string } | undefined;
 		lookup.during = async () => {
 			ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
@@ -200,45 +245,13 @@ describe('grantPendingAccess', () => {
 
 		await expect(
 			grantPendingAccess('U_ADA', ['coc_reviewer']),
-		).resolves.toEqual({ ok: true });
+		).resolves.toEqual({ ok: true, message: 'Ada has access now.' });
 
 		await expect(roleOf(ada!.id)).resolves.toEqual({
 			role: 'coc_reviewer',
 			roleGrantedBy: 'Local dev',
 		});
-		const [grant] = await db().select().from(pendingGrant);
-		expect(grant).toMatchObject({
-			slackUserId: 'U_ADA',
-			claimedAt: expect.any(Date),
-		});
-	});
-
-	test('a recovery claim that fails is reported, not passed off as success', async () => {
-		let ada: { id: string } | undefined;
-		lookup.during = async () => {
-			ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
-		};
-		const fault = await failWrites('pending_grant', 'update');
-		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-		try {
-			await expect(
-				grantPendingAccess('U_ADA', ['coc_reviewer']),
-			).resolves.toMatchObject({
-				ok: false,
-				message: expect.stringContaining('stranded'),
-			});
-
-			await expect(roleOf(ada!.id)).resolves.toMatchObject({ role: null });
-			const [grant] = await db().select().from(pendingGrant);
-			expect(grant).toMatchObject({ slackUserId: 'U_ADA', claimedAt: null });
-			await expect(listAccessRows()).resolves.toContainEqual(
-				expect.objectContaining({ kind: 'user', id: ada!.id, stranded: true }),
-			);
-		} finally {
-			await fault.remove();
-			error.mockRestore();
-		}
+		await expect(db().select().from(pendingGrant)).resolves.toEqual([]);
 	});
 
 	test('any other failure surfaces rather than posing as a duplicate', async () => {

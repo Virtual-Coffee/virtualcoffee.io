@@ -232,9 +232,10 @@ export function RolesDropdown({
 }
 
 /**
- * Pre-provision a Role for someone in the Slack workspace. Candidates come
- * from Slack, not `user`: the point is to give access to someone who has
- * never visited the site.
+ * Give a Role to someone in the Slack workspace who is not yet in the table:
+ * pre-provisioned if they have never signed in, applied directly if they have.
+ * Candidates come from Slack, not `user`: the point is to reach someone who
+ * has never visited the site.
  */
 export function GrantAccessForm({
 	candidates,
@@ -262,9 +263,9 @@ export function GrantAccessForm({
 		setOpen(false);
 	}
 
-	// The error the hook keeps is load-bearing here: picking someone who has
-	// already signed in is refused, and a silent refusal reads as the button
-	// being broken.
+	// The error the hook keeps is load-bearing here: the server can still
+	// refuse (a sign-in or a grant that landed since the page loaded), and a
+	// silent refusal reads as the button being broken.
 	function submit(event: React.FormEvent) {
 		event.preventDefault();
 		if (!selected) return;
@@ -327,17 +328,22 @@ export function GrantAccessForm({
 
 						{matches.map((candidate) => {
 							/**
-							 * Someone who has signed in has a user row, so a Grant against
-							 * their Slack id would never be claimed. Shown rather than
-							 * omitted: a maintainer searching for a name they know is in
-							 * Slack should find them and be told why they cannot be picked
-							 * here, not find nothing.
+							 * Someone already in the table is edited there. Shown rather
+							 * than omitted: a maintainer searching for a name they know is
+							 * in Slack should find them and be told why they cannot be
+							 * picked here, not find nothing. Someone who signed in holding
+							 * nothing is not in the table, so they are offered here and
+							 * granted directly rather than pre-provisioned.
 							 */
 							const unavailable =
-								candidate.hasAccount || candidate.hasPendingGrant;
-							const reason = candidate.hasAccount
-								? 'has signed in — set their roles below'
-								: 'already has access pending';
+								candidate.account === 'hasRoles' || candidate.hasPendingGrant;
+							const note = candidate.hasPendingGrant
+								? 'already has access pending'
+								: candidate.account === 'hasRoles'
+									? 'has signed in — set their roles below'
+									: candidate.account === 'noRoles'
+										? 'signed in — granted immediately'
+										: null;
 
 							return (
 								<li key={candidate.id}>
@@ -358,9 +364,9 @@ export function GrantAccessForm({
 												</span>
 											)}
 										</span>
-										{unavailable && (
+										{note && (
 											<span className="text-body-secondary small text-nowrap">
-												{reason}
+												{note}
 											</span>
 										)}
 									</button>
