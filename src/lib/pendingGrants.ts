@@ -63,6 +63,30 @@ export function lockSlackMember(tx: Transaction, slackUserId: string) {
 	);
 }
 
+/** The one Grant nobody has claimed for this Slack member, if there is one. */
+export async function findUnclaimedGrant(tx: Transaction, slackUserId: string) {
+	const [grant] = await tx
+		.select()
+		.from(pendingGrant)
+		.where(
+			and(
+				eq(pendingGrant.slackUserId, slackUserId),
+				isNull(pendingGrant.claimedAt),
+			),
+		)
+		.limit(1);
+
+	return grant ?? null;
+}
+
+/** Record that `userId` now holds what the Grant carried. */
+export function claimGrant(tx: Transaction, grantId: string, userId: string) {
+	return tx
+		.update(pendingGrant)
+		.set({ claimedAt: new Date(), claimedUserId: userId })
+		.where(eq(pendingGrant.id, grantId));
+}
+
 /**
  * Give someone the `volunteer` role, the way access is always given: directly
  * on the user if they have signed in, otherwise as a Pending Grant keyed on the
@@ -94,33 +118,36 @@ export async function grantVolunteerRole(
 		.where(eq(user.slackUserId, member.slackUserId))
 		.limit(1);
 
-	if (existing) {
-		await tx
-			.update(user)
-			.set({
-				role: withVolunteerRole(existing.role),
-				roleGrantedAt: new Date(),
-				roleGrantedBy: grantedBy,
-			})
-			.where(eq(user.id, existing.id));
-		return;
-	}
-
 	/**
 	 * A Grant may already exist from User Management for their other roles.
 	 * Adding to it rather than inserting a second one, because the partial
 	 * unique index allows only one unclaimed Grant per Slack member.
 	 */
-	const [grant] = await tx
-		.select({ id: pendingGrant.id, role: pendingGrant.role })
-		.from(pendingGrant)
-		.where(
-			and(
-				eq(pendingGrant.slackUserId, member.slackUserId),
-				isNull(pendingGrant.claimedAt),
-			),
-		)
-		.limit(1);
+	const grant = await findUnclaimedGrant(tx, member.slackUserId);
+
+	if (existing) {
+		/**
+		 * A Grant beside a signed-in user is one their first sign-in failed to
+		 * claim. It is applied here along with `volunteer`: adding a role would
+		 * otherwise clear the "Grant not applied" badge while leaving the Grant
+		 * unclaimed and the roles it carried hidden.
+		 */
+		await tx
+			.update(user)
+			.set({
+				role: serialiseRoles([
+					...parseRoles(existing.role),
+					...parseRoles(grant?.role),
+					'volunteer',
+				]),
+				roleGrantedAt: new Date(),
+				roleGrantedBy: grantedBy,
+			})
+			.where(eq(user.id, existing.id));
+
+		if (grant) await claimGrant(tx, grant.id, existing.id);
+		return;
+	}
 
 	if (grant) {
 		await tx
@@ -191,16 +218,7 @@ export async function claimPendingGrant(account: {
 			let claimedGrantId: string | null = null;
 
 			if (holdsNothing) {
-				const [grant] = await tx
-					.select()
-					.from(pendingGrant)
-					.where(
-						and(
-							eq(pendingGrant.slackUserId, account.accountId),
-							isNull(pendingGrant.claimedAt),
-						),
-					)
-					.limit(1);
+				const grant = await findUnclaimedGrant(tx, account.accountId);
 
 				// Both can apply at once — a bootstrap admin who was also given
 				// `volunteer` from /admin/volunteers before signing in. The grant is
@@ -242,10 +260,7 @@ export async function claimPendingGrant(account: {
 			}
 
 			if (claimedGrantId) {
-				await tx
-					.update(pendingGrant)
-					.set({ claimedAt: new Date(), claimedUserId: account.userId })
-					.where(eq(pendingGrant.id, claimedGrantId));
+				await claimGrant(tx, claimedGrantId, account.userId);
 			}
 
 			/**

@@ -170,9 +170,18 @@ describe('claimPendingGrant', () => {
 			await expect(grantRows('U_ADA')).resolves.toMatchObject([
 				{ claimedAt: null },
 			]);
-			await expect(listAccessRows()).resolves.toContainEqual(
-				expect.objectContaining({ kind: 'user', id: ada.id, stranded: true }),
-			);
+			// Badged, and showing what the grant held so a maintainer can see
+			// what to apply; it is not listed a second time as pending.
+			await expect(listAccessRows()).resolves.toEqual([
+				expect.objectContaining({
+					kind: 'user',
+					id: ada.id,
+					stranded: true,
+					roles: ['coc_reviewer'],
+					grantedBy: 'user-admin',
+					grantedAt: expect.any(Date),
+				}),
+			]);
 		} finally {
 			await trigger.remove();
 			error.mockRestore();
@@ -261,5 +270,43 @@ describe('grantVolunteerRole', () => {
 		await expect(grantRows('U_GRACE')).resolves.toEqual([
 			expect.objectContaining({ role: 'coc_reviewer,volunteer' }),
 		]);
+	});
+
+	test('applies and claims a grant left behind by a failed claim', async () => {
+		const grace = await insertUser({ name: 'Grace', slackUserId: 'U_GRACE' });
+		await insertPendingGrant({ slackUserId: 'U_GRACE', role: 'admin' });
+
+		await db().transaction((tx) =>
+			grantVolunteerRole(tx, member, 'user-admin'),
+		);
+
+		await expect(userRow(grace.id)).resolves.toMatchObject({
+			role: 'admin,volunteer',
+			roleGrantedBy: 'user-admin',
+		});
+		await expect(grantRows('U_GRACE')).resolves.toEqual([
+			{
+				role: 'admin',
+				claimedAt: expect.any(Date),
+				claimedUserId: grace.id,
+			},
+		]);
+		await expect(listAccessRows()).resolves.toEqual([
+			expect.objectContaining({
+				kind: 'user',
+				id: grace.id,
+				roles: ['admin', 'volunteer'],
+				stranded: false,
+			}),
+		]);
+
+		// Repeating changes nothing: the grant is claimed, and there is nothing
+		// left to merge.
+		await db().transaction((tx) =>
+			grantVolunteerRole(tx, member, 'user-admin'),
+		);
+		await expect(userRow(grace.id)).resolves.toMatchObject({
+			role: 'admin,volunteer',
+		});
 	});
 });

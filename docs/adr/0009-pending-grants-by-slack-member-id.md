@@ -80,7 +80,10 @@ sign maintainers in request only `openid`, `profile` and `email`.
 - **Matching is never on email**, anywhere in the grant path.
 - A failed claim strands the person with no roles; `listAccessRows()` lists
   anyone holding nothing whose Slack id matches an unclaimed Grant, badged
-  **Grant not applied**, so it is visible rather than silent.
+  **Grant not applied** and showing the Grant's roles, so it is visible rather
+  than silent. The next role write to them — saving that row in User
+  Management, or a volunteer grant — applies the Grant and claims it, so no
+  Grant is left unclaimed and hidden behind a user who now holds a role.
 - There is no backfill of `user.slack_user_id`: the baseline migration creates
   `user`, `account` and the column together. If a user ever predates it, the
   "already signed in?" check answers _no_ for them and a maintainer could
