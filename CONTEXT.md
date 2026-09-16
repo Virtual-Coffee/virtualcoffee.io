@@ -50,3 +50,15 @@ site. Applied the first time they do, after which the Grant is _claimed_ and
 their Role is authoritative. Unrelated to an **Invite**, which is a volunteer's
 referral into the Waitlist.
 _Avoid_: Invite, pre-provision, reservation
+
+## History
+
+**Event Log**:
+What has happened to a Membership Application or a Submission, one row per
+happening: a status change, a note, an email or notification and whether it
+went. Two tables (`application_event`, `submission_event`) but one concept,
+and one module writes both (`src/lib/eventLog.ts`): a send's **Outbound**
+becomes an event there, and a status change and its event commit together.
+Shown as **History** on a detail page and as the activity feed on the
+dashboard.
+_Avoid_: audit log, activity table, timeline (the component, not the concept)
