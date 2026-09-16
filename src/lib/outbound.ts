@@ -7,7 +7,8 @@
  * a checkout either.
  */
 
-export type OutboundKind = 'email' | 'slack' | 'slack dm' | 'github issue';
+export type OutboundKind =
+	'email' | 'slack' | 'slack dm' | 'github issue' | 'calendar';
 
 export function isProduction(): boolean {
 	return process.env.CONTEXT === 'production';
@@ -62,7 +63,7 @@ export function capture(
 	console.info(
 		`[${kind} captured] ${deployContext()} ${target}`,
 		...(details ? [details] : []),
-		`\n${body}`,
+		...(body ? [`\n${body}`] : []),
 	);
 }
 
@@ -105,7 +106,7 @@ function isLoopbackHost(host: string): boolean {
  * is `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true`, paired with per-context webhook
  * and App values that point at a test channel or repository.
  */
-export function notifyDelivery(): 'live' | 'captured' {
+function notifyDelivery(): 'live' | 'captured' {
 	if (isProduction()) return 'live';
 	return process.env.NOTIFY_LIVE_OUTSIDE_PRODUCTION === 'true'
 		? 'live'
@@ -118,7 +119,7 @@ export function notifyDelivery(): 'live' | 'captured' {
  * meant to be paired with a `GOOGLE_CALENDAR_ID` that names a scratch calendar
  * the service account can edit. Reads are never gated.
  */
-export function calendarDelivery(): 'live' | 'captured' {
+function calendarDelivery(): 'live' | 'captured' {
 	if (isProduction()) return 'live';
 	return process.env.CALENDAR_LIVE_OUTSIDE_PRODUCTION === 'true'
 		? 'live'
@@ -162,7 +163,12 @@ type Delivery<K extends OutboundKind> =
 
 function deliveryFor<K extends OutboundKind>(kind: K): Delivery<K> {
 	if (kind === 'email') return emailDelivery() as Delivery<K>;
-	const mode = kind === 'slack dm' ? dmDelivery() : notifyDelivery();
+	const mode =
+		kind === 'slack dm'
+			? dmDelivery()
+			: kind === 'calendar'
+				? calendarDelivery()
+				: notifyDelivery();
 	return (
 		mode === 'captured'
 			? { mode: 'captured', context: deployContext() }
@@ -175,6 +181,7 @@ const VERB: Record<OutboundKind, string> = {
 	slack: 'posted to Slack',
 	'slack dm': 'sent as a Slack DM',
 	'github issue': 'opened on GitHub',
+	calendar: 'written to the Events Calendar',
 };
 
 /** `AbortSignal.timeout()` rejects with a DOMException named TimeoutError. */
