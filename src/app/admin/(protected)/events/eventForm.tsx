@@ -1,20 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useId, useState } from 'react';
+import { useId } from 'react';
 
-import type { EventDetails, EventType } from '@/lib/eventsCalendar';
+import { draftFromEvent, emptyDraft, toEventInput } from '@/lib/eventDraft';
+import type { EventDetails } from '@/lib/eventsCalendar';
 import { useAction } from '@/util/forms/useAction';
 
 import { createEvent, updateEvent } from './actions';
-import { DescriptionField } from './descriptionField';
-import {
-	EventTypeField,
-	HostCodeField,
-	TextField,
-	TimeFields,
-	type TimeInput,
-} from './fields';
+import { DraftIssueText, EventFields } from './fields';
+import { useEventDraft } from './useEventDraft';
 
 /**
  * A one-off Event: everything a Series has except the rule. One form for a
@@ -25,75 +20,35 @@ import {
 export function EventForm({ event }: { event?: EventDetails }) {
 	const id = useId();
 	const { run, pending, result, feedback } = useAction();
-
-	const [title, setTitle] = useState(event?.title ?? '');
-	const [joinLink, setJoinLink] = useState(event?.joinLink ?? '');
-	const [hostCode, setHostCode] = useState(event?.hostCode ?? '');
-	const [eventType, setEventType] = useState<EventType | ''>(
-		event?.eventType ?? '',
+	const { draft, set, touched } = useEventDraft(
+		event ? draftFromEvent(event) : emptyDraft('event'),
 	);
-	const [description, setDescription] = useState(event?.description ?? '');
-	const [when, setWhen] = useState<TimeInput>({
-		date: event?.date ?? '',
-		startTime: event?.startTime ?? '09:00',
-		endTime: event?.endTime ?? '10:00',
-	});
-	const ready = title.trim() && joinLink && eventType && when.date;
+
+	const parsed = toEventInput(draft);
 	const created = !event && result?.ok;
+	const disabled = pending || Boolean(created);
 
 	return (
 		<form
 			onSubmit={(e) => {
 				e.preventDefault();
-				const input = {
-					title,
-					joinLink,
-					hostCode,
-					eventType,
-					description,
-					...when,
-				};
+				if (!parsed.ok) return;
+				const input = parsed.input;
 				run(() =>
 					event ? updateEvent(event.id, event.etag, input) : createEvent(input),
 				);
 			}}
 		>
-			<fieldset disabled={pending || Boolean(created)}>
-				<TextField
-					id={`${id}-title`}
-					label="Title"
-					value={title}
-					onChange={setTitle}
-					required
-				/>
-				<TimeFields id={id} dateLabel="Date" draft={when} onChange={setWhen} />
-				<TextField
-					id={`${id}-join`}
-					label="Join Link"
-					type="url"
-					value={joinLink}
-					onChange={setJoinLink}
-					help="Where people go to attend."
-					required
-				/>
-				<HostCodeField
-					id={`${id}-host`}
-					value={hostCode}
-					onChange={setHostCode}
-				/>
-				<EventTypeField
-					id={`${id}-type`}
-					value={eventType}
-					onChange={setEventType}
+			<fieldset disabled={disabled}>
+				<EventFields
+					id={id}
+					draft={draft}
+					set={set}
+					dateLabel="Date"
+					joinHelp="Where people go to attend."
+					descriptionHelp="Shown on /events."
 					legacy={Boolean(event) && event?.eventType === null}
-				/>
-				<DescriptionField
-					id={`${id}-description`}
-					label="Description"
-					value={description}
-					onChange={setDescription}
-					disabled={pending || Boolean(created)}
-					help="Shown on /events."
+					disabled={disabled}
 				/>
 			</fieldset>
 
@@ -102,7 +57,7 @@ export function EventForm({ event }: { event?: EventDetails }) {
 					<button
 						type="submit"
 						className="btn btn-primary btn-sm"
-						disabled={pending || !ready}
+						disabled={pending || !parsed.ok}
 					>
 						{pending ? 'Saving…' : event ? 'Save Event' : 'Create Event'}
 					</button>
@@ -110,6 +65,12 @@ export function EventForm({ event }: { event?: EventDetails }) {
 				<Link href="/admin/events" className="btn btn-outline-secondary btn-sm">
 					{created ? 'Back to Events' : 'Cancel'}
 				</Link>
+				{!created && (
+					<DraftIssueText
+						issue={parsed.ok ? undefined : parsed.issue}
+						touched={touched}
+					/>
+				)}
 			</div>
 			{feedback}
 		</form>
