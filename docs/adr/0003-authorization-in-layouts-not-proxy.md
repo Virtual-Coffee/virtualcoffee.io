@@ -1,7 +1,7 @@
 # Authorization lives in server components, not in proxy.ts
 
 `/admin` is gated in `src/app/admin/(protected)/layout.tsx`, which calls
-`requireSession()` (`src/lib/adminAccess.ts`) and redirects. It is deliberately
+`requireSession()` (`src/lib/access/adminAccess.ts`) and redirects. It is deliberately
 **not** gated in `proxy.ts`.
 
 Next.js 16 renamed `middleware.ts` to `proxy.ts`, and its own documentation says

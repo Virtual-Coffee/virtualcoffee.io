@@ -2,7 +2,11 @@ import { and, eq, isNotNull, isNull, ne, or } from 'drizzle-orm';
 
 import { db, pendingGrant, user, type Database, type Transaction } from '@/db';
 import { getSlackMembers, type SlackMember } from '@/data/slackMembers';
-import { DEFAULT_ROLE, parseRoles, type RoleName } from '@/lib/permissions';
+import {
+	DEFAULT_ROLE,
+	parseRoles,
+	type RoleName,
+} from '@/lib/access/permissions';
 
 /**
  * A row on the User Management screen: everyone who can reach /admin, signed

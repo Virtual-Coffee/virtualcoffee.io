@@ -5,13 +5,13 @@ import { revalidatePath } from 'next/cache';
 
 import { db, isUniqueViolation, pendingGrant, user } from '@/db';
 import { getSlackMembers } from '@/data/slackMembers';
-import { requirePermission, sessionRoles } from '@/lib/adminAccess';
-import { userForSlackId } from '@/lib/admins';
+import { requirePermission, sessionRoles } from '@/lib/access/adminAccess';
+import { userForSlackId } from '@/lib/access/admins';
 import {
 	claimGrant,
 	findUnclaimedGrant,
 	lockSlackMember,
-} from '@/lib/pendingGrants';
+} from '@/lib/access/pendingGrants';
 import { isId } from '@/db/ids';
 import {
 	GRANTABLE_ROLE_NAMES,
@@ -19,8 +19,8 @@ import {
 	parseRoles,
 	serialiseRoles,
 	type RoleName,
-} from '@/lib/permissions';
-import type { ActionResult } from '@/lib/actionResult';
+} from '@/lib/access/permissions';
+import type { ActionResult } from '@/lib/admin/actionResult';
 
 /**
  * Carry over any role this screen does not grant.

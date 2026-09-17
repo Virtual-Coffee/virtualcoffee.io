@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { requireSession, visibleSections } from '@/lib/adminAccess';
-import { dashboardCards, recentActivity } from '@/lib/dashboard';
+import { requireSession, visibleSections } from '@/lib/access/adminAccess';
+import { dashboardCards, recentActivity } from '@/lib/admin/dashboard';
 import { ActivityFeed } from './activityFeed';
 
 export const dynamic = 'force-dynamic';

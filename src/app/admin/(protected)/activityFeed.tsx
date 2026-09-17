@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import type { ActivityEntry } from '@/lib/dashboard';
-import { eventLabel } from '@/lib/eventLabels';
+import type { ActivityEntry } from '@/lib/admin/dashboard';
+import { eventLabel } from '@/lib/history/eventLabels';
 import { formatDateTime } from './presentation';
 
 /**

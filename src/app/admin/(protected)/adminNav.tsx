@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import type { Section } from '@/lib/permissions';
+import type { Section } from '@/lib/access/permissions';
 import { useDropdown } from './useDropdown';
 
 const WAITLIST_SECTIONS = [

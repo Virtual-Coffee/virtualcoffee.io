@@ -1,4 +1,4 @@
-import type { Section } from '@/lib/permissions';
+import type { Section } from '@/lib/access/permissions';
 
 /** One number on a card. Most sections have a single one; the queue has two. */
 export type DashboardFigure = {
