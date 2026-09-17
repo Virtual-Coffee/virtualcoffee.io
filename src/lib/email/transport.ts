@@ -52,7 +52,10 @@ let transporter: Transporter | undefined;
 export const TRANSPORT_OPTIONS = {
 	host: 'smtp.gmail.com',
 	port: 587,
+	// Port 587 upgrades with STARTTLS; without requireTLS a stripped upgrade
+	// would fall back to authenticating in cleartext.
 	secure: false,
+	requireTLS: true,
 	pool: true,
 	maxConnections: 2,
 	connectionTimeout: 10_000,
