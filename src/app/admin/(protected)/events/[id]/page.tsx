@@ -36,11 +36,7 @@ export default async function EditEventPage({
 		);
 	}
 
-	const event = await calendar.getEvent(id).catch((error: unknown) => {
-		// Google 404s an id it has never seen or has since purged.
-		if ((error as { status?: number }).status === 404) return null;
-		throw error;
-	});
+	const event = await calendar.getEvent(id);
 	if (!event) notFound();
 	// A Series, or an Event of one, is edited as its Series.
 	if ('seriesId' in event) redirect(`/admin/events/series/${event.seriesId}`);

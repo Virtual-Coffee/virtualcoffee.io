@@ -115,6 +115,14 @@ export class CalendarConflictError extends Error {
 	}
 }
 
+/** Google has never seen the id, or has since purged it. */
+export class CalendarGoneError extends Error {
+	constructor() {
+		super('The event is no longer on the Events Calendar.');
+		this.name = 'CalendarGoneError';
+	}
+}
+
 /**
  * Google event ids are base32hex; an instance id appends `_` and the original
  * start. Imported events can carry other characters, so this only keeps a
@@ -151,14 +159,23 @@ function withPrivateProperties(
 	};
 }
 
-function isConflict(error: unknown): boolean {
+/** Google's status arrives on any of three shapes, depending on the caller. */
+function hasStatus(error: unknown, wanted: number): boolean {
 	if (typeof error !== 'object' || error === null) return false;
 	const { status, code, response } = error as {
 		status?: number;
 		code?: string | number;
 		response?: { status?: number };
 	};
-	return status === 412 || code === 412 || response?.status === 412;
+	return status === wanted || code === wanted || response?.status === wanted;
+}
+
+function isConflict(error: unknown): boolean {
+	return hasStatus(error, 412);
+}
+
+function isNotFound(error: unknown): boolean {
+	return hasStatus(error, 404);
 }
 
 /** luxon types `toISO()` as nullable for an invalid DateTime; ours never are. */
@@ -241,12 +258,28 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		return items;
 	}
 
-	/** A write against the etag that was loaded; a 412 is a conflict. */
+	/**
+	 * A write against the etag that was loaded: a 412 is a conflict, a 404 is an
+	 * id Google no longer has. Both are translated here so no caller inspects a
+	 * Google error shape.
+	 */
 	async function conditional<T>(call: () => Promise<T>): Promise<T> {
 		try {
 			return await call();
 		} catch (error) {
 			if (isConflict(error)) throw new CalendarConflictError();
+			if (isNotFound(error)) throw new CalendarGoneError();
+			throw error;
+		}
+	}
+
+	/** One event, or null for an id Google has never seen or has purged. */
+	async function found(eventId: string) {
+		try {
+			const { data } = await client.events.get({ calendarId, eventId });
+			return data;
+		} catch (error) {
+			if (isNotFound(error)) return null;
 			throw error;
 		}
 	}
@@ -334,9 +367,17 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 			.sort((a, b) => a.title.localeCompare(b.title));
 	}
 
+	/**
+	 * A Series for its edit page. Null for a Cancelled one, an id that is not a
+	 * Series, or an id Google has never seen or has purged.
+	 */
 	async function getSeries(id: string): Promise<Series | null> {
-		const { data } = await client.events.get({ calendarId, eventId: id });
-		if (data.status === 'cancelled' || !(data.recurrence ?? []).length) {
+		const data = await found(id);
+		if (
+			!data ||
+			data.status === 'cancelled' ||
+			!(data.recurrence ?? []).length
+		) {
 			return null;
 		}
 		return toSeries(
@@ -348,12 +389,14 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 	/**
 	 * A one-off Event for its edit page. An id that is a Series or an Event of
 	 * one names its Series instead, so the page can send the maintainer there;
-	 * a Cancelled one-off is still returned, since it can be Restored.
+	 * a Cancelled one-off is still returned, since it can be Restored. Null for
+	 * an id Google has never seen or has purged.
 	 */
 	async function getEvent(
 		id: string,
 	): Promise<EventDetails | { seriesId: string } | null> {
-		const { data } = await client.events.get({ calendarId, eventId: id });
+		const data = await found(id);
+		if (!data) return null;
 		if ((data.recurrence ?? []).length) return { seriesId: id };
 		if (data.recurringEventId) return { seriesId: data.recurringEventId };
 		if (isTombstone(data)) return null;
@@ -516,9 +559,14 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 		);
 	}
 
-	/** The event as it is now, or a conflict if it is not what was loaded. */
+	/**
+	 * The event as it is now, or a conflict if it is not what was loaded. Read
+	 * through `conditional()`, since it is the first half of a write.
+	 */
 	async function current(eventId: string, etag: string) {
-		const { data } = await client.events.get({ calendarId, eventId });
+		const { data } = await conditional(() =>
+			client.events.get({ calendarId, eventId }),
+		);
 		if (data.etag !== etag) throw new CalendarConflictError();
 		return data;
 	}

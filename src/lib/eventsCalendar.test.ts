@@ -6,6 +6,7 @@ import { fakeCalendarClient } from '@/test/calendar';
 import type { SeriesInput } from './eventDraft';
 import {
 	CalendarConflictError,
+	CalendarGoneError,
 	eventsCalendar,
 	isCalendarEventId,
 } from './eventsCalendar';
@@ -198,6 +199,11 @@ describe('getSeries', () => {
 			eventType: null,
 		});
 	});
+
+	test('an id Google has never seen is nothing, not a throw', async () => {
+		const { cal } = fakeClient({ get: { coffee: series } });
+		await expect(cal.getSeries('gone')).resolves.toBeNull();
+	});
 });
 
 describe('getEvent', () => {
@@ -254,6 +260,11 @@ describe('getEvent', () => {
 			},
 		});
 		await expect(cal.getEvent('old_20260921T130000Z')).resolves.toBeNull();
+	});
+
+	test('an id Google has never seen is nothing, not a throw', async () => {
+		const { cal } = fakeClient({ get: { talk: oneOff } });
+		await expect(cal.getEvent('gone')).resolves.toBeNull();
 	});
 });
 
@@ -600,6 +611,27 @@ describe('writes', () => {
 		await expect(cal.cancelEvent('x', '"1"')).rejects.toBeInstanceOf(
 			CalendarConflictError,
 		);
+	});
+
+	test.each([
+		[{ status: 404 }],
+		[{ code: 404 }],
+		[{ response: { status: 404 } }],
+	])('Google answering 404 (%j) is gone', async (shape) => {
+		const { cal } = fakeClient({
+			patchError: Object.assign(new Error('Not Found'), shape),
+		});
+		await expect(cal.cancelEvent('x', '"1"')).rejects.toBeInstanceOf(
+			CalendarGoneError,
+		);
+	});
+
+	test('a write against an id Google does not have is gone', async () => {
+		const { cal, calls } = fakeClient({ get: { coffee: series } });
+		await expect(cal.updateEvent('gone', '"1"', input)).rejects.toBeInstanceOf(
+			CalendarGoneError,
+		);
+		expect(calls.map((call) => call.method)).toEqual(['get']);
 	});
 
 	test('any other failure propagates as itself', async () => {
