@@ -1,9 +1,12 @@
-import Link from 'next/link';
-
 import { getSlackMembers } from '@/data/slackMembers';
 import { requirePermission, sessionCan } from '@/lib/adminAccess';
 import { listVolunteers } from '@/lib/volunteers';
-import { matchesState, parseVolunteerState } from './searchParams';
+import { FilterChips } from '../filterChips';
+import {
+	DEFAULT_VOLUNTEER_STATE,
+	matchesState,
+	parseVolunteerState,
+} from './searchParams';
 import { AddVolunteerForm } from './volunteerControls';
 import { VolunteersTable } from './volunteersTable';
 
@@ -55,10 +58,15 @@ export default async function VolunteersPage({
 		(row) => row.deactivatedAt === null,
 	).length;
 
+	// Active is the default state, so its chip is the bare roster URL.
 	const chips = [
-		{ key: 'active', label: 'Active', count: activeCount },
-		{ key: 'paused', label: 'Paused', count: volunteers.length - activeCount },
-		{ key: 'all', label: 'Everything', count: volunteers.length },
+		{ value: null, label: 'Active', count: activeCount },
+		{
+			value: 'paused',
+			label: 'Paused',
+			count: volunteers.length - activeCount,
+		},
+		{ value: 'all', label: 'Everything', count: volunteers.length },
 	];
 
 	const known = new Set(volunteers.map((row) => row.slackUserId));
@@ -82,25 +90,15 @@ export default async function VolunteersPage({
 
 			<div className="row g-4 mt-0">
 				<div className="col-lg-8">
-					<div
-						className="btn-group mb-3"
-						role="group"
-						aria-label="Filter by state"
-					>
-						{chips.map((chip) => (
-							<Link
-								key={chip.key}
-								href={`/admin/volunteers?state=${chip.key}`}
-								className={`btn btn-sm ${
-									state === chip.key ? 'btn-primary' : 'btn-outline-secondary'
-								}`}
-							>
-								{chip.label}{' '}
-								<span className="badge text-bg-light border ms-1">
-									{chip.count}
-								</span>
-							</Link>
-						))}
+					<div className="mb-3">
+						<FilterChips
+							base="/admin/volunteers"
+							keep={{}}
+							param="state"
+							active={state === DEFAULT_VOLUNTEER_STATE ? null : state}
+							chips={chips}
+							ariaLabel="Filter by state"
+						/>
 					</div>
 
 					<VolunteersTable rows={rows} emptyMessage={EMPTY_MESSAGE[state]} />
