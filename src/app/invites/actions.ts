@@ -6,7 +6,6 @@ import { z } from 'zod';
 import type { ActionResult, EmailActionResult } from '@/lib/admin/actionResult';
 import { isId } from '@/db/ids';
 import { volunteerInvite } from '@/emails/volunteerInvite';
-import { renderEmail } from '@/lib/email/render';
 import { sendEmail } from '@/lib/email/transport';
 import { recordOutcome } from '@/lib/history/eventLog';
 import {
@@ -106,14 +105,15 @@ export async function sendInvite(
 
 	const { inviteId, volunteerId } = issued;
 
-	const sent = await sendEmail({
-		to: email,
-		...(await renderEmail(volunteerInvite, {
+	const sent = await sendEmail(
+		volunteerInvite,
+		{
 			inviterName: session.user.name || 'A Virtual Coffee volunteer',
 			inviteeName: name,
 			claimUrl: `${siteUrl()}/join?invite=${token}`,
-		})),
-	});
+		},
+		{ to: email },
+	);
 	await recordOutcome(volunteerSubject(volunteerId), {
 		channel: 'email',
 		outbound: sent,

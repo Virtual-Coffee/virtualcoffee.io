@@ -1,9 +1,8 @@
 import { Button, Text } from 'react-email';
 
-import { Layout } from '@/lib/email/layout';
 import { firstName } from '@/lib/email/name';
-import type { EmailTemplate } from '@/lib/email/render';
 import { styles } from '@/lib/email/styles';
+import { defineEmail } from '@/lib/email/template';
 
 /** The monthly nudge that a Volunteer has invites to give. */
 export type VolunteerAccrualProps = {
@@ -41,22 +40,15 @@ export function Content({ name, balance, invitesUrl }: VolunteerAccrualProps) {
 	);
 }
 
-export default function Email(props: VolunteerAccrualProps) {
-	return (
-		<Layout preview="Another invite to give out this month.">
-			<Content {...props} />
-		</Layout>
-	);
-}
-
-Email.PreviewProps = {
-	name: 'Grace Hopper',
-	balance: 3,
-	invitesUrl: 'https://virtualcoffee.io/invites',
-} satisfies VolunteerAccrualProps;
-
-export const volunteerAccrual: EmailTemplate<VolunteerAccrualProps> = {
+export const volunteerAccrual = defineEmail<VolunteerAccrualProps>({
 	subject,
-	Email,
+	preview: 'Another invite to give out this month.',
 	Content,
-};
+	previewProps: {
+		name: 'Grace Hopper',
+		balance: 3,
+		invitesUrl: 'https://virtualcoffee.io/invites',
+	},
+});
+
+export default volunteerAccrual.Email;
