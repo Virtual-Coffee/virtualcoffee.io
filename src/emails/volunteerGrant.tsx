@@ -1,9 +1,8 @@
 import { Button, Text } from 'react-email';
 
-import { Layout } from '@/lib/email/layout';
 import { firstName } from '@/lib/email/name';
-import type { EmailTemplate } from '@/lib/email/render';
 import { styles } from '@/lib/email/styles';
+import { defineEmail } from '@/lib/email/template';
 
 /**
  * Sent once, when someone is made a Volunteer — most are pre-provisioned and
@@ -48,22 +47,15 @@ export function Content({ name, balance, invitesUrl }: VolunteerGrantProps) {
 	);
 }
 
-export default function Email(props: VolunteerGrantProps) {
-	return (
-		<Layout preview="Anyone you invite skips the waitlist.">
-			<Content {...props} />
-		</Layout>
-	);
-}
-
-Email.PreviewProps = {
-	name: 'Grace Hopper',
-	balance: 1,
-	invitesUrl: 'https://virtualcoffee.io/invites',
-} satisfies VolunteerGrantProps;
-
-export const volunteerGrant: EmailTemplate<VolunteerGrantProps> = {
+export const volunteerGrant = defineEmail<VolunteerGrantProps>({
 	subject,
-	Email,
+	preview: 'Anyone you invite skips the waitlist.',
 	Content,
-};
+	previewProps: {
+		name: 'Grace Hopper',
+		balance: 1,
+		invitesUrl: 'https://virtualcoffee.io/invites',
+	},
+});
+
+export default volunteerGrant.Email;

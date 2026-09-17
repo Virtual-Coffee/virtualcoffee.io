@@ -1,9 +1,8 @@
 import { Button, Text } from 'react-email';
 
-import { Layout } from '@/lib/email/layout';
 import { firstName } from '@/lib/email/name';
-import type { EmailTemplate } from '@/lib/email/render';
 import { styles } from '@/lib/email/styles';
+import { defineEmail } from '@/lib/email/template';
 import { siteUrl } from '@/util/url.server';
 
 export type WelcomeProps = { name: string; inviteUrl: string };
@@ -47,17 +46,14 @@ export function Content({ name, inviteUrl }: WelcomeProps) {
 	);
 }
 
-export default function Email(props: WelcomeProps) {
-	return (
-		<Layout preview="You’re a member. The handbook and your Slack invite are inside.">
-			<Content {...props} />
-		</Layout>
-	);
-}
+export const welcome = defineEmail<WelcomeProps>({
+	subject,
+	preview: 'You’re a member. The handbook and your Slack invite are inside.',
+	Content,
+	previewProps: {
+		name: 'Ada Lovelace',
+		inviteUrl: 'https://virtualcoffee.io/join-slack?code=example',
+	},
+});
 
-Email.PreviewProps = {
-	name: 'Ada Lovelace',
-	inviteUrl: 'https://virtualcoffee.io/join-slack?code=example',
-} satisfies WelcomeProps;
-
-export const welcome: EmailTemplate<WelcomeProps> = { subject, Email, Content };
+export default welcome.Email;

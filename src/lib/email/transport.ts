@@ -1,5 +1,6 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 
+import { renderEmail, type EmailTemplate, type RenderedEmail } from './render';
 import {
 	deliver,
 	emailDelivery,
@@ -32,15 +33,14 @@ import {
  * nothing leaves the machine. See docs/adr/0013.
  */
 
-export type SendEmailInput = {
+export type Envelope = {
 	to: string;
-	subject: string;
-	/** Both parts of one `renderEmail()` — never one without the other. */
-	html: string;
-	text: string;
 	/** Copies the acting admin, per the "Copy me on this email" checkbox. */
 	cc?: string | null;
 };
+
+/** An envelope with a rendered template in it, which is all `send` needs. */
+type Message = Envelope & RenderedEmail;
 
 export function emailConfigured(): boolean {
 	return Boolean(
@@ -159,7 +159,15 @@ function bareAddress(value: string): string {
 	return (match ? match[1] : value).trim().toLowerCase();
 }
 
-export function sendEmail(input: SendEmailInput): Promise<Outbound> {
+export async function sendEmail<P extends object>(
+	template: EmailTemplate<P>,
+	props: P,
+	envelope: Envelope,
+): Promise<Outbound> {
+	const input: Message = {
+		...envelope,
+		...(await renderEmail(template, props)),
+	};
 	return deliver({
 		kind: 'email',
 		target: input.to,
@@ -177,7 +185,7 @@ export function sendEmail(input: SendEmailInput): Promise<Outbound> {
 }
 
 async function send(
-	input: SendEmailInput,
+	input: Message,
 	delivery: Exclude<EmailDelivery, { mode: 'captured' }>,
 ): Promise<Outbound> {
 	if (!emailConfigured()) {

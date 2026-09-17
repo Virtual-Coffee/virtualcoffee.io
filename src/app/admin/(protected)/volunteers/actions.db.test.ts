@@ -2,6 +2,8 @@ import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, invite, pendingGrant, user, volunteer } from '@/db';
+import { volunteerGrant } from '@/emails/volunteerGrant';
+import { volunteerInvite } from '@/emails/volunteerInvite';
 import { hashClaimToken, volunteerBalance } from '@/lib/volunteers/invites';
 import { sendEmail, sendSlackDm } from '@/test/mocks/spies';
 import { SENT } from '@/test/outbound';
@@ -119,12 +121,15 @@ describe('addVolunteer', () => {
 			roleGrantedBy: 'Local dev',
 		});
 		await expect(grantRole('U_ADA')).resolves.toEqual([]);
-		expect(sendEmail).toHaveBeenCalledWith({
-			to: 'ada@example.test',
-			subject: 'You can now invite people to Virtual Coffee',
-			html: expect.stringContaining('href="https://virtualcoffee.io/invites"'),
-			text: expect.stringContaining('https://virtualcoffee.io/invites'),
-		});
+		expect(sendEmail).toHaveBeenCalledWith(
+			volunteerGrant,
+			{
+				name: 'Ada',
+				balance: 0,
+				invitesUrl: 'https://virtualcoffee.io/invites',
+			},
+			{ to: 'ada@example.test' },
+		);
 		// Already signed in — nobody left to tell to come claim anything.
 		expect(sendSlackDm).not.toHaveBeenCalled();
 		const { id } = (await volunteerRow('U_ADA'))!;
@@ -567,12 +572,13 @@ describe('resendInvite', () => {
 		expect(row.tokenExpiresAt!.getTime()).toBeGreaterThan(soon.getTime());
 
 		expect(sendEmail).toHaveBeenCalledOnce();
-		const [{ to, subject, text }] = sendEmail.mock.calls[0];
-		expect({ to, subject }).toEqual({
-			to: 'ada@example.test',
-			subject: 'Grace Hopper invited you to Virtual Coffee',
-		});
-		const newToken = /\/join\?invite=([A-Za-z0-9_-]+)/.exec(text)?.[1];
+		const [template, props, envelope] = sendEmail.mock.calls[0];
+		expect(template).toBe(volunteerInvite);
+		expect(envelope).toEqual({ to: 'ada@example.test' });
+		expect(props.inviterName).toBe('Grace Hopper');
+		const newToken = /\/join\?invite=([A-Za-z0-9_-]+)/.exec(
+			props.claimUrl,
+		)?.[1];
 		expect(newToken).toBeDefined();
 		expect(hashClaimToken(newToken!)).toBe(row.tokenHash);
 		// No ledger movement: it is the same Invite.

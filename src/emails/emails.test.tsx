@@ -3,12 +3,12 @@ import { render } from 'react-email';
 import { z } from 'zod';
 
 import { renderEmail, type EmailTemplate } from '@/lib/email/render';
-import { coffeeInvite } from './coffeeInvite';
-import { slackInvite } from './slackInvite';
-import { volunteerAccrual } from './volunteerAccrual';
-import { volunteerGrant } from './volunteerGrant';
-import { volunteerInvite } from './volunteerInvite';
-import { welcome } from './welcome';
+import coffeeInviteDefault, { coffeeInvite } from './coffeeInvite';
+import slackInviteDefault, { slackInvite } from './slackInvite';
+import volunteerAccrualDefault, { volunteerAccrual } from './volunteerAccrual';
+import volunteerGrantDefault, { volunteerGrant } from './volunteerGrant';
+import volunteerInviteDefault, { volunteerInvite } from './volunteerInvite';
+import welcomeDefault, { welcome } from './welcome';
 
 const URL = 'https://virtualcoffee.io/join?invite=abc';
 
@@ -112,6 +112,28 @@ describe.each(templates)('%s', (_name, template, props, greeting, link) => {
 	}
 });
 
+/**
+ * `pnpm email:dev` renders each file's default export and reads `PreviewProps`
+ * off it, so a file that forgets to export its `Email` disappears from the
+ * preview server with nothing else to notice.
+ */
+describe('the preview server', () => {
+	test.each([
+		['coffeeInvite', coffeeInviteDefault, coffeeInvite.Email],
+		['slackInvite', slackInviteDefault, slackInvite.Email],
+		['volunteerAccrual', volunteerAccrualDefault, volunteerAccrual.Email],
+		['volunteerGrant', volunteerGrantDefault, volunteerGrant.Email],
+		['volunteerInvite', volunteerInviteDefault, volunteerInvite.Email],
+		['welcome', welcomeDefault, welcome.Email],
+	])(
+		'%s default-exports its Email, with props to preview it with',
+		(_name, exported, Email) => {
+			expect(exported).toBe(Email);
+			expect(exported).toHaveProperty('PreviewProps');
+		},
+	);
+});
+
 describe('Content', () => {
 	test('is the body without the shell, so a dialog can render it inline', async () => {
 		const element = <welcome.Content name="Ada Lovelace" inviteUrl={URL} />;
@@ -146,6 +168,29 @@ describe('coffeeInvite', () => {
 						.includes('https://virtualcoffee.io/join-coffee?day=tuesday')
 						.includes('https://virtualcoffee.io/join-coffee?day=thursday')
 						.includes('hello@virtualcoffee.io'),
+				}),
+			),
+		);
+	});
+});
+
+describe('welcome', () => {
+	test('points at the handbook as well as the Slack invite', async () => {
+		await expect(
+			renderEmail(welcome, { name: 'Ada', inviteUrl: URL }),
+		).resolves.toEqual(
+			expect.schemaMatching(
+				z.object({
+					html: z
+						.string()
+						.includes(
+							'href="https://virtualcoffee.io/resources/virtual-coffee-handbook"',
+						),
+					text: z
+						.string()
+						.includes(
+							'https://virtualcoffee.io/resources/virtual-coffee-handbook',
+						),
 				}),
 			),
 		);

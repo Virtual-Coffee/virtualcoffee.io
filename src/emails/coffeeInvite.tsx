@@ -1,8 +1,7 @@
 import { Button, Link, Text } from 'react-email';
 
-import { Layout } from '@/lib/email/layout';
-import type { EmailTemplate } from '@/lib/email/render';
 import { styles } from '@/lib/email/styles';
+import { defineEmail } from '@/lib/email/template';
 import { siteUrl } from '@/util/url.server';
 
 /** Deliberately unaddressed: the maintainers' copy greets everyone alike. */
@@ -61,18 +60,12 @@ export function Content() {
 	);
 }
 
-export default function Email() {
-	return (
-		<Layout preview="You’re off the waiting list — the last step is a Virtual Coffee meeting.">
-			<Content />
-		</Layout>
-	);
-}
-
-Email.PreviewProps = {} satisfies CoffeeInviteProps;
-
-export const coffeeInvite: EmailTemplate<CoffeeInviteProps> = {
+export const coffeeInvite = defineEmail<CoffeeInviteProps>({
 	subject,
-	Email,
+	preview:
+		'You’re off the waiting list — the last step is a Virtual Coffee meeting.',
 	Content,
-};
+	previewProps: {},
+});
+
+export default coffeeInvite.Email;
