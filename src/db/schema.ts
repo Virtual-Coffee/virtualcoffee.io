@@ -600,7 +600,7 @@ export type ApplicationSource = (typeof applicationSource.enumValues)[number];
  * table so its access can be narrowed independently.
  *
  * These previously lived in the Airtable "Form Submissions" base, where they
- * were flat lists with no status of any kind. The status and the event log are
+ * were flat lists with no status of any kind. The status and History are
  * new.
  */
 export const submissionStatus = pgEnum('submission_status', [
