@@ -8,9 +8,12 @@ import {
 	discardAttachment,
 	storeAttachment,
 	type StoredAttachment,
-} from '@/lib/attachments';
+} from '@/lib/submissions/attachments';
 import { cocReportMessage, notifySlack } from '@/lib/slack/notify';
-import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
+import {
+	notifyAndRecord,
+	persistSubmission,
+} from '@/lib/submissions/submitSubmission';
 import { agree, email, name } from '@/util/forms/fields';
 import { intake, savingFailed } from '@/util/forms/intake';
 import { invalidFields } from '@/util/forms/parse';

@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { cocReport, db, submissionEvent } from '@/db';
-import { failedNotifications } from '@/lib/submissions';
+import { failedNotifications } from '@/lib/submissions/submissions';
 import { failInserts } from '@/test/db/fixtures';
 import { fieldErrors, formDataWith } from '@/test/forms';
 import { blobs, notifySlack } from '@/test/mocks/spies';
