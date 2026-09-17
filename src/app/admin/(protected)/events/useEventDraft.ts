@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import type { Draft } from '@/lib/eventDraft';
+import type { Draft } from '@/lib/events/eventDraft';
 
 /**
  * The Draft both Events forms hold. `set` patches fields; `touched` says

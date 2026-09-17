@@ -5,8 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useId } from 'react';
 
 import { ActionDialog } from '@/components/ActionDialog';
-import { draftFromSeries, emptyDraft, toSeriesInput } from '@/lib/eventDraft';
-import type { Series } from '@/lib/eventsCalendar';
+import {
+	draftFromSeries,
+	emptyDraft,
+	toSeriesInput,
+} from '@/lib/events/eventDraft';
+import type { Series } from '@/lib/events/eventsCalendar';
 import { useAction } from '@/util/forms/useAction';
 
 import { createSeries, endSeries, updateSeries } from './actions';

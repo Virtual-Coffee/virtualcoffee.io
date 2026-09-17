@@ -1,7 +1,10 @@
 import { notFound } from 'next/navigation';
 
-import { requirePermission } from '@/lib/adminAccess';
-import { connectEventsCalendar, isCalendarEventId } from '@/lib/eventsCalendar';
+import { requirePermission } from '@/lib/access/adminAccess';
+import {
+	connectEventsCalendar,
+	isCalendarEventId,
+} from '@/lib/events/eventsCalendar';
 
 import { Breadcrumb } from '../../../presentation';
 import { NotConfigured } from '../../presentation';

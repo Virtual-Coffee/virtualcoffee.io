@@ -71,8 +71,8 @@ vi.mock('@/lib/github/issues', async (importOriginal) => ({
 	createLunchAndLearnIssue: (await import('@/test/mocks/spies'))
 		.createLunchAndLearnIssue,
 }));
-vi.mock('@/lib/eventsCalendar', async (importOriginal) => ({
-	...(await importOriginal<typeof import('@/lib/eventsCalendar')>()),
+vi.mock('@/lib/events/eventsCalendar', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/events/eventsCalendar')>()),
 	connectEventsCalendar: (await import('@/test/mocks/spies'))
 		.connectEventsCalendar,
 }));

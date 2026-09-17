@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { useId, useState } from 'react';
 
 import { ActionDialog } from '@/components/ActionDialog';
-import type { TimeInput } from '@/lib/eventDraft';
-import type { AdminEvent } from '@/lib/eventsCalendar';
+import type { TimeInput } from '@/lib/events/eventDraft';
+import type { AdminEvent } from '@/lib/events/eventsCalendar';
 import { displayParts } from '@/util/date';
 import { useAction } from '@/util/forms/useAction';
 
