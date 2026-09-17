@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 
 import { db, pendingGrant, user } from '@/db';
 import { sendSlackDm } from '@/test/mocks/slackDm';
@@ -12,11 +12,6 @@ import {
 } from '@/test/db/fixtures';
 import { listAccessRows } from '@/lib/access/admins';
 import { slackDirectory, slackMember } from '@/test/mocks/slackMembers';
-
-vi.mock('@/lib/slack/dm', async (importOriginal) => ({
-	...(await importOriginal<typeof import('@/lib/slack/dm')>()),
-	...(await import('@/test/mocks/slackDm')),
-}));
 
 import {
 	grantPendingAccess,

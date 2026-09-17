@@ -48,6 +48,23 @@ vi.mock('@/data/slackMembers', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/data/slackMembers')>()),
 	...(await import('@/test/mocks/slackMembers')),
 }));
+vi.mock('@/lib/slack/notify', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/slack/notify')>()),
+	...(await import('@/test/mocks/notify')),
+}));
+vi.mock('@/lib/slack/dm', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/slack/dm')>()),
+	...(await import('@/test/mocks/slackDm')),
+}));
+vi.mock('@/lib/email/transport', () => import('@/test/mocks/transport'));
+
+/** `staleRead.readAs` stages the race — see `@/test/mocks/staleRead`. */
+vi.mock('@/lib/applications', async (importOriginal) =>
+	(await import('@/test/mocks/staleRead')).withStaleRead(
+		await importOriginal<typeof import('@/lib/applications')>(),
+		'getApplication',
+	),
+);
 
 /** Every table in the schema, so a new one is truncated without editing this. */
 const tables = Object.values(schema)
