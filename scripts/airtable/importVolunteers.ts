@@ -74,9 +74,21 @@ type MappingEntry = {
 	inviteRecordIds: string[];
 	/** The one field a maintainer edits. Empty means "do not import this row". */
 	slackUserId: string;
-	/** Reference only; ignored on apply. */
+	/** Written by `--propose`; `apply` reads only the handle of the chosen one. */
 	candidates: Candidate[];
 };
+
+/**
+ * The Slack handle of the member the maintainer chose — the roster renders it
+ * as `@handle`, so it has to be Slack's, not the Airtable GitHub username. An
+ * id typed by hand with no matching candidate has none.
+ */
+function slackHandle(entry: MappingEntry): string | null {
+	const match = entry.candidates.find(
+		(candidate) => candidate.slackUserId === entry.slackUserId,
+	);
+	return match?.handle.trim() || null;
+}
 
 async function fetchAll(table: string, apiKey: string): Promise<AirtableRow[]> {
 	const base = new Airtable({ apiKey }).base(BASE_ID);
@@ -391,7 +403,7 @@ async function apply(dryRun: boolean) {
 					// sign-in does not overwrite it; `claimPendingGrant` applies the
 					// Grant written below and fills in the user id.
 					slackDisplayName: entry.profileName ?? entry.name,
-					slackHandle: entry.githubUsername?.trim() || null,
+					slackHandle: slackHandle(entry),
 					roleLabels: entry.roleLabels,
 					// The one place a Volunteer's address comes from in bulk. Slack's
 					// directory does not carry one without `users:read.email`, so without
@@ -431,7 +443,7 @@ async function apply(dryRun: boolean) {
 					{
 						slackUserId: entry.slackUserId,
 						slackDisplayName: entry.profileName ?? entry.name,
-						slackHandle: entry.githubUsername?.trim() || null,
+						slackHandle: slackHandle(entry),
 					},
 					'Airtable import',
 				);
