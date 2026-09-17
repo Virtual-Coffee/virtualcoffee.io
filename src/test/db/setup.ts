@@ -3,7 +3,8 @@ import { PgTable } from 'drizzle-orm/pg-core';
 import { afterEach, beforeEach, inject, vi } from 'vitest';
 
 import * as schema from '@/db/schema';
-import { resetMocks } from '@/test/mocks';
+import { resetSpies } from '@/test/mocks/spies';
+import { resetWrappers } from '@/test/mocks/wrappers';
 
 /**
  * Runs before every `*.db.test.ts`.
@@ -35,15 +36,11 @@ delete process.env.NETLIFY_DB_DRIVER;
 process.env.BETTER_AUTH_SECRET ??= 'vitest-only-secret-0123456789abcdef';
 process.env.URL ??= 'http://localhost:9000';
 
-/**
- * `revalidatePath()` throws outside a Next request ("static generation store
- * missing"), and every admin action calls it after writing.
- */
-vi.mock('next/cache', () => ({
-	revalidatePath: vi.fn(),
-	revalidateTag: vi.fn(),
-	unstable_cache: <T>(fn: T) => fn,
-}));
+/** The outbound edge, mocked once for every db test — spies in `src/test/mocks/`. */
+vi.mock('next/cache', async () => {
+	const { revalidatePath, revalidateTag } = await import('@/test/mocks/spies');
+	return { revalidatePath, revalidateTag, unstable_cache: <T>(fn: T) => fn };
+});
 
 /** Every table in the schema, so a new one is truncated without editing this. */
 const tables = Object.values(schema)
@@ -52,7 +49,8 @@ const tables = Object.values(schema)
 	.join(', ');
 
 beforeEach(() => {
-	resetMocks();
+	resetSpies();
+	resetWrappers();
 });
 
 afterEach(async () => {
