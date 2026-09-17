@@ -47,6 +47,10 @@ export async function htmlToMarkdown(html: string) {
  * format; this is the one sniff both the public read and the admin page use.
  */
 export function looksLikeHtml(raw: string): boolean {
+	// A tag in Markdown code is text, not markup: drop fences, then spans.
+	const prose = raw
+		.replace(/^(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1[ \t]*$/gm, '')
+		.replace(/(`+)[^`\n][\s\S]*?\1/g, '');
 	// A tag, not a Markdown autolink like `<https://…>` or `<name@…>`.
-	return /<\/?[a-z][a-z0-9-]*(?:\s[^<>]*?)?\s*\/?>/i.test(raw);
+	return /<\/?[a-z][a-z0-9-]*(?:\s[^<>]*?)?\s*\/?>/i.test(prose);
 }
