@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 import type { ApplicationStatus } from '@/db';
 import {
@@ -11,11 +11,11 @@ import {
 	sendCoffeeInvite,
 	withdrawApplication,
 } from '../actions';
-import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
+import { ActionDialog, type ActionFailure } from '@/components/ActionDialog';
+import { EmailPreview } from '@/components/EmailPreview';
 import { ARCHIVE_STATUSES } from '@/lib/applicationStatuses';
 import type { EmailStatus } from '@/lib/email/transport';
-import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
-import { CloseDialog } from './closeDialog';
+import { MAX_NOTE_LENGTH } from '@/lib/notes';
 import { useAction } from '@/util/forms/useAction';
 import { ReadOnlyNotice } from '../../presentation';
 
@@ -35,47 +35,59 @@ type Props = {
 	slackInvite: Template;
 };
 
-type Dialog = 'coffee' | 'approve' | 'resend' | 'decline' | 'withdraw' | null;
-
 export function ActionPanel(props: Props) {
-	const [dialog, setDialog] = useState<Dialog>(null);
-	const {
-		run: runAction,
-		pending,
-		result,
-	} = useAction<ActionResult | EmailActionResult>();
-
-	// Closed on either outcome: the failure alert below sits behind the
-	// dialog, and a maintainer must read it before deciding on a retry.
-	const run = (action: () => Promise<ActionResult | EmailActionResult>) =>
-		runAction(action, { settle: () => setDialog(null), refresh: 'always' });
+	// One draft each, not one per dialog: only one of these can be open, and
+	// every close resets them, so a note typed for one decision cannot carry
+	// over to the next.
+	const [copyMe, setCopyMe] = useState(false);
+	const [note, setNote] = useState('');
+	// Each action changes the status that decides which buttons render, so a
+	// success message beside the trigger would unmount with it. It lives up
+	// here instead, where the next confirmation clears it.
+	const [notice, setNotice] = useState<string | null>(null);
+	const attendance = useAction();
 
 	if (!props.canManage) return <ReadOnlyNotice />;
 
+	/**
+	 * Whether anything was emailed is the thing the maintainer needs in order
+	 * to decide about retrying, so it is stated outright rather than left to
+	 * be inferred.
+	 */
+	const retryAdvice = (result: ActionFailure) =>
+		'emailSent' in result ? (
+			<p className="mb-0 small">
+				{result.emailSent === false
+					? `${props.applicantName} is still ${props.statusText} and nothing was emailed — safe to try again.`
+					: result.emailSent === 'unknown'
+						? `We can’t confirm whether the email went out. Check with ${props.applicantEmail} before retrying, or you may email them twice.`
+						: 'An email was already sent — read the message above before retrying.'}
+			</p>
+		) : null;
+
+	// Shared by every dialog here: the outcome is reported above rather than
+	// beside the trigger, the drafts reset on close, and the screen's numbers
+	// may have moved even when the action refused.
+	const shared = {
+		showFeedback: false,
+		refresh: 'always',
+		onOpen: () => setNotice(null),
+		onClose: () => {
+			setCopyMe(false);
+			setNote('');
+		},
+		onSuccess: (result: { message?: string }) =>
+			setNotice(result.message ?? null),
+		errorDetail: retryAdvice,
+	} as const;
+
+	const sendCopy = { copyMe, onCopyMe: setCopyMe };
+
 	return (
 		<>
-			{result && !result.ok && (
-				<div className="alert alert-danger" role="alert">
-					<h3 className="h6 alert-heading">That didn&rsquo;t work</h3>
-					<p className="mb-1">{result.message}</p>
-					{/* Whether anything was emailed is the thing the maintainer needs
-					    in order to decide about retrying, so it is stated outright
-					    rather than left to be inferred. */}
-					{'emailSent' in result && (
-						<p className="mb-0 small">
-							{result.emailSent === false
-								? `${props.applicantName} is still ${props.statusText} and nothing was emailed — safe to try again.`
-								: result.emailSent === 'unknown'
-									? `We can’t confirm whether the email went out. Check with ${props.applicantEmail} before retrying, or you may email them twice.`
-									: 'An email was already sent — read the message above before retrying.'}
-						</p>
-					)}
-				</div>
-			)}
-
-			{result?.ok && result.message && (
+			{notice && (
 				<div className="alert alert-warning small" role="alert">
-					{result.message}
+					{notice}
 				</div>
 			)}
 
@@ -83,32 +95,70 @@ export function ActionPanel(props: Props) {
 
 			<div className="d-grid gap-2">
 				{props.status === 'waitlisted' && (
-					<button
-						type="button"
+					<ActionDialog
+						{...shared}
 						className="btn btn-primary"
-						disabled={pending}
-						onClick={() => setDialog('coffee')}
+						label="Send Coffee invite"
+						title="Send Coffee invite"
+						confirmLabel="Send invite"
+						pendingLabel="Sending…"
+						action={() => sendCoffeeInvite(props.applicationId, copyMe)}
 					>
-						Send Coffee invite
-					</button>
+						<EmailPreview
+							{...sendCopy}
+							intro={
+								<>
+									This sends an email to <strong>{props.applicantEmail}</strong>{' '}
+									and moves {props.applicantName} to{' '}
+									<strong>Coffee invited</strong>.
+								</>
+							}
+							to={props.applicantEmail}
+							emails={[props.coffeeInvite]}
+						/>
+					</ActionDialog>
 				)}
 
 				{props.status === 'coffee_invited' && (
 					<>
-						<button
-							type="button"
+						<ActionDialog
+							{...shared}
 							className="btn btn-primary"
-							disabled={pending}
-							onClick={() => setDialog('approve')}
+							label="Approve membership"
+							title="Approve membership"
+							confirmLabel="Approve &amp; send Slack invite"
+							pendingLabel="Sending…"
+							action={() => approveMembership(props.applicationId, copyMe)}
 						>
-							Approve membership
-						</button>
+							<EmailPreview
+								{...sendCopy}
+								intro={
+									<>
+										Two things happen and neither can be taken back:{' '}
+										{props.applicantName} gets a welcome email, and a Slack
+										invite goes out to <strong>{props.applicantEmail}</strong>.
+										<span className="d-block mt-2 text-body-secondary">
+											Coffee invited → Member
+											{props.attendedAt
+												? ` · Attended ${props.attendedAt}`
+												: ''}
+										</span>
+									</>
+								}
+								to={props.applicantEmail}
+								emails={[props.welcome, props.slackInvite]}
+							/>
+						</ActionDialog>
 						{!props.attendedAt && (
 							<button
 								type="button"
 								className="btn btn-outline-secondary"
-								disabled={pending}
-								onClick={() => run(() => recordAttendance(props.applicationId))}
+								disabled={attendance.pending}
+								onClick={() =>
+									attendance.run(() => recordAttendance(props.applicationId), {
+										refresh: 'always',
+									})
+								}
 							>
 								Record attendance
 							</button>
@@ -117,132 +167,115 @@ export function ActionPanel(props: Props) {
 				)}
 
 				{props.status === 'member' && (
-					<button
-						type="button"
+					<ActionDialog
+						{...shared}
 						className="btn btn-outline-secondary"
-						disabled={pending}
-						onClick={() => setDialog('resend')}
+						label="Re-send Slack invite"
+						title="Re-send Slack invite"
+						confirmLabel="Send invite"
+						pendingLabel="Sending…"
+						action={() => resendSlackInvite(props.applicationId, copyMe)}
 					>
-						Re-send Slack invite
-					</button>
+						<EmailPreview
+							{...sendCopy}
+							intro={
+								<>
+									A new single-use link goes to{' '}
+									<strong>{props.applicantEmail}</strong>. Use this when the
+									first one was opened by a link scanner, expired, or never
+									arrived. Nothing else changes.
+								</>
+							}
+							to={props.applicantEmail}
+							emails={[props.slackInvite]}
+						/>
+					</ActionDialog>
 				)}
 
 				{/* The archive links here too; a closed application has nothing left to close. */}
 				{!ARCHIVE_STATUSES.includes(props.status) && (
 					<>
-						<button
-							type="button"
+						<ActionDialog
+							{...shared}
 							className="btn btn-outline-danger"
-							disabled={pending}
-							onClick={() => setDialog('decline')}
+							label="Decline"
+							title="Decline application"
+							danger
+							action={() => declineApplication(props.applicationId, note)}
 						>
-							Decline
-						</button>
-						<button
-							type="button"
+							<CloseBody
+								applicantName={props.applicantName}
+								outcome="declined"
+								note={note}
+								onNote={setNote}
+							/>
+						</ActionDialog>
+						<ActionDialog
+							{...shared}
 							className="btn btn-outline-secondary"
-							disabled={pending}
-							onClick={() => setDialog('withdraw')}
+							label="Mark withdrawn"
+							title="Mark withdrawn"
+							danger
+							action={() => withdrawApplication(props.applicationId, note)}
 						>
-							Mark withdrawn
-						</button>
+							<CloseBody
+								applicantName={props.applicantName}
+								outcome="marked withdrawn"
+								note={note}
+								onNote={setNote}
+							/>
+						</ActionDialog>
 					</>
 				)}
 			</div>
+
+			{attendance.feedback}
 
 			{props.status === 'coffee_invited' && (
 				<p className="text-body-secondary small mt-3 mb-0">
 					Approving also sends the Slack invite.
 				</p>
 			)}
+		</>
+	);
+}
 
-			<ConfirmSendDialog
-				open={dialog === 'coffee'}
-				title="Send Coffee invite"
-				intro={
-					<>
-						This sends an email to <strong>{props.applicantEmail}</strong> and
-						moves {props.applicantName} to <strong>Coffee invited</strong>.
-					</>
-				}
-				to={props.applicantEmail}
-				emails={[props.coffeeInvite]}
-				confirmLabel="Send invite"
-				pending={pending}
-				offerCopy
-				onCancel={() => setDialog(null)}
-				onConfirm={(copyMe) =>
-					run(() => sendCoffeeInvite(props.applicationId, copyMe))
-				}
-			/>
+/**
+ * The body of the two terminal closes. Neither sends anything, but neither can
+ * be undone either. The optional note lands on the close event itself, so the
+ * reason is on the same History line as the decision rather than a separate
+ * note someone may not leave.
+ */
+function CloseBody({
+	applicantName,
+	outcome,
+	note,
+	onNote,
+}: {
+	applicantName: string;
+	outcome: string;
+	note: string;
+	onNote: (note: string) => void;
+}) {
+	const noteId = useId();
 
-			<ConfirmSendDialog
-				open={dialog === 'approve'}
-				title="Approve membership"
-				intro={
-					<>
-						Two things happen and neither can be taken back:{' '}
-						{props.applicantName} gets a welcome email, and a Slack invite goes
-						out to <strong>{props.applicantEmail}</strong>.
-						<span className="d-block mt-2 text-body-secondary">
-							Coffee invited → Member
-							{props.attendedAt ? ` · Attended ${props.attendedAt}` : ''}
-						</span>
-					</>
-				}
-				to={props.applicantEmail}
-				emails={[props.welcome, props.slackInvite]}
-				confirmLabel="Approve &amp; send Slack invite"
-				pending={pending}
-				offerCopy
-				onCancel={() => setDialog(null)}
-				onConfirm={(copyMe) =>
-					run(() => approveMembership(props.applicationId, copyMe))
-				}
-			/>
-
-			<CloseDialog
-				open={dialog === 'decline'}
-				verb="decline"
-				applicantName={props.applicantName}
-				pending={pending}
-				onCancel={() => setDialog(null)}
-				onConfirm={(note) =>
-					run(() => declineApplication(props.applicationId, note))
-				}
-			/>
-
-			<CloseDialog
-				open={dialog === 'withdraw'}
-				verb="withdraw"
-				applicantName={props.applicantName}
-				pending={pending}
-				onCancel={() => setDialog(null)}
-				onConfirm={(note) =>
-					run(() => withdrawApplication(props.applicationId, note))
-				}
-			/>
-
-			<ConfirmSendDialog
-				open={dialog === 'resend'}
-				title="Re-send Slack invite"
-				intro={
-					<>
-						A new single-use link goes to{' '}
-						<strong>{props.applicantEmail}</strong>. Use this when the first one
-						was opened by a link scanner, expired, or never arrived. Nothing
-						else changes.
-					</>
-				}
-				to={props.applicantEmail}
-				emails={[props.slackInvite]}
-				confirmLabel="Send invite"
-				pending={pending}
-				offerCopy
-				onCancel={() => setDialog(null)}
-				onConfirm={(copyMe) =>
-					run(() => resendSlackInvite(props.applicationId, copyMe))
-				}
+	return (
+		<>
+			<p>
+				{applicantName} will be <strong>{outcome}</strong> and moved to the
+				archive. This can&rsquo;t be undone; they would have to apply again.
+			</p>
+			<label className="form-label small" htmlFor={noteId}>
+				Why? <span className="text-body-secondary">(optional)</span>
+			</label>
+			<textarea
+				id={noteId}
+				className="form-control form-control-sm"
+				rows={3}
+				maxLength={MAX_NOTE_LENGTH}
+				value={note}
+				onChange={(event) => onNote(event.target.value)}
+				placeholder="Recorded in the history alongside the decision"
 			/>
 		</>
 	);
