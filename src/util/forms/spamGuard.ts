@@ -25,7 +25,7 @@ export const MIN_ELAPSED_MS = 2_000;
 /** A form left open overnight is a real person coming back to it, not a bot. */
 export const MAX_ELAPSED_MS = 24 * 60 * 60 * 1000;
 
-export type SpamCheck = 'ok' | 'honeypot' | 'invalid' | 'stale';
+type SpamCheck = 'ok' | 'honeypot' | 'invalid' | 'stale';
 
 /**
  * Signed so the timestamp cannot simply be back-dated in the payload.
