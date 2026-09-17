@@ -176,9 +176,12 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 export async function runInviteMaintenance(
 	now = new Date(),
 ): Promise<MaintenanceReport> {
+	// Notify before the sweep: the accrual is once per month by index, so the
+	// only run that can email it is this one, while an Invite the sweep misses
+	// is still due tomorrow. The unrecoverable step goes first (docs/adr/0005).
 	const accruedFor = await accrue(now);
-	const { expired, failures: expiryFailures } = await expire(now);
 	const { emailed, failures } = await notify(accruedFor);
+	const { expired, failures: expiryFailures } = await expire(now);
 
 	return {
 		period: periodKey(now),
