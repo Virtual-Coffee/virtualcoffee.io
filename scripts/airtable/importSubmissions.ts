@@ -11,6 +11,7 @@ import {
 	volunteerSignup,
 } from '../../src/db';
 import { ATTACHMENT_STORE } from '../../src/lib/submissions/attachments';
+import { isLocalDatabaseUrl } from '../lib/localOnly';
 import {
 	recordImport,
 	type SubmissionEventKey,
@@ -163,7 +164,8 @@ type StoredLegacy = {
  * `scripts/with-local-netlify.ts` fills in with a local sandbox store — the
  * same reason it also supplies the database connection string. Passing
  * NETLIFY_SITE_ID and NETLIFY_AUTH_TOKEN overrides that and writes to the real
- * production store, which is what a live migration needs.
+ * production store — only ever alongside a production database, which the
+ * wrapper refuses; `assertStoresMatch` keeps the two from coming apart.
  *
  * With neither, the writes fail with "The environment has not been configured
  * to use Netlify Blobs", which the per-file error handling would report as a
@@ -177,6 +179,28 @@ function attachmentStore() {
 	return siteID && token
 		? getStore({ name: ATTACHMENT_STORE, siteID, token })
 		: getStore(ATTACHMENT_STORE);
+}
+
+/**
+ * The blob store and the database have to be the same environment: local rows
+ * whose `attachment_blob_key` only resolves in the production store are a
+ * broken local site and four orphaned production objects. The wrapper only
+ * ever supplies a local database, so a production store override under it is
+ * always this mistake.
+ */
+function assertStoresMatch(): void {
+	const productionStore = Boolean(
+		process.env.NETLIFY_SITE_ID && process.env.NETLIFY_AUTH_TOKEN,
+	);
+	const databaseUrl =
+		process.env.NETLIFY_DB_URL ?? process.env.DATABASE_URL ?? '';
+	if (productionStore && isLocalDatabaseUrl(databaseUrl)) {
+		throw new Error(
+			'NETLIFY_SITE_ID and NETLIFY_AUTH_TOKEN point attachments at the ' +
+				'production blob store, but the database is local. Unset them for ' +
+				'a local run; the two must be the same environment.',
+		);
+	}
 }
 
 /**
@@ -274,6 +298,7 @@ async function main() {
 	// A dry run still fetches the attachments (to prove the URLs resolve) but
 	// never writes them, so it does not need working blob credentials.
 	if (!dryRun) {
+		assertStoresMatch();
 		await assertBlobsUsable();
 	}
 
