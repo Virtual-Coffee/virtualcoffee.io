@@ -16,8 +16,8 @@ import type {
 	SeriesInput,
 	SeriesUpdate,
 	TimeInput,
-} from '@/lib/eventDraft';
-import { isEventType, type EventType } from '@/lib/eventTypes';
+} from '@/lib/events/eventDraft';
+import { isEventType, type EventType } from '@/lib/events/eventTypes';
 import { DISPLAY_ZONE, displayParts } from '@/util/date';
 import { htmlToMarkdown, looksLikeHtml } from '@/util/markdown.server';
 import {
@@ -26,14 +26,14 @@ import {
 	parseRecurrence,
 	serializeRecurrence,
 	type Recurrence,
-} from '@/lib/recurrence';
+} from '@/lib/events/recurrence';
 
 export {
 	EVENT_TYPE_LABELS,
 	EVENT_TYPES,
 	isEventType,
 	type EventType,
-} from '@/lib/eventTypes';
+} from '@/lib/events/eventTypes';
 
 /** A writer must present the etag it read; Google answers 412 if it moved on. */
 export type WriteOptions = { headers: { 'If-Match': string } };

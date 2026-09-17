@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 
-import type { AdminEvent } from '@/lib/eventsCalendar';
+import type { AdminEvent } from '@/lib/events/eventsCalendar';
 import { useAction } from '@/util/forms/useAction';
 
 import { cancelEvent } from './actions';
