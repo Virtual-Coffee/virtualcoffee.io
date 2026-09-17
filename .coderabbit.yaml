@@ -17,7 +17,8 @@ reviews:
       - 'coderabbit-review'
   # Generated or frozen files — never review-worthy. Lockfile and drizzle
   # snapshots are committed on purpose (docs/adr/0001); the rest is codegen
-  # (docs/bot-list.md) or a data snapshot (CLAUDE.md "Content conventions").
+  # (src/data/bots.ts — policy in docs/bot-list.md) or a data snapshot
+  # (CLAUDE.md "Content conventions").
   path_filters:
     - '!pnpm-lock.yaml'
     - '!drizzle/**/snapshot.json'
