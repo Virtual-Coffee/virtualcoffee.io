@@ -11,9 +11,9 @@ have not consented to publication.
 
 ## Decision
 
-Membership Applications live in Postgres, reachable only through `/admin`, and
-do not move to vc-data. The two kinds of data need opposite handling; that both
-are "data" is not a reason to colocate them.
+Membership Applications live in Postgres and do not move to vc-data: `/join`
+creates one, and `/admin` is the only place it is read. The two kinds of data
+need opposite handling; that both are "data" is not a reason to colocate them.
 
 ## Consequences
 

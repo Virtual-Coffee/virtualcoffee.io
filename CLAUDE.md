@@ -67,7 +67,7 @@ Every external data source lives in `src/data/` and degrades to a mock when its 
 
 Before touching `src/db`, `src/lib/access`, `src/lib/history` or `src/app/join`, read `CONTEXT.md` for the vocabulary. Each rule below cites the ADR that decided it; open the ADR before changing the rule.
 
-- Every page and server action gates itself with `requirePermission()` (`src/lib/access/adminAccess.ts`); a layout only proves the viewer holds _some_ section — `docs/adr/0006`.
+- Every `/admin` page and server action gates itself with `requirePermission()` (`src/lib/access/adminAccess.ts`); a layout only proves the viewer holds _some_ section — `docs/adr/0006`.
 - A Pending Grant (`src/lib/access/pendingGrants.ts`) matches on the Slack member id — `docs/adr/0009`.
 - `src/lib/history/eventLog.ts` is the only writer of `application_event` and `submission_event`: `recordOutcome()` turns a send into History, `transitionAndRecord()` commits a status change with its event. Labels in `src/lib/history/eventLabels.ts` are keyed by the enums, so a new event type is a type error until labelled.
 - A schema change is a new migration: `pnpm db:generate --name=<hyphenated-slug>`, both generated files committed — `docs/adr/0001`.
