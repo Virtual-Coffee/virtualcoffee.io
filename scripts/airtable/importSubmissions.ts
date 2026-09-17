@@ -204,6 +204,18 @@ function assertStoresMatch(): void {
 }
 
 /**
+ * Best-effort, like `discardAttachment` in `src/lib/submissions/attachments`,
+ * but against this script's store, which may be the production override.
+ */
+async function discardUpload(key: string): Promise<void> {
+	try {
+		await attachmentStore().delete(key);
+	} catch (error) {
+		console.error(`  orphaned attachment ${key} could not be deleted`, error);
+	}
+}
+
+/**
  * Fail before importing anything rather than after, so a misconfigured run
  * cannot quietly drop every attachment and still report success.
  */
@@ -357,25 +369,36 @@ async function main() {
 			// `onConflictDoNothing` on the unique airtable_record_id is what makes
 			// two runs at once safe — which is also why the row and its `imported`
 			// event commit together: a re-run would never come back for the event.
-			const created = await db().transaction(async (tx) => {
-				const [stored] = await tx
-					.insert(table)
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					.values(values as any)
-					.onConflictDoNothing({ target: table.airtableRecordId })
-					.returning({ id: table.id });
+			let created = false;
+			try {
+				created = await db().transaction(async (tx) => {
+					const [stored] = await tx
+						.insert(table)
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						.values(values as any)
+						.onConflictDoNothing({ target: table.airtableRecordId })
+						.returning({ id: table.id });
 
-				if (!stored) return false;
+					if (!stored) return false;
 
-				await recordImport(
-					{ kind: 'submission', id: stored.id, table, eventKey },
-					row.id,
-					submittedAt(row),
-					undefined,
-					tx,
-				);
-				return true;
-			});
+					await recordImport(
+						{ kind: 'submission', id: stored.id, table, eventKey },
+						row.id,
+						submittedAt(row),
+						undefined,
+						tx,
+					);
+					return true;
+				});
+			} finally {
+				// The pre-read above covers an ordinary re-run; this covers a
+				// concurrent one, and a database failure after the upload. Either
+				// way the row was not written, so the blob it points at goes too.
+				const key = values.attachmentBlobKey;
+				if (!created && typeof key === 'string') {
+					await discardUpload(key);
+				}
+			}
 
 			if (!created) continue;
 
