@@ -9,7 +9,7 @@ import { createLunchAndLearnIssue } from '@/lib/github/issues';
 import { lunchAndLearnMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import { agree, email, name } from '@/util/forms/fields';
-import { intake } from '@/util/forms/intake';
+import { intake, savingFailed } from '@/util/forms/intake';
 import { siteUrl } from '@/util/url.server';
 import type { FormState } from '@/util/forms/types';
 
@@ -65,8 +65,7 @@ export async function submitLunchAndLearnIdea(
 		},
 		{
 			submitted: 'Idea submitted',
-			failed:
-				'Something went wrong saving your form. Please try again, or email hello@virtualcoffee.io.',
+			failed: savingFailed(),
 		},
 	);
 	if ('error' in saved) return saved.error;

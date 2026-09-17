@@ -7,7 +7,7 @@ import { coffeeTableGroupRequest } from '@/db';
 import { coffeeTableGroupMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import { agree, email, name } from '@/util/forms/fields';
-import { intake } from '@/util/forms/intake';
+import { intake, savingFailed } from '@/util/forms/intake';
 import type { FormState } from '@/util/forms/types';
 
 const THANKS = '/start-coffee-table-group/thanks';
@@ -54,8 +54,7 @@ export async function submitCoffeeTableGroupRequest(
 		},
 		{
 			submitted: 'Request submitted',
-			failed:
-				'Something went wrong saving your form. Please try again, or email hello@virtualcoffee.io.',
+			failed: savingFailed(),
 		},
 	);
 	if ('error' in saved) return saved.error;
