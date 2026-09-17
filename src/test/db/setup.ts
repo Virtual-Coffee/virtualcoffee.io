@@ -1,11 +1,21 @@
 import { getTableName, is, sql } from 'drizzle-orm';
 import { PgTable } from 'drizzle-orm/pg-core';
-import { afterAll, afterEach, inject, vi } from 'vitest';
+import { afterEach, beforeEach, inject, vi } from 'vitest';
 
 import * as schema from '@/db/schema';
+import { resetMocks } from '@/test/mocks';
 
 /**
  * Runs before every `*.db.test.ts`.
+ *
+ * The db project runs its files in one worker without isolation
+ * (`vitest.config.mts`), so they share a module cache: `db()`, Better Auth
+ * and drizzle load once per run instead of once per file, which is about half
+ * the wall time. The cost is that a `vi.mock` in a test file is ignored when
+ * another file already loaded the module — so every mock of a shared module
+ * is registered here, once, and a test sets state through the knobs in
+ * `src/test/mocks/` (ESLint rejects a file-scoped `vi.mock` in `*.db.test.ts`).
+ * The worker's exit closes the pool's sockets; nothing ends it explicitly.
  *
  * `db()` is a lazy singleton that reads `NETLIFY_DB_URL` on first use, so
  * setting it here — before any test module is imported — is the whole seam.
@@ -41,17 +51,12 @@ const tables = Object.values(schema)
 	.map((table) => `"${getTableName(table)}"`)
 	.join(', ');
 
+beforeEach(() => {
+	resetMocks();
+});
+
 afterEach(async () => {
 	const { db } = await import('@/db');
 	await db().execute(sql.raw(`TRUNCATE ${tables} RESTART IDENTITY CASCADE`));
 	vi.unstubAllEnvs();
-});
-
-afterAll(async () => {
-	// Idle pg clients would otherwise hold the worker open past the run.
-	const { db } = await import('@/db');
-	const client = (
-		db() as unknown as { $client?: { pool?: { end(): Promise<void> } } }
-	).$client;
-	await client?.pool?.end();
 });

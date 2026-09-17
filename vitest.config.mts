@@ -43,8 +43,17 @@ export default defineConfig({
 					include: ['**/*.db.test.ts'],
 					globalSetup: ['./src/test/db/globalSetup.ts'],
 					setupFiles: ['./src/test/setup.ts', './src/test/db/setup.ts'],
-					// One in-memory database per run, so files must not race.
+					// One in-memory database per run, so files must not race — and
+					// with no parallelism to lose, one worker thread runs them all
+					// without isolation: drizzle, the schema and Better Auth load once
+					// per run rather than once per file. Files share module state,
+					// which is why this project's mocks live in `src/test/db/setup.ts`.
 					fileParallelism: false,
+					pool: 'threads',
+					isolate: false,
+					// Projects with different worker counts cannot share a group;
+					// the db project runs after `unit`.
+					sequence: { groupOrder: 1 },
 				},
 			},
 		],

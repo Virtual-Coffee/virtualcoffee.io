@@ -1,5 +1,3 @@
-import { beforeEach } from 'vitest';
-
 /**
  * Stages the race the conditional updates exist for: the action reads one
  * status, but the row has already moved on by the time it writes. Set
@@ -7,9 +5,9 @@ import { beforeEach } from 'vitest';
  */
 export const staleRead = { readAs: null as string | null };
 
-beforeEach(() => {
+export function reset() {
 	staleRead.readAs = null;
-});
+}
 
 /** A reader `withStaleRead` can wrap: async, returning a row with a status. */
 type Reader = (...args: never[]) => Promise<{ status: string } | null>;
@@ -21,7 +19,8 @@ type ReaderKey<M> = {
 
 /**
  * Returns `actual` with one reader wrapped, so the status it reports is
- * whatever `staleRead.readAs` holds. A test file's mock is one statement:
+ * whatever `staleRead.readAs` holds. `src/test/db/setup.ts` registers one
+ * per module whose reader an action fences on, e.g.
  *
  * ```ts
  * vi.mock('@/lib/applications', async (importOriginal) =>
