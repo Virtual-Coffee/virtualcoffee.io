@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 /**
- * Delivery Mode for anything the site sends out — email, Slack posts, GitHub
- * issues. Live delivery is production only; everywhere else is Captured
+ * Delivery Mode for anything the site sends out — email, Slack posts and DMs,
+ * GitHub issues. Live delivery is production only; everywhere else is Captured
  * (built and logged, the caller carries on as though it went) unless an opt-in
- * says otherwise. See docs/adr/0013.
+ * says otherwise — and a Slack DM has no opt-in. See docs/adr/0013.
  *
  * `CONTEXT` is Netlify's: `production`, `deploy-preview`, `branch-deploy`, or
  * `dev` under `netlify dev`. Plain `next dev` has none, which is non-production
@@ -15,7 +15,7 @@ import { z } from 'zod';
  * the `Outbound` result. A sender cannot reach its credentials before the mode.
  */
 
-export type OutboundKind = 'email' | 'slack' | 'github issue';
+export type OutboundKind = 'email' | 'slack' | 'slack dm' | 'github issue';
 
 export function isProduction(): boolean {
 	return process.env.CONTEXT === 'production';
@@ -83,15 +83,24 @@ export function emailDelivery(): EmailDelivery {
 }
 
 /**
- * Slack and GitHub have no address to redirect to; their opt-in is
- * `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true`, paired with per-context webhook and
- * App values that point at a test channel or repository.
+ * Slack posts and GitHub issues have no address to redirect to; their opt-in
+ * is `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true`, paired with per-context webhook
+ * and App values that point at a test channel or repository.
  */
 export function notifyDelivery(): 'live' | 'captured' {
 	if (isProduction()) return 'live';
 	return process.env.NOTIFY_LIVE_OUTSIDE_PRODUCTION === 'true'
 		? 'live'
 		: 'captured';
+}
+
+/**
+ * A Slack DM is addressed to a stored member id, and on a preview that is a
+ * real person (docs/adr/0007) — there is no test channel to point it at, so
+ * no variable opts it in.
+ */
+function dmDelivery(): 'live' | 'captured' {
+	return isProduction() ? 'live' : 'captured';
 }
 
 /**
@@ -122,8 +131,9 @@ type Delivery<K extends OutboundKind> =
 
 function deliveryFor<K extends OutboundKind>(kind: K): Delivery<K> {
 	if (kind === 'email') return emailDelivery() as Delivery<K>;
+	const mode = kind === 'slack dm' ? dmDelivery() : notifyDelivery();
 	return (
-		notifyDelivery() === 'captured'
+		mode === 'captured'
 			? { mode: 'captured', context: deployContext() }
 			: { mode: 'live' }
 	) as Delivery<K>;
@@ -132,6 +142,7 @@ function deliveryFor<K extends OutboundKind>(kind: K): Delivery<K> {
 const VERB: Record<OutboundKind, string> = {
 	email: 'delivered',
 	slack: 'posted to Slack',
+	'slack dm': 'sent as a Slack DM',
 	'github issue': 'opened on GitHub',
 };
 
