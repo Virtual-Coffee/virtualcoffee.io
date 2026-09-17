@@ -60,6 +60,7 @@ describe('submitCoffeeTableGroupRequest', () => {
 		// notifySlack() returns rather than throws, by contract.
 		notifySlack.mockResolvedValue({
 			ok: false,
+			definitelyNotSent: false,
 			message: 'Could not reach Slack: fetch failed',
 		});
 
