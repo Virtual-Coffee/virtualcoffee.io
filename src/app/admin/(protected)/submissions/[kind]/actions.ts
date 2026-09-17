@@ -84,8 +84,6 @@ export async function setSubmissionStatus(
 			type: 'status_changed',
 			body: null,
 			actorUserId: actor,
-			fromStatus: current.status,
-			toStatus: next,
 		},
 	);
 	if (!changed) {
