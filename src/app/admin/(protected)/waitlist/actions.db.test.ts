@@ -4,8 +4,8 @@ import { db, inviteToken } from '@/db';
 import {
 	createSlackInviteToken,
 	slackInviteForToken,
-} from '@/lib/inviteTokens';
-import { MAX_NOTE_LENGTH } from '@/lib/notes';
+} from '@/lib/waitlist/inviteTokens';
+import { MAX_NOTE_LENGTH } from '@/lib/admin/notes';
 import { staleRead } from '@/test/mocks/wrappers';
 import { sendEmail } from '@/test/mocks/spies';
 import { NOT_FOUND } from '@/test/next';

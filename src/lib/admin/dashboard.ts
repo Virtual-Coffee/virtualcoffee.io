@@ -1,4 +1,4 @@
-import { statusCounts } from '@/lib/applications';
+import { statusCounts } from '@/lib/waitlist/applications';
 import { recentEvents } from '@/lib/history/eventLog';
 import type { Section } from '@/lib/access/permissions';
 

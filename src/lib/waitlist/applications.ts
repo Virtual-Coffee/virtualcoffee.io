@@ -9,9 +9,9 @@ import {
 	type MembershipApplication,
 } from '@/db';
 import { isId } from '@/db/ids';
-import type { ApplicationSubject } from '@/lib/eventLog';
-import { pagedList } from '@/lib/pagedList';
-import { countByStatus } from '@/lib/statusCounts';
+import type { ApplicationSubject } from '@/lib/history/eventLog';
+import { pagedList } from '@/lib/admin/pagedList';
+import { countByStatus } from '@/lib/admin/statusCounts';
 
 /** The Subject a Membership Application's events are recorded and read against. */
 export function applicationSubject(id: string): ApplicationSubject {

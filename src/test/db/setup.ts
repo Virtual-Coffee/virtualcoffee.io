@@ -60,9 +60,9 @@ vi.mock('@/lib/email/transport', async () => ({
 }));
 
 /** `staleRead.readAs` stages the race — see `@/test/mocks/wrappers`. */
-vi.mock('@/lib/applications', async (importOriginal) =>
+vi.mock('@/lib/waitlist/applications', async (importOriginal) =>
 	(await import('@/test/mocks/wrappers')).withStaleRead(
-		await importOriginal<typeof import('@/lib/applications')>(),
+		await importOriginal<typeof import('@/lib/waitlist/applications')>(),
 		'getApplication',
 	),
 );

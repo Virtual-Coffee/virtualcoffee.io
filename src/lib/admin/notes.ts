@@ -1,4 +1,4 @@
-import type { ActionResult } from '@/lib/actionResult';
+import type { ActionResult } from '@/lib/admin/actionResult';
 
 /**
  * A maintainer's note, as every section's "add a note" action accepts it.

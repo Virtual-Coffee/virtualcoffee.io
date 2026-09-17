@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import { requirePermission } from '@/lib/adminAccess';
-import { listApplications, statusCounts } from '@/lib/applications';
-import { QUEUE_STATUSES } from '@/lib/applicationStatuses';
+import { requirePermission } from '@/lib/access/adminAccess';
+import { listApplications, statusCounts } from '@/lib/waitlist/applications';
+import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import { FilterChips } from '../filterChips';
 import { ApplicationsTable } from './applicationsTable';
 import { QueueSearch } from './queueSearch';

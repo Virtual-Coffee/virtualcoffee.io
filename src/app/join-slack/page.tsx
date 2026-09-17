@@ -1,5 +1,5 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
-import { slackInviteForToken } from '@/lib/inviteTokens';
+import { slackInviteForToken } from '@/lib/waitlist/inviteTokens';
 import { single } from '@/util/searchParams';
 
 import { FAILURES } from './copy';

@@ -1,5 +1,5 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
-import { inviteForClaimToken } from '@/lib/invites';
+import { inviteForClaimToken } from '@/lib/volunteers/invites';
 import { createMetaData } from '@/util/createMetaData.server';
 import { issueTimestamp } from '@/util/forms/spamGuard';
 import { single } from '@/util/searchParams';

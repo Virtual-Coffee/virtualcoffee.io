@@ -2,14 +2,14 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { isId } from '@/db/ids';
-import { requirePermission, sessionCan } from '@/lib/adminAccess';
+import { requirePermission, sessionCan } from '@/lib/access/adminAccess';
 import {
 	applicationSubject,
 	getApplication,
 	getApplicationInviter,
-} from '@/lib/applications';
-import { ARCHIVE_STATUSES } from '@/lib/applicationStatuses';
-import { history } from '@/lib/eventLog';
+} from '@/lib/waitlist/applications';
+import { ARCHIVE_STATUSES } from '@/lib/waitlist/applicationStatuses';
+import { history } from '@/lib/history/eventLog';
 import {
 	coffeeInviteEmail,
 	slackInviteEmail,
