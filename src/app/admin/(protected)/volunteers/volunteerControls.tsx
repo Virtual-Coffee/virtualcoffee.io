@@ -10,8 +10,8 @@ import {
 	parseRoleLabels,
 } from '@/lib/volunteerRoles';
 import { useAction } from '@/util/forms/useAction';
+import { RoleCheckboxMenu } from '../roleCheckboxMenu';
 import { SlackMemberCombobox } from '../slackMemberCombobox';
-import { useDropdown } from '../useDropdown';
 import {
 	addVolunteer,
 	adjustBalance,
@@ -117,10 +117,8 @@ export function AddVolunteerForm({ candidates }: { candidates: Candidate[] }) {
 }
 
 /**
- * The Airtable roles list as a dropdown of checkboxes, the same shape as the
- * User Management `RolesDropdown` minus the Save step: this is form state, and
- * the enclosing form's button is the commit. `id` prefixes every element id,
- * so two on one page do not collide.
+ * The Airtable roles list as a dropdown of checkboxes. `id` prefixes every
+ * element id, so two on one page do not collide.
  */
 function CommunityRolesDropdown({
 	id,
@@ -135,69 +133,24 @@ function CommunityRolesDropdown({
 	size?: 'sm';
 	onChange: (roles: CommunityRole[]) => void;
 }) {
-	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
-		HTMLDivElement,
-		HTMLButtonElement
-	>();
-	const menuId = `${id}-menu`;
-
 	return (
-		<div className="dropdown" ref={wrapperRef}>
-			<button
-				type="button"
-				ref={toggleRef}
-				className={`btn btn-outline-secondary dropdown-toggle${
-					size === 'sm' ? ' btn-sm' : ''
-				}`}
-				aria-labelledby={`${id}-label`}
-				aria-expanded={open}
-				aria-haspopup="true"
-				aria-controls={menuId}
-				disabled={disabled}
-				onClick={() => setOpen((wasOpen) => !wasOpen)}
-			>
-				{selected.length === 0 ? 'Pick roles' : selected.join(', ')}
-			</button>
-
-			{open && (
-				<ul
-					id={menuId}
-					className="dropdown-menu show py-1 overflow-auto"
-					style={
-						{
-							'--bs-dropdown-font-size': '0.8125rem',
-							maxHeight: '18rem',
-						} as React.CSSProperties
-					}
-				>
-					{COMMUNITY_ROLES.map((role) => {
-						const inputId = `${id}-${role.replace(/[^a-z0-9]+/gi, '-')}`;
-						return (
-							<li key={role} className="px-3">
-								<div className="form-check py-1 mb-0 lh-sm">
-									<input
-										className="form-check-input"
-										type="checkbox"
-										id={inputId}
-										checked={selected.includes(role)}
-										onChange={() =>
-											onChange(
-												selected.includes(role)
-													? selected.filter((entry) => entry !== role)
-													: [...selected, role],
-											)
-										}
-									/>
-									<label className="form-check-label" htmlFor={inputId}>
-										{role}
-									</label>
-								</div>
-							</li>
-						);
-					})}
-				</ul>
-			)}
-		</div>
+		<RoleCheckboxMenu
+			id={id}
+			labelledBy={`${id}-label`}
+			size={size}
+			disabled={disabled}
+			scrollable
+			label={selected.length === 0 ? 'Pick roles' : selected.join(', ')}
+			options={COMMUNITY_ROLES.map((role) => ({ value: role, label: role }))}
+			selected={selected}
+			onToggle={(role) =>
+				onChange(
+					selected.includes(role)
+						? selected.filter((entry) => entry !== role)
+						: [...selected, role],
+				)
+			}
+		/>
 	);
 }
 
