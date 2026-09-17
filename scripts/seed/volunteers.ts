@@ -1,4 +1,12 @@
-import type { InviteStatus } from '@/db';
+import { eq } from 'drizzle-orm';
+
+import {
+	db,
+	volunteerAccrualNotice,
+	volunteerInviteLedger,
+	type AccrualNoticeOutcome,
+	type InviteStatus,
+} from '@/db';
 import {
 	accrue,
 	adjust,
@@ -174,6 +182,29 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 	// This month's row for everyone still active, which is the daily job's own
 	// call — so the Volunteer who stepped back gets none.
 	await accrue(new Date());
+
+	// The job's record that each accrual was announced, one of each outcome.
+	// Nothing renders these yet; they are seeded so the table is never empty.
+	const outcomes: Record<string, AccrualNoticeOutcome> = {
+		[ADMIN.slackUserId]: 'sent',
+		[VOLUNTEER.slackUserId]: 'failed',
+		[NEW_VOLUNTEER.slackUserId]: 'no_address',
+	};
+	const accruals = await db()
+		.select({
+			id: volunteerInviteLedger.id,
+			slackUserId: volunteerInviteLedger.slackUserId,
+		})
+		.from(volunteerInviteLedger)
+		.where(eq(volunteerInviteLedger.reason, 'monthly_accrual'));
+	await db()
+		.insert(volunteerAccrualNotice)
+		.values(
+			accruals.map((row) => ({
+				ledgerId: row.id,
+				outcome: outcomes[row.slackUserId] ?? 'sent',
+			})),
+		);
 
 	const invitesByEmail = new Map<string, string>();
 

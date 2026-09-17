@@ -40,6 +40,9 @@ const ENUM_COLUMNS: Record<string, { table: PgTable; column: string }[]> = {
 	volunteer_ledger_reason: [
 		{ table: schema.volunteerInviteLedger, column: 'reason' },
 	],
+	accrual_notice_outcome: [
+		{ table: schema.volunteerAccrualNotice, column: 'outcome' },
+	],
 	submission_status: [
 		{ table: schema.cocReport, column: 'status' },
 		{ table: schema.volunteerSignup, column: 'status' },
