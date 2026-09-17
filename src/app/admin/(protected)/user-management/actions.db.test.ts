@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, pendingGrant, user } from '@/db';
+import { sendSlackDm } from '@/test/mocks/slackDm';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
@@ -12,10 +13,9 @@ import {
 import { listAccessRows } from '@/lib/access/admins';
 import { slackDirectory, slackMember } from '@/test/mocks/slackMembers';
 
-const sendSlackDm = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/slack/dm', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/lib/slack/dm')>()),
-	sendSlackDm,
+	...(await import('@/test/mocks/slackDm')),
 }));
 
 import {
@@ -48,7 +48,7 @@ beforeEach(async () => {
 	slackDirectory.members = [
 		slackMember('U_ADA', { name: 'Ada', displayName: 'Ada', handle: 'ada' }),
 	];
-	sendSlackDm.mockReset().mockResolvedValue({ ok: true, message: 'DM sent.' });
+	sendSlackDm.mockResolvedValue({ ok: true, message: 'DM sent.' });
 	admin = await signInAs('admin');
 });
 
