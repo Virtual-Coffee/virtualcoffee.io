@@ -35,39 +35,40 @@ type Props = {
 	slackInvite: Template;
 };
 
-export function ActionPanel(props: Props) {
-	// One draft each, not one per dialog: only one of these can be open, and
-	// every close resets them, so a note typed for one decision cannot carry
-	// over to the next.
+/**
+ * Whether anything was emailed is the thing the maintainer needs in order to
+ * decide about retrying, so it is stated outright rather than left to be
+ * inferred.
+ */
+function retryAdvice(props: Props, result: ActionFailure) {
+	return 'emailSent' in result ? (
+		<p className="mb-0 small">
+			{result.emailSent === false
+				? `${props.applicantName} is still ${props.statusText} and nothing was emailed — safe to try again.`
+				: result.emailSent === 'unknown'
+					? `We can’t confirm whether the email went out. Check with ${props.applicantEmail} before retrying, or you may email them twice.`
+					: 'An email was already sent — read the message above before retrying.'}
+		</p>
+	) : null;
+}
+
+/**
+ * The drafts and the outcome every dialog on this panel shares.
+ *
+ * One draft each, not one per dialog: only one of these can be open, and every
+ * close resets them, so a note typed for one decision cannot carry over to the
+ * next. Each action changes the status that decides which buttons render, so a
+ * success message beside the trigger would unmount with it; the notice lives
+ * up here instead, where the next confirmation clears it.
+ */
+function useDialogs(props: Props) {
 	const [copyMe, setCopyMe] = useState(false);
 	const [note, setNote] = useState('');
-	// Each action changes the status that decides which buttons render, so a
-	// success message beside the trigger would unmount with it. It lives up
-	// here instead, where the next confirmation clears it.
 	const [notice, setNotice] = useState<string | null>(null);
-	const attendance = useAction();
 
-	if (!props.canManage) return <ReadOnlyNotice />;
-
-	/**
-	 * Whether anything was emailed is the thing the maintainer needs in order
-	 * to decide about retrying, so it is stated outright rather than left to
-	 * be inferred.
-	 */
-	const retryAdvice = (result: ActionFailure) =>
-		'emailSent' in result ? (
-			<p className="mb-0 small">
-				{result.emailSent === false
-					? `${props.applicantName} is still ${props.statusText} and nothing was emailed — safe to try again.`
-					: result.emailSent === 'unknown'
-						? `We can’t confirm whether the email went out. Check with ${props.applicantEmail} before retrying, or you may email them twice.`
-						: 'An email was already sent — read the message above before retrying.'}
-			</p>
-		) : null;
-
-	// Shared by every dialog here: the outcome is reported above rather than
-	// beside the trigger, the drafts reset on close, and the screen's numbers
-	// may have moved even when the action refused.
+	// Spread onto every ActionDialog here: the outcome is reported above rather
+	// than beside the trigger, the drafts reset on close, and the screen's
+	// numbers may have moved even when the action refused.
 	const shared = {
 		showFeedback: false,
 		refresh: 'always',
@@ -78,10 +79,24 @@ export function ActionPanel(props: Props) {
 		},
 		onSuccess: (result: { message?: string }) =>
 			setNotice(result.message ?? null),
-		errorDetail: retryAdvice,
+		errorDetail: (result: ActionFailure) => retryAdvice(props, result),
 	} as const;
 
-	const sendCopy = { copyMe, onCopyMe: setCopyMe };
+	return {
+		notice,
+		copyMe,
+		note,
+		setNote,
+		shared,
+		sendCopy: { copyMe, onCopyMe: setCopyMe },
+	};
+}
+
+export function ActionPanel(props: Props) {
+	const { notice, copyMe, note, setNote, shared, sendCopy } = useDialogs(props);
+	const attendance = useAction();
+
+	if (!props.canManage) return <ReadOnlyNotice />;
 
 	return (
 		<>
