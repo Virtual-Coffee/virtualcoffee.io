@@ -63,6 +63,11 @@ export async function submitMembershipApplication(
 		 * history holds duplicates, and this is a courtesy rather than a boundary —
 		 * two submissions racing each other can still both land, and the spam
 		 * guard's own scope (drive-by bots, not a determined sender) is unchanged.
+		 *
+		 * The message does tell a caller whether an address is in the pipeline.
+		 * Accepted: this is a community waitlist behind the edge rate limit
+		 * (netlify/edge-functions/rate-limit-join.ts), and telling someone they
+		 * already applied is worth more than hiding that from a prober.
 		 */
 		const [existing] = await db()
 			.select({ id: membershipApplication.id })
