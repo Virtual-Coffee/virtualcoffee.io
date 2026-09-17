@@ -59,6 +59,8 @@ describe('sendEmail', () => {
 		// The transporter is a module singleton, so the options are asserted
 		// directly rather than off a createTransport call some earlier test made.
 		expect(TRANSPORT_OPTIONS).toMatchObject({
+			secure: false,
+			requireTLS: true,
 			pool: true,
 			connectionTimeout: expect.any(Number),
 			greetingTimeout: expect.any(Number),
