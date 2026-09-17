@@ -40,6 +40,11 @@ const SORT_COLUMNS = {
 	submittedAt: membershipApplication.submittedAt,
 } as const;
 
+/** Postgres ILIKE reads `%`, `_` and `\` as syntax; the search box does not. */
+function escapeLike(term: string): string {
+	return term.replace(/[\\%_]/g, '\\$&');
+}
+
 function buildWhere(filters: ListFilters) {
 	const clauses = [];
 
@@ -53,7 +58,7 @@ function buildWhere(filters: ListFilters) {
 
 	const search = filters.search?.trim();
 	if (search) {
-		const pattern = `%${search}%`;
+		const pattern = `%${escapeLike(search)}%`;
 		clauses.push(
 			or(
 				ilike(membershipApplication.name, pattern),
