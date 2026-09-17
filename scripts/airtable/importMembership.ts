@@ -213,6 +213,7 @@ async function main() {
 
 	console.log('Importing applications…');
 	let insertedCount = 0;
+	const importedAt = new Date();
 
 	// Oldest first, so the `reference` identity column — the number maintainers
 	// see — counts up with application age rather than Airtable's fetch order.
@@ -253,8 +254,14 @@ async function main() {
 			// Attendance was never recorded under the old process.
 			coffeeAttendedAt: null,
 			approvedAt: classified.approvedAt,
+			// A terminal row closes. Airtable never says when a never-queued row
+			// lapsed, so it closes at import — the moment the site said so — rather
+			// than a made-up historical date. Its History event is still backdated
+			// to `submittedAt` by `recordImport`, so the two will not agree.
 			closedAt:
-				classified.status === 'lapsed' ? classified.coffeeInvitedAt : null,
+				classified.status === 'lapsed'
+					? (classified.coffeeInvitedAt ?? importedAt)
+					: null,
 			airtableRecordId: row.id,
 		};
 
