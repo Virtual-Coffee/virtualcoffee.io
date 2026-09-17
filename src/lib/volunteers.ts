@@ -1,8 +1,9 @@
-import { and, count, desc, eq, isNull, sql } from 'drizzle-orm';
+import { and, desc, eq, isNull, sql } from 'drizzle-orm';
 
 import { db, invite, membershipApplication, volunteer } from '@/db';
 import type { InviteStatus } from '@/db/schema';
 import { balancesBySlackUser } from '@/lib/invites';
+import { countRows } from '@/lib/pagedList';
 
 /** The roster behind /admin/volunteers — reads only; writes are in its `actions.ts`. */
 
@@ -143,12 +144,7 @@ export async function volunteerInvites(
 
 /** How many Volunteers can currently give out Invites. */
 export async function activeVolunteerCount(): Promise<number> {
-	const [row] = await db()
-		.select({ value: count() })
-		.from(volunteer)
-		.where(isNull(volunteer.deactivatedAt));
-
-	return row?.value ?? 0;
+	return countRows(volunteer, isNull(volunteer.deactivatedAt));
 }
 
 /** A pending Invite, for the admin-only resend. */
