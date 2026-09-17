@@ -6,6 +6,8 @@ import {
 	slackInviteForToken,
 } from '@/lib/inviteTokens';
 import { MAX_NOTE_LENGTH } from '@/lib/notes';
+import { staleRead } from '@/test/mocks/staleRead';
+import { sendEmail } from '@/test/mocks/transport';
 import { NOT_FOUND } from '@/test/next';
 import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/outbound';
 import { signInAs } from '@/test/session';
@@ -19,27 +21,15 @@ import {
 	inviteRow,
 } from '@/test/db/fixtures';
 
-const sendEmail = vi.hoisted(() => vi.fn());
-vi.mock('@/lib/email/transport', () => ({ sendEmail }));
+vi.mock('@/lib/email/transport', () => import('@/test/mocks/transport'));
 
-/**
- * Stages the race the conditional updates exist for: the action reads one
- * status, but the row has already moved on by the time it writes. Set
- * `readAs` to the status the action should believe it saw.
- */
-const staleRead = vi.hoisted(() => ({ readAs: null as string | null }));
-vi.mock('@/lib/applications', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('@/lib/applications')>();
-	return {
-		...actual,
-		getApplication: async (id: string) => {
-			const row = await actual.getApplication(id);
-			return row && staleRead.readAs
-				? { ...row, status: staleRead.readAs }
-				: row;
-		},
-	};
-});
+/** `staleRead.readAs` stages the race — see `@/test/mocks/staleRead`. */
+vi.mock('@/lib/applications', async (importOriginal) =>
+	(await import('@/test/mocks/staleRead')).withStaleRead(
+		await importOriginal<typeof import('@/lib/applications')>(),
+		'getApplication',
+	),
+);
 
 import {
 	addNote,
@@ -54,8 +44,6 @@ import {
 let admin: Awaited<ReturnType<typeof signInAs>>;
 
 beforeEach(async () => {
-	sendEmail.mockReset();
-	staleRead.readAs = null;
 	admin = await signInAs('admin');
 });
 
