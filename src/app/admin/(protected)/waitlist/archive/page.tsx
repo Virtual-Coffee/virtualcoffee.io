@@ -40,7 +40,13 @@ export default async function ArchivePage({
 	// "All statuses" here means all *archive* statuses. Queue rows belong on the
 	// queue; `?status=all` clears the filter in `parseSearchParams`, so it is
 	// put back rather than letting the archive list the Waitlist as well.
-	const filters = { ...parsed, statuses: parsed.statuses ?? ARCHIVE_STATUSES };
+	// There is no source chip on this page, so a pasted `?source=` is dropped
+	// rather than silently narrowing a listing nothing on screen explains.
+	const filters = {
+		...parsed,
+		source: undefined,
+		statuses: parsed.statuses ?? ARCHIVE_STATUSES,
+	};
 
 	const [{ rows, rowCount }, counts] = await Promise.all([
 		listApplications(filters),
