@@ -334,6 +334,74 @@ export type RecentEvent = {
 );
 
 /**
+ * The newest Submission events over the kinds asked for.
+ *
+ * One query across all of them: the columns are shared, only which foreign key
+ * is set differs, and the row's own kind is recovered from whichever of those
+ * keys came back non-null.
+ */
+async function recentSubmissionEvents(
+	kinds: readonly { eventKey: SubmissionEventKey }[],
+	limit: number,
+): Promise<RecentEvent[]> {
+	const keys = kinds.map(({ eventKey }) => eventKey);
+
+	const found = await db()
+		.select({
+			id: submissionEvent.id,
+			cocReportId: submissionEvent.cocReportId,
+			volunteerSignupId: submissionEvent.volunteerSignupId,
+			lunchAndLearnIdeaId: submissionEvent.lunchAndLearnIdeaId,
+			coffeeTableGroupRequestId: submissionEvent.coffeeTableGroupRequestId,
+			type: sql<string>`${submissionEvent.type}`,
+			body: submissionEvent.body,
+			createdAt: submissionEvent.createdAt,
+			actorName: user.name,
+			// The kinds are mutually exclusive, so exactly one of these is set.
+			reference: sql<number>`coalesce(${cocReport.reference}, ${volunteerSignup.reference}, ${lunchAndLearnIdea.reference}, ${coffeeTableGroupRequest.reference})`,
+		})
+		.from(submissionEvent)
+		.leftJoin(user, eq(submissionEvent.actorUserId, user.id))
+		.leftJoin(cocReport, eq(submissionEvent.cocReportId, cocReport.id))
+		.leftJoin(
+			volunteerSignup,
+			eq(submissionEvent.volunteerSignupId, volunteerSignup.id),
+		)
+		.leftJoin(
+			lunchAndLearnIdea,
+			eq(submissionEvent.lunchAndLearnIdeaId, lunchAndLearnIdea.id),
+		)
+		.leftJoin(
+			coffeeTableGroupRequest,
+			eq(submissionEvent.coffeeTableGroupRequestId, coffeeTableGroupRequest.id),
+		)
+		.where(or(...keys.map((key) => isNotNull(submissionEvent[key]))))
+		.orderBy(desc(submissionEvent.createdAt), desc(submissionEvent.id))
+		.limit(limit);
+
+	return found.flatMap((row) => {
+		const eventKey = keys.find((key) => row[key] !== null);
+		const subjectId = eventKey ? row[eventKey] : null;
+		if (!eventKey || !subjectId) return [];
+
+		return [
+			{
+				id: row.id,
+				type: row.type,
+				body: row.body,
+				createdAt: row.createdAt,
+				actorName: row.actorName,
+				reference: row.reference,
+				name: null,
+				kind: 'submission' as const,
+				subjectId,
+				eventKey,
+			},
+		];
+	});
+}
+
+/**
  * The newest events over the tables the caller asks for.
  *
  * Merged in JavaScript rather than as a SQL UNION: the two event tables have
@@ -381,70 +449,7 @@ export async function recentEvents(input: {
 	}
 
 	if (input.submissions.length > 0) {
-		// One query across every kind asked for: the columns are shared, only
-		// which foreign key is set differs.
-		const found = await db()
-			.select({
-				id: submissionEvent.id,
-				cocReportId: submissionEvent.cocReportId,
-				volunteerSignupId: submissionEvent.volunteerSignupId,
-				lunchAndLearnIdeaId: submissionEvent.lunchAndLearnIdeaId,
-				coffeeTableGroupRequestId: submissionEvent.coffeeTableGroupRequestId,
-				type: sql<string>`${submissionEvent.type}`,
-				body: submissionEvent.body,
-				createdAt: submissionEvent.createdAt,
-				actorName: user.name,
-				// The kinds are mutually exclusive, so exactly one of these is set.
-				reference: sql<number>`coalesce(${cocReport.reference}, ${volunteerSignup.reference}, ${lunchAndLearnIdea.reference}, ${coffeeTableGroupRequest.reference})`,
-			})
-			.from(submissionEvent)
-			.leftJoin(user, eq(submissionEvent.actorUserId, user.id))
-			.leftJoin(cocReport, eq(submissionEvent.cocReportId, cocReport.id))
-			.leftJoin(
-				volunteerSignup,
-				eq(submissionEvent.volunteerSignupId, volunteerSignup.id),
-			)
-			.leftJoin(
-				lunchAndLearnIdea,
-				eq(submissionEvent.lunchAndLearnIdeaId, lunchAndLearnIdea.id),
-			)
-			.leftJoin(
-				coffeeTableGroupRequest,
-				eq(
-					submissionEvent.coffeeTableGroupRequestId,
-					coffeeTableGroupRequest.id,
-				),
-			)
-			.where(
-				or(
-					...input.submissions.map(({ eventKey }) =>
-						isNotNull(submissionEvent[eventKey]),
-					),
-				),
-			)
-			.orderBy(desc(submissionEvent.createdAt), desc(submissionEvent.id))
-			.limit(limit);
-
-		for (const row of found) {
-			const key = input.submissions.find(
-				({ eventKey }) => row[eventKey] !== null,
-			)?.eventKey;
-			const subjectId = key ? row[key] : null;
-			if (!key || !subjectId) continue;
-
-			rows.push({
-				id: row.id,
-				type: row.type,
-				body: row.body,
-				createdAt: row.createdAt,
-				actorName: row.actorName,
-				reference: row.reference,
-				name: null,
-				kind: 'submission',
-				subjectId,
-				eventKey: key,
-			});
-		}
+		rows.push(...(await recentSubmissionEvents(input.submissions, limit)));
 	}
 
 	return rows
