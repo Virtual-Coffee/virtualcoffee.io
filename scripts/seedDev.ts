@@ -31,8 +31,9 @@ async function main() {
 	}
 
 	// Scripts do not read `.env`, and `siteUrl()` would otherwise fall back to
-	// the production domain for the two links printed below.
-	process.env.URL ??= 'http://localhost:9000';
+	// the production domain for the two links printed below. `||=`, because an
+	// empty `URL` would fall back the same way.
+	process.env.URL ||= 'http://localhost:9000';
 
 	// The wrapper only exports a blob context when it found a site ID; without
 	// one the attachment row still exists, its link just serves nothing.
