@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 
-import { ConfirmSendDialog } from '@/components/ConfirmSendDialog';
-import type { EmailActionResult } from '@/lib/actionResult';
-import { useAction } from '@/util/forms/useAction';
+import { ActionDialog } from '@/components/ActionDialog';
+import { EmailPreview } from '@/components/EmailPreview';
 import { volunteerInviteEmail } from '@/lib/email/templates';
 import { sendInvite } from './actions';
 
@@ -25,10 +24,9 @@ export function SendInviteForm({
 }) {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
-	const [reviewing, setReviewing] = useState(false);
-	const { run, pending, result, clear } = useAction<EmailActionResult>();
-	const error = result && !result.ok ? result.message : null;
-	const notice = result?.ok ? (result.message ?? 'Invite sent.') : null;
+	// Spending the last invite replaces the form the trigger sits in, so the
+	// outcome is reported up here rather than beside it.
+	const [notice, setNotice] = useState<string | null>(null);
 
 	const spent = balance < 1;
 	const preview = volunteerInviteEmail(
@@ -37,34 +35,11 @@ export function SendInviteForm({
 		claimUrlPreview,
 	);
 
-	function review() {
-		clear();
-		setReviewing(true);
-	}
-
-	function confirm() {
-		run(() => sendInvite(name, email.trim()), {
-			settle: () => setReviewing(false),
-			onSuccess: () => {
-				setName('');
-				setEmail('');
-			},
-			// A definitely-failed send gives the invite back, so the balance on
-			// screen is stale either way.
-			refresh: 'always',
-		});
-	}
-
 	return (
 		<div className="card">
 			<div className="card-body">
 				<h2 className="h6 text-body-secondary">Invite someone</h2>
 
-				{error && (
-					<div className="alert alert-danger" role="alert">
-						{error}
-					</div>
-				)}
 				{notice && (
 					<div className="alert alert-success" role="status">
 						{notice}
@@ -77,12 +52,7 @@ export function SendInviteForm({
 						1st of the month.
 					</p>
 				) : (
-					<form
-						onSubmit={(event) => {
-							event.preventDefault();
-							review();
-						}}
-					>
+					<form>
 						<div className="mb-3">
 							<label className="form-label" htmlFor="invitee-name">
 								Their name
@@ -117,33 +87,42 @@ export function SendInviteForm({
 							</div>
 						</div>
 
-						<button
-							type="submit"
+						{/* A submit trigger, so Enter in either field reviews the invite
+						    and the fields' own validation still runs first. */}
+						<ActionDialog
 							className="btn btn-primary"
-							disabled={pending || !name.trim() || !email.trim()}
+							label="Review invite"
+							triggerType="submit"
+							disabled={!name.trim() || !email.trim()}
+							title="Send this invite?"
+							confirmLabel="Send invite"
+							pendingLabel="Sending…"
+							showFeedback={false}
+							// A definitely-failed send gives the invite back, so the balance
+							// on screen is stale either way.
+							refresh="always"
+							onOpen={() => setNotice(null)}
+							onSuccess={(result) => {
+								setNotice(result.message ?? 'Invite sent.');
+								setName('');
+								setEmail('');
+							}}
+							action={() => sendInvite(name, email.trim())}
 						>
-							{pending ? 'Just a moment…' : 'Review invite'}
-						</button>
+							<EmailPreview
+								intro={
+									<>
+										This previews what {email.trim()} will receive. The private
+										invite link is hidden until you send it.
+									</>
+								}
+								to={email.trim()}
+								emails={[preview]}
+							/>
+						</ActionDialog>
 					</form>
 				)}
 			</div>
-
-			<ConfirmSendDialog
-				open={reviewing}
-				title="Send this invite?"
-				intro={
-					<>
-						This previews what {email.trim()} will receive. The private invite
-						link is hidden until you send it.
-					</>
-				}
-				to={email.trim()}
-				emails={[preview]}
-				confirmLabel="Send invite"
-				pending={pending}
-				onCancel={() => setReviewing(false)}
-				onConfirm={confirm}
-			/>
 		</div>
 	);
 }

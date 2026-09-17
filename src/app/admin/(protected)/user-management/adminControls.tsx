@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import { ActionDialog } from '@/components/ActionDialog';
 import type { GrantCandidate } from '@/lib/access/admins';
-import { filterSlackMembers } from '@/lib/slackMemberPicker';
 import {
 	GRANTABLE_ROLE_NAMES,
 	GRANTABLE_ROLES,
