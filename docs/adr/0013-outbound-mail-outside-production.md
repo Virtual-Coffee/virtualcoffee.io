@@ -44,6 +44,10 @@ sends, and it decides on `CONTEXT` alone:
   test channel or repository. The capture check runs before the "credentials
   missing" check so a preview without webhooks is quiet rather than a wall of
   `notification_failed` events.
+- A Slack DM to a member is Captured outside production with no opt-in at
+  all. It is addressed to a stored member id, which on a preview is a real
+  person (`0007`); there is no test channel to point it at, so no variable
+  can make it safe.
 
 Scoping the secrets in Netlify is still done, as belt and braces. It is not the
 mechanism.

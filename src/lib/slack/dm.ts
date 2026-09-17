@@ -13,15 +13,16 @@ const TIMEOUT_MS = 10_000;
  * (`src/data/slackMembers.ts`), with `im:write` and `chat:write` added to its
  * `users:read` scope so it can open a DM and post to it.
  *
- * Same contract as `notifySlack()`: never throws, and outside production the
- * send is Captured rather than reaching a real person. See docs/adr/0013.
+ * Never throws, like `notifySlack()`. Unlike it, there is no opt-in: outside
+ * production the DM is always Captured, because the id it is addressed to is
+ * a real member's on a preview. See docs/adr/0013.
  */
 export function sendSlackDm(
 	slackUserId: string,
 	text: string,
 ): Promise<Outbound> {
 	return deliver({
-		kind: 'slack',
+		kind: 'slack dm',
 		target: slackUserId,
 		body: text,
 		unreachable: 'Slack',

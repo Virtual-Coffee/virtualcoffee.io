@@ -35,14 +35,26 @@ describe('sendSlackDm', () => {
 
 		await expect(sendSlackDm('U123', 'hi')).resolves.toMatchObject({
 			ok: true,
-			warning: 'Captured, not posted to Slack (deploy-preview).',
+			warning: 'Captured, not sent as a Slack DM (deploy-preview).',
 		});
 		expect(conversationsOpen).not.toHaveBeenCalled();
 		expect(info).toHaveBeenCalledWith(
-			'[slack captured] deploy-preview U123',
+			'[slack dm captured] deploy-preview U123',
 			'\nhi',
 		);
 		info.mockRestore();
+	});
+
+	test('the Slack-post opt-in does not opt a DM in: it is captured regardless', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', 'true');
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+
+		await expect(sendSlackDm('U123', 'hi')).resolves.toMatchObject({
+			ok: true,
+			warning: 'Captured, not sent as a Slack DM (deploy-preview).',
+		});
+		expect(conversationsOpen).not.toHaveBeenCalled();
 	});
 
 	test('a missing bot token is a skip, not an error, and nothing is opened', async () => {
