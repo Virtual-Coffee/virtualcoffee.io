@@ -2,6 +2,7 @@ import { describe, expect, test, vi } from 'vitest';
 
 import { db, membershipApplication } from '@/db';
 import { fieldErrors, formDataWith } from '@/test/forms';
+import { notifySlack } from '@/test/mocks/notify';
 import { redirectTo } from '@/test/next';
 import {
 	applicationEvents,
@@ -10,10 +11,9 @@ import {
 	inviteRow,
 } from '@/test/db/fixtures';
 
-const notifySlack = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/slack/notify', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/lib/slack/notify')>()),
-	notifySlack,
+	...(await import('@/test/mocks/notify')),
 }));
 
 import { submitMembershipApplication } from './action';
