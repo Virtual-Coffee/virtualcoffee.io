@@ -72,6 +72,15 @@ export type EventInput<S extends Subject> = S extends ApplicationSubject
 	? ApplicationEventInput
 	: SubmissionEventInput;
 
+/**
+ * What `transitionAndRecord` takes: the statuses are not the caller's to
+ * supply, they come from the transition itself.
+ */
+export type TransitionEventInput<S extends Subject> =
+	S extends ApplicationSubject
+		? Omit<ApplicationEventInput, 'fromStatus' | 'toStatus'>
+		: Omit<SubmissionEventInput, 'fromStatus' | 'toStatus'>;
+
 export type StatusOf<S extends Subject> = S extends ApplicationSubject
 	? ApplicationStatus
 	: SubmissionStatus;
@@ -232,16 +241,26 @@ type StatusTable = PgTable & { id: PgColumn; status: PgColumn };
  * The event commits with the change, so a failed insert cannot leave a row
  * that moved with no history saying who moved it. False means the transition
  * did not apply and nothing was written.
+ *
+ * The recorded `fromStatus`/`toStatus` are `from` and `patch.status`, so
+ * History cannot disagree with the row; a patch that leaves the status alone
+ * records neither.
  */
 export async function transitionAndRecord<S extends Subject>(
 	subject: S,
 	from: StatusOf<S>,
 	patch: PatchOf<S>,
-	event: EventInput<S>,
+	event: TransitionEventInput<S>,
 	guard?: SQL,
 ): Promise<boolean> {
 	const table: StatusTable =
 		subject.kind === 'application' ? membershipApplication : subject.table;
+	const to = (patch as { status?: StatusOf<S> }).status;
+	const recorded = {
+		...event,
+		fromStatus: to === undefined ? null : from,
+		toStatus: to ?? null,
+	} as ApplicationEventInput | SubmissionEventInput;
 	return db().transaction(async (tx) => {
 		const moved = await tx
 			.update(table)
@@ -251,7 +270,7 @@ export async function transitionAndRecord<S extends Subject>(
 			)
 			.returning({ id: table.id });
 		if (moved.length === 0) return false;
-		await writeEvent(subject, event, tx);
+		await writeEvent(subject, recorded, tx);
 		return true;
 	});
 }

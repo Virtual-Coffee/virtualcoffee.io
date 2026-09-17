@@ -292,18 +292,16 @@ describe('transitionAndRecord', () => {
 			{ kind: 'application', id },
 			'waitlisted',
 			{ status: 'coffee_invited' },
-			{
-				type: 'coffee_invited',
-				fromStatus: 'waitlisted',
-				toStatus: 'coffee_invited',
-				actorUserId: actor.id,
-			},
+			{ type: 'coffee_invited', actorUserId: actor.id },
 		);
 
 		expect(moved).toBe(true);
 		expect((await applicationRow(id)).status).toBe('coffee_invited');
 		expect(await applicationEvents(id)).toEqual([
 			{ type: 'coffee_invited', body: null, actorUserId: actor.id },
+		]);
+		expect(await history({ kind: 'application', id })).toMatchObject([
+			{ fromStatus: 'waitlisted', toStatus: 'coffee_invited' },
 		]);
 	});
 
@@ -314,7 +312,7 @@ describe('transitionAndRecord', () => {
 			{ kind: 'application', id },
 			'waitlisted',
 			{ status: 'declined' },
-			{ type: 'declined', fromStatus: 'waitlisted', toStatus: 'declined' },
+			{ type: 'declined' },
 		);
 
 		expect(moved).toBe(false);
@@ -336,7 +334,9 @@ describe('transitionAndRecord', () => {
 
 		expect(await record()).toBe(true);
 		expect(await record()).toBe(false);
-		expect(await applicationEvents(id)).toHaveLength(1);
+		expect(await history(subject)).toMatchObject([
+			{ type: 'attendance_recorded', fromStatus: null, toStatus: null },
+		]);
 	});
 
 	test('a failed event insert rolls the status change back', async () => {
@@ -348,7 +348,7 @@ describe('transitionAndRecord', () => {
 					{ kind: 'application', id },
 					'waitlisted',
 					{ status: 'declined' },
-					{ type: 'declined', fromStatus: 'waitlisted', toStatus: 'declined' },
+					{ type: 'declined' },
 				),
 			).rejects.toThrow();
 			expect((await applicationRow(id)).status).toBe('waitlisted');
@@ -364,13 +364,13 @@ describe('transitionAndRecord', () => {
 			subject,
 			'new',
 			{ status: 'in_progress' },
-			{ type: 'status_changed', fromStatus: 'new', toStatus: 'in_progress' },
+			{ type: 'status_changed' },
 		);
 		const again = await transitionAndRecord(
 			subject,
 			'new',
 			{ status: 'resolved' },
-			{ type: 'status_changed', fromStatus: 'new', toStatus: 'resolved' },
+			{ type: 'status_changed' },
 		);
 
 		expect([moved, again]).toEqual([true, false]);
@@ -446,11 +446,7 @@ describe('history', () => {
 			subject,
 			'waitlisted',
 			{ status: 'coffee_invited' },
-			{
-				type: 'coffee_invited',
-				fromStatus: 'waitlisted',
-				toStatus: 'coffee_invited',
-			},
+			{ type: 'coffee_invited' },
 		);
 
 		expect(await history(subject)).toMatchObject([
