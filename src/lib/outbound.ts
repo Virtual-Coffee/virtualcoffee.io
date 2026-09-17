@@ -15,8 +15,6 @@ import { z } from 'zod';
  * the `Outbound` result. A sender cannot reach its credentials before the mode.
  */
 
-export type DeliveryMode = 'live' | 'captured' | 'redirected';
-
 export type OutboundKind = 'email' | 'slack' | 'github issue';
 
 export function isProduction(): boolean {
