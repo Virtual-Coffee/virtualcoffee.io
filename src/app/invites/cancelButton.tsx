@@ -22,7 +22,10 @@ export function CancelInviteButton({
 			pendingLabel="Cancelling…"
 			action={() => cancelInvite(inviteId)}
 		>
-			<p className="mb-0">You&rsquo;ll get it back to use on someone else.</p>
+			<p className="mb-0">
+				This stops the link from working. If the invite was charged to your
+				allowance, you get it back to use on someone else.
+			</p>
 		</ActionDialog>
 	);
 }
