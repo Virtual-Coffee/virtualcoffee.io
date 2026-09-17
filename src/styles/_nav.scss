@@ -18,10 +18,9 @@
 	}
 
 	// Scoped to .navbar deliberately: `.nav-item` / `.nav-link` are plain
-	// Bootstrap classes, so any other nav on the site (`.nav-pills`, tabs)
-	// inherited both this type ramp and the text-shadow. Dark-on-light links
-	// with a black shadow read as blurry; the shadow only earns its place over
-	// the gradient.
+	// Bootstrap classes, and /admin's `.nav-pills` inherited both this type
+	// ramp and the text-shadow. Dark-on-light links with a black shadow read
+	// as blurry; the shadow only earns its place over the gradient.
 	.nav-item {
 		font-weight: 600;
 		font-size: 1.1rem;

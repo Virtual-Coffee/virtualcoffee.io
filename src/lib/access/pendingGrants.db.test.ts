@@ -9,6 +9,7 @@ import {
 	insertVolunteer,
 } from '@/test/db/fixtures';
 
+import { listAccessRows } from './admins';
 import { claimPendingGrant, grantVolunteerRole } from './pendingGrants';
 
 async function userRow(id: string) {
@@ -146,7 +147,7 @@ describe('claimPendingGrant', () => {
 	});
 
 	/**
-	 * ADR 0009 promises that a failed claim strands nobody: User Management
+	 * ADR 0009 promises that a failed claim strands nobody: listAccessRows()
 	 * finds them by Slack id. That only holds if the Slack id was written
 	 * before the part that failed.
 	 */
@@ -168,6 +169,18 @@ describe('claimPendingGrant', () => {
 			});
 			await expect(grantRows('U_ADA')).resolves.toMatchObject([
 				{ claimedAt: null },
+			]);
+			// Badged, and showing what the grant held so a maintainer can see
+			// what to apply; it is not listed a second time as pending.
+			await expect(listAccessRows()).resolves.toEqual([
+				expect.objectContaining({
+					kind: 'user',
+					id: ada.id,
+					stranded: true,
+					roles: ['coc_reviewer'],
+					grantedBy: 'user-admin',
+					grantedAt: expect.any(Date),
+				}),
 			]);
 		} finally {
 			await trigger.remove();
@@ -277,6 +290,14 @@ describe('grantVolunteerRole', () => {
 				claimedAt: expect.any(Date),
 				claimedUserId: grace.id,
 			},
+		]);
+		await expect(listAccessRows()).resolves.toEqual([
+			expect.objectContaining({
+				kind: 'user',
+				id: grace.id,
+				roles: ['admin', 'volunteer'],
+				stranded: false,
+			}),
 		]);
 
 		// Repeating changes nothing: the grant is claimed, and there is nothing
