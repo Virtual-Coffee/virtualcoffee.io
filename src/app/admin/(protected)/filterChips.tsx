@@ -48,6 +48,7 @@ export function FilterChips({
 				<Link
 					key={chip.value ?? ''}
 					href={chipHref(base, keep, param, chip.value)}
+					aria-current={active === chip.value ? 'page' : undefined}
 					className={`btn btn-sm ${
 						active === chip.value ? 'btn-primary' : 'btn-outline-secondary'
 					}`}
