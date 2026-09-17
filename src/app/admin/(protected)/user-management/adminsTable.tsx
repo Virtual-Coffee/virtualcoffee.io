@@ -11,7 +11,7 @@ import {
 	useTable,
 } from '@tanstack/react-table';
 
-import type { AccessRow } from '@/lib/admins';
+import type { AccessRow } from '@/lib/access/admins';
 import { AccessStateBadge, formatDate } from '../presentation';
 import { SortableHeader } from '../sortableHeader';
 import { RolesDropdown } from './adminControls';

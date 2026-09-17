@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { createDevtoolsPanelProps } from 'better-auth-devtools';
 
 import { SignOutButton } from '@/app/admin/sign-in/buttons';
-import { requireSession, visibleSections } from '@/lib/adminAccess';
-import { devtoolsConfig } from '@/lib/devtools';
+import { requireSession, visibleSections } from '@/lib/access/adminAccess';
+import { devtoolsConfig } from '@/lib/access/devtools';
 import { AdminNav } from './adminNav';
 import { DeployBanner } from './deployBanner';
 import { DevtoolsPanel } from './devtoolsPanel';

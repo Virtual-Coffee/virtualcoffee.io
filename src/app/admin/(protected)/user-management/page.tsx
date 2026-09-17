@@ -1,6 +1,6 @@
-import { requirePermission } from '@/lib/adminAccess';
-import { grantCandidates, listAccessRows } from '@/lib/admins';
-import { GRANTABLE_ROLE_NAMES } from '@/lib/permissions';
+import { requirePermission } from '@/lib/access/adminAccess';
+import { grantCandidates, listAccessRows } from '@/lib/access/admins';
+import { GRANTABLE_ROLE_NAMES } from '@/lib/access/permissions';
 import { GrantAccessForm } from './adminControls';
 import { AdminsTable } from './adminsTable';
 

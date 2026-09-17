@@ -3,13 +3,13 @@
 import { useMemo, useState } from 'react';
 
 import { filterSlackMembers } from '@/data/slackMembers';
-import type { GrantCandidate } from '@/lib/admins';
+import type { GrantCandidate } from '@/lib/access/admins';
 import {
 	GRANTABLE_ROLE_NAMES,
 	GRANTABLE_ROLES,
 	ROLE_LABELS,
 	type RoleName,
-} from '@/lib/permissions';
+} from '@/lib/access/permissions';
 import { useAction } from '@/util/forms/useAction';
 import { type CheckboxMenuOption, RoleCheckboxMenu } from '../roleCheckboxMenu';
 import { useDropdown } from '../useDropdown';

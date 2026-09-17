@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { signIn, signOut } from '@/lib/auth-client';
+import { signIn, signOut } from '@/lib/access/auth-client';
 
 /**
  * `callbackURL` is where Slack sends them back to. It defaults to /admin, but
