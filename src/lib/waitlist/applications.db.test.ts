@@ -42,3 +42,26 @@ describe('listApplications ordering', () => {
 		).resolves.toEqual(['Ada', 'Mia', 'Zed']);
 	});
 });
+
+describe('listApplications search', () => {
+	test.each([
+		['dev_user', ['dev_user']],
+		['%', []],
+		['\\', ['back\\slash']],
+	])('%j is matched literally, not as a pattern', async (search, expected) => {
+		await insertApplication({
+			name: 'dev_user',
+			email: 'dev_user@example.test',
+		});
+		await insertApplication({
+			name: 'devXuser',
+			email: 'devxuser@example.test',
+		});
+		await insertApplication({
+			name: 'back\\slash',
+			email: 'back@example.test',
+		});
+
+		await expect(names({ ...byName, search })).resolves.toEqual(expected);
+	});
+});
