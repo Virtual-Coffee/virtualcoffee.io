@@ -21,7 +21,7 @@ export type AttachmentBytes = Uint8Array;
  * screenshot someone actually sent. Fixed dimensions and text, so every run
  * stores the same file.
  */
-export const PLACEHOLDER_URL =
+const PLACEHOLDER_URL =
 	'https://placehold.co/640x480.png?text=Seeded+CoC+attachment';
 
 /**
