@@ -1,4 +1,4 @@
-import { HONEYPOT_FIELD, TIMESTAMP_FIELD } from './spamGuard';
+import { HONEYPOT_FIELD, TIMESTAMP_FIELD } from './spamGuardFieldNames';
 
 /**
  * The hidden half of the spam guard, rendered inside every public form.
