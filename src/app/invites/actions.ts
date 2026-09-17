@@ -24,6 +24,11 @@ const schema = z.object({
 	email: z.email('That doesn’t look like an email address.').max(320),
 });
 
+/** A refusal where nothing was emailed — every `sendInvite` failure but the 'unknown' one. */
+function fail(message: string): EmailActionResult {
+	return { ok: false, message, emailSent: false };
+}
+
 /**
  * Send an Invite.
  *
@@ -48,35 +53,25 @@ export async function sendInvite(
 	// pasted trailing space.
 	const parsed = schema.safeParse({ name: rawName, email: rawEmail.trim() });
 	if (!parsed.success) {
-		return {
-			ok: false,
-			message: parsed.error.issues[0]?.message ?? 'Please check the form.',
-			emailSent: false,
-		};
+		return fail(parsed.error.issues[0]?.message ?? 'Please check the form.');
 	}
 	const { name, email } = parsed.data;
 
 	const blocking = await blockingInvite(email);
 	if (blocking === 'invited') {
-		return {
-			ok: false,
-			message: `${name} already has an invite waiting at ${email}. Nothing has been sent and your invite is untouched.`,
-			emailSent: false,
-		};
+		return fail(
+			`${name} already has an invite waiting at ${email}. Nothing has been sent and your invite is untouched.`,
+		);
 	}
 	if (blocking === 'member') {
-		return {
-			ok: false,
-			message: `${name} is already a member of Virtual Coffee — no invite needed.`,
-			emailSent: false,
-		};
+		return fail(
+			`${name} is already a member of Virtual Coffee — no invite needed.`,
+		);
 	}
 	if (blocking === 'in_progress') {
-		return {
-			ok: false,
-			message: `${name} already has an application in progress, so an invite would duplicate it. Nothing has been sent and your invite is untouched.`,
-			emailSent: false,
-		};
+		return fail(
+			`${name} already has an application in progress, so an invite would duplicate it. Nothing has been sent and your invite is untouched.`,
+		);
 	}
 
 	const { token, expiresAt } = newClaimToken();
@@ -94,36 +89,23 @@ export async function sendInvite(
 		});
 	} catch (error) {
 		console.error('Failed to record an invite', { slackUserId, error });
-		return {
-			ok: false,
-			message: 'Something went wrong saving that invite. Please try again.',
-			emailSent: false,
-		};
+		return fail('Something went wrong saving that invite. Please try again.');
 	}
 
 	if (!issued.ok) {
 		if (issued.reason === 'no_volunteer') {
-			return {
-				ok: false,
-				message:
-					'We haven’t finished setting you up as a volunteer. Ask a maintainer to add you in Admin → Volunteers.',
-				emailSent: false,
-			};
+			return fail(
+				'We haven’t finished setting you up as a volunteer. Ask a maintainer to add you in Admin → Volunteers.',
+			);
 		}
 		if (issued.reason === 'no_balance') {
-			return {
-				ok: false,
-				message: 'You have no invites left. You get one more on the 1st.',
-				emailSent: false,
-			};
+			return fail('You have no invites left. You get one more on the 1st.');
 		}
 		// Another Volunteer invited the same person between the pre-check above
 		// and the write. The index is what makes that impossible to charge for.
-		return {
-			ok: false,
-			message: `${name} already has an invite waiting at ${email}. Nothing has been sent and your invite is untouched.`,
-			emailSent: false,
-		};
+		return fail(
+			`${name} already has an invite waiting at ${email}. Nothing has been sent and your invite is untouched.`,
+		);
 	}
 
 	const { inviteId } = issued;
@@ -165,19 +147,15 @@ export async function sendInvite(
 					error,
 				});
 				revalidatePath('/invites');
-				return {
-					ok: false,
-					message: `${sent.message} Nothing was emailed, but we couldn’t give the invite back automatically — cancel it from your list to get it back.`,
-					emailSent: false,
-				};
+				return fail(
+					`${sent.message} Nothing was emailed, but we couldn’t give the invite back automatically — cancel it from your list to get it back.`,
+				);
 			}
 
 			revalidatePath('/invites');
-			return {
-				ok: false,
-				message: `${sent.message} Nothing was emailed and your invite has been given back — safe to try again.`,
-				emailSent: false,
-			};
+			return fail(
+				`${sent.message} Nothing was emailed and your invite has been given back — safe to try again.`,
+			);
 		}
 
 		revalidatePath('/invites');
