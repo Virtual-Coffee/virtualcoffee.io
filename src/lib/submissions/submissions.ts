@@ -1,4 +1,13 @@
-import { and, count, desc, eq, inArray, isNull, or, sql } from 'drizzle-orm';
+import {
+	and,
+	count,
+	eq,
+	exists,
+	inArray,
+	notExists,
+	or,
+	sql,
+} from 'drizzle-orm';
 
 import {
 	cocReport,
@@ -101,11 +110,13 @@ export async function openCount(kind: SubmissionKind): Promise<number> {
 
 /**
  * Submissions nobody has been told about, for the warning banner: still `new`,
- * and either the latest notification attempt failed or none was recorded
- * (`notifyAndRecord` writes the event after the attempt and can lose it). Stored
- * but never announced is the failure mode docs/adr/0005 accepts, so it has to be
- * visible; counting only while `new` lets the banner clear once a maintainer
- * has moved the row on.
+ * and either an announcement failed or none was recorded (`notifyAndRecord`
+ * writes the event after the attempt and can lose it). Any failure counts, not
+ * just the latest: a Lunch & Learn idea is announced on two channels, and a
+ * Slack success must not hide the GitHub failure before it. Stored but never
+ * announced is the failure mode docs/adr/0005 accepts, so it has to be visible;
+ * counting only while `new` lets the banner clear once a maintainer has moved
+ * the row on.
  */
 export async function failedNotifications(
 	kinds: readonly SubmissionKind[],
@@ -115,31 +126,27 @@ export async function failedNotifications(
 	const results = await Promise.all(
 		kinds.map(async (kind) => {
 			const { table, eventColumn } = SUBMISSION_KINDS[kind];
-			const latest = db()
-				.selectDistinctOn([eventColumn], {
-					submissionId: eventColumn,
-					type: submissionEvent.type,
-				})
-				.from(submissionEvent)
-				.where(
-					sql`${eventColumn} is not null and ${submissionEvent.type} in ('notification_sent', 'notification_failed')`,
-				)
-				.orderBy(
-					eventColumn,
-					desc(submissionEvent.createdAt),
-					desc(submissionEvent.id),
-				)
-				.as('latest');
+			const attempts = (
+				types: (typeof submissionEvent.$inferSelect)['type'][],
+			) =>
+				db()
+					.select({ one: sql`1` })
+					.from(submissionEvent)
+					.where(
+						and(
+							eq(eventColumn, table.id),
+							inArray(submissionEvent.type, types),
+						),
+					);
 			const [row] = await db()
 				.select({ value: count() })
 				.from(table)
-				.leftJoin(latest, eq(latest.submissionId, table.id))
 				.where(
 					and(
 						eq(table.status, 'new'),
 						or(
-							eq(latest.type, 'notification_failed'),
-							isNull(latest.submissionId),
+							exists(attempts(['notification_failed'])),
+							notExists(attempts(['notification_sent', 'notification_failed'])),
 						),
 					),
 				);
