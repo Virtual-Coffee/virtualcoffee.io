@@ -36,7 +36,12 @@ export function sendSlackDm(
 				};
 			}
 
-			const client = new WebClient(token, { timeout: TIMEOUT_MS });
+			// No SDK retries: the default policy re-sends for ~30 minutes, past the
+			// action's own timeout, and a lost postMessage response would DM twice.
+			const client = new WebClient(token, {
+				timeout: TIMEOUT_MS,
+				retryConfig: { retries: 0 },
+			});
 			const opened = await client.conversations.open({ users: slackUserId });
 			const channel = opened.channel?.id;
 
