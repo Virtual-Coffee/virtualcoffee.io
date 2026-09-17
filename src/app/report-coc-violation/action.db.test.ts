@@ -5,12 +5,12 @@ import { cocReport, db, submissionEvent } from '@/db';
 import { failedNotifications } from '@/lib/submissions';
 import { failInserts } from '@/test/db/fixtures';
 import { fieldErrors, formDataWith } from '@/test/forms';
+import { notifySlack } from '@/test/mocks/notify';
 import { redirectTo } from '@/test/next';
 
-const notifySlack = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/slack/notify', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/lib/slack/notify')>()),
-	notifySlack,
+	...(await import('@/test/mocks/notify')),
 }));
 
 const blobs = vi.hoisted(() => ({ set: vi.fn(), delete: vi.fn() }));
@@ -39,7 +39,6 @@ async function submit(fields: Record<string, string | File>) {
 }
 
 beforeEach(() => {
-	notifySlack.mockReset();
 	blobs.set.mockReset();
 	blobs.delete.mockReset();
 });

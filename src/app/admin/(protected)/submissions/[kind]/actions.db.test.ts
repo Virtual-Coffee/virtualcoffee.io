@@ -3,23 +3,17 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { cocReport, db, submissionEvent } from '@/db';
 import { failInserts } from '@/test/db/fixtures';
+import { staleRead } from '@/test/mocks/staleRead';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 
-/** Stages a read that is stale by the time the action writes. */
-const staleRead = vi.hoisted(() => ({ readAs: null as string | null }));
-vi.mock('@/lib/submissions', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('@/lib/submissions')>();
-	return {
-		...actual,
-		getSubmission: async (...args: Parameters<typeof actual.getSubmission>) => {
-			const row = await actual.getSubmission(...args);
-			return row && staleRead.readAs
-				? { ...row, status: staleRead.readAs }
-				: row;
-		},
-	};
-});
+/** `staleRead.readAs` stages the race — see `@/test/mocks/staleRead`. */
+vi.mock('@/lib/submissions', async (importOriginal) =>
+	(await import('@/test/mocks/staleRead')).withStaleRead(
+		await importOriginal<typeof import('@/lib/submissions')>(),
+		'getSubmission',
+	),
+);
 
 import { addSubmissionNote, setSubmissionStatus } from './actions';
 
@@ -97,10 +91,7 @@ describe('addSubmissionNote', () => {
 });
 
 describe('setSubmissionStatus', () => {
-	beforeEach(async () => {
-		staleRead.readAs = null;
-		await signInAs('coc_reviewer');
-	});
+	beforeEach(() => signInAs('coc_reviewer'));
 
 	test('a status change whose event fails to write is rolled back with it', async () => {
 		const id = await insertCocReport();

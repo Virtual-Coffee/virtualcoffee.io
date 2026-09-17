@@ -4,12 +4,12 @@ import { describe, expect, test, vi } from 'vitest';
 import { db, lunchAndLearnIdea, submissionEvent } from '@/db';
 import { failWrites } from '@/test/db/fixtures';
 import { formDataWith } from '@/test/forms';
+import { notifySlack } from '@/test/mocks/notify';
 import { redirectTo } from '@/test/next';
 
-const notifySlack = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/slack/notify', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/lib/slack/notify')>()),
-	notifySlack,
+	...(await import('@/test/mocks/notify')),
 }));
 
 const createLunchAndLearnIssue = vi.hoisted(() => vi.fn());
