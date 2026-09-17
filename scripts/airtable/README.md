@@ -222,10 +222,12 @@ FORMS_AIRTABLE_API_KEY=… pnpm exec tsx scripts/with-local-netlify.ts \
   tsx scripts/airtable/importSubmissions.ts
 ```
 
-It closes with a `found / expected / inserted` table. The expected column is
-what was in Airtable on 2026-09-09 — Volunteer Form 50, CoC Violation Reports
-18, Lunch and Learn Idea 9, New Coffee Table Group 2 — and a `*` marks any count
-that has drifted since.
+It closes with a `found / expected / inserted / present` table. The expected
+column is what was in Airtable on 2026-09-09 — Volunteer Form 50, CoC Violation
+Reports 18, Lunch and Learn Idea 9, New Coffee Table Group 2 — and a `*` marks
+any count that has drifted since. `present` is what an earlier run had already
+imported; those rows are skipped before their attachments are fetched, so a
+re-run neither re-hosts a file nor leaves a blob no row points at.
 
 **Everything imports as `new`, not `resolved`.** Airtable tracked no status at
 all, so the historical rows show up as open work in `/admin`. That is the honest
