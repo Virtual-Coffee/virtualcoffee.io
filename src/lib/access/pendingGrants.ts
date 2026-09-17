@@ -1,7 +1,11 @@
 import { and, eq, isNull, sql } from 'drizzle-orm';
 
 import { db, pendingGrant, user, volunteer, type Transaction } from '@/db';
-import { parseRoles, serialiseRoles, type RoleName } from '@/lib/permissions';
+import {
+	parseRoles,
+	serialiseRoles,
+	type RoleName,
+} from '@/lib/access/permissions';
 
 /**
  * Pending Grants: a Role assigned to a Slack member id before that person has

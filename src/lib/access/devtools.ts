@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 
 import { db, user } from '@/db';
 import { newId } from '@/db/ids';
-import { GRANTABLE_ROLES, type RoleName } from '@/lib/permissions';
+import { GRANTABLE_ROLES, type RoleName } from '@/lib/access/permissions';
 
 /**
  * The devtools panel on /admin (`src/app/admin/(protected)/layout.tsx`):
@@ -44,7 +44,7 @@ export const devtoolsConfig = defineDevtoolsConfig({
 	),
 	/**
 	 * Written with Drizzle rather than through Better Auth: the
-	 * `user.create.before` hook in `src/lib/auth.ts` sets every new user's
+	 * `user.create.before` hook in `src/lib/access/auth.ts` sets every new user's
 	 * role to the default, which is right for a Slack sign-in and wrong for a
 	 * test user whose whole point is the role.
 	 */

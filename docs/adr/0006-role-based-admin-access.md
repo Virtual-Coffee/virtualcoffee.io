@@ -10,7 +10,7 @@ role cannot express.
 
 ## Decision
 
-`src/lib/permissions.ts` declares one access-control resource per section,
+`src/lib/access/permissions.ts` declares one access-control resource per section,
 each with `read` and `manage`. `read` is enough to see a section and open its
 detail views; `manage` is needed to change anything, which is what makes "let
 someone watch a queue without acting on it" expressible. Roles are built from
@@ -20,7 +20,7 @@ holds exactly one.
 **Roles live comma-separated in `user.role`.** Better Auth's admin plugin
 supports this natively — `hasPermission` splits on `,` and authorises if _any_
 role matches — so `admin,coc_reviewer` fits the column that already exists.
-`src/lib/permissions.ts` holds the only two functions that know the encoding.
+`src/lib/access/permissions.ts` holds the only two functions that know the encoding.
 
 **`adminRoles` stays `['admin']`.** That option gates the plugin's _own_
 endpoints — ban, impersonate, set-role — which only `/admin/user-management`

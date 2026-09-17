@@ -12,7 +12,7 @@ import {
 	type ApplicationStatus,
 	type VolunteerLedgerReason,
 } from '@/db';
-import { hashClaimToken } from '@/lib/invites';
+import { hashClaimToken } from '@/lib/volunteers/invites';
 
 /**
  * Small inserters for the db tests. Each returns what a test needs to refer

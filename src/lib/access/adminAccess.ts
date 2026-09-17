@@ -6,14 +6,14 @@ import { getSessionCookie } from 'better-auth/cookies';
 import { eq } from 'drizzle-orm';
 
 import { db, user } from '@/db';
-import { getAuth, type Session } from '@/lib/auth';
+import { getAuth, type Session } from '@/lib/access/auth';
 import {
 	parseRoles,
 	roles,
 	SECTIONS,
 	type Section,
 	type RoleName,
-} from '@/lib/permissions';
+} from '@/lib/access/permissions';
 
 const DEPLOYED_CONTEXTS = new Set([
 	'production',
