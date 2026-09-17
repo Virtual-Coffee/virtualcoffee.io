@@ -30,16 +30,9 @@ function fail(message: string): EmailActionResult {
 }
 
 /**
- * Send an Invite.
- *
- * The write has to come first: the Claim Link carries a token that must exist
- * in the database before the email can be composed. That inverts the
- * "send first, then write" rule the waitlist actions follow, so the failure
- * path compensates — on a send failure we know did not deliver, the Invite is
- * cancelled and the allowance refunded, and the Volunteer is told plainly that
- * nothing went out. On a failure we cannot be sure about, it stays charged and
- * they are told that instead; refunding there risks two invitations reaching
- * one person. See docs/adr/0011.
+ * Send an Invite. The write comes first because the Claim Link's token must
+ * exist before the email can be composed, so a send that certainly failed is
+ * refunded and an uncertain one stays charged (docs/adr/0011).
  */
 export async function sendInvite(
 	rawName: string,

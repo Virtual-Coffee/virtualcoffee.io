@@ -43,6 +43,23 @@ The weekly hour-long Zoom chat. Attending one is the step between a Coffee
 Invite and a Membership Approval.
 _Avoid_: Meeting, call, event
 
+**Invite**:
+A referral from a **Volunteer**, spent from their **Invite Allowance** and sent
+as a **Claim Link**. An application arising from one enters the Waitlist with
+priority. An Invite nobody claims expires, and the Volunteer gets it back.
+_Avoid_: Referral, nomination, lapse (an application lapses; an Invite expires)
+
+**Invite Allowance**:
+How many Invites a Volunteer may currently give out. It grows a little each
+month and is spent one Invite at a time.
+_Avoid_: Quota, credits, balance
+
+**Claim Link**:
+The single-use link an Invite sends to the person being invited. It carries
+them to the ordinary join form, where they still answer every question and
+agree to the Code of Conduct themselves.
+_Avoid_: Invite link, referral link, token
+
 ## People
 
 **Member**:
@@ -50,10 +67,8 @@ Someone whose Membership Application reached `member` status. Membership is
 about access to the community, not about appearing on the website.
 
 **Volunteer**:
-A Member trusted to give out Invites. A Volunteer can be paused
-(`deactivated_at`): the row and its history stay, but they stop accruing and
-lose the `volunteer` role until they are reactivated. Imported volunteers who
-were inactive in Airtable arrive paused (ADR 0012).
+A Member trusted to give out Invites. A paused Volunteer keeps their row and
+History but stops accruing and loses the `volunteer` Role until reactivated.
 _Avoid_: Volunteer signup (that is the form), referrer, sponsor
 
 **Member Profile**:
