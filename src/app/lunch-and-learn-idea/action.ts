@@ -8,14 +8,16 @@ import { db, lunchAndLearnIdea } from '@/db';
 import { createLunchAndLearnIssue } from '@/lib/github/issues';
 import { lunchAndLearnMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import { formObject, invalidFields, staleForm } from '@/util/forms/parse';
-import { checkSpam } from '@/util/forms/spamGuard';
+import { agree, email, name } from '@/util/forms/fields';
+import { intake } from '@/util/forms/intake';
 import { siteUrl } from '@/util/url.server';
 import type { FormState } from '@/util/forms/types';
 
+const THANKS = '/lunch-and-learn-idea/thanks';
+
 const schema = z.object({
-	Name: z.string().trim().min(1, 'Please tell us your name.').max(200),
-	Email: z.email('That doesn’t look like an email address.').max(320),
+	Name: name(),
+	Email: email(),
 	Topic: z
 		.string()
 		.trim()
@@ -33,24 +35,15 @@ const schema = z.object({
 		.trim()
 		.min(1, 'Please tell us what date and time works for you.')
 		.max(300),
-	agree: z.literal('agree', {
-		message: 'Please confirm you’ve read the Code of Conduct.',
-	}),
+	agree: agree(),
 });
 
 export async function submitLunchAndLearnIdea(
 	_state: FormState,
 	formData: FormData,
 ): Promise<FormState> {
-	const guard = checkSpam(formData);
-	if (guard === 'stale') return staleForm();
-	if (guard !== 'ok') redirect('/lunch-and-learn-idea/thanks');
-
-	const parsed = schema.safeParse(formObject(formData, schema));
-
-	if (!parsed.success) {
-		return invalidFields(parsed.error);
-	}
+	const parsed = intake(formData, { schema, thanks: THANKS });
+	if (!parsed.ok) return parsed.state;
 
 	const idea = {
 		name: parsed.data.Name,
@@ -133,5 +126,5 @@ export async function submitLunchAndLearnIdea(
 		},
 	);
 
-	redirect('/lunch-and-learn-idea/thanks');
+	redirect(THANKS);
 }
