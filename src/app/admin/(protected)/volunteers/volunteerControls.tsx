@@ -49,8 +49,10 @@ export function AddVolunteerForm({ candidates }: { candidates: Candidate[] }) {
 						onSelect={(member) => {
 							setSelected(member);
 							// Prefilled, not locked: Slack's address is a good guess, and
-							// the maintainer can still type over it.
-							if (member?.email) setEmail(member.email);
+							// the maintainer can still type over it. Picking someone with
+							// no address clears the last pick's; typing in the search box
+							// (a null select) leaves whatever was typed alone.
+							if (member) setEmail(member.email ?? '');
 						}}
 						unavailable={(member) =>
 							member.alreadyVolunteer ? 'already a volunteer' : null
