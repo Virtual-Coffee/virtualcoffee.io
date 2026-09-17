@@ -24,7 +24,9 @@ type BuildUrls = {
 export function siteUrl(): string {
 	const context = process.env.CONTEXT;
 	const preview = context === 'deploy-preview' || context === 'branch-deploy';
+	// `||`, not `??`: a declared-but-empty variable must fall through too, or
+	// every emailed link would come out relative.
 	const origin =
-		(preview ? process.env.DEPLOY_PRIME_URL : undefined) ?? process.env.URL;
-	return origin?.replace(/\/$/, '') ?? 'https://virtualcoffee.io';
+		(preview ? process.env.DEPLOY_PRIME_URL : undefined) || process.env.URL;
+	return origin?.replace(/\/$/, '') || 'https://virtualcoffee.io';
 }
