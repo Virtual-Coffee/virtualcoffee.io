@@ -8,14 +8,10 @@ contents, and real maintainers' Slack accounts, and it sits behind a preview
 URL that is public and shareable.
 
 Slack's OAuth app registers a fixed list of redirect URIs, and a preview's
-address is new every time, so a preview could not sign anyone in. The first
-answer to both problems was a build step that rewrote every personal column
-with fakes, verified its own work against `information_schema`, and failed the
-build if a column was left out — and then a flag that gave anyone holding the
-preview link a standing admin session, which was acceptable only because the
-data behind it was no longer real. Reviewing `/admin` on a preview meant
-looking at faked rows through an identity nobody has, and every schema change
-had to be registered with the scrubber before the build would go green.
+address is new every time, so on its own a preview could not sign anyone in.
+Scrubbing the fork and letting the preview link stand in for a session would
+mean reviewing `/admin` through faked rows and an identity nobody has, and
+registering every schema change with the scrubber.
 
 ## Decision
 
@@ -43,8 +39,8 @@ thing and reaches nobody.
 
 ### Who a preview is protected from
 
-With the door the same as production's, the audiences the scrub was defending
-against are gone or were never covered:
+With the door the same as production's, the audiences a scrub would defend
+against are already covered:
 
 - Anyone with the link now sees a sign-in page.
 - A workspace member who has never been granted anything holds the default
@@ -53,10 +49,9 @@ against are gone or were never covered:
 - The Netlify site team can read a preview's function log and its database
   branch. They are the same people who hold `admin` and `coc` on production,
   and can read production's database the same way.
-- A pull request's build runs that pull request's code against the fork. A
-  scrub that runs inside the same build never protected against that; only
+- A pull request's build runs that pull request's code against the fork. Only
   Netlify's sensitive-variable policy for builds from outside the repository
-  does.
+  protects against that; a scrub inside the same build would not.
 
 ## Consequences
 
@@ -73,9 +68,7 @@ against are gone or were never covered:
 - Netlify's **sensitive variable policy** must keep secrets and the database
   URL away from builds by unrecognised authors. It is a site setting, not
   code, and the only thing standing between a fork PR's build and the fork.
-- Adding a table or column is just adding it; there is no scrubber to
-  register it with.
+- Adding a table or column is just adding it; nothing has to be registered.
 - Anything a preview reaches that is not the database is not forked: an
   opt-in that makes a preview write to a real external system (a calendar, a
-  channel) writes to the real one. That was true before and is worth saying
-  now that the rest of a preview looks so much like production.
+  channel) writes to the real one.

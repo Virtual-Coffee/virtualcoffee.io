@@ -108,14 +108,9 @@ function createAuth() {
 			 */
 			admin({ ac, roles, defaultRole: DEFAULT_ROLE, adminRoles: ['admin'] }),
 			/**
-			 * Slack registers one redirect URI, production's, and a preview's
-			 * address is new every time. A preview's sign-in therefore goes to
-			 * production's callback, which exchanges the code, encrypts the
-			 * profile with the secret and hands it back for the preview to create
-			 * its own session — production writes nothing (docs/adr/0007). The
-			 * same route serves a local checkout, so the secret has to match
-			 * production's wherever Slack sign-in is used; `BETTER_AUTH_SECRET`
-			 * deliberately does not.
+			 * Every deploy signs in through production's Slack callback, so
+			 * `OAUTH_PROXY_SECRET` matches production's wherever Slack sign-in is
+			 * used, while `BETTER_AUTH_SECRET` deliberately differs (docs/adr/0007).
 			 */
 			oAuthProxy({
 				productionURL: 'https://virtualcoffee.io',

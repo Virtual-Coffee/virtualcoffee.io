@@ -1,4 +1,4 @@
-# Pre-provisioned roles are keyed on the Slack member id
+# Pending Grants are keyed on the Slack member id
 
 ## Context
 
@@ -61,7 +61,7 @@ nothing in `sessionCan()` consults it, and a Grant only matters for a user
 that does not exist yet. On claim the Grant's roles are copied onto
 `user.role`, the Grant is stamped `claimed_at`, and `user.role` is
 authoritative from then on. Claimed Grants are kept — they record who
-pre-provisioned whom, and the User Management table reads the grantor and
+granted whom, and the User Management table reads the grantor and
 date off them. An _unclaimed_ Grant that is withdrawn is hard-deleted, because
 it never took effect.
 

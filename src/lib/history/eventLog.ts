@@ -20,7 +20,7 @@ import {
 } from '@/db';
 
 /**
- * The Event Log: `application_event` and `submission_event` as one concept.
+ * History: `application_event` and `submission_event` as one concept.
  * Every read and every write of either table comes through here, so what a
  * send outcome or a status change becomes in History is decided once, and the
  * two subjects' timelines cannot drift apart. See CONTEXT.md.

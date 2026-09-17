@@ -1,7 +1,7 @@
 import type { ApplicationEventType, SubmissionEventType } from '@/db';
 
 /**
- * The Event Log's labels, apart from the writes in `eventLog.ts` because the
+ * History's labels, apart from the writes in `eventLog.ts` because the
  * timelines and the dashboard feed are client components and must not pull
  * the database in.
  */
