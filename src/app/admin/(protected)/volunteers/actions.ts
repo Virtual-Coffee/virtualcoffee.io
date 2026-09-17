@@ -179,21 +179,6 @@ export async function addVolunteer(
 	};
 }
 
-/**
- * Stop or restart someone's volunteering.
- *
- * Both halves move together: `deactivated_at` is what the accrual job reads,
- * and the role is what /invites reads. Deactivating only one of them leaves
- * someone who can spend but never earns, or who banks an Invite every month for
- * years and comes back holding a supply nobody reviewed.
- *
- * The ledger is untouched. It is append-only and it is the record of what
- * happened; a returning Volunteer picks up the balance they left with.
- *
- * A restart is the same grant `addVolunteer` makes, so it goes through
- * `grantVolunteerRole`: a pause withdraws a Pending Grant that carried only
- * `volunteer`, and someone who never signed in has nothing else to update.
- */
 /** Descriptive only, so no transaction, ledger row or grant — just the column. */
 export async function setRoleLabels(
 	volunteerId: string,
@@ -263,6 +248,21 @@ export async function setEmail(
 	};
 }
 
+/**
+ * Stop or restart someone's volunteering.
+ *
+ * Both halves move together: `deactivated_at` is what the accrual job reads,
+ * and the role is what /invites reads. Deactivating only one of them leaves
+ * someone who can spend but never earns, or who banks an Invite every month for
+ * years and comes back holding a supply nobody reviewed.
+ *
+ * The ledger is untouched. It is append-only and it is the record of what
+ * happened; a returning Volunteer picks up the balance they left with.
+ *
+ * A restart is the same grant `addVolunteer` makes, so it goes through
+ * `grantVolunteerRole`: a pause withdraws a Pending Grant that carried only
+ * `volunteer`, and someone who never signed in has nothing else to update.
+ */
 export async function setVolunteerActive(
 	volunteerId: string,
 	active: boolean,
