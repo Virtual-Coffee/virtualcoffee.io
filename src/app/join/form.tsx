@@ -23,7 +23,7 @@ export function JoinForm({
 	defaultName?: string;
 	defaultEmail?: string;
 }) {
-	const { formProps, errorContent, fieldError, state } = useFormAction(
+	const { formProps, errorContent, fieldError, pending, state } = useFormAction(
 		submitMembershipApplication,
 	);
 
@@ -104,7 +104,7 @@ export function JoinForm({
 			<CodeOfConduct error={fieldError('agree')} />
 			<SpamGuardFields token={state?.spamToken ?? spamToken} />
 
-			<Submit />
+			<Submit pending={pending} />
 		</form>
 	);
 }
