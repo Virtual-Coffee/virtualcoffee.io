@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useId } from 'react';
 
+import { ActionDialog } from '@/components/ActionDialog';
 import { draftFromSeries, emptyDraft, toSeriesInput } from '@/lib/eventDraft';
 import type { Series } from '@/lib/eventsCalendar';
 import { useAction } from '@/util/forms/useAction';
@@ -117,7 +118,6 @@ export function SeriesForm({ series }: { series?: Series }) {
  */
 export function EndSeriesSection({ series }: { series: Series }) {
 	const router = useRouter();
-	const { run, pending, feedback } = useAction();
 	return (
 		<section className="border rounded p-3 mt-4" aria-labelledby="end-series">
 			<h2 className="h6" id="end-series">
@@ -126,27 +126,19 @@ export function EndSeriesSection({ series }: { series: Series }) {
 			<p className="small mb-3">
 				No more Events will be scheduled. Past ones stay on the calendar.
 			</p>
-			<button
-				type="button"
+			<ActionDialog
 				className="btn btn-sm btn-outline-danger"
-				disabled={pending}
-				onClick={() => {
-					if (
-						!window.confirm(
-							`End “${series.title}”? No more Events will be scheduled. Past ones stay on the calendar.`,
-						)
-					) {
-						return;
-					}
-					run(() => endSeries(series.id, series.etag), {
-						onSuccess: () => router.push('/admin/events'),
-						refresh: 'always',
-					});
-				}}
+				label="End Series"
+				title={`End “${series.title}”?`}
+				danger
+				refresh="always"
+				onSuccess={() => router.push('/admin/events')}
+				action={() => endSeries(series.id, series.etag)}
 			>
-				{pending ? '…' : 'End Series'}
-			</button>
-			{feedback}
+				<p className="mb-0">
+					No more Events will be scheduled. Past ones stay on the calendar.
+				</p>
+			</ActionDialog>
 		</section>
 	);
 }
