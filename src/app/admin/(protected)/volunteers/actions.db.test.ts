@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { db, invite, pendingGrant, user, volunteer } from '@/db';
 import { hashClaimToken, volunteerBalance } from '@/lib/volunteers/invites';
 import { sendEmail, sendSlackDm } from '@/test/mocks/spies';
+import { SENT } from '@/test/outbound';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
@@ -61,7 +62,7 @@ beforeEach(async () => {
 			handle: 'ada',
 		}),
 	];
-	sendEmail.mockResolvedValue({ ok: true });
+	sendEmail.mockResolvedValue(SENT);
 	sendSlackDm.mockResolvedValue({ ok: true, message: 'DM sent.' });
 	vi.stubEnv('URL', 'https://virtualcoffee.io');
 	await signInAs('admin');
