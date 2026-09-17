@@ -12,7 +12,7 @@ import {
 import { cocReportMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
 import { agree, email, name } from '@/util/forms/fields';
-import { intake } from '@/util/forms/intake';
+import { intake, savingFailed } from '@/util/forms/intake';
 import { invalidFields } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
 
@@ -94,8 +94,7 @@ export async function submitCocReport(
 		},
 		{
 			submitted: 'Report submitted',
-			failed:
-				'Something went wrong saving your report. Please try again, or email hello@virtualcoffee.io.',
+			failed: savingFailed('report'),
 		},
 	);
 	if ('error' in saved) {
