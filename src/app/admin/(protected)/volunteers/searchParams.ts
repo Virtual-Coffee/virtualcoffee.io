@@ -1,8 +1,8 @@
 import { oneOf, type RawSearchParams } from '@/util/searchParams';
 
-export const VOLUNTEER_STATES = ['active', 'paused', 'all'] as const;
+const VOLUNTEER_STATES = ['active', 'paused', 'all'] as const;
 
-export type VolunteerState = (typeof VOLUNTEER_STATES)[number];
+type VolunteerState = (typeof VOLUNTEER_STATES)[number];
 
 /**
  * Active by default: the question a maintainer arrives with is "who can send
