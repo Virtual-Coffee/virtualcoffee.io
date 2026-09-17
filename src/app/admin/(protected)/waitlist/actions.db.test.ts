@@ -6,8 +6,8 @@ import {
 	slackInviteForToken,
 } from '@/lib/inviteTokens';
 import { MAX_NOTE_LENGTH } from '@/lib/notes';
-import { staleRead } from '@/test/mocks/staleRead';
-import { sendEmail } from '@/test/mocks/transport';
+import { staleRead } from '@/test/mocks/wrappers';
+import { sendEmail } from '@/test/mocks/spies';
 import { NOT_FOUND } from '@/test/next';
 import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/outbound';
 import { signInAs } from '@/test/session';

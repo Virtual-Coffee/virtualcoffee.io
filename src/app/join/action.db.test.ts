@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 
 import { db, membershipApplication } from '@/db';
 import { fieldErrors, formDataWith } from '@/test/forms';
-import { notifySlack } from '@/test/mocks/notify';
+import { notifySlack } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
 import {
 	applicationEvents,

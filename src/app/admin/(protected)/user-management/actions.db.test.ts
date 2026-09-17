@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test } from 'vitest';
 
 import { db, pendingGrant, user } from '@/db';
-import { sendSlackDm } from '@/test/mocks/slackDm';
+import { sendSlackDm } from '@/test/mocks/spies';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
