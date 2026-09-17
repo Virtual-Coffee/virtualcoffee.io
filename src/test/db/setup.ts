@@ -71,6 +71,10 @@ vi.mock('@/lib/github/issues', async (importOriginal) => ({
 	createLunchAndLearnIssue: (await import('@/test/mocks/spies'))
 		.createLunchAndLearnIssue,
 }));
+vi.mock('@/lib/eventsCalendar', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/eventsCalendar')>()),
+	...(await import('@/test/mocks/eventsCalendar')),
+}));
 
 /** `staleRead.readAs` stages the race — see `@/test/mocks/wrappers`. */
 vi.mock('@/lib/waitlist/applications', async (importOriginal) =>

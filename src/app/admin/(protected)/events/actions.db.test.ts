@@ -1,8 +1,21 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { CalendarConflictError, CalendarGoneError } from '@/lib/eventsCalendar';
+import { connectEventsCalendar } from '@/test/mocks/eventsCalendar';
+import { revalidatePath, revalidateTag } from '@/test/mocks/nextCache';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
+
+import {
+	cancelEvent,
+	createEvent,
+	createSeries,
+	endSeries,
+	rescheduleEvent,
+	restoreEvent,
+	updateEvent,
+	updateSeries,
+} from './actions';
 
 const calendar = {
 	createSeries: vi.fn(),
@@ -14,31 +27,6 @@ const calendar = {
 	restoreEvent: vi.fn(),
 	rescheduleEvent: vi.fn(),
 };
-const connectEventsCalendar = vi.fn();
-const revalidateTag = vi.fn();
-const revalidatePath = vi.fn();
-
-vi.mock('@/lib/eventsCalendar', async (importOriginal) => ({
-	...(await importOriginal<typeof import('@/lib/eventsCalendar')>()),
-	connectEventsCalendar: () => connectEventsCalendar(),
-}));
-vi.mock('next/cache', () => ({
-	revalidateTag: (...args: unknown[]) => revalidateTag(...args),
-	revalidatePath: (...args: unknown[]) => revalidatePath(...args),
-	// `src/data/events.ts` wraps `getEvents` at import time.
-	unstable_cache: (fn: unknown) => fn,
-}));
-
-const {
-	cancelEvent,
-	createEvent,
-	createSeries,
-	endSeries,
-	rescheduleEvent,
-	restoreEvent,
-	updateEvent,
-	updateSeries,
-} = await import('./actions');
 
 const series = {
 	title: 'Virtual Coffee',
@@ -65,8 +53,6 @@ beforeEach(async () => {
 	vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', 'true');
 	connectEventsCalendar.mockReturnValue(calendar);
 	for (const fn of Object.values(calendar)) fn.mockReset();
-	revalidateTag.mockReset();
-	revalidatePath.mockReset();
 });
 afterEach(() => vi.unstubAllEnvs());
 
