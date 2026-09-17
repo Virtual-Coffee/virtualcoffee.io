@@ -1,8 +1,17 @@
 import { useId, type ComponentProps } from 'react';
 import { useFormStatus } from 'react-dom';
 
-export function Submit({ text = 'Submit', loadingText = 'Submitting...' }) {
-	const { pending } = useFormStatus();
+/**
+ * `pending` is for a form that dispatches its Action itself (`useFormAction`):
+ * `useFormStatus()` only sees a native form submission, so that path passes
+ * the transition's state in.
+ */
+export function Submit({
+	text = 'Submit',
+	loadingText = 'Submitting...',
+	pending: dispatched = false,
+}) {
+	const pending = useFormStatus().pending || dispatched;
 	return (
 		<div className="text-end">
 			<button

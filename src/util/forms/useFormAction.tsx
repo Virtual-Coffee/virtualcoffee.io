@@ -15,7 +15,7 @@ const initialState: FormState = {
 };
 
 export function useFormAction(action: Action) {
-	const [state, formAction] = useActionState<FormState, FormData>(
+	const [state, formAction, pending] = useActionState<FormState, FormData>(
 		action,
 		initialState,
 	);
@@ -25,6 +25,8 @@ export function useFormAction(action: Action) {
 	 * React resets an uncontrolled form once a native action completes, which
 	 * wiped everything the person had typed under a validation error. The
 	 * `action` prop stays on the form so it still posts without JavaScript.
+	 * A dispatched Action is invisible to `useFormStatus()`, so `pending` is
+	 * returned for the submit control.
 	 */
 	const onSubmit = useCallback(
 		(event: SubmitEvent<HTMLFormElement>) => {
@@ -54,7 +56,8 @@ export function useFormAction(action: Action) {
 			formProps: { action: formAction, onSubmit },
 			errorContent,
 			fieldError,
+			pending,
 			state,
 		};
-	}, [formAction, onSubmit, state]);
+	}, [formAction, onSubmit, pending, state]);
 }
