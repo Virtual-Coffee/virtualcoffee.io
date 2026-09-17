@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { CalendarConflictError, CalendarGoneError } from '@/lib/eventsCalendar';
+import {
+	CalendarConflictError,
+	CalendarGoneError,
+} from '@/lib/events/eventsCalendar';
 import {
 	connectEventsCalendar,
 	revalidatePath,
@@ -77,7 +80,7 @@ describe('access', () => {
 });
 
 describe('validation', () => {
-	// The Draft rules and their messages are `src/lib/eventDraft.test.ts`'s;
+	// The Draft rules and their messages are `src/lib/events/eventDraft.test.ts`'s;
 	// what matters here is that every action parses before it writes.
 	test.each<[keyof typeof calendar, () => Promise<unknown>, string]>([
 		[

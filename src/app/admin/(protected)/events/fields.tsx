@@ -2,13 +2,13 @@
 
 import type { ReactNode } from 'react';
 
-import type { Draft, DraftIssue, TimeInput } from '@/lib/eventDraft';
+import type { Draft, DraftIssue, TimeInput } from '@/lib/events/eventDraft';
 import {
 	EVENT_TYPE_LABELS,
 	EVENT_TYPES,
 	isEventType,
 	type EventType,
-} from '@/lib/eventTypes';
+} from '@/lib/events/eventTypes';
 
 import { DescriptionField } from './descriptionField';
 

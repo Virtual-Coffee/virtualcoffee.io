@@ -1,6 +1,6 @@
 import type { calendar_v3 } from '@googleapis/calendar';
 
-import type { CalendarClient } from '@/lib/eventsCalendar';
+import type { CalendarClient } from '@/lib/events/eventsCalendar';
 
 type Events = CalendarClient['events'];
 

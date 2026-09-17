@@ -11,7 +11,7 @@ import {
 	WEEKDAYS,
 	type RecurrenceDraft,
 	type Weekday,
-} from '@/lib/recurrence';
+} from '@/lib/events/recurrence';
 
 function toggle<T>(list: T[], value: T, on: boolean): T[] {
 	return on ? [...list, value] : list.filter((entry) => entry !== value);

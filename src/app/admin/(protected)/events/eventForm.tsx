@@ -3,8 +3,12 @@
 import Link from 'next/link';
 import { useId } from 'react';
 
-import { draftFromEvent, emptyDraft, toEventInput } from '@/lib/eventDraft';
-import type { EventDetails } from '@/lib/eventsCalendar';
+import {
+	draftFromEvent,
+	emptyDraft,
+	toEventInput,
+} from '@/lib/events/eventDraft';
+import type { EventDetails } from '@/lib/events/eventsCalendar';
 import { useAction } from '@/util/forms/useAction';
 
 import { createEvent, updateEvent } from './actions';

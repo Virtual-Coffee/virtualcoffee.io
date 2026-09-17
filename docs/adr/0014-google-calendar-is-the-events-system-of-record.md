@@ -66,7 +66,7 @@ calendar through the API can read the code — the workspace — and that
 exposure is accepted; the calendar is not public.
 
 **The Event Type is `extendedProperties.private.eventType`.** A key from a
-fixed list in code (`EVENT_TYPES` in `src/lib/eventTypes.ts`) that says
+fixed list in code (`EVENT_TYPES` in `src/lib/events/eventTypes.ts`) that says
 what kind of thing a Series or one-off Event is — Virtual Coffee, Lunch &
 Learn, and so on. It is written beside the Host Code, the admin page is its
 only writer and requires one on every save, and an entry from before there

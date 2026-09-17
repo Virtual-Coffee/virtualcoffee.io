@@ -1,4 +1,4 @@
-import { requirePermission } from '@/lib/adminAccess';
+import { requirePermission } from '@/lib/access/adminAccess';
 
 import { Breadcrumb } from '../../presentation';
 import { EventForm } from '../eventForm';

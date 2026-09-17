@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { requirePermission, sessionCan } from '@/lib/adminAccess';
-import { connectEventsCalendar } from '@/lib/eventsCalendar';
+import { requirePermission, sessionCan } from '@/lib/access/adminAccess';
+import { connectEventsCalendar } from '@/lib/events/eventsCalendar';
 
 import { ReadOnlyNotice } from '../presentation';
 import { EventsTable } from './eventsTable';

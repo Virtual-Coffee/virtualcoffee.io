@@ -1,4 +1,4 @@
-import type { AdminEvent } from '@/lib/eventsCalendar';
+import type { AdminEvent } from '@/lib/events/eventsCalendar';
 import { dateForDisplay } from '@/util/date';
 
 /** "Tue, Sep 15" — always the display zone. */

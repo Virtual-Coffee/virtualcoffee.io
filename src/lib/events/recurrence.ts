@@ -6,7 +6,7 @@
  * (no `+1FR`, no `INTERVAL=1`). Google expands the rule; nothing here computes
  * occurrences beyond the one check that a first Event lands on the rule.
  *
- * Also the rule half of a Draft (`src/lib/eventDraft.ts`): `RecurrenceDraft`
+ * Also the rule half of a Draft (`src/lib/events/eventDraft.ts`): `RecurrenceDraft`
  * is what the controls hold while it is being typed, and `recurrenceSchema`
  * is what a save is parsed against. Imported by client components, so nothing
  * server-only belongs here.

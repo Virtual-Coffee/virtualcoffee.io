@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import type { Series } from '@/lib/eventsCalendar';
+import type { Series } from '@/lib/events/eventsCalendar';
 
 import { EventWhen } from './presentation';
 

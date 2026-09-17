@@ -18,8 +18,8 @@
 import { DateTime } from 'luxon';
 import { z } from 'zod';
 
-import type { EventDetails, Series } from '@/lib/eventsCalendar';
-import { EVENT_TYPES, type EventType } from '@/lib/eventTypes';
+import type { EventDetails, Series } from '@/lib/events/eventsCalendar';
+import { EVENT_TYPES, type EventType } from '@/lib/events/eventTypes';
 import {
 	dateSchema,
 	draftFromRecurrence,
@@ -30,7 +30,7 @@ import {
 	recurrenceSchema,
 	type RecurrenceDraft,
 	type RecurrenceForm,
-} from '@/lib/recurrence';
+} from '@/lib/events/recurrence';
 
 /**
  * The same test the bots apply (`src/zoom/join-link.ts` in vc-bots): a Zoom

@@ -3,21 +3,21 @@
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { z } from 'zod';
 
-import type { ActionResult } from '@/lib/actionResult';
-import { requirePermission } from '@/lib/adminAccess';
+import type { ActionResult } from '@/lib/admin/actionResult';
+import { requirePermission } from '@/lib/access/adminAccess';
 import {
 	eventInputSchema,
 	seriesInputSchema,
 	seriesUpdateSchema,
 	timeInputSchema,
-} from '@/lib/eventDraft';
+} from '@/lib/events/eventDraft';
 import {
 	CalendarConflictError,
 	CalendarGoneError,
 	connectEventsCalendar,
 	isCalendarEventId,
 	type EventsCalendar,
-} from '@/lib/eventsCalendar';
+} from '@/lib/events/eventsCalendar';
 import { deliver } from '@/lib/outbound';
 
 const CONFLICT =
