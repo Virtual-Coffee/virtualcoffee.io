@@ -39,18 +39,20 @@ export async function submitVolunteerSignup(
 	const parsed = intake(formData, { schema, thanks: THANKS });
 	if (!parsed.ok) return parsed.state;
 
+	const signup = {
+		name: parsed.data.name,
+		email: parsed.data.email,
+		githubUsername: parsed.data.github_username,
+		position: parsed.data.position,
+		description: parsed.data.description,
+	};
+
 	const saved = await persistSubmission(
 		'volunteers',
 		async (tx) => {
 			const [row] = await tx
 				.insert(volunteerSignup)
-				.values({
-					name: parsed.data.name,
-					email: parsed.data.email,
-					githubUsername: parsed.data.github_username,
-					position: parsed.data.position,
-					description: parsed.data.description,
-				})
+				.values(signup)
 				.returning({ id: volunteerSignup.id });
 			return row;
 		},
@@ -67,15 +69,7 @@ export async function submitVolunteerSignup(
 		saved.id,
 		{ channel: 'slack', what: 'Slack notified of a Volunteer signup' },
 		async () => {
-			return notifySlack(
-				'volunteers',
-				volunteerSignupMessage({
-					name: parsed.data.name,
-					email: parsed.data.email,
-					position: parsed.data.position,
-					description: parsed.data.description,
-				}),
-			);
+			return notifySlack('volunteers', volunteerSignupMessage(signup));
 		},
 	);
 
