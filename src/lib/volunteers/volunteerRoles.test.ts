@@ -17,3 +17,10 @@ test('formatRoleLabels dedupes, orders like the list and is null when empty', ()
 	);
 	expect(formatRoleLabels([])).toBeNull();
 });
+
+test('formatRoleLabels keeps a stored name that is not on the list', () => {
+	expect(
+		formatRoleLabels(['VC Host'], 'Maintainer, Notetaker, Maintainer'),
+	).toBe('VC Host, Maintainer');
+	expect(formatRoleLabels([], 'Maintainer')).toBe('Maintainer');
+});

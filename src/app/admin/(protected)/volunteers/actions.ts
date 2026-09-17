@@ -199,15 +199,21 @@ export async function setRoleLabels(
 		};
 	}
 
-	const [row] = await db()
-		.update(volunteer)
-		.set({ roleLabels: formatRoleLabels(roles.data) })
-		.where(eq(volunteer.id, volunteerId))
-		.returning({ id: volunteer.id });
+	// Read first: a label the import brought across that is not on the list is
+	// not the editor's to drop.
+	const [current] = await db()
+		.select({ roleLabels: volunteer.roleLabels })
+		.from(volunteer)
+		.where(eq(volunteer.id, volunteerId));
 
-	if (!row) {
+	if (!current) {
 		return { ok: false, message: 'That volunteer no longer exists.' };
 	}
+
+	await db()
+		.update(volunteer)
+		.set({ roleLabels: formatRoleLabels(roles.data, current.roleLabels) })
+		.where(eq(volunteer.id, volunteerId));
 
 	revalidate(volunteerId);
 	return { ok: true, message: 'Roles updated.' };
