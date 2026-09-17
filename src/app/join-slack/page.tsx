@@ -4,6 +4,7 @@ import { single } from '@/util/searchParams';
 
 import { FAILURES } from './copy';
 import { JoinSlackForm } from './form';
+import { slackJoinLink } from './joinLink';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,10 +34,7 @@ export default async function JoinSlackPage({
 	if (!token) {
 		title = 'That link is missing something';
 		body = 'This invite link is incomplete, so we can’t check it.';
-	} else if (!process.env.SLACK_JOIN_LINK) {
-		console.error(
-			'SLACK_JOIN_LINK is not set; cannot complete a Slack invite.',
-		);
+	} else if (!slackJoinLink()) {
 		title = 'Something is misconfigured on our side';
 		body = FAILURES.misconfigured;
 	} else {

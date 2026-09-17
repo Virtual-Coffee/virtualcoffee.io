@@ -39,11 +39,17 @@ describe('joinSlack', () => {
 		});
 	});
 
-	test('a missing join link never spends the token', async () => {
-		vi.stubEnv('SLACK_JOIN_LINK', undefined);
+	test.each([
+		['missing', undefined],
+		['not a URL', 'join.slack.com/t/vc/x'],
+		['not HTTPS', 'http://join.slack.com/t/vc/x'],
+		['not Slack', 'https://example.com/t/vc/x'],
+	])('a %s join link never spends the token', async (_, link) => {
+		vi.stubEnv('SLACK_JOIN_LINK', link);
 		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
 		await expect(submission('tok')).resolves.toMatchObject({ is_error: true });
 		expect(redeem).not.toHaveBeenCalled();
+		expect(error).toHaveBeenCalledOnce();
 		error.mockRestore();
 	});
 });

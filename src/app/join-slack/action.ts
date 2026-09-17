@@ -7,6 +7,7 @@ import { formValue } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
 
 import { FAILURES } from './copy';
+import { slackJoinLink } from './joinLink';
 
 /**
  * Spends the single-use token and forwards to the workspace join link. This
@@ -18,17 +19,12 @@ export async function joinSlack(
 	formData: FormData,
 ): Promise<FormState> {
 	const code = formValue(formData, 'code');
-	const joinLink = process.env.SLACK_JOIN_LINK;
-
 	if (!code) return { is_error: true, message: FAILURES.unknown };
-	if (!joinLink) {
-		// Checked before redeeming, so a misconfigured deploy does not burn the
-		// token.
-		console.error(
-			'SLACK_JOIN_LINK is not set; cannot complete a Slack invite.',
-		);
-		return { is_error: true, message: FAILURES.misconfigured };
-	}
+
+	// Checked before redeeming, so a misconfigured deploy does not burn the
+	// token.
+	const joinLink = slackJoinLink();
+	if (!joinLink) return { is_error: true, message: FAILURES.misconfigured };
 
 	const result = await redeemSlackInviteToken(code);
 	if (!result.ok) return { is_error: true, message: FAILURES[result.reason] };
