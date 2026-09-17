@@ -66,6 +66,7 @@ describe('submitCocReport', () => {
 	test('a Slack failure keeps the report and is visible in /admin', async () => {
 		notifySlack.mockResolvedValue({
 			ok: false,
+			definitelyNotSent: true,
 			message: 'Slack rejected the message (404: no_service).',
 		});
 
