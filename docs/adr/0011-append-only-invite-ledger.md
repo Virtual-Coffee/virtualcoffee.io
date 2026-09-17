@@ -27,8 +27,10 @@ Two partial unique indexes do the work that would otherwise be careful code:
 
 A unique index says nothing about a row whose key is NULL, so the CHECK
 constraint `volunteer_invite_ledger_reason_keys` requires `period_key` on an
-accrual and `invite_id` on a spend or refund. The code always sets them; the
-constraint is what makes the indexes mean what this section claims.
+accrual and `invite_id` on a spend or refund, and forbids either key on every
+other reason — an `admin_grant` cannot point at an Invite it had no part in,
+and an accrual cannot carry one. The code always writes exactly the right key;
+the constraint is what makes the indexes mean what this section claims.
 
 ### Accrual is a daily, idempotent cron
 
