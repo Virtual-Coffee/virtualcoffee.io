@@ -1,10 +1,10 @@
 import type { InviteStatus } from '@/db';
+import { accrue, adjust, giveBack, importBalance, spend } from '@/lib/invites';
 import { serialiseRoles } from '@/lib/permissions';
 import {
 	insertInvite,
 	insertPendingGrant,
 	insertVolunteer,
-	ledgerRow,
 } from '@/test/db/fixtures';
 
 import {
@@ -80,7 +80,8 @@ const INVITE_SEEDS: {
  * Volunteers, their allowance history, and the Invites they have sent.
  *
  * The balance is not stored anywhere — it is the sum of the ledger — so seeding
- * it means seeding the movements that produce it. This adds up to 2 for the dev
+ * it means seeding the movements that produce it, through the same module the
+ * site writes them with (`src/lib/invites.ts`). This adds up to 2 for the dev
  * bypass Volunteer (six imported, one accrued, seven spent, two given back) and
  * 6 for the Volunteer-only user (three imported, two granted, one accrued). The
  * not-yet-signed-in Volunteer holds only this month's accrual, 1.
@@ -88,8 +89,6 @@ const INVITE_SEEDS: {
  * Returns the Invite id for each claimed invitee email, for the applications.
  */
 export async function seedVolunteers(): Promise<Map<string, string>> {
-	const period = new Date().toISOString().slice(0, 7);
-
 	await insertVolunteer({
 		slackUserId: ADMIN.slackUserId,
 		name: ADMIN.name,
@@ -134,67 +133,52 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 		deactivatedAt: daysAgo(60),
 	});
 
-	await ledgerRow({
+	await importBalance({
 		slackUserId: ADMIN.slackUserId,
-		delta: 6,
-		reason: 'imported',
-		body: 'Balance carried over from Airtable',
-		createdAt: daysAgo(200),
+		credit: 6,
+		airtableRecordId: 'recSEEDADMIN',
+		at: daysAgo(200),
 	});
-	await ledgerRow({
-		slackUserId: ADMIN.slackUserId,
-		delta: 1,
-		reason: 'monthly_accrual',
-		periodKey: period,
-	});
-	await ledgerRow({
+	await importBalance({
 		slackUserId: VOLUNTEER.slackUserId,
-		delta: 3,
-		reason: 'imported',
-		body: 'Balance carried over from Airtable',
-		createdAt: daysAgo(200),
+		credit: 3,
+		airtableRecordId: 'recSEEDVOLUNTEER',
+		at: daysAgo(200),
 	});
-	await ledgerRow({
+	await importBalance({
+		slackUserId: FORMER_VOLUNTEER_SLACK_ID,
+		credit: 2,
+		airtableRecordId: 'recSEEDFORMER',
+		at: daysAgo(200),
+	});
+	await adjust({
 		slackUserId: VOLUNTEER.slackUserId,
 		delta: 2,
-		reason: 'admin_grant',
 		actorUserId: ADMIN.id,
 		body: 'Extra invites for the hackathon cohort',
-		createdAt: daysAgo(30),
+		at: daysAgo(30),
 	});
-	await ledgerRow({
-		slackUserId: VOLUNTEER.slackUserId,
-		delta: 1,
-		reason: 'monthly_accrual',
-		periodKey: period,
-	});
-	await ledgerRow({
-		slackUserId: NEW_VOLUNTEER.slackUserId,
-		delta: 1,
-		reason: 'monthly_accrual',
-		periodKey: period,
-	});
-	await ledgerRow({
-		slackUserId: FORMER_VOLUNTEER_SLACK_ID,
-		delta: 2,
-		reason: 'imported',
-		body: 'Balance carried over from Airtable',
-		createdAt: daysAgo(200),
-	});
-	await ledgerRow({
+	await adjust({
 		slackUserId: FORMER_VOLUNTEER_SLACK_ID,
 		delta: -2,
-		reason: 'admin_revoke',
 		actorUserId: ADMIN.id,
 		body: 'Stepped back from volunteering',
-		createdAt: daysAgo(60),
+		at: daysAgo(60),
 	});
+	// This month's row for everyone still active, which is the daily job's own
+	// call — so the Volunteer who stepped back gets none.
+	await accrue(new Date());
 
 	const invitesByEmail = new Map<string, string>();
 
 	for (const seed of INVITE_SEEDS) {
 		const sentAt = daysAgo(seed.daysAgo);
 		const claimed = seed.status === 'accepted' || seed.status === 'completed';
+
+		// An Invite that will never be claimed is seeded `pending` and then given
+		// back below, so the seed reaches those two statuses the way the site
+		// does rather than writing them directly.
+		const givenBack = seed.status === 'expired' || seed.status === 'cancelled';
 
 		// Only a pending Invite still has a usable Claim Link. The others have
 		// had theirs cleared by redemption, cancellation or the sweep.
@@ -204,7 +188,7 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 			inviterName: ADMIN.name,
 			inviteeName: seed.inviteeName,
 			inviteeEmail: seed.inviteeEmail,
-			status: seed.status,
+			status: givenBack ? 'pending' : seed.status,
 			...(seed.status === 'pending'
 				? { token: CLAIM_TOKEN, expiresAt: daysAhead(90 - seed.daysAgo) }
 				: { token: null }),
@@ -217,27 +201,22 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 		// happen: the application exists, so the Invite was never unclaimed.
 		if (claimed) invitesByEmail.set(seed.inviteeEmail, row.id);
 
-		await ledgerRow({
+		await spend({
 			slackUserId: ADMIN.slackUserId,
-			delta: -1,
-			reason: 'spend',
 			inviteId: row.id,
 			actorUserId: ADMIN.id,
 			body: `Invited ${seed.inviteeName} <${seed.inviteeEmail}>`,
-			createdAt: sentAt,
+			at: sentAt,
 		});
 
-		// An Invite that will never be claimed gives the allowance back.
-		if (seed.status === 'expired' || seed.status === 'cancelled') {
-			await ledgerRow({
-				slackUserId: ADMIN.slackUserId,
-				delta: 1,
+		if (givenBack) {
+			await giveBack({
+				inviteId: row.id,
 				reason:
 					seed.status === 'expired' ? 'refund_expired' : 'refund_cancelled',
-				inviteId: row.id,
 				actorUserId: seed.status === 'cancelled' ? ADMIN.id : null,
 				body: seed.status === 'expired' ? 'Expired unclaimed' : 'Cancelled',
-				createdAt: daysAgo(Math.max(seed.daysAgo - 90, 1)),
+				at: daysAgo(Math.max(seed.daysAgo - 90, 1)),
 			});
 		}
 	}
