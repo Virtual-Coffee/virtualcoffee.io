@@ -11,6 +11,7 @@ import {
 	type RoleName,
 } from '@/lib/permissions';
 import { useAction } from '@/util/forms/useAction';
+import { type CheckboxMenuOption, RoleCheckboxMenu } from '../roleCheckboxMenu';
 import { useDropdown } from '../useDropdown';
 import {
 	grantPendingAccess,
@@ -46,17 +47,13 @@ export function RolesDropdown({
 	isSelf: boolean;
 }) {
 	const { run, pending, error } = useAction();
-	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
-		HTMLDivElement,
-		HTMLButtonElement
-	>();
 
 	const grantable = roles.filter((role) => GRANTABLE_ROLE_NAMES.has(role));
 
 	/**
 	 * Seeded from `grantable` each time the menu opens, not in an effect: the
-	 * hook closes the menu on Escape and outside clicks without telling us, and
-	 * reseeding on open is what makes those discard the draft.
+	 * menu closes on Escape and outside clicks without telling us, and reseeding
+	 * on open is what makes those discard the draft.
 	 */
 	const [draft, setDraft] = useState<RoleName[]>([]);
 
@@ -76,13 +73,13 @@ export function RolesDropdown({
 	 * The menu stays open on failure: the error renders under the chips, and
 	 * the draft is still there to fix and retry.
 	 */
-	function save() {
+	function save(close: () => void) {
 		run(
 			() =>
 				kind === 'user'
 					? setUserRoles(id, draft)
 					: setPendingGrantRoles(id, draft),
-			{ onSuccess: () => setOpen(false) },
+			{ onSuccess: close },
 		);
 	}
 
@@ -103,70 +100,37 @@ export function RolesDropdown({
 		);
 	}
 
-	const menuId = `${id}-roles-menu`;
+	const options: CheckboxMenuOption<RoleName>[] = GRANTABLE_ROLES.map(
+		(role) => ({
+			value: role.name,
+			label: ROLE_LABELS[role.name],
+			description: role.description,
+			// Removing your own admin role is refused server-side too; the
+			// disabled box just avoids offering an action that cannot work.
+			disabled:
+				pending || (isSelf && role.name === 'admin' && roles.includes('admin')),
+		}),
+	);
 
 	return (
-		<div className="dropdown" ref={wrapperRef}>
-			<button
-				type="button"
-				ref={toggleRef}
-				className="btn btn-sm btn-outline-secondary dropdown-toggle"
-				aria-expanded={open}
-				aria-haspopup="true"
-				aria-controls={menuId}
-				onClick={() => {
-					if (!open) setDraft(grantable);
-					setOpen((wasOpen) => !wasOpen);
-				}}
-			>
-				Roles
-				{roles.length > 0 && (
-					<span className="badge text-bg-secondary ms-2">{roles.length}</span>
-				)}
-			</button>
-
-			{open && (
-				<ul
-					id={menuId}
-					className="dropdown-menu show py-1"
-					style={
-						{
-							// `.small` loses to `.dropdown-menu`'s own font-size; the variable wins.
-							'--bs-dropdown-font-size': '0.8125rem',
-						} as React.CSSProperties
-					}
-				>
-					{GRANTABLE_ROLES.map((role) => {
-						// Removing your own admin role is refused server-side too; the
-						// disabled box just avoids offering an action that cannot work.
-						const locked =
-							isSelf && role.name === 'admin' && roles.includes('admin');
-						const inputId = `${id}-${role.name}`;
-
-						return (
-							// Inset on the `li`: `.form-check`'s padding pairs with a negative
-							// margin on the input, so a `px-*` there pushes the box outside.
-							<li key={role.name} className="px-3">
-								<div className="form-check py-1 mb-0 lh-sm">
-									<input
-										className="form-check-input"
-										type="checkbox"
-										id={inputId}
-										checked={draft.includes(role.name)}
-										disabled={pending || locked}
-										onChange={() => toggleDraft(role.name)}
-									/>
-									<label className="form-check-label" htmlFor={inputId}>
-										{ROLE_LABELS[role.name]}
-										<span className="d-block small text-body-secondary">
-											{role.description}
-										</span>
-									</label>
-								</div>
-							</li>
-						);
-					})}
-
+		<RoleCheckboxMenu
+			id={id}
+			menuId={`${id}-roles-menu`}
+			size="sm"
+			label={
+				<>
+					Roles
+					{roles.length > 0 && (
+						<span className="badge text-bg-secondary ms-2">{roles.length}</span>
+					)}
+				</>
+			}
+			options={options}
+			selected={draft}
+			onToggle={toggleDraft}
+			onOpen={() => setDraft(grantable)}
+			footer={(close) => (
+				<>
 					<li>
 						<hr className="dropdown-divider" />
 					</li>
@@ -175,7 +139,7 @@ export function RolesDropdown({
 							type="button"
 							className="btn btn-sm btn-primary"
 							disabled={pending || (!dirty && !stranded)}
-							onClick={save}
+							onClick={() => save(close)}
 						>
 							{stranded ? 'Apply' : 'Save'}
 						</button>
@@ -183,7 +147,7 @@ export function RolesDropdown({
 							type="button"
 							className="btn btn-sm btn-outline-secondary"
 							disabled={pending}
-							onClick={() => setOpen(false)}
+							onClick={close}
 						>
 							Cancel
 						</button>
@@ -203,7 +167,7 @@ export function RolesDropdown({
 										className="dropdown-item text-danger"
 										disabled={pending}
 										onClick={() => {
-											setOpen(false);
+											close();
 											revokeAll();
 										}}
 									>
@@ -212,9 +176,9 @@ export function RolesDropdown({
 								</li>
 							</>
 						)}
-				</ul>
+				</>
 			)}
-
+		>
 			<div className="mt-1 d-flex flex-wrap gap-1">
 				{roles.length === 0 ? (
 					<span className="small text-body-secondary">No access</span>
@@ -232,7 +196,7 @@ export function RolesDropdown({
 					{error}
 				</p>
 			)}
-		</div>
+		</RoleCheckboxMenu>
 	);
 }
 
