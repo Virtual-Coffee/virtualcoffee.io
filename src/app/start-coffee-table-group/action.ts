@@ -6,13 +6,15 @@ import { z } from 'zod';
 import { coffeeTableGroupRequest } from '@/db';
 import { coffeeTableGroupMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import { formObject, invalidFields, staleForm } from '@/util/forms/parse';
-import { checkSpam } from '@/util/forms/spamGuard';
+import { agree, email, name } from '@/util/forms/fields';
+import { intake } from '@/util/forms/intake';
 import type { FormState } from '@/util/forms/types';
 
+const THANKS = '/start-coffee-table-group/thanks';
+
 const schema = z.object({
-	name: z.string().trim().min(1, 'Please tell us your name.').max(200),
-	email: z.email('That doesn’t look like an email address.').max(320),
+	name: name(),
+	email: email(),
 	// Both are `required` in the browser, so they are required here too.
 	group_name: z
 		.string()
@@ -24,24 +26,15 @@ const schema = z.object({
 		.trim()
 		.min(1, 'Please describe your group idea.')
 		.max(5000),
-	agree: z.literal('agree', {
-		message: 'Please confirm you’ve read the Code of Conduct.',
-	}),
+	agree: agree(),
 });
 
 export async function submitCoffeeTableGroupRequest(
 	_state: FormState,
 	formData: FormData,
 ): Promise<FormState> {
-	const guard = checkSpam(formData);
-	if (guard === 'stale') return staleForm();
-	if (guard !== 'ok') redirect('/start-coffee-table-group/thanks');
-
-	const parsed = schema.safeParse(formObject(formData, schema));
-
-	if (!parsed.success) {
-		return invalidFields(parsed.error);
-	}
+	const parsed = intake(formData, { schema, thanks: THANKS });
+	if (!parsed.ok) return parsed.state;
 
 	const saved = await persistSubmission(
 		'coffee-tables',
@@ -85,5 +78,5 @@ export async function submitCoffeeTableGroupRequest(
 		},
 	);
 
-	redirect('/start-coffee-table-group/thanks');
+	redirect(THANKS);
 }

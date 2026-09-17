@@ -6,18 +6,16 @@ import { z } from 'zod';
 import { volunteerSignup } from '@/db';
 import { notifySlack, volunteerSignupMessage } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import {
-	formObject,
-	githubUsername,
-	invalidFields,
-	staleForm,
-} from '@/util/forms/parse';
-import { checkSpam } from '@/util/forms/spamGuard';
+import { agree, email, name } from '@/util/forms/fields';
+import { intake } from '@/util/forms/intake';
+import { githubUsername } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
 
+const THANKS = '/volunteer-at-virtual-coffee/thanks';
+
 const schema = z.object({
-	name: z.string().trim().min(1, 'Please tell us your name.').max(200),
-	email: z.email('That doesn’t look like an email address.').max(320),
+	name: name(),
+	email: email(),
 	// Required in the browser, so required here too — server validation that is
 	// laxer than the form's own `required` attributes is validation in name only.
 	github_username: githubUsername('Please give us your GitHub username.'),
@@ -31,24 +29,15 @@ const schema = z.object({
 		.trim()
 		.min(1, 'Please share any details or thoughts.')
 		.max(5000),
-	agree: z.literal('agree', {
-		message: 'Please confirm you’ve read the Code of Conduct.',
-	}),
+	agree: agree(),
 });
 
 export async function submitVolunteerSignup(
 	_state: FormState,
 	formData: FormData,
 ): Promise<FormState> {
-	const guard = checkSpam(formData);
-	if (guard === 'stale') return staleForm();
-	if (guard !== 'ok') redirect('/volunteer-at-virtual-coffee/thanks');
-
-	const parsed = schema.safeParse(formObject(formData, schema));
-
-	if (!parsed.success) {
-		return invalidFields(parsed.error);
-	}
+	const parsed = intake(formData, { schema, thanks: THANKS });
+	if (!parsed.ok) return parsed.state;
 
 	const saved = await persistSubmission(
 		'volunteers',
@@ -90,5 +79,5 @@ export async function submitVolunteerSignup(
 		},
 	);
 
-	redirect('/volunteer-at-virtual-coffee/thanks');
+	redirect(THANKS);
 }

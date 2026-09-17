@@ -11,20 +11,20 @@ import {
 } from '@/lib/attachments';
 import { cocReportMessage, notifySlack } from '@/lib/slack/notify';
 import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
-import { formObject, invalidFields, staleForm } from '@/util/forms/parse';
-import { checkSpam } from '@/util/forms/spamGuard';
+import { agree, email, name } from '@/util/forms/fields';
+import { intake } from '@/util/forms/intake';
+import { invalidFields } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
+
+const THANKS = '/report-coc-violation/thanks';
 
 /**
  * Name and email are optional by design: the form tells reporters to skip both
  * if they want to remain anonymous, and some historical reports did.
  */
 const schema = z.object({
-	name: z.string().trim().max(200).optional(),
-	email: z
-		.email('That doesn’t look like an email address.')
-		.max(320)
-		.optional(),
+	name: name({ optional: true }),
+	email: email().optional(),
 	reportee_name: z
 		.string()
 		.trim()
@@ -41,27 +41,17 @@ const schema = z.object({
 		.min(1, 'Please describe what happened.')
 		.max(10000),
 	anyone_else_involved: z.string().trim().max(5000).optional(),
-	agree: z.literal('agree', {
-		message: 'Please confirm you’ve read the Code of Conduct.',
-	}),
+	agree: agree(),
 });
 
 export async function submitCocReport(
 	_state: FormState,
 	formData: FormData,
 ): Promise<FormState> {
-	// A bot is dropped silently and deliberately shown success: telling it which
-	// check caught it only helps it try again. A stale token is a person who
-	// wrote this slowly, and a CoC report is the last thing to lose that way.
-	const guard = checkSpam(formData);
-	if (guard === 'stale') return staleForm();
-	if (guard !== 'ok') redirect('/report-coc-violation/thanks');
-
-	const parsed = schema.safeParse(formObject(formData, schema));
-
-	if (!parsed.success) {
-		return invalidFields(parsed.error);
-	}
+	// A stale token is a person who wrote this slowly, and a CoC report is the
+	// last thing to lose that way.
+	const parsed = intake(formData, { schema, thanks: THANKS });
+	if (!parsed.ok) return parsed.state;
 
 	// The upload is validated before the row is written, so a rejected file is a
 	// form error the reporter can fix rather than a half-saved report.
@@ -130,5 +120,5 @@ export async function submitCocReport(
 		},
 	);
 
-	redirect('/report-coc-violation/thanks');
+	redirect(THANKS);
 }
