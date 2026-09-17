@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
 import { volunteerBalance } from '@/lib/invites';
-import { sendEmail } from '@/test/mocks/transport';
+import { sendEmail } from '@/test/mocks/spies';
 import {
 	failLedgerInserts,
 	insertInvite,
