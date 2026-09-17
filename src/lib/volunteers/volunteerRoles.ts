@@ -42,10 +42,25 @@ export function parseRoleLabels(value: string | null): string[] {
 		.filter(Boolean);
 }
 
-/** Deduplicated, in `COMMUNITY_ROLES` order; `null` when nothing is picked. */
+/**
+ * Deduplicated, in `COMMUNITY_ROLES` order; `null` when nothing is picked.
+ *
+ * `current` is the column as stored: any name in it that is not on the list
+ * (an import can carry one) is kept after the picked roles, because the
+ * editor never offered it and so cannot have meant to remove it.
+ */
 export function formatRoleLabels(
 	roles: readonly CommunityRole[],
+	current: string | null = null,
 ): string | null {
-	const picked = COMMUNITY_ROLES.filter((role) => roles.includes(role));
-	return picked.length > 0 ? picked.join(', ') : null;
+	const picked: string[] = COMMUNITY_ROLES.filter((role) =>
+		roles.includes(role),
+	);
+	const kept = new Set(
+		parseRoleLabels(current).filter(
+			(label) => !(COMMUNITY_ROLES as readonly string[]).includes(label),
+		),
+	);
+	const all = [...picked, ...kept];
+	return all.length > 0 ? all.join(', ') : null;
 }

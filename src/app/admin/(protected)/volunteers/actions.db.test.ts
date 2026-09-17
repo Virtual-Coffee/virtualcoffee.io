@@ -431,6 +431,21 @@ describe('setRoleLabels', () => {
 		});
 	});
 
+	test('an imported label that is not on the list survives an edit', async () => {
+		const { id } = await insertVolunteer({
+			slackUserId: 'U_ADA',
+			roleLabels: 'Maintainer, VC Host',
+		});
+
+		await expect(setRoleLabels(id, ['Notetaker'])).resolves.toEqual({
+			ok: true,
+			message: 'Roles updated.',
+		});
+		await expect(volunteerRow('U_ADA')).resolves.toMatchObject({
+			roleLabels: 'Notetaker, Maintainer',
+		});
+	});
+
 	test('a malformed or unknown id is a soft failure, not a 22P02', async () => {
 		await expect(setRoleLabels('42', ['VC Host'])).resolves.toEqual({
 			ok: false,
