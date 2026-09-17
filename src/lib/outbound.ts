@@ -92,10 +92,22 @@ export type EmailDelivery =
 export function emailDelivery(): EmailDelivery {
 	if (isProduction()) return { mode: 'live' };
 
-	if (!isDeployed() && process.env.SMTP_HOST?.trim()) {
-		return { mode: 'local', context: deployContext() };
+	const host = process.env.SMTP_HOST?.trim();
+	if (!isDeployed() && host) {
+		if (isLoopbackHost(host)) {
+			return { mode: 'local', context: deployContext() };
+		}
+		// A sink that mail can leave the machine for is not a sink.
+		console.warn(
+			`[email captured] SMTP_HOST=${host} is not a loopback address; nothing is delivered outside production.`,
+		);
 	}
 	return { mode: 'captured', context: deployContext() };
+}
+
+function isLoopbackHost(host: string): boolean {
+	const bare = host.toLowerCase().replace(/^\[(.*)\]$/, '$1');
+	return bare === 'localhost' || bare === '127.0.0.1' || bare === '::1';
 }
 
 /**
