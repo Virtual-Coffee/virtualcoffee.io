@@ -330,6 +330,7 @@ async function apply(dryRun: boolean) {
 		.select({
 			airtableRecordId: volunteer.airtableRecordId,
 			slackUserId: volunteer.slackUserId,
+			deactivatedAt: volunteer.deactivatedAt,
 		})
 		.from(volunteer)
 		.where(
@@ -338,12 +339,10 @@ async function apply(dryRun: boolean) {
 				mapped.map((entry) => entry.airtableRecordId),
 			),
 		);
-	const storedBy = new Map(
-		stored.map((row) => [row.airtableRecordId, row.slackUserId]),
-	);
+	const storedBy = new Map(stored.map((row) => [row.airtableRecordId, row]));
 	const remapped = mapped.filter((entry) => {
 		const existing = storedBy.get(entry.airtableRecordId);
-		return existing !== undefined && existing !== entry.slackUserId;
+		return existing !== undefined && existing.slackUserId !== entry.slackUserId;
 	});
 	if (remapped.length > 0) {
 		console.error(
@@ -351,7 +350,7 @@ async function apply(dryRun: boolean) {
 		);
 		for (const entry of remapped) {
 			console.error(
-				`  ${entry.name} -> ${entry.slackUserId} (stored: ${storedBy.get(entry.airtableRecordId)})`,
+				`  ${entry.name} -> ${entry.slackUserId} (stored: ${storedBy.get(entry.airtableRecordId)?.slackUserId})`,
 			);
 		}
 		process.exit(1);
@@ -412,8 +411,14 @@ async function apply(dryRun: boolean) {
 			 * arrive the way `setVolunteerActive` leaves someone, with no role — and
 			 * not gated on `row`: the helper merges rather than duplicates, so a
 			 * second run over people already imported backfills anyone missed.
+			 *
+			 * Except someone a maintainer has since paused: `setVolunteerActive`
+			 * sets `deactivated_at` and takes the role away, and a re-run must not
+			 * hand it back. Airtable's opinion of who is active is the older one.
 			 */
-			if (entry.active) {
+			const paused =
+				storedBy.get(entry.airtableRecordId)?.deactivatedAt != null;
+			if (entry.active && !paused) {
 				await grantVolunteerRole(
 					tx,
 					{
