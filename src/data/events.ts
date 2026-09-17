@@ -79,7 +79,7 @@ export async function renderDescription(raw: string): Promise<string> {
 }
 
 /** A calendar entry with everything the events UI renders. */
-export type DisplayableEvent = calendar_v3.Schema$Event & {
+type DisplayableEvent = calendar_v3.Schema$Event & {
 	id: string;
 	summary: string;
 	start: { dateTime: string };
