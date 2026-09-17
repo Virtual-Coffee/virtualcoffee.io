@@ -100,16 +100,12 @@ export async function openCount(kind: SubmissionKind): Promise<number> {
 }
 
 /**
- * Submissions nobody has been told about: still `new`, and either the latest
- * notification attempt failed or none was ever recorded.
- *
- * This is what backs the warning banner. A submission that was stored but never
- * announced is the failure mode the persist-then-notify ordering accepts, so it
- * has to be visible rather than merely logged — see docs/adr/0005. A row with
- * no notification event at all is the same case: the audit line is written
- * after the attempt and can be lost (`notifyAndRecord` logs and carries on).
- * Counting rows, not events, and only while `new`: once a maintainer has moved
- * it on they have plainly seen it, and the banner would otherwise never clear.
+ * Submissions nobody has been told about, for the warning banner: still `new`,
+ * and either the latest notification attempt failed or none was recorded
+ * (`notifyAndRecord` writes the event after the attempt and can lose it). Stored
+ * but never announced is the failure mode docs/adr/0005 accepts, so it has to be
+ * visible; counting only while `new` lets the banner clear once a maintainer
+ * has moved the row on.
  */
 export async function failedNotifications(
 	kinds: readonly SubmissionKind[],
