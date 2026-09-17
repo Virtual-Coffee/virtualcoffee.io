@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { db, invite } from '@/db';
 import { volunteerBalance } from '@/lib/invites';
+import { sendEmail } from '@/test/mocks/transport';
 import { redirectTo } from '@/test/next';
 import { CAPTURED, MAYBE_SENT, NOT_SENT, SENT } from '@/test/outbound';
 import { signInAs } from '@/test/session';
@@ -16,8 +17,7 @@ import {
 	ledgerRow,
 } from '@/test/db/fixtures';
 
-const sendEmail = vi.hoisted(() => vi.fn());
-vi.mock('@/lib/email/transport', () => ({ sendEmail }));
+vi.mock('@/lib/email/transport', () => import('@/test/mocks/transport'));
 
 /** Set to skip the friendly pre-check, so the index has to do the work. */
 const preCheck = vi.hoisted(() => ({ skip: false }));
@@ -42,7 +42,6 @@ async function volunteerWithBalance(balance: number) {
 }
 
 beforeEach(async () => {
-	sendEmail.mockReset();
 	sendEmail.mockResolvedValue(SENT);
 	preCheck.skip = false;
 	await signInAs('volunteer', GRACE);
