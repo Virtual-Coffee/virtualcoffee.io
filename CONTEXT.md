@@ -55,6 +55,37 @@ The weekly hour-long Zoom chat. Attending one is the step between a Coffee
 Invite and a Membership Approval.
 _Avoid_: Meeting, call, event
 
+## Membership
+
+**Membership Application**:
+One person's request to join, and the record of its progress through the
+pipeline. Carries the applicant's details and their long-form answers.
+_Avoid_: Signup, registration, membership form, member record
+
+**Waitlist**:
+The live queue of applications awaiting a first decision. It is a working
+queue, not an archive — historical applications are not on it.
+_Avoid_: Waiting list, backlog
+
+**Coffee Invite**:
+The first of two approvals. The applicant is taken off the Waitlist and emailed
+a link to a Coffee.
+_Avoid_: Approval, first approval, invite
+
+**Membership Approval**:
+The second of two approvals, granted after the applicant attends a Coffee.
+Sends the welcome email and the Slack invite.
+_Avoid_: Approval, final approval, acceptance
+
+**Lapsed**:
+An application that went cold without anyone deciding on it. Distinct from
+**Declined**, which records a decision a maintainer actually made.
+
+**Coffee**:
+The weekly hour-long Zoom chat. Attending one is the step between a Coffee
+Invite and a Membership Approval.
+_Avoid_: Meeting, call, event
+
 ## People
 
 **Member**:
@@ -109,3 +140,20 @@ one writer. Shown as History on a detail page and as the activity feed on the
 dashboard.
 _Avoid_: audit log, event log, activity table, timeline (the component, not
 the concept)
+
+## Outbound
+
+**Delivery Mode**:
+What happens to an email, Slack post or DM, or GitHub issue the site sends.
+**Live** delivers it to the intended recipient; only production does that.
+**Captured** builds and logs it and the pipeline carries on as though it went,
+but nothing leaves the deploy. Which mode applies where is `docs/adr/0013`.
+_Avoid_: Dry run, suppressed, sandbox, test mode
+
+**Outbound**:
+What one send came to, whatever it was: it went (`ok`), with a sentence for
+History and, if it went but not as asked, a warning for the maintainer; or it
+did not, with whether that is certain. A send that may have gone — the
+connection dropped after the server began accepting — is a failure that is not
+certain. Every sender returns one.
+_Avoid_: result, response, status, notification result
