@@ -37,8 +37,8 @@ import {
 	recordEvent,
 	recordOutcome,
 	transitionAndRecord,
-	type ApplicationEventInput,
 	type ApplicationSubject,
+	type TransitionEventInput,
 } from '@/lib/history/eventLog';
 import type { Outbound } from '@/lib/outbound';
 import { siteUrl } from '@/util/url.server';
@@ -144,7 +144,7 @@ async function transitionAfterSend(
 	opened: OpenedOk,
 	from: ApplicationStatus,
 	patch: Partial<typeof membershipApplication.$inferInsert>,
-	event: Omit<ApplicationEventInput, 'actorUserId'>,
+	event: Omit<TransitionEventInput<ApplicationSubject>, 'actorUserId'>,
 	stranded: string,
 	rollback?: () => Promise<unknown>,
 ): Promise<EmailActionResult | null> {
@@ -196,8 +196,6 @@ export async function sendCoffeeInvite(
 		{ status: 'coffee_invited', coffeeInvitedAt: new Date() },
 		{
 			type: 'coffee_invited',
-			fromStatus: 'waitlisted',
-			toStatus: 'coffee_invited',
 			body: `Coffee invite emailed to ${application.email}`,
 		},
 		`Coffee invite emailed to ${application.email}, but the application had already left Waitlisted`,
@@ -311,8 +309,6 @@ export async function approveMembership(
 		},
 		{
 			type: 'approved',
-			fromStatus: 'coffee_invited',
-			toStatus: 'member',
 			body: `Membership approved; welcome and Slack invite emailed to ${application.email}`,
 		},
 		`Welcome and Slack invite emailed to ${application.email}, but the application had already left Coffee invited; the Slack link has been invalidated`,
@@ -435,8 +431,6 @@ async function close(
 		{
 			actorUserId: actor,
 			type: status === 'declined' ? 'declined' : 'withdrawn',
-			fromStatus: application.status,
-			toStatus: status,
 			body,
 		},
 	);
