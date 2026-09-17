@@ -76,13 +76,17 @@ Before touching `src/db`, `src/lib/access`, `src/lib/history`, `src/app/join` or
 - `/admin` — the dashboard, scoped to what the viewer may see
 - `/admin/waitlist/*` — the queue, `archive/`, and the `[id]` detail page; `/join` is what feeds it
 - `/admin/submissions/[kind]/*` — the four Submission kinds
+- `/admin/volunteers/*` — the Volunteer roster and their Invite Allowances
 - `/admin/user-management` — who has access
 
 Rules:
 
 - Every Section page and server action under `/admin` gates itself with `requirePermission()` (`src/lib/access/adminAccess.ts`); the `(protected)` layout and the `/admin` dashboard only prove the viewer holds _some_ section, and the dashboard scopes what it shows with `visibleSections()` — `docs/adr/0003`, `docs/adr/0006`.
 - A Pending Grant (`src/lib/access/pendingGrants.ts`) matches on the Slack member id — `docs/adr/0009`.
-- `src/lib/history/eventLog.ts` is the only writer of `application_event` and `submission_event`: `recordOutcome()` turns a send into History, `transitionAndRecord()` commits a status change with its event. Labels in `src/lib/history/eventLabels.ts` are keyed by the enums, so a new event type is a type error until labelled.
+- `/invites` is outside `/admin`: `requireVolunteer()` (`src/lib/access/volunteerAccess.ts`) shares only `getSession()` with the admin path, and the `volunteer` Role holds no Section — `docs/adr/0010`.
+- The Invite Allowance is an append-only ledger; a correction is a new row through `adjustBalance` with a reason — `docs/adr/0011`.
+- Volunteers imported from Airtable come from a reviewed mapping, never a guess — `docs/adr/0012`; the one-off scripts are documented in `scripts/airtable/README.md`.
+- `src/lib/history/eventLog.ts` is the only writer of `application_event` and `submission_event`, and `src/lib/volunteers/invites.ts` of `volunteer_invite_ledger`: `recordOutcome()` turns a send into History, `transitionAndRecord()` commits a status change with its event. Labels in `src/lib/history/eventLabels.ts` are keyed by the enums, so a new event type is a type error until labelled.
 - A schema change is a new migration: `pnpm db:generate --name=<hyphenated-slug>`, both generated files committed — `docs/adr/0001`.
 - `id` (UUIDv7, `newId()` in `src/db/ids.ts`) is the URL and foreign-key handle, checked with `isId()` on the way in; `reference` is display-only — `docs/adr/0008`.
 - One-off scripts run through `scripts/with-local-netlify.ts`, which supplies the local connection string and refuses anything non-local.

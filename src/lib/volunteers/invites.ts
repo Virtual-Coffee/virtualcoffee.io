@@ -341,10 +341,9 @@ export type IssuedInvite =
 /**
  * Write the Invite and charge it, or say why neither happened.
  *
- * The balance is read under `SELECT … FOR UPDATE` on the Volunteer's row. The
- * indexes stop one Invite being charged twice, but two sends started at once
- * would each charge a *different* Invite against the same last allowance, and
- * no index can see that (docs/adr/0011).
+ * The allowance is read under `SELECT … FOR UPDATE` on the Volunteer's row,
+ * because two sends started at once would each charge a different Invite
+ * against the same last allowance (docs/adr/0011).
  *
  * `already_invited` is `invite_pending_email_idx` firing: another Volunteer
  * invited the same person between the caller's friendly pre-check and this
@@ -422,10 +421,8 @@ export type GaveBack = 'given_back' | 'not_pending' | 'flipped_without_spend';
  * what makes two clicks — or a cancel racing the sweep — produce one credit
  * rather than two, ahead of the refund index refusing the second row.
  *
- * The credit is written **only where a `spend` exists**. An Invite imported
- * from Airtable is `pending` forever and was never charged, because the import
- * brings a balance across as one net row (docs/adr/0012); crediting it would
- * invent allowance out of nothing.
+ * The credit is written only where a `spend` exists: an imported Invite was
+ * never charged (docs/adr/0012).
  *
  * Both token columns are cleared whatever the reason: a given-back Invite has
  * no Claim Link. `inviter` scopes it to one Volunteer, which is how /invites
@@ -529,13 +526,9 @@ export async function adjust(
 }
 
 /**
- * The single net row a Volunteer arrives from Airtable with.
- *
- * Airtable's number was a running balance with no history behind it, so there
- * is nothing to replay — one row saying "this is what Airtable said" is the
- * honest version of it (docs/adr/0012). Takes the importer's transaction: it
- * belongs with the `volunteer` row that run created, or a re-run would double
- * the balance.
+ * The single net row a Volunteer arrives from Airtable with (docs/adr/0012).
+ * Takes the importer's transaction: it belongs with the `volunteer` row that
+ * run created, or a re-run would double the allowance.
  */
 export async function importBalance(
 	input: {
