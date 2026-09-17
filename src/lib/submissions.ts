@@ -1,16 +1,5 @@
-import {
-	and,
-	asc,
-	count,
-	desc,
-	eq,
-	inArray,
-	isNull,
-	or,
-	sql,
-} from 'drizzle-orm';
+import { and, count, desc, eq, inArray, isNull, or, sql } from 'drizzle-orm';
 
-import { PAGE_SIZE } from '@/util/searchParams';
 import {
 	cocReport,
 	coffeeTableGroupRequest,
@@ -22,6 +11,7 @@ import {
 } from '@/db';
 import { isId } from '@/db/ids';
 import type { SubmissionSubject } from '@/lib/eventLog';
+import { countRows, pagedList } from '@/lib/pagedList';
 import type { Section } from '@/lib/permissions';
 import { countByStatus } from '@/lib/statusCounts';
 
@@ -106,12 +96,7 @@ export const OPEN_STATUSES: SubmissionStatus[] = ['new', 'in_progress'];
 export async function openCount(kind: SubmissionKind): Promise<number> {
 	const { table } = SUBMISSION_KINDS[kind];
 
-	const [row] = await db()
-		.select({ value: count() })
-		.from(table)
-		.where(inArray(table.status, OPEN_STATUSES));
-
-	return row?.value ?? 0;
+	return countRows(table, inArray(table.status, OPEN_STATUSES));
 }
 
 /**
@@ -284,35 +269,21 @@ export async function listSubmissions(
 	} = {},
 ): Promise<{ rows: SubmissionRow[]; rowCount: number }> {
 	const { table } = SUBMISSION_KINDS[kind];
-	const page = options.page ?? 0;
-	const direction = options.direction === 'asc' ? asc : desc;
-	const sortColumn = {
-		reference: table.reference,
-		status: table.status,
-		submittedAt: table.submittedAt,
-	}[options.sort ?? 'submittedAt'];
-	const where = options.statuses?.length
-		? inArray(table.status, options.statuses)
-		: undefined;
 
-	const [rows, [totals]] = await Promise.all([
-		db()
-			.select()
-			.from(table)
-			.where(where)
-			// None of the sortable columns except `reference` is unique, and a
-			// non-deterministic order across pages would drop and repeat rows as
-			// the maintainer pages through. The v7 id breaks ties by creation order.
-			.orderBy(direction(sortColumn), desc(table.id))
-			.limit(PAGE_SIZE)
-			.offset(page * PAGE_SIZE),
-		db().select({ value: count() }).from(table).where(where),
-	]);
+	const { rows, rowCount } = await pagedList(table, {
+		where: options.statuses?.length
+			? inArray(table.status, options.statuses)
+			: undefined,
+		sort: {
+			reference: table.reference,
+			status: table.status,
+			submittedAt: table.submittedAt,
+		}[options.sort ?? 'submittedAt'],
+		direction: options.direction ?? 'desc',
+		page: options.page ?? 0,
+	});
 
-	return {
-		rows: rows as unknown as SubmissionRow[],
-		rowCount: totals?.value ?? 0,
-	};
+	return { rows: rows as unknown as SubmissionRow[], rowCount };
 }
 
 export async function getSubmission(
