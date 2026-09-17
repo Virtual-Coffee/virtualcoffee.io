@@ -7,6 +7,12 @@ store with a UI we control, and the site is a Next.js SSR app deployed on
 Netlify. Every deploy preview needs a database it can write to without
 touching production data.
 
+Cloudflare D1 was explored in #1521, but reaching it from this site means the
+`vinext`/Cloudflare rewrite of #1522 (merged and reverted the same day), and
+that spike predates Netlify offering a database at all. `/bots/*` still
+proxies to a Cloudflare Worker; this decision is about the membership data,
+not about removing Cloudflare from the stack.
+
 ## Decision
 
 **Netlify Database** (Postgres). `@netlify/database` provisions it
@@ -50,15 +56,6 @@ with its own ledger. Netlify's docs support choosing your own migration system
 and applying it in the build command, and the constraint is the same either
 way: production has no publish hook, so a migration runs while the previous
 deploy is still live and must be backwards-compatible with it.
-
-## Considered options
-
-**Cloudflare D1**, explored in #1521, where a maintainer had converted four
-form submissions and the events list. Reaching D1 from this site means the
-`vinext`/Cloudflare rewrite of #1522 (merged and reverted the same day), and
-the spike predates Netlify offering a database at all. `/bots/*` still proxies
-to a Cloudflare Worker; this decision is about the membership data, not about
-removing Cloudflare from the stack.
 
 ## Consequences
 
