@@ -6,11 +6,17 @@
  * obviously local is refused rather than used.
  */
 export function isLocalDatabaseUrl(url: string): boolean {
-	let host: string;
+	let parsed: URL;
 	try {
-		host = new URL(url).hostname;
+		parsed = new URL(url);
 	} catch {
 		return false;
 	}
+	// `pg` lets a `host` or `hostaddr` query parameter override the authority,
+	// so `localhost` in the URL is not where the driver would connect.
+	if (parsed.searchParams.has('host') || parsed.searchParams.has('hostaddr')) {
+		return false;
+	}
+	const host = parsed.hostname;
 	return host === 'localhost' || host === '127.0.0.1' || host === '[::1]';
 }
