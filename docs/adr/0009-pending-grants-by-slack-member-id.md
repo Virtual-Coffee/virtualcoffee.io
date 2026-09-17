@@ -49,8 +49,10 @@ and locking them out is worse than letting them in with nothing.
 Deliberately. Every question this feature asks — "does this Slack member
 already have an account?", "whose grant is this?" — becomes a single-table
 lookup on a unique, indexed column instead of a join against `account`
-filtered by `provider_id`. `claimPendingGrant()` writes it on every Slack
-sign-in, grant or no grant.
+filtered by `provider_id`. `claimPendingGrant()` writes it on the first Slack
+sign-in, grant or no grant — the `account.create` hook; a later sign-in of an
+existing account runs no hook, so a failed claim is not retried (see the
+stranded case under Consequences).
 
 ### Roles still live in `user.role`
 
