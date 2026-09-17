@@ -58,7 +58,7 @@ Every external data source lives in `src/data/` and degrades to a mock when its 
 | ----------------------------------------------- | ---------------------------- | --------------------------------------------------- |
 | Member GitHub profiles                          | `src/data/members/index.ts`  | `src/data/mocks/memberData.js` (faker)              |
 | GitHub Sponsors                                 | `src/data/sponsors.ts`       | `src/data/mocks/sponsors.ts`                        |
-| Events (Craft CMS)                              | `src/data/events.ts`         | `src/data/mocks/events.ts`                          |
+| Events (the Events Calendar on Google)          | `src/data/events.ts`         | `src/data/mocks/events.ts`                          |
 | Submission and membership notifications (Slack) | `src/lib/slack/notify.ts`    | Captured; the failure is an event shown in `/admin` |
 | Lunch & Learn GitHub issue                      | `src/lib/github/issues.ts`   | Captured; same                                      |
 | Transactional email (`/admin` actions)          | `src/lib/email/transport.ts` | Captured; a failure is an `email_failed` event      |
@@ -67,7 +67,7 @@ Every external data source lives in `src/data/` and degrades to a mock when its 
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. A new external fetch follows this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`, and wrap the fetch in `unstable_cache` with a tag so `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) can revalidate it.
 
-Events are read from the public Google Events Calendar, which is the system of record: the Join Link is the event's `location`, `extendedProperties` are never read or written, and nothing on the calendar is private. `docs/adr/0014`.
+The Events Calendar is the system of record for Series and Events; `/admin/events` is a client of the Calendar API and stores nothing — `docs/adr/0014`. The shape of a Series or an Event is declared once, in `src/lib/events/eventDraft.ts` (with recurrence in `src/lib/events/recurrence.ts`), and the admin forms and `events/actions.ts` both parse against it.
 
 ### Membership pipeline (Postgres)
 
@@ -79,6 +79,7 @@ Before touching `src/db`, `src/lib/access`, `src/lib/history`, `src/app/join` or
 - `/admin/waitlist/*` — the queue, `archive/`, and the `[id]` detail page; `/join` is what feeds it
 - `/admin/submissions/[kind]/*` — the four Submission kinds
 - `/admin/volunteers/*` — the Volunteer roster and their Invite Allowances
+- `/admin/events/*` — the Events Calendar (`src/lib/events/eventsCalendar.ts`)
 - `/admin/user-management` — who has access
 
 Rules:
@@ -95,7 +96,7 @@ Rules:
 - `ADMIN_DEV_BYPASS*` (`.env.example`) signs a local checkout in without Slack; a real session cookie takes precedence over it.
 - A deploy preview is production's data behind production's Slack sign-in; `OAUTH_PROXY_SECRET` holds one value in every Netlify context — `docs/adr/0007`.
 - An admin action that emails sends first and writes the status change only after, reporting whether anything went out; `waitlist/actions.db.test.ts` pins the order.
-- Live delivery is `CONTEXT=production` only; everywhere else every email, Slack post, GitHub issue and DM is Captured unless `.env.example` names an opt-in — `docs/adr/0013`. A new sender is a `deliver()` call in `src/lib/outbound.ts`, which decides the mode before the sender can reach its credentials; on a deploy `capture()` logs the masked recipient, subject and links, never the body, because the data is real (`docs/adr/0007`).
+- Live delivery is `CONTEXT=production` only; everywhere else every email, Slack post, GitHub issue, DM and Events Calendar write is Captured unless `.env.example` names an opt-in — `docs/adr/0013`, `docs/adr/0014`. A new sender is a `deliver()` call in `src/lib/outbound.ts`, which decides the mode before the sender can reach its credentials; on a deploy `capture()` logs the masked recipient, subject and links, never the body, because the data is real (`docs/adr/0007`).
 - A Slack post is Block Kit built from `src/lib/slack/blocks.ts`: a typed value is a literal `rich_text` run, mrkdwn is for static copy only — `docs/adr/0016`.
 - `/join` and the four public forms (`/report-coc-violation`, `/volunteer-at-virtual-coffee`, `/lunch-and-learn-idea`, `/start-coffee-table-group`) are `force-dynamic`: the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token that prerendering would bake into cached HTML. Every form action opens with `intake()` (`src/util/forms/intake.ts`), which owns that guard and the schema parse; shared fields are in `src/util/forms/fields.ts`.
 - A public form persists first and notifies second — the inverse of the admin rule above, on purpose — `docs/adr/0005`. The `action.db.test.ts` beside each form pins the order.
