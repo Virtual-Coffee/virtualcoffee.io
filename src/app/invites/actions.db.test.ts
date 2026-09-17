@@ -16,19 +16,7 @@ import {
 	ledgerFor,
 	ledgerRow,
 } from '@/test/db/fixtures';
-
-vi.mock('@/lib/email/transport', () => import('@/test/mocks/transport'));
-
-/** Set to skip the friendly pre-check, so the index has to do the work. */
-const preCheck = vi.hoisted(() => ({ skip: false }));
-vi.mock('@/lib/invites', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('@/lib/invites')>();
-	return {
-		...actual,
-		blockingInvite: async (email: string) =>
-			preCheck.skip ? null : actual.blockingInvite(email),
-	};
-});
+import { preCheck } from '@/test/mocks/preCheck';
 
 import { cancelInvite, sendInvite } from './actions';
 
@@ -43,7 +31,6 @@ async function volunteerWithBalance(balance: number) {
 
 beforeEach(async () => {
 	sendEmail.mockResolvedValue(SENT);
-	preCheck.skip = false;
 	await signInAs('volunteer', GRACE);
 	vi.stubEnv('URL', 'https://virtualcoffee.io');
 });

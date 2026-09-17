@@ -13,10 +13,6 @@ import {
 	ledgerRow,
 } from '@/test/db/fixtures';
 
-// The module under test imports this by relative path; the mock resolves to
-// the same file either way.
-vi.mock('@/lib/email/transport', () => import('@/test/mocks/transport'));
-
 import { runInviteMaintenance } from './inviteMaintenance';
 
 const JAN = new Date('2026-01-15T06:00:00Z');
