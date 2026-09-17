@@ -33,8 +33,14 @@ the wiring itself gets verified.
 
 **`environment` is the Netlify deploy context.** `next.config.mjs` inlines
 `CONTEXT` as `NEXT_PUBLIC_SENTRY_ENVIRONMENT` so the browser and the server
-agree; locally it is `development`. `release` is left to the SDK's git
-detection, which Netlify's clone satisfies.
+agree; locally it is `development`.
+
+**A release is the commit SHA, with its commits and deploys attached.** The
+build plugin detects the SHA from git, attaches the commits since the previous
+release, and registers the Netlify deploy against it under the same context
+name. With Sentry's GitHub App installed on the `Virtual-Coffee` org that
+gives suspect commits, stack frames that link to GitHub, and `Fixes
+VIRTUALCOFFEE-IO-N` in a commit message resolving the issue when it lands.
 
 **No PII.** `sendDefaultPii` stays at its default and no `dataCollection`
 block is passed — the SDK treats even an empty object as opting the unset

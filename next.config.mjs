@@ -124,4 +124,17 @@ export default withSentryConfig(withMDX(nextConfig), {
 	tunnelRoute: '/monitoring',
 	widenClientFileUpload: true,
 	silent: !process.env.CI,
+	release: {
+		// The plugin's default, made explicit, plus a guard for a clone that
+		// lacks the previous release's commit: fall back to the last 10 commits
+		// instead of failing the upload step.
+		setCommits: { auto: true, ignoreMissing: true },
+		// Registers each Netlify deploy against the release so the Releases page
+		// shows which environments have it. Only runs with the upload, so never
+		// locally.
+		deploy: {
+			env: process.env.CONTEXT ?? 'development',
+			url: process.env.DEPLOY_PRIME_URL,
+		},
+	},
 });
