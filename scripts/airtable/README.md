@@ -252,9 +252,12 @@ with the content type sniffed from the leading bytes.
 - Under the wrapper the files land in the **local** sandbox store, in the same
   directory `netlify dev` serves, so the local site can serve them from
   `/admin/submissions/coc/[id]/attachment`.
-- To write to the **production** store instead — which is what the real
-  migration needs — set `NETLIFY_SITE_ID` and `NETLIFY_AUTH_TOKEN`. Those
-  override the wrapper's local store, so do not set them for a local run.
+- `NETLIFY_SITE_ID` and `NETLIFY_AUTH_TOKEN` point the files at the
+  **production** store instead. That only makes sense beside a production
+  database, and there is no supported path to one (see "Production is not
+  documented" above), so under the wrapper the script refuses the pair: rows in
+  local Postgres with blob keys that resolve only in production would be a
+  broken local site plus orphaned production objects. Leave both unset.
 
 A per-file failure is a warning, not a fatal error: the report text matters far
 more than the screenshot. A row whose fetch failed still records the original
