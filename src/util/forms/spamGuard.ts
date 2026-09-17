@@ -1,5 +1,7 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
+import { HONEYPOT_FIELD, TIMESTAMP_FIELD } from './spamGuardFieldNames';
+
 /**
  * A honeypot field plus a signed render timestamp.
  *
@@ -16,8 +18,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
  * with a fresh token, rather than thanking them for a report it never saved.
  */
 
-export const HONEYPOT_FIELD = 'website';
-export const TIMESTAMP_FIELD = 'rendered_at';
+export { HONEYPOT_FIELD, TIMESTAMP_FIELD };
 
 /** Nothing legitimate is filled in and submitted this fast. */
 export const MIN_ELAPSED_MS = 2_000;
