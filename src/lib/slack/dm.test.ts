@@ -12,6 +12,8 @@ vi.mock('@slack/web-api', () => ({
 	}),
 }));
 
+import { WebClient } from '@slack/web-api';
+
 import { grantDmMessage, sendSlackDm } from './dm';
 
 describe('sendSlackDm', () => {
@@ -75,6 +77,10 @@ describe('sendSlackDm', () => {
 		await expect(sendSlackDm('U123', 'hi')).resolves.toEqual({
 			ok: true,
 			message: 'DM sent.',
+		});
+		expect(WebClient).toHaveBeenCalledWith('xoxb-test', {
+			timeout: 10_000,
+			retryConfig: { retries: 0 },
 		});
 		expect(conversationsOpen).toHaveBeenCalledWith({ users: 'U123' });
 		expect(chatPostMessage).toHaveBeenCalledWith({
