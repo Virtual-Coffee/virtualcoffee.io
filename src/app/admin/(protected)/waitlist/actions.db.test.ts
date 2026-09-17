@@ -21,16 +21,6 @@ import {
 	inviteRow,
 } from '@/test/db/fixtures';
 
-vi.mock('@/lib/email/transport', () => import('@/test/mocks/transport'));
-
-/** `staleRead.readAs` stages the race — see `@/test/mocks/staleRead`. */
-vi.mock('@/lib/applications', async (importOriginal) =>
-	(await import('@/test/mocks/staleRead')).withStaleRead(
-		await importOriginal<typeof import('@/lib/applications')>(),
-		'getApplication',
-	),
-);
-
 import {
 	addNote,
 	approveMembership,
