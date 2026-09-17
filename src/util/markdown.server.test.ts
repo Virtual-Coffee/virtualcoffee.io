@@ -52,6 +52,11 @@ test.each([
 	['<https://example.com>', false],
 	['<name@example.com>', false],
 	['Plain **Markdown** with a < b', false],
+	['Use `<br>` for a line break', false],
+	['``a `<b>` tag``', false],
+	['```html\n<p>Hello</p>\n```\n\nplain', false],
+	['~~~\n<div>\n~~~', false],
+	['`<br>` in code, <em>real</em> outside', true],
 	['', false],
 ])('looksLikeHtml(%j) is %s', (raw, expected) => {
 	expect(looksLikeHtml(raw)).toBe(expected);
