@@ -1,6 +1,6 @@
 'use client';
 
-import { useAction } from '@/util/forms/useAction';
+import { ActionDialog } from '@/components/ActionDialog';
 
 import { cancelInvite } from './actions';
 
@@ -12,33 +12,17 @@ export function CancelInviteButton({
 	inviteId: string;
 	inviteeName: string;
 }) {
-	const { run, pending, error } = useAction();
-
 	return (
-		<>
-			<button
-				type="button"
-				className="btn btn-sm btn-outline-secondary"
-				disabled={pending}
-				onClick={() => {
-					if (
-						!window.confirm(
-							`Cancel the invite to ${inviteeName}? You'll get it back to use on someone else.`,
-						)
-					) {
-						return;
-					}
-
-					run(() => cancelInvite(inviteId));
-				}}
-			>
-				{pending ? 'Cancelling…' : 'Cancel'}
-			</button>
-			{error && (
-				<p className="text-danger small mb-0 mt-1" role="alert">
-					{error}
-				</p>
-			)}
-		</>
+		<ActionDialog
+			className="btn btn-sm btn-outline-secondary"
+			label="Cancel"
+			title={`Cancel the invite to ${inviteeName}?`}
+			// Not "Cancel": the dialog's own dismissal is already called that.
+			confirmLabel="Cancel invite"
+			pendingLabel="Cancelling…"
+			action={() => cancelInvite(inviteId)}
+		>
+			<p className="mb-0">You&rsquo;ll get it back to use on someone else.</p>
+		</ActionDialog>
 	);
 }
