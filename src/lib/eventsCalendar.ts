@@ -241,6 +241,49 @@ function timed(event: calendar_v3.Schema$Event) {
 		: null;
 }
 
+/** Reads a Series, fetching each one once however many Events ask for it. */
+function parentSeries(client: CalendarClient, calendarId: string) {
+	const pending = new Map<string, Promise<calendar_v3.Schema$Event>>();
+	return (id: string) => {
+		let series = pending.get(id);
+		if (!series) {
+			series = client.events
+				.get({ calendarId, eventId: id })
+				.then((response) => response.data);
+			pending.set(id, series);
+		}
+		return series;
+	};
+}
+
+/** The Series an Event needs filling in from, or null when it carries its own. */
+async function seriesFallback(
+	item: calendar_v3.Schema$Event,
+	seriesId: string | null,
+	parent: (id: string) => Promise<calendar_v3.Schema$Event>,
+): Promise<calendar_v3.Schema$Event | null> {
+	if (item.status !== 'cancelled' || !seriesId) return null;
+	if (item.summary && timed(item)) return null;
+	return parent(seriesId);
+}
+
+/** When an Event runs; its Series' duration answers for one that carries no end. */
+function timesOf(
+	item: calendar_v3.Schema$Event,
+	series: calendar_v3.Schema$Event | null,
+	originalStart: string | null,
+) {
+	const own = timed(item);
+	if (own) return own;
+	if (!originalStart || !series) return null;
+	return {
+		start: originalStart,
+		end: iso(
+			DateTime.fromISO(originalStart, { setZone: true }).plus(duration(series)),
+		),
+	};
+}
+
 export function eventsCalendar(client: CalendarClient, calendarId: string) {
 	/** Every item of a paged listing, following `nextPageToken` to the end. */
 	async function paginate(
@@ -416,17 +459,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 	async function toAdminEvents(
 		items: calendar_v3.Schema$Event[],
 	): Promise<AdminEvent[]> {
-		const parents = new Map<string, Promise<calendar_v3.Schema$Event>>();
-		const parent = (id: string) => {
-			let pending = parents.get(id);
-			if (!pending) {
-				pending = client.events
-					.get({ calendarId, eventId: id })
-					.then((response) => response.data);
-				parents.set(id, pending);
-			}
-			return pending;
-		};
+		const parent = parentSeries(client, calendarId);
 
 		const events = await Promise.all(
 			items.map(async (item): Promise<AdminEvent | null> => {
@@ -434,22 +467,8 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 				const cancelled = item.status === 'cancelled';
 				const seriesId = item.recurringEventId ?? null;
 				const originalStart = item.originalStartTime?.dateTime ?? null;
-				const from =
-					cancelled && seriesId && (!item.summary || !timed(item))
-						? await parent(seriesId)
-						: null;
-				const when =
-					timed(item) ??
-					(originalStart && from
-						? {
-								start: originalStart,
-								end: iso(
-									DateTime.fromISO(originalStart, { setZone: true }).plus(
-										duration(from),
-									),
-								),
-							}
-						: null);
+				const from = await seriesFallback(item, seriesId, parent);
+				const when = timesOf(item, from, originalStart);
 				if (!when) return null;
 				return {
 					id: item.id,
