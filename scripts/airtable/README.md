@@ -190,7 +190,8 @@ dies halfway leaves nothing for the retry to misread. Volunteers key on
 balance on a second run; nothing else in the ledger is consulted, so an
 `admin_grant` made between runs neither blocks nor doubles the import. The role
 is merged into whatever a person already holds rather than duplicated, so a
-second run also backfills grants for rows an earlier run imported.
+second run also backfills grants for rows an earlier run imported — unless a
+maintainer has paused that person since, in which case the pause stands.
 
 **Re-running does not correct a mapping.** A row that is already imported under
 a different Slack member id stops the run before anything is written: the
