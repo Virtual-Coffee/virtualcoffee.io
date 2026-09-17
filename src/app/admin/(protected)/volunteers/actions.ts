@@ -11,7 +11,6 @@ import {
 	pendingGrant,
 	user,
 	volunteer,
-	volunteerInviteLedger,
 } from '@/db';
 import { isId } from '@/db/ids';
 import { getSlackMembers } from '@/data/slackMembers';
@@ -23,7 +22,7 @@ import {
 	volunteerInviteEmail,
 } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
-import { newClaimToken, hashClaimToken } from '@/lib/invites';
+import { adjust, newClaimToken, hashClaimToken } from '@/lib/invites';
 import { grantVolunteerRole, withoutVolunteerRole } from '@/lib/pendingGrants';
 import { parseRoles } from '@/lib/permissions';
 import { grantDmMessage, sendSlackDm } from '@/lib/slack/dm';
@@ -399,15 +398,12 @@ export async function adjustBalance(
 		return { ok: false, message: 'That volunteer no longer exists.' };
 	}
 
-	await db()
-		.insert(volunteerInviteLedger)
-		.values({
-			slackUserId: row.slackUserId,
-			delta,
-			reason: delta > 0 ? 'admin_grant' : 'admin_revoke',
-			actorUserId: await actorId(session.user.id),
-			body: reason.trim(),
-		});
+	await adjust({
+		slackUserId: row.slackUserId,
+		delta,
+		actorUserId: await actorId(session.user.id),
+		body: reason.trim(),
+	});
 
 	revalidate(volunteerId);
 	return {

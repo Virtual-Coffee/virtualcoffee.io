@@ -354,6 +354,31 @@ describe('cancelInvite', () => {
 	});
 
 	/**
+	 * An Invite imported from Airtable was never charged, because the import
+	 * brought a balance across as one net row. Cancelling it has to close it
+	 * without crediting anyone, or the ledger invents allowance (docs/adr/0011).
+	 */
+	test('cancelling an imported invite closes it and gives nothing back', async () => {
+		await volunteerWithBalance(1);
+		const { id } = await insertInvite({
+			inviterSlackUserId: GRACE,
+			token: null,
+		});
+
+		await expect(cancelInvite(id)).resolves.toEqual({
+			ok: true,
+			message: 'Invite cancelled.',
+		});
+		await expect(inviteRow(id)).resolves.toMatchObject({
+			status: 'cancelled',
+		});
+		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
+		await expect(ledgerFor(GRACE)).resolves.toEqual([
+			expect.objectContaining({ reason: 'imported' }),
+		]);
+	});
+
+	/**
 	 * The partial unique index over both refund reasons is the backstop: even
 	 * a second refund written by another path is dropped, not doubled.
 	 */

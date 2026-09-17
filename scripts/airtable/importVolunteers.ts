@@ -4,8 +4,9 @@ import { resolve } from 'path';
 import Airtable from 'airtable';
 import { eq, inArray } from 'drizzle-orm';
 
-import { db, invite, volunteer, volunteerInviteLedger } from '../../src/db';
+import { db, invite, volunteer } from '../../src/db';
 import { fetchSlackMembers } from '../../src/data/slackMembers';
+import { importBalance } from '../../src/lib/invites';
 import { grantVolunteerRole } from '../../src/lib/pendingGrants';
 import { CONFIDENT_SCORE, score, type Candidate } from './match';
 
@@ -450,12 +451,14 @@ async function apply(dryRun: boolean) {
 			 */
 			const credit = entry.active ? (entry.invitesAvailable ?? 0) : 0;
 			if (row && credit > 0) {
-				await tx.insert(volunteerInviteLedger).values({
-					slackUserId: entry.slackUserId,
-					delta: credit,
-					reason: 'imported',
-					body: `Balance carried over from Airtable (${entry.airtableRecordId})`,
-				});
+				await importBalance(
+					{
+						slackUserId: entry.slackUserId,
+						credit,
+						airtableRecordId: entry.airtableRecordId,
+					},
+					tx,
+				);
 				credited += 1;
 			}
 

@@ -1,13 +1,7 @@
 import { and, count, desc, eq, isNull, sql } from 'drizzle-orm';
 
-import {
-	db,
-	invite,
-	membershipApplication,
-	volunteer,
-	volunteerInviteLedger,
-} from '@/db';
-import type { InviteStatus, VolunteerLedgerReason } from '@/db/schema';
+import { db, invite, membershipApplication, volunteer } from '@/db';
+import type { InviteStatus } from '@/db/schema';
 import { balancesBySlackUser } from '@/lib/invites';
 
 /** The roster behind /admin/volunteers — reads only; writes are in its `actions.ts`. */
@@ -87,38 +81,9 @@ export async function getVolunteerById(id: string) {
 	return row ?? null;
 }
 
-export type LedgerEntry = {
-	id: string;
-	delta: number;
-	reason: VolunteerLedgerReason;
-	periodKey: string | null;
-	body: string | null;
-	createdAt: Date;
-};
-
-/** The whole allowance history, newest first — this is the audit trail. */
-export async function volunteerLedger(
-	slackUserId: string,
-): Promise<LedgerEntry[]> {
-	return (
-		db()
-			.select({
-				id: volunteerInviteLedger.id,
-				delta: volunteerInviteLedger.delta,
-				reason: volunteerInviteLedger.reason,
-				periodKey: volunteerInviteLedger.periodKey,
-				body: volunteerInviteLedger.body,
-				createdAt: volunteerInviteLedger.createdAt,
-			})
-			.from(volunteerInviteLedger)
-			.where(eq(volunteerInviteLedger.slackUserId, slackUserId))
-			// `createdAt` is not unique; the v7 id breaks ties by creation order.
-			.orderBy(
-				desc(volunteerInviteLedger.createdAt),
-				desc(volunteerInviteLedger.id),
-			)
-	);
-}
+// The ledger is owned by `src/lib/invites.ts`, reads as well as writes; the
+// roster screen reaches it through here.
+export { volunteerLedger, type LedgerEntry } from '@/lib/invites';
 
 export type AdminInviteRow = {
 	id: string;
