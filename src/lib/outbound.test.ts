@@ -33,6 +33,25 @@ describe('emailDelivery', () => {
 		},
 	);
 
+	// The ADR's promise that nothing leaves the machine is enforced, not trusted.
+	test.each(['smtp.gmail.com', 'mailpit', '192.168.1.20'])(
+		'SMTP_HOST=%s is not a sink, so a checkout stays captured',
+		(host) => {
+			vi.stubEnv('CONTEXT', 'dev');
+			vi.stubEnv('SMTP_HOST', host);
+			expect(emailDelivery()).toEqual({ mode: 'captured', context: 'dev' });
+		},
+	);
+
+	test.each(['127.0.0.1', '::1', '[::1]', 'LOCALHOST', ' localhost '])(
+		'SMTP_HOST=%j is a loopback sink',
+		(host) => {
+			vi.stubEnv('CONTEXT', 'dev');
+			vi.stubEnv('SMTP_HOST', host);
+			expect(emailDelivery()).toEqual({ mode: 'local', context: 'dev' });
+		},
+	);
+
 	test('SMTP_HOST is ignored in production', () => {
 		vi.stubEnv('CONTEXT', 'production');
 		vi.stubEnv('SMTP_HOST', 'localhost');
