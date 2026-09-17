@@ -21,7 +21,7 @@ import {
  * 50 rows on screen as if it had ordered them all. Every server-paged admin
  * table builds its column helper against this one feature set.
  */
-export const serverTableFeatures = tableFeatures({
+const serverTableFeatures = tableFeatures({
 	rowSortingFeature,
 	rowPaginationFeature,
 });
@@ -36,7 +36,7 @@ export type ServerTableFeatures = typeof serverTableFeatures;
  * already correct. The handlers resolve the value-or-updater form the table
  * may pass.
  */
-export function useTableUrlState({
+function useTableUrlState({
 	sorting,
 	pagination,
 }: {
