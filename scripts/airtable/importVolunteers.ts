@@ -323,6 +323,30 @@ async function apply(dryRun: boolean) {
 		process.exit(1);
 	}
 
+	// An Invite under two entries would be attributed to whichever ran last,
+	// silently: the update is keyed by the Invite's record id, not the entry's.
+	const seenInvites = new Map<string, string>();
+	const sharedInvites: string[] = [];
+	for (const entry of mapped) {
+		for (const inviteId of entry.inviteRecordIds) {
+			const other = seenInvites.get(inviteId);
+			if (other && other !== entry.airtableRecordId) {
+				sharedInvites.push(
+					`  ${inviteId}: ${other} and ${entry.airtableRecordId}`,
+				);
+			}
+			seenInvites.set(inviteId, entry.airtableRecordId);
+		}
+	}
+
+	if (sharedInvites.length > 0) {
+		console.error(
+			'One Airtable invite is listed under more than one volunteer. Fix the file first:',
+		);
+		for (const line of sharedInvites) console.error(line);
+		process.exit(1);
+	}
+
 	console.log(`${mapped.length} mapped, ${skipped} left unmapped.\n`);
 
 	if (dryRun) {
