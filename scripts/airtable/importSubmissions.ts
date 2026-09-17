@@ -1,5 +1,6 @@
 import Airtable from 'airtable';
 import { getStore } from '@netlify/blobs';
+import { inArray } from 'drizzle-orm';
 import { randomUUID } from 'node:crypto';
 
 import {
@@ -278,7 +279,10 @@ async function main() {
 
 	console.log(dryRun ? 'Dry run — nothing will be written.\n' : 'Importing.\n');
 
-	const summary: Record<string, { found: number; inserted: number }> = {};
+	const summary: Record<
+		string,
+		{ found: number; inserted: number; present: number }
+	> = {};
 
 	/** Insert one row and its `imported` event, skipping anything already there. */
 	async function importRows<T extends Record<string, unknown>>(
@@ -290,12 +294,32 @@ async function main() {
 	) {
 		let inserted = 0;
 
+		// Rows a previous run imported are skipped before `toValues` runs, not
+		// left to `onConflictDoNothing`: for a CoC report `toValues` re-hosts the
+		// attachment under a fresh random key, and a conflict after that upload
+		// would strand the blob with no row pointing at it.
+		const present = new Set(
+			dryRun
+				? []
+				: (
+						await db()
+							.select({ airtableRecordId: table.airtableRecordId })
+							.from(table)
+							.where(
+								inArray(
+									table.airtableRecordId,
+									rows.map((row) => row.id),
+								),
+							)
+					).map((row) => row.airtableRecordId),
+		);
+
 		// Oldest first, so the `reference` identity column — the number
 		// maintainers see — counts up with submission age rather than Airtable's
 		// fetch order.
-		const inOrder = [...rows].sort(
-			(a, b) => submittedAt(a).getTime() - submittedAt(b).getTime(),
-		);
+		const inOrder = [...rows]
+			.filter((row) => !present.has(row.id))
+			.sort((a, b) => submittedAt(a).getTime() - submittedAt(b).getTime());
 
 		for (const row of inOrder) {
 			const values = await toValues(row);
@@ -306,8 +330,8 @@ async function main() {
 			}
 
 			// `onConflictDoNothing` on the unique airtable_record_id is what makes
-			// a re-run safe — which is also why the row and its `imported` event
-			// commit together: a re-run would never come back for the event.
+			// two runs at once safe — which is also why the row and its `imported`
+			// event commit together: a re-run would never come back for the event.
 			const created = await db().transaction(async (tx) => {
 				const [stored] = await tx
 					.insert(table)
@@ -333,7 +357,7 @@ async function main() {
 			inserted++;
 		}
 
-		summary[label] = { found: rows.length, inserted };
+		summary[label] = { found: rows.length, inserted, present: present.size };
 	}
 
 	// --- Volunteer Form ----------------------------------------------------
@@ -422,14 +446,16 @@ async function main() {
 		}),
 	);
 
-	console.log('\nTable                    found  expected  inserted');
+	console.log('\nTable                    found  expected  inserted  present');
 	for (const [label, counts] of Object.entries(summary)) {
 		const expected = EXPECTED[label] ?? 0;
 		const flag = counts.found === expected ? ' ' : '*';
 		console.log(
 			`${label.padEnd(24)} ${String(counts.found).padStart(5)}  ${String(
 				expected,
-			).padStart(8)}  ${String(counts.inserted).padStart(8)}${flag}`,
+			).padStart(8)}  ${String(counts.inserted).padStart(8)}${flag} ${String(
+				counts.present,
+			).padStart(7)}`,
 		);
 	}
 	console.log(
