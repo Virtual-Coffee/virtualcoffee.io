@@ -24,6 +24,7 @@ async function main() {
 	console.log(`Expiry failures: ${report.expiryFailures}`);
 	console.log(`Emailed:         ${report.emailed}`);
 	console.log(`Email failures:  ${report.emailFailures}`);
+	console.log(`Email deferred:  ${report.emailDeferred}`);
 
 	process.exit(report.expiryFailures > 0 ? 1 : 0);
 }

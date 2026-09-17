@@ -1,6 +1,8 @@
+import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
+import { db, volunteerAccrualNotice, volunteerInviteLedger } from '@/db';
 import { volunteerBalance } from '@/lib/volunteers/invites';
 import { sendEmail } from '@/test/mocks/spies';
 import { SENT } from '@/test/outbound';
@@ -18,6 +20,18 @@ import { runInviteMaintenance } from './inviteMaintenance';
 
 const JAN = new Date('2026-01-15T06:00:00Z');
 const FEB = new Date('2026-02-01T06:00:00Z');
+
+async function noticesFor(slackUserId: string) {
+	const rows = await db()
+		.select({ outcome: volunteerAccrualNotice.outcome })
+		.from(volunteerAccrualNotice)
+		.innerJoin(
+			volunteerInviteLedger,
+			eq(volunteerInviteLedger.id, volunteerAccrualNotice.ledgerId),
+		)
+		.where(eq(volunteerInviteLedger.slackUserId, slackUserId));
+	return rows.map((row) => row.outcome);
+}
 
 beforeEach(() => {
 	sendEmail.mockResolvedValue(SENT);
@@ -37,6 +51,7 @@ describe('accrual', () => {
 			expiryFailures: 0,
 			emailed: 2,
 			emailFailures: 0,
+			emailDeferred: 0,
 		});
 		await expect(runInviteMaintenance(JAN)).resolves.toMatchObject({
 			accrued: 0,
@@ -116,7 +131,7 @@ describe('accrual', () => {
 		);
 	});
 
-	test('an email failure is counted, and the accrual stands', async () => {
+	test('an email failure is counted once, and the accrual stands', async () => {
 		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
 		sendEmail.mockResolvedValue({
 			ok: false,
@@ -124,14 +139,68 @@ describe('accrual', () => {
 			message: 'nope',
 		});
 		await insertVolunteer({ slackUserId: 'U_A', email: 'a@example.test' });
+		await insertVolunteer({ slackUserId: 'U_NOWHERE' });
 
 		await expect(runInviteMaintenance(JAN)).resolves.toMatchObject({
-			accrued: 1,
+			accrued: 2,
 			emailed: 0,
 			emailFailures: 1,
+			emailDeferred: 0,
 		});
 		await expect(volunteerBalance('U_A')).resolves.toBe(1);
+
+		// The attempt is the notice: tomorrow does not try the same address again.
+		sendEmail.mockResolvedValue(SENT);
+		await expect(runInviteMaintenance(JAN)).resolves.toMatchObject({
+			emailed: 0,
+			emailFailures: 0,
+		});
+		expect(sendEmail).toHaveBeenCalledTimes(1);
+		await expect(noticesFor('U_A')).resolves.toEqual(['failed']);
+		await expect(noticesFor('U_NOWHERE')).resolves.toEqual(['no_address']);
 		error.mockRestore();
+	});
+
+	/**
+	 * A scheduled function is cut off at 30 seconds, so the run stops starting
+	 * batches once its budget is spent; the accruals it did not reach have no
+	 * notice, and the next run — which accrues nothing — emails them.
+	 */
+	test('accruals not reached within the budget are emailed by the next run', async () => {
+		vi.useFakeTimers({ shouldAdvanceTime: true });
+		for (const letter of ['A', 'B', 'C', 'D', 'E']) {
+			await insertVolunteer({
+				slackUserId: `U_${letter}`,
+				email: `${letter.toLowerCase()}@example.test`,
+			});
+		}
+		sendEmail.mockImplementation(async () => {
+			vi.setSystemTime(Date.now() + 16_000);
+			return SENT;
+		});
+
+		try {
+			await expect(runInviteMaintenance(JAN)).resolves.toMatchObject({
+				accrued: 5,
+				emailed: 4,
+				emailFailures: 0,
+				emailDeferred: 1,
+			});
+			expect(sendEmail).toHaveBeenCalledTimes(4);
+			await expect(noticesFor('U_E')).resolves.toEqual([]);
+
+			await expect(runInviteMaintenance(JAN)).resolves.toMatchObject({
+				accrued: 0,
+				emailed: 1,
+				emailDeferred: 0,
+			});
+			expect(sendEmail).toHaveBeenLastCalledWith(
+				expect.objectContaining({ to: 'e@example.test' }),
+			);
+			await expect(noticesFor('U_E')).resolves.toEqual(['sent']);
+		} finally {
+			vi.useRealTimers();
+		}
 	});
 
 	test('one send that hangs costs one email, not the rest of the roster', async () => {
