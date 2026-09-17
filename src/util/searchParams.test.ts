@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'vitest';
 
-import { listHref, MAX_PAGE, pageIndex } from './searchParams';
+import { listHref, MAX_PAGE, pageIndex, parseListQuery } from './searchParams';
+
+const SORT_FIELDS = ['name', 'submittedAt'] as const;
 
 describe('pageIndex', () => {
 	test('counts from 1 in the URL and from 0 in the query', () => {
@@ -22,6 +24,33 @@ describe('pageIndex', () => {
 		expect(pageIndex({ page: '1e20' })).toBe(0);
 		expect(pageIndex({ page: String(MAX_PAGE) })).toBe(MAX_PAGE - 1);
 		expect(pageIndex({ page: String(MAX_PAGE + 1) })).toBe(0);
+	});
+});
+
+describe('parseListQuery', () => {
+	test('nothing in the URL is page one of the default sort, descending', () => {
+		expect(parseListQuery({}, SORT_FIELDS, 'submittedAt')).toEqual({
+			page: 0,
+			sort: 'submittedAt',
+			direction: 'desc',
+		});
+	});
+
+	test('reads a whitelisted sort and an ascending direction', () => {
+		expect(
+			parseListQuery(
+				{ page: '2', sort: 'name', dir: 'asc' },
+				SORT_FIELDS,
+				'submittedAt',
+			),
+		).toEqual({ page: 1, sort: 'name', direction: 'asc' });
+	});
+
+	test('a column that is not sortable falls back to the default', () => {
+		// The value reaches an ORDER BY, so only the caller's list is accepted.
+		expect(
+			parseListQuery({ sort: 'email' }, SORT_FIELDS, 'submittedAt').sort,
+		).toBe('submittedAt');
 	});
 });
 

@@ -1,7 +1,4 @@
-import { count, inArray } from 'drizzle-orm';
-
-import { db, membershipApplication } from '@/db';
-import { QUEUE_STATUSES } from '@/lib/applicationStatuses';
+import { statusCounts } from '@/lib/applications';
 import { recentEvents } from '@/lib/history/eventLog';
 import type { Section } from '@/lib/access/permissions';
 
@@ -38,19 +35,9 @@ export type ActivityEntry = {
 };
 
 async function waitlistCard(): Promise<DashboardCard> {
-	// Grouped rather than two counts: the two figures are halves of the same
-	// set, and one query cannot disagree with itself about a row that changed
-	// status between them.
-	const rows = await db()
-		.select({
-			status: membershipApplication.status,
-			value: count(),
-		})
-		.from(membershipApplication)
-		.where(inArray(membershipApplication.status, QUEUE_STATUSES))
-		.groupBy(membershipApplication.status);
-
-	const byStatus = new Map(rows.map((row) => [row.status, row.value]));
+	// The queue's own grouped count: one query cannot disagree with itself
+	// about a row that changed status between the two figures.
+	const counts = await statusCounts();
 
 	return {
 		section: 'waitlist',
@@ -58,9 +45,9 @@ async function waitlistCard(): Promise<DashboardCard> {
 		href: '/admin/waitlist',
 		figures: [
 			// Awaiting a first decision — nobody has looked at them yet.
-			{ count: byStatus.get('waitlisted') ?? 0, label: 'waiting' },
+			{ count: counts.waitlisted ?? 0, label: 'waiting' },
 			// Sent a Coffee invite, awaiting a Membership Approval after it.
-			{ count: byStatus.get('coffee_invited') ?? 0, label: 'pending' },
+			{ count: counts.coffee_invited ?? 0, label: 'pending' },
 		],
 	};
 }

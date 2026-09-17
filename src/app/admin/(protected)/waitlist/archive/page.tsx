@@ -1,12 +1,11 @@
-import Link from 'next/link';
-
 import { requirePermission } from '@/lib/adminAccess';
 import { listApplications, statusCounts } from '@/lib/applications';
 import { ARCHIVE_STATUSES } from '@/lib/applicationStatuses';
+import { FilterChips } from '../../filterChips';
 import { ApplicationsTable } from '../applicationsTable';
 import { QueueSearch } from '../queueSearch';
 import { parseSearchParams } from '../searchParams';
-import { listHref, oneOf, type RawSearchParams } from '@/util/searchParams';
+import { oneOf, type RawSearchParams } from '@/util/searchParams';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,8 +14,9 @@ export const metadata = {
 	robots: { index: false, follow: false },
 };
 
+// "All statuses" is the default view, so its link carries no status at all.
 const STATUS_FILTERS = [
-	{ value: 'all', label: 'All statuses' },
+	{ value: null, label: 'All statuses' },
 	{ value: 'member', label: 'Members' },
 	{ value: 'lapsed', label: 'Lapsed' },
 	{ value: 'declined', label: 'Declined' },
@@ -51,16 +51,9 @@ export default async function ArchivePage({
 		(sum, status) => sum + (counts[status] ?? 0),
 		0,
 	);
-	const active = oneOf(params.status, [...ARCHIVE_STATUSES, 'all']) ?? 'all';
-	// A status chip is a filter, so it resets the page — and keeps the search
-	// and the sort the maintainer set.
-	const chipHref = (status: string) =>
-		listHref('/admin/waitlist/archive', {
-			status,
-			q: filters.search ?? null,
-			sort: filters.sort === 'submittedAt' ? null : filters.sort,
-			dir: filters.direction === 'desc' ? null : filters.direction,
-		});
+	// `?status=all` is the same view as no status at all, so both land on the
+	// "All statuses" chip.
+	const active = oneOf(params.status, ARCHIVE_STATUSES) ?? null;
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -79,22 +72,19 @@ export default async function ArchivePage({
 				/>
 			</div>
 
-			<div
-				className="btn-group mb-3"
-				role="group"
-				aria-label="Filter by status"
-			>
-				{STATUS_FILTERS.map((option) => (
-					<Link
-						key={option.value}
-						href={chipHref(option.value)}
-						className={`btn btn-sm ${
-							active === option.value ? 'btn-primary' : 'btn-outline-secondary'
-						}`}
-					>
-						{option.label}
-					</Link>
-				))}
+			<div className="mb-3">
+				<FilterChips
+					base="/admin/waitlist/archive"
+					keep={{
+						q: filters.search ?? null,
+						sort: filters.sort === 'submittedAt' ? null : filters.sort,
+						dir: filters.direction === 'desc' ? null : filters.direction,
+					}}
+					param="status"
+					active={active}
+					chips={STATUS_FILTERS}
+					ariaLabel="Filter by status"
+				/>
 			</div>
 
 			<ApplicationsTable
