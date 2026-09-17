@@ -452,7 +452,13 @@ export async function recentEvents(input: {
 		rows.push(...(await recentSubmissionEvents(input.submissions, limit)));
 	}
 
+	// The same order as each query's ORDER BY, so a tie across the two tables
+	// falls to the newer UUIDv7 rather than to which table was read first.
 	return rows
-		.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+		.sort(
+			(a, b) =>
+				b.createdAt.getTime() - a.createdAt.getTime() ||
+				b.id.localeCompare(a.id),
+		)
 		.slice(0, limit);
 }
