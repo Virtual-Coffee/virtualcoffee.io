@@ -114,19 +114,27 @@ describe('notifyAndRecord', () => {
 
 	/**
 	 * The banner says "nobody will have seen them come in". Once a maintainer
-	 * has moved the submission on, or a later attempt got through, that is
-	 * no longer true — and a count that never clears is one nobody reads.
+	 * has moved the submission on, that is no longer true — and a count that
+	 * never clears is one nobody reads. A later success on another channel does
+	 * not clear it: a Lunch & Learn idea is announced twice, and the GitHub
+	 * failure is still a failure after Slack got through.
 	 */
-	test('the banner clears when someone acts on it, or a later attempt succeeds', async () => {
+	test('the banner clears when someone acts on it, not when a later channel succeeds', async () => {
 		const seen = await insertCocReport();
-		const retried = await insertCocReport();
+		const partly = await insertCocReport();
 		const fail = async () => ({
 			ok: false as const,
 			definitelyNotSent: true,
 			message: 'x',
 		});
 		await notifyAndRecord('coc', seen, NOTIFIED, fail);
-		await notifyAndRecord('coc', retried, NOTIFIED, fail);
+		await notifyAndRecord('coc', partly, NOTIFIED, fail);
+		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });
+
+		await notifyAndRecord('coc', partly, NOTIFIED, async () => ({
+			ok: true,
+			message: 'x',
+		}));
 		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });
 
 		await db()
@@ -134,12 +142,6 @@ describe('notifyAndRecord', () => {
 			.set({ status: 'in_progress' })
 			.where(eq(cocReport.id, seen));
 		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
-
-		await notifyAndRecord('coc', retried, NOTIFIED, async () => ({
-			ok: true,
-			message: 'x',
-		}));
-		await expect(failedNotifications(['coc'])).resolves.toEqual({});
 	});
 
 	test('losing the audit line does not lose the submission', async () => {

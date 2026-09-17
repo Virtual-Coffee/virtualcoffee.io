@@ -73,8 +73,10 @@ export async function submitLunchAndLearnIdea(
 	);
 	if ('error' in saved) return saved.error;
 
-	// The issue is created first so the Slack message can link it; neither
-	// failing loses the idea.
+	// The issue is opened first so the Slack message can link it. Each channel
+	// is its own line of History, so a Slack outage is never written up as a
+	// GitHub failure; neither failing loses the idea.
+	let issueUrl: string | null = null;
 	await notifyAndRecord(
 		'lunch-and-learn',
 		saved.id,
@@ -86,46 +88,40 @@ export async function submitLunchAndLearnIdea(
 			});
 
 			// A captured issue has no URL to keep (docs/adr/0013).
-			const issueUrl = issue.ok ? issue.url : null;
+			if (!issue.ok || !issue.url) return issue;
+			issueUrl = issue.url;
+
 			// Slack does not depend on the row carrying the URL, so a failed update is
 			// noted in the event (whose body already names the issue) rather than
 			// allowed to skip the announcement.
-			let unsaved = '';
-			if (issueUrl) {
-				try {
-					await db()
-						.update(lunchAndLearnIdea)
-						.set({ githubIssueUrl: issueUrl })
-						.where(eq(lunchAndLearnIdea.id, saved.id));
-				} catch (error) {
-					console.error(
-						`Could not save the issue URL on Lunch & Learn idea ${saved.id}`,
-						error,
-					);
-					unsaved = ' The issue link could not be saved to the submission.';
-				}
+			try {
+				await db()
+					.update(lunchAndLearnIdea)
+					.set({ githubIssueUrl: issue.url })
+					.where(eq(lunchAndLearnIdea.id, saved.id));
+			} catch (error) {
+				console.error(
+					`Could not save the issue URL on Lunch & Learn idea ${saved.id}`,
+					error,
+				);
+				return {
+					...issue,
+					warning: `${issue.message}. The issue link could not be saved to the submission.`,
+				};
 			}
+			return issue;
+		},
+	);
 
-			const slack = await notifySlack(
+	await notifyAndRecord(
+		'lunch-and-learn',
+		saved.id,
+		{ channel: 'slack', what: 'Slack notified of a Lunch & Learn idea' },
+		() =>
+			notifySlack(
 				'lunch-and-learn',
 				lunchAndLearnMessage({ topic: idea.topic, name: idea.name, issueUrl }),
-			);
-
-			const message = `${issue.message}${unsaved} ${slack.message}`;
-			if (!issue.ok || !slack.ok) {
-				return { ok: false, message, definitelyNotSent: true };
-			}
-			// What History needs beyond "it went": a Captured note from either
-			// side, and the issue link if the row could not keep it.
-			const warning = [
-				issue.warning,
-				unsaved ? `${issue.message}.${unsaved}` : undefined,
-				slack.warning,
-			]
-				.filter(Boolean)
-				.join(' ');
-			return warning ? { ok: true, message, warning } : { ok: true, message };
-		},
+			),
 	);
 
 	redirect(THANKS);
