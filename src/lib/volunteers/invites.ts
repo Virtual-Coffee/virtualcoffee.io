@@ -106,7 +106,7 @@ export async function inviteForClaimToken(token: string): Promise<{
 	// which a NULL never satisfies): a hash with no expiry is not a live link,
 	// and showing "you've been invited" for one would then write an ordinary
 	// signup.
-	if (!row.tokenExpiresAt || row.tokenExpiresAt < new Date()) return null;
+	if (!row.tokenExpiresAt || row.tokenExpiresAt <= new Date()) return null;
 
 	return {
 		id: row.id,

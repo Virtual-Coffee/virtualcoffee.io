@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { insertInvite } from '@/test/db/fixtures';
 
@@ -23,6 +23,18 @@ describe('inviteForClaimToken', () => {
 					expiresAt: new Date(Date.now() - 1000),
 				}).then((r) => r.token),
 		],
+		// The boundary is the redemption's: `> now` fails at the instant itself.
+		[
+			'a link expiring this instant',
+			async () => {
+				const now = new Date();
+				vi.useFakeTimers({ toFake: ['Date'], now });
+				return insertInvite({
+					inviterSlackUserId: 'U_GRACE',
+					expiresAt: now,
+				}).then((r) => r.token);
+			},
+		],
 		// Redemption requires `token_expires_at > now`, which NULL never satisfies;
 		// the page must not offer what the action will refuse.
 		[
@@ -44,4 +56,6 @@ describe('inviteForClaimToken', () => {
 		const token = await arrange();
 		await expect(inviteForClaimToken(token)).resolves.toBeNull();
 	});
+
+	afterEach(() => vi.useRealTimers());
 });
