@@ -25,7 +25,7 @@ a preview are the people who can open it on production, because it is the
 same `user` and `account` rows, the same roles, and the same Slack sign-in.
 
 **Sign-in goes through production's callback.** Better Auth's `oAuthProxy`
-plugin runs on every deploy (`src/lib/auth.ts`). A preview's sign-in sends
+plugin runs on every deploy (`src/lib/access/auth.ts`). A preview's sign-in sends
 Slack to production's registered redirect URI; production exchanges the code,
 checks the workspace, encrypts the profile with `OAUTH_PROXY_SECRET` and hands
 it back to the preview, which creates the user and session in its own branch.

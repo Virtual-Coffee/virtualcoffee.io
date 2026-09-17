@@ -57,7 +57,7 @@ _Avoid_: Invite, pre-provision, reservation
 What has happened to a Membership Application or a Submission, one row per
 happening: a status change, a note, an email or notification and whether it
 went. Two tables (`application_event`, `submission_event`) but one concept,
-and one module writes both (`src/lib/eventLog.ts`): a send's **Outbound**
+and one module writes both (`src/lib/history/eventLog.ts`): a send's **Outbound**
 becomes an event there, and a status change and its event commit together.
 Shown as **History** on a detail page and as the activity feed on the
 dashboard.

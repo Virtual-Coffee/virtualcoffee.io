@@ -1,10 +1,10 @@
-import { getAuth } from '@/lib/auth';
+import { getAuth } from '@/lib/access/auth';
 import { insertUser } from '@/test/db/fixtures';
 import { requestHeaders } from '@/test/requestHeaders';
 
 /**
  * Sign a test in as a real user: a `user` row holding `roles`, a `session`
- * row minted by Better Auth's `testUtils` plugin (`src/lib/auth.ts`), and
+ * row minted by Better Auth's `testUtils` plugin (`src/lib/access/auth.ts`), and
  * the session cookie on the mocked request (`src/test/setup.ts`), so
  * `getSession()` and everything
  * above it — `requirePermission()`, `requireVolunteer()`, `actorId()` — run
