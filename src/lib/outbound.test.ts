@@ -140,6 +140,46 @@ describe('deliver', () => {
 		info.mockRestore();
 	});
 
+	test('a slack dm is captured outside production even when Slack posts are opted in', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', 'true');
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'coc',
+				body: '',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toEqual({ ok: true, message: 'Posted.' });
+
+		live.mockClear();
+		await expect(
+			deliver({
+				kind: 'slack dm',
+				target: 'U123',
+				body: '',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toMatchObject({
+			warning: 'Captured, not sent as a Slack DM (deploy-preview).',
+		});
+		expect(live).not.toHaveBeenCalled();
+
+		vi.stubEnv('CONTEXT', 'production');
+		await deliver({
+			kind: 'slack dm',
+			target: 'U123',
+			body: '',
+			unreachable: 'Slack',
+			live,
+		});
+		expect(live).toHaveBeenCalledWith({ mode: 'live' });
+	});
+
 	test('a captured success carries the extra fields the sender declared', async () => {
 		vi.stubEnv('CONTEXT', undefined);
 		vi.spyOn(console, 'info').mockImplementation(() => {});
