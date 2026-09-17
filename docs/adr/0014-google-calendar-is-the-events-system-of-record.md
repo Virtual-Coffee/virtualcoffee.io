@@ -1,4 +1,4 @@
-# Google Calendar is the system of record for Events
+# The Events Calendar is the system of record for Events
 
 ## Context
 
@@ -22,10 +22,8 @@ the owner of recurrence, exceptions and cancellations — the exact machinery
 Google runs for us and pushes notifications about — and turned every edit
 made in Google's UI into a sync conflict.
 
-The host code was the awkward field. It is Zoom's per-user host key, and the
-first version of this decision had the bots fetch it from Zoom at send time
-so the calendar would carry nothing sensitive. That cannot be built: Zoom
-removed `host_key` from every API response in 2022 "for security reasons"
+The host code was the awkward field. It is Zoom's per-user host key, and it
+cannot be fetched at send time: Zoom removed `host_key` from every API response in 2022 "for security reasons"
 (<https://devforum.zoom.us/t/get-a-users-host-key-via-api/79004>), a live
 probe with the admin user scopes confirmed no user returns one, and Zoom's
 own advice is to keep your own datastore. Google's `extendedProperties.private`
@@ -36,7 +34,7 @@ properties at all.
 
 ## Decision
 
-**Google Calendar is the system of record for Series and Events.** The site
+**The Events Calendar is the system of record for Series and Events.** The site
 and the bots read the same Events Calendar with the same service account;
 `/admin/events` is a client of the Calendar API and stores nothing of its
 own. Recurrence, exceptions, Cancels and Reschedules are Google's, so the
@@ -111,10 +109,6 @@ edited in Google.
 - Rotating a Host Code is an edit on `/admin/events`, and nowhere else.
 - A Series' standing description and Join Link live on the recurring event
   in Google, where the site and the bots both read them.
-- The calendar itself needs a one-off migration on the bots' side: set
-  `location` on the two Virtual Coffee Series whose old `joinLink` property
-  disagrees with it, clear `joinLink`, keep `hostCode`, and convert the
-  descriptions from HTML to Markdown.
 - Ending a Series, or splitting one in Google's UI, leaves Google returning a
   cancelled placeholder (`showDeleted` only) for every slot the truncated rule
   no longer generates — an instance-shaped id with no Series behind it. The
