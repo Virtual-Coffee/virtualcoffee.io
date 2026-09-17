@@ -11,7 +11,7 @@ import { SUBMISSION_COUNT, seedSubmissions } from './submissions';
 import { seedUsers } from './users';
 import { seedVolunteers } from './volunteers';
 
-export type SeedReport = {
+type SeedReport = {
 	/** Plaintext Claim Link token for the one pending Invite. */
 	claimToken: string;
 	/** Plaintext Slack join token for the member whose invite was re-sent. */

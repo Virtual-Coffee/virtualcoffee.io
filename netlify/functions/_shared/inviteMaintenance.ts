@@ -18,7 +18,7 @@ import { siteUrl } from '../../../src/util/url.server.ts';
  * to resolve inside a bundled function.
  */
 
-export type MaintenanceReport = {
+type MaintenanceReport = {
 	period: string;
 	accrued: number;
 	expired: number;
