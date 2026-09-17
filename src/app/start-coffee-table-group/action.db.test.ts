@@ -1,15 +1,10 @@
 import { eq } from 'drizzle-orm';
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
 import { coffeeTableGroupRequest, db, submissionEvent } from '@/db';
 import { formDataWith } from '@/test/forms';
-import { notifySlack } from '@/test/mocks/notify';
+import { notifySlack } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
-
-vi.mock('@/lib/slack/notify', async (importOriginal) => ({
-	...(await importOriginal<typeof import('@/lib/slack/notify')>()),
-	...(await import('@/test/mocks/notify')),
-}));
 
 import { submitCoffeeTableGroupRequest } from './action';
 

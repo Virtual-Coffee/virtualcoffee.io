@@ -1,19 +1,11 @@
 import { eq } from 'drizzle-orm';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 
 import { cocReport, db, submissionEvent } from '@/db';
 import { failInserts } from '@/test/db/fixtures';
-import { staleRead } from '@/test/mocks/staleRead';
+import { staleRead } from '@/test/mocks/wrappers';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
-
-/** `staleRead.readAs` stages the race — see `@/test/mocks/staleRead`. */
-vi.mock('@/lib/submissions', async (importOriginal) =>
-	(await import('@/test/mocks/staleRead')).withStaleRead(
-		await importOriginal<typeof import('@/lib/submissions')>(),
-		'getSubmission',
-	),
-);
 
 import { addSubmissionNote, setSubmissionStatus } from './actions';
 

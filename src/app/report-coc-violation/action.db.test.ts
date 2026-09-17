@@ -5,16 +5,8 @@ import { cocReport, db, submissionEvent } from '@/db';
 import { failedNotifications } from '@/lib/submissions';
 import { failInserts } from '@/test/db/fixtures';
 import { fieldErrors, formDataWith } from '@/test/forms';
-import { notifySlack } from '@/test/mocks/notify';
+import { blobs, notifySlack } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
-
-vi.mock('@/lib/slack/notify', async (importOriginal) => ({
-	...(await importOriginal<typeof import('@/lib/slack/notify')>()),
-	...(await import('@/test/mocks/notify')),
-}));
-
-const blobs = vi.hoisted(() => ({ set: vi.fn(), delete: vi.fn() }));
-vi.mock('@netlify/blobs', () => ({ getStore: () => blobs }));
 
 import { submitCocReport } from './action';
 

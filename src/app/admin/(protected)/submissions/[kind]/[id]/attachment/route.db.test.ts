@@ -1,13 +1,9 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 
 import { cocReport, db } from '@/db';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
-
-const readAttachment = vi.hoisted(() =>
-	vi.fn<(key: string) => Promise<unknown>>(),
-);
-vi.mock('@/lib/attachments', () => ({ readAttachment }));
+import { readAttachment } from '@/test/mocks/spies';
 
 import { GET } from './route';
 
