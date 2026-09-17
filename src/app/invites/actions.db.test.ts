@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { db, invite } from '@/db';
 import { volunteerBalance } from '@/lib/invites';
-import { sendEmail } from '@/test/mocks/transport';
+import { sendEmail } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
 import { CAPTURED, MAYBE_SENT, NOT_SENT, SENT } from '@/test/outbound';
 import { signInAs } from '@/test/session';
@@ -16,7 +16,7 @@ import {
 	ledgerFor,
 	ledgerRow,
 } from '@/test/db/fixtures';
-import { preCheck } from '@/test/mocks/preCheck';
+import { preCheck } from '@/test/mocks/wrappers';
 
 import { cancelInvite, sendInvite } from './actions';
 

@@ -3,8 +3,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, invite, pendingGrant, user, volunteer } from '@/db';
 import { hashClaimToken, volunteerBalance } from '@/lib/invites';
-import { sendSlackDm } from '@/test/mocks/slackDm';
-import { sendEmail } from '@/test/mocks/transport';
+import { sendEmail, sendSlackDm } from '@/test/mocks/spies';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
@@ -16,7 +15,7 @@ import {
 	inviteRow,
 	ledgerFor,
 } from '@/test/db/fixtures';
-import { afterRead } from '@/test/mocks/afterRead';
+import { afterRead } from '@/test/mocks/wrappers';
 import { slackDirectory, slackMember } from '@/test/mocks/slackMembers';
 
 import {
