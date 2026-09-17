@@ -274,6 +274,7 @@ export function GrantAccessForm({
 				size="sm"
 				candidates={candidates}
 				selected={selected}
+				disabled={pending}
 				onSelect={(candidate) => {
 					setSelected(candidate);
 					clear();
