@@ -6,7 +6,7 @@ import { useFormAction } from '@/util/forms/useFormAction';
 import { submitCoffeeTableGroupRequest } from './action';
 
 export function Form({ spamToken }: { spamToken: string }) {
-	const { formProps, errorContent, fieldError, state } = useFormAction(
+	const { formProps, errorContent, fieldError, pending, state } = useFormAction(
 		submitCoffeeTableGroupRequest,
 	);
 
@@ -58,7 +58,7 @@ export function Form({ spamToken }: { spamToken: string }) {
 			<CodeOfConduct error={fieldError('agree')} />
 			<SpamGuardFields token={state?.spamToken ?? spamToken} />
 			{errorContent}
-			<Submit />
+			<Submit pending={pending} />
 		</form>
 	);
 }
