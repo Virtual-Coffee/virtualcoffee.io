@@ -507,6 +507,33 @@ describe('recentEvents', () => {
 		]);
 	});
 
+	test('a tie across the two tables falls to the newer id, not the table read first', async () => {
+		const application = await insertApplication({});
+		const report = await insertCocReport();
+
+		// Applications are read first; the submission event is the newer row.
+		await recordEvent(
+			{ kind: 'application', id: application.id },
+			{ type: 'note', body: 'written first', createdAt: at(1) },
+		);
+		await recordEvent(report, {
+			type: 'note',
+			body: 'written second',
+			createdAt: at(1),
+		});
+
+		const rows = await recentEvents({
+			applications: true,
+			submissions: [{ eventKey: 'cocReportId' }],
+			limit: 15,
+		});
+
+		expect(rows.map((row) => [row.kind, row.body])).toEqual([
+			['submission', 'written second'],
+			['application', 'written first'],
+		]);
+	});
+
 	test('carries the reference, and the name where the subject has one', async () => {
 		const application = await insertApplication({ name: 'Ada Lovelace' });
 		const report = await insertCocReport();
