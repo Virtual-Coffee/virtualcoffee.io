@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { volunteerBalance } from '@/lib/volunteers/invites';
 import { sendEmail } from '@/test/mocks/spies';
+import { SENT } from '@/test/outbound';
 import {
 	failLedgerInserts,
 	insertInvite,
@@ -19,7 +20,7 @@ const JAN = new Date('2026-01-15T06:00:00Z');
 const FEB = new Date('2026-02-01T06:00:00Z');
 
 beforeEach(() => {
-	sendEmail.mockResolvedValue({ ok: true });
+	sendEmail.mockResolvedValue(SENT);
 	vi.stubEnv('URL', 'https://virtualcoffee.io');
 });
 
@@ -138,7 +139,7 @@ describe('accrual', () => {
 		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
 		sendEmail.mockImplementation(async ({ to }: { to: string }) => {
 			if (to === 'hung@example.test') return new Promise(() => {});
-			return { ok: true };
+			return SENT;
 		});
 		await insertVolunteer({ slackUserId: 'U_A', email: 'a@example.test' });
 		await insertVolunteer({
