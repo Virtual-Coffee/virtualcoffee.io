@@ -9,7 +9,11 @@ import {
 	submissionStatusCounts,
 } from '@/lib/submissions/submissions';
 import { FilterChips } from '../../filterChips';
-import { STATUS_ORDER, SubmissionStatusBadge } from './presentation';
+import {
+	STATUS_ORDER,
+	SubmissionStatusBadge,
+	submissionStatusLabel,
+} from './presentation';
 import { PAGE_SIZE } from '@/util/searchParams';
 import { parseSubmissionSearchParams } from './searchParams';
 import { SubmissionsTable, type SubmissionListRow } from './submissionsTable';
@@ -85,7 +89,7 @@ export default async function SubmissionListPage({
 				<span className="text-body-secondary small">
 					{rowCount.toLocaleString()}{' '}
 					{rowCount === 1 ? 'submission' : 'submissions'}
-					{active ? ` with status “${active}”` : ''}
+					{active ? ` with status “${submissionStatusLabel(active)}”` : ''}
 				</span>
 			</div>
 
