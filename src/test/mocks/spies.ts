@@ -1,5 +1,6 @@
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
 
+import type { Outbound } from '@/lib/outbound';
 import { NOT_SENT } from '@/test/outbound';
 
 /**
@@ -13,14 +14,17 @@ import { NOT_SENT } from '@/test/outbound';
  * when it needs the message to go out.
  */
 
+/** A send: the outcome is the contract; the arguments are the caller's to read. */
+type Sender = (...args: Parameters<Mock>) => Promise<Outbound>;
+
 /** `@/lib/email/transport` — replaced. Outcomes are in `@/test/outbound`. */
-export const sendEmail = vi.fn(async () => NOT_SENT);
+export const sendEmail = vi.fn<Sender>(async () => NOT_SENT);
 
 /** `@/lib/slack/notify` — spread; the message builders stay real. */
-export const notifySlack = vi.fn(async () => NOT_SENT);
+export const notifySlack = vi.fn<Sender>(async () => NOT_SENT);
 
 /** `@/lib/slack/dm` — spread; `grantDmMessage` stays real. */
-export const sendSlackDm = vi.fn(async () => NOT_SENT);
+export const sendSlackDm = vi.fn<Sender>(async () => NOT_SENT);
 
 /**
  * `next/cache` — replaced: `revalidatePath()` throws outside a Next request

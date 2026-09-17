@@ -270,6 +270,7 @@ describe('grantPendingAccess', () => {
 		const ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
 		sendSlackDm.mockResolvedValue({
 			ok: false,
+			definitelyNotSent: true,
 			message: 'SLACK_BOT_TOKEN is not set, so no DM was sent.',
 		});
 
@@ -378,6 +379,7 @@ describe('resendPendingGrantDm', () => {
 	test('reports rather than throws when the DM fails', async () => {
 		sendSlackDm.mockResolvedValue({
 			ok: false,
+			definitelyNotSent: true,
 			message: 'SLACK_BOT_TOKEN is not set, so no DM was sent.',
 		});
 		const { id } = await insertPendingGrant({
