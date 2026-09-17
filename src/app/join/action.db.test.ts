@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test } from 'vitest';
 
 import { db, membershipApplication } from '@/db';
 import { fieldErrors, formDataWith } from '@/test/forms';
@@ -10,11 +10,6 @@ import {
 	insertInvite,
 	inviteRow,
 } from '@/test/db/fixtures';
-
-vi.mock('@/lib/slack/notify', async (importOriginal) => ({
-	...(await importOriginal<typeof import('@/lib/slack/notify')>()),
-	...(await import('@/test/mocks/notify')),
-}));
 
 import { submitMembershipApplication } from './action';
 
