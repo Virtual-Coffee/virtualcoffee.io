@@ -3,6 +3,7 @@ import { PgTable } from 'drizzle-orm/pg-core';
 import { afterEach, beforeEach, inject, vi } from 'vitest';
 
 import * as schema from '@/db/schema';
+import { resetSlackDirectory } from '@/test/mocks/slackMembers';
 import { resetSpies } from '@/test/mocks/spies';
 import { resetWrappers } from '@/test/mocks/wrappers';
 
@@ -42,6 +43,12 @@ vi.mock('next/cache', async () => {
 	return { revalidatePath, revalidateTag, unstable_cache: <T>(fn: T) => fn };
 });
 
+/** The outbound edge, mocked once for every db test — knobs in `src/test/mocks/`. */
+vi.mock('@/data/slackMembers', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/data/slackMembers')>()),
+	...(await import('@/test/mocks/slackMembers')),
+}));
+
 /** Every table in the schema, so a new one is truncated without editing this. */
 const tables = Object.values(schema)
 	.filter((value) => is(value, PgTable))
@@ -49,6 +56,7 @@ const tables = Object.values(schema)
 	.join(', ');
 
 beforeEach(() => {
+	resetSlackDirectory();
 	resetSpies();
 	resetWrappers();
 });
