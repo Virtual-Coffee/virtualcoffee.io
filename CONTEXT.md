@@ -39,8 +39,8 @@ An application that went cold without anyone deciding on it. Distinct from
 **Declined**, which records a decision a maintainer actually made.
 
 **Coffee**:
-The weekly hour-long Zoom chat. Attending one is the step between a Coffee
-Invite and a Membership Approval.
+The weekly hour-long Zoom chat — an Event whose Event Type is Virtual Coffee.
+Attending one is the step between a Coffee Invite and a Membership Approval.
 _Avoid_: Meeting, call, event
 
 **Invite**:
@@ -141,15 +141,12 @@ Series unless one Event's is changed.
 _Avoid_: Zoom link, location, join URL
 
 **Host Code**:
-The Zoom host key for an Event, kept on the Events Calendar where only the
-admin page can set it. The Slack bots show it to the host; a Zoom Event has
-one or the bots will not announce it.
+The Zoom host key for an Event, which the Slack bots show to the host.
 _Avoid_: Host key, hostCode, Zoom key, password
 
 **Event Type**:
 Which kind of thing a Series or Event is (Virtual Coffee, Lunch & Learn, …),
-from a fixed list. Set on the admin page, required on every save; the planned
-calendar feed filters on it.
+from a fixed list in code.
 _Avoid_: Category, tag, kind, label, eventType
 
 **Cancel**:
@@ -159,6 +156,16 @@ _Avoid_: Delete, remove
 **Reschedule**:
 Move one Event to a different time. The Series is unchanged.
 _Avoid_: Move, edit time, exception
+
+**Restore**:
+Take back a Cancel or a Reschedule: the Event happens, at the time its
+Series' rule gives it.
+_Avoid_: Un-cancel, reinstate, undelete, move back
+
+**End**:
+Declare that a Series has no further Events. Its past Events remain on the
+Events Calendar.
+_Avoid_: Delete, remove, stop, archive
 
 ## Access
 
@@ -200,7 +207,8 @@ the concept)
 ## Outbound
 
 **Delivery Mode**:
-What happens to an email, Slack post or DM, or GitHub issue the site sends.
+What happens to an email, Slack post or DM, GitHub issue or Events Calendar
+write the site sends.
 **Live** delivers it to the intended recipient; only production does that.
 **Captured** builds and logs it and the pipeline carries on as though it went,
 but nothing leaves the deploy. **Local** delivers an email for real, addressed

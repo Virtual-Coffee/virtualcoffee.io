@@ -1,5 +1,6 @@
 /**
- * Delivery Mode for everything the site sends: Live on production only,
+ * Delivery Mode for everything the site sends, Events Calendar writes
+ * included: Live on production only,
  * Captured everywhere else unless an opt-in says otherwise, and email's Local
  * opt-in (`SMTP_HOST`) only on a checkout (docs/adr/0013). Every sender is a
  * `deliver()` call, so it cannot reach its credentials before the mode is
