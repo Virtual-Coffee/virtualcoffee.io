@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
 import { volunteerBalance } from '@/lib/invites';
+import { sendEmail } from '@/test/mocks/transport';
 import {
 	failLedgerInserts,
 	insertInvite,
@@ -14,8 +15,7 @@ import {
 
 // The module under test imports this by relative path; the mock resolves to
 // the same file either way.
-const sendEmail = vi.hoisted(() => vi.fn());
-vi.mock('@/lib/email/transport', () => ({ sendEmail }));
+vi.mock('@/lib/email/transport', () => import('@/test/mocks/transport'));
 
 import { runInviteMaintenance } from './inviteMaintenance';
 
@@ -23,7 +23,6 @@ const JAN = new Date('2026-01-15T06:00:00Z');
 const FEB = new Date('2026-02-01T06:00:00Z');
 
 beforeEach(() => {
-	sendEmail.mockReset();
 	sendEmail.mockResolvedValue({ ok: true });
 	vi.stubEnv('URL', 'https://virtualcoffee.io');
 });

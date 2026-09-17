@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, invite, pendingGrant, user, volunteer } from '@/db';
 import { hashClaimToken, volunteerBalance } from '@/lib/invites';
+import { sendSlackDm } from '@/test/mocks/slackDm';
+import { sendEmail } from '@/test/mocks/transport';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
@@ -15,13 +17,10 @@ import {
 	ledgerFor,
 } from '@/test/db/fixtures';
 
-const sendEmail = vi.hoisted(() => vi.fn());
-vi.mock('@/lib/email/transport', () => ({ sendEmail }));
-
-const sendSlackDm = vi.hoisted(() => vi.fn());
+vi.mock('@/lib/email/transport', () => import('@/test/mocks/transport'));
 vi.mock('@/lib/slack/dm', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/lib/slack/dm')>()),
-	sendSlackDm,
+	...(await import('@/test/mocks/slackDm')),
 }));
 
 /** Runs between resendInvite()'s read and its write, to stage a race. */
@@ -89,9 +88,8 @@ async function grantRole(slackUserId: string) {
 const VOLUNTEER_ID = '0199404c-2c5e-7000-8000-000000000000';
 
 beforeEach(async () => {
-	sendEmail.mockReset();
 	sendEmail.mockResolvedValue({ ok: true });
-	sendSlackDm.mockReset().mockResolvedValue({ ok: true, message: 'DM sent.' });
+	sendSlackDm.mockResolvedValue({ ok: true, message: 'DM sent.' });
 	vi.stubEnv('URL', 'https://virtualcoffee.io');
 	await signInAs('admin');
 });
