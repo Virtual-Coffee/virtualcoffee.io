@@ -46,9 +46,8 @@ therefore show as open work, which is the honest presentation.
   entry form. Those challenges are over, so the links are stale content rather
   than a live dependency — archiving the Monthly Challenges base will break
   them, and rewriting finished challenge prose is an editorial call.
-- `scripts/airtable/importMembership.ts` and `MEMBERSHIP_AIRTABLE_API_KEY`
-  stay until the production membership import is confirmed complete; the
-  `airtable` dependency stays for the one-off scripts.
+- `scripts/airtable/importMembership.ts`, `MEMBERSHIP_AIRTABLE_API_KEY` and
+  the `airtable` dependency exist for the one-off import scripts only.
 - Disabling the four automations and archiving the bases needs base-creator
   rights. Nothing breaks if they stay: the site no longer writes to Airtable,
   so they can never fire again.
