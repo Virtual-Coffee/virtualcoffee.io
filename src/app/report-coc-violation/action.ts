@@ -68,18 +68,22 @@ export async function submitCocReport(
 		attachment = result;
 	}
 
+	const report = {
+		name: parsed.data.name ?? null,
+		email: parsed.data.email ?? null,
+		reporteeName: parsed.data.reportee_name,
+		timeLocation: parsed.data.time_location,
+		description: parsed.data.description,
+		anyoneElseInvolved: parsed.data.anyone_else_involved ?? null,
+	};
+
 	const saved = await persistSubmission(
 		'coc',
 		async (tx) => {
 			const [row] = await tx
 				.insert(cocReport)
 				.values({
-					name: parsed.data.name ?? null,
-					email: parsed.data.email ?? null,
-					reporteeName: parsed.data.reportee_name,
-					timeLocation: parsed.data.time_location,
-					description: parsed.data.description,
-					anyoneElseInvolved: parsed.data.anyone_else_involved ?? null,
+					...report,
 					attachmentBlobKey: attachment?.key ?? null,
 					attachmentFilename: attachment?.filename ?? null,
 					attachmentContentType: attachment?.contentType ?? null,
@@ -107,15 +111,7 @@ export async function submitCocReport(
 		async () => {
 			return notifySlack(
 				'coc',
-				cocReportMessage({
-					name: parsed.data.name ?? null,
-					email: parsed.data.email ?? null,
-					reporteeName: parsed.data.reportee_name,
-					timeLocation: parsed.data.time_location,
-					description: parsed.data.description,
-					anyoneElseInvolved: parsed.data.anyone_else_involved ?? null,
-					hasAttachment: attachment !== null,
-				}),
+				cocReportMessage({ ...report, hasAttachment: attachment !== null }),
 			);
 		},
 	);

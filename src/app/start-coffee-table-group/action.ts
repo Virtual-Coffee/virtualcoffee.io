@@ -36,17 +36,19 @@ export async function submitCoffeeTableGroupRequest(
 	const parsed = intake(formData, { schema, thanks: THANKS });
 	if (!parsed.ok) return parsed.state;
 
+	const request = {
+		name: parsed.data.name,
+		email: parsed.data.email,
+		groupName: parsed.data.group_name,
+		description: parsed.data.description,
+	};
+
 	const saved = await persistSubmission(
 		'coffee-tables',
 		async (tx) => {
 			const [row] = await tx
 				.insert(coffeeTableGroupRequest)
-				.values({
-					name: parsed.data.name,
-					email: parsed.data.email,
-					groupName: parsed.data.group_name,
-					description: parsed.data.description,
-				})
+				.values(request)
 				.returning({ id: coffeeTableGroupRequest.id });
 			return row;
 		},
@@ -66,15 +68,7 @@ export async function submitCoffeeTableGroupRequest(
 			what: 'Slack notified of a Coffee Table group request',
 		},
 		async () => {
-			return notifySlack(
-				'coffee-tables',
-				coffeeTableGroupMessage({
-					name: parsed.data.name,
-					email: parsed.data.email,
-					groupName: parsed.data.group_name,
-					description: parsed.data.description,
-				}),
-			);
+			return notifySlack('coffee-tables', coffeeTableGroupMessage(request));
 		},
 	);
 
