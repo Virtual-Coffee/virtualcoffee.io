@@ -14,10 +14,10 @@ import {
 	emailWentButRowMoved,
 	type ActionResult,
 	type EmailActionResult,
-} from '@/lib/actionResult';
-import { checkNote } from '@/lib/notes';
-import { actorId, requirePermission } from '@/lib/adminAccess';
-import type { Session } from '@/lib/auth';
+} from '@/lib/admin/actionResult';
+import { checkNote } from '@/lib/admin/notes';
+import { actorId, requirePermission } from '@/lib/access/adminAccess';
+import type { Session } from '@/lib/access/auth';
 import { sendEmail } from '@/lib/email/transport';
 import {
 	coffeeInviteEmail,
@@ -28,15 +28,18 @@ import {
 	createSlackInviteToken,
 	expireSlackInviteToken,
 	supersedeSlackInviteTokens,
-} from '@/lib/inviteTokens';
-import { applicationSubject, getApplication } from '@/lib/applications';
+} from '@/lib/waitlist/inviteTokens';
+import {
+	applicationSubject,
+	getApplication,
+} from '@/lib/waitlist/applications';
 import {
 	recordEvent,
 	recordOutcome,
 	transitionAndRecord,
 	type ApplicationEventInput,
 	type ApplicationSubject,
-} from '@/lib/eventLog';
+} from '@/lib/history/eventLog';
 import type { Outbound } from '@/lib/outbound';
 import { siteUrl } from '@/util/url.server';
 

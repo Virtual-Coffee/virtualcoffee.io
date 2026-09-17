@@ -1,7 +1,7 @@
 import { WebClient } from '@slack/web-api';
 
 import { deliver, type Outbound } from '@/lib/outbound';
-import { ROLE_LABELS, type RoleName } from '@/lib/permissions';
+import { ROLE_LABELS, type RoleName } from '@/lib/access/permissions';
 import { siteUrl } from '@/util/url.server';
 
 const TIMEOUT_MS = 10_000;

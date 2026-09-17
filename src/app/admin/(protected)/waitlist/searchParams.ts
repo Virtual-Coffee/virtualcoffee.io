@@ -1,5 +1,5 @@
 import type { ApplicationStatus } from '@/db';
-import type { ListFilters, SortField } from '@/lib/applications';
+import type { ListFilters, SortField } from '@/lib/waitlist/applications';
 import {
 	oneOf,
 	PAGE_SIZE,

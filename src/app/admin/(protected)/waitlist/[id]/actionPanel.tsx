@@ -13,9 +13,9 @@ import {
 } from '../actions';
 import { ActionDialog, type ActionFailure } from '@/components/ActionDialog';
 import { EmailPreview } from '@/components/EmailPreview';
-import { ARCHIVE_STATUSES } from '@/lib/applicationStatuses';
+import { ARCHIVE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import type { EmailStatus } from '@/lib/email/transport';
-import { MAX_NOTE_LENGTH } from '@/lib/notes';
+import { MAX_NOTE_LENGTH } from '@/lib/admin/notes';
 import { useAction } from '@/util/forms/useAction';
 import { ReadOnlyNotice } from '../../presentation';
 

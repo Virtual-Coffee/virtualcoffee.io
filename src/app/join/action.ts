@@ -5,10 +5,10 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { db, invite, membershipApplication } from '@/db';
-import { recordEvent, recordOutcome } from '@/lib/eventLog';
-import { applicationSubject } from '@/lib/applications';
-import { hashClaimToken } from '@/lib/invites';
-import { QUEUE_STATUSES } from '@/lib/applicationStatuses';
+import { recordEvent, recordOutcome } from '@/lib/history/eventLog';
+import { applicationSubject } from '@/lib/waitlist/applications';
+import { hashClaimToken } from '@/lib/volunteers/invites';
+import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
 import { agree, email, name } from '@/util/forms/fields';
 import { intake } from '@/util/forms/intake';
