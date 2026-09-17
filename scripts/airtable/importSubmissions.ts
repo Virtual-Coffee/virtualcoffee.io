@@ -9,12 +9,12 @@ import {
 	lunchAndLearnIdea,
 	volunteerSignup,
 } from '../../src/db';
-import { ATTACHMENT_STORE } from '../../src/lib/attachments';
+import { ATTACHMENT_STORE } from '../../src/lib/submissions/attachments';
 import {
 	recordImport,
 	type SubmissionEventKey,
 	type SubmissionTable,
-} from '../../src/lib/eventLog';
+} from '../../src/lib/history/eventLog';
 
 /**
  * One-off import of the Airtable "Form Submissions" base into Postgres.

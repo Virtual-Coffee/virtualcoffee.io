@@ -14,7 +14,7 @@ export function daysAhead(days: number) {
 
 /**
  * The identity `ADMIN_DEV_BYPASS` logs in as (`devBypassSession()` in
- * `src/lib/adminAccess.ts`). Every maintainer-driven event below names it as
+ * `src/lib/access/adminAccess.ts`). Every maintainer-driven event below names it as
  * the actor, so the History panels show a person rather than "system".
  */
 export const ADMIN = {

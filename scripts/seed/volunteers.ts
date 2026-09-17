@@ -1,6 +1,12 @@
 import type { InviteStatus } from '@/db';
-import { accrue, adjust, giveBack, importBalance, spend } from '@/lib/invites';
-import { serialiseRoles } from '@/lib/permissions';
+import {
+	accrue,
+	adjust,
+	giveBack,
+	importBalance,
+	spend,
+} from '@/lib/volunteers/invites';
+import { serialiseRoles } from '@/lib/access/permissions';
 import {
 	insertInvite,
 	insertPendingGrant,
@@ -81,7 +87,7 @@ const INVITE_SEEDS: {
  *
  * The balance is not stored anywhere — it is the sum of the ledger — so seeding
  * it means seeding the movements that produce it, through the same module the
- * site writes them with (`src/lib/invites.ts`). This adds up to 2 for the dev
+ * site writes them with (`src/lib/volunteers/invites.ts`). This adds up to 2 for the dev
  * bypass Volunteer (six imported, one accrued, seven spent, two given back) and
  * 6 for the Volunteer-only user (three imported, two granted, one accrued). The
  * not-yet-signed-in Volunteer holds only this month's accrual, 1.

@@ -87,17 +87,17 @@ vi.mock('@/lib/submissions/submissions', async (importOriginal) =>
 );
 
 /** `afterRead.run` fires between the read and the write — see `@/test/mocks/wrappers`. */
-vi.mock('@/lib/volunteers', async (importOriginal) =>
+vi.mock('@/lib/volunteers/volunteers', async (importOriginal) =>
 	(await import('@/test/mocks/wrappers')).withAfterRead(
-		await importOriginal<typeof import('@/lib/volunteers')>(),
+		await importOriginal<typeof import('@/lib/volunteers/volunteers')>(),
 		'pendingInvite',
 	),
 );
 
 /** `preCheck.skip` makes the index do the work — see `@/test/mocks/wrappers`. */
-vi.mock('@/lib/invites', async (importOriginal) =>
+vi.mock('@/lib/volunteers/invites', async (importOriginal) =>
 	(await import('@/test/mocks/wrappers')).withSkippableCheck(
-		await importOriginal<typeof import('@/lib/invites')>(),
+		await importOriginal<typeof import('@/lib/volunteers/invites')>(),
 		'blockingInvite',
 	),
 );

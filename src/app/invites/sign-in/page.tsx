@@ -3,9 +3,9 @@ import { redirect } from 'next/navigation';
 
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { SignInButton, SignOutButton } from '@/app/admin/sign-in/buttons';
-import { getSession } from '@/lib/adminAccess';
-import { slackAuthConfigured } from '@/lib/auth';
-import { isVolunteer } from '@/lib/volunteerAccess';
+import { getSession } from '@/lib/access/adminAccess';
+import { slackAuthConfigured } from '@/lib/access/auth';
+import { isVolunteer } from '@/lib/access/volunteerAccess';
 
 export const dynamic = 'force-dynamic';
 

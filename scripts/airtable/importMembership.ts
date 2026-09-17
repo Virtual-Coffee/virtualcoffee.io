@@ -7,7 +7,7 @@ import {
 	membershipApplication,
 	type NewMembershipApplication,
 } from '../../src/db';
-import { recordImport } from '../../src/lib/eventLog';
+import { recordImport } from '../../src/lib/history/eventLog';
 import { bool, classify, date, str } from './classify';
 
 /**

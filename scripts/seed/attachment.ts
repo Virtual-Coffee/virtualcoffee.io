@@ -26,7 +26,7 @@ const PLACEHOLDER_URL =
 
 /**
  * A 1×1 transparent PNG: the smallest file that passes `sniff()` in
- * `src/lib/attachments.ts`. What the row points at when the placeholder
+ * `src/lib/submissions/attachments.ts`. What the row points at when the placeholder
  * cannot be fetched (offline, or the service is down), and what the db test
  * writes, since it never touches the network.
  */
