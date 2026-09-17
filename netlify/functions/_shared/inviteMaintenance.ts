@@ -1,14 +1,13 @@
-import { and, eq, inArray, isNotNull, isNull, lt, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNotNull, lt } from 'drizzle-orm';
 
-import {
-	db,
-	invite,
-	user,
-	volunteer,
-	volunteerInviteLedger,
-} from '../../../src/db/index.ts';
+import { db, invite, user, volunteer } from '../../../src/db/index.ts';
 import { volunteerAccrualEmail } from '../../../src/lib/email/templates.ts';
-import { balancesBySlackUser } from '../../../src/lib/invites.ts';
+import {
+	accrue,
+	balancesBySlackUser,
+	giveBack,
+	periodKey,
+} from '../../../src/lib/invites.ts';
 import { sendEmail } from '../../../src/lib/email/transport.ts';
 import { siteUrl } from '../../../src/util/url.server.ts';
 
@@ -29,79 +28,24 @@ export type MaintenanceReport = {
 	emailFailures: number;
 };
 
-/** `YYYY-MM` in UTC — the key the accrual's unique index is built on. */
-export function periodKey(now: Date): string {
-	return now.toISOString().slice(0, 7);
-}
-
-/**
- * Give every active Volunteer this month's Invite. "Ensure this month's row
- * exists", not "run on the 1st": the partial unique index on
- * (slack_user_id, period_key) makes `onConflictDoNothing` idempotent.
- * Deactivated Volunteers are skipped, or someone who stepped back two years
- * ago would return holding twenty-four invites nobody reviewed.
- */
-async function accrue(now: Date): Promise<string[]> {
-	const period = periodKey(now);
-	const database = db();
-
-	const active = await database
-		.select({ slackUserId: volunteer.slackUserId })
-		.from(volunteer)
-		.where(isNull(volunteer.deactivatedAt));
-
-	if (active.length === 0) return [];
-
-	const inserted = await database
-		.insert(volunteerInviteLedger)
-		.values(
-			active.map((row) => ({
-				slackUserId: row.slackUserId,
-				delta: 1,
-				reason: 'monthly_accrual' as const,
-				periodKey: period,
-				body: `Monthly invite for ${period}`,
-			})),
-		)
-		.onConflictDoNothing()
-		.returning({ slackUserId: volunteerInviteLedger.slackUserId });
-
-	return inserted.map((row) => row.slackUserId);
-}
+/** Re-exported so the period key is testable from beside the job that runs it. */
+export { periodKey };
 
 /**
  * Expire Claim Links that were never used, and give the allowance back.
  *
- * Two guards that both matter:
- *
- *   - `token_expires_at is not null` skips the Invites imported from Airtable.
- *     They are `pending` forever because nobody ever recorded an outcome for
- *     them, they never had a Claim Link, and they were never charged against
- *     the new ledger — the import brings a balance across as a single net row.
- *   - a refund is only written where a `spend` exists. The unique index stops a
- *     second refund, but nothing else would stop a *first* one against an
- *     Invite that was never charged, which would invent allowance out of
- *     nothing.
+ * `token_expires_at is not null` is this sweep's own guard: it skips the
+ * Invites imported from Airtable, which are `pending` forever because nobody
+ * ever recorded an outcome for them and never had a Claim Link. The second
+ * guard — that a credit needs a `spend` — is `giveBack()`'s, and applies to
+ * every give-back rather than only this one.
  */
 async function expire(
 	now: Date,
 ): Promise<{ expired: number; failures: number }> {
-	const database = db();
-
-	const due = await database
-		.select({
-			id: invite.id,
-			slackUserId: invite.inviterSlackUserId,
-			spendId: volunteerInviteLedger.id,
-		})
+	const due = await db()
+		.select({ id: invite.id })
 		.from(invite)
-		.leftJoin(
-			volunteerInviteLedger,
-			and(
-				eq(volunteerInviteLedger.inviteId, invite.id),
-				eq(volunteerInviteLedger.reason, 'spend'),
-			),
-		)
 		.where(
 			and(
 				eq(invite.status, 'pending'),
@@ -114,42 +58,22 @@ async function expire(
 	let failures = 0;
 
 	for (const row of due) {
-		// One transaction per Invite: once the row is no longer `pending` the
-		// next sweep will never see it again, so the refund must land with the
-		// status change or not at all. And one Invite's failure is its own:
-		// the row stays `pending` for tomorrow's sweep, and the rest of the
-		// run — the other expiries, and telling Volunteers what they accrued —
-		// still happens. The caller decides what to do with the count.
+		// One Invite's failure is its own: the row stays `pending` for tomorrow's
+		// sweep, and the rest of the run — the other expiries, and telling
+		// Volunteers what they accrued — still happens. The caller decides what
+		// to do with the count.
 		try {
-			const flipped = await database.transaction(async (tx) => {
-				// Conditional on `pending` again: the Invite may have been claimed
-				// or cancelled since the select above. Then it is neither expired
-				// nor refunded, and it is not counted.
-				const rows = await tx
-					.update(invite)
-					.set({ status: 'expired', tokenHash: null })
-					.where(and(eq(invite.id, row.id), eq(invite.status, 'pending')))
-					.returning({ id: invite.id });
-
-				if (rows.length === 0) return false;
-
-				if (row.slackUserId && row.spendId) {
-					await tx
-						.insert(volunteerInviteLedger)
-						.values({
-							slackUserId: row.slackUserId,
-							delta: 1,
-							reason: 'refund_expired',
-							inviteId: row.id,
-							body: 'Invite expired unclaimed',
-						})
-						.onConflictDoNothing();
-				}
-
-				return true;
+			// An Invite that was never charged is still expired; it is only the
+			// credit that is withheld. One that is no longer `pending` was claimed
+			// or cancelled since the select above, and is not counted.
+			const outcome = await giveBack({
+				inviteId: row.id,
+				reason: 'refund_expired',
+				actorUserId: null,
+				body: 'Invite expired unclaimed',
 			});
 
-			if (flipped) expired += 1;
+			if (outcome !== 'not_pending') expired += 1;
 		} catch (error) {
 			failures += 1;
 			console.error('Invite expiry failed', { inviteId: row.id, error });

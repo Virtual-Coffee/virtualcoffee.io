@@ -1,26 +1,19 @@
 'use server';
 
-import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-import {
-	db,
-	invite,
-	volunteer,
-	volunteerInviteLedger,
-	type Transaction,
-} from '@/db';
 import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
-import { isUniqueViolation } from '@/db/errors';
 import { isId } from '@/db/ids';
 import { volunteerInviteEmail } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
 import {
 	blockingInvite,
+	giveBack,
 	hashClaimToken,
+	issueInvite,
 	newClaimToken,
-	volunteerBalance,
+	type IssuedInvite,
 } from '@/lib/invites';
 import { actorId } from '@/lib/adminAccess';
 import { requireVolunteer } from '@/lib/volunteerAccess';
@@ -88,82 +81,18 @@ export async function sendInvite(
 
 	const { token, expiresAt } = newClaimToken();
 
-	let inviteId: string;
+	let issued: IssuedInvite;
 	try {
-		inviteId = await db().transaction(async (tx) => {
-			/**
-			 * Lock the Volunteer's row before reading the balance. Two sends started
-			 * at once would otherwise both read the same balance, both find it
-			 * sufficient, and both spend it — the ledger's unique indexes stop an
-			 * Invite being charged twice, but nothing stops two Invites being
-			 * charged once each against one remaining allowance.
-			 */
-			const [held] = await tx
-				.select({ id: volunteer.id })
-				.from(volunteer)
-				.where(eq(volunteer.slackUserId, slackUserId))
-				.limit(1)
-				.for('update');
-
-			if (!held) throw new Error('NO_VOLUNTEER_ROW');
-
-			if ((await volunteerBalance(slackUserId, tx)) < 1) {
-				throw new Error('NO_BALANCE');
-			}
-
-			const [row] = await tx
-				.insert(invite)
-				.values({
-					inviterUserId: actor,
-					inviterName: session.user.name || session.user.email,
-					inviterSlackUserId: slackUserId,
-					inviteeName: name,
-					inviteeEmail: email,
-					status: 'pending',
-					tokenHash: hashClaimToken(token),
-					tokenExpiresAt: expiresAt,
-				})
-				.returning({ id: invite.id });
-
-			await tx.insert(volunteerInviteLedger).values({
+		issued = await issueInvite({
+			inviter: {
 				slackUserId,
-				delta: -1,
-				reason: 'spend',
-				inviteId: row.id,
-				actorUserId: actor,
-				body: `Invited ${name} <${email}>`,
-			});
-
-			return row.id;
+				userId: actor,
+				name: session.user.name || session.user.email,
+			},
+			invitee: { name, email },
+			token: { hash: hashClaimToken(token), expiresAt },
 		});
 	} catch (error) {
-		const reason = error instanceof Error ? error.message : '';
-
-		if (reason === 'NO_VOLUNTEER_ROW') {
-			return {
-				ok: false,
-				message:
-					'We haven’t finished setting you up as a volunteer. Ask a maintainer to add you in Admin → Volunteers.',
-				emailSent: false,
-			};
-		}
-		if (reason === 'NO_BALANCE') {
-			return {
-				ok: false,
-				message: 'You have no invites left. You get one more on the 1st.',
-				emailSent: false,
-			};
-		}
-		// Another Volunteer invited the same person between the check above and
-		// this write. The index is what makes that impossible to charge for.
-		if (isUniqueViolation(error, 'invite_pending_email_idx')) {
-			return {
-				ok: false,
-				message: `${name} already has an invite waiting at ${email}. Nothing has been sent and your invite is untouched.`,
-				emailSent: false,
-			};
-		}
-
 		console.error('Failed to record an invite', { slackUserId, error });
 		return {
 			ok: false,
@@ -171,6 +100,33 @@ export async function sendInvite(
 			emailSent: false,
 		};
 	}
+
+	if (!issued.ok) {
+		if (issued.reason === 'no_volunteer') {
+			return {
+				ok: false,
+				message:
+					'We haven’t finished setting you up as a volunteer. Ask a maintainer to add you in Admin → Volunteers.',
+				emailSent: false,
+			};
+		}
+		if (issued.reason === 'no_balance') {
+			return {
+				ok: false,
+				message: 'You have no invites left. You get one more on the 1st.',
+				emailSent: false,
+			};
+		}
+		// Another Volunteer invited the same person between the pre-check above
+		// and the write. The index is what makes that impossible to charge for.
+		return {
+			ok: false,
+			message: `${name} already has an invite waiting at ${email}. Nothing has been sent and your invite is untouched.`,
+			emailSent: false,
+		};
+	}
+
+	const { inviteId } = issued;
 
 	const template = volunteerInviteEmail(
 		session.user.name || 'A Virtual Coffee volunteer',
@@ -188,25 +144,16 @@ export async function sendInvite(
 		if (sent.definitelyNotSent) {
 			/**
 			 * Cancel as well as refund. Leaving it `pending` would hand it to the
-			 * ninety-day expiry sweep, which refunds too — and while the ledger's
+			 * ninety-day expiry sweep, which gives back too — and while the ledger's
 			 * refund index would refuse the second credit, an Invite nobody can ever
 			 * claim has no business sitting in the Volunteer's list as "Sent".
 			 */
 			try {
-				await db().transaction(async (tx) => {
-					await tx
-						.update(invite)
-						.set({ status: 'cancelled', tokenHash: null, tokenExpiresAt: null })
-						.where(eq(invite.id, inviteId));
-
-					await refund(
-						tx,
-						inviteId,
-						slackUserId,
-						actor,
-						'refund_cancelled',
-						`Send to ${email} failed: ${sent.message}`,
-					);
+				await giveBack({
+					inviteId,
+					reason: 'refund_cancelled',
+					actorUserId: actor,
+					body: `Send to ${email} failed: ${sent.message}`,
 				});
 			} catch (error) {
 				// The one fact the Volunteer needs is that nothing went out. The
@@ -253,9 +200,8 @@ export async function sendInvite(
 /**
  * Give an Invite back before anyone claims it.
  *
- * The status change is conditional on it still being `pending`, so two clicks
- * cannot produce two refunds even before the ledger's partial unique index on
- * invite_id over both refund reasons refuses the second row.
+ * `inviter` scopes it to the caller — an id from someone else's list is not
+ * theirs to cancel, and this is the only place that is enforced.
  */
 export async function cancelInvite(inviteId: string): Promise<ActionResult> {
 	const { session, slackUserId } = await requireVolunteer();
@@ -268,39 +214,15 @@ export async function cancelInvite(inviteId: string): Promise<ActionResult> {
 		};
 	}
 
-	// The status change and the refund commit together: an Invite that is no
-	// longer `pending` is invisible to the expiry sweep, so a refund that failed
-	// after the flip would never be made good.
-	const cancelled = await db().transaction(async (tx) => {
-		const rows = await tx
-			.update(invite)
-			.set({ status: 'cancelled', tokenHash: null, tokenExpiresAt: null })
-			.where(
-				and(
-					eq(invite.id, inviteId),
-					// Scoped to the caller: an id from someone else's list is not theirs
-					// to cancel, and this is the only place that is enforced.
-					eq(invite.inviterSlackUserId, slackUserId),
-					eq(invite.status, 'pending'),
-				),
-			)
-			.returning({ id: invite.id });
-
-		if (rows.length > 0) {
-			await refund(
-				tx,
-				inviteId,
-				slackUserId,
-				actor,
-				'refund_cancelled',
-				'Cancelled',
-			);
-		}
-
-		return rows.length > 0;
+	const outcome = await giveBack({
+		inviteId,
+		reason: 'refund_cancelled',
+		actorUserId: actor,
+		body: 'Cancelled',
+		inviter: slackUserId,
 	});
 
-	if (!cancelled) {
+	if (outcome === 'not_pending') {
 		return {
 			ok: false,
 			message:
@@ -309,27 +231,9 @@ export async function cancelInvite(inviteId: string): Promise<ActionResult> {
 	}
 
 	revalidatePath('/invites');
-	return { ok: true, message: 'Invite cancelled and given back.' };
-}
-
-/**
- * Append the compensating credit.
- *
- * `onConflictDoNothing` leans on `volunteer_invite_ledger_refund_idx`, the
- * partial unique index on invite_id where the reason is either refund: if a
- * refund for this Invite already exists — of either kind — the second one is
- * silently dropped rather than doubling the allowance.
- */
-async function refund(
-	tx: Transaction,
-	inviteId: string,
-	slackUserId: string,
-	actorUserId: string | null,
-	reason: 'refund_cancelled' | 'refund_expired',
-	body: string,
-): Promise<void> {
-	await tx
-		.insert(volunteerInviteLedger)
-		.values({ slackUserId, delta: 1, reason, inviteId, actorUserId, body })
-		.onConflictDoNothing();
+	// An imported Invite was never charged, so there is nothing to give back;
+	// cancelling it is still the right outcome (docs/adr/0011).
+	return outcome === 'given_back'
+		? { ok: true, message: 'Invite cancelled and given back.' }
+		: { ok: true, message: 'Invite cancelled.' };
 }

@@ -62,9 +62,15 @@ index can see that.
 
 - **Nothing may ever `UPDATE` or `DELETE` a ledger row.** Corrections are new
   rows, which is why `adjustBalance` requires a reason.
+- **`src/lib/invites.ts` is the only writer of the ledger**, as the Event Log
+  is of `application_event`. Every movement — accrual, spend, give-back, admin
+  adjustment, import — is a function there, so what a send or a cancellation
+  does to a balance is decided once and a new caller cannot invent a movement
+  by spelling out an `INSERT` of its own.
 - The balance is never read from a column, so every screen that shows it runs
   a sum — a correlated subquery at ninety volunteers, worth revisiting at a
   scale this community is unlikely to reach.
 - An Invite imported from Airtable has no `spend` row, because the import
-  brings a balance across as one net figure (0012). The expiry sweep therefore
-  refuses to refund any Invite it cannot find a `spend` for.
+  brings a balance across as one net figure (0012). So **any** give-back —
+  cancelling as much as the expiry sweep — closes the Invite but refuses to
+  credit one it cannot find a `spend` for.
