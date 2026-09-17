@@ -276,7 +276,10 @@ async function apply(dryRun: boolean) {
 	// Trimmed once, here: the id is written to `volunteer`, `pending_grant`,
 	// the ledger and `invite`, and the joins between them are exact.
 	const mapped = entries
-		.map((entry) => ({ ...entry, slackUserId: entry.slackUserId.trim() }))
+		.map((entry) => ({
+			...entry,
+			slackUserId: (entry.slackUserId ?? '').trim(),
+		}))
 		.filter((entry) => entry.slackUserId.length > 0);
 	const skipped = entries.length - mapped.length;
 
