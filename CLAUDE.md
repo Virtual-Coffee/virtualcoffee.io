@@ -54,13 +54,13 @@ When writing or debugging a test, read `docs/testing.md` first.
 
 Every external data source lives in `src/data/` and degrades to a mock when its credentials are missing:
 
-| Source                                      | File                        | Fallback                               |
-| ------------------------------------------- | --------------------------- | -------------------------------------- |
-| Member GitHub profiles                      | `src/data/members/index.ts` | `src/data/mocks/memberData.js` (faker) |
-| GitHub Sponsors                             | `src/data/sponsors.ts`      | `src/data/mocks/sponsors.ts`           |
-| Events (Craft CMS)                          | `src/data/events.ts`        | `src/data/mocks/events.ts`             |
-| Slack member directory (`/admin` grant picker) | `src/data/slackMembers.ts` | `src/data/mocks/slackMembers.ts` (faker) |
-| Membership applications (`/join`, `/admin`) | `src/db/`                   | local Postgres from `netlify dev`      |
+| Source                                         | File                        | Fallback                                 |
+| ---------------------------------------------- | --------------------------- | ---------------------------------------- |
+| Member GitHub profiles                         | `src/data/members/index.ts` | `src/data/mocks/memberData.js` (faker)   |
+| GitHub Sponsors                                | `src/data/sponsors.ts`      | `src/data/mocks/sponsors.ts`             |
+| Events (Craft CMS)                             | `src/data/events.ts`        | `src/data/mocks/events.ts`               |
+| Slack member directory (`/admin` grant picker) | `src/data/slackMembers.ts`  | `src/data/mocks/slackMembers.ts` (faker) |
+| Membership applications (`/join`, `/admin`)    | `src/db/`                   | local Postgres from `netlify dev`        |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. A new external fetch follows this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`, and wrap the fetch in `unstable_cache` with a tag so `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) can revalidate it.
 
