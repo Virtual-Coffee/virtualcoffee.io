@@ -451,6 +451,7 @@ describe('a rejected cc', () => {
 	test('is reported as a warning on success, never as a failed send', async () => {
 		sendEmail.mockResolvedValue({
 			ok: true,
+			message: 'Sent.',
 			warning: 'Sent, but the copy to dev@localhost was rejected.',
 		});
 		const { id } = await insertApplication({ status: 'waitlisted' });
