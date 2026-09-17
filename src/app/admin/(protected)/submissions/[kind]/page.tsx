@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { requirePermission } from '@/lib/adminAccess';
@@ -9,6 +8,7 @@ import {
 	SUBMISSION_KINDS,
 	submissionStatusCounts,
 } from '@/lib/submissions';
+import { FilterChips } from '../../filterChips';
 import { STATUS_ORDER, SubmissionStatusBadge } from './presentation';
 import { PAGE_SIZE } from '@/util/searchParams';
 import { parseSubmissionSearchParams } from './searchParams';
@@ -78,17 +78,6 @@ export default async function SubmissionListPage({
 		};
 	});
 
-	// The status chips are a filter, so they reset the page — but they keep the
-	// order the maintainer chose.
-	const chipQuery = (status: string | null) => {
-		const query = new URLSearchParams();
-		if (status) query.set('status', status);
-		if (filters.sort !== 'submittedAt') query.set('sort', filters.sort);
-		if (filters.direction !== 'desc') query.set('dir', filters.direction);
-		const suffix = query.toString();
-		return suffix ? `${base}?${suffix}` : base;
-	};
-
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
 			<div className="d-flex flex-wrap align-items-baseline gap-3 mb-3">
@@ -100,28 +89,27 @@ export default async function SubmissionListPage({
 				</span>
 			</div>
 
-			<nav
-				className="mb-3 d-flex flex-wrap gap-1"
-				aria-label="Filter by status"
-			>
-				<Link
-					href={chipQuery(null)}
-					className={`btn btn-sm ${active ? 'btn-outline-secondary' : 'btn-secondary'}`}
-				>
-					All ({counts.all ?? 0})
-				</Link>
-				{STATUS_ORDER.map((value) => (
-					<Link
-						key={value}
-						href={chipQuery(value)}
-						className={`btn btn-sm ${
-							active === value ? 'btn-secondary' : 'btn-outline-secondary'
-						}`}
-					>
-						<SubmissionStatusBadge status={value} /> {counts[value] ?? 0}
-					</Link>
-				))}
-			</nav>
+			<div className="mb-3">
+				<FilterChips
+					base={base}
+					// The chips reset the page but keep the order the maintainer chose.
+					keep={{
+						sort: filters.sort === 'submittedAt' ? null : filters.sort,
+						dir: filters.direction === 'desc' ? null : filters.direction,
+					}}
+					param="status"
+					active={active}
+					chips={[
+						{ value: null, label: 'All', count: counts.all ?? 0 },
+						...STATUS_ORDER.map((value) => ({
+							value,
+							label: <SubmissionStatusBadge status={value} />,
+							count: counts[value] ?? 0,
+						})),
+					]}
+					ariaLabel="Filter by status"
+				/>
+			</div>
 
 			<SubmissionsTable
 				rows={listRows}
