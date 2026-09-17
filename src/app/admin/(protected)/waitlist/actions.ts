@@ -34,8 +34,10 @@ import {
 	recordEvent,
 	recordOutcome,
 	transitionAndRecord,
+	type ApplicationEventInput,
 	type ApplicationSubject,
 } from '@/lib/eventLog';
+import type { Outbound } from '@/lib/outbound';
 import { siteUrl } from '@/util/url.server';
 
 function changedUnderneath(name: string): string {
@@ -91,13 +93,83 @@ async function open(applicationId: string): Promise<Opened> {
 	};
 }
 
+type OpenedOk = Extract<Opened, { ok: true }>;
+
+/**
+ * One email to the applicant, whose failure is History. `what` is how History
+ * names the send — "Coffee invite" — and `rollback` kills anything minted to
+ * go in it before the failure is reported.
+ */
+async function emailApplicant(
+	opened: OpenedOk,
+	copyMe: boolean,
+	what: string,
+	template: { subject: string; text: string },
+	rollback?: () => Promise<unknown>,
+): Promise<Outbound> {
+	const { session, actor, application, subject } = opened;
+
+	const sent = await sendEmail({
+		to: application.email,
+		subject: template.subject,
+		text: template.text,
+		cc: copyMe ? session.user.email : null,
+	});
+	if (sent.ok) return sent;
+
+	await rollback?.();
+	await recordOutcome(subject, {
+		channel: 'email',
+		outbound: sent,
+		what: `${what} to ${application.email}`,
+		actorUserId: actor,
+	});
+	return sent;
+}
+
+/**
+ * The status change that follows a send, and never precedes it: reversed, a
+ * failed send leaves the applicant marked as invited with no email and the
+ * maintainer no way to tell.
+ *
+ * Null means the row moved and the caller carries on. Otherwise the race was
+ * lost — the email has gone regardless, so History says so and `rollback`
+ * kills a link this request is no longer entitled to — and the caller hands
+ * the answer back.
+ */
+async function transitionAfterSend(
+	opened: OpenedOk,
+	from: ApplicationStatus,
+	patch: Partial<typeof membershipApplication.$inferInsert>,
+	event: Omit<ApplicationEventInput, 'actorUserId'>,
+	stranded: string,
+	rollback?: () => Promise<unknown>,
+): Promise<EmailActionResult | null> {
+	const { actor, application, subject } = opened;
+
+	const moved = await transitionAndRecord(subject, from, patch, {
+		...event,
+		actorUserId: actor,
+	});
+	if (moved) return null;
+
+	await rollback?.();
+	await recordEvent(subject, {
+		actorUserId: actor,
+		type: 'email_sent',
+		body: stranded,
+	});
+	revalidateApplication(subject.id);
+	return emailWentButRowMoved(changedUnderneath(application.name));
+}
+
 export async function sendCoffeeInvite(
 	applicationId: string,
 	copyMe: boolean,
 ): Promise<EmailActionResult> {
 	const opened = await open(applicationId);
 	if (!opened.ok) return opened;
-	const { session, actor, application, subject } = opened;
+	const { application } = opened;
 
 	if (application.status !== 'waitlisted') {
 		return {
@@ -107,51 +179,27 @@ export async function sendCoffeeInvite(
 		};
 	}
 
-	const template = coffeeInviteEmail(application.name);
+	const sent = await emailApplicant(
+		opened,
+		copyMe,
+		'Coffee invite',
+		coffeeInviteEmail(application.name),
+	);
+	if (!sent.ok) return emailFailed(sent);
 
-	// Send BEFORE the status change. If this is reversed, a failed send leaves
-	// the applicant marked as invited with no email, and the maintainer has no
-	// way to tell.
-	const sent = await sendEmail({
-		to: application.email,
-		subject: template.subject,
-		text: template.text,
-		cc: copyMe ? session.user.email : null,
-	});
-
-	if (!sent.ok) {
-		await recordOutcome(subject, {
-			channel: 'email',
-			outbound: sent,
-			what: `Coffee invite to ${application.email}`,
-			actorUserId: actor,
-		});
-		return emailFailed(sent);
-	}
-
-	const moved = await transitionAndRecord(
-		subject,
+	const stranded = await transitionAfterSend(
+		opened,
 		'waitlisted',
 		{ status: 'coffee_invited', coffeeInvitedAt: new Date() },
 		{
-			actorUserId: actor,
 			type: 'coffee_invited',
 			fromStatus: 'waitlisted',
 			toStatus: 'coffee_invited',
 			body: `Coffee invite emailed to ${application.email}`,
 		},
+		`Coffee invite emailed to ${application.email}, but the application had already left Waitlisted`,
 	);
-
-	if (!moved) {
-		// The email has gone regardless, so the history must say so.
-		await recordEvent(subject, {
-			actorUserId: actor,
-			type: 'email_sent',
-			body: `Coffee invite emailed to ${application.email}, but the application had already left Waitlisted`,
-		});
-		revalidateApplication(applicationId);
-		return emailWentButRowMoved(changedUnderneath(application.name));
-	}
+	if (stranded) return stranded;
 
 	revalidateApplication(applicationId);
 	return { ok: true, message: sent.warning };
@@ -205,7 +253,7 @@ export async function approveMembership(
 ): Promise<EmailActionResult> {
 	const opened = await open(applicationId);
 	if (!opened.ok) return opened;
-	const { session, actor, application, subject } = opened;
+	const { application } = opened;
 
 	if (application.status !== 'coffee_invited') {
 		return {
@@ -221,44 +269,25 @@ export async function approveMembership(
 	// Another approval may be racing this one, and its link must survive if
 	// it wins. The loser expires its own.
 	const { id: tokenId, token } = await createSlackInviteToken(applicationId);
-	const inviteUrl = `${siteUrl()}/join-slack?code=${token}`;
+	const expireToken = () => expireSlackInviteToken(tokenId, new Date());
 
-	const welcome = welcomeEmail(application.name);
-	const welcomeSent = await sendEmail({
-		to: application.email,
-		subject: welcome.subject,
-		text: welcome.text,
-		cc: copyMe ? session.user.email : null,
-	});
+	const welcomeSent = await emailApplicant(
+		opened,
+		copyMe,
+		'Welcome email',
+		welcomeEmail(application.name),
+		expireToken,
+	);
+	if (!welcomeSent.ok) return emailFailed(welcomeSent);
 
-	if (!welcomeSent.ok) {
-		await expireSlackInviteToken(tokenId, new Date());
-		await recordOutcome(subject, {
-			channel: 'email',
-			outbound: welcomeSent,
-			what: `Welcome email to ${application.email}`,
-			actorUserId: actor,
-		});
-		return emailFailed(welcomeSent);
-	}
-
-	const slack = slackInviteEmail(application.name, inviteUrl);
-	const slackSent = await sendEmail({
-		to: application.email,
-		subject: slack.subject,
-		text: slack.text,
-		cc: copyMe ? session.user.email : null,
-	});
-
+	const slackSent = await emailApplicant(
+		opened,
+		copyMe,
+		'Slack invite',
+		slackInviteEmail(application.name, `${siteUrl()}/join-slack?code=${token}`),
+		expireToken,
+	);
 	if (!slackSent.ok) {
-		// A timeout may have delivered the link anyway; kill it before saying so.
-		await expireSlackInviteToken(tokenId, new Date());
-		await recordOutcome(subject, {
-			channel: 'email',
-			outbound: slackSent,
-			what: `Slack invite to ${application.email}`,
-			actorUserId: actor,
-		});
 		// The welcome email has already gone out, so this is not a clean retry:
 		// say so rather than implying nothing happened.
 		return {
@@ -269,8 +298,8 @@ export async function approveMembership(
 	}
 
 	const now = new Date();
-	const approved = await transitionAndRecord(
-		subject,
+	const stranded = await transitionAfterSend(
+		opened,
 		'coffee_invited',
 		{
 			status: 'member',
@@ -278,28 +307,15 @@ export async function approveMembership(
 			coffeeAttendedAt: application.coffeeAttendedAt ?? now,
 		},
 		{
-			actorUserId: actor,
 			type: 'approved',
 			fromStatus: 'coffee_invited',
 			toStatus: 'member',
 			body: `Membership approved; welcome and Slack invite emailed to ${application.email}`,
 		},
+		`Welcome and Slack invite emailed to ${application.email}, but the application had already left Coffee invited; the Slack link has been invalidated`,
+		expireToken,
 	);
-
-	if (!approved) {
-		// Both emails have gone regardless, so the history must say so — and the
-		// Slack link in one of them must stop working, since this request is not
-		// making anyone a member. Only this request's link: if the race was lost
-		// to another approval, that one's link is the member's way in.
-		await expireSlackInviteToken(tokenId, new Date());
-		await recordEvent(subject, {
-			actorUserId: actor,
-			type: 'email_sent',
-			body: `Welcome and Slack invite emailed to ${application.email}, but the application had already left Coffee invited; the Slack link has been invalidated`,
-		});
-		revalidateApplication(applicationId);
-		return emailWentButRowMoved(changedUnderneath(application.name));
-	}
+	if (stranded) return stranded;
 
 	// Complete the Invite that produced this application, if any. After the
 	// status change and not fatal: the applicant has already been approved and
@@ -337,7 +353,7 @@ export async function resendSlackInvite(
 ): Promise<EmailActionResult> {
 	const opened = await open(applicationId);
 	if (!opened.ok) return opened;
-	const { session, actor, application, subject } = opened;
+	const { actor, application, subject } = opened;
 
 	if (application.status !== 'member') {
 		return {
@@ -348,29 +364,19 @@ export async function resendSlackInvite(
 	}
 
 	const minted = await createSlackInviteToken(applicationId);
-	const template = slackInviteEmail(
-		application.name,
-		`${siteUrl()}/join-slack?code=${minted.token}`,
+	const sent = await emailApplicant(
+		opened,
+		copyMe,
+		'Slack invite re-send',
+		slackInviteEmail(
+			application.name,
+			`${siteUrl()}/join-slack?code=${minted.token}`,
+		),
+		// Only this request's link: the previous one is still the one the
+		// member holds.
+		() => expireSlackInviteToken(minted.id, new Date()),
 	);
-	const sent = await sendEmail({
-		to: application.email,
-		subject: template.subject,
-		text: template.text,
-		cc: copyMe ? session.user.email : null,
-	});
-
-	if (!sent.ok) {
-		// A timeout may have delivered the new link anyway; kill it, and only
-		// it — the previous link is still the one the member holds.
-		await expireSlackInviteToken(minted.id, new Date());
-		await recordOutcome(subject, {
-			channel: 'email',
-			outbound: sent,
-			what: `Slack invite re-send to ${application.email}`,
-			actorUserId: actor,
-		});
-		return emailFailed(sent);
-	}
+	if (!sent.ok) return emailFailed(sent);
 
 	await supersedeSlackInviteTokens(applicationId, minted, new Date());
 	await recordOutcome(subject, {
