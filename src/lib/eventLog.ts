@@ -256,6 +256,17 @@ export async function transitionAndRecord<S extends Subject>(
 	});
 }
 
+/** The columns the two event tables share, which is all History reads. */
+type EventTable = PgTable & {
+	id: PgColumn;
+	type: PgColumn;
+	body: PgColumn;
+	fromStatus: PgColumn;
+	toStatus: PgColumn;
+	createdAt: PgColumn;
+	actorUserId: PgColumn;
+};
+
 /**
  * One row of History, as a detail screen's timeline renders it.
  *
@@ -277,37 +288,28 @@ export type HistoryEntry<S extends Subject> = {
 export async function history<S extends Subject>(
 	subject: S,
 ): Promise<HistoryEntry<S>[]> {
-	const rows =
+	const table: EventTable =
+		subject.kind === 'application' ? applicationEvent : submissionEvent;
+	const belongsToSubject =
 		subject.kind === 'application'
-			? await db()
-					.select({
-						id: applicationEvent.id,
-						type: sql<string>`${applicationEvent.type}`,
-						body: applicationEvent.body,
-						fromStatus: applicationEvent.fromStatus,
-						toStatus: applicationEvent.toStatus,
-						createdAt: applicationEvent.createdAt,
-						actorName: user.name,
-					})
-					.from(applicationEvent)
-					.leftJoin(user, eq(applicationEvent.actorUserId, user.id))
-					.where(eq(applicationEvent.applicationId, subject.id))
-					// `createdAt` is not unique; the v7 id breaks ties by creation order.
-					.orderBy(desc(applicationEvent.createdAt), desc(applicationEvent.id))
-			: await db()
-					.select({
-						id: submissionEvent.id,
-						type: sql<string>`${submissionEvent.type}`,
-						body: submissionEvent.body,
-						fromStatus: submissionEvent.fromStatus,
-						toStatus: submissionEvent.toStatus,
-						createdAt: submissionEvent.createdAt,
-						actorName: user.name,
-					})
-					.from(submissionEvent)
-					.leftJoin(user, eq(submissionEvent.actorUserId, user.id))
-					.where(eq(submissionEvent[subject.eventKey], subject.id))
-					.orderBy(desc(submissionEvent.createdAt), desc(submissionEvent.id));
+			? eq(applicationEvent.applicationId, subject.id)
+			: eq(submissionEvent[subject.eventKey], subject.id);
+
+	const rows = await db()
+		.select({
+			id: table.id,
+			type: sql<string>`${table.type}`,
+			body: table.body,
+			fromStatus: table.fromStatus,
+			toStatus: table.toStatus,
+			createdAt: table.createdAt,
+			actorName: user.name,
+		})
+		.from(table)
+		.leftJoin(user, eq(table.actorUserId, user.id))
+		.where(belongsToSubject)
+		// `createdAt` is not unique; the v7 id breaks ties by creation order.
+		.orderBy(desc(table.createdAt), desc(table.id));
 
 	return rows as HistoryEntry<S>[];
 }
