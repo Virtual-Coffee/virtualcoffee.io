@@ -37,9 +37,11 @@ export default async function VolunteersPage({
 	const params = await searchParams;
 	const state = parseVolunteerState(params);
 
+	// The Slack directory only feeds the add form, so a read-only viewer never
+	// waits on it — nor loses the roster to a Slack outage.
 	const [volunteers, members] = await Promise.all([
 		listVolunteers(),
-		getSlackMembers(),
+		canManage ? getSlackMembers() : [],
 	]);
 
 	/**
