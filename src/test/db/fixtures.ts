@@ -15,7 +15,10 @@ import {
 	type VolunteerLedgerReason,
 } from '@/db';
 import { hashClaimToken } from '@/lib/volunteers/invites';
-import { SUBMISSION_KINDS, type SubmissionKind } from '@/lib/submissions';
+import {
+	SUBMISSION_KINDS,
+	type SubmissionKind,
+} from '@/lib/submissions/submissions';
 import { hashToken } from '@/lib/tokens';
 
 /**

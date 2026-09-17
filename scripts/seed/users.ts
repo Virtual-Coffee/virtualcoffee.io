@@ -1,4 +1,4 @@
-import { serialiseRoles } from '@/lib/permissions';
+import { serialiseRoles } from '@/lib/access/permissions';
 import {
 	insertDevtoolsUser,
 	insertPendingGrant,

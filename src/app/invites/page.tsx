@@ -1,8 +1,12 @@
 import Link from 'next/link';
 
 import { SignOutButton } from '@/app/admin/sign-in/buttons';
-import { getVolunteer, listInvitesFor, volunteerBalance } from '@/lib/invites';
-import { requireVolunteer } from '@/lib/volunteerAccess';
+import {
+	getVolunteer,
+	listInvitesFor,
+	volunteerBalance,
+} from '@/lib/volunteers/invites';
+import { requireVolunteer } from '@/lib/access/volunteerAccess';
 import { siteUrl } from '@/util/url.server';
 import { CancelInviteButton } from './cancelButton';
 import { formatDate, InviteStatusBadge } from './presentation';

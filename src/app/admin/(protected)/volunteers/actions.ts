@@ -14,20 +14,30 @@ import {
 } from '@/db';
 import { isId } from '@/db/ids';
 import { getSlackMembers } from '@/data/slackMembers';
-import type { ActionResult } from '@/lib/actionResult';
-import { actorId, requirePermission } from '@/lib/adminAccess';
-import { userForSlackId } from '@/lib/admins';
+import type { ActionResult } from '@/lib/admin/actionResult';
+import { actorId, requirePermission } from '@/lib/access/adminAccess';
+import { userForSlackId } from '@/lib/access/admins';
 import {
 	volunteerGrantEmail,
 	volunteerInviteEmail,
 } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
-import { adjust, newClaimToken, hashClaimToken } from '@/lib/invites';
-import { grantVolunteerRole, withoutVolunteerRole } from '@/lib/pendingGrants';
-import { parseRoles } from '@/lib/permissions';
+import {
+	adjust,
+	newClaimToken,
+	hashClaimToken,
+} from '@/lib/volunteers/invites';
+import {
+	grantVolunteerRole,
+	withoutVolunteerRole,
+} from '@/lib/access/pendingGrants';
+import { parseRoles } from '@/lib/access/permissions';
 import { grantDmMessage, sendSlackDm } from '@/lib/slack/dm';
-import { COMMUNITY_ROLES, formatRoleLabels } from '@/lib/volunteerRoles';
-import { pendingInvite } from '@/lib/volunteers';
+import {
+	COMMUNITY_ROLES,
+	formatRoleLabels,
+} from '@/lib/volunteers/volunteerRoles';
+import { pendingInvite } from '@/lib/volunteers/volunteers';
 import { siteUrl } from '@/util/url.server';
 
 function revalidate(volunteerId?: string) {

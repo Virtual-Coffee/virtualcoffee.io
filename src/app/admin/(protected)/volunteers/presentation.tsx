@@ -1,5 +1,5 @@
 import type { InviteStatus, VolunteerLedgerReason } from '@/db/schema';
-import { parseRoleLabels } from '@/lib/volunteerRoles';
+import { parseRoleLabels } from '@/lib/volunteers/volunteerRoles';
 
 // The admin vocabulary for Invites and ledger movements — blunter than the
 // Volunteer's own in `/invites/presentation.tsx`, on purpose.

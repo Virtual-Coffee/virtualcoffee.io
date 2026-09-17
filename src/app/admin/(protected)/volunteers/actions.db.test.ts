@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, invite, pendingGrant, user, volunteer } from '@/db';
-import { hashClaimToken, volunteerBalance } from '@/lib/invites';
+import { hashClaimToken, volunteerBalance } from '@/lib/volunteers/invites';
 import { sendEmail, sendSlackDm } from '@/test/mocks/spies';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';

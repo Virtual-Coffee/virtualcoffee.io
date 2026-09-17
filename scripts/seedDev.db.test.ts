@@ -10,8 +10,11 @@ import {
 	volunteer,
 	volunteerInviteLedger,
 } from '@/db';
-import { inviteForClaimToken, volunteerBalance } from '@/lib/invites';
-import { slackInviteForToken } from '@/lib/inviteTokens';
+import {
+	inviteForClaimToken,
+	volunteerBalance,
+} from '@/lib/volunteers/invites';
+import { slackInviteForToken } from '@/lib/waitlist/inviteTokens';
 
 import { seedDev } from './seed';
 import { ATTACHMENT, NEW_VOLUNTEER } from './seed/shared';
@@ -161,7 +164,7 @@ describe('seedDev', { timeout: 60_000 }, () => {
 		expect(store.writes[0].key).toBe(ATTACHMENT.key);
 		expect(store.writes[0].bytes.byteLength).toBe(row.size);
 		expect(row.size).toBe(504);
-		// PNG magic, which `sniff()` in src/lib/attachments.ts requires.
+		// PNG magic, which `sniff()` in src/lib/submissions/attachments.ts requires.
 		expect([...store.writes[0].bytes.slice(0, 4)]).toEqual([
 			0x89, 0x50, 0x4e, 0x47,
 		]);

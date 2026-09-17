@@ -2,12 +2,12 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { isId } from '@/db/ids';
-import { requirePermission, sessionCan } from '@/lib/adminAccess';
+import { requirePermission, sessionCan } from '@/lib/access/adminAccess';
 import {
 	getVolunteerById,
 	volunteerInvites,
 	volunteerLedger,
-} from '@/lib/volunteers';
+} from '@/lib/volunteers/volunteers';
 import {
 	Breadcrumb,
 	formatDate,

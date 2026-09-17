@@ -2,7 +2,10 @@
 
 import { useMemo, useState } from 'react';
 
-import { filterSlackMembers, type SlackMember } from '@/lib/slackMemberPicker';
+import {
+	filterSlackMembers,
+	type SlackMember,
+} from '@/lib/volunteers/slackMemberPicker';
 import { useDropdown } from './useDropdown';
 
 /**
