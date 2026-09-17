@@ -16,41 +16,8 @@ import {
 	inviteRow,
 	ledgerFor,
 } from '@/test/db/fixtures';
-
-vi.mock('@/lib/email/transport', () => import('@/test/mocks/transport'));
-vi.mock('@/lib/slack/dm', async (importOriginal) => ({
-	...(await importOriginal<typeof import('@/lib/slack/dm')>()),
-	...(await import('@/test/mocks/slackDm')),
-}));
-
-/** Runs between resendInvite()'s read and its write, to stage a race. */
-const afterRead = vi.hoisted(() => ({
-	run: null as null | (() => Promise<void>),
-}));
-vi.mock('@/lib/volunteers', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('@/lib/volunteers')>();
-	return {
-		...actual,
-		pendingInvite: async (inviteId: string) => {
-			const row = await actual.pendingInvite(inviteId);
-			await afterRead.run?.();
-			afterRead.run = null;
-			return row;
-		},
-	};
-});
-
-vi.mock('@/data/slackMembers', () => ({
-	getSlackMembers: async () => [
-		{
-			id: 'U_ADA',
-			name: 'Ada Lovelace',
-			displayName: 'Ada',
-			handle: 'ada',
-			email: null,
-		},
-	],
-}));
+import { afterRead } from '@/test/mocks/afterRead';
+import { slackDirectory, slackMember } from '@/test/mocks/slackMembers';
 
 import {
 	addVolunteer,
@@ -88,6 +55,13 @@ async function grantRole(slackUserId: string) {
 const VOLUNTEER_ID = '0199404c-2c5e-7000-8000-000000000000';
 
 beforeEach(async () => {
+	slackDirectory.members = [
+		slackMember('U_ADA', {
+			name: 'Ada Lovelace',
+			displayName: 'Ada',
+			handle: 'ada',
+		}),
+	];
 	sendEmail.mockResolvedValue({ ok: true });
 	sendSlackDm.mockResolvedValue({ ok: true, message: 'DM sent.' });
 	vi.stubEnv('URL', 'https://virtualcoffee.io');
