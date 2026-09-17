@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { CalendarConflictError } from '@/lib/eventsCalendar';
+import { CalendarConflictError, CalendarGoneError } from '@/lib/eventsCalendar';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 
@@ -204,6 +204,16 @@ describe('writing', () => {
 			definitelyNotSent: true,
 			message:
 				'This changed in Google Calendar since you loaded it. Check the current details and try again.',
+		});
+		expect(revalidateTag).not.toHaveBeenCalled();
+	});
+
+	test('an id the calendar no longer has is a message, not a crash', async () => {
+		calendar.updateEvent.mockRejectedValue(new CalendarGoneError());
+		await expect(updateEvent(ID, ETAG, series)).resolves.toEqual({
+			ok: false,
+			definitelyNotSent: true,
+			message: 'That no longer exists on the Events Calendar.',
 		});
 		expect(revalidateTag).not.toHaveBeenCalled();
 	});
