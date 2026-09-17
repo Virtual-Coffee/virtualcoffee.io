@@ -301,6 +301,28 @@ async function apply(dryRun: boolean) {
 		process.exit(1);
 	}
 
+	// The other direction: one Airtable record listed twice would be created by
+	// its first entry and then treated as already present by its second, which
+	// would grant the role and re-point the Invites to the second Slack member.
+	const seenRecords = new Set<string>();
+	const duplicateRecords = mapped.filter((entry) => {
+		if (seenRecords.has(entry.airtableRecordId)) return true;
+		seenRecords.add(entry.airtableRecordId);
+		return false;
+	});
+
+	if (duplicateRecords.length > 0) {
+		console.error(
+			'One Airtable volunteer is listed more than once. Fix the file first:',
+		);
+		for (const entry of duplicateRecords) {
+			console.error(
+				`  ${entry.airtableRecordId} (${entry.name}) -> ${entry.slackUserId}`,
+			);
+		}
+		process.exit(1);
+	}
+
 	console.log(`${mapped.length} mapped, ${skipped} left unmapped.\n`);
 
 	if (dryRun) {
