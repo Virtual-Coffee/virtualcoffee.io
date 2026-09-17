@@ -45,6 +45,14 @@ There is **no cap**; `deactivated_at` is the check on it. Someone who steps
 back stops accruing, so the unbounded case is a person actively volunteering
 and choosing not to invite anyone.
 
+The email that announces an accrual is owed by the ledger row, not by the run
+that inserted it: `volunteer_accrual_notice` records each attempt against its
+`monthly_accrual`, and the job emails every accrual of the month that has no
+notice. A scheduled function is cut off at 30 seconds, so the job stops
+starting sends once its budget is spent and the next morning finishes the
+roster. One notice per attempt, whatever its outcome — a failed address is
+reported once, not retried daily until the month turns.
+
 ### Sending inverts the "send first, then write" rule
 
 The Claim Link carries a token that must exist in the database before the

@@ -51,7 +51,9 @@ _Avoid_: Referral, nomination, lapse (an application lapses; an Invite expires)
 
 **Invite Allowance**:
 How many Invites a Volunteer may currently give out. It grows a little each
-month and is spent one Invite at a time.
+month and is spent one Invite at a time. The monthly growth is announced by
+email; an **Accrual Notice** records that the email was attempted, so a run cut
+short tells the rest of the roster the next day.
 _Avoid_: Quota, credits, balance
 
 **Claim Link**:

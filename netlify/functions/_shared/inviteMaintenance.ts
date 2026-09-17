@@ -1,6 +1,14 @@
-import { and, eq, inArray, isNotNull, lt } from 'drizzle-orm';
+import { and, eq, isNotNull, isNull, lt } from 'drizzle-orm';
 
-import { db, invite, user, volunteer } from '../../../src/db/index.ts';
+import {
+	db,
+	invite,
+	user,
+	volunteer,
+	volunteerAccrualNotice,
+	volunteerInviteLedger,
+	type AccrualNoticeOutcome,
+} from '../../../src/db/index.ts';
 import { volunteerAccrualEmail } from '../../../src/lib/email/templates.ts';
 import {
 	accrue,
@@ -26,6 +34,8 @@ type MaintenanceReport = {
 	expiryFailures: number;
 	emailed: number;
 	emailFailures: number;
+	/** Accruals not reached before the run's budget; tomorrow's run emails them. */
+	emailDeferred: number;
 };
 
 /** Re-exported so the period key is testable from beside the job that runs it. */
@@ -86,6 +96,12 @@ async function expire(
 /** How many accrual emails are in flight at once, and how long each may take. */
 const SEND_CONCURRENCY = 4;
 const SEND_TIMEOUT_MS = 10_000;
+/**
+ * How far into the run `notify` may still start a batch. A scheduled function
+ * is cut off at 30 seconds, and a batch that has started may take
+ * `SEND_TIMEOUT_MS` to give up, so this plus that leaves the sweep its share.
+ */
+const NOTIFY_BUDGET_MS = 15_000;
 
 /**
  * Tell the Volunteers who accrued something what they now hold. Prefers the
@@ -94,37 +110,59 @@ const SEND_TIMEOUT_MS = 10_000;
  * happened, and failing the run would only make tomorrow's report an error
  * for something that succeeded.
  *
- * One query for everyone, then sends a few at a time with a timeout each: a
- * scheduled function has seconds, not minutes, and one hung SMTP exchange
- * must cost one email, not the rest of the roster's.
+ * Works from the ledger, not from what `accrue()` just inserted: every
+ * `monthly_accrual` of the period without a `volunteer_accrual_notice` is
+ * owed an email, and each attempt writes its notice. So a run that stops at
+ * `deadline` — or is killed by the platform — leaves the rest for tomorrow
+ * instead of losing them, while an attempt that failed is not repeated every
+ * morning until the month turns.
+ *
+ * One query for everyone, then sends a few at a time with a timeout each: one
+ * hung SMTP exchange must cost one email, not the rest of the roster's.
  */
-async function notify(slackUserIds: string[]): Promise<{
-	emailed: number;
-	failures: number;
-}> {
-	if (slackUserIds.length === 0) return { emailed: 0, failures: 0 };
-
+async function notify(
+	period: string,
+	deadline: number,
+): Promise<{ emailed: number; failures: number; deferred: number }> {
 	const database = db();
 	const balances = balancesBySlackUser(database);
 	const rows = await database
 		.select({
+			ledgerId: volunteerInviteLedger.id,
 			slackUserId: volunteer.slackUserId,
 			name: volunteer.slackDisplayName,
 			email: volunteer.email,
 			accountEmail: user.email,
 			balance: balances.total,
 		})
-		.from(volunteer)
+		.from(volunteerInviteLedger)
+		.innerJoin(
+			volunteer,
+			eq(volunteer.slackUserId, volunteerInviteLedger.slackUserId),
+		)
 		.leftJoin(user, eq(volunteer.userId, user.id))
 		.leftJoin(balances, eq(balances.slackUserId, volunteer.slackUserId))
-		.where(inArray(volunteer.slackUserId, slackUserIds));
+		.leftJoin(
+			volunteerAccrualNotice,
+			eq(volunteerAccrualNotice.ledgerId, volunteerInviteLedger.id),
+		)
+		.where(
+			and(
+				eq(volunteerInviteLedger.reason, 'monthly_accrual'),
+				eq(volunteerInviteLedger.periodKey, period),
+				isNull(volunteerAccrualNotice.id),
+			),
+		)
+		.orderBy(volunteerInviteLedger.createdAt);
 
 	let emailed = 0;
 	let failures = 0;
 
-	const send = async (row: (typeof rows)[number]) => {
+	const attempt = async (
+		row: (typeof rows)[number],
+	): Promise<AccrualNoticeOutcome> => {
 		const address = row.email ?? row.accountEmail;
-		if (!address) return;
+		if (!address) return 'no_address';
 
 		try {
 			const template = volunteerAccrualEmail(
@@ -141,14 +179,15 @@ async function notify(slackUserIds: string[]): Promise<{
 				SEND_TIMEOUT_MS,
 			);
 
-			if (sent.ok) emailed += 1;
-			else {
-				failures += 1;
-				console.error('Accrual email failed', {
-					slackUserId: row.slackUserId,
-					message: sent.message,
-				});
+			if (sent.ok) {
+				emailed += 1;
+				return 'sent';
 			}
+			failures += 1;
+			console.error('Accrual email failed', {
+				slackUserId: row.slackUserId,
+				message: sent.message,
+			});
 		} catch (error) {
 			failures += 1;
 			console.error('Accrual email threw', {
@@ -156,13 +195,25 @@ async function notify(slackUserIds: string[]): Promise<{
 				error,
 			});
 		}
+		return 'failed';
 	};
 
-	for (let i = 0; i < rows.length; i += SEND_CONCURRENCY) {
+	const send = async (row: (typeof rows)[number]) => {
+		const outcome = await attempt(row);
+		// A notice that fails to write is a resend tomorrow, which is the
+		// cheaper mistake.
+		await database
+			.insert(volunteerAccrualNotice)
+			.values({ ledgerId: row.ledgerId, outcome })
+			.onConflictDoNothing();
+	};
+
+	let i = 0;
+	for (; i < rows.length && Date.now() < deadline; i += SEND_CONCURRENCY) {
 		await Promise.all(rows.slice(i, i + SEND_CONCURRENCY).map(send));
 	}
 
-	return { emailed, failures };
+	return { emailed, failures, deferred: Math.max(0, rows.length - i) };
 }
 
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
@@ -176,19 +227,23 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 export async function runInviteMaintenance(
 	now = new Date(),
 ): Promise<MaintenanceReport> {
-	// Notify before the sweep: the accrual is once per month by index, so the
-	// only run that can email it is this one, while an Invite the sweep misses
-	// is still due tomorrow. The unrecoverable step goes first (docs/adr/0005).
+	// `now` is the date being maintained; the budget is the wall clock.
+	const deadline = Date.now() + NOTIFY_BUDGET_MS;
+	const period = periodKey(now);
+
+	// Notify before the sweep: a run cut short makes both good tomorrow, and
+	// the email is the part a Volunteer is waiting on.
 	const accruedFor = await accrue(now);
-	const { emailed, failures } = await notify(accruedFor);
+	const { emailed, failures, deferred } = await notify(period, deadline);
 	const { expired, failures: expiryFailures } = await expire(now);
 
 	return {
-		period: periodKey(now),
+		period,
 		accrued: accruedFor.length,
 		expired,
 		expiryFailures,
 		emailed,
 		emailFailures: failures,
+		emailDeferred: deferred,
 	};
 }
