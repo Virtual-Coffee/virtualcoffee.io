@@ -12,7 +12,7 @@
  * server-only belongs here.
  */
 import { DateTime } from 'luxon';
-import { RRule, type Options } from 'rrule';
+import { RRule, type Frequency, type Options } from 'rrule';
 import { z } from 'zod';
 
 import { DISPLAY_ZONE } from '@/util/date';
@@ -250,6 +250,104 @@ function describe(rrule: string): string {
 	return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+/** A BYDAY entry: the weekday index, and the ordinal a monthly rule carries. */
+type ByDay = { weekday: number; n: number | undefined };
+
+/** What a form shape is built from, once the options every FREQ shares are read. */
+type RuleParts = {
+	entries: ByDay[];
+	interval: number;
+	ends: Ends;
+	wkst: Partial<Options>['wkst'];
+};
+
+/**
+ * `rrule` gives a Weekday object per BYDAY entry; a plain number is only
+ * possible when constructed in code, which a parsed line never is.
+ */
+function entriesFrom(byweekday: Partial<Options>['byweekday']): ByDay[] {
+	return (byweekday == null ? [] : [byweekday].flat()).map((entry) =>
+		typeof entry === 'number'
+			? { weekday: entry, n: undefined }
+			: typeof entry === 'string'
+				? { weekday: WEEKDAYS.indexOf(entry as Weekday), n: undefined }
+				: { weekday: entry.weekday, n: entry.n },
+	);
+}
+
+/** How the rule ends; null when it names an `UNTIL` this cannot read. */
+function endsFrom(options: Partial<Options>, line: string): Ends | null {
+	if (options.count != null) return { kind: 'count', count: options.count };
+	if (!options.until) return { kind: 'never' };
+	const date = untilDate(line);
+	return date ? { kind: 'until', date } : null;
+}
+
+/** Weekly on days: at least one BYDAY entry, none of them an nth weekday. */
+function weeklyFrom({
+	entries,
+	interval,
+	ends,
+	wkst,
+}: RuleParts): RecurrenceForm | null {
+	if (entries.length === 0 || entries.some((entry) => entry.n != null)) {
+		return null;
+	}
+	const weekdays = entries.map((entry) => weekdayFrom(entry.weekday));
+	if (weekdays.some((day) => day == null)) return null;
+	const weekStart =
+		typeof wkst === 'number'
+			? weekdayFrom(wkst)
+			: wkst == null
+				? undefined
+				: weekdayFrom(wkst.weekday);
+	return {
+		kind: 'weekly',
+		interval,
+		weekdays: weekdays as Weekday[],
+		ends,
+		...(weekStart ? { weekStart } : {}),
+	};
+}
+
+/** Monthly on the nth weekday(s): one weekday, every entry an ordinal of it. */
+function monthlyFrom({
+	entries,
+	interval,
+	ends,
+	wkst,
+}: RuleParts): RecurrenceForm | null {
+	if (wkst != null || entries.length === 0) return null;
+	const weekday = weekdayFrom(entries[0].weekday);
+	if (
+		!weekday ||
+		entries.some(
+			(entry) =>
+				entry.weekday !== entries[0].weekday ||
+				entry.n == null ||
+				!isOrdinal(entry.n),
+		)
+	) {
+		return null;
+	}
+	return {
+		kind: 'monthly',
+		interval,
+		ordinals: entries.map((entry) => entry.n as Ordinal),
+		weekday,
+		ends,
+	};
+}
+
+/** One per FREQ the form has controls for; each returns null for a rule it cannot hold. */
+const FORM_SHAPES = new Map<
+	Frequency,
+	(parts: RuleParts) => RecurrenceForm | null
+>([
+	[RRule.WEEKLY, weeklyFrom],
+	[RRule.MONTHLY, monthlyFrom],
+]);
+
 /**
  * The `RRULE:` line of a Google `recurrence` array as the form sees it.
  * Anything the form has no controls for — daily, yearly, by month-day,
@@ -265,86 +363,22 @@ export function parseRecurrence(lines: readonly string[]): Recurrence {
 	} catch {
 		return { kind: 'custom', rrule: line, text: line };
 	}
-	const custom = (): CustomRecurrence => ({
-		kind: 'custom',
-		rrule: line,
-		text: describe(line),
-	});
 
 	const options = rule.origOptions;
-	if (
-		Object.keys(options).some(
-			(key) => !FORM_OPTION_KEYS.has(key as keyof Options),
-		)
-	) {
-		return custom();
-	}
-
-	let ends: Ends = { kind: 'never' };
-	if (options.count != null) ends = { kind: 'count', count: options.count };
-	else if (options.until) {
-		const date = untilDate(line);
-		if (!date) return custom();
-		ends = { kind: 'until', date };
-	}
-	const interval = options.interval ?? 1;
-
-	const byweekday = options.byweekday == null ? [] : [options.byweekday].flat();
-	// `rrule` gives a Weekday object per BYDAY entry; a plain number is only
-	// possible when constructed in code, which a parsed line never is.
-	const entries = byweekday.map((entry) =>
-		typeof entry === 'number'
-			? { weekday: entry, n: undefined }
-			: typeof entry === 'string'
-				? { weekday: WEEKDAYS.indexOf(entry as Weekday), n: undefined }
-				: { weekday: entry.weekday, n: entry.n },
+	const editable = Object.keys(options).every((key) =>
+		FORM_OPTION_KEYS.has(key as keyof Options),
 	);
-
-	if (options.freq === RRule.WEEKLY) {
-		if (entries.length === 0 || entries.some((entry) => entry.n != null)) {
-			return custom();
-		}
-		const weekdays = entries.map((entry) => weekdayFrom(entry.weekday));
-		if (weekdays.some((day) => day == null)) return custom();
-		const weekStart =
-			typeof options.wkst === 'number'
-				? weekdayFrom(options.wkst)
-				: options.wkst == null
-					? undefined
-					: weekdayFrom(options.wkst.weekday);
-		return {
-			kind: 'weekly',
-			interval,
-			weekdays: weekdays as Weekday[],
-			ends,
-			...(weekStart ? { weekStart } : {}),
-		};
-	}
-
-	if (options.freq === RRule.MONTHLY) {
-		if (options.wkst != null || entries.length === 0) return custom();
-		const weekday = weekdayFrom(entries[0].weekday);
-		if (
-			!weekday ||
-			entries.some(
-				(entry) =>
-					entry.weekday !== entries[0].weekday ||
-					entry.n == null ||
-					!isOrdinal(entry.n),
-			)
-		) {
-			return custom();
-		}
-		return {
-			kind: 'monthly',
-			interval,
-			ordinals: entries.map((entry) => entry.n as Ordinal),
-			weekday,
-			ends,
-		};
-	}
-
-	return custom();
+	const ends = endsFrom(options, line);
+	const form =
+		editable && ends && options.freq != null
+			? FORM_SHAPES.get(options.freq)?.({
+					entries: entriesFrom(options.byweekday),
+					interval: options.interval ?? 1,
+					ends,
+					wkst: options.wkst,
+				})
+			: null;
+	return form ?? { kind: 'custom', rrule: line, text: describe(line) };
 }
 
 /** An iCalendar UTC timestamp, as `UNTIL` and `DTSTART` carry it. */
