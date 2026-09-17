@@ -60,6 +60,23 @@ export default defineConfig([
 		plugins: { vitest },
 		rules: { ...vitest.configs.recommended.rules },
 	},
+	{
+		name: 'vitest/db-project',
+		files: ['**/*.db.test.ts'],
+		rules: {
+			// The db project runs without isolation, so a file's `vi.mock` is
+			// ignored when another file loaded the module first.
+			'no-restricted-syntax': [
+				'error',
+				{
+					selector:
+						'Program > ExpressionStatement > CallExpression[callee.object.name="vi"][callee.property.name="mock"]',
+					message:
+						'The db project shares one module cache across files, so this mock is only honoured if this file happens to load first. Register it in src/test/db/setup.ts and set state through src/test/mocks/.',
+				},
+			],
+		},
+	},
 	globalIgnores([
 		'node_modules/**',
 		'.next/**',
