@@ -32,9 +32,12 @@ describe('submitCocReport', () => {
 	test('name and email are optional — anonymous reports are the point', async () => {
 		// Nothing is written without a database; a valid form goes on to the
 		// insert and fails there, which is not what this asserts. So: prove the
-		// optional fields are optional by leaving them out and checking that the
-		// *other* errors are the only ones.
-		const result = await submit(formDataWith({ ...valid, description: '' }));
+		// optional fields are optional by leaving them blank — the browser sends
+		// `email=""`, not nothing, and `formObject` turns that into "not given"
+		// — and checking that the *other* errors are the only ones.
+		const result = await submit(
+			formDataWith({ ...valid, name: '', email: '', description: '' }),
+		);
 		expect(result).toEqual(
 			fieldErrors({ description: 'Please describe what happened.' }),
 		);
