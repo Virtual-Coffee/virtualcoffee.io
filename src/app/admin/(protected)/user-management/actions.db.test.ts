@@ -9,7 +9,7 @@ import {
 	insertPendingGrant,
 	insertUser,
 } from '@/test/db/fixtures';
-import { listAccessRows } from '@/lib/admins';
+import { listAccessRows } from '@/lib/access/admins';
 import { slackDirectory, slackMember } from '@/test/mocks/slackMembers';
 
 import {

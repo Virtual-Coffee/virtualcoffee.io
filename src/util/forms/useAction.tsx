@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
+import type { ActionResult, EmailActionResult } from '@/lib/admin/actionResult';
 
 /**
  * Run a server action from a button, keep its result, and refresh the page
