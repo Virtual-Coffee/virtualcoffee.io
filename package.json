@@ -34,6 +34,7 @@
 		"@imgix/js-core": "^3.8.0",
 		"@mdx-js/loader": "^3.1.1",
 		"@next/mdx": "16.3.4",
+		"@sentry/nextjs": "^10.75.0",
 		"@sindresorhus/slugify": "^3.0.1",
 		"@types/mdx": "^2.0.14",
 		"airtable": "^0.12.2",
