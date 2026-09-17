@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import type { ActionResult } from '@/lib/actionResult';
-import { MAX_NOTE_LENGTH } from '@/lib/notes';
+import type { ActionResult } from '@/lib/admin/actionResult';
+import { MAX_NOTE_LENGTH } from '@/lib/admin/notes';
 import { useAction } from '@/util/forms/useAction';
 
 /** A note on a detail screen; `onSubmit` is the section's own action, bound to its row. */

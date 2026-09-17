@@ -1,6 +1,6 @@
-import { requirePermission } from '@/lib/adminAccess';
-import { listApplications, statusCounts } from '@/lib/applications';
-import { ARCHIVE_STATUSES } from '@/lib/applicationStatuses';
+import { requirePermission } from '@/lib/access/adminAccess';
+import { listApplications, statusCounts } from '@/lib/waitlist/applications';
+import { ARCHIVE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import { FilterChips } from '../../filterChips';
 import { ApplicationsTable } from '../applicationsTable';
 import { QueueSearch } from '../queueSearch';

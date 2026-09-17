@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { createColumnHelper } from '@tanstack/react-table';
 
 import type { MembershipApplication } from '@/db';
-import type { SortField } from '@/lib/applications';
+import type { SortField } from '@/lib/waitlist/applications';
 import { ApplicationDrawer } from './applicationDrawer';
 import { StatusBadge, SourceBadge, formatDate } from '../presentation';
 import { SortableHeader } from '../sortableHeader';

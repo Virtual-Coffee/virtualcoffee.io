@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from 'react';
 
 import { AdminDialog } from '@/components/AdminDialog';
-import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
+import type { ActionResult, EmailActionResult } from '@/lib/admin/actionResult';
 import { useAction } from '@/util/forms/useAction';
 import { useModalDialog } from '@/util/useModalDialog';
 

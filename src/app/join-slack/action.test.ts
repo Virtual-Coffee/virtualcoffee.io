@@ -5,7 +5,9 @@ import { redirectTo } from '@/test/next';
 import { joinSlack } from './action';
 
 const redeem = vi.hoisted(() => vi.fn());
-vi.mock('@/lib/inviteTokens', () => ({ redeemSlackInviteToken: redeem }));
+vi.mock('@/lib/waitlist/inviteTokens', () => ({
+	redeemSlackInviteToken: redeem,
+}));
 
 function submission(code?: string) {
 	const formData = new FormData();

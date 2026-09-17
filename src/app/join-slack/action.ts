@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 
-import { redeemSlackInviteToken } from '@/lib/inviteTokens';
+import { redeemSlackInviteToken } from '@/lib/waitlist/inviteTokens';
 import { formValue } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
 
