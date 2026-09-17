@@ -22,7 +22,9 @@ export default async function AdminLayout({
 }: {
 	children: ReactNode;
 }) {
-	// Holding some section gets you in; each page and action re-checks its own.
+	// Holding some section gets you in; each Section page and action re-checks
+	// its own Permission. The dashboard is the exception: it shows what the
+	// viewer's sections allow rather than requiring one.
 	const session = await requireSession();
 	const sections = visibleSections(session);
 
