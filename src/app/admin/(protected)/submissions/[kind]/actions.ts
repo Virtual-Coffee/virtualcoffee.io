@@ -20,7 +20,7 @@ import { STATUS_ORDER } from './presentation';
 
 /**
  * Every action re-checks `manage` on the kind's own section rather than
- * trusting the route it was reached from — per ADR 0003, and because a server
+ * trusting the route it was reached from — per ADR 0006, and because a server
  * action is reachable by anyone who can guess its id.
  */
 async function authorise(
