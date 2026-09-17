@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { filterSlackMembers } from '@/data/slackMembers';
+import { ActionDialog } from '@/components/ActionDialog';
 import type { GrantCandidate } from '@/lib/access/admins';
 import {
 	GRANTABLE_ROLE_NAMES,
@@ -81,23 +82,6 @@ export function RolesDropdown({
 					? setUserRoles(id, draft)
 					: setPendingGrantRoles(id, draft),
 			{ onSuccess: close },
-		);
-	}
-
-	/**
-	 * Revoking a Pending Grant deletes it rather than setting it to no roles: it
-	 * never took effect, so there is nothing to keep, and a grant holding nothing
-	 * would sit in the table meaning nothing.
-	 *
-	 * Only this button deletes, and it is not staged. Unticking every checkbox
-	 * and saving goes through `save` with an empty set, because a Volunteer's
-	 * grant still holds `volunteer` after that and is not empty.
-	 */
-	function revokeAll() {
-		if (!window.confirm(`Revoke every /admin role for ${name}?`)) return;
-
-		run(() =>
-			kind === 'user' ? setUserRoles(id, []) : revokePendingGrant(id),
 		);
 	}
 
@@ -189,17 +173,36 @@ export function RolesDropdown({
 									<hr className="dropdown-divider" />
 								</li>
 								<li>
-									<button
-										type="button"
+									{/*
+									 * Revoking a Pending Grant deletes it rather than setting it
+									 * to no roles: it never took effect, so there is nothing to
+									 * keep, and a grant holding nothing would sit in the table
+									 * meaning nothing.
+									 *
+									 * Only this button deletes, and it is not staged. Unticking
+									 * every checkbox and saving goes through `save` with an empty
+									 * set, because a Volunteer's grant still holds `volunteer`
+									 * after that and is not empty.
+									 *
+									 * The menu stays open behind the dialog because the dialog is
+									 * mounted in it; a refusal is reported there rather than under
+									 * the chips, which this row loses on success.
+									 */}
+									<ActionDialog
 										className="dropdown-item text-danger"
+										label="Revoke /admin roles"
+										title="Revoke /admin roles"
+										danger
 										disabled={pending}
-										onClick={() => {
-											close();
-											revokeAll();
-										}}
+										showFeedback={false}
+										action={() =>
+											kind === 'user'
+												? setUserRoles(id, [])
+												: revokePendingGrant(id)
+										}
 									>
-										Revoke /admin roles
-									</button>
+										<p className="mb-0">Revoke every /admin role for {name}?</p>
+									</ActionDialog>
 								</li>
 							</>
 						)}
