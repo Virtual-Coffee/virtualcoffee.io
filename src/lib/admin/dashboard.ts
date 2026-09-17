@@ -7,7 +7,7 @@ import {
 	SUBMISSION_KINDS,
 	visibleSubmissionKinds,
 	type SubmissionKind,
-} from '@/lib/submissions';
+} from '@/lib/submissions/submissions';
 
 /** One number on a card. Most sections have a single one; the queue has two. */
 export type DashboardFigure = {

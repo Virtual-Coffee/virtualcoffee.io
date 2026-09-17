@@ -1,7 +1,7 @@
 'use client';
 
-import { eventLabel } from '@/lib/eventLabels';
-import type { HistoryEntry, SubmissionSubject } from '@/lib/eventLog';
+import { eventLabel } from '@/lib/history/eventLabels';
+import type { HistoryEntry, SubmissionSubject } from '@/lib/history/eventLog';
 import { formatDateTime } from '../../../presentation';
 import { Timeline } from '../../../timeline';
 import { submissionStatusLabel } from '../presentation';

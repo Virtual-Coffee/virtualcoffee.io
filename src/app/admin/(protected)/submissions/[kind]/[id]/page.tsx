@@ -2,15 +2,15 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { isId } from '@/db/ids';
-import { requirePermission, sessionCan } from '@/lib/adminAccess';
-import { history } from '@/lib/eventLog';
+import { requirePermission, sessionCan } from '@/lib/access/adminAccess';
+import { history } from '@/lib/history/eventLog';
 import {
 	getSubmission,
 	isSubmissionKind,
 	submissionSubject,
 	SUBMISSION_DISPLAY,
 	SUBMISSION_KINDS,
-} from '@/lib/submissions';
+} from '@/lib/submissions/submissions';
 import { formatDateTime } from '../../../presentation';
 import { NoteComposer } from '../../../noteComposer';
 import { addSubmissionNote } from '../actions';

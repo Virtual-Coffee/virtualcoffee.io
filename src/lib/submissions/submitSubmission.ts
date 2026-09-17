@@ -4,13 +4,13 @@ import {
 	recordOutcome,
 	type ChannelOf,
 	type SubmissionSubject,
-} from '@/lib/eventLog';
+} from '@/lib/history/eventLog';
 import type { Outbound } from '@/lib/outbound';
 import {
 	SUBMISSION_KINDS,
 	submissionSubject,
 	type SubmissionKind,
-} from '@/lib/submissions';
+} from '@/lib/submissions/submissions';
 import { formError } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
 

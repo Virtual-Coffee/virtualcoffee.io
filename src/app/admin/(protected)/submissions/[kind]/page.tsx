@@ -1,13 +1,13 @@
 import { notFound } from 'next/navigation';
 
-import { requirePermission } from '@/lib/adminAccess';
+import { requirePermission } from '@/lib/access/adminAccess';
 import {
 	isSubmissionKind,
 	listSubmissions,
 	SUBMISSION_DISPLAY,
 	SUBMISSION_KINDS,
 	submissionStatusCounts,
-} from '@/lib/submissions';
+} from '@/lib/submissions/submissions';
 import { FilterChips } from '../../filterChips';
 import { STATUS_ORDER, SubmissionStatusBadge } from './presentation';
 import { PAGE_SIZE } from '@/util/searchParams';

@@ -2,7 +2,7 @@ import type { SubmissionStatus } from '@/db';
 import {
 	SUBMISSION_SORT_FIELDS,
 	type SubmissionSortField,
-} from '@/lib/submissions';
+} from '@/lib/submissions/submissions';
 import {
 	oneOf,
 	parseListQuery,

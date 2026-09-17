@@ -10,10 +10,10 @@ import {
 	type SubmissionStatus,
 } from '@/db';
 import { isId } from '@/db/ids';
-import type { SubmissionSubject } from '@/lib/eventLog';
-import { countRows, pagedList } from '@/lib/pagedList';
-import type { Section } from '@/lib/permissions';
-import { countByStatus } from '@/lib/statusCounts';
+import type { SubmissionSubject } from '@/lib/history/eventLog';
+import { countRows, pagedList } from '@/lib/admin/pagedList';
+import type { Section } from '@/lib/access/permissions';
+import { countByStatus } from '@/lib/admin/statusCounts';
 
 /**
  * The four Submission kinds, keyed by the URL segment they live at.
@@ -60,7 +60,7 @@ export const SUBMISSION_KINDS = {
 } as const;
 
 export type SubmissionKind = keyof typeof SUBMISSION_KINDS;
-export type { SubmissionEventKey } from '@/lib/eventLog';
+export type { SubmissionEventKey } from '@/lib/history/eventLog';
 
 /** The Subject a Submission's events are recorded and read against. */
 export function submissionSubject(

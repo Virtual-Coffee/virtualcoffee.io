@@ -1,7 +1,7 @@
 import { getTableColumns } from 'drizzle-orm';
 import { describe, expect, test } from 'vitest';
 
-import { SECTIONS } from '@/lib/permissions';
+import { SECTIONS } from '@/lib/access/permissions';
 
 import {
 	failedNotifications,

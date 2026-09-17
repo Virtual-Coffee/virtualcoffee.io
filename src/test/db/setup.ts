@@ -62,8 +62,8 @@ vi.mock('@netlify/blobs', async () => {
 	const { blobs } = await import('@/test/mocks/spies');
 	return { getStore: () => blobs };
 });
-vi.mock('@/lib/attachments', async (importOriginal) => ({
-	...(await importOriginal<typeof import('@/lib/attachments')>()),
+vi.mock('@/lib/submissions/attachments', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/submissions/attachments')>()),
 	readAttachment: (await import('@/test/mocks/spies')).readAttachment,
 }));
 vi.mock('@/lib/github/issues', async (importOriginal) => ({
@@ -79,9 +79,9 @@ vi.mock('@/lib/waitlist/applications', async (importOriginal) =>
 		'getApplication',
 	),
 );
-vi.mock('@/lib/submissions', async (importOriginal) =>
+vi.mock('@/lib/submissions/submissions', async (importOriginal) =>
 	(await import('@/test/mocks/wrappers')).withStaleRead(
-		await importOriginal<typeof import('@/lib/submissions')>(),
+		await importOriginal<typeof import('@/lib/submissions/submissions')>(),
 		'getSubmission',
 	),
 );

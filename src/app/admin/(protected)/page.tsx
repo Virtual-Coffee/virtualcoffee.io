@@ -7,7 +7,7 @@ import {
 	SUBMISSION_KINDS,
 	visibleSubmissionKinds,
 	type SubmissionKind,
-} from '@/lib/submissions';
+} from '@/lib/submissions/submissions';
 import { ActivityFeed } from './activityFeed';
 
 export const dynamic = 'force-dynamic';

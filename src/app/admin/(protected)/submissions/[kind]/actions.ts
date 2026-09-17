@@ -4,18 +4,18 @@ import { revalidatePath } from 'next/cache';
 
 import type { SubmissionStatus } from '@/db';
 import { isId } from '@/db/ids';
-import type { ActionResult } from '@/lib/actionResult';
-import { checkNote } from '@/lib/notes';
-import { actorId, requirePermission } from '@/lib/adminAccess';
-import type { Session } from '@/lib/auth';
-import { recordEvent, transitionAndRecord } from '@/lib/eventLog';
+import type { ActionResult } from '@/lib/admin/actionResult';
+import { checkNote } from '@/lib/admin/notes';
+import { actorId, requirePermission } from '@/lib/access/adminAccess';
+import type { Session } from '@/lib/access/auth';
+import { recordEvent, transitionAndRecord } from '@/lib/history/eventLog';
 import {
 	getSubmission,
 	isSubmissionKind,
 	SUBMISSION_KINDS,
 	submissionSubject,
 	type SubmissionKind,
-} from '@/lib/submissions';
+} from '@/lib/submissions/submissions';
 import { STATUS_ORDER } from './presentation';
 
 /**
