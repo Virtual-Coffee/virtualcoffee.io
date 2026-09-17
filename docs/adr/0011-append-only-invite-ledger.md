@@ -9,7 +9,7 @@ was what it was: seven volunteers sit at 23, and nobody can say how.
 
 ## Decision
 
-`volunteer_invite_ledger` is append-only, and the balance is `SUM(delta)`.
+`volunteer_invite_ledger` is append-only, and the allowance is `SUM(delta)`.
 Every movement is a row with a reason — a monthly accrual, a spend against a
 named Invite, a refund, an admin adjustment with a note — and the volunteer
 detail screen renders that list as the answer to "why do I have four?".
@@ -67,12 +67,12 @@ index can see that.
 - **`src/lib/volunteers/invites.ts` is the only writer of the ledger**, as the Event Log
   is of `application_event`. Every movement — accrual, spend, give-back, admin
   adjustment, import — is a function there, so what a send or a cancellation
-  does to a balance is decided once and a new caller cannot invent a movement
+  does to an allowance is decided once and a new caller cannot invent a movement
   by spelling out an `INSERT` of its own.
-- The balance is never read from a column, so every screen that shows it runs
+- The allowance is never read from a column, so every screen that shows it runs
   a sum — a correlated subquery at ninety volunteers, worth revisiting at a
   scale this community is unlikely to reach.
 - An Invite imported from Airtable has no `spend` row, because the import
-  brings a balance across as one net figure (0012). So **any** give-back —
+  brings an allowance across as one net figure (0012). So **any** give-back —
   cancelling as much as the expiry sweep — closes the Invite but refuses to
   credit one it cannot find a `spend` for.

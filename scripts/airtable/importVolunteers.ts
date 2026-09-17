@@ -11,34 +11,10 @@ import { grantVolunteerRole } from '../../src/lib/access/pendingGrants';
 import { CONFIDENT_SCORE, score, type Candidate } from './match';
 
 /**
- * One-off import of the Airtable `Volunteers` table into Postgres.
- *
- * The hard part is not the data, it is the identity. Everything about an Invite
- * Allowance is keyed on the Slack member id (docs/adr/0009), and **Airtable
- * holds no Slack ids at all** — `member_profiles.SlackID` exists and is
- * entirely empty. So the join has to be made from a name, a GitHub username and
- * an email against the live Slack directory, and that will not be clean for
- * everyone: 9 of the 91 rows have no GitHub link, the names are informal
- * ("Kirk", "Meg", "Nicky T"), and one username carries a trailing space.
- *
- * Guessing is not an option. A wrong match credits or debits a real person's
- * allowance, and the failure is invisible — the volunteer simply finds a number
- * they did not expect. So this runs in two phases with a human in the middle:
- *
- *   --propose   score every candidate and write a mapping file
- *   (edit it)   a maintainer confirms or corrects each row
- *   --apply     write only what the file says
- *
- * The mapping file is deliberately **not committed**. It pairs real names with
- * Slack member ids, and it is a working artefact of one migration rather than
- * something the site depends on.
- *
- * Same principle as `lapsed` not `declined` in 0004: where the old system does
- * not actually say something, this does not invent it.
- *
- * An active volunteer also gets the `volunteer` role — as a Pending Grant, since
- * almost none of them have signed in (docs/adr/0010) — because a `volunteer`
- * row on its own accrues Invites its owner cannot reach.
+ * One-off import of the Airtable `Volunteers` table into Postgres. Airtable
+ * holds no Slack ids, so the join is a reviewed mapping: `--propose` scores
+ * every candidate into an uncommitted mapping file, a maintainer confirms or
+ * corrects each row, `--apply` writes only what the file says (docs/adr/0012).
  */
 
 const BASE_ID = 'appGHm8ztVWug6UxH';

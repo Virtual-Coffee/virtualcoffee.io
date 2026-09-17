@@ -119,14 +119,10 @@ been made — see "What is deliberately left" in `docs/adr/0004-retiring-airtabl
 Imports the 91 rows of the `Volunteers` table: who may give out Invites, what
 they had left, and which historical Invites were theirs.
 
-**The hard part is identity, and it needs a human.** Everything about an Invite
-Allowance is keyed on the Slack member id (`docs/adr/0009`), and Airtable holds
-no Slack ids at all — `member_profiles.SlackID` exists and is entirely empty. So
-the join has to be made from a name, a GitHub username and an email against the
-live Slack directory, and it will not be clean: 9 of the 91 rows have no GitHub
-link, the names are informal ("Kirk", "Meg", "Nicky T"), and one username ends
-in a space. A wrong match credits or debits a real person's allowance and does
-it invisibly, so nothing is guessed. See `docs/adr/0012`.
+**The identity join is reviewed by a person.** Airtable holds no Slack ids, so
+the match is made from name, GitHub username and email against the live Slack
+directory, and nothing is written that a maintainer has not confirmed
+(`docs/adr/0012`).
 
 It therefore runs in two phases with a review in between:
 
@@ -181,10 +177,8 @@ that `claimPendingGrant()` applies at first sign-in (`docs/adr/0009`, `0010`),
 with `Airtable import` as the grantor. Paused volunteers arrive with no role,
 exactly as pausing in `/admin/volunteers` leaves someone.
 
-**Balances arrive as one net row**, not a reconstruction. Airtable's number is a
-running balance with no history behind it (the grants were manual, +5 at a time,
-and unrecorded), so there is nothing to replay. One `imported` ledger row saying
-what Airtable said is the honest version of a number nobody can explain further.
+**Allowances arrive as one net `imported` row**; Airtable's number has no
+history to replay (`docs/adr/0012`).
 
 **Re-running is safe.** Each Volunteer is one transaction — row, role,
 balance and Invite attribution commit together or not at all — so a run that

@@ -57,14 +57,14 @@ the README says how to regenerate it.
   account, or have Invites attributed. Getting the unmapped count to zero is
   what the review is for; leaving one blank is an admission that nobody could
   identify that person.
-- **Only the 25 active volunteers get a balance and the `volunteer` role.** A
+- **Only the 25 active volunteers get an allowance and the `volunteer` role.** A
   mapped inactive volunteer is imported paused with no credit and no role, so
   history stays attributable and reactivation is one click. The role is a
   Pending Grant on the Slack member id (0009) through the same helper
   `/admin/volunteers` uses, since almost none of the 91 have signed in.
 - Rows with no `Invites Available` value import as zero; absent is not a
   number.
-- **Balances arrive as one net `imported` row** dated when Airtable said it.
+- **Allowances arrive as one net `imported` row** dated when Airtable said it.
   There is no history to replay, and this is why 0011's expiry sweep refuses to
   refund an Invite with no `spend` row.
 - **Re-running is safe.** Each Volunteer is one transaction, keyed on

@@ -38,12 +38,8 @@ export function normalise(value: string | null): string {
  * a GitHub handle and an email local-part are close to unique. Nothing here
  * decides anything — the score only orders the list a human reads.
  *
- * ADR 0009 says access matching is never on email. That rule is about
- * *authorisation at sign-in*, where the address is whatever Slack happens to
- * return and a mismatch fails silently. This is a one-off migration where every
- * row is confirmed by a person before it is written, which is a different act;
- * the email is simply the highest-signal field available and ignoring it would
- * mean more ambiguous rows to resolve by hand.
+ * Email is used here although access matching never is (docs/adr/0009): every
+ * row is confirmed by a person before it is written (docs/adr/0012).
  */
 export function score(
 	member: SlackMember,

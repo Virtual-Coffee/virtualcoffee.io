@@ -73,17 +73,10 @@ function normaliseEmail(
 }
 
 /**
- * Make someone a Volunteer.
- *
- * One transaction writing the `volunteer` row *and* the access, because either
- * on its own is a broken state: a row with no role accrues Invites its owner
- * cannot reach, and a role with no row lets someone into /invites to find
- * nothing there. That is also why /admin/user-management does not offer
- * `volunteer` in its picker — see `GRANTABLE_ROLE_NAMES`.
- *
- * The access is granted the way it always is: directly on the user if they have
- * signed in, otherwise as a Pending Grant keyed on the Slack member id, which
- * `claimPendingGrant()` applies at their first sign-in (docs/adr/0009).
+ * Make someone a Volunteer: the `volunteer` row and the Role in one
+ * transaction, which is why `/admin/user-management` does not offer
+ * `volunteer` (docs/adr/0010). The Role lands directly or as a Pending Grant
+ * (docs/adr/0009).
  */
 export async function addVolunteer(
 	slackUserId: string,
