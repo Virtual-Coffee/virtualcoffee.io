@@ -1,17 +1,10 @@
 /**
- * Delivery Mode for anything the site sends out — email, Slack posts and DMs,
- * GitHub issues. Live delivery is production only; everywhere else is Captured
- * (built and logged, the caller carries on as though it went) unless an opt-in
- * says otherwise — and a Slack DM has no opt-in. Email's opt-in is Local (`SMTP_HOST`, a local-only sink such
- * as Mailpit), honoured on a checkout only. See docs/adr/0013.
- *
- * `CONTEXT` is Netlify's: `production`, `deploy-preview`, `branch-deploy`, or
- * `dev` under `netlify dev`. Plain `next dev` has none. Live is decided on
- * "production or not"; Local on "a checkout or not" — a deploy is neither.
- *
- * Every sender is a `deliver()` call: it hands over the message and a `live`
- * callback, and this module decides the mode, captures, catches, and shapes
- * the `Outbound` result. A sender cannot reach its credentials before the mode.
+ * Delivery Mode for everything the site sends: Live on production only,
+ * Captured everywhere else unless an opt-in says otherwise, and email's Local
+ * opt-in (`SMTP_HOST`) only on a checkout (docs/adr/0013). Every sender is a
+ * `deliver()` call, so it cannot reach its credentials before the mode is
+ * decided. Plain `next dev` has no `CONTEXT` at all: non-production, and not
+ * a checkout either.
  */
 
 export type OutboundKind = 'email' | 'slack' | 'slack dm' | 'github issue';
@@ -47,12 +40,9 @@ export function linksIn(body: string): string[] {
 }
 
 /**
- * The Captured sink is the function log — the `netlify dev` terminal locally,
- * the deploy's function log on a preview. Locally the whole message goes in.
- * On a deploy the message is about a real person (docs/adr/0007) and the log
- * outlives the walkthrough, so only what the walkthrough needs is written:
- * whom it was for, masked; what it was; and its links, which is how a
- * reviewer follows an invite. docs/adr/0013.
+ * The Captured sink is the function log. Locally the whole message goes in; on
+ * a deploy only the masked recipient, the subject and the links, because the
+ * message is about a real person (docs/adr/0007, docs/adr/0013).
  */
 export function capture(
 	kind: OutboundKind,
@@ -134,7 +124,7 @@ function dmDelivery(): 'live' | 'captured' {
 /**
  * What a send came to, in a sentence — `message` is recorded as the event
  * body either way. `warning` is set when it succeeded but not as asked
- * (Captured, Redirected, a cc rejected): still a success, since retrying
+ * (Captured, Local, a cc rejected): still a success, since retrying
  * would send twice, so it sits alongside `ok` rather than instead of it.
  *
  * `definitelyNotSent` is load-bearing: the admin UI promises "nothing was
