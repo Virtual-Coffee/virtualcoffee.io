@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 
 import { db, pendingGrant, user } from '@/db';
 import { NOT_FOUND } from '@/test/next';
@@ -10,29 +10,7 @@ import {
 	insertUser,
 } from '@/test/db/fixtures';
 import { listAccessRows } from '@/lib/admins';
-
-/**
- * `grantPendingAccess` looks the member up in Slack before it takes the lock
- * and asks whether they have signed in, so a test can land a sign-in in that
- * window from inside the mock.
- */
-const lookup = vi.hoisted(() => ({
-	during: undefined as (() => Promise<void>) | undefined,
-}));
-
-vi.mock('@/data/slackMembers', () => ({
-	getSlackMembers: async () => {
-		await lookup.during?.();
-		return [
-			{
-				id: 'U_ADA',
-				name: 'Ada',
-				displayName: 'Ada',
-				handle: 'ada',
-			},
-		];
-	},
-}));
+import { slackDirectory, slackMember } from '@/test/mocks/slackMembers';
 
 import {
 	grantPendingAccess,
@@ -60,7 +38,9 @@ async function grantRole(id: string) {
 let admin: Awaited<ReturnType<typeof signInAs>>;
 
 beforeEach(async () => {
-	lookup.during = undefined;
+	slackDirectory.members = [
+		slackMember('U_ADA', { name: 'Ada', displayName: 'Ada', handle: 'ada' }),
+	];
 	admin = await signInAs('admin');
 });
 
@@ -289,7 +269,7 @@ describe('grantPendingAccess', () => {
 
 	test('a first sign-in that lands mid-action is granted directly', async () => {
 		let ada: { id: string } | undefined;
-		lookup.during = async () => {
+		slackDirectory.during = async () => {
 			ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
 		};
 
