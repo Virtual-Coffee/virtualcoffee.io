@@ -28,130 +28,83 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Overview
 
-virtualcoffee.io is a Next.js 16 App Router site on Turbopack (React 19, TypeScript, Bootstrap 5.3 SCSS, no Tailwind) deployed on Netlify. Content is a mix of checked-in MDX/TS/JSON and build-time fetches from GitHub and a Craft CMS, both of which fall back to mock data when credentials are absent. Airtable remains only behind the form submissions, which return an error state without credentials.
+virtualcoffee.io is a Next.js App Router site (Bootstrap SCSS, no Tailwind) deployed on Netlify. Content is checked-in MDX/TS/JSON plus build-time fetches that fall back to mock data when credentials are absent; the membership pipeline lives in Netlify Database.
 
 ## Commands
 
-pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`).
+Scripts are in `package.json`; `pnpm` is enforced. What no script name tells you:
 
-| Task                                       | Command                                                                                                                                                 |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Install                                    | `pnpm install` (copy `.env.example` to `.env` first)                                                                                                    |
-| Dev server                                 | `pnpm dev` — runs the codegen, then `npm-watch` + `netlify dev` (site on <http://localhost:9000>, proxying Next on :3000)                               |
-| Dev server on a public URL                 | `pnpm dev:tunnel` — the same behind `netlify dev --live`; sets `NETLIFY_TUNNEL=1`, which gates the tunnel-only settings in `next.config.mjs`            |
-| Next only (no Netlify functions/redirects) | `next dev`                                                                                                                                              |
-| Build                                      | `pnpm build` — `prebuild` runs the codegen first                                                                                                        |
-| Typecheck                                  | `pnpm typecheck` (`next typegen` then `tsc --noEmit`, the native TypeScript 7 binary)                                                                   |
-| Lint                                       | `pnpm lint` (ESLint flat config: `next/core-web-vitals` + `next/typescript`; `netlify/**` is ignored)                                                   |
-| Unused files, exports, dependencies        | `pnpm knip` (config in `knip.ts`; needs the codegen files, so run `pnpm codegen` first)                                                                 |
-| Test                                       | `pnpm test` (Vitest, run once; `pnpm test:watch` to watch, `pnpm test:coverage` for a v8 report; CI posts totals to the job summary and a PR comment)   |
-| Format                                     | `pnpm format` (Prettier: tabs, single quotes, trailing commas; CI auto-commits fixes on same-repo PR branches only; there is no husky/lint-staged hook) |
-| Regenerate all codegen                     | `pnpm codegen` (member barrels + Undraw aspect ratios; **not** the bot list, which is checked in)                                                       |
-| Regenerate member barrels                  | `pnpm build-member-files`                                                                                                                               |
-| Regenerate Undraw aspect ratios            | `pnpm build-undraw-ratios`                                                                                                                              |
-| Regenerate the bot list                    | `pnpm build-bot-list` (fetches the release pinned in `.botlist-version.json`)                                                                           |
-| Check the bot matcher                      | `pnpm check-bot-matching` (just `src/data/botMatcher.test.ts`; `pnpm test` covers it, this alias is for `refresh-bot-list.yml`)                         |
-| Generate a DB migration                    | `pnpm db:generate --name=<hyphenated-slug>` (drizzle-kit writes into `drizzle/`)                                                                        |
-| Apply migrations locally                   | `pnpm db:migrate` (needs `netlify dev` running)                                                                                                         |
-| Apply migrations on a deploy               | `pnpm db:migrate:deploy` — what `netlify.toml` runs after `next build`; reads `NETLIFY_DB_URL`                                                          |
+- `pnpm dev` is `netlify dev` in front of Next (site on :9000). `pnpm dev:tunnel` sets `NETLIFY_TUNNEL=1`, which gates the tunnel-only settings in `next.config.mjs`.
+- `pnpm codegen` regenerates the gitignored generated files (see [Generated files](#generated-files)) and deliberately excludes the checked-in bot list.
+- `pnpm typecheck` runs `next typegen` first because the gitignored `next-env.d.ts` is what declares image imports; a clean checkout fails on any `*.png` without it.
+- `pnpm db:migrate` needs `netlify dev` running. Deploys apply migrations in `netlify.toml`'s build command.
+- There is no husky/lint-staged hook; CI (`.github/workflows/ci.yml`) auto-commits Prettier fixes on same-repo branches.
+- CI does not build. Run `pnpm build` locally when a change can only fail at prerender: MDX frontmatter, `generateStaticParams`, or a component pages render at build time.
+- `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Every entry in `knip.ts` carries its reason in a comment; content directories are entries, not ignores, so their own imports are still checked. The CI job is `continue-on-error` until this stack has merged, because each layer exports things only the layer above imports — the follow-up is #1589.
+- CodeQL is advanced-setup: `.github/workflows/codeql.yml` is the whole config, and the repository's default-setup toggle stays off.
+- `typescript` is aliased to `@typescript/typescript6` (the compiler API typescript-eslint and `next build` need) and `@typescript/native` to `typescript@7` (the `tsc` binary). Keep both until typescript-eslint supports TypeScript 7.
 
-`.github/workflows/ci.yml` runs five jobs on every pull request — `format`, `lint`, `typecheck`, `test`, `knip`. Netlify still owns `pnpm build`; CI does not build. CodeQL (`.github/workflows/codeql.yml`, advanced setup — leave the repository's default-setup toggle off) scans `javascript-typescript` and `actions` on pull requests, pushes to `main` and weekly; its findings go to the Security tab and are not a required check.
+Before finishing a change: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test && pnpm knip`.
 
-The `lint`, `typecheck`, `test` and `knip` jobs run `pnpm codegen` first, because `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test && pnpm knip` before finishing a change.
-
-Neither CI nor those checks run `next build`, so nothing before Netlify's deploy preview exercises prerendering. Run `pnpm build` locally when a change can only fail there — anything touching MDX frontmatter, `generateStaticParams`, or a component that pages render at build time.
-
-`typecheck` shells out to `next typegen` before `tsc` because `next-env.d.ts` is gitignored (Next's docs require this) and is what declares non-code imports like `*.png`. Without it a clean checkout fails on any image import. `typegen` also writes `.next/types/`, so `tsc` validates typed routes without a full build.
-
-The `format` job auto-commits Prettier fixes, but only on branches in this repo, and never on `renovate[bot]`/`dependabot[bot]` branches (a foreign commit stops Renovate rebasing). Fork PRs get no secrets, so they fall back to `prettier --check` and fail with the file list in the job summary — the contributor runs `pnpm format` themselves.
-
-### Dead code (knip)
-
-`knip.ts` declares what knip cannot infer, and every entry there carries its reason in a comment — keep it that way rather than adding bare globs. Content directories are **entries**, not ignores: members are namespace-iterated through the codegen barrels, newsletters and MDX pages are loaded by template-string `import()`, so knip cannot see them used, but their own imports should still be checked. SCSS goes through a small compiler in the same file so `bootstrap` counts as used. The `knip` CI job is `continue-on-error` until the membership stack (#1579 and below) has merged, because each layer exports things only the layer above imports; the follow-up is #1589.
-
-### Testing
-
-Tests are Vitest (`vitest.config.mts`), colocated as `*.test.ts` beside the module, in a plain `node` environment with explicit `import { test, expect } from 'vitest'` — no globals, no jsdom, no React Testing Library. Two projects: `unit` (`*.test.ts` under `src/`, `scripts/` and `netlify/`; `pnpm test --project unit` is the fast loop) and `db` (`*.db.test.ts`, anything that touches the database). `@/` is an alias in the Vitest config, not a tsconfig-paths plugin. `tsconfig.json` already includes `**/*.ts`, so `pnpm typecheck` sees test files, and `@vitest/eslint-plugin`'s recommended rules apply to them (no focused or skipped tests).
-
-Async Server Components can't be rendered by a unit runner (Next's own guidance), so pages are not unit-tested; Netlify's deploy preview is still what exercises rendering. Server actions _are_ tested, by calling them: `'use server'` is inert under Node, `db()` and `auth` are lazy, so an action that fails validation returns its `fieldErrors` without a database, and `redirect()`/`notFound()` are asserted on the thrown digest (`src/test/next.ts`). The zod schemas stay private to their action files on purpose.
-
-The `db` project runs against `@netlify/database-dev` — the in-memory PGlite engine `netlify dev` uses, behind a Postgres wire server — started once per run by `src/test/db/globalSetup.ts`, which applies `drizzle/` with drizzle's migrator; `src/test/db/setup.ts` points `NETLIFY_DB_URL` at it before anything calls `db()`, mocks `next/cache` (`revalidatePath` throws outside a request), and truncates every schema table after each test. No `netlify dev`, no Docker, nothing extra in CI. The db project runs every file in one worker without isolation (about half the wall time), so a `vi.mock` in a `*.db.test.ts` is ignored whenever another file loaded that module first: mocks of shared modules are registered once in `src/test/db/setup.ts`, tests set state through the knobs in `src/test/mocks/`, and ESLint rejects a file-scoped `vi.mock` there. PGlite is one session, so a race between two transactions cannot be staged — idempotency is shown by calling twice. **Tests authenticate with real sessions, not by mocking auth:** `signInAs(roles, slackId)` in `src/test/session.ts` inserts a user and mints a session through Better Auth's `testUtils` plugin (in `src/lib/access/auth.ts`'s plugins), and `src/test/setup.ts` mocks `next/headers` so `getSession()` sees that cookie — `requirePermission()`, `requireVolunteer()` and `actorId()` run for real. So `signInAs` needs the `db` project; the dev bypass is never stubbed in a test except where it is the subject (`adminAccess.db.test.ts`). Fixtures are in `src/test/db/fixtures.ts`.
-
-`@/*` maps to `./src/*`.
-
-Two TypeScript packages are installed on purpose: `typescript` is aliased to `@typescript/typescript6` (the JS compiler API that typescript-eslint and `next build` need) and `@typescript/native` is aliased to `typescript@7` (provides the native `tsc` binary used by `pnpm typecheck`). Keep both until typescript-eslint supports TypeScript 7.
+When writing or debugging a test, read `docs/testing.md` first.
 
 ## Architecture
 
 ### Data sources and the mock gate
 
-Every external data source lives in `src/data/` and degrades to mocks when its env var is missing:
+Every external data source lives in `src/data/` and degrades to a mock when its credentials are missing:
 
-| Source                                         | File                          | Env var                  | Fallback                               |
-| ---------------------------------------------- | ----------------------------- | ------------------------ | -------------------------------------- |
-| Member GitHub profiles                         | `src/data/members/index.ts`   | `GITHUB_TOKEN`           | `src/data/mocks/memberData.js` (faker) |
-| GitHub Sponsors                                | `src/data/sponsors.ts`        | `GITHUB_TOKEN`           | `src/data/mocks/sponsors.ts`           |
-| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`          | `CMS_URL`, `CMS_TOKEN`   | `src/data/mocks/events.ts`             |
-| Form submissions (server actions)              | `src/util/airtable/action.ts` | `FORMS_AIRTABLE_API_KEY` | error state returned to the form       |
-| Membership applications (`/join`, `/admin`)    | `src/db/`                     | none (auto-provisioned)  | local Postgres from `netlify dev`      |
+| Source                                      | File                        | Fallback                               |
+| ------------------------------------------- | --------------------------- | -------------------------------------- |
+| Member GitHub profiles                      | `src/data/members/index.ts` | `src/data/mocks/memberData.js` (faker) |
+| GitHub Sponsors                             | `src/data/sponsors.ts`      | `src/data/mocks/sponsors.ts`           |
+| Events (Craft CMS)                          | `src/data/events.ts`        | `src/data/mocks/events.ts`             |
+| Membership applications (`/join`, `/admin`) | `src/db/`                   | local Postgres from `netlify dev`      |
 
-`src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. Any new external fetch should follow this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`. Fetches are wrapped in `unstable_cache` with a tag (`members`, `events`, `mdx-routes`); `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates on demand and a daily GitHub Action triggers a Netlify rebuild.
+`src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. A new external fetch follows this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`, and wrap the fetch in `unstable_cache` with a tag so `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) can revalidate it.
 
 ### Membership pipeline (Postgres)
 
-Membership Applications live in Netlify Database. Vocabulary is in `CONTEXT.md` (a **Member Profile** in `src/content/members/` is unrelated to a **Membership Application**); decisions are in `docs/adr/` — the rules below are the ones that bite, each with its ADR.
+Before touching `src/db`, `src/lib/access`, `src/lib/history` or `src/app/join`, read `CONTEXT.md` for the vocabulary. Each rule below cites the ADR that decided it; open the ADR before changing the rule.
 
-- **Access is per-section** (`src/lib/access/permissions.ts`): every page and server action gates itself with `requirePermission()` (`src/lib/access/adminAccess.ts`) and re-checks independently — a section with no check of its own is reachable by every role. `docs/adr/0006`.
-- A **Pending Grant** (`pending_grant`, `src/lib/access/pendingGrants.ts`) pre-provisions roles for a Slack member id. Matching is **never on email**. `docs/adr/0009`.
-- **Every `application_event`/`submission_event` write goes through `src/lib/history/eventLog.ts`** — `recordOutcome()` turns a send into History and never throws; `transitionAndRecord()` is the status fence, a compare-and-set on the status the row was read at, committed with its event. Labels are in `src/lib/history/eventLabels.ts`, keyed by the enums so a new type without a label is a type error.
-- Schema is Drizzle **v1** in `src/db/schema.ts`; migrations are `drizzle/<timestamp>_<slug>/`, generated with `pnpm db:generate --name=<hyphenated-slug>` and applied by `pnpm db:migrate:deploy` in the build command — Netlify's own migration step is not used. The `snapshot.json` beside each `migration.sql` is committed on purpose. **Never edit a migration that has already deployed.** `docs/adr/0001`.
-- **Primary keys are UUIDv7** (`newId()` in `src/db/ids.ts`); the sequential `reference` integer is for display and **must never appear in a URL**. Every route reading an id from the URL passes it through `isId()` first — a malformed literal against a `uuid` column throws instead of 404ing. `docs/adr/0008`.
-- One-off scripts go through `scripts/with-local-netlify.ts`, which supplies the local connection string and Blobs sandbox and refuses anything non-local.
-- Auth is Better Auth with Slack OAuth (`src/lib/access/auth.ts`); 1.7.3 has no `team` option, so the workspace check is in `mapProfileToUser`. `ADMIN_DEV_BYPASS=true` unblocks `/admin` locally without Slack credentials; a real session cookie (the devtools panel's "switch user") takes precedence over it.
-- Deploy previews get a fork of production's database and sign in through production's Slack OAuth (`oAuthProxy`, so the only registered redirect URI is production's); nothing is scrubbed and there is no preview bypass — a preview's audience is production's. `OAUTH_PROXY_SECRET` must be identical in every Netlify context. `docs/adr/0007`.
+- Every page and server action gates itself with `requirePermission()` (`src/lib/access/adminAccess.ts`); a layout only proves the viewer holds _some_ section — `docs/adr/0006`.
+- A Pending Grant (`src/lib/access/pendingGrants.ts`) matches on the Slack member id — `docs/adr/0009`.
+- `src/lib/history/eventLog.ts` is the only writer of `application_event` and `submission_event`: `recordOutcome()` turns a send into History, `transitionAndRecord()` commits a status change with its event. Labels in `src/lib/history/eventLabels.ts` are keyed by the enums, so a new event type is a type error until labelled.
+- A schema change is a new migration: `pnpm db:generate --name=<hyphenated-slug>`, both generated files committed — `docs/adr/0001`.
+- `id` (UUIDv7, `newId()` in `src/db/ids.ts`) is the URL and foreign-key handle, checked with `isId()` on the way in; `reference` is display-only — `docs/adr/0008`.
+- One-off scripts run through `scripts/with-local-netlify.ts`, which supplies the local connection string and refuses anything non-local.
+- `ADMIN_DEV_BYPASS*` (`.env.example`) signs a local checkout in without Slack; a real session cookie takes precedence over it.
+- A deploy preview is production's data behind production's Slack sign-in; `OAUTH_PROXY_SECRET` holds one value in every Netlify context — `docs/adr/0007`.
 
-Podcast episodes are a checked-in JSON snapshot (`src/data/podcast/episodes.json`) copied from the `vc-data` repo; the update procedure is in the comment at the top of `src/data/podcast.ts`. Newsletters are local JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
+Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (procedure in the comment at the top of `src/data/podcast.ts`); membership data stays out of that repo — `docs/adr/0002`. Newsletters are JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
 
-### Members pipeline (generated files)
+### Generated files
 
-- One file per member in `src/content/members/members/<github-username>.ts` (core team in `core/`), exporting a `MemberObject` (`src/content/members/types.ts`). Template: `_EXAMPLE.ts`.
-- The filename and the exported identifier are both pinned to the `MemberObject`'s `github` field by `vc/member-file-identity` (`eslint-rules/`). `github` is the lookup key — `getMembers()` returns `null` for a name GitHub doesn't know, silently dropping that member — and the export name is the key of the namespace object `src/data/members/index.ts` iterates, so two files exporting the same name make it ambiguous under `export *`. The filename match is case-insensitive (`getMembers()` lowercases); the identifier is exact, with `-` becoming `_` and a leading digit gaining an `_` prefix.
-- `scripts/loadMemberFiles.ts` generates `src/data/members/core.ts` and `src/data/members/members.ts` as barrel re-exports. **These two files are gitignored and generated — never hand-edit them; run `pnpm build-member-files` after adding a member.**
-- The other codegen is `scripts/loadUndrawAspectRatios.ts`, which reads the `viewBox` of every SVG in `public/assets/svg` into the gitignored `src/data/undrawAspectRatios.ts`. `UndrawIllustration` renders through `next/image`, which needs concrete dimensions, and a hand-maintained map had drifted to covering barely half the files. Run `pnpm build-undraw-ratios` after adding an SVG.
-- `getMembers()` merges the local overrides with GitHub GraphQL data (batched 15 logins per query) and team membership from `src/content/members/teams.ts`.
+- `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored; `pnpm codegen` writes them and CI runs it before lint, typecheck and test. Run `pnpm build-member-files` after adding a member and `pnpm build-undraw-ratios` after adding an SVG to `public/assets/svg` (`UndrawIllustration` needs concrete dimensions for `next/image`).
+- `src/data/bots.ts` is generated but **checked in**, so a GitHub outage cannot block a deploy and every change to who is blocked is a reviewable diff. Edit the policy in `src/data/botOverrides.ts` and regenerate with `pnpm build-bot-list`. When changing who is blocked, read `docs/bot-list.md` first.
 
-### The bot list (generated, but checked in)
+### Members pipeline
 
-`src/data/bots.ts` is generated by `scripts/loadBotList.ts` from [ai-robots-txt/ai.robots.txt](https://github.com/ai-robots-txt/ai.robots.txt) and sorted into three tiers — `blockedUas` (harvesters), `allowedUas` (AI search and agents fetching for a person right now) and `robotsOnlyUas` (opt-out directives that never appear as a User-Agent). Both `src/app/robots.ts` and the edge function read it.
-
-Unlike the other codegen it is **checked in**, so it is not part of `pnpm codegen`: a build-time fetch would put a GitHub outage between us and a working deploy, the Deno bundle needs the file to exist, and committing it means every change to who we block arrives as a reviewable diff. Never hand-edit it — edit the policy and regenerate.
-
-- **`.botlist-version.json`** pins the upstream release, so two runs a week apart produce the same file. Renovate bumps it through the `jsonata` custom manager in `renovate.json` — a structural query on the `version` field, rather than a regex, because Renovate reports a non-matching manager as "no dependency found" rather than as an error.
-- **`src/data/botOverrides.ts`** holds every policy decision: which upstream categories map to the allowed tier, tokens always allowed or always blocked, scrapers upstream doesn't track, and the robots.txt-only signals. The generator exits non-zero if an override doesn't reach the tier it names, and warns if upstream has dropped one.
-- **`.github/workflows/refresh-bot-list.yml`** regenerates and opens a PR: on push to `main` when the pin changes (Renovate can't run the generator itself — `postUpgradeTasks` is blocked on the hosted app), and weekly as a safety net. A weekly run that produces a diff means the committed file drifted from the overrides, and the PR says so.
-- **`src/data/botMatcher.ts`** is shared by the edge function and `src/data/botMatcher.test.ts`; `createBotPolicy()` there is the precedence rule (an allowed token wins over a blocked one), so the test exercises what the edge function runs. Matching is fenced by token boundaries, not `includes`: upstream carries tokens like `Code` (GitHub Copilot), and a substring match on it also catches `vscode`.
+- One file per member in `src/content/members/members/<github-username>.ts` (core team in `core/`), exporting a `MemberObject`; `_EXAMPLE.ts` is the template.
+- `vc/member-file-identity` (`eslint-rules/`) pins the filename and exported identifier to the `MemberObject`'s `github` field: `github` is the GitHub lookup key (`getMembers()` silently drops a name GitHub doesn't know), and the export name is the key `src/data/members/index.ts` iterates. Filename match is case-insensitive; the identifier is exact, with `-` → `_` and a leading digit prefixed with `_`.
 
 ### MDX content pipeline
 
-- `next.config.mjs` configures `@next/mdx` with remark-frontmatter, a custom TOC plugin (`src/mdx-plugins/remark-toc.mjs`, replaces a `## Table of Contents` heading with a generated list), rehype-slug, a rehype-autolink-headings wrapper (`src/mdx-plugins/rehype-heading-anchors.mjs`, h2/h3), and rehype-highlight. Plugins are referenced by path string because Turbopack requires serializable MDX loader options; put any plugin that needs function options in `src/mdx-plugins/`. Because the path is the whole cache key, editing a plugin's _contents_ does not invalidate compiled MDX — Next will happily reuse stale output, on Netlify too. `localMdxPlugin()` in `next.config.mjs` mixes a hash of the plugin file into its options to force invalidation; wire new local plugins through it. If MDX output ever looks stale anyway, `rm -rf .next` and rebuild to confirm before debugging the plugin itself.
-- `src/util/loadMdx.server.ts` walks a content directory and reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then dynamically `import()`s the `.mdx` file itself.
-- Routes: `src/app/(simple-mdx)/[...slug]/page.tsx` serves `src/content/simple-mdx-pages/*.mdx`; `src/app/resources/[[...slug]]/page.tsx` serves the nested `src/content/resources/` tree (`index.mdx` is a directory's own page, siblings are children sorted by `order`). Both are `force-static` with `dynamicParams = false`. Adding a resource is just adding an `.mdx` file with frontmatter; index listings come from `<FileIndex />` (`src/components/content/FileIndex.tsx`).
-- `src/mdx-components.tsx` is a passthrough; MDX files import components explicitly from `@/components/content/`.
-- The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
+- MDX plugins are referenced by path string in `next.config.mjs` because Turbopack requires serializable loader options; a plugin that needs function options lives in `src/mdx-plugins/`. The path is the whole cache key, so editing a plugin's _contents_ does not invalidate compiled MDX (on Netlify too) — `localMdxPlugin()` mixes a hash of the plugin file into its options; wire new local plugins through it. If MDX output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
+- `src/util/loadMdx.server.ts` reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then `import()`s the `.mdx` file. Adding a resource is adding an `.mdx` file with frontmatter under `src/content/resources/`; index listings come from `<FileIndex />`.
+- MDX files import components explicitly from `@/components/content/`; `src/mdx-components.tsx` is a passthrough. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
 
 ### Layout, styling, HTML safety
 
-- `src/components/layouts/DefaultLayout.tsx` is the only page layout; every page wraps its content in it (`Hero`, `heroHeader`, `heroSubheader`, `simple` props). Root layout in `src/app/layout.tsx` imports `src/styles/main.scss`.
-- Styles are à-la-carte Bootstrap 5.3 SCSS partials plus per-feature partials in `src/styles/`; markup uses Bootstrap classes and a custom `prose` class. Legacy Sass `@import` deprecations are silenced in `next.config.mjs`, and `quietDeps` mutes Bootstrap's own internal deprecations so warnings from `src/styles/` still surface.
-- `src/styles/_variables.scss` holds the Bootstrap overrides and is imported _before_ `_bootstrap.scss`, so it cannot reference a Bootstrap variable or call a Bootstrap function — use literals. Any Sass **map** assigned there fully replaces Bootstrap's rather than merging, so write maps out in full (`$spacers` must keep keys 0–5 or every `.m-*`/`.p-*`/`.g-*` utility disappears). Keep `$font-family-sans-serif` a single flat list; composing it from another list nests it, and v5 emits that into `--bs-body-font-family` as invalid CSS.
-- In `_bootstrap.scss` the import order is load-bearing: `utilities` is only the config map and must precede `root`, while `utilities/api` emits the utility classes and must stay last so the project partials can override them.
-- All HTML from external sources goes through `src/util/sanitizeCmsData.ts` (`sanitizeHtml` / `sanitizeCmsData`); `src/util/markdown.server.ts` deliberately uses this instead of rehype-sanitize so there is one allowlist.
-- The `.server.ts` suffix marks server-only modules (a Remix holdover); it is a naming convention, not enforced.
+- `src/components/layouts/DefaultLayout.tsx` is the only page layout (`Hero`, `heroHeader`, `heroSubheader`, `simple` props).
+- Styles are à-la-carte Bootstrap SCSS partials plus per-feature partials in `src/styles/`; markup uses Bootstrap classes and a custom `prose` class. The Sass load-order and map rules are in the headers of `src/styles/_variables.scss` and `src/styles/_bootstrap.scss`; read them before editing either. `quietDeps` in `next.config.mjs` mutes Bootstrap's own deprecations so warnings from `src/styles/` still surface.
+- All HTML from external sources goes through `src/util/sanitizeCmsData.ts`; `src/util/markdown.server.ts` uses it instead of rehype-sanitize so there is one allowlist.
+- The `.server.ts` suffix marks server-only modules by convention (a Remix holdover); nothing enforces it.
 
 ### Netlify
 
-- `netlify/functions/join-coffee.ts` and `join-slack.ts` are redirect functions (env: `ZOOM_TUESDAYS`, `ZOOM_THURSDAYS`, `SLACK_JOIN_LINK`). `netlify/edge-functions/block-bots.ts` returns 403 to harvesting user agents on every path — on deploys only, since it is skipped in local dev unless `BLOCK_BOTS_LOCAL=true` is set in `.env` (the CLI does not pass plain process env vars to edge functions), and it lets user-initiated agents through. It reads the deploy context from `context.deploy.context` (`Netlify.env.get('CONTEXT')` is build-scope and undefined at the edge), and logs one `[blocked]` line per refusal — `[dev bypass]` locally, where it matches but does not refuse. Its list is `src/data/bots.ts` (see [The bot list](#the-bot-list-generated-but-checked-in)); it imports that with an explicit `.ts` extension because it bundles for Deno.
-- `netlify.toml` holds the legacy 301 map, the `/join-*` rewrites, a `/bots/*` proxy to a Cloudflare Worker, and the Plausible analytics proxy. Add new URL redirects there, not in Next config.
+- `netlify/edge-functions/block-bots.ts` refuses harvesting user agents on deploys only; locally it matches but lets through unless `BLOCK_BOTS_LOCAL=true` is in `.env` (the CLI does not pass plain process env vars to edge functions). It reads the deploy context from `context.deploy.context` — `Netlify.env.get('CONTEXT')` is build-scope and undefined at the edge — and imports `src/data/bots.ts` with an explicit `.ts` extension because it bundles for Deno.
+- URL redirects go in `netlify.toml`, beside the legacy 301 map, rather than in Next config.
 
 ### Error monitoring
 
@@ -164,9 +117,9 @@ Sentry (`@sentry/nextjs`), errors + tracing only. Init files: `src/instrumentati
 
 ## Content conventions
 
-- Monthly challenges: prose lives in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`. Follow the process in the VC Community Building Resources "Monthly Challenge Technical Guidelines" linked from the README. The entry data for past challenges is a frozen snapshot in `src/data/monthlyChallenges/data/*.json` — see `docs/adr/0004` for why it is JSON and not a live fetch.
-- Member emoji must be standard Unicode; maintainers reject PRs otherwise.
-- PRs should link an issue (`Closes #123`); the PR template asks for Description and Methodology sections.
+- Monthly challenges: prose in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`, following the "Monthly Challenge Technical Guidelines" linked from the README. Past entry data is a frozen JSON snapshot in `src/data/monthlyChallenges/data/` — `docs/adr/0004`.
+- Member emoji are standard Unicode; maintainers reject PRs otherwise.
+- PRs link an issue (`Closes #123`) and fill the template's Description and Methodology sections.
 
 ## Agent skills
 
