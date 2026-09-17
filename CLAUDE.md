@@ -87,22 +87,21 @@ Two TypeScript packages are installed on purpose: `typescript` is aliased to `@t
 
 Every external data source lives in `src/data/` and degrades to mocks when its env var is missing:
 
-| Source                                         | File                          | Env var                  | Fallback                                 |
-| ---------------------------------------------- | ----------------------------- | ------------------------ | ---------------------------------------- |
-| Member GitHub profiles                         | `src/data/members/index.ts`   | `GITHUB_TOKEN`           | `src/data/mocks/memberData.js` (faker)   |
-| GitHub Sponsors                                | `src/data/sponsors.ts`        | `GITHUB_TOKEN`           | `src/data/mocks/sponsors.ts`             |
-| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`          | `CMS_URL`, `CMS_TOKEN`   | `src/data/mocks/events.ts`               |
-| Form submissions (server actions)              | `src/util/airtable/action.ts` | `FORMS_AIRTABLE_API_KEY` | error state returned to the form         |
-| Slack member directory (`/admin` grant picker) | `src/data/slackMembers.ts`    | `SLACK_BOT_TOKEN`        | `src/data/mocks/slackMembers.ts` (faker) |
-| Membership applications (`/join`, `/admin`)    | `src/db/`                     | none (auto-provisioned)  | local Postgres from `netlify dev`        |
+| Source                                         | File                          | Env var                  | Fallback                               |
+| ---------------------------------------------- | ----------------------------- | ------------------------ | -------------------------------------- |
+| Member GitHub profiles                         | `src/data/members/index.ts`   | `GITHUB_TOKEN`           | `src/data/mocks/memberData.js` (faker) |
+| GitHub Sponsors                                | `src/data/sponsors.ts`        | `GITHUB_TOKEN`           | `src/data/mocks/sponsors.ts`           |
+| Events (Craft CMS + Solspace Calendar GraphQL) | `src/data/events.ts`          | `CMS_URL`, `CMS_TOKEN`   | `src/data/mocks/events.ts`             |
+| Form submissions (server actions)              | `src/util/airtable/action.ts` | `FORMS_AIRTABLE_API_KEY` | error state returned to the form       |
+| Membership applications (`/join`, `/admin`)    | `src/db/`                     | none (auto-provisioned)  | local Postgres from `netlify dev`      |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. Any new external fetch should follow this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`. Fetches are wrapped in `unstable_cache` with a tag (`members`, `events`, `mdx-routes`); `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates on demand and a daily GitHub Action triggers a Netlify rebuild.
 
 ### Membership pipeline (Postgres)
 
-Membership Applications live in Netlify Database and `/admin` is where maintainers work them. The panel is organised by section: `/admin` is a dashboard scoped to what the viewer may see, and `/admin/user-management` manages who has access. A new section is a new segment beside `user-management/`, with its routes and its own components under it — `(protected)/presentation.tsx` is the only shared piece. Adding a Section is a type error in `CARDS` (`src/lib/dashboard.ts`) until you decide whether it gets a dashboard card. Vocabulary is in `CONTEXT.md` (a **Member Profile** in `src/content/members/` is unrelated to a **Membership Application**); decisions are in `docs/adr/` — the rules below are the ones that bite, each with its ADR.
+Membership Applications live in Netlify Database. Vocabulary is in `CONTEXT.md` (a **Member Profile** in `src/content/members/` is unrelated to a **Membership Application**); decisions are in `docs/adr/` — the rules below are the ones that bite, each with its ADR.
 
-- **Access to `/admin` is per-section** (`src/lib/permissions.ts`). The `(protected)` layout only checks that the viewer holds _some_ section — **each page must gate itself with `requirePermission()`, and each server action must re-check independently.** A section with no check of its own is reachable by every role. `docs/adr/0006`.
+- **Access is per-section** (`src/lib/permissions.ts`): every page and server action gates itself with `requirePermission()` (`src/lib/adminAccess.ts`) and re-checks independently — a section with no check of its own is reachable by every role. `docs/adr/0006`.
 - A **Pending Grant** (`pending_grant`, `src/lib/pendingGrants.ts`) pre-provisions roles for a Slack member id. Matching is **never on email**. `docs/adr/0009`.
 - **Every `application_event`/`submission_event` write goes through `src/lib/eventLog.ts`** — `recordOutcome()` turns a send into History and never throws; `transitionAndRecord()` is the status fence, a compare-and-set on the status the row was read at, committed with its event. Labels are in `src/lib/eventLabels.ts`, keyed by the enums so a new type without a label is a type error.
 - Schema is Drizzle **v1** in `src/db/schema.ts`; migrations are `drizzle/<timestamp>_<slug>/`, generated with `pnpm db:generate --name=<hyphenated-slug>` and applied by `pnpm db:migrate:deploy` in the build command — Netlify's own migration step is not used. The `snapshot.json` beside each `migration.sql` is committed on purpose. **Never edit a migration that has already deployed.** `docs/adr/0001`.
