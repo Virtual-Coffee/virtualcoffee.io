@@ -54,4 +54,14 @@ describe('siteUrl', () => {
 		vi.stubEnv('URL', undefined);
 		expect(siteUrl()).toBe('https://virtualcoffee.io');
 	});
+
+	test('an empty variable counts as unset', () => {
+		vi.stubEnv('URL', '');
+		expect(siteUrl()).toBe('https://virtualcoffee.io');
+
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('DEPLOY_PRIME_URL', '');
+		vi.stubEnv('URL', 'https://virtualcoffee.io');
+		expect(siteUrl()).toBe('https://virtualcoffee.io');
+	});
 });
