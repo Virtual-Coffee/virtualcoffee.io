@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { ActionDialog } from '@/components/ActionDialog';
 import type { SlackMember } from '@/lib/slackMemberPicker';
 import {
 	COMMUNITY_ROLES,
@@ -303,28 +304,21 @@ export function ActiveToggle({
 	name: string;
 	active: boolean;
 }) {
-	const { run, pending, feedback } = useAction();
-
 	return (
-		<>
-			<button
-				type="button"
-				className={`btn btn-sm ${
-					active ? 'btn-outline-secondary' : 'btn-outline-primary'
-				}`}
-				disabled={pending}
-				onClick={() => {
-					const message = active
-						? `Pause ${name}? They keep their balance but stop earning and can't send invites.`
-						: `Restart ${name}? They can send invites again and will earn one on the 1st.`;
-					if (!window.confirm(message)) return;
-					run(() => setVolunteerActive(volunteerId, !active));
-				}}
-			>
-				{pending ? '…' : active ? 'Pause' : 'Restart'}
-			</button>
-			{feedback}
-		</>
+		<ActionDialog
+			className={`btn btn-sm ${
+				active ? 'btn-outline-secondary' : 'btn-outline-primary'
+			}`}
+			label={active ? 'Pause' : 'Restart'}
+			title={active ? `Pause ${name}?` : `Restart ${name}?`}
+			action={() => setVolunteerActive(volunteerId, !active)}
+		>
+			<p className="mb-0">
+				{active
+					? 'They keep their balance but stop earning and can’t send invites.'
+					: 'They can send invites again and will earn one on the 1st.'}
+			</p>
+		</ActionDialog>
 	);
 }
 
@@ -398,28 +392,17 @@ export function ResendInviteButton({
 	volunteerId: string;
 	inviteeEmail: string;
 }) {
-	const { run, pending, feedback } = useAction();
-
 	return (
-		<>
-			<button
-				type="button"
-				className="btn btn-sm btn-outline-secondary"
-				disabled={pending}
-				onClick={() => {
-					if (
-						!window.confirm(
-							`Re-send to ${inviteeEmail}? This issues a new link and stops the old one working.`,
-						)
-					) {
-						return;
-					}
-					run(() => resendInvite(inviteId, volunteerId));
-				}}
-			>
-				{pending ? 'Sending…' : 'Re-send'}
-			</button>
-			{feedback}
-		</>
+		<ActionDialog
+			className="btn btn-sm btn-outline-secondary"
+			label="Re-send"
+			title={`Re-send to ${inviteeEmail}?`}
+			pendingLabel="Sending…"
+			action={() => resendInvite(inviteId, volunteerId)}
+		>
+			<p className="mb-0">
+				This issues a new link and stops the old one working.
+			</p>
+		</ActionDialog>
 	);
 }
