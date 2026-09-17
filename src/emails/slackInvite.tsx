@@ -1,9 +1,8 @@
 import { Button, Text } from 'react-email';
 
-import { Layout } from '@/lib/email/layout';
 import { firstName } from '@/lib/email/name';
-import type { EmailTemplate } from '@/lib/email/render';
 import { styles } from '@/lib/email/styles';
+import { defineEmail } from '@/lib/email/template';
 
 export type SlackInviteProps = { name: string; inviteUrl: string };
 
@@ -37,21 +36,14 @@ export function Content({ name, inviteUrl }: SlackInviteProps) {
 	);
 }
 
-export default function Email(props: SlackInviteProps) {
-	return (
-		<Layout preview="Your single-use link to the Virtual Coffee Slack.">
-			<Content {...props} />
-		</Layout>
-	);
-}
-
-Email.PreviewProps = {
-	name: 'Ada Lovelace',
-	inviteUrl: 'https://virtualcoffee.io/join-slack?code=example',
-} satisfies SlackInviteProps;
-
-export const slackInvite: EmailTemplate<SlackInviteProps> = {
+export const slackInvite = defineEmail<SlackInviteProps>({
 	subject,
-	Email,
+	preview: 'Your single-use link to the Virtual Coffee Slack.',
 	Content,
-};
+	previewProps: {
+		name: 'Ada Lovelace',
+		inviteUrl: 'https://virtualcoffee.io/join-slack?code=example',
+	},
+});
+
+export default slackInvite.Email;

@@ -16,7 +16,6 @@ import {
 	giveBack,
 	periodKey,
 } from '../../../src/lib/volunteers/invites.ts';
-import { renderEmail } from '../../../src/lib/email/render.ts';
 import { sendEmail } from '../../../src/lib/email/transport.ts';
 import { siteUrl } from '../../../src/util/url.server.ts';
 
@@ -166,13 +165,16 @@ async function notify(
 		if (!address) return 'no_address';
 
 		try {
-			const rendered = await renderEmail(volunteerAccrual, {
-				name: row.name,
-				balance: Number(row.balance ?? 0),
-				invitesUrl: `${siteUrl()}/invites`,
-			});
 			const sent = await withTimeout(
-				sendEmail({ to: address, ...rendered }),
+				sendEmail(
+					volunteerAccrual,
+					{
+						name: row.name,
+						balance: Number(row.balance ?? 0),
+						invitesUrl: `${siteUrl()}/invites`,
+					},
+					{ to: address },
+				),
 				SEND_TIMEOUT_MS,
 			);
 

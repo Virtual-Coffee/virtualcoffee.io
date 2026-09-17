@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { z } from 'zod';
 
 import { db, inviteToken } from '@/db';
+import { coffeeInvite } from '@/emails/coffeeInvite';
+import { slackInvite } from '@/emails/slackInvite';
+import { welcome } from '@/emails/welcome';
 import {
 	createSlackInviteToken,
 	slackInviteForToken,
@@ -40,9 +42,8 @@ beforeEach(async () => {
 });
 
 /** The single-use code carried by a Slack invite email. */
-function codeIn(text: string): string {
-	const url = /https:\/\/virtualcoffee\.io\/join-slack\?code=\S+/.exec(text);
-	return new URL(url![0]).searchParams.get('code')!;
+function codeIn(inviteUrl: string): string {
+	return new URL(inviteUrl).searchParams.get('code')!;
 }
 
 describe('sendCoffeeInvite', () => {
@@ -91,13 +92,11 @@ describe('sendCoffeeInvite', () => {
 
 		await expect(sendCoffeeInvite(id, true)).resolves.toEqual({ ok: true });
 
-		expect(sendEmail).toHaveBeenCalledWith({
-			to: 'ada@example.test',
-			subject: 'You’re invited to a Virtual Coffee',
-			html: expect.schemaMatching(z.string().startsWith('<!DOCTYPE html')),
-			text: expect.schemaMatching(z.string().startsWith('Hello there!')),
-			cc: admin.email,
-		});
+		expect(sendEmail).toHaveBeenCalledWith(
+			coffeeInvite,
+			{},
+			{ to: 'ada@example.test', cc: admin.email },
+		);
 		const row = await applicationRow(id);
 		expect(row.status).toBe('coffee_invited');
 		expect(row.coffeeInvitedAt).toBeInstanceOf(Date);
@@ -148,15 +147,15 @@ describe('approveMembership', () => {
 		await expect(approveMembership(id, false)).resolves.toEqual({ ok: true });
 
 		expect(tokensWhenSending).toEqual([1]);
-		const [welcome] = sendEmail.mock.calls;
-		expect(welcome[0]).toMatchObject({
-			subject: 'Welcome to Virtual Coffee',
-			text: expect.stringContaining(
-				'https://virtualcoffee.io/resources/virtual-coffee-handbook',
-			),
-		});
-		expect(welcome[0].text).toContain(
-			'https://virtualcoffee.io/join-slack?code=',
+		expect(sendEmail).toHaveBeenCalledWith(
+			welcome,
+			{
+				name: expect.any(String),
+				inviteUrl: expect.stringContaining(
+					'https://virtualcoffee.io/join-slack?code=',
+				),
+			},
+			{ to: 'ada@example.test', cc: null },
 		);
 		const row = await applicationRow(id);
 		expect(row.status).toBe('member');
@@ -192,18 +191,17 @@ describe('approveMembership', () => {
 
 		// /join-slack checks only the token, so a live one here would admit a
 		// non-member.
-		const [welcome] = sendEmail.mock.calls;
-		await expect(slackInviteForToken(codeIn(welcome[0].text))).resolves.toEqual(
-			{ ok: false, reason: 'expired' },
-		);
+		const [first] = sendEmail.mock.calls;
+		await expect(
+			slackInviteForToken(codeIn(first[1].inviteUrl)),
+		).resolves.toEqual({ ok: false, reason: 'expired' });
 
 		sendEmail.mockResolvedValue(SENT);
 		await expect(approveMembership(id, false)).resolves.toEqual({ ok: true });
 		const [, retry] = sendEmail.mock.calls;
-		await expect(slackInviteForToken(codeIn(retry[0].text))).resolves.toEqual({
-			ok: true,
-			applicationId: id,
-		});
+		await expect(
+			slackInviteForToken(codeIn(retry[1].inviteUrl)),
+		).resolves.toEqual({ ok: true, applicationId: id });
 	});
 
 	test('a transition that throws after both emails went leaves the link dead', async () => {
@@ -413,13 +411,10 @@ describe('a status that changed between the read and the write', () => {
 		expect((await applicationRow(id)).status).toBe('withdrawn');
 		expect(sendEmail).toHaveBeenCalledOnce();
 
-		const [welcome] = sendEmail.mock.calls;
-		await expect(slackInviteForToken(codeIn(welcome[0].text))).resolves.toEqual(
-			{
-				ok: false,
-				reason: 'expired',
-			},
-		);
+		const [call] = sendEmail.mock.calls;
+		await expect(
+			slackInviteForToken(codeIn(call[1].inviteUrl)),
+		).resolves.toEqual({ ok: false, reason: 'expired' });
 	});
 
 	test("a second approval that lost the race does not kill the first one's link", async () => {
@@ -437,14 +432,12 @@ describe('a status that changed between the read and the write', () => {
 		});
 
 		const [winner, loser] = sendEmail.mock.calls;
-		await expect(slackInviteForToken(codeIn(winner[0].text))).resolves.toEqual({
-			ok: true,
-			applicationId: id,
-		});
-		await expect(slackInviteForToken(codeIn(loser[0].text))).resolves.toEqual({
-			ok: false,
-			reason: 'expired',
-		});
+		await expect(
+			slackInviteForToken(codeIn(winner[1].inviteUrl)),
+		).resolves.toEqual({ ok: true, applicationId: id });
+		await expect(
+			slackInviteForToken(codeIn(loser[1].inviteUrl)),
+		).resolves.toEqual({ ok: false, reason: 'expired' });
 	});
 
 	test('attendance cannot be recorded on a row that already moved', async () => {
@@ -486,11 +479,9 @@ describe('resendSlackInvite', () => {
 			ok: false,
 			reason: 'expired',
 		});
-		expect(sendEmail).toHaveBeenCalledWith(
-			expect.objectContaining({
-				text: expect.stringContaining('/join-slack?code='),
-			}),
-		);
+		const [template, props] = sendEmail.mock.calls[0];
+		expect(template).toBe(slackInvite);
+		expect(props.inviteUrl).toContain('/join-slack?code=');
 		expect((await applicationRow(id)).status).toBe('member');
 		await expect(applicationEvents(id)).resolves.toEqual([
 			expect.objectContaining({

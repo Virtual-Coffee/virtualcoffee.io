@@ -1,9 +1,8 @@
 import { Button, Text } from 'react-email';
 
-import { Layout } from '@/lib/email/layout';
 import { firstName } from '@/lib/email/name';
-import type { EmailTemplate } from '@/lib/email/render';
 import { styles } from '@/lib/email/styles';
+import { defineEmail } from '@/lib/email/template';
 
 /**
  * The Claim Link a Volunteer sends. Names the Volunteer so the recipient
@@ -58,24 +57,16 @@ export function Content({
 	);
 }
 
-export default function Email(props: VolunteerInviteProps) {
-	return (
-		<Layout
-			preview={`${props.inviterName} used an invite on you — it skips the waitlist.`}
-		>
-			<Content {...props} />
-		</Layout>
-	);
-}
-
-Email.PreviewProps = {
-	inviterName: 'Grace Hopper',
-	inviteeName: 'Ada Lovelace',
-	claimUrl: 'https://virtualcoffee.io/join?invite=example',
-} satisfies VolunteerInviteProps;
-
-export const volunteerInvite: EmailTemplate<VolunteerInviteProps> = {
+export const volunteerInvite = defineEmail<VolunteerInviteProps>({
 	subject,
-	Email,
+	preview: (props) =>
+		`${props.inviterName} used an invite on you — it skips the waitlist.`,
 	Content,
-};
+	previewProps: {
+		inviterName: 'Grace Hopper',
+		inviteeName: 'Ada Lovelace',
+		claimUrl: 'https://virtualcoffee.io/join?invite=example',
+	},
+});
+
+export default volunteerInvite.Email;

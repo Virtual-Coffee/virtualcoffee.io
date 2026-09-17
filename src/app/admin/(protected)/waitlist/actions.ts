@@ -19,7 +19,7 @@ import { checkNote } from '@/lib/admin/notes';
 import { actorId, requirePermission } from '@/lib/access/adminAccess';
 import type { Session } from '@/lib/access/auth';
 import { sendEmail } from '@/lib/email/transport';
-import { renderEmail, type RenderedEmail } from '@/lib/email/render';
+import type { EmailTemplate } from '@/lib/email/render';
 import { coffeeInvite } from '@/emails/coffeeInvite';
 import { slackInvite } from '@/emails/slackInvite';
 import { welcome } from '@/emails/welcome';
@@ -102,18 +102,18 @@ type OpenedOk = Extract<Opened, { ok: true }>;
  * names the send — "Coffee invite" — and `rollback` kills anything minted to
  * go in it before the failure is reported.
  */
-async function emailApplicant(
+async function emailApplicant<P extends object>(
 	opened: OpenedOk,
 	copyMe: boolean,
 	what: string,
-	email: RenderedEmail,
+	template: EmailTemplate<P>,
+	props: P,
 	rollback?: () => Promise<unknown>,
 ): Promise<Outbound> {
 	const { session, actor, application, subject } = opened;
 
-	const sent = await sendEmail({
+	const sent = await sendEmail(template, props, {
 		to: application.email,
-		...email,
 		cc: copyMe ? session.user.email : null,
 	});
 	if (sent.ok) return sent;
@@ -199,7 +199,8 @@ export async function sendCoffeeInvite(
 		opened,
 		copyMe,
 		'Coffee invite',
-		await renderEmail(coffeeInvite, {}),
+		coffeeInvite,
+		{},
 	);
 	if (!sent.ok) return emailFailed(sent);
 
@@ -289,10 +290,11 @@ export async function approveMembership(
 		opened,
 		copyMe,
 		'Welcome email',
-		await renderEmail(welcome, {
+		welcome,
+		{
 			name: application.name,
 			inviteUrl: `${siteUrl()}/join-slack?code=${token}`,
-		}),
+		},
 		expireToken,
 	);
 	if (!welcomeSent.ok) return emailFailed(welcomeSent);
@@ -366,10 +368,11 @@ export async function resendSlackInvite(
 		opened,
 		copyMe,
 		'Slack invite re-send',
-		await renderEmail(slackInvite, {
+		slackInvite,
+		{
 			name: application.name,
 			inviteUrl: `${siteUrl()}/join-slack?code=${minted.token}`,
-		}),
+		},
 		// Only this request's link: the previous one is still the one the
 		// member holds.
 		() => expireSlackInviteToken(minted.id, new Date()),

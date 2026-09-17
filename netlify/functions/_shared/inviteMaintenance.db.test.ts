@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
 import { db, volunteerAccrualNotice, volunteerInviteLedger } from '@/db';
+import { volunteerAccrual } from '@/emails/volunteerAccrual';
 import { volunteerBalance } from '@/lib/volunteers/invites';
 import { sendEmail } from '@/test/mocks/spies';
 import { SENT } from '@/test/outbound';
@@ -113,28 +114,25 @@ describe('accrual', () => {
 		});
 
 		expect(sendEmail).toHaveBeenCalledTimes(2);
-		expect(sendEmail).toHaveBeenCalledWith({
-			to: 'grace@example.test',
-			subject: 'You have 3 Virtual Coffee invites',
-			html: expect.schemaMatching(
-				z.string().includes('href="https://virtualcoffee.io/invites"'),
-			),
-			text: expect.schemaMatching(
-				z
-					.string()
-					.startsWith('Hi Grace,')
-					.includes('https://virtualcoffee.io/invites'),
-			),
-		});
 		expect(sendEmail).toHaveBeenCalledWith(
+			volunteerAccrual,
+			{
+				name: 'Grace Hopper',
+				balance: 3,
+				invitesUrl: 'https://virtualcoffee.io/invites',
+			},
+			{ to: 'grace@example.test' },
+		);
+		expect(sendEmail).toHaveBeenCalledWith(
+			volunteerAccrual,
 			expect.schemaMatching(
 				z.object({
-					to: z.literal('ada-account@example.test'),
-					subject: z.string().min(1),
-					html: z.string().includes('/invites'),
-					text: z.string().includes('/invites'),
+					name: z.string().min(1),
+					balance: z.literal(1),
+					invitesUrl: z.literal('https://virtualcoffee.io/invites'),
 				}),
 			),
+			{ to: 'ada-account@example.test' },
 		);
 	});
 
@@ -202,7 +200,9 @@ describe('accrual', () => {
 				emailDeferred: 0,
 			});
 			expect(sendEmail).toHaveBeenLastCalledWith(
-				expect.objectContaining({ to: 'e@example.test' }),
+				volunteerAccrual,
+				expect.anything(),
+				{ to: 'e@example.test' },
 			);
 			await expect(noticesFor('U_E')).resolves.toEqual(['sent']);
 		} finally {
@@ -213,10 +213,12 @@ describe('accrual', () => {
 	test('one send that hangs costs one email, not the rest of the roster', async () => {
 		vi.useFakeTimers({ shouldAdvanceTime: true });
 		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
-		sendEmail.mockImplementation(async ({ to }: { to: string }) => {
-			if (to === 'hung@example.test') return new Promise(() => {});
-			return SENT;
-		});
+		sendEmail.mockImplementation(
+			async (_template: unknown, _props: unknown, { to }: { to: string }) => {
+				if (to === 'hung@example.test') return new Promise(() => {});
+				return SENT;
+			},
+		);
 		await insertVolunteer({ slackUserId: 'U_A', email: 'a@example.test' });
 		await insertVolunteer({
 			slackUserId: 'U_HUNG',
