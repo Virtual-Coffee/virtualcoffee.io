@@ -36,9 +36,11 @@ export const EVENT_LABELS: Record<
 	note: { sentence: 'added a note', badge: 'Note' },
 	email_sent: { sentence: 'Email sent', badge: 'Email sent' },
 	email_failed: { sentence: 'Email failed', badge: 'Email failed' },
-	notification_sent: { sentence: 'Slack notified', badge: 'Notified' },
+	// Channel-neutral: a Lunch & Learn idea is also announced as a GitHub issue,
+	// and the body names which.
+	notification_sent: { sentence: 'Notified', badge: 'Notified' },
 	notification_failed: {
-		sentence: 'Slack notification failed',
+		sentence: 'Notification failed',
 		badge: 'Notification failed',
 	},
 };

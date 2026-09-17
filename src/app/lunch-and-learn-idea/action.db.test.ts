@@ -4,6 +4,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { db, lunchAndLearnIdea, submissionEvent } from '@/db';
 import { failWrites } from '@/test/db/fixtures';
 import { formDataWith } from '@/test/forms';
+import { failedNotifications } from '@/lib/submissions/submissions';
 import { createLunchAndLearnIssue, notifySlack } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
 
@@ -29,7 +30,7 @@ async function submit() {
 		.select({ type: submissionEvent.type, body: submissionEvent.body })
 		.from(submissionEvent)
 		.where(eq(submissionEvent.lunchAndLearnIdeaId, row.id))
-		.orderBy(submissionEvent.createdAt);
+		.orderBy(submissionEvent.createdAt, submissionEvent.id);
 	return { row, events };
 }
 
@@ -59,6 +60,10 @@ describe('submitLunchAndLearnIdea', () => {
 				type: 'notification_sent',
 				body: 'Lunch & Learn issue opened on GitHub',
 			},
+			{
+				type: 'notification_sent',
+				body: 'Slack notified of a Lunch & Learn idea',
+			},
 		]);
 	});
 
@@ -77,13 +82,22 @@ describe('submitLunchAndLearnIdea', () => {
 			'lunch-and-learn',
 			'New Lunch & Learn Submission: Property testing by Ada',
 		);
+		// Each channel is its own line of History, so a GitHub outage is never
+		// hidden behind the Slack message that followed it.
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Idea submitted' },
 			{
 				type: 'notification_failed',
-				body: 'Lunch & Learn issue opened on GitHub failed: Could not reach GitHub: Not Found Posted to Slack.',
+				body: 'Lunch & Learn issue opened on GitHub failed: Could not reach GitHub: Not Found',
+			},
+			{
+				type: 'notification_sent',
+				body: 'Slack notified of a Lunch & Learn idea',
 			},
 		]);
+		await expect(failedNotifications(['lunch-and-learn'])).resolves.toEqual({
+			'lunch-and-learn': 1,
+		});
 	});
 
 	test('a captured issue leaves no URL on the row and is still a success', async () => {
@@ -106,10 +120,16 @@ describe('submitLunchAndLearnIdea', () => {
 			'lunch-and-learn',
 			'New Lunch & Learn Submission: Property testing by Ada',
 		);
-		expect(events[1]).toEqual({
-			type: 'notification_sent',
-			body: 'Lunch & Learn issue opened on GitHub — Captured, not opened on GitHub (deploy-preview). Captured, not posted to Slack (deploy-preview).',
-		});
+		expect(events.slice(1)).toEqual([
+			{
+				type: 'notification_sent',
+				body: 'Lunch & Learn issue opened on GitHub — Captured, not opened on GitHub (deploy-preview).',
+			},
+			{
+				type: 'notification_sent',
+				body: 'Slack notified of a Lunch & Learn idea — Captured, not posted to Slack (deploy-preview).',
+			},
+		]);
 	});
 
 	test('failing to save the issue URL does not stop the Slack message', async () => {
@@ -136,10 +156,16 @@ describe('submitLunchAndLearnIdea', () => {
 			`New Lunch & Learn Submission: Property testing by Ada\n\nGitHub Link: ${ISSUE}`,
 		);
 		// The row lost the link, so History is the only place that has it.
-		expect(result.events[1]).toEqual({
-			type: 'notification_sent',
-			body: `Lunch & Learn issue opened on GitHub — Opened ${ISSUE}. The issue link could not be saved to the submission.`,
-		});
+		expect(result.events.slice(1)).toEqual([
+			{
+				type: 'notification_sent',
+				body: `Lunch & Learn issue opened on GitHub — Opened ${ISSUE}. The issue link could not be saved to the submission.`,
+			},
+			{
+				type: 'notification_sent',
+				body: 'Slack notified of a Lunch & Learn idea',
+			},
+		]);
 	});
 
 	test('the issue URL is kept even when Slack then fails', async () => {
@@ -157,9 +183,15 @@ describe('submitLunchAndLearnIdea', () => {
 		const { row, events } = await submit();
 
 		expect(row.githubIssueUrl).toBe(ISSUE);
-		expect(events[1]).toEqual({
-			type: 'notification_failed',
-			body: `Lunch & Learn issue opened on GitHub failed: Opened ${ISSUE} Could not reach Slack.`,
-		});
+		expect(events.slice(1)).toEqual([
+			{
+				type: 'notification_sent',
+				body: 'Lunch & Learn issue opened on GitHub',
+			},
+			{
+				type: 'notification_failed',
+				body: 'Slack notified of a Lunch & Learn idea failed: Could not reach Slack.',
+			},
+		]);
 	});
 });
