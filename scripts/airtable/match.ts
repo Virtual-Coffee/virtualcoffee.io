@@ -16,7 +16,7 @@ export type Candidate = {
 };
 
 /** The fields of a mapping entry the scorer reads. */
-export type MatchInput = {
+type MatchInput = {
 	name: string;
 	profileName: string | null;
 	githubUsername: string | null;
