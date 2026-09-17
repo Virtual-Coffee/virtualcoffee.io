@@ -73,7 +73,8 @@ vi.mock('@/lib/github/issues', async (importOriginal) => ({
 }));
 vi.mock('@/lib/eventsCalendar', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/lib/eventsCalendar')>()),
-	...(await import('@/test/mocks/eventsCalendar')),
+	connectEventsCalendar: (await import('@/test/mocks/spies'))
+		.connectEventsCalendar,
 }));
 
 /** `staleRead.readAs` stages the race — see `@/test/mocks/wrappers`. */
