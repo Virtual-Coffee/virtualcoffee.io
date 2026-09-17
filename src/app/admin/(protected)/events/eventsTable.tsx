@@ -1,36 +1,69 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
+import { ActionDialog } from '@/components/ActionDialog';
+import type { TimeInput } from '@/lib/eventDraft';
 import type { AdminEvent } from '@/lib/eventsCalendar';
+import { displayParts } from '@/util/date';
 import { useAction } from '@/util/forms/useAction';
 
 import { cancelEvent, rescheduleEvent, restoreEvent } from './actions';
+import { TimeFields } from './fields';
 import { EventStatusBadge, EventWhen, eventWhen } from './presentation';
-import { RescheduleDialog } from './rescheduleDialog';
+
+/** The Event's own time, which is where a reschedule starts from. */
+function draftFrom(event: AdminEvent): TimeInput {
+	const start = displayParts(event.start);
+	const end = displayParts(event.end);
+	return {
+		date: start?.date ?? '',
+		startTime: start?.time ?? '',
+		endTime: end?.time ?? '',
+	};
+}
 
 /**
  * Reschedule and Cancel while the Event stands; Restore once it has been
- * Cancelled or Rescheduled.
+ * Cancelled or Rescheduled. Restore is the one without a confirmation, so it
+ * keeps the `useAction` — and its `pending` is what disables the other two.
  */
 function RowActions({ event }: { event: AdminEvent }) {
 	const { run, pending, feedback } = useAction();
-	const [rescheduling, setRescheduling] = useState(false);
+	const id = useId();
+	const [when, setWhen] = useState<TimeInput>(() => draftFrom(event));
 	const cancelled = event.status === 'cancelled';
 
 	return (
 		<>
 			<div className="d-flex justify-content-end gap-1">
 				{!cancelled && (
-					<button
-						type="button"
+					<ActionDialog
 						className="btn btn-sm btn-outline-secondary"
+						label="Reschedule"
+						title={`Reschedule ${event.title}`}
+						submit
 						disabled={pending}
-						onClick={() => setRescheduling(true)}
+						refresh="always"
+						// Seeded on open, not on close: a reschedule that succeeds
+						// refreshes the row, and the draft has to follow the time the
+						// Event now has rather than the one it was moved from.
+						onOpen={() => setWhen(draftFrom(event))}
+						action={() => rescheduleEvent(event.id, event.etag, when)}
 					>
-						Reschedule
-					</button>
+						<TimeFields
+							id={id}
+							dateLabel="Date"
+							draft={when}
+							onChange={setWhen}
+						/>
+						{event.seriesId && (
+							<p className="small text-body-secondary mb-0">
+								Only this Event moves; the Series keeps its rule.
+							</p>
+						)}
+					</ActionDialog>
 				)}
 				{(cancelled || event.rescheduled) && (
 					<button
@@ -47,42 +80,22 @@ function RowActions({ event }: { event: AdminEvent }) {
 					</button>
 				)}
 				{!cancelled && (
-					<button
-						type="button"
+					<ActionDialog
 						className="btn btn-sm btn-outline-danger"
+						label="Cancel"
+						title={`Cancel “${event.title}” on ${eventWhen(event.start, event.end)}?`}
+						// Not "Cancel": the dialog's own dismissal is already that.
+						confirmLabel="Cancel Event"
+						danger
 						disabled={pending}
-						onClick={() => {
-							if (
-								!window.confirm(
-									`Cancel “${event.title}” on ${eventWhen(event.start, event.end)}? It can be restored from here.`,
-								)
-							) {
-								return;
-							}
-							run(() => cancelEvent(event.id, event.etag), {
-								refresh: 'always',
-							});
-						}}
+						refresh="always"
+						action={() => cancelEvent(event.id, event.etag)}
 					>
-						{pending ? '…' : 'Cancel'}
-					</button>
+						<p className="mb-0">It can be restored from here.</p>
+					</ActionDialog>
 				)}
 			</div>
 			{feedback}
-			{rescheduling && (
-				<RescheduleDialog
-					event={event}
-					open={rescheduling}
-					pending={pending}
-					onCancel={() => setRescheduling(false)}
-					onConfirm={(when) =>
-						run(() => rescheduleEvent(event.id, event.etag, when), {
-							settle: () => setRescheduling(false),
-							refresh: 'always',
-						})
-					}
-				/>
-			)}
 		</>
 	);
 }
