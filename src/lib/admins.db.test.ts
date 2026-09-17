@@ -1,17 +1,18 @@
-import { expect, test, vi } from 'vitest';
+import { expect, test } from 'vitest';
 
 import { insertPendingGrant, insertUser } from '@/test/db/fixtures';
-
-vi.mock('@/data/slackMembers', () => ({
-	getSlackMembers: async () =>
-		['U_NEW', 'U_STRANDED', 'U_NO_ROLES', 'U_ADMIN', 'U_VOLUNTEER'].map(
-			(id) => ({ id, name: id, displayName: id, handle: null }),
-		),
-}));
+import { slackDirectory, slackMember } from '@/test/mocks/slackMembers';
 
 import { grantCandidates } from './admins';
 
 test('a candidate says whether a grant is pre-provisioned, applied directly, or edited in the table', async () => {
+	slackDirectory.members = [
+		'U_NEW',
+		'U_STRANDED',
+		'U_NO_ROLES',
+		'U_ADMIN',
+		'U_VOLUNTEER',
+	].map((id) => slackMember(id));
 	await insertUser({ slackUserId: 'U_STRANDED' });
 	await insertPendingGrant({ slackUserId: 'U_STRANDED', role: 'admin' });
 	await insertUser({ slackUserId: 'U_NO_ROLES' });
