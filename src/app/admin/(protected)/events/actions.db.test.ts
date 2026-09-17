@@ -1,8 +1,11 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { CalendarConflictError, CalendarGoneError } from '@/lib/eventsCalendar';
-import { connectEventsCalendar } from '@/test/mocks/eventsCalendar';
-import { revalidatePath, revalidateTag } from '@/test/mocks/nextCache';
+import {
+	connectEventsCalendar,
+	revalidatePath,
+	revalidateTag,
+} from '@/test/mocks/spies';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 
