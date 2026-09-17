@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { createColumnHelper } from '@tanstack/react-table';
 
 import type { SubmissionStatus } from '@/db';
-import type { SubmissionSortField } from '@/lib/submissions';
+import type { SubmissionSortField } from '@/lib/submissions/submissions';
 import { formatDateTime } from '../../presentation';
 import { SortableHeader } from '../../sortableHeader';
 import { TablePager } from '../../tablePager';

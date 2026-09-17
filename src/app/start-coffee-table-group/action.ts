@@ -5,7 +5,10 @@ import { z } from 'zod';
 
 import { coffeeTableGroupRequest } from '@/db';
 import { coffeeTableGroupMessage, notifySlack } from '@/lib/slack/notify';
-import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
+import {
+	notifyAndRecord,
+	persistSubmission,
+} from '@/lib/submissions/submitSubmission';
 import { agree, email, name } from '@/util/forms/fields';
 import { intake, savingFailed } from '@/util/forms/intake';
 import type { FormState } from '@/util/forms/types';

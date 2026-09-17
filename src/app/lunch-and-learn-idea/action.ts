@@ -7,7 +7,10 @@ import { z } from 'zod';
 import { db, lunchAndLearnIdea } from '@/db';
 import { createLunchAndLearnIssue } from '@/lib/github/issues';
 import { lunchAndLearnMessage, notifySlack } from '@/lib/slack/notify';
-import { notifyAndRecord, persistSubmission } from '@/lib/submitSubmission';
+import {
+	notifyAndRecord,
+	persistSubmission,
+} from '@/lib/submissions/submitSubmission';
 import { agree, email, name } from '@/util/forms/fields';
 import { intake, savingFailed } from '@/util/forms/intake';
 import { siteUrl } from '@/util/url.server';

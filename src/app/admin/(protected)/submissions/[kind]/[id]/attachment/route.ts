@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 
 import { isId } from '@/db/ids';
-import { readAttachment } from '@/lib/attachments';
-import { requirePermission } from '@/lib/adminAccess';
-import { getSubmission } from '@/lib/submissions';
+import { readAttachment } from '@/lib/submissions/attachments';
+import { requirePermission } from '@/lib/access/adminAccess';
+import { getSubmission } from '@/lib/submissions/submissions';
 
 /**
  * Serves a CoC report's attachment after checking `coc:read`.
