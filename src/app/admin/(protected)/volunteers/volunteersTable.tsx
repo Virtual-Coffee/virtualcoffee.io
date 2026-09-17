@@ -12,7 +12,7 @@ import {
 	useTable,
 } from '@tanstack/react-table';
 
-import type { VolunteerRow } from '@/lib/volunteers';
+import type { VolunteerRow } from '@/lib/volunteers/volunteers';
 import { formatDate } from '../presentation';
 import { SortableHeader } from '../sortableHeader';
 import { VolunteerStateBadge } from './presentation';

@@ -3,12 +3,12 @@
 import { useState } from 'react';
 
 import { ActionDialog } from '@/components/ActionDialog';
-import type { SlackMember } from '@/lib/slackMemberPicker';
+import type { SlackMember } from '@/lib/volunteers/slackMemberPicker';
 import {
 	COMMUNITY_ROLES,
 	type CommunityRole,
 	parseRoleLabels,
-} from '@/lib/volunteerRoles';
+} from '@/lib/volunteers/volunteerRoles';
 import { useAction } from '@/util/forms/useAction';
 import { RoleCheckboxMenu } from '../roleCheckboxMenu';
 import { SlackMemberCombobox } from '../slackMemberCombobox';

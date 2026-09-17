@@ -3,7 +3,7 @@ import {
 	recordEvent,
 	recordImport,
 	type ApplicationEventInput,
-} from '@/lib/eventLog';
+} from '@/lib/history/eventLog';
 import { insertApplication, insertInviteToken } from '@/test/db/fixtures';
 
 import { ADMIN, SLACK_TOKEN, daysAgo, daysAhead } from './shared';

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
 import { db, invite } from '@/db';
-import { volunteerBalance } from '@/lib/invites';
+import { volunteerBalance } from '@/lib/volunteers/invites';
 import { sendEmail } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
 import { CAPTURED, MAYBE_SENT, NOT_SENT, SENT } from '@/test/outbound';

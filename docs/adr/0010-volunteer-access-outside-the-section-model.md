@@ -11,7 +11,7 @@ maintainers at all, and the obvious move was a seventh Section.
 
 `volunteer` is `ac.newRole({})` — a Role that grants no Section — and
 `/invites` sits outside `/admin` behind its own boundary,
-`requireVolunteer()` in `src/lib/volunteerAccess.ts`.
+`requireVolunteer()` in `src/lib/access/volunteerAccess.ts`.
 
 ### Why not a Section
 

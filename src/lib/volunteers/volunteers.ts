@@ -2,8 +2,8 @@ import { and, desc, eq, isNull, sql } from 'drizzle-orm';
 
 import { db, invite, membershipApplication, volunteer } from '@/db';
 import type { InviteStatus } from '@/db/schema';
-import { balancesBySlackUser } from '@/lib/invites';
-import { countRows } from '@/lib/pagedList';
+import { balancesBySlackUser } from '@/lib/volunteers/invites';
+import { countRows } from '@/lib/admin/pagedList';
 
 /** The roster behind /admin/volunteers — reads only; writes are in its `actions.ts`. */
 
@@ -82,9 +82,9 @@ export async function getVolunteerById(id: string) {
 	return row ?? null;
 }
 
-// The ledger is owned by `src/lib/invites.ts`, reads as well as writes; the
+// The ledger is owned by `src/lib/volunteers/invites.ts`, reads as well as writes; the
 // roster screen reaches it through here.
-export { volunteerLedger, type LedgerEntry } from '@/lib/invites';
+export { volunteerLedger, type LedgerEntry } from '@/lib/volunteers/invites';
 
 export type AdminInviteRow = {
 	id: string;

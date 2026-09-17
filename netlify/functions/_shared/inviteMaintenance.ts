@@ -7,7 +7,7 @@ import {
 	balancesBySlackUser,
 	giveBack,
 	periodKey,
-} from '../../../src/lib/invites.ts';
+} from '../../../src/lib/volunteers/invites.ts';
 import { sendEmail } from '../../../src/lib/email/transport.ts';
 import { siteUrl } from '../../../src/util/url.server.ts';
 

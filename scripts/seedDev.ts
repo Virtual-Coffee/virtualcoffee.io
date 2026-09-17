@@ -1,6 +1,6 @@
 import { getStore } from '@netlify/blobs';
 
-import { ATTACHMENT_STORE } from '@/lib/attachments';
+import { ATTACHMENT_STORE } from '@/lib/submissions/attachments';
 import { siteUrl } from '@/util/url.server';
 
 import { seedDev } from './seed';

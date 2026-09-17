@@ -6,8 +6,8 @@ import { eq, inArray } from 'drizzle-orm';
 
 import { db, invite, volunteer } from '../../src/db';
 import { fetchSlackMembers } from '../../src/data/slackMembers';
-import { importBalance } from '../../src/lib/invites';
-import { grantVolunteerRole } from '../../src/lib/pendingGrants';
+import { importBalance } from '../../src/lib/volunteers/invites';
+import { grantVolunteerRole } from '../../src/lib/access/pendingGrants';
 import { CONFIDENT_SCORE, score, type Candidate } from './match';
 
 /**

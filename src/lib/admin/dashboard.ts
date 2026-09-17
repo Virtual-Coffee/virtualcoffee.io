@@ -1,6 +1,6 @@
 import { statusCounts } from '@/lib/waitlist/applications';
 import { recentEvents } from '@/lib/history/eventLog';
-import { activeVolunteerCount } from '@/lib/volunteers';
+import { activeVolunteerCount } from '@/lib/volunteers/volunteers';
 import type { Section } from '@/lib/access/permissions';
 import { applicationPath, submissionPath } from '@/lib/admin/links';
 import {

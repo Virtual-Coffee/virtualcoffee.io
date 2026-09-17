@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-import type { ActionResult, EmailActionResult } from '@/lib/actionResult';
+import type { ActionResult, EmailActionResult } from '@/lib/admin/actionResult';
 import { isId } from '@/db/ids';
 import { volunteerInviteEmail } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
@@ -14,9 +14,9 @@ import {
 	issueInvite,
 	newClaimToken,
 	type IssuedInvite,
-} from '@/lib/invites';
-import { actorId } from '@/lib/adminAccess';
-import { requireVolunteer } from '@/lib/volunteerAccess';
+} from '@/lib/volunteers/invites';
+import { actorId } from '@/lib/access/adminAccess';
+import { requireVolunteer } from '@/lib/access/volunteerAccess';
 import { siteUrl } from '@/util/url.server';
 
 const schema = z.object({

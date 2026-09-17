@@ -15,7 +15,7 @@
 import { WebClient } from '@slack/web-api';
 import { unstable_cache } from 'next/cache';
 
-import type { SlackMember } from '@/lib/slackMemberPicker';
+import type { SlackMember } from '@/lib/volunteers/slackMemberPicker';
 
 import { assertMocksAllowed } from './mocks';
 

@@ -62,7 +62,7 @@ index can see that.
 
 - **Nothing may ever `UPDATE` or `DELETE` a ledger row.** Corrections are new
   rows, which is why `adjustBalance` requires a reason.
-- **`src/lib/invites.ts` is the only writer of the ledger**, as the Event Log
+- **`src/lib/volunteers/invites.ts` is the only writer of the ledger**, as the Event Log
   is of `application_event`. Every movement — accrual, spend, give-back, admin
   adjustment, import — is a function there, so what a send or a cancellation
   does to a balance is decided once and a new caller cannot invent a movement

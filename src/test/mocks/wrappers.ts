@@ -60,9 +60,9 @@ export const afterRead = { run: null as null | (() => Promise<void>) };
  * it. `src/test/db/setup.ts` registers one per module, e.g.
  *
  * ```ts
- * vi.mock('@/lib/volunteers', async (importOriginal) =>
+ * vi.mock('@/lib/volunteers/volunteers', async (importOriginal) =>
  * 	(await import('@/test/mocks/wrappers')).withAfterRead(
- * 		await importOriginal<typeof import('@/lib/volunteers')>(),
+ * 		await importOriginal<typeof import('@/lib/volunteers/volunteers')>(),
  * 		'pendingInvite',
  * 	),
  * );
@@ -94,9 +94,9 @@ export const preCheck = { skip: false };
  * set. `src/test/db/setup.ts` registers one per module, e.g.
  *
  * ```ts
- * vi.mock('@/lib/invites', async (importOriginal) =>
+ * vi.mock('@/lib/volunteers/invites', async (importOriginal) =>
  * 	(await import('@/test/mocks/wrappers')).withSkippableCheck(
- * 		await importOriginal<typeof import('@/lib/invites')>(),
+ * 		await importOriginal<typeof import('@/lib/volunteers/invites')>(),
  * 		'blockingInvite',
  * 	),
  * );

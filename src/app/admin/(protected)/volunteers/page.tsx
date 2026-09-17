@@ -1,6 +1,6 @@
 import { getSlackMembers } from '@/data/slackMembers';
-import { requirePermission, sessionCan } from '@/lib/adminAccess';
-import { listVolunteers } from '@/lib/volunteers';
+import { requirePermission, sessionCan } from '@/lib/access/adminAccess';
+import { listVolunteers } from '@/lib/volunteers/volunteers';
 import { FilterChips } from '../filterChips';
 import {
 	DEFAULT_VOLUNTEER_STATE,

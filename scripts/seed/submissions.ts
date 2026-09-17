@@ -3,12 +3,12 @@ import {
 	recordEvent,
 	recordImport,
 	type SubmissionEventInput,
-} from '@/lib/eventLog';
+} from '@/lib/history/eventLog';
 import {
 	SUBMISSION_KINDS,
 	submissionSubject,
 	type SubmissionKind,
-} from '@/lib/submissions';
+} from '@/lib/submissions/submissions';
 import { insertSubmission } from '@/test/db/fixtures';
 
 import { ADMIN, ATTACHMENT, daysAgo } from './shared';
