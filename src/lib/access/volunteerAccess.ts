@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { getSession, sessionRoles } from '@/lib/adminAccess';
-import { type Session } from '@/lib/auth';
+import { getSession, sessionRoles } from '@/lib/access/adminAccess';
+import { type Session } from '@/lib/access/auth';
 
 /**
  * The authorization boundary for /invites (docs/adr/0010). It must never ask

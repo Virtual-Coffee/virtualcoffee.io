@@ -1,6 +1,6 @@
 import { toNextJsHandler } from 'better-auth/next-js';
 
-import { getAuth } from '@/lib/auth';
+import { getAuth } from '@/lib/access/auth';
 
 /**
  * Handlers are resolved per request rather than at module scope: building the
