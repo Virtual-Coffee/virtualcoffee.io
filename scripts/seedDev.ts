@@ -1,5 +1,7 @@
 import { getStore } from '@netlify/blobs';
 
+import { isLocalDatabaseUrl } from './lib/localOnly';
+
 import { ATTACHMENT_STORE } from '@/lib/submissions/attachments';
 import { siteUrl } from '@/util/url.server';
 
@@ -18,6 +20,14 @@ import { fetchPlaceholder } from './seed/attachment';
 async function main() {
 	if (process.env.CONTEXT === 'production') {
 		throw new Error('Refusing to seed a production database.');
+	}
+	// The wrapper refuses a non-local connection string, but run directly this
+	// script would read whatever the shell carries — a branch database, say.
+	const databaseUrl = process.env.NETLIFY_DB_URL ?? process.env.DATABASE_URL;
+	if (!databaseUrl || !isLocalDatabaseUrl(databaseUrl)) {
+		throw new Error(
+			'Refusing to seed: the connection string is not local. Run `pnpm db:seed`.',
+		);
 	}
 
 	// Scripts do not read `.env`, and `siteUrl()` would otherwise fall back to
