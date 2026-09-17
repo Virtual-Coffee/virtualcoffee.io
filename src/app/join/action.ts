@@ -10,15 +10,14 @@ import { applicationSubject } from '@/lib/applications';
 import { hashClaimToken } from '@/lib/invites';
 import { QUEUE_STATUSES } from '@/lib/applicationStatuses';
 import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
+import { agree, email, name } from '@/util/forms/fields';
+import { intake } from '@/util/forms/intake';
 import {
 	formError,
-	formObject,
 	formValue,
 	githubUsername,
 	invalidFields,
-	staleForm,
 } from '@/util/forms/parse';
-import { checkSpam } from '@/util/forms/spamGuard';
 import type { FormState } from '@/util/forms/types';
 
 /** What redeeming a Claim Link yields, or null when there was nothing to redeem. */
@@ -28,35 +27,26 @@ type ClaimedInvite = {
 	inviterSlackUserId: string | null;
 } | null;
 
+const THANKS = '/join/thank-you';
+
 const schema = z.object({
-	name: z.string().trim().min(1, 'Please tell us your name.').max(200),
-	email: z.email('That doesn’t look like an email address.').max(320),
+	name: name(),
+	email: email(),
 	pronouns: z.string().trim().max(100).optional(),
 	githubUsername: githubUsername().optional(),
 	howDidYouHear: z.string().trim().max(5000).optional(),
 	journey: z.string().trim().max(5000).optional(),
 	codeInterests: z.string().trim().max(5000).optional(),
 	virtualCoffee: z.string().trim().max(5000).optional(),
-	agree: z.literal('agree', {
-		message: 'Please confirm you’ve read the Code of Conduct.',
-	}),
+	agree: agree(),
 });
 
 export async function submitMembershipApplication(
 	_state: FormState,
 	formData: FormData,
 ): Promise<FormState> {
-	// Same treatment the four submission forms give: a bot sees the thank-you
-	// page and nothing is written; a stale token is asked to submit again.
-	const guard = checkSpam(formData);
-	if (guard === 'stale') return staleForm();
-	if (guard !== 'ok') redirect('/join/thank-you');
-
-	const parsed = schema.safeParse(formObject(formData, schema));
-
-	if (!parsed.success) {
-		return invalidFields(parsed.error);
-	}
+	const parsed = intake(formData, { schema, thanks: THANKS });
+	if (!parsed.ok) return parsed.state;
 
 	const now = new Date();
 	const claimToken = formValue(formData, 'invite');
@@ -206,5 +196,5 @@ export async function submitMembershipApplication(
 		});
 	}
 
-	redirect('/join/thank-you');
+	redirect(THANKS);
 }
