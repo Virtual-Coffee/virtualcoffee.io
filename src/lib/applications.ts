@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, ilike, inArray, or } from 'drizzle-orm';
+import { and, desc, eq, ilike, inArray, or } from 'drizzle-orm';
 
 import {
 	db,
@@ -10,6 +10,7 @@ import {
 } from '@/db';
 import { isId } from '@/db/ids';
 import type { ApplicationSubject } from '@/lib/eventLog';
+import { pagedList } from '@/lib/pagedList';
 import { countByStatus } from '@/lib/statusCounts';
 
 /** The Subject a Membership Application's events are recorded and read against. */
@@ -71,40 +72,23 @@ export type ApplicationListResult = {
 };
 
 /**
- * Filtering, sorting and pagination all happen here rather than in the table
- * component. The table runs in manual mode: it renders exactly the rows this
- * returns and is told the total separately, so it never sees the other 2,500.
+ * Filtering and sorting happen here rather than in the table component, and
+ * the paging itself is `pagedList`. What is this module's own is which columns
+ * an application may be sorted by and that an invite sorts ahead of them.
  */
 export async function listApplications(
 	filters: ListFilters,
 ): Promise<ApplicationListResult> {
-	const database = db();
-	const where = buildWhere(filters);
-	const order = filters.direction === 'asc' ? asc : desc;
-
-	const [rows, [totals]] = await Promise.all([
-		database
-			.select()
-			.from(membershipApplication)
-			.where(where)
-			// The id is the tie-break (ADR 0008): `submittedAt` is not unique, and
-			// without a total order a row can straddle two pages of the queue.
-			.orderBy(
-				...(filters.priorityFirst
-					? [desc(membershipApplication.isPriority)]
-					: []),
-				order(SORT_COLUMNS[filters.sort]),
-				desc(membershipApplication.id),
-			)
-			.limit(filters.pageSize)
-			.offset(filters.page * filters.pageSize),
-		database
-			.select({ value: count() })
-			.from(membershipApplication)
-			.where(where),
-	]);
-
-	return { rows, rowCount: totals?.value ?? 0 };
+	return pagedList(membershipApplication, {
+		where: buildWhere(filters),
+		sort: SORT_COLUMNS[filters.sort],
+		direction: filters.direction,
+		leading: filters.priorityFirst
+			? [desc(membershipApplication.isPriority)]
+			: [],
+		page: filters.page,
+		pageSize: filters.pageSize,
+	});
 }
 
 /** Counts for the queue's filter chips. */

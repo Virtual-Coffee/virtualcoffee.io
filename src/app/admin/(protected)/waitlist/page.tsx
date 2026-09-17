@@ -3,10 +3,11 @@ import Link from 'next/link';
 import { requirePermission } from '@/lib/adminAccess';
 import { listApplications, statusCounts } from '@/lib/applications';
 import { QUEUE_STATUSES } from '@/lib/applicationStatuses';
+import { FilterChips } from '../filterChips';
 import { ApplicationsTable } from './applicationsTable';
 import { QueueSearch } from './queueSearch';
 import { parseSearchParams } from './searchParams';
-import { listHref, oneOf, type RawSearchParams } from '@/util/searchParams';
+import { oneOf, type RawSearchParams } from '@/util/searchParams';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,34 +48,14 @@ export default async function AdminQueuePage({
 	]);
 
 	const active = oneOf(params.status, QUEUE_STATUSES) ?? 'queue';
-	// The chips are filters, so they reset the page — but keep everything else
-	// the maintainer set: the search, the other chip group and the sort.
-	const chipHref = (changes: {
-		status?: string | null;
-		source?: string | null;
-	}) =>
-		listHref('/admin/waitlist', {
-			status: active === 'queue' ? null : active,
-			source: filters.source ?? null,
-			q: filters.search ?? null,
-			sort: filters.sort === 'submittedAt' ? null : filters.sort,
-			dir: filters.direction === 'desc' ? null : filters.direction,
-			...changes,
-		});
-	// "Everything" is the default view, so its link carries no status at all.
-	const chips = [
-		{ key: 'waitlisted', label: 'Waitlisted', count: counts.waitlisted ?? 0 },
-		{
-			key: 'coffee_invited',
-			label: 'Coffee invited',
-			count: counts.coffee_invited ?? 0,
-		},
-		{
-			key: 'queue',
-			label: 'Everything',
-			count: (counts.waitlisted ?? 0) + (counts.coffee_invited ?? 0),
-		},
-	];
+	// Either chip group keeps what the other one, the search and the sort are
+	// set to; only the defaults are left out, so the canonical view is a bare
+	// path.
+	const shared = {
+		q: filters.search ?? null,
+		sort: filters.sort === 'submittedAt' ? null : filters.sort,
+		dir: filters.direction === 'desc' ? null : filters.direction,
+	};
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -94,40 +75,40 @@ export default async function AdminQueuePage({
 			</div>
 
 			<div className="d-flex flex-wrap gap-3 align-items-center mb-3">
-				<div className="btn-group" role="group" aria-label="Filter by status">
-					{chips.map((chip) => (
-						<Link
-							key={chip.key}
-							href={chipHref({
-								status: chip.key === 'queue' ? null : chip.key,
-							})}
-							className={`btn btn-sm ${
-								active === chip.key ? 'btn-primary' : 'btn-outline-secondary'
-							}`}
-						>
-							{chip.label}{' '}
-							<span className="badge text-bg-light border ms-1">
-								{chip.count}
-							</span>
-						</Link>
-					))}
-				</div>
+				<FilterChips
+					base="/admin/waitlist"
+					keep={{ ...shared, source: filters.source ?? null }}
+					param="status"
+					// "Everything" is the default view, so its link carries no status.
+					active={active === 'queue' ? null : active}
+					chips={[
+						{
+							value: 'waitlisted',
+							label: 'Waitlisted',
+							count: counts.waitlisted ?? 0,
+						},
+						{
+							value: 'coffee_invited',
+							label: 'Coffee invited',
+							count: counts.coffee_invited ?? 0,
+						},
+						{
+							value: null,
+							label: 'Everything',
+							count: (counts.waitlisted ?? 0) + (counts.coffee_invited ?? 0),
+						},
+					]}
+					ariaLabel="Filter by status"
+				/>
 
-				<div className="btn-group" role="group" aria-label="Filter by source">
-					{SOURCE_FILTERS.map((option) => (
-						<Link
-							key={option.label}
-							href={chipHref({ source: option.value })}
-							className={`btn btn-sm ${
-								(filters.source ?? null) === option.value
-									? 'btn-secondary'
-									: 'btn-outline-secondary'
-							}`}
-						>
-							{option.label}
-						</Link>
-					))}
-				</div>
+				<FilterChips
+					base="/admin/waitlist"
+					keep={{ ...shared, status: active === 'queue' ? null : active }}
+					param="source"
+					active={filters.source ?? null}
+					chips={SOURCE_FILTERS}
+					ariaLabel="Filter by source"
+				/>
 			</div>
 
 			{/* "Clear" means the whole queue, not just this search, source or

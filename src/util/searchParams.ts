@@ -50,6 +50,30 @@ export function sortDirection(params: RawSearchParams): 'asc' | 'desc' {
 	return single(params.dir) === 'asc' ? 'asc' : 'desc';
 }
 
+/** The page, sort and direction every /admin list reads the same way. */
+export type ListQuery<S extends string> = {
+	page: number;
+	sort: S;
+	direction: 'asc' | 'desc';
+};
+
+/**
+ * The three values a paged list always has. A section's own parser calls this
+ * and adds whatever else it filters on, so the sort whitelist stays the one
+ * place that knows which columns are sortable.
+ */
+export function parseListQuery<S extends string>(
+	params: RawSearchParams,
+	sortFields: readonly S[],
+	defaultSort: S,
+): ListQuery<S> {
+	return {
+		page: pageIndex(params),
+		sort: oneOf(params.sort, sortFields) ?? defaultSort,
+		direction: sortDirection(params),
+	};
+}
+
 /**
  * A link to a list screen carrying only the values that are set: `null` and
  * `undefined` are left out, so a page passes a default as null and the
