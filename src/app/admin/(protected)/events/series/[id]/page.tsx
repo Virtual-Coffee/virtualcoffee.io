@@ -37,11 +37,7 @@ export default async function EditSeriesPage({
 		);
 	}
 
-	const series = await calendar.getSeries(id).catch((error: unknown) => {
-		// Google 404s an id it has never seen or has since purged.
-		if ((error as { status?: number }).status === 404) return null;
-		throw error;
-	});
+	const series = await calendar.getSeries(id);
 	if (!series) notFound();
 	const events = await calendar.listSeriesEvents(id, { months: 12 });
 

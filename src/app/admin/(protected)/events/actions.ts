@@ -13,6 +13,7 @@ import {
 } from '@/lib/eventDraft';
 import {
 	CalendarConflictError,
+	CalendarGoneError,
 	connectEventsCalendar,
 	isCalendarEventId,
 	type EventsCalendar,
@@ -68,6 +69,9 @@ function write(
 			} catch (error) {
 				if (error instanceof CalendarConflictError) {
 					return { ok: false, definitelyNotSent: true, message: CONFLICT };
+				}
+				if (error instanceof CalendarGoneError) {
+					return { ok: false, definitelyNotSent: true, message: GONE };
 				}
 				throw error;
 			}
