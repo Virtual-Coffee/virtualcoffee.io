@@ -25,12 +25,9 @@ import {
  * purpose: the events calendar uses a different service account under
  * `GOOGLE_SERVICE_ACCOUNT_KEY`.
  *
- * Outside production nothing reaches SMTP unless `SMTP_HOST` is set —
- * `deliver()` decides, and only calls back here once the mode is not
- * Captured, so the credentials are never read first. `SMTP_HOST` points at a
- * local-only sink such as Mailpit instead of Gmail: no Google credentials are
- * read, mail is addressed exactly as production would address it, and
- * nothing leaves the machine. See docs/adr/0013.
+ * `deliver()` decides the mode and only calls back here once it is not
+ * Captured; with `SMTP_HOST` set on a checkout, mail goes to that local sink
+ * instead of Gmail (docs/adr/0013).
  */
 
 export type Envelope = {

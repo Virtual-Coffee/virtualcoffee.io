@@ -31,7 +31,7 @@ _Avoid_: Approval, first approval, invite
 
 **Membership Approval**:
 The second of two approvals, granted after the applicant attends a Coffee.
-Sends the welcome email and the Slack invite.
+Sends the welcome email, which carries the handbook and the Slack invite.
 _Avoid_: Approval, final approval, acceptance
 
 **Lapsed**:
@@ -160,7 +160,9 @@ the concept)
 What happens to an email, Slack post or DM, or GitHub issue the site sends.
 **Live** delivers it to the intended recipient; only production does that.
 **Captured** builds and logs it and the pipeline carries on as though it went,
-but nothing leaves the deploy. Which mode applies where is `docs/adr/0013`.
+but nothing leaves the deploy. **Local** delivers an email for real, addressed
+as production would, to a local-only SMTP sink on a checkout. Which mode
+applies where is `docs/adr/0013`.
 _Avoid_: Dry run, suppressed, sandbox, test mode
 
 **Outbound**:
