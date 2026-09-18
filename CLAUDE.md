@@ -43,8 +43,6 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 
 `.github/workflows/ci.yml` runs five jobs on every pull request — `format`, `lint`, `typecheck`, `test`, `knip`. Netlify still owns `pnpm build`; CI does not build. CodeQL (`.github/workflows/codeql.yml`, advanced setup — leave the repository's default-setup toggle off) scans `javascript-typescript` and `actions` on pull requests, pushes to `main` and weekly; its findings go to the Security tab and are not a required check.
 
-PR review bots are opt-in by label: `coderabbit-review` (`.coderabbit.yaml`) and `greptile-review` (`.greptile/`); the two ignore lists stay identical.
-
 The `lint`, `typecheck`, `test` and `knip` jobs run `pnpm codegen` first, because `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test && pnpm knip` before finishing a change.
 
 Neither CI nor those checks run `next build`, so nothing before Netlify's deploy preview exercises prerendering. Run `pnpm build` locally when a change can only fail there — anything touching MDX frontmatter, `generateStaticParams`, or a component that pages render at build time.
@@ -139,6 +137,24 @@ Sentry (`@sentry/nextjs`), errors + tracing only. Init files: `src/instrumentati
 - Monthly challenges: prose lives in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`. Follow the process in the VC Community Building Resources "Monthly Challenge Technical Guidelines" linked from the README. The entry data for past challenges is a frozen snapshot in `src/data/monthlyChallenges/data/*.json` — see `docs/adr/0004` for why it is JSON and not a live fetch.
 - Member emoji must be standard Unicode; maintainers reject PRs otherwise.
 - PRs should link an issue (`Closes #123`); the PR template asks for Description and Methodology sections.
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `Virtual-Coffee/virtualcoffee.io` via `gh`. When a skill says "publish to the issue tracker", "fetch the relevant ticket" or names wayfinding, read `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+When a skill applies a triage label, read `docs/agents/triage-labels.md` for the repo's label names.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. When a skill asks for the domain docs, read `docs/agents/domain.md`.
+
+### Code review
+
+Label a PR `greptile-review` (or `coderabbit-review` for CodeRabbit) to get a bot review. Greptile's config is `.greptile/`; its `ignorePatterns` and `.coderabbit.yaml`'s `path_filters` stay identical. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

@@ -43,6 +43,7 @@
 				"src/instrumentation*.ts",
 				"sentry.*.config.ts",
 				"src/app/global-error.tsx",
+				"src/app/report-coc-violation/**",
 				"next.config.mjs"
 			],
 			"severity": "high"
