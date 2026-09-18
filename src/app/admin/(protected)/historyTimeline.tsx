@@ -8,15 +8,16 @@ import { Timeline } from './timeline';
 /**
  * One subject's History, as every detail page renders it: the event as a
  * badge, the status move when the event has one, the date and actor, then the
- * body. `statusLabel` is the Section's own wording for its statuses; a subject
- * with no status leaves it off.
+ * body. `statusLabels` is the Section's own wording for its statuses — a map,
+ * not a function, because this is a client component; a subject with no
+ * status leaves it off.
  */
 export function HistoryTimeline<S extends Subject>({
 	history,
-	statusLabel,
+	statusLabels,
 }: {
 	history: HistoryEntry<S>[];
-	statusLabel?: (status: StatusOf<S>) => string;
+	statusLabels?: Record<StatusOf<S>, string>;
 }) {
 	return (
 		<Timeline
@@ -27,9 +28,10 @@ export function HistoryTimeline<S extends Subject>({
 						<span className="badge text-bg-light border">
 							{eventLabel(entry.type, 'badge')}
 						</span>
-						{statusLabel && entry.fromStatus && entry.toStatus && (
+						{statusLabels && entry.fromStatus && entry.toStatus && (
 							<span className="small text-body-secondary">
-								{statusLabel(entry.fromStatus)} → {statusLabel(entry.toStatus)}
+								{statusLabels[entry.fromStatus]} →{' '}
+								{statusLabels[entry.toStatus]}
 							</span>
 						)}
 						<span className="ms-auto small text-body-secondary">

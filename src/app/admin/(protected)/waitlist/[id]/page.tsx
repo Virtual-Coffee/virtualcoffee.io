@@ -27,6 +27,7 @@ import {
 	StatusBadge,
 	formatDate,
 	sourceLabel,
+	STATUS_LABELS,
 	statusLabel,
 } from '../../presentation';
 
@@ -198,7 +199,7 @@ export default async function ApplicationDetailPage({
 							<NoteComposer onSubmit={addNote.bind(null, application.id)} />
 						)}
 						<div className="mt-3">
-							<HistoryTimeline history={entries} statusLabel={statusLabel} />
+							<HistoryTimeline history={entries} statusLabels={STATUS_LABELS} />
 						</div>
 					</section>
 				</div>
