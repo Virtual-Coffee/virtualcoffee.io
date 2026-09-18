@@ -392,11 +392,23 @@ export async function resendSlackInvite(
 	);
 	if (!sent.ok) return emailFailed(sent);
 
-	await supersedeSlackInviteTokens(applicationId, minted, new Date());
+	// The email has gone, so a supersession that fails is not an error page:
+	// the send is recorded either way, and History says the old link is still
+	// live so a maintainer can re-send once more to retire it.
+	let what = `Slack invite re-sent to ${application.email}`;
+	try {
+		await supersedeSlackInviteTokens(applicationId, minted, new Date());
+	} catch (error) {
+		console.error('Failed to supersede the previous Slack invite links', {
+			applicationId,
+			error,
+		});
+		what += ' — the previous link is still live';
+	}
 	await recordOutcome(subject, {
 		channel: 'email',
 		outbound: sent,
-		what: `Slack invite re-sent to ${application.email}`,
+		what,
 		actorUserId: actor,
 	});
 
