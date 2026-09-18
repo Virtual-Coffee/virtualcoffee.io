@@ -138,7 +138,9 @@ async function emailApplicant(
  * Null means the row moved and the caller carries on. Otherwise the race was
  * lost — the email has gone regardless, so History says so and `rollback`
  * kills a link this request is no longer entitled to — and the caller hands
- * the answer back.
+ * the answer back. A transition that throws instead is rolled back the same
+ * way before the error propagates: the row did not move, so the emailed
+ * link would admit someone who is not a member.
  */
 async function transitionAfterSend(
 	opened: OpenedOk,
@@ -150,10 +152,23 @@ async function transitionAfterSend(
 ): Promise<EmailActionResult | null> {
 	const { actor, application, subject } = opened;
 
-	const moved = await transitionAndRecord(subject, from, patch, {
-		...event,
-		actorUserId: actor,
-	});
+	let moved: boolean;
+	try {
+		moved = await transitionAndRecord(subject, from, patch, {
+			...event,
+			actorUserId: actor,
+		});
+	} catch (error) {
+		try {
+			await rollback?.();
+		} catch (rollbackError) {
+			console.error('Failed to roll back after a transition threw', {
+				applicationId: subject.id,
+				error: rollbackError,
+			});
+		}
+		throw error;
+	}
 	if (moved) return null;
 
 	await rollback?.();
