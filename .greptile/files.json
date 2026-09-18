@@ -26,7 +26,7 @@
 		},
 		{
 			"path": "docs/adr/0005-persist-then-notify.md",
-			"description": "Public forms persist first and notify second",
+			"description": "Order of persisting and notifying for inbound public-form submissions",
 			"scope": [
 				"src/app/join/**",
 				"src/app/report-coc-violation/**",
