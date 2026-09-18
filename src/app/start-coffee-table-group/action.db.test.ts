@@ -46,6 +46,12 @@ describe('submitCoffeeTableGroupRequest', () => {
 				/^\*New Coffee Table Group\*[\s\S]*Analytical Engines/,
 			),
 		);
+		expect(notifySlack).toHaveBeenCalledWith(
+			'coffee-tables',
+			expect.stringContaining(
+				`/admin/submissions/coffee-tables/${row.id}|View in admin>`,
+			),
+		);
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Request submitted' },
 			{

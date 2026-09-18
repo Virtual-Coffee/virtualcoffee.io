@@ -4,6 +4,12 @@
  * Relative, so a sender prefixes `siteUrl()` and a `<Link>` uses it as is.
  */
 
+import type { SubmissionKind } from '@/lib/submissions/submissions';
+
 export function applicationPath(id: string): string {
 	return `/admin/waitlist/${id}`;
+}
+
+export function submissionPath(kind: SubmissionKind, id: string): string {
+	return `/admin/submissions/${kind}/${id}`;
 }
