@@ -30,7 +30,11 @@ describe('fetchSlackMembers', () => {
 						id: 'U_FULL',
 						name: 'ghopper',
 						real_name: 'Grace Hopper',
-						profile: { display_name: 'Grace', real_name: 'Grace Hopper' },
+						profile: {
+							display_name: 'Grace',
+							real_name: 'Grace Hopper',
+							email: 'grace@example.com',
+						},
 					},
 					// No display name: falls back to the real name.
 					{ id: 'U_NO_DISPLAY', name: 'ada', profile: { real_name: 'Ada' } },
@@ -48,18 +52,27 @@ describe('fetchSlackMembers', () => {
 		const members = await fetchSlackMembers();
 
 		expect(members).toEqual<SlackMember[]>([
-			{ id: 'U_NO_DISPLAY', name: 'Ada', displayName: 'Ada', handle: 'ada' },
+			// Email Display off, or no users:read.email: null, not ''.
+			{
+				id: 'U_NO_DISPLAY',
+				name: 'Ada',
+				displayName: 'Ada',
+				handle: 'ada',
+				email: null,
+			},
 			{
 				id: 'U_FULL',
 				name: 'Grace Hopper',
 				displayName: 'Grace',
 				handle: 'ghopper',
+				email: 'grace@example.com',
 			},
 			{
 				id: 'U_HANDLE_ONLY',
 				name: 'turing',
 				displayName: 'turing',
 				handle: 'turing',
+				email: null,
 			},
 		]);
 		expect(slack.usersList).toHaveBeenCalledTimes(2);
