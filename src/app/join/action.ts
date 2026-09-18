@@ -10,7 +10,7 @@ import { recordEvent, recordOutcome } from '@/lib/history/eventLog';
 import { applicationSubject } from '@/lib/waitlist/applications';
 import { hashClaimToken } from '@/lib/volunteers/invites';
 import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
-import { inviteClaimedMessage, notifySlack } from '@/lib/slack/notify';
+import { applicationSubmittedMessage, notifySlack } from '@/lib/slack/notify';
 import { agree, email, name } from '@/util/forms/fields';
 import { intake } from '@/util/forms/intake';
 import {
@@ -181,28 +181,27 @@ export async function submitMembershipApplication(
 	/**
 	 * Persist first, notify second, per docs/adr/0005 — and outside the try above,
 	 * so a Slack outage can never be reported to the applicant as a failure to
-	 * save. An invited application jumps the queue, so a reviewer wants to know it
-	 * arrived; the outcome is recorded as an event either way, which is what makes
-	 * a silent notification visible in /admin.
+	 * save. Every application is announced; an invited one is flagged because it
+	 * jumps the queue. The outcome is recorded as an event either way, which is
+	 * what makes a silent notification visible in /admin.
 	 */
-	if (result.claimed) {
-		const invited = result.claimed;
-		const notified = await notifySlack(
-			'membership',
-			inviteClaimedMessage({
-				inviteeName: parsed.data.name,
-				inviteeEmail: parsed.data.email,
-				inviterName: invited.inviterName,
-				adminUrl: `${siteUrl()}${applicationPath(result.applicationId)}`,
-			}),
-		);
+	const notified = await notifySlack(
+		'membership',
+		applicationSubmittedMessage({
+			name: parsed.data.name,
+			email: parsed.data.email,
+			adminUrl: `${siteUrl()}${applicationPath(result.applicationId)}`,
+			invite: result.claimed && { inviterName: result.claimed.inviterName },
+		}),
+	);
 
-		await recordOutcome(applicationSubject(result.applicationId), {
-			channel: 'slack',
-			outbound: notified,
-			what: 'Slack notified of an invited application',
-		});
-	}
+	await recordOutcome(applicationSubject(result.applicationId), {
+		channel: 'slack',
+		outbound: notified,
+		what: result.claimed
+			? 'Slack notified of an invited application'
+			: 'Slack notified of a new application',
+	});
 
 	redirect(THANKS);
 }
