@@ -30,6 +30,7 @@ import {
 } from '@/lib/volunteers/invites';
 import {
 	grantVolunteerRole,
+	lockSlackMember,
 	withoutVolunteerRole,
 } from '@/lib/access/pendingGrants';
 import { parseRoles } from '@/lib/access/permissions';
@@ -326,6 +327,11 @@ export async function setVolunteerActive(
 	const signedIn = active ? await userForSlackId(row.slackUserId) : null;
 
 	await db().transaction(async (tx) => {
+		// The lock claimPendingGrant() takes: a first sign-in landing between
+		// the reads below and their writes would re-apply the Grant a pause is
+		// withdrawing, or have its own write overwritten.
+		await lockSlackMember(tx, row.slackUserId);
+
 		await tx
 			.update(volunteer)
 			.set({ deactivatedAt: active ? null : new Date() })
