@@ -16,7 +16,7 @@
 		},
 		{
 			"path": "docs/adr/0003-authorization-in-layouts-not-proxy.md",
-			"description": "Every admin page and action gates itself; the layout is not the gate",
+			"description": "Where authorization for /admin lives: server components vs proxy.ts",
 			"scope": ["src/app/admin/**", "src/lib/access/**"]
 		},
 		{
