@@ -98,7 +98,7 @@
 		},
 		{
 			"path": "docs/adr/0014-google-calendar-is-the-events-system-of-record.md",
-			"description": "Google Calendar is the Events system of record; the Join Link is the location, extendedProperties are never touched",
+			"description": "The Events Calendar as system of record for Series and Events, and what /admin/events may write",
 			"scope": [
 				"src/data/events.ts",
 				"src/lib/events/**",
