@@ -204,7 +204,7 @@ describe('approveMembership', () => {
 		).resolves.toEqual({ ok: true, applicationId: id });
 	});
 
-	test('a transition that throws after both emails went leaves the link dead', async () => {
+	test('a transition that throws after the email went leaves the link dead', async () => {
 		vi.stubEnv('URL', 'https://virtualcoffee.io');
 		sendEmail.mockResolvedValue(SENT);
 		const { id } = await insertApplication({ status: 'coffee_invited' });
@@ -218,10 +218,10 @@ describe('approveMembership', () => {
 		}
 
 		expect((await applicationRow(id)).status).toBe('coffee_invited');
-		expect(sendEmail).toHaveBeenCalledTimes(2);
-		const [, slackInvite] = sendEmail.mock.calls;
+		expect(sendEmail).toHaveBeenCalledOnce();
+		const [welcome] = sendEmail.mock.calls;
 		await expect(
-			slackInviteForToken(codeIn(slackInvite[0].text)),
+			slackInviteForToken(codeIn(welcome[1].inviteUrl)),
 		).resolves.toEqual({ ok: false, reason: 'expired' });
 	});
 
@@ -543,7 +543,7 @@ describe('resendSlackInvite', () => {
 		}
 
 		const [call] = sendEmail.mock.calls;
-		for (const token of [first, codeIn(call[0].text)]) {
+		for (const token of [first, codeIn(call[1].inviteUrl)]) {
 			await expect(slackInviteForToken(token)).resolves.toEqual({
 				ok: true,
 				applicationId: id,
