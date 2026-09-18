@@ -20,8 +20,10 @@ export default async () => {
 			);
 		}
 	} catch (error) {
-		// Netlify retries a failed scheduled function; every step is idempotent,
-		// so letting it throw is safe and a swallowed error would be invisible.
+		// Netlify documents no retry for a scheduled function (only background
+		// functions and Async Workloads get one), so a failure here is made good
+		// by tomorrow's run — every step is idempotent. Throw anyway: a swallowed
+		// error would be invisible.
 		console.error('Invite maintenance failed', error);
 		throw error;
 	}
