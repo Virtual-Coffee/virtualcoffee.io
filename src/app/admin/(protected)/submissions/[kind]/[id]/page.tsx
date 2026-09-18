@@ -14,9 +14,9 @@ import {
 import { formatDateTime } from '../../../presentation';
 import { NoteComposer } from '../../../noteComposer';
 import { addSubmissionNote } from '../actions';
-import { SubmissionStatusBadge } from '../presentation';
+import { SubmissionStatusBadge, submissionStatusLabel } from '../presentation';
 import { StatusControl } from '../statusControl';
-import { HistoryTimeline } from './historyTimeline';
+import { HistoryTimeline } from '../../../historyTimeline';
 
 export const dynamic = 'force-dynamic';
 
@@ -128,7 +128,10 @@ export default async function SubmissionDetailPage({
 
 				<div className="col-lg-5">
 					<h2 className="h6">History</h2>
-					<HistoryTimeline history={entries} />
+					<HistoryTimeline
+						history={entries}
+						statusLabel={submissionStatusLabel}
+					/>
 
 					{canManage && (
 						<NoteComposer
