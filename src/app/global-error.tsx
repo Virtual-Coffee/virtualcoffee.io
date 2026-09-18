@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/nextjs';
 import { Inter } from 'next/font/google';
-import Link from 'next/link';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import '@/styles/main.scss';
 
@@ -48,9 +47,12 @@ export default function GlobalError({
 						>
 							Try again
 						</button>
-						<Link href="/" className="btn btn-outline-secondary">
+						{/* eslint-disable-next-line @next/next/no-html-link-for-pages -- a
+						    soft navigation to the same pathname leaves the boundary active,
+						    and the router may be what crashed; reload the document instead */}
+						<a href="/" className="btn btn-outline-secondary">
 							Go to the home page
-						</Link>
+						</a>
 					</p>
 				</DefaultLayout>
 			</body>
