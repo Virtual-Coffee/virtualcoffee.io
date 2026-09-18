@@ -69,7 +69,6 @@ export const SUBMISSION_KINDS = {
 } as const;
 
 export type SubmissionKind = keyof typeof SUBMISSION_KINDS;
-export type { SubmissionEventKey } from '@/lib/history/eventLog';
 
 /** The Subject a Submission's events are recorded and read against. */
 export function submissionSubject(
