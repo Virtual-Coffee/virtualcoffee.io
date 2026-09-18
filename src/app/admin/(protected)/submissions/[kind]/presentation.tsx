@@ -1,6 +1,6 @@
 import type { SubmissionStatus } from '@/db';
 
-const STATUS_LABELS: Record<SubmissionStatus, string> = {
+export const STATUS_LABELS: Record<SubmissionStatus, string> = {
 	new: 'New',
 	in_progress: 'In progress',
 	resolved: 'Resolved',
