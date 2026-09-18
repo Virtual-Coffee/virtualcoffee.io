@@ -69,7 +69,7 @@ export function capture(
 export type EmailDelivery =
 	| { mode: 'live' }
 	| { mode: 'captured'; context: string }
-	| { mode: 'local'; context: string };
+	| { mode: 'local'; context: string; host: string };
 
 /**
  * `SMTP_HOST` turns Captured into Local: delivered for real, exactly as
@@ -85,7 +85,7 @@ export function emailDelivery(): EmailDelivery {
 	const host = process.env.SMTP_HOST?.trim();
 	if (!isDeployed() && host) {
 		if (isLoopbackHost(host)) {
-			return { mode: 'local', context: deployContext() };
+			return { mode: 'local', context: deployContext(), host };
 		}
 		// A sink that mail can leave the machine for is not a sink.
 		console.warn(

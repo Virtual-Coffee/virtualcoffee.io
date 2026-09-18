@@ -240,7 +240,8 @@ describe('delivery modes', () => {
 
 	test('local: no Google credentials needed, addressed exactly as production would', async () => {
 		vi.stubEnv('CONTEXT', 'dev');
-		vi.stubEnv('SMTP_HOST', 'localhost');
+		// Padded on purpose: the transporter gets the host emailDelivery accepted.
+		vi.stubEnv('SMTP_HOST', ' localhost ');
 		vi.stubEnv('SMTP_PORT', '1025');
 		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
 		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
@@ -321,6 +322,7 @@ describe('emailStatus', () => {
 		expect(emailStatus()).toEqual({
 			mode: 'local',
 			context: 'dev',
+			host: 'localhost',
 			configured: true,
 		});
 	});
