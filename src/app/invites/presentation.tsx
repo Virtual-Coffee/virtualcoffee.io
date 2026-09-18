@@ -19,10 +19,6 @@ const STATUS_CLASSES: Record<InviteStatus, string> = {
 	cancelled: 'text-bg-light border',
 };
 
-export function inviteStatusLabel(status: InviteStatus): string {
-	return STATUS_LABELS[status];
-}
-
 export function InviteStatusBadge({ status }: { status: InviteStatus }) {
 	return (
 		<span className={`badge ${STATUS_CLASSES[status]}`}>
