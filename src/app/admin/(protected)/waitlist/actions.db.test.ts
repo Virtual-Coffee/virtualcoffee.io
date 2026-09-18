@@ -15,6 +15,7 @@ import {
 	applicationEvents,
 	applicationRow,
 	failInserts,
+	failWrites,
 	insertApplication,
 	insertInvite,
 	insertUser,
@@ -544,6 +545,40 @@ describe('resendSlackInvite', () => {
 		expect(minted).toBeDefined();
 		await expect(applicationEvents(id)).resolves.toEqual([
 			expect.objectContaining({ type: 'email_failed' }),
+		]);
+	});
+
+	test('a supersession that fails still records the send, and says the old link is live', async () => {
+		vi.stubEnv('URL', 'https://virtualcoffee.io');
+		sendEmail.mockResolvedValue(SENT);
+		const { id } = await insertApplication({ status: 'member' });
+		const { token: first } = await createSlackInviteToken(id);
+		const fault = await failWrites('invite_token', 'update');
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+		try {
+			await expect(resendSlackInvite(id, false)).resolves.toEqual({
+				ok: true,
+			});
+			expect(error).toHaveBeenCalledOnce();
+		} finally {
+			await fault.remove();
+			error.mockRestore();
+		}
+
+		const [call] = sendEmail.mock.calls;
+		for (const token of [first, codeIn(call[0].text)]) {
+			await expect(slackInviteForToken(token)).resolves.toEqual({
+				ok: true,
+				applicationId: id,
+			});
+		}
+		await expect(applicationEvents(id)).resolves.toEqual([
+			expect.objectContaining({
+				type: 'email_sent',
+				body: expect.stringMatching(
+					/^Slack invite re-sent to .* — the previous link is still live$/,
+				),
+			}),
 		]);
 	});
 
