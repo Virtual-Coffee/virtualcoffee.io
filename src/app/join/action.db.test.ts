@@ -96,6 +96,10 @@ describe('submitMembershipApplication', () => {
 			'membership',
 			expect.stringContaining('*Invited by:* Grace Hopper'),
 		);
+		expect(notifySlack).toHaveBeenCalledWith(
+			'membership',
+			expect.stringContaining(`/admin/waitlist/${row.id}|View in admin>`),
+		);
 		await expect(applicationEvents(row.id)).resolves.toEqual([
 			expect.objectContaining({
 				type: 'submitted',

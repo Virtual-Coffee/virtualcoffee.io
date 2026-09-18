@@ -55,7 +55,9 @@ export function notifySlack(
 			const response = await fetch(url, {
 				method: 'POST',
 				headers: { 'content-type': 'application/json' },
-				body: JSON.stringify({ text, unfurl_links: true }),
+				// The admin link is behind sign-in, so an unfurl could only ever be a
+				// stray preview of the sign-in page.
+				body: JSON.stringify({ text, unfurl_links: false }),
 				signal: AbortSignal.timeout(TIMEOUT_MS),
 			});
 
@@ -100,6 +102,19 @@ function field(label: string, value: string | null | undefined): string {
 	return `*${label}:* ${block(value)}`;
 }
 
+/**
+ * `<url|label>` is Slack's link syntax. The URLs here are the site's own,
+ * built from an id, so neither can carry the `|` or `>` that would end it.
+ */
+function link(url: string, label: string): string {
+	return `<${url}|${label}>`;
+}
+
+/** The last line of every message: where a reviewer opens the row. */
+function adminLink(url: string, label = 'View in admin'): string {
+	return link(url, label);
+}
+
 export function cocReportMessage(report: {
 	name: string | null;
 	email: string | null;
@@ -108,6 +123,7 @@ export function cocReportMessage(report: {
 	description: string;
 	anyoneElseInvolved: string | null;
 	hasAttachment: boolean;
+	adminUrl: string;
 }): string {
 	return [
 		'*CoC Report Submitted*',
@@ -122,12 +138,11 @@ export function cocReportMessage(report: {
 		'',
 		'*Anyone else involved:*',
 		block(report.anyoneElseInvolved),
+		'',
 		report.hasAttachment
-			? '\n_A file was attached; open the report to view it._'
-			: '',
-	]
-		.join('\n')
-		.trimEnd();
+			? `_${adminLink(report.adminUrl, 'A file was attached; open the report to view it.')}_`
+			: adminLink(report.adminUrl),
+	].join('\n');
 }
 
 export function volunteerSignupMessage(signup: {
@@ -135,6 +150,7 @@ export function volunteerSignupMessage(signup: {
 	email: string;
 	position: string | null;
 	description: string | null;
+	adminUrl: string;
 }): string {
 	return [
 		'*New Volunteer Form Submission*',
@@ -145,6 +161,8 @@ export function volunteerSignupMessage(signup: {
 		'',
 		'*Description:*',
 		block(signup.description),
+		'',
+		adminLink(signup.adminUrl),
 	].join('\n');
 }
 
@@ -152,9 +170,14 @@ export function lunchAndLearnMessage(idea: {
 	topic: string;
 	name: string;
 	issueUrl: string | null;
+	adminUrl: string;
 }): string {
-	const lead = `New Lunch & Learn Submission: ${escape(idea.topic)} by ${escape(idea.name)}`;
-	return idea.issueUrl ? `${lead}\n\nGitHub Link: ${idea.issueUrl}` : lead;
+	return [
+		`New Lunch & Learn Submission: ${escape(idea.topic)} by ${escape(idea.name)}`,
+		'',
+		...(idea.issueUrl ? [link(idea.issueUrl, 'GitHub issue')] : []),
+		adminLink(idea.adminUrl),
+	].join('\n');
 }
 
 /**
@@ -169,6 +192,7 @@ export function inviteClaimedMessage(claim: {
 	inviteeName: string;
 	inviteeEmail: string;
 	inviterName: string | null;
+	adminUrl: string;
 }): string {
 	return [
 		'*Invited Application Received*',
@@ -178,6 +202,7 @@ export function inviteClaimedMessage(claim: {
 		field('Invited by', claim.inviterName),
 		'',
 		'_Invited applications sort to the front of the waitlist._',
+		adminLink(claim.adminUrl),
 	].join('\n');
 }
 
@@ -186,6 +211,7 @@ export function coffeeTableGroupMessage(request: {
 	email: string;
 	groupName: string | null;
 	description: string | null;
+	adminUrl: string;
 }): string {
 	return [
 		'*New Coffee Table Group*',
@@ -196,5 +222,7 @@ export function coffeeTableGroupMessage(request: {
 		'',
 		'*Description:*',
 		block(request.description),
+		'',
+		adminLink(request.adminUrl),
 	].join('\n');
 }
