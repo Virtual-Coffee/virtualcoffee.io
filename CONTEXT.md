@@ -18,6 +18,12 @@ The live queue of applications awaiting a first decision. It is a working
 queue, not an archive — historical applications are not on it.
 _Avoid_: Waiting list, backlog
 
+**Source**:
+How a Membership Application arrived. A **Waitlist signup** came through
+`/join` on its own; a **Volunteer invite** came through a Claim Link and
+enters the Waitlist with priority.
+_Avoid_: Origin, channel, referral source
+
 **Coffee Invite**:
 The first of two approvals. The applicant is taken off the Waitlist and emailed
 a link to a Coffee.
