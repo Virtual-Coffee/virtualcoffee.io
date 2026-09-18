@@ -64,7 +64,7 @@ export function Form({ spamToken }: { spamToken: string }) {
 					name="uploadedFiles"
 					type="file"
 					label="Screenshot or any other file:"
-					help="Optional. One image or PDF, up to 10MB."
+					help="Optional. One image or PDF, up to 4MB."
 					error={fieldError('uploadedFiles')}
 					accept="image/png,image/jpeg,image/gif,image/webp,application/pdf"
 				/>
