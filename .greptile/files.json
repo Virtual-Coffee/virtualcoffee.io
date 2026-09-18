@@ -97,6 +97,15 @@
 			]
 		},
 		{
+			"path": "docs/adr/0014-google-calendar-is-the-events-system-of-record.md",
+			"description": "Google Calendar is the Events system of record; the Join Link is the location, extendedProperties are never touched",
+			"scope": [
+				"src/data/events.ts",
+				"src/lib/events/**",
+				"src/app/admin/(protected)/events/**"
+			]
+		},
+		{
 			"path": "docs/adr/0016-slack-notifications-are-block-kit-containers.md",
 			"description": "Slack notifications as Block Kit container blocks: literal runs for typed values, mrkdwn for static copy",
 			"scope": ["src/lib/slack/**", "src/test/slack.ts"]
