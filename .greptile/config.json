@@ -1,0 +1,86 @@
+{
+	"strictness": 2,
+	"commentTypes": ["logic", "syntax", "style"],
+	"autoReview": ["open", "push"],
+	"labels": ["greptile-review"],
+	"excludeAuthors": ["renovate[bot]", "*[bot]"],
+	"ignorePatterns": "pnpm-lock.yaml\ndrizzle/**/snapshot.json\nsrc/data/bots.ts\nsrc/data/monthlyChallenges/data/**\nsrc/data/podcast/episodes.json",
+	"shouldUpdateDescription": false,
+	"fixWithAI": true,
+	"statusCheck": true,
+	"summarySection": {
+		"included": true,
+		"collapsible": false,
+		"defaultOpen": true
+	},
+	"issuesTableSection": {
+		"included": true,
+		"collapsible": true,
+		"defaultOpen": true
+	},
+	"confidenceScoreSection": {
+		"included": true,
+		"collapsible": false,
+		"defaultOpen": false
+	},
+	"sequenceDiagramSection": {
+		"included": true,
+		"collapsible": true,
+		"defaultOpen": false
+	},
+	"instructions": "Keep comments short: one or two sentences plus file:line. Where a rule cites an ADR under docs/adr/, link the ADR instead of restating it. PRs may target a parent branch rather than main (stacked PRs); review only the diff against the PR base.",
+	"rules": [
+		{
+			"id": "external-html-sanitized",
+			"rule": "HTML from any external source passes through src/util/sanitizeCmsData.ts, the one allowlist; do not add a second sanitizer or rehype-sanitize config.",
+			"scope": ["src/**"],
+			"severity": "high"
+		},
+		{
+			"id": "sentry-no-pii",
+			"rule": "Sentry init must never pass dataCollection or sendDefaultPii; the CoC report form must not reach Sentry (docs/adr/0015).",
+			"scope": [
+				"src/instrumentation*.ts",
+				"sentry.*.config.ts",
+				"src/app/global-error.tsx",
+				"src/app/report-coc-violation/**",
+				"next.config.mjs"
+			],
+			"severity": "high"
+		},
+		{
+			"id": "mock-gate",
+			"rule": "A new external fetch in src/data/ tries the API, falls back to a mock guarded by assertMocksAllowed() from src/data/mocks/index.ts, and is wrapped in unstable_cache with a tag so /_cache can revalidate it.",
+			"scope": ["src/data/**"],
+			"severity": "medium"
+		},
+		{
+			"id": "bot-list-generated",
+			"rule": "src/data/bots.ts is generated from src/data/botOverrides.ts by pnpm build-bot-list and checked in; never hand-edit it.",
+			"scope": [
+				"src/data/bots.ts",
+				"src/data/botOverrides.ts",
+				"netlify/edge-functions/block-bots.ts"
+			],
+			"severity": "medium"
+		},
+		{
+			"id": "redirects-in-netlify-toml",
+			"rule": "URL redirects belong in netlify.toml, not next.config.mjs.",
+			"scope": ["next.config.mjs", "netlify.toml"],
+			"severity": "low"
+		},
+		{
+			"id": "member-files",
+			"rule": "Member files export a MemberObject whose github field matches the filename and export identifier (vc/member-file-identity); emoji must be standard Unicode.",
+			"scope": ["src/content/members/**"],
+			"severity": "low"
+		},
+		{
+			"id": "no-raw-dangerously-set-inner-html",
+			"rule": "dangerouslySetInnerHTML takes only output of sanitizeCmsData (lint rule vc/no-raw-dangerously-set-inner-html).",
+			"scope": ["src/**/*.tsx"],
+			"severity": "low"
+		}
+	]
+}

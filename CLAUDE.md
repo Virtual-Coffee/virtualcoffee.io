@@ -138,6 +138,24 @@ Sentry (`@sentry/nextjs`), errors + tracing only. Init files: `src/instrumentati
 - Member emoji must be standard Unicode; maintainers reject PRs otherwise.
 - PRs should link an issue (`Closes #123`); the PR template asks for Description and Methodology sections.
 
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `Virtual-Coffee/virtualcoffee.io` via `gh`. When a skill says "publish to the issue tracker", "fetch the relevant ticket" or names wayfinding, read `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+When a skill applies a triage label, read `docs/agents/triage-labels.md` for the repo's label names.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. When a skill asks for the domain docs, read `docs/agents/domain.md`.
+
+### Code review
+
+Label a PR `greptile-review` (or `coderabbit-review` for CodeRabbit) to get a bot review. Greptile's config is `.greptile/`; its `ignorePatterns` and `.coderabbit.yaml`'s `path_filters` stay identical. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 # This is NOT the Next.js you know
