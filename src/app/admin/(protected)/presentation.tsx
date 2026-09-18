@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 
 import type { ApplicationSource, ApplicationStatus } from '@/db';
 
-const STATUS_LABELS: Record<ApplicationStatus, string> = {
+export const STATUS_LABELS: Record<ApplicationStatus, string> = {
 	waitlisted: 'Waitlisted',
 	coffee_invited: 'Coffee invited',
 	member: 'Member',
