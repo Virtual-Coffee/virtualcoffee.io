@@ -2,6 +2,7 @@ import { and, desc, eq, isNull, sql } from 'drizzle-orm';
 
 import { db, invite, membershipApplication, volunteer } from '@/db';
 import type { InviteStatus } from '@/db/schema';
+import type { VolunteerSubject } from '@/lib/history/eventLog';
 import { balancesBySlackUser } from '@/lib/volunteers/invites';
 import { countRows } from '@/lib/admin/pagedList';
 
@@ -70,6 +71,27 @@ export async function listVolunteers(): Promise<VolunteerRow[]> {
 		balance: Number(row.balance ?? 0),
 		invitesSent: Number(row.invitesSent ?? 0),
 	}));
+}
+
+/** The Subject a Volunteer's send outcomes are recorded and read against. */
+export function volunteerSubject(id: string): VolunteerSubject {
+	return { kind: 'volunteer', id };
+}
+
+/**
+ * The Subject for the Volunteer behind a Slack id, or null when the roster has
+ * no such row — an Invite imported from Airtable may name an inviter who was
+ * never a Volunteer here.
+ */
+export async function volunteerSubjectForSlackId(
+	slackUserId: string,
+): Promise<VolunteerSubject | null> {
+	const [row] = await db()
+		.select({ id: volunteer.id })
+		.from(volunteer)
+		.where(eq(volunteer.slackUserId, slackUserId))
+		.limit(1);
+	return row ? volunteerSubject(row.id) : null;
 }
 
 export async function getVolunteerById(id: string) {

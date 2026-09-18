@@ -10,6 +10,7 @@ import {
 	membershipApplication,
 	submissionEvent,
 	user,
+	volunteerEvent,
 	volunteerSignup,
 	type ApplicationEventType,
 	type ApplicationStatus,
@@ -17,14 +18,16 @@ import {
 	type SubmissionEventType,
 	type SubmissionStatus,
 	type Transaction,
+	type VolunteerEventType,
 } from '@/db';
 import type { Outbound } from '@/lib/outbound';
 
 /**
- * History: `application_event` and `submission_event` as one concept.
- * Every read and every write of either table comes through here, so what a
- * send outcome or a status change becomes in History is decided once, and the
- * two subjects' timelines cannot drift apart. See CONTEXT.md.
+ * History: `application_event`, `submission_event` and `volunteer_event` as
+ * one concept. Every read and every write of any of the three comes through
+ * here, so what a send outcome or a status change becomes in History is
+ * decided once, and the subjects' timelines cannot drift apart. See
+ * CONTEXT.md.
  */
 
 export type SubmissionTable =
@@ -49,7 +52,11 @@ export type SubmissionSubject = {
 	table: SubmissionTable;
 	eventKey: SubmissionEventKey;
 };
-export type Subject = ApplicationSubject | SubmissionSubject;
+/** A Volunteer has History but no status: only outcomes are recorded. */
+export type VolunteerSubject = { kind: 'volunteer'; id: string };
+export type Subject = ApplicationSubject | SubmissionSubject | VolunteerSubject;
+/** The subjects a status change can be recorded against. */
+export type StatusSubject = ApplicationSubject | SubmissionSubject;
 
 type EventFields<Type, Status> = {
 	type: Type;
@@ -69,23 +76,31 @@ export type SubmissionEventInput = EventFields<
 	SubmissionEventType,
 	SubmissionStatus
 >;
+export type VolunteerEventInput = Omit<
+	EventFields<VolunteerEventType, never>,
+	'fromStatus' | 'toStatus'
+>;
 export type EventInput<S extends Subject> = S extends ApplicationSubject
 	? ApplicationEventInput
-	: SubmissionEventInput;
+	: S extends SubmissionSubject
+		? SubmissionEventInput
+		: VolunteerEventInput;
 
 /**
  * What `transitionAndRecord` takes: the statuses are not the caller's to
  * supply, they come from the transition itself.
  */
-export type TransitionEventInput<S extends Subject> =
+export type TransitionEventInput<S extends StatusSubject> =
 	S extends ApplicationSubject
 		? Omit<ApplicationEventInput, 'fromStatus' | 'toStatus'>
 		: Omit<SubmissionEventInput, 'fromStatus' | 'toStatus'>;
 
 export type StatusOf<S extends Subject> = S extends ApplicationSubject
 	? ApplicationStatus
-	: SubmissionStatus;
-export type PatchOf<S extends Subject> = S extends ApplicationSubject
+	: S extends SubmissionSubject
+		? SubmissionStatus
+		: never;
+export type PatchOf<S extends StatusSubject> = S extends ApplicationSubject
 	? Partial<typeof membershipApplication.$inferInsert>
 	: Partial<SubmissionTable['$inferInsert']>;
 
@@ -94,7 +109,7 @@ type Executor = Database | Transaction;
 /**
  * One History row.
  *
- * Every INSERT into either event table goes through here — directly, or from
+ * Every INSERT into any event table goes through here — directly, or from
  * `recordOutcome`, `recordImport` or `transitionAndRecord` — and nothing
  * outside this module inserts at all.
  */
@@ -108,6 +123,15 @@ export async function recordEvent<S extends Subject>(
 		body: event.body ?? null,
 		...(event.createdAt ? { createdAt: event.createdAt } : {}),
 	};
+	if (subject.kind === 'volunteer') {
+		const input = event as VolunteerEventInput;
+		await executor.insert(volunteerEvent).values({
+			...shared,
+			volunteerId: subject.id,
+			type: input.type,
+		});
+		return;
+	}
 	if (subject.kind === 'application') {
 		const input = event as ApplicationEventInput;
 		await executor.insert(applicationEvent).values({
@@ -141,7 +165,7 @@ export async function recordEvent<S extends Subject>(
  * one; a Submission is imported at whatever status it already had, so it passes
  * nothing.
  */
-export async function recordImport<S extends Subject>(
+export async function recordImport<S extends StatusSubject>(
 	subject: S,
 	airtableRecordId: string,
 	at: Date,
@@ -162,10 +186,10 @@ export async function recordImport<S extends Subject>(
 
 export type Channel = 'email' | 'slack' | 'github issue';
 
-/** Only an application is ever emailed; a Submission's outcomes are all notifications. */
-export type ChannelOf<S extends Subject> = S extends ApplicationSubject
-	? Channel
-	: Exclude<Channel, 'email'>;
+/** A Submission's outcomes are all notifications; Applications and Volunteers are emailed too. */
+export type ChannelOf<S extends Subject> = S extends SubmissionSubject
+	? Exclude<Channel, 'email'>
+	: Channel;
 
 /**
  * What a send came to, as History. `email` becomes `email_sent` /
@@ -265,7 +289,7 @@ type StatusTable = PgTable & { id: PgColumn; status: PgColumn };
  * History cannot disagree with the row; a patch that leaves the status alone
  * records neither.
  */
-export async function transitionAndRecord<S extends Subject>(
+export async function transitionAndRecord<S extends StatusSubject>(
 	subject: S,
 	from: StatusOf<S>,
 	patch: PatchOf<S>,
@@ -294,13 +318,11 @@ export async function transitionAndRecord<S extends Subject>(
 	});
 }
 
-/** The columns the two event tables share, which is all History reads. */
+/** The columns the event tables share, which is all History reads. */
 type EventTable = PgTable & {
 	id: PgColumn;
 	type: PgColumn;
 	body: PgColumn;
-	fromStatus: PgColumn;
-	toStatus: PgColumn;
 	createdAt: PgColumn;
 	actorUserId: PgColumn;
 };
@@ -322,24 +344,51 @@ export type HistoryEntry<S extends Subject> = {
 	actorName: string | null;
 };
 
+/** Which table a subject's History is in, and the row that belongs to it. */
+function source(subject: Subject): {
+	table: EventTable;
+	belongsToSubject: SQL;
+	fromStatus: PgColumn | SQL<null>;
+	toStatus: PgColumn | SQL<null>;
+} {
+	switch (subject.kind) {
+		case 'application':
+			return {
+				table: applicationEvent,
+				belongsToSubject: eq(applicationEvent.applicationId, subject.id),
+				fromStatus: applicationEvent.fromStatus,
+				toStatus: applicationEvent.toStatus,
+			};
+		case 'submission':
+			return {
+				table: submissionEvent,
+				belongsToSubject: eq(submissionEvent[subject.eventKey], subject.id),
+				fromStatus: submissionEvent.fromStatus,
+				toStatus: submissionEvent.toStatus,
+			};
+		case 'volunteer':
+			return {
+				table: volunteerEvent,
+				belongsToSubject: eq(volunteerEvent.volunteerId, subject.id),
+				fromStatus: sql<null>`null`,
+				toStatus: sql<null>`null`,
+			};
+	}
+}
+
 /** One subject's History, newest first, with the actor's current name. */
 export async function history<S extends Subject>(
 	subject: S,
 ): Promise<HistoryEntry<S>[]> {
-	const table: EventTable =
-		subject.kind === 'application' ? applicationEvent : submissionEvent;
-	const belongsToSubject =
-		subject.kind === 'application'
-			? eq(applicationEvent.applicationId, subject.id)
-			: eq(submissionEvent[subject.eventKey], subject.id);
+	// A Volunteer's rows have no status columns; the timeline reads null.
+	const { table, belongsToSubject, ...statusColumns } = source(subject);
 
 	const rows = await db()
 		.select({
 			id: table.id,
 			type: sql<string>`${table.type}`,
 			body: table.body,
-			fromStatus: table.fromStatus,
-			toStatus: table.toStatus,
+			...statusColumns,
 			createdAt: table.createdAt,
 			actorName: user.name,
 		})

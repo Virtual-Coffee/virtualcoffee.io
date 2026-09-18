@@ -507,11 +507,47 @@ export const volunteerAccrualNotice = pgTable(
 	],
 );
 
+export const volunteerEventType = pgEnum('volunteer_event_type', [
+	'email_sent',
+	'email_failed',
+	'notification_sent',
+	'notification_failed',
+]);
+
+/**
+ * A Volunteer's History: what each send about them came to. Only outcomes —
+ * the grant, a revoke and every accrual are ledger rows already, and a second
+ * record of them would drift. No status columns: a Volunteer has no status to
+ * move between.
+ */
+export const volunteerEvent = pgTable(
+	'volunteer_event',
+	{
+		id: uuid('id').primaryKey().$defaultFn(newId),
+		volunteerId: uuid('volunteer_id')
+			.notNull()
+			.references(() => volunteer.id, { onDelete: 'cascade' }),
+		/** Null for the scheduled jobs. */
+		actorUserId: text('actor_user_id').references(() => user.id, {
+			onDelete: 'set null',
+		}),
+		type: volunteerEventType('type').notNull(),
+		/** A summary of what was sent and to whom. */
+		body: text('body'),
+		createdAt: timestamp('created_at', { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+	},
+	(table) => [index('volunteer_event_volunteer_id_idx').on(table.volunteerId)],
+);
+
 export type Volunteer = typeof volunteer.$inferSelect;
 export type VolunteerLedgerReason =
 	(typeof volunteerLedgerReason.enumValues)[number];
 export type AccrualNoticeOutcome =
 	(typeof accrualNoticeOutcome.enumValues)[number];
+export type VolunteerEvent = typeof volunteerEvent.$inferSelect;
+export type VolunteerEventType = (typeof volunteerEventType.enumValues)[number];
 export type Invite = typeof invite.$inferSelect;
 export type InviteStatus = (typeof inviteStatus.enumValues)[number];
 

@@ -11,6 +11,7 @@ import {
 	pendingGrant,
 	user,
 	volunteer,
+	volunteerEvent,
 	volunteerInviteLedger,
 	type VolunteerLedgerReason,
 } from '@/db';
@@ -95,6 +96,18 @@ export async function applicationEvents(applicationId: string) {
 		.from(applicationEvent)
 		.where(eq(applicationEvent.applicationId, applicationId))
 		.orderBy(applicationEvent.createdAt);
+}
+
+export async function volunteerEvents(volunteerId: string) {
+	return db()
+		.select({
+			type: volunteerEvent.type,
+			body: volunteerEvent.body,
+			actorUserId: volunteerEvent.actorUserId,
+		})
+		.from(volunteerEvent)
+		.where(eq(volunteerEvent.volunteerId, volunteerId))
+		.orderBy(volunteerEvent.createdAt);
 }
 
 export async function insertVolunteer(
