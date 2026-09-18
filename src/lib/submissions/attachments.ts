@@ -26,7 +26,9 @@ const ALLOWED = [
 	{ type: 'image/webp', ext: 'webp', magic: [0x52, 0x49, 0x46, 0x46] },
 ] as const;
 
-export const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
+// Netlify buffers function requests at 6MB, which is 4.5MB of binary once
+// Base64-encoded; the Next body limit in next.config.mjs is sized to match.
+export const MAX_ATTACHMENT_BYTES = 4 * 1024 * 1024;
 
 export type StoredAttachment = {
 	key: string;
@@ -75,7 +77,7 @@ export async function storeAttachment(
 	}
 
 	if (file.size > MAX_ATTACHMENT_BYTES) {
-		return { error: 'Files must be 10MB or smaller.' };
+		return { error: 'Files must be 4MB or smaller.' };
 	}
 
 	const bytes = await file.arrayBuffer();
