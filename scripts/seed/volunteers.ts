@@ -6,6 +6,7 @@ import {
 	volunteerInviteLedger,
 	type AccrualNoticeOutcome,
 	type InviteStatus,
+	type VolunteerEventType,
 } from '@/db';
 import {
 	accrue,
@@ -15,6 +16,7 @@ import {
 	spend,
 } from '@/lib/volunteers/invites';
 import { serialiseRoles } from '@/lib/access/permissions';
+import { recordEvent } from '@/lib/history/eventLog';
 import {
 	insertInvite,
 	insertPendingGrant,
@@ -103,7 +105,7 @@ const INVITE_SEEDS: {
  * Returns the Invite id for each claimed invitee email, for the applications.
  */
 export async function seedVolunteers(): Promise<Map<string, string>> {
-	await insertVolunteer({
+	const admin = await insertVolunteer({
 		slackUserId: ADMIN.slackUserId,
 		name: ADMIN.name,
 		slackHandle: 'localdev',
@@ -112,7 +114,7 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 		// Linked, the way `claimPendingGrant()` leaves it after a Slack sign-in.
 		userId: ADMIN.id,
 	});
-	await insertVolunteer({
+	const ayu = await insertVolunteer({
 		slackUserId: VOLUNTEER.slackUserId,
 		name: VOLUNTEER.name,
 		slackHandle: 'ayus',
@@ -122,7 +124,7 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 	});
 	// What /admin/volunteers writes for someone who has never signed in: the
 	// roster row and a Pending Grant, no `userId` until the claim.
-	await insertVolunteer({
+	const fresh = await insertVolunteer({
 		slackUserId: NEW_VOLUNTEER.slackUserId,
 		name: NEW_VOLUNTEER.name,
 		slackHandle: NEW_VOLUNTEER.slackHandle,
@@ -137,7 +139,7 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 		grantedBy: ADMIN.name,
 		grantedAt: daysAgo(3),
 	});
-	await insertVolunteer({
+	const former = await insertVolunteer({
 		slackUserId: FORMER_VOLUNTEER_SLACK_ID,
 		name: 'Former Volunteer',
 		slackHandle: 'former',
@@ -146,6 +148,33 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 		// Stepped back, so the daily job accrues nothing for them.
 		deactivatedAt: daysAgo(60),
 	});
+
+	// What each Volunteer was sent about their grant, as History: the welcome
+	// email on being added, and the DM for someone who had not signed in yet.
+	const history = (volunteerId: string, at: number) => ({
+		by: (type: VolunteerEventType, body: string) =>
+			recordEvent(
+				{ kind: 'volunteer', id: volunteerId },
+				{ type, body, actorUserId: ADMIN.id, createdAt: daysAgo(at) },
+			),
+	});
+	await history(admin.id, 200).by(
+		'email_sent',
+		'Volunteer welcome to localdev@example.com',
+	);
+	await history(ayu.id, 200).by(
+		'email_failed',
+		`Volunteer welcome to ${VOLUNTEER.email} failed: SMTP connection refused`,
+	);
+	await history(fresh.id, 3).by('notification_sent', 'Volunteer DM');
+	await history(fresh.id, 3).by(
+		'email_sent',
+		`Volunteer welcome to ${NEW_VOLUNTEER.email}`,
+	);
+	await history(former.id, 200).by(
+		'notification_failed',
+		'Volunteer DM failed: Slack said user_not_found',
+	);
 
 	await importBalance({
 		slackUserId: ADMIN.slackUserId,

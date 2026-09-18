@@ -22,6 +22,7 @@ import {
 	volunteerInviteEmail,
 } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
+import { recordOutcome } from '@/lib/history/eventLog';
 import {
 	adjust,
 	newClaimToken,
@@ -37,7 +38,11 @@ import {
 	COMMUNITY_ROLES,
 	formatRoleLabels,
 } from '@/lib/volunteers/volunteerRoles';
-import { pendingInvite } from '@/lib/volunteers/volunteers';
+import {
+	pendingInvite,
+	volunteerSubject,
+	volunteerSubjectForSlackId,
+} from '@/lib/volunteers/volunteers';
 import { siteUrl } from '@/util/url.server';
 
 function revalidate(volunteerId?: string) {
@@ -112,15 +117,19 @@ export async function addVolunteer(
 	// left to tell to come claim anything.
 	const signedIn = await userForSlackId(member.id);
 
+	let volunteerId: string;
 	try {
-		await db().transaction(async (tx) => {
-			await tx.insert(volunteer).values({
-				slackUserId: member.id,
-				slackDisplayName: member.displayName,
-				slackHandle: member.handle,
-				roleLabels: formatRoleLabels(roles.data),
-				email: address,
-			});
+		volunteerId = await db().transaction(async (tx) => {
+			const [created] = await tx
+				.insert(volunteer)
+				.values({
+					slackUserId: member.id,
+					slackDisplayName: member.displayName,
+					slackHandle: member.handle,
+					roleLabels: formatRoleLabels(roles.data),
+					email: address,
+				})
+				.returning({ id: volunteer.id });
 
 			await grantVolunteerRole(
 				tx,
@@ -131,6 +140,7 @@ export async function addVolunteer(
 				},
 				session.user.name || session.user.email,
 			);
+			return created.id;
 		});
 	} catch (error) {
 		// The unique index on volunteer.slack_user_id is the authority here, so a
@@ -144,10 +154,22 @@ export async function addVolunteer(
 
 	revalidate();
 
+	const subject = volunteerSubject(volunteerId);
+	const actorUserId = await actorId(session.user.id);
+
 	// Best-effort, same as the email below: the grant already stands, and a
 	// maintainer can retry it with "Resend DM" in /admin/user-management.
 	if (!signedIn) {
-		await sendSlackDm(member.id, grantDmMessage({ roles: ['volunteer'] }));
+		const dm = await sendSlackDm(
+			member.id,
+			grantDmMessage({ roles: ['volunteer'] }),
+		);
+		await recordOutcome(subject, {
+			channel: 'slack',
+			outbound: dm,
+			what: 'Volunteer DM',
+			actorUserId,
+		});
 	}
 
 	// Tell them, after the writes and not fatal: they are a Volunteer by now,
@@ -169,6 +191,12 @@ export async function addVolunteer(
 		to: address,
 		subject: template.subject,
 		text: template.text,
+	});
+	await recordOutcome(subject, {
+		channel: 'email',
+		outbound: sent,
+		what: `Volunteer welcome to ${address}`,
+		actorUserId,
 	});
 
 	return {
@@ -439,7 +467,7 @@ export async function resendInvite(
 	inviteId: string,
 	volunteerId: string,
 ): Promise<ActionResult> {
-	await requirePermission('volunteers', 'manage');
+	const session = await requirePermission('volunteers', 'manage');
 
 	if (!isId(inviteId)) {
 		return { ok: false, message: 'That invite no longer exists.' };
@@ -501,6 +529,18 @@ export async function resendInvite(
 		subject: template.subject,
 		text: template.text,
 	});
+	// On the inviter's History, when the inviter is a Volunteer here at all.
+	const inviter = row.inviterSlackUserId
+		? await volunteerSubjectForSlackId(row.inviterSlackUserId)
+		: null;
+	if (inviter) {
+		await recordOutcome(inviter, {
+			channel: 'email',
+			outbound: sent,
+			what: `Invite re-sent to ${row.inviteeEmail}`,
+			actorUserId: await actorId(session.user.id),
+		});
+	}
 
 	revalidate(volunteerId);
 

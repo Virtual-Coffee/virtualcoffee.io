@@ -50,6 +50,7 @@ const ENUM_COLUMNS: Record<string, { table: PgTable; column: string }[]> = {
 		{ table: schema.coffeeTableGroupRequest, column: 'status' },
 	],
 	submission_event_type: [{ table: schema.submissionEvent, column: 'type' }],
+	volunteer_event_type: [{ table: schema.volunteerEvent, column: 'type' }],
 };
 
 /** Better Auth's own tables: only a real sign-in writes these. */

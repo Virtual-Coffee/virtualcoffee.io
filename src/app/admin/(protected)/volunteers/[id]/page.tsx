@@ -3,11 +3,14 @@ import { notFound } from 'next/navigation';
 
 import { isId } from '@/db/ids';
 import { requirePermission, sessionCan } from '@/lib/access/adminAccess';
+import { history } from '@/lib/history/eventLog';
 import {
 	getVolunteerById,
 	volunteerInvites,
 	volunteerLedger,
+	volunteerSubject,
 } from '@/lib/volunteers/volunteers';
+import { HistoryTimeline } from '../../historyTimeline';
 import {
 	Breadcrumb,
 	formatDate,
@@ -55,9 +58,10 @@ export default async function VolunteerDetailPage({
 	const volunteer = await getVolunteerById(id);
 	if (!volunteer) notFound();
 
-	const [ledger, invites] = await Promise.all([
+	const [ledger, invites, entries] = await Promise.all([
 		volunteerLedger(volunteer.slackUserId),
 		volunteerInvites(volunteer.slackUserId),
+		history(volunteerSubject(volunteer.id)),
 	]);
 
 	const balance = ledger.reduce((sum, entry) => sum + entry.delta, 0);
@@ -182,6 +186,9 @@ export default async function VolunteerDetailPage({
 							</li>
 						))}
 					</ol>
+
+					<h2 className="h6 text-body-secondary mt-4 mb-3">History</h2>
+					<HistoryTimeline history={entries} />
 				</div>
 
 				<div className="col-lg-5">

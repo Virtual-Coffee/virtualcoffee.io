@@ -15,6 +15,7 @@ import {
 	inviteRow,
 	ledgerFor,
 	ledgerRow,
+	volunteerEvents,
 } from '@/test/db/fixtures';
 import { preCheck } from '@/test/mocks/wrappers';
 
@@ -23,10 +24,14 @@ import { cancelInvite, sendInvite } from './actions';
 const GRACE = 'U_GRACE';
 
 async function volunteerWithBalance(balance: number) {
-	await insertVolunteer({ slackUserId: GRACE, name: 'Grace Hopper' });
+	const { id } = await insertVolunteer({
+		slackUserId: GRACE,
+		name: 'Grace Hopper',
+	});
 	if (balance > 0) {
 		await ledgerRow({ slackUserId: GRACE, delta: balance, reason: 'imported' });
 	}
+	return id;
 }
 
 beforeEach(async () => {
@@ -50,7 +55,7 @@ describe('sendInvite', () => {
 	});
 
 	test('spends one invite, writes the Invite with only the hash, and emails the link', async () => {
-		await volunteerWithBalance(2);
+		const volunteerId = await volunteerWithBalance(2);
 
 		await expect(
 			sendInvite('Ada Lovelace', 'ada@example.test'),
@@ -80,6 +85,10 @@ describe('sendInvite', () => {
 		await expect(ledgerFor(GRACE)).resolves.toEqual([
 			expect.objectContaining({ delta: 2, reason: 'imported' }),
 			{ delta: -1, reason: 'spend', periodKey: null, inviteId: row.id },
+		]);
+		// The send is on the sender's own History.
+		await expect(volunteerEvents(volunteerId)).resolves.toMatchObject([
+			{ type: 'email_sent', body: 'Invite to ada@example.test' },
 		]);
 	});
 
@@ -223,7 +232,7 @@ describe('sendInvite', () => {
 
 	/** ADR 0011: a definite failure is cancelled and refunded, in that order. */
 	test('a definite send failure cancels the Invite and gives the allowance back', async () => {
-		await volunteerWithBalance(1);
+		const volunteerId = await volunteerWithBalance(1);
 		sendEmail.mockResolvedValue(NOT_SENT);
 
 		await expect(sendInvite('Ada', 'ada@example.test')).resolves.toEqual({
@@ -247,6 +256,12 @@ describe('sendInvite', () => {
 				reason: 'refund_cancelled',
 				inviteId: row.id,
 			}),
+		]);
+		await expect(volunteerEvents(volunteerId)).resolves.toMatchObject([
+			{
+				type: 'email_failed',
+				body: `Invite to ada@example.test failed: ${NOT_SENT.message}`,
+			},
 		]);
 	});
 

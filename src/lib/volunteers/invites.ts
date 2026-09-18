@@ -382,7 +382,7 @@ export async function spend(
 }
 
 export type IssuedInvite =
-	| { ok: true; inviteId: string }
+	| { ok: true; inviteId: string; volunteerId: string }
 	| { ok: false; reason: 'no_volunteer' | 'no_balance' | 'already_invited' };
 
 /**
@@ -442,7 +442,7 @@ export async function issueInvite(input: {
 				tx,
 			);
 
-			return { ok: true, inviteId: row.id } as const;
+			return { ok: true, inviteId: row.id, volunteerId: held.id } as const;
 		});
 	} catch (error) {
 		if (isUniqueViolation(error, 'invite_pending_email_idx')) {
