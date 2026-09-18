@@ -27,6 +27,7 @@ export function fakeCalendarClient(canned: {
 		calendar_v3.Schema$Events | calendar_v3.Schema$Events[]
 	>;
 	patchError?: unknown;
+	instancesError?: unknown;
 }) {
 	const calls: CalendarCall[] = [];
 	let page = 0;
@@ -45,6 +46,7 @@ export function fakeCalendarClient(canned: {
 			},
 			async instances(params) {
 				calls.push({ method: 'instances', params });
+				if (canned.instancesError) throw canned.instancesError;
 				const id = params.eventId ?? '';
 				const canned_ = canned.instances?.[id] ?? { items: [] };
 				if (!Array.isArray(canned_)) return { data: canned_ };
