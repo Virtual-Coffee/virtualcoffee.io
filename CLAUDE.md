@@ -32,6 +32,7 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Build                                      | `pnpm build` — `prebuild` runs the codegen first                                                                                                        |
 | Typecheck                                  | `pnpm typecheck` (`next typegen` then `tsc --noEmit`, the native TypeScript 7 binary)                                                                   |
 | Lint                                       | `pnpm lint` (ESLint flat config: `next/core-web-vitals` + `next/typescript`; `netlify/**` is ignored)                                                   |
+| Unused files, exports, dependencies        | `pnpm knip` (config in `knip.ts`; needs the codegen files, so run `pnpm codegen` first)                                                                 |
 | Test                                       | `pnpm test` (Vitest, run once; `pnpm test:watch` to watch, `pnpm test:coverage` for a v8 report; CI posts totals to the job summary and a PR comment)   |
 | Format                                     | `pnpm format` (Prettier: tabs, single quotes, trailing commas; CI auto-commits fixes on same-repo PR branches only; there is no husky/lint-staged hook) |
 | Regenerate all codegen                     | `pnpm codegen` (member barrels + Undraw aspect ratios; **not** the bot list, which is checked in)                                                       |
@@ -40,15 +41,19 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 | Regenerate the bot list                    | `pnpm build-bot-list` (fetches the release pinned in `.botlist-version.json`)                                                                           |
 | Check the bot matcher                      | `pnpm check-bot-matching` (just `src/data/botMatcher.test.ts`; `pnpm test` covers it, this alias is for `refresh-bot-list.yml`)                         |
 
-`.github/workflows/ci.yml` runs four jobs on every pull request — `format`, `lint`, `typecheck`, `test`. Netlify still owns `pnpm build`; CI does not build. CodeQL (`.github/workflows/codeql.yml`, advanced setup — leave the repository's default-setup toggle off) scans `javascript-typescript` and `actions` on pull requests, pushes to `main` and weekly; its findings go to the Security tab and are not a required check.
+`.github/workflows/ci.yml` runs five jobs on every pull request — `format`, `lint`, `typecheck`, `test`, `knip`. Netlify still owns `pnpm build`; CI does not build. CodeQL (`.github/workflows/codeql.yml`, advanced setup — leave the repository's default-setup toggle off) scans `javascript-typescript` and `actions` on pull requests, pushes to `main` and weekly; its findings go to the Security tab and are not a required check.
 
-The `lint`, `typecheck` and `test` jobs run `pnpm codegen` first, because `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test` before finishing a change.
+The `lint`, `typecheck`, `test` and `knip` jobs run `pnpm codegen` first, because `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test && pnpm knip` before finishing a change.
 
 Neither CI nor those checks run `next build`, so nothing before Netlify's deploy preview exercises prerendering. Run `pnpm build` locally when a change can only fail there — anything touching MDX frontmatter, `generateStaticParams`, or a component that pages render at build time.
 
 `typecheck` shells out to `next typegen` before `tsc` because `next-env.d.ts` is gitignored (Next's docs require this) and is what declares non-code imports like `*.png`. Without it a clean checkout fails on any image import. `typegen` also writes `.next/types/`, so `tsc` validates typed routes without a full build.
 
 The `format` job auto-commits Prettier fixes, but only on branches in this repo, and never on `renovate[bot]`/`dependabot[bot]` branches (a foreign commit stops Renovate rebasing). Fork PRs get no secrets, so they fall back to `prettier --check` and fail with the file list in the job summary — the contributor runs `pnpm format` themselves.
+
+### Dead code (knip)
+
+`knip.ts` declares what knip cannot infer, and every entry there carries its reason in a comment — keep it that way rather than adding bare globs. Content directories are **entries**, not ignores: members are namespace-iterated through the codegen barrels, newsletters and MDX pages are loaded by template-string `import()`, so knip cannot see them used, but their own imports should still be checked. SCSS goes through a small compiler in the same file so `bootstrap` counts as used. The `knip` CI job is `continue-on-error` until the membership stack (#1579 and below) has merged, because each layer exports things only the layer above imports; the follow-up is #1589.
 
 ### Testing
 
