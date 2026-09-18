@@ -9,6 +9,10 @@
 	function = "block-bots"
 	path     = "/*"
 
+[[edge_functions]]
+	function = "limit-action-body"
+	path     = "/*"
+
 [dev]
 	autoLaunch = false
 	command    = "next dev"
