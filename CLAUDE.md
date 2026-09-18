@@ -43,6 +43,8 @@ pnpm is enforced (`preinstall` runs `only-allow pnpm`). Node >= 24.20 (`.nvmrc`)
 
 `.github/workflows/ci.yml` runs five jobs on every pull request — `format`, `lint`, `typecheck`, `test`, `knip`. Netlify still owns `pnpm build`; CI does not build. CodeQL (`.github/workflows/codeql.yml`, advanced setup — leave the repository's default-setup toggle off) scans `javascript-typescript` and `actions` on pull requests, pushes to `main` and weekly; its findings go to the Security tab and are not a required check.
 
+PR review bots are opt-in by label: `coderabbit-review` (`.coderabbit.yaml`) and `greptile-review` (`.greptile/`); the two ignore lists stay identical.
+
 The `lint`, `typecheck`, `test` and `knip` jobs run `pnpm codegen` first, because `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored codegen and only `prebuild` generates them otherwise. Do the same locally: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test && pnpm knip` before finishing a change.
 
 Neither CI nor those checks run `next build`, so nothing before Netlify's deploy preview exercises prerendering. Run `pnpm build` locally when a change can only fail there — anything touching MDX frontmatter, `generateStaticParams`, or a component that pages render at build time.

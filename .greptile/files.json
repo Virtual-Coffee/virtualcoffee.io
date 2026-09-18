@@ -1,0 +1,19 @@
+{
+	"files": [
+		{
+			"path": "docs/adr/0004-retiring-airtable.md",
+			"description": "Airtable is retired; monthly-challenge data is a frozen snapshot.",
+			"scope": ["src/data/monthlyChallenges/**", "src/app/monthlychallenges/**"]
+		},
+		{
+			"path": "docs/adr/0015-error-monitoring-with-sentry.md",
+			"description": "Sentry: errors + tracing only, no dataCollection or sendDefaultPii.",
+			"scope": [
+				"src/instrumentation*.ts",
+				"sentry.*.config.ts",
+				"src/app/global-error.tsx",
+				"next.config.mjs"
+			]
+		}
+	]
+}
