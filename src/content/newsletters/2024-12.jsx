@@ -11,10 +11,6 @@ export const handle = {
 	listTitle: 'December 2024',
 };
 
-export const meta = () => {
-	return handle.meta;
-};
-
 export default function Issue() {
 	return (
 		<>

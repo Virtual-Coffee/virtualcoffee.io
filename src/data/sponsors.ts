@@ -207,5 +207,3 @@ export const getSponsors = unstable_cache(
 	[],
 	{ revalidate: 86400, tags: ['sponsors'] },
 );
-
-export type SponsorsResponse = Awaited<ReturnType<typeof getSponsors>>;

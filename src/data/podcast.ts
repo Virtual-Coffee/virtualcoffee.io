@@ -1,8 +1,6 @@
 import { unstable_cache } from 'next/cache';
 import rawEpisodes from './podcast/episodes.json';
 
-export const buzzsproutPodcastId = '1558601' as const;
-
 // episodes.json is sourced from vc-data and bundled here at build time.
 // To update: copy the latest episodes.json from Virtual-Coffee/vc-data into
 // src/data/podcast/episodes.json and open a PR.
@@ -237,12 +235,3 @@ export const getTranscript = unstable_cache(
 	[],
 	{ revalidate: 86400, tags: ['podcast'] },
 );
-
-// ---------------------------------------------------------------------------
-// Kept for backwards compatibility — no longer needed with vc-data
-// but removing it would be a breaking change if anything imports it.
-// ---------------------------------------------------------------------------
-
-export async function getEpisodeQueryParams(_request: Request) {
-	return '';
-}
