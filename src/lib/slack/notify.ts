@@ -91,15 +91,10 @@ function escape(value: string): string {
 		.replaceAll('>', '&gt;');
 }
 
-/** A free-text block as typed, or a dash for nothing. */
-function block(value: string | null | undefined): string {
-	const trimmed = value?.trim();
-	return trimmed ? escape(trimmed) : '—';
-}
-
-/** `*bold*` is Slack's mrkdwn, not Markdown's `**bold**`. */
+/** `*bold*` is Slack's mrkdwn, not Markdown's `**bold**`; a dash for nothing. */
 function field(label: string, value: string | null | undefined): string {
-	return `*${label}:* ${block(value)}`;
+	const trimmed = value?.trim();
+	return `*${label}:* ${trimmed ? escape(trimmed) : '—'}`;
 }
 
 /**
@@ -115,13 +110,17 @@ function adminLink(url: string, label = 'View in admin'): string {
 	return link(url, label);
 }
 
+/*
+ * Every message is the row's identifying fields and the link; what a person
+ * wrote at length stays behind the link, on a page that needs a sign-in. A
+ * channel is the wrong place for a CoC report's account of what happened.
+ */
+
 export function cocReportMessage(report: {
 	name: string | null;
 	email: string | null;
 	reporteeName: string;
 	timeLocation: string;
-	description: string;
-	anyoneElseInvolved: string | null;
 	hasAttachment: boolean;
 	adminUrl: string;
 }): string {
@@ -133,12 +132,6 @@ export function cocReportMessage(report: {
 		field('Reportee Name', report.reporteeName),
 		field('Time/Location', report.timeLocation),
 		'',
-		'*Description:*',
-		block(report.description),
-		'',
-		'*Anyone else involved:*',
-		block(report.anyoneElseInvolved),
-		'',
 		report.hasAttachment
 			? `_${adminLink(report.adminUrl, 'A file was attached; open the report to view it.')}_`
 			: adminLink(report.adminUrl),
@@ -149,7 +142,6 @@ export function volunteerSignupMessage(signup: {
 	name: string;
 	email: string;
 	position: string | null;
-	description: string | null;
 	adminUrl: string;
 }): string {
 	return [
@@ -159,50 +151,26 @@ export function volunteerSignupMessage(signup: {
 		field('Email', signup.email),
 		field('Position', signup.position),
 		'',
-		'*Description:*',
-		block(signup.description),
-		'',
 		adminLink(signup.adminUrl),
 	].join('\n');
 }
 
 export function lunchAndLearnMessage(idea: {
-	topic: string;
 	name: string;
+	email: string;
+	topic: string;
 	issueUrl: string | null;
 	adminUrl: string;
 }): string {
 	return [
-		`New Lunch & Learn Submission: ${escape(idea.topic)} by ${escape(idea.name)}`,
+		'*New Lunch & Learn Idea*',
+		'',
+		field('Name', idea.name),
+		field('Email', idea.email),
+		field('Title', idea.topic),
 		'',
 		...(idea.issueUrl ? [link(idea.issueUrl, 'GitHub issue')] : []),
 		adminLink(idea.adminUrl),
-	].join('\n');
-}
-
-/**
- * An invited applicant has joined the queue.
- *
- * The one membership-pipeline notification, and it fires on the claim rather
- * than on the send: sending an Invite is a Volunteer spending their own
- * allowance and is nobody else's work, whereas a claim puts a priority
- * application at the front of the Waitlist for a reviewer to pick up.
- */
-export function inviteClaimedMessage(claim: {
-	inviteeName: string;
-	inviteeEmail: string;
-	inviterName: string | null;
-	adminUrl: string;
-}): string {
-	return [
-		'*Invited Application Received*',
-		'',
-		field('Name', claim.inviteeName),
-		field('Email', claim.inviteeEmail),
-		field('Invited by', claim.inviterName),
-		'',
-		'_Invited applications sort to the front of the waitlist._',
-		adminLink(claim.adminUrl),
 	].join('\n');
 }
 
@@ -210,7 +178,6 @@ export function coffeeTableGroupMessage(request: {
 	name: string;
 	email: string;
 	groupName: string | null;
-	description: string | null;
 	adminUrl: string;
 }): string {
 	return [
@@ -220,9 +187,34 @@ export function coffeeTableGroupMessage(request: {
 		field('Email', request.email),
 		field('Group name', request.groupName),
 		'',
-		'*Description:*',
-		block(request.description),
-		'',
 		adminLink(request.adminUrl),
+	].join('\n');
+}
+
+/**
+ * An application has joined the queue: the membership pipeline's one
+ * notification. An invited one is flagged, because a claim puts a priority
+ * application at the front of the Waitlist for a reviewer to pick up —
+ * whereas sending the Invite was a Volunteer spending their own allowance,
+ * and nobody else's work.
+ */
+export function applicationSubmittedMessage(application: {
+	name: string;
+	email: string;
+	adminUrl: string;
+	invite: { inviterName: string | null } | null;
+}): string {
+	const { invite } = application;
+	return [
+		invite ? '*Invited Application Received*' : '*Application Received*',
+		'',
+		field('Name', application.name),
+		field('Email', application.email),
+		...(invite ? [field('Invited by', invite.inviterName)] : []),
+		'',
+		...(invite
+			? ['_Invited applications sort to the front of the waitlist._']
+			: []),
+		adminLink(application.adminUrl),
 	].join('\n');
 }
