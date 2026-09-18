@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { cocReport } from '@/db';
+import { submissionPath } from '@/lib/admin/links';
 import {
 	discardAttachment,
 	storeAttachment,
@@ -18,6 +19,7 @@ import { agree, email, name } from '@/util/forms/fields';
 import { intake, savingFailed } from '@/util/forms/intake';
 import { invalidFields } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
+import { siteUrl } from '@/util/url.server';
 
 const THANKS = '/report-coc-violation/thanks';
 
@@ -113,7 +115,11 @@ export async function submitCocReport(
 		async () => {
 			return notifySlack(
 				'coc',
-				cocReportMessage({ ...report, hasAttachment: attachment !== null }),
+				cocReportMessage({
+					...report,
+					hasAttachment: attachment !== null,
+					adminUrl: `${siteUrl()}${submissionPath('coc', saved.id)}`,
+				}),
 			);
 		},
 	);
