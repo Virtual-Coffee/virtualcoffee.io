@@ -28,13 +28,6 @@ import {
 	type Recurrence,
 } from '@/lib/events/recurrence';
 
-export {
-	EVENT_TYPE_LABELS,
-	EVENT_TYPES,
-	isEventType,
-	type EventType,
-} from '@/lib/events/eventTypes';
-
 /** A writer must present the etag it read; Google answers 412 if it moved on. */
 export type WriteOptions = { headers: { 'If-Match': string } };
 
