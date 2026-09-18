@@ -143,11 +143,14 @@ _Avoid_: Invite, pre-provision, reservation
 ## History
 
 **History**:
-What has happened to a Membership Application or a Submission, one row per
-happening: a status change, a note, an email or notification and whether it
-went. Two tables (`application_event`, `submission_event`) but one concept and
-one writer. Shown as History on a detail page and as the activity feed on the
-dashboard.
+What has happened to a Membership Application, a Submission or a Volunteer,
+one row per happening: a status change, a note, an email or notification and
+whether it went. Three tables (`application_event`, `submission_event`,
+`volunteer_event`) but one concept and one writer. A Volunteer's History holds
+only send outcomes: their grant, a pause and every accrual are Invite
+Allowance movements, recorded once, in the ledger. Shown as History on a
+detail page; Applications and Submissions also feed the dashboard's activity
+feed.
 _Avoid_: audit log, event log, activity table, timeline (the component, not
 the concept)
 
