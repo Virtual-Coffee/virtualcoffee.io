@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import {
+	applicationSubmittedMessage,
 	cocReportMessage,
 	coffeeTableGroupMessage,
-	inviteClaimedMessage,
 	lunchAndLearnMessage,
 	notifySlack,
 	volunteerSignupMessage,
@@ -109,8 +109,7 @@ describe('the messages', () => {
 		const text = volunteerSignupMessage({
 			name: '<!channel>',
 			email: 'a&b@example.test',
-			position: null,
-			description: '<https://evil.example|click>',
+			position: '<https://evil.example|click>',
 			adminUrl: ADMIN_URL,
 		});
 		expect(text).toContain('*Name:* &lt;!channel&gt;');
@@ -120,23 +119,23 @@ describe('the messages', () => {
 
 		expect(
 			lunchAndLearnMessage({
-				topic: '<!here>',
 				name: 'A & B',
+				email: 'ab@example.test',
+				topic: '<!here>',
 				issueUrl: null,
-				adminUrl:
-					'https://virtualcoffee.io/admin/submissions/lunch-and-learn/01',
+				adminUrl: ADMIN_URL,
 			}),
-		).toContain('New Lunch & Learn Submission: &lt;!here&gt; by A &amp; B');
+		).toContain(
+			'*Name:* A &amp; B\n*Email:* ab@example.test\n*Title:* &lt;!here&gt;',
+		);
 	});
 
-	test('a CoC report shows who, where, and links the file to open', () => {
+	test('a CoC report shows who and where, and links the file to open', () => {
 		const text = cocReportMessage({
 			name: 'Ada',
 			email: 'ada@example.test',
 			reporteeName: 'Someone',
 			timeLocation: 'Tuesday coffee',
-			description: 'What happened.',
-			anyoneElseInvolved: '  ',
 			hasAttachment: true,
 			adminUrl: 'https://virtualcoffee.io/admin/submissions/coc/01',
 		});
@@ -149,12 +148,6 @@ describe('the messages', () => {
 				'*Reportee Name:* Someone',
 				'*Time/Location:* Tuesday coffee',
 				'',
-				'*Description:*',
-				'What happened.',
-				'',
-				'*Anyone else involved:*',
-				'—',
-				'',
 				'_<https://virtualcoffee.io/admin/submissions/coc/01|A file was attached; open the report to view it.>_',
 			].join('\n'),
 		);
@@ -166,8 +159,6 @@ describe('the messages', () => {
 			email: null,
 			reporteeName: 'Someone',
 			timeLocation: 'Slack',
-			description: 'x',
-			anyoneElseInvolved: null,
 			hasAttachment: false,
 			adminUrl: 'https://virtualcoffee.io/admin/submissions/coc/01',
 		});
@@ -187,7 +178,6 @@ describe('the messages', () => {
 				name: 'Ada',
 				email: 'ada@example.test',
 				position: null,
-				description: null,
 				adminUrl: ADMIN_URL,
 			}),
 		).toBe(
@@ -198,9 +188,6 @@ describe('the messages', () => {
 				'*Email:* ada@example.test',
 				'*Position:* —',
 				'',
-				'*Description:*',
-				'—',
-				'',
 				ADMIN_LINK,
 			].join('\n'),
 		);
@@ -209,49 +196,85 @@ describe('the messages', () => {
 			coffeeTableGroupMessage({
 				name: 'Ada',
 				email: 'ada@example.test',
-				groupName: 'Rustaceans',
-				description: 'Weekly',
+				groupName: null,
 				adminUrl: ADMIN_URL,
 			}),
-		).toContain(
-			`*Group name:* Rustaceans\n\n*Description:*\nWeekly\n\n${ADMIN_LINK}`,
-		);
+		).toContain(`*Group name:* —\n\n${ADMIN_LINK}`);
 	});
 
 	test('a Lunch & Learn message links the issue only when one was opened', () => {
+		const fields = [
+			'*New Lunch & Learn Idea*',
+			'',
+			'*Name:* Ada',
+			'*Email:* ada@example.test',
+			'*Title:* Testing',
+			'',
+		];
 		expect(
 			lunchAndLearnMessage({
-				topic: 'Testing',
 				name: 'Ada',
+				email: 'ada@example.test',
+				topic: 'Testing',
 				issueUrl: null,
 				adminUrl: ADMIN_URL,
 			}),
-		).toBe(`New Lunch & Learn Submission: Testing by Ada\n\n${ADMIN_LINK}`);
+		).toBe([...fields, ADMIN_LINK].join('\n'));
 		expect(
 			lunchAndLearnMessage({
-				topic: 'Testing',
 				name: 'Ada',
+				email: 'ada@example.test',
+				topic: 'Testing',
 				issueUrl: 'https://github.com/x/y/issues/1',
 				adminUrl: ADMIN_URL,
 			}),
 		).toBe(
-			`New Lunch & Learn Submission: Testing by Ada\n\n<https://github.com/x/y/issues/1|GitHub issue>\n${ADMIN_LINK}`,
+			[
+				...fields,
+				'<https://github.com/x/y/issues/1|GitHub issue>',
+				ADMIN_LINK,
+			].join('\n'),
+		);
+	});
+
+	test('a plain application is name, email and the link', () => {
+		expect(
+			applicationSubmittedMessage({
+				name: 'Ada',
+				email: 'ada@example.test',
+				adminUrl: 'https://virtualcoffee.io/admin/waitlist/01',
+				invite: null,
+			}),
+		).toBe(
+			[
+				'*Application Received*',
+				'',
+				'*Name:* Ada',
+				'*Email:* ada@example.test',
+				'',
+				'<https://virtualcoffee.io/admin/waitlist/01|View in admin>',
+			].join('\n'),
 		);
 	});
 
 	test('a claimed invite names the inviter and explains the priority', () => {
-		const text = inviteClaimedMessage({
-			inviteeName: 'Ada',
-			inviteeEmail: 'ada@example.test',
-			inviterName: null,
+		const text = applicationSubmittedMessage({
+			name: 'Ada',
+			email: 'ada@example.test',
 			adminUrl: 'https://virtualcoffee.io/admin/waitlist/01',
+			invite: { inviterName: null },
 		});
-		expect(text).toContain('*Invited by:* —');
-		expect(text).toContain('sort to the front of the waitlist');
-		expect(
-			text.endsWith(
-				'\n<https://virtualcoffee.io/admin/waitlist/01|View in admin>',
-			),
-		).toBe(true);
+		expect(text).toBe(
+			[
+				'*Invited Application Received*',
+				'',
+				'*Name:* Ada',
+				'*Email:* ada@example.test',
+				'*Invited by:* —',
+				'',
+				'_Invited applications sort to the front of the waitlist._',
+				'<https://virtualcoffee.io/admin/waitlist/01|View in admin>',
+			].join('\n'),
+		);
 	});
 });

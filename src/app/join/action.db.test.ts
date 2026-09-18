@@ -49,8 +49,19 @@ describe('submitMembershipApplication', () => {
 		expect(row.waitlistedAt).toBeInstanceOf(Date);
 		await expect(applicationEvents(row.id)).resolves.toEqual([
 			{ type: 'submitted', body: 'Application submitted', actorUserId: null },
+			expect.objectContaining({
+				type: 'notification_sent',
+				body: 'Slack notified of a new application',
+			}),
 		]);
-		expect(notifySlack).not.toHaveBeenCalled();
+		expect(notifySlack).toHaveBeenCalledWith(
+			'membership',
+			expect.stringContaining('*Application Received*'),
+		);
+		expect(notifySlack).toHaveBeenCalledWith(
+			'membership',
+			expect.stringContaining(`/admin/waitlist/${row.id}|View in admin>`),
+		);
 	});
 
 	test('an email already in the pipeline is refused; a closed one may apply again', async () => {
@@ -123,7 +134,14 @@ describe('submitMembershipApplication', () => {
 			inviteId: null,
 		});
 		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'pending' });
-		expect(notifySlack).not.toHaveBeenCalled();
+		expect(notifySlack).toHaveBeenCalledWith(
+			'membership',
+			expect.stringContaining('*Application Received*'),
+		);
+		expect(notifySlack).not.toHaveBeenCalledWith(
+			'membership',
+			expect.stringContaining('Invited'),
+		);
 	});
 
 	test('a link works once', async () => {
