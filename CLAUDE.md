@@ -118,6 +118,15 @@ Unlike the other codegen it is **checked in**, so it is not part of `pnpm codege
 - `netlify/functions/join-coffee.ts` and `join-slack.ts` are redirect functions (env: `ZOOM_TUESDAYS`, `ZOOM_THURSDAYS`, `SLACK_JOIN_LINK`). `netlify/edge-functions/block-bots.ts` returns 403 to harvesting user agents on every path — on deploys only, since it is skipped in local dev unless `BLOCK_BOTS_LOCAL=true` is set in `.env` (the CLI does not pass plain process env vars to edge functions), and it lets user-initiated agents through. It reads the deploy context from `context.deploy.context` (`Netlify.env.get('CONTEXT')` is build-scope and undefined at the edge), and logs one `[blocked]` line per refusal — `[dev bypass]` locally, where it matches but does not refuse. Its list is `src/data/bots.ts` (see [The bot list](#the-bot-list-generated-but-checked-in)); it imports that with an explicit `.ts` extension because it bundles for Deno.
 - `netlify.toml` holds the legacy 301 map, the `/join-*` rewrites, a `/bots/*` proxy to a Cloudflare Worker, and the Plausible analytics proxy. Add new URL redirects there, not in Next config.
 
+### Error monitoring
+
+Sentry (`@sentry/nextjs`), errors + tracing only. Init files: `src/instrumentation-client.ts` (browser), `sentry.server.config.ts`, `sentry.edge.config.ts` (dispatched from `src/instrumentation.ts`), and `src/app/global-error.tsx` for a root-layout crash. `next.config.mjs` wraps the config in `withSentryConfig` (org `virtual-coffee-nw`, project `virtualcoffee-io`), which uploads source maps after the Turbopack build when `SENTRY_AUTH_TOKEN` is set — Netlify's build env only — and rewrites `/monitoring` as the event tunnel.
+
+- Off without `NEXT_PUBLIC_SENTRY_DSN`; Netlify sets it for every deploy context, `.env` locally is opt-in.
+- Never pass `dataCollection` or `sendDefaultPii`: the CoC report form must not reach Sentry. Rationale in `docs/adr/0015-error-monitoring-with-sentry.md`.
+- `environment` is the Netlify `CONTEXT`, inlined as `NEXT_PUBLIC_SENTRY_ENVIRONMENT` in `next.config.mjs`.
+- Releases are commit SHAs with commits and Netlify deploys attached by the build; `Fixes VIRTUALCOFFEE-IO-N` in a commit message resolves that Sentry issue on merge.
+
 ## Content conventions
 
 - Monthly challenges: prose lives in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`. Follow the process in the VC Community Building Resources "Monthly Challenge Technical Guidelines" linked from the README. The entry data for past challenges is a frozen snapshot in `src/data/monthlyChallenges/data/*.json` — see `docs/adr/0004` for why it is JSON and not a live fetch.

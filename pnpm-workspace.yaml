@@ -1,5 +1,6 @@
 allowBuilds:
   '@parcel/watcher': true
+  '@sentry/cli': true
   esbuild: true
   netlify-cli: true
   sharp: false

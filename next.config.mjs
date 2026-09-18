@@ -3,6 +3,7 @@ import { createHash } from 'crypto';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import createMDX from '@next/mdx';
+import { withSentryConfig } from '@sentry/nextjs/config';
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename);
@@ -80,6 +81,12 @@ const nextConfig = {
 		},
 	},
 	allowedDevOrigins: devTunnelOrigins,
+	// Sentry's `environment` tag is the Netlify deploy context (production,
+	// deploy-preview, branch-deploy). Inlined here so the browser bundle sees
+	// the same value as the server; CONTEXT is unset outside Netlify.
+	env: {
+		NEXT_PUBLIC_SENTRY_ENVIRONMENT: process.env.CONTEXT ?? 'development',
+	},
 };
 
 const withMDX = createMDX({
@@ -104,4 +111,30 @@ const withMDX = createMDX({
 	},
 });
 
-export default withMDX(nextConfig);
+// Outermost so Sentry sees the final config. Source maps upload after the
+// Turbopack build (`runAfterProductionCompile`) and only when
+// SENTRY_AUTH_TOKEN is set, which is Netlify's build env and nowhere else;
+// the generated maps are deleted from .next afterwards. `tunnelRoute` adds a
+// rewrite so browser events go through the site instead of straight to
+// sentry.io, the same reasoning as the Plausible proxy in netlify.toml.
+export default withSentryConfig(withMDX(nextConfig), {
+	org: 'virtual-coffee-nw',
+	project: 'virtualcoffee-io',
+	authToken: process.env.SENTRY_AUTH_TOKEN,
+	tunnelRoute: '/monitoring',
+	widenClientFileUpload: true,
+	silent: !process.env.CI,
+	release: {
+		// The plugin's default, made explicit, plus a guard for a clone that
+		// lacks the previous release's commit: fall back to the last 10 commits
+		// instead of failing the upload step.
+		setCommits: { auto: true, ignoreMissing: true },
+		// Registers each Netlify deploy against the release so the Releases page
+		// shows which environments have it. Only runs with the upload, so never
+		// locally.
+		deploy: {
+			env: process.env.CONTEXT ?? 'development',
+			url: process.env.DEPLOY_PRIME_URL,
+		},
+	},
+});
