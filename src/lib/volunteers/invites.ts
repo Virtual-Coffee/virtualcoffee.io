@@ -11,7 +11,6 @@ import {
 } from '@/db';
 import type {
 	ApplicationStatus,
-	Invite,
 	InviteStatus,
 	Volunteer,
 } from '@/db/schema';
@@ -201,5 +200,3 @@ export async function listInvitesFor(
 		.where(eq(invite.inviterSlackUserId, slackUserId))
 		.orderBy(desc(invite.createdAt));
 }
-
-export type { Invite };
