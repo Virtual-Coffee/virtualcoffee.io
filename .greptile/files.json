@@ -67,12 +67,12 @@
 		},
 		{
 			"path": "docs/adr/0010-volunteer-access-outside-the-section-model.md",
-			"description": "/invites uses requireVolunteer(); the volunteer Role holds no Section",
+			"description": "Volunteer access to /invites and its relation to the Section model",
 			"scope": ["src/app/invites/**", "src/lib/access/**"]
 		},
 		{
 			"path": "docs/adr/0011-append-only-invite-ledger.md",
-			"description": "The Invite Allowance is an append-only ledger; corrections go through adjustBalance",
+			"description": "The Invite Allowance ledger and how balances are corrected",
 			"scope": [
 				"src/lib/volunteers/**",
 				"src/app/admin/(protected)/volunteers/**",
@@ -82,7 +82,7 @@
 		},
 		{
 			"path": "docs/adr/0012-reviewed-airtable-volunteer-mapping.md",
-			"description": "Volunteers imported from Airtable come from a reviewed mapping",
+			"description": "How Airtable volunteers were matched to Slack accounts",
 			"scope": ["scripts/airtable/**", "src/lib/volunteers/**"]
 		},
 		{
