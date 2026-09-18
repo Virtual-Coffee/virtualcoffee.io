@@ -79,6 +79,22 @@ describe('volunteer_invite_ledger', () => {
 		},
 	);
 
+	test.each(['2026-9', '2026-13', '26-09', '2026-09-01'])(
+		'refuses monthly_accrual with period_key %s',
+		async (periodKey) => {
+			await expect(
+				ledgerRow({
+					slackUserId: GRACE,
+					delta: 1,
+					reason: 'monthly_accrual',
+					periodKey,
+				}),
+			).rejects.toMatchObject({
+				cause: { constraint: 'volunteer_invite_ledger_period_key_format' },
+			});
+		},
+	);
+
 	test('an Invite with a spend against it cannot be deleted', async () => {
 		const { id } = await insertInvite({ inviterSlackUserId: GRACE });
 		await ledgerRow({
