@@ -114,9 +114,17 @@ export async function listAccessRows(): Promise<AccessRow[]> {
 		});
 	}
 
-	/** Their user row is already listed above, badged as stranded. */
+	/**
+	 * Their user row is already listed above, badged as stranded. Only the
+	 * role-less rows: a Grant beside a role-holder is one `claimPendingGrant()`
+	 * declined to apply — a second Slack account linked onto someone who
+	 * already had access — and it stays its own row so it can be edited or
+	 * withdrawn.
+	 */
 	const strandedSlackIds = new Set(
-		userRows.filter((row) => row.slackUserId).map((row) => row.slackUserId),
+		userRows
+			.filter((row) => row.slackUserId && parseRoles(row.role).length === 0)
+			.map((row) => row.slackUserId),
 	);
 
 	for (const grant of grants) {
