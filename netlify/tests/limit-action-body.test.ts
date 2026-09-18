@@ -1,6 +1,7 @@
+// Not beside the function: Netlify bundles every file in netlify/edge-functions/ as an edge function.
 import type { Context } from '@netlify/edge-functions';
 import { describe, expect, test } from 'vitest';
-import limitActionBody from './limit-action-body';
+import limitActionBody from '../edge-functions/limit-action-body';
 
 const oneMiB = 1024 * 1024;
 
