@@ -5,7 +5,11 @@
 //   - Nothing here can use a Bootstrap variable or function; they aren't
 //     imported yet. Use literals.
 //   - A map assigned here REPLACES Bootstrap's, it doesn't merge. Write maps
-//     out in full or you'll silently drop keys.
+//     out in full or you'll silently drop keys ($spacers must keep keys 0-5
+//     or every .m-*/.p-*/.g-* utility disappears).
+//   - Keep $font-family-sans-serif a single flat list. Composing it from
+//     another list nests it, and v5 emits that into --bs-body-font-family as
+//     invalid CSS.
 
 $enable-rfs: true;
 $enable-dark-mode: false;

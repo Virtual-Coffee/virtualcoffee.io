@@ -5,18 +5,76 @@
 			"description": "Domain glossary: the terms to use and the synonyms to avoid"
 		},
 		{
+			"path": "docs/adr/0001-netlify-database-for-membership.md",
+			"description": "Netlify Database (Postgres) for the membership pipeline, and how migrations are produced",
+			"scope": ["drizzle/**", "drizzle.config.ts", "src/db/**", "netlify.toml"]
+		},
+		{
+			"path": "docs/adr/0002-membership-data-separate-from-vc-data.md",
+			"description": "Which data lives in vc-data and which stays in this repo (podcast snapshot, membership)",
+			"scope": ["src/data/podcast*", "src/db/**"]
+		},
+		{
 			"path": "docs/adr/0004-retiring-airtable.md",
-			"description": "Airtable is retired; monthly-challenge data is a frozen snapshot.",
+			"description": "Retiring Airtable: what replaced it and what became a frozen snapshot",
 			"scope": ["src/data/monthlyChallenges/**", "src/app/monthlychallenges/**"]
 		},
 		{
+			"path": "docs/adr/0006-role-based-admin-access.md",
+			"description": "Roles, Sections and requirePermission()",
+			"scope": ["src/app/admin/**", "src/lib/access/**", "src/lib/admin/**"]
+		},
+		{
+			"path": "docs/adr/0007-real-data-previews-behind-production-auth.md",
+			"description": "Deploy previews: production data behind production Slack sign-in",
+			"scope": [
+				"src/lib/outbound.ts",
+				"src/lib/access/**",
+				"src/app/admin/sign-in/**",
+				"netlify.toml"
+			]
+		},
+		{
+			"path": "docs/adr/0008-uuidv7-primary-keys.md",
+			"description": "Primary keys (UUIDv7) and the separate human-facing reference",
+			"scope": ["src/db/**", "src/lib/**", "src/app/admin/**"]
+		},
+		{
+			"path": "docs/adr/0009-pending-grants-by-slack-member-id.md",
+			"description": "How a Pending Grant is matched to a person",
+			"scope": [
+				"src/lib/access/**",
+				"src/app/admin/(protected)/user-management/**"
+			]
+		},
+		{
 			"path": "docs/adr/0015-error-monitoring-with-sentry.md",
-			"description": "Sentry: errors + tracing only, no dataCollection or sendDefaultPii.",
+			"description": "Error monitoring with Sentry: what is collected and what is kept out",
 			"scope": [
 				"src/instrumentation*.ts",
 				"sentry.*.config.ts",
 				"src/app/global-error.tsx",
 				"next.config.mjs"
+			]
+		},
+		{
+			"path": "docs/bot-list.md",
+			"description": "Policy for who is blocked; src/data/bots.ts is generated from it",
+			"scope": [
+				"src/data/botOverrides.ts",
+				"src/data/bots.ts",
+				"netlify/edge-functions/block-bots.ts",
+				".botlist-version.json"
+			]
+		},
+		{
+			"path": "docs/testing.md",
+			"description": "How tests are written here: Vitest, *.db.test.ts on PGlite, Zod matchers",
+			"scope": [
+				"**/*.test.ts",
+				"**/*.test.tsx",
+				"vitest.config.*",
+				"src/test/**"
 			]
 		}
 	]
