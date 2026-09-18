@@ -53,6 +53,17 @@
 			]
 		},
 		{
+			"path": "docs/adr/0013-outbound-mail-outside-production.md",
+			"description": "Live delivery is production only; every sender goes through deliver()",
+			"scope": [
+				"src/lib/outbound.ts",
+				"src/lib/email/**",
+				"src/lib/slack/**",
+				"src/lib/github/**",
+				".env.example"
+			]
+		},
+		{
 			"path": "docs/adr/0015-error-monitoring-with-sentry.md",
 			"description": "Error monitoring with Sentry: what is collected and what is kept out",
 			"scope": [
