@@ -14,7 +14,7 @@ import {
 import { formatDateTime } from '../../../presentation';
 import { NoteComposer } from '../../../noteComposer';
 import { addSubmissionNote } from '../actions';
-import { SubmissionStatusBadge, submissionStatusLabel } from '../presentation';
+import { STATUS_LABELS, SubmissionStatusBadge } from '../presentation';
 import { StatusControl } from '../statusControl';
 import { HistoryTimeline } from '../../../historyTimeline';
 
@@ -128,10 +128,7 @@ export default async function SubmissionDetailPage({
 
 				<div className="col-lg-5">
 					<h2 className="h6">History</h2>
-					<HistoryTimeline
-						history={entries}
-						statusLabel={submissionStatusLabel}
-					/>
+					<HistoryTimeline history={entries} statusLabels={STATUS_LABELS} />
 
 					{canManage && (
 						<NoteComposer
