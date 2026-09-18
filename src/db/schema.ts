@@ -452,6 +452,11 @@ export const volunteerInviteLedger = pgTable(
 				OR (${table.reason} NOT IN ('spend', 'refund_cancelled', 'refund_expired') AND ${table.inviteId} IS NULL)
 			)`,
 		),
+		/** `YYYY-MM` and nothing else, or the accrual index above compares two spellings of one month. */
+		check(
+			'volunteer_invite_ledger_period_key_format',
+			sql`${table.periodKey} IS NULL OR ${table.periodKey} ~ '^[0-9]{4}-(0[1-9]|1[0-2])$'`,
+		),
 		/**
 		 * The balance is `SUM(delta)`, so a positive `spend` or a zero row would
 		 * corrupt it silently. Named to sort after `reason_keys`: Postgres checks
