@@ -15,6 +15,7 @@ import {
 	insertVolunteer,
 	inviteRow,
 	ledgerFor,
+	volunteerEvents,
 } from '@/test/db/fixtures';
 import { afterRead } from '@/test/mocks/wrappers';
 import { slackDirectory, slackMember } from '@/test/mocks/slackMembers';
@@ -125,6 +126,14 @@ describe('addVolunteer', () => {
 		});
 		// Already signed in — nobody left to tell to come claim anything.
 		expect(sendSlackDm).not.toHaveBeenCalled();
+		const { id } = (await volunteerRow('U_ADA'))!;
+		await expect(volunteerEvents(id)).resolves.toEqual([
+			{
+				type: 'email_sent',
+				body: 'Volunteer welcome to ada@example.test',
+				actorUserId: expect.any(String),
+			},
+		]);
 	});
 
 	test('someone who has never signed in gets a Pending Grant, merged into any existing one', async () => {
@@ -151,6 +160,14 @@ describe('addVolunteer', () => {
 			'U_ADA',
 			expect.stringContaining('Volunteer'),
 		);
+		const { id } = (await volunteerRow('U_ADA'))!;
+		await expect(volunteerEvents(id)).resolves.toEqual([
+			{
+				type: 'notification_sent',
+				body: 'Volunteer DM',
+				actorUserId: expect.any(String),
+			},
+		]);
 	});
 
 	test('a second add is refused by the unique index, and grants nothing', async () => {
@@ -190,7 +207,16 @@ describe('addVolunteer', () => {
 			message:
 				"Ada can now send invites, but the email didn't send: The mail server rejected ada@example.test.",
 		});
-		await expect(volunteerRow('U_ADA')).resolves.not.toBeNull();
+		const row = await volunteerRow('U_ADA');
+		expect(row).not.toBeNull();
+		// The DM went (they have not signed in); the email did not.
+		await expect(volunteerEvents(row!.id)).resolves.toMatchObject([
+			{ type: 'notification_sent', body: 'Volunteer DM' },
+			{
+				type: 'email_failed',
+				body: 'Volunteer welcome to ada@example.test failed: The mail server rejected ada@example.test.',
+			},
+		]);
 	});
 
 	test('unknown Slack members and the wrong section are refused', async () => {
@@ -545,6 +571,14 @@ describe('resendInvite', () => {
 		expect(hashClaimToken(newToken!)).toBe(row.tokenHash);
 		// No ledger movement: it is the same Invite.
 		await expect(ledgerFor('U_GRACE')).resolves.toEqual([]);
+		// On the inviter's History.
+		await expect(volunteerEvents(volunteerId)).resolves.toEqual([
+			{
+				type: 'email_sent',
+				body: 'Invite re-sent to ada@example.test',
+				actorUserId: expect.any(String),
+			},
+		]);
 	});
 
 	test('a failed send admits the previous link has stopped working', async () => {
@@ -566,6 +600,9 @@ describe('resendInvite', () => {
 				'The mail server rejected ada@example.test. The previous link has stopped working, so try again or cancel the invite.',
 		});
 		expect((await inviteRow(id)).tokenHash).not.toBe(hashClaimToken(oldToken));
+		await expect(volunteerEvents(volunteerId)).resolves.toMatchObject([
+			{ type: 'email_failed' },
+		]);
 	});
 
 	test('an invite imported from Airtable has no link to re-send', async () => {

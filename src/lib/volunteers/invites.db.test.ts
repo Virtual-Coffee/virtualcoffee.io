@@ -105,7 +105,11 @@ describe('issueInvite', () => {
 			token: freshToken(),
 		});
 
-		expect(issued).toEqual({ ok: true, inviteId: expect.any(String) });
+		expect(issued).toEqual({
+			ok: true,
+			inviteId: expect.any(String),
+			volunteerId: expect.any(String),
+		});
 		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
 		await expect(
 			inviteRow(issued.ok ? issued.inviteId : ''),

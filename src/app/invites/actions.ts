@@ -7,6 +7,7 @@ import type { ActionResult, EmailActionResult } from '@/lib/admin/actionResult';
 import { isId } from '@/db/ids';
 import { volunteerInviteEmail } from '@/lib/email/templates';
 import { sendEmail } from '@/lib/email/transport';
+import { recordOutcome } from '@/lib/history/eventLog';
 import {
 	blockingInvite,
 	giveBack,
@@ -17,6 +18,7 @@ import {
 } from '@/lib/volunteers/invites';
 import { actorId } from '@/lib/access/adminAccess';
 import { requireVolunteer } from '@/lib/access/volunteerAccess';
+import { volunteerSubject } from '@/lib/volunteers/volunteers';
 import { siteUrl } from '@/util/url.server';
 
 const schema = z.object({
@@ -101,7 +103,7 @@ export async function sendInvite(
 		);
 	}
 
-	const { inviteId } = issued;
+	const { inviteId, volunteerId } = issued;
 
 	const template = volunteerInviteEmail(
 		session.user.name || 'A Virtual Coffee volunteer',
@@ -113,6 +115,12 @@ export async function sendInvite(
 		to: email,
 		subject: template.subject,
 		text: template.text,
+	});
+	await recordOutcome(volunteerSubject(volunteerId), {
+		channel: 'email',
+		outbound: sent,
+		what: `Invite to ${email}`,
+		actorUserId: actor,
 	});
 
 	if (!sent.ok) {
