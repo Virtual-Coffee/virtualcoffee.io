@@ -17,7 +17,7 @@ import {
 } from '@/lib/email/templates';
 import { emailStatus } from '@/lib/email/transport';
 import { ActionPanel } from './actionPanel';
-import { HistoryTimeline } from './historyTimeline';
+import { HistoryTimeline } from '../../historyTimeline';
 import { NoteComposer } from '../../noteComposer';
 import { addNote } from '../actions';
 import {
@@ -198,7 +198,7 @@ export default async function ApplicationDetailPage({
 							<NoteComposer onSubmit={addNote.bind(null, application.id)} />
 						)}
 						<div className="mt-3">
-							<HistoryTimeline history={entries} />
+							<HistoryTimeline history={entries} statusLabel={statusLabel} />
 						</div>
 					</section>
 				</div>
