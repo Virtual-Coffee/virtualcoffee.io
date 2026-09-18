@@ -3,7 +3,7 @@ import { expect, test } from 'vitest';
 import { insertPendingGrant, insertUser } from '@/test/db/fixtures';
 import { slackDirectory, slackMember } from '@/test/mocks/slackMembers';
 
-import { grantCandidates } from './admins';
+import { grantCandidates, listAccessRows } from './admins';
 
 test('a candidate says whether a grant is pre-provisioned, applied directly, or edited in the table', async () => {
 	slackDirectory.members = [
@@ -34,4 +34,29 @@ test('a candidate says whether a grant is pre-provisioned, applied directly, or 
 		U_ADMIN: { account: 'hasRoles', hasPendingGrant: false },
 		U_VOLUNTEER: { account: 'hasRoles', hasPendingGrant: false },
 	});
+});
+
+test('a Grant beside a role-holder is its own pending row, not hidden behind them', async () => {
+	// Better Auth links a second Slack account onto an existing role-holder,
+	// and `claimPendingGrant()` leaves the Grant alone rather than rewrite
+	// their roles. Nothing else applies it, so User Management must show it.
+	await insertUser({ name: 'Grace', slackUserId: 'U_HOLDER', role: 'admin' });
+	await insertPendingGrant({ slackUserId: 'U_HOLDER', role: 'coc_reviewer' });
+
+	const rows = await listAccessRows();
+
+	expect(rows).toEqual([
+		expect.objectContaining({
+			kind: 'user',
+			name: 'Grace',
+			roles: ['admin'],
+			stranded: false,
+		}),
+		expect.objectContaining({
+			kind: 'pending',
+			handle: null,
+			roles: ['coc_reviewer'],
+			stranded: false,
+		}),
+	]);
 });
