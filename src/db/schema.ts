@@ -400,8 +400,8 @@ export const volunteerInviteLedger = pgTable(
 		reason: volunteerLedgerReason('reason').notNull(),
 		/**
 		 * `YYYY-MM`, and only ever set on `monthly_accrual`. It exists solely so
-		 * the unique index below can exist: the accrual job runs daily and is
-		 * retried on failure, so "has this month already been granted?" has to be
+		 * the unique index below can exist: the accrual job runs daily and can be
+		 * run again by hand, so "has this month already been granted?" has to be
 		 * a question the database answers, not one the job asks and then races.
 		 */
 		periodKey: text('period_key'),
