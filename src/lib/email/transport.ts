@@ -120,9 +120,9 @@ function getTransporter(account: {
  * A local-only SMTP sink such as Mailpit: unauthenticated, no TLS, nothing
  * else in common with `TRANSPORT_OPTIONS` — that config is Gmail-specific.
  */
-function getLocalTransporter(): Transporter {
+function getLocalTransporter(host: string): Transporter {
 	localTransporter ??= nodemailer.createTransport({
-		host: process.env.SMTP_HOST,
+		host,
 		port: Number(process.env.SMTP_PORT) || 1025,
 		secure: false,
 		ignoreTLS: true,
@@ -198,7 +198,7 @@ async function send(
 	// GOOGLE_SMTP_USER is only cosmetic (the From address) rather than required.
 	let sendingTransporter: Transporter;
 	if (delivery.mode === 'local') {
-		sendingTransporter = getLocalTransporter();
+		sendingTransporter = getLocalTransporter(delivery.host);
 	} else {
 		const account = serviceAccount();
 		if (!account) {
@@ -253,7 +253,7 @@ async function send(
 		return {
 			ok: true,
 			message: 'Sent.',
-			warning: `Sent to local SMTP sink at ${process.env.SMTP_HOST}:${Number(process.env.SMTP_PORT) || 1025} (${delivery.context}) — not delivered outside this machine.`,
+			warning: `Sent to local SMTP sink at ${delivery.host}:${Number(process.env.SMTP_PORT) || 1025} (${delivery.context}) — not delivered outside this machine.`,
 		};
 	}
 	return { ok: true, message: 'Sent.' };
