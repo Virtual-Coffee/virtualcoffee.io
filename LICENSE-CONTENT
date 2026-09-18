@@ -1,9 +1,11 @@
 SPDX-License-Identifier: CC-BY-4.0
 
-The written content of virtualcoffee.io (the prose and MDX under src/content/,
-the page.mdx files under src/app/, and the illustrations under public/assets/)
-is licensed under Creative Commons Attribution 4.0 International. The source
-code is licensed separately under the MIT License in LICENSE.
+The written content of virtualcoffee.io - the text the site displays (the MDX
+under src/content/, the prose inside the pages under src/app/, and the
+illustrations under public/assets/) - is licensed under Creative Commons
+Attribution 4.0 International. The source code that renders it, including the
+TypeScript in those same page files, is licensed under the MIT License in
+LICENSE.
 
 Attribution 4.0 International
 
