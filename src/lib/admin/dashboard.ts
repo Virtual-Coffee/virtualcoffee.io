@@ -1,6 +1,7 @@
 import { statusCounts } from '@/lib/waitlist/applications';
 import { recentEvents } from '@/lib/history/eventLog';
 import type { Section } from '@/lib/access/permissions';
+import { applicationPath } from '@/lib/admin/links';
 
 /** One number on a card. Most sections have a single one; the queue has two. */
 export type DashboardFigure = {
@@ -110,7 +111,7 @@ export async function recentActivity(
 		type: row.type,
 		body: row.body,
 		actorName: row.actorName,
-		href: `/admin/waitlist/${row.subjectId}`,
+		href: applicationPath(row.subjectId),
 		subject: row.name ?? `Application ${row.reference}`,
 	}));
 }

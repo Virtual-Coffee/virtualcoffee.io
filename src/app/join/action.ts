@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { db, invite, membershipApplication } from '@/db';
+import { applicationPath } from '@/lib/admin/links';
 import { recordEvent, recordOutcome } from '@/lib/history/eventLog';
 import { applicationSubject } from '@/lib/waitlist/applications';
 import { hashClaimToken } from '@/lib/volunteers/invites';
@@ -19,6 +20,7 @@ import {
 	invalidFields,
 } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
+import { siteUrl } from '@/util/url.server';
 
 /** What redeeming a Claim Link yields, or null when there was nothing to redeem. */
 type ClaimedInvite = {
@@ -191,6 +193,7 @@ export async function submitMembershipApplication(
 				inviteeName: parsed.data.name,
 				inviteeEmail: parsed.data.email,
 				inviterName: invited.inviterName,
+				adminUrl: `${siteUrl()}${applicationPath(result.applicationId)}`,
 			}),
 		);
 
