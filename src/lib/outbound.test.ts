@@ -29,6 +29,7 @@ describe('emailDelivery', () => {
 			expect(emailDelivery()).toEqual({
 				mode: 'local',
 				context: context ?? 'local',
+				host: 'localhost',
 			});
 		},
 	);
@@ -48,7 +49,11 @@ describe('emailDelivery', () => {
 		(host) => {
 			vi.stubEnv('CONTEXT', 'dev');
 			vi.stubEnv('SMTP_HOST', host);
-			expect(emailDelivery()).toEqual({ mode: 'local', context: 'dev' });
+			expect(emailDelivery()).toEqual({
+				mode: 'local',
+				context: 'dev',
+				host: host.trim(),
+			});
 		},
 	);
 
@@ -261,7 +266,11 @@ describe('deliver', () => {
 			unreachable: 'the mail server',
 			live,
 		});
-		expect(live).toHaveBeenLastCalledWith({ mode: 'local', context: 'dev' });
+		expect(live).toHaveBeenLastCalledWith({
+			mode: 'local',
+			context: 'dev',
+			host: 'localhost',
+		});
 	});
 
 	test('a throw from live is a failure naming what could not be reached', async () => {
