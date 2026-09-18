@@ -37,7 +37,7 @@ describe('storeAttachment rejects before touching the store', () => {
 		[
 			'a file over the limit',
 			{ name: 'big.png', size: MAX_ATTACHMENT_BYTES + 1 } as File,
-			'Files must be 10MB or smaller.',
+			'Files must be 4MB or smaller.',
 		],
 		[
 			'text declared as PNG',
