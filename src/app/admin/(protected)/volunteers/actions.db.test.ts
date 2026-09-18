@@ -320,11 +320,16 @@ describe('setVolunteerActive', () => {
 		});
 		expect((await volunteerRow('U_ADA'))?.deactivatedAt).toBeNull();
 		await expect(grantRole('U_ADA')).resolves.toEqual(['volunteer']);
-		// Still never signed in, so the restart DMs them again.
+		// Still never signed in, so the restart DMs them again, on their History
+		// like the first one.
 		expect(sendSlackDm).toHaveBeenCalledWith(
 			'U_ADA',
 			expect.stringContaining('Volunteer'),
 		);
+		await expect(volunteerEvents(id)).resolves.toMatchObject([
+			{ type: 'notification_sent', body: 'Volunteer DM' },
+			{ type: 'notification_sent', body: 'Volunteer DM' },
+		]);
 	});
 
 	test('a malformed or unknown id is a soft failure, not a 22P02', async () => {
