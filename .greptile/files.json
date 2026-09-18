@@ -1,6 +1,10 @@
 {
 	"files": [
 		{
+			"path": "CONTEXT.md",
+			"description": "Domain glossary: the terms to use and the synonyms to avoid"
+		},
+		{
 			"path": "docs/adr/0004-retiring-airtable.md",
 			"description": "Airtable is retired; monthly-challenge data is a frozen snapshot.",
 			"scope": ["src/data/monthlyChallenges/**", "src/app/monthlychallenges/**"]
