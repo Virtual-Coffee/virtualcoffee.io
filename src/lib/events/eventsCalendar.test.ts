@@ -785,6 +785,32 @@ describe('writes', () => {
 		]);
 	});
 
+	test('endSeries on a Series deleted between its two reads is gone', async () => {
+		const { cal } = fakeClient({
+			get: { coffee: series },
+			instancesError: Object.assign(new Error('Not Found'), { status: 404 }),
+		});
+		await expect(cal.endSeries('coffee', '"1"')).rejects.toBeInstanceOf(
+			CalendarGoneError,
+		);
+	});
+
+	test('restore of a Reschedule whose Series is gone is gone', async () => {
+		const id = 'coffee_20260922T130000Z';
+		const { cal, calls } = fakeClient({
+			get: {
+				[id]: instance('coffee', '2026-09-22', {
+					start: { dateTime: '2026-09-23T11:00:00-04:00' },
+					end: { dateTime: '2026-09-23T12:30:00-04:00' },
+				}),
+			},
+		});
+		await expect(
+			cal.restoreEvent(id, '"coffee-2026-09-22"'),
+		).rejects.toBeInstanceOf(CalendarGoneError);
+		expect(calls.map((call) => call.method)).toEqual(['get', 'get']);
+	});
+
 	test('restore of an Event that moved on is a conflict', async () => {
 		const { cal } = fakeClient({ get: { e1: { id: 'e1', etag: '"new"' } } });
 		await expect(cal.restoreEvent('e1', '"old"')).rejects.toBeInstanceOf(

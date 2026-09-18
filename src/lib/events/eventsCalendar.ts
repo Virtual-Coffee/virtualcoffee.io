@@ -634,12 +634,16 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 	): Promise<'ended' | 'deleted'> {
 		const now = DateTime.now().setZone(DISPLAY_ZONE);
 		const existing = await current(id, etag);
-		const { data: past } = await client.events.instances({
-			calendarId,
-			eventId: id,
-			timeMax: iso(now),
-			maxResults: 1,
-		});
+		// The second half of the same write: a Series deleted between the two
+		// reads is gone, not an error page.
+		const { data: past } = await conditional(() =>
+			client.events.instances({
+				calendarId,
+				eventId: id,
+				timeMax: iso(now),
+				maxResults: 1,
+			}),
+		);
 		if (!(past.items ?? []).length) {
 			await conditional(() =>
 				client.events.delete(
@@ -702,10 +706,10 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 			await patch(id, etag, { status: 'confirmed' });
 			return;
 		}
-		const { data: series } = await client.events.get({
-			calendarId,
-			eventId: existing.recurringEventId,
-		});
+		// Without its Series there is no rule to restore the Event to.
+		const { data: series } = await conditional(() =>
+			client.events.get({ calendarId, eventId: existing.recurringEventId! }),
+		);
 		const at = DateTime.fromISO(originalStart, { setZone: true });
 		await patch(id, etag, {
 			status: 'confirmed',
