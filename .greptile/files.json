@@ -66,6 +66,26 @@
 			]
 		},
 		{
+			"path": "docs/adr/0010-volunteer-access-outside-the-section-model.md",
+			"description": "/invites uses requireVolunteer(); the volunteer Role holds no Section",
+			"scope": ["src/app/invites/**", "src/lib/access/**"]
+		},
+		{
+			"path": "docs/adr/0011-append-only-invite-ledger.md",
+			"description": "The Invite Allowance is an append-only ledger; corrections go through adjustBalance",
+			"scope": [
+				"src/lib/volunteers/**",
+				"src/app/admin/(protected)/volunteers/**",
+				"src/app/invites/**",
+				"drizzle/**"
+			]
+		},
+		{
+			"path": "docs/adr/0012-reviewed-airtable-volunteer-mapping.md",
+			"description": "Volunteers imported from Airtable come from a reviewed mapping",
+			"scope": ["scripts/airtable/**", "src/lib/volunteers/**"]
+		},
+		{
 			"path": "docs/adr/0013-outbound-mail-outside-production.md",
 			"description": "Outbound mail, Slack and GitHub delivery outside production: Captured vs Live, and what capture() logs",
 			"scope": [
