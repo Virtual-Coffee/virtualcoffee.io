@@ -80,9 +80,10 @@ const nextConfig = {
 		reactDebugChannel: !isTunnel,
 		serverActions: {
 			allowedOrigins: devTunnelOrigins,
-			// Next caps action bodies at 1MB by default; the CoC form accepts a
-			// 10MB attachment (MAX_ATTACHMENT_BYTES), plus the multipart overhead.
-			bodySizeLimit: '11mb',
+			// Next's default is 1MB; the CoC form's 4MiB attachment
+			// (MAX_ATTACHMENT_BYTES) plus multipart overhead needs more. Netlify
+			// buffers function requests at 6MB, so nothing higher would arrive anyway.
+			bodySizeLimit: '5mb',
 		},
 	},
 	allowedDevOrigins: devTunnelOrigins,
