@@ -116,7 +116,10 @@ export async function submitCocReport(
 			return notifySlack(
 				'coc',
 				cocReportMessage({
-					...report,
+					name: report.name,
+					email: report.email,
+					reporteeName: report.reporteeName,
+					timeLocation: report.timeLocation,
 					hasAttachment: attachment !== null,
 					adminUrl: `${siteUrl()}${submissionPath('coc', saved.id)}`,
 				}),

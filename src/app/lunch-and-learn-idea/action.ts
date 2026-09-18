@@ -123,8 +123,9 @@ export async function submitLunchAndLearnIdea(
 			notifySlack(
 				'lunch-and-learn',
 				lunchAndLearnMessage({
-					topic: idea.topic,
 					name: idea.name,
+					email: idea.email,
+					topic: idea.topic,
 					issueUrl,
 					adminUrl,
 				}),

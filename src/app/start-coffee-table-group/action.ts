@@ -75,7 +75,9 @@ export async function submitCoffeeTableGroupRequest(
 			return notifySlack(
 				'coffee-tables',
 				coffeeTableGroupMessage({
-					...request,
+					name: request.name,
+					email: request.email,
+					groupName: request.groupName,
 					adminUrl: `${siteUrl()}${submissionPath('coffee-tables', saved.id)}`,
 				}),
 			);

@@ -25,6 +25,18 @@ const ISSUE = 'https://github.com/Virtual-Coffee/VC-Community-Docs/issues/9';
 const adminLink = (id: string) =>
 	`<${siteUrl()}/admin/submissions/lunch-and-learn/${id}|View in admin>`;
 
+/** The message with the links it carries, in order. */
+const message = (...links: string[]) =>
+	[
+		'*New Lunch & Learn Idea*',
+		'',
+		'*Name:* Ada',
+		'*Email:* ada@example.test',
+		'*Title:* Property testing',
+		'',
+		...links,
+	].join('\n');
+
 async function submit() {
 	await expect(
 		submitLunchAndLearnIdea(null, formDataWith(valid)),
@@ -56,7 +68,7 @@ describe('submitLunchAndLearnIdea', () => {
 		});
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			`New Lunch & Learn Submission: Property testing by Ada\n\n<${ISSUE}|GitHub issue>\n${adminLink(row.id)}`,
+			message(`<${ISSUE}|GitHub issue>`, adminLink(row.id)),
 		);
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Idea submitted' },
@@ -84,7 +96,7 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(row.githubIssueUrl).toBeNull();
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			`New Lunch & Learn Submission: Property testing by Ada\n\n${adminLink(row.id)}`,
+			message(adminLink(row.id)),
 		);
 		// Each channel is its own line of History, so a GitHub outage is never
 		// hidden behind the Slack message that followed it.
@@ -122,7 +134,7 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(row.githubIssueUrl).toBeNull();
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			`New Lunch & Learn Submission: Property testing by Ada\n\n${adminLink(row.id)}`,
+			message(adminLink(row.id)),
 		);
 		expect(events.slice(1)).toEqual([
 			{
@@ -157,7 +169,7 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(result.row.githubIssueUrl).toBeNull();
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			`New Lunch & Learn Submission: Property testing by Ada\n\n<${ISSUE}|GitHub issue>\n${adminLink(result.row.id)}`,
+			message(`<${ISSUE}|GitHub issue>`, adminLink(result.row.id)),
 		);
 		// The row lost the link, so History is the only place that has it.
 		expect(result.events.slice(1)).toEqual([
