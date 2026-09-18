@@ -45,6 +45,11 @@ declare namespace NodeJS {
 		// itself at the front of the queue.
 		SLACK_WEBHOOK_MEMBERSHIP?: string;
 
+		// Bot token with `users:read`, for the Slack member directory the
+		// "Grant access" picker reads. A separate credential from SLACK_CLIENT_*:
+		// those scopes are OIDC-only and cannot call users.list.
+		SLACK_BOT_TOKEN?: string;
+
 		// The GitHub App CI already uses, for the Lunch & Learn issue — the same
 		// App the workflows read as the CI_APP_* Actions secrets. Not the same
 		// credential as GITHUB_TOKEN, which stays a permission-less PAT.

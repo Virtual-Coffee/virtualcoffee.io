@@ -47,6 +47,8 @@
 		"@octokit/rest": "^22.0.1",
 		"@sentry/nextjs": "^10.75.0",
 		"@sindresorhus/slugify": "^3.0.1",
+		"@slack/web-api": "^8.1.1",
+		"@tanstack/react-table": "^9.2.4",
 		"@types/mdx": "^2.0.14",
 		"airtable": "^0.12.2",
 		"better-auth": "^1.7.3",
