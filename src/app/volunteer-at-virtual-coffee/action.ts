@@ -76,7 +76,9 @@ export async function submitVolunteerSignup(
 			return notifySlack(
 				'volunteers',
 				volunteerSignupMessage({
-					...signup,
+					name: signup.name,
+					email: signup.email,
+					position: signup.position,
 					adminUrl: `${siteUrl()}${submissionPath('volunteers', saved.id)}`,
 				}),
 			);
