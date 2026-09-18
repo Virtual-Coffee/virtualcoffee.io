@@ -9,11 +9,7 @@ import {
 	type Database,
 	type Transaction,
 } from '@/db';
-import type {
-	ApplicationStatus,
-	InviteStatus,
-	Volunteer,
-} from '@/db/schema';
+import type { ApplicationStatus, InviteStatus, Volunteer } from '@/db/schema';
 import { hashToken, newToken } from '@/lib/tokens';
 
 /**
