@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { coffeeTableGroupRequest } from '@/db';
+import { submissionPath } from '@/lib/admin/links';
 import { coffeeTableGroupMessage, notifySlack } from '@/lib/slack/notify';
 import {
 	notifyAndRecord,
@@ -12,6 +13,7 @@ import {
 import { agree, email, name } from '@/util/forms/fields';
 import { intake, savingFailed } from '@/util/forms/intake';
 import type { FormState } from '@/util/forms/types';
+import { siteUrl } from '@/util/url.server';
 
 const THANKS = '/start-coffee-table-group/thanks';
 
@@ -70,7 +72,13 @@ export async function submitCoffeeTableGroupRequest(
 			what: 'Slack notified of a Coffee Table group request',
 		},
 		async () => {
-			return notifySlack('coffee-tables', coffeeTableGroupMessage(request));
+			return notifySlack(
+				'coffee-tables',
+				coffeeTableGroupMessage({
+					...request,
+					adminUrl: `${siteUrl()}${submissionPath('coffee-tables', saved.id)}`,
+				}),
+			);
 		},
 	);
 

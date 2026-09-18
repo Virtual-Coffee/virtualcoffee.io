@@ -1,7 +1,7 @@
 import { statusCounts } from '@/lib/waitlist/applications';
 import { recentEvents } from '@/lib/history/eventLog';
 import type { Section } from '@/lib/access/permissions';
-import { applicationPath } from '@/lib/admin/links';
+import { applicationPath, submissionPath } from '@/lib/admin/links';
 import {
 	openCount,
 	SUBMISSION_KINDS,
@@ -151,7 +151,7 @@ export async function recentActivity(
 		return [
 			{
 				...shared,
-				href: `/admin/submissions/${kind}/${row.subjectId}`,
+				href: submissionPath(kind, row.subjectId),
 				subject: `${SUBMISSION_KINDS[kind].singular} ${row.reference}`,
 			},
 		];

@@ -57,6 +57,12 @@ describe('submitCocReport', () => {
 			'coc',
 			expect.stringContaining('*Name:* (anonymous)'),
 		);
+		expect(notifySlack).toHaveBeenCalledWith(
+			'coc',
+			expect.stringContaining(
+				`/admin/submissions/coc/${row.id}|View in admin>`,
+			),
+		);
 	});
 
 	/**
@@ -105,7 +111,9 @@ describe('submitCocReport', () => {
 		);
 		expect(notifySlack).toHaveBeenCalledWith(
 			'coc',
-			expect.stringContaining('A file was attached'),
+			expect.stringContaining(
+				`/admin/submissions/coc/${row.id}|A file was attached; open the report to view it.>`,
+			),
 		);
 	});
 

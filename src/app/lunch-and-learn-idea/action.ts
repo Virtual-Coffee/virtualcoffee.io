@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { db, lunchAndLearnIdea } from '@/db';
+import { submissionPath } from '@/lib/admin/links';
 import { createLunchAndLearnIssue } from '@/lib/github/issues';
 import { lunchAndLearnMessage, notifySlack } from '@/lib/slack/notify';
 import {
@@ -77,6 +78,7 @@ export async function submitLunchAndLearnIdea(
 	// is its own line of History, so a Slack outage is never written up as a
 	// GitHub failure; neither failing loses the idea.
 	let issueUrl: string | null = null;
+	const adminUrl = `${siteUrl()}${submissionPath('lunch-and-learn', saved.id)}`;
 	await notifyAndRecord(
 		'lunch-and-learn',
 		saved.id,
@@ -84,7 +86,7 @@ export async function submitLunchAndLearnIdea(
 		async () => {
 			const issue = await createLunchAndLearnIssue({
 				...idea,
-				adminUrl: `${siteUrl()}/admin/submissions/lunch-and-learn/${saved.id}`,
+				adminUrl,
 			});
 
 			// A captured issue has no URL to keep (docs/adr/0013).
@@ -120,7 +122,12 @@ export async function submitLunchAndLearnIdea(
 		() =>
 			notifySlack(
 				'lunch-and-learn',
-				lunchAndLearnMessage({ topic: idea.topic, name: idea.name, issueUrl }),
+				lunchAndLearnMessage({
+					topic: idea.topic,
+					name: idea.name,
+					issueUrl,
+					adminUrl,
+				}),
 			),
 	);
 

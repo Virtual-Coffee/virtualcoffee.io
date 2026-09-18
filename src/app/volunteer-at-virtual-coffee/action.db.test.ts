@@ -46,6 +46,12 @@ describe('submitVolunteerSignup', () => {
 			'volunteers',
 			expect.stringMatching(/^\*New Volunteer Form Submission\*[\s\S]*Ada/),
 		);
+		expect(notifySlack).toHaveBeenCalledWith(
+			'volunteers',
+			expect.stringContaining(
+				`/admin/submissions/volunteers/${row.id}|View in admin>`,
+			),
+		);
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Signup submitted' },
 			{

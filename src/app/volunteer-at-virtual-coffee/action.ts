@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { volunteerSignup } from '@/db';
+import { submissionPath } from '@/lib/admin/links';
 import { notifySlack, volunteerSignupMessage } from '@/lib/slack/notify';
 import {
 	notifyAndRecord,
@@ -13,6 +14,7 @@ import { agree, email, name } from '@/util/forms/fields';
 import { intake, savingFailed } from '@/util/forms/intake';
 import { githubUsername } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
+import { siteUrl } from '@/util/url.server';
 
 const THANKS = '/volunteer-at-virtual-coffee/thanks';
 
@@ -71,7 +73,13 @@ export async function submitVolunteerSignup(
 		saved.id,
 		{ channel: 'slack', what: 'Slack notified of a Volunteer signup' },
 		async () => {
-			return notifySlack('volunteers', volunteerSignupMessage(signup));
+			return notifySlack(
+				'volunteers',
+				volunteerSignupMessage({
+					...signup,
+					adminUrl: `${siteUrl()}${submissionPath('volunteers', saved.id)}`,
+				}),
+			);
 		},
 	);
 

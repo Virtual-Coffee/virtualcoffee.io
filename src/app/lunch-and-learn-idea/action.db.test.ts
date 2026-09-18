@@ -7,6 +7,7 @@ import { formDataWith } from '@/test/forms';
 import { failedNotifications } from '@/lib/submissions/submissions';
 import { createLunchAndLearnIssue, notifySlack } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
+import { siteUrl } from '@/util/url.server';
 
 import { submitLunchAndLearnIdea } from './action';
 
@@ -20,6 +21,9 @@ const valid = {
 };
 
 const ISSUE = 'https://github.com/Virtual-Coffee/VC-Community-Docs/issues/9';
+
+const adminLink = (id: string) =>
+	`<${siteUrl()}/admin/submissions/lunch-and-learn/${id}|View in admin>`;
 
 async function submit() {
 	await expect(
@@ -52,7 +56,7 @@ describe('submitLunchAndLearnIdea', () => {
 		});
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			`New Lunch & Learn Submission: Property testing by Ada\n\nGitHub Link: ${ISSUE}`,
+			`New Lunch & Learn Submission: Property testing by Ada\n\n<${ISSUE}|GitHub issue>\n${adminLink(row.id)}`,
 		);
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Idea submitted' },
@@ -80,7 +84,7 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(row.githubIssueUrl).toBeNull();
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			'New Lunch & Learn Submission: Property testing by Ada',
+			`New Lunch & Learn Submission: Property testing by Ada\n\n${adminLink(row.id)}`,
 		);
 		// Each channel is its own line of History, so a GitHub outage is never
 		// hidden behind the Slack message that followed it.
@@ -118,7 +122,7 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(row.githubIssueUrl).toBeNull();
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			'New Lunch & Learn Submission: Property testing by Ada',
+			`New Lunch & Learn Submission: Property testing by Ada\n\n${adminLink(row.id)}`,
 		);
 		expect(events.slice(1)).toEqual([
 			{
@@ -153,7 +157,7 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(result.row.githubIssueUrl).toBeNull();
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			`New Lunch & Learn Submission: Property testing by Ada\n\nGitHub Link: ${ISSUE}`,
+			`New Lunch & Learn Submission: Property testing by Ada\n\n<${ISSUE}|GitHub issue>\n${adminLink(result.row.id)}`,
 		);
 		// The row lost the link, so History is the only place that has it.
 		expect(result.events.slice(1)).toEqual([
