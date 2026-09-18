@@ -1,4 +1,3 @@
-import { NextPageProps } from '@/util/types';
 import { notFound } from 'next/navigation';
 
 import { Fragment } from 'react';
@@ -59,7 +58,7 @@ async function getEpisodeData(slug: string) {
 
 export async function generateMetadata({
 	params,
-}: NextPageProps<'slug'>): Promise<Metadata> {
+}: PageProps<'/podcast/[slug]'>): Promise<Metadata> {
 	const { episode } = await getEpisodeData((await params).slug);
 
 	const cardImage = episode.podcastEpisodeCard && episode.podcastEpisodeCard[0];
@@ -114,7 +113,9 @@ export async function generateMetadata({
 	};
 }
 
-export default async function Newsletter({ params }: NextPageProps<'slug'>) {
+export default async function Newsletter({
+	params,
+}: PageProps<'/podcast/[slug]'>) {
 	const { episode, transcript } = await getEpisodeData((await params).slug);
 
 	return (

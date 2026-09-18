@@ -5,7 +5,6 @@ import {
 	loadMdxRouteFileAttributes,
 	MdxFile,
 } from '@/util/loadMdx.server';
-import type { NextPageProps } from '@/util/types';
 import { MDXProps } from 'mdx/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -89,7 +88,7 @@ function findBreadcrumbs(files: MdxFile[], slug: string): MdxFile[] {
 
 export async function generateMetadata({
 	params,
-}: NextPageProps<'slug', false, true>): Promise<Metadata> {
+}: PageProps<'/resources/[[...slug]]'>): Promise<Metadata> {
 	const uri = ((await params).slug ?? []).join('/');
 
 	const file = await getFile(uri);
@@ -106,7 +105,7 @@ export async function generateMetadata({
 
 export default async function Page({
 	params,
-}: NextPageProps<'slug', false, true>) {
+}: PageProps<'/resources/[[...slug]]'>) {
 	const uri = ((await params).slug ?? []).join('/');
 	const file = await getFile(uri);
 

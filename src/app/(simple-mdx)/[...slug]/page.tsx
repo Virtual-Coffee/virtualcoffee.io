@@ -4,7 +4,6 @@ import {
 	loadMdxRouteFileAttributes,
 	loadMdxDirectory,
 } from '@/util/loadMdx.server';
-import type { NextPageProps } from '@/util/types';
 import { MDXProps } from 'mdx/types';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -40,7 +39,7 @@ async function getFile(slug: string) {
 
 export async function generateMetadata({
 	params,
-}: NextPageProps<'slug', false, true>): Promise<Metadata> {
+}: PageProps<'/[...slug]'>): Promise<Metadata> {
 	const uri = ((await params).slug ?? []).join('/');
 
 	const file = await getFile(uri);
@@ -55,9 +54,7 @@ export async function generateMetadata({
 	});
 }
 
-export default async function Page({
-	params,
-}: NextPageProps<'slug', false, true>) {
+export default async function Page({ params }: PageProps<'/[...slug]'>) {
 	const uri = ((await params).slug ?? []).join('/');
 	const file = await getFile(uri);
 
