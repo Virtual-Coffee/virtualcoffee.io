@@ -25,6 +25,19 @@
 			"scope": ["src/data/monthlyChallenges/**", "src/app/monthlychallenges/**"]
 		},
 		{
+			"path": "docs/adr/0005-persist-then-notify.md",
+			"description": "Order of persisting and notifying for inbound Submissions",
+			"scope": [
+				"src/app/join/**",
+				"src/app/report-coc-violation/**",
+				"src/app/volunteer-at-virtual-coffee/**",
+				"src/app/lunch-and-learn-idea/**",
+				"src/app/start-coffee-table-group/**",
+				"src/util/forms/**",
+				"src/lib/submissions/**"
+			]
+		},
+		{
 			"path": "docs/adr/0006-role-based-admin-access.md",
 			"description": "Roles, Sections and requirePermission()",
 			"scope": ["src/app/admin/**", "src/lib/access/**", "src/lib/admin/**"]

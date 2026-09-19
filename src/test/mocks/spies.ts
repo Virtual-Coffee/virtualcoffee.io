@@ -35,6 +35,15 @@ export const sendSlackDm = vi.fn<Sender>(async () => NOT_SENT);
 export const revalidatePath = vi.fn();
 export const revalidateTag = vi.fn();
 
+/** `@netlify/blobs` — replaced: one store, whose `set`/`delete` a test drives. */
+export const blobs = { set: vi.fn(), delete: vi.fn() };
+
+/** `@/lib/attachments` — spread; storing and discarding stay real, on the mocked blobs. */
+export const readAttachment = vi.fn<(key: string) => Promise<unknown>>();
+
+/** `@/lib/github/issues` — spread; `githubAppConfigured` stays real. */
+export const createLunchAndLearnIssue = vi.fn();
+
 export function resetSpies() {
 	for (const spy of [
 		sendEmail,
@@ -42,6 +51,10 @@ export function resetSpies() {
 		sendSlackDm,
 		revalidatePath,
 		revalidateTag,
+		blobs.set,
+		blobs.delete,
+		readAttachment,
+		createLunchAndLearnIssue,
 	]) {
 		spy.mockReset();
 	}

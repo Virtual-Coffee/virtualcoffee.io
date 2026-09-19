@@ -55,6 +55,18 @@ describe('storeAttachment rejects before touching the store', () => {
 	});
 });
 
+describe('storeAttachment when the store is down', () => {
+	test('returns a form error rather than throwing', async () => {
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+		blobs.set.mockRejectedValueOnce(new Error('blobs unavailable'));
+		await expect(storeAttachment(file(PNG, 'a.png', 'x'))).resolves.toEqual({
+			error: expect.stringContaining('store the attachment'),
+		});
+		expect(error).toHaveBeenCalledOnce();
+		error.mockRestore();
+	});
+});
+
 describe('storeAttachment accepts by leading bytes, not by declaration', () => {
 	test.each([
 		[PNG, 'shot.PNG', 'image/png', 'shot.png'],

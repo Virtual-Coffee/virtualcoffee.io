@@ -1,8 +1,12 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 import { Form } from './form';
+import { issueTimestamp } from '@/util/forms/spamGuard';
 import LeadText from '@/components/content/LeadText';
 import Link from 'next/link';
+
+// The spam guard signs a per-render token that prerendering would bake in.
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata() {
 	return await createMetaData({
@@ -36,7 +40,7 @@ export default function VolunteerForm() {
 				</p>
 			</LeadText>
 
-			<Form />
+			<Form spamToken={issueTimestamp()} />
 		</DefaultLayout>
 	);
 }
