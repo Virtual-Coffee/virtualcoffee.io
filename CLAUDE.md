@@ -59,7 +59,7 @@ Every external data source lives in `src/data/` and degrades to a mock when its 
 | Member GitHub profiles                         | `src/data/members/index.ts`  | `src/data/mocks/memberData.js` (faker)         |
 | GitHub Sponsors                                | `src/data/sponsors.ts`       | `src/data/mocks/sponsors.ts`                   |
 | Events (Craft CMS)                             | `src/data/events.ts`         | `src/data/mocks/events.ts`                     |
-| Membership notifications (Slack)               | `src/lib/slack/notify.ts`    | Captured; the application is still saved       |
+| Membership notifications (Slack, Block Kit)    | `src/lib/slack/notify.ts`    | Captured; the application is still saved       |
 | Transactional email (`/admin` actions)         | `src/lib/email/transport.ts` | Captured; a failure is an `email_failed` event |
 | Slack member directory (`/admin` grant picker) | `src/data/slackMembers.ts`   | `src/data/mocks/slackMembers.ts` (faker)       |
 | Membership applications (`/join`, `/admin`)    | `src/db/`                    | local Postgres from `netlify dev`              |
@@ -88,6 +88,7 @@ Rules:
 - A deploy preview is production's data behind production's Slack sign-in; `OAUTH_PROXY_SECRET` holds one value in every Netlify context — `docs/adr/0007`.
 - An admin action that emails sends first and writes the status change only after, reporting whether anything went out; `waitlist/actions.db.test.ts` pins the order.
 - Live delivery is `CONTEXT=production` only; everywhere else every email, Slack post and GitHub issue is Captured unless `.env.example` names an opt-in — `docs/adr/0013`. A new sender is a `deliver()` call in `src/lib/outbound.ts`, which decides the mode before the sender can reach its credentials.
+- A Slack post is Block Kit built from `src/lib/slack/blocks.ts`: a typed value is a literal `rich_text` run, mrkdwn is for static copy only — `docs/adr/0016`.
 - `/join` is `force-dynamic`: the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token that prerendering would bake into cached HTML. Every public form's action opens with `intake()` (`src/util/forms/intake.ts`), which owns that guard and the schema parse.
 
 Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (procedure in the comment at the top of `src/data/podcast.ts`); membership data stays out of that repo — `docs/adr/0002`. Newsletters are JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
