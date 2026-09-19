@@ -8,6 +8,8 @@ import { failedNotifications } from '@/lib/submissions/submissions';
 import { createLunchAndLearnIssue, notifySlack } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
 import { siteUrl } from '@/util/url.server';
+import { buttonLinks, richTextFields } from '@/test/slack';
+import type { SlackMessage } from '@/lib/slack/blocks';
 
 import { submitLunchAndLearnIdea } from './action';
 
@@ -22,20 +24,27 @@ const valid = {
 
 const ISSUE = 'https://github.com/Virtual-Coffee/VC-Community-Docs/issues/9';
 
-const adminLink = (id: string) =>
-	`<${siteUrl()}/admin/submissions/lunch-and-learn/${id}|View in admin>`;
+const adminUrl = (id: string) =>
+	`${siteUrl()}/admin/submissions/lunch-and-learn/${id}`;
 
-/** The message with the links it carries, in order. */
-const message = (...links: string[]) =>
-	[
-		'*New Lunch & Learn Idea*',
-		'',
-		'*Name:* Ada',
-		'*Email:* ada@example.test',
-		'*Title:* Property testing',
-		'',
-		...links,
-	].join('\n');
+/** The message with the buttons it carries, in order. */
+const message = (...buttons: [label: string, url: string][]) => ({
+	text: 'New Lunch & Learn Idea — Property testing',
+	fields: { Name: 'Ada', Email: 'ada@example.test', Title: 'Property testing' },
+	buttons,
+});
+
+/** What the last Slack post carried, in the shape `message()` describes. */
+function posted() {
+	const call = notifySlack.mock.lastCall;
+	if (!call) throw new Error('notifySlack was not called');
+	const sent = call[1] as SlackMessage;
+	return {
+		text: sent.text,
+		fields: richTextFields(sent),
+		buttons: Object.entries(buttonLinks(sent)),
+	};
+}
 
 async function submit() {
 	await expect(
@@ -68,7 +77,10 @@ describe('submitLunchAndLearnIdea', () => {
 		});
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			message(`<${ISSUE}|GitHub issue>`, adminLink(row.id)),
+			expect.anything(),
+		);
+		expect(posted()).toEqual(
+			message(['View in admin', adminUrl(row.id)], ['GitHub issue', ISSUE]),
 		);
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Idea submitted' },
@@ -96,8 +108,9 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(row.githubIssueUrl).toBeNull();
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			message(adminLink(row.id)),
+			expect.anything(),
 		);
+		expect(posted()).toEqual(message(['View in admin', adminUrl(row.id)]));
 		// Each channel is its own line of History, so a GitHub outage is never
 		// hidden behind the Slack message that followed it.
 		expect(events).toEqual([
@@ -134,8 +147,9 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(row.githubIssueUrl).toBeNull();
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			message(adminLink(row.id)),
+			expect.anything(),
 		);
+		expect(posted()).toEqual(message(['View in admin', adminUrl(row.id)]));
 		expect(events.slice(1)).toEqual([
 			{
 				type: 'notification_sent',
@@ -169,7 +183,13 @@ describe('submitLunchAndLearnIdea', () => {
 		expect(result.row.githubIssueUrl).toBeNull();
 		expect(notifySlack).toHaveBeenCalledWith(
 			'lunch-and-learn',
-			message(`<${ISSUE}|GitHub issue>`, adminLink(result.row.id)),
+			expect.anything(),
+		);
+		expect(posted()).toEqual(
+			message(
+				['View in admin', adminUrl(result.row.id)],
+				['GitHub issue', ISSUE],
+			),
 		);
 		// The row lost the link, so History is the only place that has it.
 		expect(result.events.slice(1)).toEqual([

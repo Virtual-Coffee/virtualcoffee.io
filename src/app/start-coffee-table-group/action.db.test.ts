@@ -5,6 +5,8 @@ import { coffeeTableGroupRequest, db, submissionEvent } from '@/db';
 import { formDataWith } from '@/test/forms';
 import { notifySlack } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
+import { buttonLinks, richTextFields } from '@/test/slack';
+import type { SlackMessage } from '@/lib/slack/blocks';
 
 import { submitCoffeeTableGroupRequest } from './action';
 
@@ -42,16 +44,19 @@ describe('submitCoffeeTableGroupRequest', () => {
 		});
 		expect(notifySlack).toHaveBeenCalledWith(
 			'coffee-tables',
-			expect.stringMatching(
-				/^\*New Coffee Table Group\*[\s\S]*Analytical Engines/,
-			),
+			expect.objectContaining({
+				text: 'New Coffee Table Group — Analytical Engines',
+			}),
 		);
-		expect(notifySlack).toHaveBeenCalledWith(
-			'coffee-tables',
-			expect.stringContaining(
-				`/admin/submissions/coffee-tables/${row.id}|View in admin>`,
+		const sent = notifySlack.mock.lastCall?.[1] as SlackMessage;
+		expect(richTextFields(sent)).toMatchObject({
+			'Group name': 'Analytical Engines',
+		});
+		expect(buttonLinks(sent)).toEqual({
+			'View in admin': expect.stringMatching(
+				new RegExp(`/admin/submissions/coffee-tables/${row.id}$`),
 			),
-		);
+		});
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Request submitted' },
 			{

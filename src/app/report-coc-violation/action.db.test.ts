@@ -7,8 +7,17 @@ import { failInserts } from '@/test/db/fixtures';
 import { fieldErrors, formDataWith } from '@/test/forms';
 import { blobs, notifySlack } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
+import { buttonLinks, container, notes, richTextFields } from '@/test/slack';
+import type { SlackMessage } from '@/lib/slack/blocks';
 
 import { submitCocReport } from './action';
+
+/** The message the last Slack post carried. */
+function posted(): SlackMessage {
+	const call = notifySlack.mock.lastCall;
+	if (!call) throw new Error('notifySlack was not called');
+	return call[1] as SlackMessage;
+}
 
 const valid = {
 	reportee_name: 'Someone',
@@ -53,16 +62,22 @@ describe('submitCocReport', () => {
 			{ type: 'submitted', body: 'Report submitted' },
 			{ type: 'notification_sent', body: 'Slack notified of a CoC report' },
 		]);
-		expect(notifySlack).toHaveBeenCalledWith(
-			'coc',
-			expect.stringContaining('*Name:* (anonymous)'),
-		);
-		expect(notifySlack).toHaveBeenCalledWith(
-			'coc',
-			expect.stringContaining(
-				`/admin/submissions/coc/${row.id}|View in admin>`,
+		expect(notifySlack).toHaveBeenCalledWith('coc', expect.anything());
+		// Collapsed on arrival, and the preview names nobody.
+		expect(posted().text).toBe('CoC Report Submitted');
+		expect(container(posted())).toMatchObject({
+			default_collapsed: true,
+			subtitle: { text: 'Submitted anonymously · expand to view' },
+		});
+		expect(richTextFields(posted())).toMatchObject({
+			Name: '(anonymous)',
+			Email: '(anonymous)',
+		});
+		expect(buttonLinks(posted())).toEqual({
+			'View in admin': expect.stringMatching(
+				new RegExp(`/admin/submissions/coc/${row.id}$`),
 			),
-		);
+		});
 	});
 
 	/**
@@ -109,12 +124,14 @@ describe('submitCocReport', () => {
 			expect.any(ArrayBuffer),
 			expect.anything(),
 		);
-		expect(notifySlack).toHaveBeenCalledWith(
-			'coc',
-			expect.stringContaining(
-				`/admin/submissions/coc/${row.id}|A file was attached; open the report to view it.>`,
+		expect(notes(posted())).toEqual([
+			'_A file was attached; open the report to view it._',
+		]);
+		expect(buttonLinks(posted())).toEqual({
+			'View in admin': expect.stringMatching(
+				new RegExp(`/admin/submissions/coc/${row.id}$`),
 			),
-		);
+		});
 	});
 
 	/**
