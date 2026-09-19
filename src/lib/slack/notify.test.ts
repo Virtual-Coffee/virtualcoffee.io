@@ -207,7 +207,7 @@ describe('the messages', () => {
 		expect(message.text).toBe('CoC Report Submitted');
 		expect(container(message)).toMatchObject({
 			title: { text: 'CoC Report Submitted' },
-			subtitle: { text: 'Submitted by Ada · expand to view' },
+			subtitle: { text: 'Expand to view' },
 			is_collapsible: true,
 			default_collapsed: true,
 		});
@@ -234,9 +234,7 @@ describe('the messages', () => {
 			hasAttachment: false,
 			adminUrl: 'https://virtualcoffee.io/admin/submissions/coc/01',
 		});
-		expect(container(message)?.subtitle?.text).toBe(
-			'Submitted anonymously · expand to view',
-		);
+		expect(container(message)?.subtitle?.text).toBe('Expand to view');
 		expect(richTextFields(message)).toMatchObject({
 			Name: '(anonymous)',
 			Email: '(anonymous)',
