@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, test } from 'vitest';
 
 import { db, pendingGrant, user } from '@/db';
 import { sendSlackDm } from '@/test/mocks/spies';
+import { buttonLinks } from '@/test/slack';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
@@ -195,7 +196,9 @@ describe('grantPendingAccess', () => {
 		).resolves.toEqual({ ok: true, message: 'DM sent.' });
 		expect(sendSlackDm).toHaveBeenCalledWith(
 			'U_ADA',
-			expect.stringContaining('CoC reviewer'),
+			expect.objectContaining({
+				text: expect.stringContaining('CoC reviewer'),
+			}),
 		);
 		await expect(grantPendingAccess('U_ADA', ['admin'])).resolves.toEqual({
 			ok: false,
@@ -230,8 +233,13 @@ describe('grantPendingAccess', () => {
 		// Told the access is live, not that there is something to claim.
 		expect(sendSlackDm).toHaveBeenCalledWith(
 			'U_ADA',
-			expect.stringMatching(/CoC reviewer[^]*active now/),
+			expect.objectContaining({
+				text: expect.stringContaining('CoC reviewer'),
+			}),
 		);
+		expect(buttonLinks(sendSlackDm.mock.lastCall?.[1])).toEqual({
+			'Open admin tools': expect.stringMatching(/\/admin$/),
+		});
 
 		await expect(roleOf(ada.id)).resolves.toEqual({
 			role: 'coc_reviewer',
@@ -308,10 +316,9 @@ describe('grantPendingAccess', () => {
 		await expect(
 			grantPendingAccess('U_ADA', ['coc_reviewer']),
 		).resolves.toEqual({ ok: true, message: 'Ada has access now. DM sent.' });
-		expect(sendSlackDm).toHaveBeenCalledWith(
-			'U_ADA',
-			expect.stringContaining('active now'),
-		);
+		expect(buttonLinks(sendSlackDm.mock.lastCall?.[1])).toEqual({
+			'Open admin tools': expect.stringMatching(/\/admin$/),
+		});
 
 		await expect(roleOf(ada!.id)).resolves.toEqual({
 			role: 'coc_reviewer',
@@ -353,7 +360,9 @@ describe('resendPendingGrantDm', () => {
 		});
 		expect(sendSlackDm).toHaveBeenCalledWith(
 			'U_GRACE',
-			expect.stringContaining('CoC reviewer, Volunteer'),
+			expect.objectContaining({
+				text: expect.stringContaining('CoC reviewer, Volunteer'),
+			}),
 		);
 	});
 
