@@ -5,6 +5,8 @@ import { db, submissionEvent, volunteerSignup } from '@/db';
 import { formDataWith } from '@/test/forms';
 import { notifySlack } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
+import { buttonLinks, richTextFields } from '@/test/slack';
+import type { SlackMessage } from '@/lib/slack/blocks';
 
 import { submitVolunteerSignup } from './action';
 
@@ -44,14 +46,17 @@ describe('submitVolunteerSignup', () => {
 		});
 		expect(notifySlack).toHaveBeenCalledWith(
 			'volunteers',
-			expect.stringMatching(/^\*New Volunteer Form Submission\*[\s\S]*Ada/),
+			expect.objectContaining({
+				text: expect.stringContaining('New Volunteer Form Submission'),
+			}),
 		);
-		expect(notifySlack).toHaveBeenCalledWith(
-			'volunteers',
-			expect.stringContaining(
-				`/admin/submissions/volunteers/${row.id}|View in admin>`,
+		const sent = notifySlack.mock.lastCall?.[1] as SlackMessage;
+		expect(richTextFields(sent)).toMatchObject({ Name: 'Ada' });
+		expect(buttonLinks(sent)).toEqual({
+			'View in admin': expect.stringMatching(
+				new RegExp(`/admin/submissions/volunteers/${row.id}$`),
 			),
-		);
+		});
 		expect(events).toEqual([
 			{ type: 'submitted', body: 'Signup submitted' },
 			{
