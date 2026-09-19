@@ -183,6 +183,7 @@ describe('the messages', () => {
 						elements: [
 							{
 								type: 'button',
+								action_id: 'website_view_in_admin',
 								text: { type: 'plain_text', text: 'View in admin' },
 								url: ADMIN_URL,
 								style: 'primary',

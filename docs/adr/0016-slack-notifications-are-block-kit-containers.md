@@ -58,6 +58,11 @@ blocks under a title, takes a `rich_text` child, and can arrive collapsed.
 - `container` is newer than the SDK's types, so its acceptance by an incoming
   webhook is proven by a live post from a preview (the `NOTIFY_LIVE_OUTSIDE_PRODUCTION`
   opt-in of docs/adr/0013), not by the type checker.
+- Slack posts a `block_actions` for a url button as well, and renders a 404
+  warning on the button unless the app's Interactivity URL acks it. The
+  webhooks belong to the vc-bots Slack app, so every link button carries a
+  `website_<id>` `action_id` and vc-bots acks `/^website_/`; a button without
+  that ack still opens its page, with the warning beside it.
 - `/join` reads the queue count after the insert: one more query on a public
   action, outside the save's try so a slow count can never be reported to the
   applicant as a failure to save.

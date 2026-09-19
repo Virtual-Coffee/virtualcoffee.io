@@ -54,21 +54,23 @@ describe('fields', () => {
 });
 
 describe('buttons', () => {
-	test('keeps array order and styles only the primary one', () => {
+	test('keeps array order, names each action, and styles only the primary one', () => {
 		expect(
 			buttons(
-				{ url: 'https://a.test', label: 'A', primary: true },
-				{ url: 'https://b.test', label: 'B' },
+				{ url: 'https://a.test', label: 'A', id: 'a', primary: true },
+				{ url: 'https://b.test', label: 'B', id: 'b' },
 			).elements,
 		).toEqual([
 			{
 				type: 'button',
+				action_id: 'website_a',
 				text: { type: 'plain_text', text: 'A' },
 				url: 'https://a.test',
 				style: 'primary',
 			},
 			{
 				type: 'button',
+				action_id: 'website_b',
 				text: { type: 'plain_text', text: 'B' },
 				url: 'https://b.test',
 			},
@@ -83,7 +85,7 @@ describe('notification', () => {
 			subtitle: '  ',
 			fields: [['Name', 'Ada']],
 			note: '_static_',
-			buttons: [{ url: 'https://a.test', label: 'Open' }],
+			buttons: [{ url: 'https://a.test', label: 'Open', id: 'open' }],
 		});
 		expect(block).toMatchObject({
 			type: 'container',
