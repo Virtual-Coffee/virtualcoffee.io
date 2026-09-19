@@ -95,7 +95,7 @@ export async function submitMembershipApplication(
 			 *
 			 * The redemption is a conditional UPDATE, so two submissions racing on
 			 * one link produce exactly one priority application — the second finds
-			 * nothing to claim and is written as an ordinary signup. Doing it in the
+			 * nothing to claim and is written as a Waitlist signup. Doing it in the
 			 * same transaction as the insert is what stops a failed insert burning
 			 * the Invite: the applicant would lose both their answers and their
 			 * friend's invite, having done nothing wrong.
@@ -140,7 +140,7 @@ export async function submitMembershipApplication(
 					status: 'waitlisted',
 					/**
 					 * An expired or already-used link still produces an application, as
-					 * an ordinary signup. Refusing it would throw away the long answers
+					 * a Waitlist signup. Refusing it would throw away the long answers
 					 * they just wrote over a link they had no way to check.
 					 */
 					source: claimed ? 'volunteer_invite' : 'waitlist_signup',
