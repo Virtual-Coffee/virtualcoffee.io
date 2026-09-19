@@ -158,7 +158,7 @@ describe('addVolunteer', () => {
 		expect(sendEmail).not.toHaveBeenCalled();
 		expect(sendSlackDm).toHaveBeenCalledWith(
 			'U_ADA',
-			expect.stringContaining('Volunteer'),
+			expect.objectContaining({ text: expect.stringContaining('Volunteer') }),
 		);
 		const { id } = (await volunteerRow('U_ADA'))!;
 		await expect(volunteerEvents(id)).resolves.toEqual([
@@ -324,7 +324,7 @@ describe('setVolunteerActive', () => {
 		// like the first one.
 		expect(sendSlackDm).toHaveBeenCalledWith(
 			'U_ADA',
-			expect.stringContaining('Volunteer'),
+			expect.objectContaining({ text: expect.stringContaining('Volunteer') }),
 		);
 		await expect(volunteerEvents(id)).resolves.toMatchObject([
 			{ type: 'notification_sent', body: 'Volunteer DM' },
