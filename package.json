@@ -87,6 +87,7 @@
 		"@faker-js/faker": "^10.6.0",
 		"@netlify/database-dev": "^1.0.1",
 		"@netlify/edge-functions": "^4.0.0",
+		"@slack/types": "^3.1.0",
 		"@types/estree": "^1.0.9",
 		"@types/hast": "^3.0.5",
 		"@types/leaflet": "^1.9.22",

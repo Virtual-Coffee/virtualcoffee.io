@@ -5,6 +5,7 @@
  */
 
 import { deliver, type Outbound } from '@/lib/outbound';
+import { note, notification, type Field, type SlackMessage } from './blocks';
 
 /**
  * One webhook per destination, so a missing one only silences its own form.
@@ -34,12 +35,14 @@ const TIMEOUT_MS = 10_000;
  */
 export function notifySlack(
 	channel: NotifyChannel,
-	text: string,
+	message: SlackMessage,
 ): Promise<Outbound> {
 	return deliver({
 		kind: 'slack',
 		target: channel,
-		body: text,
+		// The payload itself, so the local log shows what would have been posted
+		// and a deploy's link-only line still finds the admin URL in it.
+		body: JSON.stringify(message, null, 2),
 		unreachable: 'Slack',
 		live: async () => {
 			const url = process.env[WEBHOOK_ENV[channel]];
@@ -57,7 +60,7 @@ export function notifySlack(
 				headers: { 'content-type': 'application/json' },
 				// The admin link is behind sign-in, so an unfurl could only ever be a
 				// stray preview of the sign-in page.
-				body: JSON.stringify({ text, unfurl_links: false }),
+				body: JSON.stringify({ ...message, unfurl_links: false }),
 				signal: AbortSignal.timeout(TIMEOUT_MS),
 			});
 
@@ -78,44 +81,22 @@ export function notifySlack(
 	});
 }
 
-/**
- * Slack reads `&`, `<` and `>` as control characters — `<!channel>` in a
- * form field would page the whole channel — so every value a person typed
- * is escaped before it is interpolated. Slack's own list, and only those
- * three: entity-encoding anything else shows up literally.
- */
-function escape(value: string): string {
-	return value
-		.replaceAll('&', '&amp;')
-		.replaceAll('<', '&lt;')
-		.replaceAll('>', '&gt;');
-}
-
-/** `*bold*` is Slack's mrkdwn, not Markdown's `**bold**`; a dash for nothing. */
-function field(label: string, value: string | null | undefined): string {
-	const trimmed = value?.trim();
-	return `*${label}:* ${trimmed ? escape(trimmed) : '—'}`;
-}
-
-/**
- * `<url|label>` is Slack's link syntax. The URLs here are the site's own,
- * built from an id, so neither can carry the `|` or `>` that would end it.
- */
-function link(url: string, label: string): string {
-	return `<${url}|${label}>`;
-}
-
-/** The last line of every message: where a reviewer opens the row. */
-function adminLink(url: string, label = 'View in admin'): string {
-	return link(url, label);
-}
-
 /*
- * Every message is the row's identifying fields and the link; what a person
- * wrote at length stays behind the link, on a page that needs a sign-in. A
- * channel is the wrong place for a CoC report's account of what happened.
+ * Every post is one container of the row's identifying fields and a button to
+ * the row; what a person wrote at length stays behind the button, on a page
+ * that needs a sign-in. The shapes are in `./blocks`, the format decision in
+ * docs/adr/0016. `text` is what a push notification shows: the title, plus the
+ * subtitle where that is not a person's name.
  */
 
+function text(title: string, subtitle?: string | null): string {
+	return subtitle ? `${title} — ${subtitle}` : title;
+}
+
+/**
+ * Collapsed on arrival: a channel is the wrong place for a reporter's name and
+ * the time and place of an incident to sit open, and `text` carries no field.
+ */
 export function cocReportMessage(report: {
 	name: string | null;
 	email: string | null;
@@ -123,19 +104,30 @@ export function cocReportMessage(report: {
 	timeLocation: string;
 	hasAttachment: boolean;
 	adminUrl: string;
-}): string {
-	return [
-		'*CoC Report Submitted*',
-		'',
-		field('Name', report.name ?? '(anonymous)'),
-		field('Email', report.email ?? '(anonymous)'),
-		field('Reportee Name', report.reporteeName),
-		field('Time/Location', report.timeLocation),
-		'',
-		report.hasAttachment
-			? `_${adminLink(report.adminUrl, 'A file was attached; open the report to view it.')}_`
-			: adminLink(report.adminUrl),
-	].join('\n');
+}): SlackMessage {
+	const title = 'CoC Report Submitted';
+	return {
+		text: title,
+		blocks: [
+			notification({
+				title,
+				subtitle: `Submitted ${report.name === null ? 'anonymously' : `by ${report.name}`} · expand to view`,
+				collapsed: true,
+				fields: [
+					['Name', report.name ?? '(anonymous)'],
+					['Email', report.email ?? '(anonymous)'],
+					['Reportee Name', report.reporteeName],
+					['Time/Location', report.timeLocation],
+				],
+				note: report.hasAttachment
+					? '_A file was attached; open the report to view it._'
+					: null,
+				buttons: [
+					{ url: report.adminUrl, label: 'View in admin', primary: true },
+				],
+			}),
+		],
+	};
 }
 
 export function volunteerSignupMessage(signup: {
@@ -143,16 +135,25 @@ export function volunteerSignupMessage(signup: {
 	email: string;
 	position: string | null;
 	adminUrl: string;
-}): string {
-	return [
-		'*New Volunteer Form Submission*',
-		'',
-		field('Name', signup.name),
-		field('Email', signup.email),
-		field('Position', signup.position),
-		'',
-		adminLink(signup.adminUrl),
-	].join('\n');
+}): SlackMessage {
+	const title = 'New Volunteer Form Submission';
+	return {
+		text: text(title, signup.position),
+		blocks: [
+			notification({
+				title,
+				subtitle: signup.position,
+				fields: [
+					['Name', signup.name],
+					['Email', signup.email],
+					['Position', signup.position],
+				],
+				buttons: [
+					{ url: signup.adminUrl, label: 'View in admin', primary: true },
+				],
+			}),
+		],
+	};
 }
 
 export function lunchAndLearnMessage(idea: {
@@ -161,17 +162,28 @@ export function lunchAndLearnMessage(idea: {
 	topic: string;
 	issueUrl: string | null;
 	adminUrl: string;
-}): string {
-	return [
-		'*New Lunch & Learn Idea*',
-		'',
-		field('Name', idea.name),
-		field('Email', idea.email),
-		field('Title', idea.topic),
-		'',
-		...(idea.issueUrl ? [link(idea.issueUrl, 'GitHub issue')] : []),
-		adminLink(idea.adminUrl),
-	].join('\n');
+}): SlackMessage {
+	const title = 'New Lunch & Learn Idea';
+	return {
+		text: text(title, idea.topic),
+		blocks: [
+			notification({
+				title,
+				subtitle: idea.topic,
+				fields: [
+					['Name', idea.name],
+					['Email', idea.email],
+					['Title', idea.topic],
+				],
+				buttons: [
+					{ url: idea.adminUrl, label: 'View in admin', primary: true },
+					...(idea.issueUrl
+						? [{ url: idea.issueUrl, label: 'GitHub issue' }]
+						: []),
+				],
+			}),
+		],
+	};
 }
 
 export function coffeeTableGroupMessage(request: {
@@ -179,16 +191,25 @@ export function coffeeTableGroupMessage(request: {
 	email: string;
 	groupName: string | null;
 	adminUrl: string;
-}): string {
-	return [
-		'*New Coffee Table Group*',
-		'',
-		field('Name', request.name),
-		field('Email', request.email),
-		field('Group name', request.groupName),
-		'',
-		adminLink(request.adminUrl),
-	].join('\n');
+}): SlackMessage {
+	const title = 'New Coffee Table Group';
+	return {
+		text: text(title, request.groupName),
+		blocks: [
+			notification({
+				title,
+				subtitle: request.groupName,
+				fields: [
+					['Name', request.name],
+					['Email', request.email],
+					['Group name', request.groupName],
+				],
+				buttons: [
+					{ url: request.adminUrl, label: 'View in admin', primary: true },
+				],
+			}),
+		],
+	};
 }
 
 /**
@@ -196,25 +217,52 @@ export function coffeeTableGroupMessage(request: {
  * notification. An invited one is flagged, because a claim puts a priority
  * application at the front of the Waitlist for a reviewer to pick up —
  * whereas sending the Invite was a Volunteer spending their own allowance,
- * and nobody else's work.
+ * and nobody else's work. `waiting` is how deep the queue now is, or null when
+ * the count could not be read: the announcement matters more than the number.
  */
 export function applicationSubmittedMessage(application: {
 	name: string;
 	email: string;
 	adminUrl: string;
+	waitlistUrl: string;
+	waiting: number | null;
 	invite: { inviterName: string | null } | null;
-}): string {
-	const { invite } = application;
-	return [
-		invite ? '*Invited Application Received*' : '*Application Received*',
-		'',
-		field('Name', application.name),
-		field('Email', application.email),
-		...(invite ? [field('Invited by', invite.inviterName)] : []),
-		'',
-		...(invite
-			? ['_Invited applications sort to the front of the waitlist._']
-			: []),
-		adminLink(application.adminUrl),
-	].join('\n');
+}): SlackMessage {
+	const { invite, waiting } = application;
+	const title = invite
+		? 'Invited Application Received'
+		: 'Application Received';
+	const subtitle = invite
+		? invite.inviterName
+			? `Invited by ${invite.inviterName}`
+			: 'Invited application'
+		: 'Membership waitlist';
+	const fields: Field[] = [
+		['Name', application.name],
+		['Email', application.email],
+	];
+	if (invite) fields.push(['Invited by', invite.inviterName]);
+	return {
+		text: text(title, subtitle),
+		blocks: [
+			notification({
+				title,
+				subtitle,
+				fields,
+				note: invite
+					? '_Invited applications sort to the front of the waitlist._'
+					: null,
+				buttons: [
+					{ url: application.adminUrl, label: 'View in admin', primary: true },
+				],
+			}),
+			...(waiting === null
+				? []
+				: [
+						note(
+							`*${waiting}* waiting on a first decision · <${application.waitlistUrl}|Waitlist queue>`,
+						),
+					]),
+		],
+	};
 }

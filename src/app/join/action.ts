@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { db, invite, membershipApplication } from '@/db';
 import { applicationPath } from '@/lib/admin/links';
 import { recordEvent, recordOutcome } from '@/lib/history/eventLog';
-import { applicationSubject } from '@/lib/waitlist/applications';
+import { applicationSubject, statusCounts } from '@/lib/waitlist/applications';
 import { hashClaimToken } from '@/lib/volunteers/invites';
 import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import { applicationSubmittedMessage, notifySlack } from '@/lib/slack/notify';
@@ -191,6 +191,8 @@ export async function submitMembershipApplication(
 			name: parsed.data.name,
 			email: parsed.data.email,
 			adminUrl: `${siteUrl()}${applicationPath(result.applicationId)}`,
+			waitlistUrl: `${siteUrl()}/admin/waitlist`,
+			waiting: await waitingCount(),
 			invite: result.claimed && { inviterName: result.claimed.inviterName },
 		}),
 	);
@@ -204,4 +206,19 @@ export async function submitMembershipApplication(
 	});
 
 	redirect(THANKS);
+}
+
+/**
+ * How many are awaiting a first decision, for the post's footer. Best-effort:
+ * the row is saved and the announcement matters more than the number, so a
+ * failed read is logged and the footer left off.
+ */
+async function waitingCount(): Promise<number | null> {
+	try {
+		const counts = await statusCounts();
+		return counts.waitlisted ?? 0;
+	} catch (error) {
+		console.error('Waitlist count unavailable for the Slack post', error);
+		return null;
+	}
 }

@@ -1,9 +1,12 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 
 import { db, membershipApplication } from '@/db';
 import { fieldErrors, formDataWith } from '@/test/forms';
 import { notifySlack } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
+import { buttonLinks, notes, richTextFields } from '@/test/slack';
+import type { SlackMessage } from '@/lib/slack/blocks';
+import * as applications from '@/lib/waitlist/applications';
 import {
 	applicationEvents,
 	insertApplication,
@@ -12,6 +15,13 @@ import {
 } from '@/test/db/fixtures';
 
 import { submitMembershipApplication } from './action';
+
+/** The message the last Slack post carried. */
+function posted(): SlackMessage {
+	const call = notifySlack.mock.lastCall;
+	if (!call) throw new Error('notifySlack was not called');
+	return call[1] as SlackMessage;
+}
 
 const valid = {
 	name: 'Ada Lovelace',
@@ -56,12 +66,48 @@ describe('submitMembershipApplication', () => {
 		]);
 		expect(notifySlack).toHaveBeenCalledWith(
 			'membership',
-			expect.stringContaining('*Application Received*'),
+			expect.objectContaining({
+				text: expect.stringContaining('Application Received'),
+			}),
 		);
-		expect(notifySlack).toHaveBeenCalledWith(
-			'membership',
-			expect.stringContaining(`/admin/waitlist/${row.id}|View in admin>`),
+		expect(richTextFields(posted())).toEqual({
+			Name: 'Ada Lovelace',
+			Email: 'ada@example.test',
+		});
+		expect(buttonLinks(posted())).toEqual({
+			'View in admin': expect.stringMatching(
+				new RegExp(`/admin/waitlist/${row.id}$`),
+			),
+		});
+		// The one application just written is the whole queue.
+		expect(notes(posted())).toEqual([
+			expect.stringMatching(
+				/^\*1\* waiting on a first decision · <.*\/admin\/waitlist\|Waitlist queue>$/,
+			),
+		]);
+	});
+
+	test('a queue count that cannot be read is logged and left off; the post still goes out', async () => {
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
+		const counts = vi
+			.spyOn(applications, 'statusCounts')
+			.mockRejectedValueOnce(new Error('connection reset'));
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		const row = await submit(valid);
+
+		expect(notifySlack).toHaveBeenCalledOnce();
+		expect(notes(posted())).toEqual([]);
+		expect(error).toHaveBeenCalledWith(
+			'Waitlist count unavailable for the Slack post',
+			expect.any(Error),
 		);
+		await expect(applicationEvents(row.id)).resolves.toEqual([
+			expect.objectContaining({ type: 'submitted' }),
+			expect.objectContaining({ type: 'notification_sent' }),
+		]);
+		counts.mockRestore();
+		error.mockRestore();
 	});
 
 	test('an email already in the pipeline is refused; a closed one may apply again', async () => {
@@ -103,14 +149,17 @@ describe('submitMembershipApplication', () => {
 		});
 		expect(row.agreedToCocAt).toEqual((await inviteRow(id)).claimedAt);
 
-		expect(notifySlack).toHaveBeenCalledWith(
-			'membership',
-			expect.stringContaining('*Invited by:* Grace Hopper'),
+		expect(posted().text).toBe(
+			'Invited Application Received — Invited by Grace Hopper',
 		);
-		expect(notifySlack).toHaveBeenCalledWith(
-			'membership',
-			expect.stringContaining(`/admin/waitlist/${row.id}|View in admin>`),
-		);
+		expect(richTextFields(posted())).toMatchObject({
+			'Invited by': 'Grace Hopper',
+		});
+		expect(buttonLinks(posted())).toEqual({
+			'View in admin': expect.stringMatching(
+				new RegExp(`/admin/waitlist/${row.id}$`),
+			),
+		});
 		await expect(applicationEvents(row.id)).resolves.toEqual([
 			expect.objectContaining({
 				type: 'submitted',
@@ -134,14 +183,8 @@ describe('submitMembershipApplication', () => {
 			inviteId: null,
 		});
 		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'pending' });
-		expect(notifySlack).toHaveBeenCalledWith(
-			'membership',
-			expect.stringContaining('*Application Received*'),
-		);
-		expect(notifySlack).not.toHaveBeenCalledWith(
-			'membership',
-			expect.stringContaining('Invited'),
-		);
+		expect(posted().text).toBe('Application Received — Membership waitlist');
+		expect(richTextFields(posted())).not.toHaveProperty('Invited by');
 	});
 
 	test('a link works once', async () => {
