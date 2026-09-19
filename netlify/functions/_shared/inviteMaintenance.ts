@@ -9,7 +9,7 @@ import {
 	volunteerInviteLedger,
 	type AccrualNoticeOutcome,
 } from '../../../src/db/index.ts';
-import { volunteerAccrualEmail } from '../../../src/lib/email/templates.ts';
+import { volunteerAccrual } from '../../../src/emails/volunteerAccrual.tsx';
 import {
 	accrue,
 	balancesBySlackUser,
@@ -165,17 +165,16 @@ async function notify(
 		if (!address) return 'no_address';
 
 		try {
-			const template = volunteerAccrualEmail(
-				row.name,
-				Number(row.balance ?? 0),
-				`${siteUrl()}/invites`,
-			);
 			const sent = await withTimeout(
-				sendEmail({
-					to: address,
-					subject: template.subject,
-					text: template.text,
-				}),
+				sendEmail(
+					volunteerAccrual,
+					{
+						name: row.name,
+						balance: Number(row.balance ?? 0),
+						invitesUrl: `${siteUrl()}/invites`,
+					},
+					{ to: address },
+				),
 				SEND_TIMEOUT_MS,
 			);
 
