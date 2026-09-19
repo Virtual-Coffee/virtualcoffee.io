@@ -53,6 +53,22 @@
 			]
 		},
 		{
+			"path": "docs/adr/0013-outbound-mail-outside-production.md",
+			"description": "Outbound mail, Slack and GitHub delivery outside production: Captured vs Live, and what capture() logs",
+			"scope": [
+				"src/lib/outbound.ts",
+				"src/lib/email/**",
+				"src/lib/slack/**",
+				"src/lib/github/**",
+				".env.example"
+			]
+		},
+		{
+			"path": "docs/adr/0016-slack-notifications-are-block-kit-containers.md",
+			"description": "Slack notifications as Block Kit container blocks: literal runs for typed values, mrkdwn for static copy",
+			"scope": ["src/lib/slack/**", "src/test/slack.ts"]
+		},
+		{
 			"path": "docs/adr/0015-error-monitoring-with-sentry.md",
 			"description": "Error monitoring with Sentry: what is collected and what is kept out",
 			"scope": [

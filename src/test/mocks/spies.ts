@@ -1,4 +1,7 @@
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
+
+import type { Outbound } from '@/lib/outbound';
+import { NOT_SENT } from '@/test/outbound';
 
 /**
  * The spies the db project's mocked modules hand out. `src/test/db/setup.ts`
@@ -6,17 +9,22 @@ import { vi } from 'vitest';
  * the module stays real, replacing the module where nothing else is needed —
  * and a test imports the spy from here to set outcomes and assert calls.
  * A spy that stands in for a send must _return_ a failure rather than
- * reject; that is the real functions' contract.
+ * reject; that is the real functions' contract, so each send spy defaults to
+ * `NOT_SENT` (`mockReset()` restores that default) and a test sets `SENT`
+ * when it needs the message to go out.
  */
 
+/** A send: the outcome is the contract; the arguments are the caller's to read. */
+type Sender = (...args: Parameters<Mock>) => Promise<Outbound>;
+
 /** `@/lib/email/transport` — replaced. Outcomes are in `@/test/outbound`. */
-export const sendEmail = vi.fn();
+export const sendEmail = vi.fn<Sender>(async () => NOT_SENT);
 
 /** `@/lib/slack/notify` — spread; the message builders stay real. */
-export const notifySlack = vi.fn();
+export const notifySlack = vi.fn<Sender>(async () => NOT_SENT);
 
 /** `@/lib/slack/dm` — spread; `grantDmMessage` stays real. */
-export const sendSlackDm = vi.fn();
+export const sendSlackDm = vi.fn<Sender>(async () => NOT_SENT);
 
 /**
  * `next/cache` — replaced: `revalidatePath()` throws outside a Next request
