@@ -66,6 +66,26 @@
 			]
 		},
 		{
+			"path": "docs/adr/0010-volunteer-access-outside-the-section-model.md",
+			"description": "Volunteer access to /invites and its relation to the Section model",
+			"scope": ["src/app/invites/**", "src/lib/access/**"]
+		},
+		{
+			"path": "docs/adr/0011-append-only-invite-ledger.md",
+			"description": "The Invite Allowance ledger and how balances are corrected",
+			"scope": [
+				"src/lib/volunteers/**",
+				"src/app/admin/(protected)/volunteers/**",
+				"src/app/invites/**",
+				"drizzle/**"
+			]
+		},
+		{
+			"path": "docs/adr/0012-reviewed-airtable-volunteer-mapping.md",
+			"description": "How Airtable volunteers were matched to Slack accounts",
+			"scope": ["scripts/airtable/**", "src/lib/volunteers/**"]
+		},
+		{
 			"path": "docs/adr/0013-outbound-mail-outside-production.md",
 			"description": "Outbound mail, Slack and GitHub delivery outside production: Captured vs Live, and what capture() logs",
 			"scope": [

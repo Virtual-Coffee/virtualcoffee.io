@@ -24,7 +24,14 @@ export function slackMember(
 	id: string,
 	overrides: Partial<Omit<SlackMember, 'id'>> = {},
 ): SlackMember {
-	return { id, name: id, displayName: id, handle: id, ...overrides };
+	return {
+		id,
+		name: id,
+		displayName: id,
+		handle: id,
+		email: null,
+		...overrides,
+	};
 }
 
 export function resetSlackDirectory() {

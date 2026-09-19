@@ -48,6 +48,72 @@ export function withStaleRead<
 	return { ...actual, [reader]: stale };
 }
 
+/**
+ * Stages a race between an action's read and its write: `run` executes right
+ * after the wrapped reader returns, once, so a test can move the row on
+ * before the action gets to write it.
+ */
+export const afterRead = { run: null as null | (() => Promise<void>) };
+
+/**
+ * Returns `actual` with one reader wrapped so `afterRead.run` fires after
+ * it. `src/test/db/setup.ts` registers one per module, e.g.
+ *
+ * ```ts
+ * vi.mock('@/lib/volunteers/volunteers', async (importOriginal) =>
+ * 	(await import('@/test/mocks/wrappers')).withAfterRead(
+ * 		await importOriginal<typeof import('@/lib/volunteers/volunteers')>(),
+ * 		'pendingInvite',
+ * 	),
+ * );
+ * ```
+ */
+export function withAfterRead<M extends object, K extends ReaderKey<M>>(
+	actual: M,
+	reader: K,
+): M {
+	const read = actual[reader] as Reader;
+	const hooked = async (...args: never[]) => {
+		const row = await read(...args);
+		const run = afterRead.run;
+		afterRead.run = null;
+		await run?.();
+		return row;
+	};
+	return { ...actual, [reader]: hooked };
+}
+
+/**
+ * Set `skip` to make a friendly pre-check report nothing, so the database
+ * index has to do the work the pre-check normally spares it.
+ */
+export const preCheck = { skip: false };
+
+/**
+ * Returns `actual` with one check answering `null` while `preCheck.skip` is
+ * set. `src/test/db/setup.ts` registers one per module, e.g.
+ *
+ * ```ts
+ * vi.mock('@/lib/volunteers/invites', async (importOriginal) =>
+ * 	(await import('@/test/mocks/wrappers')).withSkippableCheck(
+ * 		await importOriginal<typeof import('@/lib/volunteers/invites')>(),
+ * 		'blockingInvite',
+ * 	),
+ * );
+ * ```
+ */
+export function withSkippableCheck<M extends object, K extends ReaderKey<M>>(
+	actual: M,
+	check: K,
+): M {
+	const run = actual[check] as Reader;
+	const skippable = async (...args: never[]) =>
+		preCheck.skip ? null : run(...args);
+	return { ...actual, [check]: skippable };
+}
+
 export function resetWrappers() {
 	staleRead.readAs = null;
+	afterRead.run = null;
+	preCheck.skip = false;
 }

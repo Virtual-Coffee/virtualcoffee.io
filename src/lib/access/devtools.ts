@@ -1,5 +1,4 @@
 import { defineDevtoolsConfig } from 'better-auth-devtools';
-import { eq } from 'drizzle-orm';
 
 import { db, user } from '@/db';
 import { newId } from '@/db/ids';
@@ -11,28 +10,14 @@ import { GRANTABLE_ROLES, type RoleName } from '@/lib/access/permissions';
  * holds something. Only ever active where `NODE_ENV` is not production — the
  * library refuses everywhere else.
  *
- * The first `volunteer` acts as the Slack member id the dev bypass defaults
- * to, which is the Volunteer `pnpm db:seed` creates, so /invites works after
- * a switch. `slack_user_id` is unique, so any further one gets its own.
+ * `pnpm db:seed` registers its own users with the panel (`scripts/seed/users.ts`),
+ * among them a Volunteer with an allowance; a `volunteer` created from here
+ * is a fresh one with no roster row and nothing to spend.
  */
 const TEMPLATE_ROLES: ReadonlyArray<{ name: RoleName; description: string }> = [
 	...GRANTABLE_ROLES,
 	{ name: 'volunteer', description: 'Invite Allowance on /invites' },
 ];
-
-const SEEDED_VOLUNTEER = 'U_DEV_BYPASS';
-
-async function slackUserIdFor(role: string, suffix: string): Promise<string> {
-	if (role === 'volunteer') {
-		const [taken] = await db()
-			.select({ id: user.id })
-			.from(user)
-			.where(eq(user.slackUserId, SEEDED_VOLUNTEER))
-			.limit(1);
-		if (!taken) return SEEDED_VOLUNTEER;
-	}
-	return `U_DEVTOOLS_${suffix}`;
-}
 
 export const devtoolsConfig = defineDevtoolsConfig({
 	enabled: true,
@@ -65,7 +50,7 @@ export const devtoolsConfig = defineDevtoolsConfig({
 				role,
 				roleGrantedBy: 'devtools',
 				roleGrantedAt: new Date(),
-				slackUserId: await slackUserIdFor(role, suffix),
+				slackUserId: `U_DEVTOOLS_${suffix}`,
 			})
 			.returning({ id: user.id });
 		return { userId: row.id, email, label: template.label };

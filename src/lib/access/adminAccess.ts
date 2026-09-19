@@ -67,7 +67,9 @@ function bypassSession(fields: {
  * `ADMIN_DEV_BYPASS_ROLES` narrows what the session holds (default `admin`).
  * `ADMIN_DEV_BYPASS_SLACK_ID` is what an Invite Allowance is keyed on;
  * `pnpm db:seed` creates a Volunteer for the default, so
- * `ADMIN_DEV_BYPASS_ROLES=volunteer` works with no further setup.
+ * `ADMIN_DEV_BYPASS_ROLES=volunteer` works with no further setup; it also
+ * registers that user with the devtools panel, so "switch user" is the other
+ * way in.
  *
  * A real session cookie takes precedence over it — see `getSession()`.
  */
