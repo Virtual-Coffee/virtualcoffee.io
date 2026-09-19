@@ -67,7 +67,7 @@ describe('submitCocReport', () => {
 		expect(posted().text).toBe('CoC Report Submitted');
 		expect(container(posted())).toMatchObject({
 			default_collapsed: true,
-			subtitle: { text: 'Submitted anonymously · expand to view' },
+			subtitle: { text: 'Expand to view' },
 		});
 		expect(richTextFields(posted())).toMatchObject({
 			Name: '(anonymous)',
