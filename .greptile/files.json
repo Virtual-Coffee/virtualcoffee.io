@@ -26,7 +26,7 @@
 		},
 		{
 			"path": "docs/adr/0005-persist-then-notify.md",
-			"description": "Order of persisting and notifying for inbound public-form submissions",
+			"description": "Order of persisting and notifying for inbound Submissions",
 			"scope": [
 				"src/app/join/**",
 				"src/app/report-coc-violation/**",

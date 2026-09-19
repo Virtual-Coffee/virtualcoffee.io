@@ -3,7 +3,7 @@
 ## Context
 
 Airtable held four things for this site: the membership base (moved in 0001),
-the four public form submissions, the monthly challenge data, and the
+the four kinds of Submission, the monthly challenge data, and the
 notifications that told maintainers any of it had arrived — four deployed
 automations that posted to Slack on every new record, one of which also opened
 an assigned GitHub issue in `Virtual-Coffee/VC-Community-Docs`. None of that
@@ -11,7 +11,7 @@ last part appeared anywhere in the codebase.
 
 ## Decision
 
-**The form submissions moved to Netlify Database**, one typed table per kind
+**The Submissions moved to Netlify Database**, one typed table per kind
 rather than one polymorphic table: a CoC Report and a Volunteer Signup share
 almost no fields, and CoC needs its own table so its access can be narrowed
 independently of the rest (0006). Status and history are new; Airtable tracked
