@@ -111,7 +111,7 @@ export function cocReportMessage(report: {
 		blocks: [
 			notification({
 				title,
-				subtitle: `Submitted ${report.name === null ? 'anonymously' : `by ${report.name}`} · expand to view`,
+				subtitle: 'Expand to view',
 				collapsed: true,
 				fields: [
 					['Name', report.name ?? '(anonymous)'],
