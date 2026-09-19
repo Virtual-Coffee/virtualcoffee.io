@@ -123,7 +123,12 @@ export function cocReportMessage(report: {
 					? '_A file was attached; open the report to view it._'
 					: null,
 				buttons: [
-					{ url: report.adminUrl, label: 'View in admin', primary: true },
+					{
+						url: report.adminUrl,
+						label: 'View in admin',
+						id: 'view_in_admin',
+						primary: true,
+					},
 				],
 			}),
 		],
@@ -149,7 +154,12 @@ export function volunteerSignupMessage(signup: {
 					['Position', signup.position],
 				],
 				buttons: [
-					{ url: signup.adminUrl, label: 'View in admin', primary: true },
+					{
+						url: signup.adminUrl,
+						label: 'View in admin',
+						id: 'view_in_admin',
+						primary: true,
+					},
 				],
 			}),
 		],
@@ -176,9 +186,20 @@ export function lunchAndLearnMessage(idea: {
 					['Title', idea.topic],
 				],
 				buttons: [
-					{ url: idea.adminUrl, label: 'View in admin', primary: true },
+					{
+						url: idea.adminUrl,
+						label: 'View in admin',
+						id: 'view_in_admin',
+						primary: true,
+					},
 					...(idea.issueUrl
-						? [{ url: idea.issueUrl, label: 'GitHub issue' }]
+						? [
+								{
+									url: idea.issueUrl,
+									label: 'GitHub issue',
+									id: 'github_issue',
+								},
+							]
 						: []),
 				],
 			}),
@@ -205,7 +226,12 @@ export function coffeeTableGroupMessage(request: {
 					['Group name', request.groupName],
 				],
 				buttons: [
-					{ url: request.adminUrl, label: 'View in admin', primary: true },
+					{
+						url: request.adminUrl,
+						label: 'View in admin',
+						id: 'view_in_admin',
+						primary: true,
+					},
 				],
 			}),
 		],
@@ -253,7 +279,12 @@ export function applicationSubmittedMessage(application: {
 					? '_Invited applications sort to the front of the waitlist._'
 					: null,
 				buttons: [
-					{ url: application.adminUrl, label: 'View in admin', primary: true },
+					{
+						url: application.adminUrl,
+						label: 'View in admin',
+						id: 'view_in_admin',
+						primary: true,
+					},
 				],
 			}),
 			...(waiting === null

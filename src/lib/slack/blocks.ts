@@ -61,14 +61,25 @@ export function fields(pairs: Field[]): RichTextBlock {
 	};
 }
 
-export type LinkButton = { url: string; label: string; primary?: boolean };
+export type LinkButton = {
+	url: string;
+	label: string;
+	/** Unique within the block; becomes the `website_<id>` action_id. */
+	id: string;
+	primary?: boolean;
+};
 
-/** Link buttons in array order; the first is usually the primary one. */
+/**
+ * Link buttons in array order; the first is usually the primary one. Slack
+ * posts a `block_actions` for a url button too, and shows a 404 warning on it
+ * unless the app acks; the `website_` prefix is what vc-bots acks. docs/adr/0016.
+ */
 export function buttons(...links: LinkButton[]): ActionsBlock {
 	return {
 		type: 'actions',
-		elements: links.map(({ url, label, primary }) => ({
+		elements: links.map(({ url, label, id, primary }) => ({
 			type: 'button',
+			action_id: `website_${id}`,
 			text: { type: 'plain_text', text: label },
 			url,
 			...(primary ? { style: 'primary' as const } : {}),

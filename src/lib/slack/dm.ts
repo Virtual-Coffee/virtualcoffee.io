@@ -94,13 +94,16 @@ export function grantDmMessage(grant: {
 					}`,
 				},
 			},
-			buttons({
-				url,
-				label: grant.active
-					? `Open ${volunteerOnly ? 'Invites' : 'admin tools'}`
-					: 'Sign in with Slack',
-				primary: true,
-			}),
+			buttons(
+				grant.active
+					? {
+							url,
+							label: `Open ${volunteerOnly ? 'Invites' : 'admin tools'}`,
+							id: volunteerOnly ? 'open_invites' : 'open_admin',
+							primary: true,
+						}
+					: { url, label: 'Sign in with Slack', id: 'sign_in', primary: true },
+			),
 		],
 	};
 }
