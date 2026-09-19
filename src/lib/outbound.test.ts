@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { capture, deliver, emailDelivery, notifyDelivery } from './outbound';
+import { capture, deliver, emailDelivery, type OutboundKind } from './outbound';
 
 afterEach(() => vi.unstubAllEnvs());
 
@@ -72,28 +72,6 @@ describe('emailDelivery', () => {
 			expect(emailDelivery()).toEqual({ mode: 'captured', context });
 		},
 	);
-});
-
-describe('notifyDelivery', () => {
-	test('production is live regardless of the flag', () => {
-		vi.stubEnv('CONTEXT', 'production');
-		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', undefined);
-		expect(notifyDelivery()).toBe('live');
-	});
-
-	test('outside production it is captured unless opted in', () => {
-		vi.stubEnv('CONTEXT', 'deploy-preview');
-		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', undefined);
-		expect(notifyDelivery()).toBe('captured');
-		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', 'true');
-		expect(notifyDelivery()).toBe('live');
-	});
-
-	test('only the literal "true" opts in', () => {
-		vi.stubEnv('CONTEXT', undefined);
-		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', '1');
-		expect(notifyDelivery()).toBe('captured');
-	});
 });
 
 describe('capture', () => {
@@ -227,6 +205,71 @@ describe('deliver', () => {
 			live,
 		});
 		expect(live).toHaveBeenCalledWith({ mode: 'live' });
+	});
+
+	/**
+	 * Which env var opts a kind in outside production. Slack and GitHub share
+	 * one; the Events Calendar has its own, since there is one real calendar
+	 * and the opt-in is meant to be paired with a scratch GOOGLE_CALENDAR_ID.
+	 * A Slack DM has none, and is tested above.
+	 */
+	const OPT_IN: Record<Exclude<OutboundKind, 'email' | 'slack dm'>, string> = {
+		slack: 'NOTIFY_LIVE_OUTSIDE_PRODUCTION',
+		'github issue': 'NOTIFY_LIVE_OUTSIDE_PRODUCTION',
+		calendar: 'CALENDAR_LIVE_OUTSIDE_PRODUCTION',
+	};
+
+	async function mode(kind: OutboundKind): Promise<'live' | 'captured'> {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		live.mockClear();
+		await deliver({ kind, target: 't', body: '', unreachable: 'x', live });
+		return live.mock.calls.length ? 'live' : 'captured';
+	}
+
+	test.each(Object.entries(OPT_IN))(
+		'%s: production is live regardless of the flag; elsewhere only %s=true opts in',
+		async (kind, flag) => {
+			const k = kind as OutboundKind;
+			vi.stubEnv('CONTEXT', 'production');
+			vi.stubEnv(flag, undefined);
+			await expect(mode(k)).resolves.toBe('live');
+
+			vi.stubEnv('CONTEXT', 'deploy-preview');
+			await expect(mode(k)).resolves.toBe('captured');
+			vi.stubEnv(flag, '1');
+			await expect(mode(k)).resolves.toBe('captured');
+			vi.stubEnv(flag, 'true');
+			await expect(mode(k)).resolves.toBe('live');
+		},
+	);
+
+	test('the Slack/GitHub opt-in does not opt the calendar in, nor the reverse', async () => {
+		vi.stubEnv('CONTEXT', undefined);
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', 'true');
+		vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', undefined);
+		await expect(mode('calendar')).resolves.toBe('captured');
+
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', undefined);
+		vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', 'true');
+		await expect(mode('slack')).resolves.toBe('captured');
+	});
+
+	test('a calendar write has no body to log: the line is the label alone', async () => {
+		vi.stubEnv('CONTEXT', undefined);
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+		await expect(
+			deliver({
+				kind: 'calendar',
+				target: 'cancel Event',
+				body: '',
+				unreachable: 'the Events Calendar',
+				live,
+			}),
+		).resolves.toMatchObject({
+			ok: true,
+			warning: 'Captured, not written to the Events Calendar (local).',
+		});
+		expect(info).toHaveBeenCalledWith('[calendar captured] local cancel Event');
 	});
 
 	test('a captured success carries the extra fields the sender declared', async () => {

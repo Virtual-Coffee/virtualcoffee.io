@@ -89,3 +89,27 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+// The description editor (MDXEditor) inside a Bootstrap form: its own
+// stylesheet draws the toolbar; this frames it like a `.form-control`.
+.admin-editor {
+	border: var(--bs-border-width) solid var(--bs-border-color);
+	border-radius: var(--bs-border-radius);
+	font-size: 0.875rem;
+
+	&:focus-within {
+		border-color: $input-focus-border-color;
+		box-shadow: $input-focus-box-shadow;
+	}
+}
+
+.admin-editor__content {
+	min-height: 8rem;
+	padding: 0.5rem 0.75rem;
+}
+
+// Hour / minute / AM-PM selects: let the arrows breathe at their widths.
+.admin-time-select .form-select {
+	padding-right: 1.75rem;
+	min-width: 0;
+}

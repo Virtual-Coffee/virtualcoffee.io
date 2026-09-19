@@ -44,6 +44,9 @@ export const readAttachment = vi.fn<(key: string) => Promise<unknown>>();
 /** `@/lib/github/issues` — spread; `githubAppConfigured` stays real. */
 export const createLunchAndLearnIssue = vi.fn();
 
+/** `@/lib/eventsCalendar` — spread; a test hands it the client to return. */
+export const connectEventsCalendar = vi.fn();
+
 export function resetSpies() {
 	for (const spy of [
 		sendEmail,
@@ -55,6 +58,7 @@ export function resetSpies() {
 		blobs.delete,
 		readAttachment,
 		createLunchAndLearnIssue,
+		connectEventsCalendar,
 	]) {
 		spy.mockReset();
 	}

@@ -1,5 +1,6 @@
 /**
- * Delivery Mode for everything the site sends: Live on production only,
+ * Delivery Mode for everything the site sends, Events Calendar writes
+ * included: Live on production only,
  * Captured everywhere else unless an opt-in says otherwise, and email's Local
  * opt-in (`SMTP_HOST`) only on a checkout (docs/adr/0013). Every sender is a
  * `deliver()` call, so it cannot reach its credentials before the mode is
@@ -7,7 +8,8 @@
  * a checkout either.
  */
 
-export type OutboundKind = 'email' | 'slack' | 'slack dm' | 'github issue';
+export type OutboundKind =
+	'email' | 'slack' | 'slack dm' | 'github issue' | 'calendar';
 
 export function isProduction(): boolean {
 	return process.env.CONTEXT === 'production';
@@ -62,7 +64,7 @@ export function capture(
 	console.info(
 		`[${kind} captured] ${deployContext()} ${target}`,
 		...(details ? [details] : []),
-		`\n${body}`,
+		...(body ? [`\n${body}`] : []),
 	);
 }
 
@@ -105,9 +107,22 @@ function isLoopbackHost(host: string): boolean {
  * is `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true`, paired with per-context webhook
  * and App values that point at a test channel or repository.
  */
-export function notifyDelivery(): 'live' | 'captured' {
+function notifyDelivery(): 'live' | 'captured' {
 	if (isProduction()) return 'live';
 	return process.env.NOTIFY_LIVE_OUTSIDE_PRODUCTION === 'true'
+		? 'live'
+		: 'captured';
+}
+
+/**
+ * Writes to the Events Calendar (`/admin/events`) are the same shape: there is
+ * one real calendar, so the opt-in `CALENDAR_LIVE_OUTSIDE_PRODUCTION=true` is
+ * meant to be paired with a `GOOGLE_CALENDAR_ID` that names a scratch calendar
+ * the service account can edit. Reads are never gated.
+ */
+function calendarDelivery(): 'live' | 'captured' {
+	if (isProduction()) return 'live';
+	return process.env.CALENDAR_LIVE_OUTSIDE_PRODUCTION === 'true'
 		? 'live'
 		: 'captured';
 }
@@ -149,7 +164,12 @@ type Delivery<K extends OutboundKind> =
 
 function deliveryFor<K extends OutboundKind>(kind: K): Delivery<K> {
 	if (kind === 'email') return emailDelivery() as Delivery<K>;
-	const mode = kind === 'slack dm' ? dmDelivery() : notifyDelivery();
+	const mode =
+		kind === 'slack dm'
+			? dmDelivery()
+			: kind === 'calendar'
+				? calendarDelivery()
+				: notifyDelivery();
 	return (
 		mode === 'captured'
 			? { mode: 'captured', context: deployContext() }
@@ -162,6 +182,7 @@ const VERB: Record<OutboundKind, string> = {
 	slack: 'posted to Slack',
 	'slack dm': 'sent as a Slack DM',
 	'github issue': 'opened on GitHub',
+	calendar: 'written to the Events Calendar',
 };
 
 /** `AbortSignal.timeout()` rejects with a DOMException named TimeoutError. */
