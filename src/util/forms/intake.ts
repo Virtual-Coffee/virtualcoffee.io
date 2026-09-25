@@ -26,3 +26,8 @@ export function intake<S extends z.ZodObject>(
 
 	return { ok: true, data: parsed.data };
 }
+
+/** What a public form says when the write failed, in one wording for all five. */
+export function savingFailed(noun: 'form' | 'report' | 'application' = 'form') {
+	return `Something went wrong saving your ${noun}. Please try again, or email hello@virtualcoffee.io.`;
+}

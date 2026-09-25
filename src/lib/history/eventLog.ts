@@ -429,7 +429,7 @@ async function recentSubmissionEvents(
  * keeping a union in step with both.
  *
  * The caller says which kinds of Submission to include, because it — not this
- * module — knows what the viewer may see. `src/lib/submissions.ts` reads from
+ * module — knows what the viewer may see. `src/lib/submissions/submissions.ts` reads from
  * here, so this module cannot import it back for the mapping.
  */
 export async function recentEvents(input: {

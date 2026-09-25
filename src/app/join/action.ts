@@ -12,7 +12,7 @@ import { hashClaimToken } from '@/lib/volunteers/invites';
 import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import { applicationSubmittedMessage, notifySlack } from '@/lib/slack/notify';
 import { agree, email, name } from '@/util/forms/fields';
-import { intake } from '@/util/forms/intake';
+import { intake, savingFailed } from '@/util/forms/intake';
 import {
 	formError,
 	formValue,
@@ -173,9 +173,7 @@ export async function submitMembershipApplication(
 		// Deliberately not surfaced to the applicant: the upstream message can
 		// name tables and columns, and there is nothing they could do with it.
 		console.error('Membership application failed to save', error);
-		return formError(
-			'Something went wrong saving your application. Please try again, or email hello@virtualcoffee.io.',
-		);
+		return formError(savingFailed('application'));
 	}
 
 	/**

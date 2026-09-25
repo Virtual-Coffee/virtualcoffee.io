@@ -58,12 +58,31 @@ vi.mock('@/lib/slack/dm', async (importOriginal) => ({
 vi.mock('@/lib/email/transport', async () => ({
 	sendEmail: (await import('@/test/mocks/spies')).sendEmail,
 }));
+vi.mock('@netlify/blobs', async () => {
+	const { blobs } = await import('@/test/mocks/spies');
+	return { getStore: () => blobs };
+});
+vi.mock('@/lib/submissions/attachments', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/submissions/attachments')>()),
+	readAttachment: (await import('@/test/mocks/spies')).readAttachment,
+}));
+vi.mock('@/lib/github/issues', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/github/issues')>()),
+	createLunchAndLearnIssue: (await import('@/test/mocks/spies'))
+		.createLunchAndLearnIssue,
+}));
 
 /** `staleRead.readAs` stages the race — see `@/test/mocks/wrappers`. */
 vi.mock('@/lib/waitlist/applications', async (importOriginal) =>
 	(await import('@/test/mocks/wrappers')).withStaleRead(
 		await importOriginal<typeof import('@/lib/waitlist/applications')>(),
 		'getApplication',
+	),
+);
+vi.mock('@/lib/submissions/submissions', async (importOriginal) =>
+	(await import('@/test/mocks/wrappers')).withStaleRead(
+		await importOriginal<typeof import('@/lib/submissions/submissions')>(),
+		'getSubmission',
 	),
 );
 
