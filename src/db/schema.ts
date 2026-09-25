@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import {
 	boolean,
 	check,
+	foreignKey,
 	index,
 	integer,
 	pgEnum,
@@ -471,9 +472,82 @@ export const volunteerInviteLedger = pgTable(
 	],
 );
 
+export const accrualNoticeOutcome = pgEnum('accrual_notice_outcome', [
+	'sent',
+	'failed',
+	'no_address',
+]);
+
+/**
+ * That a Volunteer was told about one `monthly_accrual` — or that telling them
+ * was tried. The daily job emails every accrual of the month that has no row
+ * here, so a run cut off by the scheduled-function limit leaves the rest for
+ * tomorrow rather than losing them. One row per attempt, whatever came of it:
+ * a failed address is logged once, not retried every morning until the month
+ * turns. Append-only like the ledger it points at.
+ */
+export const volunteerAccrualNotice = pgTable(
+	'volunteer_accrual_notice',
+	{
+		id: uuid('id').primaryKey().$defaultFn(newId),
+		ledgerId: uuid('ledger_id').notNull().unique(),
+		outcome: accrualNoticeOutcome('outcome').notNull(),
+		createdAt: timestamp('created_at', { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+	},
+	(table) => [
+		// Named by hand: drizzle's generated name would pass 63 characters and
+		// come out as a hash.
+		foreignKey({
+			name: 'volunteer_accrual_notice_ledger_id_fkey',
+			columns: [table.ledgerId],
+			foreignColumns: [volunteerInviteLedger.id],
+		}).onDelete('restrict'),
+	],
+);
+
+export const volunteerEventType = pgEnum('volunteer_event_type', [
+	'email_sent',
+	'email_failed',
+	'notification_sent',
+	'notification_failed',
+]);
+
+/**
+ * A Volunteer's History: what each send about them came to. Only outcomes —
+ * the grant, a revoke and every accrual are ledger rows already, and a second
+ * record of them would drift. No status columns: a Volunteer has no status to
+ * move between.
+ */
+export const volunteerEvent = pgTable(
+	'volunteer_event',
+	{
+		id: uuid('id').primaryKey().$defaultFn(newId),
+		volunteerId: uuid('volunteer_id')
+			.notNull()
+			.references(() => volunteer.id, { onDelete: 'cascade' }),
+		/** Null for the scheduled jobs. */
+		actorUserId: text('actor_user_id').references(() => user.id, {
+			onDelete: 'set null',
+		}),
+		type: volunteerEventType('type').notNull(),
+		/** A summary of what was sent and to whom. */
+		body: text('body'),
+		createdAt: timestamp('created_at', { withTimezone: true })
+			.notNull()
+			.defaultNow(),
+	},
+	(table) => [index('volunteer_event_volunteer_id_idx').on(table.volunteerId)],
+);
+
 export type Volunteer = typeof volunteer.$inferSelect;
 export type VolunteerLedgerReason =
 	(typeof volunteerLedgerReason.enumValues)[number];
+export type AccrualNoticeOutcome =
+	(typeof accrualNoticeOutcome.enumValues)[number];
+export type VolunteerEvent = typeof volunteerEvent.$inferSelect;
+export type VolunteerEventType = (typeof volunteerEventType.enumValues)[number];
 export type Invite = typeof invite.$inferSelect;
 export type InviteStatus = (typeof inviteStatus.enumValues)[number];
 

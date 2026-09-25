@@ -86,6 +86,22 @@ vi.mock('@/lib/submissions/submissions', async (importOriginal) =>
 	),
 );
 
+/** `afterRead.run` fires between the read and the write — see `@/test/mocks/wrappers`. */
+vi.mock('@/lib/volunteers/volunteers', async (importOriginal) =>
+	(await import('@/test/mocks/wrappers')).withAfterRead(
+		await importOriginal<typeof import('@/lib/volunteers/volunteers')>(),
+		'pendingInvite',
+	),
+);
+
+/** `preCheck.skip` makes the index do the work — see `@/test/mocks/wrappers`. */
+vi.mock('@/lib/volunteers/invites', async (importOriginal) =>
+	(await import('@/test/mocks/wrappers')).withSkippableCheck(
+		await importOriginal<typeof import('@/lib/volunteers/invites')>(),
+		'blockingInvite',
+	),
+);
+
 /** Every table in the schema, so a new one is truncated without editing this. */
 const tables = Object.values(schema)
 	.filter((value) => is(value, PgTable))

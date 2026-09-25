@@ -1,0 +1,578 @@
+'use server';
+
+import { and, eq, isNull } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
+
+import {
+	db,
+	isUniqueViolation,
+	invite,
+	pendingGrant,
+	user,
+	volunteer,
+} from '@/db';
+import { isId } from '@/db/ids';
+import { getSlackMembers } from '@/data/slackMembers';
+import type { ActionResult } from '@/lib/admin/actionResult';
+import { actorId, requirePermission } from '@/lib/access/adminAccess';
+import { userForSlackId } from '@/lib/access/admins';
+import {
+	volunteerGrantEmail,
+	volunteerInviteEmail,
+} from '@/lib/email/templates';
+import { sendEmail } from '@/lib/email/transport';
+import { recordOutcome } from '@/lib/history/eventLog';
+import {
+	adjust,
+	newClaimToken,
+	hashClaimToken,
+} from '@/lib/volunteers/invites';
+import {
+	grantVolunteerRole,
+	lockSlackMember,
+	withoutVolunteerRole,
+} from '@/lib/access/pendingGrants';
+import { parseRoles } from '@/lib/access/permissions';
+import { grantDmMessage, sendSlackDm } from '@/lib/slack/dm';
+import {
+	COMMUNITY_ROLES,
+	formatRoleLabels,
+} from '@/lib/volunteers/volunteerRoles';
+import {
+	pendingInvite,
+	volunteerSubject,
+	volunteerSubjectForSlackId,
+} from '@/lib/volunteers/volunteers';
+import { siteUrl } from '@/util/url.server';
+
+function revalidate(volunteerId?: string) {
+	revalidatePath('/admin/volunteers');
+	revalidatePath('/admin');
+	if (volunteerId) revalidatePath(`/admin/volunteers/${volunteerId}`);
+}
+
+// The form's input is `type="email"`, but it submits through a button's
+// onClick, so the browser never runs that check.
+const emailSchema = z
+	.email('That doesn’t look like an email address.')
+	.max(320);
+
+const roleLabelsSchema = z
+	.array(z.enum(COMMUNITY_ROLES, 'That isn’t one of the community roles.'))
+	.max(COMMUNITY_ROLES.length);
+
+/** Empty clears the address; anything else has to be one. */
+function normaliseEmail(
+	email: string,
+): { ok: true; value: string | null } | (ActionResult & { ok: false }) {
+	const address = email.trim().toLowerCase();
+	if (!address) return { ok: true, value: null };
+	const checked = emailSchema.safeParse(address);
+	if (!checked.success) {
+		return {
+			ok: false,
+			message: checked.error.issues[0]?.message ?? 'Please check the email.',
+		};
+	}
+	return { ok: true, value: address };
+}
+
+/**
+ * Make someone a Volunteer: the `volunteer` row and the Role in one
+ * transaction, which is why `/admin/user-management` does not offer
+ * `volunteer` (docs/adr/0010). The Role lands directly or as a Pending Grant
+ * (docs/adr/0009).
+ */
+export async function addVolunteer(
+	slackUserId: string,
+	roleLabels: string[],
+	email: string,
+): Promise<ActionResult> {
+	const session = await requirePermission('volunteers', 'manage');
+
+	const roles = roleLabelsSchema.safeParse(roleLabels);
+	if (!roles.success) {
+		return {
+			ok: false,
+			message:
+				roles.error.issues[0]?.message ?? 'Please check the community roles.',
+		};
+	}
+
+	const normalised = normaliseEmail(email);
+	if (!normalised.ok) return normalised;
+	const address = normalised.value;
+
+	const members = await getSlackMembers();
+	const member = members.find((entry) => entry.id === slackUserId);
+
+	if (!member) {
+		return {
+			ok: false,
+			message: 'That Slack member is no longer in the workspace.',
+		};
+	}
+
+	// Someone who has already signed in is a Volunteer immediately — nobody
+	// left to tell to come claim anything.
+	const signedIn = await userForSlackId(member.id);
+
+	let volunteerId: string;
+	try {
+		volunteerId = await db().transaction(async (tx) => {
+			const [created] = await tx
+				.insert(volunteer)
+				.values({
+					slackUserId: member.id,
+					slackDisplayName: member.displayName,
+					slackHandle: member.handle,
+					roleLabels: formatRoleLabels(roles.data),
+					email: address,
+				})
+				.returning({ id: volunteer.id });
+
+			await grantVolunteerRole(
+				tx,
+				{
+					slackUserId: member.id,
+					slackDisplayName: member.displayName,
+					slackHandle: member.handle,
+				},
+				session.user.name || session.user.email,
+			);
+			return created.id;
+		});
+	} catch (error) {
+		// The unique index on volunteer.slack_user_id is the authority here, so a
+		// race lands in this branch rather than creating a second row.
+		if (!isUniqueViolation(error)) throw error;
+		return {
+			ok: false,
+			message: `${member.displayName} is already a volunteer.`,
+		};
+	}
+
+	revalidate();
+
+	const subject = volunteerSubject(volunteerId);
+	const actorUserId = await actorId(session.user.id);
+
+	// Best-effort, same as the email below: the grant already stands, and a
+	// maintainer can retry it with "Resend DM" in /admin/user-management.
+	if (!signedIn) {
+		const dm = await sendSlackDm(
+			member.id,
+			grantDmMessage({ roles: ['volunteer'] }),
+		);
+		await recordOutcome(subject, {
+			channel: 'slack',
+			outbound: dm,
+			what: 'Volunteer DM',
+			actorUserId,
+		});
+	}
+
+	// Tell them, after the writes and not fatal: they are a Volunteer by now,
+	// and a failed email must not read as a failed grant.
+	if (!address) {
+		return {
+			ok: true,
+			message: `${member.displayName} can now send invites. Add an email address to let us tell them.`,
+		};
+	}
+
+	const template = volunteerGrantEmail(
+		member.displayName,
+		0,
+		`${siteUrl()}/invites`,
+	);
+
+	const sent = await sendEmail({
+		to: address,
+		subject: template.subject,
+		text: template.text,
+	});
+	await recordOutcome(subject, {
+		channel: 'email',
+		outbound: sent,
+		what: `Volunteer welcome to ${address}`,
+		actorUserId,
+	});
+
+	return {
+		ok: true,
+		message: sent.ok
+			? `${member.displayName} can now send invites, and we've emailed them.${sent.warning ? ` ${sent.warning}` : ''}`
+			: `${member.displayName} can now send invites, but the email didn't send: ${sent.message}`,
+	};
+}
+
+/** Descriptive only, so no transaction, ledger row or grant — just the column. */
+export async function setRoleLabels(
+	volunteerId: string,
+	roleLabels: string[],
+): Promise<ActionResult> {
+	await requirePermission('volunteers', 'manage');
+
+	if (!isId(volunteerId)) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	const roles = roleLabelsSchema.safeParse(roleLabels);
+	if (!roles.success) {
+		return {
+			ok: false,
+			message:
+				roles.error.issues[0]?.message ?? 'Please check the community roles.',
+		};
+	}
+
+	// Read first: a label the import brought across that is not on the list is
+	// not the editor's to drop.
+	const [current] = await db()
+		.select({ roleLabels: volunteer.roleLabels })
+		.from(volunteer)
+		.where(eq(volunteer.id, volunteerId));
+
+	if (!current) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	await db()
+		.update(volunteer)
+		.set({ roleLabels: formatRoleLabels(roles.data, current.roleLabels) })
+		.where(eq(volunteer.id, volunteerId));
+
+	revalidate(volunteerId);
+	return { ok: true, message: 'Roles updated.' };
+}
+
+/**
+ * The roster address is what the grant and accrual emails go to, ahead of the
+ * linked account's, so a wrong one has to be correctable here. Descriptive
+ * only — no event, ledger row or grant.
+ */
+export async function setEmail(
+	volunteerId: string,
+	email: string,
+): Promise<ActionResult> {
+	await requirePermission('volunteers', 'manage');
+
+	if (!isId(volunteerId)) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	const address = normaliseEmail(email);
+	if (!address.ok) return address;
+
+	const [row] = await db()
+		.update(volunteer)
+		.set({ email: address.value })
+		.where(eq(volunteer.id, volunteerId))
+		.returning({ id: volunteer.id });
+
+	if (!row) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	revalidate(volunteerId);
+	return {
+		ok: true,
+		message: address.value ? 'Email updated.' : 'Email cleared.',
+	};
+}
+
+/**
+ * Stop or restart someone's volunteering.
+ *
+ * Both halves move together: `deactivated_at` is what the accrual job reads,
+ * and the role is what /invites reads. Deactivating only one of them leaves
+ * someone who can spend but never earns, or who banks an Invite every month for
+ * years and comes back holding a supply nobody reviewed.
+ *
+ * The ledger is untouched. It is append-only and it is the record of what
+ * happened; a returning Volunteer picks up the balance they left with.
+ *
+ * A restart is the same grant `addVolunteer` makes, so it goes through
+ * `grantVolunteerRole`: a pause withdraws a Pending Grant that carried only
+ * `volunteer`, and someone who never signed in has nothing else to update.
+ */
+export async function setVolunteerActive(
+	volunteerId: string,
+	active: boolean,
+): Promise<ActionResult> {
+	const session = await requirePermission('volunteers', 'manage');
+
+	if (!isId(volunteerId)) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	const [row] = await db()
+		.select({
+			slackUserId: volunteer.slackUserId,
+			slackDisplayName: volunteer.slackDisplayName,
+			slackHandle: volunteer.slackHandle,
+		})
+		.from(volunteer)
+		.where(eq(volunteer.id, volunteerId))
+		.limit(1);
+
+	if (!row) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	// Checked before the transaction: whether a restart DMs anyone depends on
+	// whether they have signed in, not on anything the transaction changes.
+	const signedIn = active ? await userForSlackId(row.slackUserId) : null;
+
+	await db().transaction(async (tx) => {
+		// The lock claimPendingGrant() takes: a first sign-in landing between
+		// the reads below and their writes would re-apply the Grant a pause is
+		// withdrawing, or have its own write overwritten.
+		await lockSlackMember(tx, row.slackUserId);
+
+		await tx
+			.update(volunteer)
+			.set({ deactivatedAt: active ? null : new Date() })
+			.where(eq(volunteer.id, volunteerId));
+
+		if (active) {
+			await grantVolunteerRole(
+				tx,
+				row,
+				session.user.name || session.user.email,
+			);
+			return;
+		}
+
+		const [account] = await tx
+			.select({ id: user.id, role: user.role })
+			.from(user)
+			.where(eq(user.slackUserId, row.slackUserId))
+			.limit(1);
+
+		if (account) {
+			// `roleGrantedAt/By` record who gave access and when. A pause takes
+			// a role away, so it leaves those alone; only a restart is a grant.
+			await tx
+				.update(user)
+				.set({ role: withoutVolunteerRole(account.role) })
+				.where(eq(user.id, account.id));
+		}
+
+		const [grant] = await tx
+			.select({ id: pendingGrant.id, role: pendingGrant.role })
+			.from(pendingGrant)
+			.where(
+				and(
+					eq(pendingGrant.slackUserId, row.slackUserId),
+					isNull(pendingGrant.claimedAt),
+				),
+			)
+			.limit(1);
+
+		if (grant) {
+			const role = withoutVolunteerRole(grant.role);
+			// A grant that would carry nothing is withdrawn, as User Management
+			// would have done: it never took effect, and an empty grant is one
+			// setPendingGrantRoles() refuses to write.
+			if (parseRoles(role).length === 0) {
+				await tx.delete(pendingGrant).where(eq(pendingGrant.id, grant.id));
+			} else {
+				await tx
+					.update(pendingGrant)
+					.set({ role })
+					.where(eq(pendingGrant.id, grant.id));
+			}
+		}
+	});
+
+	// Best-effort, after the transaction commits: the restart already stands,
+	// and a maintainer can retry it with "Resend DM" in /admin/user-management.
+	if (active && !signedIn) {
+		const dm = await sendSlackDm(
+			row.slackUserId,
+			grantDmMessage({ roles: ['volunteer'] }),
+		);
+		await recordOutcome(volunteerSubject(volunteerId), {
+			channel: 'slack',
+			outbound: dm,
+			what: 'Volunteer DM',
+			actorUserId: await actorId(session.user.id),
+		});
+	}
+
+	revalidate(volunteerId);
+	return {
+		ok: true,
+		message: active ? 'Volunteering restarted.' : 'Volunteering paused.',
+	};
+}
+
+/**
+ * Adjust a balance by hand.
+ *
+ * A ledger row, never an edit — that is the whole point of the table. A reason
+ * is required because "why do I have four?" is the question this screen exists
+ * to answer, and an unexplained adjustment answers it worse than no adjustment.
+ */
+export async function adjustBalance(
+	volunteerId: string,
+	delta: number,
+	reason: string,
+): Promise<ActionResult> {
+	const session = await requirePermission('volunteers', 'manage');
+
+	if (!isId(volunteerId)) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+	if (!Number.isInteger(delta) || delta === 0) {
+		return { ok: false, message: 'Give a whole number of invites, not zero.' };
+	}
+	if (Math.abs(delta) > 50) {
+		return { ok: false, message: 'That is more invites than anyone needs.' };
+	}
+	if (!reason.trim()) {
+		return { ok: false, message: 'Say why — the ledger is the audit trail.' };
+	}
+
+	const [row] = await db()
+		.select({ slackUserId: volunteer.slackUserId })
+		.from(volunteer)
+		.where(eq(volunteer.id, volunteerId))
+		.limit(1);
+
+	if (!row) {
+		return { ok: false, message: 'That volunteer no longer exists.' };
+	}
+
+	await adjust({
+		slackUserId: row.slackUserId,
+		delta,
+		actorUserId: await actorId(session.user.id),
+		body: reason.trim(),
+	});
+
+	revalidate(volunteerId);
+	return {
+		ok: true,
+		message: `${delta > 0 ? 'Added' : 'Removed'} ${Math.abs(delta)} invite${
+			Math.abs(delta) === 1 ? '' : 's'
+		}.`,
+	};
+}
+
+/**
+ * Re-send a Claim Link that never arrived.
+ *
+ * Admin-only, deliberately: it re-issues the token, which quietly invalidates
+ * whatever the invitee may already have. In the hands of the Volunteer that
+ * would be a footgun on the common case where the first email did arrive and is
+ * simply unread.
+ *
+ * No ledger movement — the Invite was already charged and is the same Invite.
+ * The expiry restarts, because an Invite nobody has managed to receive has not
+ * had its ninety days.
+ */
+export async function resendInvite(
+	inviteId: string,
+	volunteerId: string,
+): Promise<ActionResult> {
+	const session = await requirePermission('volunteers', 'manage');
+
+	if (!isId(inviteId)) {
+		return { ok: false, message: 'That invite no longer exists.' };
+	}
+
+	const row = await pendingInvite(inviteId);
+
+	if (!row || !row.inviteeEmail) {
+		return {
+			ok: false,
+			message: 'Only an unclaimed invite with an email address can be re-sent.',
+		};
+	}
+	// An invite imported from Airtable never had a Claim Link (no token, no
+	// expiry); minting one now would email a years-old invitee a live link.
+	if (!row.tokenExpiresAt || !row.tokenHash) {
+		return {
+			ok: false,
+			message:
+				'This invite was imported from Airtable and has no claim link to re-send.',
+		};
+	}
+
+	const { token, expiresAt } = newClaimToken();
+
+	// Written before the send on purpose: the link in the email must already
+	// redeem, and a failed send is reported as such. See docs/adr/0011.
+	// Conditional on `pending` and on the token we read, and checked: the
+	// invite may have been claimed, cancelled or re-sent by someone else since
+	// the read above, and a link that is not the one in the row must not go
+	// out as "re-sent".
+	const replaced = await db()
+		.update(invite)
+		.set({ tokenHash: hashClaimToken(token), tokenExpiresAt: expiresAt })
+		.where(
+			and(
+				eq(invite.id, inviteId),
+				eq(invite.status, 'pending'),
+				eq(invite.tokenHash, row.tokenHash),
+			),
+		)
+		.returning({ id: invite.id });
+	if (replaced.length === 0) {
+		return {
+			ok: false,
+			message:
+				'That invite was claimed, cancelled or re-sent just now. Reload the page.',
+		};
+	}
+
+	const template = volunteerInviteEmail(
+		row.inviterName || 'A Virtual Coffee volunteer',
+		row.inviteeName || 'there',
+		`${siteUrl()}/join?invite=${token}`,
+	);
+
+	const sent = await sendEmail({
+		to: row.inviteeEmail,
+		subject: template.subject,
+		text: template.text,
+	});
+	// On the inviter's History, when the inviter is a Volunteer here at all.
+	const inviter = row.inviterSlackUserId
+		? await volunteerSubjectForSlackId(row.inviterSlackUserId)
+		: null;
+	if (inviter) {
+		await recordOutcome(inviter, {
+			channel: 'email',
+			outbound: sent,
+			what: `Invite re-sent to ${row.inviteeEmail}`,
+			actorUserId: await actorId(session.user.id),
+		});
+	}
+
+	revalidate(volunteerId);
+
+	if (!sent.ok) {
+		/**
+		 * The old link is already dead by this point — the hash was replaced
+		 * before the send, because the email cannot carry a token that does not
+		 * exist yet. Say so, rather than letting a maintainer believe the invitee
+		 * still has a working link.
+		 */
+		return {
+			ok: false,
+			message: `${sent.message} The previous link has stopped working, so try again or cancel the invite.`,
+		};
+	}
+
+	return {
+		ok: true,
+		message: sent.warning
+			? `Invite re-sent to ${row.inviteeEmail}. ${sent.warning}`
+			: `Invite re-sent to ${row.inviteeEmail}.`,
+	};
+}

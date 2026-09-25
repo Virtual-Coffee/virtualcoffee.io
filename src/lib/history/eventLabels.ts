@@ -1,4 +1,8 @@
-import type { ApplicationEventType, SubmissionEventType } from '@/db';
+import type {
+	ApplicationEventType,
+	SubmissionEventType,
+	VolunteerEventType,
+} from '@/db';
 
 /**
  * History's labels, apart from the writes in `eventLog.ts` because the
@@ -10,11 +14,11 @@ import type { ApplicationEventType, SubmissionEventType } from '@/db';
  * How an event type reads. `sentence` follows the actor's name on an
  * application's History ("Ada Sent a Coffee invite"); `badge` stands alone on
  * a Submission's History and on the dashboard feed, which already shows the
- * subject beside it. Keyed by the two enums together, so a new type without a
- * label is a type error.
+ * subject beside it. Keyed by the three enums together, so a new type without
+ * a label is a type error.
  */
 export const EVENT_LABELS: Record<
-	ApplicationEventType | SubmissionEventType,
+	ApplicationEventType | SubmissionEventType | VolunteerEventType,
 	{ sentence: string; badge: string }
 > = {
 	submitted: { sentence: 'Application submitted', badge: 'Submitted' },

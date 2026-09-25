@@ -16,6 +16,8 @@ import {
 	failInserts,
 	insertApplication,
 	insertUser,
+	insertVolunteer,
+	volunteerEvents,
 } from '@/test/db/fixtures';
 
 import {
@@ -27,6 +29,7 @@ import {
 	transitionAndRecord,
 	type Outcome,
 	type SubmissionSubject,
+	type VolunteerSubject,
 } from './eventLog';
 
 const SENT: Outcome = { ok: true, message: 'Sent.' };
@@ -186,6 +189,11 @@ describe('recordImport', () => {
 	});
 });
 
+async function insertVolunteerRow() {
+	const { id } = await insertVolunteer({ slackUserId: 'U_HISTORY' });
+	return { kind: 'volunteer', id } as const satisfies VolunteerSubject;
+}
+
 describe('recordOutcome', () => {
 	test('an email that went is email_sent, one that did not is email_failed', async () => {
 		const { id } = await insertApplication({});
@@ -257,6 +265,36 @@ describe('recordOutcome', () => {
 			{
 				type: 'notification_failed',
 				body: 'GitHub issue failed: The server said no.',
+			},
+		]);
+	});
+
+	test('a Volunteer is emailed and DMed, and both outcomes are theirs', async () => {
+		const subject = await insertVolunteerRow();
+		const actor = await insertUser({ name: 'Grace' });
+
+		await recordOutcome(subject, {
+			channel: 'email',
+			outbound: SENT,
+			what: 'Volunteer welcome to v@example.test',
+			actorUserId: actor.id,
+		});
+		await recordOutcome(subject, {
+			channel: 'slack',
+			outbound: FAILED,
+			what: 'Volunteer DM',
+		});
+
+		expect(await volunteerEvents(subject.id)).toEqual([
+			{
+				type: 'email_sent',
+				body: 'Volunteer welcome to v@example.test',
+				actorUserId: actor.id,
+			},
+			{
+				type: 'notification_failed',
+				body: 'Volunteer DM failed: The server said no.',
+				actorUserId: null,
 			},
 		]);
 	});
@@ -451,6 +489,36 @@ describe('history', () => {
 
 		expect(await history(subject)).toMatchObject([
 			{ fromStatus: 'waitlisted', toStatus: 'coffee_invited' },
+		]);
+	});
+
+	test('a Volunteer’s rows come back newest first, with no statuses', async () => {
+		const subject = await insertVolunteerRow();
+		const other = await insertVolunteer({ slackUserId: 'U_OTHER' });
+
+		await recordEvent(subject, {
+			type: 'email_sent',
+			body: 'first',
+			createdAt: new Date('2024-03-01T00:00:00Z'),
+		});
+		await recordEvent(subject, {
+			type: 'email_failed',
+			body: 'second',
+			createdAt: new Date('2024-03-02T00:00:00Z'),
+		});
+		await recordEvent(
+			{ kind: 'volunteer', id: other.id },
+			{ type: 'email_sent', body: 'another volunteer' },
+		);
+
+		expect(await history(subject)).toMatchObject([
+			{
+				type: 'email_failed',
+				body: 'second',
+				fromStatus: null,
+				toStatus: null,
+			},
+			{ type: 'email_sent', body: 'first', fromStatus: null, toStatus: null },
 		]);
 	});
 

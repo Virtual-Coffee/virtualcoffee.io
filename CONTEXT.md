@@ -43,11 +43,35 @@ The weekly hour-long Zoom chat. Attending one is the step between a Coffee
 Invite and a Membership Approval.
 _Avoid_: Meeting, call, event
 
+**Invite**:
+A referral from a **Volunteer**, spent from their **Invite Allowance** and sent
+as a **Claim Link**. An application arising from one enters the Waitlist with
+priority. An Invite nobody claims expires, and the Volunteer gets it back.
+_Avoid_: Referral, nomination, lapse (an application lapses; an Invite expires)
+
+**Invite Allowance**:
+How many Invites a Volunteer may currently give out. It grows a little each
+month and is spent one Invite at a time. The monthly growth is announced by
+email; an **Accrual Notice** records that the email was attempted, so a run cut
+short tells the rest of the roster the next day.
+_Avoid_: Quota, credits, balance
+
+**Claim Link**:
+The single-use link an Invite sends to the person being invited. It carries
+them to the ordinary join form, where they still answer every question and
+agree to the Code of Conduct themselves.
+_Avoid_: Invite link, referral link, token
+
 ## People
 
 **Member**:
 Someone whose Membership Application reached `member` status. Membership is
 about access to the community, not about appearing on the website.
+
+**Volunteer**:
+A Member trusted to give out Invites. A paused Volunteer keeps their row and
+History but stops accruing and loses the `volunteer` Role until reactivated.
+_Avoid_: Volunteer signup (that is the form), referrer, sponsor
 
 **Member Profile**:
 A voluntary public listing on `/members`, authored as a file in the repo and
@@ -119,11 +143,14 @@ _Avoid_: Invite, pre-provision, reservation
 ## History
 
 **History**:
-What has happened to a Membership Application or a Submission, one row per
-happening: a status change, a note, an email or notification and whether it
-went. Two tables (`application_event`, `submission_event`) but one concept and
-one writer. Shown as History on a detail page and as the activity feed on the
-dashboard.
+What has happened to a Membership Application, a Submission or a Volunteer,
+one row per happening: a status change, a note, an email or notification and
+whether it went. Three tables (`application_event`, `submission_event`,
+`volunteer_event`) but one concept and one writer. A Volunteer's History holds
+only send outcomes: their grant, a pause and every accrual are Invite
+Allowance movements, recorded once, in the ledger. Shown as History on a
+detail page; Applications and Submissions also feed the dashboard's activity
+feed.
 _Avoid_: audit log, event log, activity table, timeline (the component, not
 the concept)
 
