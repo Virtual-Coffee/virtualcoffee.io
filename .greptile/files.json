@@ -97,6 +97,15 @@
 			]
 		},
 		{
+			"path": "docs/adr/0014-google-calendar-is-the-events-system-of-record.md",
+			"description": "The Events Calendar as system of record for Series and Events, and what /admin/events may write",
+			"scope": [
+				"src/data/events.ts",
+				"src/lib/events/**",
+				"src/app/admin/(protected)/events/**"
+			]
+		},
+		{
 			"path": "docs/adr/0016-slack-notifications-are-block-kit-containers.md",
 			"description": "Slack notifications as Block Kit container blocks: literal runs for typed values, mrkdwn for static copy",
 			"scope": ["src/lib/slack/**", "src/test/slack.ts"]

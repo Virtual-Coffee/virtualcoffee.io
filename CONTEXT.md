@@ -3,8 +3,8 @@
 The public website for Virtual Coffee, a deliberately small developer community.
 This glossary covers the **membership pipeline** — how someone gets from "I'd
 like to join" to "I'm in the Slack" — along with the **Submissions** the site's
-other public forms produce, and the **access** model that decides who can work
-on either.
+other public forms produce, the **Events** the community runs, and the
+**access** model that decides who can work on any of them.
 
 ## Membership
 
@@ -39,8 +39,8 @@ An application that went cold without anyone deciding on it. Distinct from
 **Declined**, which records a decision a maintainer actually made.
 
 **Coffee**:
-The weekly hour-long Zoom chat. Attending one is the step between a Coffee
-Invite and a Membership Approval.
+The weekly hour-long Zoom chat — an Event whose Event Type is Virtual Coffee.
+Attending one is the step between a Coffee Invite and a Membership Approval.
 _Avoid_: Meeting, call, event
 
 **Invite**:
@@ -117,6 +117,56 @@ _Avoid_: Talk submission, proposal
 A proposal for a new small special-interest group.
 _Avoid_: Group application
 
+## Events
+
+**Events Calendar**:
+The single calendar that holds every Series and Event the community runs.
+Readable by everyone in the virtualcoffee.io Google Workspace, and by the site
+and the Slack bots through one service account; not public.
+_Avoid_: Calendar, Google Calendar, CMS
+
+**Series**:
+A recurring entry on the Events Calendar. Owns the standing description and
+the Join Link that each of its Events inherits.
+_Avoid_: Recurring event, schedule, meeting
+
+**Event**:
+One dated occurrence, of a Series or on its own. What `/events` lists and the
+bots announce.
+_Avoid_: Meeting, session, instance, occurrence, calendar event
+
+**Join Link**:
+The URL people follow to attend an Event. The same for every Event of a
+Series unless one Event's is changed.
+_Avoid_: Zoom link, location, join URL
+
+**Host Code**:
+The Zoom host key for an Event, which the Slack bots show to the host.
+_Avoid_: Host key, hostCode, Zoom key, password
+
+**Event Type**:
+Which kind of thing a Series or Event is (Virtual Coffee, Lunch & Learn, …),
+from a fixed list in code.
+_Avoid_: Category, tag, kind, label, eventType
+
+**Cancel**:
+Declare that one Event will not happen. The Series continues.
+_Avoid_: Delete, remove
+
+**Reschedule**:
+Move one Event to a different time. The Series is unchanged.
+_Avoid_: Move, edit time, exception
+
+**Restore**:
+Take back a Cancel or a Reschedule: the Event happens, at the time its
+Series' rule gives it.
+_Avoid_: Un-cancel, reinstate, undelete, move back
+
+**End**:
+Declare that a Series has no further Events. Its past Events remain on the
+Events Calendar.
+_Avoid_: Delete, remove, stop, archive
+
 ## Access
 
 **Section**:
@@ -157,7 +207,8 @@ the concept)
 ## Outbound
 
 **Delivery Mode**:
-What happens to an email, Slack post or DM, or GitHub issue the site sends.
+What happens to an email, Slack post or DM, GitHub issue or Events Calendar
+write the site sends.
 **Live** delivers it to the intended recipient; only production does that.
 **Captured** builds and logs it and the pipeline carries on as though it went,
 but nothing leaves the deploy. **Local** delivers an email for real, addressed

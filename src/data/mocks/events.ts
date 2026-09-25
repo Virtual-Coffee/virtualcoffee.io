@@ -1,7 +1,13 @@
 import { faker } from '@faker-js/faker';
 import { DateTime } from 'luxon';
 import { ics, google, outlook } from 'calendar-link';
+import type { EventsResponse } from '../events';
 
+/**
+ * Stand-in for `getEvents` when Google Calendar is not configured: `limit`
+ * fake one-hour events scattered across the same range the real query uses,
+ * shaped like `EventsResponse` down to the calendar links.
+ */
 export function createEventsData({
 	limit = 15,
 	rangeStart,
@@ -10,7 +16,7 @@ export function createEventsData({
 	limit: number;
 	rangeStart: string;
 	rangeEnd: string;
-}) {
+}): EventsResponse {
 	const dates = faker.date.betweens({
 		from: rangeStart,
 		to: rangeEnd,
@@ -19,35 +25,22 @@ export function createEventsData({
 
 	return dates.map((date) => {
 		const startDate = DateTime.fromJSDate(date);
-		const calendarLinkGoogle = google({
-			title: faker.lorem.sentence(7),
-			start: startDate.toUTC().toString(),
-			end: startDate.toUTC().plus({ hours: 1 }).toString(),
-			description: faker.lorem.paragraph(),
-		});
-		const calendarLinkOutlook = outlook({
-			title: faker.lorem.sentence(7),
-			start: startDate.toUTC().toString(),
-			end: startDate.toUTC().plus({ hours: 1 }).toString(),
-			description: faker.lorem.paragraph(),
-		});
-		const calendarLinkIcs = ics({
-			title: faker.lorem.sentence(7),
-			start: startDate.toUTC().toString(),
-			end: startDate.toUTC().plus({ hours: 1 }).toString(),
-			description: faker.lorem.paragraph(),
-		});
+		const title = faker.lorem.sentence(7);
+		const paragraph = faker.lorem.paragraph();
+		const start = startDate.toUTC().toString();
+		const end = startDate.toUTC().plus({ hours: 1 }).toString();
+		const linkDetails = { title, start, end, description: paragraph };
 
 		return {
 			id: faker.string.uuid(),
-			title: faker.lorem.sentence(7),
-			startDateLocalized: startDate.toUTC().toString(),
-			endDateLocalized: startDate.toUTC().plus({ hours: 1 }).toString(),
-			eventCalendarDescription: `<p>${faker.lorem.paragraph()}</p>`,
-			eventCalendarLinks: {
-				google: calendarLinkGoogle,
-				outlook: calendarLinkOutlook,
-				ics: calendarLinkIcs,
+			title,
+			start,
+			end,
+			description: `<p>${paragraph}</p>`,
+			calendarLinks: {
+				google: google(linkDetails),
+				outlook: outlook(linkDetails),
+				ics: ics(linkDetails),
 			},
 		};
 	});
