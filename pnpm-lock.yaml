@@ -308,6 +308,9 @@ importers:
       '@netlify/edge-functions':
         specifier: ^4.0.0
         version: 4.0.0
+      '@slack/types':
+        specifier: ^3.1.0
+        version: 3.1.0
       '@types/estree':
         specifier: ^1.0.9
         version: 1.0.9

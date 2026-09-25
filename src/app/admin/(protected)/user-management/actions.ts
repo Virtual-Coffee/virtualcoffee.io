@@ -12,6 +12,7 @@ import {
 	findUnclaimedGrant,
 	lockSlackMember,
 } from '@/lib/access/pendingGrants';
+import { grantDmMessage, sendSlackDm } from '@/lib/slack/dm';
 import { isId } from '@/db/ids';
 import {
 	GRANTABLE_ROLE_NAMES,
@@ -213,6 +214,7 @@ export async function grantPendingAccess(
 	};
 
 	let result: ActionResult;
+	let preProvisioned = false;
 
 	try {
 		/**
@@ -258,6 +260,7 @@ export async function grantPendingAccess(
 				grantedBy,
 			});
 
+			preProvisioned = true;
 			return { ok: true };
 		});
 	} catch (error) {
@@ -267,7 +270,24 @@ export async function grantPendingAccess(
 		return alreadyPending;
 	}
 
-	if (result.ok) revalidate();
+	if (!result.ok) return result;
+
+	/**
+	 * Best-effort: the grant already stands regardless of whether the DM lands.
+	 * A Pending Grant's DM says where to sign in and can be re-sent from the
+	 * table; a direct grant's says the access is live, and its outcome rides
+	 * on the "has access now" line since there is no row action to retry it.
+	 */
+	const dm = await sendSlackDm(
+		member.id,
+		grantDmMessage({ roles: requested, active: !preProvisioned }),
+	);
+	result = {
+		ok: true,
+		message: [result.message, dm.message].filter(Boolean).join(' '),
+	};
+
+	revalidate();
 	return result;
 }
 
@@ -329,6 +349,42 @@ export async function setPendingGrantRoles(
 
 	revalidate();
 	return { ok: true };
+}
+
+/** Re-send the "you've been given access" DM for a Grant nobody has claimed. */
+export async function resendPendingGrantDm(
+	grantId: string,
+): Promise<ActionResult> {
+	await requirePermission('admins', 'manage');
+
+	if (!isId(grantId)) {
+		return {
+			ok: false,
+			message: 'That grant no longer exists. Reload the page.',
+		};
+	}
+
+	const [grant] = await db()
+		.select({ slackUserId: pendingGrant.slackUserId, role: pendingGrant.role })
+		.from(pendingGrant)
+		.where(and(eq(pendingGrant.id, grantId), isNull(pendingGrant.claimedAt)))
+		.limit(1);
+
+	if (!grant) {
+		return {
+			ok: false,
+			message: 'That grant has already been claimed. Reload the page.',
+		};
+	}
+
+	const sent = await sendSlackDm(
+		grant.slackUserId,
+		grantDmMessage({ roles: parseRoles(grant.role) }),
+	);
+
+	return sent.ok
+		? { ok: true, message: sent.message }
+		: { ok: false, message: sent.message };
 }
 
 /**

@@ -1,6 +1,10 @@
+import Link from 'next/link';
+import type { Route } from 'next';
+import type { ReactNode } from 'react';
+
 import type { ApplicationSource, ApplicationStatus } from '@/db';
 
-const STATUS_LABELS: Record<ApplicationStatus, string> = {
+export const STATUS_LABELS: Record<ApplicationStatus, string> = {
 	waitlisted: 'Waitlisted',
 	coffee_invited: 'Coffee invited',
 	member: 'Member',
@@ -95,6 +99,30 @@ const DATE_TIME_FORMAT = new Intl.DateTimeFormat('en-US', {
 
 export function formatDateTime(value: Date | null) {
 	return value ? DATE_TIME_FORMAT.format(value) : '—';
+}
+
+/** The way back to a section's list from one of its detail pages. */
+export function Breadcrumb({
+	parent,
+	current,
+	className,
+}: {
+	parent: { href: Route; label: string };
+	current: ReactNode;
+	className?: string;
+}) {
+	return (
+		<nav aria-label="Breadcrumb" className={className}>
+			<ol className="breadcrumb mb-0 small">
+				<li className="breadcrumb-item">
+					<Link href={parent.href}>{parent.label}</Link>
+				</li>
+				<li className="breadcrumb-item active" aria-current="page">
+					{current}
+				</li>
+			</ol>
+		</nav>
+	);
 }
 
 /** Shown where a control would be, for a viewer who holds `read` but not `manage`. */
