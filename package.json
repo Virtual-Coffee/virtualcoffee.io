@@ -6,7 +6,7 @@
 	"engines": {
 		"node": ">=24.21.0"
 	},
-	"packageManager": "pnpm@12.4.1+sha512.2e81e399d73fe8390dab25e06aa788ab7a5908248d2f5a370f82b481147a6a7a367bf8048f9a6fdb6460f21a66f0542dedb8b94ca2c8723596741920b1656d4c",
+	"packageManager": "pnpm@12.6.0+sha512.3ef68f951cb111ac204b4a5a16f0b2ddf0da56a96e0413e81d855d9f0b55ef926714709028e1cd00c405c2c5fb7b9e8ec4dc46777c805d0373c2f2ff00fd20ec",
 	"scripts": {
 		"preinstall": "npx only-allow pnpm",
 		"format": "prettier --write --ignore-unknown --list-different .",
