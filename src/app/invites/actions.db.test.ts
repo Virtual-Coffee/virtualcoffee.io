@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { z } from 'zod';
 
 import { db, invite } from '@/db';
+import { volunteerInvite } from '@/emails/volunteerInvite';
 import { volunteerBalance } from '@/lib/volunteers/invites';
 import { sendEmail } from '@/test/mocks/spies';
 import { redirectTo } from '@/test/next';
@@ -50,7 +51,9 @@ describe('sendInvite', () => {
 			message: 'Invite sent to ada@example.test.',
 		});
 		expect(sendEmail).toHaveBeenCalledWith(
-			expect.objectContaining({ to: 'ada@example.test' }),
+			volunteerInvite,
+			expect.objectContaining({ inviteeName: 'Ada' }),
+			{ to: 'ada@example.test' },
 		);
 	});
 
@@ -76,11 +79,13 @@ describe('sendInvite', () => {
 			tokenExpiresAt: expect.schemaMatching(z.date().min(new Date())),
 		});
 
-		const [{ text, to }] = sendEmail.mock.calls[0];
+		const [template, props, { to }] = sendEmail.mock.calls[0];
+		expect(template).toBe(volunteerInvite);
 		expect(to).toBe('ada@example.test');
-		const [, token] = text.match(/join\?invite=([A-Za-z0-9_-]{43})/) ?? [];
+		const [, token] =
+			props.claimUrl.match(/join\?invite=([A-Za-z0-9_-]{43})/) ?? [];
 		expect(token).toBeDefined();
-		expect(text).not.toContain(row.tokenHash);
+		expect(props.claimUrl).not.toContain(row.tokenHash);
 
 		await expect(ledgerFor(GRACE)).resolves.toEqual([
 			expect.objectContaining({ delta: 2, reason: 'imported' }),

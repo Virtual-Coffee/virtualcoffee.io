@@ -1,8 +1,10 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 
+import { renderEmail, type EmailTemplate, type RenderedEmail } from './render';
 import {
 	deliver,
 	emailDelivery,
+	maskAddress,
 	type EmailDelivery,
 	type Outbound,
 } from '@/lib/outbound';
@@ -15,23 +17,57 @@ import {
  * no static outbound addresses, so there is nothing to allowlist. Port 587 is
  * open from that runtime.
  *
- * Outside production nothing reaches SMTP unless `EMAIL_REDIRECT_TO` is set —
- * `deliver()` decides, and only calls back here once the mode is not
- * Captured, so the credentials are never read first. See docs/adr/0013.
+ * Authenticates with XOAUTH2 as a service account granted domain-wide
+ * delegation over hello@ (scope `https://mail.google.com/`), so there is no
+ * App Password to rotate and no consent-screen refresh token to expire.
+ * `GMAIL_SERVICE_ACCOUNT_KEY` is the downloaded JSON key file, whole — its
+ * `client_id` and `private_key` are what nodemailer needs. Mail-scoped on
+ * purpose: the events calendar uses a different service account under
+ * `GOOGLE_SERVICE_ACCOUNT_KEY`.
+ *
+ * `deliver()` decides the mode and only calls back here once it is not
+ * Captured; with `SMTP_HOST` set on a checkout, mail goes to that local sink
+ * instead of Gmail (docs/adr/0013).
  */
 
-export type SendEmailInput = {
+export type Envelope = {
 	to: string;
-	subject: string;
-	text: string;
 	/** Copies the acting admin, per the "Copy me on this email" checkbox. */
 	cc?: string | null;
 };
 
+/** An envelope with a rendered template in it, which is all `send` needs. */
+type Message = Envelope & RenderedEmail;
+
 export function emailConfigured(): boolean {
 	return Boolean(
-		process.env.GOOGLE_SMTP_USER && process.env.GOOGLE_SMTP_APP_PASSWORD,
+		process.env.SMTP_HOST ||
+		(process.env.GOOGLE_SMTP_USER && process.env.GMAIL_SERVICE_ACCOUNT_KEY),
 	);
+}
+
+/**
+ * Netlify's UI collapses a pasted PEM onto one line inside the JSON, so
+ * `\n` escapes in the key are restored — a key with literal backslash-n
+ * fails signing with an opaque error.
+ */
+function serviceAccount(): { clientId: string; privateKey: string } | null {
+	try {
+		const parsed: unknown = JSON.parse(
+			process.env.GMAIL_SERVICE_ACCOUNT_KEY ?? '',
+		);
+		if (typeof parsed !== 'object' || parsed === null) return null;
+		const { client_id, private_key } = parsed as Record<string, unknown>;
+		if (typeof client_id !== 'string' || typeof private_key !== 'string') {
+			return null;
+		}
+		return {
+			clientId: client_id,
+			privateKey: private_key.replace(/\\n/g, '\n'),
+		};
+	} catch {
+		return null;
+	}
 }
 
 /** What the admin UI shows above the send buttons. */
@@ -42,6 +78,7 @@ export function emailStatus(): EmailStatus {
 }
 
 let transporter: Transporter | undefined;
+let localTransporter: Transporter | undefined;
 
 /**
  * Pooled, so the daily accrual run reuses a connection across its sends
@@ -63,15 +100,34 @@ export const TRANSPORT_OPTIONS = {
 	socketTimeout: 30_000,
 } as const;
 
-function getTransporter(): Transporter {
+function getTransporter(account: {
+	clientId: string;
+	privateKey: string;
+}): Transporter {
 	transporter ??= nodemailer.createTransport({
 		...TRANSPORT_OPTIONS,
 		auth: {
+			type: 'OAuth2',
 			user: process.env.GOOGLE_SMTP_USER,
-			pass: process.env.GOOGLE_SMTP_APP_PASSWORD,
+			serviceClient: account.clientId,
+			privateKey: account.privateKey,
 		},
 	});
 	return transporter;
+}
+
+/**
+ * A local-only SMTP sink such as Mailpit: unauthenticated, no TLS, nothing
+ * else in common with `TRANSPORT_OPTIONS` — that config is Gmail-specific.
+ */
+function getLocalTransporter(host: string): Transporter {
+	localTransporter ??= nodemailer.createTransport({
+		host,
+		port: Number(process.env.SMTP_PORT) || 1025,
+		secure: false,
+		ignoreTLS: true,
+	});
+	return localTransporter;
 }
 
 /**
@@ -100,12 +156,25 @@ function bareAddress(value: string): string {
 	return (match ? match[1] : value).trim().toLowerCase();
 }
 
-export function sendEmail(input: SendEmailInput): Promise<Outbound> {
+export async function sendEmail<P extends object>(
+	template: EmailTemplate<P>,
+	props: P,
+	envelope: Envelope,
+): Promise<Outbound> {
+	const input: Message = {
+		...envelope,
+		...(await renderEmail(template, props)),
+	};
 	return deliver({
 		kind: 'email',
 		target: input.to,
 		body: input.text,
-		details: { cc: input.cc || undefined, subject: input.subject },
+		// The cc is the acting maintainer's address; masked wherever it is
+		// logged, since a deploy's log names nobody (docs/adr/0013).
+		details: {
+			cc: input.cc ? maskAddress(input.cc) : undefined,
+			subject: input.subject,
+		},
 		unreachable: 'the mail server',
 		isTimeout: isSmtpTimeout,
 		live: (delivery) => send(input, delivery),
@@ -113,7 +182,7 @@ export function sendEmail(input: SendEmailInput): Promise<Outbound> {
 }
 
 async function send(
-	input: SendEmailInput,
+	input: Message,
 	delivery: Exclude<EmailDelivery, { mode: 'captured' }>,
 ): Promise<Outbound> {
 	if (!emailConfigured()) {
@@ -121,32 +190,43 @@ async function send(
 			ok: false,
 			definitelyNotSent: true,
 			message:
-				'Email is not configured (GOOGLE_SMTP_USER / GOOGLE_SMTP_APP_PASSWORD).',
+				'Email is not configured (GOOGLE_SMTP_USER / GMAIL_SERVICE_ACCOUNT_KEY, or SMTP_HOST).',
 		};
 	}
 
-	const from = `Virtual Coffee <${process.env.GOOGLE_SMTP_USER}>`;
+	// Local skips Gmail entirely — there is no service account to check, and
+	// GOOGLE_SMTP_USER is only cosmetic (the From address) rather than required.
+	let sendingTransporter: Transporter;
+	if (delivery.mode === 'local') {
+		sendingTransporter = getLocalTransporter(delivery.host);
+	} else {
+		const account = serviceAccount();
+		if (!account) {
+			return {
+				ok: false,
+				definitelyNotSent: true,
+				message:
+					'GMAIL_SERVICE_ACCOUNT_KEY is not a service account key file (expected JSON with client_id and private_key).',
+			};
+		}
+		sendingTransporter = getTransporter(account);
+	}
 
-	// Redirected: one address gets everything, the intended recipient is named
-	// in the subject and a header, and no cc — the point is that only the
-	// maintainer who set EMAIL_REDIRECT_TO receives anything.
-	const to = delivery.mode === 'redirected' ? delivery.redirectTo : input.to;
-	const cc = delivery.mode === 'redirected' ? undefined : input.cc || undefined;
-	const subject =
-		delivery.mode === 'redirected'
-			? `[to: ${input.to}] ${input.subject}`
-			: input.subject;
+	const from = `Virtual Coffee <${process.env.GOOGLE_SMTP_USER || 'dev@localhost'}>`;
 
-	const info = await getTransporter().sendMail({
+	// Local addresses exactly as Live would: the point of a local sink is
+	// seeing what production would actually send.
+	const to = input.to;
+	const cc = input.cc || undefined;
+
+	const info = await sendingTransporter.sendMail({
 		from,
 		to,
 		cc,
-		subject,
+		subject: input.subject,
+		html: input.html,
 		text: input.text,
-		replyTo: process.env.GOOGLE_SMTP_USER,
-		...(delivery.mode === 'redirected'
-			? { headers: { 'X-Original-To': input.to } }
-			: {}),
+		replyTo: process.env.GOOGLE_SMTP_USER || undefined,
 	});
 
 	// nodemailer only resolves with rejections when at least one address
@@ -169,11 +249,11 @@ async function send(
 		};
 	}
 
-	if (delivery.mode === 'redirected') {
+	if (delivery.mode === 'local') {
 		return {
 			ok: true,
 			message: 'Sent.',
-			warning: `Redirected to ${delivery.redirectTo} (${delivery.context}) instead of ${input.to}.`,
+			warning: `Sent to local SMTP sink at ${delivery.host}:${Number(process.env.SMTP_PORT) || 1025} (${delivery.context}) — not delivered outside this machine.`,
 		};
 	}
 	return { ok: true, message: 'Sent.' };

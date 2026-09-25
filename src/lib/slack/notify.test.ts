@@ -43,11 +43,9 @@ describe('notifySlack', () => {
 			warning: 'Captured, not posted to Slack (deploy-preview).',
 		});
 		expect(fetch).not.toHaveBeenCalled();
-		// The captured body is the payload itself, so the log shows what would
-		// have been posted.
+		// On a deploy the text is not logged (outbound.test.ts has the shape).
 		expect(info).toHaveBeenCalledWith(
 			'[slack captured] deploy-preview membership',
-			`\n${JSON.stringify(HI, null, 2)}`,
 		);
 		info.mockRestore();
 	});

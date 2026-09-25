@@ -9,7 +9,6 @@ describe('emailDelivery', () => {
 		'CONTEXT=%s is captured',
 		(context) => {
 			vi.stubEnv('CONTEXT', context);
-			vi.stubEnv('EMAIL_REDIRECT_TO', undefined);
 			expect(emailDelivery()).toEqual({
 				mode: 'captured',
 				context: context ?? 'local',
@@ -22,43 +21,57 @@ describe('emailDelivery', () => {
 		expect(emailDelivery()).toEqual({ mode: 'live' });
 	});
 
-	test('EMAIL_REDIRECT_TO redirects outside production', () => {
-		vi.stubEnv('CONTEXT', 'deploy-preview');
-		vi.stubEnv('EMAIL_REDIRECT_TO', ' maintainer@example.test ');
-		expect(emailDelivery()).toEqual({
-			mode: 'redirected',
-			context: 'deploy-preview',
-			redirectTo: 'maintainer@example.test',
-		});
-	});
+	test.each(['dev', undefined])(
+		'SMTP_HOST is local on a checkout (CONTEXT=%s)',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			vi.stubEnv('SMTP_HOST', 'localhost');
+			expect(emailDelivery()).toEqual({
+				mode: 'local',
+				context: context ?? 'local',
+				host: 'localhost',
+			});
+		},
+	);
 
-	test('EMAIL_REDIRECT_TO is ignored in production', () => {
+	// The ADR's promise that nothing leaves the machine is enforced, not trusted.
+	test.each(['smtp.gmail.com', 'mailpit', '192.168.1.20'])(
+		'SMTP_HOST=%s is not a sink, so a checkout stays captured',
+		(host) => {
+			vi.stubEnv('CONTEXT', 'dev');
+			vi.stubEnv('SMTP_HOST', host);
+			expect(emailDelivery()).toEqual({ mode: 'captured', context: 'dev' });
+		},
+	);
+
+	test.each(['127.0.0.1', '::1', '[::1]', 'LOCALHOST', ' localhost '])(
+		'SMTP_HOST=%j is a loopback sink',
+		(host) => {
+			vi.stubEnv('CONTEXT', 'dev');
+			vi.stubEnv('SMTP_HOST', host);
+			expect(emailDelivery()).toEqual({
+				mode: 'local',
+				context: 'dev',
+				host: host.trim(),
+			});
+		},
+	);
+
+	test('SMTP_HOST is ignored in production', () => {
 		vi.stubEnv('CONTEXT', 'production');
-		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+		vi.stubEnv('SMTP_HOST', 'localhost');
 		expect(emailDelivery()).toEqual({ mode: 'live' });
 	});
 
-	test('a blank EMAIL_REDIRECT_TO is no redirect', () => {
-		vi.stubEnv('CONTEXT', 'dev');
-		vi.stubEnv('EMAIL_REDIRECT_TO', '  ');
-		expect(emailDelivery()).toMatchObject({ mode: 'captured' });
-	});
-
-	test('a multi-address EMAIL_REDIRECT_TO is captured, not redirected', () => {
-		vi.stubEnv('CONTEXT', 'deploy-preview');
-		vi.stubEnv(
-			'EMAIL_REDIRECT_TO',
-			'maintainer@example.test, other@example.test',
-		);
-		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-		expect(emailDelivery()).toEqual({
-			mode: 'captured',
-			context: 'deploy-preview',
-		});
-		expect(warn).toHaveBeenCalledOnce();
-		warn.mockRestore();
-	});
+	// A deploy's SMTP_HOST would be a host real applicants' mail can reach.
+	test.each(['deploy-preview', 'branch-deploy'])(
+		'SMTP_HOST is ignored on a deploy (CONTEXT=%s)',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			vi.stubEnv('SMTP_HOST', 'smtp.example.test');
+			expect(emailDelivery()).toEqual({ mode: 'captured', context });
+		},
+	);
 });
 
 describe('notifyDelivery', () => {
@@ -84,24 +97,60 @@ describe('notifyDelivery', () => {
 });
 
 describe('capture', () => {
-	test('names the kind, deploy and target, then the whole body', () => {
-		vi.stubEnv('CONTEXT', 'deploy-preview');
-		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+	const body = [
+		'Hello Ada,',
+		'Your invite: https://virtualcoffee.io/join-slack?code=abc123.',
+		'Questions? https://virtualcoffee.io/faq and https://virtualcoffee.io/faq again.',
+	].join('\n');
 
-		capture('slack', 'membership', 'hi');
-		expect(info).toHaveBeenLastCalledWith(
-			'[slack captured] deploy-preview membership',
-			'\nhi',
-		);
+	test.each(['dev', undefined])(
+		'locally (CONTEXT=%s) the whole body goes to the log',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 
-		capture('email', 'a@example.test', 'body', { subject: 'Hello' });
-		expect(info).toHaveBeenLastCalledWith(
-			'[email captured] deploy-preview a@example.test',
-			{ subject: 'Hello' },
-			'\nbody',
-		);
-		info.mockRestore();
-	});
+			capture('slack', 'membership', 'hi');
+			expect(info).toHaveBeenLastCalledWith(
+				`[slack captured] ${context ?? 'local'} membership`,
+				'\nhi',
+			);
+
+			capture('email', 'ada@example.test', body, { subject: 'Hello' });
+			expect(info).toHaveBeenLastCalledWith(
+				`[email captured] ${context ?? 'local'} ada@example.test`,
+				{ subject: 'Hello' },
+				`\n${body}`,
+			);
+			info.mockRestore();
+		},
+	);
+
+	/**
+	 * A deploy's message is about a real person and the log outlives the
+	 * walkthrough (docs/adr/0007), so it gets the address masked, the details,
+	 * and each link once — enough to follow the invite, nothing to read.
+	 */
+	test.each(['deploy-preview', 'branch-deploy'])(
+		'on a deploy (CONTEXT=%s) only the masked target, details and links',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+			capture('email', 'ada@example.test', body, { subject: 'Hello' });
+			expect(info).toHaveBeenLastCalledWith(
+				`[email captured] ${context} a•••@example.test`,
+				{ subject: 'Hello' },
+				'\nhttps://virtualcoffee.io/join-slack?code=abc123',
+				'\nhttps://virtualcoffee.io/faq',
+			);
+
+			capture('slack', 'C0123', 'A new report from Ada');
+			expect(info).toHaveBeenLastCalledWith(
+				`[slack captured] ${context} C0123`,
+			);
+			info.mockRestore();
+		},
+	);
 });
 
 describe('deliver', () => {
@@ -132,10 +181,10 @@ describe('deliver', () => {
 			warning: 'Captured, not posted to Slack (deploy-preview).',
 		});
 		expect(live).not.toHaveBeenCalled();
+		// A deploy's line names nobody and carries no body; `capture` pins that.
 		expect(info).toHaveBeenCalledWith(
 			'[slack captured] deploy-preview membership',
 			{ subject: 'Hello' },
-			'\nhi',
 		);
 		info.mockRestore();
 	});
@@ -209,7 +258,7 @@ describe('deliver', () => {
 		expect(live).toHaveBeenCalledWith({ mode: 'live' });
 
 		vi.stubEnv('CONTEXT', 'dev');
-		vi.stubEnv('EMAIL_REDIRECT_TO', 'maintainer@example.test');
+		vi.stubEnv('SMTP_HOST', 'localhost');
 		await deliver({
 			kind: 'email',
 			target: 'a@example.test',
@@ -218,9 +267,9 @@ describe('deliver', () => {
 			live,
 		});
 		expect(live).toHaveBeenLastCalledWith({
-			mode: 'redirected',
+			mode: 'local',
 			context: 'dev',
-			redirectTo: 'maintainer@example.test',
+			host: 'localhost',
 		});
 	});
 
