@@ -12,8 +12,10 @@ import {
 
 import { failInserts } from '@/test/db/fixtures';
 
-import { failedNotifications } from './submissions';
-import { notifyAndRecord, persistSubmission } from './submitSubmission';
+import { notifyAndRecord } from '@/lib/history/eventLog';
+
+import { failedNotifications, submissionSubject } from './submissions';
+import { persistSubmission } from './submitSubmission';
 
 const NOTIFIED = { channel: 'slack' as const, what: 'Notified' };
 
@@ -40,7 +42,7 @@ async function eventsFor(id: string) {
 describe('notifyAndRecord', () => {
 	test('a delivered notification is recorded as sent', async () => {
 		const id = await insertCocReport();
-		await notifyAndRecord('coc', id, NOTIFIED, async () => ({
+		await notifyAndRecord(submissionSubject('coc', id), NOTIFIED, async () => ({
 			ok: true,
 			message: 'Posted to #coc',
 		}));
@@ -57,7 +59,7 @@ describe('notifyAndRecord', () => {
 	test('a failed notification is recorded, and never thrown', async () => {
 		const id = await insertCocReport();
 		await expect(
-			notifyAndRecord('coc', id, NOTIFIED, async () => ({
+			notifyAndRecord(submissionSubject('coc', id), NOTIFIED, async () => ({
 				ok: false,
 				definitelyNotSent: true,
 				message: 'Slack rejected the message (404).',
@@ -74,7 +76,7 @@ describe('notifyAndRecord', () => {
 	test('a notifier that throws is treated the same as one that fails', async () => {
 		const id = await insertCocReport();
 		await expect(
-			notifyAndRecord('coc', id, NOTIFIED, async () => {
+			notifyAndRecord(submissionSubject('coc', id), NOTIFIED, async () => {
 				throw new Error('fetch failed');
 			}),
 		).resolves.toBeUndefined();
@@ -86,15 +88,23 @@ describe('notifyAndRecord', () => {
 	test('what the /admin banner counts', async () => {
 		const failed = await insertCocReport();
 		const fine = await insertCocReport();
-		await notifyAndRecord('coc', failed, NOTIFIED, async () => ({
-			ok: false,
-			definitelyNotSent: true,
-			message: 'x',
-		}));
-		await notifyAndRecord('coc', fine, NOTIFIED, async () => ({
-			ok: true,
-			message: 'x',
-		}));
+		await notifyAndRecord(
+			submissionSubject('coc', failed),
+			NOTIFIED,
+			async () => ({
+				ok: false,
+				definitelyNotSent: true,
+				message: 'x',
+			}),
+		);
+		await notifyAndRecord(
+			submissionSubject('coc', fine),
+			NOTIFIED,
+			async () => ({
+				ok: true,
+				message: 'x',
+			}),
+		);
 
 		// Kinds with nothing failed are omitted, so the banner has nothing to say.
 		await expect(failedNotifications(['coc', 'volunteers'])).resolves.toEqual({
@@ -127,14 +137,18 @@ describe('notifyAndRecord', () => {
 			definitelyNotSent: true,
 			message: 'x',
 		});
-		await notifyAndRecord('coc', seen, NOTIFIED, fail);
-		await notifyAndRecord('coc', partly, NOTIFIED, fail);
+		await notifyAndRecord(submissionSubject('coc', seen), NOTIFIED, fail);
+		await notifyAndRecord(submissionSubject('coc', partly), NOTIFIED, fail);
 		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });
 
-		await notifyAndRecord('coc', partly, NOTIFIED, async () => ({
-			ok: true,
-			message: 'x',
-		}));
+		await notifyAndRecord(
+			submissionSubject('coc', partly),
+			NOTIFIED,
+			async () => ({
+				ok: true,
+				message: 'x',
+			}),
+		);
 		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });
 
 		await db()
@@ -149,8 +163,7 @@ describe('notifyAndRecord', () => {
 		// An id no row has: the event insert fails its foreign key.
 		await expect(
 			notifyAndRecord(
-				'coc',
-				'0199404c-2c5e-7000-8000-000000000000',
+				submissionSubject('coc', '0199404c-2c5e-7000-8000-000000000000'),
 				NOTIFIED,
 				async () => ({
 					ok: true,

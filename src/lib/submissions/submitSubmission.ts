@@ -1,11 +1,5 @@
 import { db, type Transaction } from '@/db';
-import {
-	recordEvent,
-	recordOutcome,
-	type ChannelOf,
-	type SubmissionSubject,
-} from '@/lib/history/eventLog';
-import type { Outbound } from '@/lib/outbound';
+import { recordEvent } from '@/lib/history/eventLog';
 import {
 	SUBMISSION_KINDS,
 	submissionSubject,
@@ -50,37 +44,4 @@ export async function persistSubmission(
 		console.error(`${SUBMISSION_KINDS[kind].singular} failed to save`, error);
 		return { error: formError(copy.failed) };
 	}
-}
-
-/**
- * Announce a Submission, and record what happened either way. Called *after*
- * the row is committed — persist first, notify second — and never throws.
- * See docs/adr/0005.
- */
-export async function notifyAndRecord(
-	kind: SubmissionKind,
-	submissionId: string,
-	input: { channel: ChannelOf<SubmissionSubject>; what: string },
-	notify: () => Promise<Outbound>,
-): Promise<void> {
-	let outcome: Outbound;
-
-	try {
-		outcome = await notify();
-	} catch (error) {
-		outcome = {
-			ok: false,
-			definitelyNotSent: true,
-			message:
-				error instanceof Error
-					? error.message
-					: 'The notification threw unexpectedly.',
-		};
-	}
-
-	await recordOutcome(submissionSubject(kind, submissionId), {
-		channel: input.channel,
-		outbound: outcome,
-		what: input.what,
-	});
 }

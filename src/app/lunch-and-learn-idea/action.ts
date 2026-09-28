@@ -8,10 +8,9 @@ import { db, lunchAndLearnIdea } from '@/db';
 import { submissionPath } from '@/lib/admin/links';
 import { createLunchAndLearnIssue } from '@/lib/github/issues';
 import { lunchAndLearnMessage, notifySlack } from '@/lib/slack/notify';
-import {
-	notifyAndRecord,
-	persistSubmission,
-} from '@/lib/submissions/submitSubmission';
+import { notifyAndRecord } from '@/lib/history/eventLog';
+import { submissionSubject } from '@/lib/submissions/submissions';
+import { persistSubmission } from '@/lib/submissions/submitSubmission';
 import { agree, email, name } from '@/util/forms/fields';
 import { intake, savingFailed } from '@/util/forms/intake';
 import { siteUrl } from '@/util/url.server';
@@ -80,8 +79,7 @@ export async function submitLunchAndLearnIdea(
 	let issueUrl: string | null = null;
 	const adminUrl = `${siteUrl()}${submissionPath('lunch-and-learn', saved.id)}`;
 	await notifyAndRecord(
-		'lunch-and-learn',
-		saved.id,
+		submissionSubject('lunch-and-learn', saved.id),
 		{ channel: 'github issue', what: 'Lunch & Learn issue opened on GitHub' },
 		async () => {
 			const issue = await createLunchAndLearnIssue({
@@ -116,8 +114,7 @@ export async function submitLunchAndLearnIdea(
 	);
 
 	await notifyAndRecord(
-		'lunch-and-learn',
-		saved.id,
+		submissionSubject('lunch-and-learn', saved.id),
 		{ channel: 'slack', what: 'Slack notified of a Lunch & Learn idea' },
 		() =>
 			notifySlack(

@@ -10,8 +10,7 @@ import { note, notification, type Field, type SlackMessage } from './blocks';
 /**
  * One webhook per destination, so a missing one only silences its own form.
  * The first four share their keys with `SUBMISSION_KINDS`. `membership` is
- * the membership pipeline, not a Submission kind: reach it through
- * `notifySlack` directly, since `notifyAndRecord` writes `submission_event`.
+ * the membership pipeline, not a Submission kind.
  */
 const WEBHOOK_ENV = {
 	coc: 'SLACK_WEBHOOK_COC',

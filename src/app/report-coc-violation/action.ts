@@ -11,10 +11,9 @@ import {
 	type StoredAttachment,
 } from '@/lib/submissions/attachments';
 import { cocReportMessage, notifySlack } from '@/lib/slack/notify';
-import {
-	notifyAndRecord,
-	persistSubmission,
-} from '@/lib/submissions/submitSubmission';
+import { notifyAndRecord } from '@/lib/history/eventLog';
+import { submissionSubject } from '@/lib/submissions/submissions';
+import { persistSubmission } from '@/lib/submissions/submitSubmission';
 import { agree, email, name } from '@/util/forms/fields';
 import { intake, savingFailed } from '@/util/forms/intake';
 import { invalidFields } from '@/util/forms/parse';
@@ -109,8 +108,7 @@ export async function submitCocReport(
 	}
 
 	await notifyAndRecord(
-		'coc',
-		saved.id,
+		submissionSubject('coc', saved.id),
 		{ channel: 'slack', what: 'Slack notified of a CoC report' },
 		async () => {
 			return notifySlack(

@@ -6,10 +6,9 @@ import { z } from 'zod';
 import { coffeeTableGroupRequest } from '@/db';
 import { submissionPath } from '@/lib/admin/links';
 import { coffeeTableGroupMessage, notifySlack } from '@/lib/slack/notify';
-import {
-	notifyAndRecord,
-	persistSubmission,
-} from '@/lib/submissions/submitSubmission';
+import { notifyAndRecord } from '@/lib/history/eventLog';
+import { submissionSubject } from '@/lib/submissions/submissions';
+import { persistSubmission } from '@/lib/submissions/submitSubmission';
 import { agree, email, name } from '@/util/forms/fields';
 import { intake, savingFailed } from '@/util/forms/intake';
 import type { FormState } from '@/util/forms/types';
@@ -65,8 +64,7 @@ export async function submitCoffeeTableGroupRequest(
 	if ('error' in saved) return saved.error;
 
 	await notifyAndRecord(
-		'coffee-tables',
-		saved.id,
+		submissionSubject('coffee-tables', saved.id),
 		{
 			channel: 'slack',
 			what: 'Slack notified of a Coffee Table group request',
