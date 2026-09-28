@@ -1,9 +1,8 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 
-import type { SubmissionStatus } from '@/db';
-import { isId } from '@/db/ids';
 import type { ActionResult } from '@/lib/admin/actionResult';
 import { checkNote } from '@/lib/admin/notes';
 import { actorId, requirePermission } from '@/lib/access/adminAccess';
@@ -17,6 +16,8 @@ import {
 	type SubmissionKind,
 } from '@/lib/submissions/submissions';
 import { STATUS_ORDER } from './presentation';
+
+const statusSchema = z.enum(STATUS_ORDER);
 
 /**
  * Every action re-checks `manage` on the kind's own section rather than
@@ -46,14 +47,9 @@ export async function setSubmissionStatus(
 	const context = await authorise(kind);
 	if (!context) return { ok: false, message: 'Unknown submission type.' };
 
-	if (!STATUS_ORDER.includes(status as SubmissionStatus)) {
-		return { ok: false, message: 'Unknown status.' };
-	}
-
-	const next = status as SubmissionStatus;
-
-	if (!isId(id))
-		return { ok: false, message: 'That submission no longer exists.' };
+	const parsed = statusSchema.safeParse(status);
+	if (!parsed.success) return { ok: false, message: 'Unknown status.' };
+	const next = parsed.data;
 
 	const current = await getSubmission(context.kind, id);
 
@@ -113,7 +109,7 @@ export async function addSubmissionNote(
 	if (!note.ok) return note;
 	// Looked up first: recordEvent() would otherwise throw on the foreign key
 	// for a well-formed id that was deleted underneath the page.
-	if (!isId(id) || !(await getSubmission(context.kind, id)))
+	if (!(await getSubmission(context.kind, id)))
 		return { ok: false, message: 'That submission no longer exists.' };
 
 	await recordEvent(submissionSubject(context.kind, id), {

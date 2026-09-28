@@ -60,7 +60,8 @@ export default async function SubmissionDetailPage({
 	if (!submission) notFound();
 
 	const display = SUBMISSION_DISPLAY[kind];
-	const attachmentKey = submission.attachmentBlobKey as string | null;
+	// The fields are named per kind, so they are read by key.
+	const values: Record<string, unknown> = submission;
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -90,7 +91,7 @@ export default async function SubmissionDetailPage({
 									className={`mb-0${field.long ? ' text-break' : ''}`}
 									style={field.long ? { whiteSpace: 'pre-wrap' } : undefined}
 								>
-									{formatValue(submission[field.key])}
+									{formatValue(values[field.key])}
 								</dd>
 							</div>
 						))}
@@ -99,7 +100,7 @@ export default async function SubmissionDetailPage({
 							<div className="col-12 mb-3">
 								<dt className="small text-body-secondary">Attachment</dt>
 								<dd className="mb-0">
-									{attachmentKey ? (
+									{values.attachmentBlobKey ? (
 										// Served through an authorized route, never a public
 										// blob URL.
 										<a
@@ -107,7 +108,7 @@ export default async function SubmissionDetailPage({
 											rel="noopener noreferrer"
 											target="_blank"
 										>
-											{formatValue(submission.attachmentFilename)}
+											{formatValue(values.attachmentFilename)}
 										</a>
 									) : (
 										'—'

@@ -7,6 +7,7 @@ import {
 	notExists,
 	or,
 	sql,
+	type InferSelectModel,
 } from 'drizzle-orm';
 
 import {
@@ -233,15 +234,12 @@ export function isSubmissionKind(value: string): value is SubmissionKind {
 	return SUBMISSION_KEYS.includes(value as SubmissionKind);
 }
 
-export type SubmissionRow = Record<string, unknown> & {
-	/** Opaque, and what URLs carry. */
-	id: string;
-	/** The number shown to maintainers. Never put this in a URL. */
-	reference: number;
-	status: SubmissionStatus;
-	submittedAt: Date;
-	closedAt: Date | null;
-};
+/**
+ * One stored Submission of a kind. `id` is what URLs carry; `reference` is
+ * the number shown to maintainers and never goes in a URL (ADR 0008).
+ */
+export type SubmissionRow<K extends SubmissionKind = SubmissionKind> =
+	InferSelectModel<(typeof SUBMISSION_KINDS)[K]['table']>;
 
 /**
  * The columns a Submission list may be ordered by.
@@ -272,7 +270,7 @@ export async function listSubmissions(
 ): Promise<{ rows: SubmissionRow[]; rowCount: number }> {
 	const { table } = SUBMISSION_KINDS[kind];
 
-	const { rows, rowCount } = await pagedList(table, {
+	return pagedList(table, {
 		where: options.statuses?.length
 			? inArray(table.status, options.statuses)
 			: undefined,
@@ -284,17 +282,24 @@ export async function listSubmissions(
 		direction: options.direction ?? 'desc',
 		page: options.page ?? 0,
 	});
-
-	return { rows: rows as unknown as SubmissionRow[], rowCount };
 }
 
+export function getSubmission<K extends SubmissionKind>(
+	kind: K,
+	id: string,
+): Promise<SubmissionRow<K> | null>;
+// The plain signature last: `withStaleRead` checks the last one, and cannot
+// match a generic.
+export function getSubmission(
+	kind: SubmissionKind,
+	id: string,
+): Promise<SubmissionRow | null>;
 export async function getSubmission(
 	kind: SubmissionKind,
 	id: string,
 ): Promise<SubmissionRow | null> {
-	const { table } = SUBMISSION_KINDS[kind];
-
 	if (!isId(id)) return null;
+	const { table } = SUBMISSION_KINDS[kind];
 
 	const [row] = await db()
 		.select()
@@ -302,7 +307,7 @@ export async function getSubmission(
 		.where(eq(table.id, id))
 		.limit(1);
 
-	return (row as unknown as SubmissionRow) ?? null;
+	return row ?? null;
 }
 
 /** Counts per status, for the filter chips on a list screen. */

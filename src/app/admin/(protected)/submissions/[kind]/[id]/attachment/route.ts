@@ -28,7 +28,7 @@ export async function GET(
 	if (!isId(id)) notFound();
 
 	const report = await getSubmission('coc', id);
-	const key = report?.attachmentBlobKey as string | null | undefined;
+	const key = report?.attachmentBlobKey;
 
 	if (!key) notFound();
 
@@ -36,12 +36,12 @@ export async function GET(
 	if (!stored) notFound();
 
 	const filename =
-		(report?.attachmentFilename as string | null) ??
+		report?.attachmentFilename ??
 		(stored.metadata.filename as string | undefined) ??
 		'attachment';
 
 	const contentType =
-		(report?.attachmentContentType as string | null) ??
+		report?.attachmentContentType ??
 		(stored.metadata.contentType as string | undefined) ??
 		'application/octet-stream';
 
