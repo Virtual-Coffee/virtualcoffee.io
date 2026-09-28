@@ -4,8 +4,8 @@
  * so a new kind is appended, never renamed. ADR 0014.
  *
  * Its own module because the admin forms (client components) need the list
- * and `eventsCalendar.ts` pulls the Google client in; import from there on
- * the server, from here in the browser.
+ * and `eventsCalendar.ts` pulls the Google client in; the server and the
+ * browser both import it from here.
  */
 export const EVENT_TYPES = [
 	'virtual-coffee',

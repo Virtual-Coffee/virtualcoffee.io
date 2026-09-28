@@ -46,11 +46,11 @@ function revalidate() {
  * Every write goes through `deliver()`: the Delivery Mode first
  * (docs/adr/0013), then the calendar, then the caches. `label` is a literal
  * naming the operation — the only thing logged, so nothing a maintainer typed
- * reaches the log; `write` returns the success message.
+ * reaches the log; `apply` returns the success message.
  */
 function write(
 	label: string,
-	write: (calendar: EventsCalendar) => Promise<string>,
+	apply: (calendar: EventsCalendar) => Promise<string>,
 ): Promise<ActionResult> {
 	return deliver({
 		kind: 'calendar',
@@ -63,7 +63,7 @@ function write(
 				return { ok: false, definitelyNotSent: true, message: NOT_CONFIGURED };
 			}
 			try {
-				const message = await write(calendar);
+				const message = await apply(calendar);
 				revalidate();
 				return { ok: true, message };
 			} catch (error) {
