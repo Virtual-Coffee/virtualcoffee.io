@@ -33,12 +33,27 @@ function metaLine({
 	) : null;
 }
 
+/** The Slack post for this application failed; docs/adr/0005. */
+function UnannouncedBadge() {
+	return (
+		<span
+			className="badge text-bg-warning ms-2"
+			title="The Slack announcement failed; see the application’s History"
+		>
+			Not announced
+		</span>
+	);
+}
+
 /**
  * The name is a button so the drawer is reachable from the keyboard; the row
  * click is the pointer shortcut, not the only way in. Built per open handler,
  * as the submissions table builds per base path.
  */
-const buildColumns = (open: (id: string) => void) =>
+const buildColumns = (
+	open: (id: string) => void,
+	unannounced: ReadonlySet<string>,
+) =>
 	helper.columns([
 		helper.accessor('name', {
 			header: 'Name',
@@ -51,6 +66,7 @@ const buildColumns = (open: (id: string) => void) =>
 					>
 						{row.original.name}
 					</button>
+					{unannounced.has(row.original.id) && <UnannouncedBadge />}
 					{metaLine(row.original)}
 				</div>
 			),
@@ -86,8 +102,12 @@ const buildColumns = (open: (id: string) => void) =>
 		}),
 	]);
 
+const NONE: string[] = [];
+
 type Props = {
 	rows: MembershipApplication[];
+	/** Ids among `rows` whose Slack announcement failed; the queue only. */
+	unannounced?: string[];
 	rowCount: number;
 	page: number;
 	pageSize: number;
@@ -97,6 +117,7 @@ type Props = {
 
 export function ApplicationsTable({
 	rows,
+	unannounced = NONE,
 	rowCount,
 	page,
 	pageSize,
@@ -104,7 +125,10 @@ export function ApplicationsTable({
 	direction,
 }: Props) {
 	const [openId, setOpenId] = useState<string | null>(null);
-	const columns = useMemo(() => buildColumns(setOpenId), []);
+	const columns = useMemo(
+		() => buildColumns(setOpenId, new Set(unannounced)),
+		[unannounced],
+	);
 
 	const { table, pagination } = useServerPagedTable({
 		columns,
@@ -210,7 +234,10 @@ export function ApplicationsTable({
 					<li key={row.id} className="border-bottom py-3">
 						<div className="d-flex justify-content-between align-items-start gap-2">
 							<div>
-								<div className="fw-semibold">{row.name}</div>
+								<div className="fw-semibold">
+									{row.name}
+									{unannounced.includes(row.id) && <UnannouncedBadge />}
+								</div>
 								{metaLine(row)}
 							</div>
 							<SourceBadge source={row.source} />

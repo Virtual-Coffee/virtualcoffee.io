@@ -1,6 +1,7 @@
-import { and, desc, eq, ilike, inArray, or } from 'drizzle-orm';
+import { and, count, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
 
 import {
+	applicationEvent,
 	db,
 	invite,
 	membershipApplication,
@@ -99,6 +100,61 @@ export async function listApplications(
 /** Counts for the queue's filter chips. */
 export async function statusCounts(): Promise<Record<string, number>> {
 	return countByStatus(membershipApplication);
+}
+
+/**
+ * The application's latest Slack announcement failed. Stored but never
+ * announced is the failure mode docs/adr/0005 accepts, so it has to be visible.
+ *
+ * The latest attempt rather than any, so a later success clears it; and only
+ * where an attempt was recorded, because imported applications were never
+ * announced by this site and would otherwise all be flagged.
+ */
+function announcementFailed() {
+	const latest = db()
+		.select({ type: applicationEvent.type })
+		.from(applicationEvent)
+		.where(
+			and(
+				eq(applicationEvent.applicationId, membershipApplication.id),
+				inArray(applicationEvent.type, [
+					'notification_sent',
+					'notification_failed',
+				]),
+			),
+		)
+		.orderBy(desc(applicationEvent.createdAt), desc(applicationEvent.id))
+		.limit(1);
+
+	return sql`(${latest}) = 'notification_failed'`;
+}
+
+/** Which of these applications the queue should mark as never announced. */
+export async function unannouncedAmong(ids: string[]): Promise<string[]> {
+	if (ids.length === 0) return [];
+
+	const rows = await db()
+		.select({ id: membershipApplication.id })
+		.from(membershipApplication)
+		.where(and(inArray(membershipApplication.id, ids), announcementFailed()));
+
+	return rows.map((row) => row.id);
+}
+
+/**
+ * How many applications awaiting a first decision were never announced.
+ * Counted only while `waitlisted`, so it clears once a maintainer has moved
+ * the application on.
+ */
+export async function unannouncedCount(): Promise<number> {
+	const [row] = await db()
+		.select({ value: count() })
+		.from(membershipApplication)
+		.where(
+			and(eq(membershipApplication.status, 'waitlisted'), announcementFailed()),
+		);
+
+	return row?.value ?? 0;
 }
 
 /**

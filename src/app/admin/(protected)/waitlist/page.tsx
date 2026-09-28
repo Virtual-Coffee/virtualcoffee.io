@@ -1,7 +1,12 @@
 import Link from 'next/link';
 
 import { requirePermission } from '@/lib/access/adminAccess';
-import { listApplications, statusCounts } from '@/lib/waitlist/applications';
+import {
+	listApplications,
+	statusCounts,
+	unannouncedAmong,
+	unannouncedCount,
+} from '@/lib/waitlist/applications';
 import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import { FilterChips } from '../filterChips';
 import { ApplicationsTable } from './applicationsTable';
@@ -39,13 +44,15 @@ export default async function AdminQueuePage({
 	// does with its own statuses.
 	const filters = { ...parsed, statuses: parsed.statuses ?? QUEUE_STATUSES };
 
-	const [{ rows, rowCount }, counts] = await Promise.all([
+	const [{ rows, rowCount }, counts, unannounced] = await Promise.all([
 		// Volunteer invites sort to the front of the queue no matter what else
 		// is applied; that priority is the point of the invite. Only here: the
 		// archive is history, sorted by whatever column was chosen.
 		listApplications({ ...filters, priorityFirst: true }),
 		statusCounts(),
+		unannouncedCount(),
 	]);
+	const unannouncedIds = await unannouncedAmong(rows.map((row) => row.id));
 
 	const active = oneOf(params.status, QUEUE_STATUSES) ?? 'queue';
 	// Either chip group keeps what the other one, the search and the sort are
@@ -66,6 +73,12 @@ export default async function AdminQueuePage({
 						{counts.waitlisted ?? 0} waiting on a first decision ·{' '}
 						{counts.coffee_invited ?? 0} invited to a Coffee
 					</p>
+					{unannounced > 0 && (
+						<p className="text-warning-emphasis mb-0 small">
+							{unannounced} waiting {unannounced === 1 ? 'was' : 'were'} never
+							announced in Slack
+						</p>
+					)}
 				</div>
 				{/* Keyed on the URL's term so Back/Forward remounts the input with it. */}
 				<QueueSearch
@@ -139,6 +152,7 @@ export default async function AdminQueuePage({
 			) : (
 				<ApplicationsTable
 					rows={rows}
+					unannounced={unannouncedIds}
 					rowCount={rowCount}
 					page={filters.page}
 					pageSize={filters.pageSize}
