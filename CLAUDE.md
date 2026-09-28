@@ -92,7 +92,7 @@ Rules:
 - One-off scripts run through `scripts/with-local-netlify.ts`, which supplies the local connection string and refuses anything non-local.
 - `ADMIN_DEV_BYPASS*` (`.env.example`) signs a local checkout in without Slack; a real session cookie takes precedence over it.
 - A deploy preview is production's data behind production's Slack sign-in; `OAUTH_PROXY_SECRET` holds one value in every Netlify context — `docs/adr/0007`.
-- An admin action that emails sends first and writes the status change only after, reporting whether anything went out; `waitlist/actions.db.test.ts` pins the order.
+- An admin action that emails about a status change sends first and writes the change only after, reporting whether anything went out; `waitlist/actions.db.test.ts` pins the order. Adding a Volunteer writes first — `docs/adr/0010`.
 - Live delivery is `CONTEXT=production` only; everywhere else every email, Slack post and GitHub issue is Captured unless `.env.example` names an opt-in — `docs/adr/0013`. A new sender is a `deliver()` call in `src/lib/outbound.ts`, which decides the mode before the sender can reach its credentials.
 - A Slack post is Block Kit built from `src/lib/slack/blocks.ts`: a typed value is a literal `rich_text` run, mrkdwn is for static copy only — `docs/adr/0016`.
 - `/join` and the four public forms (`/report-coc-violation`, `/volunteer-at-virtual-coffee`, `/lunch-and-learn-idea`, `/start-coffee-table-group`) are `force-dynamic`: the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token that prerendering would bake into cached HTML. Every form action opens with `intake()` (`src/util/forms/intake.ts`), which owns that guard and the schema parse; shared fields are in `src/util/forms/fields.ts`.

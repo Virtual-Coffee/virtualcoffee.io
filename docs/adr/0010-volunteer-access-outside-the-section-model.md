@@ -63,3 +63,7 @@ reach `/invites`, and most who do are members who were told about it.
   how someone accrues Invites they cannot spend — so `/admin/volunteers` writes
   both in one transaction, and `setUserRoles` / `setPendingGrantRoles` preserve
   any Role outside `GRANTABLE_ROLE_NAMES` so "Revoke all" cannot strip it.
+- Adding a Volunteer writes that transaction first and sends the welcome email
+  after, the reverse of the email-first order for a status change: the email
+  reports a grant that already stands, so a failed send is an `email_failed`
+  line in their History, not a failed add.

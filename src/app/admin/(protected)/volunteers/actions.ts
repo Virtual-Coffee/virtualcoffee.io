@@ -164,8 +164,7 @@ export async function addVolunteer(
 		});
 	}
 
-	// Tell them, after the writes and not fatal: they are a Volunteer by now,
-	// and a failed email must not read as a failed grant.
+	// Written first, emailed after: docs/adr/0010.
 	if (!address) {
 		return {
 			ok: true,
