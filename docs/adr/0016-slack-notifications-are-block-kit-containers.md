@@ -45,8 +45,9 @@ blocks under a title, takes a `rich_text` child, and can arrive collapsed.
 - `ContainerBlock` is declared locally until `@slack/types` ships one
   (`3.1.0` has `card` and `table` but not `container`); every other block type
   comes from `@slack/types`.
-- What `deliver()` captures is the **payload JSON**, so the log — local or a
-  deploy's — shows exactly what would have been posted (docs/adr/0013).
+- What `deliver()` captures is the **payload JSON**, so the local log shows
+  exactly what would have been posted and a deploy's link-only line still
+  finds the admin URL (docs/adr/0013).
 
 ## Consequences
 
