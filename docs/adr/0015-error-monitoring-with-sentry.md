@@ -42,15 +42,26 @@ name. With Sentry's GitHub App installed on the `Virtual-Coffee` org that
 gives suspect commits, stack frames that link to GitHub, and `Fixes
 VIRTUALCOFFEE-IO-N` in a commit message resolving the issue when it lands.
 
-**No PII.** `sendDefaultPii` stays at its default and no `dataCollection`
-block is passed — the SDK treats even an empty object as opting the unset
-categories in. Sentry therefore sees stack traces, breadcrumbs and route
-names, not IP addresses, cookies, headers or request bodies. The cost is no
-IP-derived geography on issues; the alternative was a CoC reporter's address
-in a third-party tool.
+**No PII: every runtime passes one restrictive `dataCollection`.** From v11
+the SDK collects cookies, headers, request and response bodies and user info
+whenever `dataCollection` is unset, so leaving it out is the permissive
+choice. `src/sentryDataCollection.ts` holds the baseline all three init files
+import (no user info, cookies, bodies, database or queue data, and IP-bearing
+headers and query params denied), and a test pins its values. Sentry
+therefore sees stack traces, breadcrumbs and route names, not IP addresses,
+cookies, headers or request bodies. The cost is no IP-derived geography on
+issues; the alternative was a CoC reporter's address in a third-party tool.
+
+Server stack traces keep local variable values (`includeLocalVariables`, with
+`stackFrameVariables: true` in the baseline). That is a deliberate trade-off:
+a throw inside the CoC report action could carry report text in a frame's
+variables, and we accept it for readable server errors.
 
 **Traces are sampled at 25% in production, 100% in development.** Enough to
 see route timings on a low-traffic site without a bot wave burning the quota.
+Spans stream to Sentry as they finish (the v11 default) rather than being
+buffered per transaction; nothing here hooks `beforeSendTransaction` or
+`ignoreTransactions`, which that model no longer runs.
 
 **Browser noise from code we don't ship is tagged, not dropped.** The build
 marks our bundles with an `applicationKey` and `thirdPartyErrorFilterIntegration`
@@ -74,10 +85,12 @@ the client-side half of the picture disappears.
 
 ## Consequences
 
-- A new external service must not be reported to: CoC report contents, form
-  submissions and visitor identity stay out of Sentry unless someone passes
-  `dataCollection` or `sendDefaultPii`. Reviewers should treat either as a
-  policy change, not a config tweak.
+- CoC report contents, form submissions and visitor identity stay out of
+  Sentry only while every `Sentry.init` passes the shared `dataCollection`.
+  An init without it, or a loosened baseline, is a policy change, not a
+  config tweak; the pinning test fails on the second.
+- An SDK major can move these defaults again: read the data-collection
+  section of its migration guide before bumping.
 - Adding a signal (replay, logs, profiling) is a change to the relevant init
   file and a fresh look at quota and privacy; it is not blocked by anything
   here.

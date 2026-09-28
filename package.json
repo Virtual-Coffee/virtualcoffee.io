@@ -50,7 +50,7 @@
 		"@next/mdx": "16.3.6",
 		"@octokit/auth-app": "^8.3.1",
 		"@octokit/rest": "^22.0.1",
-		"@sentry/nextjs": "^10.75.3",
+		"@sentry/nextjs": "^11.0.0",
 		"@sindresorhus/slugify": "^3.0.1",
 		"@slack/web-api": "^8.1.1",
 		"@tanstack/react-table": "^9.2.4",

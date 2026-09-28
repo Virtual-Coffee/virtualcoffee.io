@@ -138,7 +138,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 Sentry (`@sentry/nextjs`), errors + tracing only. Init files: `src/instrumentation-client.ts` (browser), `sentry.server.config.ts`, `sentry.edge.config.ts` (dispatched from `src/instrumentation.ts`), and `src/app/global-error.tsx` for a root-layout crash. `next.config.mjs` wraps the config in `withSentryConfig` (org `virtual-coffee-nw`, project `virtualcoffee-io`), which uploads source maps after the Turbopack build when `SENTRY_AUTH_TOKEN` is set — Netlify's build env only — and rewrites `/monitoring` as the event tunnel.
 
 - Off without `NEXT_PUBLIC_SENTRY_DSN`; Netlify sets it for every deploy context, `.env` locally is opt-in.
-- Never pass `dataCollection` or `sendDefaultPii`: the CoC report form must not reach Sentry. Rationale in `docs/adr/0015-error-monitoring-with-sentry.md`.
+- Every `Sentry.init` passes `dataCollection` from `src/sentryDataCollection.ts` (v11 is permissive when it's unset); loosening it is a policy change. The CoC report form must not reach Sentry. Rationale in `docs/adr/0015-error-monitoring-with-sentry.md`.
 - `environment` is the Netlify `CONTEXT`, inlined as `NEXT_PUBLIC_SENTRY_ENVIRONMENT` in `next.config.mjs`.
 - Errors with frames outside our bundles are tagged `third_party_code:true`, not dropped (`applicationKey` in `next.config.mjs` must match `filterKeys`); only Netlify's RUM beacon failure is dropped. See ADR 0015.
 - Releases are commit SHAs with commits and Netlify deploys attached by the build; `Fixes VIRTUALCOFFEE-IO-N` in a commit message resolves that Sentry issue on merge.
