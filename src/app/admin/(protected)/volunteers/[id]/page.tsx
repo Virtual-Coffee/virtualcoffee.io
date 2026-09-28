@@ -243,8 +243,9 @@ export default async function VolunteerDetailPage({
 						<div className="card-body">
 							<h2 className="h6 text-body-secondary">Volunteering</h2>
 							<p className="small text-body-secondary">
-								Pausing removes their access to /invites and stops the monthly
-								invite. Their Invite Allowance and History are kept.
+								{volunteer.deactivatedAt === null
+									? 'Pausing removes their access to /invites and stops the monthly invite. Their Invite Allowance and History are kept.'
+									: 'Restarting gives them back /invites and the monthly invite from the 1st. Their Invite Allowance and History carry on where they left off.'}
 							</p>
 							{canManage ? (
 								<ActiveToggle

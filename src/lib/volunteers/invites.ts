@@ -592,7 +592,7 @@ export async function importBalance(
 			slackUserId: input.slackUserId,
 			delta: input.credit,
 			reason: 'imported',
-			body: `Balance carried over from Airtable (${input.airtableRecordId})`,
+			body: `Invite Allowance carried over from Airtable (${input.airtableRecordId})`,
 			...(input.at ? { createdAt: input.at } : {}),
 		})
 		.returning();
