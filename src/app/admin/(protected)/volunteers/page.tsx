@@ -85,8 +85,8 @@ export default async function VolunteersPage({
 		<div className="container-fluid px-3 px-lg-4 py-4">
 			<h1 className="h4 mb-1">Volunteers</h1>
 			<p className="text-body-secondary">
-				{activeCount} active, holding {totalBalance} invite
-				{totalBalance === 1 ? '' : 's'} between them. Everyone active earns one
+				{activeCount} active. Their Invite Allowances add up to {totalBalance}{' '}
+				invite{totalBalance === 1 ? '' : 's'}, and everyone active earns one
 				more on the 1st of the month.
 			</p>
 

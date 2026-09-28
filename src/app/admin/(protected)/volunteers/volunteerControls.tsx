@@ -270,7 +270,7 @@ export function ActiveToggle({
 		>
 			<p className="mb-0">
 				{active
-					? 'They keep their balance but stop earning and can’t send invites.'
+					? 'They keep their Invite Allowance but stop earning and can’t send invites.'
 					: 'They can send invites again and will earn one on the 1st.'}
 			</p>
 		</ActionDialog>
@@ -328,7 +328,7 @@ export function AdjustBalanceForm({ volunteerId }: { volunteerId: string }) {
 				className="btn btn-sm btn-outline-primary mt-2"
 				disabled={pending || !reason.trim() || !validDelta}
 			>
-				{pending ? 'Saving…' : 'Adjust balance'}
+				{pending ? 'Saving…' : 'Adjust Invite Allowance'}
 			</button>
 			<div className="form-text">
 				A negative number takes invites away. This is recorded in the ledger.

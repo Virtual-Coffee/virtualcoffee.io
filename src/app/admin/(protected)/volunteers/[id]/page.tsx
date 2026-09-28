@@ -244,7 +244,7 @@ export default async function VolunteerDetailPage({
 							<h2 className="h6 text-body-secondary">Volunteering</h2>
 							<p className="small text-body-secondary">
 								Pausing removes their access to /invites and stops the monthly
-								invite. Their balance and history are kept.
+								invite. Their Invite Allowance and History are kept.
 							</p>
 							{canManage ? (
 								<ActiveToggle
