@@ -12,10 +12,11 @@ wrong identity even setting the URL aside.
 
 ## Decision
 
-**Eight tables use `uuid` primary keys generated in the app as UUIDv7**
-(`src/db/ids.ts`, the `uuid` package's `v7()`): `invite`,
+**Every membership table uses a `uuid` primary key generated in the app as
+UUIDv7** (`src/db/ids.ts`, the `uuid` package's `v7()`): `pending_grant`,
+`invite`, `invite_token`, `volunteer`, `volunteer_invite_ledger`,
 `membership_application`, `application_event`, the four submission kinds and
-`submission_event`. `invite_token` was already `uuid`. Better Auth's tables
+`submission_event`. Better Auth's tables
 keep their `text` ids — Better Auth owns that convention.
 
 **v7 rather than v4** because it is time-ordered: rows insert at the end of the
