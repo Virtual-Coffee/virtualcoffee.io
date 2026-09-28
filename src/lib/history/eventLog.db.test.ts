@@ -10,6 +10,7 @@ import {
 	volunteerSignup,
 } from '@/db';
 import { newId } from '@/db/ids';
+import type { Outbound } from '@/lib/outbound';
 import {
 	applicationEvents,
 	applicationRow,
@@ -20,22 +21,26 @@ import {
 
 import {
 	history,
+	notifyAndRecord,
 	recentEvents,
 	recordEvent,
 	recordImport,
 	recordOutcome,
 	transitionAndRecord,
-	type Outcome,
 	type SubmissionSubject,
 } from './eventLog';
 
-const SENT: Outcome = { ok: true, message: 'Sent.' };
-const CAPTURED: Outcome = {
+const SENT: Outbound = { ok: true, message: 'Sent.' };
+const CAPTURED: Outbound = {
 	ok: true,
 	message: 'Captured, not delivered (test).',
 	warning: 'Captured, not delivered (test).',
 };
-const FAILED: Outcome = { ok: false, message: 'The server said no.' };
+const FAILED: Outbound = {
+	ok: false,
+	definitelyNotSent: true,
+	message: 'The server said no.',
+};
 
 async function insertCocReport() {
 	const [row] = await db()
@@ -280,6 +285,42 @@ describe('recordOutcome', () => {
 			await failing.remove();
 			error.mockRestore();
 		}
+	});
+});
+
+describe('notifyAndRecord', () => {
+	test('records what the sender returned', async () => {
+		const { id } = await insertApplication({});
+
+		await notifyAndRecord(
+			{ kind: 'application', id },
+			{ channel: 'slack', what: 'Slack notified' },
+			async () => SENT,
+		);
+
+		expect(await applicationEvents(id)).toEqual([
+			{ type: 'notification_sent', body: 'Slack notified', actorUserId: null },
+		]);
+	});
+
+	test('a sender that throws is recorded as a failure, never thrown', async () => {
+		const { id } = await insertApplication({});
+
+		await notifyAndRecord(
+			{ kind: 'application', id },
+			{ channel: 'slack', what: 'Slack notified' },
+			async () => {
+				throw new Error('socket hang up');
+			},
+		);
+
+		expect(await applicationEvents(id)).toEqual([
+			{
+				type: 'notification_failed',
+				body: 'Slack notified failed: socket hang up',
+				actorUserId: null,
+			},
+		]);
 	});
 });
 
