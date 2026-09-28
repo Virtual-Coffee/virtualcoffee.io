@@ -39,8 +39,7 @@ export function notifySlack(
 	return deliver({
 		kind: 'slack',
 		target: channel,
-		// The payload itself, so the local log shows what would have been posted
-		// and a deploy's link-only line still finds the admin URL in it.
+		// The payload itself, so the log shows what would have been posted.
 		body: JSON.stringify(message, null, 2),
 		unreachable: 'Slack',
 		live: async () => {
