@@ -171,6 +171,52 @@ export async function grantVolunteerRole(
 }
 
 /**
+ * Take the `volunteer` role away, the inverse of `grantVolunteerRole`: off the
+ * user if they have signed in, and off any Grant still waiting for them. Takes
+ * the caller's transaction for the same reason.
+ *
+ * Under the lock `claimPendingGrant()` takes, so a first sign-in cannot land
+ * between the reads and their writes and re-apply what this withdraws.
+ */
+export async function revokeVolunteerRole(
+	tx: Transaction,
+	slackUserId: string,
+): Promise<void> {
+	await lockSlackMember(tx, slackUserId);
+
+	const [account] = await tx
+		.select({ id: user.id, role: user.role })
+		.from(user)
+		.where(eq(user.slackUserId, slackUserId))
+		.limit(1);
+
+	if (account) {
+		// `roleGrantedAt/By` record who gave access and when. Taking a role away
+		// leaves those alone; only a grant is a grant.
+		await tx
+			.update(user)
+			.set({ role: withoutVolunteerRole(account.role) })
+			.where(eq(user.id, account.id));
+	}
+
+	const grant = await findUnclaimedGrant(tx, slackUserId);
+	if (!grant) return;
+
+	const role = withoutVolunteerRole(grant.role);
+	// A Grant that would carry nothing is withdrawn, as User Management would
+	// have done: it never took effect, and an empty Grant is one
+	// setPendingGrantRoles() refuses to write.
+	if (parseRoles(role).length === 0) {
+		await tx.delete(pendingGrant).where(eq(pendingGrant.id, grant.id));
+	} else {
+		await tx
+			.update(pendingGrant)
+			.set({ role })
+			.where(eq(pendingGrant.id, grant.id));
+	}
+}
+
+/**
  * Copy the Slack member id onto the user and apply any Pending Grant
  * for it. Called from `databaseHooks.account.create.after` (docs/adr/0009).
  *

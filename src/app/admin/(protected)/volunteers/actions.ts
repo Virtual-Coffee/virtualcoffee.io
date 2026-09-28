@@ -1,17 +1,10 @@
 'use server';
 
-import { and, eq, isNull } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-import {
-	db,
-	isUniqueViolation,
-	invite,
-	pendingGrant,
-	user,
-	volunteer,
-} from '@/db';
+import { db, isUniqueViolation, invite, volunteer } from '@/db';
 import { isId } from '@/db/ids';
 import { getSlackMembers } from '@/data/slackMembers';
 import type { ActionResult } from '@/lib/admin/actionResult';
@@ -30,10 +23,8 @@ import {
 } from '@/lib/volunteers/invites';
 import {
 	grantVolunteerRole,
-	lockSlackMember,
-	withoutVolunteerRole,
+	revokeVolunteerRole,
 } from '@/lib/access/pendingGrants';
-import { parseRoles } from '@/lib/access/permissions';
 import { grantDmMessage, sendSlackDm } from '@/lib/slack/dm';
 import {
 	COMMUNITY_ROLES,
@@ -327,11 +318,6 @@ export async function setVolunteerActive(
 	const signedIn = active ? await userForSlackId(row.slackUserId) : null;
 
 	await db().transaction(async (tx) => {
-		// The lock claimPendingGrant() takes: a first sign-in landing between
-		// the reads below and their writes would re-apply the Grant a pause is
-		// withdrawing, or have its own write overwritten.
-		await lockSlackMember(tx, row.slackUserId);
-
 		await tx
 			.update(volunteer)
 			.set({ deactivatedAt: active ? null : new Date() })
@@ -343,48 +329,8 @@ export async function setVolunteerActive(
 				row,
 				session.user.name || session.user.email,
 			);
-			return;
-		}
-
-		const [account] = await tx
-			.select({ id: user.id, role: user.role })
-			.from(user)
-			.where(eq(user.slackUserId, row.slackUserId))
-			.limit(1);
-
-		if (account) {
-			// `roleGrantedAt/By` record who gave access and when. A pause takes
-			// a role away, so it leaves those alone; only a restart is a grant.
-			await tx
-				.update(user)
-				.set({ role: withoutVolunteerRole(account.role) })
-				.where(eq(user.id, account.id));
-		}
-
-		const [grant] = await tx
-			.select({ id: pendingGrant.id, role: pendingGrant.role })
-			.from(pendingGrant)
-			.where(
-				and(
-					eq(pendingGrant.slackUserId, row.slackUserId),
-					isNull(pendingGrant.claimedAt),
-				),
-			)
-			.limit(1);
-
-		if (grant) {
-			const role = withoutVolunteerRole(grant.role);
-			// A grant that would carry nothing is withdrawn, as User Management
-			// would have done: it never took effect, and an empty grant is one
-			// setPendingGrantRoles() refuses to write.
-			if (parseRoles(role).length === 0) {
-				await tx.delete(pendingGrant).where(eq(pendingGrant.id, grant.id));
-			} else {
-				await tx
-					.update(pendingGrant)
-					.set({ role })
-					.where(eq(pendingGrant.id, grant.id));
-			}
+		} else {
+			await revokeVolunteerRole(tx, row.slackUserId);
 		}
 	});
 
