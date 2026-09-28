@@ -1,6 +1,5 @@
 import {
 	and,
-	count,
 	eq,
 	exists,
 	inArray,
@@ -109,52 +108,69 @@ export async function openCount(kind: SubmissionKind): Promise<number> {
 }
 
 /**
- * Submissions nobody has been told about, for the warning banner: still `new`,
- * and either an announcement failed or none was recorded (`notifyAndRecord`
- * writes the event after the attempt and can lose it). Any failure counts, not
- * just the latest: a Lunch & Learn idea is announced on two channels, and a
- * Slack success must not hide the GitHub failure before it. Stored but never
- * announced is the failure mode docs/adr/0005 accepts, so it has to be visible;
- * counting only while `new` lets the banner clear once a maintainer has moved
- * the row on.
+ * A Submission nobody has been told about: still `new`, and either an
+ * announcement failed or none was recorded (`notifyAndRecord` writes the event
+ * after the attempt and can lose it). Any failure counts, not just the latest:
+ * a Lunch & Learn idea is announced on two channels, and a Slack success must
+ * not hide the GitHub failure before it. Stored but never announced is the
+ * failure mode docs/adr/0005 accepts, so it has to be visible; holding only
+ * while `new` lets it clear once a maintainer has moved the row on.
+ *
+ * The one definition the dashboard banner, the list marker and the list's
+ * `?failed=1` filter all use.
  */
+function neverAnnounced(kind: SubmissionKind) {
+	const { table, eventColumn } = SUBMISSION_KINDS[kind];
+	const attempts = (types: (typeof submissionEvent.$inferSelect)['type'][]) =>
+		db()
+			.select({ one: sql`1` })
+			.from(submissionEvent)
+			.where(
+				and(eq(eventColumn, table.id), inArray(submissionEvent.type, types)),
+			);
+
+	return and(
+		eq(table.status, 'new'),
+		or(
+			exists(attempts(['notification_failed'])),
+			notExists(attempts(['notification_sent', 'notification_failed'])),
+		),
+	);
+}
+
+/** How many Submissions of each kind were never announced, for the banner. */
 export async function failedNotifications(
 	kinds: readonly SubmissionKind[],
 ): Promise<Record<string, number>> {
 	if (kinds.length === 0) return {};
 
 	const results = await Promise.all(
-		kinds.map(async (kind) => {
-			const { table, eventColumn } = SUBMISSION_KINDS[kind];
-			const attempts = (
-				types: (typeof submissionEvent.$inferSelect)['type'][],
-			) =>
-				db()
-					.select({ one: sql`1` })
-					.from(submissionEvent)
-					.where(
-						and(
-							eq(eventColumn, table.id),
-							inArray(submissionEvent.type, types),
-						),
-					);
-			const [row] = await db()
-				.select({ value: count() })
-				.from(table)
-				.where(
-					and(
-						eq(table.status, 'new'),
-						or(
-							exists(attempts(['notification_failed'])),
-							notExists(attempts(['notification_sent', 'notification_failed'])),
-						),
-					),
-				);
-			return [kind, row?.value ?? 0] as const;
-		}),
+		kinds.map(
+			async (kind) =>
+				[
+					kind,
+					await countRows(SUBMISSION_KINDS[kind].table, neverAnnounced(kind)),
+				] as const,
+		),
 	);
 
 	return Object.fromEntries(results.filter(([, value]) => value > 0));
+}
+
+/** Which of these Submissions the list should mark as never announced. */
+export async function neverAnnouncedAmong(
+	kind: SubmissionKind,
+	ids: string[],
+): Promise<string[]> {
+	if (ids.length === 0) return [];
+	const { table } = SUBMISSION_KINDS[kind];
+
+	const rows = await db()
+		.select({ id: table.id })
+		.from(table)
+		.where(and(inArray(table.id, ids), neverAnnounced(kind)));
+
+	return rows.map((row) => row.id);
 }
 
 /**
@@ -263,6 +279,8 @@ export async function listSubmissions(
 	kind: SubmissionKind,
 	options: {
 		statuses?: SubmissionStatus[];
+		/** Only the ones never announced; see `neverAnnounced`. */
+		failed?: boolean;
 		page?: number;
 		sort?: SubmissionSortField;
 		direction?: 'asc' | 'desc';
@@ -271,9 +289,12 @@ export async function listSubmissions(
 	const { table } = SUBMISSION_KINDS[kind];
 
 	return pagedList(table, {
-		where: options.statuses?.length
-			? inArray(table.status, options.statuses)
-			: undefined,
+		where: and(
+			options.statuses?.length
+				? inArray(table.status, options.statuses)
+				: undefined,
+			options.failed ? neverAnnounced(kind) : undefined,
+		),
 		sort: {
 			reference: table.reference,
 			status: table.status,

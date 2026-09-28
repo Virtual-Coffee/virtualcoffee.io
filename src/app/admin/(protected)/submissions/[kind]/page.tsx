@@ -2,8 +2,10 @@ import { notFound } from 'next/navigation';
 
 import { requirePermission } from '@/lib/access/adminAccess';
 import {
+	failedNotifications,
 	isSubmissionKind,
 	listSubmissions,
+	neverAnnouncedAmong,
 	SUBMISSION_DISPLAY,
 	SUBMISSION_KINDS,
 	submissionStatusCounts,
@@ -55,18 +57,31 @@ export default async function SubmissionListPage({
 	const filters = parseSubmissionSearchParams(await searchParams);
 	const active = filters.status;
 
-	const [{ rows, rowCount }, counts] = await Promise.all([
+	const [{ rows, rowCount }, counts, failures] = await Promise.all([
 		listSubmissions(kind, {
 			statuses: active ? [active] : undefined,
+			failed: filters.failed,
 			page: filters.page,
 			sort: filters.sort,
 			direction: filters.direction,
 		}),
 		submissionStatusCounts(kind),
+		failedNotifications([kind]),
 	]);
+	const unannounced = new Set(
+		await neverAnnouncedAmong(
+			kind,
+			rows.map((row) => row.id),
+		),
+	);
+	const failedCount = failures[kind] ?? 0;
 
 	const display = SUBMISSION_DISPLAY[kind];
 	const base = `/admin/submissions/${kind}`;
+	const order = {
+		sort: filters.sort === 'submittedAt' ? null : filters.sort,
+		dir: filters.direction === 'desc' ? null : filters.direction,
+	};
 
 	// Flattened here so the client table never has to reach for
 	// `SUBMISSION_DISPLAY`, which lives behind a drizzle import.
@@ -79,6 +94,7 @@ export default async function SubmissionListPage({
 			subtitle: summary.subtitle,
 			status: row.status,
 			submittedAt: row.submittedAt,
+			unannounced: unannounced.has(row.id),
 		};
 	});
 
@@ -90,17 +106,15 @@ export default async function SubmissionListPage({
 					{rowCount.toLocaleString()}{' '}
 					{rowCount === 1 ? 'submission' : 'submissions'}
 					{active ? ` with status “${submissionStatusLabel(active)}”` : ''}
+					{filters.failed ? ', never announced' : ''}
 				</span>
 			</div>
 
-			<div className="mb-3">
+			<div className="d-flex flex-wrap gap-3 align-items-center mb-3">
 				<FilterChips
 					base={base}
 					// The chips reset the page but keep the order the maintainer chose.
-					keep={{
-						sort: filters.sort === 'submittedAt' ? null : filters.sort,
-						dir: filters.direction === 'desc' ? null : filters.direction,
-					}}
+					keep={{ ...order, failed: filters.failed ? '1' : null }}
 					param="status"
 					active={active}
 					chips={[
@@ -112,6 +126,18 @@ export default async function SubmissionListPage({
 						})),
 					]}
 					ariaLabel="Filter by status"
+				/>
+				{/* Stored but never announced; docs/adr/0005. */}
+				<FilterChips
+					base={base}
+					keep={{ ...order, status: active }}
+					param="failed"
+					active={filters.failed ? '1' : null}
+					chips={[
+						{ value: null, label: 'Any' },
+						{ value: '1', label: 'Not announced', count: failedCount },
+					]}
+					ariaLabel="Filter by announcement"
 				/>
 			</div>
 

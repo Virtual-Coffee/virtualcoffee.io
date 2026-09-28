@@ -13,6 +13,8 @@ import { STATUS_ORDER } from './presentation';
 
 type SubmissionFilters = ListQuery<SubmissionSortField> & {
 	status: SubmissionStatus | null;
+	/** `?failed=1`: only the ones never announced (docs/adr/0005). */
+	failed: boolean;
 };
 
 export function parseSubmissionSearchParams(
@@ -20,6 +22,7 @@ export function parseSubmissionSearchParams(
 ): SubmissionFilters {
 	return {
 		status: oneOf(params.status, STATUS_ORDER) ?? null,
+		failed: oneOf(params.failed, ['1']) !== undefined,
 		...parseListQuery(params, SUBMISSION_SORT_FIELDS, 'submittedAt'),
 	};
 }

@@ -27,6 +27,8 @@ export type SubmissionListRow = {
 	subtitle: string;
 	status: SubmissionStatus;
 	submittedAt: Date;
+	/** Never announced; docs/adr/0005. */
+	unannounced: boolean;
 };
 
 const helper = createColumnHelper<ServerTableFeatures, SubmissionListRow>();
@@ -50,6 +52,14 @@ function buildColumns(basePath: string) {
 					<Link href={`${basePath}/${row.original.id}`}>
 						{row.original.title}
 					</Link>
+					{row.original.unannounced && (
+						<span
+							className="badge text-bg-warning ms-2"
+							title="The announcement failed or was never recorded; see the History"
+						>
+							Not announced
+						</span>
+					)}
 					<div className="small text-body-secondary">
 						{row.original.subtitle}
 					</div>

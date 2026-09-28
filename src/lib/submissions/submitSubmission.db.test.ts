@@ -14,7 +14,12 @@ import { failInserts } from '@/test/db/fixtures';
 
 import { notifyAndRecord } from '@/lib/history/eventLog';
 
-import { failedNotifications, submissionSubject } from './submissions';
+import {
+	failedNotifications,
+	listSubmissions,
+	neverAnnouncedAmong,
+	submissionSubject,
+} from './submissions';
 import { persistSubmission } from './submitSubmission';
 
 const NOTIFIED = { channel: 'slack' as const, what: 'Notified' };
@@ -155,6 +160,35 @@ describe('notifyAndRecord', () => {
 			.update(cocReport)
 			.set({ status: 'in_progress' })
 			.where(eq(cocReport.id, seen));
+		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
+	});
+
+	/** The list marker and `?failed=1` show the rows the banner counts. */
+	test('the list marks and filters the same rows the banner counts', async () => {
+		const failed = await insertCocReport();
+		const fine = await insertCocReport();
+		const moved = await insertCocReport();
+		await notifyAndRecord(
+			submissionSubject('coc', failed),
+			NOTIFIED,
+			async () => ({ ok: false, definitelyNotSent: true, message: 'x' }),
+		);
+		await notifyAndRecord(
+			submissionSubject('coc', fine),
+			NOTIFIED,
+			async () => ({ ok: true, message: 'x' }),
+		);
+		await db()
+			.update(cocReport)
+			.set({ status: 'resolved' })
+			.where(eq(cocReport.id, moved));
+
+		await expect(
+			neverAnnouncedAmong('coc', [failed, fine, moved]),
+		).resolves.toEqual([failed]);
+		const { rows, rowCount } = await listSubmissions('coc', { failed: true });
+		expect(rows.map((row) => row.id)).toEqual([failed]);
+		expect(rowCount).toBe(1);
 		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
 	});
 
