@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { insertInvite } from '@/test/db/fixtures';
+import { insertInvite, inviteRow } from '@/test/db/fixtures';
 
-import { inviteForClaimToken } from './invites';
+import { claimInvite, completeInvite, inviteForClaimToken } from './invites';
 
 describe('inviteForClaimToken', () => {
 	test('a live link resolves to the Invite', async () => {
@@ -58,4 +58,49 @@ describe('inviteForClaimToken', () => {
 	});
 
 	afterEach(() => vi.useRealTimers());
+});
+
+describe('claimInvite', () => {
+	test('spends a live link once', async () => {
+		const { id, token } = await insertInvite({
+			inviterSlackUserId: 'U_GRACE',
+			inviterName: 'Grace Hopper',
+		});
+		const now = new Date();
+
+		await expect(claimInvite(token, now)).resolves.toEqual({
+			id,
+			inviterName: 'Grace Hopper',
+			inviterSlackUserId: 'U_GRACE',
+		});
+		await expect(inviteRow(id)).resolves.toMatchObject({
+			status: 'accepted',
+			claimedAt: now,
+			tokenHash: null,
+		});
+		await expect(claimInvite(token, new Date())).resolves.toBeNull();
+	});
+
+	test('an expired link is not spent', async () => {
+		const { id, token } = await insertInvite({
+			inviterSlackUserId: 'U_GRACE',
+			expiresAt: new Date(Date.now() - 1000),
+		});
+
+		await expect(claimInvite(token, new Date())).resolves.toBeNull();
+		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'pending' });
+	});
+});
+
+describe('completeInvite', () => {
+	test('marks the Invite completed', async () => {
+		const { id } = await insertInvite({
+			inviterSlackUserId: 'U_GRACE',
+			status: 'accepted',
+		});
+
+		await completeInvite(id);
+
+		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'completed' });
+	});
 });

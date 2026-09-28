@@ -1,14 +1,9 @@
 'use server';
 
-import { eq, isNull } from 'drizzle-orm';
+import { isNull } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
-import {
-	db,
-	invite,
-	membershipApplication,
-	type ApplicationStatus,
-} from '@/db';
+import { membershipApplication, type ApplicationStatus } from '@/db';
 import {
 	emailFailed,
 	emailWentButRowMoved,
@@ -41,6 +36,7 @@ import {
 	type TransitionEventInput,
 } from '@/lib/history/eventLog';
 import type { Outbound } from '@/lib/outbound';
+import { completeInvite } from '@/lib/volunteers/invites';
 import { siteUrl } from '@/util/url.server';
 
 function changedUnderneath(name: string): string {
@@ -336,10 +332,7 @@ export async function approveMembership(
 	// emailed.
 	if (application.inviteId) {
 		try {
-			await db()
-				.update(invite)
-				.set({ status: 'completed' })
-				.where(eq(invite.id, application.inviteId));
+			await completeInvite(application.inviteId);
 		} catch (error) {
 			console.error('Failed to complete an invite', {
 				applicationId,

@@ -1,4 +1,4 @@
-import { and, desc, eq, isNotNull, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, isNotNull, sql } from 'drizzle-orm';
 
 import {
 	db,
@@ -114,6 +114,53 @@ export async function inviteForClaimToken(token: string): Promise<{
 		inviteeName: row.inviteeName,
 		inviteeEmail: row.inviteeEmail,
 	};
+}
+
+/** What redeeming a Claim Link yields. */
+export type ClaimedInvite = {
+	id: string;
+	inviterName: string | null;
+	inviterSlackUserId: string | null;
+};
+
+/**
+ * Spend a Claim Link, or null when it is not live. Takes the caller's
+ * transaction so the redemption commits with the application it produces.
+ *
+ * A conditional UPDATE, so two submissions racing on one link produce exactly
+ * one claim — the second finds nothing to redeem. Clearing the hash is what
+ * makes the link single-use rather than merely checked-against.
+ */
+export async function claimInvite(
+	token: string,
+	now: Date,
+	executor: Database | Transaction = db(),
+): Promise<ClaimedInvite | null> {
+	const [claimed] = await executor
+		.update(invite)
+		.set({ status: 'accepted', claimedAt: now, tokenHash: null })
+		.where(
+			and(
+				eq(invite.tokenHash, hashClaimToken(token)),
+				eq(invite.status, 'pending'),
+				gt(invite.tokenExpiresAt, now),
+			),
+		)
+		.returning({
+			id: invite.id,
+			inviterName: invite.inviterName,
+			inviterSlackUserId: invite.inviterSlackUserId,
+		});
+
+	return claimed ?? null;
+}
+
+/** The Invite's applicant became a member. */
+export async function completeInvite(inviteId: string): Promise<void> {
+	await db()
+		.update(invite)
+		.set({ status: 'completed' })
+		.where(eq(invite.id, inviteId));
 }
 
 // Keyed on the Slack member id, because a Volunteer can hold a balance before

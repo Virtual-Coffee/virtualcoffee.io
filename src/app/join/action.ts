@@ -1,14 +1,14 @@
 'use server';
 
-import { and, eq, gt, inArray, sql } from 'drizzle-orm';
+import { and, inArray, sql } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-import { db, invite, membershipApplication } from '@/db';
+import { db, membershipApplication } from '@/db';
 import { applicationPath } from '@/lib/admin/links';
 import { recordEvent, recordOutcome } from '@/lib/history/eventLog';
 import { applicationSubject, statusCounts } from '@/lib/waitlist/applications';
-import { hashClaimToken } from '@/lib/volunteers/invites';
+import { claimInvite, type ClaimedInvite } from '@/lib/volunteers/invites';
 import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import { applicationSubmittedMessage, notifySlack } from '@/lib/slack/notify';
 import { agree, email, name } from '@/util/forms/fields';
@@ -21,13 +21,6 @@ import {
 } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
 import { siteUrl } from '@/util/url.server';
-
-/** What redeeming a Claim Link yields, or null when there was nothing to redeem. */
-type ClaimedInvite = {
-	id: string;
-	inviterName: string | null;
-	inviterSlackUserId: string | null;
-} | null;
 
 const THANKS = '/join/thank-you';
 
@@ -52,7 +45,7 @@ export async function submitMembershipApplication(
 
 	const now = new Date();
 	const claimToken = formValue(formData, 'invite');
-	let result: { applicationId: string; claimed: ClaimedInvite };
+	let result: { applicationId: string; claimed: ClaimedInvite | null };
 
 	try {
 		/**
@@ -89,42 +82,15 @@ export async function submitMembershipApplication(
 		}
 
 		result = await db().transaction(async (tx) => {
-			let claimed: ClaimedInvite = null;
+			let claimed: ClaimedInvite | null = null;
 			/**
-			 * Redeem the Claim Link and write the application together.
-			 *
-			 * The redemption is a conditional UPDATE, so two submissions racing on
-			 * one link produce exactly one priority application — the second finds
-			 * nothing to claim and is written as a Waitlist signup. Doing it in the
-			 * same transaction as the insert is what stops a failed insert burning
+			 * Redeem the Claim Link and write the application together. A racing
+			 * second submission finds nothing to claim and is written as a Waitlist
+			 * signup. The shared transaction is what stops a failed insert burning
 			 * the Invite: the applicant would lose both their answers and their
 			 * friend's invite, having done nothing wrong.
 			 */
-			if (claimToken) {
-				const [redeemed] = await tx
-					.update(invite)
-					.set({
-						status: 'accepted',
-						claimedAt: now,
-						// Single-use: clearing the hash is what makes the link dead
-						// rather than merely checked-against.
-						tokenHash: null,
-					})
-					.where(
-						and(
-							eq(invite.tokenHash, hashClaimToken(claimToken)),
-							eq(invite.status, 'pending'),
-							gt(invite.tokenExpiresAt, now),
-						),
-					)
-					.returning({
-						id: invite.id,
-						inviterName: invite.inviterName,
-						inviterSlackUserId: invite.inviterSlackUserId,
-					});
-
-				claimed = redeemed ?? null;
-			}
+			if (claimToken) claimed = await claimInvite(claimToken, now, tx);
 
 			const [row] = await tx
 				.insert(membershipApplication)
