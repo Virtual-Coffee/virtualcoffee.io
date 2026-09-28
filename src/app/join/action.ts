@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { db, membershipApplication } from '@/db';
 import { applicationPath } from '@/lib/admin/links';
-import { recordEvent, recordOutcome } from '@/lib/history/eventLog';
+import { notifyAndRecord, recordEvent } from '@/lib/history/eventLog';
 import { applicationSubject, statusCounts } from '@/lib/waitlist/applications';
 import { claimInvite, type ClaimedInvite } from '@/lib/volunteers/invites';
 import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
@@ -151,25 +151,29 @@ export async function submitMembershipApplication(
 	 * jumps the queue. The outcome is recorded as an event either way, which is
 	 * what makes a silent notification visible in /admin.
 	 */
-	const notified = await notifySlack(
-		'membership',
-		applicationSubmittedMessage({
-			name: parsed.data.name,
-			email: parsed.data.email,
-			adminUrl: `${siteUrl()}${applicationPath(result.applicationId)}`,
-			waitlistUrl: `${siteUrl()}/admin/waitlist`,
-			waiting: await waitingCount(),
-			invite: result.claimed && { inviterName: result.claimed.inviterName },
-		}),
+	await notifyAndRecord(
+		applicationSubject(result.applicationId),
+		{
+			channel: 'slack',
+			what: result.claimed
+				? 'Slack notified of an invited application'
+				: 'Slack notified of a new application',
+		},
+		async () =>
+			notifySlack(
+				'membership',
+				applicationSubmittedMessage({
+					name: parsed.data.name,
+					email: parsed.data.email,
+					adminUrl: `${siteUrl()}${applicationPath(result.applicationId)}`,
+					waitlistUrl: `${siteUrl()}/admin/waitlist`,
+					waiting: await waitingCount(),
+					invite: result.claimed && {
+						inviterName: result.claimed.inviterName,
+					},
+				}),
+			),
 	);
-
-	await recordOutcome(applicationSubject(result.applicationId), {
-		channel: 'slack',
-		outbound: notified,
-		what: result.claimed
-			? 'Slack notified of an invited application'
-			: 'Slack notified of a new application',
-	});
 
 	redirect(THANKS);
 }
