@@ -7,9 +7,9 @@ import { history } from '@/lib/history/eventLog';
 import {
 	getVolunteerById,
 	volunteerInvites,
-	volunteerLedger,
 	volunteerSubject,
 } from '@/lib/volunteers/volunteers';
+import { volunteerLedger } from '@/lib/volunteers/invites';
 import { HistoryTimeline } from '../../historyTimeline';
 import {
 	Breadcrumb,

@@ -104,10 +104,6 @@ export async function getVolunteerById(id: string) {
 	return row ?? null;
 }
 
-// The ledger is owned by `src/lib/volunteers/invites.ts`, reads as well as writes; the
-// roster screen reaches it through here.
-export { volunteerLedger } from '@/lib/volunteers/invites';
-
 export type AdminInviteRow = {
 	id: string;
 	inviteeName: string | null;
