@@ -11,15 +11,18 @@ import {
 
 /**
  * Transactional mail for the membership pipeline, sent through Google
- * Workspace over SMTP as hello@virtualcoffee.io.
+ * Workspace over SMTP from `SENDER`, with replies going there too.
  *
  * SMTP AUTH rather than IP allowlisting: Netlify Functions run on Lambda with
  * no static outbound addresses, so there is nothing to allowlist. Port 587 is
  * open from that runtime.
  *
  * Authenticates with XOAUTH2 as a service account granted domain-wide
- * delegation over hello@ (scope `https://mail.google.com/`), so there is no
- * App Password to rotate and no consent-screen refresh token to expire.
+ * delegation (scope `https://mail.google.com/`), so there is no App Password
+ * to rotate and no consent-screen refresh token to expire. hello@ is a Google
+ * Group, which cannot be impersonated, so the service account signs in as the
+ * user `GOOGLE_SMTP_USER` names. That user must have hello@ as a Gmail "Send
+ * mail as" alias: without it Gmail silently rewrites the From to the user.
  * `GMAIL_SERVICE_ACCOUNT_KEY` is the downloaded JSON key file, whole — its
  * `client_id` and `private_key` are what nodemailer needs. Mail-scoped on
  * purpose: the events calendar uses a different service account under
@@ -29,6 +32,9 @@ import {
  * Captured; with `SMTP_HOST` set on a checkout, mail goes to that local sink
  * instead of Gmail (docs/adr/0013).
  */
+
+/** The group address every message is From, and Reply-To. */
+const SENDER = 'hello@virtualcoffee.io';
 
 export type Envelope = {
 	to: string;
@@ -194,8 +200,8 @@ async function send(
 		};
 	}
 
-	// Local skips Gmail entirely — there is no service account to check, and
-	// GOOGLE_SMTP_USER is only cosmetic (the From address) rather than required.
+	// Local skips Gmail entirely — there is no service account to check and
+	// no user to sign in as.
 	let sendingTransporter: Transporter;
 	if (delivery.mode === 'local') {
 		sendingTransporter = getLocalTransporter(delivery.host);
@@ -212,21 +218,19 @@ async function send(
 		sendingTransporter = getTransporter(account);
 	}
 
-	const from = `Virtual Coffee <${process.env.GOOGLE_SMTP_USER || 'dev@localhost'}>`;
-
 	// Local addresses exactly as Live would: the point of a local sink is
 	// seeing what production would actually send.
 	const to = input.to;
 	const cc = input.cc || undefined;
 
 	const info = await sendingTransporter.sendMail({
-		from,
+		from: `Virtual Coffee <${SENDER}>`,
 		to,
 		cc,
 		subject: input.subject,
 		html: input.html,
 		text: input.text,
-		replyTo: process.env.GOOGLE_SMTP_USER || undefined,
+		replyTo: SENDER,
 	});
 
 	// nodemailer only resolves with rejections when at least one address

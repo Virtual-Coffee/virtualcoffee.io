@@ -45,7 +45,7 @@ beforeEach(() => {
 	// Live delivery is production only; every case below is about what a
 	// live send does. The non-production modes have their own describe.
 	vi.stubEnv('CONTEXT', 'production');
-	vi.stubEnv('GOOGLE_SMTP_USER', 'hello@virtualcoffee.io');
+	vi.stubEnv('GOOGLE_SMTP_USER', 'maintainer@virtualcoffee.io');
 	vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', KEY);
 	sendMail.mockReset();
 	sendMail.mockResolvedValue({ rejected: [] });
@@ -62,7 +62,7 @@ describe('emailConfigured', () => {
 });
 
 describe('sendEmail', () => {
-	test('sends as hello@ with hello@ as Reply-To, and no cc when none was asked for', async () => {
+	test('sends from hello@ with hello@ as Reply-To, and no cc when none was asked for', async () => {
 		await expect(sendEmail(template, props, { to, cc: null })).resolves.toEqual(
 			{
 				ok: true,
@@ -77,13 +77,14 @@ describe('sendEmail', () => {
 			replyTo: 'hello@virtualcoffee.io',
 		});
 		// The transporter is a module singleton, built on this first send:
-		// XOAUTH2 as the service account impersonating hello@, with the PEM's
+		// XOAUTH2 as the service account impersonating GOOGLE_SMTP_USER — hello@
+		// is a group, sent from as that user's alias — with the PEM's
 		// collapsed newlines restored.
 		expect(createTransport).toHaveBeenCalledWith(
 			expect.objectContaining({
 				auth: {
 					type: 'OAuth2',
-					user: 'hello@virtualcoffee.io',
+					user: 'maintainer@virtualcoffee.io',
 					serviceClient: '113600000000000000000',
 					privateKey:
 						'-----BEGIN PRIVATE KEY-----\nMIIE\n-----END PRIVATE KEY-----\n',
@@ -255,11 +256,11 @@ describe('delivery modes', () => {
 				'Sent to local SMTP sink at localhost:1025 (dev) — not delivered outside this machine.',
 		});
 		expect(sendMail).toHaveBeenCalledWith({
-			from: 'Virtual Coffee <dev@localhost>',
+			from: 'Virtual Coffee <hello@virtualcoffee.io>',
 			to,
 			cc: 'maintainer@example.test',
 			...(await renderEmail(template, props)),
-			replyTo: undefined,
+			replyTo: 'hello@virtualcoffee.io',
 		});
 		expect(createTransport).toHaveBeenLastCalledWith({
 			host: 'localhost',
