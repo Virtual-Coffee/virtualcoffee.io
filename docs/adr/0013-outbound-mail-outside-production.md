@@ -41,7 +41,11 @@ sends, and it decides on `CONTEXT` alone:
   [Mailpit](https://mailpit.axllent.org/). No Google credentials are read, and
   nothing leaves the machine. Only a checkout (`CONTEXT=dev` or none) honours
   it; production and every Netlify deploy ignore it, because on a deploy the
-  same variable would name a host that real applicants' mail can reach.
+  same variable would name a host that real applicants' mail can reach. The
+  host must be loopback — `localhost`, `127.0.0.1` or `::1` — or the send
+  stays Captured with a warning, so a checkout cannot relay real mail through
+  a remote SMTP server. A sink in Docker is reached through a published port
+  on localhost, not by its container hostname (`mailpit`).
 - There is no "redirect everything to one inbox" mode. It existed while
   preview data was fake; against real applicants it would deliver their mail,
   addressed by name, to whoever set a variable.
