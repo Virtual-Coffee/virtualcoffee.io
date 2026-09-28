@@ -460,6 +460,26 @@ describe('listSeriesEvents', () => {
 			},
 		]);
 	});
+
+	test('an Event of a Series whose end alone moved is Rescheduled', async () => {
+		const { cal } = fakeClient({
+			instances: {
+				coffee: {
+					items: [
+						instance('coffee', '2026-09-15', {
+							end: { dateTime: '2026-09-15T10:30:00-04:00' },
+						}),
+						instance('coffee', '2026-09-17'),
+					],
+				},
+			},
+			get: { coffee: series },
+		});
+		expect(await cal.listSeriesEvents('coffee', { months: 12 })).toMatchObject([
+			{ id: 'coffee_20260915T130000Z', rescheduled: true },
+			{ id: 'coffee_20260917T130000Z', rescheduled: false },
+		]);
+	});
 });
 
 describe('writes', () => {
@@ -740,16 +760,90 @@ describe('writes', () => {
 	test('restore takes back a Cancel', async () => {
 		const id = 'coffee_20260917T130000Z';
 		const { cal, calls } = fakeClient({
-			get: { [id]: instance('coffee', '2026-09-17', { status: 'cancelled' }) },
+			get: {
+				[id]: instance('coffee', '2026-09-17', { status: 'cancelled' }),
+				coffee: series,
+			},
 		});
 		await cal.restoreEvent(id, '"coffee-2026-09-17"');
 		expect(calls.filter((call) => call.method === 'patch')).toMatchObject([
 			{
-				params: { eventId: id, requestBody: { status: 'confirmed' } },
+				params: {
+					eventId: id,
+					requestBody: {
+						status: 'confirmed',
+						start: { dateTime: '2026-09-17T09:00:00.000-04:00' },
+						end: { dateTime: '2026-09-17T10:00:00.000-04:00' },
+					},
+				},
 				options: { headers: { 'If-Match': '"coffee-2026-09-17"' } },
 			},
 		]);
+	});
+
+	test('restore of a one-off only takes back its Cancel', async () => {
+		const { cal, calls } = fakeClient({
+			get: { talk: { ...oneOff, status: 'cancelled' } },
+		});
+		await cal.restoreEvent('talk', '"t1"');
+		expect(calls.filter((call) => call.method === 'patch')).toEqual([
+			expect.objectContaining({
+				params: expect.objectContaining({
+					requestBody: { status: 'confirmed' },
+				}),
+			}),
+		]);
 		expect(calls.filter((call) => call.method === 'get')).toHaveLength(1);
+	});
+
+	test("restore resets a Reschedule that only changed the Event's length", async () => {
+		const id = 'coffee_20260922T130000Z';
+		const { cal, calls } = fakeClient({
+			get: {
+				[id]: instance('coffee', '2026-09-22', {
+					end: { dateTime: '2026-09-22T10:30:00-04:00' },
+				}),
+				coffee: series,
+			},
+		});
+		await cal.restoreEvent(id, '"coffee-2026-09-22"');
+		expect(calls.filter((call) => call.method === 'patch')).toMatchObject([
+			{
+				params: {
+					requestBody: {
+						status: 'confirmed',
+						start: { dateTime: '2026-09-22T09:00:00.000-04:00' },
+						end: { dateTime: '2026-09-22T10:00:00.000-04:00' },
+					},
+				},
+			},
+		]);
+	});
+
+	test('restore of a Cancelled Reschedule with no start goes back to the Series time', async () => {
+		const id = 'coffee_20260922T130000Z';
+		const { cal, calls } = fakeClient({
+			get: {
+				[id]: instance('coffee', '2026-09-22', {
+					status: 'cancelled',
+					start: undefined,
+					end: undefined,
+				}),
+				coffee: series,
+			},
+		});
+		await cal.restoreEvent(id, '"coffee-2026-09-22"');
+		expect(calls.filter((call) => call.method === 'patch')).toMatchObject([
+			{
+				params: {
+					requestBody: {
+						status: 'confirmed',
+						start: { dateTime: '2026-09-22T09:00:00.000-04:00' },
+						end: { dateTime: '2026-09-22T10:00:00.000-04:00' },
+					},
+				},
+			},
+		]);
 	});
 
 	test("restore takes back a Reschedule, with the Series' duration", async () => {

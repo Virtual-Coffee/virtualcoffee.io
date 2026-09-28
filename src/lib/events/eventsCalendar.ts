@@ -211,19 +211,28 @@ function isTombstone(event: calendar_v3.Schema$Event) {
 	);
 }
 
-/** Whether an Event of a Series sits somewhere other than where the rule put it. */
-function moved(originalStart: string | null, start: string): boolean {
-	return (
-		originalStart !== null &&
-		DateTime.fromISO(originalStart).toMillis() !==
-			DateTime.fromISO(start).toMillis()
-	);
-}
-
 /** How long a Series' Events run, from the Series itself. */
 function duration(series: calendar_v3.Schema$Event) {
 	return DateTime.fromISO(series.end?.dateTime ?? '').diff(
 		DateTime.fromISO(series.start?.dateTime ?? ''),
+	);
+}
+
+/**
+ * Whether an Event of a Series sits somewhere other than where the rule put
+ * it: another start, or another length than its Series'.
+ */
+function moved(
+	originalStart: string | null,
+	when: { start: string; end: string },
+	series: calendar_v3.Schema$Event,
+): boolean {
+	if (originalStart === null) return false;
+	const start = DateTime.fromISO(when.start);
+	return (
+		DateTime.fromISO(originalStart).toMillis() !== start.toMillis() ||
+		DateTime.fromISO(when.end).diff(start).toMillis() !==
+			duration(series).toMillis()
 	);
 }
 
@@ -463,6 +472,8 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 				const from = await seriesFallback(item, seriesId, parent);
 				const when = timesOf(item, from, originalStart);
 				if (!when) return null;
+				// A live Event of a Series is compared against its Series' length.
+				const series = seriesId && !cancelled ? await parent(seriesId) : null;
 				return {
 					id: item.id,
 					etag: item.etag,
@@ -471,7 +482,7 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 					end: when.end,
 					status: cancelled ? 'cancelled' : 'confirmed',
 					seriesId,
-					rescheduled: !cancelled && moved(originalStart, when.start),
+					rescheduled: series !== null && moved(originalStart, when, series),
 					originalStart,
 					joinLink: item.location ?? from?.location ?? '',
 					htmlLink: item.htmlLink ?? null,
@@ -682,26 +693,22 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 	}
 
 	/**
-	 * Takes back a Cancel and a Reschedule alike: the Event happens, at the
-	 * time its Series' rule gives it (with the Series' duration — a Reschedule
-	 * may have changed that too).
+	 * Takes back a Cancel and a Reschedule alike: an Event of a Series happens
+	 * at the time its Series' rule gives it, with the Series' duration, whether
+	 * or not it was moved — a Cancelled Event may carry no `start` to compare.
+	 * A one-off just happens.
 	 */
 	async function restoreEvent(id: string, etag: string): Promise<void> {
 		const existing = await current(id, etag);
-		const originalStart = existing.originalStartTime?.dateTime ?? null;
-		const start = existing.start?.dateTime;
-		if (
-			!originalStart ||
-			!start ||
-			!existing.recurringEventId ||
-			!moved(originalStart, start)
-		) {
+		const originalStart = existing.originalStartTime?.dateTime;
+		const seriesId = existing.recurringEventId;
+		if (!originalStart || !seriesId) {
 			await patch(id, etag, { status: 'confirmed' });
 			return;
 		}
 		// Without its Series there is no rule to restore the Event to.
 		const { data: series } = await conditional(() =>
-			client.events.get({ calendarId, eventId: existing.recurringEventId! }),
+			client.events.get({ calendarId, eventId: seriesId }),
 		);
 		const at = DateTime.fromISO(originalStart, { setZone: true });
 		await patch(id, etag, {
