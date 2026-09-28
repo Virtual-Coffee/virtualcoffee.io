@@ -8,7 +8,11 @@
 import type { calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
 
-import { createCalendarClient, type CalendarEventsClient } from '@/data/events';
+import {
+	calendarConfigured,
+	createCalendarClient,
+	type CalendarEventsClient,
+} from '@/data/events';
 // The shape of what a write carries is declared once, with the forms' Draft;
 // type-only, so nothing of that module reaches this one at runtime.
 import type {
@@ -756,7 +760,7 @@ export type EventsCalendar = ReturnType<typeof eventsCalendar>;
 
 /** The real calendar, or null when the env vars that name it are missing. */
 export function connectEventsCalendar(): EventsCalendar | null {
-	const calendarId = process.env.GOOGLE_CALENDAR_ID;
-	if (!process.env.GOOGLE_SERVICE_ACCOUNT_KEY || !calendarId) return null;
-	return eventsCalendar(createCalendarClient(), calendarId);
+	const configured = calendarConfigured();
+	if (!configured) return null;
+	return eventsCalendar(createCalendarClient(), configured.calendarId);
 }

@@ -31,6 +31,16 @@ export type EventsResponse = Array<EventItem>;
 const SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
 
 /**
+ * The Events Calendar's id when both env vars that reach it are set, or null
+ * — the one check `getEvents` and `/admin/events` share.
+ */
+export function calendarConfigured(): { calendarId: string } | null {
+	const calendarId = process.env.GOOGLE_CALENDAR_ID;
+	if (!process.env.GOOGLE_SERVICE_ACCOUNT_KEY || !calendarId) return null;
+	return { calendarId };
+}
+
+/**
  * Builds an authenticated Calendar client from `GOOGLE_SERVICE_ACCOUNT_KEY`,
  * which holds the raw contents of a service account key file. Both failure
  * modes — unparseable JSON and a key missing the fields the auth call needs —
@@ -169,9 +179,8 @@ export const getEvents = unstable_cache(
 		// Calendar days, so the window survives the DST change.
 		const rangeEnd = displayRangeStart.plus({ days: 30 }).toUTC().toISO();
 
-		if (!(
-			process.env.GOOGLE_SERVICE_ACCOUNT_KEY && process.env.GOOGLE_CALENDAR_ID
-		)) {
+		const configured = calendarConfigured();
+		if (!configured) {
 			assertMocksAllowed('calendar events');
 			const fakeData = await import('./mocks/events');
 			return fakeData.createEventsData({ limit, rangeEnd, rangeStart });
@@ -179,7 +188,7 @@ export const getEvents = unstable_cache(
 
 		try {
 			const items = await listDisplayableEvents(createCalendarClient(), {
-				calendarId: process.env.GOOGLE_CALENDAR_ID,
+				calendarId: configured.calendarId,
 				timeMin: rangeStart,
 				timeMax: rangeEnd,
 				limit,
