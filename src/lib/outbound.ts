@@ -112,28 +112,19 @@ function isLoopbackHost(host: string): boolean {
 }
 
 /**
- * Slack posts and GitHub issues have no address to redirect to; their opt-in
- * is `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true`, paired with per-context webhook
- * and App values that point at a test channel or repository.
+ * Senders with no address to redirect to share one opt-in shape: an env var
+ * set to `true` makes them Live outside production, paired with per-context
+ * values that point somewhere safe.
+ *
+ * - `NOTIFY_LIVE_OUTSIDE_PRODUCTION` — Slack posts and GitHub issues, with
+ *   webhook and App values for a test channel or repository.
+ * - `CALENDAR_LIVE_OUTSIDE_PRODUCTION` — Events Calendar writes
+ *   (`/admin/events`), with a `GOOGLE_CALENDAR_ID` naming a scratch calendar
+ *   the service account can edit. Reads are never gated.
  */
-function notifyDelivery(): 'live' | 'captured' {
+function optInDelivery(envVar: string): 'live' | 'captured' {
 	if (isProduction()) return 'live';
-	return process.env.NOTIFY_LIVE_OUTSIDE_PRODUCTION === 'true'
-		? 'live'
-		: 'captured';
-}
-
-/**
- * Writes to the Events Calendar (`/admin/events`) are the same shape: there is
- * one real calendar, so the opt-in `CALENDAR_LIVE_OUTSIDE_PRODUCTION=true` is
- * meant to be paired with a `GOOGLE_CALENDAR_ID` that names a scratch calendar
- * the service account can edit. Reads are never gated.
- */
-function calendarDelivery(): 'live' | 'captured' {
-	if (isProduction()) return 'live';
-	return process.env.CALENDAR_LIVE_OUTSIDE_PRODUCTION === 'true'
-		? 'live'
-		: 'captured';
+	return process.env[envVar] === 'true' ? 'live' : 'captured';
 }
 
 /**
@@ -176,9 +167,11 @@ function deliveryFor<K extends OutboundKind>(kind: K): Delivery<K> {
 	const mode =
 		kind === 'slack dm'
 			? dmDelivery()
-			: kind === 'calendar'
-				? calendarDelivery()
-				: notifyDelivery();
+			: optInDelivery(
+					kind === 'calendar'
+						? 'CALENDAR_LIVE_OUTSIDE_PRODUCTION'
+						: 'NOTIFY_LIVE_OUTSIDE_PRODUCTION',
+				);
 	return (
 		mode === 'captured'
 			? { mode: 'captured', context: deployContext() }
