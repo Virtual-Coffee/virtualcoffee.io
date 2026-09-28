@@ -6,9 +6,8 @@ import { getStore } from '@netlify/blobs';
  * Storage for CoC report attachments.
  *
  * The form's file input had been commented out since the Netlify Forms era with
- * a `TODO: hook up file upload - probably using Netlify Blob`. The four
- * historical attachments in Airtable are rehosted into the same store by
- * `scripts/airtable/importSubmissions.ts`.
+ * a `TODO: hook up file upload - probably using Netlify Blob`. Airtable's
+ * historical attachments are not rehosted yet (docs/adr/0004).
  *
  * Files are never served from a public URL — `/admin/submissions/coc/[id]/
  * attachment` reads them back after checking `coc:read`.
