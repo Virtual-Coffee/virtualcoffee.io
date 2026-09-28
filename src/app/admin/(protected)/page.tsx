@@ -8,6 +8,7 @@ import {
 	visibleSubmissionKinds,
 	type SubmissionKind,
 } from '@/lib/submissions/submissions';
+import { unannouncedCount } from '@/lib/waitlist/applications';
 import { ActivityFeed } from './activityFeed';
 
 export const dynamic = 'force-dynamic';
@@ -30,13 +31,15 @@ export default async function AdminDashboardPage() {
 
 	const visibleKinds = visibleSubmissionKinds(sections);
 
-	const [cards, activity, failures] = await Promise.all([
+	const [cards, activity, failures, waitlistUnannounced] = await Promise.all([
 		dashboardCards(sections),
 		recentActivity(sections),
 		failedNotifications(visibleKinds),
+		sections.includes('waitlist') ? unannouncedCount() : 0,
 	]);
 
 	const failureEntries = Object.entries(failures);
+	const announcementFailures = failureEntries.length + waitlistUnannounced;
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -44,16 +47,16 @@ export default async function AdminDashboardPage() {
 				Welcome back, {session.user.name || session.user.email}
 			</h1>
 
-			{failureEntries.length > 0 && (
+			{announcementFailures > 0 && (
 				/**
-				 * Submissions are stored before they are announced, so a Slack or
-				 * GitHub outage leaves a real submission that nobody has been told
-				 * about. This is deliberately shown on arrival as well as inside the
-				 * affected section — see docs/adr/0005.
+				 * Applications and Submissions are stored before they are announced,
+				 * so a Slack or GitHub outage leaves a real one that nobody has been
+				 * told about. This is deliberately shown on arrival as well as inside
+				 * the affected section — see docs/adr/0005.
 				 */
 				<div className="alert alert-warning" role="alert">
 					<h2 className="h6 alert-heading">
-						Some submissions were never announced
+						Some applications or submissions were never announced
 					</h2>
 					<p className="mb-2">
 						These were saved, but the automatic announcement (Slack, and the
@@ -61,9 +64,16 @@ export default async function AdminDashboardPage() {
 						nobody may have seen them come in.
 					</p>
 					<ul className="mb-0">
+						{waitlistUnannounced > 0 && (
+							<li>
+								<Link href="/admin/waitlist">Waitlist</Link>:{' '}
+								{waitlistUnannounced}{' '}
+								{waitlistUnannounced === 1 ? 'application' : 'applications'}
+							</li>
+						)}
 						{failureEntries.map(([kind, total]) => (
 							<li key={kind}>
-								<Link href={`/admin/submissions/${kind}`}>
+								<Link href={`/admin/submissions/${kind}?failed=1`}>
 									{SUBMISSION_KINDS[kind as SubmissionKind].label}
 								</Link>
 								: {total} {total === 1 ? 'submission' : 'submissions'}
