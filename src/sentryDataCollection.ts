@@ -6,14 +6,18 @@ type DataCollection = NonNullable<Parameters<typeof init>[0]['dataCollection']>;
 // The privacy baseline every Sentry.init passes. v11 collects cookies,
 // headers, request bodies and user info when this is unset, so it is never
 // left unset. See docs/adr/0015-error-monitoring-with-sentry.md.
-const ipHeaders = { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] };
+const ipParams = { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] };
 
 export const dataCollection = {
 	userInfo: false,
 	cookies: false,
-	httpHeaders: { request: ipHeaders, response: ipHeaders },
+	// User-Agent only: Sentry derives browser/OS tags and its crawler and
+	// legacy-browser inbound filters from it. Every other request header
+	// (Referer, Accept-Language, IP-bearing proxies) is filtered, and no
+	// response headers are kept.
+	httpHeaders: { request: { allow: ['user-agent'] }, response: false },
 	httpBodies: [],
-	urlQueryParams: ipHeaders,
+	urlQueryParams: ipParams,
 	genAI: { inputs: false, outputs: false },
 	databaseQueryData: false,
 	queues: false,

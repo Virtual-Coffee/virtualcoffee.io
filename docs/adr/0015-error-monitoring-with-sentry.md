@@ -46,10 +46,13 @@ VIRTUALCOFFEE-IO-N` in a commit message resolving the issue when it lands.
 the SDK collects cookies, headers, request and response bodies and user info
 whenever `dataCollection` is unset, so leaving it out is the permissive
 choice. `src/sentryDataCollection.ts` holds the baseline all three init files
-import (no user info, cookies, bodies, database or queue data, and IP-bearing
-headers and query params denied), and a test pins its values. Sentry
-therefore sees stack traces, breadcrumbs and route names, not IP addresses,
-cookies, headers or request bodies. The cost is no IP-derived geography on
+import (no user info, cookies, bodies, database or queue data, no response
+headers, request headers limited to `User-Agent`, IP-bearing query params
+denied), and a test pins its values. Sentry therefore sees stack traces,
+breadcrumbs, route names and the browser's `User-Agent`, not IP addresses,
+cookies, referrers, other headers or request bodies. `User-Agent` stays
+because Sentry derives browser and OS tags and its crawler and legacy-browser
+inbound filters from it. The cost is no IP-derived geography on
 issues; the alternative was a CoC reporter's address in a third-party tool.
 
 Server stack traces keep local variable values (`includeLocalVariables`, with
