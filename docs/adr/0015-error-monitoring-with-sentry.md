@@ -52,6 +52,15 @@ in a third-party tool.
 **Traces are sampled at 25% in production, 100% in development.** Enough to
 see route timings on a low-traffic site without a bot wave burning the quota.
 
+**Browser noise from code we don't ship is tagged, not dropped.** The build
+marks our bundles with an `applicationKey` and `thirdPartyErrorFilterIntegration`
+tags any event with a frame outside them `third_party_code:true`; the default
+issue view filters that tag out. Extensions and injected scripts are the bulk
+of it, but a stack can mix their frames with ours, and a dropped event can't be
+looked at later. The one exception is Netlify's injected RUM beacon, whose
+ingest request fails whenever a blocker drops it: fully identified, never
+actionable, and several a day, so `ignoreErrors` drops it by host.
+
 **Source maps upload from Netlify builds and are deleted afterwards.**
 `withSentryConfig` wraps the Next config; with Turbopack the upload runs after
 the build completes and needs `SENTRY_AUTH_TOKEN` in Netlify's build
@@ -77,5 +86,8 @@ the client-side half of the picture disappears.
 - Netlify holds two new env vars: `NEXT_PUBLIC_SENTRY_DSN` (all contexts) and
   `SENTRY_AUTH_TOKEN` (build secret). Rotating the token is a Netlify change
   only.
+- A rejection from the RUM beacon's ingest host is never reported, including
+  one that is somehow ours. Anything else with a foreign frame is still
+  collected and counts toward quota.
 - The Deno edge function `netlify/edge-functions/block-bots.ts` is outside the
   Next runtime and is not instrumented.
