@@ -38,9 +38,6 @@ type MaintenanceReport = {
 	emailDeferred: number;
 };
 
-/** Re-exported so the period key is testable from beside the job that runs it. */
-export { periodKey };
-
 /**
  * Expire Claim Links that were never used, and give the allowance back.
  *
