@@ -3,8 +3,8 @@
  * Captured everywhere else unless an opt-in says otherwise, and email's Local
  * opt-in (`SMTP_HOST`) only on a checkout (docs/adr/0013). Every sender is a
  * `deliver()` call, so it cannot reach its credentials before the mode is
- * decided. Plain `next dev` has no `CONTEXT` at all: non-production, and not
- * a checkout either.
+ * decided. Plain `next dev` has no `CONTEXT` at all, and counts as a
+ * checkout, like `netlify dev`'s `CONTEXT=dev`.
  */
 
 export type OutboundKind = 'email' | 'slack' | 'slack dm' | 'github issue';
