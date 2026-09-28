@@ -106,6 +106,94 @@ export type PatchOf<S extends StatusSubject> = S extends ApplicationSubject
 
 type Executor = Database | Transaction;
 
+/** The columns the event tables share, which is all History reads. */
+type EventTable = PgTable & {
+	id: PgColumn;
+	type: PgColumn;
+	body: PgColumn;
+	createdAt: PgColumn;
+	actorUserId: PgColumn;
+};
+
+/** What every event row carries whatever its subject. */
+type SharedValues = {
+	actorUserId: string | null;
+	body: string | null;
+	createdAt?: Date;
+};
+
+/**
+ * Where each kind of subject keeps its History: the table, how a row is
+ * written, which rows belong to one subject, and its status columns — null
+ * for a Volunteer, which has none.
+ */
+type HistorySource<S extends Subject> = {
+	table: EventTable;
+	insert: (
+		executor: Executor,
+		subject: S,
+		event: EventInput<S>,
+		shared: SharedValues,
+	) => Promise<unknown>;
+	belongsTo: (subject: S) => SQL;
+	status: { fromStatus: PgColumn; toStatus: PgColumn } | null;
+};
+
+const sources: {
+	[K in Subject['kind']]: HistorySource<Extract<Subject, { kind: K }>>;
+} = {
+	application: {
+		table: applicationEvent,
+		insert: (executor, subject, event, shared) =>
+			executor.insert(applicationEvent).values({
+				...shared,
+				applicationId: subject.id,
+				type: event.type,
+				fromStatus: event.fromStatus ?? null,
+				toStatus: event.toStatus ?? null,
+			}),
+		belongsTo: (subject) => eq(applicationEvent.applicationId, subject.id),
+		status: {
+			fromStatus: applicationEvent.fromStatus,
+			toStatus: applicationEvent.toStatus,
+		},
+	},
+	submission: {
+		table: submissionEvent,
+		// The wrong key trips `submission_event_exactly_one_subject` rather than
+		// writing a bad row.
+		insert: (executor, subject, event, shared) =>
+			executor.insert(submissionEvent).values({
+				...shared,
+				[subject.eventKey]: subject.id,
+				type: event.type,
+				fromStatus: event.fromStatus ?? null,
+				toStatus: event.toStatus ?? null,
+			}),
+		belongsTo: (subject) => eq(submissionEvent[subject.eventKey], subject.id),
+		status: {
+			fromStatus: submissionEvent.fromStatus,
+			toStatus: submissionEvent.toStatus,
+		},
+	},
+	volunteer: {
+		table: volunteerEvent,
+		insert: (executor, subject, event, shared) =>
+			executor.insert(volunteerEvent).values({
+				...shared,
+				volunteerId: subject.id,
+				type: event.type,
+			}),
+		belongsTo: (subject) => eq(volunteerEvent.volunteerId, subject.id),
+		status: null,
+	},
+};
+
+/** The one lookup: `S` picks its own entry, which TypeScript cannot follow. */
+function sourceOf<S extends Subject>(subject: S): HistorySource<S> {
+	return sources[subject.kind] as unknown as HistorySource<S>;
+}
+
 /**
  * One History row.
  *
@@ -118,40 +206,10 @@ export async function recordEvent<S extends Subject>(
 	event: EventInput<S>,
 	executor: Executor = db(),
 ): Promise<void> {
-	const shared = {
+	await sourceOf(subject).insert(executor, subject, event, {
 		actorUserId: event.actorUserId ?? null,
 		body: event.body ?? null,
 		...(event.createdAt ? { createdAt: event.createdAt } : {}),
-	};
-	if (subject.kind === 'volunteer') {
-		const input = event as VolunteerEventInput;
-		await executor.insert(volunteerEvent).values({
-			...shared,
-			volunteerId: subject.id,
-			type: input.type,
-		});
-		return;
-	}
-	if (subject.kind === 'application') {
-		const input = event as ApplicationEventInput;
-		await executor.insert(applicationEvent).values({
-			...shared,
-			applicationId: subject.id,
-			type: input.type,
-			fromStatus: input.fromStatus ?? null,
-			toStatus: input.toStatus ?? null,
-		});
-		return;
-	}
-	const input = event as SubmissionEventInput;
-	// The wrong key trips `submission_event_exactly_one_subject` rather than
-	// writing a bad row.
-	await executor.insert(submissionEvent).values({
-		...shared,
-		[subject.eventKey]: subject.id,
-		type: input.type,
-		fromStatus: input.fromStatus ?? null,
-		toStatus: input.toStatus ?? null,
 	});
 }
 
@@ -318,15 +376,6 @@ export async function transitionAndRecord<S extends StatusSubject>(
 	});
 }
 
-/** The columns the event tables share, which is all History reads. */
-type EventTable = PgTable & {
-	id: PgColumn;
-	type: PgColumn;
-	body: PgColumn;
-	createdAt: PgColumn;
-	actorUserId: PgColumn;
-};
-
 /**
  * One row of History, as a detail screen's timeline renders it.
  *
@@ -344,57 +393,26 @@ export type HistoryEntry<S extends Subject> = {
 	actorName: string | null;
 };
 
-/** Which table a subject's History is in, and the row that belongs to it. */
-function source(subject: Subject): {
-	table: EventTable;
-	belongsToSubject: SQL;
-	fromStatus: PgColumn | SQL<null>;
-	toStatus: PgColumn | SQL<null>;
-} {
-	switch (subject.kind) {
-		case 'application':
-			return {
-				table: applicationEvent,
-				belongsToSubject: eq(applicationEvent.applicationId, subject.id),
-				fromStatus: applicationEvent.fromStatus,
-				toStatus: applicationEvent.toStatus,
-			};
-		case 'submission':
-			return {
-				table: submissionEvent,
-				belongsToSubject: eq(submissionEvent[subject.eventKey], subject.id),
-				fromStatus: submissionEvent.fromStatus,
-				toStatus: submissionEvent.toStatus,
-			};
-		case 'volunteer':
-			return {
-				table: volunteerEvent,
-				belongsToSubject: eq(volunteerEvent.volunteerId, subject.id),
-				fromStatus: sql<null>`null`,
-				toStatus: sql<null>`null`,
-			};
-	}
-}
-
 /** One subject's History, newest first, with the actor's current name. */
 export async function history<S extends Subject>(
 	subject: S,
 ): Promise<HistoryEntry<S>[]> {
-	// A Volunteer's rows have no status columns; the timeline reads null.
-	const { table, belongsToSubject, ...statusColumns } = source(subject);
+	const { table, belongsTo, status } = sourceOf(subject);
 
 	const rows = await db()
 		.select({
 			id: table.id,
 			type: sql<string>`${table.type}`,
 			body: table.body,
-			...statusColumns,
+			// A Volunteer's rows have no status columns; the timeline reads null.
+			fromStatus: status?.fromStatus ?? sql<null>`null`,
+			toStatus: status?.toStatus ?? sql<null>`null`,
 			createdAt: table.createdAt,
 			actorName: user.name,
 		})
 		.from(table)
 		.leftJoin(user, eq(table.actorUserId, user.id))
-		.where(belongsToSubject)
+		.where(belongsTo(subject))
 		// `createdAt` is not unique; the v7 id breaks ties by creation order.
 		.orderBy(desc(table.createdAt), desc(table.id));
 
