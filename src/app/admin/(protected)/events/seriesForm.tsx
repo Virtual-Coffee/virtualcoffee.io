@@ -43,8 +43,8 @@ export function SeriesForm({ series }: { series?: Series }) {
 				<div className="form-label small fw-semibold mb-1">Repeats</div>
 				<p className="mb-1">{series?.recurrenceText}</p>
 				<div className="form-text">
-					This rule is one this form can’t edit. Change it in Google Calendar;
-					everything else here can be saved.
+					This rule is one this form can’t edit. Change it on the Events
+					Calendar; everything else here can be saved.
 				</div>
 			</div>
 		) : (

@@ -103,7 +103,7 @@ export type AdminEvent = {
 /** The etag the maintainer loaded is no longer the calendar's. */
 export class CalendarConflictError extends Error {
 	constructor() {
-		super('The event changed in Google Calendar since it was loaded.');
+		super('The event changed on the Events Calendar since it was loaded.');
 		this.name = 'CalendarConflictError';
 	}
 }

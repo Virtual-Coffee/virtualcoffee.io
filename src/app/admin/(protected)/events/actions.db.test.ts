@@ -195,7 +195,7 @@ describe('writing', () => {
 			ok: false,
 			definitelyNotSent: true,
 			message:
-				'This changed in Google Calendar since you loaded it. Check the current details and try again.',
+				'This changed on the Events Calendar since you loaded it. Check the current details and try again.',
 		});
 		expect(revalidateTag).not.toHaveBeenCalled();
 	});

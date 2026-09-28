@@ -123,7 +123,8 @@ _Avoid_: Group application
 The single calendar that holds every Series and Event the community runs.
 Readable by everyone in the virtualcoffee.io Google Workspace, and by the site
 and the Slack bots through one service account; not public.
-_Avoid_: Calendar, Google Calendar, CMS
+_Avoid_: Calendar, Google Calendar, CMS — the product name is fine where the
+copy means Google's own app ("Open in Google Calendar")
 
 **Series**:
 A recurring entry on the Events Calendar. Owns the standing description and

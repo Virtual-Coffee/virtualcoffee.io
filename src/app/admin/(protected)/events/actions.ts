@@ -21,7 +21,7 @@ import {
 import { deliver } from '@/lib/outbound';
 
 const CONFLICT =
-	'This changed in Google Calendar since you loaded it. Check the current details and try again.';
+	'This changed on the Events Calendar since you loaded it. Check the current details and try again.';
 const NOT_CONFIGURED =
 	'The Events Calendar is not configured: GOOGLE_SERVICE_ACCOUNT_KEY and GOOGLE_CALENDAR_ID are needed.';
 const GONE = 'That no longer exists on the Events Calendar.';
