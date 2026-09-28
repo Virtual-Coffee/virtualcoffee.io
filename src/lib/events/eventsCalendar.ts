@@ -630,7 +630,9 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 
 	/**
 	 * No further Events. A Series that has already run keeps its past Events
-	 * and gets `UNTIL` now; one that never ran is deleted outright.
+	 * and gets `UNTIL` now; one that never ran is deleted outright. A Cancelled
+	 * past Event still counts as run; an earlier End's placeholder does not
+	 * (docs/adr/0014).
 	 */
 	async function endSeries(
 		id: string,
@@ -644,11 +646,14 @@ export function eventsCalendar(client: CalendarClient, calendarId: string) {
 			client.events.instances({
 				calendarId,
 				eventId: id,
+				showDeleted: true,
 				timeMax: iso(now),
 				maxResults: 1,
 			}),
 		);
-		if (!(past.items ?? []).length) {
+		// Instances come in start order, and an earlier End's placeholders all
+		// sit after its UNTIL: the first item is a real Event if there is one.
+		if (!(past.items ?? []).some((item) => !isTombstone(item))) {
 			await conditional(() =>
 				client.events.delete(
 					{ calendarId, eventId: id, sendUpdates: 'none' },

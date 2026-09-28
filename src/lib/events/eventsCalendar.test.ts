@@ -673,7 +673,12 @@ describe('writes', () => {
 		await expect(cal.endSeries('coffee', '"1"')).resolves.toBe('ended');
 		expect(calls[1]).toMatchObject({
 			method: 'instances',
-			params: { eventId: 'coffee', timeMax: expect.any(String), maxResults: 1 },
+			params: {
+				eventId: 'coffee',
+				showDeleted: true,
+				timeMax: expect.any(String),
+				maxResults: 1,
+			},
 		});
 		expect(calls[2]).toMatchObject({
 			method: 'patch',
@@ -684,6 +689,50 @@ describe('writes', () => {
 			},
 			options: { headers: { 'If-Match': '"1"' } },
 		});
+	});
+
+	test('endSeries ends a Series whose past Events were all Cancelled', async () => {
+		const { cal, calls } = fakeClient({
+			get: { coffee: series },
+			instances: {
+				coffee: {
+					items: [
+						instance('coffee', '2026-09-10', {
+							status: 'cancelled',
+							start: undefined,
+							end: undefined,
+						}),
+					],
+				},
+			},
+		});
+		await expect(cal.endSeries('coffee', '"1"')).resolves.toBe('ended');
+		expect(calls.map((call) => call.method)).toEqual([
+			'get',
+			'instances',
+			'patch',
+		]);
+	});
+
+	test("endSeries does not count an earlier End's placeholder as run", async () => {
+		const { cal, calls } = fakeClient({
+			get: { coffee: series },
+			instances: {
+				coffee: {
+					items: [
+						{
+							id: 'coffee_20260910T130000Z',
+							etag: '"p"',
+							status: 'cancelled',
+							start: { dateTime: '2026-09-10T09:00:00-04:00' },
+							end: { dateTime: '2026-09-10T10:00:00-04:00' },
+						},
+					],
+				},
+			},
+		});
+		await expect(cal.endSeries('coffee', '"1"')).resolves.toBe('deleted');
+		expect(calls.at(-1)?.method).toBe('delete');
 	});
 
 	test('endSeries deletes a Series that never ran', async () => {

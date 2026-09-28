@@ -87,7 +87,8 @@ an edit made in Google's UI in the meantime is never silently overwritten.
 **A Series is Ended, not deleted.** Google's delete takes every Event of the
 Series with it, past ones included — history `/events` and the bots have
 shown. Ending sets the rule's `UNTIL` to now instead; only a Series that has
-never run is deleted outright.
+never run is deleted outright. Never run means no past slot at all, Cancelled
+or not; an earlier End's placeholder is not a slot.
 
 **Calendar writes have a Delivery Mode (0013).** There is one real calendar,
 so outside production every write is captured unless
