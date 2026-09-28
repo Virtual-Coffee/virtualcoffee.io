@@ -23,6 +23,7 @@ import {
 } from '@/lib/volunteers/invites';
 import {
 	grantVolunteerRole,
+	lockSlackMember,
 	revokeVolunteerRole,
 } from '@/lib/access/pendingGrants';
 import { grantDmMessage, sendSlackDm } from '@/lib/slack/dm';
@@ -317,6 +318,8 @@ export async function setVolunteerActive(
 	const signedIn = active ? await userForSlackId(row.slackUserId) : null;
 
 	await db().transaction(async (tx) => {
+		// Before the volunteer write: claimPendingGrant() takes them in this order.
+		await lockSlackMember(tx, row.slackUserId);
 		await tx
 			.update(volunteer)
 			.set({ deactivatedAt: active ? null : new Date() })
