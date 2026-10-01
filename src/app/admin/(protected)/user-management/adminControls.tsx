@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { filterSlackMembers } from '@/data/slackMembers';
+import { ActionDialog } from '@/components/ActionDialog';
 import type { GrantCandidate } from '@/lib/access/admins';
 import {
 	GRANTABLE_ROLE_NAMES,
@@ -15,6 +16,7 @@ import { type CheckboxMenuOption, RoleCheckboxMenu } from '../roleCheckboxMenu';
 import { useDropdown } from '../useDropdown';
 import {
 	grantPendingAccess,
+	resendPendingGrantDm,
 	revokePendingGrant,
 	setPendingGrantRoles,
 	setUserRoles,
@@ -46,7 +48,7 @@ export function RolesDropdown({
 	stranded: boolean;
 	isSelf: boolean;
 }) {
-	const { run, pending, error } = useAction();
+	const { run, pending, error, result } = useAction();
 
 	const grantable = roles.filter((role) => GRANTABLE_ROLE_NAMES.has(role));
 
@@ -83,21 +85,9 @@ export function RolesDropdown({
 		);
 	}
 
-	/**
-	 * Revoking a Pending Grant deletes it rather than setting it to no roles: it
-	 * never took effect, so there is nothing to keep, and a grant holding nothing
-	 * would sit in the table meaning nothing.
-	 *
-	 * Only this button deletes, and it is not staged. Unticking every checkbox
-	 * and saving goes through `save` with an empty set, because a Volunteer's
-	 * grant still holds `volunteer` after that and is not empty.
-	 */
-	function revokeAll() {
-		if (!window.confirm(`Revoke every /admin role for ${name}?`)) return;
-
-		run(() =>
-			kind === 'user' ? setUserRoles(id, []) : revokePendingGrant(id),
-		);
+	/** Only a Pending Grant has anyone left to DM — a `kind:'user'` row has signed in. */
+	function resendDm() {
+		run(() => resendPendingGrantDm(id));
 	}
 
 	const options: CheckboxMenuOption<RoleName>[] = GRANTABLE_ROLES.map(
@@ -153,6 +143,27 @@ export function RolesDropdown({
 						</button>
 					</li>
 
+					{kind === 'pending' && (
+						<>
+							<li>
+								<hr className="dropdown-divider" />
+							</li>
+							<li>
+								<button
+									type="button"
+									className="dropdown-item"
+									disabled={pending}
+									onClick={() => {
+										close();
+										resendDm();
+									}}
+								>
+									Resend DM
+								</button>
+							</li>
+						</>
+					)}
+
 					{!isSelf &&
 						(kind === 'user'
 							? grantable.length > 0
@@ -162,17 +173,36 @@ export function RolesDropdown({
 									<hr className="dropdown-divider" />
 								</li>
 								<li>
-									<button
-										type="button"
+									{/*
+									 * Revoking a Pending Grant deletes it rather than setting it
+									 * to no roles: it never took effect, so there is nothing to
+									 * keep, and a grant holding nothing would sit in the table
+									 * meaning nothing.
+									 *
+									 * Only this button deletes, and it is not staged. Unticking
+									 * every checkbox and saving goes through `save` with an empty
+									 * set, because a Volunteer's grant still holds `volunteer`
+									 * after that and is not empty.
+									 *
+									 * The menu stays open behind the dialog because the dialog is
+									 * mounted in it; a refusal is reported there rather than under
+									 * the chips, which this row loses on success.
+									 */}
+									<ActionDialog
 										className="dropdown-item text-danger"
+										label="Revoke /admin roles"
+										title="Revoke /admin roles"
+										danger
 										disabled={pending}
-										onClick={() => {
-											close();
-											revokeAll();
-										}}
+										showFeedback={false}
+										action={() =>
+											kind === 'user'
+												? setUserRoles(id, [])
+												: revokePendingGrant(id)
+										}
 									>
-										Revoke /admin roles
-									</button>
+										<p className="mb-0">Revoke every /admin role for {name}?</p>
+									</ActionDialog>
 								</li>
 							</>
 						)}
@@ -190,6 +220,12 @@ export function RolesDropdown({
 					))
 				)}
 			</div>
+
+			{result?.ok && result.message && (
+				<p className="text-success small mb-0 mt-1" role="status">
+					{result.message}
+				</p>
+			)}
 
 			{error && (
 				<p className="text-danger small mb-0 mt-1" role="alert">
@@ -214,7 +250,7 @@ export function GrantAccessForm({
 	const [query, setQuery] = useState('');
 	const [selected, setSelected] = useState<GrantCandidate | null>(null);
 	const [role, setRole] = useState<RoleName>('admin');
-	const { run, pending, error, clear } = useAction();
+	const { run, pending, error, result, clear } = useAction();
 	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<
 		HTMLDivElement,
 		HTMLInputElement
@@ -369,6 +405,13 @@ export function GrantAccessForm({
 			>
 				Grant access
 			</button>
+
+			{/* The grant stood either way; the message may still say the DM did not. */}
+			{result?.ok && result.message && (
+				<p className="text-body-secondary small mb-0 w-100" role="status">
+					{result.message}
+				</p>
+			)}
 
 			{error && (
 				<p className="text-danger small mb-0 w-100" role="alert">

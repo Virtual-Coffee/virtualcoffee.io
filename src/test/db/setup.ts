@@ -43,11 +43,29 @@ vi.mock('next/cache', async () => {
 	return { revalidatePath, revalidateTag, unstable_cache: <T>(fn: T) => fn };
 });
 
-/** The outbound edge, mocked once for every db test — knobs in `src/test/mocks/`. */
 vi.mock('@/data/slackMembers', async (importOriginal) => ({
 	...(await importOriginal<typeof import('@/data/slackMembers')>()),
 	...(await import('@/test/mocks/slackMembers')),
 }));
+vi.mock('@/lib/slack/notify', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/slack/notify')>()),
+	notifySlack: (await import('@/test/mocks/spies')).notifySlack,
+}));
+vi.mock('@/lib/slack/dm', async (importOriginal) => ({
+	...(await importOriginal<typeof import('@/lib/slack/dm')>()),
+	sendSlackDm: (await import('@/test/mocks/spies')).sendSlackDm,
+}));
+vi.mock('@/lib/email/transport', async () => ({
+	sendEmail: (await import('@/test/mocks/spies')).sendEmail,
+}));
+
+/** `staleRead.readAs` stages the race — see `@/test/mocks/wrappers`. */
+vi.mock('@/lib/waitlist/applications', async (importOriginal) =>
+	(await import('@/test/mocks/wrappers')).withStaleRead(
+		await importOriginal<typeof import('@/lib/waitlist/applications')>(),
+		'getApplication',
+	),
+);
 
 /** Every table in the schema, so a new one is truncated without editing this. */
 const tables = Object.values(schema)

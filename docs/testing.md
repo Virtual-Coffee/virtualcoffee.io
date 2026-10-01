@@ -13,6 +13,7 @@ Vitest, configured in `vitest.config.mts` (read its header comment: it defines t
 - **Mocks of shared modules are registered once, in `src/test/db/setup.ts`.** The project runs every file in one worker without isolation, so a file-scoped `vi.mock` is ignored whenever another file loaded that module first; ESLint rejects one. A test sets state through the knobs in `src/test/mocks/`.
 - **Tests authenticate with real sessions.** `signInAs(roles, slackId)` in `src/test/session.ts` inserts a user and mints a session through Better Auth's `testUtils` plugin, and the mocked `next/headers` (`src/test/setup.ts`) hands that cookie to `getSession()`, so `requirePermission()` and `actorId()` run for real. The dev bypass is stubbed only where it is the subject (`adminAccess.db.test.ts`).
 - **Idempotency is shown by calling twice.** PGlite is one session, so a race between two transactions cannot be staged.
+- **A mocked sender returns a failure, never rejects** — `sendEmail`/`notifySlack` in `src/test/mocks/` follow the real functions' contract (`deliver()` never throws).
 - Fixtures are in `src/test/db/fixtures.ts`.
 
 `tsconfig.json` includes `**/*.ts`, so `pnpm typecheck` sees test files, and `@vitest/eslint-plugin`'s recommended rules apply to them (no focused or skipped tests).

@@ -70,7 +70,7 @@ against are already covered:
   code, and the only thing standing between a fork PR's build and the fork.
 - A preview's sign-in only reaches the preview when the running function knows
   its own address. Netlify sets `CONTEXT` and `DEPLOY_PRIME_URL` at build only,
-  so `next.config.mjs` inlines them; without that, `qualifiedUrl()` falls back to
+  so `next.config.mjs` inlines them; without that, `siteUrl()` falls back to
   production's domain and Slack is sent production's callback.
 - Adding a table or column is just adding it; nothing has to be registered.
 - Anything a preview reaches that is not the database is not forked: an

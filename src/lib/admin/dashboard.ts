@@ -1,4 +1,7 @@
+import { statusCounts } from '@/lib/waitlist/applications';
+import { recentEvents } from '@/lib/history/eventLog';
 import type { Section } from '@/lib/access/permissions';
+import { applicationPath } from '@/lib/admin/links';
 
 /** One number on a card. Most sections have a single one; the queue has two. */
 export type DashboardFigure = {
@@ -32,6 +35,24 @@ export type ActivityEntry = {
 	subject: string;
 };
 
+async function waitlistCard(): Promise<DashboardCard> {
+	// The queue's own grouped count: one query cannot disagree with itself
+	// about a row that changed status between the two figures.
+	const counts = await statusCounts();
+
+	return {
+		section: 'waitlist',
+		label: 'Waitlist',
+		href: '/admin/waitlist',
+		figures: [
+			// Awaiting a first decision — nobody has looked at them yet.
+			{ count: counts.waitlisted ?? 0, label: 'waiting' },
+			// Sent a Coffee invite, awaiting a Membership Approval after it.
+			{ count: counts.coffee_invited ?? 0, label: 'pending' },
+		],
+	};
+}
+
 /**
  * One card per Section, or null for a Section that is a list of people rather
  * than a queue of work. Keyed on `Section` so that adding one without deciding
@@ -41,7 +62,7 @@ export type ActivityEntry = {
  * the same change as its pages.
  */
 const CARDS: Record<Section, (() => Promise<DashboardCard>) | null> = {
-	waitlist: null,
+	waitlist: waitlistCard,
 	coc: null,
 	volunteerSignups: null,
 	lunchAndLearn: null,
@@ -71,21 +92,26 @@ const ACTIVITY_LIMIT = 15;
 /**
  * The most recent events across everything the viewer can see.
  *
- * Each Section that keeps an event log contributes its rows here, merged in
- * JavaScript rather than as a SQL UNION: the event tables have different
- * shapes and different foreign keys, and at fifteen rows the cost of
- * over-fetching a little from each is irrelevant next to the complexity of
- * keeping a union in step with all of them. No Section with a log has landed
- * yet.
+ * The Event Log reads and merges the rows (`recentEvents`); what is left here
+ * is the part that is the dashboard's own: which Sections the viewer holds,
+ * where an entry links to, and how its subject is named.
  */
 export async function recentActivity(
-	// Consulted by each Section's branch as it lands.
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	sections: readonly Section[],
 ): Promise<ActivityEntry[]> {
-	const entries: ActivityEntry[] = [];
+	const rows = await recentEvents({
+		applications: sections.includes('waitlist'),
+		submissions: [],
+		limit: ACTIVITY_LIMIT,
+	});
 
-	return entries
-		.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-		.slice(0, ACTIVITY_LIMIT);
+	return rows.map((row) => ({
+		key: `${row.kind}-${row.id}`,
+		createdAt: row.createdAt,
+		type: row.type,
+		body: row.body,
+		actorName: row.actorName,
+		href: applicationPath(row.subjectId),
+		subject: row.name ?? `Application ${row.reference}`,
+	}));
 }

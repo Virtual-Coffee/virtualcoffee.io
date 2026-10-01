@@ -28,9 +28,9 @@ export const staleRead = { readAs: null as string | null };
  * per module whose reader an action fences on, e.g.
  *
  * ```ts
- * vi.mock('@/lib/applications', async (importOriginal) =>
+ * vi.mock('@/lib/waitlist/applications', async (importOriginal) =>
  * 	(await import('@/test/mocks/wrappers')).withStaleRead(
- * 		await importOriginal<typeof import('@/lib/applications')>(),
+ * 		await importOriginal<typeof import('@/lib/waitlist/applications')>(),
  * 		'getApplication',
  * 	),
  * );

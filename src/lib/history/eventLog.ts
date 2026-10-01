@@ -18,6 +18,7 @@ import {
 	type SubmissionStatus,
 	type Transaction,
 } from '@/db';
+import type { Outbound } from '@/lib/outbound';
 
 /**
  * History: `application_event` and `submission_event` as one concept.
@@ -90,10 +91,17 @@ export type PatchOf<S extends Subject> = S extends ApplicationSubject
 
 type Executor = Database | Transaction;
 
-async function writeEvent(
-	subject: Subject,
-	event: ApplicationEventInput | SubmissionEventInput,
-	executor: Executor,
+/**
+ * One History row.
+ *
+ * Every INSERT into either event table goes through here — directly, or from
+ * `recordOutcome`, `recordImport` or `transitionAndRecord` — and nothing
+ * outside this module inserts at all.
+ */
+export async function recordEvent<S extends Subject>(
+	subject: S,
+	event: EventInput<S>,
+	executor: Executor = db(),
 ): Promise<void> {
 	const shared = {
 		actorUserId: event.actorUserId ?? null,
@@ -124,21 +132,6 @@ async function writeEvent(
 }
 
 /**
- * One History row.
- *
- * Every INSERT into either event table goes through `writeEvent` — from here,
- * `recordOutcome`, `recordImport` or `transitionAndRecord` — and nothing
- * outside this module inserts at all.
- */
-export async function recordEvent<S extends Subject>(
-	subject: S,
-	event: EventInput<S>,
-	executor: Executor = db(),
-): Promise<void> {
-	await writeEvent(subject, event, executor);
-}
-
-/**
  * The History line for a row that came from Airtable, written by the seed and
  * by the one-off importers.
  *
@@ -162,15 +155,12 @@ export async function recordImport<S extends Subject>(
 		body: `Imported from Airtable (${airtableRecordId})`,
 		createdAt: at,
 		...(toStatus ? { toStatus } : {}),
-	} as ApplicationEventInput | SubmissionEventInput;
+	} as EventInput<S>;
 
-	await writeEvent(subject, event, executor);
+	await recordEvent(subject, event, executor);
 }
 
 export type Channel = 'email' | 'slack' | 'github issue';
-
-/** What `deliver()` returns (`Outbound` in lib/outbound.ts), as much of it as History needs. */
-export type Outcome = { ok: boolean; message: string; warning?: string };
 
 /** Only an application is ever emailed; a Submission's outcomes are all notifications. */
 export type ChannelOf<S extends Subject> = S extends ApplicationSubject
@@ -190,7 +180,7 @@ export async function recordOutcome<S extends Subject>(
 	subject: S,
 	input: {
 		channel: ChannelOf<S>;
-		outbound: Outcome;
+		outbound: Outbound;
 		what: string;
 		actorUserId?: string | null;
 	},
@@ -211,11 +201,11 @@ export async function recordOutcome<S extends Subject>(
 		: `${input.what} failed: ${outbound.message}`;
 
 	try {
-		await writeEvent(
-			subject,
-			{ type, body, actorUserId: input.actorUserId },
-			db(),
-		);
+		await recordEvent(subject, {
+			type,
+			body,
+			actorUserId: input.actorUserId,
+		} as EventInput<S>);
 		return true;
 	} catch (error) {
 		console.error(
@@ -224,6 +214,35 @@ export async function recordOutcome<S extends Subject>(
 		);
 		return false;
 	}
+}
+
+/**
+ * Announce a subject and record what happened either way, for a public form.
+ * Called *after* the row is committed — persist first, notify second, per
+ * docs/adr/0005 — and never throws: a sender that throws despite `deliver()`'s
+ * contract is recorded as a failure.
+ */
+export async function notifyAndRecord<S extends Subject>(
+	subject: S,
+	input: { channel: ChannelOf<S>; what: string },
+	notify: () => Promise<Outbound>,
+): Promise<void> {
+	let outbound: Outbound;
+
+	try {
+		outbound = await notify();
+	} catch (error) {
+		outbound = {
+			ok: false,
+			definitelyNotSent: true,
+			message:
+				error instanceof Error
+					? error.message
+					: 'The notification threw unexpectedly.',
+		};
+	}
+
+	await recordOutcome(subject, { ...input, outbound });
 }
 
 type StatusTable = PgTable & { id: PgColumn; status: PgColumn };
@@ -260,7 +279,7 @@ export async function transitionAndRecord<S extends Subject>(
 		...event,
 		fromStatus: to === undefined ? null : from,
 		toStatus: to ?? null,
-	} as ApplicationEventInput | SubmissionEventInput;
+	} as EventInput<S>;
 	return db().transaction(async (tx) => {
 		const moved = await tx
 			.update(table)
@@ -270,7 +289,7 @@ export async function transitionAndRecord<S extends Subject>(
 			)
 			.returning({ id: table.id });
 		if (moved.length === 0) return false;
-		await writeEvent(subject, recorded, tx);
+		await recordEvent(subject, recorded, tx);
 		return true;
 	});
 }
