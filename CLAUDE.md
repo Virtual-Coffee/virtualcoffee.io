@@ -139,6 +139,7 @@ Sentry (`@sentry/nextjs`), errors + tracing only. Init files: `src/instrumentati
 
 - Off without `NEXT_PUBLIC_SENTRY_DSN`; Netlify sets it for every deploy context, `.env` locally is opt-in.
 - Every `Sentry.init` passes `dataCollection` from `src/sentryDataCollection.ts` (v11 is permissive when it's unset); loosening it is a policy change. The CoC report form must not reach Sentry. Rationale in `docs/adr/0015-error-monitoring-with-sentry.md`.
+- A caught failure a maintainer must act on goes through `reportHandled()` (`src/lib/monitoring/reportHandled.ts`), which scrubs it; the server's `beforeSend` strips frame locals on `PII_ROUTES` — ADR 0015.
 - `environment` is the Netlify `CONTEXT`, inlined as `NEXT_PUBLIC_SENTRY_ENVIRONMENT` in `next.config.mjs`.
 - Errors with frames outside our bundles are tagged `third_party_code:true`, not dropped (`applicationKey` in `next.config.mjs` must match `filterKeys`); only Netlify's RUM beacon failure is dropped. See ADR 0015.
 - Releases are commit SHAs with commits and Netlify deploys attached by the build; `Fixes VIRTUALCOFFEE-IO-N` in a commit message resolves that Sentry issue on merge.
