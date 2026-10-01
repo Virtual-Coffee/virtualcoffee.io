@@ -5,7 +5,7 @@ import { styles } from '@/lib/email/styles';
 import { defineEmail } from '@/lib/email/template';
 
 /**
- * Sent once, when someone is made a Volunteer — most are pre-provisioned and
+ * Sent once, when someone is made a Volunteer — most hold a Pending Grant and
  * would otherwise first hear of /invites from a balance email.
  */
 export type VolunteerGrantProps = {
