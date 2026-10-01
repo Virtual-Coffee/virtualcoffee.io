@@ -8,6 +8,8 @@
  * checkout, like `netlify dev`'s `CONTEXT=dev`.
  */
 
+import { reportHandled } from '@/lib/monitoring/reportHandled';
+
 export type OutboundKind =
 	'email' | 'slack' | 'slack dm' | 'github issue' | 'calendar';
 
@@ -236,13 +238,44 @@ export async function deliver<
 	try {
 		return await input.live(delivery);
 	} catch (error) {
+		const timedOut = (input.isTimeout ?? isAbortTimeout)(error);
+		if (!timedOut && isActionable(error)) {
+			reportHandled(error, {
+				area: 'outbound',
+				tags: { outbound: input.kind, target: maskAddress(input.target) },
+			});
+		}
 		return {
 			ok: false,
 			message:
 				error instanceof Error
 					? `Could not reach ${input.unreachable}: ${error.message}`
 					: `Could not reach ${input.unreachable}.`,
-			definitelyNotSent: !(input.isTimeout ?? isAbortTimeout)(error),
+			definitelyNotSent: !timedOut,
 		};
 	}
+}
+
+/**
+ * A rejection someone has to fix (a 4xx: bad credentials, a missing
+ * installation) or a failure with no status at all. A 429, a 5xx or a timeout
+ * is the other side's weather, and History already shows it (docs/adr/0015).
+ */
+function isActionable(error: unknown): boolean {
+	const status = httpStatus(error);
+	if (status === undefined) return true;
+	return status >= 400 && status < 500 && status !== 429;
+}
+
+/** Octokit sets `status`; Google's clients use `code` or `response.status`. */
+function httpStatus(error: unknown): number | undefined {
+	if (typeof error !== 'object' || error === null) return;
+	const { status, code, response } = error as {
+		status?: unknown;
+		code?: unknown;
+		response?: { status?: unknown };
+	};
+	return [status, response?.status, code].find(
+		(value): value is number => typeof value === 'number',
+	);
 }
