@@ -5,7 +5,8 @@ node_modules
 /src/assets/css
 /src/assets/rev
 /assets.json
-/.env
+.env*
+!.env.example
 /.cache
 /.pnp
 .pnp.js
