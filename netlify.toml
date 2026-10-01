@@ -205,7 +205,7 @@
 
 [[redirects]]
 	from   = "/join-coffee"
-	query  = { day = ":day", code = ":code" }
+	query  = { day = ":day" }
 	status = 200
 	to     = "/.netlify/functions/join-coffee"
 
