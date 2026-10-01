@@ -1,7 +1,13 @@
 import { statusCounts } from '@/lib/waitlist/applications';
 import { recentEvents } from '@/lib/history/eventLog';
 import type { Section } from '@/lib/access/permissions';
-import { applicationPath } from '@/lib/admin/links';
+import { applicationPath, submissionPath } from '@/lib/admin/links';
+import {
+	openCount,
+	SUBMISSION_KINDS,
+	visibleSubmissionKinds,
+	type SubmissionKind,
+} from '@/lib/submissions/submissions';
 
 /** One number on a card. Most sections have a single one; the queue has two. */
 export type DashboardFigure = {
@@ -53,6 +59,16 @@ async function waitlistCard(): Promise<DashboardCard> {
 	};
 }
 
+function submissionCard(kind: SubmissionKind): () => Promise<DashboardCard> {
+	const { section, label } = SUBMISSION_KINDS[kind];
+	return async () => ({
+		section,
+		label,
+		href: `/admin/submissions/${kind}`,
+		figures: [{ count: await openCount(kind), label: 'awaiting a response' }],
+	});
+}
+
 /**
  * One card per Section, or null for a Section that is a list of people rather
  * than a queue of work. Keyed on `Section` so that adding one without deciding
@@ -63,10 +79,10 @@ async function waitlistCard(): Promise<DashboardCard> {
  */
 const CARDS: Record<Section, (() => Promise<DashboardCard>) | null> = {
 	waitlist: waitlistCard,
-	coc: null,
-	volunteerSignups: null,
-	lunchAndLearn: null,
-	coffeeTables: null,
+	coc: submissionCard('coc'),
+	volunteerSignups: submissionCard('volunteers'),
+	lunchAndLearn: submissionCard('lunch-and-learn'),
+	coffeeTables: submissionCard('coffee-tables'),
 	volunteers: null,
 	admins: null,
 };
@@ -99,19 +115,45 @@ const ACTIVITY_LIMIT = 15;
 export async function recentActivity(
 	sections: readonly Section[],
 ): Promise<ActivityEntry[]> {
+	const visibleKinds = visibleSubmissionKinds(sections);
+	const kindByEventKey = new Map(
+		visibleKinds.map((kind) => [SUBMISSION_KINDS[kind].eventKey, kind]),
+	);
+
 	const rows = await recentEvents({
 		applications: sections.includes('waitlist'),
-		submissions: [],
+		submissions: visibleKinds.map((kind) => SUBMISSION_KINDS[kind]),
 		limit: ACTIVITY_LIMIT,
 	});
 
-	return rows.map((row) => ({
-		key: `${row.kind}-${row.id}`,
-		createdAt: row.createdAt,
-		type: row.type,
-		body: row.body,
-		actorName: row.actorName,
-		href: applicationPath(row.subjectId),
-		subject: row.name ?? `Application ${row.reference}`,
-	}));
+	return rows.flatMap((row): ActivityEntry[] => {
+		const shared = {
+			key: `${row.kind}-${row.id}`,
+			createdAt: row.createdAt,
+			type: row.type,
+			body: row.body,
+			actorName: row.actorName,
+		};
+
+		if (row.kind === 'application') {
+			return [
+				{
+					...shared,
+					href: applicationPath(row.subjectId),
+					subject: row.name ?? `Application ${row.reference}`,
+				},
+			];
+		}
+
+		const kind = kindByEventKey.get(row.eventKey);
+		if (!kind) return [];
+
+		return [
+			{
+				...shared,
+				href: submissionPath(kind, row.subjectId),
+				subject: `${SUBMISSION_KINDS[kind].singular} ${row.reference}`,
+			},
+		];
+	});
 }

@@ -6,9 +6,8 @@ import { getStore } from '@netlify/blobs';
  * Storage for CoC report attachments.
  *
  * The form's file input had been commented out since the Netlify Forms era with
- * a `TODO: hook up file upload - probably using Netlify Blob`. The four
- * historical attachments in Airtable are rehosted into the same store by
- * `scripts/airtable/importSubmissions.ts`.
+ * a `TODO: hook up file upload - probably using Netlify Blob`. Airtable's
+ * historical attachments are not rehosted yet (docs/adr/0004).
  *
  * Files are never served from a public URL — `/admin/submissions/coc/[id]/
  * attachment` reads them back after checking `coc:read`.
@@ -94,12 +93,22 @@ export async function storeAttachment(
 	// from the blob name.
 	const key = randomUUID();
 
-	await getStore(ATTACHMENT_STORE).set(key, bytes, {
-		metadata: {
-			filename: safeFilename(file.name, kind.ext),
-			contentType: kind.type,
-		},
-	});
+	// A store that is down is a form error, not a crash: the reporter keeps
+	// what they typed and can retry, or send the report without the file.
+	try {
+		await getStore(ATTACHMENT_STORE).set(key, bytes, {
+			metadata: {
+				filename: safeFilename(file.name, kind.ext),
+				contentType: kind.type,
+			},
+		});
+	} catch (error) {
+		console.error('CoC attachment could not be stored', { key, error });
+		return {
+			error:
+				'We couldn’t store the attachment. Please try again, or send the report without it and email the file to hello@virtualcoffee.io.',
+		};
+	}
 
 	return {
 		key,

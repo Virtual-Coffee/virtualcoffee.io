@@ -10,8 +10,7 @@ import { note, notification, type Field, type SlackMessage } from './blocks';
 /**
  * One webhook per destination, so a missing one only silences its own form.
  * The first four share their keys with `SUBMISSION_KINDS`. `membership` is
- * the membership pipeline, not a Submission kind: reach it through
- * `notifySlack` directly, since `notifyAndRecord` writes `submission_event`.
+ * the membership pipeline, not a Submission kind.
  */
 const WEBHOOK_ENV = {
 	coc: 'SLACK_WEBHOOK_COC',
@@ -40,8 +39,7 @@ export function notifySlack(
 	return deliver({
 		kind: 'slack',
 		target: channel,
-		// The payload itself, so the local log shows what would have been posted
-		// and a deploy's link-only line still finds the admin URL in it.
+		// The payload itself, so the log shows what would have been posted.
 		body: JSON.stringify(message, null, 2),
 		unreachable: 'Slack',
 		live: async () => {

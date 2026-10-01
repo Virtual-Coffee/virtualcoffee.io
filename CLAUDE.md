@@ -28,7 +28,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Overview
 
-virtualcoffee.io is a Next.js App Router site (Bootstrap SCSS, no Tailwind) deployed on Netlify. Content is checked-in MDX/TS/JSON plus build-time fetches that fall back to mock data when credentials are absent; the membership pipeline lives in Netlify Database.
+virtualcoffee.io is a Next.js App Router site (Bootstrap SCSS, no Tailwind) deployed on Netlify. Content is checked-in MDX/TS/JSON plus build-time fetches that fall back to mock data when credentials are absent; the membership pipeline and the public forms live in Netlify Database (Airtable is retired — `docs/adr/0004`).
 
 ## Commands
 
@@ -54,15 +54,16 @@ When writing or debugging a test, read `docs/testing.md` first.
 
 Every external data source lives in `src/data/` and degrades to a mock when its credentials are missing:
 
-| Source                                         | File                         | Fallback                                       |
-| ---------------------------------------------- | ---------------------------- | ---------------------------------------------- |
-| Member GitHub profiles                         | `src/data/members/index.ts`  | `src/data/mocks/memberData.js` (faker)         |
-| GitHub Sponsors                                | `src/data/sponsors.ts`       | `src/data/mocks/sponsors.ts`                   |
-| Events (Craft CMS)                             | `src/data/events.ts`         | `src/data/mocks/events.ts`                     |
-| Membership notifications (Slack, Block Kit)    | `src/lib/slack/notify.ts`    | Captured; the application is still saved       |
-| Transactional email (`/admin` actions)         | `src/lib/email/transport.ts` | Captured; a failure is an `email_failed` event |
-| Slack member directory (`/admin` grant picker) | `src/data/slackMembers.ts`   | `src/data/mocks/slackMembers.ts` (faker)       |
-| Membership applications (`/join`, `/admin`)    | `src/db/`                    | local Postgres from `netlify dev`              |
+| Source                                          | File                         | Fallback                                            |
+| ----------------------------------------------- | ---------------------------- | --------------------------------------------------- |
+| Member GitHub profiles                          | `src/data/members/index.ts`  | `src/data/mocks/memberData.js` (faker)              |
+| GitHub Sponsors                                 | `src/data/sponsors.ts`       | `src/data/mocks/sponsors.ts`                        |
+| Events (Craft CMS)                              | `src/data/events.ts`         | `src/data/mocks/events.ts`                          |
+| Submission and membership notifications (Slack) | `src/lib/slack/notify.ts`    | Captured; the failure is an event shown in `/admin` |
+| Lunch & Learn GitHub issue                      | `src/lib/github/issues.ts`   | Captured; same                                      |
+| Transactional email (`/admin` actions)          | `src/lib/email/transport.ts` | Captured; a failure is an `email_failed` event      |
+| Slack member directory (`/admin` grant picker)  | `src/data/slackMembers.ts`   | `src/data/mocks/slackMembers.ts` (faker)            |
+| Membership applications (`/join`, `/admin`)     | `src/db/`                    | local Postgres from `netlify dev`                   |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. A new external fetch follows this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`, and wrap the fetch in `unstable_cache` with a tag so `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) can revalidate it.
 
@@ -74,6 +75,7 @@ Before touching `src/db`, `src/lib/access`, `src/lib/history`, `src/app/join` or
 
 - `/admin` — the dashboard, scoped to what the viewer may see
 - `/admin/waitlist/*` — the queue, `archive/`, and the `[id]` detail page; `/join` is what feeds it
+- `/admin/submissions/[kind]/*` — the four Submission kinds
 - `/admin/user-management` — who has access
 
 Rules:
@@ -89,7 +91,9 @@ Rules:
 - An admin action that emails sends first and writes the status change only after, reporting whether anything went out; `waitlist/actions.db.test.ts` pins the order.
 - Live delivery is `CONTEXT=production` only; everywhere else every email, Slack post and GitHub issue is Captured unless `.env.example` names an opt-in — `docs/adr/0013`. A new sender is a `deliver()` call in `src/lib/outbound.ts`, which decides the mode before the sender can reach its credentials.
 - A Slack post is Block Kit built from `src/lib/slack/blocks.ts`: a typed value is a literal `rich_text` run, mrkdwn is for static copy only — `docs/adr/0016`.
-- `/join` is `force-dynamic`: the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token that prerendering would bake into cached HTML. Every public form's action opens with `intake()` (`src/util/forms/intake.ts`), which owns that guard and the schema parse.
+- `/join` and the four public forms (`/report-coc-violation`, `/volunteer-at-virtual-coffee`, `/lunch-and-learn-idea`, `/start-coffee-table-group`) are `force-dynamic`: the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token that prerendering would bake into cached HTML. Every form action opens with `intake()` (`src/util/forms/intake.ts`), which owns that guard and the schema parse; shared fields are in `src/util/forms/fields.ts`.
+- A public form persists first and notifies second — the inverse of the admin rule above, on purpose — `docs/adr/0005`. The `action.db.test.ts` beside each form pins the order.
+- CoC attachments live in Netlify Blobs and are served only through a route that checks `coc:read`.
 
 Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (procedure in the comment at the top of `src/data/podcast.ts`); membership data stays out of that repo — `docs/adr/0002`. Newsletters are JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
 
