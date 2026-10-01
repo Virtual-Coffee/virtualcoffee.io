@@ -38,10 +38,11 @@
 		},
 		{
 			"id": "sentry-no-pii",
-			"rule": "Sentry init must never pass dataCollection or sendDefaultPii; the CoC report form must not reach Sentry (docs/adr/0015).",
+			"rule": "Every Sentry init passes the shared dataCollection from src/sentryDataCollection.ts, and that baseline is not loosened; the CoC report form must not reach Sentry (docs/adr/0015).",
 			"scope": [
 				"src/instrumentation*.ts",
 				"sentry.*.config.ts",
+				"src/sentryDataCollection*.ts",
 				"src/app/global-error.tsx",
 				"src/app/report-coc-violation/**",
 				"next.config.mjs"

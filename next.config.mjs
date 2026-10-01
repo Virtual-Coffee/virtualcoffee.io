@@ -135,6 +135,10 @@ export default withSentryConfig(withMDX(nextConfig), {
 	project: 'virtualcoffee-io',
 	authToken: process.env.SENTRY_AUTH_TOKEN,
 	tunnelRoute: '/monitoring',
+	// Marks our bundles so thirdPartyErrorFilterIntegration in
+	// src/instrumentation-client.ts can tell our frames from injected ones.
+	// Must match its `filterKeys`.
+	applicationKey: 'virtualcoffee-io',
 	widenClientFileUpload: true,
 	silent: !process.env.CI,
 	release: {
