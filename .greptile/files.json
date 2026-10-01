@@ -116,6 +116,7 @@
 			"scope": [
 				"src/instrumentation*.ts",
 				"sentry.*.config.ts",
+				"src/sentryDataCollection*.ts",
 				"src/app/global-error.tsx",
 				"next.config.mjs"
 			]
