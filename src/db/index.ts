@@ -1,4 +1,4 @@
-import { getDatabase } from '@netlify/database';
+import { type DatabaseConnection, getDatabase } from '@netlify/database';
 import { drizzle } from 'drizzle-orm/netlify-db';
 import type { PgAsyncDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 
@@ -34,7 +34,22 @@ function createDatabase(): Database {
 	const override = process.env.NETLIFY_DB_URL ?? process.env.DATABASE_URL;
 	const client = getDatabase(override ? { connectionString: override } : {});
 
-	return drizzle({ client });
+	return drizzle({ client: withQueryCall(client) });
+}
+
+/** Routes drizzle's `httpClient(text, params, opts)` call, which Neon 1.x rejects, to `.query`. */
+// Remove once drizzle-orm ships drizzle-team/drizzle-orm#5933 (session uses .query); see neondatabase/serverless#170.
+export function withQueryCall(client: DatabaseConnection): DatabaseConnection {
+	if (client.driver !== 'serverless') return client;
+
+	const { httpClient } = client;
+	return {
+		...client,
+		httpClient: new Proxy(httpClient, {
+			apply: (_target, _this, [text, params, opts]) =>
+				httpClient.query(text, params, opts),
+		}),
+	};
 }
 
 let cached: Database | undefined;
