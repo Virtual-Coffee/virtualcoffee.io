@@ -90,7 +90,7 @@ export async function seedUsers() {
 		grantedBy: ADMIN.name,
 		grantedAt: daysAgo(20),
 	});
-	// Claimed: kept as the record of who pre-provisioned whom.
+	// Claimed: kept as the record of who granted whom.
 	await insertPendingGrant({
 		slackUserId: COC_REVIEWER.slackUserId,
 		slackDisplayName: COC_REVIEWER.name,

@@ -25,7 +25,7 @@ or a shell special-cased to hide itself — a Section that is not really one.
 The alternative — a `volunteer` table row as the only marker — would be a
 second authorization mechanism beside the first, which is what 0006 exists to
 prevent, and it would throw away Pending Grants (0009). Volunteering is exactly
-the pre-provisioning case: the Airtable import brings 91 people across, most of
+the Pending Grant case: the Airtable import brings 91 people across, most of
 whom have never signed in.
 
 So `volunteer` is a Role like any other — in `roles`, parsed and serialised,
