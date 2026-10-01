@@ -2,7 +2,7 @@
 	"strictness": 2,
 	"commentTypes": ["logic", "syntax", "style"],
 	"autoReview": ["open", "push"],
-	"labels": ["greptile-review"],
+	"disabledLabels": ["skip-review"],
 	"excludeAuthors": ["renovate[bot]", "*[bot]"],
 	"ignorePatterns": "pnpm-lock.yaml\ndrizzle/**/snapshot.json\nsrc/data/bots.ts\nsrc/data/monthlyChallenges/data/**\nsrc/data/podcast/episodes.json",
 	"shouldUpdateDescription": false,
@@ -28,7 +28,7 @@
 		"collapsible": true,
 		"defaultOpen": false
 	},
-	"instructions": "Keep comments short: one or two sentences plus file:line. Where a rule cites an ADR under docs/adr/, link the ADR instead of restating it. PRs may target a parent branch rather than main (stacked PRs); review only the diff against the PR base.",
+	"instructions": "Keep comments short: one or two sentences plus file:line. Where a rule cites an ADR under docs/adr/, link the ADR instead of restating it. PRs may target a parent branch rather than main (stacked PRs); review only the diff against the PR base. Before flagging a race, missing retry or stale read, check the ADR or code comment at that site: documented best-effort checks and post-commit sends are intentional. If you still disagree, cite the ADR.",
 	"rules": [
 		{
 			"id": "external-html-sanitized",
@@ -81,6 +81,12 @@
 			"id": "no-raw-dangerously-set-inner-html",
 			"rule": "dangerouslySetInnerHTML takes only output of sanitizeCmsData (lint rule vc/no-raw-dangerously-set-inner-html).",
 			"scope": ["src/**/*.tsx"],
+			"severity": "low"
+		},
+		{
+			"id": "glossary-internal-only",
+			"rule": "CONTEXT.md vocabulary governs identifiers, comments, docs and /admin UI. Public copy is exempt: src/app/join/**, src/emails/**, the public form pages, src/content/**, and labels naming external products (e.g. Google Calendar). A terminology finding is never merge-blocking.",
+			"scope": ["**"],
 			"severity": "low"
 		}
 	]
