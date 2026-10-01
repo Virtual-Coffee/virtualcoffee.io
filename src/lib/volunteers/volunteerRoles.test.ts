@@ -1,0 +1,26 @@
+import { expect, test } from 'vitest';
+
+import { formatRoleLabels, parseRoleLabels } from './volunteerRoles';
+
+test('parseRoleLabels splits the column and keeps names not on the list', () => {
+	expect(parseRoleLabels(' VC Host , Notetaker,, Maintainer ')).toEqual([
+		'VC Host',
+		'Notetaker',
+		'Maintainer',
+	]);
+	expect(parseRoleLabels(null)).toEqual([]);
+});
+
+test('formatRoleLabels dedupes, orders like the list and is null when empty', () => {
+	expect(formatRoleLabels(['VC Host', 'Notetaker', 'VC Host'])).toBe(
+		'Notetaker, VC Host',
+	);
+	expect(formatRoleLabels([])).toBeNull();
+});
+
+test('formatRoleLabels keeps a stored name that is not on the list', () => {
+	expect(
+		formatRoleLabels(['VC Host'], 'Maintainer, Notetaker, Maintainer'),
+	).toBe('VC Host, Maintainer');
+	expect(formatRoleLabels([], 'Maintainer')).toBe('Maintainer');
+});

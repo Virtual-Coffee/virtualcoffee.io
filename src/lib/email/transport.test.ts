@@ -1,0 +1,337 @@
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { createElement } from 'react';
+import { Text } from 'react-email';
+
+const sendMail = vi.hoisted(() => vi.fn());
+const createTransport = vi.hoisted(() => vi.fn(() => ({ sendMail })));
+
+vi.mock('nodemailer', () => ({ default: { createTransport } }));
+
+import {
+	emailConfigured,
+	emailStatus,
+	sendEmail,
+	TRANSPORT_OPTIONS,
+} from './transport';
+import { renderEmail } from './render';
+import { defineEmail } from './template';
+
+/**
+ * A fixture rather than a real message: everything below is about the
+ * envelope and the delivery modes, and the real templates have their own
+ * tests. It still goes through the real renderer, because `sendEmail` is now
+ * what calls it.
+ */
+const template = defineEmail<{ name: string }>({
+	subject: ({ name }) => `Hello ${name}`,
+	preview: 'A preview line.',
+	Content: ({ name }) => createElement(Text, null, `Body for ${name}`),
+	previewProps: { name: 'Ada' },
+});
+const props = { name: 'Ada' };
+const to = 'ada@example.test';
+const subject = template.subject(props);
+
+/** The shape of a downloaded service-account key file, PEM collapsed as Netlify's UI does. */
+const KEY = JSON.stringify({
+	type: 'service_account',
+	client_id: '113600000000000000000',
+	client_email: 'mail@vc.iam.gserviceaccount.com',
+	private_key:
+		'-----BEGIN PRIVATE KEY-----\\nMIIE\\n-----END PRIVATE KEY-----\\n',
+});
+
+beforeEach(() => {
+	// Live delivery is production only; every case below is about what a
+	// live send does. The non-production modes have their own describe.
+	vi.stubEnv('CONTEXT', 'production');
+	vi.stubEnv('GOOGLE_SMTP_USER', 'maintainer@virtualcoffee.io');
+	vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', KEY);
+	sendMail.mockReset();
+	sendMail.mockResolvedValue({ rejected: [] });
+});
+
+afterEach(() => vi.unstubAllEnvs());
+
+describe('emailConfigured', () => {
+	test('needs both the user and the service account key', () => {
+		expect(emailConfigured()).toBe(true);
+		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
+		expect(emailConfigured()).toBe(false);
+	});
+
+	test('a blank SMTP_HOST is not a sink', () => {
+		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
+		vi.stubEnv('SMTP_HOST', ' ');
+		expect(emailConfigured()).toBe(false);
+	});
+});
+
+describe('sendEmail', () => {
+	test('sends from hello@ with hello@ as Reply-To, and no cc when none was asked for', async () => {
+		await expect(sendEmail(template, props, { to, cc: null })).resolves.toEqual(
+			{
+				ok: true,
+				message: 'Sent.',
+			},
+		);
+		expect(sendMail).toHaveBeenCalledWith({
+			from: 'Virtual Coffee <hello@virtualcoffee.io>',
+			to,
+			cc: undefined,
+			...(await renderEmail(template, props)),
+			replyTo: 'hello@virtualcoffee.io',
+		});
+		// The transporter is a module singleton, built on this first send:
+		// XOAUTH2 as the service account impersonating GOOGLE_SMTP_USER — hello@
+		// is a group, sent from as that user's alias — with the PEM's
+		// collapsed newlines restored.
+		expect(createTransport).toHaveBeenCalledWith(
+			expect.objectContaining({
+				auth: {
+					type: 'OAuth2',
+					user: 'maintainer@virtualcoffee.io',
+					serviceClient: '113600000000000000000',
+					privateKey:
+						'-----BEGIN PRIVATE KEY-----\nMIIE\n-----END PRIVATE KEY-----\n',
+				},
+			}),
+		);
+	});
+
+	test.each(['not json', '{"client_id":"x"}', '[]'])(
+		'a key that is not a service account file (%s) is definitely not sent',
+		async (key) => {
+			vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', key);
+			await expect(sendEmail(template, props, { to })).resolves.toMatchObject({
+				ok: false,
+				definitelyNotSent: true,
+				message: expect.stringContaining('not a service account key file'),
+			});
+			expect(sendMail).not.toHaveBeenCalled();
+		},
+	);
+
+	test('the transport is pooled and every phase has a timeout', () => {
+		// The transporter is a module singleton, so the options are asserted
+		// directly rather than off a createTransport call some earlier test made.
+		expect(TRANSPORT_OPTIONS).toMatchObject({
+			secure: false,
+			requireTLS: true,
+			pool: true,
+			connectionTimeout: expect.any(Number),
+			greetingTimeout: expect.any(Number),
+			socketTimeout: expect.any(Number),
+		});
+	});
+
+	test('copies the acting admin when asked', async () => {
+		await sendEmail(template, props, { to, cc: 'maintainer@example.test' });
+		expect(sendMail).toHaveBeenLastCalledWith(
+			expect.objectContaining({ cc: 'maintainer@example.test' }),
+		);
+	});
+
+	/**
+	 * `definitelyNotSent` is what the admin UI turns into "nothing was emailed
+	 * — safe to try again". Every branch below is a promise to a maintainer.
+	 */
+	test('unconfigured: definitely not sent, and no transport is even built', async () => {
+		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
+		const before = createTransport.mock.calls.length;
+
+		await expect(sendEmail(template, props, { to })).resolves.toMatchObject({
+			ok: false,
+			definitelyNotSent: true,
+			message: expect.stringContaining('not configured'),
+		});
+		expect(createTransport.mock.calls.length).toBe(before);
+		expect(sendMail).not.toHaveBeenCalled();
+	});
+
+	test('a rejected recipient: definitely not sent, naming the address', async () => {
+		sendMail.mockResolvedValue({
+			accepted: ['maintainer@example.test'],
+			rejected: ['ada@example.test'],
+		});
+		await expect(sendEmail(template, props, { to })).resolves.toEqual({
+			ok: false,
+			definitelyNotSent: true,
+			report: false,
+			message: 'The mail server rejected ada@example.test.',
+		});
+	});
+
+	/**
+	 * The applicant's copy went; only the maintainer's cc bounced. Calling that
+	 * "nothing was emailed" would have the maintainer retry and email the
+	 * applicant twice — the exact outcome definitelyNotSent exists to prevent.
+	 */
+	test('a rejected cc with the applicant accepted is a success with a warning', async () => {
+		sendMail.mockResolvedValue({
+			accepted: ['ada@example.test'],
+			rejected: ['maintainer@example.test'],
+		});
+		await expect(
+			sendEmail(template, props, { to, cc: 'maintainer@example.test' }),
+		).resolves.toEqual({
+			ok: true,
+			message: 'Sent.',
+			warning: 'Sent, but the copy to maintainer@example.test was rejected.',
+		});
+	});
+
+	test('the applicant is matched by address, not by spelling', async () => {
+		sendMail.mockResolvedValue({
+			accepted: ['Ada <ADA@example.test>'],
+			rejected: ['maintainer@example.test'],
+		});
+		await expect(
+			sendEmail(template, props, { to, cc: 'maintainer@example.test' }),
+		).resolves.toMatchObject({ ok: true });
+	});
+
+	test.each(['EAUTH', 'EENVELOPE', 'ECONNECTION', undefined])(
+		'an error with code %s: definitely not sent',
+		async (code) => {
+			sendMail.mockRejectedValue(Object.assign(new Error('boom'), { code }));
+			await expect(sendEmail(template, props, { to })).resolves.toEqual({
+				ok: false,
+				definitelyNotSent: true,
+				message: 'Could not reach the mail server: boom',
+			});
+		},
+	);
+
+	test.each(['ETIMEDOUT', 'ECONNRESET', 'ESOCKET'])(
+		'a %s may have stranded a message the server had begun accepting',
+		async (code) => {
+			sendMail.mockRejectedValue(Object.assign(new Error('late'), { code }));
+			await expect(sendEmail(template, props, { to })).resolves.toEqual({
+				ok: false,
+				definitelyNotSent: false,
+				message: 'Could not reach the mail server: late',
+			});
+		},
+	);
+});
+
+/**
+ * Outside production the credentials are irrelevant: Captured never touches
+ * them, and Local sends past them to a sink. docs/adr/0013.
+ */
+describe('delivery modes', () => {
+	test('captured: the credentials are never read, no transport is built, and the pipeline proceeds', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+		const before = createTransport.mock.calls.length;
+
+		await expect(
+			sendEmail(template, props, { to, cc: 'maintainer@example.test' }),
+		).resolves.toMatchObject({
+			ok: true,
+			warning: 'Captured, not delivered (deploy-preview).',
+		});
+		expect(createTransport.mock.calls.length).toBe(before);
+		expect(sendMail).not.toHaveBeenCalled();
+		// On a deploy the applicant's address is masked and the body is not
+		// logged, only its links — `outbound.test.ts` has the shape; this pins
+		// that email uses it, and that the maintainer's cc is masked too.
+		expect(info).toHaveBeenCalledWith(
+			'[email captured] deploy-preview a•••@example.test',
+			{ cc: 'm•••@example.test', subject },
+			'\nhttps://virtualcoffee.io',
+		);
+		info.mockRestore();
+	});
+
+	test('local: no Google credentials needed, addressed exactly as production would', async () => {
+		vi.stubEnv('CONTEXT', 'dev');
+		// Padded on purpose: the transporter gets the host emailDelivery accepted.
+		vi.stubEnv('SMTP_HOST', ' localhost ');
+		vi.stubEnv('SMTP_PORT', '1025');
+		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
+		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
+
+		await expect(
+			sendEmail(template, props, { to, cc: 'maintainer@example.test' }),
+		).resolves.toEqual({
+			ok: true,
+			message: 'Sent.',
+			warning:
+				'Sent to local SMTP sink at localhost:1025 (dev) — not delivered outside this machine.',
+		});
+		expect(sendMail).toHaveBeenCalledWith({
+			from: 'Virtual Coffee <hello@virtualcoffee.io>',
+			to,
+			cc: 'maintainer@example.test',
+			...(await renderEmail(template, props)),
+			replyTo: 'hello@virtualcoffee.io',
+		});
+		expect(createTransport).toHaveBeenLastCalledWith({
+			host: 'localhost',
+			port: 1025,
+			secure: false,
+			ignoreTLS: true,
+		});
+	});
+
+	test('local defaults SMTP_PORT to 1025', async () => {
+		// The local transporter is a module singleton like the Gmail one, so this
+		// asserts on the warning (built fresh every call) rather than a
+		// createTransport call an earlier test may already have made.
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		vi.stubEnv('SMTP_PORT', undefined);
+
+		await expect(sendEmail(template, props, { to })).resolves.toMatchObject({
+			ok: true,
+			warning: expect.stringContaining('localhost:1025'),
+		});
+	});
+
+	test('SMTP_HOST is ignored in production', async () => {
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		await expect(sendEmail(template, props, { to })).resolves.toEqual({
+			ok: true,
+			message: 'Sent.',
+		});
+		expect(sendMail).toHaveBeenLastCalledWith(
+			expect.objectContaining({
+				from: 'Virtual Coffee <hello@virtualcoffee.io>',
+				to,
+			}),
+		);
+	});
+});
+
+describe('emailStatus', () => {
+	test('reports the mode and whether credentials exist, separately', () => {
+		expect(emailStatus()).toEqual({ mode: 'live', configured: true });
+
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('GOOGLE_SMTP_USER', undefined);
+		expect(emailStatus()).toEqual({
+			mode: 'captured',
+			context: 'deploy-preview',
+			configured: false,
+		});
+
+		// A deploy's SMTP_HOST counts as configured but never as Local.
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		expect(emailStatus()).toEqual({
+			mode: 'captured',
+			context: 'deploy-preview',
+			configured: true,
+		});
+
+		vi.stubEnv('CONTEXT', 'dev');
+		expect(emailStatus()).toEqual({
+			mode: 'local',
+			context: 'dev',
+			host: 'localhost',
+			configured: true,
+		});
+	});
+});
