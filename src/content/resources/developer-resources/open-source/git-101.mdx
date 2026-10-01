@@ -32,7 +32,7 @@ This article provides an overview of Git and GitHub and the workflows you might 
 
 ### What Is Git?
 
-We like this Git definition from [Amazon Web Services](https://aws.amazon.com/devops/source-control/git/):
+See this Git definition from [Amazon Web Services](https://aws.amazon.com/devops/source-control/git/):
 
 <blockquote className="blockquote border-start border-4 ps-3">
 	Git is a distributed, open-source version control system (VCS) that enables
@@ -42,7 +42,7 @@ We like this Git definition from [Amazon Web Services](https://aws.amazon.com/de
 
 ### What Is GitHub?
 
-Like GitLab and Bitbucket, GitHub is a platform for hosting, sharing, and collaborating on Git repositories. You can interact with it via the [GitHub website](https://github.com) or [GitHub CLI](https://cli.github.com) if you prefer the command line.
+Like GitLab and Bitbucket, GitHub is a platform for hosting, sharing, and collaborating on Git repositories. You can interact with it through the [GitHub website](https://github.com) or [GitHub CLI](https://cli.github.com) if you prefer the command line.
 
 </TextContainer>
 
@@ -77,15 +77,14 @@ To fork a repository:
    	height="418"
    />
 
-By convention, you call this forked repository the `origin` repository.
+When you clone your fork, Git names it `origin`. This page refers to your fork as the `origin` repository.
 
 ### Authenticating with GitHub
 
 If you use GitHub on your local computer for the first time, authenticate your local Git with GitHub before you clone a repository.
 
-You must provide your email and credentials whenever you clone a repository, commit and push changes, or do other Git activities related to GitHub locally.
-That is a way for GitHub to authenticate you as a user.
-But you can set up your credentials locally, so you do not have to input them whenever you do a Git activity.
+Git asks for your credentials when you push changes to GitHub.
+You can save your credentials on your computer, so you do not have to enter them every time.
 
 How you authenticate depends on how you clone the repository. The next section describes the options.
 
@@ -95,13 +94,13 @@ After you fork a project's repository, you need to clone your fork. Cloning mean
 
 In the **Clone** box on the **Local** tab, GitHub offers three ways to clone a repository:
 
-- **[HTTPS](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#https)** <br/>
-  It is the most common one to use. You must create a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to enter when GitHub prompts for your password.
+- **[HTTPS](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#https)** <br />
+  It is the most common option. When Git asks for your username and password, enter your GitHub username and a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens). GitHub no longer accepts your account password for Git.
 
-- **[SSH (Secure Shell)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#ssh)** <br/>
+- **[SSH (Secure Shell)](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/about-authentication-to-github#ssh)** <br />
   It provides an encrypted way to exchange information safely. To use SSH, follow [GitHub's guide to generating a new SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
 
-- **[GitHub CLI](https://cli.github.com)** <br/>
+- **[GitHub CLI](https://cli.github.com)** <br />
   It gives you a command to run in your terminal. This option requires that you install GitHub CLI.
 
 To clone a repository:
@@ -128,8 +127,9 @@ To clone a repository:
 
 ### Adding an `upstream` Remote Repository
 
-Even though you have cloned the forked repository, you may also want to add the original repository as one of your remote repositories.
-By convention, you call this original repository `upstream`. By doing this, you can pull other people's changes into your local repository whenever you need to.
+After you clone your fork, add the original repository as a remote repository.
+By convention, you call this original repository `upstream`. With this remote repository, you can pull other people's changes into your local repository from your terminal.
+The steps on this page sync your fork on GitHub instead, so this step is optional.
 
 1. Add the original repository as a remote repository:
 
@@ -195,13 +195,13 @@ When you finish making changes, add and commit them before you push them to GitH
    git commit -m "feat: add navbar and footer"
    ```
 
-3. Verify that you added and committed your changes:
+3. See the state of your working directory and staging area:
 
    ```bash
    git status
    ```
 
-   This command shows the state of your Git working directory and staging area.
+   If you added and committed all your changes, the output says `nothing to commit, working tree clean`.
 
 ### Fetching `upstream` Changes
 
@@ -210,7 +210,9 @@ Always make sure that your fork is up to date with the `upstream` repository.
 
 1. Go to your forked repository on GitHub.
 2. Click the **Sync fork** button.
-3. If you see an **Update branch** button, click it. If you do not, your fork has no new changes. In that case, <Link href="/resources/developer-resources/open-source/git-101#pushing-changes">push your changes</Link>. Then <Link href="/resources/developer-resources/open-source/git-101#making-a-pull-request">make a pull request</Link>.
+3. If you see an **Update branch** button, click it.
+
+   If you do not see the button, your fork has no new changes. In that case, <Link href="/resources/developer-resources/open-source/git-101#pushing-changes">push your changes</Link>. Then <Link href="/resources/developer-resources/open-source/git-101#making-a-pull-request">make a pull request</Link>.
 
    <img
    	src="/assets/images/developer-resources/open-source/sync-fork-github.png"
@@ -219,20 +221,22 @@ Always make sure that your fork is up to date with the `upstream` repository.
    	height="174"
    />
 
-Now your fork has the same update as the `upstream` repository.
+Now your fork has the same updates as the `upstream` repository.
 
 ### Synchronizing Changes Locally
 
 Now that your `origin` repository is in sync with the `upstream`, synchronize these changes locally. That way, you already have the most recent content when you push your changes.
 
-Fetch and merge the latest update into your working branch.
-In your terminal, make sure that you are in your working branch. Then run:
+Fetch and merge the latest update into your working branch. To do so:
 
-```bash
-git pull origin DEFAULT-BRANCH
-```
+1. In your terminal, make sure that you are in your working branch.
+2. Run:
 
-Change `DEFAULT-BRANCH` to the name of the repository's default branch. It is not always `main` or `master`. Repositories can use other names.
+   ```bash
+   git pull origin DEFAULT-BRANCH
+   ```
+
+   Change `DEFAULT-BRANCH` to the name of the repository's default branch. It is not always `main` or `master`. Repositories can use other names.
 
 The command fetches the updated default branch from the `origin` repository and merges it into your local working branch.
 
@@ -243,14 +247,14 @@ If merge conflicts occur, resolve them. The next section explains how.
 It is common to encounter merge conflicts when contributing to open source.
 Conflicts usually occur when two different branches change the same lines in the same files.
 
-You may get conflicts if you push your changes before you fetch `upstream` and synchronize it with your `origin` and local repositories.
-When you are about to create a pull request on GitHub, GitHub notifies you about the conflicts, if any.
+You may get conflicts if you do not sync your branch with the `upstream` repository before you open a pull request.
+When you open a pull request, GitHub shows a message about conflicts, if any.
 
 There are two ways to resolve conflicts:
 
 1. **Directly on GitHub**
 
-   GitHub shows a prompt that your branch has conflicts that you must resolve. Click the **Resolve conflicts** button and fix the conflicts.
+   On the pull request page, GitHub shows the message "This branch has conflicts that must be resolved". Click the **Resolve conflicts** button and fix the conflicts.
 
    <img
    	src="/assets/images/developer-resources/open-source/merge-conflicts-github.png"
@@ -261,7 +265,7 @@ There are two ways to resolve conflicts:
 
 2. **In the local environment**
    - Complete the steps in <Link href="/resources/developer-resources/open-source/git-101#fetching-upstream-changes">Fetching `upstream` Changes</Link> and <Link href="/resources/developer-resources/open-source/git-101#synchronizing-changes-locally">Synchronizing Changes Locally</Link>.<br />
-     Then your text editor shows this:
+     If `git pull` reports conflicts, open the conflicting files in your text editor. This example uses Visual Studio Code:
 
      <img
      	src="/assets/images/developer-resources/open-source/conflict-lines-vscode.png"
@@ -277,13 +281,13 @@ There are two ways to resolve conflicts:
      - **Accept Incoming Change** — when you _only_ want to keep the incoming change.
      - **Accept Both Changes** — when you want to _keep both_ your changes and the incoming changes.
 
-After resolving the conflicts, fix and adjust the code if necessary. Then <Link href="/resources/developer-resources/open-source/git-101#adding-and-committing-changes">add and commit the changes</Link>.
+After resolving the conflicts, review the code and change it if necessary. Then <Link href="/resources/developer-resources/open-source/git-101#adding-and-committing-changes">add and commit the changes</Link>.
 
 _**Credit:** [How To Use GitHub For Project Collaboration — Based on Agile Method](https://adiati.com/blog/how-to-use-github-for-project-collaboration-based-on-agile-method) by Ayu Adiati_
 
 ### Pushing Changes
 
-You have fetched and synchronized updates and also added and committed the changes. Now push your changes to the `origin` repository.
+After you sync your branch and commit your changes, push your branch to the `origin` repository.
 
 To do so, run this command in your terminal:
 
@@ -295,19 +299,20 @@ Change `BRANCH-NAME` to the name of your working branch.
 
 ### Making a Pull Request
 
-Once you have pushed your changes to the `origin` repository, you can submit the changes to the `upstream` repository by making a pull request.
+After you push your changes to the `origin` repository, you can submit the changes to the `upstream` repository by making a pull request.
 
-Creating a pull request allows the maintainers to review your work, comment, and request any necessary changes. They then decide whether to merge your changes into the project codebase.
+A pull request allows the maintainers to review your work, comment, and request any necessary changes. They then decide whether to merge your changes into the project codebase.
 
 To make a pull request:
 
-1. Go to the `upstream` repository on GitHub and click the **New pull request** button. If you have recently pushed changes to GitHub, a banner at the top of the page shows a **Compare and pull request** button. Click it.
-2. GitHub takes you to the "Open pull request" form, where you write a description of your pull request. Many projects provide a pull request template in the form. If the project does not, read its contributing guidelines (usually in the `CONTRIBUTING.md` file) and follow the conventions described there.
-3. When you are ready, click the **Create pull request** button.
+1. Go to the `upstream` repository on GitHub. If you recently pushed changes, a banner at the top of the page shows a **Compare & pull request** button. Click it.
+2. If you do not see the banner, click the **New pull request** button instead.
+3. GitHub takes you to the "Open a pull request" form, where you write a description of your pull request. Many projects provide a pull request template in the form. If the project does not, read its contributing guidelines (usually in the `CONTRIBUTING.md` file) and follow the conventions described there.
+4. When you are ready, click the **Create pull request** button.
 
 You have made your pull request.
 
-If a maintainer requests changes, you can make the requested changes and push new commits to the same branch. GitHub adds them to the pull request automatically.
+If a maintainer requests changes, you can work on the requested changes and push new commits to the same branch. GitHub adds them to the pull request automatically.
 
 </TextContainer>
 
@@ -366,20 +371,20 @@ When you work at the same time with Alice and Charlie on the same issue, use the
 
 To add co-authors:
 
-1. Start your commit message with a short description of the change. Press Enter twice to leave a blank line after it.
+1. Start your commit message with a short description of the change. Press **Enter** twice to leave a blank line after it.
 2. Add one `Co-authored-by:` line for each teammate, in this format:
 
    ```bash
    git commit -m "feat: add new feature
    >
    >
-   Co-authored-by: Alice <alice@email.com>
-   Co-authored-by: Charlie <charlie@email.com>"
+   Co-authored-by: Alice <alice@example.com>
+   Co-authored-by: Charlie <charlie@example.com>"
    ```
 
    Change the names and email addresses to your teammates' details. Use the email address associated with each teammate's GitHub account.
 
-3. Close the commit message with a double quote (") at the end of the last `Co-authored-by:` line. Do not close it earlier.
+3. Close the commit message with a double quote (`"`) at the end of the last `Co-authored-by:` line. Do not close it earlier.
 
 You do not need to add your own name, because you are the one who commits the changes.
 
@@ -398,7 +403,7 @@ You can customize your GitHub profile. Add a short bio, a website, and social me
 	height="1128"
 />
 
-### How Does It Work?
+### How It Works
 
 To customize your profile, create a repository in your account with the same name as your GitHub username and add a README file. GitHub renders the contents of that README file on your profile page. You can add many kinds of integrations to this README, such as stats, badges, and your latest blog posts.
 
