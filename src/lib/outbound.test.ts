@@ -1,0 +1,479 @@
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+
+import { reportHandled } from '@/lib/monitoring/reportHandled';
+
+import {
+	capture,
+	deliver,
+	emailDelivery,
+	linksIn,
+	type OutboundKind,
+} from './outbound';
+
+vi.mock('@/lib/monitoring/reportHandled', () => ({ reportHandled: vi.fn() }));
+
+afterEach(() => vi.unstubAllEnvs());
+
+describe('emailDelivery', () => {
+	test.each(['deploy-preview', 'branch-deploy', 'dev', undefined])(
+		'CONTEXT=%s is captured',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			expect(emailDelivery()).toEqual({
+				mode: 'captured',
+				context: context ?? 'local',
+			});
+		},
+	);
+
+	test('production is live', () => {
+		vi.stubEnv('CONTEXT', 'production');
+		expect(emailDelivery()).toEqual({ mode: 'live' });
+	});
+
+	test.each(['dev', undefined])(
+		'SMTP_HOST is local on a checkout (CONTEXT=%s)',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			vi.stubEnv('SMTP_HOST', 'localhost');
+			expect(emailDelivery()).toEqual({
+				mode: 'local',
+				context: context ?? 'local',
+				host: 'localhost',
+			});
+		},
+	);
+
+	// The ADR's promise that nothing leaves the machine is enforced, not trusted.
+	test.each(['smtp.gmail.com', 'mailpit', '192.168.1.20'])(
+		'SMTP_HOST=%s is not a sink, so a checkout stays captured',
+		(host) => {
+			vi.stubEnv('CONTEXT', 'dev');
+			vi.stubEnv('SMTP_HOST', host);
+			expect(emailDelivery()).toEqual({ mode: 'captured', context: 'dev' });
+		},
+	);
+
+	test.each(['127.0.0.1', '::1', '[::1]', 'LOCALHOST', ' localhost '])(
+		'SMTP_HOST=%j is a loopback sink',
+		(host) => {
+			vi.stubEnv('CONTEXT', 'dev');
+			vi.stubEnv('SMTP_HOST', host);
+			expect(emailDelivery()).toEqual({
+				mode: 'local',
+				context: 'dev',
+				host: host.trim(),
+			});
+		},
+	);
+
+	test('SMTP_HOST is ignored in production', () => {
+		vi.stubEnv('CONTEXT', 'production');
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		expect(emailDelivery()).toEqual({ mode: 'live' });
+	});
+
+	// A deploy's SMTP_HOST would be a host real applicants' mail can reach.
+	test.each(['deploy-preview', 'branch-deploy'])(
+		'SMTP_HOST is ignored on a deploy (CONTEXT=%s)',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			vi.stubEnv('SMTP_HOST', 'smtp.example.test');
+			expect(emailDelivery()).toEqual({ mode: 'captured', context });
+		},
+	);
+});
+
+describe('capture', () => {
+	const body = [
+		'Hello Ada,',
+		'Your invite: https://virtualcoffee.io/join-slack?code=abc123.',
+		'Questions? https://virtualcoffee.io/faq and https://virtualcoffee.io/faq again.',
+	].join('\n');
+
+	test.each(['dev', undefined])(
+		'locally (CONTEXT=%s) the whole body goes to the log',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+			capture('slack', 'membership', 'hi');
+			expect(info).toHaveBeenLastCalledWith(
+				`[slack captured] ${context ?? 'local'} membership`,
+				'\nhi',
+			);
+
+			capture('email', 'ada@example.test', body, { subject: 'Hello' });
+			expect(info).toHaveBeenLastCalledWith(
+				`[email captured] ${context ?? 'local'} ada@example.test`,
+				{ subject: 'Hello' },
+				`\n${body}`,
+			);
+			info.mockRestore();
+		},
+	);
+
+	/**
+	 * A deploy's message is about a real person and the log outlives the
+	 * walkthrough (docs/adr/0007), so it gets the address masked, the details,
+	 * and each link once, with no invite code — nothing to read or redeem.
+	 */
+	test.each(['deploy-preview', 'branch-deploy'])(
+		'on a deploy (CONTEXT=%s) only the masked target, details and links',
+		(context) => {
+			vi.stubEnv('CONTEXT', context);
+			const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+			capture('email', 'ada@example.test', body, { subject: 'Hello' });
+			expect(info).toHaveBeenLastCalledWith(
+				`[email captured] ${context} a•••@example.test`,
+				{ subject: 'Hello' },
+				'\nhttps://virtualcoffee.io/join-slack?code=…',
+				'\nhttps://virtualcoffee.io/faq',
+			);
+
+			capture('slack', 'C0123', 'A new report from Ada');
+			expect(info).toHaveBeenLastCalledWith(
+				`[slack captured] ${context} C0123`,
+			);
+			info.mockRestore();
+		},
+	);
+});
+
+describe('linksIn', () => {
+	test('an invite code is replaced; origin and path are kept', () => {
+		expect(
+			linksIn(
+				'Join: https://preview--vc.netlify.app/join-slack?code=s3cret&utm=x. Or https://virtualcoffee.io/faq?q=1',
+			),
+		).toEqual([
+			'https://preview--vc.netlify.app/join-slack?code=…',
+			'https://virtualcoffee.io/faq?q=1',
+		]);
+	});
+});
+
+describe('deliver', () => {
+	const live = vi.fn();
+
+	beforeEach(() => {
+		vi.mocked(reportHandled).mockClear();
+		live.mockReset();
+		live.mockResolvedValue({ ok: true, message: 'Posted.' });
+		vi.stubEnv('CONTEXT', 'production');
+	});
+
+	test('captured: logs the message, never calls live, and is a success with a warning', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'membership',
+				body: 'hi',
+				details: { subject: 'Hello' },
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toEqual({
+			ok: true,
+			message: 'Captured, not posted to Slack (deploy-preview).',
+			warning: 'Captured, not posted to Slack (deploy-preview).',
+		});
+		expect(live).not.toHaveBeenCalled();
+		// A deploy's line names nobody and carries no body; `capture` pins that.
+		expect(info).toHaveBeenCalledWith(
+			'[slack captured] deploy-preview membership',
+			{ subject: 'Hello' },
+		);
+		info.mockRestore();
+	});
+
+	test('a slack dm is captured outside production even when Slack posts are opted in', async () => {
+		vi.stubEnv('CONTEXT', 'deploy-preview');
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', 'true');
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'coc',
+				body: '',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toEqual({ ok: true, message: 'Posted.' });
+
+		live.mockClear();
+		await expect(
+			deliver({
+				kind: 'slack dm',
+				target: 'U123',
+				body: '',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toMatchObject({
+			warning: 'Captured, not sent as a Slack DM (deploy-preview).',
+		});
+		expect(live).not.toHaveBeenCalled();
+
+		vi.stubEnv('CONTEXT', 'production');
+		await deliver({
+			kind: 'slack dm',
+			target: 'U123',
+			body: '',
+			unreachable: 'Slack',
+			live,
+		});
+		expect(live).toHaveBeenCalledWith({ mode: 'live' });
+	});
+
+	/**
+	 * Which env var opts a kind in outside production. Slack and GitHub share
+	 * one; the Events Calendar has its own, since there is one real calendar
+	 * and the opt-in is meant to be paired with a scratch GOOGLE_CALENDAR_ID.
+	 * A Slack DM has none, and is tested above.
+	 */
+	const OPT_IN: Record<Exclude<OutboundKind, 'email' | 'slack dm'>, string> = {
+		slack: 'NOTIFY_LIVE_OUTSIDE_PRODUCTION',
+		'github issue': 'NOTIFY_LIVE_OUTSIDE_PRODUCTION',
+		calendar: 'CALENDAR_LIVE_OUTSIDE_PRODUCTION',
+	};
+
+	async function mode(kind: OutboundKind): Promise<'live' | 'captured'> {
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+		live.mockClear();
+		await deliver({ kind, target: 't', body: '', unreachable: 'x', live });
+		return live.mock.calls.length ? 'live' : 'captured';
+	}
+
+	test.each(Object.entries(OPT_IN))(
+		'%s: production is live regardless of the flag; elsewhere only %s=true opts in',
+		async (kind, flag) => {
+			const k = kind as OutboundKind;
+			vi.stubEnv('CONTEXT', 'production');
+			vi.stubEnv(flag, undefined);
+			await expect(mode(k)).resolves.toBe('live');
+
+			vi.stubEnv('CONTEXT', 'deploy-preview');
+			await expect(mode(k)).resolves.toBe('captured');
+			vi.stubEnv(flag, '1');
+			await expect(mode(k)).resolves.toBe('captured');
+			vi.stubEnv(flag, 'true');
+			await expect(mode(k)).resolves.toBe('live');
+		},
+	);
+
+	test('the Slack/GitHub opt-in does not opt the calendar in, nor the reverse', async () => {
+		vi.stubEnv('CONTEXT', undefined);
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', 'true');
+		vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', undefined);
+		await expect(mode('calendar')).resolves.toBe('captured');
+
+		vi.stubEnv('NOTIFY_LIVE_OUTSIDE_PRODUCTION', undefined);
+		vi.stubEnv('CALENDAR_LIVE_OUTSIDE_PRODUCTION', 'true');
+		await expect(mode('slack')).resolves.toBe('captured');
+	});
+
+	test('a calendar write has no body to log: the line is the label alone', async () => {
+		vi.stubEnv('CONTEXT', undefined);
+		const info = vi.spyOn(console, 'info').mockImplementation(() => {});
+		await expect(
+			deliver({
+				kind: 'calendar',
+				target: 'cancel Event',
+				body: '',
+				unreachable: 'the Events Calendar',
+				live,
+			}),
+		).resolves.toMatchObject({
+			ok: true,
+			warning: 'Captured, not written to the Events Calendar (local).',
+		});
+		expect(info).toHaveBeenCalledWith('[calendar captured] local cancel Event');
+	});
+
+	test('a captured success carries the extra fields the sender declared', async () => {
+		vi.stubEnv('CONTEXT', undefined);
+		vi.spyOn(console, 'info').mockImplementation(() => {});
+
+		await expect(
+			deliver({
+				kind: 'github issue',
+				target: 'org/repo',
+				body: '',
+				unreachable: 'GitHub',
+				captured: { url: null },
+				live,
+			}),
+		).resolves.toMatchObject({ ok: true, url: null });
+	});
+
+	test('live: hands the resolved mode to the sender and returns its result as-is', async () => {
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'coc',
+				body: 'hi',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toEqual({ ok: true, message: 'Posted.' });
+		expect(live).toHaveBeenCalledWith({ mode: 'live' });
+
+		vi.stubEnv('CONTEXT', 'dev');
+		vi.stubEnv('SMTP_HOST', 'localhost');
+		await deliver({
+			kind: 'email',
+			target: 'a@example.test',
+			body: 'hi',
+			unreachable: 'the mail server',
+			live,
+		});
+		expect(live).toHaveBeenLastCalledWith({
+			mode: 'local',
+			context: 'dev',
+			host: 'localhost',
+		});
+	});
+
+	test('a throw from live is a failure naming what could not be reached', async () => {
+		live.mockRejectedValue(new TypeError('fetch failed'));
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'coc',
+				body: 'hi',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toEqual({
+			ok: false,
+			definitelyNotSent: true,
+			message: 'Could not reach Slack: fetch failed',
+		});
+
+		live.mockRejectedValue('nope');
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'coc',
+				body: 'hi',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toMatchObject({ message: 'Could not reach Slack.' });
+	});
+
+	test('a timeout may have stranded a message the server had begun accepting', async () => {
+		live.mockRejectedValue(new DOMException('timed out', 'TimeoutError'));
+		await expect(
+			deliver({
+				kind: 'slack',
+				target: 'coc',
+				body: 'hi',
+				unreachable: 'Slack',
+				live,
+			}),
+		).resolves.toMatchObject({ ok: false, definitelyNotSent: false });
+
+		live.mockRejectedValue(
+			Object.assign(new Error('late'), { code: 'ETIMEDOUT' }),
+		);
+		await expect(
+			deliver({
+				kind: 'email',
+				target: 'a@example.test',
+				body: 'hi',
+				unreachable: 'the mail server',
+				isTimeout: (error) => (error as { code?: string }).code === 'ETIMEDOUT',
+				live,
+			}),
+		).resolves.toEqual({
+			ok: false,
+			definitelyNotSent: false,
+			message: 'Could not reach the mail server: late',
+		});
+	});
+
+	/** Sentry hears about what a maintainer has to fix, not the other side's weather. */
+	describe('reporting to Sentry', () => {
+		const send = (kind: OutboundKind = 'email') =>
+			deliver({
+				kind,
+				target: 'ada@example.test',
+				body: 'Hello Ada',
+				unreachable: 'GitHub',
+				live,
+			});
+
+		test.each([
+			['a 404', Object.assign(new Error('Not Found'), { status: 404 })],
+			['a 401 on response.status', { response: { status: 401 } }],
+			['no status at all', new TypeError('fetch failed')],
+			[
+				"a malformed private key's DataError (code 0)",
+				new DOMException('Invalid keyData', 'DataError'),
+			],
+		])('%s is reported, masked, without the body', async (_, error) => {
+			live.mockRejectedValue(error);
+			await send();
+			expect(reportHandled).toHaveBeenCalledExactlyOnceWith(error, {
+				area: 'outbound',
+				tags: { outbound: 'email', target: 'a•••@example.test' },
+			});
+		});
+
+		test.each([
+			['a 429', Object.assign(new Error('Slow down'), { status: 429 })],
+			['a 503', Object.assign(new Error('Unavailable'), { code: 503 })],
+			['a timeout', new DOMException('timed out', 'TimeoutError')],
+		])('%s is not reported', async (_, error) => {
+			live.mockRejectedValue(error);
+			await expect(send()).resolves.toMatchObject({ ok: false });
+			expect(reportHandled).not.toHaveBeenCalled();
+		});
+
+		test('a refusal the sender returns is reported from its message', async () => {
+			live.mockResolvedValue({
+				ok: false,
+				definitelyNotSent: true,
+				message: 'GITHUB_APP_CLIENT_ID is not set.',
+			});
+			await expect(send()).resolves.toMatchObject({ ok: false });
+			expect(reportHandled).toHaveBeenCalledExactlyOnceWith(
+				expect.objectContaining({
+					message: 'GITHUB_APP_CLIENT_ID is not set.',
+				}),
+				{
+					area: 'outbound',
+					tags: { outbound: 'email', target: 'a•••@example.test' },
+				},
+			);
+		});
+
+		test.each([
+			['may have been sent', { definitelyNotSent: false }],
+			['is marked report: false', { definitelyNotSent: true, report: false }],
+		])('a returned failure that %s is not reported', async (_, failure) => {
+			live.mockResolvedValue({ ok: false, message: 'Busy.', ...failure });
+			await send();
+			expect(reportHandled).not.toHaveBeenCalled();
+		});
+
+		test('Captured never reports', async () => {
+			vi.stubEnv('CONTEXT', 'deploy-preview');
+			vi.spyOn(console, 'info').mockImplementation(() => {});
+			live.mockResolvedValue({
+				ok: false,
+				definitelyNotSent: true,
+				message: 'never called',
+			});
+			await send('github issue');
+			expect(reportHandled).not.toHaveBeenCalled();
+		});
+	});
+});

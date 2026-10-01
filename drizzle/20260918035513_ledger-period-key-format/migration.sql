@@ -1,0 +1,1 @@
+ALTER TABLE "volunteer_invite_ledger" ADD CONSTRAINT "volunteer_invite_ledger_period_key_format" CHECK ("period_key" IS NULL OR "period_key" ~ '^[0-9]{4}-(0[1-9]|1[0-2])$');
