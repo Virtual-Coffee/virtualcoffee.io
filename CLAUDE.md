@@ -166,4 +166,4 @@ Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. When a skill asks
 
 ### Code review
 
-Label a PR `greptile-review` to get a Greptile review; its config is `.greptile/`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
+Greptile reviews every PR from a person; label it `skip-review` to opt out. Its config is `.greptile/`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
