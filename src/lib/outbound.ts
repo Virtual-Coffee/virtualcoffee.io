@@ -273,7 +273,11 @@ function isActionable(error: unknown): boolean {
 	return status >= 400 && status < 500 && status !== 429;
 }
 
-/** Octokit sets `status`; Google's clients use `code` or `response.status`. */
+/**
+ * Octokit sets `status`; Google's clients use `code` or `response.status`.
+ * Only 100-599 counts: a DOMException's numeric `code` (0 for the DataError
+ * a malformed private key throws) is not an HTTP status.
+ */
 function httpStatus(error: unknown): number | undefined {
 	if (typeof error !== 'object' || error === null) return;
 	const { status, code, response } = error as {
@@ -282,6 +286,7 @@ function httpStatus(error: unknown): number | undefined {
 		response?: { status?: unknown };
 	};
 	return [status, response?.status, code].find(
-		(value): value is number => typeof value === 'number',
+		(value): value is number =>
+			typeof value === 'number' && value >= 100 && value < 600,
 	);
 }

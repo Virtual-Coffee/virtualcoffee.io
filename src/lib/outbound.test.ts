@@ -414,6 +414,10 @@ describe('deliver', () => {
 			['a 404', Object.assign(new Error('Not Found'), { status: 404 })],
 			['a 401 on response.status', { response: { status: 401 } }],
 			['no status at all', new TypeError('fetch failed')],
+			[
+				"a malformed private key's DataError (code 0)",
+				new DOMException('Invalid keyData', 'DataError'),
+			],
 		])('%s is reported, masked, without the body', async (_, error) => {
 			live.mockRejectedValue(error);
 			await send();
