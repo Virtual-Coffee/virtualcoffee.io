@@ -81,7 +81,7 @@ When you clone your fork, Git names it `origin`. This page refers to your fork a
 
 ### Authenticating with GitHub
 
-If you use GitHub on your local computer for the first time, authenticate your local Git with GitHub before you clone a repository.
+If you use GitHub on your local computer for the first time, authenticate your local Git with GitHub before you push changes.
 
 Git asks for your credentials when you push changes to GitHub.
 You can save your credentials on your computer, so you do not have to enter them every time.
@@ -212,8 +212,6 @@ Always make sure that your fork is up to date with the `upstream` repository.
 2. Click the **Sync fork** button.
 3. If you see an **Update branch** button, click it.
 
-   If you do not see the button, your fork has no new changes. In that case, <Link href="/resources/developer-resources/open-source/git-101#pushing-changes">push your changes</Link>. Then <Link href="/resources/developer-resources/open-source/git-101#making-a-pull-request">make a pull request</Link>.
-
    <img
    	src="/assets/images/developer-resources/open-source/sync-fork-github.png"
    	alt='The Sync fork button, marked, on a forked repository page that is 3 commits behind. The open menu says "This branch is out-of-date" and shows the Compare button and the marked Update branch button'
@@ -221,11 +219,13 @@ Always make sure that your fork is up to date with the `upstream` repository.
    	height="174"
    />
 
+   If you do not see the button, your fork has no new changes. In that case, <Link href="/resources/developer-resources/open-source/git-101#pushing-changes">push your changes</Link>. Then <Link href="/resources/developer-resources/open-source/git-101#making-a-pull-request">make a pull request</Link>.
+
 Now your fork has the same updates as the `upstream` repository.
 
 ### Synchronizing Changes Locally
 
-Now that your `origin` repository is in sync with the `upstream`, synchronize these changes locally. That way, you already have the most recent content when you push your changes.
+Now that your `origin` repository is in sync with the `upstream` repository, synchronize these changes locally. That way, you already have the most recent content when you push your changes.
 
 Fetch and merge the latest update into your working branch. To do so:
 
@@ -250,7 +250,7 @@ Conflicts usually occur when two different branches change the same lines in the
 You may get conflicts if you do not sync your branch with the `upstream` repository before you open a pull request.
 When you open a pull request, GitHub shows a message about conflicts, if any.
 
-GitHub can resolve simple conflicts, where two branches change the same lines, in its web editor. For more complex conflicts, GitHub does not let you use the web editor. In that case, resolve the conflicts in your local repository.
+You can resolve simple conflicts, where two branches change the same lines, in GitHub's web editor. For more complex conflicts, GitHub does not let you use the web editor. In that case, resolve the conflicts in your local repository.
 
 #### Resolving Simple Conflicts on GitHub
 
@@ -370,7 +370,7 @@ This example shows your point of view. To collaborate:
 
    Change both `BRANCH-NAME` to the name of the target branch at Alice's fork. If you used a different name for the remote repository in step 1, change `alice` to that name.
 
-4. Pull the changes that Alice pushed:
+4. Later, pull new changes that Alice pushed:
 
    ```bash
    git pull alice BRANCH-NAME
@@ -385,7 +385,7 @@ Each commit contains the name of its author, so GitHub credits both contribution
 
 ### Collaborating Synchronously
 
-When you work at the same time with Alice and Charlie on the same issue, use the same steps as in the asynchronous collaboration above. The only difference is that you [add them as co-authors in your commit message](https://docs.github.com/en/pull-requests/how-tos/commit-changes/creating-a-commit-with-multiple-authors).
+When you work at the same time with Alice and Charlie on the same issue, use the same steps as in the previous section. The only difference is that you [add them as co-authors in your commit message](https://docs.github.com/en/pull-requests/how-tos/commit-changes/creating-a-commit-with-multiple-authors).
 
 To add co-authors:
 
