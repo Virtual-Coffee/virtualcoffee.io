@@ -1,10 +1,16 @@
 [build]
-	command   = "pnpm build"
+	# Migrations are applied here, by drizzle-kit, not by Netlify's own
+	# applier. See docs/adr/0001.
+	command   = "pnpm build && pnpm db:migrate:deploy"
 	functions = "netlify/functions"
 	publish   = ".next"
 
 [[edge_functions]]
 	function = "block-bots"
+	path     = "/*"
+
+[[edge_functions]]
+	function = "limit-action-body"
 	path     = "/*"
 
 [dev]
