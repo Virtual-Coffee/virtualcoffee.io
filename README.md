@@ -124,6 +124,14 @@ You should see something like 'Server now ready on http://localhost:9000' below,
 
 Use `ctrl-c` to quit the server when you're done.
 
+### `pnpm dev:tunnel`
+
+```shell
+pnpm dev:tunnel
+```
+
+The same as `pnpm dev`, but also served on a public `https://<random>--virtual-coffee-io.netlify.live` URL (printed on start) through [`netlify dev --live`](https://docs.netlify.com/cli/local-development/#share-a-live-development-server). Use it to check the site on a phone or to receive a webhook. It sets `NETLIFY_TUNNEL=1`, which switches on the tunnel-only settings in `next.config.mjs`; plain `pnpm dev` leaves them off because they break hot reloading on localhost.
+
 ### `pnpm build`
 
 ```shell
@@ -196,10 +204,7 @@ If you'd like to work on a feature that requires an API key, please reach out to
 
 ## Netlify Functions
 
-Netlify Functions in `netlify/functions/` provide two short-link redirects (rewrites configured in `netlify.toml`):
-
-- **`/join-coffee`** — redirects to the Tuesday/Thursday Zoom rooms.
-- **`/join-slack`** — redirects to the Slack invite link.
+`netlify/functions/join-coffee.ts` serves **`/join-coffee?day=tuesday|thursday`** (a rewrite in `netlify.toml`), redirecting to that day's Zoom room. `/join-slack` is a page (`src/app/join-slack/`), not a function.
 
 ## Adding content
 
