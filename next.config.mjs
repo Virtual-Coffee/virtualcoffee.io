@@ -92,6 +92,13 @@ const nextConfig = {
 	// the same value as the server; CONTEXT is unset outside Netlify.
 	env: {
 		NEXT_PUBLIC_SENTRY_ENVIRONMENT: process.env.CONTEXT ?? 'development',
+		// Netlify sets these at build only, so the running function sees them as
+		// undefined and `siteUrl()`, `isLive()` and the admin guards would read a
+		// deploy as a local checkout. Inlined into `process.env.X` reads.
+		...(process.env.CONTEXT && { CONTEXT: process.env.CONTEXT }),
+		...(process.env.DEPLOY_PRIME_URL && {
+			DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL,
+		}),
 	},
 };
 
