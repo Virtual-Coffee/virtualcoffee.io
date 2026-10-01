@@ -8,36 +8,7 @@ vi.mock('@slack/web-api', () => ({
 	},
 }));
 
-import {
-	fetchSlackMembers,
-	filterSlackMembers,
-	type SlackMember,
-} from './slackMembers';
-
-const members: SlackMember[] = [
-	{ id: 'U1', name: 'Grace Hopper', displayName: 'Grace', handle: 'ghopper' },
-	{ id: 'U2', name: 'Ada Lovelace', displayName: 'Ada', handle: 'ada' },
-	{ id: 'U3', name: 'Alan Turing', displayName: 'Alan', handle: 'turing' },
-];
-
-describe('filterSlackMembers', () => {
-	test('matches any of the three names, ignoring case and padding', () => {
-		expect(filterSlackMembers(members, '  HOPPER ').map((m) => m.id)).toEqual([
-			'U1',
-		]);
-		expect(filterSlackMembers(members, 'a').map((m) => m.id)).toEqual([
-			'U1',
-			'U2',
-			'U3',
-		]);
-		expect(filterSlackMembers(members, 'turing')[0]?.id).toBe('U3');
-	});
-
-	test('an empty query is everyone, capped', () => {
-		expect(filterSlackMembers(members, '')).toHaveLength(3);
-		expect(filterSlackMembers(members, '', 2)).toHaveLength(2);
-	});
-});
+import { fetchSlackMembers, type SlackMember } from './slackMembers';
 
 describe('fetchSlackMembers', () => {
 	afterEach(() => {
@@ -59,7 +30,11 @@ describe('fetchSlackMembers', () => {
 						id: 'U_FULL',
 						name: 'ghopper',
 						real_name: 'Grace Hopper',
-						profile: { display_name: 'Grace', real_name: 'Grace Hopper' },
+						profile: {
+							display_name: 'Grace',
+							real_name: 'Grace Hopper',
+							email: 'grace@example.com',
+						},
 					},
 					// No display name: falls back to the real name.
 					{ id: 'U_NO_DISPLAY', name: 'ada', profile: { real_name: 'Ada' } },
@@ -77,18 +52,27 @@ describe('fetchSlackMembers', () => {
 		const members = await fetchSlackMembers();
 
 		expect(members).toEqual<SlackMember[]>([
-			{ id: 'U_NO_DISPLAY', name: 'Ada', displayName: 'Ada', handle: 'ada' },
+			// Email Display off, or no users:read.email: null, not ''.
+			{
+				id: 'U_NO_DISPLAY',
+				name: 'Ada',
+				displayName: 'Ada',
+				handle: 'ada',
+				email: null,
+			},
 			{
 				id: 'U_FULL',
 				name: 'Grace Hopper',
 				displayName: 'Grace',
 				handle: 'ghopper',
+				email: 'grace@example.com',
 			},
 			{
 				id: 'U_HANDLE_ONLY',
 				name: 'turing',
 				displayName: 'turing',
 				handle: 'turing',
+				email: null,
 			},
 		]);
 		expect(slack.usersList).toHaveBeenCalledTimes(2);

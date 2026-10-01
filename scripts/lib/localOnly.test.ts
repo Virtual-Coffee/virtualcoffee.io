@@ -16,6 +16,8 @@ describe('isLocalDatabaseUrl', () => {
 		'postgresql://user:pw@ep-cool-name-123456.us-east-2.aws.neon.tech/neondb?sslmode=require',
 		'postgres://u:p@localhost.evil.test/db',
 		'postgres://u:p@db.internal/db?application_name=localhost',
+		'postgres://u:p@localhost:5432/db?host=ep-cool-name-123456.us-east-2.aws.neon.tech',
+		'postgres://u:p@localhost:5432/db?hostaddr=203.0.113.7',
 		'not a url',
 		'',
 	])('refuses %s', (url) => {
