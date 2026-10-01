@@ -5,7 +5,7 @@ import { slackDirectory, slackMember } from '@/test/mocks/slackMembers';
 
 import { grantCandidates, listAccessRows } from './admins';
 
-test('a candidate says whether a grant is pre-provisioned, applied directly, or edited in the table', async () => {
+test('a candidate says whether a grant is a Pending Grant, applied directly, or edited in the table', async () => {
 	slackDirectory.members = [
 		'U_NEW',
 		'U_STRANDED',

@@ -31,7 +31,7 @@ export type AccessRow = {
 export type GrantCandidate = SlackMember & {
 	/**
 	 * What the site already holds for them. `none`: never signed in, so a grant
-	 * is pre-provisioned as a Pending Grant. `noRoles`: signed in holding
+	 * is a Pending Grant. `noRoles`: signed in holding
 	 * nothing, so a grant is applied to their user row directly — a Pending
 	 * Grant would never be claimed. `hasRoles`: already in the table, so not
 	 * selectable; their roles are edited there.
@@ -52,7 +52,7 @@ const USER_COLUMNS = {
 };
 
 /**
- * Everyone who can reach /admin, plus everyone pre-provisioned to.
+ * Everyone who can reach /admin, plus everyone holding a Pending Grant.
  *
  * The role filter is in JavaScript rather than SQL because roles are stored as
  * a comma-separated string — `role = 'admin'` would miss someone who is
@@ -96,7 +96,7 @@ export async function listAccessRows(): Promise<AccessRow[]> {
 
 	for (const row of userRows) {
 		const roles = parseRoles(row.role);
-		// Somebody pre-provisioned them, but they signed in holding nothing.
+		// Somebody gave them a Pending Grant, but they signed in holding nothing.
 		const stranded = roles.length === 0;
 
 		rows.push({

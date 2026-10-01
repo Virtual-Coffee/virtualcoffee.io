@@ -6,7 +6,7 @@ import { assertMocksAllowed } from './mocks';
 /**
  * The Virtual Coffee Slack workspace directory.
  *
- * `/admin/user-management` needs it to pre-provision a Role for someone who has
+ * `/admin/user-management` needs it to give a Pending Grant to someone who has
  * never signed in — a Pending Grant is keyed on a Slack member id, and a
  * maintainer should be picking a person out of a list rather than copying an
  * opaque `U…` out of Slack's profile pane.

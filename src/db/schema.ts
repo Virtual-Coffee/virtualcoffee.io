@@ -162,7 +162,7 @@ export const devtoolsUser = pgTable('devtools_user', {
  * the only identifier guaranteed to match at sign-in. See `docs/adr/0009`.
  *
  * Claimed rows are kept rather than deleted — they are the record of who
- * pre-provisioned whom, and `user.role` takes over from that point.
+ * granted whom, and `user.role` takes over from that point.
  */
 export const pendingGrant = pgTable(
 	'pending_grant',

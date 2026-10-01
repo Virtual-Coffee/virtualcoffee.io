@@ -202,7 +202,7 @@ export function RolesDropdown({
 
 /**
  * Give a Role to someone in the Slack workspace who is not yet in the table:
- * pre-provisioned if they have never signed in, applied directly if they have.
+ * a Pending Grant if they have never signed in, applied directly if they have.
  * Candidates come from Slack, not `user`: the point is to reach someone who
  * has never visited the site.
  */
@@ -302,7 +302,7 @@ export function GrantAccessForm({
 							 * in Slack should find them and be told why they cannot be
 							 * picked here, not find nothing. Someone who signed in holding
 							 * nothing is not in the table, so they are offered here and
-							 * granted directly rather than pre-provisioned.
+							 * granted directly rather than given a Pending Grant.
 							 */
 							const unavailable =
 								candidate.account === 'hasRoles' || candidate.hasPendingGrant;

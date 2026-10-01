@@ -351,8 +351,8 @@ async function unclaimedGrantById(grantId: string) {
  * Withdraw a Grant nobody has claimed.
  *
  * A hard delete: it never took effect, so there is nothing to keep a record of.
- * Claimed Grants are never deleted — they are the record of who pre-provisioned
- * whom, and the User Management table reads the grantor off them.
+ * Claimed Grants are never deleted — they are the record of who granted whom,
+ * and the User Management table reads the grantor off them.
  */
 export async function revokePendingGrant(
 	grantId: string,
