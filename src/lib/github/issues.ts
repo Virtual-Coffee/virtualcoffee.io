@@ -153,7 +153,8 @@ export function createLunchAndLearnIssue(idea: {
 	return deliver<'github issue', { url: string | null }>({
 		kind: 'github issue',
 		target: `${OWNER}/${REPO}`,
-		body: `Lunch & Learn: ${idea.topic}\n\n${issueBody(idea)}`,
+		body: issueBody(idea),
+		details: { title: `Lunch & Learn: ${idea.topic}` },
 		unreachable: 'GitHub',
 		captured: { url: null },
 		live: async () => {

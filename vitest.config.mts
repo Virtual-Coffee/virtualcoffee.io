@@ -4,7 +4,8 @@ import { configDefaults, defineConfig } from 'vitest/config';
 /**
  * Two projects, told apart by filename:
  *
- * - `unit` is every `*.test.ts` that needs nothing running. The default.
+ * - `unit` is every `*.test.ts` (or `.tsx`, for the email templates) that
+ *   needs nothing running. The default.
  * - `db` is every `*.db.test.ts`. Its `globalSetup` starts
  *   `@netlify/database-dev` (the PGlite engine `netlify dev` already uses)
  *   and applies the migrations; its setup file points `NETLIFY_DB_URL` at it
@@ -29,7 +30,7 @@ export default defineConfig({
 				test: {
 					name: 'unit',
 					include: [
-						'src/**/*.test.ts',
+						'src/**/*.test.{ts,tsx}',
 						'scripts/**/*.test.ts',
 						'netlify/**/*.test.ts',
 					],

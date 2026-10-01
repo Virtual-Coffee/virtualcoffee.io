@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import type { ActionResult, EmailActionResult } from '@/lib/admin/actionResult';
 import { isId } from '@/db/ids';
-import { volunteerInviteEmail } from '@/lib/email/templates';
+import { volunteerInvite } from '@/emails/volunteerInvite';
 import { sendEmail } from '@/lib/email/transport';
 import { recordOutcome } from '@/lib/history/eventLog';
 import {
@@ -105,17 +105,15 @@ export async function sendInvite(
 
 	const { inviteId, volunteerId } = issued;
 
-	const template = volunteerInviteEmail(
-		session.user.name || 'A Virtual Coffee volunteer',
-		name,
-		`${siteUrl()}/join?invite=${token}`,
+	const sent = await sendEmail(
+		volunteerInvite,
+		{
+			inviterName: session.user.name || 'A Virtual Coffee volunteer',
+			inviteeName: name,
+			claimUrl: `${siteUrl()}/join?invite=${token}`,
+		},
+		{ to: email },
 	);
-
-	const sent = await sendEmail({
-		to: email,
-		subject: template.subject,
-		text: template.text,
-	});
 	await recordOutcome(volunteerSubject(volunteerId), {
 		channel: 'email',
 		outbound: sent,

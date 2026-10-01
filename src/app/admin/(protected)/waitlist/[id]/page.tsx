@@ -8,13 +8,11 @@ import {
 	getApplication,
 	getApplicationInviter,
 } from '@/lib/waitlist/applications';
+import { coffeeInvite } from '@/emails/coffeeInvite';
+import { slackInvite } from '@/emails/slackInvite';
+import { welcome } from '@/emails/welcome';
 import { ARCHIVE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import { history } from '@/lib/history/eventLog';
-import {
-	coffeeInviteEmail,
-	slackInviteEmail,
-	welcomeEmail,
-} from '@/lib/email/templates';
 import { emailStatus } from '@/lib/email/transport';
 import { ActionPanel } from './actionPanel';
 import { HistoryTimeline } from '../../historyTimeline';
@@ -36,6 +34,10 @@ export const dynamic = 'force-dynamic';
 export const metadata = {
 	robots: { index: false, follow: false },
 };
+
+// The real link is minted at send time; this stands in so the previews read
+// as they will.
+const SLACK_LINK_PLACEHOLDER = 'https://virtualcoffee.io/join-slack?code=…';
 
 export default async function ApplicationDetailPage({
 	params,
@@ -183,12 +185,34 @@ export default async function ApplicationDetailPage({
 										: null
 								}
 								emailStatus={emailStatus()}
-								coffeeInvite={coffeeInviteEmail(application.name)}
-								welcome={welcomeEmail(application.name)}
-								slackInvite={slackInviteEmail(
-									application.name,
-									'https://virtualcoffee.io/join-slack?code=…',
-								)}
+								coffeeInvite={{
+									subject: coffeeInvite.subject({}),
+									body: <coffeeInvite.Content />,
+								}}
+								welcome={{
+									subject: welcome.subject({
+										name: application.name,
+										inviteUrl: '',
+									}),
+									body: (
+										<welcome.Content
+											name={application.name}
+											inviteUrl={SLACK_LINK_PLACEHOLDER}
+										/>
+									),
+								}}
+								slackInvite={{
+									subject: slackInvite.subject({
+										name: application.name,
+										inviteUrl: '',
+									}),
+									body: (
+										<slackInvite.Content
+											name={application.name}
+											inviteUrl={SLACK_LINK_PLACEHOLDER}
+										/>
+									),
+								}}
 							/>
 						</div>
 					</section>

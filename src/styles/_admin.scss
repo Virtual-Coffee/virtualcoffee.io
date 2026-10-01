@@ -55,6 +55,16 @@
 	max-width: 68ch;
 }
 
+// A template's Content rendered in a confirmation dialog. Its styles are
+// inline (email clients need them that way), so only the box is ours.
+.email-preview {
+	max-width: 68ch;
+
+	p:last-child {
+		margin-bottom: 0;
+	}
+}
+
 .admin-answer-excerpt {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
