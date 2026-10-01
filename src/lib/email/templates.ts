@@ -72,7 +72,7 @@ Virtual Coffee`,
 }
 
 /**
- * Sent once, when someone is made a Volunteer — most are pre-provisioned and
+ * Sent once, when someone is made a Volunteer — most hold a Pending Grant and
  * would otherwise first hear of /invites from a balance email.
  */
 export function volunteerGrantEmail(
