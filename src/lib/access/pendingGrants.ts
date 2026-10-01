@@ -6,6 +6,7 @@ import {
 	serialiseRoles,
 	type RoleName,
 } from '@/lib/access/permissions';
+import { reportHandled } from '@/lib/monitoring/reportHandled';
 
 /**
  * Pending Grants: a Role assigned to a Slack member id before that person has
@@ -333,6 +334,7 @@ export async function claimPendingGrant(account: {
 			slackUserId: account.accountId,
 			error,
 		});
+		reportHandled(error, { area: 'access' });
 		return false;
 	}
 	return true;

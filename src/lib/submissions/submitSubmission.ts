@@ -1,5 +1,6 @@
 import { db, type Transaction } from '@/db';
 import { recordEvent } from '@/lib/history/eventLog';
+import { reportHandled } from '@/lib/monitoring/reportHandled';
 import {
 	SUBMISSION_KINDS,
 	submissionSubject,
@@ -42,6 +43,7 @@ export async function persistSubmission(
 		return { id };
 	} catch (error) {
 		console.error(`${SUBMISSION_KINDS[kind].singular} failed to save`, error);
+		reportHandled(error, { area: 'submissions', tags: { submission: kind } });
 		return { error: formError(copy.failed) };
 	}
 }
