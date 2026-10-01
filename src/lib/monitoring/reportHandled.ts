@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
-import { maskAddress } from '@/lib/outbound';
+import { maskAddress } from '@/lib/maskAddress';
 
 /**
  * Send a failure the code has already handled to Sentry, for the ones a

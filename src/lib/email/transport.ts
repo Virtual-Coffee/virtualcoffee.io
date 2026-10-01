@@ -1,10 +1,10 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 
 import { renderEmail, type EmailTemplate, type RenderedEmail } from './render';
+import { maskAddress } from '@/lib/maskAddress';
 import {
 	deliver,
 	emailDelivery,
-	maskAddress,
 	type EmailDelivery,
 	type Outbound,
 } from '@/lib/outbound';

@@ -8,6 +8,7 @@
  * checkout, like `netlify dev`'s `CONTEXT=dev`.
  */
 
+import { maskAddress } from '@/lib/maskAddress';
 import { reportHandled } from '@/lib/monitoring/reportHandled';
 
 export type OutboundKind =
@@ -25,13 +26,6 @@ export function deployContext(): string {
 /** Whether a deploy is one of Netlify's, as opposed to a checkout. */
 function isDeployed(): boolean {
 	return Boolean(process.env.CONTEXT) && process.env.CONTEXT !== 'dev';
-}
-
-/** `ada@example.test` → `a•••@example.test`; a Slack channel is left alone. */
-export function maskAddress(target: string): string {
-	const at = target.indexOf('@');
-	if (at < 1) return target;
-	return `${target[0]}•••${target.slice(at)}`;
 }
 
 /**
