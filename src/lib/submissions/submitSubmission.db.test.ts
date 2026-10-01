@@ -12,7 +12,7 @@ import {
 
 import { failInserts } from '@/test/db/fixtures';
 
-import { notifyAndRecord } from '@/lib/history/eventLog';
+import { notifyAndRecord, recordImport } from '@/lib/history/eventLog';
 
 import {
 	failedNotifications,
@@ -125,6 +125,32 @@ describe('notifyAndRecord', () => {
 	test('a submission with no notification event at all is counted', async () => {
 		await insertCocReport();
 		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
+	});
+
+	test('an imported submission is not counted, unless an announcement failed', async () => {
+		const imported = await insertCocReport();
+		const importedThenFailed = await insertCocReport();
+		const bare = await insertCocReport();
+		const at = new Date('2024-01-01T00:00:00Z');
+		await recordImport(submissionSubject('coc', imported), 'recA', at);
+		await recordImport(
+			submissionSubject('coc', importedThenFailed),
+			'recB',
+			at,
+		);
+		await notifyAndRecord(
+			submissionSubject('coc', importedThenFailed),
+			NOTIFIED,
+			async () => ({ ok: false, definitelyNotSent: true, message: 'x' }),
+		);
+
+		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });
+		const flagged = await neverAnnouncedAmong('coc', [
+			imported,
+			importedThenFailed,
+			bare,
+		]);
+		expect(flagged.toSorted()).toEqual([importedThenFailed, bare].toSorted());
 	});
 
 	/**

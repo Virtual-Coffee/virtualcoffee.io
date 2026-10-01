@@ -115,6 +115,7 @@ export async function openCount(kind: SubmissionKind): Promise<number> {
  * not hide the GitHub failure before it. Stored but never announced is the
  * failure mode docs/adr/0005 accepts, so it has to be visible; holding only
  * while `new` lets it clear once a maintainer has moved the row on.
+ * An `imported` row was never this site's to announce, so it is exempt.
  *
  * The one definition the dashboard banner, the list marker and the list's
  * `?failed=1` filter all use.
@@ -133,7 +134,10 @@ function neverAnnounced(kind: SubmissionKind) {
 		eq(table.status, 'new'),
 		or(
 			exists(attempts(['notification_failed'])),
-			notExists(attempts(['notification_sent', 'notification_failed'])),
+			and(
+				notExists(attempts(['notification_sent', 'notification_failed'])),
+				notExists(attempts(['imported'])),
+			),
 		),
 	);
 }
