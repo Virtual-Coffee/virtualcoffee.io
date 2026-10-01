@@ -236,7 +236,7 @@ Fetch and merge the latest update into your working branch. To do so:
    git pull origin DEFAULT-BRANCH
    ```
 
-   Change `DEFAULT-BRANCH` to the name of the repository's default branch. It is not always `main` or `master`. Repositories can use other names.
+   Change `DEFAULT-BRANCH` to the name of the repository's default branch.
 
 The command fetches the updated default branch from the `origin` repository and merges it into your local working branch.
 
@@ -250,11 +250,11 @@ Conflicts usually occur when two different branches change the same lines in the
 You may get conflicts if you do not sync your branch with the `upstream` repository before you open a pull request.
 When you open a pull request, GitHub shows a message about conflicts, if any.
 
-There are two ways to resolve conflicts:
+GitHub can resolve simple conflicts, where two branches change the same lines, in its web editor. For more complex conflicts, GitHub does not let you use the web editor. In that case, resolve the conflicts in your local repository.
 
-1. **Directly on GitHub**
+#### Resolving Simple Conflicts on GitHub
 
-   On the pull request page, GitHub shows the message "This branch has conflicts that must be resolved". Click the **Resolve conflicts** button and fix the conflicts.
+1. On the pull request page, GitHub shows the message "This branch has conflicts that must be resolved". Click the **Resolve conflicts** button.
 
    <img
    	src="/assets/images/developer-resources/open-source/merge-conflicts-github.png"
@@ -263,27 +263,43 @@ There are two ways to resolve conflicts:
    	height="158"
    />
 
-2. **In the local environment**
-   - Complete the steps in <Link href="/resources/developer-resources/open-source/git-101#syncing-your-fork-with-upstream">Syncing Your Fork with `upstream`</Link> and <Link href="/resources/developer-resources/open-source/git-101#synchronizing-changes-locally">Synchronizing Changes Locally</Link>.<br />
-     If `git pull` reports conflicts, open the conflicting files in your text editor. This example uses Visual Studio Code:
+2. In the editor, GitHub shows the conflicting files on the left. For each conflict, click one of the options above it.
 
-     <img
-     	src="/assets/images/developer-resources/open-source/conflict-lines-vscode.png"
-     	alt="A text editor showing conflict markers around two versions of the same line, with the options Accept Current Change, Accept Incoming Change, Accept Both Changes, and Compare Changes marked above them"
-     	width="800"
-     	height="109"
-     />
+   <img
+   	src="/assets/images/developer-resources/open-source/github-resolve-conflicts.png"
+   	alt='The GitHub conflict editor for README.md, with "2 conflicting files" on the left and "2 conflicts" at the top. The options Accept current change, Accept incoming change, and Accept both changes are above the conflict, and the Mark as resolved button is at the top right'
+   	width="800"
+   	height="156"
+   />
 
-     <br />
+   The options work as follows:
 
-   - Select one of the options:
-     - **Accept Current Change** — when you _only_ want to keep your change.
-     - **Accept Incoming Change** — when you _only_ want to keep the incoming change.
-     - **Accept Both Changes** — when you want to _keep both_ your changes and the incoming changes.
+   - **Accept current change** — when you _only_ want to keep your change.
+   - **Accept incoming change** — when you _only_ want to keep the incoming change.
+   - **Accept both changes** — when you want to _keep both_ your changes and the incoming changes.
 
-After resolving the conflicts, review the code and change it if necessary. Then <Link href="/resources/developer-resources/open-source/git-101#adding-and-committing-changes">add and commit the changes</Link>.
+   You can also edit the file by hand. Keep the lines that you want, and delete the markers `<<<<<<<`, `=======`, and `>>>>>>>`.
 
-_**Credit:** [How To Use GitHub For Project Collaboration — Based on Agile Method](https://adiati.com/blog/how-to-use-github-for-project-collaboration-based-on-agile-method) by Ayu Adiati_
+3. Click the **Mark as resolved** button. Repeat for each conflicting file.
+4. Click the **Commit merge** button.
+
+After you commit the merge, pull the updated branch to your local repository before you continue to work on it.
+
+#### Resolving Conflicts Locally
+
+1. Complete the steps in <Link href="/resources/developer-resources/open-source/git-101#syncing-your-fork-with-upstream">Syncing Your Fork with `upstream`</Link> and <Link href="/resources/developer-resources/open-source/git-101#synchronizing-changes-locally">Synchronizing Changes Locally</Link>.
+2. If `git pull` reports conflicts, open the conflicting files in your text editor. This example uses Visual Studio Code:
+
+   <img
+   	src="/assets/images/developer-resources/open-source/conflict-lines-vscode.png"
+   	alt="A text editor showing conflict markers around two versions of the same line, with the options Accept Current Change, Accept Incoming Change, Accept Both Changes, and Compare Changes marked above them"
+   	width="800"
+   	height="109"
+   />
+
+3. For each conflict, click **Accept Current Change**, **Accept Incoming Change**, or **Accept Both Changes**. They have the same meaning as the options on GitHub.
+4. Save the file. Repeat for each conflicting file.
+5. When you resolve all the conflicts, <Link href="/resources/developer-resources/open-source/git-101#adding-and-committing-changes">add and commit the changes</Link>.
 
 ### Pushing Changes
 
@@ -346,19 +362,21 @@ This example shows your point of view. To collaborate:
    git fetch alice
    ```
 
-3. Go to the target branch:
+3. Create a local branch from Alice's branch and go to it:
 
    ```bash
-   git checkout BRANCH-NAME
+   git checkout -b BRANCH-NAME alice/BRANCH-NAME
    ```
 
-   Change `BRANCH-NAME` to the name of the target branch at Alice's fork.
+   Change both `BRANCH-NAME` to the name of the target branch at Alice's fork. If you used a different name for the remote repository in step 1, change `alice` to that name.
 
 4. Pull the changes that Alice pushed:
 
    ```bash
    git pull alice BRANCH-NAME
    ```
+
+   Run this command each time Alice pushes new commits.
 
 Now you have the updated branch with the changes from your teammate.
 
@@ -383,6 +401,8 @@ To add co-authors:
    ```
 
    Change the names and email addresses to your teammates' details. Use the email address associated with each teammate's GitHub account.
+
+   When you press **Enter** inside the quotes, the terminal shows `>` at the start of the new line. Do not type it.
 
 3. Close the commit message with a double quote (`"`) at the end of the last `Co-authored-by:` line. Do not close it earlier.
 
