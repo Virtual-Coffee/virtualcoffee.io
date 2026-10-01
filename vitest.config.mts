@@ -1,6 +1,9 @@
 import { fileURLToPath } from 'node:url';
 import { configDefaults, defineConfig } from 'vitest/config';
 
+// CI runs in UTC; pin it so a zone-sensitive test fails the same way here.
+process.env.TZ = 'UTC';
+
 /**
  * Two projects, told apart by filename:
  *

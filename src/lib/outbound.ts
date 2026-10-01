@@ -1,5 +1,6 @@
 /**
- * Delivery Mode for everything the site sends: Live on production only,
+ * Delivery Mode for everything the site sends, Events Calendar writes
+ * included: Live on production only,
  * Captured everywhere else unless an opt-in says otherwise, and email's Local
  * opt-in (`SMTP_HOST`) only on a checkout (docs/adr/0013). Every sender is a
  * `deliver()` call, so it cannot reach its credentials before the mode is
@@ -7,7 +8,8 @@
  * checkout, like `netlify dev`'s `CONTEXT=dev`.
  */
 
-export type OutboundKind = 'email' | 'slack' | 'slack dm' | 'github issue';
+export type OutboundKind =
+	'email' | 'slack' | 'slack dm' | 'github issue' | 'calendar';
 
 export function isProduction(): boolean {
 	return process.env.CONTEXT === 'production';
@@ -71,7 +73,7 @@ export function capture(
 	console.info(
 		`[${kind} captured] ${deployContext()} ${target}`,
 		...(details ? [details] : []),
-		`\n${body}`,
+		...(body ? [`\n${body}`] : []),
 	);
 }
 
@@ -110,15 +112,19 @@ function isLoopbackHost(host: string): boolean {
 }
 
 /**
- * Slack posts and GitHub issues have no address to redirect to; their opt-in
- * is `NOTIFY_LIVE_OUTSIDE_PRODUCTION=true`, paired with per-context webhook
- * and App values that point at a test channel or repository.
+ * Senders with no address to redirect to share one opt-in shape: an env var
+ * set to `true` makes them Live outside production, paired with per-context
+ * values that point somewhere safe.
+ *
+ * - `NOTIFY_LIVE_OUTSIDE_PRODUCTION` — Slack posts and GitHub issues, with
+ *   webhook and App values for a test channel or repository.
+ * - `CALENDAR_LIVE_OUTSIDE_PRODUCTION` — Events Calendar writes
+ *   (`/admin/events`), with a `GOOGLE_CALENDAR_ID` naming a scratch calendar
+ *   the service account can edit. Reads are never gated.
  */
-export function notifyDelivery(): 'live' | 'captured' {
+function optInDelivery(envVar: string): 'live' | 'captured' {
 	if (isProduction()) return 'live';
-	return process.env.NOTIFY_LIVE_OUTSIDE_PRODUCTION === 'true'
-		? 'live'
-		: 'captured';
+	return process.env[envVar] === 'true' ? 'live' : 'captured';
 }
 
 /**
@@ -158,7 +164,14 @@ type Delivery<K extends OutboundKind> =
 
 function deliveryFor<K extends OutboundKind>(kind: K): Delivery<K> {
 	if (kind === 'email') return emailDelivery() as Delivery<K>;
-	const mode = kind === 'slack dm' ? dmDelivery() : notifyDelivery();
+	const mode =
+		kind === 'slack dm'
+			? dmDelivery()
+			: optInDelivery(
+					kind === 'calendar'
+						? 'CALENDAR_LIVE_OUTSIDE_PRODUCTION'
+						: 'NOTIFY_LIVE_OUTSIDE_PRODUCTION',
+				);
 	return (
 		mode === 'captured'
 			? { mode: 'captured', context: deployContext() }
@@ -171,6 +184,7 @@ const VERB: Record<OutboundKind, string> = {
 	slack: 'posted to Slack',
 	'slack dm': 'sent as a Slack DM',
 	'github issue': 'opened on GitHub',
+	calendar: 'written to the Events Calendar',
 };
 
 /** `AbortSignal.timeout()` rejects with a DOMException named TimeoutError. */
