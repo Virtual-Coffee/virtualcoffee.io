@@ -60,7 +60,22 @@ Forking means you create a copy of the repository in your GitHub account to make
 To fork a repository:
 
 1. Click the **Fork** button on the project's repository page on GitHub.
-2. GitHub redirects you to the "Create a new fork" page. Click the **Create fork** button.
+
+   <img
+   	src="/assets/images/developer-resources/open-source/github-fork-button.png"
+   	alt="The Fork button, with the number of forks, between the Unwatch and Star buttons on a GitHub repository page"
+   	width="412"
+   	height="60"
+   />
+
+2. GitHub redirects you to the "Create a new fork" page. Fill in the required fields, then click the **Create fork** button.
+
+   <img
+   	src="/assets/images/developer-resources/open-source/github-create-a-new-fork-page.png"
+   	alt='The "Create a new fork" page with the Owner and Repository name fields, a Description field, the "Copy the main branch only" checkbox, and the Create fork button'
+   	width="600"
+   	height="418"
+   />
 
 By convention, you call this forked repository the `origin` repository.
 
@@ -95,6 +110,14 @@ To clone a repository:
 2. Click the **Code** button.
 3. On the **Local** tab, select **HTTPS**. You can also select **SSH** or **GitHub CLI**, but this example uses HTTPS.
 4. Copy the URL.
+
+   <img
+   	src="/assets/images/developer-resources/open-source/code-button-clone-tabs-github.png"
+   	alt="The Code menu on a GitHub repository page with the Local tab open. The Code button, the HTTPS tab, and the copy button next to the repository URL are marked"
+   	width="412"
+   	height="385"
+   />
+
 5. In your terminal, run:
 
    ```bash
@@ -189,6 +212,13 @@ Always make sure that your fork is up to date with the `upstream` repository.
 2. Click the **Sync fork** button.
 3. If you see an **Update branch** button, click it. If you do not, your fork has no new changes. In that case, <Link href="/resources/developer-resources/open-source/git-101#pushing-changes">push your changes</Link>. Then <Link href="/resources/developer-resources/open-source/git-101#making-a-pull-request">make a pull request</Link>.
 
+   <img
+   	src="/assets/images/developer-resources/open-source/sync-fork-github.png"
+   	alt='The Sync fork button, marked, on a forked repository page that is 3 commits behind. The open menu says "This branch is out-of-date" and shows the Compare button and the marked Update branch button'
+   	width="600"
+   	height="174"
+   />
+
 Now your fork has the same update as the `upstream` repository.
 
 ### Synchronizing Changes Locally
@@ -220,15 +250,25 @@ There are two ways to resolve conflicts:
 
 1. **Directly on GitHub**
 
-   GitHub shows a prompt that your branch has conflicts that you must resolve. Click the **Resolve conflict** button and fix the conflicts.
+   GitHub shows a prompt that your branch has conflicts that you must resolve. Click the **Resolve conflicts** button and fix the conflicts.
 
-   ![A GitHub pull request page showing conflicting files and a Resolve conflicts button](https://cdn.hashnode.com/res/hashnode/image/upload/v1646421795534/cuEiIEKgT.JPG)
+   <img
+   	src="/assets/images/developer-resources/open-source/merge-conflicts-github.png"
+   	alt='The message "This branch has conflicts that must be resolved" on a pull request, with two conflicting files listed and the Resolve conflicts button marked'
+   	width="600"
+   	height="158"
+   />
 
 2. **In the local environment**
    - Complete the steps in <Link href="/resources/developer-resources/open-source/git-101#fetching-upstream-changes">Fetching `upstream` Changes</Link> and <Link href="/resources/developer-resources/open-source/git-101#synchronizing-changes-locally">Synchronizing Changes Locally</Link>.<br />
      Then your text editor shows this:
 
-     ![A text editor showing a merge conflict with options to accept the current change, the incoming change, or both](https://cdn.hashnode.com/res/hashnode/image/upload/v1662321487768/YXuwvPrzz.jpg)
+     <img
+     	src="/assets/images/developer-resources/open-source/conflict-lines-vscode.png"
+     	alt="A text editor showing conflict markers around two versions of the same line, with the options Accept Current Change, Accept Incoming Change, Accept Both Changes, and Compare Changes marked above them"
+     	width="800"
+     	height="109"
+     />
 
      <br />
 
