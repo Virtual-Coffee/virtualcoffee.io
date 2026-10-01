@@ -38,6 +38,10 @@ function createAuth() {
 			provider: 'pg',
 			schema,
 		}),
+		// Netlify's edge sets the client address here; it backs `context.ip`.
+		advanced: {
+			ipAddress: { ipAddressHeaders: ['x-nf-client-connection-ip'] },
+		},
 		// Slack is the only way in; there is deliberately no email/password path.
 		socialProviders: slackAuthConfigured
 			? {
