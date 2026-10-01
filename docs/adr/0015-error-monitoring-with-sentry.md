@@ -62,9 +62,14 @@ issues; the alternative was a CoC reporter's address in a third-party tool.
 **Handled failures a maintainer must act on are reported too.**
 `reportHandled()` (`src/lib/monitoring/reportHandled.ts`) captures a caught
 error tagged `reported: handled` and an `area`. Only two kinds of site call
-it. One is `deliver()`, when a sender throws an HTTP 4xx other than 429 or an
-error with no status at all; a 429, a 5xx or a timeout is the other side's
-weather, and History already records it. The other is a catch that strands
+it. One is `deliver()`, in live mode only: when a sender throws an HTTP 4xx
+other than 429 or an error with no status at all, and when a sender returns a
+failure that is `definitelyNotSent` (an unset env var, a rejected webhook),
+reported from its message. A 429, a 5xx or a timeout is the other side's
+weather, and History already records it. A sender marks a returned failure
+nobody has to fix `report: false`: Slack's 429 and 5xx, a calendar edit race
+or a deleted Event, a mail server rejecting the address someone typed. The
+other is a catch that strands
 what someone typed (a form row, an Invite, a CoC attachment), or a Pending
 Grant claim, or loses a History line. Everything else stays a log line.
 Sentry's default issue alerts are what notify; nothing extra is configured.
@@ -128,9 +133,10 @@ the client-side half of the picture disappears.
 - A new form or admin route that handles personal data needs adding to
   `PII_ROUTES`; until it is, an uncaught throw there ships its locals.
 - A new catch that strands someone's data should call `reportHandled`, or the
-  failure is only a log line again. A sender that returns `{ ok: false }`
-  instead of throwing is never reported by `deliver()`, so it explains itself
-  only in History.
+  failure is only a log line again.
+- A sender's new `definitelyNotSent` failure is reported by default; one that
+  is transient or someone else's mistake needs `report: false`, or it pages
+  for nothing.
 - Netlify holds two new env vars: `NEXT_PUBLIC_SENTRY_DSN` (all contexts) and
   `SENTRY_AUTH_TOKEN` (build secret). Rotating the token is a Netlify change
   only.

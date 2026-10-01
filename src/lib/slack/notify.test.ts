@@ -102,6 +102,19 @@ describe('notifySlack', () => {
 		});
 	});
 
+	test.each([429, 503])(
+		'a %i is marked as nothing to fix, so it is not reported',
+		async (status) => {
+			fetch.mockResolvedValue(new Response('', { status }));
+			await expect(notifySlack('coc', HI)).resolves.toEqual({
+				ok: false,
+				definitelyNotSent: true,
+				report: false,
+				message: `Slack rejected the message (${status}).`,
+			});
+		},
+	);
+
 	test('a network failure returns rather than throws', async () => {
 		fetch.mockRejectedValue(new TypeError('fetch failed'));
 		await expect(notifySlack('coc', HI)).resolves.toEqual({

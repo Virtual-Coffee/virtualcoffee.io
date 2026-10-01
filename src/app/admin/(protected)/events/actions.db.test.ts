@@ -194,6 +194,7 @@ describe('writing', () => {
 		await expect(cancelEvent(ID, ETAG)).resolves.toEqual({
 			ok: false,
 			definitelyNotSent: true,
+			report: false,
 			message:
 				'This changed on the Events Calendar since you loaded it. Check the current details and try again.',
 		});
@@ -205,6 +206,7 @@ describe('writing', () => {
 		await expect(updateEvent(ID, ETAG, series)).resolves.toEqual({
 			ok: false,
 			definitelyNotSent: true,
+			report: false,
 			message: 'That no longer exists on the Events Calendar.',
 		});
 		expect(revalidateTag).not.toHaveBeenCalled();

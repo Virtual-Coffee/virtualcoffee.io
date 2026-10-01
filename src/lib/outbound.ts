@@ -145,10 +145,14 @@ function dmDelivery(): 'live' | 'captured' {
  *
  * `Extra` is what a success carries beyond the shared shape — a GitHub
  * issue's `url`, say — and the sender declares its Captured value for it.
+ *
+ * `report: false` is a sender saying nobody has to fix this failure (a busy
+ * service, an edit race, a rejected recipient), so `deliver()` keeps it out
+ * of Sentry (docs/adr/0015).
  */
 export type Outbound<Extra extends object = Record<never, never>> =
 	| ({ ok: true; message: string; warning?: string } & Extra)
-	| { ok: false; message: string; definitelyNotSent: boolean };
+	| { ok: false; message: string; definitelyNotSent: boolean; report?: false };
 
 /** The non-captured mode handed to `live`: email's variant, `{ mode: 'live' }` for the rest. */
 export type LiveDelivery<K extends OutboundKind> = K extends 'email'
@@ -229,16 +233,18 @@ export async function deliver<
 		};
 	}
 
+	const report = (error: unknown) =>
+		reportHandled(error, {
+			area: 'outbound',
+			tags: { outbound: input.kind, target: maskAddress(input.target) },
+		});
+
+	let result: Outbound<Extra>;
 	try {
-		return await input.live(delivery);
+		result = await input.live(delivery);
 	} catch (error) {
 		const timedOut = (input.isTimeout ?? isAbortTimeout)(error);
-		if (!timedOut && isActionable(error)) {
-			reportHandled(error, {
-				area: 'outbound',
-				tags: { outbound: input.kind, target: maskAddress(input.target) },
-			});
-		}
+		if (!timedOut && isActionable(error)) report(error);
 		return {
 			ok: false,
 			message:
@@ -248,6 +254,12 @@ export async function deliver<
 			definitelyNotSent: !timedOut,
 		};
 	}
+
+	// A sender's own refusal: a missing env var, a rejected webhook.
+	if (!result.ok && result.definitelyNotSent && result.report !== false) {
+		report(new Error(result.message));
+	}
+	return result;
 }
 
 /**

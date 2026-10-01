@@ -242,6 +242,8 @@ async function send(
 		return {
 			ok: false,
 			definitelyNotSent: true,
+			// The address someone typed, not a fault in the sender.
+			report: false,
 			message: `The mail server rejected ${rejected.join(', ')}.`,
 		};
 	}

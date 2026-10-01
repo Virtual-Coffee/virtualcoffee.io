@@ -433,19 +433,42 @@ describe('deliver', () => {
 			expect(reportHandled).not.toHaveBeenCalled();
 		});
 
-		test('a returned failure is the sender’s to explain, and Captured never reports', async () => {
+		test('a refusal the sender returns is reported from its message', async () => {
 			live.mockResolvedValue({
 				ok: false,
 				definitelyNotSent: true,
-				message: 'Rejected.',
+				message: 'GITHUB_APP_CLIENT_ID is not set.',
 			});
-			await send();
+			await expect(send()).resolves.toMatchObject({ ok: false });
+			expect(reportHandled).toHaveBeenCalledExactlyOnceWith(
+				expect.objectContaining({
+					message: 'GITHUB_APP_CLIENT_ID is not set.',
+				}),
+				{
+					area: 'outbound',
+					tags: { outbound: 'email', target: 'a•••@example.test' },
+				},
+			);
+		});
 
+		test.each([
+			['may have been sent', { definitelyNotSent: false }],
+			['is marked report: false', { definitelyNotSent: true, report: false }],
+		])('a returned failure that %s is not reported', async (_, failure) => {
+			live.mockResolvedValue({ ok: false, message: 'Busy.', ...failure });
+			await send();
+			expect(reportHandled).not.toHaveBeenCalled();
+		});
+
+		test('Captured never reports', async () => {
 			vi.stubEnv('CONTEXT', 'deploy-preview');
 			vi.spyOn(console, 'info').mockImplementation(() => {});
-			live.mockRejectedValue(new Error('never called'));
+			live.mockResolvedValue({
+				ok: false,
+				definitelyNotSent: true,
+				message: 'never called',
+			});
 			await send('github issue');
-
 			expect(reportHandled).not.toHaveBeenCalled();
 		});
 	});

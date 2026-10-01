@@ -68,10 +68,20 @@ function write(
 				return { ok: true, message };
 			} catch (error) {
 				if (error instanceof CalendarConflictError) {
-					return { ok: false, definitelyNotSent: true, message: CONFLICT };
+					return {
+						ok: false,
+						definitelyNotSent: true,
+						report: false,
+						message: CONFLICT,
+					};
 				}
 				if (error instanceof CalendarGoneError) {
-					return { ok: false, definitelyNotSent: true, message: GONE };
+					return {
+						ok: false,
+						definitelyNotSent: true,
+						report: false,
+						message: GONE,
+					};
 				}
 				throw error;
 			}

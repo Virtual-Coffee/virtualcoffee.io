@@ -69,6 +69,10 @@ export function notifySlack(
 				return {
 					ok: false,
 					definitelyNotSent: true,
+					// A 429 or a 5xx is Slack's weather, not ours to fix.
+					...((response.status === 429 || response.status >= 500) && {
+						report: false,
+					}),
 					message: `Slack rejected the message (${response.status}${
 						detail ? `: ${detail.slice(0, 200)}` : ''
 					}).`,
