@@ -171,7 +171,7 @@ export async function grantVolunteerRole(
 }
 
 /**
- * Copy the Slack member id onto the user and apply whatever was pre-provisioned
+ * Copy the Slack member id onto the user and apply any Pending Grant
  * for it. Called from `databaseHooks.account.create.after` (docs/adr/0009).
  *
  * Deliberately never throws: a failed claim must not fail sign-in. The grant
@@ -242,7 +242,7 @@ export async function claimPendingGrant(account: {
 						 * The grantor and the moment they decided, not the moment this
 						 * person got round to signing in. "Granted" then means the same
 						 * thing in the User Management table whether access was
-						 * pre-provisioned or set after the fact.
+						 * a Pending Grant or set after the fact.
 						 */
 						roleGrantedBy: grant.grantedBy,
 						roleGrantedAt: grant.grantedAt,

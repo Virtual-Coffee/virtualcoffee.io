@@ -54,20 +54,28 @@ When writing or debugging a test, read `docs/testing.md` first.
 
 Every external data source lives in `src/data/` and degrades to a mock when its credentials are missing:
 
-| Source                                      | File                        | Fallback                               |
-| ------------------------------------------- | --------------------------- | -------------------------------------- |
-| Member GitHub profiles                      | `src/data/members/index.ts` | `src/data/mocks/memberData.js` (faker) |
-| GitHub Sponsors                             | `src/data/sponsors.ts`      | `src/data/mocks/sponsors.ts`           |
-| Events (Craft CMS)                          | `src/data/events.ts`        | `src/data/mocks/events.ts`             |
-| Membership applications (`/join`, `/admin`) | `src/db/`                   | local Postgres from `netlify dev`      |
+| Source                                         | File                        | Fallback                                 |
+| ---------------------------------------------- | --------------------------- | ---------------------------------------- |
+| Member GitHub profiles                         | `src/data/members/index.ts` | `src/data/mocks/memberData.js` (faker)   |
+| GitHub Sponsors                                | `src/data/sponsors.ts`      | `src/data/mocks/sponsors.ts`             |
+| Events (Craft CMS)                             | `src/data/events.ts`        | `src/data/mocks/events.ts`               |
+| Slack member directory (`/admin` grant picker) | `src/data/slackMembers.ts`  | `src/data/mocks/slackMembers.ts` (faker) |
+| Membership applications (`/join`, `/admin`)    | `src/db/`                   | local Postgres from `netlify dev`        |
 
 `src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. A new external fetch follows this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`, and wrap the fetch in `unstable_cache` with a tag so `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) can revalidate it.
 
 ### Membership pipeline (Postgres)
 
-Before touching `src/db`, `src/lib/access`, `src/lib/history` or `src/app/join`, read `CONTEXT.md` for the vocabulary. Each rule below cites the ADR that decided it; open the ADR before changing the rule.
+Before touching `src/db`, `src/lib/access`, `src/lib/history`, `src/app/join` or `src/app/admin`, read `CONTEXT.md` for the vocabulary. Each rule below cites the ADR that decided it; open the ADR before changing the rule.
 
-- Every `/admin` page and server action gates itself with `requirePermission()` (`src/lib/access/adminAccess.ts`); a layout only proves the viewer holds _some_ section — `docs/adr/0006`.
+`/admin` is organised by Section, one route segment each under `src/app/admin/(protected)/`; the modules directly under `(protected)/` are shared. Adding a Section is a type error in `CARDS` (`src/lib/admin/dashboard.ts`) until it has a dashboard card or is excluded.
+
+- `/admin` — the dashboard, scoped to what the viewer may see
+- `/admin/user-management` — who has access
+
+Rules:
+
+- Every Section page and server action under `/admin` gates itself with `requirePermission()` (`src/lib/access/adminAccess.ts`); the `(protected)` layout and the `/admin` dashboard only prove the viewer holds _some_ section, and the dashboard scopes what it shows with `visibleSections()` — `docs/adr/0003`, `docs/adr/0006`.
 - A Pending Grant (`src/lib/access/pendingGrants.ts`) matches on the Slack member id — `docs/adr/0009`.
 - `src/lib/history/eventLog.ts` is the only writer of `application_event` and `submission_event`: `recordOutcome()` turns a send into History, `transitionAndRecord()` commits a status change with its event. Labels in `src/lib/history/eventLabels.ts` are keyed by the enums, so a new event type is a type error until labelled.
 - A schema change is a new migration: `pnpm db:generate --name=<hyphenated-slug>`, both generated files committed — `docs/adr/0001`.

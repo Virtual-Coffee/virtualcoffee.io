@@ -15,6 +15,11 @@
 			"scope": ["src/data/podcast*", "src/db/**"]
 		},
 		{
+			"path": "docs/adr/0003-authorization-in-layouts-not-proxy.md",
+			"description": "Where authorization for /admin lives: server components vs proxy.ts",
+			"scope": ["src/app/admin/**", "src/lib/access/**"]
+		},
+		{
 			"path": "docs/adr/0004-retiring-airtable.md",
 			"description": "Retiring Airtable: what replaced it and what became a frozen snapshot",
 			"scope": ["src/data/monthlyChallenges/**", "src/app/monthlychallenges/**"]

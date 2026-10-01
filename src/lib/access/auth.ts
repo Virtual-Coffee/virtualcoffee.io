@@ -87,7 +87,7 @@ function createAuth() {
 		databaseHooks: {
 			user: {
 				create: {
-					// Everyone starts with nothing. Pre-provisioned roles are applied
+					// Everyone starts with nothing. Pending Grants are applied
 					// by the account hook below, which is the first point at which the
 					// Slack member id exists.
 					before: async (user) => ({ data: { ...user, role: DEFAULT_ROLE } }),
