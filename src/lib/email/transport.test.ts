@@ -59,6 +59,12 @@ describe('emailConfigured', () => {
 		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
 		expect(emailConfigured()).toBe(false);
 	});
+
+	test('a blank SMTP_HOST is not a sink', () => {
+		vi.stubEnv('GMAIL_SERVICE_ACCOUNT_KEY', undefined);
+		vi.stubEnv('SMTP_HOST', ' ');
+		expect(emailConfigured()).toBe(false);
+	});
 });
 
 describe('sendEmail', () => {

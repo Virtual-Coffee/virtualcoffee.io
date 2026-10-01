@@ -47,7 +47,7 @@ type Message = Envelope & RenderedEmail;
 
 export function emailConfigured(): boolean {
 	return Boolean(
-		process.env.SMTP_HOST ||
+		process.env.SMTP_HOST?.trim() ||
 		(process.env.GOOGLE_SMTP_USER && process.env.GMAIL_SERVICE_ACCOUNT_KEY),
 	);
 }

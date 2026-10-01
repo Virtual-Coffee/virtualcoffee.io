@@ -30,13 +30,22 @@ export function maskAddress(target: string): string {
 	return `${target[0]}•••${target.slice(at)}`;
 }
 
-/** Every link in a message, so a walkthrough can still follow the one it sent. */
+/**
+ * Every link in a message, so a walkthrough can see where it went. A `code`
+ * is a live invite (`/join-slack?code=`), so its value never reaches the log.
+ */
 export function linksIn(body: string): string[] {
 	const links = (body.match(/https?:\/\/[^\s<>"')]+/g) ?? []).map((link) =>
 		// A link at the end of a sentence carries the full stop with it.
-		link.replace(/[.,;:!?]+$/, ''),
+		withoutCode(link.replace(/[.,;:!?]+$/, '')),
 	);
 	return [...new Set(links)];
+}
+
+function withoutCode(link: string): string {
+	const url = URL.parse(link);
+	if (!url?.searchParams.has('code')) return link;
+	return `${url.origin}${url.pathname}?code=…`;
 }
 
 /**

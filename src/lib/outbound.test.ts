@@ -1,6 +1,12 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { capture, deliver, emailDelivery, notifyDelivery } from './outbound';
+import {
+	capture,
+	deliver,
+	emailDelivery,
+	linksIn,
+	notifyDelivery,
+} from './outbound';
 
 afterEach(() => vi.unstubAllEnvs());
 
@@ -128,7 +134,7 @@ describe('capture', () => {
 	/**
 	 * A deploy's message is about a real person and the log outlives the
 	 * walkthrough (docs/adr/0007), so it gets the address masked, the details,
-	 * and each link once — enough to follow the invite, nothing to read.
+	 * and each link once, with no invite code — nothing to read or redeem.
 	 */
 	test.each(['deploy-preview', 'branch-deploy'])(
 		'on a deploy (CONTEXT=%s) only the masked target, details and links',
@@ -140,7 +146,7 @@ describe('capture', () => {
 			expect(info).toHaveBeenLastCalledWith(
 				`[email captured] ${context} a•••@example.test`,
 				{ subject: 'Hello' },
-				'\nhttps://virtualcoffee.io/join-slack?code=abc123',
+				'\nhttps://virtualcoffee.io/join-slack?code=…',
 				'\nhttps://virtualcoffee.io/faq',
 			);
 
@@ -151,6 +157,19 @@ describe('capture', () => {
 			info.mockRestore();
 		},
 	);
+});
+
+describe('linksIn', () => {
+	test('an invite code is replaced; origin and path are kept', () => {
+		expect(
+			linksIn(
+				'Join: https://preview--vc.netlify.app/join-slack?code=s3cret&utm=x. Or https://virtualcoffee.io/faq?q=1',
+			),
+		).toEqual([
+			'https://preview--vc.netlify.app/join-slack?code=…',
+			'https://virtualcoffee.io/faq?q=1',
+		]);
+	});
 });
 
 describe('deliver', () => {
