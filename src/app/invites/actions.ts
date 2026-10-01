@@ -8,6 +8,7 @@ import { isId } from '@/db/ids';
 import { volunteerInvite } from '@/emails/volunteerInvite';
 import { sendEmail } from '@/lib/email/transport';
 import { recordOutcome } from '@/lib/history/eventLog';
+import { reportHandled } from '@/lib/monitoring/reportHandled';
 import {
 	blockingInvite,
 	giveBack,
@@ -84,6 +85,7 @@ export async function sendInvite(
 		});
 	} catch (error) {
 		console.error('Failed to record an invite', { slackUserId, error });
+		reportHandled(error, { area: 'invites' });
 		return fail('Something went wrong saving that invite. Please try again.');
 	}
 
@@ -145,6 +147,7 @@ export async function sendInvite(
 					slackUserId,
 					error,
 				});
+				reportHandled(error, { area: 'invites' });
 				revalidatePath('/invites');
 				return fail(
 					`${sent.message} Nothing was emailed, but we couldn’t give the invite back automatically — cancel it from your list to get it back.`,

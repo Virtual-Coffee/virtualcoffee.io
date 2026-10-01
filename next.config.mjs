@@ -141,6 +141,9 @@ export default withSentryConfig(withMDX(nextConfig), {
 	applicationKey: 'virtualcoffee-io',
 	widenClientFileUpload: true,
 	silent: !process.env.CI,
+	// The build plugin's own error and performance reporting to Sentry's org;
+	// off to match the privacy baseline (docs/adr/0015).
+	telemetry: false,
 	release: {
 		// The plugin's default, made explicit, plus a guard for a clone that
 		// lacks the previous release's commit: fall back to the last 10 commits

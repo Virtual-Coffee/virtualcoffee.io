@@ -157,6 +157,7 @@ describe('sendEmail', () => {
 		await expect(sendEmail(template, props, { to })).resolves.toEqual({
 			ok: false,
 			definitelyNotSent: true,
+			report: false,
 			message: 'The mail server rejected ada@example.test.',
 		});
 	});

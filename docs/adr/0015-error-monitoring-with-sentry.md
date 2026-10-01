@@ -7,6 +7,10 @@ render, a server action failing, a client component crashing — was only
 noticed when a visitor reported it. Nothing before Netlify's deploy preview
 exercises prerendering, and nothing after it watches production.
 
+A failure the code catches is quieter still. `deliver()` turns every sender
+error into a History row, so a wrong GitHub App client ID stopped Lunch &
+Learn issues on production and nobody found out until someone looked.
+
 Two things about this site shape the setup. It is a community site with a
 Code of Conduct violation report form, so anything that could forward request
 contents to a third party has to be off by default rather than opted out of.
@@ -55,10 +59,37 @@ because Sentry derives browser and OS tags and its crawler and legacy-browser
 inbound filters from it. The cost is no IP-derived geography on
 issues; the alternative was a CoC reporter's address in a third-party tool.
 
-Server stack traces keep local variable values (`includeLocalVariables`, with
-`stackFrameVariables: true` in the baseline). That is a deliberate trade-off:
-a throw inside the CoC report action could carry report text in a frame's
-variables, and we accept it for readable server errors.
+**Handled failures a maintainer must act on are reported too.**
+`reportHandled()` (`src/lib/monitoring/reportHandled.ts`) captures a caught
+error tagged `reported: handled` and an `area`. Only two kinds of site call
+it. One is `deliver()`, in live mode only: when a sender throws an HTTP 4xx
+other than 429 or an error with no status at all, and when a sender returns a
+failure that is `definitelyNotSent` (an unset env var, a rejected webhook),
+reported from its message. A 429, a 5xx or a timeout is the other side's
+weather, and History already records it. A sender marks a returned failure
+nobody has to fix `report: false`: Slack's 429 and 5xx, a calendar edit race
+or a deleted Event, a mail server rejecting the address someone typed. The
+other is a catch that strands
+what someone typed (a form row, an Invite, a CoC attachment), or a Pending
+Grant claim, or loses a History line. Everything else stays a log line.
+Sentry's default issue alerts are what notify; nothing extra is configured.
+
+**What `reportHandled` sends is a scrubbed copy.** It keeps the message and
+stack with every email address masked as the Captured log masks it. A failed
+query keeps its SQL and loses its params, which are form input. A Postgres
+error is reduced to `code`, `constraint` and `table` (as context), so its
+`detail` and `where` never leave. A thrown non-Error is replaced, not
+serialised. Tags name the outbound kind and the masked target, never a body.
+
+**Server stack traces keep local variables, except where they could hold
+PII.** `includeLocalVariables` stays on with `stackFrameVariables: true`, for
+readable server errors. The server's `beforeSend` (`withoutPiiFrameVars` in
+`src/sentryDataCollection.ts`) deletes every frame's `vars` from an event
+tagged `reported: handled`, since the SDK captures locals for caught
+exceptions as well, and from any event whose request path or transaction is
+under a route in `PII_ROUTES`: `/admin`, `/join`, `/invites` and the four
+public forms. Filtering by variable name was rejected because the bundler
+renames locals. The edge runtime has no local variables to strip.
 
 **Traces are sampled at 25% in production, 100% in development.** Enough to
 see route timings on a low-traffic site without a bot wave burning the quota.
@@ -99,11 +130,19 @@ the client-side half of the picture disappears.
   here.
 - `src/app/global-error.tsx` carries its own `<html>`, stylesheet and font and
   has to be kept in step with `src/app/layout.tsx` by hand.
+- A new form or admin route that handles personal data needs adding to
+  `PII_ROUTES`; until it is, an uncaught throw there ships its locals.
+- A new catch that strands someone's data should call `reportHandled`, or the
+  failure is only a log line again.
+- A sender's new `definitelyNotSent` failure is reported by default; one that
+  is transient or someone else's mistake needs `report: false`, or it pages
+  for nothing.
 - Netlify holds two new env vars: `NEXT_PUBLIC_SENTRY_DSN` (all contexts) and
   `SENTRY_AUTH_TOKEN` (build secret). Rotating the token is a Netlify change
   only.
 - A rejection from the RUM beacon's ingest host is never reported, including
   one that is somehow ours. Anything else with a foreign frame is still
   collected and counts toward quota.
-- The Deno edge function `netlify/edge-functions/block-bots.ts` is outside the
-  Next runtime and is not instrumented.
+- The Deno edge function `netlify/edge-functions/block-bots.ts` and the
+  Netlify functions under `netlify/functions/` are outside the Next runtime
+  and are not instrumented.

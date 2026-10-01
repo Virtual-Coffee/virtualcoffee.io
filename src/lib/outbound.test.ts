@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
+import { reportHandled } from '@/lib/monitoring/reportHandled';
+
 import {
 	capture,
 	deliver,
@@ -7,6 +9,8 @@ import {
 	linksIn,
 	type OutboundKind,
 } from './outbound';
+
+vi.mock('@/lib/monitoring/reportHandled', () => ({ reportHandled: vi.fn() }));
 
 afterEach(() => vi.unstubAllEnvs());
 
@@ -154,6 +158,7 @@ describe('deliver', () => {
 	const live = vi.fn();
 
 	beforeEach(() => {
+		vi.mocked(reportHandled).mockClear();
 		live.mockReset();
 		live.mockResolvedValue({ ok: true, message: 'Posted.' });
 		vi.stubEnv('CONTEXT', 'production');
@@ -391,6 +396,84 @@ describe('deliver', () => {
 			ok: false,
 			definitelyNotSent: false,
 			message: 'Could not reach the mail server: late',
+		});
+	});
+
+	/** Sentry hears about what a maintainer has to fix, not the other side's weather. */
+	describe('reporting to Sentry', () => {
+		const send = (kind: OutboundKind = 'email') =>
+			deliver({
+				kind,
+				target: 'ada@example.test',
+				body: 'Hello Ada',
+				unreachable: 'GitHub',
+				live,
+			});
+
+		test.each([
+			['a 404', Object.assign(new Error('Not Found'), { status: 404 })],
+			['a 401 on response.status', { response: { status: 401 } }],
+			['no status at all', new TypeError('fetch failed')],
+			[
+				"a malformed private key's DataError (code 0)",
+				new DOMException('Invalid keyData', 'DataError'),
+			],
+		])('%s is reported, masked, without the body', async (_, error) => {
+			live.mockRejectedValue(error);
+			await send();
+			expect(reportHandled).toHaveBeenCalledExactlyOnceWith(error, {
+				area: 'outbound',
+				tags: { outbound: 'email', target: 'a•••@example.test' },
+			});
+		});
+
+		test.each([
+			['a 429', Object.assign(new Error('Slow down'), { status: 429 })],
+			['a 503', Object.assign(new Error('Unavailable'), { code: 503 })],
+			['a timeout', new DOMException('timed out', 'TimeoutError')],
+		])('%s is not reported', async (_, error) => {
+			live.mockRejectedValue(error);
+			await expect(send()).resolves.toMatchObject({ ok: false });
+			expect(reportHandled).not.toHaveBeenCalled();
+		});
+
+		test('a refusal the sender returns is reported from its message', async () => {
+			live.mockResolvedValue({
+				ok: false,
+				definitelyNotSent: true,
+				message: 'GITHUB_APP_CLIENT_ID is not set.',
+			});
+			await expect(send()).resolves.toMatchObject({ ok: false });
+			expect(reportHandled).toHaveBeenCalledExactlyOnceWith(
+				expect.objectContaining({
+					message: 'GITHUB_APP_CLIENT_ID is not set.',
+				}),
+				{
+					area: 'outbound',
+					tags: { outbound: 'email', target: 'a•••@example.test' },
+				},
+			);
+		});
+
+		test.each([
+			['may have been sent', { definitelyNotSent: false }],
+			['is marked report: false', { definitelyNotSent: true, report: false }],
+		])('a returned failure that %s is not reported', async (_, failure) => {
+			live.mockResolvedValue({ ok: false, message: 'Busy.', ...failure });
+			await send();
+			expect(reportHandled).not.toHaveBeenCalled();
+		});
+
+		test('Captured never reports', async () => {
+			vi.stubEnv('CONTEXT', 'deploy-preview');
+			vi.spyOn(console, 'info').mockImplementation(() => {});
+			live.mockResolvedValue({
+				ok: false,
+				definitelyNotSent: true,
+				message: 'never called',
+			});
+			await send('github issue');
+			expect(reportHandled).not.toHaveBeenCalled();
 		});
 	});
 });

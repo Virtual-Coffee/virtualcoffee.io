@@ -20,6 +20,7 @@ import {
 	type Transaction,
 	type VolunteerEventType,
 } from '@/db';
+import { reportHandled } from '@/lib/monitoring/reportHandled';
 import type { Outbound } from '@/lib/outbound';
 
 /**
@@ -294,6 +295,7 @@ export async function recordOutcome<S extends Subject>(
 			`Could not record the ${input.channel} outcome for ${subject.kind} ${subject.id}`,
 			error,
 		);
+		reportHandled(error, { area: 'history', tags: { channel: input.channel } });
 		return false;
 	}
 }
@@ -314,6 +316,8 @@ export async function notifyAndRecord<S extends Subject>(
 	try {
 		outbound = await notify();
 	} catch (error) {
+		// A throw here bypassed `deliver()`, so nothing else reports it.
+		reportHandled(error, { area: 'history', tags: { channel: input.channel } });
 		outbound = {
 			ok: false,
 			definitelyNotSent: true,

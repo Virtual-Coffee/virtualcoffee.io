@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { db, membershipApplication } from '@/db';
 import { applicationPath } from '@/lib/admin/links';
 import { notifyAndRecord, recordEvent } from '@/lib/history/eventLog';
+import { reportHandled } from '@/lib/monitoring/reportHandled';
 import { applicationSubject, statusCounts } from '@/lib/waitlist/applications';
 import { claimInvite, type ClaimedInvite } from '@/lib/volunteers/invites';
 import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
@@ -139,6 +140,7 @@ export async function submitMembershipApplication(
 		// Deliberately not surfaced to the applicant: the upstream message can
 		// name tables and columns, and there is nothing they could do with it.
 		console.error('Membership application failed to save', error);
+		reportHandled(error, { area: 'join' });
 		return formError(savingFailed('application'));
 	}
 

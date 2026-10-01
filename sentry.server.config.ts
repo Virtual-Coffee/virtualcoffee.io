@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/nextjs';
 
-import { dataCollection } from '@/sentryDataCollection';
+import { dataCollection, withoutPiiFrameVars } from '@/sentryDataCollection';
 
 // See src/instrumentation-client.ts for the DSN and data-collection rules.
 Sentry.init({
@@ -9,4 +9,5 @@ Sentry.init({
 	dataCollection,
 	tracesSampleRate: process.env.NODE_ENV === 'development' ? 1 : 0.25,
 	includeLocalVariables: true,
+	beforeSend: withoutPiiFrameVars,
 });

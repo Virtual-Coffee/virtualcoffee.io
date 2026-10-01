@@ -2,6 +2,8 @@ import { randomUUID } from 'node:crypto';
 
 import { getStore } from '@netlify/blobs';
 
+import { reportHandled } from '@/lib/monitoring/reportHandled';
+
 /**
  * Storage for CoC report attachments.
  *
@@ -105,6 +107,7 @@ export async function storeAttachment(
 		});
 	} catch (error) {
 		console.error('CoC attachment could not be stored', { key, error });
+		reportHandled(error, { area: 'coc attachments' });
 		return {
 			error:
 				'We couldn’t store the attachment. Please try again, or send the report without it and email the file to hello@virtualcoffee.io.',

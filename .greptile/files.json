@@ -112,9 +112,10 @@
 		},
 		{
 			"path": "docs/adr/0015-error-monitoring-with-sentry.md",
-			"description": "Error monitoring with Sentry: what is collected and what is kept out",
+			"description": "Error monitoring with Sentry: what is collected, what is kept out, and which handled failures are reported",
 			"scope": [
 				"src/instrumentation*.ts",
+				"src/lib/monitoring/**",
 				"sentry.*.config.ts",
 				"src/sentryDataCollection*.ts",
 				"src/app/global-error.tsx",

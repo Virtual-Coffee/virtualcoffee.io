@@ -8,6 +8,9 @@
  * checkout, like `netlify dev`'s `CONTEXT=dev`.
  */
 
+import { maskAddress } from '@/lib/maskAddress';
+import { reportHandled } from '@/lib/monitoring/reportHandled';
+
 export type OutboundKind =
 	'email' | 'slack' | 'slack dm' | 'github issue' | 'calendar';
 
@@ -23,13 +26,6 @@ export function deployContext(): string {
 /** Whether a deploy is one of Netlify's, as opposed to a checkout. */
 function isDeployed(): boolean {
 	return Boolean(process.env.CONTEXT) && process.env.CONTEXT !== 'dev';
-}
-
-/** `ada@example.test` → `a•••@example.test`; a Slack channel is left alone. */
-export function maskAddress(target: string): string {
-	const at = target.indexOf('@');
-	if (at < 1) return target;
-	return `${target[0]}•••${target.slice(at)}`;
 }
 
 /**
@@ -149,10 +145,14 @@ function dmDelivery(): 'live' | 'captured' {
  *
  * `Extra` is what a success carries beyond the shared shape — a GitHub
  * issue's `url`, say — and the sender declares its Captured value for it.
+ *
+ * `report: false` is a sender saying nobody has to fix this failure (a busy
+ * service, an edit race, a rejected recipient), so `deliver()` keeps it out
+ * of Sentry (docs/adr/0015).
  */
 export type Outbound<Extra extends object = Record<never, never>> =
 	| ({ ok: true; message: string; warning?: string } & Extra)
-	| { ok: false; message: string; definitelyNotSent: boolean };
+	| { ok: false; message: string; definitelyNotSent: boolean; report?: false };
 
 /** The non-captured mode handed to `live`: email's variant, `{ mode: 'live' }` for the rest. */
 export type LiveDelivery<K extends OutboundKind> = K extends 'email'
@@ -233,16 +233,60 @@ export async function deliver<
 		};
 	}
 
+	const report = (error: unknown) =>
+		reportHandled(error, {
+			area: 'outbound',
+			tags: { outbound: input.kind, target: maskAddress(input.target) },
+		});
+
+	let result: Outbound<Extra>;
 	try {
-		return await input.live(delivery);
+		result = await input.live(delivery);
 	} catch (error) {
+		const timedOut = (input.isTimeout ?? isAbortTimeout)(error);
+		if (!timedOut && isActionable(error)) report(error);
 		return {
 			ok: false,
 			message:
 				error instanceof Error
 					? `Could not reach ${input.unreachable}: ${error.message}`
 					: `Could not reach ${input.unreachable}.`,
-			definitelyNotSent: !(input.isTimeout ?? isAbortTimeout)(error),
+			definitelyNotSent: !timedOut,
 		};
 	}
+
+	// A sender's own refusal: a missing env var, a rejected webhook.
+	if (!result.ok && result.definitelyNotSent && result.report !== false) {
+		report(new Error(result.message));
+	}
+	return result;
+}
+
+/**
+ * A rejection someone has to fix (a 4xx: bad credentials, a missing
+ * installation) or a failure with no status at all. A 429, a 5xx or a timeout
+ * is the other side's weather, and History already shows it (docs/adr/0015).
+ */
+function isActionable(error: unknown): boolean {
+	const status = httpStatus(error);
+	if (status === undefined) return true;
+	return status >= 400 && status < 500 && status !== 429;
+}
+
+/**
+ * Octokit sets `status`; Google's clients use `code` or `response.status`.
+ * Only 100-599 counts: a DOMException's numeric `code` (0 for the DataError
+ * a malformed private key throws) is not an HTTP status.
+ */
+function httpStatus(error: unknown): number | undefined {
+	if (typeof error !== 'object' || error === null) return;
+	const { status, code, response } = error as {
+		status?: unknown;
+		code?: unknown;
+		response?: { status?: unknown };
+	};
+	return [status, response?.status, code].find(
+		(value): value is number =>
+			typeof value === 'number' && value >= 100 && value < 600,
+	);
 }
