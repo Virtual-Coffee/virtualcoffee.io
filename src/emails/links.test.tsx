@@ -156,6 +156,27 @@ test.each(links)('%s: %s resolves', (_name, href) => {
 	expect(resolves(new URL(href))).toBe(true);
 });
 
+/** The rewrite accepts any `:day`; the function is what rejects a bad one. */
+test.each(
+	links.filter(([, href]) => new URL(href).pathname === '/join-coffee'),
+)('%s: %s is accepted by the join-coffee function', async (_name, href) => {
+	vi.stubEnv('ZOOM_TUESDAYS', 'https://zoom.example/tuesday');
+	vi.stubEnv('ZOOM_THURSDAYS', 'https://zoom.example/thursday');
+	const { default: handler } =
+		await import('../../netlify/functions/join-coffee');
+	const response = await handler(new Request(href));
+	expect(response.status).toBe(302);
+});
+
+test('the join-coffee function rejects a day it does not serve', async () => {
+	const { default: handler } =
+		await import('../../netlify/functions/join-coffee');
+	const response = await handler(
+		new Request(`${origin}/join-coffee?day=friday`),
+	);
+	expect(response.status).toBe(401);
+});
+
 test('a link the rewrite does not accept is caught', () => {
 	expect(resolves(new URL(`${origin}/join-coffee`))).toBe(false);
 	expect(resolves(new URL(`${origin}/no-such-page`))).toBe(false);
