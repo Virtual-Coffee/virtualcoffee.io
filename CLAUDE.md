@@ -166,4 +166,4 @@ Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. When a skill asks
 
 ### Code review
 
-Label a PR `greptile-review` (or `coderabbit-review` for CodeRabbit) to get a bot review. Greptile's config is `.greptile/`; its `ignorePatterns` and `.coderabbit.yaml`'s `path_filters` stay identical. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
+Label a PR `greptile-review` to get a Greptile review; its config is `.greptile/`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
