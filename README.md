@@ -204,10 +204,7 @@ If you'd like to work on a feature that requires an API key, please reach out to
 
 ## Netlify Functions
 
-Netlify Functions in `netlify/functions/` provide two short-link redirects (rewrites configured in `netlify.toml`):
-
-- **`/join-coffee`** — redirects to the Tuesday/Thursday Zoom rooms.
-- **`/join-slack`** — redirects to the Slack invite link.
+`netlify/functions/join-coffee.ts` serves **`/join-coffee?day=tuesday|thursday`** (a rewrite in `netlify.toml`), redirecting to that day's Zoom room. `/join-slack` is a page (`src/app/join-slack/`), not a function.
 
 ## Adding content
 
