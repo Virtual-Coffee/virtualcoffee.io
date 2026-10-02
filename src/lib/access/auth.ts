@@ -8,7 +8,7 @@ import { db } from '@/db';
 import * as schema from '@/db/schema';
 import { devtoolsConfig } from '@/lib/access/devtools';
 import { ac, DEFAULT_ROLE, roles } from '@/lib/access/permissions';
-import { claimPendingGrant } from '@/lib/access/pendingGrants';
+import { claimOnSignIn } from '@/lib/access/roleAssignment';
 import { siteUrl } from '@/util/url.server';
 
 const SLACK_TEAM_ID_CLAIM = 'https://slack.com/team_id';
@@ -96,7 +96,7 @@ function createAuth() {
 			account: {
 				create: {
 					after: async (account) => {
-						await claimPendingGrant(account);
+						await claimOnSignIn(account);
 					},
 				},
 			},
@@ -106,7 +106,7 @@ function createAuth() {
 			 * Supplies `role` on the session and registers the `ac`/`roles` objects
 			 * `sessionCan()` evaluates. None of its endpoints — ban, impersonate,
 			 * set-role — are called: every role write is Drizzle, in
-			 * src/lib/access/pendingGrants.ts and user-management/actions.ts. `adminRoles`
+			 * src/lib/access/roleAssignment.ts. `adminRoles`
 			 * stays `['admin']` so that, if one ever is, a section role cannot
 			 * reach it.
 			 */

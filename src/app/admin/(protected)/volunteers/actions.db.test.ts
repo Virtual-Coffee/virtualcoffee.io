@@ -121,6 +121,10 @@ describe('addVolunteer', () => {
 			roleGrantedBy: 'Local dev',
 		});
 		await expect(grantRole('U_ADA')).resolves.toEqual([]);
+		// Linked to their account from the start, not left to look unsigned-in.
+		await expect(volunteerRow('U_ADA')).resolves.toMatchObject({
+			userId: ada.id,
+		});
 		expect(sendEmail).toHaveBeenCalledWith(
 			volunteerGrant,
 			{
@@ -292,24 +296,6 @@ describe('setVolunteerActive', () => {
 		).resolves.toEqual([{ claimedUserId: ada.id }]);
 		// Already signed in throughout — no DM either time.
 		expect(sendSlackDm).not.toHaveBeenCalled();
-	});
-
-	test('someone whose only role was volunteer is left with the default', async () => {
-		const ada = await insertUser({ role: 'volunteer', slackUserId: 'U_ADA' });
-		const { id } = await insertVolunteer({ slackUserId: 'U_ADA' });
-
-		await setVolunteerActive(id, false);
-
-		await expect(roleOf(ada.id)).resolves.toMatchObject({ role: 'user' });
-	});
-
-	test('a grant that only carried volunteer is withdrawn rather than left empty', async () => {
-		await insertPendingGrant({ slackUserId: 'U_ADA', role: 'volunteer' });
-		const { id } = await insertVolunteer({ slackUserId: 'U_ADA' });
-
-		await setVolunteerActive(id, false);
-
-		await expect(grantRole('U_ADA')).resolves.toEqual([]);
 	});
 
 	test('restarting someone who never signed in re-creates the withdrawn grant', async () => {

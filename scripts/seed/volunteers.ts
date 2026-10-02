@@ -111,7 +111,7 @@ export async function seedVolunteers(): Promise<Map<string, string>> {
 		slackHandle: 'localdev',
 		roleLabels: 'VC Host, Coffee Table Group Leader',
 		email: 'localdev@example.com',
-		// Linked, the way `claimPendingGrant()` leaves it after a Slack sign-in.
+		// Linked, the way `claimOnSignIn()` leaves it after a Slack sign-in.
 		userId: ADMIN.id,
 	});
 	const ayu = await insertVolunteer({
