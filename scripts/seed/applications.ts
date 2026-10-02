@@ -37,6 +37,7 @@ type Seed = {
 	firstEmailFailed?: boolean;
 	slackNotificationFailed?: boolean;
 	slackInviteResent?: boolean;
+	inviteCompletionFailed?: boolean;
 };
 
 const SEEDS: Seed[] = [
@@ -171,6 +172,7 @@ const SEEDS: Seed[] = [
 		status: 'member',
 		source: 'volunteer_invite',
 		referrer: 'Bekah',
+		inviteCompletionFailed: true,
 		daysAgo: 63,
 		howDidYouHear: 'Bekah invited me after a conference hallway conversation.',
 		journey:
@@ -436,6 +438,13 @@ export async function seedApplications(
 				body: `Membership approved; welcome email with Slack invite sent to ${seed.email}`,
 				createdAt: approvedAt,
 			});
+			if (seed.inviteCompletionFailed) {
+				await by({
+					type: 'invite_completion_failed',
+					body: 'The Invite behind this application could not be marked completed',
+					createdAt: new Date(approvedAt.getTime() + 1000),
+				});
+			}
 
 			// The Slack join link minted at approval. A re-send supersedes it and
 			// the live replacement is what the CLI prints; otherwise it was used.

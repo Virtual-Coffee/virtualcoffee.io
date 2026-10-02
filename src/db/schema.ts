@@ -41,7 +41,7 @@ export const user = pgTable('user', {
 	roleGrantedAt: timestamp('role_granted_at', { withTimezone: true }),
 	/**
 	 * Ours: the Slack member id, copied from `account.account_id` by
-	 * `claimPendingGrant()`. Declared to Better Auth as `input: false`, so only
+	 * `claimOnSignIn()`. Declared to Better Auth as `input: false`, so only
 	 * our own Drizzle writes can set it. See docs/adr/0009.
 	 */
 	slackUserId: text('slack_user_id').unique(),
@@ -268,6 +268,8 @@ export const applicationEventType = pgEnum('application_event_type', [
 	'notification_sent',
 	'notification_failed',
 	'imported',
+	/** The Invite behind an approved application could not be marked completed. */
+	'invite_completion_failed',
 ]);
 
 export const inviteTokenPurpose = pgEnum('invite_token_purpose', ['slack']);
@@ -357,7 +359,7 @@ export const volunteer = pgTable('volunteer', {
 	/** Snapshotted, the same trade as `pending_grant.slack_display_name`. */
 	slackDisplayName: text('slack_display_name').notNull(),
 	slackHandle: text('slack_handle'),
-	/** Backfilled by `claimPendingGrant()` the first time they sign in. */
+	/** Backfilled by `claimOnSignIn()` the first time they sign in. */
 	userId: text('user_id').references(() => user.id, { onDelete: 'set null' }),
 	/**
 	 * Not read off `user`: most of the roster has no `user` row yet. Nullable

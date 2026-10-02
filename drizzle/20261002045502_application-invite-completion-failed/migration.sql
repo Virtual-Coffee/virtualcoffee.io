@@ -1,0 +1,1 @@
+ALTER TYPE "application_event_type" ADD VALUE 'invite_completion_failed';
