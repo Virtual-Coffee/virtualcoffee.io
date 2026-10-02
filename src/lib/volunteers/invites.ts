@@ -391,7 +391,7 @@ export async function spend(
 	return row;
 }
 
-export type IssuedInvite =
+type IssuedInvite =
 	| { ok: true; inviteId: string; volunteerId: string }
 	| { ok: false; reason: 'no_volunteer' | 'no_balance' | 'already_invited' };
 
@@ -406,7 +406,7 @@ export type IssuedInvite =
  * invited the same person between the caller's friendly pre-check and this
  * write. Nothing is charged, because the whole transaction rolls back.
  */
-export async function issueInvite(input: {
+async function issueInvite(input: {
 	inviter: { slackUserId: string; userId: string | null; name: string };
 	invitee: { name: string; email: string };
 	token: { hash: string; expiresAt: Date };
