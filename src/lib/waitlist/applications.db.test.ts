@@ -1,13 +1,15 @@
 import { describe, expect, test } from 'vitest';
 
-import { recordEvent } from '@/lib/history/eventLog';
+import {
+	neverAnnouncedAmong,
+	neverAnnouncedCount,
+	recordEvent,
+} from '@/lib/history/eventLog';
 import { insertApplication } from '@/test/db/fixtures';
 
 import {
 	applicationSubject,
 	listApplications,
-	unannouncedAmong,
-	unannouncedCount,
 	type ListFilters,
 } from './applications';
 import { ARCHIVE_STATUSES, QUEUE_STATUSES } from './applicationStatuses';
@@ -74,42 +76,19 @@ describe('listApplications search', () => {
 });
 
 describe('unannounced applications', () => {
-	async function announced(
-		fields: Parameters<typeof insertApplication>[0],
-		...types: ('notification_sent' | 'notification_failed')[]
-	) {
-		const { id } = await insertApplication(fields);
-		// Spaced out: History orders by `created_at`, then by id.
-		for (const [i, type] of types.entries()) {
-			await recordEvent(applicationSubject(id), {
-				type,
-				createdAt: new Date(Date.now() + i * 1000),
-			});
-		}
-		return id;
-	}
-
-	test('only an application whose latest announcement failed is marked', async () => {
-		const failed = await announced({ name: 'Failed' }, 'notification_failed');
-		const retried = await announced(
-			{ name: 'Retried' },
-			'notification_failed',
-			'notification_sent',
-		);
-		const sent = await announced({ name: 'Sent' }, 'notification_sent');
-		// Imported: never announced by this site, so nothing to flag.
-		const imported = await announced({ name: 'Imported' });
+	// The rule itself is tabled in eventLog.db.test.ts; this is the queue's use.
+	test('the queue marks the applications the banner counts', async () => {
+		const before = await neverAnnouncedCount({ kind: 'application' });
+		const { id: bare } = await insertApplication({ status: 'waitlisted' });
+		const { id: sent } = await insertApplication({ status: 'waitlisted' });
+		await recordEvent(applicationSubject(sent), { type: 'notification_sent' });
+		const { id: moved } = await insertApplication({ status: 'coffee_invited' });
 
 		await expect(
-			unannouncedAmong([failed, retried, sent, imported]),
-		).resolves.toEqual([failed]);
-	});
-
-	test('the count is of those still waiting on a first decision', async () => {
-		await announced({ status: 'waitlisted' }, 'notification_failed');
-		await announced({ status: 'coffee_invited' }, 'notification_failed');
-		await announced({ status: 'waitlisted' }, 'notification_sent');
-
-		await expect(unannouncedCount()).resolves.toBe(1);
+			neverAnnouncedAmong({ kind: 'application' }, [bare, sent, moved]),
+		).resolves.toEqual([bare]);
+		await expect(neverAnnouncedCount({ kind: 'application' })).resolves.toBe(
+			before + 1,
+		);
 	});
 });

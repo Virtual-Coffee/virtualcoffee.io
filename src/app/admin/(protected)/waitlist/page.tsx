@@ -2,11 +2,11 @@ import Link from 'next/link';
 
 import { requirePermission } from '@/lib/access/adminAccess';
 import {
-	listApplications,
-	statusCounts,
-	unannouncedAmong,
-	unannouncedCount,
-} from '@/lib/waitlist/applications';
+	neverAnnouncedAmong,
+	neverAnnouncedCount,
+	type AnnouncedScope,
+} from '@/lib/history/eventLog';
+import { listApplications, statusCounts } from '@/lib/waitlist/applications';
 import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
 import { FilterChips } from '../filterChips';
 import { ApplicationsTable } from './applicationsTable';
@@ -15,6 +15,8 @@ import { parseSearchParams } from './searchParams';
 import { oneOf, type RawSearchParams } from '@/util/searchParams';
 
 export const dynamic = 'force-dynamic';
+
+const APPLICATIONS: AnnouncedScope = { kind: 'application' };
 
 export const metadata = {
 	title: 'Queue · Admin',
@@ -50,9 +52,12 @@ export default async function AdminQueuePage({
 		// archive is history, sorted by whatever column was chosen.
 		listApplications({ ...filters, priorityFirst: true }),
 		statusCounts(),
-		unannouncedCount(),
+		neverAnnouncedCount(APPLICATIONS),
 	]);
-	const unannouncedIds = await unannouncedAmong(rows.map((row) => row.id));
+	const unannouncedIds = await neverAnnouncedAmong(
+		APPLICATIONS,
+		rows.map((row) => row.id),
+	);
 
 	const active = oneOf(params.status, QUEUE_STATUSES) ?? 'queue';
 	// Either chip group keeps what the other one, the search and the sort are

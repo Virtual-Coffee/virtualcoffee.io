@@ -30,6 +30,14 @@ can be retried.
   rather than a log line, shown both on the `/admin` dashboard and inside the
   affected section — a banner only helps someone already looking, and the
   point is the case where nobody knows to look.
+- "Never announced" is one rule, `neverAnnounced()` in
+  `src/lib/history/eventLog.ts`, for Membership Applications and all four
+  Submission kinds: the row is still open (`waitlisted` / `new`), and either
+  any `notification_failed` exists or neither `notification_sent` nor
+  `notification_failed` nor `imported` does. Any failure counts, not the
+  latest, because a Lunch & Learn idea is announced on two channels; a missing
+  event counts because the audit line is written after the attempt and can be
+  lost. The dashboard banner, the list marker and `?failed=1` all read it.
 - **Do not "fix" the ordering to match the admin-action rule.** It reads like
   a bug, which is why this file exists. The `action.db.test.ts` beside each
-  form pins it.
+  form pins it, and `eventLog.db.test.ts` pins the rule above.

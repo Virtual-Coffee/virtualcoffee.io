@@ -1,13 +1,14 @@
 import { notFound } from 'next/navigation';
 
 import { requirePermission } from '@/lib/access/adminAccess';
+import { neverAnnouncedAmong } from '@/lib/history/eventLog';
 import {
 	failedNotifications,
 	isSubmissionKind,
 	listSubmissions,
-	neverAnnouncedAmong,
 	SUBMISSION_DISPLAY,
 	SUBMISSION_KINDS,
+	submissionScope,
 	submissionStatusCounts,
 } from '@/lib/submissions/submissions';
 import { FilterChips } from '../../filterChips';
@@ -70,7 +71,7 @@ export default async function SubmissionListPage({
 	]);
 	const unannounced = new Set(
 		await neverAnnouncedAmong(
-			kind,
+			submissionScope(kind),
 			rows.map((row) => row.id),
 		),
 	);

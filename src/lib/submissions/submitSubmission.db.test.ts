@@ -12,12 +12,12 @@ import {
 
 import { failInserts } from '@/test/db/fixtures';
 
-import { notifyAndRecord, recordImport } from '@/lib/history/eventLog';
+import { neverAnnouncedAmong, notifyAndRecord } from '@/lib/history/eventLog';
 
 import {
 	failedNotifications,
 	listSubmissions,
-	neverAnnouncedAmong,
+	submissionScope,
 	submissionSubject,
 } from './submissions';
 import { persistSubmission } from './submitSubmission';
@@ -90,105 +90,6 @@ describe('notifyAndRecord', () => {
 		]);
 	});
 
-	test('what the /admin banner counts', async () => {
-		const failed = await insertCocReport();
-		const fine = await insertCocReport();
-		await notifyAndRecord(
-			submissionSubject('coc', failed),
-			NOTIFIED,
-			async () => ({
-				ok: false,
-				definitelyNotSent: true,
-				message: 'x',
-			}),
-		);
-		await notifyAndRecord(
-			submissionSubject('coc', fine),
-			NOTIFIED,
-			async () => ({
-				ok: true,
-				message: 'x',
-			}),
-		);
-
-		// Kinds with nothing failed are omitted, so the banner has nothing to say.
-		await expect(failedNotifications(['coc', 'volunteers'])).resolves.toEqual({
-			coc: 1,
-		});
-	});
-
-	/**
-	 * The audit line is written after the attempt, and losing it is tolerated
-	 * (below). A `new` row with no notification event is therefore one nobody
-	 * can vouch for, and the banner has to count it rather than assume the best.
-	 */
-	test('a submission with no notification event at all is counted', async () => {
-		await insertCocReport();
-		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
-	});
-
-	test('an imported submission is not counted, unless an announcement failed', async () => {
-		const imported = await insertCocReport();
-		const importedThenFailed = await insertCocReport();
-		const bare = await insertCocReport();
-		const at = new Date('2024-01-01T00:00:00Z');
-		await recordImport(submissionSubject('coc', imported), 'recA', at);
-		await recordImport(
-			submissionSubject('coc', importedThenFailed),
-			'recB',
-			at,
-		);
-		await notifyAndRecord(
-			submissionSubject('coc', importedThenFailed),
-			NOTIFIED,
-			async () => ({ ok: false, definitelyNotSent: true, message: 'x' }),
-		);
-
-		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });
-		const flagged = await neverAnnouncedAmong('coc', [
-			imported,
-			importedThenFailed,
-			bare,
-		]);
-		expect(flagged.toSorted()).toEqual([importedThenFailed, bare].toSorted());
-	});
-
-	/**
-	 * The banner says "nobody will have seen them come in". Once a maintainer
-	 * has moved the submission on, that is no longer true — and a count that
-	 * never clears is one nobody reads. A later success on another channel does
-	 * not clear it: a Lunch & Learn idea is announced twice, and the GitHub
-	 * failure is still a failure after Slack got through.
-	 */
-	test('the banner clears when someone acts on it, not when a later channel succeeds', async () => {
-		const seen = await insertCocReport();
-		const partly = await insertCocReport();
-		const fail = async () => ({
-			ok: false as const,
-			definitelyNotSent: true,
-			message: 'x',
-		});
-		await notifyAndRecord(submissionSubject('coc', seen), NOTIFIED, fail);
-		await notifyAndRecord(submissionSubject('coc', partly), NOTIFIED, fail);
-		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });
-
-		await notifyAndRecord(
-			submissionSubject('coc', partly),
-			NOTIFIED,
-			async () => ({
-				ok: true,
-				message: 'x',
-			}),
-		);
-		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 2 });
-
-		await db()
-			.update(cocReport)
-			.set({ status: 'in_progress' })
-			.where(eq(cocReport.id, seen));
-		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
-	});
-
 	/** The list marker and `?failed=1` show the rows the banner counts. */
 	test('the list marks and filters the same rows the banner counts', async () => {
 		const failed = await insertCocReport();
@@ -210,7 +111,7 @@ describe('notifyAndRecord', () => {
 			.where(eq(cocReport.id, moved));
 
 		await expect(
-			neverAnnouncedAmong('coc', [failed, fine, moved]),
+			neverAnnouncedAmong(submissionScope('coc'), [failed, fine, moved]),
 		).resolves.toEqual([failed]);
 		const { rows, rowCount } = await listSubmissions('coc', { failed: true });
 		expect(rows.map((row) => row.id)).toEqual([failed]);
