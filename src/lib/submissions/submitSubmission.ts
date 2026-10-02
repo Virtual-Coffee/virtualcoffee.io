@@ -31,8 +31,14 @@ import { formError } from '@/util/forms/parse';
 import type { FormState } from '@/util/forms/types';
 import { siteUrl } from '@/util/url.server';
 
-/** Columns the action supplies that the form data cannot: CoC's attachment. */
-type Extra = Partial<typeof cocReport.$inferInsert>;
+/** The columns a stored upload fills in; only a CoC report has them. */
+type AttachmentColumns = Pick<
+	typeof cocReport.$inferInsert,
+	| 'attachmentBlobKey'
+	| 'attachmentFilename'
+	| 'attachmentContentType'
+	| 'attachmentSize'
+>;
 
 type Schemas = {
 	coc: typeof cocSchema;
@@ -53,7 +59,7 @@ type Intake<Data, Insert> = {
 		id: string,
 		data: Data,
 		adminUrl: string,
-		extra: Extra,
+		extra: Partial<AttachmentColumns>,
 	) => Promise<void>;
 };
 
@@ -61,7 +67,11 @@ type Intake<Data, Insert> = {
 function slackAnnouncer<Data>(
 	kind: SubmissionKind,
 	channel: NotifyChannel,
-	builder: (data: Data, adminUrl: string, extra: Extra) => SlackMessage,
+	builder: (
+		data: Data,
+		adminUrl: string,
+		extra: Partial<AttachmentColumns>,
+	) => SlackMessage,
 	what: string,
 ): Intake<Data, never>['announce'] {
 	return (id, data, adminUrl, extra) =>
@@ -236,13 +246,16 @@ const SUBMISSION_INTAKE: {
  * The upstream error is deliberately not surfaced: its message can name
  * tables and columns, and there is nothing the submitter could do with it.
  *
- * `extra` is columns the form data cannot supply (CoC's attachment);
+ * `extra` is CoC's attachment columns, which the form data cannot supply;
  * `onFailed` cleans up whatever `extra` points at when nothing was saved.
  */
 export async function submit<K extends SubmissionKind>(
 	kind: K,
 	data: SubmissionData<K>,
-	opts: { extra?: Extra; onFailed?: () => Promise<void> } = {},
+	opts: {
+		extra?: K extends 'coc' ? AttachmentColumns : never;
+		onFailed?: () => Promise<void>;
+	} = {},
 ): Promise<{ id: string } | { error: FormState }> {
 	const intake = SUBMISSION_INTAKE[kind];
 	const { table } = SUBMISSION_KINDS[kind];
