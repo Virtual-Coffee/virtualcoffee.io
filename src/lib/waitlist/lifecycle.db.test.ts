@@ -1,19 +1,15 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { db, inviteToken } from '@/db';
+import { db, inviteToken, membershipApplication } from '@/db';
 import { coffeeInvite } from '@/emails/coffeeInvite';
 import { slackInvite } from '@/emails/slackInvite';
 import { welcome } from '@/emails/welcome';
-import {
-	createSlackInviteToken,
-	slackInviteForToken,
-} from '@/lib/waitlist/inviteTokens';
 import { MAX_NOTE_LENGTH } from '@/lib/admin/notes';
+import * as invites from '@/lib/volunteers/invites';
+import * as monitoring from '@/lib/monitoring/reportHandled';
 import { staleRead } from '@/test/mocks/wrappers';
 import { sendEmail } from '@/test/mocks/spies';
-import { NOT_FOUND } from '@/test/next';
 import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/outbound';
-import { signInAs } from '@/test/session';
 import {
 	applicationEvents,
 	applicationRow,
@@ -25,21 +21,34 @@ import {
 	inviteRow,
 } from '@/test/db/fixtures';
 
+import { createSlackInviteToken, slackInviteForToken } from './inviteTokens';
 import {
-	addNote,
-	approveMembership,
-	declineApplication,
+	approve,
+	close,
+	coffeeInviteApplicant,
 	recordAttendance,
 	resendSlackInvite,
-	sendCoffeeInvite,
-	withdrawApplication,
-} from './actions';
+	submit,
+	type Actor,
+} from './lifecycle';
 
-let admin: Awaited<ReturnType<typeof signInAs>>;
+let admin: Actor;
 
 beforeEach(async () => {
-	admin = await signInAs('admin');
+	const { id } = await insertUser();
+	admin = { userId: id, email: 'admin@example.test' };
 });
+
+const withdraw = (id: string, note: string | null = null) =>
+	close(id, admin, { status: 'withdrawn', note });
+const decline = (id: string, note: string | null = null) =>
+	close(id, admin, { status: 'declined', note });
+const sendCoffeeInvite = (id: string, copyMe: boolean) =>
+	coffeeInviteApplicant(id, admin, { copyMe });
+const approveMembership = (id: string, copyMe: boolean) =>
+	approve(id, admin, { copyMe });
+const resend = (id: string, copyMe = false) =>
+	resendSlackInvite(id, admin, { copyMe });
 
 /** The single-use code carried by a Slack invite email. */
 function codeIn(inviteUrl: string): string {
@@ -56,9 +65,8 @@ describe('sendCoffeeInvite', () => {
 		const { id } = await insertApplication({ status: 'waitlisted' });
 
 		await expect(sendCoffeeInvite(id, false)).resolves.toEqual({
-			ok: false,
-			message: NOT_SENT.message,
-			emailSent: false,
+			kind: 'email-failed',
+			outbound: NOT_SENT,
 		});
 		await expect(applicationRow(id)).resolves.toMatchObject({
 			status: 'waitlisted',
@@ -69,13 +77,13 @@ describe('sendCoffeeInvite', () => {
 		]);
 	});
 
-	test('a timeout changes nothing either, but will not promise nothing went out', async () => {
+	test('a timeout changes nothing either, and is not reported as definitely unsent', async () => {
 		sendEmail.mockResolvedValue(MAYBE_SENT);
 		const { id } = await insertApplication({ status: 'waitlisted' });
 
-		await expect(sendCoffeeInvite(id, false)).resolves.toMatchObject({
-			ok: false,
-			emailSent: 'unknown',
+		await expect(sendCoffeeInvite(id, false)).resolves.toEqual({
+			kind: 'email-failed',
+			outbound: MAYBE_SENT,
 		});
 		await expect(applicationRow(id)).resolves.toMatchObject({
 			status: 'waitlisted',
@@ -90,12 +98,12 @@ describe('sendCoffeeInvite', () => {
 			email: 'ada@example.test',
 		});
 
-		await expect(sendCoffeeInvite(id, true)).resolves.toEqual({ ok: true });
+		await expect(sendCoffeeInvite(id, true)).resolves.toEqual({ kind: 'done' });
 
 		expect(sendEmail).toHaveBeenCalledWith(
 			coffeeInvite,
 			{},
-			{ to: 'ada@example.test', cc: admin.email },
+			{ to: 'ada@example.test', cc: 'admin@example.test' },
 		);
 		const row = await applicationRow(id);
 		expect(row.status).toBe('coffee_invited');
@@ -109,24 +117,18 @@ describe('sendCoffeeInvite', () => {
 		]);
 	});
 
-	test('only from waitlisted, and only with waitlist:manage', async () => {
+	test('only from waitlisted, and only for an application that exists', async () => {
 		sendEmail.mockResolvedValue(SENT);
 		const { id } = await insertApplication({ status: 'coffee_invited' });
 
 		await expect(sendCoffeeInvite(id, false)).resolves.toEqual({
-			ok: false,
-			message:
-				'Can only send a Coffee invite from Waitlisted, not coffee_invited.',
-			emailSent: false,
+			kind: 'wrong-status',
+			status: 'coffee_invited',
 		});
-		await expect(sendCoffeeInvite('not-an-id', false)).resolves.toMatchObject({
-			ok: false,
-			message: 'Application not found.',
+		await expect(sendCoffeeInvite('not-an-id', false)).resolves.toEqual({
+			kind: 'not-found',
 		});
 		expect(sendEmail).not.toHaveBeenCalled();
-
-		await signInAs('coc_reviewer');
-		await expect(sendCoffeeInvite(id, false)).rejects.toMatchObject(NOT_FOUND);
 	});
 });
 
@@ -144,7 +146,9 @@ describe('approveMembership', () => {
 			email: 'ada@example.test',
 		});
 
-		await expect(approveMembership(id, false)).resolves.toEqual({ ok: true });
+		await expect(approveMembership(id, false)).resolves.toEqual({
+			kind: 'done',
+		});
 
 		expect(tokensWhenSending).toEqual([1]);
 		expect(sendEmail).toHaveBeenCalledWith(
@@ -168,8 +172,7 @@ describe('approveMembership', () => {
 		const { id } = await insertApplication({ status: 'coffee_invited' });
 
 		await expect(approveMembership(id, false)).resolves.toMatchObject({
-			ok: false,
-			emailSent: false,
+			kind: 'email-failed',
 		});
 		await expect(applicationRow(id)).resolves.toMatchObject({
 			status: 'coffee_invited',
@@ -183,9 +186,9 @@ describe('approveMembership', () => {
 		sendEmail.mockResolvedValueOnce(MAYBE_SENT);
 		const { id } = await insertApplication({ status: 'coffee_invited' });
 
-		await expect(approveMembership(id, false)).resolves.toMatchObject({
-			ok: false,
-			emailSent: 'unknown',
+		await expect(approveMembership(id, false)).resolves.toEqual({
+			kind: 'email-failed',
+			outbound: MAYBE_SENT,
 		});
 		expect((await applicationRow(id)).status).toBe('coffee_invited');
 
@@ -197,7 +200,9 @@ describe('approveMembership', () => {
 		).resolves.toEqual({ ok: false, reason: 'expired' });
 
 		sendEmail.mockResolvedValue(SENT);
-		await expect(approveMembership(id, false)).resolves.toEqual({ ok: true });
+		await expect(approveMembership(id, false)).resolves.toEqual({
+			kind: 'done',
+		});
 		const [, retry] = sendEmail.mock.calls;
 		await expect(
 			slackInviteForToken(codeIn(retry[1].inviteUrl)),
@@ -247,20 +252,66 @@ describe('approveMembership', () => {
 			status: 'completed',
 		});
 	});
+
+	test('an Invite that cannot be completed is reported and left in History; the approval stands', async () => {
+		sendEmail.mockResolvedValue(SENT);
+		const { id: inviteId } = await insertInvite({
+			inviterSlackUserId: 'U_GRACE',
+			status: 'accepted',
+		});
+		const { id } = await insertApplication({
+			status: 'coffee_invited',
+			inviteId,
+		});
+		const complete = vi
+			.spyOn(invites, 'completeInvite')
+			.mockRejectedValueOnce(new Error('connection reset'));
+		const report = vi
+			.spyOn(monitoring, 'reportHandled')
+			.mockImplementation(() => {});
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		await expect(approveMembership(id, false)).resolves.toEqual({
+			kind: 'done',
+		});
+
+		expect(report).toHaveBeenCalledWith(expect.any(Error), {
+			area: 'waitlist',
+		});
+		expect((await applicationRow(id)).status).toBe('member');
+		await expect(applicationEvents(id)).resolves.toEqual([
+			expect.objectContaining({ type: 'approved' }),
+			expect.objectContaining({ type: 'invite_completion_failed' }),
+		]);
+		complete.mockRestore();
+		report.mockRestore();
+		error.mockRestore();
+	});
+
+	test('only from coffee_invited', async () => {
+		const { id } = await insertApplication({ status: 'waitlisted' });
+		await expect(approveMembership(id, false)).resolves.toEqual({
+			kind: 'wrong-status',
+			status: 'waitlisted',
+		});
+		expect(sendEmail).not.toHaveBeenCalled();
+	});
 });
 
-describe('recordAttendance and addNote', () => {
+describe('recordAttendance', () => {
 	test('attendance is only recorded after a Coffee invite', async () => {
 		const invited = await insertApplication({ status: 'coffee_invited' });
-		await expect(recordAttendance(invited.id)).resolves.toEqual({ ok: true });
+		await expect(recordAttendance(invited.id, admin)).resolves.toEqual({
+			kind: 'done',
+		});
 		await expect(applicationRow(invited.id)).resolves.toMatchObject({
 			coffeeAttendedAt: expect.any(Date),
 		});
 
 		const declined = await insertApplication({ status: 'declined' });
-		await expect(recordAttendance(declined.id)).resolves.toMatchObject({
-			ok: false,
-			message: expect.stringContaining('not from declined'),
+		await expect(recordAttendance(declined.id, admin)).resolves.toEqual({
+			kind: 'wrong-status',
+			status: 'declined',
 		});
 		await expect(applicationRow(declined.id)).resolves.toMatchObject({
 			coffeeAttendedAt: null,
@@ -271,12 +322,13 @@ describe('recordAttendance and addNote', () => {
 	// the second call here is the guard refusing, not a pre-check.
 	test('attendance is recorded once; a second click changes nothing', async () => {
 		const { id } = await insertApplication({ status: 'coffee_invited' });
-		await expect(recordAttendance(id)).resolves.toEqual({ ok: true });
+		await expect(recordAttendance(id, admin)).resolves.toEqual({
+			kind: 'done',
+		});
 		const { coffeeAttendedAt } = await applicationRow(id);
 
-		await expect(recordAttendance(id)).resolves.toEqual({
-			ok: false,
-			message: 'Attendance is already recorded.',
+		await expect(recordAttendance(id, admin)).resolves.toEqual({
+			kind: 'already-recorded',
 		});
 		expect((await applicationRow(id)).coffeeAttendedAt).toEqual(
 			coffeeAttendedAt,
@@ -285,24 +337,14 @@ describe('recordAttendance and addNote', () => {
 			expect.objectContaining({ type: 'attendance_recorded' }),
 		]);
 	});
-
-	test('a note on a malformed or unknown id is a soft failure, not a 22P02', async () => {
-		await expect(addNote('not-a-uuid', 'hello')).resolves.toMatchObject({
-			ok: false,
-			message: 'Application not found.',
-		});
-		await expect(
-			addNote('01930000-0000-7000-8000-000000000000', 'hello'),
-		).resolves.toMatchObject({ ok: false, message: 'Application not found.' });
-	});
 });
 
-describe('declineApplication and withdrawApplication', () => {
+describe('close', () => {
 	test('close the application with a timestamp and the note', async () => {
 		const { id } = await insertApplication({ status: 'waitlisted' });
 
-		await expect(declineApplication(id, 'Not a developer.')).resolves.toEqual({
-			ok: true,
+		await expect(decline(id, 'Not a developer.')).resolves.toEqual({
+			kind: 'done',
 		});
 		const row = await applicationRow(id);
 		expect(row.status).toBe('declined');
@@ -316,7 +358,7 @@ describe('declineApplication and withdrawApplication', () => {
 		const { id } = await insertApplication({ status: 'waitlisted' });
 		const fault = await failInserts('application_event');
 		try {
-			await expect(declineApplication(id, null)).rejects.toThrow();
+			await expect(decline(id)).rejects.toThrow();
 		} finally {
 			await fault.remove();
 		}
@@ -326,36 +368,42 @@ describe('declineApplication and withdrawApplication', () => {
 
 	test('a blank note is recorded as none; an over-long one is refused first', async () => {
 		const blank = await insertApplication({ status: 'waitlisted' });
-		await expect(withdrawApplication(blank.id, '   ')).resolves.toEqual({
-			ok: true,
+		await expect(withdraw(blank.id, '   ')).resolves.toEqual({
+			kind: 'done',
 		});
 		await expect(applicationEvents(blank.id)).resolves.toEqual([
 			expect.objectContaining({ type: 'withdrawn', body: null }),
 		]);
 
 		const { id } = await insertApplication({ status: 'waitlisted' });
-		await expect(
-			declineApplication(id, 'x'.repeat(MAX_NOTE_LENGTH + 1)),
-		).resolves.toMatchObject({
-			ok: false,
-			message: expect.stringContaining('at most'),
-		});
+		await expect(decline(id, 'x'.repeat(MAX_NOTE_LENGTH + 1))).resolves.toEqual(
+			{
+				kind: 'invalid-note',
+				message: expect.stringContaining('at most'),
+			},
+		);
 		expect((await applicationRow(id)).status).toBe('waitlisted');
 		await expect(applicationEvents(id)).resolves.toEqual([]);
 	});
 
 	test('a member cannot be declined or withdrawn, and closing twice is refused', async () => {
 		const member = await insertApplication({ status: 'member' });
-		await expect(declineApplication(member.id, null)).resolves.toMatchObject({
-			ok: false,
-			message: 'A member cannot be declined or withdrawn.',
+		await expect(decline(member.id)).resolves.toEqual({
+			kind: 'wrong-status',
+			status: 'member',
+		});
+
+		const lapsed = await insertApplication({ status: 'lapsed' });
+		await expect(withdraw(lapsed.id)).resolves.toEqual({
+			kind: 'wrong-status',
+			status: 'lapsed',
 		});
 
 		const { id } = await insertApplication({ status: 'coffee_invited' });
-		await withdrawApplication(id, null);
-		await expect(withdrawApplication(id, null)).resolves.toMatchObject({
-			ok: false,
-			message: 'Already withdrawn.',
+		await withdraw(id);
+		await expect(withdraw(id)).resolves.toEqual({
+			kind: 'wrong-status',
+			status: 'withdrawn',
 		});
 		await expect(applicationEvents(id)).resolves.toHaveLength(1);
 		expect(sendEmail).not.toHaveBeenCalled();
@@ -371,11 +419,8 @@ describe('declineApplication and withdrawApplication', () => {
 describe('a status that changed between the read and the write', () => {
 	test('closing twice at once records one close', async () => {
 		const { id } = await insertApplication({ status: 'waitlisted' });
-		const results = await Promise.all([
-			withdrawApplication(id, null),
-			declineApplication(id, null),
-		]);
-		expect(results.filter((r) => r.ok)).toHaveLength(1);
+		const results = await Promise.all([withdraw(id), decline(id)]);
+		expect(results.filter((r) => r.kind === 'done')).toHaveLength(1);
 		await expect(applicationEvents(id)).resolves.toHaveLength(1);
 	});
 
@@ -385,9 +430,8 @@ describe('a status that changed between the read and the write', () => {
 		staleRead.readAs = 'waitlisted';
 
 		await expect(sendCoffeeInvite(id, false)).resolves.toEqual({
-			ok: false,
-			message: expect.stringContaining('changed while you were looking'),
-			emailSent: true,
+			kind: 'stranded',
+			name: expect.any(String),
 		});
 		expect((await applicationRow(id)).status).toBe('declined');
 		await expect(applicationEvents(id)).resolves.toEqual([
@@ -405,8 +449,7 @@ describe('a status that changed between the read and the write', () => {
 		staleRead.readAs = 'coffee_invited';
 
 		await expect(approveMembership(id, false)).resolves.toMatchObject({
-			ok: false,
-			emailSent: true,
+			kind: 'stranded',
 		});
 		expect((await applicationRow(id)).status).toBe('withdrawn');
 		expect(sendEmail).toHaveBeenCalledOnce();
@@ -422,13 +465,14 @@ describe('a status that changed between the read and the write', () => {
 		sendEmail.mockResolvedValue(SENT);
 		const { id } = await insertApplication({ status: 'coffee_invited' });
 
-		await expect(approveMembership(id, false)).resolves.toEqual({ ok: true });
+		await expect(approveMembership(id, false)).resolves.toEqual({
+			kind: 'done',
+		});
 		// The other maintainer read Coffee invited before the first approval
 		// committed.
 		staleRead.readAs = 'coffee_invited';
 		await expect(approveMembership(id, false)).resolves.toMatchObject({
-			ok: false,
-			emailSent: true,
+			kind: 'stranded',
 		});
 
 		const [winner, loser] = sendEmail.mock.calls;
@@ -443,7 +487,9 @@ describe('a status that changed between the read and the write', () => {
 	test('attendance cannot be recorded on a row that already moved', async () => {
 		const { id } = await insertApplication({ status: 'member' });
 		staleRead.readAs = 'coffee_invited';
-		await expect(recordAttendance(id)).resolves.toMatchObject({ ok: false });
+		await expect(recordAttendance(id, admin)).resolves.toMatchObject({
+			kind: 'changed',
+		});
 		expect((await applicationRow(id)).coffeeAttendedAt).toBeNull();
 	});
 });
@@ -457,8 +503,8 @@ describe('a rejected cc', () => {
 		});
 		const { id } = await insertApplication({ status: 'waitlisted' });
 		await expect(sendCoffeeInvite(id, true)).resolves.toEqual({
-			ok: true,
-			message: 'Sent, but the copy to dev@localhost was rejected.',
+			kind: 'done',
+			warning: 'Sent, but the copy to dev@localhost was rejected.',
 		});
 		expect((await applicationRow(id)).status).toBe('coffee_invited');
 	});
@@ -471,7 +517,7 @@ describe('resendSlackInvite', () => {
 		const { id } = await insertApplication({ status: 'member' });
 		const { token: first } = await createSlackInviteToken(id);
 
-		await expect(resendSlackInvite(id, false)).resolves.toEqual({ ok: true });
+		await expect(resend(id)).resolves.toEqual({ kind: 'done' });
 
 		const tokens = await db().select().from(inviteToken);
 		expect(tokens).toHaveLength(2);
@@ -493,9 +539,9 @@ describe('resendSlackInvite', () => {
 
 	test('only for a member; approving sends the first one', async () => {
 		const { id } = await insertApplication({ status: 'coffee_invited' });
-		await expect(resendSlackInvite(id, false)).resolves.toMatchObject({
-			ok: false,
-			emailSent: false,
+		await expect(resend(id)).resolves.toEqual({
+			kind: 'wrong-status',
+			status: 'coffee_invited',
 		});
 		expect(sendEmail).not.toHaveBeenCalled();
 	});
@@ -507,9 +553,8 @@ describe('resendSlackInvite', () => {
 		const { id } = await insertApplication({ status: 'member' });
 		const { token: first } = await createSlackInviteToken(id);
 
-		await expect(resendSlackInvite(id, false)).resolves.toMatchObject({
-			ok: false,
-			emailSent: false,
+		await expect(resend(id)).resolves.toMatchObject({
+			kind: 'email-failed',
 		});
 
 		await expect(slackInviteForToken(first)).resolves.toEqual({
@@ -533,8 +578,8 @@ describe('resendSlackInvite', () => {
 		const fault = await failWrites('invite_token', 'update');
 		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
 		try {
-			await expect(resendSlackInvite(id, false)).resolves.toEqual({
-				ok: true,
+			await expect(resend(id)).resolves.toEqual({
+				kind: 'done',
 			});
 			expect(error).toHaveBeenCalledOnce();
 		} finally {
@@ -564,8 +609,8 @@ describe('resendSlackInvite', () => {
 		sendEmail.mockResolvedValue(SENT);
 		const { id } = await insertApplication({ status: 'member' });
 
-		await expect(resendSlackInvite(id, false)).resolves.toEqual({ ok: true });
-		await expect(resendSlackInvite(id, false)).resolves.toEqual({ ok: true });
+		await expect(resend(id)).resolves.toEqual({ kind: 'done' });
+		await expect(resend(id)).resolves.toEqual({ kind: 'done' });
 
 		const tokens = await db()
 			.select()
@@ -575,5 +620,108 @@ describe('resendSlackInvite', () => {
 		const now = new Date();
 		expect(tokens[0].expiresAt <= now).toBe(true);
 		expect(tokens[1].expiresAt > now).toBe(true);
+	});
+});
+
+describe('submit', () => {
+	const ada = { name: 'Ada Lovelace', email: 'ada@example.test' };
+
+	/** The one application written, as the row holds it. */
+	async function onlyRow() {
+		const [row] = await db().select().from(membershipApplication);
+		return row;
+	}
+
+	test('an email already in the pipeline is refused; a closed one may apply again', async () => {
+		await insertApplication({ email: 'Ada@Example.test', status: 'member' });
+
+		await expect(submit(ada, null)).resolves.toEqual({ kind: 'duplicate' });
+		expect(await db().select().from(membershipApplication)).toHaveLength(1);
+
+		await db().update(membershipApplication).set({ status: 'declined' });
+		await expect(submit(ada, null)).resolves.toMatchObject({
+			kind: 'submitted',
+		});
+		const statuses = (await db().select().from(membershipApplication)).map(
+			(row) => row.status,
+		);
+		expect(statuses.sort()).toEqual(['declined', 'waitlisted']);
+	});
+
+	test('a valid Claim Link makes a priority application and kills the link', async () => {
+		const { id, token } = await insertInvite({
+			inviterSlackUserId: 'U_GRACE',
+			inviterName: 'Grace Hopper',
+		});
+
+		const submitted = await submit(ada, token);
+
+		expect(submitted).toMatchObject({
+			kind: 'submitted',
+			claimed: { id, inviterName: 'Grace Hopper' },
+		});
+		const row = await onlyRow();
+		expect(row).toMatchObject({
+			source: 'volunteer_invite',
+			isPriority: true,
+			inviteId: id,
+			referrer: 'Grace Hopper',
+		});
+		await expect(inviteRow(id)).resolves.toMatchObject({
+			status: 'accepted',
+			tokenHash: null,
+		});
+		expect(row.agreedToCocAt).toEqual((await inviteRow(id)).claimedAt);
+		await expect(applicationEvents(row.id)).resolves.toEqual([
+			expect.objectContaining({
+				type: 'submitted',
+				body: 'Application submitted from an invite by Grace Hopper',
+			}),
+		]);
+	});
+
+	test('an expired link still produces an application, as an ordinary signup', async () => {
+		const { id, token } = await insertInvite({
+			inviterSlackUserId: 'U_GRACE',
+			expiresAt: new Date(Date.now() - 1000),
+		});
+
+		await expect(submit(ada, token)).resolves.toMatchObject({
+			kind: 'submitted',
+			claimed: null,
+		});
+
+		await expect(onlyRow()).resolves.toMatchObject({
+			source: 'waitlist_signup',
+			isPriority: false,
+			inviteId: null,
+		});
+		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'pending' });
+	});
+
+	test('a link works once', async () => {
+		const { id, token } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
+
+		await submit(ada, token);
+		await submit({ ...ada, email: 'second@example.test' }, token);
+
+		const rows = await db()
+			.select({ inviteId: membershipApplication.inviteId })
+			.from(membershipApplication);
+		expect(rows.filter((r) => r.inviteId === id)).toHaveLength(1);
+		expect(rows.filter((r) => r.inviteId === null)).toHaveLength(1);
+	});
+
+	test('a failed insert does not burn the Claim Link', async () => {
+		const { id, token } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
+		const fault = await failInserts('application_event');
+		try {
+			await expect(submit(ada, token)).rejects.toThrow();
+		} finally {
+			await fault.remove();
+		}
+
+		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'pending' });
+		expect(await db().select().from(membershipApplication)).toEqual([]);
 	});
 });

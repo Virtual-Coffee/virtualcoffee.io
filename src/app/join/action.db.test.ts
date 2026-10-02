@@ -11,7 +11,6 @@ import {
 	applicationEvents,
 	insertApplication,
 	insertInvite,
-	inviteRow,
 } from '@/test/db/fixtures';
 
 import { submitMembershipApplication } from './action';
@@ -67,7 +66,7 @@ describe('submitMembershipApplication', () => {
 		expect(notifySlack).toHaveBeenCalledWith(
 			'membership',
 			expect.objectContaining({
-				text: expect.stringContaining('Application Received'),
+				text: 'Application Received — Membership waitlist',
 			}),
 		);
 		expect(richTextFields(posted())).toEqual({
@@ -110,7 +109,7 @@ describe('submitMembershipApplication', () => {
 		error.mockRestore();
 	});
 
-	test('an email already in the pipeline is refused; a closed one may apply again', async () => {
+	test('an email already in the pipeline is refused with the form copy', async () => {
 		await insertApplication({ email: 'Ada@Example.test', status: 'member' });
 
 		await expect(
@@ -118,36 +117,17 @@ describe('submitMembershipApplication', () => {
 		).resolves.toEqual(
 			fieldErrors({ email: expect.stringContaining('already an application') }),
 		);
-		expect(await db().select().from(membershipApplication)).toHaveLength(1);
-
-		await db().update(membershipApplication).set({ status: 'declined' });
-		await submit(valid);
-		const statuses = (await db().select().from(membershipApplication)).map(
-			(row) => row.status,
-		);
-		expect(statuses.sort()).toEqual(['declined', 'waitlisted']);
+		expect(notifySlack).not.toHaveBeenCalled();
 	});
 
-	test('a valid Claim Link makes a priority application and kills the link', async () => {
+	test('an invited application is announced as such', async () => {
 		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
-		const { id, token } = await insertInvite({
+		const { token } = await insertInvite({
 			inviterSlackUserId: 'U_GRACE',
 			inviterName: 'Grace Hopper',
 		});
 
 		const row = await submit({ ...valid, invite: token });
-
-		expect(row).toMatchObject({
-			source: 'volunteer_invite',
-			isPriority: true,
-			inviteId: id,
-			referrer: 'Grace Hopper',
-		});
-		await expect(inviteRow(id)).resolves.toMatchObject({
-			status: 'accepted',
-			tokenHash: null,
-		});
-		expect(row.agreedToCocAt).toEqual((await inviteRow(id)).claimedAt);
 
 		expect(posted().text).toBe(
 			'Invited Application Received — Invited by Grace Hopper',
@@ -169,41 +149,17 @@ describe('submitMembershipApplication', () => {
 		]);
 	});
 
-	test('an expired link still produces an application — as an ordinary signup', async () => {
-		const { id, token } = await insertInvite({
+	test('an expired link is announced as an ordinary signup', async () => {
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
+		const { token } = await insertInvite({
 			inviterSlackUserId: 'U_GRACE',
 			expiresAt: new Date(Date.now() - 1000),
 		});
 
-		const row = await submit({ ...valid, invite: token });
+		await submit({ ...valid, invite: token });
 
-		expect(row).toMatchObject({
-			source: 'waitlist_signup',
-			isPriority: false,
-			inviteId: null,
-		});
-		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'pending' });
 		expect(posted().text).toBe('Application Received — Membership waitlist');
 		expect(richTextFields(posted())).not.toHaveProperty('Invited by');
-	});
-
-	test('a link works once', async () => {
-		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
-		const { id, token } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
-
-		await submit({ ...valid, invite: token });
-		await expect(
-			submitMembershipApplication(
-				null,
-				formDataWith({ ...valid, email: 'second@example.test', invite: token }),
-			),
-		).rejects.toMatchObject(redirectTo('/join/thank-you'));
-
-		const rows = await db()
-			.select({ inviteId: membershipApplication.inviteId })
-			.from(membershipApplication);
-		expect(rows.filter((r) => r.inviteId === id)).toHaveLength(1);
-		expect(rows.filter((r) => r.inviteId === null)).toHaveLength(1);
 	});
 
 	/** ADR 0005: the application is saved before Slack is asked. */
