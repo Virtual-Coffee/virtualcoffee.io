@@ -38,7 +38,7 @@ test('a candidate says whether a grant is a Pending Grant, applied directly, or 
 
 test('a Grant beside a role-holder is its own pending row, not hidden behind them', async () => {
 	// Better Auth links a second Slack account onto an existing role-holder,
-	// and `claimPendingGrant()` leaves the Grant alone rather than rewrite
+	// and `claimOnSignIn()` leaves the Grant alone rather than rewrite
 	// their roles. Nothing else applies it, so User Management must show it.
 	await insertUser({ name: 'Grace', slackUserId: 'U_HOLDER', role: 'admin' });
 	await insertPendingGrant({ slackUserId: 'U_HOLDER', role: 'coc_reviewer' });

@@ -85,7 +85,7 @@ Before touching `src/db`, `src/lib/access`, `src/lib/history`, `src/app/join` or
 Rules:
 
 - Every Section page and server action under `/admin` gates itself with `requirePermission()` (`src/lib/access/adminAccess.ts`); the `(protected)` layout and the `/admin` dashboard only prove the viewer holds _some_ section, and the dashboard scopes what it shows with `visibleSections()` — `docs/adr/0003`, `docs/adr/0006`.
-- A Pending Grant (`src/lib/access/pendingGrants.ts`) matches on the Slack member id — `docs/adr/0009`.
+- `src/lib/access/roleAssignment.ts` is the only writer of `user.role` and `pending_grant`, under one lock per Slack member. A Pending Grant matches on the Slack member id — `docs/adr/0009`.
 - `/invites` is outside `/admin`: `requireVolunteer()` (`src/lib/access/volunteerAccess.ts`) shares only `getSession()` with the admin path, and the `volunteer` Role holds no Section — `docs/adr/0010`.
 - The Invite Allowance is an append-only ledger; a correction is a new row through `adjustBalance` with a reason — `docs/adr/0011`.
 - Volunteers imported from Airtable come from a reviewed mapping, never a guess — `docs/adr/0012`; the one-off scripts are documented in `scripts/airtable/README.md`.
