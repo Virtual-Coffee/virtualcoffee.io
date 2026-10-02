@@ -55,15 +55,23 @@ describe('defineSource', () => {
 			expect(fetch).not.toHaveBeenCalled();
 		});
 
-		test('rethrows a failed fetch', async () => {
+		test('throws a failed fetch, naming the source', async () => {
 			const { gated, mock } = source({ fetch: throws });
-			await expect(gated()).rejects.toThrow('upstream down');
+			await expect(gated()).rejects.toMatchObject({
+				message: expect.stringMatching(/^the widgets: fetch failed/),
+				cause: expect.objectContaining({ message: 'upstream down' }),
+			});
 			expect(mock).not.toHaveBeenCalled();
 		});
 
 		test('treats a null fetch as an error', async () => {
 			const { gated } = source({ fetch: unusable });
-			await expect(gated()).rejects.toThrow(/no usable data/);
+			await expect(gated()).rejects.toMatchObject({
+				message: expect.stringMatching(/^the widgets: fetch failed/),
+				cause: expect.objectContaining({
+					message: 'the upstream returned no usable data',
+				}),
+			});
 		});
 	});
 

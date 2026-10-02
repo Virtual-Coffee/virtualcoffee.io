@@ -43,14 +43,16 @@ export function defineSource<Args extends unknown[], T>(source: {
 		try {
 			const data = await source.fetch(...args);
 			if (data !== null) return data;
-			failure = new Error(
-				`${source.what}: the upstream returned no usable data`,
-			);
+			failure = new Error('the upstream returned no usable data');
 		} catch (error) {
 			failure = error;
 		}
 
-		if (deployContext() === 'production') throw failure;
+		if (deployContext() === 'production') {
+			throw new Error(`${source.what}: fetch failed in a production build`, {
+				cause: failure,
+			});
+		}
 		console.warn(
 			`${source.what}: fetch failed, using mock data instead`,
 			failure,
