@@ -31,7 +31,8 @@ type Refusal =
  * `applied`: written to a user. `pending`: the change landed on a Pending Grant
  * (inserted, updated or withdrawn). `stale`: the user or Grant is gone or
  * already claimed. `changed`: the person is still there but their row moved
- * under the edit (a sign-in gave them a Slack id), so the caller's view is old. `name` is the person's, for copy that names them.
+ * under the edit (a sign-in gave them a Slack id), so the caller's view is
+ * old. `name` is the person's, for copy that names them.
  */
 export type Outcome =
 	| { kind: 'applied'; userId: string; name?: string }
