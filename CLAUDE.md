@@ -65,7 +65,7 @@ Every external data source lives in `src/data/` and degrades to a mock when its 
 | Slack member directory (`/admin` grant picker)  | `src/data/slackMembers.ts`   | `src/data/mocks/slackMembers.ts` (faker)            |
 | Membership applications (`/join`, `/admin`)     | `src/db/`                    | local Postgres from `netlify dev`                   |
 
-`src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. A new external fetch follows this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`, and wrap the fetch in `unstable_cache` with a tag so `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) can revalidate it.
+A new external fetch is a `defineSource()` (`src/data/source.ts`): it owns the mock gate and the tagged `unstable_cache` that `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates. Outside production, missing credentials or a failed fetch fall back to the mock with a `console.warn`; production throws.
 
 The Events Calendar is the system of record for Series and Events; `/admin/events` is a client of the Calendar API and stores nothing — `docs/adr/0014`. The shape of a Series or an Event is declared once, in `src/lib/events/eventDraft.ts` (with recurrence in `src/lib/events/recurrence.ts`), and the admin forms and `events/actions.ts` both parse against it.
 
