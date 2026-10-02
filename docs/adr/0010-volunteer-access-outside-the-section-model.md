@@ -29,7 +29,7 @@ the Pending Grant case: the Airtable import brings 91 people across, most of
 whom have never signed in.
 
 So `volunteer` is a Role like any other — in `roles`, parsed and serialised,
-carried by a Pending Grant, applied by `claimPendingGrant()` — that authorises
+carried by a Pending Grant, applied by `claimOnSignIn()` — that authorises
 nothing inside `/admin`. That falls out of the existing checks:
 `visibleSections()` is empty, so `requireSession()` turns a Volunteer away from
 `/admin` exactly as it turns away someone holding nothing.

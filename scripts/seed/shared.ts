@@ -55,7 +55,7 @@ export const STRANDED = {
 /**
  * Added through /admin/volunteers but yet to sign in: a roster row with no
  * `userId` and an unclaimed Pending Grant carrying only `volunteer`, which
- * `claimPendingGrant()` links up at their first Slack sign-in.
+ * `claimOnSignIn()` links up at their first Slack sign-in.
  */
 export const NEW_VOLUNTEER = {
 	slackUserId: 'U_DEV_NEW_VOLUNTEER',

@@ -157,7 +157,7 @@ export const GRANTABLE_ROLES = [
  * Checked on the server, not just used to render the checkboxes: a role that is
  * granted elsewhere has to be un-settable here, or a forged request — or the
  * "Revoke all" item, which sends an empty set — would strip it. See
- * `preserveUngrantedRoles` in that screen's actions.
+ * `preserveUngrantedRoles` in roleAssignment.
  */
 export const GRANTABLE_ROLE_NAMES: ReadonlySet<RoleName> = new Set(
 	GRANTABLE_ROLES.map((role) => role.name),

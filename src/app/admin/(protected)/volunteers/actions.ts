@@ -8,8 +8,11 @@ import { db, isUniqueViolation, invite, volunteer } from '@/db';
 import { isId } from '@/db/ids';
 import { getSlackMembers } from '@/data/slackMembers';
 import type { ActionResult } from '@/lib/admin/actionResult';
-import { actorId, requirePermission } from '@/lib/access/adminAccess';
-import { userForSlackId } from '@/lib/access/admins';
+import {
+	actorFromSession,
+	actorId,
+	requirePermission,
+} from '@/lib/access/adminAccess';
 import { volunteerGrant } from '@/emails/volunteerGrant';
 import { volunteerInvite } from '@/emails/volunteerInvite';
 import { sendEmail } from '@/lib/email/transport';
@@ -20,10 +23,10 @@ import {
 	hashClaimToken,
 } from '@/lib/volunteers/invites';
 import {
-	grantVolunteerRole,
-	lockSlackMember,
-	revokeVolunteerRole,
-} from '@/lib/access/pendingGrants';
+	addVolunteerRole,
+	removeVolunteerRole,
+	type Outcome,
+} from '@/lib/access/roleAssignment';
 import { grantDmMessage, sendSlackDm } from '@/lib/slack/dm';
 import {
 	COMMUNITY_ROLES,
@@ -69,6 +72,28 @@ function normaliseEmail(
 }
 
 /**
+ * Tell a Volunteer whose Role is waiting on a Pending Grant where to sign in.
+ * Best-effort, after the transaction commits: the grant already stands, and a
+ * maintainer can retry it with "Resend DM" in /admin/user-management.
+ */
+async function notifyNewVolunteer(
+	slackUserId: string,
+	subject: ReturnType<typeof volunteerSubject>,
+	actorUserId: string | null,
+) {
+	const dm = await sendSlackDm(
+		slackUserId,
+		grantDmMessage({ roles: ['volunteer'] }),
+	);
+	await recordOutcome(subject, {
+		channel: 'slack',
+		outbound: dm,
+		what: 'Volunteer DM',
+		actorUserId,
+	});
+}
+
+/**
  * Make someone a Volunteer: the `volunteer` row and the Role in one
  * transaction, which is why `/admin/user-management` does not offer
  * `volunteer` (docs/adr/0010). The Role lands directly or as a Pending Grant
@@ -104,14 +129,22 @@ export async function addVolunteer(
 		};
 	}
 
-	// Someone who has already signed in is a Volunteer immediately — nobody
-	// left to tell to come claim anything.
-	const signedIn = await userForSlackId(member.id);
-
-	let volunteerId: string;
+	let created: { volunteerId: string; granted: Outcome };
 	try {
-		volunteerId = await db().transaction(async (tx) => {
-			const [created] = await tx
+		created = await db().transaction(async (tx) => {
+			// The role first: it takes the lock, and a person who has already
+			// signed in has a user id the row should carry from the start.
+			const granted = await addVolunteerRole(
+				tx,
+				{
+					slackUserId: member.id,
+					slackDisplayName: member.displayName,
+					slackHandle: member.handle,
+				},
+				actorFromSession(session),
+			);
+
+			const [row] = await tx
 				.insert(volunteer)
 				.values({
 					slackUserId: member.id,
@@ -119,19 +152,11 @@ export async function addVolunteer(
 					slackHandle: member.handle,
 					roleLabels: formatRoleLabels(roles.data),
 					email: address,
+					userId: granted.kind === 'applied' ? granted.userId : null,
 				})
 				.returning({ id: volunteer.id });
 
-			await grantVolunteerRole(
-				tx,
-				{
-					slackUserId: member.id,
-					slackDisplayName: member.displayName,
-					slackHandle: member.handle,
-				},
-				session.user.name || session.user.email,
-			);
-			return created.id;
+			return { volunteerId: row.id, granted };
 		});
 	} catch (error) {
 		// The unique index on volunteer.slack_user_id is the authority here, so a
@@ -145,22 +170,13 @@ export async function addVolunteer(
 
 	revalidate();
 
-	const subject = volunteerSubject(volunteerId);
+	const subject = volunteerSubject(created.volunteerId);
 	const actorUserId = await actorId(session.user.id);
 
-	// Best-effort, same as the email below: the grant already stands, and a
-	// maintainer can retry it with "Resend DM" in /admin/user-management.
-	if (!signedIn) {
-		const dm = await sendSlackDm(
-			member.id,
-			grantDmMessage({ roles: ['volunteer'] }),
-		);
-		await recordOutcome(subject, {
-			channel: 'slack',
-			outbound: dm,
-			what: 'Volunteer DM',
-			actorUserId,
-		});
+	// Someone who has already signed in is a Volunteer immediately — nobody
+	// left to tell to come claim anything.
+	if (created.granted.kind === 'pending') {
+		await notifyNewVolunteer(member.id, subject, actorUserId);
 	}
 
 	// Written first, emailed after: docs/adr/0010.
@@ -282,7 +298,7 @@ export async function setEmail(
  * happened; a returning Volunteer picks up the balance they left with.
  *
  * A restart is the same grant `addVolunteer` makes, so it goes through
- * `grantVolunteerRole`: a pause withdraws a Pending Grant that carried only
+ * `addVolunteerRole`: a pause withdraws a Pending Grant that carried only
  * `volunteer`, and someone who never signed in has nothing else to update.
  */
 export async function setVolunteerActive(
@@ -309,42 +325,27 @@ export async function setVolunteerActive(
 		return { ok: false, message: 'That volunteer no longer exists.' };
 	}
 
-	// Checked before the transaction: whether a restart DMs anyone depends on
-	// whether they have signed in, not on anything the transaction changes.
-	const signedIn = active ? await userForSlackId(row.slackUserId) : null;
+	const outcome = await db().transaction(async (tx) => {
+		// The role op first: it takes the lock `claimOnSignIn()` takes before the
+		// volunteer write, in the same order.
+		const result = active
+			? await addVolunteerRole(tx, row, actorFromSession(session))
+			: await removeVolunteerRole(tx, row.slackUserId);
 
-	await db().transaction(async (tx) => {
-		// Before the volunteer write: claimPendingGrant() takes them in this order.
-		await lockSlackMember(tx, row.slackUserId);
 		await tx
 			.update(volunteer)
 			.set({ deactivatedAt: active ? null : new Date() })
 			.where(eq(volunteer.id, volunteerId));
 
-		if (active) {
-			await grantVolunteerRole(
-				tx,
-				row,
-				session.user.name || session.user.email,
-			);
-		} else {
-			await revokeVolunteerRole(tx, row.slackUserId);
-		}
+		return result;
 	});
 
-	// Best-effort, after the transaction commits: the restart already stands,
-	// and a maintainer can retry it with "Resend DM" in /admin/user-management.
-	if (active && !signedIn) {
-		const dm = await sendSlackDm(
+	if (active && outcome.kind === 'pending') {
+		await notifyNewVolunteer(
 			row.slackUserId,
-			grantDmMessage({ roles: ['volunteer'] }),
+			volunteerSubject(volunteerId),
+			await actorId(session.user.id),
 		);
-		await recordOutcome(volunteerSubject(volunteerId), {
-			channel: 'slack',
-			outbound: dm,
-			what: 'Volunteer DM',
-			actorUserId: await actorId(session.user.id),
-		});
 	}
 
 	revalidate(volunteerId);

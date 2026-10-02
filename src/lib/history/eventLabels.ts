@@ -47,6 +47,10 @@ export const EVENT_LABELS: Record<
 		sentence: 'Notification failed',
 		badge: 'Notification failed',
 	},
+	invite_completion_failed: {
+		sentence: 'Invite not marked completed',
+		badge: 'Invite not completed',
+	},
 };
 
 /** The label for a type read back from the database, or the type itself if it has none. */

@@ -36,11 +36,11 @@ it off the profile in `mapProfileToUser` is not an option: Better Auth's
 API input _and_ `mapProfileToUser`, and `input: false` ones accept neither. A
 column that decides which Pending Grant matches a user cannot be writable by
 that user's own `updateUser` call, so `slackUserId` is `input: false` and
-`claimPendingGrant()` writes it directly through Drizzle from
+`claimOnSignIn()` writes it directly through Drizzle from
 `databaseHooks.account.create.after` — the first point at which both ids
 exist.
 
-`claimPendingGrant()` never throws. A failed claim must not fail sign-in, for
+`claimOnSignIn()` never throws. A failed claim must not fail sign-in, for
 the same reason `notifySlack` never throws (0005): the person cannot fix it,
 and locking them out is worse than letting them in with nothing.
 
@@ -49,7 +49,7 @@ and locking them out is worse than letting them in with nothing.
 Deliberately. Every question this feature asks — "does this Slack member
 already have an account?", "whose grant is this?" — becomes a single-table
 lookup on a unique, indexed column instead of a join against `account`
-filtered by `provider_id`. `claimPendingGrant()` writes it on the first Slack
+filtered by `provider_id`. `claimOnSignIn()` writes it on the first Slack
 sign-in, grant or no grant — the `account.create` hook; a later sign-in of an
 existing account runs no hook, so a failed claim is not retried (see the
 stranded case under Consequences).

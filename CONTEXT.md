@@ -191,6 +191,12 @@ the site. Applied on their first sign-in, after which the Grant is **claimed**
 and their Role is authoritative.
 _Avoid_: Invite, pre-provision, reservation
 
+**Role assignment**:
+Giving or taking a Role directly on a user, or as a Pending Grant, all under
+one lock per Slack member. `src/lib/access/roleAssignment.ts` is the only
+writer of `user.role` and `pending_grant`; each operation returns what happened.
+_Avoid_: Permission change, provisioning
+
 ## History
 
 **History**:

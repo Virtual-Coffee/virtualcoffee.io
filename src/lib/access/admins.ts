@@ -1,6 +1,6 @@
 import { and, eq, isNotNull, isNull, ne, or } from 'drizzle-orm';
 
-import { db, pendingGrant, user, type Database, type Transaction } from '@/db';
+import { db, pendingGrant, user } from '@/db';
 import { getSlackMembers, type SlackMember } from '@/data/slackMembers';
 import {
 	DEFAULT_ROLE,
@@ -116,7 +116,7 @@ export async function listAccessRows(): Promise<AccessRow[]> {
 
 	/**
 	 * Their user row is already listed above, badged as stranded. Only the
-	 * role-less rows: a Grant beside a role-holder is one `claimPendingGrant()`
+	 * role-less rows: a Grant beside a role-holder is one `claimOnSignIn()`
 	 * declined to apply — a second Slack account linked onto someone who
 	 * already had access — and it stays its own row so it can be edited or
 	 * withdrawn.
@@ -188,21 +188,4 @@ export async function grantCandidates(): Promise<GrantCandidate[]> {
 		account: accounts.get(member.id) ?? 'none',
 		hasPendingGrant: withGrants.has(member.id),
 	}));
-}
-
-/**
- * The user holding a Slack member id, if that member has ever signed in.
- * Takes the caller's transaction when the answer decides a write.
- */
-export async function userForSlackId(
-	slackUserId: string,
-	executor: Database | Transaction = db(),
-) {
-	const [row] = await executor
-		.select({ id: user.id, name: user.name, role: user.role })
-		.from(user)
-		.where(eq(user.slackUserId, slackUserId))
-		.limit(1);
-
-	return row ?? null;
 }

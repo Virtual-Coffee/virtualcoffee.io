@@ -1,16 +1,13 @@
 'use server';
 
-import { and, inArray, sql } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-import { db, membershipApplication } from '@/db';
 import { applicationPath } from '@/lib/admin/links';
-import { notifyAndRecord, recordEvent } from '@/lib/history/eventLog';
+import { notifyAndRecord } from '@/lib/history/eventLog';
 import { reportHandled } from '@/lib/monitoring/reportHandled';
 import { applicationSubject, statusCounts } from '@/lib/waitlist/applications';
-import { claimInvite, type ClaimedInvite } from '@/lib/volunteers/invites';
-import { QUEUE_STATUSES } from '@/lib/waitlist/applicationStatuses';
+import { submit, type Submitted } from '@/lib/waitlist/lifecycle';
 import { applicationSubmittedMessage, notifySlack } from '@/lib/slack/notify';
 import { agree, email, name } from '@/util/forms/fields';
 import { intake, savingFailed } from '@/util/forms/intake';
@@ -44,98 +41,20 @@ export async function submitMembershipApplication(
 	const parsed = intake(formData, { schema, thanks: THANKS });
 	if (!parsed.ok) return parsed.state;
 
-	const now = new Date();
-	const claimToken = formValue(formData, 'invite');
-	let result: { applicationId: string; claimed: ClaimedInvite | null };
+	let result: Extract<Submitted, { kind: 'submitted' }>;
 
 	try {
-		/**
-		 * One application per person in the pipeline. Someone who was declined,
-		 * withdrew or lapsed can apply again; someone already waiting, invited or
-		 * a member gets told so instead of a second row for a reviewer to notice.
-		 *
-		 * Checked before the transaction, so nothing is written and a Claim Link
-		 * is not burned. Deliberately a lookup and not a unique index: the imported
-		 * history holds duplicates, and this is a courtesy rather than a boundary —
-		 * two submissions racing each other can still both land, and the spam
-		 * guard's own scope (drive-by bots, not a determined sender) is unchanged.
-		 *
-		 * The message does tell a caller whether an address is in the pipeline.
-		 * Accepted: this is a community waitlist behind the edge rate limit
-		 * (netlify/edge-functions/rate-limit-join.ts), and telling someone they
-		 * already applied is worth more than hiding that from a prober.
-		 */
-		const [existing] = await db()
-			.select({ id: membershipApplication.id })
-			.from(membershipApplication)
-			.where(
-				and(
-					sql`lower(${membershipApplication.email}) = ${parsed.data.email.toLowerCase()}`,
-					inArray(membershipApplication.status, [...QUEUE_STATUSES, 'member']),
-				),
-			)
-			.limit(1);
-		if (existing) {
+		const submitted = await submit(
+			parsed.data,
+			formValue(formData, 'invite') ?? null,
+		);
+		if (submitted.kind === 'duplicate') {
 			return invalidFields({
 				email:
 					'There’s already an application for this email address. If that’s a surprise, email hello@virtualcoffee.io.',
 			});
 		}
-
-		result = await db().transaction(async (tx) => {
-			let claimed: ClaimedInvite | null = null;
-			/**
-			 * Redeem the Claim Link and write the application together. A racing
-			 * second submission finds nothing to claim and is written as a Waitlist
-			 * signup. The shared transaction is what stops a failed insert burning
-			 * the Invite: the applicant would lose both their answers and their
-			 * friend's invite, having done nothing wrong.
-			 */
-			if (claimToken) claimed = await claimInvite(claimToken, now, tx);
-
-			const [row] = await tx
-				.insert(membershipApplication)
-				.values({
-					name: parsed.data.name,
-					email: parsed.data.email,
-					pronouns: parsed.data.pronouns ?? null,
-					githubUsername: parsed.data.githubUsername || null,
-					howDidYouHear: parsed.data.howDidYouHear ?? null,
-					journey: parsed.data.journey ?? null,
-					codeInterests: parsed.data.codeInterests ?? null,
-					virtualCoffee: parsed.data.virtualCoffee ?? null,
-					status: 'waitlisted',
-					/**
-					 * An expired or already-used link still produces an application, as
-					 * a Waitlist signup. Refusing it would throw away the long answers
-					 * they just wrote over a link they had no way to check.
-					 */
-					source: claimed ? 'volunteer_invite' : 'waitlist_signup',
-					// Nothing derives one from the other; both are set by hand
-					// everywhere an invited application is written.
-					isPriority: Boolean(claimed),
-					inviteId: claimed ? claimed.id : null,
-					referrer: claimed ? claimed.inviterName : null,
-					agreedToCocAt: now,
-					submittedAt: now,
-					waitlistedAt: now,
-				})
-				.returning({ id: membershipApplication.id });
-
-			await recordEvent(
-				applicationSubject(row.id),
-				{
-					type: 'submitted',
-					toStatus: 'waitlisted',
-					body: claimed
-						? `Application submitted from an invite by ${claimed.inviterName ?? 'a volunteer'}`
-						: 'Application submitted',
-				},
-				tx,
-			);
-
-			return { applicationId: row.id, claimed };
-		});
+		result = submitted;
 	} catch (error) {
 		// Deliberately not surfaced to the applicant: the upstream message can
 		// name tables and columns, and there is nothing they could do with it.
