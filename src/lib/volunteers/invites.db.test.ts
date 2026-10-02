@@ -109,6 +109,8 @@ describe('inviteForClaimToken', () => {
 });
 
 describe('issueAndSend', () => {
+	afterEach(() => vi.useRealTimers());
+
 	test('writes the Invite, charges one, and emails the link', async () => {
 		const volunteerId = await volunteerWithBalance(2);
 		sendEmail.mockResolvedValue(SENT);
@@ -121,9 +123,6 @@ describe('issueAndSend', () => {
 			inviteeEmail: 'ada@example.test',
 			status: 'pending',
 			tokenHash: expect.schemaMatching(z.hash('sha256')),
-			tokenExpiresAt: expect.schemaMatching(
-				z.date().min(new Date(Date.now() + 89 * 24 * 60 * 60 * 1000)),
-			),
 		});
 		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
 		await expect(ledgerFor(GRACE)).resolves.toEqual([
@@ -148,6 +147,20 @@ describe('issueAndSend', () => {
 		await expect(volunteerEvents(volunteerId)).resolves.toMatchObject([
 			{ type: 'email_sent', body: 'Invite to ada@example.test' },
 		]);
+	});
+
+	test('the Claim Link lives 90 days', async () => {
+		await volunteerWithBalance(1);
+		sendEmail.mockResolvedValue(SENT);
+		vi.useFakeTimers({
+			toFake: ['Date'],
+			now: Date.parse('2026-09-12T00:00:00Z'),
+		});
+
+		await send();
+
+		const [row] = await db().select().from(invite);
+		expect(row.tokenExpiresAt?.toISOString()).toBe('2026-12-11T00:00:00.000Z');
 	});
 
 	test('two Invites carry different tokens', async () => {
