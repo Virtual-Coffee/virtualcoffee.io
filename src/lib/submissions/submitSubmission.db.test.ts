@@ -10,8 +10,6 @@ import {
 	type Transaction,
 } from '@/db';
 
-import { failInserts } from '@/test/db/fixtures';
-
 import { neverAnnouncedAmong, notifyAndRecord } from '@/lib/history/eventLog';
 
 import {
@@ -20,7 +18,6 @@ import {
 	submissionScope,
 	submissionSubject,
 } from './submissions';
-import { persistSubmission } from './submitSubmission';
 
 const NOTIFIED = { channel: 'slack' as const, what: 'Notified' };
 
@@ -134,47 +131,6 @@ describe('notifyAndRecord', () => {
 		).resolves.toBeUndefined();
 		expect(error).toHaveBeenCalledOnce();
 		error.mockRestore();
-	});
-});
-
-describe('persistSubmission', () => {
-	const copy = { submitted: 'Report submitted', failed: 'Try again.' };
-
-	test('writes the row and its `submitted` event', async () => {
-		const saved = await persistSubmission(
-			'coc',
-			(tx) => insertCocReport(tx).then((id) => ({ id })),
-			copy,
-		);
-		expect(saved).toEqual({ id: expect.any(String) });
-		if ('error' in saved) throw new Error('unreachable');
-		await expect(eventsFor(saved.id)).resolves.toEqual([
-			{ type: 'submitted', body: 'Report submitted' },
-		]);
-	});
-
-	/**
-	 * The submitter is told to try again on failure, so a row that outlived
-	 * its failed event would be duplicated by that retry.
-	 */
-	test('a row whose event fails is rolled back with it', async () => {
-		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
-		const fault = await failInserts('submission_event');
-		try {
-			await expect(
-				persistSubmission(
-					'coc',
-					(tx) => insertCocReport(tx).then((id) => ({ id })),
-					copy,
-				),
-			).resolves.toEqual({
-				error: expect.objectContaining({ is_error: true }),
-			});
-		} finally {
-			await fault.remove();
-			error.mockRestore();
-		}
-		await expect(db().select().from(cocReport)).resolves.toEqual([]);
 	});
 });
 

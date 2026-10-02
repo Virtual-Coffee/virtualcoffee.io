@@ -12,11 +12,8 @@ import {
 	submissionStatusCounts,
 } from '@/lib/submissions/submissions';
 import { FilterChips } from '../../filterChips';
-import {
-	STATUS_ORDER,
-	SubmissionStatusBadge,
-	submissionStatusLabel,
-} from './presentation';
+import { STATUS_ORDER } from '@/lib/submissions/status';
+import { SubmissionStatusBadge, submissionStatusLabel } from './presentation';
 import { PAGE_SIZE } from '@/util/searchParams';
 import { parseSubmissionSearchParams } from './searchParams';
 import { SubmissionsTable, type SubmissionListRow } from './submissionsTable';

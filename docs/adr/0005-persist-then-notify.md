@@ -39,5 +39,6 @@ can be retried.
   event counts because the audit line is written after the attempt and can be
   lost. The dashboard banner, the list marker and `?failed=1` all read it.
 - **Do not "fix" the ordering to match the admin-action rule.** It reads like
-  a bug, which is why this file exists. The `action.db.test.ts` beside each
-  form pins it, and `eventLog.db.test.ts` pins the rule above.
+  a bug, which is why this file exists. `submit()` in
+  `src/lib/submissions/submitSubmission.ts` is the one persist-then-announce for
+  the four Submission forms, `submit.db.test.ts` pins it, and `eventLog.db.test.ts` pins the rule above.

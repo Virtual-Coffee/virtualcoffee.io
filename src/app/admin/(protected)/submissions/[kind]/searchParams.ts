@@ -1,4 +1,5 @@
 import type { SubmissionStatus } from '@/db';
+import { STATUS_ORDER } from '@/lib/submissions/status';
 import {
 	SUBMISSION_SORT_FIELDS,
 	type SubmissionSortField,
@@ -9,7 +10,6 @@ import {
 	type ListQuery,
 	type RawSearchParams,
 } from '@/util/searchParams';
-import { STATUS_ORDER } from './presentation';
 
 type SubmissionFilters = ListQuery<SubmissionSortField> & {
 	status: SubmissionStatus | null;
