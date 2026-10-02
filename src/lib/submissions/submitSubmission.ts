@@ -34,6 +34,18 @@ import { siteUrl } from '@/util/url.server';
 /** Columns the action supplies that the form data cannot: CoC's attachment. */
 type Extra = Partial<typeof cocReport.$inferInsert>;
 
+type Schemas = {
+	coc: typeof cocSchema;
+	volunteers: typeof volunteersSchema;
+	'lunch-and-learn': typeof lunchAndLearnSchema;
+	'coffee-tables': typeof coffeeTablesSchema;
+};
+
+export type SubmissionData<K extends SubmissionKind> = z.infer<Schemas[K]>;
+
+type Insert<K extends SubmissionKind> =
+	(typeof SUBMISSION_KINDS)[K]['table']['$inferInsert'];
+
 type Intake<Data, Insert> = {
 	toRow: (data: Data) => Insert;
 	copy: { submitted: string; failed: string };
@@ -64,9 +76,11 @@ function slackAnnouncer<Data>(
  * Everything that varies between the four public forms, once: the insert
  * values, the History and failure wording, and the announcement.
  */
-const SUBMISSION_INTAKE = {
+const SUBMISSION_INTAKE: {
+	[K in SubmissionKind]: Intake<SubmissionData<K>, Insert<K>>;
+} = {
 	coc: {
-		toRow: (data: z.infer<typeof cocSchema>) => ({
+		toRow: (data): Insert<'coc'> => ({
 			name: data.name ?? null,
 			email: data.email ?? null,
 			reporteeName: data.reportee_name,
@@ -75,7 +89,7 @@ const SUBMISSION_INTAKE = {
 			anyoneElseInvolved: data.anyone_else_involved ?? null,
 		}),
 		copy: { submitted: 'Report submitted', failed: savingFailed('report') },
-		announce: slackAnnouncer<z.infer<typeof cocSchema>>(
+		announce: slackAnnouncer<SubmissionData<'coc'>>(
 			'coc',
 			'coc',
 			(data, adminUrl, extra) =>
@@ -91,7 +105,7 @@ const SUBMISSION_INTAKE = {
 		),
 	},
 	volunteers: {
-		toRow: (data: z.infer<typeof volunteersSchema>) => ({
+		toRow: (data): Insert<'volunteers'> => ({
 			name: data.name,
 			email: data.email,
 			githubUsername: data.github_username,
@@ -99,7 +113,7 @@ const SUBMISSION_INTAKE = {
 			description: data.description,
 		}),
 		copy: { submitted: 'Signup submitted', failed: savingFailed() },
-		announce: slackAnnouncer<z.infer<typeof volunteersSchema>>(
+		announce: slackAnnouncer<SubmissionData<'volunteers'>>(
 			'volunteers',
 			'volunteers',
 			(data, adminUrl) =>
@@ -113,7 +127,7 @@ const SUBMISSION_INTAKE = {
 		),
 	},
 	'lunch-and-learn': {
-		toRow: (data: z.infer<typeof lunchAndLearnSchema>) => ({
+		toRow: (data): Insert<'lunch-and-learn'> => ({
 			name: data.Name,
 			email: data.Email,
 			topic: data.Topic,
@@ -122,13 +136,7 @@ const SUBMISSION_INTAKE = {
 			timing: data.Timing,
 		}),
 		copy: { submitted: 'Idea submitted', failed: savingFailed() },
-		announce: async (
-			id: string,
-			data: z.infer<typeof lunchAndLearnSchema>,
-			adminUrl: string,
-		) => {
-			const idea = SUBMISSION_INTAKE['lunch-and-learn'].toRow(data);
-
+		announce: async (id, data, adminUrl) => {
 			// The issue is opened first so the Slack message can link it. Each channel
 			// is its own line of History, so a Slack outage is never written up as a
 			// GitHub failure; neither failing loses the idea.
@@ -141,7 +149,11 @@ const SUBMISSION_INTAKE = {
 				},
 				async () => {
 					const issue = await createLunchAndLearnIssue({
-						...idea,
+						name: data.Name,
+						topic: data.Topic,
+						description: data.Description,
+						format: data.Format ?? null,
+						timing: data.Timing,
 						adminUrl,
 					});
 
@@ -178,9 +190,9 @@ const SUBMISSION_INTAKE = {
 					notifySlack(
 						'lunch-and-learn',
 						lunchAndLearnMessage({
-							name: idea.name,
-							email: idea.email,
-							topic: idea.topic,
+							name: data.Name,
+							email: data.Email,
+							topic: data.Topic,
 							issueUrl,
 							adminUrl,
 						}),
@@ -189,14 +201,14 @@ const SUBMISSION_INTAKE = {
 		},
 	},
 	'coffee-tables': {
-		toRow: (data: z.infer<typeof coffeeTablesSchema>) => ({
+		toRow: (data): Insert<'coffee-tables'> => ({
 			name: data.name,
 			email: data.email,
 			groupName: data.group_name,
 			description: data.description,
 		}),
 		copy: { submitted: 'Request submitted', failed: savingFailed() },
-		announce: slackAnnouncer<z.infer<typeof coffeeTablesSchema>>(
+		announce: slackAnnouncer<SubmissionData<'coffee-tables'>>(
 			'coffee-tables',
 			'coffee-tables',
 			(data, adminUrl) =>
@@ -209,11 +221,7 @@ const SUBMISSION_INTAKE = {
 			'Slack notified of a Coffee Table group request',
 		),
 	},
-} as const satisfies Record<SubmissionKind, unknown>;
-
-export type SubmissionData<K extends SubmissionKind> = Parameters<
-	(typeof SUBMISSION_INTAKE)[K]['toRow']
->[0];
+};
 
 /**
  * A public form's write and announcement: insert the row, log `submitted`,
@@ -236,10 +244,7 @@ export async function submit<K extends SubmissionKind>(
 	data: SubmissionData<K>,
 	opts: { extra?: Extra; onFailed?: () => Promise<void> } = {},
 ): Promise<{ id: string } | { error: FormState }> {
-	const intake = SUBMISSION_INTAKE[kind] as unknown as Intake<
-		SubmissionData<K>,
-		Record<string, unknown>
-	>;
+	const intake = SUBMISSION_INTAKE[kind];
 	const { table } = SUBMISSION_KINDS[kind];
 
 	let id: string;

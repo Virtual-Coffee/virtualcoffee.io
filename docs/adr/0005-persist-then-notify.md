@@ -40,5 +40,7 @@ can be retried.
   lost. The dashboard banner, the list marker and `?failed=1` all read it.
 - **Do not "fix" the ordering to match the admin-action rule.** It reads like
   a bug, which is why this file exists. `submit()` in
-  `src/lib/submissions/submitSubmission.ts` is the one persist-then-announce for
-  the four Submission forms, `submit.db.test.ts` pins it, and `eventLog.db.test.ts` pins the rule above.
+  `src/lib/submissions/submitSubmission.ts` is the one persist-then-announce
+  for the four Submission forms, and `submit.db.test.ts` pins its order;
+  `src/app/join/action.db.test.ts` pins `/join`'s, and `eventLog.db.test.ts`
+  pins the rule above.

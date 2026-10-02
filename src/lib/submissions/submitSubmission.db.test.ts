@@ -113,7 +113,10 @@ describe('notifyAndRecord', () => {
 		const { rows, rowCount } = await listSubmissions('coc', { failed: true });
 		expect(rows.map((row) => row.id)).toEqual([failed]);
 		expect(rowCount).toBe(1);
-		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
+		// A kind with nothing to flag is left out, not counted as zero.
+		await expect(failedNotifications(['coc', 'volunteers'])).resolves.toEqual({
+			coc: 1,
+		});
 	});
 
 	test('losing the audit line does not lose the submission', async () => {

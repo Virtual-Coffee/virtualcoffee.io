@@ -46,7 +46,7 @@ export default async function AdminQueuePage({
 	// does with its own statuses.
 	const filters = { ...parsed, statuses: parsed.statuses ?? QUEUE_STATUSES };
 
-	const [{ rows, rowCount }, counts, unannounced] = await Promise.all([
+	const [{ rows, rowCount }, counts, neverAnnouncedTotal] = await Promise.all([
 		// Volunteer invites sort to the front of the queue no matter what else
 		// is applied; that priority is the point of the invite. Only here: the
 		// archive is history, sorted by whatever column was chosen.
@@ -54,7 +54,7 @@ export default async function AdminQueuePage({
 		statusCounts(),
 		neverAnnouncedCount(APPLICATIONS),
 	]);
-	const unannouncedIds = await neverAnnouncedAmong(
+	const neverAnnouncedIds = await neverAnnouncedAmong(
 		APPLICATIONS,
 		rows.map((row) => row.id),
 	);
@@ -78,10 +78,11 @@ export default async function AdminQueuePage({
 						{counts.waitlisted ?? 0} waiting on a first decision ·{' '}
 						{counts.coffee_invited ?? 0} invited to a Coffee
 					</p>
-					{unannounced > 0 && (
+					{neverAnnouncedTotal > 0 && (
 						<p className="text-warning-emphasis mb-0 small">
-							{unannounced} waiting {unannounced === 1 ? 'was' : 'were'} never
-							announced in Slack
+							{neverAnnouncedTotal} waiting{' '}
+							{neverAnnouncedTotal === 1 ? 'was' : 'were'} not announced: the
+							announcement failed or was never recorded
 						</p>
 					)}
 				</div>
@@ -157,7 +158,7 @@ export default async function AdminQueuePage({
 			) : (
 				<ApplicationsTable
 					rows={rows}
-					unannounced={unannouncedIds}
+					neverAnnounced={neverAnnouncedIds}
 					rowCount={rowCount}
 					page={filters.page}
 					pageSize={filters.pageSize}

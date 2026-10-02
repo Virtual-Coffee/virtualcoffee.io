@@ -66,7 +66,7 @@ export default async function SubmissionListPage({
 		submissionStatusCounts(kind),
 		failedNotifications([kind]),
 	]);
-	const unannounced = new Set(
+	const neverAnnouncedIds = new Set(
 		await neverAnnouncedAmong(
 			submissionScope(kind),
 			rows.map((row) => row.id),
@@ -92,7 +92,7 @@ export default async function SubmissionListPage({
 			subtitle: summary.subtitle,
 			status: row.status,
 			submittedAt: row.submittedAt,
-			unannounced: unannounced.has(row.id),
+			neverAnnounced: neverAnnouncedIds.has(row.id),
 		};
 	});
 

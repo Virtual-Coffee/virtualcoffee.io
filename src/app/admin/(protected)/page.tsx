@@ -31,18 +31,20 @@ export default async function AdminDashboardPage() {
 
 	const visibleKinds = visibleSubmissionKinds(sections);
 
-	const [cards, activity, failures, waitlistUnannounced] = await Promise.all([
-		dashboardCards(sections),
-		recentActivity(sections),
-		failedNotifications(visibleKinds),
-		sections.includes('waitlist')
-			? neverAnnouncedCount({ kind: 'application' })
-			: 0,
-	]);
+	const [cards, activity, failures, waitlistNeverAnnounced] = await Promise.all(
+		[
+			dashboardCards(sections),
+			recentActivity(sections),
+			failedNotifications(visibleKinds),
+			sections.includes('waitlist')
+				? neverAnnouncedCount({ kind: 'application' })
+				: 0,
+		],
+	);
 
 	const failureEntries = Object.entries(failures);
 	const announcementFailures =
-		waitlistUnannounced +
+		waitlistNeverAnnounced +
 		failureEntries.reduce((sum, [, total]) => sum + total, 0);
 
 	return (
@@ -68,11 +70,11 @@ export default async function AdminDashboardPage() {
 						nobody may have seen them come in.
 					</p>
 					<ul className="mb-0">
-						{waitlistUnannounced > 0 && (
+						{waitlistNeverAnnounced > 0 && (
 							<li>
 								<Link href="/admin/waitlist">Waitlist</Link>:{' '}
-								{waitlistUnannounced}{' '}
-								{waitlistUnannounced === 1 ? 'application' : 'applications'}
+								{waitlistNeverAnnounced}{' '}
+								{waitlistNeverAnnounced === 1 ? 'application' : 'applications'}
 							</li>
 						)}
 						{failureEntries.map(([kind, total]) => (

@@ -34,11 +34,11 @@ function metaLine({
 }
 
 /** The Slack post for this application failed; docs/adr/0005. */
-function UnannouncedBadge() {
+function NeverAnnouncedBadge() {
 	return (
 		<span
 			className="badge text-bg-warning ms-2"
-			title="The Slack announcement failed; see the application’s History"
+			title="The announcement failed or was never recorded; see the application’s History"
 		>
 			Not announced
 		</span>
@@ -52,7 +52,7 @@ function UnannouncedBadge() {
  */
 const buildColumns = (
 	open: (id: string) => void,
-	unannounced: ReadonlySet<string>,
+	neverAnnounced: ReadonlySet<string>,
 ) =>
 	helper.columns([
 		helper.accessor('name', {
@@ -66,7 +66,7 @@ const buildColumns = (
 					>
 						{row.original.name}
 					</button>
-					{unannounced.has(row.original.id) && <UnannouncedBadge />}
+					{neverAnnounced.has(row.original.id) && <NeverAnnouncedBadge />}
 					{metaLine(row.original)}
 				</div>
 			),
@@ -106,8 +106,8 @@ const NONE: string[] = [];
 
 type Props = {
 	rows: MembershipApplication[];
-	/** Ids among `rows` whose Slack announcement failed; the queue only. */
-	unannounced?: string[];
+	/** Ids among `rows` never announced; the queue only. */
+	neverAnnounced?: string[];
 	rowCount: number;
 	page: number;
 	pageSize: number;
@@ -117,7 +117,7 @@ type Props = {
 
 export function ApplicationsTable({
 	rows,
-	unannounced = NONE,
+	neverAnnounced = NONE,
 	rowCount,
 	page,
 	pageSize,
@@ -126,8 +126,8 @@ export function ApplicationsTable({
 }: Props) {
 	const [openId, setOpenId] = useState<string | null>(null);
 	const columns = useMemo(
-		() => buildColumns(setOpenId, new Set(unannounced)),
-		[unannounced],
+		() => buildColumns(setOpenId, new Set(neverAnnounced)),
+		[neverAnnounced],
 	);
 
 	const { table, pagination } = useServerPagedTable({
@@ -236,7 +236,7 @@ export function ApplicationsTable({
 							<div>
 								<div className="fw-semibold">
 									{row.name}
-									{unannounced.includes(row.id) && <UnannouncedBadge />}
+									{neverAnnounced.includes(row.id) && <NeverAnnouncedBadge />}
 								</div>
 								{metaLine(row)}
 							</div>

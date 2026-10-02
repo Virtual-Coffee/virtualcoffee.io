@@ -26,6 +26,8 @@ const KINDS: {
 	slack: Record<string, string>;
 	submitted: string;
 	announced: string;
+	/** History between `submitted` and the Slack line. */
+	between: { type: string; body: string }[];
 }[] = [
 	{
 		kind: 'coc',
@@ -42,6 +44,7 @@ const KINDS: {
 		slack: { Name: '(anonymous)', Email: '(anonymous)' },
 		submitted: 'Report submitted',
 		announced: 'Slack notified of a CoC report',
+		between: [],
 	},
 	{
 		kind: 'volunteers',
@@ -66,6 +69,7 @@ const KINDS: {
 		slack: { Name: 'Ada' },
 		submitted: 'Signup submitted',
 		announced: 'Slack notified of a Volunteer signup',
+		between: [],
 	},
 	{
 		kind: 'lunch-and-learn',
@@ -88,6 +92,12 @@ const KINDS: {
 		},
 		submitted: 'Idea submitted',
 		announced: 'Slack notified of a Lunch & Learn idea',
+		between: [
+			{
+				type: 'notification_sent',
+				body: 'Lunch & Learn issue opened on GitHub',
+			},
+		],
 	},
 	{
 		kind: 'coffee-tables',
@@ -109,6 +119,7 @@ const KINDS: {
 		slack: { 'Group name': 'Analytical Engines' },
 		submitted: 'Request submitted',
 		announced: 'Slack notified of a Coffee Table group request',
+		between: [],
 	},
 ];
 
@@ -150,11 +161,11 @@ describe.each(KINDS)('submit — $kind', (entry) => {
 				new RegExp(`/admin/submissions/${entry.kind}/${row.id}$`),
 			),
 		});
-		expect(events[0]).toEqual({ type: 'submitted', body: entry.submitted });
-		expect(events).toContainEqual({
-			type: 'notification_sent',
-			body: expect.stringContaining(entry.announced),
-		});
+		expect(events).toEqual([
+			{ type: 'submitted', body: entry.submitted },
+			...entry.between,
+			{ type: 'notification_sent', body: entry.announced },
+		]);
 	});
 
 	/** ADR 0005: the row is saved before Slack is asked. */
@@ -172,11 +183,14 @@ describe.each(KINDS)('submit — $kind', (entry) => {
 
 		const { events } = await run(entry);
 
-		expect(events[0]).toEqual({ type: 'submitted', body: entry.submitted });
-		expect(events).toContainEqual({
-			type: 'notification_failed',
-			body: `${entry.announced} failed: Could not reach Slack: fetch failed`,
-		});
+		expect(events).toEqual([
+			{ type: 'submitted', body: entry.submitted },
+			...entry.between,
+			{
+				type: 'notification_failed',
+				body: `${entry.announced} failed: Could not reach Slack: fetch failed`,
+			},
+		]);
 	});
 });
 
