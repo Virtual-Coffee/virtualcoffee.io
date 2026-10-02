@@ -268,6 +268,8 @@ export const applicationEventType = pgEnum('application_event_type', [
 	'notification_sent',
 	'notification_failed',
 	'imported',
+	/** The Invite behind an approved application could not be marked completed. */
+	'invite_completion_failed',
 ]);
 
 export const inviteTokenPurpose = pgEnum('invite_token_purpose', ['slack']);
