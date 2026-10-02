@@ -19,7 +19,8 @@ describe('siteUrl', () => {
 		expect(siteUrl()).toBe('http://localhost:9000');
 	});
 
-	test.each(['deploy-preview', 'branch-deploy'])(
+	// An unrecognised context is a preview (docs/adr/0017).
+	test.each(['deploy-preview', 'branch-deploy', 'some-new-context'])(
 		'a %s links to its own address, not production',
 		(context) => {
 			vi.stubEnv('CONTEXT', context);
