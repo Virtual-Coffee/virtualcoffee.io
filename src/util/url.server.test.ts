@@ -2,11 +2,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { siteUrl } from './url.server';
 
-/**
- * `siteUrl()` reads the environment on every call, so these stub it directly.
- * (`buildUrls` still snapshots at module load, but nothing reads it except
- * the production-only analytics tag in the root layout.)
- */
+/** `siteUrl()` reads the environment on every call, so these stub it directly. */
 describe('siteUrl', () => {
 	// A shell with Netlify's variables in it must not tilt the first test.
 	beforeEach(() => {

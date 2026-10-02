@@ -83,6 +83,10 @@ describe('the dev bypass session', () => {
 			'on a branch deploy',
 			{ ADMIN_DEV_BYPASS: 'true', CONTEXT: 'branch-deploy' },
 		],
+		[
+			'on a context it does not recognise',
+			{ ADMIN_DEV_BYPASS: 'true', CONTEXT: 'something-new' },
+		],
 	])('is off when %s', async (_label, values) => {
 		env(values);
 		await expect(getSession()).resolves.toBeNull();
