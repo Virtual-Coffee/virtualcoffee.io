@@ -48,7 +48,7 @@ export type Movement = typeof volunteerInviteLedger.$inferSelect;
 const CLAIM_TOKEN_TTL_DAYS = 90;
 
 export const hashClaimToken = hashToken;
-export const newClaimToken = () => newToken(CLAIM_TOKEN_TTL_DAYS);
+const newClaimToken = () => newToken(CLAIM_TOKEN_TTL_DAYS);
 
 /**
  * Statuses that make an email ineligible for an Invite. `lapsed`, `declined`
