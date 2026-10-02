@@ -18,12 +18,13 @@ import type {
 } from '@/db/schema';
 import { volunteerInvite } from '@/emails/volunteerInvite';
 import { sendEmail } from '@/lib/email/transport';
-import { recordOutcome } from '@/lib/history/eventLog';
+import { recordOutcome, type VolunteerSubject } from '@/lib/history/eventLog';
 import { reportHandled } from '@/lib/monitoring/reportHandled';
 import type { Outbound } from '@/lib/outbound';
 import { hashToken, newToken } from '@/lib/tokens';
 import {
 	pendingInvite,
+	volunteerSubject,
 	volunteerSubjectForSlackId,
 } from '@/lib/volunteers/volunteers';
 import { siteUrl } from '@/util/url.server';
@@ -477,6 +478,8 @@ const claimUrl = (token: string) => `${siteUrl()}/join?invite=${token}`;
  */
 async function sendClaimLink(input: {
 	inviteId: string;
+	/** Resolved from the Slack id when absent. */
+	subject?: VolunteerSubject | null;
 	inviterSlackUserId: string | null;
 	inviterName: string | null;
 	inviteeName: string;
@@ -495,9 +498,11 @@ async function sendClaimLink(input: {
 		{ to: input.inviteeEmail },
 	);
 
-	const subject = input.inviterSlackUserId
-		? await volunteerSubjectForSlackId(input.inviterSlackUserId)
-		: null;
+	const subject =
+		input.subject ??
+		(input.inviterSlackUserId
+			? await volunteerSubjectForSlackId(input.inviterSlackUserId)
+			: null);
 	if (subject) {
 		await recordOutcome(subject, {
 			channel: 'email',
@@ -569,6 +574,7 @@ export async function issueAndSend(input: {
 
 	const sent = await sendClaimLink({
 		inviteId: issued.inviteId,
+		subject: volunteerSubject(issued.volunteerId),
 		inviterSlackUserId: inviter.slackUserId,
 		inviterName: input.inviterName,
 		inviteeName: invitee.name,
@@ -617,9 +623,6 @@ export type ResendOutcome =
 	| { kind: 'maybe_sent'; message: string };
 
 /**
- * Swap an Invite's Claim Link and email the new one. No ledger movement: it is
- * the same Invite, already charged, and its expiry restarts.
- *
  * Conditional on `pending` and on the token read, so a link that is not the
  * one in the row never goes out as "re-sent".
  */
@@ -645,6 +648,10 @@ async function replaceClaimToken(
 	return replaced.length > 0;
 }
 
+/**
+ * Swap an Invite's Claim Link and email the new one. No ledger movement: it is
+ * the same Invite, already charged, and its expiry restarts.
+ */
 export async function resendClaimLink(
 	inviteId: string,
 	{ actorUserId }: { actorUserId: string | null },

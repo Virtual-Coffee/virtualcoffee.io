@@ -482,9 +482,12 @@ describe('resendClaimLink', () => {
 		});
 
 		expect(sendEmail).toHaveBeenCalledOnce();
-		expect(report).toHaveBeenCalledWith(expect.any(Error), {
-			area: 'invites',
-		});
+		expect(report).toHaveBeenCalledWith(
+			expect.objectContaining({
+				message: expect.stringContaining('with no inviter Volunteer'),
+			}),
+			{ area: 'invites' },
+		);
 		await expect(db().select().from(volunteerEvent)).resolves.toEqual([]);
 	});
 });

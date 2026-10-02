@@ -81,10 +81,11 @@ index can see that.
 - **Nothing may ever `UPDATE` or `DELETE` a ledger row.** Corrections are new
   rows, which is why `adjustBalance` requires a reason.
 - **`src/lib/volunteers/invites.ts` is the only writer of the ledger and of an
-  Invite's Claim Link**, as the Event Log is of `application_event`. Every movement — accrual, spend, give-back, admin
-  adjustment, import — is a function there, so what a send or a cancellation
-  does to an allowance is decided once and a new caller cannot invent a movement
-  by spelling out an `INSERT` of its own.
+  Invite's Claim Link**, as the Event Log is of `application_event`. Every
+  movement — accrual, spend, give-back, admin adjustment, import — is a function
+  there, so what a send or a cancellation does to an allowance is decided once
+  and a new caller cannot invent a movement by spelling out an `INSERT` of its
+  own.
 - The allowance is never read from a column, so every screen that shows it runs
   a sum — a correlated subquery at ninety volunteers, worth revisiting at a
   scale this community is unlikely to reach.

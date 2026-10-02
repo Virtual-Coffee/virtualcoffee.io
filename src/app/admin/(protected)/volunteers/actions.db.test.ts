@@ -547,6 +547,12 @@ describe('resendInvite', () => {
 		expect(revalidatePath).toHaveBeenCalledWith(
 			`/admin/volunteers/${volunteerId}`,
 		);
+		await expect(volunteerEvents(volunteerId)).resolves.toMatchObject([
+			{
+				type: 'email_sent',
+				actorUserId: expect.any(String),
+			},
+		]);
 	});
 
 	test('a definite failure admits the previous link has stopped working', async () => {

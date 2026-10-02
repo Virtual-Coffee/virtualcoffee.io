@@ -455,7 +455,7 @@ export async function resendInvite(
 			});
 		case 'maybe_sent':
 			return emailFailed({
-				message: `${outcome.message} We can’t confirm whether the email went out, and the previous link has stopped working. Check with the invitee before re-sending, or they may get two links.`,
+				message: `${outcome.message} We can’t confirm whether the email went out, and the previous link has stopped working. Check with the invitee before re-sending: each re-send stops the last link working.`,
 				definitelyNotSent: false,
 			});
 		case 'sent':
