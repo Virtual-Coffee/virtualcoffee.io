@@ -16,7 +16,17 @@ import type {
 	Volunteer,
 	VolunteerLedgerReason,
 } from '@/db/schema';
+import { volunteerInvite } from '@/emails/volunteerInvite';
+import { sendEmail } from '@/lib/email/transport';
+import { recordOutcome } from '@/lib/history/eventLog';
+import { reportHandled } from '@/lib/monitoring/reportHandled';
+import type { Outbound } from '@/lib/outbound';
 import { hashToken, newToken } from '@/lib/tokens';
+import {
+	pendingInvite,
+	volunteerSubjectForSlackId,
+} from '@/lib/volunteers/volunteers';
+import { siteUrl } from '@/util/url.server';
 
 /**
  * Invites and the Invite Allowance. Every read of the ledger and **every write
@@ -450,6 +460,226 @@ export async function issueInvite(input: {
 		}
 		throw error;
 	}
+}
+
+/* -------------------------------------------------------------------------- */
+/* Claim Links — every send, and every write of an Invite's token             */
+/* -------------------------------------------------------------------------- */
+
+// /join parses `?invite=` (src/app/join/page.tsx); keep the two in step.
+const claimUrl = (token: string) => `${siteUrl()}/join?invite=${token}`;
+
+/**
+ * Email a Claim Link whose token is already written, and put the outcome on
+ * the inviter's History. An inviter who is not a Volunteer here (an imported
+ * Invite can name one) has no History: the send still stands and the gap is
+ * reported.
+ */
+async function sendClaimLink(input: {
+	inviteId: string;
+	inviterSlackUserId: string | null;
+	inviterName: string | null;
+	inviteeName: string;
+	inviteeEmail: string;
+	token: string;
+	actorUserId: string | null;
+	what: string;
+}): Promise<Outbound> {
+	const sent = await sendEmail(
+		volunteerInvite,
+		{
+			inviterName: input.inviterName || 'A Virtual Coffee volunteer',
+			inviteeName: input.inviteeName,
+			claimUrl: claimUrl(input.token),
+		},
+		{ to: input.inviteeEmail },
+	);
+
+	const subject = input.inviterSlackUserId
+		? await volunteerSubjectForSlackId(input.inviterSlackUserId)
+		: null;
+	if (subject) {
+		await recordOutcome(subject, {
+			channel: 'email',
+			outbound: sent,
+			what: input.what,
+			actorUserId: input.actorUserId,
+		});
+	} else {
+		reportHandled(
+			new Error(
+				`Claim Link sent for Invite ${input.inviteId} with no inviter Volunteer`,
+			),
+			{ area: 'invites' },
+		);
+	}
+
+	return sent;
+}
+
+/**
+ * `refused`: nothing written or sent. `not_sent_given_back`: certainly not
+ * delivered, so the Invite is cancelled and refunded. `not_sent_give_back_failed`:
+ * certainly not delivered, but the refund failed and the Invite is still
+ * `pending` and charged. `maybe_sent`: delivery is unknown, so it stays
+ * charged (docs/adr/0011). `failed`: the write itself threw.
+ */
+export type IssueOutcome =
+	| {
+			kind: 'refused';
+			reason: 'no_volunteer' | 'no_balance' | 'already_invited';
+	  }
+	| { kind: 'sent'; warning?: string }
+	| { kind: 'not_sent_given_back'; message: string }
+	| { kind: 'not_sent_give_back_failed'; message: string }
+	| { kind: 'maybe_sent'; message: string }
+	| { kind: 'failed' };
+
+/**
+ * Write an Invite, charge it and email its Claim Link. The write comes first
+ * because the token must exist before the email can be composed, so the
+ * failure path compensates (docs/adr/0011).
+ */
+export async function issueAndSend(input: {
+	inviter: { slackUserId: string; userId: string | null; name: string };
+	invitee: { name: string; email: string };
+	/** The name the email signs with; the Invite row keeps `inviter.name`. */
+	inviterName: string | null;
+}): Promise<IssueOutcome> {
+	const { inviter, invitee } = input;
+	const { token, expiresAt } = newClaimToken();
+
+	let issued: IssuedInvite;
+	try {
+		issued = await issueInvite({
+			inviter,
+			invitee,
+			token: { hash: hashClaimToken(token), expiresAt },
+		});
+	} catch (error) {
+		console.error('Failed to record an invite', {
+			slackUserId: inviter.slackUserId,
+			error,
+		});
+		reportHandled(error, { area: 'invites' });
+		return { kind: 'failed' };
+	}
+
+	if (!issued.ok) return { kind: 'refused', reason: issued.reason };
+
+	const sent = await sendClaimLink({
+		inviteId: issued.inviteId,
+		inviterSlackUserId: inviter.slackUserId,
+		inviterName: input.inviterName,
+		inviteeName: invitee.name,
+		inviteeEmail: invitee.email,
+		token,
+		actorUserId: inviter.userId,
+		what: `Invite to ${invitee.email}`,
+	});
+
+	if (sent.ok) return { kind: 'sent', warning: sent.warning };
+	if (!sent.definitelyNotSent) {
+		return { kind: 'maybe_sent', message: sent.message };
+	}
+
+	// Cancelled as well as refunded: left `pending`, the expiry sweep would
+	// give back too, and an Invite nobody can claim should not sit in the
+	// Volunteer's list as "Sent".
+	try {
+		await giveBack({
+			inviteId: issued.inviteId,
+			reason: 'refund_cancelled',
+			actorUserId: inviter.userId,
+			body: `Send to ${invitee.email} failed: ${sent.message}`,
+		});
+	} catch (error) {
+		console.error('Failed to give back an unsent invite', {
+			inviteId: issued.inviteId,
+			slackUserId: inviter.slackUserId,
+			error,
+		});
+		reportHandled(error, { area: 'invites' });
+		return { kind: 'not_sent_give_back_failed', message: sent.message };
+	}
+	return { kind: 'not_sent_given_back', message: sent.message };
+}
+
+/**
+ * `stale`: the Invite was claimed, cancelled or re-sent since the read. In
+ * every send outcome the previous link is already dead; there is no rollback.
+ */
+export type ResendOutcome =
+	| { kind: 'refused'; reason: 'not_pending' | 'no_email' | 'imported' }
+	| { kind: 'stale' }
+	| { kind: 'sent'; email: string; warning?: string }
+	| { kind: 'not_sent'; message: string }
+	| { kind: 'maybe_sent'; message: string };
+
+/**
+ * Swap an Invite's Claim Link and email the new one. No ledger movement: it is
+ * the same Invite, already charged, and its expiry restarts.
+ *
+ * Conditional on `pending` and on the token read, so a link that is not the
+ * one in the row never goes out as "re-sent".
+ */
+async function replaceClaimToken(
+	inviteId: string,
+	oldHash: string,
+	token: { token: string; expiresAt: Date },
+): Promise<boolean> {
+	const replaced = await db()
+		.update(invite)
+		.set({
+			tokenHash: hashClaimToken(token.token),
+			tokenExpiresAt: token.expiresAt,
+		})
+		.where(
+			and(
+				eq(invite.id, inviteId),
+				eq(invite.status, 'pending'),
+				eq(invite.tokenHash, oldHash),
+			),
+		)
+		.returning({ id: invite.id });
+	return replaced.length > 0;
+}
+
+export async function resendClaimLink(
+	inviteId: string,
+	{ actorUserId }: { actorUserId: string | null },
+): Promise<ResendOutcome> {
+	const row = await pendingInvite(inviteId);
+	if (!row) return { kind: 'refused', reason: 'not_pending' };
+	if (!row.inviteeEmail) return { kind: 'refused', reason: 'no_email' };
+	// An imported Invite never had a Claim Link; minting one now would email a
+	// years-old invitee a live link.
+	if (!row.tokenExpiresAt || !row.tokenHash) {
+		return { kind: 'refused', reason: 'imported' };
+	}
+
+	const minted = newClaimToken();
+	if (!(await replaceClaimToken(inviteId, row.tokenHash, minted))) {
+		return { kind: 'stale' };
+	}
+
+	const sent = await sendClaimLink({
+		inviteId,
+		inviterSlackUserId: row.inviterSlackUserId,
+		inviterName: row.inviterName,
+		inviteeName: row.inviteeName || 'there',
+		inviteeEmail: row.inviteeEmail,
+		token: minted.token,
+		actorUserId,
+		what: `Invite re-sent to ${row.inviteeEmail}`,
+	});
+
+	if (sent.ok) {
+		return { kind: 'sent', email: row.inviteeEmail, warning: sent.warning };
+	}
+	return sent.definitelyNotSent
+		? { kind: 'not_sent', message: sent.message }
+		: { kind: 'maybe_sent', message: sent.message };
 }
 
 /**

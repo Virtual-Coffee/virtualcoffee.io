@@ -1,13 +1,22 @@
+import { eq } from 'drizzle-orm';
 import { afterEach, describe, expect, test, vi } from 'vitest';
+import { z } from 'zod';
 
-import { db, invite } from '@/db';
+import { db, invite, volunteerEvent } from '@/db';
+import { volunteerInvite } from '@/emails/volunteerInvite';
+import * as monitoring from '@/lib/monitoring/reportHandled';
 import {
+	failLedgerInserts,
 	insertInvite,
 	insertVolunteer,
 	inviteRow,
 	ledgerFor,
 	ledgerRow,
+	volunteerEvents,
 } from '@/test/db/fixtures';
+import { sendEmail } from '@/test/mocks/spies';
+import { afterRead } from '@/test/mocks/wrappers';
+import { CAPTURED, MAYBE_SENT, NOT_SENT, SENT } from '@/test/outbound';
 
 import {
 	accrue,
@@ -17,28 +26,30 @@ import {
 	completeInvite,
 	hashClaimToken,
 	inviteForClaimToken,
-	issueInvite,
-	newClaimToken,
+	issueAndSend,
+	resendClaimLink,
 	volunteerBalance,
 } from './invites';
 
 const GRACE = 'U_GRACE';
 
-/** The inviter side of `issueInvite`, as `sendInvite` assembles it. */
-function inviter(slackUserId = GRACE) {
-	return { slackUserId, userId: null, name: 'Grace Hopper' };
-}
+const ADA = { name: 'Ada Lovelace', email: 'ada@example.test' };
 
-function freshToken() {
-	const { token, expiresAt } = newClaimToken();
-	return { hash: hashClaimToken(token), expiresAt };
+/** The inviter side of `issueAndSend`, as the action assembles it. */
+function send(slackUserId = GRACE, invitee = ADA) {
+	return issueAndSend({
+		inviter: { slackUserId, userId: null, name: 'Grace Hopper' },
+		invitee,
+		inviterName: 'Grace Hopper',
+	});
 }
 
 async function volunteerWithBalance(balance: number, slackUserId = GRACE) {
-	await insertVolunteer({ slackUserId });
+	const { id } = await insertVolunteer({ slackUserId });
 	if (balance > 0) {
 		await ledgerRow({ slackUserId, delta: balance, reason: 'imported' });
 	}
+	return id;
 }
 
 describe('inviteForClaimToken', () => {
@@ -97,68 +108,95 @@ describe('inviteForClaimToken', () => {
 	afterEach(() => vi.useRealTimers());
 });
 
-describe('issueInvite', () => {
-	test('writes the Invite and charges one, in one transaction', async () => {
-		await volunteerWithBalance(2);
+describe('issueAndSend', () => {
+	test('writes the Invite, charges one, and emails the link', async () => {
+		const volunteerId = await volunteerWithBalance(2);
+		sendEmail.mockResolvedValue(SENT);
 
-		const issued = await issueInvite({
-			inviter: inviter(),
-			invitee: { name: 'Ada Lovelace', email: 'ada@example.test' },
-			token: freshToken(),
-		});
+		await expect(send()).resolves.toEqual({ kind: 'sent' });
 
-		expect(issued).toEqual({
-			ok: true,
-			inviteId: expect.any(String),
-			volunteerId: expect.any(String),
-		});
-		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
-		await expect(
-			inviteRow(issued.ok ? issued.inviteId : ''),
-		).resolves.toMatchObject({
+		const [row] = await db().select().from(invite);
+		expect(row).toMatchObject({
 			inviterSlackUserId: GRACE,
 			inviteeEmail: 'ada@example.test',
 			status: 'pending',
+			tokenHash: expect.schemaMatching(z.hash('sha256')),
+			tokenExpiresAt: expect.schemaMatching(
+				z.date().min(new Date(Date.now() + 89 * 24 * 60 * 60 * 1000)),
+			),
 		});
+		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
 		await expect(ledgerFor(GRACE)).resolves.toEqual([
 			expect.objectContaining({ delta: 2, reason: 'imported' }),
 			expect.objectContaining({
 				delta: -1,
 				reason: 'spend',
-				inviteId: issued.ok ? issued.inviteId : '',
+				inviteId: row.id,
 			}),
+		]);
+
+		const [template, props, envelope] = sendEmail.mock.calls[0];
+		expect(template).toBe(volunteerInvite);
+		expect(envelope).toEqual({ to: 'ada@example.test' });
+		expect(props).toMatchObject({
+			inviterName: 'Grace Hopper',
+			inviteeName: 'Ada Lovelace',
+		});
+		const [, token] =
+			props.claimUrl.match(/join\?invite=([A-Za-z0-9_-]{43})/) ?? [];
+		expect(hashClaimToken(token)).toBe(row.tokenHash);
+		await expect(volunteerEvents(volunteerId)).resolves.toMatchObject([
+			{ type: 'email_sent', body: 'Invite to ada@example.test' },
 		]);
 	});
 
-	test('a volunteer role with no roster row writes nothing', async () => {
-		const issued = await issueInvite({
-			inviter: inviter(),
-			invitee: { name: 'Ada', email: 'ada@example.test' },
-			token: freshToken(),
-		});
+	test('two Invites carry different tokens', async () => {
+		await volunteerWithBalance(2);
+		sendEmail.mockResolvedValue(SENT);
 
-		expect(issued).toEqual({ ok: false, reason: 'no_volunteer' });
-		await expect(db().select().from(invite)).resolves.toEqual([]);
+		await send(GRACE, ADA);
+		await send(GRACE, { name: 'Alan', email: 'alan@example.test' });
+
+		const hashes = (await db().select().from(invite)).map((r) => r.tokenHash);
+		expect(new Set(hashes).size).toBe(2);
 	});
 
-	test('an empty allowance writes nothing', async () => {
+	test('a captured send is still spent, and says where it went', async () => {
+		await volunteerWithBalance(2);
+		sendEmail.mockResolvedValue(CAPTURED);
+
+		await expect(send()).resolves.toEqual({
+			kind: 'sent',
+			warning: CAPTURED.warning,
+		});
+		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
+	});
+
+	test('a volunteer role with no roster row writes nothing', async () => {
+		await expect(send()).resolves.toEqual({
+			kind: 'refused',
+			reason: 'no_volunteer',
+		});
+		await expect(db().select().from(invite)).resolves.toEqual([]);
+		expect(sendEmail).not.toHaveBeenCalled();
+	});
+
+	test('an empty allowance writes and sends nothing', async () => {
 		await volunteerWithBalance(0);
 
-		const issued = await issueInvite({
-			inviter: inviter(),
-			invitee: { name: 'Ada', email: 'ada@example.test' },
-			token: freshToken(),
+		await expect(send()).resolves.toEqual({
+			kind: 'refused',
+			reason: 'no_balance',
 		});
-
-		expect(issued).toEqual({ ok: false, reason: 'no_balance' });
 		await expect(db().select().from(invite)).resolves.toEqual([]);
 		await expect(ledgerFor(GRACE)).resolves.toEqual([]);
+		expect(sendEmail).not.toHaveBeenCalled();
 	});
 
 	/**
-	 * `invite_pending_email_idx` firing, which is what the caller's friendly
-	 * pre-check can race past. The whole transaction rolls back, so the second
-	 * Volunteer is not charged.
+	 * `invite_pending_email_idx` firing, which the action's friendly pre-check
+	 * can race past. The whole transaction rolls back, so the second Volunteer
+	 * is not charged.
 	 */
 	test('a live Claim Link at that address is refused and nothing is charged', async () => {
 		await volunteerWithBalance(2);
@@ -167,15 +205,287 @@ describe('issueInvite', () => {
 			inviteeEmail: 'ada@example.test',
 		});
 
-		const issued = await issueInvite({
-			inviter: inviter(),
-			invitee: { name: 'Ada', email: 'ada@example.test' },
-			token: freshToken(),
+		await expect(send()).resolves.toEqual({
+			kind: 'refused',
+			reason: 'already_invited',
 		});
-
-		expect(issued).toEqual({ ok: false, reason: 'already_invited' });
 		await expect(volunteerBalance(GRACE)).resolves.toBe(2);
 		await expect(ledgerFor(GRACE)).resolves.toHaveLength(1);
+		expect(sendEmail).not.toHaveBeenCalled();
+	});
+
+	test('a definite send failure cancels the Invite and gives the allowance back', async () => {
+		const volunteerId = await volunteerWithBalance(1);
+		sendEmail.mockResolvedValue(NOT_SENT);
+
+		await expect(send()).resolves.toEqual({
+			kind: 'not_sent_given_back',
+			message: NOT_SENT.message,
+		});
+
+		const [row] = await db().select().from(invite);
+		expect(row).toMatchObject({
+			status: 'cancelled',
+			tokenHash: null,
+			tokenExpiresAt: null,
+		});
+		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
+		await expect(ledgerFor(GRACE)).resolves.toEqual([
+			expect.objectContaining({ reason: 'imported' }),
+			expect.objectContaining({ reason: 'spend', inviteId: row.id }),
+			expect.objectContaining({
+				delta: 1,
+				reason: 'refund_cancelled',
+				inviteId: row.id,
+			}),
+		]);
+		await expect(volunteerEvents(volunteerId)).resolves.toMatchObject([
+			{
+				type: 'email_failed',
+				body: `Invite to ada@example.test failed: ${NOT_SENT.message}`,
+			},
+		]);
+	});
+
+	test('a definite send failure whose refund fails leaves it pending and charged', async () => {
+		await volunteerWithBalance(1);
+		sendEmail.mockResolvedValue(NOT_SENT);
+		const report = vi
+			.spyOn(monitoring, 'reportHandled')
+			.mockImplementation(() => {});
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		const fault = await failLedgerInserts('refund_cancelled');
+		try {
+			await expect(send()).resolves.toEqual({
+				kind: 'not_sent_give_back_failed',
+				message: NOT_SENT.message,
+			});
+		} finally {
+			await fault.remove();
+		}
+
+		// Rolled back together, so Cancel on the list can still give it back.
+		const [row] = await db().select().from(invite);
+		expect(row).toMatchObject({ status: 'pending' });
+		await expect(volunteerBalance(GRACE)).resolves.toBe(0);
+		expect(report).toHaveBeenCalledWith(expect.anything(), {
+			area: 'invites',
+		});
+		await expect(
+			giveBack({
+				inviteId: row.id,
+				reason: 'refund_cancelled',
+				body: 'Cancelled',
+			}),
+		).resolves.toBe('given_back');
+		await expect(volunteerBalance(GRACE)).resolves.toBe(1);
+	});
+
+	test('a failure we cannot be sure about stays spent', async () => {
+		await volunteerWithBalance(1);
+		sendEmail.mockResolvedValue(MAYBE_SENT);
+
+		await expect(send()).resolves.toEqual({
+			kind: 'maybe_sent',
+			message: MAYBE_SENT.message,
+		});
+		const [row] = await db().select().from(invite);
+		expect(row).toMatchObject({ status: 'pending' });
+		expect(row.tokenHash).not.toBeNull();
+		await expect(volunteerBalance(GRACE)).resolves.toBe(0);
+	});
+
+	test('a write that throws is reported and sends nothing', async () => {
+		await volunteerWithBalance(1);
+		const report = vi
+			.spyOn(monitoring, 'reportHandled')
+			.mockImplementation(() => {});
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		const fault = await failLedgerInserts('spend');
+		try {
+			await expect(send()).resolves.toEqual({ kind: 'failed' });
+		} finally {
+			await fault.remove();
+		}
+
+		expect(report).toHaveBeenCalledOnce();
+		expect(sendEmail).not.toHaveBeenCalled();
+		await expect(db().select().from(invite)).resolves.toEqual([]);
+	});
+});
+
+describe('resendClaimLink', () => {
+	const ACTOR = { actorUserId: null };
+
+	test('replaces the token, restarts the expiry, and emails the new link', async () => {
+		const { id: volunteerId } = await insertVolunteer({ slackUserId: GRACE });
+		const soon = new Date(Date.now() + 60 * 60 * 1000);
+		const { id, token: oldToken } = await insertInvite({
+			inviterSlackUserId: GRACE,
+			inviterName: 'Grace Hopper',
+			inviteeEmail: 'ada@example.test',
+			expiresAt: soon,
+		});
+		sendEmail.mockResolvedValue(SENT);
+
+		await expect(resendClaimLink(id, ACTOR)).resolves.toEqual({
+			kind: 'sent',
+			email: 'ada@example.test',
+		});
+
+		const row = await inviteRow(id);
+		expect(row.tokenHash).not.toBe(hashClaimToken(oldToken));
+		expect(row.tokenExpiresAt!.getTime()).toBeGreaterThan(soon.getTime());
+
+		const [template, props, envelope] = sendEmail.mock.calls[0];
+		expect(template).toBe(volunteerInvite);
+		expect(envelope).toEqual({ to: 'ada@example.test' });
+		expect(props.inviterName).toBe('Grace Hopper');
+		const [, token] = props.claimUrl.match(/join\?invite=([\w-]+)/) ?? [];
+		expect(hashClaimToken(token)).toBe(row.tokenHash);
+		// No ledger movement: it is the same Invite.
+		await expect(ledgerFor(GRACE)).resolves.toEqual([]);
+		await expect(volunteerEvents(volunteerId)).resolves.toEqual([
+			{
+				type: 'email_sent',
+				body: 'Invite re-sent to ada@example.test',
+				actorUserId: null,
+			},
+		]);
+	});
+
+	test.each([
+		['a definite failure', NOT_SENT, 'not_sent', 'email_failed'],
+		['an uncertain failure', MAYBE_SENT, 'maybe_sent', 'email_failed'],
+	] as const)(
+		'%s leaves the previous link dead and says which it was',
+		async (_name, outbound, kind, eventType) => {
+			const { id: volunteerId } = await insertVolunteer({
+				slackUserId: GRACE,
+			});
+			const { id, token: oldToken } = await insertInvite({
+				inviterSlackUserId: GRACE,
+			});
+			sendEmail.mockResolvedValue(outbound);
+
+			await expect(resendClaimLink(id, ACTOR)).resolves.toEqual({
+				kind,
+				message: outbound.message,
+			});
+
+			expect((await inviteRow(id)).tokenHash).not.toBe(
+				hashClaimToken(oldToken),
+			);
+			await expect(volunteerEvents(volunteerId)).resolves.toMatchObject([
+				{ type: eventType },
+			]);
+		},
+	);
+
+	test('an Invite imported from Airtable has no link to re-send', async () => {
+		await insertVolunteer({ slackUserId: GRACE });
+		const [{ id }] = await db()
+			.insert(invite)
+			.values({
+				inviterSlackUserId: GRACE,
+				inviterName: 'Grace',
+				inviteeName: 'Ada',
+				inviteeEmail: 'ada@example.test',
+				status: 'pending',
+				airtableRecordId: 'recIMPORTED',
+			})
+			.returning({ id: invite.id });
+
+		await expect(resendClaimLink(id, ACTOR)).resolves.toEqual({
+			kind: 'refused',
+			reason: 'imported',
+		});
+		expect((await inviteRow(id)).tokenHash).toBeNull();
+		expect(sendEmail).not.toHaveBeenCalled();
+	});
+
+	test('only a pending Invite with an email can be re-sent', async () => {
+		const { id, token } = await insertInvite({
+			inviterSlackUserId: GRACE,
+			status: 'accepted',
+		});
+
+		await expect(resendClaimLink(id, ACTOR)).resolves.toEqual({
+			kind: 'refused',
+			reason: 'not_pending',
+		});
+
+		const [{ id: noEmail }] = await db()
+			.insert(invite)
+			.values({
+				inviterSlackUserId: GRACE,
+				inviterName: 'Grace',
+				status: 'pending',
+				tokenHash: hashClaimToken('x'),
+				tokenExpiresAt: new Date(Date.now() + 1000),
+			})
+			.returning({ id: invite.id });
+		await expect(resendClaimLink(noEmail, ACTOR)).resolves.toEqual({
+			kind: 'refused',
+			reason: 'no_email',
+		});
+		expect((await inviteRow(id)).tokenHash).toBe(hashClaimToken(token));
+		expect(sendEmail).not.toHaveBeenCalled();
+	});
+
+	test('an Invite claimed between the read and the write is not emailed', async () => {
+		const { id } = await insertInvite({ inviterSlackUserId: GRACE });
+		// The read sees `pending`; the claim lands before the write.
+		afterRead.run = async () => {
+			await db()
+				.update(invite)
+				.set({ status: 'accepted', tokenHash: null })
+				.where(eq(invite.id, id));
+		};
+
+		await expect(resendClaimLink(id, ACTOR)).resolves.toEqual({
+			kind: 'stale',
+		});
+		expect(sendEmail).not.toHaveBeenCalled();
+		expect((await inviteRow(id)).status).toBe('accepted');
+	});
+
+	test('a resend that lost the race to another resend is not emailed', async () => {
+		const { id } = await insertInvite({ inviterSlackUserId: GRACE });
+		// Still `pending`, but the other maintainer's token is already in the row.
+		const theirs = hashClaimToken('the-other-resend');
+		afterRead.run = async () => {
+			await db()
+				.update(invite)
+				.set({ tokenHash: theirs })
+				.where(eq(invite.id, id));
+		};
+
+		await expect(resendClaimLink(id, ACTOR)).resolves.toEqual({
+			kind: 'stale',
+		});
+		expect(sendEmail).not.toHaveBeenCalled();
+		expect((await inviteRow(id)).tokenHash).toBe(theirs);
+	});
+
+	test('with no inviter Volunteer the send goes out, nothing is recorded, and it is reported', async () => {
+		const report = vi
+			.spyOn(monitoring, 'reportHandled')
+			.mockImplementation(() => {});
+		const { id } = await insertInvite({ inviterSlackUserId: 'U_NOT_HERE' });
+		sendEmail.mockResolvedValue(SENT);
+
+		await expect(resendClaimLink(id, ACTOR)).resolves.toMatchObject({
+			kind: 'sent',
+		});
+
+		expect(sendEmail).toHaveBeenCalledOnce();
+		expect(report).toHaveBeenCalledWith(expect.any(Error), {
+			area: 'invites',
+		});
+		await expect(db().select().from(volunteerEvent)).resolves.toEqual([]);
 	});
 });
 
