@@ -374,7 +374,7 @@ describe('replaceRoles', () => {
 	 * A user with no Slack id takes no lock, so the write is pinned to still
 	 * having none; the shim stands in for a sign-in landing before the write.
 	 */
-	test('is stale when a sign-in gives a Slack-less user an id before the write', async () => {
+	test('is changed, not gone, when a sign-in gives a Slack-less user an id before the write', async () => {
 		const ada = await insertUser({});
 
 		const outcome = await db().transaction((tx) => {
@@ -397,10 +397,10 @@ describe('replaceRoles', () => {
 			return replaceRoles(racing, ada.id, ['coc_reviewer'], admin);
 		});
 
-		expect(outcome).toEqual({ kind: 'stale' });
+		expect(outcome).toEqual({ kind: 'changed' });
 	});
 
-	test('is stale when the Slack id changes between the read and the lock', async () => {
+	test('is changed, not gone, when the Slack id changes between the read and the lock', async () => {
 		const ada = await insertUser({ slackUserId: 'U_ADA', role: 'admin' });
 
 		const outcome = await db().transaction((tx) => {
@@ -420,7 +420,7 @@ describe('replaceRoles', () => {
 			return replaceRoles(racing, ada.id, ['coc_reviewer'], admin);
 		});
 
-		expect(outcome).toEqual({ kind: 'stale' });
+		expect(outcome).toEqual({ kind: 'changed' });
 		await expect(userRow(ada.id)).resolves.toMatchObject({ role: 'admin' });
 	});
 

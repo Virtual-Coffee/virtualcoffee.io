@@ -83,6 +83,11 @@ export async function setUserRoles(
 			return { ok: true };
 		case 'refused':
 			return { ok: false, message: 'You cannot revoke your own admin access.' };
+		case 'changed':
+			return {
+				ok: false,
+				message: 'Their roles changed while you were editing. Reload the page.',
+			};
 		default:
 			return {
 				ok: false,

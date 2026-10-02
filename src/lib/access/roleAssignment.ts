@@ -30,12 +30,14 @@ type Refusal =
 /**
  * `applied`: written to a user. `pending`: the change landed on a Pending Grant
  * (inserted, updated or withdrawn). `stale`: the user or Grant is gone or
- * already claimed. `name` is the person's, for copy that names them.
+ * already claimed. `changed`: the person is still there but their row moved
+ * under the edit (a sign-in gave them a Slack id), so the caller's view is old. `name` is the person's, for copy that names them.
  */
 export type Outcome =
 	| { kind: 'applied'; userId: string; name?: string }
 	| { kind: 'pending'; grantId: string }
 	| { kind: 'stale' }
+	| { kind: 'changed' }
 	| { kind: 'refused'; reason: Refusal; name?: string };
 
 type SlackMemberRef = {
@@ -193,7 +195,8 @@ export async function replaceRoles(
 	if (first.slackUserId) {
 		await lockSlackMember(tx, first.slackUserId);
 		const locked = await readUser(tx, userId);
-		if (locked?.slackUserId !== first.slackUserId) return { kind: 'stale' };
+		if (!locked) return { kind: 'stale' };
+		if (locked.slackUserId !== first.slackUserId) return { kind: 'changed' };
 		target = locked;
 		grant = await findUnclaimedGrant(tx, first.slackUserId);
 	}
@@ -228,7 +231,7 @@ export async function replaceRoles(
 				first.slackUserId ? undefined : isNull(user.slackUserId),
 			),
 		);
-	if (updated.rowCount === 0) return { kind: 'stale' };
+	if (updated.rowCount === 0) return { kind: 'changed' };
 
 	if (grant) {
 		// Claimed only if something was applied; a claimed Grant is the record of
