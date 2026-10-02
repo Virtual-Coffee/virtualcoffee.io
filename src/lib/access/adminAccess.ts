@@ -7,6 +7,7 @@ import { eq } from 'drizzle-orm';
 
 import { db, user } from '@/db';
 import { getAuth, type Session } from '@/lib/access/auth';
+import type { Actor } from '@/lib/access/roleAssignment';
 import {
 	parseRoles,
 	roles,
@@ -190,3 +191,11 @@ export const actorId = cache(async (userId: string): Promise<string | null> => {
 		.limit(1);
 	return row?.id ?? null;
 });
+
+/** The Role assignment actor for a signed-in session. */
+export function actorFromSession(session: Session): Actor {
+	return {
+		userId: session.user.id,
+		name: session.user.name || session.user.email,
+	};
+}

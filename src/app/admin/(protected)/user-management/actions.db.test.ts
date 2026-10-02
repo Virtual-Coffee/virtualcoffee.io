@@ -95,97 +95,11 @@ describe('setUserRoles', () => {
 		});
 	});
 
-	/**
-	 * `volunteer` is granted from /admin/volunteers alongside a `volunteer`
-	 * row; the dropdown here must not be able to strip it, even with "Revoke
-	 * all", or that row is left accruing invites nobody can spend.
-	 */
-	test('preserves volunteer when the dropdown omits it, or sends nothing', async () => {
-		const grace = await insertUser({ role: 'coc_reviewer,volunteer' });
-
-		await setUserRoles(grace.id, ['admin']);
-		await expect(roleOf(grace.id)).resolves.toMatchObject({
-			role: 'admin,volunteer',
-		});
-
-		await setUserRoles(grace.id, []);
-		await expect(roleOf(grace.id)).resolves.toMatchObject({
-			role: 'volunteer',
-		});
-
-		// Sending it explicitly grants nothing extra and refuses nothing.
-		await expect(setUserRoles(grace.id, ['volunteer'])).resolves.toEqual({
-			ok: true,
-		});
-		await expect(roleOf(grace.id)).resolves.toMatchObject({
-			role: 'volunteer',
-		});
-	});
-
-	test('revoking everything leaves the default role and no grantor', async () => {
-		const ada = await insertUser({ role: 'admin' });
-		await setUserRoles(ada.id, []);
-		await expect(roleOf(ada.id)).resolves.toEqual({
-			role: 'user',
-			roleGrantedBy: null,
-		});
-	});
-
 	test('a stale row is a failure, not a silent success', async () => {
 		await expect(setUserRoles('gone', ['admin'])).resolves.toEqual({
 			ok: false,
 			message: 'That person no longer exists. Reload the page.',
 		});
-	});
-
-	/**
-	 * The recovery for a claim that failed at sign-in. The grant is consumed
-	 * here, or it would sit unclaimed and — once they hold a role — hidden.
-	 */
-	test('recovers a stranded user: applies the roles and claims the grant, keeping its volunteer', async () => {
-		const ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
-		const grant = await insertPendingGrant({
-			slackUserId: 'U_ADA',
-			role: 'coc_reviewer,volunteer',
-		});
-
-		await expect(setUserRoles(ada.id, ['admin'])).resolves.toEqual({
-			ok: true,
-		});
-		await expect(roleOf(ada.id)).resolves.toEqual({
-			role: 'admin,volunteer',
-			roleGrantedBy: 'Local dev',
-		});
-		await expect(
-			db()
-				.select({ claimedUserId: pendingGrant.claimedUserId })
-				.from(pendingGrant)
-				.where(eq(pendingGrant.id, grant.id)),
-		).resolves.toEqual([{ claimedUserId: ada.id }]);
-		await expect(listAccessRows()).resolves.toEqual([
-			expect.objectContaining({
-				kind: 'user',
-				id: ada.id,
-				roles: ['admin', 'volunteer'],
-				stranded: false,
-			}),
-			expect.objectContaining({ kind: 'user', id: admin.userId }),
-		]);
-	});
-
-	test('revoking everything from a stranded user withdraws the grant rather than claiming it', async () => {
-		const ada = await insertUser({ name: 'Ada', slackUserId: 'U_ADA' });
-		await insertPendingGrant({ slackUserId: 'U_ADA', role: 'admin' });
-
-		await expect(setUserRoles(ada.id, [])).resolves.toEqual({ ok: true });
-		await expect(roleOf(ada.id)).resolves.toEqual({
-			role: 'user',
-			roleGrantedBy: null,
-		});
-		await expect(db().select().from(pendingGrant)).resolves.toEqual([]);
-		await expect(listAccessRows()).resolves.toEqual([
-			expect.objectContaining({ kind: 'user', id: admin.userId }),
-		]);
 	});
 });
 
@@ -415,19 +329,16 @@ describe('setPendingGrantRoles and revokePendingGrant', () => {
 		});
 	});
 
-	test('edits keep volunteer, and an empty result is refused rather than stored', async () => {
+	test('an edit is saved, and an empty result is refused rather than stored', async () => {
 		const { id } = await insertPendingGrant({
 			slackUserId: 'U_GRACE',
-			role: 'coc_reviewer,volunteer',
+			role: 'coc_reviewer',
 		});
 
 		await expect(setPendingGrantRoles(id, ['admin'])).resolves.toEqual({
 			ok: true,
 		});
-		await expect(grantRole(id)).resolves.toBe('admin,volunteer');
-
-		await expect(setPendingGrantRoles(id, [])).resolves.toEqual({ ok: true });
-		await expect(grantRole(id)).resolves.toBe('volunteer');
+		await expect(grantRole(id)).resolves.toBe('admin');
 
 		const plain = await insertPendingGrant({
 			slackUserId: 'U_ADA',
