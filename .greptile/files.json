@@ -72,7 +72,7 @@
 		},
 		{
 			"path": "docs/adr/0011-append-only-invite-ledger.md",
-			"description": "The Invite Allowance ledger and how balances are corrected",
+			"description": "The Invite Allowance ledger, Claim Link sends and how balances are corrected",
 			"scope": [
 				"src/lib/volunteers/**",
 				"src/app/admin/(protected)/volunteers/**",
