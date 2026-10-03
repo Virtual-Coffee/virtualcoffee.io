@@ -1,8 +1,7 @@
 import type { MemberList } from '@/content/members/types';
 import { GraphQLClient, gql } from 'graphql-request';
-import { unstable_cache } from 'next/cache';
 import teamsData from '@/content/members/teams';
-import { assertMocksAllowed } from '@/data/mocks';
+import { defineSource } from '@/data/source';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
 import { parseMarkdown } from '@/util/markdown.server';
 import type {
@@ -26,132 +25,105 @@ function nonNullable<T>(value: T): value is NonNullable<T> {
 	return value !== null && value !== undefined;
 }
 
-export const getMembers = unstable_cache(
-	async (): Promise<MembersResponse> => {
-		const userData = await loadUserData();
-
-		return userData;
-	},
-	[],
-	{ revalidate: 86400, tags: ['members'] },
-);
-
 async function loadMockMemberData(
 	data: MemberObject[],
 ): Promise<GithubSearchUserLookup> {
-	assertMocksAllowed('GitHub member data');
 	const { default: mockMemberData } = await import('@/data/mocks/memberData');
 	return (await mockMemberData(data)) as GithubSearchUserLookup;
 }
 
-async function getMemberGithubData(
+async function fetchMemberGithubData(
 	data: MemberObject[],
 ): Promise<GithubSearchUserLookup> {
-	const token = process.env.GITHUB_TOKEN;
-
-	if (!token) {
-		return loadMockMemberData(data);
-	}
-
 	const headers = {
 		Accept: 'application/vnd.github.v3+json',
-		Authorization: 'bearer ' + token,
+		Authorization: 'bearer ' + process.env.GITHUB_TOKEN,
 	};
 
-	try {
-		console.log('Fetching member data...');
+	console.log('Fetching member data...');
 
-		const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
-			headers,
-			// A member who has since deleted their GitHub account resolves to null
-			// with a NOT_FOUND error alongside everybody else's data. That is
-			// ordinary drift in a hand-maintained list, not a failed request, so
-			// don't let it throw. Transport and auth failures are not GraphQL
-			// errors and still throw into the catch below.
-			errorPolicy: 'all',
-		});
+	const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
+		headers,
+		// A member who has since deleted their GitHub account resolves to null
+		// with a NOT_FOUND error alongside everybody else's data. That is
+		// ordinary drift in a hand-maintained list, not a failed request, so
+		// don't let it throw. Transport and auth failures are not GraphQL
+		// errors and still throw.
+		errorPolicy: 'all',
+	});
 
-		const githubData: GithubSearchUserLookup = {};
-		const missing: string[] = [];
+	const githubData: GithubSearchUserLookup = {};
+	const missing: string[] = [];
 
-		// One `user(login:)` lookup per member, aliased, rather than one
-		// `search(type: USER)` per batch: GitHub's user search index omits accounts
-		// whose owner has made their activity private, so search silently loses
-		// real members. Direct lookups resolve them, and cost one rate-limit point
-		// per request no matter how many members are in it.
-		const chunk = 100;
+	// One `user(login:)` lookup per member, aliased, rather than one
+	// `search(type: USER)` per batch: GitHub's user search index omits accounts
+	// whose owner has made their activity private, so search silently loses
+	// real members. Direct lookups resolve them, and cost one rate-limit point
+	// per request no matter how many members are in it.
+	const chunk = 100;
 
-		for (let i = 0; i < data.length; i += chunk) {
-			const batch = data.slice(i, i + chunk);
+	for (let i = 0; i < data.length; i += chunk) {
+		const batch = data.slice(i, i + chunk);
 
-			// A GraphQL alias has to be a valid name, and a GitHub login may start
-			// with a digit or contain a hyphen, so alias by position and read the
-			// results back the same way.
-			const query = gql`
-				query {
-					${batch
-						.map(
-							(member, index) =>
-								`u${index}: user(login: ${JSON.stringify(member.github)}) { ...memberFields }`,
-						)
-						.join('\n\t\t\t\t\t')}
-				}
+		// A GraphQL alias has to be a valid name, and a GitHub login may start
+		// with a digit or contain a hyphen, so alias by position and read the
+		// results back the same way.
+		const query = gql`
+			query {
+				${batch
+					.map(
+						(member, index) =>
+							`u${index}: user(login: ${JSON.stringify(member.github)}) { ...memberFields }`,
+					)
+					.join('\n\t\t\t\t\t')}
+			}
 
-				fragment memberFields on User {
-					login
-					id
-					url
-					avatarUrl
-					name
-					company
-					location
-					isHireable
-					bio
-					bioHTML
-					twitterUsername
-					websiteUrl
-				}
-			`;
+			fragment memberFields on User {
+				login
+				id
+				url
+				avatarUrl
+				name
+				company
+				location
+				isHireable
+				bio
+				bioHTML
+				twitterUsername
+				websiteUrl
+			}
+		`;
 
-			const response =
-				await graphQLClient.request<Record<string, GithubSearchUser | null>>(
-					query,
-				);
-
-			batch.forEach((member, index) => {
-				const user = response[`u${index}`];
-
-				if (user) {
-					githubData[user.login.toLowerCase()] = { ...user };
-				} else {
-					missing.push(member.github);
-				}
-			});
-		}
-
-		if (data.length > 0 && Object.keys(githubData).length === 0) {
-			// A response shaped like a success that resolved nobody is far more
-			// likely a broken query than every member deleting their account at
-			// once. Fall back rather than ship an empty members page.
-			throw new Error('GitHub resolved none of the members');
-		}
-
-		if (missing.length > 0) {
-			console.warn(
-				`No GitHub account for ${missing.length} member(s), so they will not appear on the members page: ${missing.join(', ')}`,
+		const response =
+			await graphQLClient.request<Record<string, GithubSearchUser | null>>(
+				query,
 			);
-		}
 
-		return githubData;
-	} catch (error) {
-		if (error instanceof Error) {
-			console.log(error.message);
-		}
-		// Outside production, fall back to mocks so local dev and deploy previews
-		// still render. In production this rethrows via assertMocksAllowed.
-		console.log('Error loading github member data, using fake data instead');
-		return loadMockMemberData(data);
+		batch.forEach((member, index) => {
+			const user = response[`u${index}`];
+
+			if (user) {
+				githubData[user.login.toLowerCase()] = { ...user };
+			} else {
+				missing.push(member.github);
+			}
+		});
 	}
+
+	if (data.length > 0 && Object.keys(githubData).length === 0) {
+		// A response shaped like a success that resolved nobody is far more
+		// likely a broken query than every member deleting their account at
+		// once. Fall back rather than ship an empty members page.
+		throw new Error('GitHub resolved none of the members');
+	}
+
+	if (missing.length > 0) {
+		console.warn(
+			`No GitHub account for ${missing.length} member(s), so they will not appear on the members page: ${missing.join(', ')}`,
+		);
+	}
+
+	return githubData;
 }
 
 function loadDirectory(
@@ -176,7 +148,9 @@ function loadDirectory(
 
 // const allTeamNames = teamsData.map((team) => team.name) as const;
 
-async function loadUserData() {
+async function loadUserData(
+	lookup: (data: MemberObject[]) => Promise<GithubSearchUserLookup>,
+): Promise<MembersResponse> {
 	const core = loadDirectory(coreMembers);
 	const members = loadDirectory(membersMembers);
 
@@ -195,7 +169,7 @@ async function loadUserData() {
 		});
 	});
 
-	const githubData = await getMemberGithubData([...core, ...members]);
+	const githubData = await lookup([...core, ...members]);
 
 	const fixupData = async (data: MemberObject) => {
 		const github = githubData[data.github.toLowerCase()];
@@ -411,3 +385,13 @@ async function loadUserData() {
 		members: filteredMembers.filter(Boolean),
 	};
 }
+
+export const getMembers = defineSource({
+	what: 'GitHub member data',
+	key: 'members',
+	tag: 'members',
+	revalidate: 86400,
+	configured: () => Boolean(process.env.GITHUB_TOKEN),
+	fetch: () => loadUserData(fetchMemberGithubData),
+	mock: () => loadUserData(loadMockMemberData),
+}).get;

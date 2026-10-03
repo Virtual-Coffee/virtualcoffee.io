@@ -7,6 +7,7 @@ import { eq } from 'drizzle-orm';
 
 import { db, user } from '@/db';
 import { getAuth, type Session } from '@/lib/access/auth';
+import { deployContext } from '@/lib/deployContext';
 import type { Actor } from '@/lib/access/roleAssignment';
 import {
 	parseRoles,
@@ -15,12 +16,6 @@ import {
 	type Section,
 	type RoleName,
 } from '@/lib/access/permissions';
-
-const DEPLOYED_CONTEXTS = new Set([
-	'production',
-	'deploy-preview',
-	'branch-deploy',
-]);
 
 /** A session that exists only in memory: no `user` row, no account. */
 function bypassSession(fields: {
@@ -61,9 +56,8 @@ function bypassSession(fields: {
  * contributor working from a fork has no way to get. Three conditions must all
  * hold, and each is independently sufficient to disable it in any deployed
  * environment: `ADMIN_DEV_BYPASS` is explicitly `true`, `NODE_ENV` is not
- * production, and `CONTEXT` is not a deployed context — `netlify dev` sets
- * `CONTEXT=dev`, so this checks for the three deployed values rather than for
- * the variable being absent.
+ * production, and the deploy context is local (`netlify dev` sets
+ * `CONTEXT=dev`; an unrecognised value counts as a preview, docs/adr/0017).
  *
  * `ADMIN_DEV_BYPASS_ROLES` narrows what the session holds (default `admin`).
  * `ADMIN_DEV_BYPASS_SLACK_ID` is what an Invite Allowance is keyed on;
@@ -78,7 +72,7 @@ function devBypassSession(): Session | null {
 	const enabled =
 		process.env.ADMIN_DEV_BYPASS === 'true' &&
 		process.env.NODE_ENV !== 'production' &&
-		!DEPLOYED_CONTEXTS.has(process.env.CONTEXT ?? '');
+		deployContext() === 'local';
 
 	if (!enabled) return null;
 

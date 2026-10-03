@@ -1,3 +1,4 @@
+import { deployContext } from '../src/lib/deployContext';
 import { runInviteMaintenance } from '../netlify/functions/_shared/inviteMaintenance';
 
 /**
@@ -12,7 +13,7 @@ import { runInviteMaintenance } from '../netlify/functions/_shared/inviteMainten
  * string that is not localhost.
  */
 async function main() {
-	if (process.env.CONTEXT === 'production') {
+	if (deployContext() === 'production') {
 		throw new Error('Refusing to run maintenance against production.');
 	}
 

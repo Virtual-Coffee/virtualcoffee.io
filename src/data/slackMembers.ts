@@ -13,11 +13,10 @@
  * stores on `account` cannot call `users.list`.
  */
 import { WebClient } from '@slack/web-api';
-import { unstable_cache } from 'next/cache';
 
 import type { SlackMember } from '@/lib/volunteers/slackMemberPicker';
 
-import { assertMocksAllowed } from './mocks';
+import { defineSource } from './source';
 
 export type { SlackMember };
 
@@ -47,21 +46,8 @@ function eligible(member: {
 	);
 }
 
-/**
- * The uncached fetch, kept separate from the cache wrapper below so it can be
- * exercised outside a request — `unstable_cache` throws without Next's
- * incremental cache, which puts the real API call out of reach of any script.
- */
-export async function fetchSlackMembers(): Promise<SlackMember[]> {
-	const token = process.env.SLACK_BOT_TOKEN;
-
-	if (!token) {
-		assertMocksAllowed('the Slack member directory');
-		const fakeData = await import('./mocks/slackMembers');
-		return fakeData.createSlackMembers();
-	}
-
-	const client = new WebClient(token);
+async function listSlackMembers(): Promise<SlackMember[]> {
+	const client = new WebClient(process.env.SLACK_BOT_TOKEN);
 	const members: SlackMember[] = [];
 	let cursor: string | undefined;
 
@@ -94,13 +80,18 @@ export async function fetchSlackMembers(): Promise<SlackMember[]> {
  * Cached for twelve hours and tagged, so `/_cache?tag=slack-members` picks up a
  * new hire without waiting. `users.list` is rate limited and pages the whole
  * workspace, which is far too much work to repeat on every render of a screen
- * two or three maintainers have open at once.
+ * two or three maintainers have open at once. `fetchSlackMembers` is the
+ * uncached call, for scripts, which `unstable_cache` throws outside a request.
  */
-export const getSlackMembers = unstable_cache(
-	fetchSlackMembers,
-	['slack-members'],
-	{
-		revalidate: 43200,
-		tags: ['slack-members'],
-	},
-);
+const slackMembers = defineSource({
+	what: 'the Slack member directory',
+	key: 'slack-members',
+	tag: 'slack-members',
+	revalidate: 43200,
+	configured: () => Boolean(process.env.SLACK_BOT_TOKEN),
+	fetch: listSlackMembers,
+	mock: async () => (await import('./mocks/slackMembers')).createSlackMembers(),
+});
+
+export const fetchSlackMembers = slackMembers.fetch;
+export const getSlackMembers = slackMembers.get;

@@ -2,11 +2,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { siteUrl } from './url.server';
 
-/**
- * `siteUrl()` reads the environment on every call, so these stub it directly.
- * (`buildUrls` still snapshots at module load, but nothing reads it except
- * the production-only analytics tag in the root layout.)
- */
+/** `siteUrl()` reads the environment on every call, so these stub it directly. */
 describe('siteUrl', () => {
 	// A shell with Netlify's variables in it must not tilt the first test.
 	beforeEach(() => {
@@ -23,7 +19,8 @@ describe('siteUrl', () => {
 		expect(siteUrl()).toBe('http://localhost:9000');
 	});
 
-	test.each(['deploy-preview', 'branch-deploy'])(
+	// An unrecognised context is a preview (docs/adr/0017).
+	test.each(['deploy-preview', 'branch-deploy', 'some-new-context'])(
 		'a %s links to its own address, not production',
 		(context) => {
 			vi.stubEnv('CONTEXT', context);

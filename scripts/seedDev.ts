@@ -2,6 +2,7 @@ import { getStore } from '@netlify/blobs';
 
 import { isLocalDatabaseUrl } from './lib/localOnly';
 
+import { deployContext } from '@/lib/deployContext';
 import { ATTACHMENT_STORE } from '@/lib/submissions/attachments';
 import { siteUrl } from '@/util/url.server';
 
@@ -18,7 +19,7 @@ import { fetchPlaceholder } from './seed/attachment';
  * counters, and leaves a contributor's own Slack sign-in alone.
  */
 async function main() {
-	if (process.env.CONTEXT === 'production') {
+	if (deployContext() === 'production') {
 		throw new Error('Refusing to seed a production database.');
 	}
 	// The wrapper refuses a non-local connection string, but run directly this
