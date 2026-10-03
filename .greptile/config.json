@@ -6,7 +6,8 @@
 	"excludeAuthors": [
 		"dependabot[bot]",
 		"allcontributors[bot]",
-		"github-actions[bot]"
+		"github-actions[bot]",
+		"virtual-coffee-ci[bot]"
 	],
 	"ignoreKeywords": "!Greptile review skipped!",
 	"ignorePatterns": "pnpm-lock.yaml\ndrizzle/**/snapshot.json\nsrc/data/bots.ts\nsrc/data/monthlyChallenges/data/**\nsrc/data/podcast/episodes.json",
