@@ -13,7 +13,7 @@ import {
 } from '../actions';
 import { ActionDialog, type ActionFailure } from '@/components/ActionDialog';
 import { EmailPreview } from '@/components/EmailPreview';
-import { ARCHIVE_STATUSES } from '@/lib/waitlist/applicationStatuses';
+import { can } from '@/lib/waitlist/applicationStatuses';
 import type { EmailStatus } from '@/lib/email/transport';
 import { MAX_NOTE_LENGTH } from '@/lib/admin/notes';
 import { useAction } from '@/util/forms/useAction';
@@ -110,7 +110,7 @@ export function ActionPanel(props: Props) {
 			<DeliveryNotice status={props.emailStatus} />
 
 			<div className="d-grid gap-2">
-				{props.status === 'waitlisted' && (
+				{can(props.status, 'coffeeInvite') && (
 					<ActionDialog
 						{...shared}
 						className="btn btn-primary"
@@ -135,7 +135,7 @@ export function ActionPanel(props: Props) {
 					</ActionDialog>
 				)}
 
-				{props.status === 'coffee_invited' && (
+				{can(props.status, 'approve') && (
 					<>
 						<ActionDialog
 							{...shared}
@@ -165,7 +165,7 @@ export function ActionPanel(props: Props) {
 								emails={[props.welcome]}
 							/>
 						</ActionDialog>
-						{!props.attendedAt && (
+						{can(props.status, 'recordAttendance') && !props.attendedAt && (
 							<button
 								type="button"
 								className="btn btn-outline-secondary"
@@ -182,7 +182,7 @@ export function ActionPanel(props: Props) {
 					</>
 				)}
 
-				{props.status === 'member' && (
+				{can(props.status, 'resendSlackInvite') && (
 					<ActionDialog
 						{...shared}
 						className="btn btn-outline-secondary"
@@ -209,7 +209,7 @@ export function ActionPanel(props: Props) {
 				)}
 
 				{/* The archive links here too; a closed application has nothing left to close. */}
-				{!ARCHIVE_STATUSES.includes(props.status) && (
+				{can(props.status, 'close') && (
 					<>
 						<ActionDialog
 							{...shared}
@@ -247,7 +247,7 @@ export function ActionPanel(props: Props) {
 
 			{attendance.feedback}
 
-			{props.status === 'coffee_invited' && (
+			{can(props.status, 'approve') && (
 				<p className="text-body-secondary small mt-3 mb-0">
 					Approving sends the welcome email, which carries the Slack invite.
 				</p>
