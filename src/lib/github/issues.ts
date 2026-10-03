@@ -57,7 +57,7 @@ async function client(): Promise<Octokit> {
 			appId: process.env.GITHUB_APP_CLIENT_ID,
 			privateKey: privateKey(),
 		},
-		request: { fetch: timedFetch },
+		request: { fetch: timedFetch(10_000) },
 	});
 
 	const { data: installation } = await appOctokit.rest.apps.getRepoInstallation(
@@ -73,7 +73,7 @@ async function client(): Promise<Octokit> {
 			repositoryNames: [REPO],
 			permissions: { issues: 'write' },
 		},
-		request: { fetch: timedFetch },
+		request: { fetch: timedFetch(10_000) },
 	});
 
 	return cached;
