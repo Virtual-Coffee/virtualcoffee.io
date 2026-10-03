@@ -3,6 +3,8 @@ import { Octokit } from '@octokit/rest';
 
 import { deliver, type Outbound } from '@/lib/outbound';
 
+import { timedFetch } from './timedFetch';
+
 /**
  * Opens the Lunch & Learn issue — the working artefact; the Slack message
  * just links it.
@@ -17,21 +19,6 @@ const OWNER = 'Virtual-Coffee';
 const REPO = 'VC-Community-Docs';
 const LABEL = 'Lunch & Learn';
 const ASSIGNEES = ['shelleymcq', 'meg-gutshall'];
-/**
- * Applied per request through the client's `fetch`, so it also covers the
- * installation-token exchange inside auth-app's hook, which a `request.signal`
- * on the visible calls never reaches.
- */
-const TIMEOUT_MS = 10_000;
-
-const timedFetch: typeof fetch = (input, init) => {
-	const timeout = AbortSignal.timeout(TIMEOUT_MS);
-	return fetch(input, {
-		...init,
-		signal: init?.signal ? AbortSignal.any([init.signal, timeout]) : timeout,
-	});
-};
-
 export function githubAppConfigured(): boolean {
 	return Boolean(
 		process.env.GITHUB_APP_CLIENT_ID && process.env.GITHUB_APP_PRIVATE_KEY,
