@@ -173,7 +173,7 @@ all import as zero — absent is not a number, and all twelve are recent.
 **Only active volunteers get the `volunteer` role.** The row alone would accrue
 Invites its owner cannot reach, so an active volunteer is also granted the role
 — directly on their user if they have signed in, otherwise as a Pending Grant
-that `claimPendingGrant()` applies at first sign-in (`docs/adr/0009`, `0010`),
+that `claimOnSignIn()` applies at first sign-in (`docs/adr/0009`, `0010`),
 with `Airtable import` as the grantor. Paused volunteers arrive with no role,
 exactly as pausing in `/admin/volunteers` leaves someone.
 

@@ -7,7 +7,7 @@ import { eq, inArray } from 'drizzle-orm';
 import { db, invite, volunteer } from '../../src/db';
 import { fetchSlackMembers } from '../../src/data/slackMembers';
 import { importBalance } from '../../src/lib/volunteers/invites';
-import { grantVolunteerRole } from '../../src/lib/access/pendingGrants';
+import { addVolunteerRole } from '../../src/lib/access/roleAssignment';
 import { CONFIDENT_SCORE, score, type Candidate } from './match';
 
 /**
@@ -421,7 +421,7 @@ async function apply(dryRun: boolean) {
 				.values({
 					slackUserId: entry.slackUserId,
 					// The Airtable name is what a maintainer will recognise. A later
-					// sign-in does not overwrite it; `claimPendingGrant` applies the
+					// sign-in does not overwrite it; `claimOnSignIn` applies the
 					// Grant written below and fills in the user id.
 					slackDisplayName: entry.profileName ?? entry.name,
 					slackHandle: slackHandle(entry),
@@ -465,14 +465,14 @@ async function apply(dryRun: boolean) {
 			const paused =
 				storedBy.get(entry.airtableRecordId)?.deactivatedAt != null;
 			if (entry.active && !paused) {
-				await grantVolunteerRole(
+				await addVolunteerRole(
 					tx,
 					{
 						slackUserId: entry.slackUserId,
 						slackDisplayName: entry.profileName ?? entry.name,
 						slackHandle: slackHandle(entry),
 					},
-					'Airtable import',
+					{ name: 'Airtable import' },
 				);
 				granted += 1;
 			}
