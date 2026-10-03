@@ -23,12 +23,16 @@ import {
 
 import {
 	history,
+	neverAnnouncedAmong,
+	neverAnnouncedCount,
 	notifyAndRecord,
 	recentEvents,
 	recordEvent,
 	recordImport,
 	recordOutcome,
 	transitionAndRecord,
+	type AnnouncedScope,
+	type StatusSubject,
 	type SubmissionSubject,
 	type VolunteerSubject,
 } from './eventLog';
@@ -704,5 +708,93 @@ describe('recentEvents', () => {
 		expect(
 			await recentEvents({ applications: false, submissions: [], limit: 15 }),
 		).toEqual([]);
+	});
+});
+
+describe('never announced', () => {
+	type Step = 'failed' | 'sent' | 'imported';
+
+	const APPLICATION: AnnouncedScope = { kind: 'application' };
+	const SUBMISSION: AnnouncedScope = {
+		kind: 'submission',
+		table: cocReport,
+		eventKey: 'cocReportId',
+	};
+	const MOVED_ON = {
+		application: 'coffee_invited',
+		submission: 'in_progress',
+	} as const;
+
+	const cases: {
+		name: string;
+		steps: Step[];
+		movedOn?: true;
+		flagged: boolean;
+	}[] = [
+		{ name: 'failed', steps: ['failed'], flagged: true },
+		{ name: 'failed then sent', steps: ['failed', 'sent'], flagged: true },
+		{ name: 'sent', steps: ['sent'], flagged: false },
+		{ name: 'no events', steps: [], flagged: true },
+		{ name: 'imported', steps: ['imported'], flagged: false },
+		{
+			name: 'imported then failed',
+			steps: ['imported', 'failed'],
+			flagged: true,
+		},
+		{
+			name: 'failed, status moved on',
+			steps: ['failed'],
+			movedOn: true,
+			flagged: false,
+		},
+	];
+
+	async function seed(scope: AnnouncedScope, steps: Step[], movedOn?: true) {
+		const subject: StatusSubject =
+			scope.kind === 'application'
+				? { kind: 'application', id: (await insertApplication({})).id }
+				: await insertCocReport();
+
+		// Spaced out: History orders by `created_at`, then by id.
+		for (const [i, step] of steps.entries()) {
+			const createdAt = new Date(Date.now() + i * 1000);
+			if (step === 'imported') await recordImport(subject, 'recX', createdAt);
+			else
+				await recordEvent(subject, {
+					type: step === 'failed' ? 'notification_failed' : 'notification_sent',
+					createdAt,
+				});
+		}
+
+		if (movedOn && subject.kind === 'application') {
+			await db()
+				.update(membershipApplication)
+				.set({ status: MOVED_ON.application })
+				.where(eq(membershipApplication.id, subject.id));
+		} else if (movedOn) {
+			await db()
+				.update(cocReport)
+				.set({ status: MOVED_ON.submission })
+				.where(eq(cocReport.id, subject.id));
+		}
+
+		return subject.id;
+	}
+
+	describe.each([
+		['Application', APPLICATION],
+		['Submission', SUBMISSION],
+	])('%s', (_, scope) => {
+		test.each(cases)('$name', async ({ steps, movedOn, flagged }) => {
+			const before = await neverAnnouncedCount(scope);
+			const id = await seed(scope, steps, movedOn);
+
+			await expect(neverAnnouncedAmong(scope, [id])).resolves.toEqual(
+				flagged ? [id] : [],
+			);
+			await expect(neverAnnouncedCount(scope)).resolves.toBe(
+				before + (flagged ? 1 : 0),
+			);
+		});
 	});
 });

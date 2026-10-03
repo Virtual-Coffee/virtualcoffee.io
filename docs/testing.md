@@ -5,7 +5,7 @@ Vitest, configured in `vitest.config.mts` (read its header comment: it defines t
 ## What is tested, and how
 
 - Pages are not unit-tested: an async Server Component cannot be rendered by a unit runner (Next's own guidance), so Netlify's deploy preview is what exercises rendering.
-- Server actions are tested by calling them. `'use server'` is inert under Node and `db()` and `auth` are lazy, so an action that fails validation returns its `fieldErrors` without a database. `redirect()` and `notFound()` are asserted on the thrown digest with the helpers in `src/test/next.ts`. The zod schemas stay private to their action files.
+- Server actions are tested by calling them. `'use server'` is inert under Node and `db()` and `auth` are lazy, so an action that fails validation returns its `fieldErrors` without a database. `redirect()` and `notFound()` are asserted on the thrown digest with the helpers in `src/test/next.ts`. The zod schemas live in `src/lib/submissions/formSchemas.ts` or private to their action file, since a `'use server'` file may export only async functions.
 - Anything that touches the database is a `*.db.test.ts` and runs in the `db` project against `@netlify/database-dev`, the PGlite engine `netlify dev` uses — no `netlify dev`, no Docker, nothing extra in CI.
 
 ## Rules of the `db` project

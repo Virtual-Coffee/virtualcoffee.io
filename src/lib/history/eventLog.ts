@@ -1,4 +1,15 @@
-import { and, desc, eq, isNotNull, or, sql, type SQL } from 'drizzle-orm';
+import {
+	and,
+	desc,
+	eq,
+	exists,
+	inArray,
+	isNotNull,
+	notExists,
+	or,
+	sql,
+	type SQL,
+} from 'drizzle-orm';
 import type { PgColumn, PgTable } from 'drizzle-orm/pg-core';
 
 import {
@@ -20,6 +31,7 @@ import {
 	type Transaction,
 	type VolunteerEventType,
 } from '@/db';
+import { countRows } from '@/lib/admin/pagedList';
 import { reportHandled } from '@/lib/monitoring/reportHandled';
 import type { Outbound } from '@/lib/outbound';
 
@@ -570,4 +582,83 @@ export async function recentEvents(input: {
 				b.id.localeCompare(a.id),
 		)
 		.slice(0, limit);
+}
+
+/** A Subject without its id: which rows "never announced" is asked over. */
+export type AnnouncedScope =
+	Omit<ApplicationSubject, 'id'> | Omit<SubmissionSubject, 'id'>;
+
+/**
+ * Never announced: still in its open status (`new` / `waitlisted`), and either
+ * any announcement failed or none was recorded (the event is written after the
+ * attempt and can be lost). Any failure counts, not just the latest: a Lunch &
+ * Learn idea is announced on two channels, and a Slack success must not hide
+ * the GitHub failure. An `imported` row was never this site's to announce, so
+ * it is exempt unless an announcement failed. See CONTEXT.md, docs/adr/0005.
+ */
+export function neverAnnounced(scope: AnnouncedScope): SQL {
+	const attempts =
+		scope.kind === 'application'
+			? (types: ApplicationEventType[]) =>
+					db()
+						.select({ one: sql`1` })
+						.from(applicationEvent)
+						.where(
+							and(
+								eq(applicationEvent.applicationId, membershipApplication.id),
+								inArray(applicationEvent.type, types),
+							),
+						)
+			: (types: SubmissionEventType[]) =>
+					db()
+						.select({ one: sql`1` })
+						.from(submissionEvent)
+						.where(
+							and(
+								eq(submissionEvent[scope.eventKey], scope.table.id),
+								inArray(submissionEvent.type, types),
+							),
+						);
+	const status =
+		scope.kind === 'application'
+			? eq(membershipApplication.status, 'waitlisted')
+			: eq(scope.table.status, 'new');
+
+	return and(
+		status,
+		or(
+			exists(attempts(['notification_failed'])),
+			and(
+				notExists(attempts(['notification_sent', 'notification_failed'])),
+				notExists(attempts(['imported'])),
+			),
+		),
+	)!;
+}
+
+/** Which of these rows the list should mark as never announced. */
+export async function neverAnnouncedAmong(
+	scope: AnnouncedScope,
+	ids: string[],
+): Promise<string[]> {
+	if (ids.length === 0) return [];
+	const table =
+		scope.kind === 'application' ? membershipApplication : scope.table;
+
+	const rows = await db()
+		.select({ id: table.id })
+		.from(table)
+		.where(and(inArray(table.id, ids), neverAnnounced(scope)));
+
+	return rows.map((row) => row.id);
+}
+
+/** How many rows are never announced, for the banner and the list chip. */
+export async function neverAnnouncedCount(
+	scope: AnnouncedScope,
+): Promise<number> {
+	return countRows(
+		scope.kind === 'application' ? membershipApplication : scope.table,
+		neverAnnounced(scope),
+	);
 }

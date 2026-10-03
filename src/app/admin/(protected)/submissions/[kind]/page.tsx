@@ -1,21 +1,19 @@
 import { notFound } from 'next/navigation';
 
 import { requirePermission } from '@/lib/access/adminAccess';
+import { neverAnnouncedAmong } from '@/lib/history/eventLog';
 import {
 	failedNotifications,
 	isSubmissionKind,
 	listSubmissions,
-	neverAnnouncedAmong,
 	SUBMISSION_DISPLAY,
 	SUBMISSION_KINDS,
+	submissionScope,
 	submissionStatusCounts,
 } from '@/lib/submissions/submissions';
 import { FilterChips } from '../../filterChips';
-import {
-	STATUS_ORDER,
-	SubmissionStatusBadge,
-	submissionStatusLabel,
-} from './presentation';
+import { STATUS_ORDER } from '@/lib/submissions/status';
+import { SubmissionStatusBadge, submissionStatusLabel } from './presentation';
 import { PAGE_SIZE } from '@/util/searchParams';
 import { parseSubmissionSearchParams } from './searchParams';
 import { SubmissionsTable, type SubmissionListRow } from './submissionsTable';
@@ -68,9 +66,9 @@ export default async function SubmissionListPage({
 		submissionStatusCounts(kind),
 		failedNotifications([kind]),
 	]);
-	const unannounced = new Set(
+	const neverAnnouncedIds = new Set(
 		await neverAnnouncedAmong(
-			kind,
+			submissionScope(kind),
 			rows.map((row) => row.id),
 		),
 	);
@@ -94,7 +92,7 @@ export default async function SubmissionListPage({
 			subtitle: summary.subtitle,
 			status: row.status,
 			submittedAt: row.submittedAt,
-			unannounced: unannounced.has(row.id),
+			neverAnnounced: neverAnnouncedIds.has(row.id),
 		};
 	});
 
