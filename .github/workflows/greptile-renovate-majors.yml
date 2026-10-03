@@ -1,0 +1,40 @@
+name: Greptile review for Renovate majors
+
+# Greptile never starts an automatic review on a PR opened by renovate[bot]:
+# it tracks the PR but creates no review run, although .greptile/config.json and
+# the dashboard both allow it. Asking by mention works, so this asks.
+# Non-major Renovate PRs carry the marker from renovate.json's prBodyNotes and
+# stay unreviewed, as .greptile/config.json's ignoreKeywords intends.
+
+on:
+  # pull_request_target runs this file from main with no PR code checked out,
+  # so a Renovate branch can't change what runs here.
+  pull_request_target:
+    types: [opened, reopened]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: PR number to ask Greptile to review
+        required: true
+        type: number
+
+permissions:
+  contents: read
+
+jobs:
+  request-review:
+    name: Ask Greptile to review
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.user.login == 'renovate[bot]' &&
+      !contains(github.event.pull_request.body, '!Greptile review skipped!'))
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Comment @greptileai
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number || inputs.pr }}
+        run: gh pr comment "$PR" --body '@greptileai review this major version bump'
