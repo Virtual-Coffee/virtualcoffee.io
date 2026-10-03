@@ -167,4 +167,4 @@ Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. When a skill asks
 
 ### Code review
 
-Greptile reviews every PR from a person, plus Renovate majors: Greptile never auto-reviews `renovate[bot]`, so `.github/workflows/greptile-renovate-majors.yml` asks by mention on PRs Renovate labels `major`; label it `skip-review` to opt out. Its config is `.greptile/`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
+Greptile reviews every PR from a person, plus Renovate majors: Greptile never auto-reviews `renovate[bot]`, so `.github/workflows/greptile-renovate-majors.yml` posts `@greptileai` as the `virtual-coffee-ci` App on PRs Renovate labels `major`; label it `skip-review` to opt out. Its config is `.greptile/`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
