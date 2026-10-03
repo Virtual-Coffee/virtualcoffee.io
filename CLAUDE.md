@@ -167,4 +167,4 @@ Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. When a skill asks
 
 ### Code review
 
-Greptile reviews every PR from a person; label it `skip-review` to opt out. Its config is `.greptile/`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
+Greptile reviews every PR from a person, plus Renovate major bumps (non-major Renovate PRs carry the `ignoreKeywords` line); label it `skip-review` to opt out. Its config is `.greptile/`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.

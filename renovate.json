@@ -12,5 +12,22 @@
 			"datasourceTemplate": "github-releases",
 			"versioningTemplate": "semver-coerced"
 		}
+	],
+	"packageRules": [
+		{
+			"description": "Non-major PRs carry the line Greptile's ignoreKeywords matches (.greptile/config.json), so Greptile reviews only major bumps",
+			"matchUpdateTypes": [
+				"minor",
+				"patch",
+				"pin",
+				"pinDigest",
+				"digest",
+				"lockFileMaintenance",
+				"rollback",
+				"bump",
+				"replacement"
+			],
+			"prBodyNotes": ["Non-major update: !Greptile review skipped!"]
+		}
 	]
 }
