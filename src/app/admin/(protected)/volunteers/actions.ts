@@ -1,27 +1,26 @@
 'use server';
 
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-import { db, isUniqueViolation, invite, volunteer } from '@/db';
+import { db, isUniqueViolation, volunteer } from '@/db';
 import { isId } from '@/db/ids';
 import { getSlackMembers } from '@/data/slackMembers';
-import type { ActionResult } from '@/lib/admin/actionResult';
+import {
+	emailFailed,
+	type ActionResult,
+	type EmailActionResult,
+} from '@/lib/admin/actionResult';
 import {
 	actorFromSession,
 	actorId,
 	requirePermission,
 } from '@/lib/access/adminAccess';
 import { volunteerGrant } from '@/emails/volunteerGrant';
-import { volunteerInvite } from '@/emails/volunteerInvite';
 import { sendEmail } from '@/lib/email/transport';
 import { recordOutcome } from '@/lib/history/eventLog';
-import {
-	adjust,
-	newClaimToken,
-	hashClaimToken,
-} from '@/lib/volunteers/invites';
+import { adjust, resendClaimLink } from '@/lib/volunteers/invites';
 import {
 	addVolunteerRole,
 	removeVolunteerRole,
@@ -32,11 +31,7 @@ import {
 	COMMUNITY_ROLES,
 	formatRoleLabels,
 } from '@/lib/volunteers/volunteerRoles';
-import {
-	pendingInvite,
-	volunteerSubject,
-	volunteerSubjectForSlackId,
-} from '@/lib/volunteers/volunteers';
+import { volunteerSubject } from '@/lib/volunteers/volunteers';
 import { siteUrl } from '@/util/url.server';
 
 function revalidate(volunteerId?: string) {
@@ -414,108 +409,61 @@ export async function adjustBalance(
  * Admin-only, deliberately: it re-issues the token, which quietly invalidates
  * whatever the invitee may already have. In the hands of the Volunteer that
  * would be a footgun on the common case where the first email did arrive and is
- * simply unread.
- *
- * No ledger movement — the Invite was already charged and is the same Invite.
- * The expiry restarts, because an Invite nobody has managed to receive has not
- * had its ninety days.
+ * simply unread. `resendClaimLink` owns the rest (docs/adr/0011).
  */
 export async function resendInvite(
 	inviteId: string,
 	volunteerId: string,
-): Promise<ActionResult> {
+): Promise<EmailActionResult> {
 	const session = await requirePermission('volunteers', 'manage');
 
 	if (!isId(inviteId)) {
-		return { ok: false, message: 'That invite no longer exists.' };
-	}
-
-	const row = await pendingInvite(inviteId);
-
-	if (!row || !row.inviteeEmail) {
 		return {
 			ok: false,
-			message: 'Only an unclaimed invite with an email address can be re-sent.',
-		};
-	}
-	// An invite imported from Airtable never had a Claim Link (no token, no
-	// expiry); minting one now would email a years-old invitee a live link.
-	if (!row.tokenExpiresAt || !row.tokenHash) {
-		return {
-			ok: false,
-			message:
-				'This invite was imported from Airtable and has no claim link to re-send.',
+			message: 'That invite no longer exists.',
+			emailSent: false,
 		};
 	}
 
-	const { token, expiresAt } = newClaimToken();
+	const outcome = await resendClaimLink(inviteId, {
+		actorUserId: await actorId(session.user.id),
+	});
 
-	// Written before the send on purpose: the link in the email must already
-	// redeem, and a failed send is reported as such. See docs/adr/0011.
-	// Conditional on `pending` and on the token we read, and checked: the
-	// invite may have been claimed, cancelled or re-sent by someone else since
-	// the read above, and a link that is not the one in the row must not go
-	// out as "re-sent".
-	const replaced = await db()
-		.update(invite)
-		.set({ tokenHash: hashClaimToken(token), tokenExpiresAt: expiresAt })
-		.where(
-			and(
-				eq(invite.id, inviteId),
-				eq(invite.status, 'pending'),
-				eq(invite.tokenHash, row.tokenHash),
-			),
-		)
-		.returning({ id: invite.id });
-	if (replaced.length === 0) {
-		return {
-			ok: false,
-			message:
-				'That invite was claimed, cancelled or re-sent just now. Reload the page.',
-		};
+	if (outcome.kind !== 'refused' && outcome.kind !== 'stale') {
+		revalidate(volunteerId);
 	}
 
-	const sent = await sendEmail(
-		volunteerInvite,
-		{
-			inviterName: row.inviterName || 'A Virtual Coffee volunteer',
-			inviteeName: row.inviteeName || 'there',
-			claimUrl: `${siteUrl()}/join?invite=${token}`,
-		},
-		{ to: row.inviteeEmail },
-	);
-	// On the inviter's History, when the inviter is a Volunteer here at all.
-	const inviter = row.inviterSlackUserId
-		? await volunteerSubjectForSlackId(row.inviterSlackUserId)
-		: null;
-	if (inviter) {
-		await recordOutcome(inviter, {
-			channel: 'email',
-			outbound: sent,
-			what: `Invite re-sent to ${row.inviteeEmail}`,
-			actorUserId: await actorId(session.user.id),
-		});
+	switch (outcome.kind) {
+		case 'refused':
+			return emailFailed({
+				message:
+					outcome.reason === 'imported'
+						? 'This invite was imported from Airtable and has no claim link to re-send.'
+						: 'Only an unclaimed invite with an email address can be re-sent.',
+				definitelyNotSent: true,
+			});
+		case 'stale':
+			return emailFailed({
+				message:
+					'That invite was claimed, cancelled or re-sent just now. Reload the page.',
+				definitelyNotSent: true,
+			});
+		case 'not_sent':
+			return emailFailed({
+				message: `${outcome.message} The previous link has stopped working, so try again or cancel the invite.`,
+				definitelyNotSent: true,
+			});
+		case 'maybe_sent':
+			return emailFailed({
+				message: `${outcome.message} We can’t confirm whether the email went out, and the previous link has stopped working. Check with the invitee before re-sending: each re-send stops the last link working.`,
+				definitelyNotSent: false,
+			});
+		case 'sent':
+			return {
+				ok: true,
+				message: outcome.warning
+					? `Invite re-sent to ${outcome.email}. ${outcome.warning}`
+					: `Invite re-sent to ${outcome.email}.`,
+			};
 	}
-
-	revalidate(volunteerId);
-
-	if (!sent.ok) {
-		/**
-		 * The old link is already dead by this point — the hash was replaced
-		 * before the send, because the email cannot carry a token that does not
-		 * exist yet. Say so, rather than letting a maintainer believe the invitee
-		 * still has a working link.
-		 */
-		return {
-			ok: false,
-			message: `${sent.message} The previous link has stopped working, so try again or cancel the invite.`,
-		};
-	}
-
-	return {
-		ok: true,
-		message: sent.warning
-			? `Invite re-sent to ${row.inviteeEmail}. ${sent.warning}`
-			: `Invite re-sent to ${row.inviteeEmail}.`,
-	};
 }

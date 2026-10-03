@@ -63,6 +63,14 @@ about leaves it charged and says exactly that, because refunding there risks
 two invitations reaching one person. That is `sendEmail`'s `definitelyNotSent`
 discipline reached from the other direction.
 
+The rule lives in two functions, `issueAndSend` (a Volunteer's Invite) and
+`resendClaimLink` (an admin's re-send), which share one private send step and
+return outcomes the actions only map to copy. A re-send swaps the token with a
+compare-and-swap on the hash it read and has no rollback: the old link is dead
+whether or not the new email goes, so a failed re-send says so. Where the
+inviter has no Volunteer row there is no History to write to; the send still
+stands and the gap is reported.
+
 The spend is taken under `SELECT … FOR UPDATE` on the Volunteer's row. The
 indexes stop one Invite being charged twice, but two sends started at once
 would each charge a _different_ Invite against the same last allowance, and no
@@ -72,11 +80,12 @@ index can see that.
 
 - **Nothing may ever `UPDATE` or `DELETE` a ledger row.** Corrections are new
   rows, which is why `adjustBalance` requires a reason.
-- **`src/lib/volunteers/invites.ts` is the only writer of the ledger**, as the Event Log
-  is of `application_event`. Every movement — accrual, spend, give-back, admin
-  adjustment, import — is a function there, so what a send or a cancellation
-  does to an allowance is decided once and a new caller cannot invent a movement
-  by spelling out an `INSERT` of its own.
+- **`src/lib/volunteers/invites.ts` is the only writer of the ledger and of an
+  Invite's Claim Link**, as the Event Log is of `application_event`. Every
+  movement — accrual, spend, give-back, admin adjustment, import — is a function
+  there, so what a send or a cancellation does to an allowance is decided once
+  and a new caller cannot invent a movement by spelling out an `INSERT` of its
+  own.
 - The allowance is never read from a column, so every screen that shows it runs
   a sum — a correlated subquery at ninety volunteers, worth revisiting at a
   scale this community is unlikely to reach.

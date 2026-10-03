@@ -3,10 +3,9 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { db, invite, pendingGrant, user, volunteer } from '@/db';
 import { volunteerGrant } from '@/emails/volunteerGrant';
-import { volunteerInvite } from '@/emails/volunteerInvite';
-import { hashClaimToken, volunteerBalance } from '@/lib/volunteers/invites';
-import { sendEmail, sendSlackDm } from '@/test/mocks/spies';
-import { SENT } from '@/test/outbound';
+import { volunteerBalance } from '@/lib/volunteers/invites';
+import { revalidatePath, sendEmail, sendSlackDm } from '@/test/mocks/spies';
+import { MAYBE_SENT, NOT_SENT, SENT } from '@/test/outbound';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
 import {
@@ -15,7 +14,6 @@ import {
 	insertPendingGrant,
 	insertUser,
 	insertVolunteer,
-	inviteRow,
 	ledgerFor,
 	volunteerEvents,
 } from '@/test/db/fixtures';
@@ -532,75 +530,57 @@ describe('setEmail', () => {
 });
 
 describe('resendInvite', () => {
-	/**
-	 * The old link dies before the email goes out, because the email cannot
-	 * carry a token that does not exist yet — so a failed send has to say so.
-	 */
-	test('replaces the token, restarts the expiry, and emails the new link', async () => {
+	test('a re-sent Invite says so and refreshes the volunteer', async () => {
 		const { id: volunteerId } = await insertVolunteer({
 			slackUserId: 'U_GRACE',
 		});
-		const soon = new Date(Date.now() + 60 * 60 * 1000);
-		const { id, token: oldToken } = await insertInvite({
+		const { id } = await insertInvite({
 			inviterSlackUserId: 'U_GRACE',
-			inviterName: 'Grace Hopper',
 			inviteeEmail: 'ada@example.test',
-			expiresAt: soon,
 		});
+		sendEmail.mockResolvedValue(SENT);
 
 		await expect(resendInvite(id, volunteerId)).resolves.toEqual({
 			ok: true,
 			message: 'Invite re-sent to ada@example.test.',
 		});
-
-		const row = await inviteRow(id);
-		expect(row.tokenHash).not.toBe(hashClaimToken(oldToken));
-		expect(row.tokenExpiresAt!.getTime()).toBeGreaterThan(soon.getTime());
-
-		expect(sendEmail).toHaveBeenCalledOnce();
-		const [template, props, envelope] = sendEmail.mock.calls[0];
-		expect(template).toBe(volunteerInvite);
-		expect(envelope).toEqual({ to: 'ada@example.test' });
-		expect(props.inviterName).toBe('Grace Hopper');
-		const newToken = /\/join\?invite=([A-Za-z0-9_-]+)/.exec(
-			props.claimUrl,
-		)?.[1];
-		expect(newToken).toBeDefined();
-		expect(hashClaimToken(newToken!)).toBe(row.tokenHash);
-		// No ledger movement: it is the same Invite.
-		await expect(ledgerFor('U_GRACE')).resolves.toEqual([]);
-		// On the inviter's History.
-		await expect(volunteerEvents(volunteerId)).resolves.toEqual([
+		expect(revalidatePath).toHaveBeenCalledWith(
+			`/admin/volunteers/${volunteerId}`,
+		);
+		await expect(volunteerEvents(volunteerId)).resolves.toMatchObject([
 			{
 				type: 'email_sent',
-				body: 'Invite re-sent to ada@example.test',
 				actorUserId: expect.any(String),
 			},
 		]);
 	});
 
-	test('a failed send admits the previous link has stopped working', async () => {
-		sendEmail.mockResolvedValue({
-			ok: false,
-			definitelyNotSent: true,
-			message: 'The mail server rejected ada@example.test.',
-		});
+	test('a definite failure admits the previous link has stopped working', async () => {
 		const { id: volunteerId } = await insertVolunteer({
 			slackUserId: 'U_GRACE',
 		});
-		const { id, token: oldToken } = await insertInvite({
-			inviterSlackUserId: 'U_GRACE',
-		});
+		const { id } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
+		sendEmail.mockResolvedValue(NOT_SENT);
 
 		await expect(resendInvite(id, volunteerId)).resolves.toEqual({
 			ok: false,
-			message:
-				'The mail server rejected ada@example.test. The previous link has stopped working, so try again or cancel the invite.',
+			message: `${NOT_SENT.message} The previous link has stopped working, so try again or cancel the invite.`,
+			emailSent: false,
 		});
-		expect((await inviteRow(id)).tokenHash).not.toBe(hashClaimToken(oldToken));
-		await expect(volunteerEvents(volunteerId)).resolves.toMatchObject([
-			{ type: 'email_failed' },
-		]);
+	});
+
+	test('an uncertain failure is reported as unknown', async () => {
+		const { id: volunteerId } = await insertVolunteer({
+			slackUserId: 'U_GRACE',
+		});
+		const { id } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
+		sendEmail.mockResolvedValue(MAYBE_SENT);
+
+		await expect(resendInvite(id, volunteerId)).resolves.toMatchObject({
+			ok: false,
+			emailSent: 'unknown',
+			message: expect.stringContaining('previous link has stopped working'),
+		});
 	});
 
 	test('an invite imported from Airtable has no link to re-send', async () => {
@@ -623,17 +603,15 @@ describe('resendInvite', () => {
 			ok: false,
 			message:
 				'This invite was imported from Airtable and has no claim link to re-send.',
+			emailSent: false,
 		});
-		expect((await inviteRow(id)).tokenHash).toBeNull();
-		expect(sendEmail).not.toHaveBeenCalled();
 	});
 
-	test('an invite claimed between the read and the write is not emailed', async () => {
+	test('an invite claimed between the read and the write asks for a reload', async () => {
 		const { id: volunteerId } = await insertVolunteer({
 			slackUserId: 'U_GRACE',
 		});
 		const { id } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
-		// The read sees `pending`; the claim lands before the write.
 		afterRead.run = async () => {
 			await db()
 				.update(invite)
@@ -645,39 +623,15 @@ describe('resendInvite', () => {
 			ok: false,
 			message:
 				'That invite was claimed, cancelled or re-sent just now. Reload the page.',
+			emailSent: false,
 		});
-		expect(sendEmail).not.toHaveBeenCalled();
-		expect((await inviteRow(id)).status).toBe('accepted');
-	});
-
-	test('a resend that lost the race to another resend is not emailed', async () => {
-		const { id: volunteerId } = await insertVolunteer({
-			slackUserId: 'U_GRACE',
-		});
-		const { id } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
-		// Still `pending`, but the other maintainer's token is already in the row.
-		const theirs = hashClaimToken('the-other-resend');
-		afterRead.run = async () => {
-			await db()
-				.update(invite)
-				.set({ tokenHash: theirs })
-				.where(eq(invite.id, id));
-		};
-
-		await expect(resendInvite(id, volunteerId)).resolves.toEqual({
-			ok: false,
-			message:
-				'That invite was claimed, cancelled or re-sent just now. Reload the page.',
-		});
-		expect(sendEmail).not.toHaveBeenCalled();
-		expect((await inviteRow(id)).tokenHash).toBe(theirs);
 	});
 
 	test('only a pending invite with an email can be re-sent', async () => {
 		const { id: volunteerId } = await insertVolunteer({
 			slackUserId: 'U_GRACE',
 		});
-		const { id, token } = await insertInvite({
+		const { id } = await insertInvite({
 			inviterSlackUserId: 'U_GRACE',
 			status: 'accepted',
 		});
@@ -685,12 +639,13 @@ describe('resendInvite', () => {
 		await expect(resendInvite(id, volunteerId)).resolves.toEqual({
 			ok: false,
 			message: 'Only an unclaimed invite with an email address can be re-sent.',
+			emailSent: false,
 		});
 		await expect(resendInvite('42', volunteerId)).resolves.toEqual({
 			ok: false,
 			message: 'That invite no longer exists.',
+			emailSent: false,
 		});
-		expect((await inviteRow(id)).tokenHash).toBe(hashClaimToken(token));
 		expect(sendEmail).not.toHaveBeenCalled();
 	});
 });

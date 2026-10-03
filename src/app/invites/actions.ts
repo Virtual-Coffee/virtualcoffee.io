@@ -3,24 +3,19 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-import type { ActionResult, EmailActionResult } from '@/lib/admin/actionResult';
+import {
+	emailFailed,
+	type ActionResult,
+	type EmailActionResult,
+} from '@/lib/admin/actionResult';
 import { isId } from '@/db/ids';
-import { volunteerInvite } from '@/emails/volunteerInvite';
-import { sendEmail } from '@/lib/email/transport';
-import { recordOutcome } from '@/lib/history/eventLog';
-import { reportHandled } from '@/lib/monitoring/reportHandled';
 import {
 	blockingInvite,
 	giveBack,
-	hashClaimToken,
-	issueInvite,
-	newClaimToken,
-	type IssuedInvite,
+	issueAndSend,
 } from '@/lib/volunteers/invites';
 import { actorId } from '@/lib/access/adminAccess';
 import { requireVolunteer } from '@/lib/access/volunteerAccess';
-import { volunteerSubject } from '@/lib/volunteers/volunteers';
-import { siteUrl } from '@/util/url.server';
 
 const schema = z.object({
 	name: z.string().trim().min(1, 'Please give their name.').max(200),
@@ -32,11 +27,7 @@ function fail(message: string): EmailActionResult {
 	return { ok: false, message, emailSent: false };
 }
 
-/**
- * Send an Invite. The write comes first because the Claim Link's token must
- * exist before the email can be composed, so a send that certainly failed is
- * refunded and an uncertain one stays charged (docs/adr/0011).
- */
+/** Send an Invite; `issueAndSend` owns the write-first send (docs/adr/0011). */
 export async function sendInvite(
 	rawName: string,
 	rawEmail: string,
@@ -70,111 +61,60 @@ export async function sendInvite(
 		);
 	}
 
-	const { token, expiresAt } = newClaimToken();
-
-	let issued: IssuedInvite;
-	try {
-		issued = await issueInvite({
-			inviter: {
-				slackUserId,
-				userId: actor,
-				name: session.user.name || session.user.email,
-			},
-			invitee: { name, email },
-			token: { hash: hashClaimToken(token), expiresAt },
-		});
-	} catch (error) {
-		console.error('Failed to record an invite', { slackUserId, error });
-		reportHandled(error, { area: 'invites' });
-		return fail('Something went wrong saving that invite. Please try again.');
-	}
-
-	if (!issued.ok) {
-		if (issued.reason === 'no_volunteer') {
-			return fail(
-				'We haven’t finished setting you up as a volunteer. Ask a maintainer to add you in Admin → Volunteers.',
-			);
-		}
-		if (issued.reason === 'no_balance') {
-			return fail('You have no invites left. You get one more on the 1st.');
-		}
-		// Another Volunteer invited the same person between the pre-check above
-		// and the write. The index is what makes that impossible to charge for.
-		return fail(
-			`${name} already has an invite waiting at ${email}. Nothing has been sent and your invite is untouched.`,
-		);
-	}
-
-	const { inviteId, volunteerId } = issued;
-
-	const sent = await sendEmail(
-		volunteerInvite,
-		{
-			inviterName: session.user.name || 'A Virtual Coffee volunteer',
-			inviteeName: name,
-			claimUrl: `${siteUrl()}/join?invite=${token}`,
+	const outcome = await issueAndSend({
+		inviter: {
+			slackUserId,
+			userId: actor,
+			name: session.user.name || session.user.email,
 		},
-		{ to: email },
-	);
-	await recordOutcome(volunteerSubject(volunteerId), {
-		channel: 'email',
-		outbound: sent,
-		what: `Invite to ${email}`,
-		actorUserId: actor,
+		invitee: { name, email },
+		inviterName: session.user.name,
 	});
 
-	if (!sent.ok) {
-		if (sent.definitelyNotSent) {
-			/**
-			 * Cancel as well as refund. Leaving it `pending` would hand it to the
-			 * ninety-day expiry sweep, which gives back too — and while the ledger's
-			 * refund index would refuse the second credit, an Invite nobody can ever
-			 * claim has no business sitting in the Volunteer's list as "Sent".
-			 */
-			try {
-				await giveBack({
-					inviteId,
-					reason: 'refund_cancelled',
-					actorUserId: actor,
-					body: `Send to ${email} failed: ${sent.message}`,
-				});
-			} catch (error) {
-				// The one fact the Volunteer needs is that nothing went out. The
-				// Invite is still `pending` and charged, and Cancel on the list is
-				// the same transaction again.
-				console.error('Failed to give back an unsent invite', {
-					inviteId,
-					slackUserId,
-					error,
-				});
-				reportHandled(error, { area: 'invites' });
-				revalidatePath('/invites');
-				return fail(
-					`${sent.message} Nothing was emailed, but we couldn’t give the invite back automatically — cancel it from your list to get it back.`,
-				);
-			}
-
-			revalidatePath('/invites');
-			return fail(
-				`${sent.message} Nothing was emailed and your invite has been given back — safe to try again.`,
-			);
-		}
-
+	if (outcome.kind !== 'refused' && outcome.kind !== 'failed') {
 		revalidatePath('/invites');
-		return {
-			ok: false,
-			message: `${sent.message} We can’t confirm whether the email went out, so the invite is still spent. Check with ${email} before sending another, or you may invite them twice — a maintainer can give the invite back.`,
-			emailSent: 'unknown',
-		};
 	}
 
-	revalidatePath('/invites');
-	return {
-		ok: true,
-		message: sent.warning
-			? `Invite sent to ${email}. ${sent.warning}`
-			: `Invite sent to ${email}.`,
-	};
+	switch (outcome.kind) {
+		case 'failed':
+			return fail('Something went wrong saving that invite. Please try again.');
+		case 'refused':
+			switch (outcome.reason) {
+				case 'no_volunteer':
+					return fail(
+						'We haven’t finished setting you up as a volunteer. Ask a maintainer to add you in Admin → Volunteers.',
+					);
+				case 'no_balance':
+					return fail('You have no invites left. You get one more on the 1st.');
+				case 'already_invited':
+					// Another Volunteer got there between the pre-check and the write.
+					return fail(
+						`${name} already has an invite waiting at ${email}. Nothing has been sent and your invite is untouched.`,
+					);
+			}
+		case 'not_sent_given_back':
+			return emailFailed({
+				message: `${outcome.message} Nothing was emailed and your invite has been given back — safe to try again.`,
+				definitelyNotSent: true,
+			});
+		case 'not_sent_give_back_failed':
+			return emailFailed({
+				message: `${outcome.message} Nothing was emailed, but we couldn’t give the invite back automatically — cancel it from your list to get it back.`,
+				definitelyNotSent: true,
+			});
+		case 'maybe_sent':
+			return emailFailed({
+				message: `${outcome.message} We can’t confirm whether the email went out, so the invite is still spent. Check with ${email} before sending another, or you may invite them twice — a maintainer can give the invite back.`,
+				definitelyNotSent: false,
+			});
+		case 'sent':
+			return {
+				ok: true,
+				message: outcome.warning
+					? `Invite sent to ${email}. ${outcome.warning}`
+					: `Invite sent to ${email}.`,
+			};
+	}
 }
 
 /**
