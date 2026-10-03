@@ -27,6 +27,7 @@ jobs:
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event.pull_request.user.login == 'renovate[bot]' &&
+      !contains(github.event.pull_request.labels.*.name, 'skip-review') &&
       ((github.event.action == 'labeled' && github.event.label.name == 'major') ||
       (github.event.action == 'reopened' &&
       contains(github.event.pull_request.labels.*.name, 'major'))))
