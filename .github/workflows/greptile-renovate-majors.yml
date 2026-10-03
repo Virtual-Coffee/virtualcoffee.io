@@ -1,10 +1,10 @@
 name: Greptile review for Renovate majors
 
-# Greptile never starts an automatic review on a PR opened by renovate[bot]:
-# it tracks the PR but creates no review run, although .greptile/config.json and
-# the dashboard both allow it. It also ignored @greptileai from
-# github-actions[bot], so the mention is posted as the virtual-coffee-ci App, on
-# the PRs renovate.json labels `major`.
+# Greptile never starts an automatic review on a PR opened by renovate[bot],
+# and it ignores @greptileai from bot accounts (github-actions[bot] and the
+# virtual-coffee-ci App both tried). Its API does start one, so on the PRs
+# renovate.json labels `major` this calls trigger_code_review over Greptile's
+# MCP endpoint. What a major-bump review looks for is in .greptile/config.json.
 
 on:
   # pull_request_target runs this file from main with no PR code checked out,
@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 # Renovate can apply the same label twice in a second; queue the runs so the
-# second sees the first one's comment.
+# second sees the review the first one started.
 concurrency:
   group: greptile-renovate-majors-${{ github.event.pull_request.number || inputs.pr }}
   cancel-in-progress: false
@@ -31,8 +31,8 @@ jobs:
   request-review:
     name: Ask Greptile to review
     runs-on: ubuntu-latest
-    # The App token is in scope, so a manual run is pinned to main, as in
-    # refresh-bot-list.yml: a branch can't borrow the token.
+    # The Greptile key is in scope, so a manual run is pinned to main, as in
+    # refresh-bot-list.yml: a branch can't borrow it.
     if: >-
       (github.event_name == 'workflow_dispatch' && github.ref ==
       'refs/heads/main') ||
@@ -42,34 +42,50 @@ jobs:
       (github.event.action == 'reopened' &&
       contains(github.event.pull_request.labels.*.name, 'major'))))
     steps:
-      - name: Generate app token
-        id: app-token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
-        with:
-          client-id: ${{ secrets.CI_APP_CLIENT_ID }}
-          private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
-          # Commenting on a PR is all it does.
-          permission-pull-requests: write
-
-      - name: Comment @greptileai
+      - name: Trigger Greptile review
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          GH_REPO: ${{ github.repository }}
+          GREPTILE_API_KEY: ${{ secrets.GREPTILE_API_KEY }}
           PR: ${{ github.event.pull_request.number || inputs.pr }}
-          # A manual run is a deliberate retry, so it always posts.
-          RETRY: ${{ github.event_name == 'workflow_dispatch' }}
-          BODY: >-
-            @greptileai review this major version bump: read the release notes
-            in the PR description and check this repo's usages for breaking
-            changes; flag code that must change, not the bump itself.
+          # Empty on a manual run, which is a deliberate retry and always
+          # triggers.
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          if [ "$RETRY" != true ]; then
-            asked=$(gh api "repos/$GH_REPO/issues/$PR/comments" --paginate \
-              --jq '[.[] | select(.user.login == "virtual-coffee-ci[bot]" and (.body | startswith("@greptileai")))] | length' \
-              | awk '{ n += $1 } END { print n + 0 }')
-            if [ "$asked" -gt 0 ]; then
-              echo "Already asked on #$PR; not asking again."
+          if [ -z "$GREPTILE_API_KEY" ]; then
+            echo "::error::The GREPTILE_API_KEY secret is not set."
+            exit 1
+          fi
+
+          # One MCP tools/call. Prints the tool's result text (JSON); fails on
+          # a transport, JSON-RPC or tool error.
+          call() {
+            local response
+            response=$(curl -sS --fail-with-body https://api.greptile.com/mcp \
+              -H "Authorization: Bearer $GREPTILE_API_KEY" \
+              -H 'Content-Type: application/json' \
+              -H 'Accept: application/json, text/event-stream' \
+              -d "$(jq -cn --arg tool "$1" --argjson args "$2" \
+                '{jsonrpc: "2.0", id: 1, method: "tools/call", params: {name: $tool, arguments: $args}}')")
+            # A streamed reply wraps the JSON-RPC message in `data:` lines.
+            if [ "${response#event:}" != "$response" ] || [ "${response#data:}" != "$response" ]; then
+              response=$(printf '%s\n' "$response" | sed -n 's/^data: //p' | tail -n 1)
+            fi
+            if ! jq -e '.result and (.result.isError | not)' <<<"$response" >/dev/null; then
+              echo "::error::Greptile $1 failed: $response"
+              return 1
+            fi
+            jq -r '.result.content[0].text' <<<"$response"
+          }
+
+          repo=$(jq -cn --argjson pr "$PR" \
+            '{name: "virtual-coffee/virtualcoffee.io", remote: "github", defaultBranch: "main", prNumber: $pr}')
+
+          if [ -n "$HEAD_SHA" ]; then
+            started=$(call list_code_reviews "$repo" | jq --arg sha "$HEAD_SHA" \
+              '[.codeReviews[] | select(.commitSha == $sha and .status != "FAILED")] | length')
+            if [ "$started" -gt 0 ]; then
+              echo "Greptile already has a review of $HEAD_SHA on #$PR; not asking again."
               exit 0
             fi
           fi
-          gh pr comment "$PR" --body "$BODY"
+
+          call trigger_code_review "$repo"
