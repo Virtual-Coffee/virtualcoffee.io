@@ -62,7 +62,7 @@
 		"calendar-link": "^2.11.5",
 		"drizzle-orm": "1.0.0-rc.4",
 		"front-matter": "^4.0.2",
-		"graphql": "^16.14.2",
+		"graphql": "^17.0.2",
 		"graphql-request": "^7.4.0",
 		"hast-util-to-string": "^3.0.1",
 		"hastscript": "^9.0.1",
