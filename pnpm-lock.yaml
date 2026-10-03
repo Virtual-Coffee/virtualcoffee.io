@@ -167,8 +167,8 @@ importers:
   .:
     dependencies:
       '@googleapis/calendar':
-        specifier: ^16.0.0
-        version: 16.0.0(supports-color@5.5.0)
+        specifier: ^20.0.1
+        version: 20.0.1(supports-color@5.5.0)
       '@imgix/js-core':
         specifier: ^3.8.0
         version: 3.8.0
@@ -1319,9 +1319,9 @@ packages:
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
 
-  '@googleapis/calendar@16.0.0':
-    resolution: {integrity: sha512-Z/8Jdf4hMvmMlBMhP0whZNPSixEpYv4mC5RJfrlvrnqpf/rV68MJ+8M9MmyqUt7/SQp2zRfVmEqkk+csB2Cgmg==}
-    engines: {node: '>=12.0.0'}
+  '@googleapis/calendar@20.0.1':
+    resolution: {integrity: sha512-NclDdcEoPvPBCHwUtcQj9rqWelAVl/nRj98WLUrNM2ByvqXjjUP0Ux/0nVb/FH9hoLR+dw9f0zHDOu2Di8oqrg==}
+    engines: {node: '>=22.0.0'}
 
   '@graphql-typed-document-node/core@3.2.0':
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
@@ -6186,9 +6186,13 @@ packages:
     resolution: {integrity: sha512-YGGyuEdVIjqxkxVH1pUTMY/XtmmsApXrCVv5EU25iX6inEPbV+VakJfLealkBtJN69AQmh1eGOdCl9Sm1UP6XQ==}
     engines: {node: '>=18'}
 
-  gcp-metadata@8.1.4:
-    resolution: {integrity: sha512-iJ9KMsiu+xKtNRX0PmGLSaIU3bUBAyzWTyqKemKPzNPsmmsBCQYmlNg+brEbES7IHSXtdVwzBPzx1vz3FAaipw==}
+  gaxios@7.3.1:
+    resolution: {integrity: sha512-kB3rzJV7d9juLZh8/56QTXCwQfxyhdOMdyYk1HdQKFtF8TJTDTZQJtixWIwXdE9Jji91mC41DUNpjleo4L4eAQ==}
     engines: {node: '>=18'}
+
+  gcp-metadata@9.0.4:
+    resolution: {integrity: sha512-p6WvbXOhfwnVtv/MyPq5kBiVhfV/qglMIxwwTVNEI1Ha1HmOgz5uHYHtYO6SfGckFaXe8blA11IJJ3wqXmvmBA==}
+    engines: {node: '>=22'}
 
   generator-function@2.0.1:
     resolution: {integrity: sha512-SFdFmIJi+ybC0vjlHN0ZGVGHc3lgE0DxPAT0djjVg+kjOnSqclqmj0KQ7ykTOLP6YxoqOvuAODGdcHJn+43q3g==}
@@ -6296,17 +6300,17 @@ packages:
     engines: {node: '>=0.6.0'}
     hasBin: true
 
-  google-auth-library@10.5.0:
-    resolution: {integrity: sha512-7ABviyMOlX5hIVD60YOfHw4/CxOfBhyduaYB+wbFWCWoni4N7SLcV46hrVRktuBbZjFC9ONyqamZITN7q3n32w==}
-    engines: {node: '>=18'}
+  google-auth-library@11.1.0:
+    resolution: {integrity: sha512-YIBq5KNoHQrZ9PM4PeodDBqqBGlSTIxh1zibN8u3zNIO9UJg8gvKuCpdKV7fWXhsZ2zRkU6FhGrgKNgLJ2IRgw==}
+    engines: {node: '>=22'}
 
-  google-logging-utils@1.1.3:
-    resolution: {integrity: sha512-eAmLkjDjAFCVXg7A1unxHsLf961m6y17QFqXqAXGj/gVkKFrEICfStRfwUlGNfeCEjNRa32JEWOUTlYXPyyKvA==}
-    engines: {node: '>=14'}
+  google-logging-utils@2.0.1:
+    resolution: {integrity: sha512-HMhaQghlOTvbcb3c4T5jmmOMtG3JUF1iOQMezaJXL86CDS+Tm2vHd0IeLFRAx3+ewd+bo9E1HFHoy17X5aJa9A==}
+    engines: {node: '>=22'}
 
-  googleapis-common@8.0.3:
-    resolution: {integrity: sha512-7g1yzQKx0mmNTjiK0H9dJ8eqKqDBveES9vLHeg5neb3BMQy/d1oQefIMhIpOVT8a+f+LOcixMEdRbFIW/cQUJw==}
-    engines: {node: '>=18'}
+  googleapis-common@9.1.0:
+    resolution: {integrity: sha512-UJBElspYPJb0+fI8q0LxARw1hPnwd9yd5NqhKqEUPxjhnB1jdsRP7rlRTBp69JS5Vo10bCiRE9+ISsIG2A+Ttg==}
+    engines: {node: '>=22'}
 
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
@@ -6326,10 +6330,6 @@ packages:
   graphql@16.14.2:
     resolution: {integrity: sha512-Chq1s4CY7jmh8gO2qvLIJyfCDIN+EHLFW/9iShnp1z8FjBQMoodWP1kDC36VAMXXIvAjj4ARa7ntfAV2BrjsbA==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
-
-  gtoken@8.0.0:
-    resolution: {integrity: sha512-+CqsMbHPiSTdtSO14O51eMNlrp9N79gmeqmXeouJOhfucAedHw9noVe/n5uJk3tbKE6a+6ZCQg3RPhVhHByAIw==}
-    engines: {node: '>=18'}
 
   h3@1.15.11:
     resolution: {integrity: sha512-L3THSe2MPeBwgIZVSH5zLdBBU90TOxarvhK9d04IDY2AmVS8j2Jz2LIWtwsGOU3lu2I5jCN7FNvVfY2+XyF+mg==}
@@ -10705,9 +10705,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
-  '@googleapis/calendar@16.0.0(supports-color@5.5.0)':
+  '@googleapis/calendar@20.0.1(supports-color@5.5.0)':
     dependencies:
-      googleapis-common: 8.0.3(supports-color@5.5.0)
+      googleapis-common: 9.1.0(supports-color@5.5.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -15905,10 +15905,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  gcp-metadata@8.1.4(supports-color@5.5.0):
+  gaxios@7.3.1(supports-color@5.5.0):
+    dependencies:
+      extend: 3.0.2
+      https-proxy-agent: 7.0.6(supports-color@5.5.0)
+      node-fetch: 3.3.2
+    transitivePeerDependencies:
+      - supports-color
+
+  gcp-metadata@9.0.4(supports-color@5.5.0):
     dependencies:
       gaxios: 7.1.3(supports-color@5.5.0)
-      google-logging-utils: 1.1.3
+      google-logging-utils: 2.0.1
       json-bigint: 1.0.0
     transitivePeerDependencies:
       - supports-color
@@ -16017,26 +16025,25 @@ snapshots:
     dependencies:
       minimist: 1.2.8
 
-  google-auth-library@10.5.0(supports-color@5.5.0):
+  google-auth-library@11.1.0(supports-color@5.5.0):
     dependencies:
       base64-js: 1.5.1
       ecdsa-sig-formatter: 1.0.11
-      gaxios: 7.1.3(supports-color@5.5.0)
-      gcp-metadata: 8.1.4(supports-color@5.5.0)
-      google-logging-utils: 1.1.3
-      gtoken: 8.0.0(supports-color@5.5.0)
+      gaxios: 7.3.1(supports-color@5.5.0)
+      gcp-metadata: 9.0.4(supports-color@5.5.0)
+      google-logging-utils: 2.0.1
       jws: 4.0.1
     transitivePeerDependencies:
       - supports-color
 
-  google-logging-utils@1.1.3: {}
+  google-logging-utils@2.0.1: {}
 
-  googleapis-common@8.0.3(supports-color@5.5.0):
+  googleapis-common@9.1.0(supports-color@5.5.0):
     dependencies:
       extend: 3.0.2
-      gaxios: 7.1.3(supports-color@5.5.0)
-      google-auth-library: 10.5.0(supports-color@5.5.0)
-      google-logging-utils: 1.1.3
+      gaxios: 7.3.1(supports-color@5.5.0)
+      google-auth-library: 11.1.0(supports-color@5.5.0)
+      google-logging-utils: 2.0.1
       qs: 6.16.0
       url-template: 2.0.8
     transitivePeerDependencies:
@@ -16054,13 +16061,6 @@ snapshots:
       graphql: 16.14.2
 
   graphql@16.14.2: {}
-
-  gtoken@8.0.0(supports-color@5.5.0):
-    dependencies:
-      gaxios: 7.1.3(supports-color@5.5.0)
-      jws: 4.0.1
-    transitivePeerDependencies:
-      - supports-color
 
   h3@1.15.11:
     dependencies:
