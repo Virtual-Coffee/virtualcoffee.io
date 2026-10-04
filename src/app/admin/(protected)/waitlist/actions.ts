@@ -216,6 +216,11 @@ export async function releaseApplication(
 			};
 		case 'changed':
 			return { ok: false, message: changedUnderneath(outcome.name) };
+		case 'already-active':
+			return {
+				ok: false,
+				message: `${outcome.name}’s email already has a live application. Decline this one instead.`,
+			};
 	}
 }
 

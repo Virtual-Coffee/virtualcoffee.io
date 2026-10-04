@@ -452,6 +452,28 @@ describe('release', () => {
 		expect(sendEmail).not.toHaveBeenCalled();
 	});
 
+	test('is refused when the same email already has a live application', async () => {
+		await insertApplication({
+			email: 'ada@example.test',
+			status: 'waitlisted',
+		});
+		const { id } = await insertApplication({
+			email: 'ADA@example.test',
+			name: 'Ada',
+			status: 'suspected_spam',
+			waitlistedAt: null,
+		});
+
+		await expect(release(id, admin)).resolves.toEqual({
+			kind: 'already-active',
+			name: 'Ada',
+		});
+		await expect(applicationRow(id)).resolves.toMatchObject({
+			status: 'suspected_spam',
+		});
+		await expect(applicationEvents(id)).resolves.toEqual([]);
+	});
+
 	test('is refused from any other status', async () => {
 		const { id } = await insertApplication({ status: 'waitlisted' });
 		await expect(release(id, admin)).resolves.toEqual({
@@ -846,6 +868,18 @@ describe('submit', () => {
 				submit(
 					{ ...ada, name: 'HXtBTQgRAfwqQQPyStQoKS', email: 'bot@example.test' },
 					null,
+				),
+			).resolves.toEqual({ kind: 'quarantined-repeat' });
+
+			expect(await db().select().from(membershipApplication)).toHaveLength(1);
+			expect(await db().select().from(applicationEvent)).toEqual([]);
+		});
+
+		test('a made-up Claim Link does not get a suspect repeat past it', async () => {
+			await expect(
+				submit(
+					{ ...ada, name: 'HXtBTQgRAfwqQQPyStQoKS', email: 'bot@example.test' },
+					'not-a-real-token',
 				),
 			).resolves.toEqual({ kind: 'quarantined-repeat' });
 
