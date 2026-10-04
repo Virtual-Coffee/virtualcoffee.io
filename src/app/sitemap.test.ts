@@ -65,15 +65,35 @@ describe('sitemap', () => {
 		}
 	});
 
-	test('lists the MDX resources and simple pages', async () => {
-		const paths = await sitemapPaths();
+	test('lists exactly the MDX pages their routes generate', async () => {
+		// Both routes set `dynamicParams = false`: a path they don't generate 404s.
+		const routes = [
+			['/', await import('./(simple-mdx)/[...slug]/page')],
+			['/resources/', await import('./resources/[[...slug]]/page')],
+		] as const;
+		const generated = (
+			await Promise.all(
+				routes.map(async ([base, page]) =>
+					(await page.generateStaticParams()).map(({ slug }) =>
+						`${base}${slug.join('/')}`.replace(/\/$/, ''),
+					),
+				),
+			)
+		).flat();
+		const simplePages = readdirSync(
+			join(process.cwd(), 'src', 'content', 'simple-mdx-pages'),
+		).map((name) => name.replace(/\.mdx$/, ''));
+		const listed = (await sitemapPaths()).filter(
+			(path) =>
+				path.startsWith('/resources') ||
+				simplePages.includes(path.split('/')[1]),
+		);
 
-		expect(paths).toContain('/about');
-		expect(paths).toContain('/code-of-conduct');
-		expect(paths).toContain('/resources/developer-resources');
-		expect(paths).toContain(
+		expect(generated).toContain('/about');
+		expect(generated).toContain(
 			'/resources/virtual-coffee-handbook/join-virtual-coffee',
 		);
+		expect(listed.toSorted()).toEqual(generated.toSorted());
 	});
 
 	test('lists every podcast episode and newsletter issue', async () => {

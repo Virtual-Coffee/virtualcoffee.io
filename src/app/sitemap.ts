@@ -53,20 +53,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 	const paths = [
 		...pages,
-		...extractRoutes(simplePages, 'content/simple-mdx-pages/').map(
-			(slug) => `/${slug}`,
+		// Top level only, as `(simple-mdx)/[...slug]` generates no deeper routes.
+		...simplePages.map(
+			(page) => `/${page.slug.replace('content/simple-mdx-pages/', '')}`,
 		),
 		...extractRoutes(resources, 'content/resources/').map(
 			(slug) => `/resources/${slug}`,
 		),
-		// Two episode slugs have a non-ASCII character; a <loc> must be escaped.
-		...episodes.map(
-			(episode) => `/podcast/${encodeURIComponent(episode.slug)}`,
-		),
+		...episodes.map((episode) => `/podcast/${episode.slug}`),
 		...newsletters.map((newsletter) => newsletter.href),
 		...challenges,
 	];
 
+	// A <loc> must be escaped; two episode slugs have a non-ASCII character.
 	const origin = siteUrl();
-	return paths.map((path) => ({ url: `${origin}${path}` }));
+	return paths.map((path) => ({
+		url: `${origin}${path.split('/').map(encodeURIComponent).join('/')}`,
+	}));
 }
