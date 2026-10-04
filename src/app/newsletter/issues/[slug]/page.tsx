@@ -7,10 +7,18 @@ import { notFound } from 'next/navigation';
 export const dynamicParams = false;
 export const dynamic = 'force-static';
 
-export async function generateMetadata() {
+export async function generateMetadata({
+	params,
+}: PageProps<'/newsletter/issues/[slug]'>) {
+	const newsletter = await getNewsletter((await params).slug);
+
+	if (!newsletter) {
+		notFound();
+	}
+
 	return await createMetaData({
-		title: 'Virtual Coffee Newsletter',
-		description: 'Sign up for the Virtual Coffee Newsletter.',
+		title: newsletter.handle.meta.title,
+		description: newsletter.handle.meta.description,
 		Hero: 'UndrawArrived',
 	});
 }

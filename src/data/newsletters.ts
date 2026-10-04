@@ -1,5 +1,3 @@
-'use server';
-
 import { handle as issue202412 } from '@/content/newsletters/2024-12';
 import { handle as issue202411 } from '@/content/newsletters/2024-11';
 import { handle as issue202410 } from '@/content/newsletters/2024-10';
@@ -105,7 +103,7 @@ const newsletters = [
 
 export type NewsletterIssue = {
 	/**
-	 * handleData is based on the data from [newsletter issues](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/app/routes/__frontend/newsletter/issues)
+	 * handleData is based on the data from [newsletter issues](https://github.com/Virtual-Coffee/virtualcoffee.io/tree/main/src/content/newsletters)
 	 */
 	handleData: {
 		meta: {
@@ -144,6 +142,11 @@ export async function getNewsletters(
 }
 
 export async function getNewsletter(slug: string) {
+	// Only a listed issue is imported: the slug becomes part of a module path.
+	if (!newsletters.some((issue) => issue.slug === slug)) {
+		return null;
+	}
+
 	try {
 		const { handle, default: Page } = (await import(
 			'@/content/newsletters/' + slug
