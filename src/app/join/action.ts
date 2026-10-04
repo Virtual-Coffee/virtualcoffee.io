@@ -41,7 +41,7 @@ export async function submitMembershipApplication(
 	const parsed = intake(formData, { schema, thanks: THANKS });
 	if (!parsed.ok) return parsed.state;
 
-	let result: Extract<Submitted, { kind: 'submitted' }>;
+	let outcome: Exclude<Submitted, { kind: 'duplicate' }>;
 
 	try {
 		const submitted = await submit(
@@ -54,9 +54,7 @@ export async function submitMembershipApplication(
 					'There’s already an application for this email address. If that’s a surprise, email hello@virtualcoffee.io.',
 			});
 		}
-		// Same page as a real signup: the reply must not tell a bot it was caught.
-		if (submitted.kind === 'quarantined-repeat') redirect(THANKS);
-		result = submitted;
+		outcome = submitted;
 	} catch (error) {
 		// Deliberately not surfaced to the applicant: the upstream message can
 		// name tables and columns, and there is nothing they could do with it.
@@ -64,6 +62,14 @@ export async function submitMembershipApplication(
 		reportHandled(error, { area: 'join' });
 		return formError(savingFailed('application'));
 	}
+
+	// redirect() throws, so it stays outside the try above. Same page as a real
+	// signup: the reply must not tell a bot it was caught. A quarantined row
+	// posts nothing to Slack and records no notification event; the next real
+	// post's footer counts it instead.
+	if (outcome.kind === 'quarantined-repeat' || outcome.flagged)
+		redirect(THANKS);
+	const result = outcome;
 
 	/**
 	 * Persist first, notify second, per docs/adr/0005 — and outside the try above,
@@ -80,34 +86,45 @@ export async function submitMembershipApplication(
 				? 'Slack notified of an invited application'
 				: 'Slack notified of a new application',
 		},
-		async () =>
-			notifySlack(
+		async () => {
+			const depth = await queueDepth();
+			return notifySlack(
 				'membership',
 				applicationSubmittedMessage({
 					name: parsed.data.name,
 					email: parsed.data.email,
 					adminUrl: `${siteUrl()}${applicationPath(result.applicationId)}`,
 					waitlistUrl: `${siteUrl()}/admin/waitlist`,
-					waiting: await waitingCount(),
+					suspectedUrl: `${siteUrl()}/admin/waitlist/suspected-spam`,
+					waiting: depth?.waiting ?? null,
+					suspected: depth?.suspected ?? 0,
 					invite: result.claimed && {
 						inviterName: result.claimed.inviterName,
 					},
 				}),
-			),
+			);
+		},
 	);
 
 	redirect(THANKS);
 }
 
 /**
- * How many are awaiting a first decision, for the post's footer. Best-effort:
+ * How many are awaiting a first decision, and how many are quarantined as
+ * suspected spam, for the post's footer. Best-effort:
  * the row is saved and the announcement matters more than the number, so a
  * failed read is logged and the footer left off.
  */
-async function waitingCount(): Promise<number | null> {
+async function queueDepth(): Promise<{
+	waiting: number;
+	suspected: number;
+} | null> {
 	try {
 		const counts = await statusCounts();
-		return counts.waitlisted ?? 0;
+		return {
+			waiting: counts.waitlisted ?? 0,
+			suspected: counts.suspected_spam ?? 0,
+		};
 	} catch (error) {
 		console.error('Waitlist count unavailable for the Slack post', error);
 		return null;
