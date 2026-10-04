@@ -214,6 +214,10 @@ export const pendingGrant = pgTable(
  * `declined`, which records a decision a maintainer actually made. The Airtable
  * import puts ~1,378 rows into `lapsed`; calling those `declined` would assert
  * something untrue about real people.
+ *
+ * `suspected_spam` is a /join submission the content heuristic
+ * (`src/util/forms/spamHeuristics.ts`) flagged: held for a human to release to
+ * the Waitlist or decline, never dropped.
  */
 export const applicationStatus = pgEnum('application_status', [
 	'waitlisted',
@@ -222,6 +226,7 @@ export const applicationStatus = pgEnum('application_status', [
 	'declined',
 	'withdrawn',
 	'lapsed',
+	'suspected_spam',
 ]);
 
 export const applicationSource = pgEnum('application_source', [
@@ -270,6 +275,8 @@ export const applicationEventType = pgEnum('application_event_type', [
 	'imported',
 	/** The Invite behind an approved application could not be marked completed. */
 	'invite_completion_failed',
+	/** The spam heuristic held this submission; its signal is in the event body. */
+	'flagged_as_spam',
 ]);
 
 export const inviteTokenPurpose = pgEnum('invite_token_purpose', ['slack']);
