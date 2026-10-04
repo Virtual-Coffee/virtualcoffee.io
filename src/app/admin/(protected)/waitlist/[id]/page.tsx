@@ -11,7 +11,10 @@ import {
 import { coffeeInvite } from '@/emails/coffeeInvite';
 import { slackInvite } from '@/emails/slackInvite';
 import { welcome } from '@/emails/welcome';
-import { ARCHIVE_STATUSES } from '@/lib/waitlist/applicationStatuses';
+import {
+	ARCHIVE_STATUSES,
+	QUARANTINE_STATUSES,
+} from '@/lib/waitlist/applicationStatuses';
 import { history } from '@/lib/history/eventLog';
 import { emailStatus } from '@/lib/email/transport';
 import { ActionPanel } from './actionPanel';
@@ -68,17 +71,17 @@ export default async function ApplicationDetailPage({
 	// The actions re-check for themselves; this only keeps a read-only viewer
 	// from being shown buttons that would 404 on them.
 	const canManage = sessionCan(session, 'waitlist', 'manage');
-	const isArchived = ARCHIVE_STATUSES.includes(application.status);
+	const parent = QUARANTINE_STATUSES.includes(application.status)
+		? { href: '/admin/waitlist/suspected-spam', label: 'Suspected spam' }
+		: ARCHIVE_STATUSES.includes(application.status)
+			? { href: '/admin/waitlist/archive', label: 'Archive' }
+			: { href: '/admin/waitlist', label: 'Queue' };
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
 			<Breadcrumb
 				className="mb-3"
-				parent={
-					isArchived
-						? { href: '/admin/waitlist/archive', label: 'Archive' }
-						: { href: '/admin/waitlist', label: 'Queue' }
-				}
+				parent={parent}
 				current={`Application ${application.reference}`}
 			/>
 
