@@ -244,7 +244,7 @@ export function ActionPanel(props: Props) {
 								onNote={setNote}
 							/>
 						</ActionDialog>
-						{/* Spam never applied, so there is nothing to withdraw. */}
+						{/* Suspected spam is released or declined; withdrawing is the applicant's call, not a verdict on it. */}
 						{props.status !== 'suspected_spam' && (
 							<ActionDialog
 								{...shared}
