@@ -1,0 +1,72 @@
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import type { MetadataRoute } from 'next';
+
+import { getNewsletters } from '@/data/newsletters';
+import { getEpisodes } from '@/data/podcast';
+import { extractRoutes, loadMdxDirectory } from '@/util/loadMdx.server';
+import { siteUrl } from '@/util/url.server';
+
+/**
+ * The hand-written top-level pages. Everything below them comes from the
+ * same data their pages' `generateStaticParams` read, so a new resource,
+ * episode, issue or challenge is listed without touching this file.
+ *
+ * Left out: `/admin` and `/invites` (signed-in only), `/join-slack`
+ * (`noindex`), the forms' thank-you pages, and whatever `robots.ts`
+ * disallows.
+ */
+const pages = [
+	'/',
+	'/events',
+	'/members',
+	'/podcast',
+	'/newsletter',
+	'/monthlychallenges',
+	'/resources',
+	'/join',
+	'/report-coc-violation',
+	'/volunteer-at-virtual-coffee',
+	'/lunch-and-learn-idea',
+	'/start-coffee-table-group',
+];
+
+const challengesDirectory = join(
+	process.cwd(),
+	'src',
+	'app',
+	'monthlychallenges',
+	'(challenges)',
+);
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+	const [resources, simplePages, episodes, newsletters] = await Promise.all([
+		loadMdxDirectory({ baseDirectory: 'content/resources' }),
+		loadMdxDirectory({ baseDirectory: 'content/simple-mdx-pages' }),
+		getEpisodes({ limit: Infinity }),
+		getNewsletters(),
+	]);
+
+	const challenges = readdirSync(challengesDirectory, { withFileTypes: true })
+		.filter((entry) => entry.isDirectory())
+		.map((entry) => `/monthlychallenges/${entry.name}`);
+
+	const paths = [
+		...pages,
+		...extractRoutes(simplePages, 'content/simple-mdx-pages/').map(
+			(slug) => `/${slug}`,
+		),
+		...extractRoutes(resources, 'content/resources/').map(
+			(slug) => `/resources/${slug}`,
+		),
+		// Two episode slugs have a non-ASCII character; a <loc> must be escaped.
+		...episodes.map(
+			(episode) => `/podcast/${encodeURIComponent(episode.slug)}`,
+		),
+		...newsletters.map((newsletter) => newsletter.href),
+		...challenges,
+	];
+
+	const origin = siteUrl();
+	return paths.map((path) => ({ url: `${origin}${path}` }));
+}
