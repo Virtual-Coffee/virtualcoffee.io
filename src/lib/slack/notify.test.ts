@@ -319,6 +319,8 @@ describe('the messages', () => {
 			email: 'ada@example.test',
 			adminUrl: 'https://virtualcoffee.io/admin/waitlist/01',
 			waitlistUrl: 'https://virtualcoffee.io/admin/waitlist',
+			suspectedUrl: 'https://virtualcoffee.io/admin/waitlist/suspected-spam',
+			suspected: 0,
 			waiting: 14,
 			invite: null,
 		});
@@ -340,12 +342,30 @@ describe('the messages', () => {
 		]);
 	});
 
+	test('quarantined submissions are named in the footer, linked to their page', () => {
+		const message = applicationSubmittedMessage({
+			name: 'Ada',
+			email: 'ada@example.test',
+			adminUrl: 'https://virtualcoffee.io/admin/waitlist/01',
+			waitlistUrl: 'https://virtualcoffee.io/admin/waitlist',
+			suspectedUrl: 'https://virtualcoffee.io/admin/waitlist/suspected-spam',
+			waiting: 14,
+			suspected: 2,
+			invite: null,
+		});
+		expect(notes(message)).toEqual([
+			'*14* waiting on a first decision · <https://virtualcoffee.io/admin/waitlist/suspected-spam|2 suspected spam> · <https://virtualcoffee.io/admin/waitlist|Waitlist queue>',
+		]);
+	});
+
 	test('a queue depth that could not be read leaves the footer off', () => {
 		const message = applicationSubmittedMessage({
 			name: 'Ada',
 			email: 'ada@example.test',
 			adminUrl: 'https://virtualcoffee.io/admin/waitlist/01',
 			waitlistUrl: 'https://virtualcoffee.io/admin/waitlist',
+			suspectedUrl: 'https://virtualcoffee.io/admin/waitlist/suspected-spam',
+			suspected: 0,
 			waiting: null,
 			invite: null,
 		});
@@ -359,6 +379,8 @@ describe('the messages', () => {
 			email: 'ada@example.test',
 			adminUrl: 'https://virtualcoffee.io/admin/waitlist/01',
 			waitlistUrl: 'https://virtualcoffee.io/admin/waitlist',
+			suspectedUrl: 'https://virtualcoffee.io/admin/waitlist/suspected-spam',
+			suspected: 0,
 			waiting: 3,
 			invite: { inviterName: 'Grace' },
 		});
@@ -382,6 +404,8 @@ describe('the messages', () => {
 			email: 'ada@example.test',
 			adminUrl: 'https://virtualcoffee.io/admin/waitlist/01',
 			waitlistUrl: 'https://virtualcoffee.io/admin/waitlist',
+			suspectedUrl: 'https://virtualcoffee.io/admin/waitlist/suspected-spam',
+			suspected: 0,
 			waiting: 3,
 			invite: { inviterName: null },
 		});

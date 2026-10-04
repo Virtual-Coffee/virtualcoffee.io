@@ -11,6 +11,7 @@ export const STATUS_LABELS: Record<ApplicationStatus, string> = {
 	declined: 'Declined',
 	withdrawn: 'Withdrawn',
 	lapsed: 'Lapsed',
+	suspected_spam: 'Suspected spam',
 };
 
 // `lapsed` is deliberately muted rather than red: nobody decided anything, and
@@ -22,6 +23,9 @@ const STATUS_CLASSES: Record<ApplicationStatus, string> = {
 	declined: 'text-bg-danger',
 	withdrawn: 'text-bg-secondary',
 	lapsed: 'text-bg-light border',
+	// Dark, not warning (that is `waitlisted`) and not danger (a decision): held,
+	// not judged.
+	suspected_spam: 'text-bg-dark',
 };
 
 export function StatusBadge({ status }: { status: ApplicationStatus }) {
