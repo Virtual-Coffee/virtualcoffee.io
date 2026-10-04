@@ -54,6 +54,8 @@ export async function submitMembershipApplication(
 					'There’s already an application for this email address. If that’s a surprise, email hello@virtualcoffee.io.',
 			});
 		}
+		// Same page as a real signup: the reply must not tell a bot it was caught.
+		if (submitted.kind === 'quarantined-repeat') redirect(THANKS);
 		result = submitted;
 	} catch (error) {
 		// Deliberately not surfaced to the applicant: the upstream message can

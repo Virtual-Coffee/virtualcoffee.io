@@ -23,7 +23,10 @@ import {
 } from '@/lib/volunteers/invites';
 import { siteUrl } from '@/util/url.server';
 
+import { suspectSpam } from '@/util/forms/spamHeuristics';
+
 import {
+	QUARANTINE_STATUSES,
 	QUEUE_STATUSES,
 	can,
 	type LifecycleAction,
@@ -428,6 +431,34 @@ export async function close(
 }
 
 /**
+ * Not spam: move a Quarantined application to the Waitlist. `submittedAt` is
+ * kept as the place in the queue, so the applicant loses nothing for the
+ * detour. No email goes out; nothing was ever promised.
+ */
+export async function release(
+	applicationId: string,
+	actor?: Actor,
+): Promise<Of<'done' | 'not-found' | 'wrong-status' | 'changed'>> {
+	const opened = await open(applicationId, 'release');
+	if (isOutcome(opened)) return opened;
+	const { application, subject } = opened;
+
+	const released = await transitionAndRecord(
+		subject,
+		'suspected_spam',
+		{ status: 'waitlisted', waitlistedAt: application.submittedAt },
+		{
+			actorUserId: actor?.userId ?? null,
+			type: 'waitlisted',
+			body: 'Not spam — moved to the Waitlist',
+		},
+	);
+	if (!released) return { kind: 'changed', name: application.name };
+
+	return { kind: 'done' };
+}
+
+/**
  * What an applicant fills in. Consent is recorded as given at submission, so
  * the caller has validated the agreement before it gets here.
  */
@@ -443,12 +474,20 @@ export type Submission = {
 };
 
 export type Submitted =
-	| { kind: 'submitted'; applicationId: string; claimed: ClaimedInvite | null }
-	| { kind: 'duplicate' };
+	| {
+			kind: 'submitted';
+			applicationId: string;
+			claimed: ClaimedInvite | null;
+			/** Held in Quarantine as suspected spam instead of joining the Waitlist. */
+			flagged: boolean;
+	  }
+	| { kind: 'duplicate' }
+	| { kind: 'quarantined-repeat' };
 
 /**
- * A new application from `/join`, on the Waitlist. The Slack announcement is
- * the caller's, after this returns (docs/adr/0005).
+ * A new application from `/join`, on the Waitlist — or in Quarantine when
+ * `suspectSpam` flags the name or email, unless a Claim Link was redeemed. The
+ * Slack announcement is the caller's, after this returns (docs/adr/0005).
  */
 export async function submit(
 	input: Submission,
@@ -484,6 +523,24 @@ export async function submit(
 		.limit(1);
 	if (existing) return { kind: 'duplicate' };
 
+	/**
+	 * A bot retrying a quarantined address must not pile up rows, and the reply
+	 * must not reveal anything (unlike `duplicate`, which names the pipeline):
+	 * the caller shows the ordinary thank-you page. Nothing is written, so no
+	 * Claim Link is burned either.
+	 */
+	const [quarantined] = await db()
+		.select({ id: membershipApplication.id })
+		.from(membershipApplication)
+		.where(
+			and(
+				sql`lower(${membershipApplication.email}) = ${input.email.toLowerCase()}`,
+				inArray(membershipApplication.status, QUARANTINE_STATUSES),
+			),
+		)
+		.limit(1);
+	if (quarantined) return { kind: 'quarantined-repeat' };
+
 	return db().transaction(async (tx) => {
 		let claimed: ClaimedInvite | null = null;
 		/**
@@ -494,6 +551,14 @@ export async function submit(
 		 * friend's invite, having done nothing wrong.
 		 */
 		if (claimToken) claimed = await claimInvite(claimToken, now, tx);
+
+		/**
+		 * A redeemed Invite skips the heuristic: a Volunteer vouched for this
+		 * person, and quarantining would burn the Invite while hiding the
+		 * application from the queue.
+		 */
+		const signal = claimed ? null : suspectSpam(input);
+		const status = signal ? 'suspected_spam' : 'waitlisted';
 
 		const [row] = await tx
 			.insert(membershipApplication)
@@ -506,7 +571,7 @@ export async function submit(
 				journey: input.journey ?? null,
 				codeInterests: input.codeInterests ?? null,
 				virtualCoffee: input.virtualCoffee ?? null,
-				status: 'waitlisted',
+				status,
 				/**
 				 * An expired or already-used link still produces an application, as
 				 * a Waitlist signup. Refusing it would throw away the long answers
@@ -518,7 +583,7 @@ export async function submit(
 				referrer: claimed ? claimed.inviterName : null,
 				agreedToCocAt: now,
 				submittedAt: now,
-				waitlistedAt: now,
+				waitlistedAt: signal ? null : now,
 			})
 			.returning({ id: membershipApplication.id });
 
@@ -526,14 +591,32 @@ export async function submit(
 			applicationSubject(row.id),
 			{
 				type: 'submitted',
-				toStatus: 'waitlisted',
+				toStatus: status,
 				body: claimed
 					? `Application submitted from an invite by ${claimed.inviterName ?? 'a volunteer'}`
 					: 'Application submitted',
 			},
 			tx,
 		);
+		if (signal) {
+			await recordEvent(
+				applicationSubject(row.id),
+				{
+					type: 'flagged_as_spam',
+					body:
+						signal === 'name'
+							? 'Name looks machine-generated'
+							: 'Email looks like a Gmail dot-trick address',
+				},
+				tx,
+			);
+		}
 
-		return { kind: 'submitted', applicationId: row.id, claimed };
+		return {
+			kind: 'submitted',
+			applicationId: row.id,
+			claimed,
+			flagged: signal !== null,
+		};
 	});
 }
