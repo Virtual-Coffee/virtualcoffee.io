@@ -282,6 +282,19 @@ const MORE_SEEDS: Seed[] = [
 		virtualCoffee:
 			'To source candidates for three open senior positions at my company.',
 	},
+	{
+		// The bot signature from #1630, held by the /join heuristic.
+		name: 'HXtBTQgRAfwqQQPyStQoKS',
+		email: 'xx.x.xx.xxx.xx.x.x42@gmail.com',
+		pronouns: '',
+		githubUsername: '',
+		status: 'suspected_spam',
+		source: 'waitlist_signup',
+		daysAgo: 2,
+		journey: 'yvsNBVqaraOujSzZ',
+		codeInterests: 'yvsNBVqaraOujSzZ',
+		virtualCoffee: 'yvsNBVqaraOujSzZ',
+	},
 ];
 
 const ALL_SEEDS = [...SEEDS, ...MORE_SEEDS];
@@ -344,7 +357,7 @@ export async function seedApplications(
 			virtualCoffee: seed.virtualCoffee,
 			agreedToCocAt: submittedAt,
 			submittedAt,
-			waitlistedAt: submittedAt,
+			waitlistedAt: seed.status === 'suspected_spam' ? null : submittedAt,
 			coffeeInvitedAt: invitedAt,
 			coffeeAttendedAt: attendedAt,
 			approvedAt: attendedAt,
@@ -374,10 +387,18 @@ export async function seedApplications(
 		} else {
 			await event({
 				type: 'submitted',
-				toStatus: 'waitlisted',
+				toStatus: seed.status === 'suspected_spam' ? seed.status : 'waitlisted',
 				body: inviteId
 					? `Application submitted from an invite by ${ADMIN.name}`
 					: 'Application submitted',
+				createdAt: submittedAt,
+			});
+		}
+
+		if (seed.status === 'suspected_spam') {
+			await event({
+				type: 'flagged_as_spam',
+				body: 'Name looks machine-generated',
 				createdAt: submittedAt,
 			});
 		}
