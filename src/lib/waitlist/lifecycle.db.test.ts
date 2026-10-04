@@ -832,21 +832,55 @@ describe('submit', () => {
 		]);
 	});
 
-	test('a repeat from a quarantined address writes nothing and burns no link', async () => {
-		await insertApplication({
-			email: 'Bot@Example.test',
-			status: 'suspected_spam',
-			waitlistedAt: null,
+	describe('from an address already in Quarantine', () => {
+		beforeEach(async () => {
+			await insertApplication({
+				email: 'Bot@Example.test',
+				status: 'suspected_spam',
+				waitlistedAt: null,
+			});
 		});
-		const { id, token } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
 
-		await expect(
-			submit({ ...ada, email: 'bot@example.test' }, token),
-		).resolves.toEqual({ kind: 'quarantined-repeat' });
+		test('a suspect repeat writes nothing', async () => {
+			await expect(
+				submit(
+					{ ...ada, name: 'HXtBTQgRAfwqQQPyStQoKS', email: 'bot@example.test' },
+					null,
+				),
+			).resolves.toEqual({ kind: 'quarantined-repeat' });
 
-		expect(await db().select().from(membershipApplication)).toHaveLength(1);
-		expect(await db().select().from(applicationEvent)).toEqual([]);
-		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'pending' });
+			expect(await db().select().from(membershipApplication)).toHaveLength(1);
+			expect(await db().select().from(applicationEvent)).toEqual([]);
+		});
+
+		test('the real person, typing their own name, still joins the Waitlist', async () => {
+			await expect(
+				submit({ ...ada, email: 'bot@example.test' }, null),
+			).resolves.toMatchObject({ kind: 'submitted', flagged: false });
+
+			const rows = await db().select().from(membershipApplication);
+			expect(rows.map((r) => r.status).sort()).toEqual([
+				'suspected_spam',
+				'waitlisted',
+			]);
+		});
+
+		test('a Claim Link is honoured even under a suspect name', async () => {
+			const { id, token } = await insertInvite({
+				inviterSlackUserId: 'U_GRACE',
+			});
+
+			await expect(
+				submit(
+					{ ...ada, name: 'HXtBTQgRAfwqQQPyStQoKS', email: 'bot@example.test' },
+					token,
+				),
+			).resolves.toMatchObject({ kind: 'submitted', flagged: false });
+
+			await expect(inviteRow(id)).resolves.toMatchObject({
+				status: 'accepted',
+			});
+		});
 	});
 
 	test('a failed insert does not burn the Claim Link', async () => {

@@ -20,8 +20,10 @@ nothing — would lose that person without anyone seeing it.
 name and email. A match is written as an Application with status
 `suspected_spam` and a `flagged_as_spam` event naming the signal. It is not
 announced in Slack; the next real announcement's footer counts it instead. The
-applicant sees the ordinary thank-you page, and a resubmission from a
-quarantined address writes nothing.
+applicant sees the ordinary thank-you page. A resubmission from a quarantined
+address writes nothing only when it is itself suspect and has no Claim Link:
+anyone can type another person's email, so a quarantined row must not stop the
+real person applying.
 
 `suspected_spam` is a status, in a third list (`QUARANTINE_STATUSES`) beside
 the queue and archive lists, not a flag column. A flag would be a second axis

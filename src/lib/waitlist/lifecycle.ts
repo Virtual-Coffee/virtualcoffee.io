@@ -526,20 +526,25 @@ export async function submit(
 	/**
 	 * A bot retrying a quarantined address must not pile up rows, and the reply
 	 * must not reveal anything (unlike `duplicate`, which names the pipeline):
-	 * the caller shows the ordinary thank-you page. Nothing is written, so no
-	 * Claim Link is burned either.
+	 * the caller shows the ordinary thank-you page. Only a submission that is
+	 * itself suspect and carries no Claim Link is swallowed — anyone can type
+	 * someone else's address, so a quarantined row must not stop the real
+	 * person applying, least of all with a Volunteer's Invite.
 	 */
-	const [quarantined] = await db()
-		.select({ id: membershipApplication.id })
-		.from(membershipApplication)
-		.where(
-			and(
-				sql`lower(${membershipApplication.email}) = ${input.email.toLowerCase()}`,
-				inArray(membershipApplication.status, QUARANTINE_STATUSES),
-			),
-		)
-		.limit(1);
-	if (quarantined) return { kind: 'quarantined-repeat' };
+	const suspect = suspectSpam(input);
+	if (suspect && !claimToken) {
+		const [quarantined] = await db()
+			.select({ id: membershipApplication.id })
+			.from(membershipApplication)
+			.where(
+				and(
+					sql`lower(${membershipApplication.email}) = ${input.email.toLowerCase()}`,
+					inArray(membershipApplication.status, QUARANTINE_STATUSES),
+				),
+			)
+			.limit(1);
+		if (quarantined) return { kind: 'quarantined-repeat' };
+	}
 
 	return db().transaction(async (tx) => {
 		let claimed: ClaimedInvite | null = null;
@@ -557,7 +562,7 @@ export async function submit(
 		 * person, and quarantining would burn the Invite while hiding the
 		 * application from the queue.
 		 */
-		const signal = claimed ? null : suspectSpam(input);
+		const signal = claimed ? null : suspect;
 		const status = signal ? 'suspected_spam' : 'waitlisted';
 
 		const [row] = await tx
