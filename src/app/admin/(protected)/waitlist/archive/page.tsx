@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { requirePermission } from '@/lib/access/adminAccess';
 import { listApplications, statusCounts } from '@/lib/waitlist/applications';
 import { ARCHIVE_STATUSES } from '@/lib/waitlist/applicationStatuses';
@@ -69,6 +71,11 @@ export default async function ArchivePage({
 					<p className="text-body-secondary mb-0 small">
 						{archived} applications · {counts.lapsed ?? 0} lapsed ·{' '}
 						{counts.member ?? 0} members
+					</p>
+					<p className="mb-0 small">
+						<Link href="/admin/waitlist/suspected-spam">
+							{counts.suspected_spam ?? 0} suspected spam
+						</Link>
 					</p>
 				</div>
 				{/* Keyed on the URL's term so Back/Forward remounts the input with it. */}
