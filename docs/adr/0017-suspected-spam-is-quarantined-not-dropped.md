@@ -21,7 +21,7 @@ name and email. A match is written as an Application with status
 `suspected_spam` and a `flagged_as_spam` event naming the signal. It is not
 announced in Slack; the next real announcement's footer counts it instead. The
 applicant sees the ordinary thank-you page. A resubmission from a quarantined
-address writes nothing only when it is itself suspect and has no Claim Link:
+address writes nothing only when it is itself suspect and redeems no Claim Link:
 anyone can type another person's email, so a quarantined row must not stop the
 real person applying.
 
@@ -30,7 +30,9 @@ the queue and archive lists, not a flag column. A flag would be a second axis
 the lifecycle module does not own, and every queue query would have to
 remember to filter it. As a status it is a transition like any other: a human
 releases it to `waitlisted`, keeping `submittedAt` as its place in the queue,
-or declines it through `close()`, which sends no email.
+or declines it through `close()`, which sends no email. Release is refused
+while the same email has a live application, so it never puts one person in
+the queue twice.
 
 An application that redeemed a Claim Link skips the check. A Volunteer vouched
 for that person, and quarantining it would spend their Invite while hiding the
