@@ -7,6 +7,7 @@ import {
 	approveMembership,
 	declineApplication,
 	recordAttendance,
+	releaseApplication,
 	resendSlackInvite,
 	sendCoffeeInvite,
 	withdrawApplication,
@@ -208,6 +209,23 @@ export function ActionPanel(props: Props) {
 					</ActionDialog>
 				)}
 
+				{can(props.status, 'release') && (
+					<ActionDialog
+						{...shared}
+						className="btn btn-primary"
+						label="Not spam — move to Waitlist"
+						title="Not spam — move to Waitlist"
+						confirmLabel="Move to Waitlist"
+						pendingLabel="Moving…"
+						action={() => releaseApplication(props.applicationId)}
+					>
+						<p className="mb-0">
+							{props.applicantName} joins the Waitlist at their original
+							submission time. Nothing is emailed.
+						</p>
+					</ActionDialog>
+				)}
+
 				{/* The archive links here too; a closed application has nothing left to close. */}
 				{can(props.status, 'close') && (
 					<>
@@ -226,21 +244,24 @@ export function ActionPanel(props: Props) {
 								onNote={setNote}
 							/>
 						</ActionDialog>
-						<ActionDialog
-							{...shared}
-							className="btn btn-outline-secondary"
-							label="Mark withdrawn"
-							title="Mark withdrawn"
-							danger
-							action={() => withdrawApplication(props.applicationId, note)}
-						>
-							<CloseBody
-								applicantName={props.applicantName}
-								outcome="marked withdrawn"
-								note={note}
-								onNote={setNote}
-							/>
-						</ActionDialog>
+						{/* Spam never applied, so there is nothing to withdraw. */}
+						{props.status !== 'suspected_spam' && (
+							<ActionDialog
+								{...shared}
+								className="btn btn-outline-secondary"
+								label="Mark withdrawn"
+								title="Mark withdrawn"
+								danger
+								action={() => withdrawApplication(props.applicationId, note)}
+							>
+								<CloseBody
+									applicantName={props.applicantName}
+									outcome="marked withdrawn"
+									note={note}
+									onNote={setNote}
+								/>
+							</ActionDialog>
+						)}
 					</>
 				)}
 			</div>

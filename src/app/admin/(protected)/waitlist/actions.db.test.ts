@@ -12,6 +12,7 @@ import {
 	approveMembership,
 	declineApplication,
 	recordAttendance,
+	releaseApplication,
 	resendSlackInvite,
 	sendCoffeeInvite,
 	withdrawApplication,
@@ -29,7 +30,11 @@ beforeEach(async () => {
 describe('every action', () => {
 	test('is refused without waitlist:manage', async () => {
 		const { id } = await insertApplication({ status: 'coffee_invited' });
+		const spam = await insertApplication({ status: 'suspected_spam' });
 		await signInAs('coc_reviewer');
+
+		await expect(releaseApplication(spam.id)).rejects.toMatchObject(NOT_FOUND);
+		expect((await applicationRow(spam.id)).status).toBe('suspected_spam');
 
 		for (const act of [
 			() => sendCoffeeInvite(id, false),
@@ -108,6 +113,21 @@ describe('outcome copy', () => {
 		await expect(declineApplication(lapsed.id, null)).resolves.toEqual({
 			ok: false,
 			message: 'Cannot be declined or withdrawn from lapsed.',
+		});
+		await expect(releaseApplication(waiting.id)).resolves.toEqual({
+			ok: false,
+			message:
+				'Only a suspected-spam application can be released, not waitlisted.',
+		});
+	});
+
+	test('release moves a suspected-spam application to the Waitlist', async () => {
+		const { id } = await insertApplication({ status: 'suspected_spam' });
+
+		await expect(releaseApplication(id)).resolves.toEqual({ ok: true });
+		expect((await applicationRow(id)).status).toBe('waitlisted');
+		await expect(releaseApplication(id)).resolves.toMatchObject({
+			ok: false,
 		});
 	});
 
