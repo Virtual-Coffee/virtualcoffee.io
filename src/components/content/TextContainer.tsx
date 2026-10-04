@@ -1,13 +1,13 @@
 type TextContainerProps = {
 	children?: React.ReactNode;
-	background: 'white' | 'light';
-	showBackToTopLink: boolean;
+	background?: 'white' | 'light';
+	showBackToTopLink?: boolean;
 };
 
 export default function TextContainer({
 	children,
-	background,
-	showBackToTopLink,
+	background = 'white',
+	showBackToTopLink = true,
 }: TextContainerProps) {
 	return (
 		<div className={`bg-${background} py-3`}>
@@ -23,10 +23,3 @@ export default function TextContainer({
 		</div>
 	);
 }
-
-const defaultProps: TextContainerProps = {
-	background: 'white',
-	showBackToTopLink: true,
-};
-
-TextContainer.defaultProps = defaultProps;
