@@ -20,6 +20,7 @@ import {
 	close,
 	coffeeInviteApplicant,
 	recordAttendance as recordAttendanceFor,
+	release,
 	resendSlackInvite as resendSlackInviteTo,
 	type Actor,
 	type Outcome,
@@ -30,13 +31,14 @@ function changedUnderneath(name: string): string {
 }
 
 /**
- * A status change moves an application between the two list views — off the
- * queue and into the archive, or back — so both have to be revalidated, or one
- * of them keeps showing a row that now belongs to the other.
+ * A status change moves an application between the list views — off the
+ * queue and into the archive, out of quarantine, or back — so all of them have
+ * to be revalidated, or one keeps showing a row that now belongs to another.
  */
 function revalidateApplication(applicationId: string) {
 	revalidatePath('/admin/waitlist');
 	revalidatePath('/admin/waitlist/archive');
+	revalidatePath('/admin/waitlist/suspected-spam');
 	revalidatePath(`/admin/waitlist/${applicationId}`);
 }
 
@@ -192,6 +194,33 @@ async function closeApplication(
 			return { ok: false, message: outcome.message };
 		case 'changed':
 			return { ok: false, message: changedUnderneath(outcome.name) };
+	}
+}
+
+export async function releaseApplication(
+	applicationId: string,
+): Promise<ActionResult> {
+	const actor = await manage();
+	const outcome = await release(applicationId, actor);
+
+	switch (outcome.kind) {
+		case 'done':
+			revalidateApplication(applicationId);
+			return { ok: true };
+		case 'not-found':
+			return { ok: false, message: NOT_FOUND };
+		case 'wrong-status':
+			return {
+				ok: false,
+				message: `Only a suspected-spam application can be released, not ${outcome.status}.`,
+			};
+		case 'changed':
+			return { ok: false, message: changedUnderneath(outcome.name) };
+		case 'already-active':
+			return {
+				ok: false,
+				message: `${outcome.name}’s email already has a live application. Decline this one instead.`,
+			};
 	}
 }
 

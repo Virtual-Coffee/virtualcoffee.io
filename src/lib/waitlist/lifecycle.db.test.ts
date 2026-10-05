@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { db, inviteToken, membershipApplication } from '@/db';
+import { and, eq } from 'drizzle-orm';
+
+import { applicationEvent, db, inviteToken, membershipApplication } from '@/db';
 import { coffeeInvite } from '@/emails/coffeeInvite';
 import { slackInvite } from '@/emails/slackInvite';
 import { welcome } from '@/emails/welcome';
@@ -27,6 +29,7 @@ import {
 	close,
 	coffeeInviteApplicant,
 	recordAttendance,
+	release,
 	resendSlackInvite,
 	submit,
 	type Actor,
@@ -386,6 +389,15 @@ describe('close', () => {
 		await expect(applicationEvents(id)).resolves.toEqual([]);
 	});
 
+	test('a quarantined application can be declined', async () => {
+		const { id } = await insertApplication({
+			status: 'suspected_spam',
+			waitlistedAt: null,
+		});
+		await expect(decline(id)).resolves.toEqual({ kind: 'done' });
+		expect((await applicationRow(id)).status).toBe('declined');
+	});
+
 	test('a member cannot be declined or withdrawn, and closing twice is refused', async () => {
 		const member = await insertApplication({ status: 'member' });
 		await expect(decline(member.id)).resolves.toEqual({
@@ -407,6 +419,68 @@ describe('close', () => {
 		});
 		await expect(applicationEvents(id)).resolves.toHaveLength(1);
 		expect(sendEmail).not.toHaveBeenCalled();
+	});
+});
+
+describe('release', () => {
+	test('moves a quarantined application to the Waitlist, keeping its place', async () => {
+		const submittedAt = new Date(Date.now() - 86_400_000);
+		const { id } = await insertApplication({
+			status: 'suspected_spam',
+			submittedAt,
+			waitlistedAt: null,
+		});
+
+		await expect(release(id, admin)).resolves.toEqual({ kind: 'done' });
+
+		await expect(applicationRow(id)).resolves.toMatchObject({
+			status: 'waitlisted',
+			waitlistedAt: submittedAt,
+		});
+		await expect(applicationEvents(id)).resolves.toEqual([
+			{
+				type: 'waitlisted',
+				body: 'Not spam — moved to the Waitlist',
+				actorUserId: admin.userId,
+			},
+		]);
+		const [event] = await db()
+			.select({ fromStatus: applicationEvent.fromStatus })
+			.from(applicationEvent)
+			.where(eq(applicationEvent.applicationId, id));
+		expect(event.fromStatus).toBe('suspected_spam');
+		expect(sendEmail).not.toHaveBeenCalled();
+	});
+
+	test('is refused when the same email already has a live application', async () => {
+		await insertApplication({
+			email: 'ada@example.test',
+			status: 'waitlisted',
+		});
+		const { id } = await insertApplication({
+			email: 'ADA@example.test',
+			name: 'Ada',
+			status: 'suspected_spam',
+			waitlistedAt: null,
+		});
+
+		await expect(release(id, admin)).resolves.toEqual({
+			kind: 'already-active',
+			name: 'Ada',
+		});
+		await expect(applicationRow(id)).resolves.toMatchObject({
+			status: 'suspected_spam',
+		});
+		await expect(applicationEvents(id)).resolves.toEqual([]);
+	});
+
+	test('is refused from any other status', async () => {
+		const { id } = await insertApplication({ status: 'waitlisted' });
+		await expect(release(id, admin)).resolves.toEqual({
+			kind: 'wrong-status',
+			status: 'waitlisted',
+		});
+		await expect(applicationEvents(id)).resolves.toEqual([]);
 	});
 });
 
@@ -710,6 +784,137 @@ describe('submit', () => {
 			.from(membershipApplication);
 		expect(rows.filter((r) => r.inviteId === id)).toHaveLength(1);
 		expect(rows.filter((r) => r.inviteId === null)).toHaveLength(1);
+	});
+
+	test('an ordinary submission is waitlisted and not flagged', async () => {
+		await expect(submit(ada, null)).resolves.toMatchObject({
+			kind: 'submitted',
+			flagged: false,
+		});
+		const row = await onlyRow();
+		expect(row.status).toBe('waitlisted');
+		expect(row.waitlistedAt).toEqual(row.submittedAt);
+		await expect(applicationEvents(row.id)).resolves.toEqual([
+			expect.objectContaining({ type: 'submitted' }),
+		]);
+	});
+
+	test('a machine-generated name is quarantined, with the reason in History', async () => {
+		await expect(
+			submit({ ...ada, name: 'HXtBTQgRAfwqQQPyStQoKS' }, null),
+		).resolves.toMatchObject({ kind: 'submitted', flagged: true });
+
+		const row = await onlyRow();
+		expect(row).toMatchObject({ status: 'suspected_spam', waitlistedAt: null });
+		await expect(applicationEvents(row.id)).resolves.toEqual([
+			expect.objectContaining({ type: 'submitted' }),
+			expect.objectContaining({
+				type: 'flagged_as_spam',
+				body: 'Name looks machine-generated',
+			}),
+		]);
+		const [submitted] = await db()
+			.select({ toStatus: applicationEvent.toStatus })
+			.from(applicationEvent)
+			.where(
+				and(
+					eq(applicationEvent.applicationId, row.id),
+					eq(applicationEvent.type, 'submitted'),
+				),
+			);
+		expect(submitted.toStatus).toBe('suspected_spam');
+	});
+
+	test('a dotted Gmail address is quarantined with the email reason', async () => {
+		await submit({ ...ada, email: 'x.x.xx.xxx.xx.x.x42@gmail.com' }, null);
+
+		const row = await onlyRow();
+		expect(row.status).toBe('suspected_spam');
+		await expect(applicationEvents(row.id)).resolves.toEqual([
+			expect.objectContaining({ type: 'submitted' }),
+			expect.objectContaining({
+				type: 'flagged_as_spam',
+				body: 'Email looks like a Gmail dot-trick address',
+			}),
+		]);
+	});
+
+	test('a redeemed Claim Link skips the heuristic', async () => {
+		const { id, token } = await insertInvite({ inviterSlackUserId: 'U_GRACE' });
+
+		await expect(
+			submit({ ...ada, name: 'HXtBTQgRAfwqQQPyStQoKS' }, token),
+		).resolves.toMatchObject({ kind: 'submitted', flagged: false });
+
+		const row = await onlyRow();
+		expect(row.status).toBe('waitlisted');
+		await expect(inviteRow(id)).resolves.toMatchObject({ status: 'accepted' });
+		await expect(applicationEvents(row.id)).resolves.toEqual([
+			expect.objectContaining({ type: 'submitted' }),
+		]);
+	});
+
+	describe('from an address already in Quarantine', () => {
+		beforeEach(async () => {
+			await insertApplication({
+				email: 'Bot@Example.test',
+				status: 'suspected_spam',
+				waitlistedAt: null,
+			});
+		});
+
+		test('a suspect repeat writes nothing', async () => {
+			await expect(
+				submit(
+					{ ...ada, name: 'HXtBTQgRAfwqQQPyStQoKS', email: 'bot@example.test' },
+					null,
+				),
+			).resolves.toEqual({ kind: 'quarantined-repeat' });
+
+			expect(await db().select().from(membershipApplication)).toHaveLength(1);
+			expect(await db().select().from(applicationEvent)).toEqual([]);
+		});
+
+		test('a made-up Claim Link does not get a suspect repeat past it', async () => {
+			await expect(
+				submit(
+					{ ...ada, name: 'HXtBTQgRAfwqQQPyStQoKS', email: 'bot@example.test' },
+					'not-a-real-token',
+				),
+			).resolves.toEqual({ kind: 'quarantined-repeat' });
+
+			expect(await db().select().from(membershipApplication)).toHaveLength(1);
+			expect(await db().select().from(applicationEvent)).toEqual([]);
+		});
+
+		test('the real person, typing their own name, still joins the Waitlist', async () => {
+			await expect(
+				submit({ ...ada, email: 'bot@example.test' }, null),
+			).resolves.toMatchObject({ kind: 'submitted', flagged: false });
+
+			const rows = await db().select().from(membershipApplication);
+			expect(rows.map((r) => r.status).sort()).toEqual([
+				'suspected_spam',
+				'waitlisted',
+			]);
+		});
+
+		test('a Claim Link is honoured even under a suspect name', async () => {
+			const { id, token } = await insertInvite({
+				inviterSlackUserId: 'U_GRACE',
+			});
+
+			await expect(
+				submit(
+					{ ...ada, name: 'HXtBTQgRAfwqQQPyStQoKS', email: 'bot@example.test' },
+					token,
+				),
+			).resolves.toMatchObject({ kind: 'submitted', flagged: false });
+
+			await expect(inviteRow(id)).resolves.toMatchObject({
+				status: 'accepted',
+			});
+		});
 	});
 
 	test('a failed insert does not burn the Claim Link', async () => {

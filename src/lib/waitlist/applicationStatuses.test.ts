@@ -5,16 +5,21 @@ import { applicationStatus } from '@/db/schema';
 import {
 	ACTIONS_FROM,
 	ARCHIVE_STATUSES,
+	QUARANTINE_STATUSES,
 	QUEUE_STATUSES,
 	can,
 } from './applicationStatuses';
 
-describe('queue and archive', () => {
+describe('queue, archive and quarantine', () => {
 	test('never show the same row, and between them show every status', () => {
-		const overlap = QUEUE_STATUSES.filter((s) => ARCHIVE_STATUSES.includes(s));
-		expect(overlap).toEqual([]);
+		const lists = [QUEUE_STATUSES, ARCHIVE_STATUSES, QUARANTINE_STATUSES];
+		for (const [i, a] of lists.entries()) {
+			for (const b of lists.slice(i + 1)) {
+				expect(a.filter((s) => b.includes(s))).toEqual([]);
+			}
+		}
 
-		const covered = [...QUEUE_STATUSES, ...ARCHIVE_STATUSES].sort();
+		const covered = lists.flat().sort();
 		expect(covered).toEqual([...applicationStatus.enumValues].sort());
 	});
 });
@@ -36,5 +41,8 @@ describe('the transition table', () => {
 		expect(can('member', 'close')).toBe(false);
 		expect(can('member', 'resendSlackInvite')).toBe(true);
 		expect(can('declined', 'close')).toBe(false);
+		expect(can('suspected_spam', 'release')).toBe(true);
+		expect(can('waitlisted', 'release')).toBe(false);
+		expect(can('suspected_spam', 'close')).toBe(true);
 	});
 });

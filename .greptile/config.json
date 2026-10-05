@@ -10,6 +10,11 @@
 		"virtual-coffee-ci[bot]"
 	],
 	"ignoreKeywords": "!Greptile review skipped!",
+	"autoApprove": {
+		"enabled": true,
+		"riskCeiling": "critical",
+		"filters": { "excludeAuthors": ["renovate[bot]"] }
+	},
 	"ignorePatterns": "pnpm-lock.yaml\ndrizzle/**/snapshot.json\nsrc/data/bots.ts\nsrc/data/monthlyChallenges/data/**\nsrc/data/podcast/episodes.json",
 	"shouldUpdateDescription": false,
 	"fixWithAI": true,
@@ -34,7 +39,7 @@
 		"collapsible": true,
 		"defaultOpen": false
 	},
-	"instructions": "Keep comments short: one or two sentences plus file:line. Where a rule cites an ADR under docs/adr/, link the ADR instead of restating it. PRs may target a parent branch rather than main (stacked PRs); review only the diff against the PR base. Before flagging a race, missing retry or stale read, check the ADR or code comment at that site: documented best-effort checks and post-commit sends are intentional. If you still disagree, cite the ADR. On a Renovate major-version bump, read the release notes in the PR body and check this repo's usages for breaking changes; flag code that must change, not the bump itself.",
+	"instructions": "Keep comments short: one or two sentences plus file:line. Where a rule cites an ADR under docs/adr/, link the ADR instead of restating it. PRs may target a parent branch rather than main (stacked PRs); review only the diff against the PR base. Before flagging a race, missing retry or stale read, check the ADR or code comment at that site: documented best-effort checks and post-commit sends are intentional. If you still disagree, cite the ADR. When a PR bumps any dependency to a new major version, read its release notes or changelog and check this repo's usages for breaking changes; flag code that must change, not the bump itself.",
 	"rules": [
 		{
 			"id": "external-html-sanitized",

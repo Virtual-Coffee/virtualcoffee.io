@@ -73,6 +73,13 @@ export default async function AdminQueuePage({
 						{counts.waitlisted ?? 0} waiting on a first decision ·{' '}
 						{counts.coffee_invited ?? 0} invited to a Coffee
 					</p>
+					{(counts.suspected_spam ?? 0) > 0 && (
+						<p className="mb-0 small">
+							<Link href="/admin/waitlist/suspected-spam">
+								{counts.suspected_spam} suspected spam
+							</Link>
+						</p>
+					)}
 					{unannounced > 0 && (
 						<p className="text-warning-emphasis mb-0 small">
 							{unannounced} waiting {unannounced === 1 ? 'was' : 'were'} never

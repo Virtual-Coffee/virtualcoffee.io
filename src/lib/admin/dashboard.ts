@@ -60,6 +60,8 @@ async function waitlistCard(): Promise<DashboardCard> {
 			{ count: counts.waitlisted ?? 0, label: 'waiting' },
 			// Sent a Coffee invite, awaiting a Membership Approval after it.
 			{ count: counts.coffee_invited ?? 0, label: 'pending' },
+			// Held by the /join heuristic until someone releases or declines them.
+			{ count: counts.suspected_spam ?? 0, label: 'suspected spam' },
 		],
 	};
 }
