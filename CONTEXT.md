@@ -217,6 +217,16 @@ feed.
 _Avoid_: audit log, event log, activity table, timeline (the component, not
 the concept)
 
+**Never announced**:
+A Membership Application or Submission that was stored but nobody has been told
+about: still in its open status (`waitlisted` for an Application, `new` for a
+Submission), and either any announcement failed or none was recorded. Any
+failure counts, not just the latest, because a Lunch & Learn idea is announced
+on two channels. Imported rows are exempt unless an announcement failed. One
+rule in `src/lib/history/eventLog.ts` behind the dashboard banner, the list
+marker and the `?failed=1` filter; `docs/adr/0005`.
+_Avoid_: unannounced, failed notification, missing notification
+
 ## Outbound
 
 **Delivery Mode**:

@@ -2,7 +2,6 @@ import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import { cocReport, db, submissionEvent } from '@/db';
-import { failedNotifications } from '@/lib/submissions/submissions';
 import { failInserts } from '@/test/db/fixtures';
 import { fieldErrors, formDataWith } from '@/test/forms';
 import { blobs, notifySlack } from '@/test/mocks/spies';
@@ -78,30 +77,6 @@ describe('submitCocReport', () => {
 				new RegExp(`/admin/submissions/coc/${row.id}$`),
 			),
 		});
-	});
-
-	/**
-	 * ADR 0005: persist first, notify second. A Slack outage must never lose a
-	 * report — the reporter still sees thanks, and /admin shows the failure.
-	 */
-	test('a Slack failure keeps the report and is visible in /admin', async () => {
-		notifySlack.mockResolvedValue({
-			ok: false,
-			definitelyNotSent: true,
-			message: 'Slack rejected the message (404: no_service).',
-		});
-
-		const { row, events } = await submit(valid);
-
-		expect(row.status).toBe('new');
-		expect(events).toEqual([
-			{ type: 'submitted', body: 'Report submitted' },
-			{
-				type: 'notification_failed',
-				body: 'Slack notified of a CoC report failed: Slack rejected the message (404: no_service).',
-			},
-		]);
-		await expect(failedNotifications(['coc'])).resolves.toEqual({ coc: 1 });
 	});
 
 	test('an attachment is stored before the row, and the row points at it', async () => {

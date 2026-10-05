@@ -15,7 +15,7 @@ import {
 	submissionSubject,
 	type SubmissionKind,
 } from '@/lib/submissions/submissions';
-import { STATUS_ORDER } from './presentation';
+import { nextState, STATUS_ORDER } from '@/lib/submissions/status';
 
 const statusSchema = z.enum(STATUS_ORDER);
 
@@ -61,21 +61,13 @@ export async function setSubmissionStatus(
 	// status change behind with no event recording who made it.
 	const actor = await actorId(context.session.user.id);
 
-	// `closedAt` records when it stopped needing attention, so reopening clears
-	// it rather than leaving a date that is no longer true, and moving between
-	// the two closed statuses keeps the original.
-	const closed = next === 'resolved' || next === 'dismissed';
-
 	// Conditional on the status still being what was read — see
 	// transitionAndRecord() — so two maintainers cannot both write the change
 	// and both record it from a stale status.
 	const changed = await transitionAndRecord(
 		submissionSubject(context.kind, id),
 		current.status,
-		{
-			status: next,
-			closedAt: closed ? (current.closedAt ?? new Date()) : null,
-		},
+		nextState(current, next),
 		{
 			type: 'status_changed',
 			body: null,
