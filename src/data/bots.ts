@@ -11,6 +11,7 @@
  * at the edge.
  */
 export const blockedUas = [
+	'AgentDataBot',
 	'AgentTimes',
 	'AI2Bot',
 	'AI2Bot-DeepResearchEval',
@@ -30,6 +31,7 @@ export const blockedUas = [
 	'AwarioRssBot',
 	'AwarioSmartBot',
 	'bedrockbot',
+	'BixelBot',
 	'Bravebot',
 	'Brightbot',
 	'BuddyBot',
@@ -41,6 +43,7 @@ export const blockedUas = [
 	'Claude-Web',
 	'ClaudeBot',
 	'Cloudflare-AutoRAG',
+	'CloudflareBrowserRenderingCrawler',
 	'CloudVertexBot',
 	'Code',
 	'cohere-ai',
@@ -84,6 +87,7 @@ export const blockedUas = [
 	'img2dataset',
 	'ISSCyberRiskCrawler',
 	'Kangaroo Bot',
+	'Kimi-Agent',
 	'KimiBot',
 	'KlaviyoAIBot',
 	'KunatoCrawler',
@@ -115,6 +119,7 @@ export const blockedUas = [
 	'peer39_crawler',
 	'PetalBot',
 	'Poseidon Research Crawler',
+	'qodercli',
 	'QualifiedBot',
 	'Querit-SearchBot',
 	'QueritBot',
@@ -171,6 +176,7 @@ export const allowedUas = [
 	'Google-NotebookLM',
 	'GoogleAgent-URLContext',
 	'kagi-fetcher',
+	'KeenableBot',
 	'Kimi-SearchBot',
 	'Kimi-User',
 	'LinerBot',
