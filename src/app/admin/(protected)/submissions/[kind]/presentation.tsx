@@ -16,13 +16,6 @@ const STATUS_CLASSES: Record<SubmissionStatus, string> = {
 	dismissed: 'text-bg-light border',
 };
 
-export const STATUS_ORDER: SubmissionStatus[] = [
-	'new',
-	'in_progress',
-	'resolved',
-	'dismissed',
-];
-
 export function SubmissionStatusBadge({
 	status,
 }: {

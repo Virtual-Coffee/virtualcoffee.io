@@ -3,7 +3,8 @@
 import type { SubmissionStatus } from '@/db';
 import { useAction } from '@/util/forms/useAction';
 import { setSubmissionStatus } from './actions';
-import { STATUS_ORDER, submissionStatusLabel } from './presentation';
+import { STATUS_ORDER } from '@/lib/submissions/status';
+import { submissionStatusLabel } from './presentation';
 import { ReadOnlyNotice } from '../../presentation';
 
 export function StatusControl({

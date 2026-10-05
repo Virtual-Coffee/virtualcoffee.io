@@ -8,7 +8,7 @@ import {
 	visibleSubmissionKinds,
 	type SubmissionKind,
 } from '@/lib/submissions/submissions';
-import { unannouncedCount } from '@/lib/waitlist/applications';
+import { neverAnnouncedCount } from '@/lib/history/eventLog';
 import { ActivityFeed } from './activityFeed';
 
 export const dynamic = 'force-dynamic';
@@ -31,15 +31,21 @@ export default async function AdminDashboardPage() {
 
 	const visibleKinds = visibleSubmissionKinds(sections);
 
-	const [cards, activity, failures, waitlistUnannounced] = await Promise.all([
-		dashboardCards(sections),
-		recentActivity(sections),
-		failedNotifications(visibleKinds),
-		sections.includes('waitlist') ? unannouncedCount() : 0,
-	]);
+	const [cards, activity, failures, waitlistNeverAnnounced] = await Promise.all(
+		[
+			dashboardCards(sections),
+			recentActivity(sections),
+			failedNotifications(visibleKinds),
+			sections.includes('waitlist')
+				? neverAnnouncedCount({ kind: 'application' })
+				: 0,
+		],
+	);
 
 	const failureEntries = Object.entries(failures);
-	const announcementFailures = failureEntries.length + waitlistUnannounced;
+	const announcementFailures =
+		waitlistNeverAnnounced +
+		failureEntries.reduce((sum, [, total]) => sum + total, 0);
 
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
@@ -64,11 +70,11 @@ export default async function AdminDashboardPage() {
 						nobody may have seen them come in.
 					</p>
 					<ul className="mb-0">
-						{waitlistUnannounced > 0 && (
+						{waitlistNeverAnnounced > 0 && (
 							<li>
 								<Link href="/admin/waitlist">Waitlist</Link>:{' '}
-								{waitlistUnannounced}{' '}
-								{waitlistUnannounced === 1 ? 'application' : 'applications'}
+								{waitlistNeverAnnounced}{' '}
+								{waitlistNeverAnnounced === 1 ? 'application' : 'applications'}
 							</li>
 						)}
 						{failureEntries.map(([kind, total]) => (
