@@ -1,3 +1,4 @@
+import type { Server } from 'node:net';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -31,6 +32,12 @@ const MIGRATIONS = resolve(
 export default async function setup(project: TestProject) {
 	const database = new NetlifyDB({ logger: () => {} });
 	const url = await database.start();
+	// The wire server leaves Nagle on; with Linux's delayed ACK each
+	// multi-write reply stalls ~40ms. `server` is private in the types only.
+	(database as unknown as { server: Server }).server.on(
+		'connection',
+		(socket) => socket.setNoDelay(true),
+	);
 
 	// A throwaway client rather than `db()`: this process is not a test worker,
 	// and the pool has to be closed for vitest to exit.
