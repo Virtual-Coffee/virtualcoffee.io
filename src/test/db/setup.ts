@@ -107,11 +107,23 @@ vi.mock('@/lib/volunteers/invites', async (importOriginal) =>
 	),
 );
 
-/** Every table in the schema, so a new one is truncated without editing this. */
+/**
+ * Empties every table in the schema, so a new one is covered without editing
+ * this. `DELETE` with foreign-key triggers off, then the identity sequences
+ * reset: on PGlite that is ~1ms, where `TRUNCATE … RESTART IDENTITY CASCADE`
+ * is ~11ms — most of a typical test's wall time.
+ */
 const tables = Object.values(schema)
 	.filter((value) => is(value, PgTable))
-	.map((table) => `"${getTableName(table)}"`)
-	.join(', ');
+	.map((table) => `"${getTableName(table)}"`);
+const reset = sql.raw(
+	[
+		'SET session_replication_role = replica',
+		...tables.map((table) => `DELETE FROM ${table}`),
+		'SET session_replication_role = DEFAULT',
+		`SELECT setval(seq, 1, false) FROM (SELECT (quote_ident(schemaname) || '.' || quote_ident(sequencename))::regclass AS seq FROM pg_sequences WHERE schemaname = 'public') s`,
+	].join('; '),
+);
 
 beforeEach(() => {
 	resetSlackDirectory();
@@ -121,6 +133,6 @@ beforeEach(() => {
 
 afterEach(async () => {
 	const { db } = await import('@/db');
-	await db().execute(sql.raw(`TRUNCATE ${tables} RESTART IDENTITY CASCADE`));
+	await db().execute(reset);
 	vi.unstubAllEnvs();
 });
