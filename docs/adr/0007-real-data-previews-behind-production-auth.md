@@ -71,7 +71,8 @@ against are already covered:
 - A preview's sign-in only reaches the preview when the running function knows
   its own address. Netlify sets `CONTEXT` and `DEPLOY_PRIME_URL` at build only,
   so `next.config.mjs` inlines them; without that, `siteUrl()` falls back to
-  production's domain and Slack is sent production's callback.
+  production's domain and Slack is sent production's callback. What a
+  `CONTEXT` value means is decided once, in docs/adr/0017.
 - Adding a table or column is just adding it; nothing has to be registered.
 - Anything a preview reaches that is not the database is not forked: an
   opt-in that makes a preview write to a real external system (a calendar, a

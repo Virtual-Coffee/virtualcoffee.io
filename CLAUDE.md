@@ -65,7 +65,7 @@ Every external data source lives in `src/data/` and degrades to a mock when its 
 | Slack member directory (`/admin` grant picker)  | `src/data/slackMembers.ts`   | `src/data/mocks/slackMembers.ts` (faker)            |
 | Membership applications (`/join`, `/admin`)     | `src/db/`                    | local Postgres from `netlify dev`                   |
 
-`src/data/mocks/index.ts` exports `assertMocksAllowed()`, which throws when Netlify's `CONTEXT === 'production'`. A new external fetch follows this pattern: try the API, fall back to a mock guarded by `assertMocksAllowed`, and wrap the fetch in `unstable_cache` with a tag so `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) can revalidate it.
+A new external fetch is a `defineSource()` (`src/data/source.ts`): it owns the mock gate and the tagged `unstable_cache` that `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates. Outside production, missing credentials fall back to the mock silently and a failed fetch with a `console.warn`; production throws either way.
 
 The Events Calendar is the system of record for Series and Events; `/admin/events` is a client of the Calendar API and stores nothing — `docs/adr/0014`. The shape of a Series or an Event is declared once, in `src/lib/events/eventDraft.ts` (with recurrence in `src/lib/events/recurrence.ts`), and the admin forms and `events/actions.ts` both parse against it.
 
@@ -132,6 +132,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 ### Netlify
 
 - `netlify/edge-functions/block-bots.ts` refuses harvesting user agents on deploys only; locally it matches but lets through unless `BLOCK_BOTS_LOCAL=true` is in `.env` (the CLI does not pass plain process env vars to edge functions). It reads the deploy context from `context.deploy.context` — `Netlify.env.get('CONTEXT')` is build-scope and undefined at the edge — and imports `src/data/bots.ts` with an explicit `.ts` extension because it bundles for Deno.
+- `CONTEXT` is read through `deployContext()` (`src/lib/deployContext.ts`): `production`, `preview` or `local`, an unknown value counting as a preview; the edge function imports it with a `.ts` extension — `docs/adr/0017`.
 - `CONTEXT` and `DEPLOY_PRIME_URL` are build-scope, so `next.config.mjs` inlines them into `process.env.*` reads; otherwise a running function sees a deploy as a local checkout — `docs/adr/0007`.
 - URL redirects go in `netlify.toml`, beside the legacy 301 map, rather than in Next config. `/join-slack` is a page (`src/app/join-slack/`), not a redirect function.
 

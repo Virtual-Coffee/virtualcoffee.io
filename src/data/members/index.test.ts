@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { z } from 'zod';
 import type { MemberObject } from '@/content/members/types';
-import { getMemberGithubData } from './index';
+import { fetchMemberGithubData } from './index';
 
 const members = ['ada', 'ghost', 'grace'].map((github) => ({
 	github,
@@ -32,8 +32,6 @@ function stubGraphql(body: unknown) {
 
 beforeEach(() => {
 	vi.stubEnv('GITHUB_TOKEN', 'test-token');
-	// Mocks are refused in production (assertMocksAllowed).
-	vi.stubEnv('CONTEXT', 'deploy-preview');
 	vi.spyOn(console, 'log').mockImplementation(() => {});
 	vi.spyOn(console, 'warn').mockImplementation(() => {});
 });
@@ -44,7 +42,8 @@ afterEach(() => {
 	vi.restoreAllMocks();
 });
 
-describe('getMemberGithubData', () => {
+// The mock fallback is defineSource's, covered in src/data/source.test.ts.
+describe('fetchMemberGithubData', () => {
 	test('drops a member GitHub reports NOT_FOUND and keeps the rest', async () => {
 		stubGraphql({
 			data: { u0: user('ada'), u1: null, u2: user('grace') },
@@ -57,7 +56,7 @@ describe('getMemberGithubData', () => {
 			],
 		});
 
-		const result = await getMemberGithubData(members);
+		const result = await fetchMemberGithubData(members);
 
 		expect(Object.keys(result)).toEqual(['ada', 'grace']);
 		expect(console.warn).toHaveBeenCalledWith(
@@ -65,16 +64,14 @@ describe('getMemberGithubData', () => {
 		);
 	});
 
-	test('falls back to mock data on any other GraphQL error', async () => {
+	test('throws on any other GraphQL error', async () => {
 		stubGraphql({
 			data: null,
 			errors: [{ type: 'RATE_LIMITED', message: 'API rate limit exceeded' }],
 		});
 
-		const result = await getMemberGithubData(members);
-
-		// The mock resolves every member, including the one a real lookup would drop.
-		expect(Object.keys(result).sort()).toEqual(['ada', 'ghost', 'grace']);
-		expect(result.ada.id).not.toBe('id-ada');
+		await expect(fetchMemberGithubData(members)).rejects.toThrow(
+			'API rate limit exceeded',
+		);
 	});
 });

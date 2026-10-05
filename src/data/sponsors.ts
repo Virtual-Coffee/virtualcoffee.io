@@ -1,6 +1,5 @@
-import { unstable_cache } from 'next/cache';
 import type mockSponsors from './mocks/sponsors';
-import { assertMocksAllowed } from './mocks';
+import { defineSource } from './source';
 import { githubGraphql } from '@/lib/github/graphql';
 import ImgixClient from '@imgix/js-core';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
@@ -113,84 +112,84 @@ const query = /* GraphQL */ `
 	}
 `;
 
-export const getSponsors = unstable_cache(
-	async function getSponsorsInternal() {
-		// async function main() {
+type SponsorsResponse = typeof mockSponsors;
 
-		const token = process.env.GITHUB_TOKEN;
+async function requestSponsors(): Promise<SponsorsResponse | null> {
+	// `configured` in the source below guarantees the token.
+	const response = await githubGraphql(process.env.GITHUB_TOKEN!)<
+		SponsorsResponse | undefined
+	>(query);
 
-		let response: undefined | typeof mockSponsors;
+	// Also reached when the GITHUB_TOKEN user lacks the right permissions,
+	// which returns an empty response rather than throwing.
+	return response?.organization?.sponsorsListing?.tiers ? response : null;
+}
 
-		if (token) {
-			try {
-				response = await githubGraphql(token)<typeof mockSponsors>(query);
-			} catch (error) {
-				console.log(error);
-				console.log('Error loading github sponsors, using fake data instead');
-			}
-		}
+async function groupSponsors(response: SponsorsResponse) {
+	const tiers = await Promise.all(
+		response.organization.sponsorsListing.tiers.nodes.map(async (tier) => {
+			const sponsors = await Promise.all(
+				response.organization.sponsorshipsAsMaintainer.nodes
+					.filter((sponsor) => {
+						return sponsor.tier?.id === tier.id;
+					})
+					.map(async (sponsor) => {
+						const entity = sponsor.sponsorEntity;
 
-		if (!response || !response?.organization?.sponsorsListing?.tiers) {
-			// Also reached when the GITHUB_TOKEN user lacks the right permissions,
-			// which returns an empty response rather than throwing.
-			assertMocksAllowed('GitHub sponsors');
-			response = (await import('./mocks/sponsors')).default;
-		}
+						return {
+							...entity,
+							// A sponsor writes their own description, and it is rendered
+							// as HTML, so it goes through the one allowlist like every
+							// other HTML path in the app.
+							descriptionHTML: entity.descriptionHTML
+								? await sanitizeHtml(entity.descriptionHTML)
+								: entity.descriptionHTML,
+							// Overrides are authored here and reviewed like any other
+							// code, so they are applied after sanitizing -- the allowlist
+							// carries no `class` attribute, and stripping it would drop
+							// the styling they rely on.
+							...(sponsorOverrides[entity.id] || {}),
+						};
+					}),
+			);
 
-		const tiers = await Promise.all(
-			response.organization.sponsorsListing.tiers.nodes.map(async (tier) => {
-				const sponsors = await Promise.all(
-					response.organization.sponsorshipsAsMaintainer.nodes
-						.filter((sponsor) => {
-							return sponsor.tier?.id === tier.id;
-						})
-						.map(async (sponsor) => {
-							const entity = sponsor.sponsorEntity;
+			return {
+				...tier,
+				sponsors,
+			};
+		}),
+	);
 
-							return {
-								...entity,
-								// A sponsor writes their own description, and it is rendered
-								// as HTML, so it goes through the one allowlist like every
-								// other HTML path in the app.
-								descriptionHTML: entity.descriptionHTML
-									? await sanitizeHtml(entity.descriptionHTML)
-									: entity.descriptionHTML,
-								// Overrides are authored here and reviewed like any other
-								// code, so they are applied after sanitizing -- the allowlist
-								// carries no `class` attribute, and stripping it would drop
-								// the styling they rely on.
-								...(sponsorOverrides[entity.id] || {}),
-							};
-						}),
-				);
+	const returnVal = {
+		logoSponsors: tiers
+			.filter(
+				(tier) =>
+					!tier.isOneTime &&
+					tier.monthlyPriceInDollars >= 100 &&
+					tier.sponsors.length > 0,
+			)
+			.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
+		supporters: tiers
+			.filter(
+				(tier) =>
+					(tier.isOneTime || tier.monthlyPriceInDollars < 100) &&
+					tier.sponsors.length > 0,
+			)
+			.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
+	};
 
-				return {
-					...tier,
-					sponsors,
-				};
-			}),
-		);
+	return returnVal;
+}
 
-		const returnVal = {
-			logoSponsors: tiers
-				.filter(
-					(tier) =>
-						!tier.isOneTime &&
-						tier.monthlyPriceInDollars >= 100 &&
-						tier.sponsors.length > 0,
-				)
-				.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
-			supporters: tiers
-				.filter(
-					(tier) =>
-						(tier.isOneTime || tier.monthlyPriceInDollars < 100) &&
-						tier.sponsors.length > 0,
-				)
-				.sort((a, b) => b.monthlyPriceInDollars - a.monthlyPriceInDollars),
-		};
-
-		return returnVal;
+export const getSponsors = defineSource({
+	what: 'GitHub sponsors',
+	key: 'sponsors',
+	tag: 'sponsors',
+	revalidate: 86400,
+	configured: () => Boolean(process.env.GITHUB_TOKEN),
+	fetch: async () => {
+		const response = await requestSponsors();
+		return response && groupSponsors(response);
 	},
-	[],
-	{ revalidate: 86400, tags: ['sponsors'] },
-);
+	mock: async () => groupSponsors((await import('./mocks/sponsors')).default),
+}).get;

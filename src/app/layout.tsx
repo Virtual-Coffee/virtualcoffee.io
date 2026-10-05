@@ -5,7 +5,7 @@ import '@/styles/main.scss';
 
 import Image from 'next/image';
 
-import { buildUrls } from '@/util/url.server';
+import { deployContext } from '@/lib/deployContext';
 import { createMetaData } from '@/util/createMetaData.server';
 import Script from 'next/script';
 
@@ -43,7 +43,7 @@ export default function RootLayout({
 				data-scroll-behavior="smooth"
 			>
 				<head>
-					{buildUrls.NETLIFY && buildUrls.CONTEXT === 'production' && (
+					{deployContext() === 'production' && (
 						<Script
 							strategy="afterInteractive"
 							data-domain="virtualcoffee.io"

@@ -1,10 +1,9 @@
-import { unstable_cache } from 'next/cache';
 import { calendar, auth, type calendar_v3 } from '@googleapis/calendar';
 import { DateTime } from 'luxon';
 import { DISPLAY_ZONE } from '@/util/date';
 import { looksLikeHtml, parseMarkdown } from '@/util/markdown.server';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
-import { assertMocksAllowed, mocksAllowed } from './mocks';
+import { defineSource } from './source';
 import { ics, google, outlook } from 'calendar-link';
 
 export interface EventItem {
@@ -160,71 +159,79 @@ export async function listDisplayableEvents(
 }
 
 /**
- * Upcoming events for the next 30 days, in start order, filtered by
- * `isDisplayableEvent`. Without Google credentials this returns mock data, and
- * a failed fetch rethrows wherever mocks are disallowed (production) so a
- * broken build fails loudly instead of shipping an empty events page.
+ * The 30 days from local midnight in the zone the UI renders in. `timeMax` is
+ * an exclusive upper bound on an event's start time, so truncating in UTC
+ * instead would cut off the final local day.
  */
-export const getEvents = unstable_cache(
-	async ({ limit }: { limit: number }): Promise<EventsResponse> => {
-		// `timeMax` is an exclusive upper bound on an event's start time, so the
-		// window has to run from local midnight in the zone the UI renders in.
-		// Truncating in UTC instead would cut off the final local day.
-		const now = DateTime.now().setZone(DISPLAY_ZONE);
-		if (!now.isValid) {
-			throw new Error(`Invalid time zone: ${DISPLAY_ZONE}`);
-		}
-		const displayRangeStart = now.startOf('day');
-		const rangeStart = displayRangeStart.toUTC().toISO();
+function displayWindow() {
+	const now = DateTime.now().setZone(DISPLAY_ZONE);
+	if (!now.isValid) {
+		throw new Error(`Invalid time zone: ${DISPLAY_ZONE}`);
+	}
+	const displayRangeStart = now.startOf('day');
+	return {
+		rangeStart: displayRangeStart.toUTC().toISO(),
 		// Calendar days, so the window survives the DST change.
-		const rangeEnd = displayRangeStart.plus({ days: 30 }).toUTC().toISO();
+		rangeEnd: displayRangeStart.plus({ days: 30 }).toUTC().toISO(),
+	};
+}
 
-		const configured = calendarConfigured();
-		if (!configured) {
-			assertMocksAllowed('calendar events');
-			const fakeData = await import('./mocks/events');
-			return fakeData.createEventsData({ limit, rangeEnd, rangeStart });
-		}
+async function fetchEvents({
+	limit,
+}: {
+	limit: number;
+}): Promise<EventsResponse | null> {
+	const configured = calendarConfigured();
+	if (!configured) return null;
 
-		try {
-			const items = await listDisplayableEvents(createCalendarClient(), {
-				calendarId: configured.calendarId,
-				timeMin: rangeStart,
-				timeMax: rangeEnd,
-				limit,
-			});
+	const { rangeStart, rangeEnd } = displayWindow();
+	const items = await listDisplayableEvents(createCalendarClient(), {
+		calendarId: configured.calendarId,
+		timeMin: rangeStart,
+		timeMax: rangeEnd,
+		limit,
+	});
 
-			return await Promise.all(
-				items.map(async (event) => {
-					const title = event.summary;
-					const start = event.start.dateTime;
-					const end = event.end.dateTime;
-					const description = await renderDescription(event.description ?? '');
-					const linkDetails = { title, start, end, description };
+	return Promise.all(
+		items.map(async (event) => {
+			const title = event.summary;
+			const start = event.start.dateTime;
+			const end = event.end.dateTime;
+			const description = await renderDescription(event.description ?? '');
+			const linkDetails = { title, start, end, description };
 
-					return {
-						id: event.id,
-						title,
-						start,
-						end,
-						description,
-						htmlLink: event.htmlLink ?? undefined,
-						calendarLinks: {
-							google: google(linkDetails),
-							outlook: outlook(linkDetails),
-							ics: ics(linkDetails),
-						},
-					};
-				}),
-			);
-		} catch (e) {
-			console.error(e);
-			// A production build that can't reach Google Calendar should fail rather
-			// than silently render an empty events list.
-			if (!mocksAllowed()) throw e;
-			return [];
-		}
-	},
-	[],
-	{ revalidate: 43200, tags: ['events'] },
-);
+			return {
+				id: event.id,
+				title,
+				start,
+				end,
+				description,
+				htmlLink: event.htmlLink ?? undefined,
+				calendarLinks: {
+					google: google(linkDetails),
+					outlook: outlook(linkDetails),
+					ics: ics(linkDetails),
+				},
+			};
+		}),
+	);
+}
+
+/**
+ * Upcoming events for the next 30 days, in start order, filtered by
+ * `isDisplayableEvent`. A failed fetch throws in production, so a broken build
+ * fails loudly instead of shipping an empty events page.
+ */
+export const getEvents = defineSource({
+	what: 'calendar events',
+	key: 'events',
+	tag: 'events',
+	revalidate: 43200,
+	configured: () => calendarConfigured() !== null,
+	fetch: fetchEvents,
+	mock: async ({ limit }: { limit: number }) =>
+		(await import('./mocks/events')).createEventsData({
+			limit,
+			...displayWindow(),
+		}),
+}).get;

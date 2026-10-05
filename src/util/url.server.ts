@@ -1,16 +1,4 @@
-export const buildUrls: BuildUrls = {
-	NETLIFY: process.env.NETLIFY,
-	URL: process.env.URL as string,
-	DEPLOY_PRIME_URL: process.env.DEPLOY_PRIME_URL,
-	CONTEXT: process.env.CONTEXT,
-};
-
-type BuildUrls = {
-	URL: string;
-	NETLIFY?: string;
-	CONTEXT?: string;
-	DEPLOY_PRIME_URL?: string;
-};
+import { deployContext } from '@/lib/deployContext';
 
 /**
  * The site's own origin for links in emails, with no trailing slash.
@@ -22,8 +10,7 @@ type BuildUrls = {
  * Coffee invite sent from `netlify dev` links back to localhost.
  */
 export function siteUrl(): string {
-	const context = process.env.CONTEXT;
-	const preview = context === 'deploy-preview' || context === 'branch-deploy';
+	const preview = deployContext() === 'preview';
 	// `||`, not `??`: a declared-but-empty variable must fall through too, or
 	// every emailed link would come out relative.
 	const origin =

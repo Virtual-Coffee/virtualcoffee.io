@@ -1,15 +1,12 @@
 import type { EdgeFunction } from '@netlify/edge-functions';
 import { allowedUas, blockedUas } from '../../src/data/bots.ts';
+import { classify } from '../../src/lib/deployContext.ts';
 import { createBotPolicy } from '../../src/data/botMatcher.ts';
 
-// Netlify reports one of these as `context.deploy.context` on a real deploy,
-// and `dev` under `netlify dev`. Test for a deploy positively — there is
-// nothing to protect on a laptop, and a silent 403 there reads as an auth bug.
-//
-// Read it from the context object, not `Netlify.env.get('CONTEXT')`: that is
-// a build-scope variable and is undefined at the edge, which made this gate
-// fail closed on every production request.
-const deployContexts = ['production', 'deploy-preview', 'branch-deploy'];
+// Read the deploy context from the context object, not
+// `Netlify.env.get('CONTEXT')`: that is a build-scope variable and is
+// undefined at the edge, which made this gate fail closed on every production
+// request.
 
 // Built once at module load rather than per request. The precedence rule
 // (allowed wins) lives with the matcher so `botMatcher.test.ts` exercises the
@@ -27,7 +24,7 @@ const blockBots: EdgeFunction = (request, context) => {
 
 	// Matching runs before the deploy gate so that local dev still reports what
 	// production would refuse, just under a different tag.
-	const onDeploy = deployContexts.includes(context.deploy.context);
+	const onDeploy = classify(context.deploy.context) !== 'local';
 	const enforce = onDeploy || Netlify.env.get('BLOCK_BOTS_LOCAL') === 'true';
 
 	// One line per refusal. The list changes weekly and the gate above once

@@ -8,25 +8,12 @@
  * checkout, like `netlify dev`'s `CONTEXT=dev`.
  */
 
+import { contextLabel, deployContext } from '@/lib/deployContext';
 import { maskAddress } from '@/lib/maskAddress';
 import { reportHandled } from '@/lib/monitoring/reportHandled';
 
 export type OutboundKind =
 	'email' | 'slack' | 'slack dm' | 'github issue' | 'calendar';
-
-export function isProduction(): boolean {
-	return process.env.CONTEXT === 'production';
-}
-
-/** For log lines and warnings: which deploy captured the message. */
-export function deployContext(): string {
-	return process.env.CONTEXT || 'local';
-}
-
-/** Whether a deploy is one of Netlify's, as opposed to a checkout. */
-function isDeployed(): boolean {
-	return Boolean(process.env.CONTEXT) && process.env.CONTEXT !== 'dev';
-}
 
 /**
  * Every link in a message, so a walkthrough can see where it went. A `code`
@@ -57,9 +44,9 @@ export function capture(
 	body: string,
 	details?: Record<string, string | undefined>,
 ): void {
-	if (isDeployed()) {
+	if (deployContext() !== 'local') {
 		console.info(
-			`[${kind} captured] ${deployContext()} ${maskAddress(target)}`,
+			`[${kind} captured] ${contextLabel()} ${maskAddress(target)}`,
 			...(details ? [details] : []),
 			...linksIn(body).map((link) => `\n${link}`),
 		);
@@ -67,7 +54,7 @@ export function capture(
 	}
 
 	console.info(
-		`[${kind} captured] ${deployContext()} ${target}`,
+		`[${kind} captured] ${contextLabel()} ${target}`,
 		...(details ? [details] : []),
 		...(body ? [`\n${body}`] : []),
 	);
@@ -87,19 +74,19 @@ export type EmailDelivery =
  * preview stays Captured whatever is set.
  */
 export function emailDelivery(): EmailDelivery {
-	if (isProduction()) return { mode: 'live' };
+	if (deployContext() === 'production') return { mode: 'live' };
 
 	const host = process.env.SMTP_HOST?.trim();
-	if (!isDeployed() && host) {
+	if (deployContext() === 'local' && host) {
 		if (isLoopbackHost(host)) {
-			return { mode: 'local', context: deployContext(), host };
+			return { mode: 'local', context: contextLabel(), host };
 		}
 		// A sink that mail can leave the machine for is not a sink.
 		console.warn(
 			`[email captured] SMTP_HOST=${host} is not a loopback address; nothing is delivered outside production.`,
 		);
 	}
-	return { mode: 'captured', context: deployContext() };
+	return { mode: 'captured', context: contextLabel() };
 }
 
 function isLoopbackHost(host: string): boolean {
@@ -119,7 +106,7 @@ function isLoopbackHost(host: string): boolean {
  *   the service account can edit. Reads are never gated.
  */
 function optInDelivery(envVar: string): 'live' | 'captured' {
-	if (isProduction()) return 'live';
+	if (deployContext() === 'production') return 'live';
 	return process.env[envVar] === 'true' ? 'live' : 'captured';
 }
 
@@ -129,7 +116,7 @@ function optInDelivery(envVar: string): 'live' | 'captured' {
  * no variable opts it in.
  */
 function dmDelivery(): 'live' | 'captured' {
-	return isProduction() ? 'live' : 'captured';
+	return deployContext() === 'production' ? 'live' : 'captured';
 }
 
 /**
@@ -174,7 +161,7 @@ function deliveryFor<K extends OutboundKind>(kind: K): Delivery<K> {
 				);
 	return (
 		mode === 'captured'
-			? { mode: 'captured', context: deployContext() }
+			? { mode: 'captured', context: contextLabel() }
 			: { mode: 'live' }
 	) as Delivery<K>;
 }
