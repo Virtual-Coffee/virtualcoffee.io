@@ -121,7 +121,7 @@ const reset = sql.raw(
 		'SET session_replication_role = replica',
 		...tables.map((table) => `DELETE FROM ${table}`),
 		'SET session_replication_role = DEFAULT',
-		`SELECT setval(seq, 1, false) FROM (SELECT (quote_ident(schemaname) || '.' || quote_ident(sequencename))::regclass AS seq FROM pg_sequences WHERE schemaname = 'public') s`,
+		`SELECT setval((quote_ident(schemaname) || '.' || quote_ident(sequencename))::regclass, start_value, false) FROM pg_sequences WHERE schemaname = 'public'`,
 	].join('; '),
 );
 
