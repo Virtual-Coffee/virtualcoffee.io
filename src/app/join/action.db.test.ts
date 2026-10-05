@@ -86,6 +86,56 @@ describe('submitMembershipApplication', () => {
 		]);
 	});
 
+	test('a flagged submission is quarantined silently: no Slack post, no notification event', async () => {
+		const row = await submit({
+			...valid,
+			name: 'HXtBTQgRAfwqQQPyStQoKS',
+			email: 'flagged@example.test',
+		});
+
+		expect(row.status).toBe('suspected_spam');
+		expect(notifySlack).not.toHaveBeenCalled();
+		const events = await applicationEvents(row.id);
+		expect(events.map((event) => event.type)).not.toContain(
+			'notification_sent',
+		);
+		expect(events.map((event) => event.type)).not.toContain(
+			'notification_failed',
+		);
+	});
+
+	test('a repeat from a quarantined email writes nothing more and looks like a signup', async () => {
+		const fields = {
+			...valid,
+			name: 'HXtBTQgRAfwqQQPyStQoKS',
+			email: 'flagged@example.test',
+		};
+		await submit(fields);
+		const before = await db().select().from(membershipApplication);
+
+		await expect(
+			submitMembershipApplication(null, formDataWith(fields)),
+		).rejects.toMatchObject(redirectTo('/join/thank-you'));
+
+		await expect(db().select().from(membershipApplication)).resolves.toEqual(
+			before,
+		);
+		expect(notifySlack).not.toHaveBeenCalled();
+	});
+
+	test('the footer counts quarantined submissions and links to their page', async () => {
+		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
+		await insertApplication({ status: 'suspected_spam' });
+
+		await submit(valid);
+
+		expect(notes(posted())).toEqual([
+			expect.stringMatching(
+				/^\*1\* waiting on a first decision · <.*\/admin\/waitlist\/suspected-spam\|1 suspected spam> · <.*\/admin\/waitlist\|Waitlist queue>$/,
+			),
+		]);
+	});
+
 	test('a queue count that cannot be read is logged and left off; the post still goes out', async () => {
 		notifySlack.mockResolvedValue({ ok: true, message: 'Posted to Slack.' });
 		const counts = vi

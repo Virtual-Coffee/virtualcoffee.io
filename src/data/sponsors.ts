@@ -1,6 +1,6 @@
-import { GraphQLClient, gql } from 'graphql-request';
 import type mockSponsors from './mocks/sponsors';
 import { defineSource } from './source';
+import { githubGraphql } from '@/lib/github/graphql';
 import ImgixClient from '@imgix/js-core';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
 
@@ -57,7 +57,7 @@ const sponsorOverrides: Record<string, Partial<SponsorEntity>> = {
 	},
 };
 
-const query = gql`
+const query = /* GraphQL */ `
 	{
 		organization(login: "Virtual-Coffee") {
 			sponsorshipsAsMaintainer(first: 100) {
@@ -115,14 +115,10 @@ const query = gql`
 type SponsorsResponse = typeof mockSponsors;
 
 async function requestSponsors(): Promise<SponsorsResponse | null> {
-	const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
-		headers: {
-			Accept: 'application/vnd.github.v3+json',
-			Authorization: 'bearer ' + process.env.GITHUB_TOKEN,
-		},
-	});
-
-	const response: SponsorsResponse = await graphQLClient.request(query);
+	// `configured` in the source below guarantees the token.
+	const response = await githubGraphql(process.env.GITHUB_TOKEN!)<
+		SponsorsResponse | undefined
+	>(query);
 
 	// Also reached when the GITHUB_TOKEN user lacks the right permissions,
 	// which returns an empty response rather than throwing.

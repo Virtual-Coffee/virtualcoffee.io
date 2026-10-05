@@ -1,7 +1,7 @@
 import type { MemberList } from '@/content/members/types';
-import { GraphQLClient, gql } from 'graphql-request';
 import teamsData from '@/content/members/teams';
 import { defineSource } from '@/data/source';
+import { githubGraphql, isGraphqlResponseError } from '@/lib/github/graphql';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
 import { parseMarkdown } from '@/util/markdown.server';
 import type {
@@ -32,25 +32,13 @@ async function loadMockMemberData(
 	return (await mockMemberData(data)) as GithubSearchUserLookup;
 }
 
-async function fetchMemberGithubData(
+export async function fetchMemberGithubData(
 	data: MemberObject[],
 ): Promise<GithubSearchUserLookup> {
-	const headers = {
-		Accept: 'application/vnd.github.v3+json',
-		Authorization: 'bearer ' + process.env.GITHUB_TOKEN,
-	};
-
 	console.log('Fetching member data...');
 
-	const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
-		headers,
-		// A member who has since deleted their GitHub account resolves to null
-		// with a NOT_FOUND error alongside everybody else's data. That is
-		// ordinary drift in a hand-maintained list, not a failed request, so
-		// don't let it throw. Transport and auth failures are not GraphQL
-		// errors and still throw.
-		errorPolicy: 'all',
-	});
+	// `configured` in the source below guarantees the token.
+	const graphql = githubGraphql(process.env.GITHUB_TOKEN!);
 
 	const githubData: GithubSearchUserLookup = {};
 	const missing: string[] = [];
@@ -68,7 +56,7 @@ async function fetchMemberGithubData(
 		// A GraphQL alias has to be a valid name, and a GitHub login may start
 		// with a digit or contain a hyphen, so alias by position and read the
 		// results back the same way.
-		const query = gql`
+		const query = /* GraphQL */ `
 			query {
 				${batch
 					.map(
@@ -94,10 +82,25 @@ async function fetchMemberGithubData(
 			}
 		`;
 
-		const response =
-			await graphQLClient.request<Record<string, GithubSearchUser | null>>(
-				query,
-			);
+		let response: Record<string, GithubSearchUser | null>;
+
+		try {
+			response = await graphql<Record<string, GithubSearchUser | null>>(query);
+		} catch (error) {
+			// A member who has since deleted their GitHub account resolves to null
+			// with a NOT_FOUND error alongside everybody else's data. That is
+			// ordinary drift in a hand-maintained list, not a failed request, so
+			// keep the partial data. Any other error, and transport or auth
+			// failures, rethrow for the source to fall back.
+			if (
+				isGraphqlResponseError(error) &&
+				error.errors.every((e) => e.type === 'NOT_FOUND')
+			) {
+				response = error.data as Record<string, GithubSearchUser | null>;
+			} else {
+				throw error;
+			}
+		}
 
 		batch.forEach((member, index) => {
 			const user = response[`u${index}`];

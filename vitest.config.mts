@@ -12,7 +12,7 @@ process.env.TZ = 'UTC';
  * - `db` is every `*.db.test.ts`. Its `globalSetup` starts
  *   `@netlify/database-dev` (the PGlite engine `netlify dev` already uses)
  *   and applies the migrations; its setup file points `NETLIFY_DB_URL` at it
- *   and truncates the tables between tests. Tests authenticate with a real
+ *   and empties the tables between tests. Tests authenticate with a real
  *   session (`src/test/session.ts`), not by mocking auth — which is why a
  *   test that signs in is a db test.
  *

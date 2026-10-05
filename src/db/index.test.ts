@@ -4,7 +4,7 @@ import { drizzle } from 'drizzle-orm/netlify-db';
 import { expect, test } from 'vitest';
 import { z } from 'zod';
 
-import { withQueryCall } from './index';
+import { type Database, withQueryCall } from './index';
 
 function fakeServerless() {
 	const calls: unknown[][] = [];
@@ -33,7 +33,8 @@ function fakeServerless() {
 test('a serverless query reaches the client through .query', async () => {
 	const { client, calls } = fakeServerless();
 
-	await drizzle({ client: withQueryCall(client) }).execute(sql`select ${1}`);
+	const db: Database = drizzle({ client: withQueryCall(client) });
+	await db.execute(sql`select ${1}`);
 
 	expect(calls).toEqual([
 		[
