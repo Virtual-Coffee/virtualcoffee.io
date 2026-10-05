@@ -254,10 +254,13 @@ export function applicationSubmittedMessage(application: {
 	email: string;
 	adminUrl: string;
 	waitlistUrl: string;
+	suspectedUrl: string;
 	waiting: number | null;
+	/** Quarantined submissions awaiting review; named in the footer when above 0. */
+	suspected: number;
 	invite: { inviterName: string | null } | null;
 }): SlackMessage {
-	const { invite, waiting } = application;
+	const { invite, waiting, suspected } = application;
 	const title = invite
 		? 'Invited Application Received'
 		: 'Application Received';
@@ -294,7 +297,15 @@ export function applicationSubmittedMessage(application: {
 				? []
 				: [
 						note(
-							`*${waiting}* waiting on a first decision · <${application.waitlistUrl}|Waitlist queue>`,
+							[
+								`*${waiting}* waiting on a first decision`,
+								...(suspected > 0
+									? [
+											`<${application.suspectedUrl}|${suspected} suspected spam>`,
+										]
+									: []),
+								`<${application.waitlistUrl}|Waitlist queue>`,
+							].join(' · '),
 						),
 					]),
 		],

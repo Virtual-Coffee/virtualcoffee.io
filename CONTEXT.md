@@ -38,6 +38,12 @@ _Avoid_: Approval, final approval, acceptance
 An application that went cold without anyone deciding on it. Distinct from
 **Declined**, which records a decision a maintainer actually made.
 
+**Suspected Spam**:
+An application from `/join` whose name or email matched the bot signature. It
+is held in **Quarantine**, off the Waitlist and unannounced, until a reviewer
+releases it to the Waitlist or declines it.
+_Avoid_: Spam (unproven), rejected, blocked
+
 **Coffee**:
 The weekly hour-long Zoom chat — an Event whose Event Type is Virtual Coffee.
 Attending one is the step between a Coffee Invite and a Membership Approval.

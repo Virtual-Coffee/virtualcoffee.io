@@ -23,7 +23,10 @@ import {
 } from '@/lib/volunteers/invites';
 import { siteUrl } from '@/util/url.server';
 
+import { suspectSpam } from '@/util/forms/spamHeuristics';
+
 import {
+	QUARANTINE_STATUSES,
 	QUEUE_STATUSES,
 	can,
 	type LifecycleAction,
@@ -60,7 +63,8 @@ export type Actor = { userId: string | null; email: string };
  * `wrong-status`: the table does not allow the action from `status`.
  * `changed`: the row moved between the read and the write, and nothing went
  * out. `stranded`: the same, but the email had already gone. `already-recorded`:
- * attendance was already there. `name` is the applicant's, for copy that names them.
+ * attendance was already there. `already-active`: the same email has a live
+ * application. `name` is the applicant's, for copy that names them.
  */
 export type Outcome =
 	| { kind: 'done'; warning?: string }
@@ -70,6 +74,7 @@ export type Outcome =
 	| { kind: 'stranded'; name: string }
 	| { kind: 'email-failed'; outbound: Extract<Outbound, { ok: false }> }
 	| { kind: 'already-recorded' }
+	| { kind: 'already-active'; name: string }
 	| { kind: 'invalid-note'; message: string };
 
 type Of<K extends Outcome['kind']> = Extract<Outcome, { kind: K }>;
@@ -428,6 +433,59 @@ export async function close(
 }
 
 /**
+ * Not spam: move a Quarantined application to the Waitlist. `submittedAt` is
+ * kept as the place in the queue, so the applicant loses nothing for the
+ * detour. No email goes out; nothing was ever promised.
+ *
+ * Refused when the same email already has a live application — the real
+ * person may have applied again after a bot used their address — since
+ * releasing would put two rows for one person in the queue. Decline this one.
+ */
+export async function release(
+	applicationId: string,
+	actor?: Actor,
+): Promise<
+	Of<'done' | 'not-found' | 'wrong-status' | 'changed' | 'already-active'>
+> {
+	const opened = await open(applicationId, 'release');
+	if (isOutcome(opened)) return opened;
+	const { application, subject } = opened;
+
+	if (await liveApplicationFor(application.email)) {
+		return { kind: 'already-active', name: application.name };
+	}
+
+	const released = await transitionAndRecord(
+		subject,
+		'suspected_spam',
+		{ status: 'waitlisted', waitlistedAt: application.submittedAt },
+		{
+			actorUserId: actor?.userId ?? null,
+			type: 'waitlisted',
+			body: 'Not spam — moved to the Waitlist',
+		},
+	);
+	if (!released) return { kind: 'changed', name: application.name };
+
+	return { kind: 'done' };
+}
+
+/** Whether this email already has an application waiting, invited or a member. */
+async function liveApplicationFor(email: string): Promise<boolean> {
+	const [live] = await db()
+		.select({ id: membershipApplication.id })
+		.from(membershipApplication)
+		.where(
+			and(
+				sql`lower(${membershipApplication.email}) = ${email.toLowerCase()}`,
+				inArray(membershipApplication.status, [...QUEUE_STATUSES, 'member']),
+			),
+		)
+		.limit(1);
+	return Boolean(live);
+}
+
+/**
  * What an applicant fills in. Consent is recorded as given at submission, so
  * the caller has validated the agreement before it gets here.
  */
@@ -443,12 +501,20 @@ export type Submission = {
 };
 
 export type Submitted =
-	| { kind: 'submitted'; applicationId: string; claimed: ClaimedInvite | null }
-	| { kind: 'duplicate' };
+	| {
+			kind: 'submitted';
+			applicationId: string;
+			claimed: ClaimedInvite | null;
+			/** Held in Quarantine as suspected spam instead of joining the Waitlist. */
+			flagged: boolean;
+	  }
+	| { kind: 'duplicate' }
+	| { kind: 'quarantined-repeat' };
 
 /**
- * A new application from `/join`, on the Waitlist. The Slack announcement is
- * the caller's, after this returns (docs/adr/0005).
+ * A new application from `/join`, on the Waitlist — or in Quarantine when
+ * `suspectSpam` flags the name or email, unless a Claim Link was redeemed. The
+ * Slack announcement is the caller's, after this returns (docs/adr/0005).
  */
 export async function submit(
 	input: Submission,
@@ -472,19 +538,9 @@ export async function submit(
 	 * (netlify/edge-functions/rate-limit-join.ts), and telling someone they
 	 * already applied is worth more than hiding that from a prober.
 	 */
-	const [existing] = await db()
-		.select({ id: membershipApplication.id })
-		.from(membershipApplication)
-		.where(
-			and(
-				sql`lower(${membershipApplication.email}) = ${input.email.toLowerCase()}`,
-				inArray(membershipApplication.status, [...QUEUE_STATUSES, 'member']),
-			),
-		)
-		.limit(1);
-	if (existing) return { kind: 'duplicate' };
+	if (await liveApplicationFor(input.email)) return { kind: 'duplicate' };
 
-	return db().transaction(async (tx) => {
+	return db().transaction(async (tx): Promise<Submitted> => {
 		let claimed: ClaimedInvite | null = null;
 		/**
 		 * Redeem the Claim Link and write the application together. A racing
@@ -494,6 +550,37 @@ export async function submit(
 		 * friend's invite, having done nothing wrong.
 		 */
 		if (claimToken) claimed = await claimInvite(claimToken, now, tx);
+
+		/**
+		 * A redeemed Invite skips the heuristic: a Volunteer vouched for this
+		 * person, and quarantining would burn the Invite while hiding the
+		 * application from the queue.
+		 */
+		const signal = claimed ? null : suspectSpam(input);
+
+		/**
+		 * A bot retrying a quarantined address must not pile up rows, and the
+		 * reply must not reveal anything (unlike `duplicate`, which names the
+		 * pipeline): the caller shows the ordinary thank-you page. Only a suspect
+		 * submission is swallowed — anyone can type someone else's address, so a
+		 * quarantined row must not stop the real person applying. Checked after
+		 * the claim, so a made-up Claim Link does not get a bot past it; nothing
+		 * was claimed, so returning here writes nothing.
+		 */
+		if (signal) {
+			const [quarantined] = await tx
+				.select({ id: membershipApplication.id })
+				.from(membershipApplication)
+				.where(
+					and(
+						sql`lower(${membershipApplication.email}) = ${input.email.toLowerCase()}`,
+						inArray(membershipApplication.status, QUARANTINE_STATUSES),
+					),
+				)
+				.limit(1);
+			if (quarantined) return { kind: 'quarantined-repeat' };
+		}
+		const status = signal ? 'suspected_spam' : 'waitlisted';
 
 		const [row] = await tx
 			.insert(membershipApplication)
@@ -506,7 +593,7 @@ export async function submit(
 				journey: input.journey ?? null,
 				codeInterests: input.codeInterests ?? null,
 				virtualCoffee: input.virtualCoffee ?? null,
-				status: 'waitlisted',
+				status,
 				/**
 				 * An expired or already-used link still produces an application, as
 				 * a Waitlist signup. Refusing it would throw away the long answers
@@ -518,7 +605,7 @@ export async function submit(
 				referrer: claimed ? claimed.inviterName : null,
 				agreedToCocAt: now,
 				submittedAt: now,
-				waitlistedAt: now,
+				waitlistedAt: signal ? null : now,
 			})
 			.returning({ id: membershipApplication.id });
 
@@ -526,14 +613,32 @@ export async function submit(
 			applicationSubject(row.id),
 			{
 				type: 'submitted',
-				toStatus: 'waitlisted',
+				toStatus: status,
 				body: claimed
 					? `Application submitted from an invite by ${claimed.inviterName ?? 'a volunteer'}`
 					: 'Application submitted',
 			},
 			tx,
 		);
+		if (signal) {
+			await recordEvent(
+				applicationSubject(row.id),
+				{
+					type: 'flagged_as_spam',
+					body:
+						signal === 'name'
+							? 'Name looks machine-generated'
+							: 'Email looks like a Gmail dot-trick address',
+				},
+				tx,
+			);
+		}
 
-		return { kind: 'submitted', applicationId: row.id, claimed };
+		return {
+			kind: 'submitted',
+			applicationId: row.id,
+			claimed,
+			flagged: signal !== null,
+		};
 	});
 }
