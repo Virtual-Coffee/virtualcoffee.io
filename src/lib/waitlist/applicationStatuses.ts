@@ -8,8 +8,9 @@ export const QUEUE_STATUSES: ApplicationStatus[] = [
 ];
 
 /**
- * Everything the queue is not. The Waitlist is a working queue and the Archive
- * is its history (CONTEXT.md), so the two never show the same row.
+ * Applications that are finished. The Waitlist is a working queue, the Archive
+ * is its history and Quarantine holds suspected spam (CONTEXT.md), so no two
+ * of the three show the same row.
  */
 export const ARCHIVE_STATUSES: ApplicationStatus[] = [
 	'member',
@@ -18,17 +19,22 @@ export const ARCHIVE_STATUSES: ApplicationStatus[] = [
 	'withdrawn',
 ];
 
+/** Held for a human to release to the Waitlist or decline; never in the queue. */
+export const QUARANTINE_STATUSES: ApplicationStatus[] = ['suspected_spam'];
+
 export type LifecycleAction =
 	| 'coffeeInvite'
 	| 'recordAttendance'
 	| 'approve'
 	| 'resendSlackInvite'
+	| 'release'
 	| 'close';
 
 /**
  * What an application can have done to it from each status. `lifecycle.ts`
  * refuses anything else, and the action panel offers exactly these. `lapsed`
- * is terminal and only the import writes it; no action enters it.
+ * is terminal and only the import writes it; no action enters it, and nothing
+ * but the /join heuristic enters `suspected_spam`.
  */
 export const ACTIONS_FROM: Record<
 	ApplicationStatus,
@@ -40,6 +46,7 @@ export const ACTIONS_FROM: Record<
 	lapsed: [],
 	declined: [],
 	withdrawn: [],
+	suspected_spam: ['release', 'close'],
 };
 
 export function can(status: ApplicationStatus, action: LifecycleAction) {

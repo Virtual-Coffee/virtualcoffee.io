@@ -1,7 +1,7 @@
-import { GraphQLClient, gql } from 'graphql-request';
 import { unstable_cache } from 'next/cache';
 import type mockSponsors from './mocks/sponsors';
 import { assertMocksAllowed } from './mocks';
+import { githubGraphql } from '@/lib/github/graphql';
 import ImgixClient from '@imgix/js-core';
 import { sanitizeHtml } from '@/util/sanitizeCmsData';
 
@@ -58,7 +58,7 @@ const sponsorOverrides: Record<string, Partial<SponsorEntity>> = {
 	},
 };
 
-const query = gql`
+const query = /* GraphQL */ `
 	{
 		organization(login: "Virtual-Coffee") {
 			sponsorshipsAsMaintainer(first: 100) {
@@ -117,26 +117,13 @@ export const getSponsors = unstable_cache(
 	async function getSponsorsInternal() {
 		// async function main() {
 
-		const headers: HeadersInit = {
-			Accept: 'application/vnd.github.v3+json',
-		};
-
 		const token = process.env.GITHUB_TOKEN;
-
-		if (token) {
-			headers.Authorization = 'bearer ' + token;
-		}
-
-		const graphQLClient = new GraphQLClient('https://api.github.com/graphql', {
-			headers,
-		});
 
 		let response: undefined | typeof mockSponsors;
 
 		if (token) {
 			try {
-				// do some expensive operation here, this is simplified for brevity
-				response = await graphQLClient.request(query);
+				response = await githubGraphql(token)<typeof mockSponsors>(query);
 			} catch (error) {
 				console.log(error);
 				console.log('Error loading github sponsors, using fake data instead');

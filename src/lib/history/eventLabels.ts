@@ -51,6 +51,10 @@ export const EVENT_LABELS: Record<
 		sentence: 'Invite not marked completed',
 		badge: 'Invite not completed',
 	},
+	flagged_as_spam: {
+		sentence: 'Flagged as suspected spam',
+		badge: 'Suspected spam',
+	},
 };
 
 /** The label for a type read back from the database, or the type itself if it has none. */

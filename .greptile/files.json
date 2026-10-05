@@ -107,6 +107,16 @@
 			]
 		},
 		{
+			"path": "docs/adr/0017-suspected-spam-is-quarantined-not-dropped.md",
+			"description": "Handling /join submissions that match the bot signature",
+			"scope": [
+				"src/app/join/**",
+				"src/lib/waitlist/**",
+				"src/util/forms/spamHeuristics*.ts",
+				"src/app/admin/(protected)/waitlist/**"
+			]
+		},
+		{
 			"path": "docs/adr/0016-slack-notifications-are-block-kit-containers.md",
 			"description": "Slack notifications as Block Kit container blocks: literal runs for typed values, mrkdwn for static copy",
 			"scope": ["src/lib/slack/**", "src/test/slack.ts"]

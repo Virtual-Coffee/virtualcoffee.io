@@ -101,6 +101,7 @@ Rules:
 - A Slack post is Block Kit built from `src/lib/slack/blocks.ts`: a typed value is a literal `rich_text` run, mrkdwn is for static copy only — `docs/adr/0016`.
 - `/join` and the four public forms (`/report-coc-violation`, `/volunteer-at-virtual-coffee`, `/lunch-and-learn-idea`, `/start-coffee-table-group`) are `force-dynamic`: the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token that prerendering would bake into cached HTML. Every form action opens with `intake()` (`src/util/forms/intake.ts`), which owns that guard and the schema parse; shared fields are in `src/util/forms/fields.ts`.
 - A public form persists first and notifies second — the inverse of the admin rule above, on purpose — `docs/adr/0005`. `submit()` (`src/lib/submissions/submitSubmission.ts`) is the one persist-then-announce for all four, and `submit.db.test.ts` pins the order (`src/app/join/action.db.test.ts` does for `/join`).
+- A `/join` submission that `suspectSpam()` matches is quarantined as `suspected_spam`, never dropped or announced — `docs/adr/0017`.
 - CoC attachments live in Netlify Blobs and are served only through a route that checks `coc:read`.
 
 Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (procedure in the comment at the top of `src/data/podcast.ts`); membership data stays out of that repo — `docs/adr/0002`. Newsletters are JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
@@ -167,4 +168,4 @@ Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. When a skill asks
 
 ### Code review
 
-Greptile reviews every PR from a person; label it `skip-review` to opt out. Its config is `.greptile/`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
+Greptile reviews every PR except those from the bots in `excludeAuthors`; label one `skip-review` to opt out. Renovate PRs are reviewed only for majors: `renovate.json` adds the line `ignoreKeywords` matches to every other Renovate PR, and Greptile never auto-approves Renovate. Who Greptile answers is set in the dashboard's Organization → Permissions and fails silently; "Trigger reviews by authoring" must stay "Everyone (including non-members)". Its config is `.greptile/`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
