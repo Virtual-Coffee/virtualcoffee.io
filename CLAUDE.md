@@ -76,16 +76,16 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 - One file per member in `src/content/members/members/<github-username>.ts` (core team in `core/`), exporting a `MemberObject`; `_EXAMPLE.ts` is the template.
 - `vc/member-file-identity` (`eslint-rules/`) pins the filename and exported identifier to the `MemberObject`'s `github` field: `github` is the GitHub lookup key (`getMembers()` silently drops a name GitHub doesn't know), and the export name is the key `src/data/members/index.ts` iterates. Filename match is case-insensitive; the identifier is exact, with `-` → `_` and a leading digit prefixed with `_`.
 
-### MDX content pipeline
+### Routes and MDX content pipeline
 
+- `typedRoutes` is on: a literal href that matches no route is a type error. Build a `/resources` href with `resourceHref()` (ESLint bans a raw one), type an href kept in data as `AdminHref` or a template literal, and add no `as Route` cast beyond the Slack join URL.
+- `about`, `code-of-conduct` and `uses` are explicit routes over `src/content/simple-mdx-pages/` through `src/util/simpleMdxPage.server.tsx`; a new simple page is a new `src/app/<slug>/page.tsx` and a slug in that helper.
 - Editing a plugin in `src/mdx-plugins/` invalidates compiled MDX only when it's wired through `localMdxPlugin()` in `next.config.mjs`; if output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
 - `src/util/loadMdx.server.ts` reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then `import()`s the `.mdx` file. Adding a resource is adding an `.mdx` file with frontmatter under `src/content/resources/`; index listings come from `<FileIndex />`.
 - MDX files import components explicitly from `@/components/content/`. `src/mdx-components.tsx` maps only what Markdown itself generates, which no import can reach: `a` → `MdxLink`, so a page path goes through `next/link`. A JSX `<a>` written in MDX compiles to a literal `<a>` and bypasses it, so write internal links as Markdown. `src/content/links.test.ts` fails on a root-relative link that is not a page the site serves (a `netlify.toml` redirect source included). The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
 
 ### Layout, styling, HTML safety
 
-- `typedRoutes` is on: a literal href that matches no route is a type error. Build a `/resources` href with `resourceHref()` (ESLint bans a raw one), type an href kept in data as `AdminHref` or a template literal, and add no `as Route` cast beyond the Slack join URL.
-- `about`, `code-of-conduct` and `uses` are explicit routes over `src/content/simple-mdx-pages/` through `src/util/simpleMdxPage.server.tsx`; a new simple page is a new `src/app/<slug>/page.tsx` and a slug in that helper.
 - `src/components/layouts/DefaultLayout.tsx` is the only page layout (`Hero`, `heroHeader`, `heroSubheader`, `simple` props).
 - Styles are à-la-carte Bootstrap SCSS partials (no Tailwind) plus per-feature partials in `src/styles/`; markup uses Bootstrap classes and a custom `prose` class. The Sass load-order and map rules are in the headers of `src/styles/_variables.scss` and `src/styles/_bootstrap.scss`; read them before editing either. `quietDeps` in `next.config.mjs` mutes Bootstrap's own deprecations so warnings from `src/styles/` still surface.
 - All HTML from external sources goes through `src/util/sanitizeCmsData.ts`; `src/util/markdown.server.ts` uses it instead of rehype-sanitize so there is one allowlist.
