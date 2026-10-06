@@ -10,8 +10,6 @@ import {
 import { AddVolunteerForm } from './volunteerControls';
 import { VolunteersTable } from './volunteersTable';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'Volunteers · Admin',
 	robots: { index: false, follow: false },

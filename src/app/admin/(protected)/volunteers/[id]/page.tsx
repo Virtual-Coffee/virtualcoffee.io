@@ -31,8 +31,6 @@ import {
 	VolunteerRolesEditor,
 } from '../volunteerControls';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'Volunteer · Admin',
 	robots: { index: false, follow: false },

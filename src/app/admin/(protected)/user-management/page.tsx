@@ -4,8 +4,6 @@ import { GRANTABLE_ROLE_NAMES } from '@/lib/access/permissions';
 import { GrantAccessForm } from './adminControls';
 import { AdminsTable } from './adminsTable';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'User Management · Admin',
 	robots: { index: false, follow: false },

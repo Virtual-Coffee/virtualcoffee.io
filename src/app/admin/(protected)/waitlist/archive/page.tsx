@@ -9,8 +9,6 @@ import { QueueSearch } from '../queueSearch';
 import { parseSearchParams } from '../searchParams';
 import { oneOf, type RawSearchParams } from '@/util/searchParams';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'Archive · Admin',
 	robots: { index: false, follow: false },

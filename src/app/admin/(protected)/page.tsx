@@ -11,8 +11,6 @@ import {
 import { neverAnnouncedCount } from '@/lib/history/eventLog';
 import { ActivityFeed } from './activityFeed';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'Admin',
 	robots: { index: false, follow: false },
