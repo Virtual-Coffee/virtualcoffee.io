@@ -40,7 +40,7 @@ therefore show as open work, which is the honest presentation.
 ## Consequences
 
 - The site no longer writes to Airtable, so the old automations can never fire
-  again and nothing breaks whether or not the bases are archived.
+  again. Archiving the bases does not affect the membership pipeline.
 - The import and snapshot scripts under `scripts/airtable/`, their read-only
   tokens and the `airtable` dependency exist for the one-off runs only;
   `scripts/airtable/README.md` says how to run them.
