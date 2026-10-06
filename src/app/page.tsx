@@ -10,6 +10,7 @@ import { loadMdxDirectory } from '@/util/loadMdx.server';
 import { getSponsors } from '@/data/sponsors';
 import DisplayHtml from '@/components/DisplayHtml';
 import { homePageLinks } from '@/util/homePageLinks';
+import { resourceHref } from '@/util/resourceHref';
 
 export default async function Home() {
 	const resources = await loadMdxDirectory({
@@ -99,7 +100,7 @@ export default async function Home() {
 							id="resources"
 							title="Member Resources"
 							subtitle="A collection of resources for Virtual Coffee members"
-							linkTo="/resources"
+							linkTo={resourceHref('/resources')}
 							footer="See more Member Resources"
 						>
 							<PostList items={formatFileListItemsForPostList(resources)} />

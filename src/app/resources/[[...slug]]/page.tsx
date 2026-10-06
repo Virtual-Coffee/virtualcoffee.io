@@ -6,6 +6,7 @@ import {
 	loadMdxRouteFileAttributes,
 	MdxFile,
 } from '@/util/loadMdx.server';
+import { isResourcePath, resourceHref } from '@/util/resourceHref';
 import { MDXProps } from 'mdx/types';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -120,7 +121,7 @@ export default async function Page({
 						<nav aria-label="breadcrumb">
 							<ol className="breadcrumb">
 								<li className="breadcrumb-item">
-									<Link href="/resources">Resources</Link>
+									<Link href={resourceHref('/resources')}>Resources</Link>
 								</li>
 								{breadCrumbs.map((bc, i) => {
 									if (i === breadCrumbs.length - 1) {
@@ -134,11 +135,14 @@ export default async function Page({
 											</li>
 										);
 									}
+									const path = `/${bc.slug.replace('content/', '')}`;
 									return (
 										<li className="breadcrumb-item" key={bc.slug}>
-											<Link href={`/${bc.slug.replace('content/', '')}`}>
-												{bc.meta.title}
-											</Link>
+											{isResourcePath(path) ? (
+												<Link href={resourceHref(path)}>{bc.meta.title}</Link>
+											) : (
+												bc.meta.title
+											)}
 										</li>
 									);
 								})}

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import VirtualCoffeeFull from '@/svg/VirtualCoffeeFull';
+import { resourceHref } from '@/util/resourceHref';
 
 export default function Nav() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -104,7 +105,7 @@ export default function Nav() {
 							<li className="mb-2">
 								<Link
 									className="dropdown-item"
-									href="/resources/virtual-coffee-handbook"
+									href={resourceHref('/resources/virtual-coffee-handbook')}
 									onClick={handleLinkClick}
 								>
 									VC Community Handbook
@@ -145,7 +146,7 @@ export default function Nav() {
 							<li className="mb-2">
 								<Link
 									className="dropdown-item"
-									href="/resources/developer-resources"
+									href={resourceHref('/resources/developer-resources')}
 									onClick={handleLinkClick}
 								>
 									Developer Resources
@@ -176,7 +177,9 @@ export default function Nav() {
 					<li className="nav-item">
 						<Link
 							className="nav-link"
-							href="/resources/virtual-coffee-handbook/join-virtual-coffee"
+							href={resourceHref(
+								'/resources/virtual-coffee-handbook/join-virtual-coffee',
+							)}
 							onClick={handleLinkClick}
 						>
 							Join

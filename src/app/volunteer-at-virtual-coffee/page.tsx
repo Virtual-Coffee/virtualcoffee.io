@@ -3,6 +3,7 @@ import { createMetaData } from '@/util/createMetaData.server';
 import { Form } from './form';
 import { issueTimestamp } from '@/util/forms/spamGuard';
 import LeadText from '@/components/content/LeadText';
+import { resourceHref } from '@/util/resourceHref';
 import Link from 'next/link';
 
 // The spam guard signs a per-render token that prerendering would bake in.
@@ -33,7 +34,11 @@ export default function VolunteerForm() {
 				</p>
 				<p>
 					To read more and to see some roles available, read our{' '}
-					<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+					<Link
+						href={resourceHref(
+							'/resources/virtual-coffee-handbook/get-involved/paths-to-leadership',
+						)}
+					>
 						Paths to Leadership &amp; Roles guide
 					</Link>
 					.

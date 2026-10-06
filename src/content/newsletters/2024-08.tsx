@@ -1,4 +1,5 @@
 import LeadText from '@/components/content/LeadText';
+import { resourceHref } from '@/util/resourceHref';
 import Link from 'next/link';
 
 export const handle = {
@@ -153,7 +154,11 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out{' '}
-				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+				<Link
+					href={resourceHref(
+						'/resources/virtual-coffee-handbook/get-involved/paths-to-leadership',
+					)}
+				>
 					some the roles
 				</Link>
 				!
