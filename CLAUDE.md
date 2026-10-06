@@ -120,7 +120,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 - MDX plugins are referenced by path string in `next.config.mjs` because Turbopack requires serializable loader options; a plugin that needs function options lives in `src/mdx-plugins/`. The path is the whole cache key, so editing a plugin's _contents_ does not invalidate compiled MDX (on Netlify too) — `localMdxPlugin()` mixes a hash of the plugin file into its options; wire new local plugins through it. If MDX output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
 - `src/util/loadMdx.server.ts` reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then `import()`s the `.mdx` file. Adding a resource is adding an `.mdx` file with frontmatter under `src/content/resources/`; index listings come from `<FileIndex />`.
-- MDX files import components explicitly from `@/components/content/`; `src/mdx-components.tsx` is a passthrough. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
+- MDX files import components explicitly from `@/components/content/`. `src/mdx-components.tsx` maps only what Markdown itself generates, which no import can reach: `a` → `MdxLink`, so a page path goes through `next/link`. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
 
 ### Layout, styling, HTML safety
 
