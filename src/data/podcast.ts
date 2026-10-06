@@ -164,7 +164,7 @@ export async function getEpisode({
 }
 
 // ---------------------------------------------------------------------------
-// Transcript — unchanged, reads from feeds.virtualcoffee.io
+// Transcript — reads from feeds.virtualcoffee.io
 // ---------------------------------------------------------------------------
 
 type TranscriptSegment = {
