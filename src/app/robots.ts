@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { allowedUas, blockedUas, robotsOnlyUas } from '@/data/bots';
+import { siteUrl } from '@/util/url.server';
 
 /**
  * Repeated in every group that names an agent, not just the `*` fallback: a
@@ -15,5 +16,6 @@ export default function robots(): MetadataRoute.Robots {
 			{ userAgent: [...blockedUas, ...robotsOnlyUas], disallow: '/' },
 			{ userAgent: '*', disallow: restrictedPaths },
 		],
+		sitemap: `${siteUrl()}/sitemap.xml`,
 	};
 }

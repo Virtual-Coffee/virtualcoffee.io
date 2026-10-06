@@ -1,6 +1,7 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 import {
+	extractRoutes,
 	loadMdxDirectory,
 	loadMdxRouteFileAttributes,
 	MdxFile,
@@ -14,21 +15,11 @@ import { notFound } from 'next/navigation';
 export const dynamicParams = false;
 export const dynamic = 'force-static';
 
-function extractRoutes(files: MdxFile[]): string[] {
-	return files.reduce((list, file) => {
-		const slug = file.slug.replace('content/resources/', '');
-		if (file.children) {
-			return [...list, ...extractRoutes(file.children), slug];
-		}
-		return [...list, slug];
-	}, [] as string[]);
-}
-
 export async function generateStaticParams() {
 	const allFiles = await loadMdxDirectory({
 		baseDirectory: 'content/resources',
 	});
-	const routes = extractRoutes(allFiles);
+	const routes = extractRoutes(allFiles, 'content/resources/');
 
 	return [
 		{ slug: [''] },

@@ -13,7 +13,7 @@ import { Metadata } from 'next';
 export const dynamic = 'force-static';
 
 export async function generateStaticParams() {
-	const podcastEpisodes = await getEpisodes({ limit: 99 });
+	const podcastEpisodes = await getEpisodes({ limit: Infinity });
 
 	return podcastEpisodes.map((pod) => ({
 		slug: pod.slug,

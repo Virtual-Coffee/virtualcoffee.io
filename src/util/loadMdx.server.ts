@@ -155,6 +155,20 @@ export const loadMdxDirectory = unstable_cache(
 );
 
 /**
+ * Flattens a `loadMdxDirectory` tree into route slugs, each with `prefix`
+ * (the content directory, e.g. `content/resources/`) removed.
+ */
+export function extractRoutes(files: MdxFile[], prefix: string): string[] {
+	return files.reduce((list, file) => {
+		const slug = file.slug.replace(prefix, '');
+		if (file.children) {
+			return [...list, ...extractRoutes(file.children, prefix), slug];
+		}
+		return [...list, slug];
+	}, [] as string[]);
+}
+
+/**
  * Loads route attributes for a given slug, handling the special case of index.mdx files.
  * @param slug - The slug representing the path to the MDX file.
  * @returns The MdxFile for the given slug, or null if not found.
