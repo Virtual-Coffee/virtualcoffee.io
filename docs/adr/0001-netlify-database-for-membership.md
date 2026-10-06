@@ -22,17 +22,17 @@ dashboard. That fork carries real data, so a preview's `/admin` is behind the
 same Slack sign-in and roles as production (0007).
 
 **The ORM is Drizzle v1**, pinned to an exact release candidate rather than the
-`0.45` line npm tags `latest`. Netlify's own Drizzle guide says to install
+older line npm tags `latest`. Netlify's own Drizzle guide says to install
 `drizzle-orm@rc` with `@netlify/database`, because v1 ships the first-party
 `drizzle-orm/netlify-db` adapter that picks the Postgres driver by runtime. An
 RC on the production data path is acceptable while three things hold, and the
 choice should be revisited if any stops:
 
 - Netlify recommends it, and the adapter is theirs to maintain.
-- Better Auth declares `>=1.0.0-rc.1 <2.0.0` as a supported peer, so the auth
-  adapter is sanctioned, not tolerated.
-- This codebase uses none of the APIs v1 broke: no relational queries, no
-  reliance on global `casing`, no `drizzle-zod`.
+- Better Auth lists the v1 range as a supported peer, so the auth adapter is
+  sanctioned, not tolerated.
+- This codebase uses none of the APIs v1 broke (relational queries, global
+  `casing`, `drizzle-zod`).
 
 The version is pinned without a caret so Renovate proposes each RC bump as a
 reviewable diff.
@@ -40,14 +40,13 @@ reviewable diff.
 ### Migrations
 
 **drizzle-kit owns migrations end to end, and we apply them ourselves.**
-`pnpm db:generate --name=<hyphenated-slug>` writes
-`drizzle/<YYYYMMDDHHmmss>_<slug>/migration.sql` plus the `snapshot.json` the
-next `generate` diffs against — both committed, neither hand-edited. The
-Netlify build runs `pnpm db:migrate:deploy` (`drizzle-kit migrate`) after
-`next build`, on every deploy context; locally `pnpm db:migrate` does the same
-through `scripts/with-local-netlify.ts`, and the `db` test project applies the
-same folders with drizzle's migrator. The ledger is
-`drizzle.__drizzle_migrations`.
+`pnpm db:generate --name=<hyphenated-slug>` writes a migration folder under
+`drizzle/` holding `migration.sql` plus the `snapshot.json` the next `generate`
+diffs against — both committed, neither hand-edited. The Netlify build runs
+`pnpm db:migrate:deploy` (`drizzle-kit migrate`) after `next build`, on every
+deploy context; locally `pnpm db:migrate` does the same through
+`scripts/with-local-netlify.ts`, and the `db` test project applies the same
+folders with drizzle's migrator.
 
 Netlify's own migration step (anything under `netlify/database/migrations/`)
 is deliberately not used: it would be a second applier over the same folders,
@@ -59,7 +58,8 @@ deploy is still live and must be backwards-compatible with it.
 
 ## Consequences
 
-- **Never edit a migration that has already deployed.** Generate a new one.
+- **A migration that has deployed is final.** A change to the schema is a new
+  migration, never an edit to an old one.
 - A branch database whose schema was applied under a different ledger, or by
   hand, is deleted on the Netlify website rather than repaired — the CLI cannot
   — so the next deploy re-forks it from production and replays the migrations

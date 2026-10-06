@@ -25,7 +25,7 @@ or a shell special-cased to hide itself — a Section that is not really one.
 The alternative — a `volunteer` table row as the only marker — would be a
 second authorization mechanism beside the first, which is what 0006 exists to
 prevent, and it would throw away Pending Grants (0009). Volunteering is exactly
-the Pending Grant case: the Airtable import brings 91 people across, most of
+the Pending Grant case: the Airtable import brings people across, most of
 whom have never signed in.
 
 So `volunteer` is a Role like any other — in `roles`, parsed and serialised,
@@ -64,6 +64,6 @@ reach `/invites`, and most who do are members who were told about it.
   both in one transaction, and `setUserRoles` / `setPendingGrantRoles` preserve
   any Role outside `GRANTABLE_ROLE_NAMES` so "Revoke all" cannot strip it.
 - Adding a Volunteer writes that transaction first and sends the welcome email
-  after, the reverse of the email-first order for a status change: the email
-  reports a grant that already stands, so a failed send is an `email_failed`
-  line in their History, not a failed add.
+  after: the email reports a grant that already stands, so a failed send is an
+  `email_failed` line in their History, not a failed add. Claim Links follow
+  the same write-first order for their own reason (0011).

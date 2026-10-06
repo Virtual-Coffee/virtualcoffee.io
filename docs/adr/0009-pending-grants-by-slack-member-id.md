@@ -69,15 +69,6 @@ The unique index is partial — one unclaimed Grant per Slack member, any number
 of claimed ones — so someone whose `user` row was deleted can be granted
 access again without colliding with their own history.
 
-### The picker needs a bot token
-
-`users.list` needs `users:read` on a bot token (`users:read.email` too, for
-the address the Volunteers picker prefills); the OAuth credentials that sign
-maintainers in request only `openid`, `profile` and `email`.
-`SLACK_BOT_TOKEN` is therefore a separate credential, and
-`src/data/slackMembers.ts` follows the mock gate every other source in
-`src/data/` uses.
-
 ## Consequences
 
 - **Matching is never on email**, anywhere in the grant path.
@@ -87,7 +78,3 @@ maintainers in request only `openid`, `profile` and `email`.
   than silent. The next role write to them — saving that row in User
   Management, or a volunteer grant — applies the Grant and claims it, so no
   Grant is left unclaimed and hidden behind a user who now holds a role.
-- There is no backfill of `user.slack_user_id`: the baseline migration creates
-  `user`, `account` and the column together. If a user ever predates it, the
-  "already signed in?" check answers _no_ for them and a maintainer could
-  create a Grant that can never be claimed.

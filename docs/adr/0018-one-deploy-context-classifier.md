@@ -2,9 +2,9 @@
 
 ## Context
 
-Nine places read Netlify's `CONTEXT` and decided for themselves what it meant:
+Many places read Netlify's `CONTEXT` and decided for themselves what it meant:
 outbound delivery, the admin dev bypass, the admin banner, `siteUrl()`, the
-analytics tag, two scripts, the mock gate and the edge function. They disagreed
+analytics tag, scripts, the mock gate and the edge function. They disagreed
 about a value none of them listed. The dev bypass treated an unknown context as
 local and signed in without Slack; outbound delivery treated it as a deploy
 and captured with a masked log line.
@@ -25,6 +25,5 @@ and captured with a masked log line.
 ## Consequences
 
 - A new Netlify context needs no code change: it is a preview.
-- The dev bypass is refused on a context it does not recognise, where it was
-  allowed before.
+- The dev bypass is refused on a context the classifier does not recognise.
 - A new reader of `CONTEXT` is a review finding: use `deployContext()`.

@@ -29,15 +29,12 @@ banning users is not "nothing else".
 
 **`admin` holds CoC too.** One coherent "full maintainer" role, and nobody is
 locked out mid-incident. `coc_reviewer` is the role a _non-admin_ volunteer can
-be given. If the CoC audience should ever be narrower than the admin group, the
-change is one line, because the resource is already separate.
+be given.
 
 ## Consequences
 
-- **The layout is not the boundary.** `(protected)/layout.tsx` only checks that
-  the viewer holds _some_ section. Each page gates itself with
-  `requirePermission()`, and every server action re-checks independently
-  (0003). A new section is reachable by every role until its own page says
-  otherwise.
+- **The layout is not the boundary.** Each page gates itself and every server
+  action re-checks, as 0003 decides; a new section is reachable by every role
+  until its own page says otherwise.
 - Sections a viewer cannot read return 404, not 403. Someone who only handles
   volunteer signups should not learn that a CoC section exists.

@@ -47,8 +47,7 @@ so for them a match could only mean dropping the submission.
   and costs the applicant nothing. Some will happen — an initials-only address
   such as `j.r.r@` trips the email signal — and the heuristic is tuned against
   that cost rather than to zero.
-- The heuristic matches today's bots. When they change pattern, change
-  `spamHeuristics.ts`; a challenge such as Cloudflare Turnstile is the step
-  after that, and does not need our DNS moved.
-- Persist-then-notify (`docs/adr/0005`) still holds: the quarantined row is
-  committed; only the notification is withheld.
+- The heuristic matches the bots seen so far; when their pattern changes, it
+  changes in `spamHeuristics.ts`.
+- The quarantined row is committed and only the notification is withheld, per
+  docs/adr/0005.

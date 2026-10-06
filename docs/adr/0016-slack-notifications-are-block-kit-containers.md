@@ -26,7 +26,7 @@ blocks under a title, takes a `rich_text` child, and can arrive collapsed.
   "View in admin" first and primary. The shapes live in `src/lib/slack/blocks.ts`
   and every builder in `notify.ts` is data fed to `notification()`.
 - **Anything a person typed is a `rich_text` text run or a `plain_text`
-  object**, both of which Slack renders literally. `escape()` is gone because
+  object**, both of which Slack renders literally. No `escape()` is needed because
   nothing typed reaches mrkdwn; mrkdwn is for static copy only, in `context`
   blocks and the DM's one sentence. A subtitle taken from a field is clipped to
   the 150-character `plain_text` cap; the field below keeps the whole value.
@@ -42,9 +42,8 @@ blocks under a title, takes a `rich_text` child, and can arrive collapsed.
 - The **access-grant DM is top-level blocks**, not a container: one sentence
   and one button need no group, and a collapse control would only let a
   member hide the instruction they were sent.
-- `ContainerBlock` is declared locally until `@slack/types` ships one
-  (`3.1.0` has `card` and `table` but not `container`); every other block type
-  comes from `@slack/types`.
+- `ContainerBlock` is declared locally because `@slack/types` does not ship
+  one; every other block type comes from `@slack/types`.
 - What `deliver()` captures is the **payload JSON**, so the local log shows
   exactly what would have been posted and a deploy's link-only line still
   finds the admin URL (docs/adr/0013).
@@ -58,11 +57,3 @@ blocks under a title, takes a `rich_text` child, and can arrive collapsed.
 - `container` is newer than the SDK's types, so its acceptance by an incoming
   webhook is proven by a live post from a preview (the `NOTIFY_LIVE_OUTSIDE_PRODUCTION`
   opt-in of docs/adr/0013), not by the type checker.
-- Slack posts a `block_actions` for a url button as well, and renders a 404
-  warning on the button unless the app's Interactivity URL acks it. The
-  webhooks belong to the vc-bots Slack app, so every link button carries a
-  `website_<id>` `action_id` and vc-bots acks `/^website_/`; a button without
-  that ack still opens its page, with the warning beside it.
-- `/join` reads the queue count after the insert: one more query on a public
-  action, outside the save's try so a slow count can never be reported to the
-  applicant as a failure to save.
