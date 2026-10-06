@@ -67,6 +67,8 @@ Every external data source lives in `src/data/` and degrades to a mock when its 
 
 A new external fetch is a `defineSource()` (`src/data/source.ts`): it owns the mock gate and the tagged `unstable_cache` that `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates. Outside production, missing credentials fall back to the mock silently and a failed fetch with a `console.warn`; production throws either way.
 
+A revalidation interval is declared once, beside the fetch in `src/data/*`; pages export no `revalidate`, and a page that reads only checked-in content (MDX, the podcast JSON) is static until the next deploy. Do not wrap a synchronous or `fs` read in `unstable_cache`: it hands its `revalidate` and tags to every page that calls it. A fetch that can fail splits into an uncached call that throws (`null` only for a definite "none") and the cached wrapper, as `fetchTranscript` / `getTranscript` and `fetchSlackMembers` do, so a failure is never cached as data. The tags left are `events`, `members`, `sponsors`, `slack-members` and `podcast` (transcripts only).
+
 The Events Calendar is the system of record for Series and Events; `/admin/events` is a client of the Calendar API and stores nothing — `docs/adr/0014`. The shape of a Series or an Event is declared once, in `src/lib/events/eventDraft.ts` (with recurrence in `src/lib/events/recurrence.ts`), and the admin forms and `events/actions.ts` both parse against it.
 
 ### Membership pipeline (Postgres)
