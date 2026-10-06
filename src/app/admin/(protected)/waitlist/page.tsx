@@ -14,8 +14,6 @@ import { QueueSearch } from './queueSearch';
 import { parseSearchParams } from './searchParams';
 import { oneOf, type RawSearchParams } from '@/util/searchParams';
 
-export const dynamic = 'force-dynamic';
-
 const APPLICATIONS: AnnouncedScope = { kind: 'application' };
 
 export const metadata = {

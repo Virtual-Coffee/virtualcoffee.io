@@ -20,7 +20,7 @@ export async function generateMetadata() {
 	});
 }
 
-export default async function EventsIndex() {
+export default async function MembersIndex() {
 	const { core, members }: MembersResponse = await getMembers();
 
 	const mapMembers = [...core, ...members].filter(

@@ -3,8 +3,6 @@ import { requirePermission } from '@/lib/access/adminAccess';
 import { Breadcrumb } from '../../presentation';
 import { EventForm } from '../eventForm';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'New Event · Admin',
 	robots: { index: false, follow: false },

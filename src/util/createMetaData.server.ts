@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 export async function createMetaData({
 	title,
 	description,
-	hero: heroPath,
+	hero: heroName,
 	Hero,
 }: {
 	title?: string;
@@ -13,8 +13,8 @@ export async function createMetaData({
 	hero?: string;
 	Hero?: string;
 }): Promise<Metadata> {
-	// `/assets/svg/${attributes.hero.Hero}.svg`
-	const hero = heroPath || Hero ? `/assets/svg/${Hero}.svg` : undefined;
+	const name = Hero || heroName;
+	const hero = name ? `/assets/svg/${name}.svg` : undefined;
 	const image = createSocialImage({
 		title: title,
 		subtitle: description,

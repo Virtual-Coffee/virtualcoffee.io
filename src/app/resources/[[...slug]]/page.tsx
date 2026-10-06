@@ -11,7 +11,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-// ISR: Revalidate every week
 export const dynamicParams = false;
 export const dynamic = 'force-static';
 

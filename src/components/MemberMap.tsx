@@ -28,12 +28,11 @@ function Markers({ members }: { members: MappableMember[] }) {
 
 	useEffect(() => {
 		map.fitBounds(
-			members.map(
-				(member) => [member.location.latitude, member.location.longitude],
-				{
-					padding: [25, 25],
-				},
-			),
+			members.map((member) => [
+				member.location.latitude,
+				member.location.longitude,
+			]),
+			{ padding: [25, 25] },
 		);
 	}, [members, map]);
 

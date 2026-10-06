@@ -1,3 +1,5 @@
+'use client';
+
 import { useId, type ComponentProps } from 'react';
 import { useFormStatus } from 'react-dom';
 

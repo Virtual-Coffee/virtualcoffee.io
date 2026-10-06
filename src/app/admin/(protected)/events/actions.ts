@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { z } from 'zod';
 
 import type { ActionResult } from '@/lib/admin/actionResult';
@@ -35,7 +35,7 @@ const etagSchema = z.string().min(1);
 function revalidate() {
 	// The public pages read through `getEvents`' tag; the admin pages read
 	// live, but their route cache still has to go.
-	revalidateTag('events', { expire: 0 });
+	updateTag('events');
 	revalidatePath('/events');
 	revalidatePath('/');
 	revalidatePath('/admin/events', 'layout');

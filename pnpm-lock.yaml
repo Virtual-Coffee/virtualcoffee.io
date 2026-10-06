@@ -208,9 +208,6 @@ importers:
       '@types/mdx':
         specifier: ^2.0.14
         version: 2.0.14
-      airtable:
-        specifier: ^0.12.2
-        version: 0.12.2
       better-auth:
         specifier: ^1.7.7
         version: 1.7.7(@opentelemetry/api@1.9.1)(drizzle-kit@1.0.0-rc.5-ab785fc)(drizzle-orm@1.0.0-rc.5-ab785fc(@neondatabase/serverless@1.1.0)(@opentelemetry/api@1.9.1)(pg@8.23.0)(zod@4.6.5))(next@16.3.8(@babel/core@7.29.7(supports-color@5.5.0))(@opentelemetry/api@1.9.1)(@types/node@24.19.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(sass@1.105.1))(pg@8.23.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(vitest@5.0.3)
@@ -374,6 +371,9 @@ importers:
       '@vitest/eslint-plugin':
         specifier: ^1.6.27
         version: 1.6.27(@typescript-eslint/eslint-plugin@8.69.0(@typescript-eslint/parser@8.69.0(@typescript/typescript6@6.0.2)(eslint@10.11.0(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0))(@typescript/typescript6@6.0.2)(eslint@10.11.0(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0))(@typescript/typescript6@6.0.2)(eslint@10.11.0(jiti@2.7.0)(supports-color@5.5.0))(supports-color@5.5.0)(vitest@5.0.3)
+      airtable:
+        specifier: ^0.12.2
+        version: 0.12.2
       concurrently:
         specifier: ^10.0.5
         version: 10.0.5

@@ -11,8 +11,6 @@ import { NotConfigured } from '../../presentation';
 import { SeriesChangedEvents } from '../../seriesChangedEvents';
 import { EndSeriesSection, SeriesForm } from '../../seriesForm';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'Edit Series · Admin',
 	robots: { index: false, follow: false },

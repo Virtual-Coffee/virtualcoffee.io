@@ -42,7 +42,7 @@ Scripts are in `package.json`; `pnpm` is enforced. What no script name tells you
 - CI does not build. Run `pnpm build` locally when a change can only fail at prerender: MDX frontmatter, `generateStaticParams`, or a component pages render at build time.
 - `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Every entry in `knip.ts` carries its reason in a comment; content directories are entries, not ignores, so their own imports are still checked. The CI job is `continue-on-error` until this stack has merged, because each layer exports things only the layer above imports — the follow-up is #1589.
 - CodeQL is advanced-setup: `.github/workflows/codeql.yml` is the whole config, and the repository's default-setup toggle stays off.
-- `typescript` is aliased to `@typescript/typescript6` (the compiler API typescript-eslint and `next build` need) and `@typescript/native` to `typescript@7` (the `tsc` binary). Keep both until typescript-eslint supports TypeScript 7.
+- `typescript` is aliased to `@typescript/typescript6` (the compiler API typescript-eslint and `next build` need) and `@typescript/native` to `typescript@7` (the `tsc` binary). `next build` runs the `tsc` CLI of the aliased package (TS 6; `experimental.useTypeScriptCli` defaults to true in 16.3) while `pnpm typecheck` runs TS 7, so the build and CI check with different compilers. Keep both until typescript-eslint supports TypeScript 7.
 
 Before finishing a change: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test && pnpm knip`.
 
@@ -122,7 +122,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 - MDX plugins are referenced by path string in `next.config.mjs` because Turbopack requires serializable loader options; a plugin that needs function options lives in `src/mdx-plugins/`. The path is the whole cache key, so editing a plugin's _contents_ does not invalidate compiled MDX (on Netlify too) — `localMdxPlugin()` mixes a hash of the plugin file into its options; wire new local plugins through it. If MDX output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
 - `src/util/loadMdx.server.ts` reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then `import()`s the `.mdx` file. Adding a resource is adding an `.mdx` file with frontmatter under `src/content/resources/`; index listings come from `<FileIndex />`.
-- MDX files import components explicitly from `@/components/content/`; `src/mdx-components.tsx` is a passthrough. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
+- MDX files import components explicitly from `@/components/content/`; `src/mdx-components.tsx` maps nothing. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
 
 ### Layout, styling, HTML safety
 

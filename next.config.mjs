@@ -45,7 +45,6 @@ const devTunnelOrigins = isTunnel ? ['*.netlify.live'] : [];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	reactStrictMode: true,
 	// `netlify dev` routes every request through the block-bots edge function
 	// (netlify.toml declares it on /*), and the local Deno runtime gunzips the
 	// upstream body while passing Next's `content-encoding: gzip` header through
@@ -54,7 +53,6 @@ const nextConfig = {
 	// NETLIFY_DEV is set by the CLI for the process it spawns.
 	compress: process.env.NETLIFY_DEV !== 'true',
 	sassOptions: {
-		includePaths: [path.join(__dirname, 'node_modules')],
 		// Bootstrap 5.3's own Sass triggers if-function and global-builtin
 		// deprecations on Dart Sass 1.10x. Silence warnings coming from
 		// dependencies only, so warnings in src/styles/ still surface.
@@ -64,10 +62,9 @@ const nextConfig = {
 			'color-functions',
 			'color-module-compat',
 			'import',
-			'legacy-js-api',
 		],
 	},
-	pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+	pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
 	// Next 16 streams React's dev-only debug info (owner stacks, component
 	// origins) to the browser over the `/_next/hmr` websocket, keyed by request
 	// id, and the client router *blocks* the Flight decode until those chunks

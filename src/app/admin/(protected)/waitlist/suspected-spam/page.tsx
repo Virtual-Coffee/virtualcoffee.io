@@ -6,8 +6,6 @@ import { QueueSearch } from '../queueSearch';
 import { parseSearchParams } from '../searchParams';
 import type { RawSearchParams } from '@/util/searchParams';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'Suspected spam · Admin',
 	robots: { index: false, follow: false },
