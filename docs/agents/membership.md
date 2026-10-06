@@ -16,7 +16,7 @@ The rules for the Postgres-backed membership pipeline, the public forms and `/ad
 Each table has one writer; go through it.
 
 - `src/lib/access/roleAssignment.ts` writes `user.role` and `pending_grant`, under one lock per Slack member. A Pending Grant matches on the Slack member id — `docs/adr/0009`.
-- `src/lib/history/eventLog.ts` writes `application_event`, `submission_event` and `volunteer_event`: `recordOutcome()` turns a Send Outcome into History, `transitionAndRecord()` commits a status change with its event. Labels in `src/lib/history/eventLabels.ts` are keyed by the enums, so a new event type is a type error until labelled.
+- `src/lib/history/eventLog.ts` writes `application_event`, `submission_event` and `volunteer_event`: `recordOutcome()` turns an Outbound into History, `transitionAndRecord()` commits a status change with its event. Labels in `src/lib/history/eventLabels.ts` are keyed by the enums, so a new event type is a type error until labelled.
 - `src/lib/volunteers/invites.ts` writes `volunteer_invite_ledger` and sends every Claim Link (`issueAndSend`, `resendClaimLink`).
 - `src/lib/waitlist/lifecycle.ts` writes an Application's status and owns the guards, the send-first order and invite completion; the transition table is `applicationStatuses.ts`, which the action panel reads. Only the import writes `lapsed`.
 - The Invite Allowance is an append-only ledger; a correction is a new row through `adjustBalance` with a reason — `docs/adr/0011`.
