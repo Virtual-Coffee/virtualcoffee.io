@@ -28,22 +28,20 @@ const topLevelPages = [
 	'/volunteer-at-virtual-coffee',
 	'/lunch-and-learn-idea',
 	'/start-coffee-table-group',
+	'/about',
+	'/code-of-conduct',
+	'/uses',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-	const [resources, simplePages, episodes, newsletters] = await Promise.all([
+	const [resources, episodes, newsletters] = await Promise.all([
 		loadMdxDirectory({ baseDirectory: 'content/resources' }),
-		loadMdxDirectory({ baseDirectory: 'content/simple-mdx-pages' }),
 		getEpisodes({ limit: Infinity }),
 		getNewsletters(),
 	]);
 
 	const paths = [
 		...topLevelPages,
-		// Top level only, as `(simple-mdx)/[...slug]` generates no deeper routes.
-		...simplePages.map(
-			(page) => `/${page.slug.replace('content/simple-mdx-pages/', '')}`,
-		),
 		...extractRoutes(resources, 'content/resources/').map(
 			(slug) => `/resources/${slug}`,
 		),
