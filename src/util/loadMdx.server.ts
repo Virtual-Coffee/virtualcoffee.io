@@ -1,3 +1,4 @@
+import 'server-only';
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import fm from 'front-matter';
