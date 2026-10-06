@@ -68,7 +68,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 ### Generated files
 
-- `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored; `pnpm codegen` writes them. Run `pnpm build-member-files` after adding a member and `pnpm build-undraw-ratios` after adding an SVG to `public/assets/svg` (`UndrawIllustration` needs concrete dimensions for `next/image`).
+- `src/data/members/{core,members}.ts`, `src/data/undrawAspectRatios.ts` and `src/data/resourcePaths.ts` are gitignored; `pnpm codegen` writes them. Run `pnpm build-member-files` after adding a member, `pnpm build-undraw-ratios` after adding an SVG to `public/assets/svg` (`UndrawIllustration` needs concrete dimensions for `next/image`) and `pnpm build-resource-paths` after adding or moving a file in `src/content/resources` (`ResourcePath` types `resourceHref()`).
 - `src/data/bots.ts` is generated but **checked in**, so a GitHub outage cannot block a deploy and every change to who is blocked is a reviewable diff. Edit the policy in `src/data/botOverrides.ts` and regenerate with `pnpm build-bot-list`. When changing who is blocked, read `docs/bot-list.md` first.
 
 ### Members pipeline
@@ -80,10 +80,12 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 - Editing a plugin in `src/mdx-plugins/` invalidates compiled MDX only when it's wired through `localMdxPlugin()` in `next.config.mjs`; if output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
 - `src/util/loadMdx.server.ts` reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then `import()`s the `.mdx` file. Adding a resource is adding an `.mdx` file with frontmatter under `src/content/resources/`; index listings come from `<FileIndex />`.
-- MDX files import components explicitly from `@/components/content/`. `src/mdx-components.tsx` maps only what Markdown itself generates, which no import can reach: `a` → `MdxLink`, so a page path goes through `next/link`. A JSX `<a>` written in MDX compiles to a literal `<a>` and bypasses it, so write internal links as Markdown. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
+- MDX files import components explicitly from `@/components/content/`. `src/mdx-components.tsx` maps only what Markdown itself generates, which no import can reach: `a` → `MdxLink`, so a page path goes through `next/link`. A JSX `<a>` written in MDX compiles to a literal `<a>` and bypasses it, so write internal links as Markdown. `src/content/links.test.ts` fails on a root-relative link that is not a page the site serves (a `netlify.toml` redirect source included). The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
 
 ### Layout, styling, HTML safety
 
+- `typedRoutes` is on: a literal href that matches no route is a type error. Build a `/resources` href with `resourceHref()` (ESLint bans a raw one), type an href kept in data as `AdminHref` or a template literal, and add no `as Route` cast beyond the Slack join URL.
+- `about`, `code-of-conduct` and `uses` are explicit routes over `src/content/simple-mdx-pages/` through `src/util/simpleMdxPage.server.tsx`; a new simple page is a new `src/app/<slug>/page.tsx` and a slug in that helper.
 - `src/components/layouts/DefaultLayout.tsx` is the only page layout (`Hero`, `heroHeader`, `heroSubheader`, `simple` props).
 - Styles are à-la-carte Bootstrap SCSS partials (no Tailwind) plus per-feature partials in `src/styles/`; markup uses Bootstrap classes and a custom `prose` class. The Sass load-order and map rules are in the headers of `src/styles/_variables.scss` and `src/styles/_bootstrap.scss`; read them before editing either. `quietDeps` in `next.config.mjs` mutes Bootstrap's own deprecations so warnings from `src/styles/` still surface.
 - All HTML from external sources goes through `src/util/sanitizeCmsData.ts`; `src/util/markdown.server.ts` uses it instead of rehype-sanitize so there is one allowlist.
