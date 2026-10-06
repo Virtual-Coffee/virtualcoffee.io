@@ -149,7 +149,7 @@ Sentry (`@sentry/nextjs`), errors + tracing only. Init files: `src/instrumentati
 
 ## Content conventions
 
-- Monthly challenges: prose in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`, following the "Monthly Challenge Technical Guidelines" linked from the README. Past entry data is a frozen JSON snapshot in `src/data/monthlyChallenges/data/` — `docs/adr/0004`.
+- Monthly challenges: one `src/content/monthly-challenges/<slug>.mdx` per challenge, served by `src/app/monthlychallenges/[slug]/`. The `/monthlychallenges` list is built from `series/<id>.mdx`: each challenge's `series` frontmatter links it to one or more series, and the newest challenge in a series becomes its "most recent challenge" link. The frontmatter schema and the loader are in `src/data/monthlyChallenges/index.ts`. Pages that render data import a component from `src/components/content/monthlyChallenges/`. Past entry data is a frozen JSON snapshot in `src/data/monthlyChallenges/data/` — `docs/adr/0004`.
 - Member emoji are standard Unicode; maintainers reject PRs otherwise.
 - PRs link an issue (`Closes #123`) and fill the template's Description and Methodology sections.
 
