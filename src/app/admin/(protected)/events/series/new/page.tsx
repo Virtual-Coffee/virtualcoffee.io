@@ -3,8 +3,6 @@ import { requirePermission } from '@/lib/access/adminAccess';
 import { Breadcrumb } from '../../../presentation';
 import { SeriesForm } from '../../seriesForm';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'New Series · Admin',
 	robots: { index: false, follow: false },

@@ -6,21 +6,10 @@ pnpm-lock.yaml
 /.nova
 .DS_Store
 node_modules
-/_site
-/src/assets/css
-/src/assets/rev
-/assets.json
 /.env
-/.cache
-
-/netlify/functions/server
-/public/build
 
 # Local Netlify folder
 .netlify
-/app/styles
-/.tmp
-/app/_generatedData
 
 # drizzle-kit writes these in its own format; Prettier fights it on every db:generate
 /drizzle/*/snapshot.json

@@ -6,8 +6,6 @@ import { FAILURES } from './copy';
 import { JoinSlackForm } from './form';
 import { slackJoinLink } from './joinLink';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'Join us on Slack',
 	robots: { index: false, follow: false },

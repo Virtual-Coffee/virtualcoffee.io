@@ -4,7 +4,12 @@ import { Fragment } from 'react';
 import CdnImage from '@/components/CdnImage';
 import DisplayHtml from '@/components/DisplayHtml';
 import PodcastSubscribe from '@/components/PodcastSubscribe';
-import { getEpisode, getEpisodes, getTranscript } from '@/data/podcast';
+import {
+	getEpisode,
+	getEpisodes,
+	getTranscript,
+	transcriptOrNullDuringBuild,
+} from '@/data/podcast';
 import { dateForDisplay } from '@/util/date';
 import { sanitizeCmsData } from '@/util/sanitizeCmsData';
 import createCmsImage, { cmsImageUrl } from '@/util/cmsimage';
@@ -47,7 +52,10 @@ async function getEpisodeData(slug: string) {
 		console.error(`Episode not found - ${slug}`);
 		notFound();
 	}
-	const transcript = await getTranscript({ id: episode.podcastBuzzsproutId });
+	const transcript = await transcriptOrNullDuringBuild(
+		getTranscript({ id: episode.podcastBuzzsproutId }),
+		episode.slug,
+	);
 
 	const sanitizedEpisode = sanitizeCmsData(episode);
 	return {
@@ -113,7 +121,7 @@ export async function generateMetadata({
 	};
 }
 
-export default async function Newsletter({
+export default async function PodcastEpisode({
 	params,
 }: PageProps<'/podcast/[slug]'>) {
 	const { episode, transcript } = await getEpisodeData((await params).slug);

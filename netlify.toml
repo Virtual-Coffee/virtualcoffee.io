@@ -9,6 +9,8 @@
 	function = "block-bots"
 	path     = "/*"
 
+# Also declared inline; dropping these two disables the /join rate limit on
+# deploys (checked on a deploy preview, #1658).
 [[edge_functions]]
 	function = "limit-action-body"
 	path     = "/*"
@@ -24,11 +26,6 @@
 	port       = 9000
 	targetPort = 3000
 
-[[headers]]
-	for = "/_next/static/*"
-	[headers.values]
-		"Cache-Control" = "public, max-age=31536000, s-maxage=31536000"
-
 [[redirects]]
 	from   = "/volunteer"
 	status = 301
@@ -43,16 +40,6 @@
 	from   = "/member-survey"
 	status = 301
 	to     = "https://airtable.com/appGHm8ztVWug6UxH/pagKrtAhS4jnRhtYD/form"
-
-[[redirects]]
-	from   = "/netlify-forms"
-	status = 200
-	to     = "/"
-
-[[redirects]]
-	from   = "/report-coc-violation-success"
-	status = 200
-	to     = "/"
 
 [[redirects]]
 	from   = "/sponsorship"

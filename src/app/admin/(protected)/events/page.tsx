@@ -8,8 +8,6 @@ import { EventsTable } from './eventsTable';
 import { NotConfigured } from './presentation';
 import { SeriesTable } from './seriesTable';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'Events · Admin',
 	robots: { index: false, follow: false },

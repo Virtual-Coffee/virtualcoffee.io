@@ -42,7 +42,7 @@ Scripts are in `package.json`; `pnpm` is enforced. What no script name tells you
 - CI does not build. Run `pnpm build` locally when a change can only fail at prerender: MDX frontmatter, `generateStaticParams`, or a component pages render at build time.
 - `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Every entry in `knip.ts` carries its reason in a comment; content directories are entries, not ignores, so their own imports are still checked. The CI job is `continue-on-error` until this stack has merged, because each layer exports things only the layer above imports — the follow-up is #1589.
 - CodeQL is advanced-setup: `.github/workflows/codeql.yml` is the whole config, and the repository's default-setup toggle stays off.
-- `typescript` is aliased to `@typescript/typescript6` (the compiler API typescript-eslint and `next build` need) and `@typescript/native` to `typescript@7` (the `tsc` binary). Keep both until typescript-eslint supports TypeScript 7.
+- `typescript` is aliased to `@typescript/typescript6` (the compiler API typescript-eslint and `next build` need) and `@typescript/native` to `typescript@7` (the `tsc` binary). `next build` runs the `tsc` CLI of the aliased package (TS 6; `experimental.useTypeScriptCli` defaults to true in 16.3) while `pnpm typecheck` runs TS 7, so the build and CI check with different compilers. Keep both until typescript-eslint supports TypeScript 7.
 
 Before finishing a change: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test && pnpm knip`.
 
@@ -66,6 +66,8 @@ Every external data source lives in `src/data/` and degrades to a mock when its 
 | Membership applications (`/join`, `/admin`)     | `src/db/`                    | local Postgres from `netlify dev`                   |
 
 A new external fetch is a `defineSource()` (`src/data/source.ts`): it owns the mock gate and the tagged `unstable_cache` that `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates. Outside production, missing credentials fall back to the mock silently and a failed fetch with a `console.warn`; production throws either way.
+
+A revalidation interval is declared once, beside the fetch in `src/data/*`; pages export no `revalidate`, and a page that reads only checked-in content (MDX, the podcast JSON) is static until the next deploy. Do not wrap a synchronous or `fs` read in `unstable_cache`: it hands its `revalidate` and tags to every page that calls it. A credential-less fetch where `null` is a valid answer skips `defineSource()`; copy the `fetchTranscript` / `getTranscript` pair in `src/data/podcast.ts`.
 
 The Events Calendar is the system of record for Series and Events; `/admin/events` is a client of the Calendar API and stores nothing — `docs/adr/0014`. The shape of a Series or an Event is declared once, in `src/lib/events/eventDraft.ts` (with recurrence in `src/lib/events/recurrence.ts`), and the admin forms and `events/actions.ts` both parse against it.
 
@@ -127,7 +129,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 - `src/components/layouts/DefaultLayout.tsx` is the only page layout (`Hero`, `heroHeader`, `heroSubheader`, `simple` props).
 - Styles are à-la-carte Bootstrap SCSS partials plus per-feature partials in `src/styles/`; markup uses Bootstrap classes and a custom `prose` class. The Sass load-order and map rules are in the headers of `src/styles/_variables.scss` and `src/styles/_bootstrap.scss`; read them before editing either. `quietDeps` in `next.config.mjs` mutes Bootstrap's own deprecations so warnings from `src/styles/` still surface.
 - All HTML from external sources goes through `src/util/sanitizeCmsData.ts`; `src/util/markdown.server.ts` uses it instead of rehype-sanitize so there is one allowlist.
-- The `.server.ts` suffix marks server-only modules by convention (a Remix holdover); nothing enforces it.
+- `createMetaData`, `loadMdx` and `markdown` `.server.ts` start with `import 'server-only'` (Next resolves it, no dependency; Vitest aliases it to `src/test/serverOnly.ts`), so a client import is a build error. `url.server.ts` is exempt: `netlify/functions` and `tsx` scripts import it. The suffix alone enforces nothing.
 
 ### Netlify
 

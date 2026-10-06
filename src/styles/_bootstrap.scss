@@ -1,5 +1,5 @@
 // Bootstrap 5.3.x. Order mirrors node_modules/bootstrap/scss/bootstrap.scss.
-// Bare specifiers resolve via sassOptions.includePaths in next.config.mjs.
+// Bare specifiers resolve through sass-loader's own node_modules importer.
 //
 // Ordering is load-bearing: `utilities` is only the config map and must precede
 // `root`, while `utilities/api` emits the actual utility classes and must stay

@@ -39,8 +39,8 @@ process.env.URL ??= 'http://localhost:9000';
 
 /** The outbound edge, mocked once for every db test — spies in `src/test/mocks/`. */
 vi.mock('next/cache', async () => {
-	const { revalidatePath, revalidateTag } = await import('@/test/mocks/spies');
-	return { revalidatePath, revalidateTag, unstable_cache: <T>(fn: T) => fn };
+	const { revalidatePath, updateTag } = await import('@/test/mocks/spies');
+	return { revalidatePath, updateTag, unstable_cache: <T>(fn: T) => fn };
 });
 
 vi.mock('@/data/slackMembers', async (importOriginal) => ({

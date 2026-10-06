@@ -55,7 +55,6 @@
 		"@slack/web-api": "^8.2.0",
 		"@tanstack/react-table": "^9.2.4",
 		"@types/mdx": "^2.0.14",
-		"airtable": "^0.12.2",
 		"better-auth": "^1.7.7",
 		"better-auth-devtools": "^1.1.0",
 		"bootstrap": "^5.3.8",
@@ -112,6 +111,7 @@
 		"@typescript/native": "npm:typescript@^7.0.2",
 		"@vitest/coverage-v8": "^5.0.3",
 		"@vitest/eslint-plugin": "^1.6.27",
+		"airtable": "^0.12.2",
 		"concurrently": "^10.0.5",
 		"cross-env": "^10.1.0",
 		"drizzle-kit": "1.0.0-rc.5-ab785fc",
@@ -126,7 +126,6 @@
 		"typescript": "npm:@typescript/typescript6@^6.0.2",
 		"vitest": "^5.0.3"
 	},
-	"overrides": {},
 	"intent": {
 		"skills": [
 			"@tanstack/*",

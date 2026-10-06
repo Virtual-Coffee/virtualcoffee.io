@@ -1,12 +1,9 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
+import BrokenLinkReport from '@/components/BrokenLinkReport';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import PostList from '@/components/PostList';
 import { homePageLinks } from '@/util/homePageLinks';
 
 export default function NotFound() {
-	const pathname = usePathname();
 	return (
 		<DefaultLayout
 			Hero="Undraw404"
@@ -48,13 +45,7 @@ export default function NotFound() {
 			<hr />
 
 			<p className="lead">
-				If you want to let us know about this broken link,{' '}
-				<a
-					href={`https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new?title=Broken+link:+${pathname}&body=This+link+resulted+in+a+404:+https://virtualcoffee.io${pathname}&labels=bug`}
-				>
-					please open an issue on GitHub
-				</a>
-				.
+				If you want to let us know about this broken link, <BrokenLinkReport />.
 			</p>
 		</DefaultLayout>
 	);

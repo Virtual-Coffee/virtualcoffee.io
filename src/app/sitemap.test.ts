@@ -7,9 +7,6 @@ import episodes from '@/data/podcast/episodes.json';
 import robots from './robots';
 import sitemap from './sitemap';
 
-// `unstable_cache` throws outside a Next request; the data is what's tested.
-vi.mock('next/cache', () => ({ unstable_cache: <T>(fn: T) => fn }));
-
 const ORIGIN = 'https://virtualcoffee.io';
 
 /** Routes that are deliberately not in the sitemap. */

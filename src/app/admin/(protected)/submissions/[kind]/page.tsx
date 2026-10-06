@@ -18,8 +18,6 @@ import { PAGE_SIZE } from '@/util/searchParams';
 import { parseSubmissionSearchParams } from './searchParams';
 import { SubmissionsTable, type SubmissionListRow } from './submissionsTable';
 
-export const dynamic = 'force-dynamic';
-
 export async function generateMetadata({
 	params,
 }: {

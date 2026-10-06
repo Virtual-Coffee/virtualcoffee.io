@@ -1,8 +1,8 @@
+import 'server-only';
 import { readdirSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import fm from 'front-matter';
 import { UndrawIllustrationName } from '@/components/UndrawIllustration';
-import { unstable_cache } from 'next/cache';
 
 /**
  * Represents the attributes of an MDX route.
@@ -30,129 +30,122 @@ export interface MdxFile {
  * @param includeChildren - If true, include children routes in the result.
  * @returns An array of MdxFile representing the MDX routes.
  */
-export const loadMdxDirectory = unstable_cache(
-	async ({
-		baseDirectory,
-		includeChildren = true,
-	}: {
-		baseDirectory: string;
-		includeChildren?: boolean;
-	}): Promise<MdxFile[]> => {
-		baseDirectory = join(...baseDirectory.split('/'));
-		// Get the absolute path to the base directory
-		const basePath = join(process.cwd(), 'src', baseDirectory);
+export async function loadMdxDirectory({
+	baseDirectory,
+	includeChildren = true,
+}: {
+	baseDirectory: string;
+	includeChildren?: boolean;
+}): Promise<MdxFile[]> {
+	baseDirectory = join(...baseDirectory.split('/'));
+	// Get the absolute path to the base directory
+	const basePath = join(process.cwd(), 'src', baseDirectory);
 
-		// Get the directory entries (files and directories) inside the base path
-		const dirEntries = readdirSync(basePath, { withFileTypes: true });
-		const dirs = dirEntries.filter((entry) => entry.isDirectory());
-		const files = dirEntries.filter((entry) => entry.isFile());
+	// Get the directory entries (files and directories) inside the base path
+	const dirEntries = readdirSync(basePath, { withFileTypes: true });
+	const dirs = dirEntries.filter((entry) => entry.isDirectory());
+	const files = dirEntries.filter((entry) => entry.isFile());
 
-		try {
-			// Process directories and their children
-			const directories = await Promise.all(
-				dirs.map(async (dir) => {
-					// Get the index file's attributes for the current directory
-					const index = await loadMdxRouteFileAttributes({
-						slug: join(baseDirectory, dir.name, 'index'),
+	try {
+		// Process directories and their children
+		const directories = await Promise.all(
+			dirs.map(async (dir) => {
+				// Get the index file's attributes for the current directory
+				const index = await loadMdxRouteFileAttributes({
+					slug: join(baseDirectory, dir.name, 'index'),
+				});
+
+				let children: MdxFile[] | null = null;
+
+				if (includeChildren) {
+					// Read all files and subdirectories in the current directory
+					const dirs = readdirSync(join(basePath, dir.name), {
+						withFileTypes: true,
 					});
 
-					let children: MdxFile[] | null = null;
+					const mappedChildren = await Promise.all(
+						dirs.map(async (e) => {
+							// Skip the index file
+							if (e.name !== 'index.mdx') {
+								if (e.isFile()) {
+									// If it's a file, load its attributes
+									return await loadMdxRouteFileAttributes({
+										slug: join(
+											baseDirectory,
+											dir.name,
+											e.name.replace('.mdx', ''),
+										),
+									});
+								} else if (e.isDirectory()) {
+									// If it's a directory, recursively load its attributes
+									const dirIndex = await loadMdxRouteFileAttributes({
+										slug: join(baseDirectory, dir.name, e.name, 'index'),
+									});
 
-					if (includeChildren) {
-						// Read all files and subdirectories in the current directory
-						const dirs = readdirSync(join(basePath, dir.name), {
-							withFileTypes: true,
-						});
-
-						const mappedChildren = await Promise.all(
-							dirs.map(async (e) => {
-								// Skip the index file
-								if (e.name !== 'index.mdx') {
-									if (e.isFile()) {
-										// If it's a file, load its attributes
-										return await loadMdxRouteFileAttributes({
-											slug: join(
-												baseDirectory,
-												dir.name,
-												e.name.replace('.mdx', ''),
-											),
-										});
-									} else if (e.isDirectory()) {
-										// If it's a directory, recursively load its attributes
-										const dirIndex = await loadMdxRouteFileAttributes({
-											slug: join(baseDirectory, dir.name, e.name, 'index'),
-										});
-
-										if (dirIndex) {
-											return {
-												...dirIndex,
-												children: await loadMdxDirectory({
-													baseDirectory: join(baseDirectory, dir.name, e.name),
-												}),
-											};
-										}
+									if (dirIndex) {
+										return {
+											...dirIndex,
+											children: await loadMdxDirectory({
+												baseDirectory: join(baseDirectory, dir.name, e.name),
+											}),
+										};
 									}
 								}
-								return null;
-							}),
-						);
+							}
+							return null;
+						}),
+					);
 
-						children = mappedChildren
-							.filter((route): route is MdxFile => route !== null)
-							.sort((a, b) => {
-								return 'order' in a && 'order' in b && a.order && b.order
-									? a.order - b.order
-									: 0;
-							});
-					}
+					children = mappedChildren
+						.filter((route): route is MdxFile => route !== null)
+						.sort((a, b) => {
+							return 'order' in a && 'order' in b && a.order && b.order
+								? a.order - b.order
+								: 0;
+						});
+				}
 
-					return {
-						...index,
-						children,
-					};
-				}),
-			);
+				return {
+					...index,
+					children,
+				};
+			}),
+		);
 
-			// Process individual files in the base directory
-			const entries = await Promise.all(
-				files.map(async (entry) => {
-					// Skip index files
-					if (entry.name === 'index.jsx' || entry.name === 'index.mdx') {
-						return null;
-					}
+		// Process individual files in the base directory
+		const entries = await Promise.all(
+			files.map(async (entry) => {
+				// Skip index files
+				if (entry.name === 'index.jsx' || entry.name === 'index.mdx') {
+					return null;
+				}
 
-					// Load attributes for the file
-					const attributes = await loadMdxRouteFileAttributes({
-						slug: join(baseDirectory, entry.name.replace('.mdx', '')),
-					});
+				// Load attributes for the file
+				const attributes = await loadMdxRouteFileAttributes({
+					slug: join(baseDirectory, entry.name.replace('.mdx', '')),
+				});
 
-					return attributes;
-				}),
-			);
+				return attributes;
+			}),
+		);
 
-			// Combine directories and entries and filter out null values
-			const allRoutes: MdxFile[] = [...entries, ...directories].filter(
-				(route): route is MdxFile => route !== null,
-			);
+		// Combine directories and entries and filter out null values
+		const allRoutes: MdxFile[] = [...entries, ...directories].filter(
+			(route): route is MdxFile => route !== null,
+		);
 
-			// Sort the result by order
-			return allRoutes.sort((a, b) => {
-				return 'order' in a && 'order' in b && a.order && b.order
-					? a.order - b.order
-					: 0;
-			});
-		} catch (error) {
-			// If any error occurs, log it and return an empty array
-			console.log(error);
-			return [];
-		}
-	},
-	[],
-	{
-		revalidate: 86400,
-		tags: ['mdx-routes'],
-	},
-);
+		// Sort the result by order
+		return allRoutes.sort((a, b) => {
+			return 'order' in a && 'order' in b && a.order && b.order
+				? a.order - b.order
+				: 0;
+		});
+	} catch (error) {
+		// If any error occurs, log it and return an empty array
+		console.log(error);
+		return [];
+	}
+}
 
 /**
  * Flattens a `loadMdxDirectory` tree into route slugs, each with `prefix`
@@ -173,60 +166,57 @@ export function extractRoutes(files: MdxFile[], prefix: string): string[] {
  * @param slug - The slug representing the path to the MDX file.
  * @returns The MdxFile for the given slug, or null if not found.
  */
-export const loadMdxRouteFileAttributes = unstable_cache(
-	async ({ slug }: { slug: string }): Promise<MdxFile | null> => {
-		slug = join(...slug.split('/'));
+export async function loadMdxRouteFileAttributes({
+	slug,
+}: {
+	slug: string;
+}): Promise<MdxFile | null> {
+	slug = join(...slug.split('/'));
 
-		// Generate the regular file name and index file name based on the slug
-		const regularFileName = join(
-			process.cwd(),
-			'src',
-			...`${slug}.mdx`.split('/').filter(Boolean),
-		);
+	// Generate the regular file name and index file name based on the slug
+	const regularFileName = join(
+		process.cwd(),
+		'src',
+		...`${slug}.mdx`.split('/').filter(Boolean),
+	);
 
-		const indexFileName = join(
-			process.cwd(),
-			'src',
-			...slug.split('/').filter(Boolean),
-			'index.mdx',
-		);
+	const indexFileName = join(
+		process.cwd(),
+		'src',
+		...slug.split('/').filter(Boolean),
+		'index.mdx',
+	);
 
-		// Check if the regular file exists, otherwise, check if the index file exists
-		const fileName = existsSync(regularFileName)
-			? regularFileName
-			: existsSync(indexFileName)
-				? indexFileName
-				: null;
+	// Check if the regular file exists, otherwise, check if the index file exists
+	const fileName = existsSync(regularFileName)
+		? regularFileName
+		: existsSync(indexFileName)
+			? indexFileName
+			: null;
 
-		// If the file doesn't exist, return null
-		if (!fileName) {
-			return null;
-		}
+	// If the file doesn't exist, return null
+	if (!fileName) {
+		return null;
+	}
 
-		// Read the contents of the file
-		const fileContents = readFileSync(fileName, {
-			encoding: 'utf-8',
-		});
+	// Read the contents of the file
+	const fileContents = readFileSync(fileName, {
+		encoding: 'utf-8',
+	});
 
-		// Parse the front matter from the file contents using the front-matter library
-		const contents = fm(fileContents);
-		const attributes = contents.attributes as Omit<
-			MdxFile,
-			'slug' | 'requirePath'
-		>;
+	// Parse the front matter from the file contents using the front-matter library
+	const contents = fm(fileContents);
+	const attributes = contents.attributes as Omit<
+		MdxFile,
+		'slug' | 'requirePath'
+	>;
 
-		// The attributes type is unknown, but we know it should match the MdxFile interface,
-		// so we assert the type to MdxFile to resolve the TypeScript error.
-		// Additionally, modify the slug to remove trailing "/index" and "__frontend/" if present.
-		return {
-			...attributes,
-			isIndex: fileName === indexFileName,
-			slug: slug.replace(/\/index$/g, '').replace(/^__frontend\//g, ''),
-		};
-	},
-	[],
-	{
-		revalidate: 86400,
-		tags: ['mdx-routes'],
-	},
-);
+	// The attributes type is unknown, but we know it should match the MdxFile interface,
+	// so we assert the type to MdxFile to resolve the TypeScript error.
+	// Additionally, modify the slug to remove trailing "/index" and "__frontend/" if present.
+	return {
+		...attributes,
+		isIndex: fileName === indexFileName,
+		slug: slug.replace(/\/index$/g, '').replace(/^__frontend\//g, ''),
+	};
+}

@@ -10,8 +10,6 @@ import { Breadcrumb } from '../../presentation';
 import { EventForm } from '../eventForm';
 import { EventStatusBadge, NotConfigured } from '../presentation';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'Edit Event · Admin',
 	robots: { index: false, follow: false },

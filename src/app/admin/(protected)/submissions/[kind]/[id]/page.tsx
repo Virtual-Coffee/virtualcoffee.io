@@ -18,8 +18,6 @@ import { STATUS_LABELS, SubmissionStatusBadge } from '../presentation';
 import { StatusControl } from '../statusControl';
 import { HistoryTimeline } from '../../../historyTimeline';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
 	title: 'Submission',
 	robots: { index: false, follow: false },

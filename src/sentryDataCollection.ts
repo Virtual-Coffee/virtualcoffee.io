@@ -8,7 +8,22 @@ type ErrorEvent = Parameters<NonNullable<Options['beforeSend']>>[0];
 // The privacy baseline every Sentry.init passes. v11 collects cookies,
 // headers, request bodies and user info when this is unset, so it is never
 // left unset. See docs/adr/0015-error-monitoring-with-sentry.md.
-const ipParams = { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] };
+// Deny terms match query keys as case-insensitive substrings, on top of the
+// SDK's built-ins (token, key, secret, auth, ...). `code` is the Slack invite
+// on /join-slack and the OAuth callback code, `invite` the Claim Link on
+// /join, `state` the OAuth callback state.
+const urlQueryParams = {
+	deny: [
+		'forwarded',
+		'-ip',
+		'remote-',
+		'via',
+		'-user',
+		'code',
+		'invite',
+		'state',
+	],
+};
 
 export const dataCollection = {
 	userInfo: false,
@@ -19,7 +34,7 @@ export const dataCollection = {
 	// response headers are kept.
 	httpHeaders: { request: { allow: ['user-agent'] }, response: false },
 	httpBodies: [],
-	urlQueryParams: ipParams,
+	urlQueryParams,
 	genAI: { inputs: false, outputs: false },
 	databaseQueryData: false,
 	queues: false,
@@ -45,7 +60,8 @@ export const PII_ROUTES = [
 	'/start-coffee-table-group',
 ] as const;
 
-function underPiiRoute(path: string | undefined): boolean {
+/** Whether `path` is a PII route or under one. */
+export function underPiiRoute(path: string | undefined): boolean {
 	return PII_ROUTES.some(
 		(route) => path === route || path?.startsWith(`${route}/`),
 	);
