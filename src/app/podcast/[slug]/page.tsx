@@ -12,7 +12,6 @@ import createCmsImage, { cmsImageUrl } from '@/util/cmsimage';
 import { Metadata } from 'next';
 
 export const dynamic = 'force-static';
-export const dynamicParams = false;
 
 export async function generateStaticParams() {
 	const podcastEpisodes = await getEpisodes({ limit: Infinity });
