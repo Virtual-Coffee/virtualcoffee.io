@@ -28,7 +28,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Overview
 
-virtualcoffee.io is a Next.js App Router site (Bootstrap SCSS, no Tailwind) deployed on Netlify. Content is checked-in MDX/TS/JSON plus build-time fetches that fall back to mock data when credentials are absent; the membership pipeline and the public forms live in Netlify Database (Airtable is retired — `docs/adr/0004`).
+virtualcoffee.io is a Next.js App Router site deployed on Netlify. Content is checked-in MDX/TS/JSON plus build-time fetches that fall back to mock data when credentials are absent; the membership pipeline and the public forms live in Netlify Database (Airtable is retired — `docs/adr/0004`).
 
 ## Commands
 
@@ -40,9 +40,9 @@ Scripts are in `package.json`; `pnpm` is enforced. What no script name tells you
 - `pnpm db:migrate` needs `netlify dev` running. Deploys apply migrations in `netlify.toml`'s build command.
 - There is no husky/lint-staged hook; CI (`.github/workflows/ci.yml`) auto-commits Prettier fixes on same-repo branches.
 - CI does not build. Run `pnpm build` locally when a change can only fail at prerender: MDX frontmatter, `generateStaticParams`, or a component pages render at build time.
-- `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Every entry in `knip.ts` carries its reason in a comment; content directories are entries, not ignores, so their own imports are still checked. The CI job is `continue-on-error` until this stack has merged, because each layer exports things only the layer above imports — the follow-up is #1589.
+- `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Content directories are entries, not ignores, so their own imports are still checked. The CI job is `continue-on-error` until #1589.
 - CodeQL is advanced-setup: `.github/workflows/codeql.yml` is the whole config, and the repository's default-setup toggle stays off.
-- `typescript` is aliased to `@typescript/typescript6` (the compiler API typescript-eslint and `next build` need) and `@typescript/native` to `typescript@7` (the `tsc` binary). `next build` runs the `tsc` CLI of the aliased package (TS 6; `experimental.useTypeScriptCli` defaults to true in 16.3) while `pnpm typecheck` runs TS 7, so the build and CI check with different compilers. Keep both until typescript-eslint supports TypeScript 7.
+- `typescript` is `@typescript/typescript6` (for typescript-eslint and `next build`) and `@typescript/native` is `typescript@7` (the `tsc` that `pnpm typecheck` runs), so the build and CI check with different compilers. Keep both until typescript-eslint supports TypeScript 7.
 
 Before finishing a change: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test && pnpm knip`.
 
@@ -52,20 +52,9 @@ When writing or debugging a test, read `docs/testing.md` first.
 
 ### Data sources and the mock gate
 
-Every external data source lives in `src/data/` and degrades to a mock when its credentials are missing:
+Every external read in `src/data/` (members, sponsors, events, Slack members) degrades to a mock in `src/data/mocks/` when its credentials are missing. Outbound senders (`src/lib/slack/notify.ts`, `src/lib/github/issues.ts`, `src/lib/email/transport.ts`) are Captured instead, and a failure is an event shown in `/admin`; membership data is local Postgres from `netlify dev`.
 
-| Source                                          | File                         | Fallback                                            |
-| ----------------------------------------------- | ---------------------------- | --------------------------------------------------- |
-| Member GitHub profiles                          | `src/data/members/index.ts`  | `src/data/mocks/memberData.js` (faker)              |
-| GitHub Sponsors                                 | `src/data/sponsors.ts`       | `src/data/mocks/sponsors.ts`                        |
-| Events (the Events Calendar on Google)          | `src/data/events.ts`         | `src/data/mocks/events.ts`                          |
-| Submission and membership notifications (Slack) | `src/lib/slack/notify.ts`    | Captured; the failure is an event shown in `/admin` |
-| Lunch & Learn GitHub issue                      | `src/lib/github/issues.ts`   | Captured; same                                      |
-| Transactional email (`/admin` actions)          | `src/lib/email/transport.ts` | Captured; a failure is an `email_failed` event      |
-| Slack member directory (`/admin` grant picker)  | `src/data/slackMembers.ts`   | `src/data/mocks/slackMembers.ts` (faker)            |
-| Membership applications (`/join`, `/admin`)     | `src/db/`                    | local Postgres from `netlify dev`                   |
-
-A new external fetch is a `defineSource()` (`src/data/source.ts`): it owns the mock gate and the tagged `unstable_cache` that `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates. Outside production, missing credentials fall back to the mock silently and a failed fetch with a `console.warn`; production throws either way.
+A new external fetch is a `defineSource()` (`src/data/source.ts`): it owns the mock gate and the tagged `unstable_cache` that `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates; production throws where anywhere else falls back to the mock.
 
 A revalidation interval is declared once, beside the fetch in `src/data/*`; pages export no `revalidate`, and a page that reads only checked-in content (MDX, the podcast JSON) is static until the next deploy. Do not wrap a synchronous or `fs` read in `unstable_cache`: it hands its `revalidate` and tags to every page that calls it. A credential-less fetch where `null` is a valid answer skips `defineSource()`; copy the `fetchTranscript` / `getTranscript` pair in `src/data/podcast.ts`.
 
@@ -73,44 +62,13 @@ The Events Calendar is the system of record for Series and Events; `/admin/event
 
 ### Membership pipeline (Postgres)
 
-Before touching `src/db`, `src/lib/access`, `src/lib/history`, `src/app/join` or `src/app/admin`, read `CONTEXT.md` for the vocabulary. Each rule below cites the ADR that decided it; open the ADR before changing the rule.
-
-`/admin` is organised by Section, one route segment each under `src/app/admin/(protected)/`; the modules directly under `(protected)/` are shared. Adding a Section is a type error in `CARDS` (`src/lib/admin/dashboard.ts`) until it has a dashboard card or is excluded.
-
-- `/admin` — the dashboard, scoped to what the viewer may see
-- `/admin/waitlist/*` — the queue, `archive/`, and the `[id]` detail page; `/join` is what feeds it
-- `/admin/submissions/[kind]/*` — the four Submission kinds
-- `/admin/volunteers/*` — the Volunteer roster and their Invite Allowances
-- `/admin/events/*` — the Events Calendar (`src/lib/events/eventsCalendar.ts`)
-- `/admin/user-management` — who has access
-
-Rules:
-
-- Every Section page and server action under `/admin` gates itself with `requirePermission()` (`src/lib/access/adminAccess.ts`); the `(protected)` layout and the `/admin` dashboard only prove the viewer holds _some_ section, and the dashboard scopes what it shows with `visibleSections()` — `docs/adr/0003`, `docs/adr/0006`.
-- `src/lib/access/roleAssignment.ts` is the only writer of `user.role` and `pending_grant`, under one lock per Slack member. A Pending Grant matches on the Slack member id — `docs/adr/0009`.
-- `/invites` is outside `/admin`: `requireVolunteer()` (`src/lib/access/volunteerAccess.ts`) shares only `getSession()` with the admin path, and the `volunteer` Role holds no Section — `docs/adr/0010`.
-- The Invite Allowance is an append-only ledger; a correction is a new row through `adjustBalance` with a reason — `docs/adr/0011`.
-- Volunteers imported from Airtable come from a reviewed mapping, never a guess — `docs/adr/0012`; the one-off scripts are documented in `scripts/airtable/README.md`.
-- `src/lib/history/eventLog.ts` is the only writer of `application_event`, `submission_event` and `volunteer_event`, and `src/lib/volunteers/invites.ts` of `volunteer_invite_ledger` and every Claim Link send (`issueAndSend`, `resendClaimLink`): `recordOutcome()` turns a send into History, `transitionAndRecord()` commits a status change with its event. Labels in `src/lib/history/eventLabels.ts` are keyed by the enums, so a new event type is a type error until labelled.
-- `src/lib/waitlist/lifecycle.ts` is the only writer of an Application's status and owns the guards, the send-first order and invite completion; the transition table is `applicationStatuses.ts`, which the action panel reads. `lapsed` is written only by the import.
-- A schema change is a new migration: `pnpm db:generate --name=<hyphenated-slug>`, both generated files committed — `docs/adr/0001`.
-- `id` (UUIDv7, `newId()` in `src/db/ids.ts`) is the URL and foreign-key handle, checked with `isId()` on the way in; `reference` is display-only — `docs/adr/0008`.
-- One-off scripts run through `scripts/with-local-netlify.ts`, which supplies the local connection string and refuses anything non-local.
-- `ADMIN_DEV_BYPASS*` (`.env.example`) signs a local checkout in without Slack; a real session cookie takes precedence over it.
-- A deploy preview is production's data behind production's Slack sign-in; `OAUTH_PROXY_SECRET` holds one value in every Netlify context — `docs/adr/0007`.
-- An admin action that emails about a status change sends first and writes the change only after, reporting whether anything went out; `src/lib/waitlist/lifecycle.db.test.ts` pins the order. Adding a Volunteer writes first — `docs/adr/0010` — and so does a Claim Link, whose token must exist before the email, with a definite failure refunded and an uncertain one left charged — `docs/adr/0011`.
-- Live delivery is `CONTEXT=production` only; everywhere else every email, Slack post, GitHub issue, DM and Events Calendar write is Captured unless `.env.example` names an opt-in — `docs/adr/0013`, `docs/adr/0014`. A new sender is a `deliver()` call in `src/lib/outbound.ts`, which decides the mode before the sender can reach its credentials; on a deploy `capture()` logs the masked recipient, subject and links, never the body, because the data is real (`docs/adr/0007`).
-- A Slack post is Block Kit built from `src/lib/slack/blocks.ts`: a typed value is a literal `rich_text` run, mrkdwn is for static copy only — `docs/adr/0016`.
-- `/join` and the four public forms (`/report-coc-violation`, `/volunteer-at-virtual-coffee`, `/lunch-and-learn-idea`, `/start-coffee-table-group`) are `force-dynamic`: the spam guard (`src/util/forms/spamGuard.ts`) signs a per-render token that prerendering would bake into cached HTML. Every form action opens with `intake()` (`src/util/forms/intake.ts`), which owns that guard and the schema parse; shared fields are in `src/util/forms/fields.ts`.
-- A public form persists first and notifies second — the inverse of the admin rule above, on purpose — `docs/adr/0005`. `submit()` (`src/lib/submissions/submitSubmission.ts`) is the one persist-then-announce for all four, and `submit.db.test.ts` pins the order (`src/app/join/action.db.test.ts` does for `/join`).
-- A `/join` submission that `suspectSpam()` matches is quarantined as `suspected_spam`, never dropped or announced — `docs/adr/0017`.
-- CoC attachments live in Netlify Blobs and are served only through a route that checks `coc:read`.
+Before touching `src/db`, `src/lib/{access,history,waitlist,volunteers,submissions}`, `/admin`, `/invites`, `/join` or a public form, or anything that sends (email, a Slack post, a GitHub issue, an Events Calendar write), read `CONTEXT.md` for the vocabulary and `docs/agents/membership.md` for the rules; each rule cites the ADR that decided it.
 
 Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (procedure in the comment at the top of `src/data/podcast.ts`); membership data stays out of that repo — `docs/adr/0002`. Newsletters are JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
 
 ### Generated files
 
-- `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored; `pnpm codegen` writes them and CI runs it before lint, typecheck and test. Run `pnpm build-member-files` after adding a member and `pnpm build-undraw-ratios` after adding an SVG to `public/assets/svg` (`UndrawIllustration` needs concrete dimensions for `next/image`).
+- `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored; `pnpm codegen` writes them. Run `pnpm build-member-files` after adding a member and `pnpm build-undraw-ratios` after adding an SVG to `public/assets/svg` (`UndrawIllustration` needs concrete dimensions for `next/image`).
 - `src/data/bots.ts` is generated but **checked in**, so a GitHub outage cannot block a deploy and every change to who is blocked is a reviewable diff. Edit the policy in `src/data/botOverrides.ts` and regenerate with `pnpm build-bot-list`. When changing who is blocked, read `docs/bot-list.md` first.
 
 ### Members pipeline
@@ -120,38 +78,37 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 ### MDX content pipeline
 
-- MDX plugins are referenced by path string in `next.config.mjs` because Turbopack requires serializable loader options; a plugin that needs function options lives in `src/mdx-plugins/`. The path is the whole cache key, so editing a plugin's _contents_ does not invalidate compiled MDX (on Netlify too) — `localMdxPlugin()` mixes a hash of the plugin file into its options; wire new local plugins through it. If MDX output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
+- Editing a plugin in `src/mdx-plugins/` invalidates compiled MDX only when it's wired through `localMdxPlugin()` in `next.config.mjs`; if output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
 - `src/util/loadMdx.server.ts` reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then `import()`s the `.mdx` file. Adding a resource is adding an `.mdx` file with frontmatter under `src/content/resources/`; index listings come from `<FileIndex />`.
 - MDX files import components explicitly from `@/components/content/`. `src/mdx-components.tsx` maps only what Markdown itself generates, which no import can reach: `a` → `MdxLink`, so a page path goes through `next/link`. A JSX `<a>` written in MDX compiles to a literal `<a>` and bypasses it, so write internal links as Markdown. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
 
 ### Layout, styling, HTML safety
 
 - `src/components/layouts/DefaultLayout.tsx` is the only page layout (`Hero`, `heroHeader`, `heroSubheader`, `simple` props).
-- Styles are à-la-carte Bootstrap SCSS partials plus per-feature partials in `src/styles/`; markup uses Bootstrap classes and a custom `prose` class. The Sass load-order and map rules are in the headers of `src/styles/_variables.scss` and `src/styles/_bootstrap.scss`; read them before editing either. `quietDeps` in `next.config.mjs` mutes Bootstrap's own deprecations so warnings from `src/styles/` still surface.
+- Styles are à-la-carte Bootstrap SCSS partials (no Tailwind) plus per-feature partials in `src/styles/`; markup uses Bootstrap classes and a custom `prose` class. The Sass load-order and map rules are in the headers of `src/styles/_variables.scss` and `src/styles/_bootstrap.scss`; read them before editing either. `quietDeps` in `next.config.mjs` mutes Bootstrap's own deprecations so warnings from `src/styles/` still surface.
 - All HTML from external sources goes through `src/util/sanitizeCmsData.ts`; `src/util/markdown.server.ts` uses it instead of rehype-sanitize so there is one allowlist.
 - `createMetaData`, `loadMdx` and `markdown` `.server.ts` start with `import 'server-only'` (Next resolves it, no dependency; Vitest aliases it to `src/test/serverOnly.ts`), so a client import is a build error. `url.server.ts` is exempt: `netlify/functions` and `tsx` scripts import it. The suffix alone enforces nothing.
 
 ### Netlify
 
-- `netlify/edge-functions/block-bots.ts` refuses harvesting user agents on deploys only; locally it matches but lets through unless `BLOCK_BOTS_LOCAL=true` is in `.env` (the CLI does not pass plain process env vars to edge functions). It reads the deploy context from `context.deploy.context` — `Netlify.env.get('CONTEXT')` is build-scope and undefined at the edge — and imports `src/data/bots.ts` with an explicit `.ts` extension because it bundles for Deno.
-- `CONTEXT` is read through `deployContext()` (`src/lib/deployContext.ts`): `production`, `preview` or `local`, an unknown value counting as a preview; the edge function imports it with a `.ts` extension — `docs/adr/0017`.
+- `netlify/edge-functions/block-bots.ts` refuses harvesting user agents on deploys only (`BLOCK_BOTS_LOCAL` in `.env.example`). It bundles for Deno, so its imports from `src/` carry an explicit `.ts` extension.
+- `CONTEXT` is read through `deployContext()` (`src/lib/deployContext.ts`): `production`, `preview` or `local`, an unknown value counting as a preview — `docs/adr/0018`.
 - `CONTEXT` and `DEPLOY_PRIME_URL` are build-scope, so `next.config.mjs` inlines them into `process.env.*` reads; otherwise a running function sees a deploy as a local checkout — `docs/adr/0007`.
 - URL redirects go in `netlify.toml`, beside the legacy 301 map, rather than in Next config. `/join-slack` is a page (`src/app/join-slack/`), not a redirect function.
 
 ### Error monitoring
 
-Sentry (`@sentry/nextjs`), errors + tracing only. Init files: `src/instrumentation-client.ts` (browser), `sentry.server.config.ts`, `sentry.edge.config.ts` (dispatched from `src/instrumentation.ts`), and `src/app/global-error.tsx` for a root-layout crash. `next.config.mjs` wraps the config in `withSentryConfig` (org `virtual-coffee-nw`, project `virtualcoffee-io`), which uploads source maps after the Turbopack build when `SENTRY_AUTH_TOKEN` is set — Netlify's build env only — and rewrites `/monitoring` as the event tunnel.
+Sentry (`@sentry/nextjs`), errors + tracing only; rationale in `docs/adr/0015`; source maps and the `/monitoring` tunnel are configured in `next.config.mjs`.
 
 - Off without `NEXT_PUBLIC_SENTRY_DSN`; Netlify sets it for every deploy context, `.env` locally is opt-in.
-- Every `Sentry.init` passes `dataCollection` from `src/sentryDataCollection.ts` (v11 is permissive when it's unset); loosening it is a policy change. The CoC report form must not reach Sentry. Rationale in `docs/adr/0015-error-monitoring-with-sentry.md`.
-- A caught failure a maintainer must act on goes through `reportHandled()` (`src/lib/monitoring/reportHandled.ts`), which scrubs it; the server's `beforeSend` strips frame locals on `PII_ROUTES` — ADR 0015.
-- `environment` is the Netlify `CONTEXT`, inlined as `NEXT_PUBLIC_SENTRY_ENVIRONMENT` in `next.config.mjs`.
-- Errors with frames outside our bundles are tagged `third_party_code:true`, not dropped (`applicationKey` in `next.config.mjs` must match `filterKeys`); only Netlify's RUM beacon failure is dropped. See ADR 0015.
+- Every `Sentry.init` passes `dataCollection` from `src/sentryDataCollection.ts` (v11 is permissive when it's unset); loosening it is a policy change. Keep the CoC report form out of Sentry: its route is on the `PII_ROUTES` list.
+- A caught failure a maintainer must act on goes through `reportHandled()` (`src/lib/monitoring/reportHandled.ts`), which scrubs it; the server's `beforeSend` strips frame locals on `PII_ROUTES`.
+- Errors with frames outside our bundles are tagged `third_party_code:true`, not dropped; only Netlify's RUM beacon failure is dropped.
 - Releases are commit SHAs with commits and Netlify deploys attached by the build; `Fixes VIRTUALCOFFEE-IO-N` in a commit message resolves that Sentry issue on merge.
 
 ## Content conventions
 
-- Monthly challenges: one `src/content/monthly-challenges/<slug>.mdx` per challenge, served by `src/app/monthlychallenges/[slug]/`. The `/monthlychallenges` list is built from `series/<id>.mdx`: each challenge's `series` frontmatter links it to one or more series, and the newest challenge in a series becomes its "most recent challenge" link. The frontmatter schema and the loader are in `src/data/monthlyChallenges/index.ts`. Pages that render data import a component from `src/components/content/monthlyChallenges/`. Past entry data is a frozen JSON snapshot in `src/data/monthlyChallenges/data/` — `docs/adr/0004`.
+- Monthly challenges: one `.mdx` per challenge under `src/content/monthly-challenges/`; the frontmatter schema and loader are in `src/data/monthlyChallenges/index.ts`. Past entry data is a frozen JSON snapshot in `src/data/monthlyChallenges/data/` — `docs/adr/0004`.
 - Member emoji are standard Unicode; maintainers reject PRs otherwise.
 - PRs link an issue (`Closes #123`) and fill the template's Description and Methodology sections.
 
@@ -171,4 +128,4 @@ Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. When a skill asks
 
 ### Code review
 
-Greptile reviews every PR except those from the bots in `excludeAuthors`; label one `skip-review` to opt out. Renovate PRs are reviewed only for majors: `renovate.json` adds the line `ignoreKeywords` matches to every other Renovate PR, and Greptile never auto-approves Renovate. Who Greptile answers is set in the dashboard's Organization → Permissions and fails silently; "Trigger reviews by authoring" must stay "Everyone (including non-members)". Its config is `.greptile/`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
+Greptile reviews every PR except those from the bots in `excludeAuthors`; label one `skip-review` to opt out. Its config is `.greptile/`, and how Renovate PRs and the dashboard are handled is in `.greptile/README.md`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.

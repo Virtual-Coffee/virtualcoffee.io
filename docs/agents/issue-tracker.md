@@ -9,7 +9,7 @@ Issues and specs for this repo are GitHub issues on `Virtual-Coffee/virtualcoffe
 
 ## Wayfinding operations
 
-Read by `/wayfinder`. The **map** is one issue labelled `wayfinder:map`; its tickets are GitHub sub-issues of the map, labelled `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`) and assigned to the driving dev once claimed.
+Read by `/wayfinder`. The `wayfinder:*` labels are created on first use. The **map** is one issue labelled `wayfinder:map`; its tickets are GitHub sub-issues of the map, labelled `wayfinder:<type>` (`research`/`prototype`/`grilling`/`task`) and assigned to the driving dev once claimed.
 
 - **Blocking** uses GitHub's native issue dependencies: `gh api --method POST repos/<owner>/<repo>/issues/<child>/dependencies/blocked_by -F issue_id=<blocker-db-id>`, where the id is the blocker's numeric **database id** (`gh api repos/<owner>/<repo>/issues/<n> --jq .id`), not its `#number` or `node_id`. `issue_dependencies_summary.blocked_by` counts open blockers only.
 - **Frontier**: the map's open children with no open blocker and no assignee; first in map order wins. **Claim**: `gh issue edit <n> --add-assignee @me`. **Resolve**: comment the answer, close, then append a pointer to the map's Decisions-so-far.

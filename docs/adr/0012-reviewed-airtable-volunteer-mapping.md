@@ -7,7 +7,7 @@ volunteer import cannot: everything about an Invite Allowance keys on the
 Slack member id (0009), and Airtable has no such field — `member_profiles.SlackID`
 is entirely empty. A row has an informal `Name` ("Kirk", "Meg", "Nicky T"), a
 `Profile Name` and `Email` through a linked member record, and a
-`GitHub Username` missing for 9 of the 91. The join has to be made against the
+`GitHub Username` that is missing for some rows. The join has to be made against the
 live Slack directory from a name, a handle and an address, none reliable.
 
 ## Decision
@@ -27,13 +27,13 @@ undecided applications as `lapsed` rather than `declined`.
 
 ### What the scoring is for
 
-`--propose` fills `slackUserId` in where one candidate scores at least 50 and
-beats every other, and where a row has exactly one candidate at all — reported
-separately, since that match can rest on nothing more than a name prefix.
-Everything else arrives blank with up to five scored candidates and the reasons
-each matched. The score orders a list a human reads; it decides nothing, and a
-re-run keeps whatever the review already set. Weights put an identifier above
-a name, and normalisation trims and strips punctuation.
+`--propose` fills `slackUserId` in where one candidate clears the confidence
+threshold and beats every other, and where a row has exactly one candidate at
+all — reported separately, since that match can rest on nothing more than a
+name prefix. Everything else arrives blank with a short list of scored
+candidates and the reasons each matched. The score orders a list a human reads;
+it decides nothing, and a re-run keeps whatever the review already set. An
+identifier outweighs a name (`scripts/airtable/match.ts` owns the weights).
 
 **Email is used here.** 0009's rule is about authorisation at sign-in, where a
 mismatch grants nothing and reports nothing. This is a one-off migration in
@@ -57,11 +57,11 @@ the README says how to regenerate it.
   account, or have Invites attributed. Getting the unmapped count to zero is
   what the review is for; leaving one blank is an admission that nobody could
   identify that person.
-- **Only the 25 active volunteers get an allowance and the `volunteer` role.** A
+- **Only active volunteers get an allowance and the `volunteer` role.** A
   mapped inactive volunteer is imported paused with no credit and no role, so
   history stays attributable and reactivation is one click. The role is a
   Pending Grant on the Slack member id (0009) through the same helper
-  `/admin/volunteers` uses, since almost none of the 91 have signed in.
+  `/admin/volunteers` uses, since almost none of them have signed in.
 - Rows with no `Invites Available` value import as zero; absent is not a
   number.
 - **Allowances arrive as one net `imported` row** dated when Airtable said it.

@@ -3,9 +3,9 @@
 ## Context
 
 Airtable stored a Volunteer's allowance as `Invites Available`, a plain number.
-A manually triggered automation added five to every active volunteer whenever
+A manually triggered automation topped up every active volunteer whenever
 someone ran it; the invite form subtracted one. Nothing recorded why the number
-was what it was: seven volunteers sit at 23, and nobody can say how.
+was what it was, so an odd balance could not be explained.
 
 ## Decision
 
@@ -25,17 +25,17 @@ Two partial unique indexes do the work that would otherwise be careful code:
   cannot net a free invite — what makes double-spending unrepresentable rather
   than unlikely
 
-A unique index says nothing about a row whose key is NULL, so the CHECK
-constraint `volunteer_invite_ledger_reason_keys` requires `period_key` on an
-accrual and `invite_id` on a spend or refund, and forbids either key on every
-other reason — an `admin_grant` cannot point at an Invite it had no part in,
-and an accrual cannot carry one. The code always writes exactly the right key;
-the constraint is what makes the indexes mean what this section claims.
+A unique index says nothing about a row whose key is NULL, so a CHECK
+constraint on the table requires `period_key` on an accrual and `invite_id` on
+a spend or refund, and forbids either key on every other reason — an
+`admin_grant` cannot point at an Invite it had no part in, and an accrual
+cannot carry one. The code always writes exactly the right key; the constraint
+is what makes the indexes mean what this section claims.
 
 ### Accrual is a daily, idempotent cron
 
-+1 a month replaces Airtable's manual +5, a deliberate change of behaviour
-that lets a Volunteer plan around their allowance. The job runs **daily** as
+A small monthly accrual replaces Airtable's manual bulk top-up, a deliberate
+change of behaviour that lets a Volunteer plan around their allowance. The job runs **daily** as
 "ensure this month's row exists" rather than "run on the first": a monthly
 schedule that missed its window would leave everyone short until somebody
 noticed, a daily idempotent one heals itself the next morning, and
@@ -48,7 +48,7 @@ and choosing not to invite anyone.
 The email that announces an accrual is owed by the ledger row, not by the run
 that inserted it: `volunteer_accrual_notice` records each attempt against its
 `monthly_accrual`, and the job emails every accrual of the month that has no
-notice. A scheduled function is cut off at 30 seconds, so the job stops
+notice. A scheduled function has a short execution limit, so the job stops
 starting sends once its budget is spent and the next morning finishes the
 roster. One notice per attempt, whatever its outcome — a failed address is
 reported once, not retried daily until the month turns.
@@ -78,8 +78,9 @@ index can see that.
 
 ## Consequences
 
-- **Nothing may ever `UPDATE` or `DELETE` a ledger row.** Corrections are new
-  rows, which is why `adjustBalance` requires a reason.
+- **Ledger rows are only ever inserted.** A correction is a new row, which is
+  why `adjustBalance` requires a reason; an `UPDATE` or `DELETE` of a ledger row
+  is a bug.
 - **`src/lib/volunteers/invites.ts` is the only writer of the ledger and of an
   Invite's Claim Link**, as the Event Log is of `application_event`. Every
   movement — accrual, spend, give-back, admin adjustment, import — is a function
@@ -87,8 +88,7 @@ index can see that.
   and a new caller cannot invent a movement by spelling out an `INSERT` of its
   own.
 - The allowance is never read from a column, so every screen that shows it runs
-  a sum — a correlated subquery at ninety volunteers, worth revisiting at a
-  scale this community is unlikely to reach.
+  a sum — a correlated subquery, cheap at this community's scale.
 - An Invite imported from Airtable has no `spend` row, because the import
   brings an allowance across as one net figure (0012). So **any** give-back —
   cancelling as much as the expiry sweep — closes the Invite but refuses to

@@ -122,7 +122,7 @@
 			"scope": ["src/lib/slack/**", "src/test/slack.ts"]
 		},
 		{
-			"path": "docs/adr/0017-one-deploy-context-classifier.md",
+			"path": "docs/adr/0018-one-deploy-context-classifier.md",
 			"description": "How Netlify's CONTEXT is classified as production, preview or local, and where an unknown value lands",
 			"scope": [
 				"src/lib/deployContext.ts",
@@ -154,8 +154,33 @@
 			]
 		},
 		{
+			"path": "docs/agents/membership.md",
+			"description": "Rules for the membership pipeline, public forms and /admin, each citing its ADR",
+			"scope": [
+				"src/db/**",
+				"src/lib/access/**",
+				"src/lib/history/**",
+				"src/lib/waitlist/**",
+				"src/lib/volunteers/**",
+				"src/lib/submissions/**",
+				"src/lib/outbound.ts",
+				"src/lib/slack/**",
+				"src/lib/email/**",
+				"src/lib/github/**",
+				"src/lib/events/**",
+				"src/util/forms/**",
+				"src/app/join/**",
+				"src/app/invites/**",
+				"src/app/admin/**",
+				"src/app/report-coc-violation/**",
+				"src/app/volunteer-at-virtual-coffee/**",
+				"src/app/lunch-and-learn-idea/**",
+				"src/app/start-coffee-table-group/**"
+			]
+		},
+		{
 			"path": "docs/testing.md",
-			"description": "How tests are written here: Vitest, *.db.test.ts on PGlite, Zod matchers",
+			"description": "How tests are written here: Vitest, *.db.test.ts on PGlite, session helpers",
 			"scope": [
 				"**/*.test.ts",
 				"**/*.test.tsx",

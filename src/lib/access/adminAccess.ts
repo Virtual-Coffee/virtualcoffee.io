@@ -57,7 +57,7 @@ function bypassSession(fields: {
  * hold, and each is independently sufficient to disable it in any deployed
  * environment: `ADMIN_DEV_BYPASS` is explicitly `true`, `NODE_ENV` is not
  * production, and the deploy context is local (`netlify dev` sets
- * `CONTEXT=dev`; an unrecognised value counts as a preview, docs/adr/0017).
+ * `CONTEXT=dev`; an unrecognised value counts as a preview, docs/adr/0018).
  *
  * `ADMIN_DEV_BYPASS_ROLES` narrows what the session holds (default `admin`).
  * `ADMIN_DEV_BYPASS_SLACK_ID` is what an Invite Allowance is keyed on;

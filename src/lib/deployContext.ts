@@ -1,6 +1,6 @@
 /**
  * What kind of environment is this: Netlify's `CONTEXT` classified once, with
- * an unrecognised value treated as a preview (docs/adr/0017). No imports: the
+ * an unrecognised value treated as a preview (docs/adr/0018). No imports: the
  * edge function bundles this file for Deno.
  */
 export type DeployClass = 'production' | 'preview' | 'local';

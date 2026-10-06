@@ -25,10 +25,10 @@ plugin runs on every deploy (`src/lib/access/auth.ts`). A preview's sign-in send
 Slack to production's registered redirect URI; production exchanges the code,
 checks the workspace, encrypts the profile with `OAUTH_PROXY_SECRET` and hands
 it back to the preview, which creates the user and session in its own branch.
-Production writes nothing. The secret has to be the same in every Netlify
-context, and `BETTER_AUTH_SECRET` deliberately is not: a session token is
-signed with the latter, so a token copied out of one branch is worthless
-against another. A local checkout takes the same route: a maintainer signing
+Production writes nothing. `OAUTH_PROXY_SECRET` holds the same value in every
+Netlify context, and `BETTER_AUTH_SECRET` deliberately does not: a session
+token is signed with the latter, so a token copied out of one branch is
+worthless against another. A local checkout takes the same route: a maintainer signing
 in locally puts the same secret in `.env`, and the Slack app needs no
 `localhost` redirect URI.
 
@@ -61,18 +61,17 @@ against are already covered:
 - A maintainer signing in on a preview lands on their own row with their own
   roles; nothing has to be provisioned per preview. `ADMIN_BOOTSTRAP_SLACK_IDS`
   is production's bootstrap and does not need a preview value.
-- `OAUTH_PROXY_SECRET` has to hold the same value in every Netlify context.
-  Left unset, the plugin falls back to `BETTER_AUTH_SECRET`, which differs per
-  context, and a preview's sign-in fails after the round trip with
+- Left unset, `OAUTH_PROXY_SECRET` falls back to `BETTER_AUTH_SECRET`, which
+  differs per context, and a preview's sign-in fails after the round trip with
   `invalid_profile` — that error means the secrets do not match.
 - Netlify's **sensitive variable policy** must keep secrets and the database
   URL away from builds by unrecognised authors. It is a site setting, not
   code, and the only thing standing between a fork PR's build and the fork.
 - A preview's sign-in only reaches the preview when the running function knows
-  its own address. Netlify sets `CONTEXT` and `DEPLOY_PRIME_URL` at build only,
-  so `next.config.mjs` inlines them; without that, `siteUrl()` falls back to
-  production's domain and Slack is sent production's callback. What a
-  `CONTEXT` value means is decided once, in docs/adr/0017.
+  its own address, which `next.config.mjs` arranges by inlining build-only
+  Netlify variables; without that, `siteUrl()` falls back to production's
+  domain and Slack is sent production's callback. What a `CONTEXT` value means
+  is decided in docs/adr/0018.
 - Adding a table or column is just adding it; nothing has to be registered.
 - Anything a preview reaches that is not the database is not forked: an
   opt-in that makes a preview write to a real external system (a calendar, a
