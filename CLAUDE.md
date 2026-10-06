@@ -122,7 +122,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 - MDX plugins are referenced by path string in `next.config.mjs` because Turbopack requires serializable loader options; a plugin that needs function options lives in `src/mdx-plugins/`. The path is the whole cache key, so editing a plugin's _contents_ does not invalidate compiled MDX (on Netlify too) — `localMdxPlugin()` mixes a hash of the plugin file into its options; wire new local plugins through it. If MDX output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
 - `src/util/loadMdx.server.ts` reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then `import()`s the `.mdx` file. Adding a resource is adding an `.mdx` file with frontmatter under `src/content/resources/`; index listings come from `<FileIndex />`.
-- MDX files import components explicitly from `@/components/content/`; `src/mdx-components.tsx` maps nothing. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
+- MDX files import components explicitly from `@/components/content/`. `src/mdx-components.tsx` maps only what Markdown itself generates, which no import can reach: `a` → `MdxLink`, so a page path goes through `next/link`. A JSX `<a>` written in MDX compiles to a literal `<a>` and bypasses it, so write internal links as Markdown. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
 
 ### Layout, styling, HTML safety
 
@@ -151,7 +151,7 @@ Sentry (`@sentry/nextjs`), errors + tracing only. Init files: `src/instrumentati
 
 ## Content conventions
 
-- Monthly challenges: prose in `src/app/monthlychallenges/page.tsx` (`challengeList`) plus one static page per month under `src/app/monthlychallenges/(challenges)/<mon-year>/`, following the "Monthly Challenge Technical Guidelines" linked from the README. Past entry data is a frozen JSON snapshot in `src/data/monthlyChallenges/data/` — `docs/adr/0004`.
+- Monthly challenges: one `src/content/monthly-challenges/<slug>.mdx` per challenge, served by `src/app/monthlychallenges/[slug]/`. The `/monthlychallenges` list is built from `series/<id>.mdx`: each challenge's `series` frontmatter links it to one or more series, and the newest challenge in a series becomes its "most recent challenge" link. The frontmatter schema and the loader are in `src/data/monthlyChallenges/index.ts`. Pages that render data import a component from `src/components/content/monthlyChallenges/`. Past entry data is a frozen JSON snapshot in `src/data/monthlyChallenges/data/` — `docs/adr/0004`.
 - Member emoji are standard Unicode; maintainers reject PRs otherwise.
 - PRs link an issue (`Closes #123`) and fill the template's Description and Methodology sections.
 
