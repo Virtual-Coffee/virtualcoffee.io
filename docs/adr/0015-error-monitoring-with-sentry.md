@@ -51,8 +51,8 @@ the SDK collects cookies, headers, request and response bodies and user info
 whenever `dataCollection` is unset, so leaving it out is the permissive
 choice. `src/sentryDataCollection.ts` holds the baseline all three init files
 import (no user info, cookies, bodies, database or queue data, no response
-headers, request headers limited to `User-Agent`, IP-bearing query params
-denied), and a test pins its values. Sentry therefore sees stack traces,
+headers, request headers limited to `User-Agent`, IP- and secret-bearing query
+params denied: `code`, `invite`, `state`), and a test pins its values. Sentry therefore sees stack traces,
 breadcrumbs, route names and the browser's `User-Agent`, not IP addresses,
 cookies, referrers, other headers or request bodies. `User-Agent` stays
 because Sentry derives browser and OS tags and its crawler and legacy-browser
@@ -130,6 +130,9 @@ the client-side half of the picture disappears.
   here.
 - `src/app/global-error.tsx` carries its own `<html>`, stylesheet and font and
   has to be kept in step with `src/app/layout.tsx` by hand.
+- Neither `src/app/error.tsx` nor `src/app/admin/(protected)/error.tsx`
+  reports from a `PII_ROUTES` path (a client-side message can quote what was
+  typed); server errors there are captured by `onRequestError`.
 - A new form or admin route that handles personal data needs adding to
   `PII_ROUTES`; until it is, an uncaught throw there ships its locals.
 - A new catch that strands someone's data should call `reportHandled`, or the

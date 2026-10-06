@@ -2,19 +2,31 @@ import { describe, expect, test } from 'vitest';
 import {
 	dataCollection,
 	PII_ROUTES,
+	underPiiRoute,
 	withoutPiiFrameVars,
 } from './sentryDataCollection';
 
 // A failing test here is a privacy policy change, not a config tweak:
 // loosening any of these needs ADR 0015 rewritten first.
 test('the Sentry baseline keeps request data out', () => {
-	const ipParams = { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] };
+	const urlQueryParams = {
+		deny: [
+			'forwarded',
+			'-ip',
+			'remote-',
+			'via',
+			'-user',
+			'code',
+			'invite',
+			'state',
+		],
+	};
 	expect(dataCollection).toStrictEqual({
 		userInfo: false,
 		cookies: false,
 		httpHeaders: { request: { allow: ['user-agent'] }, response: false },
 		httpBodies: [],
-		urlQueryParams: ipParams,
+		urlQueryParams,
 		genAI: { inputs: false, outputs: false },
 		databaseQueryData: false,
 		queues: false,
@@ -85,5 +97,18 @@ describe('withoutPiiFrameVars', () => {
 			{ email: 'ada@example.test' },
 			{ body: 'what happened' },
 		]);
+	});
+});
+
+describe('underPiiRoute', () => {
+	test.each([
+		['/report-coc-violation', true],
+		['/admin/events/series/new', true],
+		['/join', true],
+		['/joined', false],
+		['/resources/joining', false],
+		[undefined, false],
+	])('%s -> %s', (path, expected) => {
+		expect(underPiiRoute(path)).toBe(expected);
 	});
 });
