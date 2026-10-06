@@ -51,8 +51,8 @@ the SDK collects cookies, headers, request and response bodies and user info
 whenever `dataCollection` is unset, so leaving it out is the permissive
 choice. `src/sentryDataCollection.ts` holds the baseline all three init files
 import (no user info, cookies, bodies, database or queue data, no response
-headers, request headers limited to `User-Agent`, IP-bearing query params
-denied), and a test pins its values. Sentry therefore sees stack traces,
+headers, request headers limited to `User-Agent`, IP- and secret-bearing query
+params denied: `code`, `invite`, `state`), and a test pins its values. Sentry therefore sees stack traces,
 breadcrumbs, route names and the browser's `User-Agent`, not IP addresses,
 cookies, referrers, other headers or request bodies. `User-Agent` stays
 because Sentry derives browser and OS tags and its crawler and legacy-browser

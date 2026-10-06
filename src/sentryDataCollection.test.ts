@@ -9,13 +9,24 @@ import {
 // A failing test here is a privacy policy change, not a config tweak:
 // loosening any of these needs ADR 0015 rewritten first.
 test('the Sentry baseline keeps request data out', () => {
-	const ipParams = { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] };
+	const urlQueryParams = {
+		deny: [
+			'forwarded',
+			'-ip',
+			'remote-',
+			'via',
+			'-user',
+			'code',
+			'invite',
+			'state',
+		],
+	};
 	expect(dataCollection).toStrictEqual({
 		userInfo: false,
 		cookies: false,
 		httpHeaders: { request: { allow: ['user-agent'] }, response: false },
 		httpBodies: [],
-		urlQueryParams: ipParams,
+		urlQueryParams,
 		genAI: { inputs: false, outputs: false },
 		databaseQueryData: false,
 		queues: false,
