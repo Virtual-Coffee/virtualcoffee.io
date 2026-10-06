@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
-import * as Sentry from '@sentry/nextjs';
-
-// Renders inside the admin shell, so the nav and sign-out stay.
+// Renders inside the admin shell, so the nav and sign-out stay. No client-side
+// Sentry capture: /admin is a PII route, and the server reports it (ADR 0015).
 export default function AdminError({
 	error,
 	retry,
@@ -11,10 +9,6 @@ export default function AdminError({
 	error: Error & { digest?: string };
 	retry: () => void;
 }) {
-	useEffect(() => {
-		Sentry.captureException(error);
-	}, [error]);
-
 	return (
 		<div className="container-fluid px-3 px-lg-4 py-4">
 			<div className="alert alert-danger" role="alert">

@@ -130,10 +130,9 @@ the client-side half of the picture disappears.
   here.
 - `src/app/global-error.tsx` carries its own `<html>`, stylesheet and font and
   has to be kept in step with `src/app/layout.tsx` by hand.
-- `src/app/error.tsx` does not report from a `PII_ROUTES` path (a client-side
-  message can quote what was typed); `src/app/admin/(protected)/error.tsx`
-  always reports, since a Server Component error reaches it as a generic
-  message and a digest.
+- Neither `src/app/error.tsx` nor `src/app/admin/(protected)/error.tsx`
+  reports from a `PII_ROUTES` path (a client-side message can quote what was
+  typed); server errors there are captured by `onRequestError`.
 - A new form or admin route that handles personal data needs adding to
   `PII_ROUTES`; until it is, an uncaught throw there ships its locals.
 - A new catch that strands someone's data should call `reportHandled`, or the
