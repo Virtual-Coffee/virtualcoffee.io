@@ -16,7 +16,7 @@ import { siteUrl } from '@/util/url.server';
  * (`noindex`), the forms' thank-you pages, and whatever `robots.ts`
  * disallows.
  */
-const pages = [
+const topLevelPages = [
 	'/',
 	'/events',
 	'/members',
@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		.map((entry) => `/monthlychallenges/${entry.name}`);
 
 	const paths = [
-		...pages,
+		...topLevelPages,
 		// Top level only, as `(simple-mdx)/[...slug]` generates no deeper routes.
 		...simplePages.map(
 			(page) => `/${page.slug.replace('content/simple-mdx-pages/', '')}`,

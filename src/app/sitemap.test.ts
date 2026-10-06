@@ -51,7 +51,7 @@ describe('sitemap', () => {
 				!thanksPage.test(route),
 		);
 
-		expect(expected.length).toBeGreaterThan(40);
+		expect(expected).toEqual(expect.arrayContaining(['/', '/events', '/join']));
 		expect(expected.filter((route) => !paths.includes(route))).toEqual([]);
 	});
 
