@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, test, vi } from 'vitest';
@@ -8,8 +8,11 @@ import { afterEach, describe, expect, test, vi } from 'vitest';
  * path under `src/content/monthly-challenges/`. The module resolves its
  * directory from `process.cwd()` at import, hence the fresh import.
  */
+const roots: string[] = [];
+
 async function loadWith(files: Record<string, string>) {
 	const root = mkdtempSync(join(tmpdir(), 'monthly-challenges-'));
+	roots.push(root);
 	const content = join(root, 'src', 'content', 'monthly-challenges');
 	mkdirSync(join(content, 'series'), { recursive: true });
 	for (const [path, body] of Object.entries(files)) {
@@ -25,7 +28,12 @@ const series = (fields: string) =>
 const challenge = (date: string, seriesIds: string[], extra = '') =>
 	`---\nmeta:\n  title: T\n  description: D\ndate: ${date}\nseries: [${seriesIds.join(', ')}]\n${extra}---\n`;
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => {
+	vi.restoreAllMocks();
+	for (const root of roots.splice(0)) {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
 
 describe('getChallenges', () => {
 	test('sorts newest first and derives href and label', async () => {
