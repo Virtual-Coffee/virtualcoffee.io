@@ -1,14 +1,33 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { useSyncExternalStore } from 'react';
 
+const subscribe = () => () => {};
+
+const ISSUE_URL =
+	'https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new';
+
+function issueHref(pathname: string | null) {
+	const params = new URLSearchParams({ labels: 'bug' });
+	if (pathname) {
+		params.set('title', `Broken link: ${pathname}`);
+		params.set(
+			'body',
+			`This link resulted in a 404: https://virtualcoffee.io${pathname}`,
+		);
+	} else {
+		params.set('title', 'Broken link');
+	}
+	return `${ISSUE_URL}?${params}`;
+}
+
+// The prerendered 404 HTML has no request path, so read it after mount.
 export default function BrokenLinkReport() {
-	const pathname = usePathname();
-	return (
-		<a
-			href={`https://github.com/Virtual-Coffee/virtualcoffee.io/issues/new?title=Broken+link:+${pathname}&body=This+link+resulted+in+a+404:+https://virtualcoffee.io${pathname}&labels=bug`}
-		>
-			please open an issue on GitHub
-		</a>
+	const pathname = useSyncExternalStore(
+		subscribe,
+		() => window.location.pathname,
+		() => null,
 	);
+
+	return <a href={issueHref(pathname)}>please open an issue on GitHub</a>;
 }
