@@ -18,9 +18,10 @@ export default function RootError({
 	const pathname = usePathname();
 
 	useEffect(() => {
-		// A thrown message can quote what a person typed; PII routes report
-		// from the server only, with locals stripped (docs/adr/0015).
-		if (underPiiRoute(pathname)) return;
+		// A digest means `onRequestError` already reported it. A thrown message
+		// can quote what a person typed; PII routes report from the server only,
+		// with locals stripped (docs/adr/0015).
+		if (error.digest || underPiiRoute(pathname)) return;
 		Sentry.captureException(error);
 	}, [error, pathname]);
 

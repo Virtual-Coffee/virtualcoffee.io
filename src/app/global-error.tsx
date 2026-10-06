@@ -22,6 +22,8 @@ export default function GlobalError({
 	retry: () => void;
 }) {
 	useEffect(() => {
+		// A digest means `onRequestError` already reported it.
+		if (error.digest) return;
 		Sentry.captureException(error);
 	}, [error]);
 
