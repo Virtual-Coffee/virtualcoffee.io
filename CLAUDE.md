@@ -62,7 +62,7 @@ The Events Calendar is the system of record for Series and Events; `/admin/event
 
 ### Membership pipeline (Postgres)
 
-Before touching `src/db`, `/admin`, `/invites`, `/join` or a public form, or anything that sends (email, a Slack post, a GitHub issue, an Events Calendar write), read `CONTEXT.md` for the vocabulary and `docs/agents/membership.md` for the rules; each rule cites the ADR that decided it.
+Before touching `src/db`, `src/lib/{access,history,waitlist,volunteers,submissions}`, `/admin`, `/invites`, `/join` or a public form, or anything that sends (email, a Slack post, a GitHub issue, an Events Calendar write), read `CONTEXT.md` for the vocabulary and `docs/agents/membership.md` for the rules; each rule cites the ADR that decided it.
 
 Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (procedure in the comment at the top of `src/data/podcast.ts`); membership data stays out of that repo — `docs/adr/0002`. Newsletters are JSX files under `src/content/newsletters/` listed in `src/data/newsletters.ts`.
 
