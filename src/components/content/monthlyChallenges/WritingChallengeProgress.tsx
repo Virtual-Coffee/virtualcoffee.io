@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import { HeroHead } from '@/components/layouts/DefaultLayout';
 import {
 	getWritingChallengeData,
 	type WritingChallengeYear,
@@ -7,6 +8,21 @@ import {
 type WritingChallengeProgressProps = {
 	year: WritingChallengeYear;
 };
+
+/** The page's banner: its title over the running word count. */
+export function WritingChallengeStatus({
+	year,
+	title,
+}: WritingChallengeProgressProps & { title: string }) {
+	const { totals, currentGoal } = getWritingChallengeData(year);
+
+	return (
+		<HeroHead
+			heroHeader={title}
+			heroSubheader={`Current status: ${totals.totalCount.toLocaleString()} out of ${currentGoal?.title} words`}
+		/>
+	);
+}
 
 export default function WritingChallengeProgress({
 	year,

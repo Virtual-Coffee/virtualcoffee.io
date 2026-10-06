@@ -8,7 +8,11 @@ series:
 ---
 
 import LeadText from '@/components/content/LeadText';
-import WritingChallengeProgress from '@/components/content/monthlyChallenges/WritingChallengeProgress';
+import WritingChallengeProgress, {
+	WritingChallengeStatus,
+} from '@/components/content/monthlyChallenges/WritingChallengeProgress';
+
+<WritingChallengeStatus year={2024} title={props.meta.title} />
 
 <h1>
 	<div className="alert alert-success">

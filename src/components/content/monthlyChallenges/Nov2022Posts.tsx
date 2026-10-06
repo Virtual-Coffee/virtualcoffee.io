@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import slugify from '@sindresorhus/slugify';
+import { HeroHead } from '@/components/layouts/DefaultLayout';
 import data from '@/data/monthlyChallenges/data/nov-2022.json';
 
 type NovemberChallengeEntryAuthor = {
@@ -50,7 +51,7 @@ const goals = [
 	},
 ];
 
-export default function Nov2022Posts() {
+function getProgress() {
 	const posts: NovemberChallengeEntry[] = data;
 
 	let totalWordCount = 0;
@@ -88,6 +89,36 @@ export default function Nov2022Posts() {
 
 	const currentGoal = goals.find((goal) => goal.value > totalWordCount);
 	const completedGoals = goals.filter((goal) => goal.value <= totalWordCount);
+
+	return {
+		totalWordCount,
+		totalPosts,
+		authorsWithPosts,
+		currentGoal,
+		completedGoals,
+	};
+}
+
+/** The page's banner: its title over the running word count. */
+export function Nov2022Status({ title }: { title: string }) {
+	const { totalWordCount, currentGoal } = getProgress();
+
+	return (
+		<HeroHead
+			heroHeader={title}
+			heroSubheader={`Current status: ${totalWordCount.toLocaleString()} out of ${currentGoal?.title} words`}
+		/>
+	);
+}
+
+export default function Nov2022Posts() {
+	const {
+		totalWordCount,
+		totalPosts,
+		authorsWithPosts,
+		currentGoal,
+		completedGoals,
+	} = getProgress();
 
 	if (totalPosts === 0) {
 		return null;

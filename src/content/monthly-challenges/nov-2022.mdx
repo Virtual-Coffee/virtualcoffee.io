@@ -8,7 +8,11 @@ series:
 ---
 
 import LeadText from '@/components/content/LeadText';
-import Nov2022Posts from '@/components/content/monthlyChallenges/Nov2022Posts';
+import Nov2022Posts, {
+	Nov2022Status,
+} from '@/components/content/monthlyChallenges/Nov2022Posts';
+
+<Nov2022Status title={props.meta.title} />
 
 # <small>Monthly Challenge for November 2022:</small> Let's write 100k words together!
 

@@ -27,7 +27,8 @@ export default async function Challenge({
 	params,
 }: PageProps<'/monthlychallenges/[slug]'>) {
 	const { slug } = await params;
-	if (!getChallenge(slug)) {
+	const challenge = getChallenge(slug);
+	if (!challenge) {
 		notFound();
 	}
 
@@ -39,7 +40,8 @@ export default async function Challenge({
 
 	return (
 		<DefaultLayout simple>
-			<Content />
+			{/* MDX reads it as `props.meta`. */}
+			<Content meta={challenge.meta} />
 		</DefaultLayout>
 	);
 }

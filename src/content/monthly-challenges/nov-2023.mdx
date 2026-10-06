@@ -8,7 +8,11 @@ series:
 ---
 
 import LeadText from '@/components/content/LeadText';
-import WritingChallengeProgress from '@/components/content/monthlyChallenges/WritingChallengeProgress';
+import WritingChallengeProgress, {
+	WritingChallengeStatus,
+} from '@/components/content/monthlyChallenges/WritingChallengeProgress';
+
+<WritingChallengeStatus year={2023} title={props.meta.title} />
 
 <div className="alert alert-success">
 	This monthly challenge is complete. Congratulations! Please join us for the
