@@ -18,7 +18,7 @@ that matters.
 ## Decision
 
 `src/lib/outbound.ts` decides the **Delivery Mode** for anything the site
-sends, and it decides on `CONTEXT` alone, classified by docs/adr/0017:
+sends, and it decides on `CONTEXT` alone, classified by docs/adr/0018:
 
 - **Live** only when `CONTEXT=production`.
 - Otherwise email is **Captured**: `sendEmail` writes the whole message to the

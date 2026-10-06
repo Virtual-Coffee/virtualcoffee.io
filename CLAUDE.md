@@ -134,7 +134,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 ### Netlify
 
 - `netlify/edge-functions/block-bots.ts` refuses harvesting user agents on deploys only; locally it matches but lets through unless `BLOCK_BOTS_LOCAL=true` is in `.env` (the CLI does not pass plain process env vars to edge functions). It reads the deploy context from `context.deploy.context` — `Netlify.env.get('CONTEXT')` is build-scope and undefined at the edge — and imports `src/data/bots.ts` with an explicit `.ts` extension because it bundles for Deno.
-- `CONTEXT` is read through `deployContext()` (`src/lib/deployContext.ts`): `production`, `preview` or `local`, an unknown value counting as a preview; the edge function imports it with a `.ts` extension — `docs/adr/0017`.
+- `CONTEXT` is read through `deployContext()` (`src/lib/deployContext.ts`): `production`, `preview` or `local`, an unknown value counting as a preview; the edge function imports it with a `.ts` extension — `docs/adr/0018`.
 - `CONTEXT` and `DEPLOY_PRIME_URL` are build-scope, so `next.config.mjs` inlines them into `process.env.*` reads; otherwise a running function sees a deploy as a local checkout — `docs/adr/0007`.
 - URL redirects go in `netlify.toml`, beside the legacy 301 map, rather than in Next config. `/join-slack` is a page (`src/app/join-slack/`), not a redirect function.
 

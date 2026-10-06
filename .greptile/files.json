@@ -122,7 +122,7 @@
 			"scope": ["src/lib/slack/**", "src/test/slack.ts"]
 		},
 		{
-			"path": "docs/adr/0017-one-deploy-context-classifier.md",
+			"path": "docs/adr/0018-one-deploy-context-classifier.md",
 			"description": "How Netlify's CONTEXT is classified as production, preview or local, and where an unknown value lands",
 			"scope": [
 				"src/lib/deployContext.ts",
