@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useSyncExternalStore } from 'react';
 
 const subscribe = () => () => {};
@@ -23,6 +24,8 @@ function issueHref(pathname: string | null) {
 
 // The prerendered 404 HTML has no request path, so read it after mount.
 export default function BrokenLinkReport() {
+	// Subscribes to soft navigations so the snapshot below is re-read.
+	usePathname();
 	const pathname = useSyncExternalStore(
 		subscribe,
 		() => window.location.pathname,
