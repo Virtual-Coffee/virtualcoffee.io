@@ -32,8 +32,7 @@ export default function RootError({
 			simple
 		>
 			<p className="lead">
-				We've been notified. You can try the page again, or head back to the
-				home page.
+				You can try the page again, or head back to the home page.
 			</p>
 			<p>
 				<button
