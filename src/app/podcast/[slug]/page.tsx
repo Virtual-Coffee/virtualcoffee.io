@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 
 import { Fragment } from 'react';
 import CdnImage from '@/components/CdnImage';
@@ -51,6 +52,9 @@ async function getEpisodeData(slug: string) {
 	const transcript = await getTranscript({
 		id: episode.podcastBuzzsproutId,
 	}).catch((error) => {
+		// A feed outage must not fail a deploy, but a runtime regeneration should
+		// throw so ISR keeps serving the last good page (with its transcript).
+		if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) throw error;
 		console.error(`Error loading transcript ${episode.slug}`, error);
 		return null;
 	});
