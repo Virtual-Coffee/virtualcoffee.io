@@ -37,16 +37,6 @@
 	to     = "https://airtable.com/appGHm8ztVWug6UxH/pagKrtAhS4jnRhtYD/form"
 
 [[redirects]]
-	from   = "/netlify-forms"
-	status = 200
-	to     = "/"
-
-[[redirects]]
-	from   = "/report-coc-violation-success"
-	status = 200
-	to     = "/"
-
-[[redirects]]
 	from   = "/sponsorship"
 	status = 302
 	to     = "https://github.com/sponsors/Virtual-Coffee"
