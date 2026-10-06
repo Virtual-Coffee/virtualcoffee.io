@@ -9,6 +9,8 @@
 	function = "block-bots"
 	path     = "/*"
 
+# Also declared inline; dropping these two disables the /join rate limit on
+# deploys (checked on a deploy preview, #1658).
 [[edge_functions]]
 	function = "limit-action-body"
 	path     = "/*"
