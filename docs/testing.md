@@ -1,6 +1,6 @@
 # Testing
 
-Vitest, configured in `vitest.config.mts` (read its header comment: it defines the two projects and where the `@/` alias comes from). Tests are colocated as `*.test.ts` beside the module (`*.test.tsx` where the subject is JSX, as in `src/emails/`), run in a plain `node` environment with explicit `import { test, expect } from 'vitest'` — no globals, no jsdom, no React Testing Library. `pnpm test --project unit` is the fast loop; `pnpm test` runs both projects. The exception is `netlify/edge-functions/`, which Netlify bundles file-by-file; its tests live in `netlify/tests/`.
+Vitest, configured in `vitest.config.mts` (read its header comment: it defines the two projects and where the `@/` alias comes from). Tests are colocated as `*.test.ts` beside the module (`*.test.tsx` where the subject is JSX, as in `src/emails/`), run in a plain `node` environment with explicit `import { test, expect } from 'vitest'`; there is no jsdom and no React Testing Library, so do not add either. `pnpm test --project unit` is the fast loop; `pnpm test` runs both projects. The exception is `netlify/edge-functions/`, which Netlify bundles file-by-file; its tests live in `netlify/tests/`.
 
 ## What is tested, and how
 
@@ -14,6 +14,4 @@ Vitest, configured in `vitest.config.mts` (read its header comment: it defines t
 - **Tests authenticate with real sessions.** `signInAs(roles, slackId)` in `src/test/session.ts` inserts a user and mints a session through Better Auth's `testUtils` plugin, and the mocked `next/headers` (`src/test/setup.ts`) hands that cookie to `getSession()`, so `requirePermission()` and `actorId()` run for real. The dev bypass is stubbed only where it is the subject (`adminAccess.db.test.ts`).
 - **Idempotency is shown by calling twice.** PGlite is one session, so a race between two transactions cannot be staged.
 - **A mocked sender returns a failure, never rejects** — `sendEmail`/`notifySlack` in `src/test/mocks/` follow the real functions' contract (`deliver()` never throws).
-- Fixtures are in `src/test/db/fixtures.ts`.
-
-`tsconfig.json` includes `**/*.ts`, so `pnpm typecheck` sees test files, and `@vitest/eslint-plugin`'s recommended rules apply to them (no focused or skipped tests).
+- `@vitest/eslint-plugin`'s recommended rules apply to tests (no focused or skipped tests).
