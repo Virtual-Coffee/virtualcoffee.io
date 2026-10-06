@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import {
 	dataCollection,
 	PII_ROUTES,
+	underPiiRoute,
 	withoutPiiFrameVars,
 } from './sentryDataCollection';
 
@@ -85,5 +86,18 @@ describe('withoutPiiFrameVars', () => {
 			{ email: 'ada@example.test' },
 			{ body: 'what happened' },
 		]);
+	});
+});
+
+describe('underPiiRoute', () => {
+	test.each([
+		['/report-coc-violation', true],
+		['/admin/events/series/new', true],
+		['/join', true],
+		['/joined', false],
+		['/resources/joining', false],
+		[undefined, false],
+	])('%s -> %s', (path, expected) => {
+		expect(underPiiRoute(path)).toBe(expected);
 	});
 });

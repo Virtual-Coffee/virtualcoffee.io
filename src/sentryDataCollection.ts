@@ -45,7 +45,8 @@ export const PII_ROUTES = [
 	'/start-coffee-table-group',
 ] as const;
 
-function underPiiRoute(path: string | undefined): boolean {
+/** Whether `path` is a PII route or under one. */
+export function underPiiRoute(path: string | undefined): boolean {
 	return PII_ROUTES.some(
 		(route) => path === route || path?.startsWith(`${route}/`),
 	);
