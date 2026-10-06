@@ -11,6 +11,7 @@ import createCmsImage, { cmsImageUrl } from '@/util/cmsimage';
 import { Metadata } from 'next';
 
 export const dynamic = 'force-static';
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
 	const podcastEpisodes = await getEpisodes({ limit: Infinity });
@@ -47,7 +48,12 @@ async function getEpisodeData(slug: string) {
 		console.error(`Episode not found - ${slug}`);
 		notFound();
 	}
-	const transcript = await getTranscript({ id: episode.podcastBuzzsproutId });
+	const transcript = await getTranscript({
+		id: episode.podcastBuzzsproutId,
+	}).catch((error) => {
+		console.error(`Error loading transcript ${episode.slug}`, error);
+		return null;
+	});
 
 	const sanitizedEpisode = sanitizeCmsData(episode);
 	return {
