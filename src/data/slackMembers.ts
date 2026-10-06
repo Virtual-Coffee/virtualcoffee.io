@@ -77,8 +77,7 @@ async function listSlackMembers(): Promise<SlackMember[]> {
 }
 
 /**
- * Cached for twelve hours and tagged, so `/_cache?tag=slack-members` picks up a
- * new hire without waiting. `users.list` is rate limited and pages the whole
+ * Cached for twelve hours. `users.list` is rate limited and pages the whole
  * workspace, which is far too much work to repeat on every render of a screen
  * two or three maintainers have open at once. `fetchSlackMembers` is the
  * uncached call, for scripts, which `unstable_cache` throws outside a request.

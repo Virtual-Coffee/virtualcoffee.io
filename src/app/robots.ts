@@ -7,7 +7,7 @@ import { siteUrl } from '@/util/url.server';
  * crawler obeys only the most specific group it matches, so anything listed
  * below by name never reads the `*` rules at all.
  */
-const restrictedPaths = ['/_cache', '/api/'];
+const restrictedPaths = ['/api/'];
 
 export default function robots(): MetadataRoute.Robots {
 	return {

@@ -62,7 +62,7 @@
 		},
 		{
 			"id": "mock-gate",
-			"rule": "A new external fetch in src/data/ is a defineSource() from src/data/source.ts, which owns the mock gate and the tagged unstable_cache that /_cache revalidates.",
+			"rule": "A new external fetch in src/data/ is a defineSource() from src/data/source.ts, which owns the mock gate and the tagged unstable_cache.",
 			"scope": ["src/data/**"],
 			"severity": "medium"
 		},

@@ -20,6 +20,6 @@ export const config: Config = {
 	path: '/*',
 	method: 'POST',
 	// The CoC form is the reason for the raised limit; /monitoring is the
-	// Sentry tunnel and /_cache the revalidation route, neither a Server Action.
-	excludedPath: ['/report-coc-violation', '/monitoring', '/_cache'],
+	// Sentry tunnel, not a Server Action.
+	excludedPath: ['/report-coc-violation', '/monitoring'],
 };

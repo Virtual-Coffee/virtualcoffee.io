@@ -20,7 +20,7 @@ function assertMocksAllowed(what: string): void {
  * without credentials, or when the fetch throws or returns `null` (no usable
  * data), a source falls back to its mock everywhere but production, where it
  * throws. `fetch` is the gated, uncached call for scripts and tests; `get` is
- * the same call under `unstable_cache`, tagged so `/_cache` can revalidate it.
+ * the same call under `unstable_cache`, tagged so an `updateTag()` can refresh it early.
  */
 export function defineSource<Args extends unknown[], T>(source: {
 	/** Names the source in the error and the warning. */

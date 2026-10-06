@@ -54,7 +54,7 @@ When writing or debugging a test, read `docs/testing.md` first.
 
 Every external read in `src/data/` (members, sponsors, events, Slack members) degrades to a mock in `src/data/mocks/` when its credentials are missing. Outbound senders (`src/lib/slack/notify.ts`, `src/lib/github/issues.ts`, `src/lib/email/transport.ts`) are Captured instead, and a failure is an event shown in `/admin`; membership data is local Postgres from `netlify dev`.
 
-A new external fetch is a `defineSource()` (`src/data/source.ts`): it owns the mock gate and the tagged `unstable_cache` that `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates; production throws where anywhere else falls back to the mock.
+A new external fetch is a `defineSource()` (`src/data/source.ts`): it owns the mock gate and the tagged `unstable_cache`; production throws where anywhere else falls back to the mock.
 
 A revalidation interval is declared once, beside the fetch in `src/data/*`; pages export no `revalidate`, and a page that reads only checked-in content (MDX, the podcast JSON) is static until the next deploy. Do not wrap a synchronous or `fs` read in `unstable_cache`: it hands its `revalidate` and tags to every page that calls it. A credential-less fetch where `null` is a valid answer skips `defineSource()`; copy the `fetchTranscript` / `getTranscript` pair in `src/data/podcast.ts`.
 
