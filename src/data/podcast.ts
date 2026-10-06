@@ -1,4 +1,5 @@
 import { unstable_cache } from 'next/cache';
+import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 import rawEpisodes from './podcast/episodes.json';
 
 // episodes.json is sourced from vc-data and bundled here at build time.
@@ -148,29 +149,23 @@ const allMappedEpisodes: PodcastEpisode[] = (
 // Public API (same signatures as before)
 // ---------------------------------------------------------------------------
 
-export const getEpisodes = unstable_cache(
-	async ({ limit = 5 }: { limit?: number } = {}): Promise<PodcastEpisodes> => {
-		return allMappedEpisodes.slice(0, limit);
-	},
-	[],
-	{ revalidate: false, tags: ['podcast'] },
-);
+export async function getEpisodes({
+	limit = 5,
+}: { limit?: number } = {}): Promise<PodcastEpisodes> {
+	return allMappedEpisodes.slice(0, limit);
+}
 
-export const getEpisode = unstable_cache(
-	async ({
-		slug,
-	}: {
-		slug: PodcastEpisode['slug'];
-		queryParams?: string;
-	}): Promise<PodcastEpisode | null> => {
-		return allMappedEpisodes.find((e) => e.slug === slug) ?? null;
-	},
-	[],
-	{ revalidate: false, tags: ['podcast'] },
-);
+export async function getEpisode({
+	slug,
+}: {
+	slug: PodcastEpisode['slug'];
+	queryParams?: string;
+}): Promise<PodcastEpisode | null> {
+	return allMappedEpisodes.find((e) => e.slug === slug) ?? null;
+}
 
 // ---------------------------------------------------------------------------
-// Transcript — unchanged, reads from feeds.virtualcoffee.io
+// Transcript — reads from feeds.virtualcoffee.io
 // ---------------------------------------------------------------------------
 
 type TranscriptSegment = {
@@ -186,52 +181,81 @@ type TranscriptItem = {
 };
 type Transcript = Array<TranscriptItem>;
 
-export const getTranscript = unstable_cache(
-	async ({ id }: Partial<PodcastEpisode>): Promise<Transcript | null> => {
-		try {
-			const response: { segments: TranscriptSegment[] } = await fetch(
-				`https://feeds.virtualcoffee.io/podcast-assets/${id}/transcript.json`,
-			).then((res) => res.json());
+/**
+ * The uncached fetch: `null` when the episode has no transcript (a 404), a throw
+ * for anything else, so `getTranscript` never caches a failure as "no
+ * transcript". Exported for tests.
+ */
+export async function fetchTranscript({
+	id,
+}: Partial<PodcastEpisode>): Promise<Transcript | null> {
+	const res = await fetch(
+		`https://feeds.virtualcoffee.io/podcast-assets/${id}/transcript.json`,
+	);
 
-			if (response && response.segments) {
-				return response.segments.reduce(
-					(arr: Transcript, segment: TranscriptSegment) => {
-						if (arr.length && arr[arr.length - 1].name === segment.speaker) {
-							const cur: TranscriptItem | undefined = arr.pop();
-							if (typeof cur === 'undefined') return [...arr];
-							return [
-								...arr,
-								{
-									...cur,
-									text: cur.text + ' ' + segment.body,
-								},
-							];
-						} else {
-							const date = new Date(0);
-							date.setSeconds(segment.startTime);
+	if (res.status === 404) return null;
+	if (!res.ok) {
+		throw new Error(`Transcript ${id}: ${res.status} ${res.statusText}`);
+	}
 
-							return [
-								...arr,
-								{
-									name: segment.speaker,
-									text: segment.body,
-									timestamp: date.toISOString().substr(14, 5),
-								},
-							];
-						}
+	const response: { segments?: TranscriptSegment[] } = await res.json();
+
+	if (!response?.segments) return null;
+
+	return response.segments.reduce(
+		(arr: Transcript, segment: TranscriptSegment) => {
+			if (arr.length && arr[arr.length - 1].name === segment.speaker) {
+				const cur: TranscriptItem | undefined = arr.pop();
+				if (typeof cur === 'undefined') return [...arr];
+				return [
+					...arr,
+					{
+						...cur,
+						text: cur.text + ' ' + segment.body,
 					},
-					[],
-				);
+				];
+			} else {
+				const date = new Date(0);
+				date.setSeconds(segment.startTime);
+
+				return [
+					...arr,
+					{
+						name: segment.speaker,
+						text: segment.body,
+						timestamp: date.toISOString().substr(14, 5),
+					},
+				];
 			}
+		},
+		[],
+	);
+}
 
-			console.log('no response.segments');
+/**
+ * Cached for 24 h and tagged, so `/_cache?tag=podcast` picks up a new
+ * transcript without waiting. A throw is never cached, so a failed request
+ * costs one render, not a day.
+ */
+export const getTranscript = unstable_cache(fetchTranscript, ['transcript'], {
+	revalidate: 86400,
+	tags: ['podcast'],
+});
 
-			return null;
-		} catch (error) {
-			console.error(`Error loading transcript ${id}`, error);
-			return null;
-		}
-	},
-	[],
-	{ revalidate: 86400, tags: ['podcast'] },
-);
+/**
+ * A feed outage must not fail a deploy, but a runtime regeneration should throw
+ * so ISR keeps serving the last good page (with its transcript). Resolves to
+ * `null` for a failure during the production build, rethrows otherwise.
+ */
+export async function transcriptOrNullDuringBuild(
+	load: Promise<Transcript | null>,
+	label: string,
+): Promise<Transcript | null> {
+	try {
+		return await load;
+	} catch (error) {
+		if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) throw error;
+		console.error(`Error loading transcript ${label}`, error);
+		return null;
+	}
+}

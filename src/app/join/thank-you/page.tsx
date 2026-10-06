@@ -2,9 +2,6 @@ import Link from 'next/link';
 
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
-// ISR: Revalidate every 24 hours
-export const revalidate = 86400;
-
 export const metadata = {
 	title: 'You’re on the list',
 	description: `You're now on the Virtual Coffee membership waiting list.`,

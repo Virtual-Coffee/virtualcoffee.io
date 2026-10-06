@@ -6,9 +6,6 @@ import {
 import { createMetaData } from '@/util/createMetaData.server';
 import Link from 'next/link';
 
-// ISR: Revalidate every 24 hours
-export const revalidate = 86400;
-
 export async function generateMetadata() {
 	return await createMetaData({
 		title: 'Virtual Coffee Monthly Challenges',
