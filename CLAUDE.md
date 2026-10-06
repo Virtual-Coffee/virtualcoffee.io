@@ -40,9 +40,9 @@ Scripts are in `package.json`; `pnpm` is enforced. What no script name tells you
 - `pnpm db:migrate` needs `netlify dev` running. Deploys apply migrations in `netlify.toml`'s build command.
 - There is no husky/lint-staged hook; CI (`.github/workflows/ci.yml`) auto-commits Prettier fixes on same-repo branches.
 - CI does not build. Run `pnpm build` locally when a change can only fail at prerender: MDX frontmatter, `generateStaticParams`, or a component pages render at build time.
-- `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Every entry in `knip.ts` carries its reason in a comment; content directories are entries, not ignores, so their own imports are still checked. The CI job is `continue-on-error` until this stack has merged, because each layer exports things only the layer above imports — the follow-up is #1589.
+- `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Content directories are entries, not ignores, so their own imports are still checked. The CI job is `continue-on-error` until #1589.
 - CodeQL is advanced-setup: `.github/workflows/codeql.yml` is the whole config, and the repository's default-setup toggle stays off.
-- `typescript` is aliased to `@typescript/typescript6` (the compiler API typescript-eslint and `next build` need) and `@typescript/native` to `typescript@7` (the `tsc` binary). `next build` runs the `tsc` CLI of the aliased package (TS 6) while `pnpm typecheck` runs TS 7, so the build and CI check with different compilers. Keep both until typescript-eslint supports TypeScript 7.
+- `typescript` is `@typescript/typescript6` (for typescript-eslint and `next build`) and `@typescript/native` is `typescript@7` (the `tsc` that `pnpm typecheck` runs), so the build and CI check with different compilers. Keep both until typescript-eslint supports TypeScript 7.
 
 Before finishing a change: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test && pnpm knip`.
 
@@ -54,7 +54,7 @@ When writing or debugging a test, read `docs/testing.md` first.
 
 Every external read in `src/data/` (members, sponsors, events, Slack members) degrades to a mock in `src/data/mocks/` when its credentials are missing. Outbound senders (`src/lib/slack/notify.ts`, `src/lib/github/issues.ts`, `src/lib/email/transport.ts`) are Captured instead, and a failure is an event shown in `/admin`; membership data is local Postgres from `netlify dev`.
 
-A new external fetch is a `defineSource()` (`src/data/source.ts`): it owns the mock gate and the tagged `unstable_cache` that `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates. Outside production, missing credentials fall back to the mock silently and a failed fetch with a `console.warn`; production throws either way.
+A new external fetch is a `defineSource()` (`src/data/source.ts`): it owns the mock gate and the tagged `unstable_cache` that `/_cache?tag=…&path=…` (`src/app/%5Fcache/route.ts`) revalidates; production throws where anywhere else falls back to the mock.
 
 A revalidation interval is declared once, beside the fetch in `src/data/*`; pages export no `revalidate`, and a page that reads only checked-in content (MDX, the podcast JSON) is static until the next deploy. Do not wrap a synchronous or `fs` read in `unstable_cache`: it hands its `revalidate` and tags to every page that calls it. A credential-less fetch where `null` is a valid answer skips `defineSource()`; copy the `fetchTranscript` / `getTranscript` pair in `src/data/podcast.ts`.
 
@@ -78,7 +78,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 ### MDX content pipeline
 
-- MDX plugins are referenced by path string in `next.config.mjs` because Turbopack requires serializable loader options; a plugin that needs function options lives in `src/mdx-plugins/`. The path is the whole cache key, so editing a plugin's _contents_ does not invalidate compiled MDX (on Netlify too) — `localMdxPlugin()` mixes a hash of the plugin file into its options; wire new local plugins through it. If MDX output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
+- Editing a plugin in `src/mdx-plugins/` invalidates compiled MDX only when it's wired through `localMdxPlugin()` in `next.config.mjs`; if output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
 - `src/util/loadMdx.server.ts` reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then `import()`s the `.mdx` file. Adding a resource is adding an `.mdx` file with frontmatter under `src/content/resources/`; index listings come from `<FileIndex />`.
 - MDX files import components explicitly from `@/components/content/`. `src/mdx-components.tsx` maps only what Markdown itself generates, which no import can reach: `a` → `MdxLink`, so a page path goes through `next/link`. A JSX `<a>` written in MDX compiles to a literal `<a>` and bypasses it, so write internal links as Markdown. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
 
@@ -91,20 +91,19 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 ### Netlify
 
-- `netlify/edge-functions/block-bots.ts` refuses harvesting user agents on deploys only; locally it matches but lets through unless `BLOCK_BOTS_LOCAL=true` is in `.env` (the CLI does not pass plain process env vars to edge functions). It reads the deploy context from `context.deploy.context` — `Netlify.env.get('CONTEXT')` is build-scope and undefined at the edge — and imports `src/data/bots.ts` with an explicit `.ts` extension because it bundles for Deno.
-- `CONTEXT` is read through `deployContext()` (`src/lib/deployContext.ts`): `production`, `preview` or `local`, an unknown value counting as a preview; the edge function imports it with a `.ts` extension — `docs/adr/0018`.
+- `netlify/edge-functions/block-bots.ts` refuses harvesting user agents on deploys only (`BLOCK_BOTS_LOCAL` in `.env.example`). It bundles for Deno, so its imports from `src/` carry an explicit `.ts` extension.
+- `CONTEXT` is read through `deployContext()` (`src/lib/deployContext.ts`): `production`, `preview` or `local`, an unknown value counting as a preview — `docs/adr/0018`.
 - `CONTEXT` and `DEPLOY_PRIME_URL` are build-scope, so `next.config.mjs` inlines them into `process.env.*` reads; otherwise a running function sees a deploy as a local checkout — `docs/adr/0007`.
 - URL redirects go in `netlify.toml`, beside the legacy 301 map, rather than in Next config. `/join-slack` is a page (`src/app/join-slack/`), not a redirect function.
 
 ### Error monitoring
 
-Sentry (`@sentry/nextjs`), errors + tracing only; rationale in `docs/adr/0015`. `next.config.mjs` wraps the config in `withSentryConfig`, which uploads source maps after the Turbopack build when `SENTRY_AUTH_TOKEN` is set — Netlify's build env only — and rewrites `/monitoring` as the event tunnel.
+Sentry (`@sentry/nextjs`), errors + tracing only; rationale in `docs/adr/0015`; source maps and the `/monitoring` tunnel are configured in `next.config.mjs`.
 
 - Off without `NEXT_PUBLIC_SENTRY_DSN`; Netlify sets it for every deploy context, `.env` locally is opt-in.
 - Every `Sentry.init` passes `dataCollection` from `src/sentryDataCollection.ts` (v11 is permissive when it's unset); loosening it is a policy change. Keep the CoC report form out of Sentry: its route is on the `PII_ROUTES` list.
 - A caught failure a maintainer must act on goes through `reportHandled()` (`src/lib/monitoring/reportHandled.ts`), which scrubs it; the server's `beforeSend` strips frame locals on `PII_ROUTES`.
-- `environment` is the Netlify `CONTEXT`, inlined as `NEXT_PUBLIC_SENTRY_ENVIRONMENT` in `next.config.mjs`.
-- Errors with frames outside our bundles are tagged `third_party_code:true`, not dropped (`applicationKey` in `next.config.mjs` must match `filterKeys`); only Netlify's RUM beacon failure is dropped.
+- Errors with frames outside our bundles are tagged `third_party_code:true`, not dropped; only Netlify's RUM beacon failure is dropped.
 - Releases are commit SHAs with commits and Netlify deploys attached by the build; `Fixes VIRTUALCOFFEE-IO-N` in a commit message resolves that Sentry issue on merge.
 
 ## Content conventions
@@ -129,4 +128,4 @@ Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. When a skill asks
 
 ### Code review
 
-Greptile reviews every PR except those from the bots in `excludeAuthors`; label one `skip-review` to opt out. Renovate PRs are reviewed only for majors: `renovate.json` adds the line `ignoreKeywords` matches to every other Renovate PR, and Greptile never auto-approves Renovate. Its config is `.greptile/`; dashboard settings are in `.greptile/README.md`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
+Greptile reviews every PR except those from the bots in `excludeAuthors`; label one `skip-review` to opt out. Its config is `.greptile/`, and how Renovate PRs and the dashboard are handled is in `.greptile/README.md`. A new ADR gets a `files.json` entry — `docs/agents/domain.md`.
