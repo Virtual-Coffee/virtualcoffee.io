@@ -1,23 +1,7 @@
-import challengeJson from './nov-2020.json';
 import { Fragment } from 'react';
-import Link from 'next/link';
+import challengeJson from '@/data/monthlyChallenges/data/nov-2020.json';
 
-const handle = {
-	listTitle: 'November, 2020: 50k words!',
-	meta: {
-		title: 'Monthly Theme & Challenge for November, 2020: 50k words!',
-		description:
-			'November challenge -> Blogging: we all work together to hit 50,000 words.',
-	},
-	date: '2020-11-01',
-	hero: {
-		heroHeader: '',
-	},
-};
-
-export const metadata = handle.meta;
-
-export default function Challenge() {
+export default function Nov2020Posts() {
 	const { challengedata } = challengeJson;
 
 	const totalsList: {
@@ -49,25 +33,6 @@ export default function Challenge() {
 
 	return (
 		<>
-			<div className="alert alert-success">
-				This monthly challenge is complete. Congratulations! Please join us for
-				the
-				<Link href="/monthlychallenges/">next challenge</Link>!
-			</div>
-
-			<h1>
-				<small>Monthly Challenge for November, 2020:</small> 50k words!
-			</h1>
-
-			<p className="lead">
-				The Virtual Coffee Monthly Challenge for November 2020 -&gt; Blogging!
-				We all work together to hit 50,000 words. Based off the NanWriMo
-				(National Novel Writing Month) Challenge, but working together towards
-				the goal while posting on our own blogs.
-			</p>
-
-			<p className="lead">Get those blog posts up!</p>
-
 			<h2>
 				Current status: {totals.totalCount.toLocaleString()} out of 50,000 words
 			</h2>
