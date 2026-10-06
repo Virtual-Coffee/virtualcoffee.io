@@ -7,7 +7,7 @@ import {
 import {
 	connectEventsCalendar,
 	revalidatePath,
-	revalidateTag,
+	updateTag,
 } from '@/test/mocks/spies';
 import { NOT_FOUND } from '@/test/next';
 import { signInAs } from '@/test/session';
@@ -147,7 +147,7 @@ describe('writing', () => {
 			message: '“Virtual Coffee” is on the Events Calendar.',
 		});
 		expect(calendar.createSeries).toHaveBeenCalledWith(series);
-		expect(revalidateTag).toHaveBeenCalledWith('events', { expire: 0 });
+		expect(updateTag).toHaveBeenCalledWith('events');
 		expect(revalidatePath.mock.calls).toEqual([
 			['/events'],
 			['/'],
@@ -198,7 +198,7 @@ describe('writing', () => {
 			message:
 				'This changed on the Events Calendar since you loaded it. Check the current details and try again.',
 		});
-		expect(revalidateTag).not.toHaveBeenCalled();
+		expect(updateTag).not.toHaveBeenCalled();
 	});
 
 	test('an id the calendar no longer has is a message, not a crash', async () => {
@@ -209,7 +209,7 @@ describe('writing', () => {
 			report: false,
 			message: 'That no longer exists on the Events Calendar.',
 		});
-		expect(revalidateTag).not.toHaveBeenCalled();
+		expect(updateTag).not.toHaveBeenCalled();
 	});
 
 	test('any other failure is a message too, and nothing revalidates', async () => {
@@ -219,7 +219,7 @@ describe('writing', () => {
 			definitelyNotSent: true,
 			message: 'Could not reach the Events Calendar: quota',
 		});
-		expect(revalidateTag).not.toHaveBeenCalled();
+		expect(updateTag).not.toHaveBeenCalled();
 	});
 
 	test('an unconfigured calendar says so', async () => {
@@ -242,7 +242,7 @@ describe('Delivery Mode', () => {
 		// The log line is the constant label: nothing a maintainer typed, no id.
 		expect(info).toHaveBeenCalledWith('[calendar captured] local cancel Event');
 		expect(connectEventsCalendar).not.toHaveBeenCalled();
-		expect(revalidateTag).not.toHaveBeenCalled();
+		expect(updateTag).not.toHaveBeenCalled();
 		info.mockRestore();
 	});
 

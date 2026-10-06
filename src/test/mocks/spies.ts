@@ -33,7 +33,7 @@ export const sendSlackDm = vi.fn<Sender>(async () => NOT_SENT);
  * modules wrap their fetches at import time.
  */
 export const revalidatePath = vi.fn();
-export const revalidateTag = vi.fn();
+export const updateTag = vi.fn();
 
 /** `@netlify/blobs` — replaced: one store, whose `set`/`delete` a test drives. */
 export const blobs = { set: vi.fn(), delete: vi.fn() };
@@ -53,7 +53,7 @@ export function resetSpies() {
 		notifySlack,
 		sendSlackDm,
 		revalidatePath,
-		revalidateTag,
+		updateTag,
 		blobs.set,
 		blobs.delete,
 		readAttachment,
