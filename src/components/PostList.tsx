@@ -1,4 +1,4 @@
-import { MdxFile } from '@/util/loadMdx.server';
+import type { MdxFile } from '@/util/loadMdx.server';
 import Link from 'next/link';
 import path from 'path';
 import { ReactNode } from 'react';
