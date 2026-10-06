@@ -115,6 +115,7 @@ const withMDX = createMDX({
 				maxDepth: 3,
 			}),
 			'remark-frontmatter',
+			localMdxPlugin('src/mdx-plugins/remark-unwrap-jsx-paragraph.mjs'),
 		],
 		rehypePlugins: [
 			'rehype-slug',
