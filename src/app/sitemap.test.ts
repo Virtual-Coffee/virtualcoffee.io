@@ -96,6 +96,20 @@ describe('sitemap', () => {
 		expect(listed.toSorted()).toEqual(generated.toSorted());
 	});
 
+	test('lists exactly the monthly challenges their route generates', async () => {
+		const { generateStaticParams } =
+			await import('./monthlychallenges/[slug]/page');
+		const generated = generateStaticParams().map(
+			({ slug }) => `/monthlychallenges/${slug}`,
+		);
+		const listed = (await sitemapPaths()).filter((path) =>
+			path.startsWith('/monthlychallenges/'),
+		);
+
+		expect(generated).toContain('/monthlychallenges/may-2025');
+		expect(listed.toSorted()).toEqual(generated.toSorted());
+	});
+
 	test('lists every podcast episode and newsletter issue', async () => {
 		const paths = await sitemapPaths();
 		const newsletters = await getNewsletters();

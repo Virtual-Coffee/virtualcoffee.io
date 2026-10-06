@@ -1,7 +1,6 @@
-import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
 import type { MetadataRoute } from 'next';
 
+import { getChallenges } from '@/data/monthlyChallenges';
 import { getNewsletters } from '@/data/newsletters';
 import { getEpisodes } from '@/data/podcast';
 import { extractRoutes, loadMdxDirectory } from '@/util/loadMdx.server';
@@ -31,14 +30,6 @@ const topLevelPages = [
 	'/start-coffee-table-group',
 ];
 
-const challengesDirectory = join(
-	process.cwd(),
-	'src',
-	'app',
-	'monthlychallenges',
-	'(challenges)',
-);
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const [resources, simplePages, episodes, newsletters] = await Promise.all([
 		loadMdxDirectory({ baseDirectory: 'content/resources' }),
@@ -46,10 +37,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		getEpisodes({ limit: Infinity }),
 		getNewsletters(),
 	]);
-
-	const challenges = readdirSync(challengesDirectory, { withFileTypes: true })
-		.filter((entry) => entry.isDirectory())
-		.map((entry) => `/monthlychallenges/${entry.name}`);
 
 	const paths = [
 		...topLevelPages,
@@ -62,7 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		),
 		...episodes.map((episode) => `/podcast/${episode.slug}`),
 		...newsletters.map((newsletter) => newsletter.href),
-		...challenges,
+		...getChallenges().map((challenge) => challenge.href),
 	];
 
 	// A <loc> must be escaped; two episode slugs have a non-ASCII character.
