@@ -1,3 +1,4 @@
+import type { Route } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -69,7 +70,9 @@ export default async function ApplicationDetailPage({
 	// The actions re-check for themselves; this only keeps a read-only viewer
 	// from being shown buttons that would 404 on them.
 	const canManage = sessionCan(session, 'waitlist', 'manage');
-	const parent = QUARANTINE_STATUSES.includes(application.status)
+	const parent: { href: Route; label: string } = QUARANTINE_STATUSES.includes(
+		application.status,
+	)
 		? { href: '/admin/waitlist/suspected-spam', label: 'Suspected spam' }
 		: ARCHIVE_STATUSES.includes(application.status)
 			? { href: '/admin/waitlist/archive', label: 'Archive' }

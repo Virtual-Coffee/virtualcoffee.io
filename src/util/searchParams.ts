@@ -8,6 +8,8 @@
  * otherwise. These are the pieces they share.
  */
 
+import type { AdminHref } from '@/lib/admin/links';
+
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
 /** Rows per page on every server-paged /admin list. */
@@ -82,9 +84,9 @@ export function parseListQuery<S extends string>(
  * alive across a status change.
  */
 export function listHref(
-	base: string,
+	base: AdminHref,
 	values: Record<string, string | null | undefined>,
-): string {
+): AdminHref {
 	const query = new URLSearchParams();
 	for (const [key, value] of Object.entries(values)) {
 		if (value) query.set(key, value);

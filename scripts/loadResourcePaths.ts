@@ -6,7 +6,7 @@ import { extractRoutes, loadMdxDirectory } from '../src/util/loadMdx.server';
  * Writes every URL the `/resources` route serves to
  * `src/data/resourcePaths.ts` as a `ResourcePath` union.
  *
- * `resources/[[...slug]]` types as `/resources/${string}`, so typedRoutes
+ * `resources/[...slug]` types as `/resources/${string}`, so typedRoutes
  * cannot tell a typo from a page. `resourceHref()` takes a `ResourcePath`
  * instead; it comes from the same `loadMdxDirectory` + `extractRoutes` the
  * resources page and the sitemap use, so the three cannot disagree.

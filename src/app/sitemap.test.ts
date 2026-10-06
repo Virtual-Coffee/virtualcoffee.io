@@ -64,10 +64,13 @@ describe('sitemap', () => {
 
 	test('lists exactly the MDX pages the resources route generates', async () => {
 		// The route sets `dynamicParams = false`: a path it doesn't generate 404s.
-		const page = await import('./resources/[[...slug]]/page');
-		const generated = (await page.generateStaticParams()).map(({ slug }) =>
-			`/resources/${slug.join('/')}`.replace(/\/$/, ''),
-		);
+		const page = await import('./resources/[...slug]/page');
+		const generated = [
+			'/resources',
+			...(await page.generateStaticParams()).map(
+				({ slug }) => `/resources/${slug.join('/')}`,
+			),
+		];
 		const listed = (await sitemapPaths()).filter((path) =>
 			path.startsWith('/resources'),
 		);

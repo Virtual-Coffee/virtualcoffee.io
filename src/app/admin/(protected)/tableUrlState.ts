@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useMemo } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
 	rowPaginationFeature,
 	rowSortingFeature,
@@ -44,7 +44,6 @@ function useTableUrlState({
 	pagination: PaginationState;
 }) {
 	const router = useRouter();
-	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
 	const push = useCallback(
@@ -54,9 +53,10 @@ function useTableUrlState({
 				if (value === null) next.delete(key);
 				else next.set(key, value);
 			}
-			router.push(`${pathname}?${next.toString()}`);
+			// A query-only href keeps the path.
+			router.push(`?${next.toString()}`);
 		},
-		[pathname, router, searchParams],
+		[router, searchParams],
 	);
 
 	const onSortingChange: OnChangeFn<SortingState> = useCallback(

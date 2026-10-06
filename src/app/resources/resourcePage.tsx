@@ -1,7 +1,6 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { createMetaData } from '@/util/createMetaData.server';
 import {
-	extractRoutes,
 	loadMdxDirectory,
 	loadMdxRouteFileAttributes,
 	MdxFile,
@@ -12,20 +11,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-export const dynamicParams = false;
-export const dynamic = 'force-static';
-
-export async function generateStaticParams() {
-	const allFiles = await loadMdxDirectory({
-		baseDirectory: 'content/resources',
-	});
-	const routes = extractRoutes(allFiles, 'content/resources/');
-
-	return [
-		{ slug: [''] },
-		...routes.map((slug) => ({ slug: slug.split('/').filter(Boolean) })),
-	];
-}
+// The index is `resources/page.tsx` and the rest is `resources/[...slug]`:
+// a required catch-all keeps `/resources` a static route, which typedRoutes
+// needs to accept an href to it.
 
 async function getFile(slug: string) {
 	const file = await loadMdxRouteFileAttributes({
@@ -77,11 +65,8 @@ function findBreadcrumbs(files: MdxFile[], slug: string): MdxFile[] {
 		.filter(Boolean);
 }
 
-export async function generateMetadata({
-	params,
-}: PageProps<'/resources/[[...slug]]'>): Promise<Metadata> {
-	const uri = ((await params).slug ?? []).join('/');
-
+/** `uri` is the path under `/resources`, empty for the index. */
+export async function resourceMetadata(uri: string): Promise<Metadata> {
 	const file = await getFile(uri);
 	if (!file) {
 		notFound();
@@ -94,10 +79,7 @@ export async function generateMetadata({
 	});
 }
 
-export default async function Page({
-	params,
-}: PageProps<'/resources/[[...slug]]'>) {
-	const uri = ((await params).slug ?? []).join('/');
+export async function ResourcePage({ uri }: { uri: string }) {
 	const file = await getFile(uri);
 
 	if (!file) {

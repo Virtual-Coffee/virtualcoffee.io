@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
+import type { AdminHref } from '@/lib/admin/links';
 import { listHref } from '@/util/searchParams';
 
 /**
@@ -17,11 +18,11 @@ import { listHref } from '@/util/searchParams';
  * place to land.
  */
 export function chipHref(
-	base: string,
+	base: AdminHref,
 	keep: Record<string, string | null | undefined>,
 	param: string,
 	value: string | null,
-): string {
+): AdminHref {
 	return listHref(base, { ...keep, [param]: value });
 }
 
@@ -33,7 +34,7 @@ export function FilterChips({
 	chips,
 	ariaLabel,
 }: {
-	base: string;
+	base: AdminHref;
 	/** Every other validated value; a default is passed as null. */
 	keep: Record<string, string | null | undefined>;
 	param: string;

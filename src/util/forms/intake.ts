@@ -1,3 +1,4 @@
+import type { Route } from 'next';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
@@ -13,7 +14,7 @@ import type { FormState } from './types';
  */
 export function intake<S extends z.ZodObject>(
 	formData: FormData,
-	options: { schema: S; thanks: string },
+	options: { schema: S; thanks: Route },
 ):
 	| { ok: true; data: z.infer<S> }
 	| { ok: false; state: NonNullable<FormState> } {

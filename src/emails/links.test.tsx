@@ -51,7 +51,7 @@ const redirects = z.array(Redirect).parse(parsed);
 
 /** Catch-alls that only serve the MDX files under a content directory. */
 const mdxCatchAlls: Record<string, string> = {
-	'src/app/resources/[[...slug]]': 'src/content/resources',
+	'src/app/resources/[...slug]': 'src/content/resources',
 };
 
 const appRoutes = globSync('src/app/**/{page.tsx,route.ts}').map((file) => {

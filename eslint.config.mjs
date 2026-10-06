@@ -76,7 +76,7 @@ export default defineConfig([
 				].map((selector) => ({
 					selector,
 					message:
-						"Build a /resources href with resourceHref() from '@/util/resourceHref': `resources/[[...slug]]` types as `/resources/${string}`, so typedRoutes cannot check a literal.",
+						"Build a /resources href with resourceHref() from '@/util/resourceHref': `resources/[...slug]` types as `/resources/${string}`, so typedRoutes cannot check a literal.",
 				})),
 			],
 		},

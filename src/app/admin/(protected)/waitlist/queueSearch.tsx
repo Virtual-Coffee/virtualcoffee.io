@@ -1,11 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export function QueueSearch({ initialValue }: { initialValue: string }) {
 	const router = useRouter();
-	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const [value, setValue] = useState(initialValue);
 
@@ -21,7 +20,8 @@ export function QueueSearch({ initialValue }: { initialValue: string }) {
 				// A new search always restarts at page one; staying on page 4 of a
 				// different result set shows an empty table for no obvious reason.
 				next.delete('page');
-				router.push(`${pathname}?${next.toString()}`);
+				// A query-only href keeps the path.
+				router.push(`?${next.toString()}`);
 			}}
 		>
 			<label className="visually-hidden" htmlFor="admin-search">
