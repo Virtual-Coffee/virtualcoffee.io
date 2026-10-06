@@ -19,12 +19,18 @@ process.env.TZ = 'UTC';
  * Both mock `next/headers` (`src/test/setup.ts`): `headers()` throws outside
  * a request, and every authorization check reads it.
  *
- * `@/` is resolved here rather than through vite-tsconfig-paths — it is the
- * only alias, and one line beats a dependency.
+ * `@/` is resolved here rather than through vite-tsconfig-paths. `server-only`
+ * (which Next resolves itself in a build, and which throws outside React's
+ * server condition) points at Next's no-op copy.
  */
 export default defineConfig({
 	resolve: {
-		alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
+		alias: {
+			'@': fileURLToPath(new URL('./src', import.meta.url)),
+			'server-only': fileURLToPath(
+				import.meta.resolve('next/dist/compiled/server-only/empty'),
+			),
+		},
 	},
 	test: {
 		environment: 'node',

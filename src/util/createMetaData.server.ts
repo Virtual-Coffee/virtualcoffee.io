@@ -1,3 +1,4 @@
+import 'server-only';
 import createSocialImage from '@/util/socialimage';
 import type { Metadata } from 'next';
 

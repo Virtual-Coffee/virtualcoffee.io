@@ -127,7 +127,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 - `src/components/layouts/DefaultLayout.tsx` is the only page layout (`Hero`, `heroHeader`, `heroSubheader`, `simple` props).
 - Styles are à-la-carte Bootstrap SCSS partials plus per-feature partials in `src/styles/`; markup uses Bootstrap classes and a custom `prose` class. The Sass load-order and map rules are in the headers of `src/styles/_variables.scss` and `src/styles/_bootstrap.scss`; read them before editing either. `quietDeps` in `next.config.mjs` mutes Bootstrap's own deprecations so warnings from `src/styles/` still surface.
 - All HTML from external sources goes through `src/util/sanitizeCmsData.ts`; `src/util/markdown.server.ts` uses it instead of rehype-sanitize so there is one allowlist.
-- The `.server.ts` suffix marks server-only modules by convention (a Remix holdover); nothing enforces it.
+- `createMetaData`, `loadMdx` and `markdown` `.server.ts` start with `import 'server-only'` (Next resolves it, no dependency; Vitest aliases it to Next's no-op copy), so a client import is a build error. `url.server.ts` is exempt: `netlify/functions` and `tsx` scripts import it. The suffix alone enforces nothing.
 
 ### Netlify
 
