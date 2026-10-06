@@ -58,7 +58,7 @@ describe('sitemap', () => {
 				expect(path).not.toMatch(pattern);
 			}
 			expect(path).not.toMatch(thanksPage);
-			expect(path).not.toMatch(/^\/(_cache|api)(\/|$)/);
+			expect(path).not.toMatch(/^\/api(\/|$)/);
 		}
 	});
 

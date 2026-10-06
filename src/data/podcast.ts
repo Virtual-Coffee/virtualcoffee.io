@@ -233,9 +233,8 @@ export async function fetchTranscript({
 }
 
 /**
- * Cached for 24 h and tagged, so `/_cache?tag=podcast` picks up a new
- * transcript without waiting. A throw is never cached, so a failed request
- * costs one render, not a day.
+ * Cached for 24 h. A throw is never cached, so a failed request costs one
+ * render, not a day.
  */
 export const getTranscript = unstable_cache(fetchTranscript, ['transcript'], {
 	revalidate: 86400,
