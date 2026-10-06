@@ -21,14 +21,14 @@ process.env.TZ = 'UTC';
  *
  * `@/` is resolved here rather than through vite-tsconfig-paths. `server-only`
  * (which Next resolves itself in a build, and which throws outside React's
- * server condition) points at Next's no-op copy.
+ * server condition) points at an empty module.
  */
 export default defineConfig({
 	resolve: {
 		alias: {
 			'@': fileURLToPath(new URL('./src', import.meta.url)),
 			'server-only': fileURLToPath(
-				import.meta.resolve('next/dist/compiled/server-only/empty'),
+				new URL('./src/test/serverOnly.ts', import.meta.url),
 			),
 		},
 	},
