@@ -10,9 +10,6 @@ import { Google } from '@/svg/calendar/Google';
 import { Outlook } from '@/svg/calendar/Outlook';
 import { Ics } from '@/svg/calendar/Ics';
 
-// ISR: Revalidate every 12 hours
-export const revalidate = 43200;
-
 export async function generateMetadata() {
 	return await createMetaData({
 		title: 'Virtual Coffee Community Events',
