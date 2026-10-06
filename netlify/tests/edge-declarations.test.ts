@@ -28,3 +28,14 @@ test('a function that declares itself inline is not also declared in netlify.tom
 		[],
 	);
 });
+
+// The test above would also pass if these lost their inline `config`.
+test.each([
+	['limit-action-body', '/*'],
+	['rate-limit-join', '/join'],
+])('%s declares its route inline', async (name, path) => {
+	const { config } = await import(`../edge-functions/${name}.ts`);
+
+	expect(exportsConfig).toContain(name);
+	expect(config).toMatchObject({ path, method: 'POST' });
+});
