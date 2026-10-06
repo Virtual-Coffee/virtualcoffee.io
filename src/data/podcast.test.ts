@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { fetchTranscript } from './podcast';
+import { PHASE_PRODUCTION_BUILD } from 'next/constants';
+
+import { fetchTranscript, transcriptOrNullDuringBuild } from './podcast';
 
 function stubFetch(response: Response) {
 	const fetchMock = vi.fn().mockResolvedValue(response);
@@ -49,5 +51,38 @@ describe('fetchTranscript', () => {
 		stubFetch(Response.json({}));
 
 		await expect(fetchTranscript({ id: 'abc' })).resolves.toBeNull();
+	});
+});
+
+describe('transcriptOrNullDuringBuild', () => {
+	afterEach(() => {
+		vi.unstubAllEnvs();
+		vi.restoreAllMocks();
+	});
+
+	test('passes a transcript through in any phase', async () => {
+		vi.stubEnv('NEXT_PHASE', 'phase-production-server');
+
+		await expect(
+			transcriptOrNullDuringBuild(Promise.resolve([]), 'ep'),
+		).resolves.toEqual([]);
+	});
+
+	test('swallows a failure during the production build', async () => {
+		vi.stubEnv('NEXT_PHASE', PHASE_PRODUCTION_BUILD);
+		const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		await expect(
+			transcriptOrNullDuringBuild(Promise.reject(new Error('feed down')), 'ep'),
+		).resolves.toBeNull();
+		expect(error).toHaveBeenCalledOnce();
+	});
+
+	test('rethrows at runtime, so ISR keeps the last good page', async () => {
+		vi.stubEnv('NEXT_PHASE', 'phase-production-server');
+
+		await expect(
+			transcriptOrNullDuringBuild(Promise.reject(new Error('feed down')), 'ep'),
+		).rejects.toThrow('feed down');
 	});
 });

@@ -1,4 +1,5 @@
 import { unstable_cache } from 'next/cache';
+import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 import rawEpisodes from './podcast/episodes.json';
 
 // episodes.json is sourced from vc-data and bundled here at build time.
@@ -240,3 +241,21 @@ export const getTranscript = unstable_cache(fetchTranscript, ['transcript'], {
 	revalidate: 86400,
 	tags: ['podcast'],
 });
+
+/**
+ * A feed outage must not fail a deploy, but a runtime regeneration should throw
+ * so ISR keeps serving the last good page (with its transcript). Resolves to
+ * `null` for a failure during the production build, rethrows otherwise.
+ */
+export async function transcriptOrNullDuringBuild(
+	load: Promise<Transcript | null>,
+	label: string,
+): Promise<Transcript | null> {
+	try {
+		return await load;
+	} catch (error) {
+		if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) throw error;
+		console.error(`Error loading transcript ${label}`, error);
+		return null;
+	}
+}

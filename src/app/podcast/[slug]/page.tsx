@@ -1,11 +1,15 @@
 import { notFound } from 'next/navigation';
-import { PHASE_PRODUCTION_BUILD } from 'next/constants';
 
 import { Fragment } from 'react';
 import CdnImage from '@/components/CdnImage';
 import DisplayHtml from '@/components/DisplayHtml';
 import PodcastSubscribe from '@/components/PodcastSubscribe';
-import { getEpisode, getEpisodes, getTranscript } from '@/data/podcast';
+import {
+	getEpisode,
+	getEpisodes,
+	getTranscript,
+	transcriptOrNullDuringBuild,
+} from '@/data/podcast';
 import { dateForDisplay } from '@/util/date';
 import { sanitizeCmsData } from '@/util/sanitizeCmsData';
 import createCmsImage, { cmsImageUrl } from '@/util/cmsimage';
@@ -48,15 +52,10 @@ async function getEpisodeData(slug: string) {
 		console.error(`Episode not found - ${slug}`);
 		notFound();
 	}
-	const transcript = await getTranscript({
-		id: episode.podcastBuzzsproutId,
-	}).catch((error) => {
-		// A feed outage must not fail a deploy, but a runtime regeneration should
-		// throw so ISR keeps serving the last good page (with its transcript).
-		if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD) throw error;
-		console.error(`Error loading transcript ${episode.slug}`, error);
-		return null;
-	});
+	const transcript = await transcriptOrNullDuringBuild(
+		getTranscript({ id: episode.podcastBuzzsproutId }),
+		episode.slug,
+	);
 
 	const sanitizedEpisode = sanitizeCmsData(episode);
 	return {
