@@ -15,7 +15,7 @@ export async function createMetaData({
 }): Promise<Metadata> {
 	// `/assets/svg/${attributes.hero.Hero}.svg`
 	const hero = heroPath || Hero ? `/assets/svg/${Hero}.svg` : undefined;
-	const image = await createSocialImage({
+	const image = createSocialImage({
 		title: title,
 		subtitle: description,
 		hero,
