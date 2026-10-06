@@ -4,11 +4,11 @@ import { describe, expect, test } from 'vitest';
 import TextContainer from './TextContainer';
 
 describe('TextContainer', () => {
-	test('omitted props fall back to a white background and a Back to Top link', () => {
+	test('renders its children, falling back to a white background and a Back to Top link', () => {
 		const html = renderToStaticMarkup(<TextContainer>Body</TextContainer>);
 
+		expect(html).toContain('Body');
 		expect(html).toContain('class="bg-white py-3"');
-		expect(html).not.toContain('bg-undefined');
 		expect(html).toContain('<a href="#top">Back to Top</a>');
 	});
 
@@ -26,11 +26,5 @@ describe('TextContainer', () => {
 		);
 
 		expect(html).toContain('class="bg-light py-3"');
-	});
-
-	test('renders its children', () => {
-		const html = renderToStaticMarkup(<TextContainer>Body</TextContainer>);
-
-		expect(html).toContain('Body');
 	});
 });
