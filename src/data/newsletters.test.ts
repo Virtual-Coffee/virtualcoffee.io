@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { z } from 'zod';
 
 import { getNewsletter, getNewsletters } from './newsletters';
 
@@ -7,13 +8,20 @@ describe('getNewsletter', () => {
 		const issues = await getNewsletters();
 		expect(issues.length).toBeGreaterThan(0);
 
-		const titles = new Set<string>();
+		const titles = new Set<string | undefined>();
 		for (const { href } of issues) {
 			const newsletter = await getNewsletter(
 				href.replace('/newsletter/issues/', ''),
 			);
-			expect(newsletter?.handle.meta.title).toBeTruthy();
-			titles.add(newsletter!.handle.meta.title);
+			expect(newsletter?.handle.meta).toEqual(
+				expect.schemaMatching(
+					z.object({
+						title: z.string().min(1),
+						description: z.string().min(1),
+					}),
+				),
+			);
+			titles.add(newsletter?.handle.meta.title);
 		}
 		expect(titles.size).toBe(issues.length);
 	});
