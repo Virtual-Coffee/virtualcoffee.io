@@ -28,8 +28,8 @@ export default function GlobalError({
 	}, [error]);
 
 	return (
-		<html lang="en" className={`h-full bg-gray-100 ${inter.variable}`}>
-			<body className="h-full">
+		<html lang="en" className={inter.variable}>
+			<body>
 				<title>Something went wrong - Virtual Coffee IO</title>
 				<DefaultLayout
 					Hero="UndrawFixingBugs"
