@@ -28,19 +28,11 @@ export function MapLoaderDev({ members }: { members: MappableMember[] }) {
 	}, []);
 
 	if (toLoad) {
-		return <MapDynamicLoader members={members} />;
+		return <MapLoader members={members} />;
 	}
 
 	return <div style={loaderStyle}>Loading...</div>;
 }
-
-export const MapDynamicLoader = dynamic(
-	() => import('@/components/MemberMap'),
-	{
-		loading: () => <div style={loaderStyle}>Loading...</div>,
-		ssr: false,
-	},
-);
 
 export const MapLoader = dynamic(() => import('@/components/MemberMap'), {
 	loading: () => <div style={loaderStyle}>Loading...</div>,

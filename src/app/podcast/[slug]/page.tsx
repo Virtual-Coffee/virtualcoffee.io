@@ -121,7 +121,7 @@ export async function generateMetadata({
 	};
 }
 
-export default async function Newsletter({
+export default async function PodcastEpisode({
 	params,
 }: PageProps<'/podcast/[slug]'>) {
 	const { episode, transcript } = await getEpisodeData((await params).slug);
