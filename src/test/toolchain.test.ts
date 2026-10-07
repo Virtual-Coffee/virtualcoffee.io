@@ -23,5 +23,9 @@ test('mise.toml pins the pnpm in packageManager', () => {
 test('mise.lock locks that pnpm', () => {
 	const version = packageManager.replace('pnpm@', '');
 
-	expect(read('mise.lock')).toContain(`version = "${version}"`);
+	const locked = /^\[\[tools\.pnpm\]\]\nversion = "([^"]+)"/m.exec(
+		read('mise.lock'),
+	)?.[1];
+
+	expect(locked).toBe(version);
 });
