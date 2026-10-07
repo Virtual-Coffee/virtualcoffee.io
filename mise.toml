@@ -1,0 +1,180 @@
+# The toolchain and the local workflows — docs/adr/0020. mise owns workflows,
+# pnpm owns primitives: CI and Netlify keep calling the package.json scripts.
+# Personal tasks (anything :prod) go in the gitignored mise.local.toml.
+#
+# Node is pinned in .nvmrc, which Netlify also reads; mise picks it up as an
+# idiomatic version file. pnpm is pinned here and in `packageManager`, and
+# src/test/toolchain.test.ts fails if the two drift apart.
+
+min_version = "2026.10.0"
+
+[settings]
+	# Daemons (`[daemons.web]`) are experimental.
+	experimental = true
+	idiomatic_version_file_enable_tools = ["node"]
+	# `mise.lock` pins every tool; CI refuses to resolve anything new.
+	lockfile = true
+
+[tools]
+	pnpm = "12.8.2"
+	# `mise watch` shells out to watchexec.
+	watchexec = "latest"
+
+[env]
+	# The project's own binaries, so tasks call `tsx` / `next` / `eslint` /
+	# `drizzle-kit` / `netlify` directly instead of through a `pnpm exec` process.
+	_.path = ["{{config_root}}/node_modules/.bin"]
+
+	# --- codegen ----------------------------------------------------------------
+	#
+	# The generated files the app imports are gitignored, so a clean checkout has
+	# to build them before anything typechecks. `sources` and `outputs` let mise
+	# skip the work when nothing changed; `mise run --force codegen` is the escape
+	# hatch, notably after *deleting* a member file, where a glob can still look
+	# fresh.
+
+[tasks."codegen:members"]
+	alias       = "build-member-files"
+	description = "Regenerate the member barrel files"
+	outputs     = ["src/data/members/core.ts", "src/data/members/members.ts"]
+	run         = "tsx scripts/loadMemberFiles.ts"
+	sources     = ["scripts/loadMemberFiles.ts", "src/content/members/core/*.ts", "src/content/members/members/*.ts"]
+
+[tasks."codegen:undraw"]
+	alias       = "build-undraw-ratios"
+	description = "Regenerate the Undraw aspect-ratio map"
+	outputs     = ["src/data/undrawAspectRatios.ts"]
+	run         = "tsx scripts/loadUndrawAspectRatios.ts"
+	sources     = ["public/assets/svg/*.svg", "scripts/loadUndrawAspectRatios.ts"]
+
+[tasks."codegen:resources"]
+	alias       = "build-resource-paths"
+	description = "Regenerate the typed /resources hrefs"
+	outputs     = ["src/data/resourcePaths.ts"]
+	run         = "tsx --require ./scripts/lib/serverOnlyStub.cjs scripts/loadResourcePaths.ts"
+	sources     = ["scripts/loadResourcePaths.ts", "src/content/resources/**/*.mdx"]
+
+[tasks.codegen]
+	depends     = ["codegen:*"]
+	description = "All generated files the app imports"
+
+	# --- checks -----------------------------------------------------------------
+
+[tasks.lint]
+	depends     = ["codegen"]
+	description = "ESLint over the whole project"
+	run         = "eslint"
+
+[tasks.typecheck]
+	depends     = ["codegen"]
+	description = "next typegen, then the native tsc"
+	run         = ["next typegen", "tsc --noEmit"]
+
+[tasks.test]
+	description = "Vitest, both projects"
+	run         = "vitest run"
+
+[tasks.knip]
+	depends     = ["codegen"]
+	description = "Unused files, exports and dependencies"
+	run         = "knip"
+
+[tasks.format]
+	description = "Prettier over everything, in place"
+	run         = "prettier --write --ignore-unknown --list-different ."
+
+[tasks."bots:build"]
+	alias       = "build-bot-list"
+	description = "Regenerate src/data/bots.ts from the release pinned in .botlist-version.json"
+	run         = "tsx scripts/loadBotList.ts"
+
+[tasks."bots:check"]
+	alias       = "check-bot-matching"
+	description = "Check the bot user-agent matcher"
+	run         = "vitest run --project unit src/data/botMatcher.test.ts"
+
+# CLAUDE.md's "before finishing" list. `format` is left out: it writes files, and
+# racing a formatter against eslint and tsc reading the same tree invites trouble.
+[tasks.check]
+	depends     = ["typecheck", "lint", "test", "knip"]
+	description = "Everything CI checks, in parallel: codegen, typecheck, lint, test, knip"
+
+	# --- dev loop ---------------------------------------------------------------
+	#
+	# Replaces concurrently, npm-watch and cross-env. `dev` has no body: its
+	# dependencies are the two long-lived processes, which mise runs together.
+
+[tasks."dev:watch"]
+	depends     = ["codegen"]
+	description = "Re-run codegen when its sources change"
+	run         = "{{mise_bin}} watch codegen"
+
+# WEB_PORT/WEB_URL come from [daemons.web] when it is configured; the fallbacks
+# are netlify.toml's. Next gets the port after the site's.
+[tasks."dev:server"]
+	alias       = "local-dev"
+	depends     = ["codegen"]
+	description = "netlify dev in front of next dev (ports from WEB_PORT, else 9000)"
+	env         = { NODE_ENV = "development" }
+	run         = "netlify dev --port ${WEB_PORT:-9000} --target-port $(( ${WEB_PORT:-9000} + 1 ))"
+
+[tasks.dev]
+	depends     = ["dev:watch", "dev:server"]
+	description = "codegen once, then the watcher and netlify dev together"
+
+	# --- build ------------------------------------------------------------------
+
+[tasks.build]
+	depends     = ["codegen"]
+	description = "Production build"
+	run         = "next build"
+
+[tasks.start]
+	description = "Serve an existing production build"
+	run         = "next start"
+
+	# --- database ---------------------------------------------------------------
+	#
+	# scripts/with-local-netlify.ts supplies DATABASE_URL and a blob store to
+	# anything that is not the site process, and refuses a non-local connection
+	# string. It resolves its child against node_modules/.bin itself.
+
+[tasks."db:generate"]
+	description = "Generate a Drizzle migration into drizzle/"
+	# Always pass a hyphenated name: `mise run db:generate -- --name=add-something`.
+	# drizzle's own names use underscores, and Netlify's migration slugs are
+	# lowercase alphanumerics and hyphens only.
+	run = "drizzle-kit generate"
+
+[tasks."db:migrate"]
+	description = "Apply migrations locally (needs `mise run dev` running)"
+	run         = "tsx scripts/with-local-netlify.ts drizzle-kit migrate"
+
+# `--force` skips the CLI's own prompt so the mise `confirm` is the only one.
+[tasks."db:reset"]
+	confirm     = { message = "Wipe the local database and re-apply every migration?", default = "no" }
+	description = "Reset the local database, then apply migrations (needs `mise run dev` running)"
+	run         = ["netlify database reset --force", { task = "db:migrate" }]
+
+[tasks."db:seed"]
+	description = "Seed sample applications, volunteers, ledger rows and invites"
+	run         = "tsx scripts/with-local-netlify.ts tsx scripts/seedDev.ts"
+
+[tasks."db:studio"]
+	description = "Drizzle Studio on the local database"
+	run         = "tsx scripts/with-local-netlify.ts drizzle-kit studio"
+
+[tasks.invite-maintenance]
+	description = "Run the daily invite accrual and expiry by hand"
+	run         = "tsx scripts/with-local-netlify.ts tsx scripts/runInviteMaintenance.ts"
+
+[tasks."email:dev"]
+	description = "React Email preview on :3010"
+	env         = { EMAIL_ASSET_ORIGIN = "http://localhost:3010" }
+	run         = "email dev --dir src/emails --port 3010"
+
+	# --- onboarding -------------------------------------------------------------
+
+[tasks.setup]
+	description = "First-run wizard: tools, dependencies, .env, database"
+	run         = "bin/setup"
