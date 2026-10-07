@@ -273,16 +273,16 @@ else
   note "Mailpit (optional mail sink): https://mailpit.axllent.org; see the SMTP_HOST lines in .env.example."
 fi
 
-if "$MISE" exec -- sh -c 'command -v pitchfork' >/dev/null 2>&1; then
-  skip "pitchfork is available"
-  "$MISE" daemons register >/dev/null 2>&1 && ok "registered this checkout's daemons"
-else
-  say "pitchfork runs the dev server as a daemon with its own port per git worktree,"
-  say "so several worktrees or agents can run side by side. Optional; mise run dev works without it."
-  if confirm "Install pitchfork into mise's global config (mise use -g pitchfork) and register this checkout?" n; then
-    "$MISE" use -g pitchfork
-    "$MISE" daemons register
-    ok "pitchfork installed and daemons registered"
+say "The web daemon (pitchfork, installed above) runs the dev server in the background"
+say "with its own port per git worktree, so worktrees and agents can run side by side."
+say "Optional; $MISE_CMD run dev works without it."
+if confirm "Register this checkout's web daemon?" n; then
+  "$MISE" daemons register
+  ok "registered"
+  if confirm "Start it now? (first start compiles the site; it stays up until you stop it)" n; then
+    "$MISE" daemons start web
+    ok "started: see $MISE_CMD daemons urls"
+    TODO+=("Stop the daemon when done: $MISE_CMD daemons stop web")
   fi
 fi
 
@@ -296,5 +296,5 @@ fi
 say "Next:"
 say "  $MISE_CMD run dev        start the site (http://localhost:$PORT_WEB)"
 say "  $MISE_CMD run check      codegen, typecheck, lint, test, knip"
-say "  $MISE_CMD daemons urls   where the daemon-run site lives (needs pitchfork)"
+say "  $MISE_CMD daemons urls   where the daemon-run site lives"
 printf '\n'

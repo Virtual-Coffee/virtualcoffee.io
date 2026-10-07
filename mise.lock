@@ -23,6 +23,29 @@ url = "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-arm64.tar.gz"
 checksum = "sha256:1462cb3b3046b815cf8ea436d3da450ec1a9f11dac7e5a46b0ada5305d7e8097"
 url = "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-x64.tar.gz"
 
+[[tools.pitchfork]]
+version = "2.29.0"
+backend = "packslip:github.com/jdx/pitchfork"
+specifiers = ["2.29.0"]
+
+[tools.pitchfork."platforms.linux-arm64"]
+checksum = "sha256:dfea08ac9b4a8b2a3f4c9ce94c5faba9a1996634a22bdc6fd17510affe9dca71"
+url = "https://github.com/jdx/pitchfork/releases/download/v2.29.0/pitchfork-aarch64-unknown-linux-gnu.tar.gz"
+signer = "sigstore-oidc:https://github.com/jdx/pitchfork/.github/workflows/release.yml"
+repository_ids = { repository = "899500793" }
+
+[tools.pitchfork."platforms.linux-x64"]
+checksum = "sha256:80d48f7077f8612c7684777aef346b93d3ecca296d4d9b392b2fb5e50a4f891d"
+url = "https://github.com/jdx/pitchfork/releases/download/v2.29.0/pitchfork-x86_64-unknown-linux-gnu.tar.gz"
+signer = "sigstore-oidc:https://github.com/jdx/pitchfork/.github/workflows/release.yml"
+repository_ids = { repository = "899500793" }
+
+[tools.pitchfork."platforms.macos-arm64"]
+checksum = "sha256:06adf144e4a48dad55806706a7b0fe1a8dfc901726c5c8939e54fbc2bcabb04e"
+url = "https://github.com/jdx/pitchfork/releases/download/v2.29.0/pitchfork-aarch64-apple-darwin.tar.gz"
+signer = "sigstore-oidc:https://github.com/jdx/pitchfork/.github/workflows/release.yml"
+repository_ids = { repository = "899500793" }
+
 [[tools.pnpm]]
 version = "12.8.2"
 backend = "aqua:pnpm/pnpm"
@@ -51,6 +74,14 @@ checksum = "sha256:162b2c91754a673195cce92a48b9a5ce82b2be379bdb0e67078717b9503b3
 url = "https://github.com/pnpm/pnpm/releases/download/v12.8.2/pnpm-darwin-x64.tar.gz"
 url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/599659880"
 provenance = "github-attestations"
+
+[[tools.usage]]
+version = "6.12.0"
+backend = "ubi:jdx/usage"
+specifiers = ["6.12.0"]
+
+[tools.usage."platforms.macos-arm64-usage"]
+checksum = "blake3:697fd703b8224112ead6b23ff1a6afff1319707751b7073186384a31b9d7036a"
 
 [[tools.watchexec]]
 version = "2.7.4"

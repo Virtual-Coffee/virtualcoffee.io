@@ -17,6 +17,9 @@ min_version = "2026.10.0"
 
 [tools]
 	pnpm = "12.8.2"
+	# Daemons (`[daemons.web]`) are run by pitchfork; tasks' `usage` specs need usage.
+	pitchfork = "2.29.0"
+	usage = "6.12.0"
 	# `mise watch` shells out to watchexec.
 	watchexec = "latest"
 
@@ -63,7 +66,15 @@ min_version = "2026.10.0"
 [tasks.lint]
 	depends     = ["codegen"]
 	description = "ESLint over the whole project"
-	run         = "eslint"
+	run         = '''
+	eval "set -- ${usage_files:-}"
+	[ "${usage_fix:-false}" = true ] && set -- --fix "$@"
+	exec eslint "$@"
+	'''
+	usage       = '''
+	flag "--fix" help="Apply autofixes"
+	arg "[files]" var=#true help="Files or folders; default is the whole project"
+	'''
 
 [tasks.typecheck]
 	depends     = ["codegen"]
@@ -72,7 +83,19 @@ min_version = "2026.10.0"
 
 [tasks.test]
 	description = "Vitest, both projects"
-	run         = "vitest run"
+	run         = '''
+	eval "set -- ${usage_files:-}"
+	[ "${usage_coverage:-false}" = true ] && set -- --coverage "$@"
+	[ -n "${usage_project:-}" ] && set -- --project "$usage_project" "$@"
+	exec vitest run "$@"
+	'''
+	usage       = '''
+	flag "--project <project>" help="Only one project" {
+	  choices "unit" "db"
+	}
+	flag "--coverage" help="Collect coverage"
+	arg "[files]" var=#true help="Test files or name filters"
+	'''
 
 [tasks.knip]
 	depends     = ["codegen"]
@@ -81,7 +104,8 @@ min_version = "2026.10.0"
 
 [tasks.format]
 	description = "Prettier over everything, in place"
-	run         = "prettier --write --ignore-unknown --list-different ."
+	run         = 'eval "set -- $usage_paths"; exec prettier --write --ignore-unknown --list-different "$@"'
+	usage       = 'arg "[paths]" var=#true default="." help="Files or folders to format"'
 
 [tasks."bots:build"]
 	alias       = "build-bot-list"
@@ -164,10 +188,16 @@ min_version = "2026.10.0"
 
 [tasks."db:generate"]
 	description = "Generate a Drizzle migration into drizzle/"
-	# Always pass a hyphenated name: `mise run db:generate -- --name=add-something`.
-	# drizzle's own names use underscores, and Netlify's migration slugs are
-	# lowercase alphanumerics and hyphens only.
-	run = "drizzle-kit generate"
+	# `mise run db:generate --name add-something`. The name is required and
+	# hyphenated: drizzle's own names use underscores, and Netlify's migration
+	# slugs are lowercase alphanumerics and hyphens only.
+	run = '''
+	case "$usage_name" in
+	  "" | *[!a-z0-9-]* | -*) echo "--name must be lowercase letters, digits and hyphens: $usage_name" >&2; exit 1 ;;
+	esac
+	exec drizzle-kit generate --name "$usage_name"
+	'''
+	usage = 'flag "--name <name>" required=#true help="Migration slug, e.g. add-invite-expiry (lowercase, digits, hyphens)"'
 
 [tasks."db:migrate"]
 	description = "Apply migrations locally (needs `mise run dev` running)"
