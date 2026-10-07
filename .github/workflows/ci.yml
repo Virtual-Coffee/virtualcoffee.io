@@ -253,11 +253,6 @@ jobs:
   knip:
     name: knip
     runs-on: ubuntu-latest
-    # Advisory until the membership stack (#1579 and below) has merged: each
-    # layer exports things only the layer above imports, so knip reports them
-    # as unused on every intermediate PR. Drop this line afterwards; tracked
-    # in #1589.
-    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
