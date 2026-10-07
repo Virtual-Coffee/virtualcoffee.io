@@ -136,7 +136,7 @@ export const SUBMISSION_DISPLAY: Record<
 			title: string;
 			subtitle: string;
 		};
-		fields: { label: string; key: string; long?: boolean }[];
+		fields: { label: string; key: string; long?: boolean; link?: true }[];
 	}
 > = {
 	coc: {
@@ -179,7 +179,8 @@ export const SUBMISSION_DISPLAY: Record<
 			{ label: 'Description', key: 'description', long: true },
 			{ label: 'Format', key: 'format' },
 			{ label: 'Timing', key: 'timing' },
-			{ label: 'GitHub issue', key: 'githubIssueUrl' },
+			// Null when the issue post failed (ADR 0005).
+			{ label: 'GitHub issue', key: 'githubIssueUrl', link: true },
 		],
 	},
 	'coffee-tables': {

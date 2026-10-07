@@ -11,7 +11,7 @@ import {
 	SUBMISSION_DISPLAY,
 	SUBMISSION_KINDS,
 } from '@/lib/submissions/submissions';
-import { formatDateTime } from '../../../presentation';
+import { formatDateTime, githubRefLabel } from '../../../presentation';
 import { NoteComposer } from '../../../noteComposer';
 import { addSubmissionNote } from '../actions';
 import { STATUS_LABELS, SubmissionStatusBadge } from '../presentation';
@@ -82,17 +82,26 @@ export default async function SubmissionDetailPage({
 			<div className="row g-4">
 				<div className="col-lg-7">
 					<dl className="row">
-						{display.fields.map((field) => (
-							<div className="col-12 mb-3" key={field.key}>
-								<dt className="small text-body-secondary">{field.label}</dt>
-								<dd
-									className={`mb-0${field.long ? ' text-break' : ''}`}
-									style={field.long ? { whiteSpace: 'pre-wrap' } : undefined}
-								>
-									{formatValue(values[field.key])}
-								</dd>
-							</div>
-						))}
+						{display.fields.map((field) => {
+							const value = values[field.key];
+							return (
+								<div className="col-12 mb-3" key={field.key}>
+									<dt className="small text-body-secondary">{field.label}</dt>
+									<dd
+										className={`mb-0${field.long ? ' text-break' : ''}`}
+										style={field.long ? { whiteSpace: 'pre-wrap' } : undefined}
+									>
+										{field.link && typeof value === 'string' && value ? (
+											<a href={value} rel="noopener noreferrer" target="_blank">
+												{githubRefLabel(value)}
+											</a>
+										) : (
+											formatValue(value)
+										)}
+									</dd>
+								</div>
+							);
+						})}
 
 						{kind === 'coc' && (
 							<div className="col-12 mb-3">

@@ -105,6 +105,16 @@ export function formatDateTime(value: Date | null) {
 	return value ? DATE_TIME_FORMAT.format(value) : '—';
 }
 
+const GITHUB_REF = /^\/([^/]+)\/([^/]+)\/(?:issues|pull)\/(\d+)\/?$/;
+
+/** `owner/repo#123` for a GitHub issue or pull URL; anything else unchanged. */
+export function githubRefLabel(url: string) {
+	if (!URL.canParse(url)) return url;
+	const { hostname, pathname } = new URL(url);
+	const match = hostname === 'github.com' && GITHUB_REF.exec(pathname);
+	return match ? `${match[1]}/${match[2]}#${match[3]}` : url;
+}
+
 /** The way back to a section's list from one of its detail pages. */
 export function Breadcrumb({
 	parent,
