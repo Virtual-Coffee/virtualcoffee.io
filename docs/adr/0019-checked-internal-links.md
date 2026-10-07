@@ -29,8 +29,8 @@ type system cannot see Markdown links at all.
 
 ## Consequences
 
-- A new simple page is a new `src/app/<slug>/page.tsx`, not just an `.mdx`
-  file.
+- A new simple page is an `.mdx` file plus a `src/app/<slug>/page.tsx` and its
+  slug in `SimpleMdxSlug` (`src/util/simpleMdxPage.server.tsx`).
 - A new catch-all at the root, or a wider one anywhere, switches link
   checking off for every path it matches. It is a review finding.
 - Adding or moving a resource file needs `pnpm codegen` before typecheck.
