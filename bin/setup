@@ -92,6 +92,7 @@ case "$(uname -s)" in
     ;;
 esac
 command -v git >/dev/null 2>&1 || die "git is required: https://git-scm.com/downloads"
+command -v curl >/dev/null 2>&1 || die "curl is required (installing mise, checking the dev server)."
 ok "$(uname -s), git $(git --version | awk '{print $3}')"
 
 # ── 2. mise ───────────────────────────────────────────────────────────────────
@@ -114,7 +115,6 @@ else
     [[ "$reply" == 1 ]] && choice=1
   fi
   if [[ "$choice" == 1 ]]; then
-    command -v curl >/dev/null 2>&1 || die "curl is required for the installer."
     curl -fsSL https://mise.run | sh
     MISE="$HOME/.local/bin/mise"
     MISE_CMD="mise"
@@ -122,7 +122,7 @@ else
     ok "installed mise $("$MISE" --version | awk '{print $1}')"
 
     case "$(basename "${SHELL:-}")" in
-      zsh) rc="$HOME/.zshrc"; line='eval "$(~/.local/bin/mise activate zsh)"' ;;
+      zsh) rc="${ZDOTDIR:-$HOME}/.zshrc"; line='eval "$(~/.local/bin/mise activate zsh)"' ;;
       bash) rc="$HOME/.bashrc"; line='eval "$(~/.local/bin/mise activate bash)"' ;;
       fish) rc="$HOME/.config/fish/config.fish"; line='~/.local/bin/mise activate fish | source' ;;
       *) rc=""; line="" ;;
