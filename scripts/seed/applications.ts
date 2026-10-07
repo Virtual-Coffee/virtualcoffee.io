@@ -303,7 +303,7 @@ const ALL_SEEDS = [...SEEDS, ...MORE_SEEDS];
  * Insert every application with the History the real actions would have
  * written, in the order they would have written it: the join action's
  * `submitted` (or the import's `imported`), the Slack notification for an
- * invited application, then each maintainer action with the dev bypass as
+ * invited application, then each maintainer action with the seeded admin as
  * its actor.
  *
  * Returns the live Slack join token for the member whose invite was re-sent.

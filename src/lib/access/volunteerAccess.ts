@@ -6,8 +6,8 @@ import { type Session } from '@/lib/access/auth';
 /**
  * The authorization boundary for /invites (docs/adr/0010). It must never ask
  * `visibleSections()` or `requirePermission()` — `volunteer` grants no Section
- * on purpose. `getSession()` is shared, so `ADMIN_DEV_BYPASS_ROLES=volunteer`
- * works here.
+ * on purpose. `getSession()` is shared, so the devtools panel's
+ * Volunteer works here.
  */
 export function isVolunteer(session: Session | null): boolean {
 	return sessionRoles(session).includes('volunteer');
@@ -34,8 +34,7 @@ export async function requireVolunteer(): Promise<VolunteerSession> {
 	const slackUserId = sessionSlackUserId(session);
 
 	if (!slackUserId) {
-		// A real user whose account never got a Slack member id (bypass sessions
-		// always carry one). Nothing the viewer can do, so explain rather than
+		// A real user whose account never got a Slack member id. Nothing the viewer can do, so explain rather than
 		// offer a sign-in button.
 		redirect('/invites/sign-in?problem=no-slack-id');
 	}

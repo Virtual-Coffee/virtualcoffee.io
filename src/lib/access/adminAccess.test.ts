@@ -1,7 +1,6 @@
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 import {
-	getSession,
 	requirePermission,
 	requireSession,
 	sessionCan,
@@ -21,90 +20,9 @@ function sessionWith(role: string | null): Session {
 	return { user: { role } } as unknown as Session;
 }
 
-const unset = {
-	CONTEXT: undefined,
-	ADMIN_DEV_BYPASS: undefined,
-	ADMIN_DEV_BYPASS_ROLES: undefined,
-	ADMIN_DEV_BYPASS_SLACK_ID: undefined,
-};
-
-function env(values: Record<string, string | undefined>) {
-	for (const [key, value] of Object.entries({ ...unset, ...values })) {
-		vi.stubEnv(key, value);
-	}
-}
-
 beforeEach(() => {
-	env({});
 	betterAuthSession.mockReset();
 	betterAuthSession.mockResolvedValue(null);
-});
-afterEach(() => vi.unstubAllEnvs());
-
-describe('the dev bypass session', () => {
-	test('is an admin with the seeded Slack id by default', async () => {
-		env({ ADMIN_DEV_BYPASS: 'true' });
-		const session = await getSession();
-		expect(session?.user).toMatchObject({
-			id: 'dev-bypass',
-			role: 'admin',
-			slackUserId: 'U_DEV_BYPASS',
-		});
-	});
-
-	test('takes its roles and Slack id from the environment', async () => {
-		env({
-			ADMIN_DEV_BYPASS: 'true',
-			ADMIN_DEV_BYPASS_ROLES: ' volunteer ',
-			ADMIN_DEV_BYPASS_SLACK_ID: 'U0AB12CD3',
-		});
-		const session = await getSession();
-		expect(session?.user).toMatchObject({
-			role: 'volunteer',
-			slackUserId: 'U0AB12CD3',
-		});
-	});
-
-	/**
-	 * Each condition is independently sufficient to disable it. `NODE_ENV` is
-	 * the third; Vitest pins it to `test`, and stubbing it would also change
-	 * how the modules under test were loaded, so it is covered by reading the
-	 * source rather than here.
-	 */
-	test.each([
-		['not opted in', { ADMIN_DEV_BYPASS: undefined }],
-		['opted in with the wrong value', { ADMIN_DEV_BYPASS: '1' }],
-		['on a deploy', { ADMIN_DEV_BYPASS: 'true', CONTEXT: 'production' }],
-		[
-			'on a deploy preview',
-			{ ADMIN_DEV_BYPASS: 'true', CONTEXT: 'deploy-preview' },
-		],
-		[
-			'on a branch deploy',
-			{ ADMIN_DEV_BYPASS: 'true', CONTEXT: 'branch-deploy' },
-		],
-		[
-			'on a context it does not recognise',
-			{ ADMIN_DEV_BYPASS: 'true', CONTEXT: 'something-new' },
-		],
-	])('is off when %s', async (_label, values) => {
-		env(values);
-		await expect(getSession()).resolves.toBeNull();
-		expect(betterAuthSession).toHaveBeenCalledOnce();
-	});
-
-	test('netlify dev sets CONTEXT=dev, and that still counts as local', async () => {
-		env({ ADMIN_DEV_BYPASS: 'true', CONTEXT: 'dev' });
-		expect((await getSession())?.user).toMatchObject({ id: 'dev-bypass' });
-	});
-
-	test('is not consulted without a session cookie', async () => {
-		env({ ADMIN_DEV_BYPASS: 'true' });
-		await getSession();
-		expect(betterAuthSession).not.toHaveBeenCalled();
-	});
-
-	// A request that does carry a cookie is `adminAccess.db.test.ts`'s.
 });
 
 describe('sessionCan and visibleSections', () => {
@@ -137,17 +55,14 @@ describe('sessionCan and visibleSections', () => {
 
 describe('requireSession and requirePermission', () => {
 	test('a role-less session is sent to sign in', async () => {
-		env({ ADMIN_DEV_BYPASS: 'true', ADMIN_DEV_BYPASS_ROLES: 'volunteer' });
+		betterAuthSession.mockResolvedValue(sessionWith('volunteer'));
 		await expect(requireSession()).rejects.toMatchObject(
 			redirectTo('/admin/sign-in'),
 		);
 	});
 
 	test('a 404, not a 403, for a section the role does not hold', async () => {
-		env({
-			ADMIN_DEV_BYPASS: 'true',
-			ADMIN_DEV_BYPASS_ROLES: 'volunteer_coordinator',
-		});
+		betterAuthSession.mockResolvedValue(sessionWith('volunteer_coordinator'));
 		await expect(requirePermission('coc')).rejects.toMatchObject(NOT_FOUND);
 		await expect(
 			requirePermission('volunteerSignups', 'manage'),
