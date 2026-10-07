@@ -78,8 +78,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 ### Routes and MDX content pipeline
 
-- `typedRoutes` is on: a literal href that matches no route is a type error. Build a `/resources` href with `resourceHref()` (ESLint bans a raw one), type an href kept in data as `AdminHref` or a template literal, and add no `as Route` cast beyond the Slack join URL.
-- `about`, `code-of-conduct` and `uses` are explicit routes over `src/content/simple-mdx-pages/` through `src/util/simpleMdxPage.server.tsx`; a new simple page is a new `src/app/<slug>/page.tsx` and a slug in that helper.
+- `typedRoutes` is on and no route is a root catch-all; build a `/resources` href with `resourceHref()` — `docs/adr/0019`.
 - Editing a plugin in `src/mdx-plugins/` invalidates compiled MDX only when it's wired through `localMdxPlugin()` in `next.config.mjs`; if output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
 - `src/util/loadMdx.server.ts` reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then `import()`s the `.mdx` file. Adding a resource is adding an `.mdx` file with frontmatter under `src/content/resources/`; index listings come from `<FileIndex />`.
 - MDX files import components explicitly from `@/components/content/`. `src/mdx-components.tsx` maps only what Markdown itself generates, which no import can reach: `a` → `MdxLink`, so a page path goes through `next/link`. A JSX `<a>` written in MDX compiles to a literal `<a>` and bypasses it, so write internal links as Markdown. `src/content/links.test.ts` fails on a root-relative link that is not a page the site serves (a `netlify.toml` redirect source included). The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.

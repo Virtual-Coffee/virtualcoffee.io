@@ -132,6 +132,20 @@
 			]
 		},
 		{
+			"path": "docs/adr/0019-checked-internal-links.md",
+			"description": "How internal links are checked: typedRoutes, the route layout it depends on, resource hrefs and links in content",
+			"scope": [
+				"src/app/**",
+				"src/components/**",
+				"src/util/resourceHref.ts",
+				"src/util/simpleMdxPage.server.tsx",
+				"src/content/**",
+				"scripts/loadResourcePaths.ts",
+				"next.config.mjs",
+				"eslint.config.mjs"
+			]
+		},
+		{
 			"path": "docs/adr/0015-error-monitoring-with-sentry.md",
 			"description": "Error monitoring with Sentry: what is collected, what is kept out, and which handled failures are reported",
 			"scope": [
