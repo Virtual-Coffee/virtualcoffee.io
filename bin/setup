@@ -264,14 +264,7 @@ else
   note "gh (GitHub CLI) is not installed; only needed to open PRs: https://cli.github.com"
 fi
 
-if command -v mailpit >/dev/null 2>&1; then
-  skip "mailpit is installed (SMTP :1025, UI :8025)"
-elif command -v brew >/dev/null 2>&1 && confirm "Install Mailpit (a local mail sink for the emails the site sends)?" n; then
-  brew install mailpit
-  TODO+=("Point the site at Mailpit: set SMTP_HOST=localhost and SMTP_PORT=1025 in .env, then run mailpit")
-else
-  note "Mailpit (optional mail sink): https://mailpit.axllent.org; see the SMTP_HOST lines in .env.example."
-fi
+note "Mail sink: $MISE_CMD run dev --mail (installs Mailpit on first use); UI at $MISE_CMD daemons urls"
 
 say "The web daemon (pitchfork, installed above) runs the dev server in the background"
 say "with its own port per git worktree, so worktrees and agents can run side by side."

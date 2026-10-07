@@ -2,6 +2,31 @@
 
 lockfile_version = 3
 
+[[tools.mailpit]]
+version = "1.31.4"
+backend = "aqua:axllent/mailpit"
+specifiers = ["1.31.4"]
+
+[tools.mailpit."platforms.linux-arm64"]
+checksum = "sha256:010a346a8b9d454f6fa22d4fd2dbd5bf5eb7104688412b9c130d0ba33a3579c4"
+url = "https://github.com/axllent/mailpit/releases/download/v1.31.4/mailpit-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/axllent/mailpit/releases/assets/607145344"
+
+[tools.mailpit."platforms.linux-x64"]
+checksum = "sha256:30942c4605c2ca8b9f759b1bb4e3ab6a12bdfdf66e5c94644ec2c75ac41e88e7"
+url = "https://github.com/axllent/mailpit/releases/download/v1.31.4/mailpit-linux-amd64.tar.gz"
+url_api = "https://api.github.com/repos/axllent/mailpit/releases/assets/607145408"
+
+[tools.mailpit."platforms.macos-arm64"]
+checksum = "sha256:26afeae329874fa6154dd83bd2e0f307e5df858054145dc7e98ec1aa426a8381"
+url = "https://github.com/axllent/mailpit/releases/download/v1.31.4/mailpit-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/axllent/mailpit/releases/assets/607144831"
+
+[tools.mailpit."platforms.macos-x64"]
+checksum = "sha256:9ff1d1b249ccb884ca48a6fca01f69f9db88b07692dd98e115294778a0b20f54"
+url = "https://github.com/axllent/mailpit/releases/download/v1.31.4/mailpit-darwin-amd64.tar.gz"
+url_api = "https://api.github.com/repos/axllent/mailpit/releases/assets/607145500"
+
 [[tools.node]]
 version = "24.21.0"
 backend = "core:node"
