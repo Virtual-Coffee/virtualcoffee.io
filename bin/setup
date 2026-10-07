@@ -1,0 +1,300 @@
+#!/usr/bin/env bash
+#
+# First-run setup for virtualcoffee.io: mise, tools, dependencies, .env, and the
+# local database. Safe to re-run: every step checks first and skips what is
+# already done. Why mise, and why not native Windows: docs/adr/0020.
+#
+#   bin/setup          interactive
+#   bin/setup --yes    no prompts: uses an installed mise or ./bin/mise, never
+#                      edits a shell rc, never asks for a token, seeds only
+#                      when it just created .env
+#
+# Written for bash 3.2 (macOS's) and up.
+
+set -euo pipefail
+
+YES=0
+case "${1:-}" in
+  "") ;;
+  -y | --yes) YES=1 ;;
+  -h | --help)
+    sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'
+    exit 0
+    ;;
+  *)
+    echo "usage: bin/setup [--yes]" >&2
+    exit 2
+    ;;
+esac
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+TOTAL_STAGES=6
+STAGE=0
+SERVER_PID=""
+SERVER_LOG=""
+TODO=()
+
+if [[ -t 1 ]] && command -v tput >/dev/null 2>&1 && [[ "$(tput colors 2>/dev/null || echo 0)" -ge 8 ]]; then
+  BOLD=$(tput bold); DIM=$(tput dim); RESET=$(tput sgr0)
+  BLUE=$(tput setaf 4); GREEN=$(tput setaf 2); YELLOW=$(tput setaf 3); RED=$(tput setaf 1)
+else
+  BOLD=""; DIM=""; RESET=""; BLUE=""; GREEN=""; YELLOW=""; RED=""
+fi
+
+stage() {
+  STAGE=$((STAGE + 1))
+  printf '\n%s%s> %s/%s  %s%s\n' "$BOLD" "$BLUE" "$STAGE" "$TOTAL_STAGES" "$1" "$RESET"
+}
+say() { printf '  %s\n' "$1"; }
+ok() { printf '  %s✓%s %s\n' "$GREEN" "$RESET" "$1"; }
+skip() { printf '  %s- %s (already done)%s\n' "$DIM" "$1" "$RESET"; }
+note() { printf '  %s%s%s\n' "$DIM" "$1" "$RESET"; }
+warn() { printf '  %s! %s%s\n' "$YELLOW" "$1" "$RESET"; }
+die() { printf '\n  %sx %s%s\n\n' "$RED" "$1" "$RESET" >&2; exit 1; }
+
+# confirm "question" [y|n]: the default answer is also what --yes gives.
+confirm() {
+  local default="${2:-n}" reply=""
+  if ((YES)); then [[ "$default" == y ]]; return; fi
+  if [[ "$default" == y ]]; then printf '  %s? %s [Y/n] ' "$YELLOW" "$1"; else printf '  %s? %s [y/N] ' "$YELLOW" "$1"; fi
+  printf '%s' "$RESET"
+  read -r reply || true
+  if [[ "$default" == y ]]; then [[ ! "$reply" =~ ^[Nn] ]]; else [[ "$reply" =~ ^[Yy] ]]; fi
+}
+
+# Whether KEY has a non-empty, uncommented value in .env.
+env_has() { grep -Eq "^${1}=.+" .env 2>/dev/null; }
+
+kill_tree() {
+  local child
+  for child in $(pgrep -P "$1" 2>/dev/null || true); do kill_tree "$child"; done
+  kill "$1" 2>/dev/null || true
+}
+
+cleanup() {
+  if [[ -n "$SERVER_PID" ]]; then
+    kill_tree "$SERVER_PID"
+    SERVER_PID=""
+  fi
+}
+trap cleanup EXIT
+trap 'exit 130' INT TERM
+
+printf '\n%s%s  virtualcoffee.io setup%s\n' "$BOLD" "$BLUE" "$RESET"
+note "  Safe to re-run; each step skips what is already done."
+
+# ── 1. Platform ───────────────────────────────────────────────────────────────
+stage "Platform"
+case "$(uname -s)" in
+  MINGW* | MSYS* | CYGWIN*)
+    die "Native Windows is not supported. Use WSL: install it (https://learn.microsoft.com/windows/wsl/install), clone the repo inside the Linux filesystem, and run bin/setup there."
+    ;;
+esac
+command -v git >/dev/null 2>&1 || die "git is required: https://git-scm.com/downloads"
+ok "$(uname -s), git $(git --version | awk '{print $3}')"
+
+# ── 2. mise ───────────────────────────────────────────────────────────────────
+stage "mise (Node, pnpm and the project tasks)"
+
+MISE=""
+MISE_CMD=""
+if command -v mise >/dev/null 2>&1; then
+  MISE=mise
+  MISE_CMD="mise"
+  skip "mise $(mise --version | awk '{print $1}') is on your PATH"
+else
+  say "mise is not installed. Two ways to get it:"
+  say "  1) global     the official installer (curl https://mise.run | sh) puts it in ~/.local/bin"
+  say "  2) repo-local ./bin/mise keeps it, Node and pnpm inside this clone's .mise/ folder"
+  choice=2
+  if ! ((YES)); then
+    printf '  %s? Which one? [1/2, default 2] %s' "$YELLOW" "$RESET"
+    read -r reply || true
+    [[ "$reply" == 1 ]] && choice=1
+  fi
+  if [[ "$choice" == 1 ]]; then
+    command -v curl >/dev/null 2>&1 || die "curl is required for the installer."
+    curl -fsSL https://mise.run | sh
+    MISE="$HOME/.local/bin/mise"
+    MISE_CMD="mise"
+    [[ -x "$MISE" ]] || die "The installer did not leave mise at $MISE."
+    ok "installed mise $("$MISE" --version | awk '{print $1}')"
+
+    case "$(basename "${SHELL:-}")" in
+      zsh) rc="$HOME/.zshrc"; line='eval "$(~/.local/bin/mise activate zsh)"' ;;
+      bash) rc="$HOME/.bashrc"; line='eval "$(~/.local/bin/mise activate bash)"' ;;
+      fish) rc="$HOME/.config/fish/config.fish"; line='~/.local/bin/mise activate fish | source' ;;
+      *) rc=""; line="" ;;
+    esac
+    if [[ -z "$rc" ]]; then
+      warn "Unknown shell; see https://mise.jdx.dev/getting-started.html#activate-mise"
+    elif [[ -f "$rc" ]] && grep -q "mise activate" "$rc"; then
+      skip "$rc already activates mise"
+    else
+      say "Shell activation lets \`mise run\` and the pinned Node/pnpm work in every new terminal."
+      say "This line would be added to $rc:"
+      printf '\n      %s\n\n' "$line"
+      if confirm "Append it to $rc?" n; then
+        mkdir -p "$(dirname "$rc")"
+        printf '\n# mise\n%s\n' "$line" >> "$rc"
+        ok "added to $rc; open a new terminal to pick it up"
+      else
+        TODO+=("Activate mise in your shell: add  $line  to $rc")
+      fi
+    fi
+  else
+    MISE=./bin/mise
+    MISE_CMD="./bin/mise"
+    ok "using ./bin/mise (first run downloads mise into .mise/)"
+    note "Run tasks as ./bin/mise run <task>."
+  fi
+fi
+
+"$MISE" trust >/dev/null 2>&1 || true
+say "Installing the pinned tools (mise.toml, mise.lock, .nvmrc)..."
+"$MISE" install
+ok "tools installed"
+
+# ── 3. Dependencies ──────────────────────────────────────────────────────────
+stage "Dependencies and generated files"
+"$MISE" exec -- pnpm install
+"$MISE" run codegen
+ok "dependencies installed, generated files up to date"
+
+# ── 4. .env ───────────────────────────────────────────────────────────────────
+stage ".env"
+NEW_ENV=0
+if [[ -f .env ]]; then
+  skip ".env exists; it will not be overwritten"
+else
+  cp .env.example .env
+  NEW_ENV=1
+  ok "created .env from .env.example"
+fi
+
+if env_has BETTER_AUTH_SECRET; then
+  skip "BETTER_AUTH_SECRET is set"
+else
+  command -v openssl >/dev/null 2>&1 || die "openssl is required to generate BETTER_AUTH_SECRET."
+  printf 'BETTER_AUTH_SECRET=%s\n' "$(openssl rand -base64 32)" >> .env
+  ok "generated BETTER_AUTH_SECRET (not shown)"
+fi
+
+if env_has GITHUB_TOKEN; then
+  skip "GITHUB_TOKEN is set"
+elif ((YES)); then
+  note "GITHUB_TOKEN unset: /members and the sponsors section use mock data."
+elif confirm "Add a GitHub token for live /members and sponsor data? (a token with no scopes is enough)" n; then
+  say "Create one at https://github.com/settings/tokens and paste it; input is hidden."
+  printf '  Token: '
+  read -rs token || true
+  printf '\n'
+  if [[ -n "${token:-}" ]]; then
+    printf 'GITHUB_TOKEN=%s\n' "$token" >> .env
+    ok "wrote GITHUB_TOKEN to .env (not shown)"
+  else
+    note "Nothing entered; skipped."
+  fi
+  unset token
+else
+  note "Skipped: everything else stays on mock data until you ask a maintainer for credentials."
+fi
+
+# ── 5. Database ──────────────────────────────────────────────────────────────
+stage "Local database"
+PORT_WEB=$("$MISE" exec -- sh -c 'printf %s "${WEB_PORT:-9000}"')
+
+site_up() { curl -s -o /dev/null --max-time 2 "http://localhost:$PORT_WEB/" 2>/dev/null; }
+
+if site_up; then
+  skip "a dev server is already answering on :$PORT_WEB; using it"
+else
+  say "The local Postgres only exists while netlify dev runs; starting it for the migration."
+  SERVER_LOG=$(mktemp "${TMPDIR:-/tmp}/vc-setup-server.XXXXXX")
+  "$MISE" run dev:server >"$SERVER_LOG" 2>&1 &
+  SERVER_PID=$!
+  printf '  Waiting for http://localhost:%s ' "$PORT_WEB"
+  waited=0
+  until site_up; do
+    if ! kill -0 "$SERVER_PID" 2>/dev/null; then
+      printf '\n'
+      tail -n 20 "$SERVER_LOG" >&2 || true
+      die "The dev server exited early; the full log is $SERVER_LOG"
+    fi
+    if ((waited >= 180)); then
+      printf '\n'
+      die "Gave up waiting for the dev server; the log is $SERVER_LOG"
+    fi
+    printf '.'
+    sleep 2
+    waited=$((waited + 2))
+  done
+  printf '\n'
+  ok "dev server is up"
+fi
+
+"$MISE" run db:migrate
+ok "migrations applied"
+
+if ((NEW_ENV)); then seed_default=y; else seed_default=n; fi
+if confirm "Seed sample applications, volunteers and invites?" "$seed_default"; then
+  "$MISE" run db:seed
+  ok "seeded"
+else
+  note "Skipped. Run  $MISE_CMD run db:seed  any time."
+fi
+
+if [[ -n "$SERVER_PID" ]]; then
+  cleanup
+  rm -f "$SERVER_LOG"
+  ok "stopped the dev server this script started"
+fi
+
+# ── 6. Optional extras ───────────────────────────────────────────────────────
+stage "Optional extras"
+
+if command -v gh >/dev/null 2>&1; then
+  if gh auth status >/dev/null 2>&1; then
+    skip "gh is signed in"
+  else
+    TODO+=("Sign in to GitHub's CLI for issues and PRs: gh auth login")
+  fi
+else
+  note "gh (GitHub CLI) is not installed; only needed to open PRs: https://cli.github.com"
+fi
+
+if command -v mailpit >/dev/null 2>&1; then
+  skip "mailpit is installed (SMTP :1025, UI :8025)"
+elif command -v brew >/dev/null 2>&1 && confirm "Install Mailpit (a local mail sink for the emails the site sends)?" n; then
+  brew install mailpit
+  TODO+=("Point the site at Mailpit: set SMTP_HOST=localhost and SMTP_PORT=1025 in .env, then run mailpit")
+else
+  note "Mailpit (optional mail sink): https://mailpit.axllent.org; see the SMTP_HOST lines in .env.example."
+fi
+
+if "$MISE" exec -- sh -c 'command -v pitchfork' >/dev/null 2>&1; then
+  skip "pitchfork is available"
+  "$MISE" daemons register >/dev/null 2>&1 && ok "registered this checkout's daemons"
+else
+  say "pitchfork runs the dev server as a daemon with its own port per git worktree,"
+  say "so several worktrees or agents can run side by side. Optional; mise run dev works without it."
+  if confirm "Install pitchfork into mise's global config (mise use -g pitchfork) and register this checkout?" n; then
+    "$MISE" use -g pitchfork
+    "$MISE" daemons register
+    ok "pitchfork installed and daemons registered"
+  fi
+fi
+
+# ── Summary ──────────────────────────────────────────────────────────────────
+printf '\n%s%s  Setup complete%s\n\n' "$BOLD" "$GREEN" "$RESET"
+if ((${#TODO[@]})); then
+  warn "Still to do by hand:"
+  for item in "${TODO[@]}"; do note "    - $item"; done
+  printf '\n'
+fi
+say "Next:"
+say "  $MISE_CMD run dev        start the site (http://localhost:$PORT_WEB)"
+say "  $MISE_CMD run check      codegen, typecheck, lint, test, knip"
+say "  $MISE_CMD daemons urls   where the daemon-run site lives (needs pitchfork)"
+printf '\n'
