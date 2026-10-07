@@ -18,6 +18,8 @@ export default {
 	ignoreExportsUsedInFile: true,
 	// `mdx/types` comes from @types/mdx; there is no `mdx` package for knip to find.
 	ignoreDependencies: ['mdx'],
+	// mise is the toolchain (docs/adr/0020), not a package; the `dev` script shims to it.
+	ignoreBinaries: ['mise'],
 	compilers: {
 		// bootstrap is only reached through @import in src/styles. Relative imports
 		// are Sass partials, so `./nav` has to become `./_nav.scss` for knip to

@@ -111,6 +111,8 @@ export default defineConfig([
 		'build/**',
 		'next-env.d.ts',
 		'.netlify/**',
+		// bin/mise's data dir; its state/ holds a link back to the checkout.
+		'.mise/**',
 		'netlify/**',
 	]),
 ]);
