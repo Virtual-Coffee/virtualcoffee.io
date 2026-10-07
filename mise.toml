@@ -6,7 +6,9 @@
 # idiomatic version file. pnpm is pinned here and in `packageManager`, and
 # src/test/toolchain.test.ts fails if the two drift apart.
 
-min_version = "2026.10.0"
+# Soft: Netlify's build image ships its own, older mise, and a hard minimum
+# fails the deploy before `pnpm install`.
+min_version = { soft = "2026.10.0" }
 
 [settings]
 	# Daemons (`[daemons.web]`) and `[deps]` are experimental.
