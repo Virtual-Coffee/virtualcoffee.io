@@ -79,6 +79,12 @@ export const SEEDED_USER_IDS = [
 	COC_REVIEWER.id,
 	STRANDED.id,
 ];
+export const SEEDED_EMAILS = [
+	ADMIN.email,
+	VOLUNTEER.email,
+	COC_REVIEWER.email,
+	STRANDED.email,
+];
 export const SEEDED_SLACK_IDS = [
 	ADMIN.slackUserId,
 	VOLUNTEER.slackUserId,

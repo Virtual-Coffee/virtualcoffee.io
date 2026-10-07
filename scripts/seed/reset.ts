@@ -15,7 +15,7 @@ import {
 	volunteerSignup,
 } from '@/db';
 
-import { SEEDED_SLACK_IDS, SEEDED_USER_IDS } from './shared';
+import { SEEDED_EMAILS, SEEDED_SLACK_IDS, SEEDED_USER_IDS } from './shared';
 
 /**
  * The tables the seed owns outright. Their event tables cascade, and nothing
@@ -40,7 +40,9 @@ const OWNED = [
  * `session`/`account`/`devtools_user` cascade from `user.id` — so those two
  * are cleared by the ids this script owns, not wholesale, to avoid silently
  * signing someone out. The Slack ids are matched too: a Volunteer the
- * devtools panel created may hold one of them from an earlier run.
+ * devtools panel created may hold one of them from an earlier run. So are the
+ * emails, which are unique too: a row seeded under an id this script has
+ * since renamed would otherwise block the insert.
  */
 export async function reset() {
 	const tables = OWNED.map((table) => `"${getTableName(table)}"`).join(', ');
@@ -55,6 +57,7 @@ export async function reset() {
 			or(
 				inArray(user.id, SEEDED_USER_IDS),
 				inArray(user.slackUserId, SEEDED_SLACK_IDS),
+				inArray(user.email, SEEDED_EMAILS),
 			),
 		);
 }
