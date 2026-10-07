@@ -55,66 +55,37 @@ If you have just run `git clone ...` , the next step would be to move into the c
 cd virtualcoffee.io
 ```
 
-### 3. Install dependencies
-
-This repo requires `node` and `pnpm` to get started. The [Netlify CLI](https://www.netlify.com/products/dev/) is installed as a project dependency, so you don't need to install it globally.
-
-#### Installing `node`:
-
-The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires node version 24.20 (see `.nvmrc`).
-
-If you already have a different version of `node` installed, but don't want to update globally, you can install [a package called `nvm`](https://github.com/nvm-sh/nvm), which will allow you to easily switch `node` versions. Once you have `nvm` installed (or if you already have it installed), you can run `nvm use` in the main directory and it will install the proper version of `node`.
-
-#### Installing `pnpm`:
-
-`pnpm` is a package manager that is used to install the rest of our dependencies.
-
-Read more about `pnpm` [on their docs site](https://pnpm.io/motivation).
-
-The best way to install `pnpm` for this project is by using [Corepack](https://nodejs.org/api/corepack.html), a new feature bundled with Node.
-
-Install pnpm via corepack with the following commands:
-
-```sh
-corepack enable
-corepack prepare
-```
-
-#### Setting up your .env
-
-Use the following command to create a local `.env` file. Then open the new file (`.env`) and adjust any settings that are needed.
+### 3. Run the setup script
 
 ```shell
-cp .env.example .env
+bin/setup
 ```
 
-#### Installing package dependencies
+This is the whole setup. It uses [mise](https://mise.jdx.dev) to install the pinned Node and pnpm; if you don't have mise, it offers to install it, or to use `./bin/mise`, a copy that lives inside this folder. Then it installs the dependencies, creates your `.env` (it never overwrites an existing one), applies the database migrations and offers sample data. Run it again any time: every step that is already done is skipped.
 
-Once you have `node` and `pnpm` installed, you're ready to install the local dependencies! Run the following command:
+**Windows:** native Windows isn't supported. Use [WSL](https://learn.microsoft.com/windows/wsl/install), clone the repo inside the Linux filesystem and run `bin/setup` there.
+
+If you installed mise yourself, `mise run <task>` below works as written. If you let the script use `./bin/mise`, write `./bin/mise run <task>` instead. `mise tasks` lists everything.
+
+When it finishes, start the site:
 
 ```shell
-pnpm install
+mise run dev
 ```
 
-At this point you're ready to roll! Run the following command to get rolling!
-
-```shell
-pnpm dev
-```
-
-Read more about what `pnpm dev` does in the following section.
+Read more about what `mise run dev` does in the following section.
 
 ## Commands
 
-The following commands are available for your use. Most of the time you'll only ever need `pnpm dev`.
+The following commands are available for your use. Most of the time you'll only ever need `mise run dev`.
 
-### `pnpm dev`
+### `mise run dev`
 
 ```shell
-pnpm dev
+mise run dev
 ```
 
-This is the only command you need to do normal local development.
+This is the only command you need to do normal local development. (`pnpm dev` is a shortcut for it.)
 
 Starts a local server and watches your source files for changes. Use this to preview local development.
 
@@ -123,6 +94,8 @@ Once you run this command, a local server is running at http://localhost:9000! A
 You should see something like 'Server now ready on http://localhost:9000' below, which means the watcher is waiting to build your awesome changes!
 
 Use `ctrl-c` to quit the server when you're done.
+
+Working in several git worktrees at once? Each one gets its own port, in `$WEB_PORT` inside `mise run` and `mise x`. `mise daemons register` once, then `mise daemons start web`, runs the site in the background there; `mise daemons urls` shows where.
 
 ### `pnpm build`
 

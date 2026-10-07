@@ -146,6 +146,19 @@
 			]
 		},
 		{
+			"path": "docs/adr/0020-mise-is-the-toolchain.md",
+			"description": "mise as the required toolchain: pins, tasks vs package.json scripts, bin/setup, per-worktree dev ports, WSL-only Windows",
+			"scope": [
+				"mise.toml",
+				"mise.lock",
+				"bin/**",
+				"package.json",
+				".nvmrc",
+				".github/workflows/**",
+				"src/test/toolchain.test.ts"
+			]
+		},
+		{
 			"path": "docs/adr/0015-error-monitoring-with-sentry.md",
 			"description": "Error monitoring with Sentry: what is collected, what is kept out, and which handled failures are reported",
 			"scope": [
