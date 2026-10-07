@@ -21,9 +21,13 @@ const TEMPLATE_ROLES: ReadonlyArray<{ name: RoleName; description: string }> = [
 	{ name: 'volunteer', description: 'Invite Allowance on /invites' },
 ];
 
-/** Whether the panel is on: a local checkout only (docs/adr/0018). */
+/**
+ * Whether the panel is on: a local checkout (docs/adr/0018) outside a
+ * production build. The library refuses a production build on its own; the
+ * check is repeated so a local `pnpm start` doesn't offer the sign-in hint.
+ */
 export function devtoolsEnabled(): boolean {
-	return deployContext() === 'local';
+	return process.env.NODE_ENV !== 'production' && deployContext() === 'local';
 }
 
 export const devtoolsConfig = defineDevtoolsConfig({
