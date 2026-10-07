@@ -11,7 +11,7 @@ import { requestHeaders } from '@/test/requestHeaders';
  * exactly as they do for a signed-in maintainer. Needs the `db` project.
  *
  * Every call is a new user: email and Slack id are unique columns, and a test
- * that signs in twice is switching identity. The name is the dev bypass's, so
+ * that signs in twice is switching identity. The name is the seeded admin's, so
  * what an action records as the actor reads the same either way.
  */
 export async function signInAs(

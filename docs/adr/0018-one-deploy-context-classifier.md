@@ -3,10 +3,10 @@
 ## Context
 
 Many places read Netlify's `CONTEXT` and decided for themselves what it meant:
-outbound delivery, the admin dev bypass, the admin banner, `siteUrl()`, the
+outbound delivery, the local devtools sign-in panel, the admin banner, `siteUrl()`, the
 analytics tag, scripts, the mock gate and the edge function. They disagreed
-about a value none of them listed. The dev bypass treated an unknown context as
-local and signed in without Slack; outbound delivery treated it as a deploy
+about a value none of them listed. A local sign-in shortcut that treated an
+unknown context as local would sign in without Slack; outbound delivery treated it as a deploy
 and captured with a masked log line.
 
 ## Decision
@@ -15,7 +15,7 @@ and captured with a masked log line.
   `production`, `preview` or `local`: `production` is production; unset, empty
   and `dev` (`netlify dev`) are local; **anything else is a preview**.
 - Unknown means preview because the safe error is the stricter one: a preview
-  captures and masks, refuses the dev bypass and takes its own origin.
+  captures and masks, hides the devtools panel and takes its own origin.
 - `contextLabel()` is the raw value for log lines and the admin banner.
 - The module has no imports, so the edge function bundles it for Deno
   (imported with an explicit `.ts` extension, like `src/data/bots.ts`).
@@ -25,5 +25,5 @@ and captured with a masked log line.
 ## Consequences
 
 - A new Netlify context needs no code change: it is a preview.
-- The dev bypass is refused on a context the classifier does not recognise.
+- The devtools panel is off on a context the classifier does not recognise.
 - A new reader of `CONTEXT` is a review finding: use `deployContext()`.

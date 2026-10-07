@@ -17,17 +17,11 @@ import {
 /**
  * Users, Pending Grants, and the devtools panel's view of them.
  *
- * `devBypassSession()` synthesizes its session in memory and never touches
- * the database, so without the `dev-bypass` row the identity every local
- * admin action is performed as never appears in User Management, and
- * `actorId()` finds nobody to attribute the action to. The seeded `role` is
- * cosmetic for the bypass — `requirePermission()` authorizes off
- * `ADMIN_DEV_BYPASS_ROLES` — but real for a devtools switch, which mints a
- * genuine session for the row.
- *
- * The three role-holding users are registered with the devtools panel so
- * "switch user" offers an admin, a Volunteer with an allowance and a CoC
- * reviewer without anyone creating them by hand.
+ * The admin is a real row, so it appears in User Management and `actorId()`
+ * finds it to attribute the maintainer actions the seed records. The three
+ * role-holding users are registered with the devtools panel so "switch user"
+ * offers an admin, a Volunteer with an allowance and a CoC reviewer without
+ * anyone creating them by hand.
  */
 export async function seedUsers() {
 	await insertUser({

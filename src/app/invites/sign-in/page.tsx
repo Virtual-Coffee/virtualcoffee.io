@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { SignInButton, SignOutButton } from '@/app/admin/sign-in/buttons';
+import { SlackNotConfigured, TestUserPanel } from '@/app/admin/testUserPanel';
 import { getSession } from '@/lib/access/adminAccess';
 import { slackAuthConfigured } from '@/lib/access/auth';
 import { isVolunteer } from '@/lib/access/volunteerAccess';
@@ -57,6 +58,7 @@ export default async function VolunteerSignInPage({
 					</Link>
 					<SignOutButton />
 				</div>
+				<TestUserPanel />
 			</DefaultLayout>
 		);
 	}
@@ -85,20 +87,11 @@ export default async function VolunteerSignInPage({
 					{slackAuthConfigured ? (
 						<SignInButton callbackURL="/invites" />
 					) : (
-						<div className="alert alert-warning" role="alert">
-							<h2 className="h6 alert-heading">
-								Slack sign-in isn&rsquo;t configured
-							</h2>
-							<p className="mb-0">
-								<code>SLACK_CLIENT_ID</code> and{' '}
-								<code>SLACK_CLIENT_SECRET</code> are not set, so there&rsquo;s
-								nothing to sign in to. This is expected on a fresh clone — see{' '}
-								<code>.env.example</code>.
-							</p>
-						</div>
+						<SlackNotConfigured />
 					)}
 				</>
 			)}
+			<TestUserPanel />
 		</DefaultLayout>
 	);
 }

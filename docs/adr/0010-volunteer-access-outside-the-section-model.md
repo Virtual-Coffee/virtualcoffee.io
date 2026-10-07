@@ -36,8 +36,8 @@ nothing inside `/admin`. That falls out of the existing checks:
 
 ### `volunteerAccess.ts` is a sibling, not a subclass
 
-It shares `getSession()` — so `ADMIN_DEV_BYPASS_ROLES=volunteer` runs it
-locally without Slack — and nothing else. It never asks `visibleSections()`,
+It shares `getSession()` — and nothing else. Locally, the devtools panel on
+`/invites/sign-in` signs in as the seeded Volunteer. It never asks `visibleSections()`,
 the kind of thing a later reader adds for consistency without noticing what
 it turns off.
 

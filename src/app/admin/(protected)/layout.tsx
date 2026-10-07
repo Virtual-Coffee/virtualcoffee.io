@@ -1,14 +1,11 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 
-import { createDevtoolsPanelProps } from 'better-auth-devtools';
-
 import { SignOutButton } from '@/app/admin/sign-in/buttons';
+import { TestUserPanel } from '@/app/admin/testUserPanel';
 import { requireSession, visibleSections } from '@/lib/access/adminAccess';
-import { devtoolsConfig } from '@/lib/access/devtools';
 import { AdminNav } from './adminNav';
 import { DeployBanner } from './deployBanner';
-import { DevtoolsPanel } from './devtoolsPanel';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,7 +50,7 @@ export default async function AdminLayout({
 			<main id="maincontent" className="flex-grow-1">
 				{children}
 			</main>
-			<DevtoolsPanel {...createDevtoolsPanelProps(devtoolsConfig)} />
+			<TestUserPanel />
 		</div>
 	);
 }

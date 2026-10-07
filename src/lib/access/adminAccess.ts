@@ -2,12 +2,10 @@ import { cache } from 'react';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 
-import { getSessionCookie } from 'better-auth/cookies';
 import { eq } from 'drizzle-orm';
 
 import { db, user } from '@/db';
 import { getAuth, type Session } from '@/lib/access/auth';
-import { deployContext } from '@/lib/deployContext';
 import type { Actor } from '@/lib/access/roleAssignment';
 import {
 	parseRoles,
@@ -17,96 +15,15 @@ import {
 	type RoleName,
 } from '@/lib/access/permissions';
 
-/** A session that exists only in memory: no `user` row, no account. */
-function bypassSession(fields: {
-	id: string;
-	name: string;
-	email: string;
-	role: string;
-	slackUserId: string;
-}): Session {
-	const now = new Date();
-	return {
-		session: {
-			id: fields.id,
-			token: fields.id,
-			userId: fields.id,
-			createdAt: now,
-			updatedAt: now,
-			expiresAt: new Date(now.getTime() + 60 * 60 * 1000),
-		},
-		user: {
-			id: fields.id,
-			name: fields.name,
-			email: fields.email,
-			emailVerified: true,
-			image: null,
-			role: fields.role,
-			slackUserId: fields.slackUserId,
-			createdAt: now,
-			updatedAt: now,
-		},
-	} as unknown as Session;
-}
-
-/**
- * A stand-in admin session for local development.
- *
- * Slack sign-in needs OAuth credentials and a registered redirect URI, which a
- * contributor working from a fork has no way to get. Three conditions must all
- * hold, and each is independently sufficient to disable it in any deployed
- * environment: `ADMIN_DEV_BYPASS` is explicitly `true`, `NODE_ENV` is not
- * production, and the deploy context is local (`netlify dev` sets
- * `CONTEXT=dev`; an unrecognised value counts as a preview, docs/adr/0018).
- *
- * `ADMIN_DEV_BYPASS_ROLES` narrows what the session holds (default `admin`).
- * `ADMIN_DEV_BYPASS_SLACK_ID` is what an Invite Allowance is keyed on;
- * `pnpm db:seed` creates a Volunteer for the default, so
- * `ADMIN_DEV_BYPASS_ROLES=volunteer` works with no further setup; it also
- * registers that user with the devtools panel, so "switch user" is the other
- * way in.
- *
- * A real session cookie takes precedence over it — see `getSession()`.
- */
-function devBypassSession(): Session | null {
-	const enabled =
-		process.env.ADMIN_DEV_BYPASS === 'true' &&
-		process.env.NODE_ENV !== 'production' &&
-		deployContext() === 'local';
-
-	if (!enabled) return null;
-
-	return bypassSession({
-		id: 'dev-bypass',
-		name: 'Local dev',
-		email: 'dev@localhost',
-		role: process.env.ADMIN_DEV_BYPASS_ROLES?.trim() || 'admin',
-		slackUserId:
-			process.env.ADMIN_DEV_BYPASS_SLACK_ID?.trim() || 'U_DEV_BYPASS',
-	});
-}
-
 /**
  * Wrapped in React's `cache()` so the layout, the page and any action
  * rendered for one request share a single session lookup instead of each
  * hitting the database. Not Better Auth's cookie cache: a role change must
  * apply on the next request, not when a cookie expires.
- *
- * A real session cookie wins over the dev bypass: it is what the devtools
- * panel's "switch user" sets, and it has to take effect while the bypass is
- * on. A cookie whose session is gone falls back to the bypass, so signing the
- * switched user out returns to the bypass identity rather than locking the
- * developer out.
  */
-export const getSession = cache(async (): Promise<Session | null> => {
-	const requestHeaders = await headers();
-	const bypass = devBypassSession();
-
-	if (bypass && !getSessionCookie(requestHeaders)) return bypass;
-
-	const real = await getAuth().api.getSession({ headers: requestHeaders });
-	return real ?? bypass;
-});
+export const getSession = cache(async (): Promise<Session | null> =>
+	getAuth().api.getSession({ headers: await headers() }),
+);
 
 /** The roles on the session's user. */
 export function sessionRoles(session: Session | null): RoleName[] {
@@ -170,12 +87,11 @@ export async function requirePermission(
 /**
  * The actor to record on an audit row for this session, or null.
  *
- * The dev bypass session above has no `user` row, and every
- * `*_event.actor_user_id` is a foreign key — so writing the session's id
- * straight in would throw on the event insert, after the status change it was
- * meant to record had already been written. Looking the row up is what makes a
- * bypass session's events land with no actor rather than not at all. Every
- * server action that records an event should get its actor from here.
+ * Every `*_event.actor_user_id` is a foreign key, so writing a session's id
+ * straight in would throw on the event insert if the `user` row were gone,
+ * after the status change it was meant to record had already been written.
+ * Looking the row up makes such an event land with no actor rather than not at
+ * all. Every server action that records an event should get its actor from here.
  */
 export const actorId = cache(async (userId: string): Promise<string | null> => {
 	const [row] = await db()

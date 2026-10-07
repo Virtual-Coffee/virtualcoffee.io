@@ -55,7 +55,7 @@ import {
  * (docs/adr/0005).
  */
 
-/** Who is acting: the signed-in user's id (null for a bypass session) and the address a copy goes to. */
+/** Who is acting: the signed-in user's id (null when the user row is gone) and the address a copy goes to. */
 export type Actor = { userId: string | null; email: string };
 
 /**

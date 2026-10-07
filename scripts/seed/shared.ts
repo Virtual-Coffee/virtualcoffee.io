@@ -13,13 +13,13 @@ export function daysAhead(days: number) {
 }
 
 /**
- * The identity `ADMIN_DEV_BYPASS` logs in as (`devBypassSession()` in
- * `src/lib/access/adminAccess.ts`). Every maintainer-driven event below names it as
- * the actor, so the History panels show a person rather than "system".
+ * The seeded admin, the one you sign in as from the devtools panel to see all
+ * of /admin. Every maintainer-driven event below names it as the actor, so the
+ * History panels show a person rather than "system".
  */
 export const ADMIN = {
-	id: 'dev-bypass',
-	slackUserId: 'U_DEV_BYPASS',
+	id: 'dev-seed-admin',
+	slackUserId: 'U_DEV_ADMIN',
 	name: 'Local dev',
 	email: 'dev@localhost',
 } as const;
@@ -78,6 +78,12 @@ export const SEEDED_USER_IDS = [
 	VOLUNTEER.id,
 	COC_REVIEWER.id,
 	STRANDED.id,
+];
+export const SEEDED_EMAILS = [
+	ADMIN.email,
+	VOLUNTEER.email,
+	COC_REVIEWER.email,
+	STRANDED.email,
 ];
 export const SEEDED_SLACK_IDS = [
 	ADMIN.slackUserId,

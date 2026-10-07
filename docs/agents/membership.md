@@ -47,4 +47,4 @@ Each table has one writer; go through it.
 ## Local dev
 
 - One-off scripts run through `scripts/with-local-netlify.ts`, which supplies the local connection string and refuses a non-local one.
-- `ADMIN_DEV_BYPASS*` (`.env.example`) signs a local checkout in without Slack; a real session cookie takes precedence over it.
+- Locally, sign in by picking a seeded test user from the devtools panel on the sign-in pages (`pnpm db:seed`; local deploy context only — `src/lib/access/devtools.ts`).

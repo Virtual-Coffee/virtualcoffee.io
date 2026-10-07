@@ -22,11 +22,6 @@ declare namespace NodeJS {
 		// override one-off scripts use (see scripts/with-local-netlify.ts).
 		NETLIFY_DB_URL?: string;
 		DATABASE_URL?: string;
-		ADMIN_DEV_BYPASS?: string;
-		ADMIN_DEV_BYPASS_ROLES?: string;
-		// The Slack member id the dev bypass acts as. Everything about an Invite
-		// Allowance keys on it, so /invites needs one to find a volunteer row.
-		ADMIN_DEV_BYPASS_SLACK_ID?: string;
 		ADMIN_BOOTSTRAP_SLACK_IDS?: string;
 		BETTER_AUTH_SECRET?: string;
 		// Shared by every deploy context: a preview signs in through
