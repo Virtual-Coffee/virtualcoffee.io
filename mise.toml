@@ -128,6 +128,23 @@ min_version = "2026.10.0"
 	depends     = ["dev:watch", "dev:server"]
 	description = "codegen once, then the watcher and netlify dev together"
 
+	# --- daemons ----------------------------------------------------------------
+	#
+	# Opt-in: needs pitchfork (`mise use -g pitchfork`, then `mise daemons
+	# register`). `mise run dev` stays the default way to run the site.
+	#
+	# `port.auto` gives the main checkout 9000 and each linked worktree its own
+	# slot, exported as WEB_PORT, so worktrees and agents can run side by side. The
+	# stride of 10 leaves room for the port above it, which dev:server gives to
+	# Next. Read the site's address from `mise daemons urls --json` or $WEB_PORT;
+	# never assume 9000.
+
+[daemons.web]
+	port      = { auto = true, base = 9000, stride = 10 }
+	proxy     = false
+	ready_cmd = "curl -s -o /dev/null --max-time 5 http://localhost:$WEB_PORT/"
+	task      = "dev:server"
+
 	# --- build ------------------------------------------------------------------
 
 [tasks.build]
