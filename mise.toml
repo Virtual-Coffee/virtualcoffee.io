@@ -154,8 +154,8 @@ min_version = "2026.10.0"
 
 	# --- daemons ----------------------------------------------------------------
 	#
-	# Opt-in: needs pitchfork (`mise use -g pitchfork`, then `mise daemons
-	# register`). `mise run dev` stays the default way to run the site.
+	# Opt-in: `mise daemons start web` (pitchfork comes from [tools]). `mise run
+	# dev` stays the default way to run the site.
 	#
 	# `port.auto` gives the main checkout 9000 and each linked worktree its own
 	# slot, exported as WEB_PORT, so worktrees and agents can run side by side. The
