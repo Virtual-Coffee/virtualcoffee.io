@@ -2,8 +2,7 @@ import type { KnipConfig } from 'knip';
 
 export default {
 	entry: [
-		// Some are not in package.json scripts (scripts/airtable/*), and the
-		// membership stack nests others behind `tsx scripts/with-local-netlify.ts …`.
+		// The membership stack nests some scripts behind `tsx scripts/with-local-netlify.ts …`.
 		'scripts/**/*.ts',
 		// netlify.toml [[edge_functions]]; the netlify plugin only finds netlify/functions.
 		'netlify/edge-functions/*.ts',

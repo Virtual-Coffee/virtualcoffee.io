@@ -8,7 +8,7 @@ import entries2024 from './data/nanowrimo-2024.json';
  * why the cohorts arrive here as separate files: the year is not recorded on
  * the rows themselves, only in which view returned them.
  *
- * Snapshot: `scripts/airtable/snapshotChallenges.ts`.
+ * Frozen snapshot, docs/adr/0004.
  */
 
 export type WritingChallengeEntry = {
