@@ -11,7 +11,9 @@ min_version = "2026.10.0"
 [settings]
 	# Daemons (`[daemons.web]`) and `[deps]` are experimental.
 	experimental = true
-	idiomatic_version_file_enable_tools = ["node"]
+	idiomatic_version_file_enable_tools = [
+		"node",
+	]
 	# `mise.lock` pins every tool; CI refuses to resolve anything new.
 	lockfile = true
 
@@ -19,14 +21,16 @@ min_version = "2026.10.0"
 	pnpm = "12.8.2"
 	# Daemons (`[daemons.web]`) are run by pitchfork; tasks' `usage` specs need usage.
 	pitchfork = "2.29.0"
-	usage = "6.12.0"
+	usage     = "6.12.0"
 	# `mise watch` shells out to watchexec.
 	watchexec = "latest"
 
 [env]
 	# The project's own binaries, so tasks call `tsx` / `next` / `eslint` /
 	# `drizzle-kit` / `netlify` directly instead of through a `pnpm exec` process.
-	_.path = ["{{config_root}}/node_modules/.bin"]
+	_.path = [
+		"{{config_root}}/node_modules/.bin",
+	]
 
 # `mise run` and `mise x` run `pnpm install` first whenever pnpm-lock.yaml is
 # newer than node_modules, so a fresh worktree or a pull needs no manual
@@ -43,25 +47,40 @@ min_version = "2026.10.0"
 	# fresh.
 
 [tasks."codegen:members"]
-	alias       = "build-member-files"
+	alias = "build-member-files"
 	description = "Regenerate the member barrel files"
-	outputs     = ["src/data/members/core.ts", "src/data/members/members.ts"]
-	run         = "tsx scripts/loadMemberFiles.ts"
-	sources     = ["scripts/loadMemberFiles.ts", "src/content/members/core/*.ts", "src/content/members/members/*.ts"]
+	outputs = [
+		"src/data/members/core.ts",
+		"src/data/members/members.ts",
+	]
+	run = "tsx scripts/loadMemberFiles.ts"
+	sources = [
+		"src/content/members/core/*.ts",
+		"src/content/members/members/*.ts",
+		"scripts/loadMemberFiles.ts",
+	]
 
 [tasks."codegen:undraw"]
-	alias       = "build-undraw-ratios"
+	alias = "build-undraw-ratios"
 	description = "Regenerate the Undraw aspect-ratio map"
-	outputs     = ["src/data/undrawAspectRatios.ts"]
-	run         = "tsx scripts/loadUndrawAspectRatios.ts"
-	sources     = ["public/assets/svg/*.svg", "scripts/loadUndrawAspectRatios.ts"]
+	outputs = [
+		"src/data/undrawAspectRatios.ts",
+	]
+	run = "tsx scripts/loadUndrawAspectRatios.ts"
+	sources = [
+		"public/assets/svg/*.svg",
+		"scripts/loadUndrawAspectRatios.ts",
+	]
 
 [tasks."codegen:resources"]
-	alias       = "build-resource-paths"
+	alias = "build-resource-paths"
 	description = "Regenerate the typed /resources hrefs"
-	outputs     = ["src/data/resourcePaths.ts"]
-	run         = "tsx --require ./scripts/lib/serverOnlyStub.cjs scripts/loadResourcePaths.ts"
-	sources     = ["scripts/loadResourcePaths.ts", "src/content/resources/**/*.mdx"]
+	outputs = ["src/data/resourcePaths.ts"]
+	run = "tsx --require ./scripts/lib/serverOnlyStub.cjs scripts/loadResourcePaths.ts"
+	sources = [
+		"src/content/resources/**/*.mdx",
+		"scripts/loadResourcePaths.ts",
+	]
 
 [tasks.codegen]
 	depends     = ["codegen:*"]
@@ -70,14 +89,14 @@ min_version = "2026.10.0"
 	# --- checks -----------------------------------------------------------------
 
 [tasks.lint]
-	depends     = ["codegen"]
+	depends = ["codegen"]
 	description = "ESLint over the whole project"
-	run         = '''
+	run = '''
 	eval "set -- ${usage_files:-}"
 	[ "${usage_fix:-false}" = true ] && set -- --fix "$@"
 	exec eslint "$@"
 	'''
-	usage       = '''
+	usage = '''
 	flag "--fix" help="Apply autofixes"
 	arg "[files]" var=#true help="Files or folders; default is the whole project"
 	'''
@@ -89,13 +108,13 @@ min_version = "2026.10.0"
 
 [tasks.test]
 	description = "Vitest, both projects"
-	run         = '''
+	run = '''
 	eval "set -- ${usage_files:-}"
 	[ "${usage_coverage:-false}" = true ] && set -- --coverage "$@"
 	[ -n "${usage_project:-}" ] && set -- --project "$usage_project" "$@"
 	exec vitest run "$@"
 	'''
-	usage       = '''
+	usage = '''
 	flag "--project <project>" help="Only one project" {
 	  choices "unit" "db"
 	}
@@ -126,7 +145,12 @@ min_version = "2026.10.0"
 # CLAUDE.md's "before finishing" list. `format` is left out: it writes files, and
 # racing a formatter against eslint and tsc reading the same tree invites trouble.
 [tasks.check]
-	depends     = ["typecheck", "lint", "test", "knip"]
+	depends = [
+		"typecheck",
+		"lint",
+		"test",
+		"knip",
+	]
 	description = "Everything CI checks, in parallel: codegen, typecheck, lint, test, knip"
 
 	# --- dev loop ---------------------------------------------------------------
@@ -151,7 +175,7 @@ min_version = "2026.10.0"
 	# --mail points SMTP_* at the shared Mailpit on :1025, starting the mail
 	# daemon (below) only if nothing answers on :8025. Exported values win over
 	# .env: netlify dev ignores a .env var already in the process.
-	run         = '''
+	run = '''
 	port=${WEB_PORT:-9000}
 	export PORT=$((port + 1)) URL=http://localhost:$port
 	if [ "${usage_mail:-false}" = true ]; then
@@ -164,12 +188,15 @@ min_version = "2026.10.0"
 	fi
 	exec netlify dev --port "$port" --target-port "$PORT"
 	'''
-	usage       = 'flag "--mail" help="Send email to the shared Mailpit inbox on :8025 (installed on first use)"'
+	usage = 'flag "--mail" help="Send email to the shared Mailpit inbox on :8025 (installed on first use)"'
 
 [tasks.dev]
-	depends     = ["dev:watch", "dev:server {% if usage.mail %}--mail{% endif %}"]
+	depends = [
+		"dev:watch",
+		"dev:server {% if usage.mail %}--mail{% endif %}",
+	]
 	description = "codegen once, then the watcher and netlify dev together"
-	usage       = 'flag "--mail" help="Send email to the shared Mailpit inbox on :8025 (installed on first use)"'
+	usage = 'flag "--mail" help="Send email to the shared Mailpit inbox on :8025 (installed on first use)"'
 
 	# --- daemons ----------------------------------------------------------------
 	#
@@ -241,9 +268,12 @@ min_version = "2026.10.0"
 
 # `--force` skips the CLI's own prompt so the mise `confirm` is the only one.
 [tasks."db:reset"]
-	confirm     = { message = "Wipe the local database and re-apply every migration?", default = "no" }
+	confirm = { message = "Wipe the local database and re-apply every migration?", default = "no" }
 	description = "Reset the local database, then apply migrations (needs `mise run dev` running)"
-	run         = ["netlify database reset --force", { task = "db:migrate" }]
+	run = [
+		"netlify database reset --force",
+		{ task = "db:migrate" },
+	]
 
 [tasks."db:seed"]
 	description = "Seed sample applications, volunteers, ledger rows and invites"
