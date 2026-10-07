@@ -40,7 +40,7 @@ Scripts are in `package.json`; `pnpm` is enforced. What no script name tells you
 - `pnpm db:migrate` needs `netlify dev` running. Deploys apply migrations in `netlify.toml`'s build command.
 - There is no husky/lint-staged hook; CI (`.github/workflows/ci.yml`) auto-commits Prettier fixes on same-repo branches.
 - CI does not build. Run `pnpm build` locally when a change can only fail at prerender: MDX frontmatter, `generateStaticParams`, or a component pages render at build time.
-- `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Content directories are entries, not ignores, so their own imports are still checked. The CI job is `continue-on-error` until #1589.
+- `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Content directories are entries, not ignores, so their own imports are still checked.
 - CodeQL is advanced-setup: `.github/workflows/codeql.yml` is the whole config, and the repository's default-setup toggle stays off.
 - `typescript` is `@typescript/typescript6` (for typescript-eslint and `next build`) and `@typescript/native` is `typescript@7` (the `tsc` that `pnpm typecheck` runs), so the build and CI check with different compilers. Keep both until typescript-eslint supports TypeScript 7.
 
