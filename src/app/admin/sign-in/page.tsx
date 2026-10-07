@@ -3,8 +3,10 @@ import { redirect } from 'next/navigation';
 
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { SignInButton, SignOutButton } from '@/app/admin/sign-in/buttons';
+import { LocalSignInHint, TestUserPanel } from '@/app/admin/testUserPanel';
 import { getSession, visibleSections } from '@/lib/access/adminAccess';
 import { slackAuthConfigured, slackTeamId } from '@/lib/access/auth';
+import { devtoolsEnabled } from '@/lib/access/devtools';
 import { isVolunteer } from '@/lib/access/volunteerAccess';
 
 export const dynamic = 'force-dynamic';
@@ -55,6 +57,8 @@ export default async function AdminSignInPage() {
 					<p>Admin uses your Virtual Coffee Slack account.</p>
 					{slackAuthConfigured ? (
 						<SignInButton teamId={slackTeamId} />
+					) : devtoolsEnabled() ? (
+						<LocalSignInHint />
 					) : (
 						<div className="alert alert-warning" role="alert">
 							<h2 className="h6 alert-heading">
@@ -70,6 +74,7 @@ export default async function AdminSignInPage() {
 					)}
 				</>
 			)}
+			<TestUserPanel />
 		</DefaultLayout>
 	);
 }

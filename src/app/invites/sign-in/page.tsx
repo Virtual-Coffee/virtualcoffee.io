@@ -3,8 +3,10 @@ import { redirect } from 'next/navigation';
 
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { SignInButton, SignOutButton } from '@/app/admin/sign-in/buttons';
+import { LocalSignInHint, TestUserPanel } from '@/app/admin/testUserPanel';
 import { getSession } from '@/lib/access/adminAccess';
 import { slackAuthConfigured } from '@/lib/access/auth';
+import { devtoolsEnabled } from '@/lib/access/devtools';
 import { isVolunteer } from '@/lib/access/volunteerAccess';
 
 export const dynamic = 'force-dynamic';
@@ -57,6 +59,7 @@ export default async function VolunteerSignInPage({
 					</Link>
 					<SignOutButton />
 				</div>
+				<TestUserPanel />
 			</DefaultLayout>
 		);
 	}
@@ -84,6 +87,8 @@ export default async function VolunteerSignInPage({
 					<p>Inviting people uses your Virtual Coffee Slack account.</p>
 					{slackAuthConfigured ? (
 						<SignInButton callbackURL="/invites" />
+					) : devtoolsEnabled() ? (
+						<LocalSignInHint />
 					) : (
 						<div className="alert alert-warning" role="alert">
 							<h2 className="h6 alert-heading">
@@ -99,6 +104,7 @@ export default async function VolunteerSignInPage({
 					)}
 				</>
 			)}
+			<TestUserPanel />
 		</DefaultLayout>
 	);
 }

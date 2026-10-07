@@ -2,13 +2,15 @@ import { defineDevtoolsConfig } from 'better-auth-devtools';
 
 import { db, user } from '@/db';
 import { newId } from '@/db/ids';
+import { deployContext } from '@/lib/deployContext';
 import { GRANTABLE_ROLES, type RoleName } from '@/lib/access/permissions';
 
 /**
- * The devtools panel on /admin (`src/app/admin/(protected)/layout.tsx`):
- * one managed test user per Role, so "switch user" lands on a session that
- * holds something. Only ever active where `NODE_ENV` is not production — the
- * library refuses everywhere else.
+ * The devtools panel (`src/app/admin/testUserPanel.tsx`), mounted on /admin
+ * and both sign-in pages: the local way to sign in without Slack. One managed
+ * test user per Role, so "switch user" lands on a session that holds
+ * something. Active only on a local checkout — `devtoolsEnabled()` — and the
+ * library itself also refuses where `NODE_ENV` is production.
  *
  * `pnpm db:seed` registers its own users with the panel (`scripts/seed/users.ts`),
  * among them a Volunteer with an allowance; a `volunteer` created from here
@@ -19,8 +21,13 @@ const TEMPLATE_ROLES: ReadonlyArray<{ name: RoleName; description: string }> = [
 	{ name: 'volunteer', description: 'Invite Allowance on /invites' },
 ];
 
+/** Whether the panel is on: a local checkout only (docs/adr/0018). */
+export function devtoolsEnabled(): boolean {
+	return deployContext() === 'local';
+}
+
 export const devtoolsConfig = defineDevtoolsConfig({
-	enabled: true,
+	enabled: devtoolsEnabled,
 	templates: Object.fromEntries(
 		TEMPLATE_ROLES.map((role) => [
 			role.name,
