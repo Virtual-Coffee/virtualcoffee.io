@@ -216,12 +216,6 @@ Any files added to `src/content/resources` will be automatically loaded and adde
 
 A good way to start adding a new page would be to copy one of the existing pages, then edit the details and content.
 
-### Monthly Challenges
-
-Each challenge is an MDX file in `src/content/monthly-challenges/`, named after its URL (`may-2025.mdx` is `/monthlychallenges/may-2025`). Its frontmatter sets the title, description, date and the series it belongs to. Each series on the [Monthly Challenges](https://virtualcoffee.io/monthlychallenges) page is a file in `src/content/monthly-challenges/series/`. A new challenge appears there automatically as its series' most recent challenge. To change which series is current, move `current: true` to that series' file.
-
-For more on the process, read the instructions at the [Monthly Challenge Technical Guidelines](https://vc-community-docs.netlify.app/docs/monthly-challenges/facilitators-docs/technical-guidelines#updating-the-monthly-challenge-pages-on-the-website) page on the VC Community Building Resources.
-
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
