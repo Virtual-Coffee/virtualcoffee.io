@@ -34,8 +34,7 @@ virtualcoffee.io is a Next.js App Router site deployed on Netlify. Content is ch
 
 Scripts are in `package.json`; `pnpm` is enforced. What no script name tells you:
 
-- `pnpm dev` is `netlify dev` in front of Next (site on :9000). `pnpm dev:tunnel` sets `NETLIFY_TUNNEL=1`, which gates the tunnel-only settings in `next.config.mjs`.
-- `pnpm codegen` regenerates the gitignored generated files (see [Generated files](#generated-files)) and deliberately excludes the checked-in bot list.
+- `pnpm dev` is `netlify dev` in front of Next (site on :9000).- `pnpm codegen` regenerates the gitignored generated files (see [Generated files](#generated-files)) and deliberately excludes the checked-in bot list.
 - `pnpm typecheck` runs `next typegen` first because the gitignored `next-env.d.ts` is what declares image imports; a clean checkout fails on any `*.png` without it.
 - `pnpm db:migrate` needs `netlify dev` running. Deploys apply migrations in `netlify.toml`'s build command.
 - There is no husky/lint-staged hook; CI (`.github/workflows/ci.yml`) auto-commits Prettier fixes on same-repo branches.
