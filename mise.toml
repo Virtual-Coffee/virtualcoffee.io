@@ -109,14 +109,20 @@ min_version = "2026.10.0"
 	description = "Re-run codegen when its sources change"
 	run         = "{{mise_bin}} watch codegen"
 
-# WEB_PORT/WEB_URL come from [daemons.web] when it is configured; the fallbacks
-# are netlify.toml's. Next gets the port after the site's.
+# WEB_PORT comes from [daemons.web] when it is configured (one port per
+# worktree); the fallback is netlify.toml's 9000. netlify dev does not pass the
+# port to `[dev] command`, so Next gets it through PORT, and URL (which a .env
+# copy of .env.example also sets, to :9000) follows the site's port.
 [tasks."dev:server"]
 	alias       = "local-dev"
 	depends     = ["codegen"]
-	description = "netlify dev in front of next dev (ports from WEB_PORT, else 9000)"
+	description = "netlify dev in front of next dev (site on $WEB_PORT, else 9000; next on one above)"
 	env         = { NODE_ENV = "development" }
-	run         = "netlify dev --port ${WEB_PORT:-9000} --target-port $(( ${WEB_PORT:-9000} + 1 ))"
+	run         = '''
+	port=${WEB_PORT:-9000}
+	export PORT=$((port + 1)) URL=http://localhost:$port
+	exec netlify dev --port "$port" --target-port "$PORT"
+	'''
 
 [tasks.dev]
 	depends     = ["dev:watch", "dev:server"]

@@ -21,27 +21,17 @@
 		"build-bot-list": "tsx scripts/loadBotList.ts",
 		"check-bot-matching": "vitest run --project unit src/data/botMatcher.test.ts",
 		"codegen": "pnpm build-member-files && pnpm build-undraw-ratios && pnpm build-resource-paths",
-		"local-dev": "cross-env NODE_ENV=development pnpm netlify dev",
 		"build": "next build",
 		"start": "next start",
 		"prebuild": "pnpm codegen",
 		"typecheck": "next typegen && tsc --noEmit",
-		"watch": "npm-watch",
-		"dev": "pnpm codegen && concurrently \"pnpm watch\" \"pnpm local-dev\"",
+		"dev": "mise run dev",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "tsx scripts/with-local-netlify.ts drizzle-kit migrate",
 		"db:migrate:deploy": "drizzle-kit migrate",
 		"db:seed": "tsx scripts/with-local-netlify.ts tsx scripts/seedDev.ts",
 		"invite-maintenance": "tsx scripts/with-local-netlify.ts tsx scripts/runInviteMaintenance.ts",
-		"email:dev": "cross-env EMAIL_ASSET_ORIGIN=http://localhost:3010 email dev --dir src/emails --port 3010"
-	},
-	"watch": {
-		"build-member-files": "src/content/members/**/*.ts",
-		"build-undraw-ratios": "public/assets/svg/*.svg",
-		"build-resource-paths": {
-			"patterns": "src/content/resources",
-			"extensions": "mdx"
-		}
+		"email:dev": "EMAIL_ASSET_ORIGIN=http://localhost:3010 email dev --dir src/emails --port 3010"
 	},
 	"dependencies": {
 		"@googleapis/calendar": "^20.0.1",
@@ -114,14 +104,11 @@
 		"@typescript/native": "npm:typescript@^7.0.2",
 		"@vitest/coverage-v8": "^5.0.3",
 		"@vitest/eslint-plugin": "^1.6.27",
-		"concurrently": "^10.0.5",
-		"cross-env": "^10.1.0",
 		"drizzle-kit": "1.0.0-rc.5-ab785fc",
 		"eslint": "^10.11.0",
 		"eslint-config-next": "16.3.8",
 		"knip": "^6.39.0",
 		"netlify-cli": "^27.10.2",
-		"npm-watch": "^0.13.0",
 		"prettier": "^3.9.9",
 		"sass": "^1.105.1",
 		"tsx": "^4.23.15",
