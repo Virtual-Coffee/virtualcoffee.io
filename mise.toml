@@ -148,23 +148,28 @@ min_version = "2026.10.0"
 	depends     = ["codegen"]
 	description = "netlify dev in front of next dev (site on $WEB_PORT, else 9000; next on one above)"
 	env         = { NODE_ENV = "development" }
-	# --mail starts the mail daemon (below) and points SMTP_* at it. Exported
-	# values win over .env: netlify dev ignores a .env var already in the process.
+	# --mail points SMTP_* at the shared Mailpit on :1025, starting the mail
+	# daemon (below) only if nothing answers on :8025. Exported values win over
+	# .env: netlify dev ignores a .env var already in the process.
 	run         = '''
 	port=${WEB_PORT:-9000}
 	export PORT=$((port + 1)) URL=http://localhost:$port
 	if [ "${usage_mail:-false}" = true ]; then
-	  {{mise_bin}} daemons start mail
-	  export SMTP_HOST=localhost SMTP_PORT=$((MAIL_PORT + 1))
+	  if curl -s -o /dev/null --max-time 2 http://127.0.0.1:8025/api/v1/info; then
+	    echo "mail: reusing the Mailpit already on http://localhost:8025"
+	  else
+	    {{mise_bin}} daemons start mail
+	  fi
+	  export SMTP_HOST=localhost SMTP_PORT=1025
 	fi
 	exec netlify dev --port "$port" --target-port "$PORT"
 	'''
-	usage       = 'flag "--mail" help="Send email to a local Mailpit (installed on first use)"'
+	usage       = 'flag "--mail" help="Send email to the shared Mailpit inbox on :8025 (installed on first use)"'
 
 [tasks.dev]
 	depends     = ["dev:watch", "dev:server {% if usage.mail %}--mail{% endif %}"]
 	description = "codegen once, then the watcher and netlify dev together"
-	usage       = 'flag "--mail" help="Send email to a local Mailpit (installed on first use)"'
+	usage       = 'flag "--mail" help="Send email to the shared Mailpit inbox on :8025 (installed on first use)"'
 
 	# --- daemons ----------------------------------------------------------------
 	#
@@ -183,19 +188,21 @@ min_version = "2026.10.0"
 	ready_cmd = "curl -s -o /dev/null --max-time 5 http://localhost:$WEB_PORT/"
 	task      = "dev:server"
 
-# Mailpit, a local mail sink. Its tool is scoped to the task, so only someone who
-# starts the daemon (or `mise run dev --mail`) ever downloads it. MAIL_PORT is
-# the web UI, which `mise daemons urls` shows; SMTP is the port above it. Data
-# stays in memory.
+# One shared inbox for every checkout: Mailpit on its default ports (UI 8025,
+# SMTP 1025), data in memory. Its tool is scoped to the task, so only someone
+# who starts the daemon (via `mise run dev --mail`) ever downloads it.
+# dev:server reuses whatever already answers on 8025, so a second worktree never
+# starts a second one. (Global [daemon_providers] would need per-user config and
+# only support postgres, cockroachdb and nats.)
 [tasks."mail:server"]
-	description = "Mailpit: UI on $MAIL_PORT, SMTP on the port above it"
-	run         = 'exec mailpit --listen "127.0.0.1:$MAIL_PORT" --smtp "127.0.0.1:$((MAIL_PORT + 1))"'
+	description = "Mailpit: UI on :8025, SMTP on :1025"
+	run         = "exec mailpit --listen 127.0.0.1:8025 --smtp 127.0.0.1:1025"
 	tools       = { mailpit = "1.31.4" }
 
 [daemons.mail]
-	port      = { auto = true, base = 8025, stride = 10 }
+	port      = 8025
 	proxy     = false
-	ready_cmd = "curl -s -o /dev/null --max-time 5 http://127.0.0.1:$MAIL_PORT/"
+	ready_cmd = "curl -s -o /dev/null --max-time 5 http://127.0.0.1:8025/api/v1/info"
 	task      = "mail:server"
 
 	# --- build ------------------------------------------------------------------

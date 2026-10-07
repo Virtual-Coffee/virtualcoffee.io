@@ -264,7 +264,7 @@ else
   note "gh (GitHub CLI) is not installed; only needed to open PRs: https://cli.github.com"
 fi
 
-note "Mail sink: $MISE_CMD run dev --mail (installs Mailpit on first use); UI at $MISE_CMD daemons urls"
+note "Mail sink: $MISE_CMD run dev --mail (installs Mailpit on first use); one shared inbox at http://localhost:8025"
 
 say "The web daemon (pitchfork, installed above) runs the dev server in the background"
 say "with its own port per git worktree, so worktrees and agents can run side by side."
