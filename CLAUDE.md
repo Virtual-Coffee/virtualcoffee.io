@@ -68,7 +68,7 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 ### Generated files
 
-- `src/data/members/{core,members}.ts` and `src/data/undrawAspectRatios.ts` are gitignored; `pnpm codegen` writes them. Run `pnpm build-member-files` after adding a member and `pnpm build-undraw-ratios` after adding an SVG to `public/assets/svg` (`UndrawIllustration` needs concrete dimensions for `next/image`).
+- `src/data/members/{core,members}.ts`, `src/data/undrawAspectRatios.ts` and `src/data/resourcePaths.ts` are gitignored; `pnpm codegen` writes them. Run `pnpm build-member-files` after adding a member, `pnpm build-undraw-ratios` after adding an SVG to `public/assets/svg` (`UndrawIllustration` needs concrete dimensions for `next/image`) and `pnpm build-resource-paths` after adding or moving a file in `src/content/resources` (`ResourcePath` types `resourceHref()`).
 - `src/data/bots.ts` is generated but **checked in**, so a GitHub outage cannot block a deploy and every change to who is blocked is a reviewable diff. Edit the policy in `src/data/botOverrides.ts` and regenerate with `pnpm build-bot-list`. When changing who is blocked, read `docs/bot-list.md` first.
 
 ### Members pipeline
@@ -76,11 +76,12 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 - One file per member in `src/content/members/members/<github-username>.ts` (core team in `core/`), exporting a `MemberObject`; `_EXAMPLE.ts` is the template.
 - `vc/member-file-identity` (`eslint-rules/`) pins the filename and exported identifier to the `MemberObject`'s `github` field: `github` is the GitHub lookup key (`getMembers()` silently drops a name GitHub doesn't know), and the export name is the key `src/data/members/index.ts` iterates. Filename match is case-insensitive; the identifier is exact, with `-` → `_` and a leading digit prefixed with `_`.
 
-### MDX content pipeline
+### Routes and MDX content pipeline
 
+- `typedRoutes` is on and no route is a root catch-all; build a `/resources` href with `resourceHref()` — `docs/adr/0019`.
 - Editing a plugin in `src/mdx-plugins/` invalidates compiled MDX only when it's wired through `localMdxPlugin()` in `next.config.mjs`; if output looks stale anyway, `rm -rf .next` and rebuild before debugging the plugin.
 - `src/util/loadMdx.server.ts` reads only frontmatter (`meta.title`, `meta.description`, `hero`, `order`); the page then `import()`s the `.mdx` file. Adding a resource is adding an `.mdx` file with frontmatter under `src/content/resources/`; index listings come from `<FileIndex />`.
-- MDX files import components explicitly from `@/components/content/`. `src/mdx-components.tsx` maps only what Markdown itself generates, which no import can reach: `a` → `MdxLink`, so a page path goes through `next/link`. A JSX `<a>` written in MDX compiles to a literal `<a>` and bypasses it, so write internal links as Markdown. The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
+- MDX files import components explicitly from `@/components/content/`. `src/mdx-components.tsx` maps only what Markdown itself generates, which no import can reach: `a` → `MdxLink`, so a page path goes through `next/link`. A JSX `<a>` written in MDX compiles to a literal `<a>` and bypasses it, so write internal links as Markdown. `src/content/links.test.ts` fails on a root-relative link that is not a page the site serves (a `netlify.toml` redirect source included). The site nav (`src/components/Nav.tsx`) is hand-written, not derived from content.
 
 ### Layout, styling, HTML safety
 

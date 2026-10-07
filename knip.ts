@@ -13,7 +13,7 @@ export default {
 		'src/content/members/{core,members}/*.ts',
 		// Loaded as '@/content/newsletters/' + slug in src/data/newsletters.ts.
 		'src/content/newsletters/*.{jsx,tsx}',
-		// Template-string import() from the (simple-mdx) and resources routes.
+		// Template-string import() from the simple-mdx-pages helper and the resources route.
 		'src/content/**/*.mdx',
 	],
 	ignoreExportsUsedInFile: true,

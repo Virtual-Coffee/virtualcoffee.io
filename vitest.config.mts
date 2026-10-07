@@ -88,6 +88,7 @@ export default defineConfig({
 				'src/data/members/core.ts',
 				'src/data/members/members.ts',
 				'src/data/undrawAspectRatios.ts',
+				'src/data/resourcePaths.ts',
 				'src/data/bots.ts',
 				// Content and styles, not code.
 				'src/content/**',

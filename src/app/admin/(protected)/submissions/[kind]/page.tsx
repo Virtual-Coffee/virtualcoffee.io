@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { requirePermission } from '@/lib/access/adminAccess';
+import type { SubmissionListHref } from '@/lib/admin/links';
 import { neverAnnouncedAmong } from '@/lib/history/eventLog';
 import {
 	failedNotifications,
@@ -73,7 +74,7 @@ export default async function SubmissionListPage({
 	const failedCount = failures[kind] ?? 0;
 
 	const display = SUBMISSION_DISPLAY[kind];
-	const base = `/admin/submissions/${kind}`;
+	const base: SubmissionListHref = `/admin/submissions/${kind}`;
 	const order = {
 		sort: filters.sort === 'submittedAt' ? null : filters.sort,
 		dir: filters.direction === 'desc' ? null : filters.direction,

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import type { Section } from '@/lib/access/permissions';
+import type { AdminHref } from '@/lib/admin/links';
 import { useDropdown } from './useDropdown';
 
 const WAITLIST_SECTIONS = [
@@ -30,7 +31,7 @@ const SUBMISSION_SECTIONS = [
 		section: 'coffeeTables',
 	},
 ] as const satisfies ReadonlyArray<{
-	href: string;
+	href: AdminHref;
 	label: string;
 	section: Section;
 }>;
@@ -47,7 +48,7 @@ function NavDropdown({
 }: {
 	label: string;
 	active: boolean;
-	items: readonly { href: string; label: string }[];
+	items: readonly { href: AdminHref; label: string }[];
 }) {
 	const pathname = usePathname();
 	const { open, setOpen, wrapperRef, toggleRef } = useDropdown<

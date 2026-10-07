@@ -52,6 +52,10 @@ const nextConfig = {
 	// CDN compresses in production, so let the proxy own compression locally.
 	// NETLIFY_DEV is set by the CLI for the process it spawns.
 	compress: process.env.NETLIFY_DEV !== 'true',
+	// A literal href that matches no route is a type error. Hrefs under
+	// /resources go through resourceHref(), as that route's catch-all types
+	// as `/resources/${string}`.
+	typedRoutes: true,
 	sassOptions: {
 		// Bootstrap 5.3's own Sass triggers if-function and global-builtin
 		// deprecations on Dart Sass 1.10x. Silence warnings coming from

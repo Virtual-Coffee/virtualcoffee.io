@@ -6,7 +6,11 @@ import { statusCounts } from '@/lib/waitlist/applications';
 import { recentEvents } from '@/lib/history/eventLog';
 import { activeVolunteerCount } from '@/lib/volunteers/volunteers';
 import type { Section } from '@/lib/access/permissions';
-import { applicationPath, submissionPath } from '@/lib/admin/links';
+import {
+	applicationPath,
+	submissionPath,
+	type AdminHref,
+} from '@/lib/admin/links';
 import {
 	openCount,
 	SUBMISSION_KINDS,
@@ -23,7 +27,7 @@ export type DashboardFigure = {
 export type DashboardCard = {
 	section: Section;
 	label: string;
-	href: string;
+	href: AdminHref;
 	/**
 	 * Things still waiting on a maintainer, as one or more numbers.
 	 *
@@ -42,7 +46,7 @@ export type ActivityEntry = {
 	body: string | null;
 	actorName: string | null;
 	/** Where the entry links to, or null when the viewer cannot open it. */
-	href: string | null;
+	href: AdminHref | null;
 	subject: string;
 };
 

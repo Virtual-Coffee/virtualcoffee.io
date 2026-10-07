@@ -11,7 +11,7 @@ const schema = z.object({
 	pronouns: z.string().trim().max(100).optional(),
 });
 
-const THANKS = '/example/thanks';
+const THANKS = '/join/thank-you';
 
 const run = (formData: FormData) =>
 	intake(formData, { schema, thanks: THANKS });

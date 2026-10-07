@@ -36,7 +36,7 @@ const seriesFrontmatter = z.object({
 
 export type Challenge = z.infer<typeof challengeFrontmatter> & {
 	slug: string;
-	href: string;
+	href: `/monthlychallenges/${string}`;
 	label: string;
 };
 
@@ -82,7 +82,7 @@ export function getChallenges(): Challenge[] {
 	);
 
 	return readMdxDirectory(contentDirectory, challengeFrontmatter)
-		.map((challenge) => {
+		.map((challenge): Challenge => {
 			for (const series of challenge.series) {
 				if (!seriesSlugs.has(series)) {
 					throw new Error(

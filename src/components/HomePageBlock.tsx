@@ -1,13 +1,14 @@
+import type { Route } from 'next';
 import Link from 'next/link';
 import UndrawIllustration from '@/components/UndrawIllustration';
 import type { UndrawIllustrationName } from '@/components/UndrawIllustration';
 
-type HomePageBlockProps = {
+type HomePageBlockProps<L extends string> = {
 	id?: string;
 	title: string;
 	subtitle: string;
 	Hero: UndrawIllustrationName;
-	linkTo?: string;
+	linkTo?: Route<L>;
 	footer?: string;
 	children: React.ReactNode;
 	wide?: boolean;
@@ -16,7 +17,7 @@ type HomePageBlockProps = {
 /**
  * A reactive block of content on the Home page.
  */
-export default function HomePageBlock({
+export default function HomePageBlock<L extends string>({
 	id,
 	title,
 	subtitle,
@@ -25,7 +26,7 @@ export default function HomePageBlock({
 	children,
 	footer,
 	wide,
-}: HomePageBlockProps) {
+}: HomePageBlockProps<L>) {
 	const titleInner = linkTo ? <Link href={linkTo}>{title}</Link> : title;
 
 	return (

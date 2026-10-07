@@ -55,6 +55,33 @@ export default defineConfig([
 		rules: { 'vc/page-requires-metadata': 'error' },
 	},
 	{
+		name: 'vc/resource-hrefs',
+		files: ['src/**/*.{ts,tsx}'],
+		// Tests use `/resources` strings as data. The sitemap lists the same
+		// paths for crawlers, and the e-mails link to absolute URLs.
+		ignores: [
+			'src/util/resourceHref.ts',
+			'src/**/*.test.{ts,tsx}',
+			'src/app/sitemap.ts',
+		],
+		rules: {
+			'no-restricted-syntax': [
+				'error',
+				...[
+					'JSXAttribute[name.name=/^(href|linkTo)$/] > Literal[value=/^\\/resources/]',
+					'JSXAttribute[name.name=/^(href|linkTo)$/] > JSXExpressionContainer > Literal[value=/^\\/resources/]',
+					'JSXAttribute[name.name=/^(href|linkTo)$/] > JSXExpressionContainer > TemplateLiteral > TemplateElement[value.raw=/^\\/resources/]',
+					'Property[key.name=/^(href|linkTo)$/] > Literal[value=/^\\/resources/]',
+					'Property[key.name=/^(href|linkTo)$/] > TemplateLiteral > TemplateElement[value.raw=/^\\/resources/]',
+				].map((selector) => ({
+					selector,
+					message:
+						"Build a /resources href with resourceHref() from '@/util/resourceHref': `resources/[...slug]` types as `/resources/${string}`, so typedRoutes cannot check a literal.",
+				})),
+			],
+		},
+	},
+	{
 		name: 'vitest',
 		files: ['**/*.test.ts', 'vitest.config.mts'],
 		plugins: { vitest },

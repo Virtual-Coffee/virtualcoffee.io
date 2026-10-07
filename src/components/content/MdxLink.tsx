@@ -14,10 +14,17 @@ function isInternalPage(href: string) {
  * Every Markdown link in MDX (mapped in `src/mdx-components.tsx`): a page on
  * this site goes through `next/link` for client-side navigation, anything
  * else (anchors, files, other sites) stays a plain `<a>`.
+ *
+ * The href is runtime text, so typedRoutes cannot check it; the pieces go in
+ * as a `UrlObject` and a test checks every link in `src/content` instead.
  */
 export default function MdxLink({ href, ...props }: ComponentProps<'a'>) {
 	if (href && isInternalPage(href)) {
-		return <Link href={href} {...props} />;
+		const { pathname, search, hash } = new URL(
+			href,
+			'https://virtualcoffee.io',
+		);
+		return <Link href={{ pathname, search, hash }} {...props} />;
 	}
 	return <a href={href} {...props} />;
 }

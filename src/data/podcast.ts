@@ -43,7 +43,7 @@ export interface PodcastEpisode {
 		headshot: Array<{ path: string }>;
 	}>;
 	podcastEpisodeCard: Array<{ path: string }>;
-	url: string;
+	url: `/podcast/${string}`;
 	episodeSponsors: Array<{
 		title: string;
 		sponsorUrl: string;

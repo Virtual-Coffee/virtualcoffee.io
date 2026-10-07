@@ -62,31 +62,19 @@ describe('sitemap', () => {
 		}
 	});
 
-	test('lists exactly the MDX pages their routes generate', async () => {
-		// Both routes set `dynamicParams = false`: a path they don't generate 404s.
-		const routes = [
-			['/', await import('./(simple-mdx)/[...slug]/page')],
-			['/resources/', await import('./resources/[[...slug]]/page')],
-		] as const;
-		const generated = (
-			await Promise.all(
-				routes.map(async ([base, page]) =>
-					(await page.generateStaticParams()).map(({ slug }) =>
-						`${base}${slug.join('/')}`.replace(/\/$/, ''),
-					),
-				),
-			)
-		).flat();
-		const simplePages = readdirSync(
-			join(process.cwd(), 'src', 'content', 'simple-mdx-pages'),
-		).map((name) => name.replace(/\.mdx$/, ''));
-		const listed = (await sitemapPaths()).filter(
-			(path) =>
-				path.startsWith('/resources') ||
-				simplePages.includes(path.split('/')[1]),
+	test('lists exactly the MDX pages the resources route generates', async () => {
+		// The route sets `dynamicParams = false`: a path it doesn't generate 404s.
+		const page = await import('./resources/[...slug]/page');
+		const generated = [
+			'/resources',
+			...(await page.generateStaticParams()).map(
+				({ slug }) => `/resources/${slug.join('/')}`,
+			),
+		];
+		const listed = (await sitemapPaths()).filter((path) =>
+			path.startsWith('/resources'),
 		);
 
-		expect(generated).toContain('/about');
 		expect(generated).toContain(
 			'/resources/virtual-coffee-handbook/join-virtual-coffee',
 		);

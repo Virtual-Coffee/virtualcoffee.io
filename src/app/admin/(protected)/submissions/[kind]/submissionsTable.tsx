@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { createColumnHelper } from '@tanstack/react-table';
 
 import type { SubmissionStatus } from '@/db';
+import type { SubmissionListHref } from '@/lib/admin/links';
 import type { SubmissionSortField } from '@/lib/submissions/submissions';
 import { formatDateTime } from '../../presentation';
 import { SortableHeader } from '../../sortableHeader';
@@ -33,7 +34,7 @@ export type SubmissionListRow = {
 
 const helper = createColumnHelper<ServerTableFeatures, SubmissionListRow>();
 
-function buildColumns(basePath: string) {
+function buildColumns(basePath: SubmissionListHref) {
 	return helper.columns([
 		helper.accessor('reference', {
 			header: 'Ref',
@@ -92,7 +93,7 @@ export function SubmissionsTable({
 }: {
 	rows: SubmissionListRow[];
 	rowCount: number;
-	basePath: string;
+	basePath: SubmissionListHref;
 	page: number;
 	pageSize: number;
 	sort: SubmissionSortField;

@@ -3,6 +3,7 @@ import { createMetaData } from '@/util/createMetaData.server';
 import { Form } from './form';
 import { issueTimestamp } from '@/util/forms/spamGuard';
 import LeadText from '@/components/content/LeadText';
+import { resourceHref } from '@/util/resourceHref';
 import Link from 'next/link';
 
 // The spam guard signs a per-render token that prerendering would bake in.
@@ -33,11 +34,19 @@ export default function CoffeeTableGroupForm() {
 				</p>
 				<p>
 					To learn more about leading a Coffee Table Group, read our{' '}
-					<Link href="/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups">
+					<Link
+						href={resourceHref(
+							'/resources/virtual-coffee-handbook/get-involved/leading-coffee-table-groups',
+						)}
+					>
 						Leading Coffee Table Groups
 					</Link>{' '}
 					guide. See the list of our existing Coffee Table Groups in the{' '}
-					<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups">
+					<Link
+						href={resourceHref(
+							'/resources/virtual-coffee-handbook/guides-to-virtual-coffee/coffee-table-groups',
+						)}
+					>
 						Coffee Table Groups
 					</Link>{' '}
 					guide.

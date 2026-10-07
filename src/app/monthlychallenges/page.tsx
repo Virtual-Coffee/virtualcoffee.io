@@ -1,6 +1,7 @@
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { type ChallengeSeries, getSeriesList } from '@/data/monthlyChallenges';
 import { createMetaData } from '@/util/createMetaData.server';
+import { resourceHref } from '@/util/resourceHref';
 import Link from 'next/link';
 
 export async function generateMetadata() {
@@ -106,7 +107,12 @@ export default async function Index() {
 							goal is to support developers of all stages in their coding
 							journey To become a member of Virtual Coffee, all you need to do
 							is{' '}
-							<Link href="/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee#coffees-virtual-coffee-weekly-zoom-chats">
+							<Link
+								href={resourceHref(
+									'/resources/virtual-coffee-handbook/guides-to-virtual-coffee/what-to-expect-in-virtual-coffee',
+									'coffees-virtual-coffee-weekly-zoom-chats',
+								)}
+							>
 								attend a Tuesday or Thursday Coffee
 							</Link>{' '}
 							and submit the form you&apos;ll receive at Coffee. After you

@@ -104,7 +104,8 @@ export default async function Page() {
 								)}
 							</ul>
 							<div className="text-end text-muted">
-								<Link href="/sponsorship">Sponsor Virtual Coffee</Link>
+								{/* A netlify.toml redirect to GitHub Sponsors, not a route. */}
+								<a href="/sponsorship">Sponsor Virtual Coffee</a>
 							</div>
 						</div>
 					)}

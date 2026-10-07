@@ -2,6 +2,7 @@ import DefaultLayout from '@/components/layouts/DefaultLayout';
 import { inviteForClaimToken } from '@/lib/volunteers/invites';
 import { createMetaData } from '@/util/createMetaData.server';
 import { issueTimestamp } from '@/util/forms/spamGuard';
+import { resourceHref } from '@/util/resourceHref';
 import { single } from '@/util/searchParams';
 import Link from 'next/link';
 
@@ -57,7 +58,11 @@ export default async function Join({
 					</p>
 					<p>
 						In the meantime, feel free to check out the{' '}
-						<Link href="/resources/virtual-coffee-handbook/join-virtual-coffee">
+						<Link
+							href={resourceHref(
+								'/resources/virtual-coffee-handbook/join-virtual-coffee',
+							)}
+						>
 							FAQ about joining Virtual Coffee
 						</Link>
 						.

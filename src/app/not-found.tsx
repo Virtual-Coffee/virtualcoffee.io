@@ -2,6 +2,7 @@ import BrokenLinkReport from '@/components/BrokenLinkReport';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 import PostList from '@/components/PostList';
 import { homePageLinks } from '@/util/homePageLinks';
+import { resourceHref } from '@/util/resourceHref';
 
 export default function NotFound() {
 	return (
@@ -26,7 +27,7 @@ export default function NotFound() {
 					{
 						title: 'Member Resources',
 						description: 'A collection of resources for Virtual Coffee members',
-						href: '/resources',
+						href: resourceHref('/resources'),
 					},
 					{
 						title: 'Virtual Coffee Podcast',

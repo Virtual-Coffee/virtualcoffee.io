@@ -73,6 +73,8 @@ describe('listHref', () => {
 	});
 
 	test('encodes a search term', () => {
-		expect(listHref('/x', { q: 'a b&c' })).toBe('/x?q=a+b%26c');
+		expect(listHref('/admin/volunteers', { q: 'a b&c' })).toBe(
+			'/admin/volunteers?q=a+b%26c',
+		);
 	});
 });

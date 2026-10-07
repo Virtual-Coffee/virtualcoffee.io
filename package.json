@@ -17,9 +17,10 @@
 		"test:coverage": "vitest run --coverage",
 		"build-member-files": "tsx scripts/loadMemberFiles.ts",
 		"build-undraw-ratios": "tsx scripts/loadUndrawAspectRatios.ts",
+		"build-resource-paths": "tsx --require ./scripts/lib/serverOnlyStub.cjs scripts/loadResourcePaths.ts",
 		"build-bot-list": "tsx scripts/loadBotList.ts",
 		"check-bot-matching": "vitest run --project unit src/data/botMatcher.test.ts",
-		"codegen": "pnpm build-member-files && pnpm build-undraw-ratios",
+		"codegen": "pnpm build-member-files && pnpm build-undraw-ratios && pnpm build-resource-paths",
 		"local-dev": "cross-env NODE_ENV=development pnpm netlify dev",
 		"local-dev:tunnel": "cross-env NODE_ENV=development NETLIFY_TUNNEL=1 pnpm netlify dev --live",
 		"build": "next build",
@@ -38,7 +39,11 @@
 	},
 	"watch": {
 		"build-member-files": "src/content/members/**/*.ts",
-		"build-undraw-ratios": "public/assets/svg/*.svg"
+		"build-undraw-ratios": "public/assets/svg/*.svg",
+		"build-resource-paths": {
+			"patterns": "src/content/resources",
+			"extensions": "mdx"
+		}
 	},
 	"dependencies": {
 		"@googleapis/calendar": "^20.0.1",
