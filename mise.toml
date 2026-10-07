@@ -9,7 +9,7 @@
 min_version = "2026.10.0"
 
 [settings]
-	# Daemons (`[daemons.web]`) are experimental.
+	# Daemons (`[daemons.web]`) and `[deps]` are experimental.
 	experimental = true
 	idiomatic_version_file_enable_tools = ["node"]
 	# `mise.lock` pins every tool; CI refuses to resolve anything new.
@@ -27,6 +27,12 @@ min_version = "2026.10.0"
 	# The project's own binaries, so tasks call `tsx` / `next` / `eslint` /
 	# `drizzle-kit` / `netlify` directly instead of through a `pnpm exec` process.
 	_.path = ["{{config_root}}/node_modules/.bin"]
+
+# `mise run` and `mise x` run `pnpm install` first whenever pnpm-lock.yaml is
+# newer than node_modules, so a fresh worktree or a pull needs no manual
+# install. CI calls pnpm directly and is unaffected.
+[deps.pnpm]
+	auto = true
 
 	# --- codegen ----------------------------------------------------------------
 	#

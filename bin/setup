@@ -158,7 +158,7 @@ ok "tools installed"
 
 # ── 3. Dependencies ──────────────────────────────────────────────────────────
 stage "Dependencies and generated files"
-"$MISE" exec -- pnpm install
+"$MISE" deps install
 "$MISE" run codegen
 ok "dependencies installed, generated files up to date"
 
