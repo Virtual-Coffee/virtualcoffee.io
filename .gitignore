@@ -7,6 +7,9 @@ node_modules
 # Local Netlify folder
 .netlify
 
+# Repo-local mise (bin/mise): tools, cache, state
+.mise/
+
 # testing
 /coverage
 
