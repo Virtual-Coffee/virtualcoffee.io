@@ -107,6 +107,7 @@ min_version = "2026.10.0"
 	run         = ["next typegen", "tsc --noEmit"]
 
 [tasks.test]
+	depends     = ["codegen"]
 	description = "Vitest, both projects"
 	run = '''
 	eval "set -- ${usage_files:-}"
