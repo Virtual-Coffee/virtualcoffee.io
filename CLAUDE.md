@@ -32,19 +32,19 @@ virtualcoffee.io is a Next.js App Router site deployed on Netlify. Content is ch
 
 ## Commands
 
-Scripts are in `package.json`; `pnpm` is enforced. What no script name tells you:
+mise is the toolchain and runs the workflows (`mise.toml`; `./bin/mise` when it is not installed); `pnpm` is enforced and owns the primitives in `package.json` — `docs/adr/0020`. Before starting, restarting or requesting the dev server, read `docs/agents/dev-server.md`: a worktree's port is not :9000. What no script name tells you:
 
-- `pnpm dev` is `netlify dev` in front of Next (site on :9000). `pnpm dev:tunnel` sets `NETLIFY_TUNNEL=1`, which gates the tunnel-only settings in `next.config.mjs`.
+- `pnpm dev` is the shim for `mise run dev`: `netlify dev` in front of Next (site on `$WEB_PORT`, else :9000).
 - `pnpm codegen` regenerates the gitignored generated files (see [Generated files](#generated-files)) and deliberately excludes the checked-in bot list.
 - `pnpm typecheck` runs `next typegen` first because the gitignored `next-env.d.ts` is what declares image imports; a clean checkout fails on any `*.png` without it.
-- `pnpm db:migrate` needs `netlify dev` running. Deploys apply migrations in `netlify.toml`'s build command.
+- `pnpm db:migrate` (or `mise run db:migrate`) needs `netlify dev` running in the same checkout. Deploys apply migrations in `netlify.toml`'s build command.
 - There is no husky/lint-staged hook; CI (`.github/workflows/ci.yml`) auto-commits Prettier fixes on same-repo branches.
 - CI does not build. Run `pnpm build` locally when a change can only fail at prerender: MDX frontmatter, `generateStaticParams`, or a component pages render at build time.
 - `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Content directories are entries, not ignores, so their own imports are still checked.
 - CodeQL is advanced-setup: `.github/workflows/codeql.yml` is the whole config, and the repository's default-setup toggle stays off.
 - `typescript` is `@typescript/typescript6` (for typescript-eslint and `next build`) and `@typescript/native` is `typescript@7` (the `tsc` that `pnpm typecheck` runs), so the build and CI check with different compilers. Keep both until typescript-eslint supports TypeScript 7.
 
-Before finishing a change: `pnpm codegen && pnpm typecheck && pnpm lint && pnpm test && pnpm knip`.
+Before finishing a change: `mise run check` (codegen, typecheck, lint, test, knip).
 
 When writing or debugging a test, read `docs/testing.md` first.
 

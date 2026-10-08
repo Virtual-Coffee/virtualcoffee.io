@@ -20,7 +20,7 @@ Each table has one writer; go through it.
 - `src/lib/volunteers/invites.ts` writes `volunteer_invite_ledger` and sends every Claim Link (`issueAndSend`, `resendClaimLink`).
 - `src/lib/waitlist/lifecycle.ts` writes an Application's status and owns the guards, the send-first order and invite completion; the transition table is `applicationStatuses.ts`, which the action panel reads. Only the import writes `lapsed`.
 - The Invite Allowance is an append-only ledger; a correction is a new row through `adjustBalance` with a reason — `docs/adr/0011`.
-- Volunteers imported from Airtable come from a reviewed mapping — `docs/adr/0012`. Before running an Airtable script, read `scripts/airtable/README.md`.
+- Volunteers imported from Airtable come from a reviewed mapping — `docs/adr/0012`.
 
 ## Ordering
 

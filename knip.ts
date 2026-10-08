@@ -2,8 +2,7 @@ import type { KnipConfig } from 'knip';
 
 export default {
 	entry: [
-		// Some are not in package.json scripts (scripts/airtable/*), and the
-		// membership stack nests others behind `tsx scripts/with-local-netlify.ts …`.
+		// The membership stack nests some scripts behind `tsx scripts/with-local-netlify.ts …`.
 		'scripts/**/*.ts',
 		// netlify.toml [[edge_functions]]; the netlify plugin only finds netlify/functions.
 		'netlify/edge-functions/*.ts',
@@ -19,6 +18,8 @@ export default {
 	ignoreExportsUsedInFile: true,
 	// `mdx/types` comes from @types/mdx; there is no `mdx` package for knip to find.
 	ignoreDependencies: ['mdx'],
+	// mise is the toolchain (docs/adr/0020), not a package; the `dev` script shims to it.
+	ignoreBinaries: ['mise'],
 	compilers: {
 		// bootstrap is only reached through @import in src/styles. Relative imports
 		// are Sass partials, so `./nav` has to become `./_nav.scss` for knip to
