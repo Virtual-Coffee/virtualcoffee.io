@@ -50,7 +50,9 @@ If you are new to open source, see the <Link href="/resources/developer-resource
 
 <TextContainer>
 
-## Contributing to Open Source with Git and GitHub
+## Setting Up
+
+Do these steps once for each project.
 
 ### Forking a Repository
 
@@ -151,6 +153,12 @@ The steps on this page sync your fork on GitHub instead, so this step is optiona
 
 Now you are ready to work on the changes.
 
+</TextContainer>
+
+<TextContainer>
+
+## Making a Change
+
 ### Creating a New Branch
 
 Before you change anything, create a new branch. Do not work directly in the default branch. Most repositories name the default branch `main` or `master`, but the name can differ.
@@ -205,6 +213,51 @@ When you finish making changes, add and commit them before you push them to GitH
 
    If you added and committed all your changes, the output says `nothing to commit, working tree clean`.
 
+</TextContainer>
+
+<TextContainer>
+
+## Sending Your Change
+
+### Pushing Changes
+
+After you commit your changes, push your branch to the `origin` repository.
+
+To do so, run this command in your terminal:
+
+```bash
+git push origin BRANCH-NAME
+```
+
+Change `BRANCH-NAME` to the name of your working branch.
+
+### Making a Pull Request
+
+After you push your changes to the `origin` repository, you can submit the changes to the `upstream` repository by making a pull request.
+
+A pull request allows the maintainers to review your work, comment, and request any necessary changes. They then decide whether to merge your changes into the project codebase.
+
+To make a pull request:
+
+1. Go to the `upstream` repository on GitHub. If you recently pushed changes, a banner at the top of the page shows a **Compare & pull request** button. Click it.
+2. If you do not see the banner, click the **New pull request** button instead.
+3. GitHub takes you to the "Open a pull request" form, where you write a description of your pull request. Many projects provide a pull request template in the form. If the project does not, read its contributing guidelines (usually in the `CONTRIBUTING.md` file) and follow the conventions described there.
+4. When you are ready, click the **Create pull request** button.
+
+You have made your pull request.
+
+If a maintainer requests changes, you can work on the requested changes and push new commits to the same branch. GitHub adds them to the pull request automatically.
+
+If GitHub shows that your branch has conflicts, see <Link href="/resources/developer-resources/open-source/git-101#keeping-your-fork-up-to-date">Keeping Your Fork Up to Date</Link>.
+
+</TextContainer>
+
+<TextContainer>
+
+## Keeping Your Fork Up to Date
+
+Use this part only when you need it. You need it when the project gets new changes while you work, or when GitHub shows conflicts on your pull request.
+
 ### Syncing Your Fork with `upstream`
 
 While you work on your changes locally, someone else may change the same file. That person may already have their pull request merged into the default branch, such as `main`, of the `upstream` repository.
@@ -221,13 +274,13 @@ Always make sure that your fork is up to date with the `upstream` repository.
    	height="174"
    />
 
-   If you do not see the button, your fork has no new changes. In that case, <Link href="/resources/developer-resources/open-source/git-101#pushing-changes">push your changes</Link>. Then <Link href="/resources/developer-resources/open-source/git-101#making-a-pull-request">make a pull request</Link>.
+   If you do not see the button, your fork has no new changes. In that case, you do not need to sync.
 
 Now your fork has the same updates as the `upstream` repository.
 
 ### Synchronizing Changes Locally
 
-Now that your `origin` repository is in sync with the `upstream` repository, synchronize these changes locally. That way, you already have the most recent content when you push your changes.
+Now that your `origin` repository is in sync with the `upstream` repository, synchronize these changes locally. That way, you already have the most recent content when you push your next changes.
 
 Fetch and merge the latest update into your working branch. To do so:
 
@@ -303,35 +356,6 @@ After you commit the merge, pull the updated branch to your local repository bef
 4. Save the file. Repeat for each conflicting file.
 5. When you resolve all the conflicts, <Link href="/resources/developer-resources/open-source/git-101#adding-and-committing-changes">add and commit the changes</Link>.
 
-### Pushing Changes
-
-After you sync your branch and commit your changes, push your branch to the `origin` repository.
-
-To do so, run this command in your terminal:
-
-```bash
-git push origin BRANCH-NAME
-```
-
-Change `BRANCH-NAME` to the name of your working branch.
-
-### Making a Pull Request
-
-After you push your changes to the `origin` repository, you can submit the changes to the `upstream` repository by making a pull request.
-
-A pull request allows the maintainers to review your work, comment, and request any necessary changes. They then decide whether to merge your changes into the project codebase.
-
-To make a pull request:
-
-1. Go to the `upstream` repository on GitHub. If you recently pushed changes, a banner at the top of the page shows a **Compare & pull request** button. Click it.
-2. If you do not see the banner, click the **New pull request** button instead.
-3. GitHub takes you to the "Open a pull request" form, where you write a description of your pull request. Many projects provide a pull request template in the form. If the project does not, read its contributing guidelines (usually in the `CONTRIBUTING.md` file) and follow the conventions described there.
-4. When you are ready, click the **Create pull request** button.
-
-You have made your pull request.
-
-If a maintainer requests changes, you can work on the requested changes and push new commits to the same branch. GitHub adds them to the pull request automatically.
-
 </TextContainer>
 
 <TextContainer>
@@ -343,6 +367,8 @@ If a maintainer requests changes, you can work on the requested changes and push
 The following workflows are helpful when collaborating with another person in open source.
 
 </LeadText>
+
+You can skip this section when you contribute on your own.
 
 ### Collaborating Asynchronously on a Shared Branch Between Two Different Forks
 
@@ -415,6 +441,8 @@ You do not need to add your own name, because you are the one who commits the ch
 <TextContainer>
 
 ## Getting the Most Out of Your GitHub Profile
+
+This section is optional. You do not need it to make a contribution.
 
 You can customize your GitHub profile. Add a short bio, a website, and social media links. Pin the repositories that show your best work. Your profile then works like a mini portfolio.
 
