@@ -119,12 +119,27 @@ min_version = { soft = "2026.10.0" }
 [tasks.knip]
 	depends     = ["codegen"]
 	description = "Unused files, exports and dependencies"
-	run         = "knip"
+	# CI adds `-- --reporter github-actions` so findings become annotations.
+	run = '''
+	eval "set -- ${usage_args:-}"
+	exec knip "$@"
+	'''
+	usage = 'arg "[args]" var=#true help="Passed to knip, e.g. --reporter github-actions"'
 
 [tasks.format]
 	description = "Prettier over everything, in place"
-	run         = 'eval "set -- $usage_paths"; exec prettier --write --ignore-unknown --list-different "$@"'
-	usage       = 'arg "[paths]" var=#true default="." help="Files or folders to format"'
+	run = '''
+	eval "set -- $usage_paths"
+	# `--check` keeps prettier's own `[warn] file` lines, which CI reads back.
+	if [ "${usage_check:-false}" = true ]; then
+	  exec prettier --check --ignore-unknown "$@"
+	fi
+	exec prettier --write --ignore-unknown --list-different "$@"
+	'''
+	usage = '''
+	flag "--check" help="Only report unformatted files; write nothing"
+	arg "[paths]" var=#true default="." help="Files or folders to format"
+	'''
 
 [tasks."bots:build"]
 	alias       = "build-bot-list"
