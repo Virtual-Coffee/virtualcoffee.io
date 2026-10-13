@@ -88,7 +88,7 @@ You can refer to our resource on [how to write an issue](https://virtualcoffee.i
 
 > ⚠️ **Heads up!** If you'd like to work on issues, please make sure you **create a new branch and work in this branch** to avoid pushing your changes directly into the `main` branch.
 
-- Follow the steps for local development [in our README](README.md#local-development-setup): clone, then run `bin/setup`. Native Windows isn't supported; use WSL.
+- Follow the steps for local development [in our README](README.md#local-development-setup): clone, then run `bin/setup`. Native Windows isn't supported; use WSL. Commands are written `mise run <task>`; if setup used `./bin/mise`, write `./bin/mise run <task>`.
 - Create a new branch by typing this command on the terminal:
 
   ```bash
@@ -130,7 +130,7 @@ When you open a pull request, three checks run automatically:
 **If the `format` check fails**, don't worry — it's the easiest one to fix. Because your pull request comes from a fork, our automation can't push to your branch, so you fix it yourself in two commands:
 
 ```shell
-pnpm format
+mise run format
 git commit -am "style: apply prettier formatting"
 ```
 

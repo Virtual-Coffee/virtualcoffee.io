@@ -41,10 +41,10 @@ Each table has one writer; go through it.
 
 ## Schema & ids
 
-- A schema change is a new migration: `pnpm db:generate --name=<hyphenated-slug>`, both generated files committed — `docs/adr/0001`.
+- A schema change is a new migration: `mise run db:generate --name <hyphenated-slug>`, both generated files committed — `docs/adr/0001`.
 - `id` (UUIDv7, `newId()` in `src/db/ids.ts`) is the URL and foreign-key handle, checked with `isId()` on the way in; `reference` is display-only — `docs/adr/0008`.
 
 ## Local dev
 
 - One-off scripts run through `scripts/with-local-netlify.ts`, which supplies the local connection string and refuses a non-local one.
-- Locally, sign in by picking a seeded test user from the devtools panel on the sign-in pages (`pnpm db:seed`; local deploy context only — `src/lib/access/devtools.ts`).
+- Locally, sign in by picking a seeded test user from the devtools panel on the sign-in pages (`mise run db:seed`; local deploy context only — `src/lib/access/devtools.ts`).

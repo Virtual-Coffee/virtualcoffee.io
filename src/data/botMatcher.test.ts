@@ -11,7 +11,7 @@ import { createBotMatcher, createBotPolicy } from './botMatcher';
  * Copilot, and a naive match on it also catches `vscode`.
  *
  * `refresh-bot-list.yml` runs this file on its own after regenerating the
- * list, via `pnpm check-bot-matching`.
+ * list, via `mise run bots:check`.
  */
 
 describe('createBotMatcher', () => {

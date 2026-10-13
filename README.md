@@ -61,11 +61,11 @@ cd virtualcoffee.io
 bin/setup
 ```
 
-This is the whole setup. It uses [mise](https://mise.jdx.dev) to install the pinned Node and pnpm; if you don't have mise, it offers to install it, or to use `./bin/mise`, a copy that lives inside this folder. Then it installs the dependencies, creates your `.env` (it never overwrites an existing one), applies the database migrations and offers sample data. Run it again any time: every step that is already done is skipped.
+This is the whole setup. It uses [mise](https://mise.jdx.dev) to install the pinned Node and pnpm; if you don't have mise, it offers to install it, or to use `./bin/mise`, a copy that lives inside this folder. Then it installs the dependencies and creates your `.env` (it never overwrites an existing one). It also offers to set up the local database; you only need that for `/join`, `/admin` and the forms, so skip it for content and page changes. Run it again any time: every step that is already done is skipped.
 
 **Windows:** native Windows isn't supported. Use [WSL](https://learn.microsoft.com/windows/wsl/install), clone the repo inside the Linux filesystem and run `bin/setup` there.
 
-If you installed mise yourself, `mise run <task>` below works as written. If you let the script use `./bin/mise`, write `./bin/mise run <task>` instead. `mise tasks` lists everything.
+Every command below is a `mise run <task>`. **If you let the script use `./bin/mise`, write `./bin/mise run <task>` instead**, everywhere. `mise tasks` lists everything.
 
 When it finishes, start the site:
 
@@ -95,33 +95,31 @@ You should see something like 'Server now ready on http://localhost:9000' below,
 
 Use `ctrl-c` to quit the server when you're done.
 
-Working in several git worktrees at once? Each one gets its own port, in `$WEB_PORT` inside `mise run` and `mise x`. `mise daemons register` once, then `mise daemons start web`, runs the site in the background there; `mise daemons urls` shows where.
-
-### `pnpm build`
+### `mise run build`
 
 ```shell
-pnpm build
+mise run build
 ```
 
-Builds a production-ready version of the site. This is what Netlify uses to build our site.
+Builds a production-ready version of the site. Netlify runs `mise run build:deploy`, which is this plus the database migrations.
 
-### `pnpm format`
+### `mise run format`
 
 ```shell
-pnpm format
+mise run format
 ```
 
 Runs [Prettier](https://prettier.io/) on all of our files.
 
-If your branch lives in this repository, CI formats it for you and pushes the fix back to your pull request. **If you are working from a fork** — which is the normal path for most contributors — CI cannot push to your branch, so the `format` check will fail and list the offending files. Run `pnpm format` locally and push the result.
+If your branch lives in this repository, CI formats it for you and pushes the fix back to your pull request. **If you are working from a fork** — which is the normal path for most contributors — CI cannot push to your branch, so the `format` check will fail and list the offending files. Run `mise run format` locally and push the result.
 
-### `pnpm lint`
+### `mise run lint`
 
 ```shell
-pnpm lint
+mise run lint
 ```
 
-Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. CI runs this on every pull request and fails on errors (warnings are allowed for now). Run `pnpm build-member-files` first if you haven't built recently.
+Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. CI runs this on every pull request and fails on errors (warnings are allowed for now). It regenerates the gitignored files first when their sources changed.
 
 Alongside the standard Next.js rules, `eslint-rules/` holds a few rules of our own for the things TypeScript can't check:
 
@@ -131,33 +129,45 @@ Alongside the standard Next.js rules, `eslint-rules/` holds a few rules of our o
 - **`vc/no-raw-dangerously-set-inner-html`** — render HTML through `DisplayHtml`, and sanitize it first.
 - **`vc/page-requires-metadata`** — every page exports `metadata` or `generateMetadata`.
 
-Most of these fix themselves with `pnpm lint --fix`.
+Most of these fix themselves with `mise run lint --fix`.
 
-### `pnpm typecheck`
+### `mise run typecheck`
 
 ```shell
-pnpm typecheck
+mise run typecheck
 ```
 
-Runs `next typegen` (which regenerates the gitignored `next-env.d.ts` and the route types) and then the TypeScript compiler (`tsc --noEmit`). CI runs this on every pull request. Run `pnpm build-member-files` first if you haven't built recently.
+Runs `next typegen` (which regenerates the gitignored `next-env.d.ts` and the route types) and then the TypeScript compiler (`tsc --noEmit`). CI runs this on every pull request. It regenerates the gitignored files first when their sources changed.
 
-### `pnpm build-member-files`
+### `mise run codegen`
 
 ```shell
-pnpm build-member-files
+mise run codegen
 ```
 
-Regenerates `src/data/members/core.ts` and `src/data/members/members.ts` from the files in `src/content/members/`. These generated files are gitignored. `pnpm dev` and `pnpm build` run this for you, and the dev watcher re-runs it whenever a member file changes.
+Regenerates the gitignored files the app imports: `src/data/members/core.ts` and `members.ts` from the files in `src/content/members/`, the Undraw aspect ratios, and the typed `/resources` links. `mise run dev`, `build`, `lint`, `typecheck` and `test` run this for you, and the dev watcher re-runs it whenever a source changes. `mise run codegen:members` (or `:undraw`, `:resources`) runs one part.
 
-### `pnpm build-bot-list`
+### `mise run check`
 
 ```shell
-pnpm build-bot-list
+mise run check
+```
+
+Codegen, typecheck, lint, test and knip together, which is everything CI checks. Run it before you push.
+
+### `mise run bots:build`
+
+```shell
+mise run bots:build
 ```
 
 Regenerates `src/data/bots.ts` — the list of crawlers the site blocks — from the [ai.robots.txt](https://github.com/ai-robots-txt/ai.robots.txt) release pinned in `.botlist-version.json`. It feeds both `/robots.txt` and the Netlify edge function.
 
 Unlike the other generated files this one **is** checked in, so nothing runs it for you and you only need it if you are changing the list. Edit `src/data/botOverrides.ts` — which holds every decision about who gets blocked or allowed — then run this and commit the result. Renovate keeps the pinned version current, and a scheduled workflow opens a PR when the list changes.
+
+### Maintainers: several worktrees
+
+Working in several git worktrees at once? Each one gets its own port, in `$WEB_PORT` inside `mise run` and `mise x`. `mise daemons register` once, then `mise daemons start web`, runs the site in the background there; `mise daemons urls` shows where.
 
 ## Loading data
 

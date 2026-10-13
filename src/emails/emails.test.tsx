@@ -113,7 +113,7 @@ describe.each(templates)('%s', (_name, template, props, greeting, link) => {
 });
 
 /**
- * `pnpm email:dev` renders each file's default export and reads `PreviewProps`
+ * `mise run email:dev` renders each file's default export and reads `PreviewProps`
  * off it, so a file that forgets to export its `Email` disappears from the
  * preview server with nothing else to notice.
  */

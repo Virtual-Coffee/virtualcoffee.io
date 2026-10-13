@@ -1,9 +1,9 @@
 # Dev server
 
-Read before starting, restarting or requesting the local site. Tasks and ports come from `mise.toml` (`docs/adr/0020`).
+Read before starting, restarting or requesting the local site. Tasks and ports come from `mise.toml` and `mise.dev.toml` (`docs/adr/0020`).
 
 - **Never assume `:9000`.** A linked worktree gets its own port. Inside `mise run` or `mise x -- …` read `$WEB_PORT` (the site is `http://localhost:$WEB_PORT`; Next runs on the port above it). From outside, `mise daemons urls --json` lists each daemon's `port`.
-- `mise run dev` starts the site and the codegen watcher on `$WEB_PORT`, else 9000. `mise daemons start web` runs the same server under pitchfork (pinned in `mise.toml`; run `mise daemons register` once per checkout, which `bin/setup` offers); `mise daemons stop web` ends it.
+- `mise run dev` starts the site and the codegen watcher on `$WEB_PORT`, else 9000. `mise daemons start web` runs the same server under pitchfork (pinned in `mise.dev.toml`; run `mise daemons register` once per checkout); `mise daemons stop web` ends it.
 - A request to a worktree's site that fails to connect usually means the server is not running there; start it before debugging.
 - Email is captured (logged, not sent) by default. `mise run dev --mail` points SMTP_* at one shared inbox for every worktree, UI `http://localhost:8025`, SMTP :1025, messages at `/api/v1/messages`. It reuses a Mailpit already answering on :8025 (any worktree's, or a brew one) and otherwise starts the `mail` daemon (installed on first use); `mise daemons stop mail` ends one it started.
 - Local database tasks (`db:migrate`, `db:seed`, `db:studio`) need the site running in the same checkout.

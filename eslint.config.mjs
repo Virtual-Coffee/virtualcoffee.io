@@ -25,7 +25,7 @@ export default defineConfig([
 		},
 	},
 	// Local rules for the content contributors write by hand. All `error`:
-	// `pnpm lint` has no `--max-warnings`, so a warning would not fail CI.
+	// `mise run lint` has no `--max-warnings`, so a warning would not fail CI.
 	{
 		name: 'vc/members',
 		plugins: { vc },
