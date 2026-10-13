@@ -126,14 +126,12 @@ min_version = { soft = "2026.10.0" }
 	'''
 	usage = 'arg "[args]" var=#true help="Passed to knip, e.g. --reporter github-actions"'
 
+# `--check` keeps prettier's own `[warn] file` lines, which CI reads back.
 [tasks.format]
 	description = "Prettier over everything, in place"
 	run = '''
 	eval "set -- $usage_paths"
-	# `--check` keeps prettier's own `[warn] file` lines, which CI reads back.
-	if [ "${usage_check:-false}" = true ]; then
-	  exec prettier --check --ignore-unknown "$@"
-	fi
+	[ "${usage_check:-false}" = true ] && exec prettier --check --ignore-unknown "$@"
 	exec prettier --write --ignore-unknown --list-different "$@"
 	'''
 	usage = '''
