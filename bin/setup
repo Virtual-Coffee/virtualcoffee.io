@@ -276,9 +276,10 @@ fi
 
 if [[ -n "$SERVER_PID" ]]; then
   cleanup
-  rm -f "$SERVER_LOG"
   ok "stopped the dev server this script started"
 fi
+# A failed run keeps the log: the warning above points at it.
+if [[ -n "$SERVER_LOG" ]] && ((DB_READY)); then rm -f "$SERVER_LOG"; fi
 
 # ── 6. Optional extras ───────────────────────────────────────────────────────
 stage "Optional extras"
