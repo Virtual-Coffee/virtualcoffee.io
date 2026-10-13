@@ -63,7 +63,7 @@ bin/setup
 
 This is the whole setup. It uses [mise](https://mise.jdx.dev) to install the pinned Node and pnpm; if you don't have mise, it offers to install it, or to use `./bin/mise`, a copy that lives inside this folder. Then it installs the dependencies and creates your `.env` (it never overwrites an existing one). It also offers to set up the local database; you only need that for `/join`, `/admin` and the forms, so skip it for content and page changes. Run it again any time: every step that is already done is skipped.
 
-**Windows:** native Windows isn't supported. Use [WSL](https://learn.microsoft.com/windows/wsl/install), clone the repo inside the Linux filesystem and run `bin/setup` there.
+**Windows:** native Windows isn't supported. Use [WSL](https://learn.microsoft.com/windows/wsl/install), clone the repo inside the Linux filesystem and run `bin/setup` there. Or skip installing anything: open the repo in a [dev container](https://containers.dev) (GitHub Codespaces, or VS Code's Dev Containers extension); `.devcontainer/devcontainer.json` runs `bin/setup --yes` for you, and `mise run dev` serves on the forwarded port 9000.
 
 Every command below is a `mise run <task>`. **If you let the script use `./bin/mise`, write `./bin/mise run <task>` instead**, everywhere. `mise tasks` lists everything.
 

@@ -89,7 +89,7 @@ note "  Safe to re-run; each step skips what is already done."
 stage "Platform"
 case "$(uname -s)" in
   MINGW* | MSYS* | CYGWIN*)
-    die "Native Windows is not supported. Use WSL: install it (https://learn.microsoft.com/windows/wsl/install), clone the repo inside the Linux filesystem, and run bin/setup there."
+    die "Native Windows is not supported. Use WSL: install it (https://learn.microsoft.com/windows/wsl/install), clone the repo inside the Linux filesystem, and run bin/setup there. A dev container (Codespaces, VS Code) works too: see .devcontainer/devcontainer.json."
     ;;
 esac
 command -v git >/dev/null 2>&1 || die "git is required: https://git-scm.com/downloads"
