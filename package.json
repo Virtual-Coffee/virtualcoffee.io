@@ -25,7 +25,7 @@
 		"start": "next start",
 		"prebuild": "pnpm codegen",
 		"typecheck": "next typegen && tsc --noEmit",
-		"dev": "if command -v mise >/dev/null 2>&1; then mise run dev; else ./bin/mise run dev; fi",
+		"dev": "sh -c 'm=mise; command -v mise >/dev/null 2>&1 || m=./bin/mise; exec \"$m\" run dev \"$@\"' dev",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "tsx scripts/with-local-netlify.ts drizzle-kit migrate",
 		"db:migrate:deploy": "drizzle-kit migrate",
