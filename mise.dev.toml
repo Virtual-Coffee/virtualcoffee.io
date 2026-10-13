@@ -15,6 +15,14 @@
 	# `mise watch` shells out to watchexec.
 	watchexec = "latest"
 
+[env]
+	# Same entry as mise.toml. mise merges the two; knip's mise plugin reads one
+	# file at a time and only resolves `netlify`, `drizzle-kit` and `email` to
+	# their packages when the file itself puts node_modules/.bin on the PATH.
+	_.path = [
+		"{{config_root}}/node_modules/.bin",
+	]
+
 # `mise run` and `mise x` run `pnpm install` first whenever pnpm-lock.yaml is
 # newer than node_modules, so a fresh worktree or a pull needs no manual
 # install. CI calls pnpm directly and is unaffected.
