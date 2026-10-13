@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 #
-# First-run setup for virtualcoffee.io: mise, tools, dependencies, .env, and the
-# local database. Safe to re-run: every step checks first and skips what is
-# already done. Why mise, and why not native Windows: docs/adr/0020.
+# First-run setup for virtualcoffee.io: mise, tools, dependencies, .env, and
+# (only if you ask) the local database. Safe to re-run: every step checks first
+# and skips what is already done. Why mise, and why not native Windows:
+# docs/adr/0020.
 #
 #   bin/setup          interactive
 #   bin/setup --yes    no prompts: uses an installed mise or ./bin/mise, never
-#                      edits a shell rc, never asks for a token, seeds only
-#                      when it just created .env
+#                      edits a shell rc, never asks for a token, skips the
+#                      database
 #
 # Written for bash 3.2 (macOS's) and up.
 
@@ -212,47 +213,65 @@ else
 fi
 
 # ── 5. Database ──────────────────────────────────────────────────────────────
-stage "Local database"
+stage "Local database (optional)"
 PORT_WEB=$("$MISE" exec -- sh -c 'printf %s "${WEB_PORT:-9000}"')
 
 site_up() { curl -s -o /dev/null --max-time 2 "http://localhost:$PORT_WEB/" 2>/dev/null; }
 
-if site_up; then
-  skip "a dev server is already answering on :$PORT_WEB; using it"
-else
-  say "The local Postgres only exists while netlify dev runs; starting it for the migration."
-  SERVER_LOG=$(mktemp "${TMPDIR:-/tmp}/vc-setup-server.XXXXXX")
-  "$MISE" run dev:server >"$SERVER_LOG" 2>&1 &
-  SERVER_PID=$!
-  printf '  Waiting for http://localhost:%s ' "$PORT_WEB"
-  waited=0
-  until site_up; do
-    if ! kill -0 "$SERVER_PID" 2>/dev/null; then
-      printf '\n'
-      tail -n 20 "$SERVER_LOG" >&2 || true
-      die "The dev server exited early; the full log is $SERVER_LOG"
-    fi
-    if ((waited >= 180)); then
-      printf '\n'
-      die "Gave up waiting for the dev server; the log is $SERVER_LOG"
-    fi
-    printf '.'
-    sleep 2
-    waited=$((waited + 2))
-  done
-  printf '\n'
-  ok "dev server is up"
-fi
+# Every failure returns instead of dying: the site and the checks work without a
+# database, so a broken netlify dev must not fail the whole setup.
+setup_database() {
+  if site_up; then
+    skip "a dev server is already answering on :$PORT_WEB; using it"
+  else
+    say "The local Postgres only exists while netlify dev runs; starting it for the migration."
+    SERVER_LOG=$(mktemp "${TMPDIR:-/tmp}/vc-setup-server.XXXXXX")
+    "$MISE" run dev:server >"$SERVER_LOG" 2>&1 &
+    SERVER_PID=$!
+    printf '  Waiting for http://localhost:%s ' "$PORT_WEB"
+    local waited=0
+    until site_up; do
+      if ! kill -0 "$SERVER_PID" 2>/dev/null; then
+        printf '\n'
+        tail -n 20 "$SERVER_LOG" >&2 || true
+        warn "The dev server exited early; the full log is $SERVER_LOG"
+        return 1
+      fi
+      if ((waited >= 180)); then
+        printf '\n'
+        warn "Gave up waiting for the dev server; the log is $SERVER_LOG"
+        return 1
+      fi
+      printf '.'
+      sleep 2
+      waited=$((waited + 2))
+    done
+    printf '\n'
+    ok "dev server is up"
+  fi
 
-"$MISE" run db:migrate
-ok "migrations applied"
+  "$MISE" run db:migrate || return 1
+  ok "migrations applied"
 
-if ((NEW_ENV)); then seed_default=y; else seed_default=n; fi
-if confirm "Seed sample applications, volunteers and invites?" "$seed_default"; then
-  "$MISE" run db:seed
-  ok "seeded"
+  local seed_default=n
+  if ((NEW_ENV)); then seed_default=y; fi
+  if confirm "Seed sample applications, volunteers and invites?" "$seed_default"; then
+    "$MISE" run db:seed || return 1
+    ok "seeded"
+  else
+    note "Skipped. Run  $MISE_CMD run db:seed  any time."
+  fi
+}
+
+DB_READY=0
+if confirm "Set up the local database? Only needed for /join, /admin and the forms" n; then
+  if setup_database; then
+    DB_READY=1
+  else
+    warn "The database was not set up; everything else is ready."
+  fi
 else
-  note "Skipped. Run  $MISE_CMD run db:seed  any time."
+  note "Skipped: pages, content and the checks work without it."
 fi
 
 if [[ -n "$SERVER_PID" ]]; then
@@ -299,5 +318,11 @@ fi
 say "Next:"
 say "  $MISE_CMD run dev        start the site (http://localhost:$PORT_WEB)"
 say "  $MISE_CMD run check      codegen, typecheck, lint, test, knip"
-say "  $MISE_CMD daemons urls   where the daemon-run site lives"
+if ! ((DB_READY)); then
+  printf '\n'
+  say "Local database (only for /join, /admin and the forms): start the site with"
+  say "  $MISE_CMD run dev, then in another terminal:"
+  say "  $MISE_CMD run db:migrate    apply the migrations"
+  say "  $MISE_CMD run db:seed       sample applications, volunteers and invites"
+fi
 printf '\n'
