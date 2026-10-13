@@ -29,3 +29,15 @@ test('mise.lock locks that pnpm', () => {
 
 	expect(locked).toBe(version);
 });
+
+// Netlify builds with the mise its image ships (2026.9.14 when this was
+// written), which rejects a lockfile newer than v2: a v3 mise.lock turns every
+// deploy log into an error. Tools that force v3 (pitchfork's forge ids) belong
+// in mise.dev.toml, which Netlify never loads. docs/adr/0020.
+test('mise.lock stays readable by the mise on Netlify', () => {
+	const version = Number(
+		/^lockfile_version = (\d+)$/m.exec(read('mise.lock'))?.[1],
+	);
+
+	expect(version).toBeLessThanOrEqual(2);
+});
