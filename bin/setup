@@ -295,19 +295,6 @@ fi
 
 note "Mail sink: $MISE_CMD run dev --mail (installs Mailpit on first use); one shared inbox at http://localhost:8025"
 
-say "The web daemon (pitchfork, installed above) runs the dev server in the background"
-say "with its own port per git worktree, so worktrees and agents can run side by side."
-say "Optional; $MISE_CMD run dev works without it."
-if confirm "Register this checkout's web daemon?" n; then
-  "$MISE" daemons register
-  ok "registered"
-  if confirm "Start it now? (first start compiles the site; it stays up until you stop it)" n; then
-    "$MISE" daemons start web
-    ok "started: see $MISE_CMD daemons urls"
-    TODO+=("Stop the daemon when done: $MISE_CMD daemons stop web")
-  fi
-fi
-
 # ── Summary ──────────────────────────────────────────────────────────────────
 printf '\n%s%s  Setup complete%s\n\n' "$BOLD" "$GREEN" "$RESET"
 if ((${#TODO[@]})); then
