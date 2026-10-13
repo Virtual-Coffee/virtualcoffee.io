@@ -32,17 +32,17 @@ virtualcoffee.io is a Next.js App Router site deployed on Netlify. Content is ch
 
 ## Commands
 
-mise is the toolchain and runs the workflows (`mise.toml`; `./bin/mise` when it is not installed); `pnpm` is enforced and owns the primitives in `package.json` — `docs/adr/0020`. Before starting, restarting or requesting the dev server, read `docs/agents/dev-server.md`: a worktree's port is not :9000. What no script name tells you:
+Every command is a `mise run <task>` (`./bin/mise run <task>` when mise is not installed); CI and Netlify call the same tasks, and `package.json` keeps only the `dev` and `test` shims — `docs/adr/0020`. `mise.toml` is what CI and Netlify read; local-only tasks (dev, db, email, setup) and the daemons are in `mise.dev.toml`, loaded by `.miserc.toml`. Before starting, restarting or requesting the dev server, read `docs/agents/dev-server.md`: a worktree's port is not :9000. What no task name tells you:
 
-- `pnpm dev` is the shim for `mise run dev`: `netlify dev` in front of Next (site on `$WEB_PORT`, else :9000).
-- `pnpm codegen` regenerates the gitignored generated files (see [Generated files](#generated-files)) and deliberately excludes the checked-in bot list.
-- `pnpm typecheck` runs `next typegen` first because the gitignored `next-env.d.ts` is what declares image imports; a clean checkout fails on any `*.png` without it.
-- `pnpm db:migrate` (or `mise run db:migrate`) needs `netlify dev` running in the same checkout. Deploys apply migrations in `netlify.toml`'s build command.
+- `mise run dev` is `netlify dev` in front of Next (site on `$WEB_PORT`, else :9000).
+- `mise run codegen` regenerates the gitignored generated files (see [Generated files](#generated-files)) and deliberately excludes the checked-in bot list; the check tasks depend on it.
+- `mise run typecheck` runs `next typegen` first because the gitignored `next-env.d.ts` is what declares image imports; a clean checkout fails on any `*.png` without it.
+- `mise run db:migrate` needs `netlify dev` running in the same checkout. Netlify runs `mise run build:deploy` (build, then migrations only if the build succeeded); keep `mise.lock` at lockfile v2 and `MISE_ENV=""` in `netlify.toml`, because its image's mise is older.
 - There is no husky/lint-staged hook; CI (`.github/workflows/ci.yml`) auto-commits Prettier fixes on same-repo branches.
-- CI does not build. Run `pnpm build` locally when a change can only fail at prerender: MDX frontmatter, `generateStaticParams`, or a component pages render at build time.
-- `pnpm knip` (config in `knip.ts`) finds unused files, exports and dependencies; run `pnpm codegen` first. Content directories are entries, not ignores, so their own imports are still checked.
+- CI does not build. Run `mise run build` locally when a change can only fail at prerender: MDX frontmatter, `generateStaticParams`, or a component pages render at build time.
+- `mise run knip` (config in `knip.ts`) finds unused files, exports and dependencies. Content directories are entries, not ignores, so their own imports are still checked.
 - CodeQL is advanced-setup: `.github/workflows/codeql.yml` is the whole config, and the repository's default-setup toggle stays off.
-- `typescript` is `@typescript/typescript6` (for typescript-eslint and `next build`) and `@typescript/native` is `typescript@7` (the `tsc` that `pnpm typecheck` runs), so the build and CI check with different compilers. Keep both until typescript-eslint supports TypeScript 7.
+- `typescript` is `@typescript/typescript6` (for typescript-eslint and `next build`) and `@typescript/native` is `typescript@7` (the `tsc` that `mise run typecheck` runs), so the build and CI check with different compilers. Keep both until typescript-eslint supports TypeScript 7.
 
 Before finishing a change: `mise run check` (codegen, typecheck, lint, test, knip).
 
@@ -68,8 +68,8 @@ Podcast episodes are a checked-in JSON snapshot copied from the `vc-data` repo (
 
 ### Generated files
 
-- `src/data/members/{core,members}.ts`, `src/data/undrawAspectRatios.ts` and `src/data/resourcePaths.ts` are gitignored; `pnpm codegen` writes them. Run `pnpm build-member-files` after adding a member, `pnpm build-undraw-ratios` after adding an SVG to `public/assets/svg` (`UndrawIllustration` needs concrete dimensions for `next/image`) and `pnpm build-resource-paths` after adding or moving a file in `src/content/resources` (`ResourcePath` types `resourceHref()`).
-- `src/data/bots.ts` is generated but **checked in**, so a GitHub outage cannot block a deploy and every change to who is blocked is a reviewable diff. Edit the policy in `src/data/botOverrides.ts` and regenerate with `pnpm build-bot-list`. When changing who is blocked, read `docs/bot-list.md` first.
+- `src/data/members/{core,members}.ts`, `src/data/undrawAspectRatios.ts` and `src/data/resourcePaths.ts` are gitignored; `mise run codegen` writes them. Run `mise run codegen:members` after adding a member, `mise run codegen:undraw` after adding an SVG to `public/assets/svg` (`UndrawIllustration` needs concrete dimensions for `next/image`) and `mise run codegen:resources` after adding or moving a file in `src/content/resources` (`ResourcePath` types `resourceHref()`).
+- `src/data/bots.ts` is generated but **checked in**, so a GitHub outage cannot block a deploy and every change to who is blocked is a reviewable diff. Edit the policy in `src/data/botOverrides.ts` and regenerate with `mise run bots:build`. When changing who is blocked, read `docs/bot-list.md` first.
 
 ### Members pipeline
 

@@ -147,10 +147,15 @@
 		},
 		{
 			"path": "docs/adr/0020-mise-is-the-toolchain.md",
-			"description": "mise as the required toolchain: pins, tasks vs package.json scripts, bin/setup, per-worktree dev ports, WSL-only Windows",
+			"description": "mise as the required toolchain: the base/dev config split, Netlify's older mise, bin/setup, per-worktree dev ports, WSL or dev container for Windows",
 			"scope": [
 				"mise.toml",
+				"mise.dev.toml",
+				".miserc.toml",
 				"mise.lock",
+				"mise.dev.lock",
+				".devcontainer/**",
+				"netlify.toml",
 				"bin/**",
 				"package.json",
 				".nvmrc",
