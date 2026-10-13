@@ -38,3 +38,8 @@ next-env.d.ts
 # generated resource URLs for typedRoutes (mise run codegen:resources)
 /src/data/resourcePaths.ts
 
+# The reviewed Airtable -> Slack volunteer mapping from the finished migration
+# pairs real names with Slack member ids. The importer is gone, but local copies
+# may remain; keep them out of git.
+scripts/airtable/volunteerSlackMapping.json
+
