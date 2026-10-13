@@ -169,6 +169,16 @@ min_version = { soft = "2026.10.0" }
 	description = "Production build"
 	run         = "next build"
 
+# Netlify's build command (netlify.toml): build, then apply migrations
+# (docs/adr/0001). The ordering is the safety property: a failed dependency
+# aborts the task, so migrations never run unless codegen and `next build` both
+# exit 0. Do not fold the two into one `run` list or add a step that continues
+# past a failure.
+[tasks."build:deploy"]
+	depends     = ["build"]
+	description = "Netlify's build: production build, then apply migrations"
+	run         = "drizzle-kit migrate"
+
 [tasks.start]
 	description = "Serve an existing production build"
 	run         = "next start"
