@@ -20,7 +20,7 @@ min_version = { soft = "2026.10.0" }
 	lockfile = true
 
 [tools]
-	pnpm = "12.8.2"
+	pnpm = "12.11.2"
 	# Daemons (`[daemons.web]`) are run by pitchfork; tasks' `usage` specs need usage.
 	pitchfork = "2.29.0"
 	usage     = "6.12.0"
