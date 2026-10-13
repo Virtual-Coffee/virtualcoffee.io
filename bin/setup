@@ -123,8 +123,17 @@ else
 
     case "$(basename "${SHELL:-}")" in
       zsh) rc="${ZDOTDIR:-$HOME}/.zshrc"; line='eval "$(~/.local/bin/mise activate zsh)"' ;;
-      # macOS terminals start bash as a login shell, which reads .bash_profile, not .bashrc.
-      bash) if [[ "$(uname -s)" == Darwin ]]; then rc="$HOME/.bash_profile"; else rc="$HOME/.bashrc"; fi; line='eval "$(~/.local/bin/mise activate bash)"' ;;
+      # macOS terminals start bash as a login shell, which reads only the first of
+      # .bash_profile, .bash_login and .profile that exists, never .bashrc.
+      bash)
+        rc="$HOME/.bashrc"
+        if [[ "$(uname -s)" == Darwin ]]; then
+          rc="$HOME/.bash_profile"
+          for f in .bash_profile .bash_login .profile; do
+            [[ -f "$HOME/$f" ]] && { rc="$HOME/$f"; break; }
+          done
+        fi
+        line='eval "$(~/.local/bin/mise activate bash)"' ;;
       fish) rc="$HOME/.config/fish/config.fish"; line='~/.local/bin/mise activate fish | source' ;;
       *) rc=""; line="" ;;
     esac
