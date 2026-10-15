@@ -10,7 +10,7 @@ import rows from './data/pairing-challenge-2023.json';
  * since, so the honest fix is to record what it finished on rather than to keep
  * presenting a live counter.
  *
- * Snapshot: `scripts/airtable/snapshotChallenges.ts`.
+ * Frozen snapshot, docs/adr/0004.
  */
 
 export type PairingChallengeRow = {

@@ -4,6 +4,9 @@ import { configDefaults, defineConfig } from 'vitest/config';
 // CI runs in UTC; pin it so a zone-sensitive test fails the same way here.
 process.env.TZ = 'UTC';
 
+/** bin/mise's data dir: its state/ links back to the checkout, so every test would run twice. */
+const mise = ['**/.mise/**'];
+
 /**
  * Two projects, told apart by filename:
  *
@@ -43,7 +46,7 @@ export default defineConfig({
 						'scripts/**/*.test.ts',
 						'netlify/**/*.test.ts',
 					],
-					exclude: [...configDefaults.exclude, '**/*.db.test.ts'],
+					exclude: [...configDefaults.exclude, ...mise, '**/*.db.test.ts'],
 					setupFiles: ['./src/test/setup.ts'],
 				},
 			},
@@ -51,6 +54,7 @@ export default defineConfig({
 				test: {
 					name: 'db',
 					include: ['**/*.db.test.ts'],
+					exclude: [...configDefaults.exclude, ...mise],
 					globalSetup: ['./src/test/db/globalSetup.ts'],
 					setupFiles: ['./src/test/setup.ts', './src/test/db/setup.ts'],
 					// One in-memory database per run, so files must not race — and

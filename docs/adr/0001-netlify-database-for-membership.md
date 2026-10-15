@@ -40,11 +40,11 @@ reviewable diff.
 ### Migrations
 
 **drizzle-kit owns migrations end to end, and we apply them ourselves.**
-`pnpm db:generate --name=<hyphenated-slug>` writes a migration folder under
+`mise run db:generate --name <hyphenated-slug>` writes a migration folder under
 `drizzle/` holding `migration.sql` plus the `snapshot.json` the next `generate`
 diffs against — both committed, neither hand-edited. The Netlify build runs
-`pnpm db:migrate:deploy` (`drizzle-kit migrate`) after `next build`, on every
-deploy context; locally `pnpm db:migrate` does the same through
+`mise run build:deploy` (`next build`, then `drizzle-kit migrate`) on every
+deploy context; locally `mise run db:migrate` does the same through
 `scripts/with-local-netlify.ts`, and the `db` test project applies the same
 folders with drizzle's migrator.
 

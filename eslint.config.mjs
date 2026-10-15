@@ -25,7 +25,7 @@ export default defineConfig([
 		},
 	},
 	// Local rules for the content contributors write by hand. All `error`:
-	// `pnpm lint` has no `--max-warnings`, so a warning would not fail CI.
+	// `mise run lint` has no `--max-warnings`, so a warning would not fail CI.
 	{
 		name: 'vc/members',
 		plugins: { vc },
@@ -111,6 +111,8 @@ export default defineConfig([
 		'build/**',
 		'next-env.d.ts',
 		'.netlify/**',
+		// bin/mise's data dir; its state/ holds a link back to the checkout.
+		'.mise/**',
 		'netlify/**',
 	]),
 ]);

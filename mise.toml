@@ -1,0 +1,182 @@
+# The toolchain and the workflows CI and Netlify run — docs/adr/0020. This file
+# is what those two read, so it stays small and readable by the older mise
+# Netlify's image ships. The local-only half (dev server, daemons, database,
+# setup) is mise.dev.toml, loaded by `.miserc.toml`; CI and Netlify set
+# `MISE_ENV=""` to skip it.
+# Personal tasks (anything :prod) go in the gitignored mise.local.toml.
+#
+# Node is pinned in .nvmrc, which Netlify also reads; mise picks it up as an
+# idiomatic version file. pnpm is pinned here and in `packageManager`, and
+# src/test/toolchain.test.ts fails if the two drift apart.
+
+# Soft: Netlify's build image ships its own, older mise, and a hard minimum
+# fails the deploy before `pnpm install`.
+min_version = { soft = "2026.10.0" }
+
+[settings]
+	idiomatic_version_file_enable_tools = [
+		"node",
+	]
+	# `mise.lock` pins every tool; CI refuses to resolve anything new.
+	lockfile = true
+
+[tools]
+	pnpm = "12.11.2"
+
+[env]
+	# The project's own binaries, so tasks call `tsx` / `next` / `eslint` /
+	# `drizzle-kit` / `netlify` directly instead of through a `pnpm exec` process.
+	_.path = [
+		"{{config_root}}/node_modules/.bin",
+	]
+
+	# --- codegen ----------------------------------------------------------------
+	#
+	# The generated files the app imports are gitignored, so a clean checkout has
+	# to build them before anything typechecks. `sources` and `outputs` let mise
+	# skip the work when nothing changed; `mise run --force codegen` is the escape
+	# hatch, notably after *deleting* a member file, where a glob can still look
+	# fresh.
+
+[tasks."codegen:members"]
+	alias = "build-member-files"
+	description = "Regenerate the member barrel files"
+	outputs = [
+		"src/data/members/core.ts",
+		"src/data/members/members.ts",
+	]
+	run = "tsx scripts/loadMemberFiles.ts"
+	sources = [
+		"src/content/members/core/*.ts",
+		"src/content/members/members/*.ts",
+		"scripts/loadMemberFiles.ts",
+	]
+
+[tasks."codegen:undraw"]
+	alias = "build-undraw-ratios"
+	description = "Regenerate the Undraw aspect-ratio map"
+	outputs = [
+		"src/data/undrawAspectRatios.ts",
+	]
+	run = "tsx scripts/loadUndrawAspectRatios.ts"
+	sources = [
+		"public/assets/svg/*.svg",
+		"scripts/loadUndrawAspectRatios.ts",
+	]
+
+[tasks."codegen:resources"]
+	alias = "build-resource-paths"
+	description = "Regenerate the typed /resources hrefs"
+	outputs = ["src/data/resourcePaths.ts"]
+	run = "tsx --require ./scripts/lib/serverOnlyStub.cjs scripts/loadResourcePaths.ts"
+	sources = [
+		"src/content/resources/**/*.mdx",
+		"scripts/loadResourcePaths.ts",
+		"src/util/loadMdx.server.ts",
+	]
+
+[tasks.codegen]
+	depends     = ["codegen:*"]
+	description = "All generated files the app imports"
+
+	# --- checks -----------------------------------------------------------------
+
+[tasks.lint]
+	depends = ["codegen"]
+	description = "ESLint over the whole project"
+	run = '''
+	eval "set -- ${usage_files:-}"
+	[ "${usage_fix:-false}" = true ] && set -- --fix "$@"
+	exec eslint "$@"
+	'''
+	usage = '''
+	flag "--fix" help="Apply autofixes"
+	arg "[files]" var=#true help="Files or folders; default is the whole project"
+	'''
+
+[tasks.typecheck]
+	depends     = ["codegen"]
+	description = "next typegen, then the native tsc"
+	run         = ["next typegen", "tsc --noEmit"]
+
+[tasks.test]
+	depends     = ["codegen"]
+	description = "Vitest, both projects"
+	run = '''
+	eval "set -- ${usage_files:-}"
+	[ "${usage_coverage:-false}" = true ] && set -- --coverage "$@"
+	[ -n "${usage_project:-}" ] && set -- --project "$usage_project" "$@"
+	exec vitest run "$@"
+	'''
+	usage = '''
+	flag "--project <project>" help="Only one project" {
+	  choices "unit" "db"
+	}
+	flag "--coverage" help="Collect coverage"
+	arg "[files]" var=#true help="Test files or name filters"
+	'''
+
+[tasks.knip]
+	depends     = ["codegen"]
+	description = "Unused files, exports and dependencies"
+	# CI adds `-- --reporter github-actions` so findings become annotations.
+	run = '''
+	eval "set -- ${usage_args:-}"
+	exec knip "$@"
+	'''
+	usage = 'arg "[args]" var=#true help="Passed to knip, e.g. --reporter github-actions"'
+
+# `--check` keeps prettier's own `[warn] file` lines, which CI reads back.
+[tasks.format]
+	description = "Prettier over everything, in place"
+	run = '''
+	eval "set -- $usage_paths"
+	[ "${usage_check:-false}" = true ] && exec prettier --check --ignore-unknown "$@"
+	exec prettier --write --ignore-unknown --list-different "$@"
+	'''
+	usage = '''
+	flag "--check" help="Only report unformatted files; write nothing"
+	arg "[paths]" var=#true default="." help="Files or folders to format"
+	'''
+
+[tasks."bots:build"]
+	alias       = "build-bot-list"
+	description = "Regenerate src/data/bots.ts from the release pinned in .botlist-version.json"
+	run         = "tsx scripts/loadBotList.ts"
+
+[tasks."bots:check"]
+	alias       = "check-bot-matching"
+	description = "Check the bot user-agent matcher"
+	run         = "vitest run --project unit src/data/botMatcher.test.ts"
+
+# CLAUDE.md's "before finishing" list. `format` is left out: it writes files, and
+# racing a formatter against eslint and tsc reading the same tree invites trouble.
+[tasks.check]
+	depends = [
+		"typecheck",
+		"lint",
+		"test",
+		"knip",
+	]
+	description = "Everything CI checks, in parallel: codegen, typecheck, lint, test, knip"
+
+	# --- build ------------------------------------------------------------------
+
+[tasks.build]
+	depends     = ["codegen"]
+	description = "Production build"
+	run         = "next build"
+
+# Netlify's build command (netlify.toml): build, then apply migrations
+# (docs/adr/0001). The ordering is the safety property: a failed dependency
+# aborts the task, so migrations never run unless codegen and `next build` both
+# exit 0. Do not fold the two into one `run` list or add a step that continues
+# past a failure.
+[tasks."build:deploy"]
+	depends     = ["build"]
+	description = "Netlify's build: production build, then apply migrations"
+	run         = "drizzle-kit migrate"
+
+[tasks.start]
+	description = "Serve an existing production build"
+	run         = "next start"

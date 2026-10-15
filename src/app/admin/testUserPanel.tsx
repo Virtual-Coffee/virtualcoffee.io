@@ -24,8 +24,9 @@ export function SlackNotConfigured() {
 			<div className="alert alert-info" role="alert">
 				<h2 className="h6 alert-heading">Sign in as a test user</h2>
 				<p className="mb-0">
-					Slack sign-in isn&rsquo;t configured. Run <code>pnpm db:seed</code>,
-					then pick a test user from the Auth DevTools panel.
+					Slack sign-in isn&rsquo;t configured. Run{' '}
+					<code>mise run db:seed</code>, then pick a test user from the Auth
+					DevTools panel.
 				</p>
 			</div>
 		);

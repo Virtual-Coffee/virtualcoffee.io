@@ -41,9 +41,9 @@ therefore show as open work, which is the honest presentation.
 
 - The site no longer writes to Airtable, so the old automations can never fire
   again. Archiving the bases does not affect the membership pipeline.
-- The import and snapshot scripts under `scripts/airtable/`, their read-only
-  tokens and the `airtable` dependency exist for the one-off runs only;
-  `scripts/airtable/README.md` says how to run them.
+- The import and snapshot scripts, their tokens and the `airtable` dependency
+  were removed after the cut-over; see git history before the commit that
+  deleted `scripts/airtable/`.
 - Historical Submissions show as open work until a reviewer resolves them.
 - `netlify.toml` still redirects `/member-survey` to an Airtable-hosted form,
   and the finished challenge pages link out to Airtable entry forms. Those are
