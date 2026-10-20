@@ -34,7 +34,11 @@ export const ausrname123: MemberObject = {
 		{ type: 'linkedin', username: 'nikkhielseath' },
 		{ type: 'youtube', customUrl: 'https://www.youtube.com/SNikhill' },
 		{ type: 'twitter', username: 'nikkhielseath' },
-		{ type: 'website', url: 'https://nikkhielseath.com', title: 'Nikkhiel Seath' },
+		{
+			type: 'website',
+			url: 'https://nikkhielseath.com',
+			title: 'Nikkhiel Seath',
+		},
 		{ type: 'medium', username: 'nikkhielseath' },
 		{ type: 'dev', username: 'nikkhielseath' },
 		// { type: 'codenewbie', username: 'yourUserName' },
