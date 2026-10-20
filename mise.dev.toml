@@ -144,7 +144,8 @@
 
 [tasks."db:seed"]
 	description = "Seed sample applications, volunteers, ledger rows and invites"
-	run         = "tsx scripts/with-local-netlify.ts tsx scripts/seedDev.ts"
+	# URL follows this checkout's port, so the printed invite links open this site.
+	run         = 'URL="http://localhost:${WEB_PORT:-9000}" tsx scripts/with-local-netlify.ts tsx scripts/seedDev.ts'
 
 [tasks."db:studio"]
 	description = "Drizzle Studio on the local database"
