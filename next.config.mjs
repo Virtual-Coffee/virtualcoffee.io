@@ -88,6 +88,12 @@ const nextConfig = {
 		},
 	},
 	allowedDevOrigins: devTunnelOrigins,
+	// Unmatched paths render /404, which the CDN caches; Next's own 404 path is no-store.
+	async rewrites() {
+		return {
+			fallback: [{ source: '/:path((?!_next/).*)', destination: '/404' }],
+		};
+	},
 	// Sentry's `environment` tag is the Netlify deploy context (production,
 	// deploy-preview, branch-deploy). Inlined here so the browser bundle sees
 	// the same value as the server; CONTEXT is unset outside Netlify.
