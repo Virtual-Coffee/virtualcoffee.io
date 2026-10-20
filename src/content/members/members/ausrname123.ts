@@ -1,7 +1,7 @@
 import type { MemberObject } from '../types';
 // import { profileMasks } from '../flare';
 
-export const SNikhill: MemberObject = {
+export const ausrname123: MemberObject = {
 	// GitHub username (required)
 	github: 'ausrname123',
 	//
