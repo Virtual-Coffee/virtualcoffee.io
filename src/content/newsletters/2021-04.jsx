@@ -21,8 +21,10 @@ export default function Issue() {
 				inviting people to talk about the job search would turn into a year of
 				100+ Virtual Coffees, 2 rounds of Lightning Talks, a Hacktoberfest
 				event, brownbags, bookclubs, member-formed groups, a{' '}
-				<a href="Postpartum Wellness App,">podcast</a>, this newsletter, an
-				amazing community, and so much more.
+				<a href="https://virtualcoffee.io/podcast/0309-season-three-wrap-up">
+					podcast
+				</a>
+				, this newsletter, an amazing community, and so much more.
 			</p>
 
 			<p className="lead">
