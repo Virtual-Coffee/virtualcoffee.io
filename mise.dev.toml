@@ -89,7 +89,9 @@
 	port      = { auto = true, base = 9000, stride = 10 }
 	proxy     = false
 	ready_cmd = "curl -s -o /dev/null --max-time 5 http://localhost:$WEB_PORT/"
-	task      = "dev:server"
+	# `dev`, not `dev:server`: the codegen watcher runs too, so a new member file
+	# reaches the running site.
+	task      = "dev"
 
 # One shared inbox for every checkout: Mailpit on its default ports (UI 8025,
 # SMTP 1025), data in memory. Its tool is scoped to the task, so only someone
