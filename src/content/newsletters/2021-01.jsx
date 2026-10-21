@@ -179,7 +179,7 @@ export default function Issue() {
 					Nick Taylor does live coding pairing sessions on Twitch (Forem related
 					stuff on the DEV stream and anything else on his own stream). He also
 					talks with folks in the tech space on the DEV stream. You can find him
-					on <a href="http://livecoding.ca ">livecoding.ca</a>.
+					on <a href="http://livecoding.ca">livecoding.ca</a>.
 				</li>
 			</ul>
 

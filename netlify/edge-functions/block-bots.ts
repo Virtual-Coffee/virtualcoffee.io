@@ -2,6 +2,7 @@ import type { EdgeFunction } from '@netlify/edge-functions';
 import { allowedUas, blockedUas } from '../../src/data/bots.ts';
 import { classify } from '../../src/lib/deployContext.ts';
 import { createBotPolicy } from '../../src/data/botMatcher.ts';
+import { isNeverServedPath } from '../../src/data/neverServedPaths.ts';
 
 // Read the deploy context from the context object, not
 // `Netlify.env.get('CONTEXT')`: that is a build-scope variable and is
@@ -16,6 +17,19 @@ const policy = createBotPolicy(allowedUas, blockedUas);
 // Returning undefined bypasses the edge function, so there is nothing here to
 // await.
 const blockBots: EdgeFunction = (request, context) => {
+	const { pathname } = new URL(request.url);
+
+	// Answered here so Next doesn't render a no-store 404 for every probe.
+	if (isNeverServedPath(pathname)) {
+		return new Response('Not found\n', {
+			status: 404,
+			headers: {
+				'content-type': 'text/plain; charset=utf-8',
+				'cache-control': 'public, max-age=3600',
+			},
+		});
+	}
+
 	const ua = request.headers.get('user-agent') ?? '';
 
 	const decision = policy(ua);
@@ -31,7 +45,6 @@ const blockBots: EdgeFunction = (request, context) => {
 	// failed silently for weeks; this is the cheapest evidence the block works.
 	// The UA goes last, quoted, because it is the one free-text field.
 	const { method } = request;
-	const { pathname } = new URL(request.url);
 	console.log(
 		`[${enforce ? 'blocked' : 'dev bypass'}] ${token} ${method} ${pathname} ip=${context.ip} req=${context.requestId} ua=${JSON.stringify(ua)}`,
 	);
