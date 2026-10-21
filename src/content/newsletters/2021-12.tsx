@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'December 2021',
 	meta: {
@@ -58,20 +60,14 @@ export default function Issue() {
 			<ul className="mb-5">
 				<li>
 					Monthly challenge -&gt;{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/nov-2021/">
-						Month of Writing
-					</a>
+					<Link href="/monthlychallenges/nov-2021">Month of Writing</Link>
 					<p>
 						Virtual Coffee took part in the NaNoWriMo (National November Writing
 						Month) event and had a blast. Last year we tried for 50k words and
 						got about 38k. This year we over 30 participants submit 136 articles
 						and contribute
 						<strong>over 125k words</strong>! See the full list of participants
-						and articles{' '}
-						<a href="https://virtualcoffee.io/monthlychallenges/nov-2021/">
-							here
-						</a>
-						.
+						and articles <Link href="/monthlychallenges/nov-2021">here</Link>.
 					</p>
 				</li>
 				<li>New members: 38 new members</li>
@@ -81,9 +77,9 @@ export default function Issue() {
 
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/dec-2021/">
+				<Link href="/monthlychallenges/dec-2021">
 					Creative community challenge
-				</a>
+				</Link>
 				!
 			</h4>
 			<p>
@@ -101,25 +97,25 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0405-suze-shardlow/">
+					<Link href="/podcast/0405-suze-shardlow">
 						Suze Shardlow - Creating welcoming spaces in dev communities
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0406-bryan-healey/">
+					<Link href="/podcast/0406-bryan-healey">
 						Bryan Healey - The Entrepreneurial Journey of a Startup Founder
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0407-jessica-wilkins/">
+					<Link href="/podcast/0407-jessica-wilkins">
 						Jessica Wilkins - Growing your tech career through writing
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0408-maeling-murphy/">
+					<Link href="/podcast/0408-maeling-murphy">
 						Maeling Murphy - Transitioning to tech, and taking notes along the
 						way
-					</a>
+					</Link>
 				</li>
 			</ul>
 
@@ -146,7 +142,7 @@ export default function Issue() {
 			<p>
 				** Link for the Lunch & Learns can be found in slack about 15 minutes
 				before the event and the descriptions can be found at{' '}
-				<a href="https://virtualcoffee.io/events/">virtualcoffee.io/events</a>
+				<Link href="/events">virtualcoffee.io/events</Link>
 			</p>
 
 			<h2>Member Blogpost Highlights</h2>
@@ -154,10 +150,7 @@ export default function Issue() {
 				<em>
 					Some of our member posts we loved in November. Honestly, there were so
 					many great ones you should really check out the{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/nov-2021/">
-						full list
-					</a>
-					.
+					<Link href="/monthlychallenges/nov-2021">full list</Link>.
 				</em>
 			</p>
 			<ul>

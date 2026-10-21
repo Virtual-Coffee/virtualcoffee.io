@@ -1,3 +1,6 @@
+import Link from 'next/link';
+import { resourceHref } from '@/util/resourceHref';
+
 export const handle = {
 	meta: {
 		title: 'Virtual Coffee Newsletter, May 2022',
@@ -59,9 +62,7 @@ export default function Issue() {
 			<h3 className="fst-italic">April Recap</h3>
 			<p>
 				Monthly challenge -&gt;{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/apr-2022">
-					All About Job Prep!
-				</a>
+				<Link href="/monthlychallenges/apr-2022">All About Job Prep!</Link>
 			</p>
 			<p>
 				We spent the month of April getting resume's reviewed and working on our
@@ -100,18 +101,22 @@ export default function Issue() {
 				journey with us and eagerly looking forward to opening up membership
 				again! If you're interested in joining the volunteer team, check out
 				some the roles{' '}
-				<a href="https://virtualcoffee.io/resources/virtual-coffee/get-involved/paths-to-leadership">
+				<Link
+					href={resourceHref(
+						'/resources/virtual-coffee-handbook/get-involved/paths-to-leadership',
+					)}
+				>
 					here
-				</a>
+				</Link>
 				!
 			</p>
 
 			<h3 className="mb-3 fst-italic">May Happenings</h3>
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/may-2022">
+				<Link href="/monthlychallenges/may-2022">
 					Community Kindness: Let's connect
-				</a>
+				</Link>
 				!
 			</h4>
 			<h5>Making connections, practicing gratitude, finding commonalities!</h5>
@@ -130,9 +135,7 @@ export default function Issue() {
 			</p>
 			<p>
 				You can check out our{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/may-2022">
-					monthly challenge page
-				</a>{' '}
+				<Link href="/monthlychallenges/may-2022">monthly challenge page</Link>{' '}
 				for more ideas on how to get started with our community kindness
 				challenge.
 			</p>

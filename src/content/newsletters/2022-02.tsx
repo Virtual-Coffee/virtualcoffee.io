@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'February 2022',
 	meta: {
@@ -51,9 +53,7 @@ export default function Issue() {
 			<ul className="mb-5">
 				<li>
 					Monthly challenge -&gt;{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/jan-2022/">
-						All About Learning!
-					</a>
+					<Link href="/monthlychallenges/jan-2022">All About Learning!</Link>
 					<p>
 						We spent the month of January choosing new technologies to learn and
 						explore, and partnering up with others to learn.
@@ -65,10 +65,7 @@ export default function Issue() {
 
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/feb-2022/">
-					Month of Pairing
-				</a>
-				!
+				<Link href="/monthlychallenges/feb-2022">Month of Pairing</Link>!
 			</h4>
 			<p>
 				Pairing is more than just coding with someone else. Pairing is about
@@ -91,7 +88,7 @@ export default function Issue() {
 			<p>
 				** Link for the Lunch & Learns can be found in Slack about 15 minutes
 				before the event and the descriptions can be found at{' '}
-				<a href="https://virtualcoffee.io/events/">virtualcoffee.io/events</a>
+				<Link href="/events">virtualcoffee.io/events</Link>
 			</p>
 
 			<h4 className="mt-4">💡 Lightning Talks are back!</h4>

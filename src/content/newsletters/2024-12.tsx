@@ -162,10 +162,7 @@ export default function Issue() {
 			<h3 className="mt-5 mb-4">🎙️ The Podcast is Back!</h3>
 			<p>
 				Check out our{' '}
-				<a href="https://virtualcoffee.io/podcast">
-					latest podcasts from season 10
-				</a>
-				!
+				<Link href="/podcast">latest podcasts from season 10</Link>!
 			</p>
 
 			<h3 className="mt-5 mb-4">🆕 New Career Focus Channels Alert</h3>
@@ -305,11 +302,7 @@ export default function Issue() {
 
 			<p>
 				If you're a member and you’d like to give a Lunch & Learn or Workshop,
-				you can{' '}
-				<a href="https://virtualcoffee.io/lunch-and-learn-idea">
-					submit your idea here
-				</a>
-				.
+				you can <Link href="/lunch-and-learn-idea">submit your idea here</Link>.
 			</p>
 			<p>
 				Have a question, suggestion, or want to nominate someone’s act of

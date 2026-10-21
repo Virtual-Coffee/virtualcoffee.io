@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'August 2021',
 	meta: {
@@ -52,9 +54,9 @@ export default function Issue() {
 			<ul>
 				<li>
 					Monthly challenge -&gt;{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/july-2021/">
+					<Link href="/monthlychallenges/july-2021">
 						Month of Demo in Public
-					</a>
+					</Link>
 				</li>
 				<li>New members: 38 new members</li>
 			</ul>
@@ -63,9 +65,7 @@ export default function Issue() {
 
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/aug-2021/">
-					Month of Healthy Habits!
-				</a>
+				<Link href="/monthlychallenges/aug-2021">Month of Healthy Habits!</Link>
 				!
 			</h4>
 			<p>
@@ -79,24 +79,24 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0301-jono-yeong/">
+					<Link href="/podcast/0301-jono-yeong">
 						Jono Yeong - Digital Gardening and Tim Tams
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0302-abbey-perini/">
+					<Link href="/podcast/0302-abbey-perini">
 						Abbey Perini - Finding Confidence and Opportunities
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0303-ayu-adiati/">
+					<Link href="/podcast/0303-ayu-adiati">
 						Ayu Adiati - Working through burnout as a self-taught developer
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0304-joan-marie-verba/">
+					<Link href="/podcast/0304-joan-marie-verba">
 						Joan Marie Verba - Keeping hope through decades of challenges
-					</a>
+					</Link>
 				</li>
 			</ul>
 

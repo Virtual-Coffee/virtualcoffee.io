@@ -63,12 +63,10 @@ export default function Issue() {
 			</p>
 			<p>
 				November was our annual{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/nov-2023">
-					Writing Challenge
-				</a>{' '}
-				and it was amazing! We got over 150,000 words as a community. Shoutout
-				to <strong>Amy Shackles</strong> for her massive contribution this month
-				of almost 60,000 words!
+				<Link href="/monthlychallenges/nov-2023">Writing Challenge</Link> and it
+				was amazing! We got over 150,000 words as a community. Shoutout to{' '}
+				<strong>Amy Shackles</strong> for her massive contribution this month of
+				almost 60,000 words!
 			</p>
 
 			<h3 className="mt-4">December: Creative Community!</h3>
@@ -86,11 +84,9 @@ export default function Issue() {
 			<p>
 				We spend so much time grinding away on understanding things in the tech
 				space; let's make some space for the other parts of ourselves. In{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/dec-2023">
-					this challenge
-				</a>
-				, we encourage folks to work on things that aren't necessarily
-				code-specific or use code to improve other hobbies and outlets.
+				<Link href="/monthlychallenges/dec-2023">this challenge</Link>, we
+				encourage folks to work on things that aren't necessarily code-specific
+				or use code to improve other hobbies and outlets.
 			</p>
 			<p>
 				Bekah wrote an amazing blog post called{' '}
@@ -370,11 +366,7 @@ export default function Issue() {
 
 			<p>
 				If you're a member and you’d like to give a Lunch & Learn or Workshop,
-				you can{' '}
-				<a href="https://virtualcoffee.io/lunch-and-learn-idea">
-					submit your idea here
-				</a>
-				.
+				you can <Link href="/lunch-and-learn-idea">submit your idea here</Link>.
 			</p>
 			<p>
 				Have a question, suggestion, or want to nominate someone’s act of

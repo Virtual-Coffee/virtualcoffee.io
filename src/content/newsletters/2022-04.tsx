@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	meta: {
 		title: 'Virtual Coffee Newsletter, April 2022',
@@ -66,9 +68,7 @@ export default function Issue() {
 			<h3 className="fst-italic">March Recap</h3>
 			<p>
 				Monthly challenge -&gt;
-				<a href="https://virtualcoffee.io/monthlychallenges/mar-2022/">
-					All About AV!
-				</a>
+				<Link href="/monthlychallenges/mar-2022">All About AV!</Link>
 			</p>
 			<p>
 				We spent the month of March creating cool video content and sharing
@@ -92,10 +92,7 @@ export default function Issue() {
 			<h3 className="mb-3 fst-italic">April Happenings</h3>
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:
-				<a href="https://virtualcoffee.io/monthlychallenges/apr-2022/">
-					Get job ready
-				</a>
-				!
+				<Link href="/monthlychallenges/apr-2022">Get job ready</Link>!
 			</h4>
 			<h5>Resume, Portfolios, Cover Letters, and Elevator Pitch!</h5>
 			<p>
@@ -108,10 +105,7 @@ export default function Issue() {
 				packet materials and that elevator pitch that might get you in the door.
 				The challenge is broken down into 2, 2-week sessions. You can find out
 				more about it on our
-				<a href="https://virtualcoffee.io/monthlychallenges/apr-2022/">
-					monthly challenge page
-				</a>
-				.
+				<Link href="/monthlychallenges/apr-2022">monthly challenge page</Link>.
 			</p>
 			<h4 className="mt-4">💡 Lightning Talks on Friday!</h4>
 			<p>We're bringing back the lightning talks!!!</p>

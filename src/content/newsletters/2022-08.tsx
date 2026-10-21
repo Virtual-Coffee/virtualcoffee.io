@@ -1,3 +1,6 @@
+import Link from 'next/link';
+import { resourceHref } from '@/util/resourceHref';
+
 export const handle = {
 	meta: {
 		title: 'Virtual Coffee Newsletter, August 2022',
@@ -53,9 +56,9 @@ export default function Issue() {
 			<h3 className="fst-italic">July Recap</h3>
 			<p>
 				Monthly challenge -&gt;{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/july-2022">
+				<Link href="/monthlychallenges/july-2022">
 					All About Building in Public!
-				</a>
+				</Link>
 			</p>
 			<p>
 				We spent July working on our projects and sharing that process with
@@ -70,18 +73,22 @@ export default function Issue() {
 				All of our active volunteers have an invite to send out to someone
 				interested in joining Virtual Coffee. If you're interested in joining
 				the volunteer team, check out some the roles{' '}
-				<a href="https://virtualcoffee.io/resources/virtual-coffee/get-involved/paths-to-leadership">
+				<Link
+					href={resourceHref(
+						'/resources/virtual-coffee-handbook/get-involved/paths-to-leadership',
+					)}
+				>
 					here
-				</a>
+				</Link>
 				!
 			</p>
 
 			<h3 className="mb-3 fst-italic">August Happenings</h3>
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/aug-2022">
+				<Link href="/monthlychallenges/aug-2022">
 					Healthy Habits for Happy Devs
-				</a>
+				</Link>
 				!
 			</h4>
 			<h5>
@@ -102,10 +109,8 @@ export default function Issue() {
 			</p>
 			<p>
 				You can check out our{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges">
-					monthly challenge page
-				</a>{' '}
-				for more ideas on on getting started with our sharing challenge.
+				<Link href="/monthlychallenges">monthly challenge page</Link> for more
+				ideas on on getting started with our sharing challenge.
 			</p>
 
 			<h4 className="mt-4">☕🪑 Coffee Table Events</h4>
@@ -171,14 +176,14 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/david-alpert-on-pairing-and-providing-support">
+					<Link href="/podcast/david-alpert-on-pairing-and-providing-support">
 						David Alpert — On pairing and providing support
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/bogdan-covrig-navigating-tech-career-paths">
+					<Link href="/podcast/bogdan-covrig-navigating-tech-career-paths">
 						Bogdan Covrig — Navigating Tech Career Paths
-					</a>
+					</Link>
 				</li>
 			</ul>
 

@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'October 2021',
 	meta: {
@@ -54,9 +56,9 @@ export default function Issue() {
 			<ul>
 				<li>
 					Monthly challenge -&gt;{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/sept-2021/">
+					<Link href="/monthlychallenges/sept-2021">
 						Preptember! Gearing up for Hacktoberfest
-					</a>
+					</Link>
 				</li>
 				<li>New members: 25 new members</li>
 			</ul>
@@ -65,9 +67,9 @@ export default function Issue() {
 
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/oct-2021/">
+				<Link href="/monthlychallenges/oct-2021">
 					Hacktoberfest! Participate in open source, learn, and have fun!
-				</a>
+				</Link>
 				!
 			</h4>
 			<p>This month we have three tracks:</p>
@@ -100,9 +102,9 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0309-season-three-wrap-up/">
+					<Link href="/podcast/0309-season-three-wrap-up">
 						Season 3 Wrap Up: Hacktoberfest is Coming!
-					</a>
+					</Link>
 				</li>
 			</ul>
 
@@ -191,10 +193,7 @@ export default function Issue() {
 				<li>
 					Shoutout to all our members who are working on Hacktoberfest
 					submissions this year as part of our{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/oct-2021/">
-						monthly challenge
-					</a>
-					.
+					<Link href="/monthlychallenges/oct-2021">monthly challenge</Link>.
 				</li>
 				<li>Ray Deck is continuing his amazing work with CodeMentor!</li>
 				<li>

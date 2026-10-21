@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'May 2021',
 	meta: {
@@ -76,25 +78,25 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0201-gant/">
+					<Link href="/podcast/0201-gant">
 						Gant Laborde: Finding your Voice
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0202-lucia/">
+					<Link href="/podcast/0202-lucia">
 						Lucia Cerchie: Mom life and finding your confidence
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0203-glen/">
+					<Link href="/podcast/0203-glen">
 						Glen McCallum: From IC to Engineering Manager, and the lessons
 						learned along the way
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0204-debra-kaye/">
+					<Link href="/podcast/0204-debra-kaye">
 						Debra-Kaye Elliott: The Self-Taught Developer Journey
-					</a>
+					</Link>
 				</li>
 			</ul>
 

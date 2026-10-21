@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'June 2021',
 	meta: {
@@ -59,9 +61,7 @@ export default function Issue() {
 			<ul>
 				<li>
 					Monthly challenge -&gt;{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/may-2021/">
-						Month of Feedback
-					</a>
+					<Link href="/monthlychallenges/may-2021">Month of Feedback</Link>
 				</li>
 				<li>New members: 15 new members</li>
 			</ul>
@@ -70,9 +70,9 @@ export default function Issue() {
 
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/june-2021/">
+				<Link href="/monthlychallenges/june-2021">
 					Month of Learning in Public
-				</a>
+				</Link>
 				!
 			</h4>
 			<p>
@@ -90,26 +90,26 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0205-tom-cudd/">
+					<Link href="/podcast/0205-tom-cudd">
 						Tom Cudd - Psychological Safety and DevOps
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0206-courtney-landau/">
+					<Link href="/podcast/0206-courtney-landau">
 						Courtney Landau - On Being Quiet in a Loud Tech World
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0207-nerando-johnson/">
+					<Link href="/podcast/0207-nerando-johnson">
 						Nerando Johnson - Keeping Momentum, Community, and Socialization as
 						a Service
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0208-sara-mccombs/">
+					<Link href="/podcast/0208-sara-mccombs">
 						Sara McCombs - Learning to Leverage your Past Experience and Embrace
 						Your Whole Self
-					</a>
+					</Link>
 				</li>
 			</ul>
 

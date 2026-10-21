@@ -213,29 +213,29 @@ export default function Issue() {
 			<h3 className="mt-5 mb-4">🎙️ The Podcast is Back!</h3>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/remote-collaboration-tools-and-techniques">
+					<Link href="/podcast/remote-collaboration-tools-and-techniques">
 						Remote Collaboration Tools and Techniques
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/how-to-build-trust-capital">
+					<Link href="/podcast/how-to-build-trust-capital">
 						How to Build Trust Capital
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/big-m-versus-little-m-mentorship">
+					<Link href="/podcast/big-m-versus-little-m-mentorship">
 						'Big M' versus 'Little m' Mentorship
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/how-to-make-a-positive-impact-during-hacktoberfest">
+					<Link href="/podcast/how-to-make-a-positive-impact-during-hacktoberfest">
 						How to Make a Positive Impact during Hacktoberfest
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/open-source-maintainer-challenges-and-benefits">
+					<Link href="/podcast/open-source-maintainer-challenges-and-benefits">
 						Open Source Maintainer Challenges and Benefits
-					</a>
+					</Link>
 				</li>
 			</ul>
 
@@ -371,11 +371,7 @@ export default function Issue() {
 
 			<p>
 				If you're a member and you’d like to give a Lunch & Learn or Workshop,
-				you can{' '}
-				<a href="https://virtualcoffee.io/lunch-and-learn-idea">
-					submit your idea here
-				</a>
-				.
+				you can <Link href="/lunch-and-learn-idea">submit your idea here</Link>.
 			</p>
 			<p>
 				Have a question, suggestion, or want to nominate someone’s act of

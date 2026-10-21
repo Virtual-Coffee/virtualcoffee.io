@@ -215,19 +215,19 @@ export default function Issue() {
 			<h3 className="mt-5 mb-4">🎙️ The Podcast is Back!</h3>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/building-relationships-in-open-source">
+					<Link href="/podcast/building-relationships-in-open-source">
 						Building Relationships in Open Source
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/climbing-the-contributor-ladder">
+					<Link href="/podcast/climbing-the-contributor-ladder">
 						Climbing the Contributor Ladder
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/open-sourcing-a-private-repo">
+					<Link href="/podcast/open-sourcing-a-private-repo">
 						Open Sourcing a Private Repo
-					</a>
+					</Link>
 				</li>
 			</ul>
 
@@ -362,11 +362,7 @@ export default function Issue() {
 
 			<p>
 				If you're a member and you’d like to give a Lunch & Learn or Workshop,
-				you can{' '}
-				<a href="https://virtualcoffee.io/lunch-and-learn-idea">
-					submit your idea here
-				</a>
-				.
+				you can <Link href="/lunch-and-learn-idea">submit your idea here</Link>.
 			</p>
 			<p>
 				Have a question, suggestion, or want to nominate someone’s act of

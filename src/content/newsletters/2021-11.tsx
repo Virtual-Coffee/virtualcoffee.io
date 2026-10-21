@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'November 2021',
 	meta: {
@@ -59,9 +61,7 @@ export default function Issue() {
 			<ul className="mb-5">
 				<li>
 					Monthly challenge -&gt;{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/oct-2021/">
-						Month of Hacktoberfest
-					</a>
+					<Link href="/monthlychallenges/oct-2021">Month of Hacktoberfest</Link>
 				</li>
 				<li>New members: 25 new members</li>
 			</ul>
@@ -70,10 +70,7 @@ export default function Issue() {
 
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/nov-2021/">
-					Month of Blogging
-				</a>
-				!
+				<Link href="/monthlychallenges/nov-2021">Month of Blogging</Link>!
 			</h4>
 			<p>
 				This month we're working together to blog 50,000 words! Based off the{' '}
@@ -90,25 +87,25 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0404-mark-noonan/">
+					<Link href="/podcast/0404-mark-noonan">
 						Mark Noonan - Civic tech, accessibility, holding the door open for
 						other career changers
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0403-jennifer-konikowski/">
+					<Link href="/podcast/0403-jennifer-konikowski">
 						Jennifer Konikowski - Hot Takes on Being a Woman in Tech
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0402-todd-libby/">
+					<Link href="/podcast/0402-todd-libby">
 						Todd Libby - Making the web equal and accessible
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0401-jessi-shakarian/">
+					<Link href="/podcast/0401-jessi-shakarian">
 						Jessi Shakarian - You aren't your tech stack: sharing your passion
-					</a>
+					</Link>
 				</li>
 			</ul>
 

@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'July 2021',
 	meta: {
@@ -54,9 +56,9 @@ export default function Issue() {
 			<ul>
 				<li>
 					Monthly challenge -&gt;{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/june-2021/">
+					<Link href="/monthlychallenges/june-2021">
 						Month of Learn in Public
-					</a>
+					</Link>
 				</li>
 				<li>New members: 27 new members</li>
 			</ul>
@@ -65,10 +67,7 @@ export default function Issue() {
 
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/july-2021/">
-					Month of Demos
-				</a>
-				!
+				<Link href="/monthlychallenges/july-2021">Month of Demos</Link>!
 			</h4>
 			<p>
 				This month we're all about demoing in public. The idea is to learn to
@@ -84,9 +83,9 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0209-season-two-wrapup/">
+					<Link href="/podcast/0209-season-two-wrapup">
 						Season Two Wrap-Up: Code and Community
-					</a>
+					</Link>
 				</li>
 			</ul>
 

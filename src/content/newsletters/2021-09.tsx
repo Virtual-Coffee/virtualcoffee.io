@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'September 2021',
 	meta: {
@@ -54,9 +56,9 @@ export default function Issue() {
 			<ul>
 				<li>
 					Monthly challenge -&gt;{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/aug-2021/">
+					<Link href="/monthlychallenges/aug-2021">
 						Month of Healthy Habits
-					</a>
+					</Link>
 				</li>
 				<li>New members: 35 new members</li>
 			</ul>
@@ -65,9 +67,9 @@ export default function Issue() {
 
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/sept-2021/">
+				<Link href="/monthlychallenges/sept-2021">
 					Preptember! Open Source Exploration
-				</a>
+				</Link>
 				!
 			</h4>
 			<p>
@@ -81,29 +83,29 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0305-kevin-truong/">
+					<Link href="/podcast/0305-kevin-truong">
 						Kevin Truong - Tech Career Coaching
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0306-ray-deck/">
+					<Link href="/podcast/0306-ray-deck">
 						Ray Deck - Rubber-Ducking your Life
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0307-mike-rogers/">
+					<Link href="/podcast/0307-mike-rogers">
 						Mike Rogers - Tend Your Career like a Garden
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0308-aurelie-verrot/">
+					<Link href="/podcast/0308-aurelie-verrot">
 						Aurelie Verrot - Learning and Working Remotely
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0309-season-three-wrap-up/">
+					<Link href="/podcast/0309-season-three-wrap-up">
 						Season 3 Wrap Up: Hacktoberfest is Coming!
-					</a>
+					</Link>
 				</li>
 			</ul>
 

@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'January 2022',
 	meta: {
@@ -57,9 +59,7 @@ export default function Issue() {
 			<ul className="mb-5">
 				<li>
 					Monthly challenge -&gt;{' '}
-					<a href="https://virtualcoffee.io/monthlychallenges/dec-2021/">
-						Creative Community
-					</a>
+					<Link href="/monthlychallenges/dec-2021">Creative Community</Link>
 					<p>
 						We spent the month of December embracing our non-technical sides,
 						showing off all the other fun activities in our lives outside of
@@ -73,10 +73,7 @@ export default function Issue() {
 
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/jan-2022/">
-					Month of Learning!{' '}
-				</a>
-				!
+				<Link href="/monthlychallenges/jan-2022">Month of Learning! </Link>!
 			</h4>
 			<p>
 				During this month, we'll work on learning new dev-related things. You
@@ -91,9 +88,9 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0409-season-four-wrapup/">
+					<Link href="/podcast/0409-season-four-wrapup">
 						Season 4 Wrap Up - Reviewing the year and celebrating our community
-					</a>
+					</Link>
 				</li>
 			</ul>
 
@@ -114,7 +111,7 @@ export default function Issue() {
 			<p>
 				** Link for the Lunch & Learns can be found in slack about 15 minutes
 				before the event and the descriptions can be found at{' '}
-				<a href="https://virtualcoffee.io/events/">virtualcoffee.io/events</a>
+				<Link href="/events">virtualcoffee.io/events</Link>
 			</p>
 
 			<h2>Member Blogpost Highlights</h2>

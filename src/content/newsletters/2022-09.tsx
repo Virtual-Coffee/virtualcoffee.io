@@ -1,3 +1,6 @@
+import Link from 'next/link';
+import { resourceHref } from '@/util/resourceHref';
+
 export const handle = {
 	meta: {
 		title: 'Virtual Coffee Newsletter, September 2022',
@@ -48,9 +51,7 @@ export default function Issue() {
 			<h3 className="fst-italic">August Recap</h3>
 			<p>
 				Monthly challenge -&gt;{' '}
-				<a href="https://virtualcoffee.io/newsletter/issues/2022-08">
-					All About Healthy Habits!
-				</a>
+				<Link href="/newsletter/issues/2022-08">All About Healthy Habits!</Link>
 			</p>
 			<p>
 				We spent August taking a step back, focusing on improving our habits and
@@ -65,19 +66,20 @@ export default function Issue() {
 				All of our active volunteers have an invite to send out to someone
 				interested in joining Virtual Coffee. If you're interested in joining
 				the volunteer team, check out some the roles{' '}
-				<a href="https://virtualcoffee.io/resources/virtual-coffee/get-involved/paths-to-leadership">
+				<Link
+					href={resourceHref(
+						'/resources/virtual-coffee-handbook/get-involved/paths-to-leadership',
+					)}
+				>
 					here
-				</a>
+				</Link>
 				!
 			</p>
 
 			<h3 className="mb-3 fst-italic">September Happenings</h3>
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/sept-2022">
-					Preptember
-				</a>
-				!
+				<Link href="/monthlychallenges/sept-2022">Preptember</Link>!
 			</h4>
 			<p>
 				This month, we have two tracks. Maintainers will be reviewing their open
@@ -97,7 +99,7 @@ export default function Issue() {
 			</p>
 			<p>
 				Check out our full challenge description{' '}
-				<a href="https://virtualcoffee.io/monthlychallenges/sept-2022">here</a>.
+				<Link href="/monthlychallenges/sept-2022">here</Link>.
 			</p>
 
 			<h4 className="mt-4">☕🪑 Coffee Table Events</h4>
@@ -145,7 +147,7 @@ export default function Issue() {
 				time of this publication. Please check the official VC #announcements
 				Slack channel, or other noted channels, for any updates and links to
 				event rooms. For the full list of events, check out{' '}
-				<a href="https://virtualcoffee.io/events">our events page</a>.
+				<Link href="/events">our events page</Link>.
 			</p>
 
 			<hr />
@@ -158,20 +160,20 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/seth-hall-from-film-production-to-technical-product-owner-a-career-changers-story">
+					<Link href="/podcast/seth-hall-from-film-production-to-technical-product-owner-a-career-changers-story">
 						Seth Hall — From Film Production to Technical Product Owner: A
 						Career Changer's Story
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/50th-episode-special-live-at-kcdc-2022">
+					<Link href="/podcast/50th-episode-special-live-at-kcdc-2022">
 						50th Episode Special — Live at KCDC 2022
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/sadie-jay-technical-interview-for-bootcamp-grads">
+					<Link href="/podcast/sadie-jay-technical-interview-for-bootcamp-grads">
 						Sadie Jay — Technical Interviews for Bootcamp Grads
-					</a>
+					</Link>
 				</li>
 			</ul>
 

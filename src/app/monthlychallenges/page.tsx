@@ -48,7 +48,7 @@ function ChallengeItem({
 						<ul>
 							{series.past.map((challenge) => (
 								<li key={challenge.slug}>
-									<a href={challenge.href}>{challenge.label}</a>
+									<Link href={challenge.href}>{challenge.label}</Link>
 								</li>
 							))}
 						</ul>
