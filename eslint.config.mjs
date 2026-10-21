@@ -13,7 +13,7 @@ export default defineConfig([
 	{
 		rules: {
 			'react/no-unescaped-entities': 'off',
-			'@next/next/no-html-link-for-pages': 'warn',
+			'@next/next/no-html-link-for-pages': 'error',
 			'@typescript-eslint/no-unused-vars': [
 				'warn',
 				{
@@ -78,6 +78,29 @@ export default defineConfig([
 					message:
 						"Build a /resources href with resourceHref() from '@/util/resourceHref': `resources/[...slug]` types as `/resources/${string}`, so typedRoutes cannot check a literal.",
 				})),
+			],
+		},
+	},
+	{
+		name: 'vc/internal-links',
+		plugins: { vc },
+		files: ['src/**/*.tsx'],
+		// E-mails are read outside the site, so their links must be absolute.
+		ignores: ['src/emails/**'],
+		rules: { 'vc/internal-links': 'error' },
+	},
+	{
+		name: 'vc/no-js',
+		files: ['src/**/*.{js,jsx}'],
+		// allowJs lets tsc load JS without checking it, so typedRoutes and the
+		// other type-aware checks never see a .jsx file's links.
+		rules: {
+			'no-restricted-syntax': [
+				'error',
+				{
+					selector: 'Program',
+					message: 'Write TypeScript: use .ts/.tsx under src.',
+				},
 			],
 		},
 	},

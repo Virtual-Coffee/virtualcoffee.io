@@ -1,3 +1,4 @@
+import internalLinks from './internal-links.mjs';
 import memberAccountUsername from './member-account-username.mjs';
 import memberEmoji from './member-emoji.mjs';
 import memberFileIdentity from './member-file-identity.mjs';
@@ -13,6 +14,7 @@ import pageRequiresMetadata from './page-requires-metadata.mjs';
 const plugin = {
 	meta: { name: 'eslint-plugin-vc', version: '1.0.0' },
 	rules: {
+		'internal-links': internalLinks,
 		'member-account-username': memberAccountUsername,
 		'member-emoji': memberEmoji,
 		'member-file-identity': memberFileIdentity,
