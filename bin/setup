@@ -65,7 +65,7 @@ confirm() {
 }
 
 # Whether KEY has a non-empty, uncommented value in .env.
-env_has() { grep -Eq "^${1}=.+" .env 2>/dev/null; }
+env_has() { grep -Eq "^${1}=['\"]?[^'\"[:space:]]" .env 2>/dev/null; }
 
 kill_tree() {
   local child
