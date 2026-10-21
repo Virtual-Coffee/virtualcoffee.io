@@ -56,6 +56,8 @@ const nextConfig = {
 	pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
 	experimental: {
 		reactDebugChannel: true,
+		// Netlify's handler isn't minimal mode, so the default preload of every route blocks each cold start's first request by ~3s.
+		preloadEntriesOnStart: false,
 		serverActions: {
 			// Next's default is 1MB; the CoC form's 4MiB attachment
 			// (MAX_ATTACHMENT_BYTES) plus multipart overhead needs more. Netlify

@@ -44,6 +44,7 @@ export default defineConfig({
 					include: [
 						'src/**/*.test.{ts,tsx}',
 						'scripts/**/*.test.ts',
+						'eslint-rules/**/*.test.ts',
 						'netlify/**/*.test.ts',
 					],
 					exclude: [...configDefaults.exclude, ...mise, '**/*.db.test.ts'],
