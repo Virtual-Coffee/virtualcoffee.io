@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import LeadText from '@/components/content/LeadText';
+import { resourceHref } from '@/util/resourceHref';
 
 export const handle = {
 	meta: {
-		title: 'Virtual Coffee Newsletter, May 2024',
-		description: 'Community Kindness! 💝',
+		title: 'Virtual Coffee Newsletter, June 2024',
+		description: 'Mid-Year Check-In! 💝',
 	},
-	date: '2024-05-01',
-	listTitle: 'May 2024',
+	date: '2024-06-01',
+	listTitle: 'June 2024',
 };
 
 export default function Issue() {
@@ -16,9 +17,9 @@ export default function Issue() {
 			<h2>Hey Friends!</h2>
 			<LeadText>
 				<p>
-					After a lot of hard work from our presenters and organizers, Lightning
-					Talks are complete! Next up is making the time to share good cheer
-					with all the great people in this community.
+					After a month of checking in on each other, it's time to check in on
+					ourselves! Checking in with our goals, doing some accountability,
+					recognizing our efforts and coordinating our actions for the future!
 				</p>
 			</LeadText>
 
@@ -30,113 +31,108 @@ export default function Issue() {
 			</p>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"I'm grateful for Ethan running Feelings Friday."
+					"I'm grateful for the Tuesday night accountabilibuddies group. I'd
+					name them all but I'm sure I'd leave someone out. You know who you
+					are."
 				</p>
-				<footer className="blockquote-footer">Eddie</footer>
+				<footer className="blockquote-footer">Cris</footer>
 			</blockquote>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"Super grateful to Andy for his detailed feedback."
+					"I'm grateful to Nick for reaching out about joining him for a stream
+					at some point."
 				</p>
-				<footer className="blockquote-footer">Lucia</footer>
+				<footer className="blockquote-footer">Brian</footer>
 			</blockquote>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"Thanks so much, Vic, for helping me troubleshoot my server issues!"
+					"I’m grateful for Dominic and Ayu who always keep things going and
+					approach everything thoughtfully."
 				</p>
-				<footer className="blockquote-footer">Laura M</footer>
+				<footer className="blockquote-footer">Bekah</footer>
+			</blockquote>
+			<blockquote className="blockquote">
+				<p className="mb-0">
+					"This week, I'm really grateful for my first VC meeting. It was
+					inspiring."
+				</p>
+				<footer className="blockquote-footer">Marianna</footer>
 			</blockquote>
 
 			<hr />
 
-			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
-			<h3>April Recap</h3>
+			<h2 className="my-5">💡 What's happening at Virtual Coffee</h2>
+			<h3 className="mb-4">May Recap: Community Kindness!</h3>
 			<p>
-				<strong>💡Monthly Theme & Challenge: Public Speaking!</strong>
-			</p>
-			<p>
-				We spent the month getting back in conf talk mode, supporting each
-				other's public personas and rounding things off with our annual
-				LIGHTNING TALKS. Thank you so so much to all who participated. To learn
-				more you can always check out our{' '}
-				<Link href="/monthlychallenges/apr-2024">website</Link>, and you can
-				check out a recap of the{' '}
-				<a href="https://www.youtube.com/live/pzLXQYZpOPU?si=63xFbmK18J01fpLn&t=6">
-					full lightning talk stream here
-				</a>
-				!
+				We spent some time just reaching out to old friends, sharing our
+				appreciation for each other, and making space for good conversations!
+				And as always, we don't have to stop the energy as the month concludes.
+				Taking time to touch base with people we love and appreciate is an
+				evergreen way to cultivate the kind of life that restores us!
 			</p>
 
-			<h3 className="mt-4">May: Community Kindness!</h3>
+			<h3 className="mb-4">June Challenge: Mid-Year Check-In!</h3>
 			<p>
-				<strong>💡Monthly Theme & Challenge: Community Kindness!</strong>
+				The Mid-Year Check-In challenge is designed to provide an opportunity
+				for Virtual Coffee members to reflect on their progress, reevaluate
+				goals, and gain clarity on their journey. Let’s pause, assess, and
+				adjust as we reach the halfway point of the year. This challenge aims to
+				encourage personal growth, foster connection within the community, and
+				provide a supportive space for members to share their insights,
+				challenges, and successes.
 			</p>
 			<p>
-				As we work hard to make sure this community continues to be the special
-				and close-knit group, this challenge encourages our members to celebrate
-				one of the things that continually makes this community so special:
-				Kindness. Some of the ways we see this include: practicing gratitude,
-				reaching out to support other members, mentoring, helping, giving honest
-				and constructive feedback, and continuing to make Virtual Coffee a safe
-				and supportive space.
-			</p>
-			<p>
-				To view all of the details of this month's challenge, check out the{' '}
-				<Link href="/monthlychallenges/may-2024">May 2024 challenge page</Link>{' '}
-				and Bekah's{' '}
-				<a href="https://dev.to/virtualcoffee/monthly-challenge-cultivating-community-kindness-in-uncertain-times-7n">
-					blog post
-				</a>
-				.
+				Learn more about this challenge in{' '}
+				<a href="https://dev.to/virtualcoffee/monthly-challenge-mid-year-check-in-recharge-and-refocus-for-an-amazing-second-half-2k4c">
+					this blog post
+				</a>{' '}
+				and check out the full{' '}
+				<Link href="/monthlychallenges/june-2024">monthly challenge page</Link>!
 			</p>
 
-			<h3 className="mt-4">☕🪑 Coffee Table Events</h3>
+			<h3 className="mt-5 mb-4">☕📅 Virtual Coffee Events</h3>
+			<h4>MONDAYS</h4>
 			<ul>
-				<li>Tech Interview Study Group (Mondays at 4:00 PM ET)</li>
+				<li>Tech Interview Study Group — 16:00 GMT-4</li>
 				<li>
-					Accountabilibuddies (Tuesdays at 7:00 PM ET | Thursdays at 9:00 AM ET)
-				</li>
-				<li>The Pack Hunt (Tandem Job Hunting) (Wednesdays at 2:00 PM ET)</li>
-				<li>Feelings Friday (Fridays at 8:00 PM ET)</li>
-				<li>
-					Frontend Friday Folks fighting CSSBattle.dev (Fridays at 11:00 AM ET)
+					Goal-setting post in <code>#goals-and-wins</code> — async
 				</li>
 			</ul>
-
-			<h3 className="mt-4">📅 Weekly Async Events</h3>
+			<h4>TUESDAYS</h4>
 			<ul>
+				<li>Virtual Coffee — 09:00 GMT-4</li>
+				<li>Accountabilibuddies — 19:00 GMT-4</li>
 				<li>
-					Mondays: Goal-setting post in <code>#goals-and-wins</code>
-				</li>
-				<li>
-					Tuesdays: Trivia in <code>#game-night</code>
-				</li>
-				<li>
-					Wednesdays: Midweek check-in in <code>#general</code>
-				</li>
-				<li>
-					Fridays:
-					<ul>
-						<li>
-							Rust Learning Cohort check-in in <code>#learning-together</code>
-						</li>
-						<li>
-							<a href="https://twitter.com/VirtualCoffeeIO">
-								X (formerly Twitter)
-							</a>{' '}
-							chat and gratitude post in <code>#general</code>
-						</li>
-					</ul>
+					Trivia in <code>#game-night</code> — async
 				</li>
 			</ul>
-
-			<h3 className="mt-4">☕ Official Virtual Coffee Events</h3>
+			<h4>WEDNESDAYS</h4>
 			<ul>
+				<li>The Pack Hunt (Tandem Job Hunting) — 10:00 GMT-4</li>
+				<li>Data Structures and Algorithms (DSA) Office Hours — 16:00 GMT-4</li>
 				<li>
-					Virtual Coffee (Tuesdays at 9:00 AM ET | Thursdays at 12:00 PM ET)
+					Midweek check-in in <code>#general</code> — async
+				</li>
+			</ul>
+			<h4>THURSDAYS</h4>
+			<ul>
+				<li>Accountabilibuddies — 09:00 GMT-4</li>
+				<li>Virtual Coffee — noon GMT-4</li>
+				<li>
+					Book club discussion: "Mindset: The New Psychology of Success" — async
+				</li>
+			</ul>
+			<h4>FRIDAYS</h4>
+			<ul>
+				<li>Frontend Friday Folks Fighting CSSBattle.dev — 11:00 GMT-4</li>
+				<li>Feeling Friday — 20:00 GMT-4</li>
+				<li>
+					Rust Learning Cohort check-in in <code>#learning-together</code> —
+					async
 				</li>
 				<li>
-					Async Twitter Chat (Weekly chat begins every Friday at 9:00 AM ET)
+					<a href="https://twitter.com/VirtualCoffeeIO">X (formerly Twitter)</a>{' '}
+					chat and gratitude post in <code>#general</code> — async
 				</li>
 			</ul>
 
@@ -148,7 +144,7 @@ export default function Issue() {
 				out <Link href="/events">our events page</Link>.
 			</p>
 
-			<h3>🆕 New Career Focus Channels Alert</h3>
+			<h3 className="mt-5 mb-4">🆕 New Career Focus Channels Alert</h3>
 			<p>
 				We've added three new private channels — <code>Senior+</code>,{' '}
 				<code>Mid-level</code>, <code>Early-career</code> — to our Slack for
@@ -160,13 +156,17 @@ export default function Issue() {
 
 			<hr />
 
-			<h3 className="mb-3">🤝 Volunteering at VC</h3>
+			<h3 className="mb-4">🤝 Volunteering at VC</h3>
 			<p>
 				We're very excited to continue open membership with the support of our
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+				<Link
+					href={resourceHref(
+						'/resources/virtual-coffee-handbook/get-involved/paths-to-leadership',
+					)}
+				>
 					here
 				</Link>
 				!
@@ -184,35 +184,21 @@ export default function Issue() {
 			<h3>Articles</h3>
 			<ul>
 				<li>
-					<a href="https://dev.to/opensauced/the-secret-recipe-to-getting-your-pull-requests-reviewed-and-merged-faster-1fag">
-						The Secret Recipe to Getting Your Pull Requests Reviewed (and
-						Merged) Faster — Ayu Adiati
+					<a href="https://dev.to/ritadee/my-open-source-journey-with-opensauced-from-beginner-to-confident-contributor-4jkp">
+						My Open Source Journey with OpenSauced: From Beginner to Confident
+						Contributor — Rita Nkem Daniel
 					</a>
 				</li>
 				<li>
-					<a href="https://css-tricks.com/managing-user-focus-with-focus-visible/?utm_team=devrel&utm_source=slack&utm_content=csstricks">
-						Managing User Focus with :focus-visible — Chris DeMars
+					<a href="https://opensauced.pizza/blog/maintainer-course">
+						Nurturing the Future of Open Source: Maintainers — Bekah Hawrot
+						Weigel
 					</a>
 				</li>
 				<li>
-					<a href="https://dev.to/opensauced/form-and-function-how-i-lost-my-submit-button-got-it-back-5b91">
-						Form and Function: How I Lost My Submit Button & Got It Back — Nick
-						Taylor
-					</a>
-				</li>
-				<li>
-					<a href="https://dev.to/marktnoonan/why-i-rarely-use-getbyrole-testing-library-and-the-first-rule-of-aria-4581">
-						Why I rarely use `getByRole`: Testing Library and the first rule of
-						ARIA — Mark Noonan
-					</a>
-				</li>
-			</ul>
-
-			<h3>Videos</h3>
-			<ul>
-				<li>
-					<a href="https://www.youtube.com/watch?v=BdnpTrviJko">
-						Should you await Inside Your C# Loops? — Michael Jolley
+					<a href="https://dev.to/opensauced/how-to-create-a-welcoming-space-for-new-open-source-contributors-25fd">
+						How To Create A Welcoming Space For New Open Source Contributors —
+						Christine Belzie
 					</a>
 				</li>
 			</ul>
@@ -223,37 +209,37 @@ export default function Issue() {
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"Just did my first PR on OpenSauced this morning (and it got
-								merged)!"
+								"I wrote my first shell script today. I used vim."
 							</p>
-							<footer className="blockquote-footer">Becky</footer>
+							<footer className="blockquote-footer">Lauren</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"Finished the rough cut of all my slides and content this
-								morning for a new talk I'm giving on Friday."
+								"I just got accepted to speak at Elixir Conf US! Super hyped for
+								this one."
 							</p>
 							<footer className="blockquote-footer">Brian</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"I attended an in-person networking event for coders in my area,
-								and had a first round interview with a company."
+								"Did my first solo presentation today at work and got a lot of
+								great feedback from managers and other devs! It was in person
+								too!"
 							</p>
-							<footer className="blockquote-footer">Jenna</footer>
+							<footer className="blockquote-footer">Klesta</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"Joined Hack for LA, and completed my first ever GitHub issue.
-								Waiting for the PR to be merged."
+								"Wow I'm still taking it in, but got a reply on a job position I
+								went for, as a tech lead/coach."
 							</p>
-							<footer className="blockquote-footer">Danielle</footer>
+							<footer className="blockquote-footer">Brett</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"Officially 30,000 words into my first novel!"
+								"I am glad to have given a talk last week."
 							</p>
-							<footer className="blockquote-footer">Drew</footer>
+							<footer className="blockquote-footer">Teri</footer>
 						</blockquote>
 					</div>
 				</div>

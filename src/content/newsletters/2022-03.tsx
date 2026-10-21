@@ -49,7 +49,7 @@ export default function Issue() {
 			<h3 className="fst-italic">February Recap</h3>
 			<p>
 				Monthly challenge -&gt;
-				<Link href="/monthlychallenges/feb-2022/">All About Pairing!</Link>
+				<Link href="/monthlychallenges/feb-2022">All About Pairing!</Link>
 			</p>
 			<p>
 				We spent the month of February forming teams to share ideas and work on
@@ -93,7 +93,7 @@ export default function Issue() {
 			<h3 className="mb-3 fst-italic">March Happenings</h3>
 			<h4 className="mt-4">
 				💡 Monthly Theme &amp; Challenge:
-				<Link href="/monthlychallenges/mar-2022/">
+				<Link href="/monthlychallenges/mar-2022">
 					Month of Creating Audio/Visual content
 				</Link>
 				!

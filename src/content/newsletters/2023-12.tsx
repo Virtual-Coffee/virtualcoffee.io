@@ -1,25 +1,25 @@
 import Link from 'next/link';
-import CdnImage from '@/components/CdnImage';
 import LeadText from '@/components/content/LeadText';
-import { cmsImageUrl } from '@/util/cmsimage';
+import { resourceHref } from '@/util/resourceHref';
 
 export const handle = {
 	meta: {
-		title: 'Virtual Coffee Newsletter, November 2023',
-		description: 'National November Writing Month! 💝',
+		title: 'Virtual Coffee Newsletter, December 2023',
+		description: 'Creative Community at the End of 2023! 💝',
 	},
-	date: '2023-11-01',
-	listTitle: 'November 2023',
+	date: '2023-12-01',
+	listTitle: 'December 2023',
 };
 
 export default function Issue() {
 	return (
 		<>
-			<h2>Hey budding writers!</h2>
+			<h2>Hey Friends!</h2>
 			<LeadText>
 				<p>
-					October was Hacktoberfest and it was amazing, but now we're switching
-					gears and putting our writer caps on! It's Nanowrimo!
+					After a successful blogging challenge with NaNoWriMo in November,
+					we're enjoying the creative parts of ourselves with Creative
+					Community!
 				</p>
 			</LeadText>
 
@@ -31,91 +31,74 @@ export default function Issue() {
 			</p>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"Grateful for MagnoliaJS and meeting a bunch of VC people in person!"
+					"Grateful for feedback from Justin, Meg, and Ryan for my new
+					educational static site. Thanks to everyone for helping me get it out
+					there!"
 				</p>
-				<footer className="blockquote-footer">Dan</footer>
+				<footer className="blockquote-footer">Lucia</footer>
 			</blockquote>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"Had my first virtual coffee today and I’m grateful."
+					"Managed to get two nights of restful sleep after having a night with
+					almost no sleep. Grateful for all the support from VC."
 				</p>
-				<footer className="blockquote-footer">Josh</footer>
+				<footer className="blockquote-footer">Vitaly</footer>
 			</blockquote>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"Grateful for many learning opportunities I got this week around open
-					source and I'm always, always grateful for being part of the VC
-					family."
+					"I participated in my first Hacktoberfest this year and just received
+					my reward kit. The content is really sick!!! I'm so grateful for this
+					community cause you guys really gave me the push through all your
+					messages here."
 				</p>
-				<footer className="blockquote-footer">Ayu</footer>
+				<footer className="blockquote-footer">Wonuola</footer>
 			</blockquote>
 
 			<hr />
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
-			<h3>October Recap</h3>
+			<h3>November Recap</h3>
 			<p>
-				<strong>💡Monthly Theme & Challenge: Hacktoberfest!</strong>
+				<strong>💡Monthly Theme & Challenge: NaNoWriMo!</strong>
 			</p>
 			<p>
-				October was our annual{' '}
-				<a href="https://hacktoberfest.com/">Hacktoberfest</a> and it was
-				amazing! Shoutout to everyone who participated. Everyone was
-				contributed, or mentored, or maintained or just tried to provide
-				support. We're super proud of all of you.
+				November was our annual{' '}
+				<a href="https://virtualcoffee.io/monthlychallenges/nov-2023">
+					Writing Challenge
+				</a>{' '}
+				and it was amazing! We got over 150,000 words as a community. Shoutout
+				to <strong>Amy Shackles</strong> for her massive contribution this month
+				of almost 60,000 words!
 			</p>
-			<LeadText>
-				<p>
-					<strong>
-						A huge thank you to <a href="https://dub.sh/PWT19Ra">Clerk</a> for
-						sponsoring the Virtual Coffee Hacktoberfest Initiative this year
-					</strong>
-					!
-				</p>
-				<p>
-					Additional gratitude to{' '}
-					<a href="https://www.levelupfinancialplanning.com/?vc">
-						LevelUp Financial Planning
-					</a>{' '}
-					for their support as well!
-				</p>
-			</LeadText>
 
-			<h3 className="mt-4">November: Nanowrimo time!</h3>
+			<h3 className="mt-4">December: Creative Community!</h3>
 			<p>
-				<strong>💡Monthly Theme & Challenge: Blogging Challenge!</strong>
+				<strong>
+					💡Monthly Theme & Challenge: Creative Community Challenge!
+				</strong>
 			</p>
 			<p>
-				This month, we're working together to blog 100,000 words! Based off the
-				NaNoWriMo (National Novel Writing Month) Challenge, we'll be doing the
-				tech take on writing and working together towards the goal while posting
-				on our own blogs. We hit over 100k words last year, and we're going to
-				start this year's challenge with a goal of 100k words. Get those blog
-				posts up!
+				Devs are more than just the code we write. This challenge is all about
+				embracing self-expression. Give back to yourself by indulging in
+				something just for fun. Share the art, music, poetry, sports, games, or
+				other hobbies that spark your joy.
+			</p>
+			<p>
+				We spend so much time grinding away on understanding things in the tech
+				space; let's make some space for the other parts of ourselves. In{' '}
+				<a href="https://virtualcoffee.io/monthlychallenges/dec-2023">
+					this challenge
+				</a>
+				, we encourage folks to work on things that aren't necessarily
+				code-specific or use code to improve other hobbies and outlets.
 			</p>
 			<p>
 				Bekah wrote an amazing blog post called{' '}
-				<a href="https://dev.to/virtualcoffee/blogging-2023-monthly-challenge-3kng">
-					Blogging 2023 Monthly Challenge
+				<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-the-creative-community-monthly-challenge-44d5?preview=1915937bfaddd231a989f8d4f4f99215178b688fe8eb5cd6533fd81a188698c0ec971b8bcad6e4b34cb65930afb4cdb718543ce10b9d3ad83c51bf1c">
+					Join Virtual Coffee in the Creative Community Monthly Challenge!
 				</a>{' '}
-				to get us started! You can learn more about the challenge{' '}
-				<Link href="/monthlychallenges/nov-2023">here</Link>!
+				to get us started!
 			</p>
-
-			<h3 className="mt-4">🎙️Podcasts</h3>
-			<p className="fst-italic">Season 9 is out!</p>
-			<ul>
-				<li>
-					<Link href="/podcast/open-source-licenses-with-matt-mcinnis-tom-cudd-and-ray-deck">
-						Open Source Licenses with Matt McInnis, Tom Cudd, and Ray Deck
-					</Link>
-				</li>
-				<li>
-					<Link href="/podcast/jessica-wilkins-using-open-source-to-create-connections">
-						Jessica Wilkins — Using Open Source to Create Connections
-					</Link>
-				</li>
-			</ul>
 
 			<h3 className="mt-4">☕🪑 Coffee Table Events</h3>
 			<ul>
@@ -175,6 +158,23 @@ export default function Issue() {
 				out <Link href="/events">our events page</Link>.
 			</p>
 
+			<h3>🆕 New Channels Alert</h3>
+			<p>
+				We've added three new private channels — <code>Senior+</code>,{' '}
+				<code>Mid-level</code>, <code>Early-career</code> — to our Slack for
+				peer-to-peer conversation, because we know that it's good to be able to
+				support and nurture conversations specific to your career level. If
+				you're interested in joining the one you identify with most, DM Bekah on
+				Slack.
+			</p>
+
+			<h3>📝 Survey</h3>
+			<p>
+				The end of the year survey will be ready soon. We ask you take a couple
+				of minutes to fill it out so we can continue to improve this community
+				and make it a space that provides value to our members.
+			</p>
+
 			<hr />
 
 			<h3 className="mb-3">🤝 Volunteering at VC</h3>
@@ -183,7 +183,11 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+				<Link
+					href={resourceHref(
+						'/resources/virtual-coffee-handbook/get-involved/paths-to-leadership',
+					)}
+				>
 					here
 				</Link>
 				!
@@ -193,79 +197,84 @@ export default function Issue() {
 
 			<h2>✨ Member Content Highlights</h2>
 			<p>
-				<em>Some of our member contents we loved in October!</em>
+				<em>Some of our member posts we loved during our Writing Challenge</em>
 			</p>
 			<h3>Articles</h3>
 			<ul>
 				<li>
-					<a href="https://dev.to/terieyenike/building-an-efficient-waitlist-app-with-nextjs-and-xata-caf">
-						Building an Efficient Waitlist App with Next.js and Xata — Teri
-						Eyenike
+					<a href="https://harshleey.hashnode.dev/demystifying-the-internet">
+						Demystifying the Internet — Fatima Adekunle-logun
 					</a>
 				</li>
 				<li>
-					<a href="https://blog.frankmtaylor.com/2023/10/02/introducing-selectorhound/">
-						Introducing SelectorHound — Frank Paceaux
+					<a href="https://dev.to/nickytonline/typescript-and-react-enforcing-props-for-accessibility-2h49">
+						TypeScript and React: Enforcing Props for Accessibility — Nick
+						Taylor
 					</a>
 				</li>
 				<li>
-					<a href="https://cam.bio/posts/3-reasons-your-laravel-validations-arent-working/">
-						3 Reasons Your Laravel Validations Aren't Working — Camilo Payan
+					<a href="https://klescode.hashnode.dev/volunteering-as-a-developer">
+						Volunteering as a Developer: Win-Win for You and the Tech Community
+						— Klesta L
 					</a>
 				</li>
 				<li>
-					<a href="https://dev.to/nehamaity/lessons-ive-learned-after-three-years-as-a-full-time-software-engineer-hml">
-						Lessons I've Learned After Three Years as a Full-time Software
-						Engineer — Neha Maity
+					<a href="https://baldbeardedbuilder.com/blog/primary-constructors-in-csharp-12-dotnet/">
+						Using Primary Constructors in C# 12 & .NET 8 — Michael Jolley
 					</a>
 				</li>
 				<li>
-					<a href="https://dev.to/cbid2/four-ways-to-survive-hacktoberfest-as-a-maintainer-26fk">
-						Four Ways To Survive Hacktoberfest As A Maintainer — Christine
-						Belzie
+					<a href="https://dev.to/raaynaldo/binary-search-finding-maxmin-template-in-javascript-1de7">
+						Binary Search Finding Max/Min Template in Javascript — Raynaldo
+						Sutisna
+					</a>
+				</li>
+				<li>
+					<a href="https://dev.to/bekahhw/hiring-firing-and-becoming-indispensable-kfe">
+						Hiring, Firing, and Becoming Indispensable — BekahHW
+					</a>
+				</li>
+				<li>
+					<a href="https://www.freecodecamp.org/news/how-to-write-commit-messages-maintainers-will-like/">
+						How to Write Commit Messages that Project Maintainers Will
+						Appreciate — Christine Belzie
+					</a>
+				</li>
+				<li>
+					<a href="https://dev.to/alexcurtisslep/lessons-from-starting-an-open-source-project-2g3l">
+						Lessons from Starting an Open Source Project — Alex Curtis-Slep
 					</a>
 				</li>
 			</ul>
 
 			<div className="card my-5 border-primary">
 				<div className="card-body">
-					<h2 className="card-title text-primary">🏆 Member Wins</h2>
+					<h2 className="card-title text-primary mb-3">🏆 Member Wins</h2>
 					<div className="card-text">
 						<blockquote className="blockquote">
-							<p className="mb-0">
-								"I got two talks accepted to{' '}
-								<a href="https://confoo.ca">ConFoo Montreal</a>! This will be
-								the first time I’m giving a talk in person!"
-							</p>
-							<footer className="blockquote-footer">Nick</footer>
+							<p className="mb-0">"My blog reached 10K+ views!"</p>
+							<footer className="blockquote-footer">Christine</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"Had a win today : an interview tomorrow and I passed the AZ-900
-								(Microsoft Certified: Azure Fundamentals)."
+								"I am so excited to officially be launching my new service, Say
+								My Name, on Product Hunt today."
 							</p>
-							<footer className="blockquote-footer">Nerando</footer>
+							<footer className="blockquote-footer">Justin</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"I'm unexpectedly speaking at Momentum next week."
+								"Win: I had my PR merged into create-typescript-app."
 							</p>
-							<footer className="blockquote-footer">Brian</footer>
+							<footer className="blockquote-footer">Dominic</footer>
 						</blockquote>
 						<blockquote className="blockquote">
-							<p className="mb-0">
-								"It's official that Christine and I are supporting OpenSauced as
-								community maintainers!"
-							</p>
-							<footer className="blockquote-footer">Ayu</footer>
+							<p className="mb-0">"Completed 3 blogs for this month!"</p>
+							<footer className="blockquote-footer">David</footer>
 						</blockquote>
 						<blockquote className="blockquote">
-							<p className="mb-0">
-								"You are now looking at one of the newest members on the
-								Developer Advocate Advisory Board at DevNetwork &
-								DeveloperWeek."
-							</p>
-							<footer className="blockquote-footer">Chris</footer>
+							<p className="mb-0">"Finally finished building my blog."</p>
+							<footer className="blockquote-footer">Jessica</footer>
 						</blockquote>
 					</div>
 				</div>
@@ -280,9 +289,7 @@ export default function Issue() {
 					</a>
 				</li>
 				<li>
-					<a href="https://www.getrevue.co/profile/nickytonline/issues/yet-another-newsletter-lol-issue-31-1002343">
-						Nick Taylor's newsletter
-					</a>{' '}
+					<a href="https://www.nickyt.co/news">Nick Taylor's newsletter</a>{' '}
 					keeps you up to date with the hot topics in tech.
 				</li>
 				<li>
@@ -295,7 +302,7 @@ export default function Issue() {
 					<a href="https://www.youtube.com/@techmesomethingcool">
 						co-hosting a vid-pod about low code/no code solutions
 					</a>{' '}
-					on youtube!
+					on YouTube!
 				</li>
 			</ul>
 
@@ -306,12 +313,6 @@ export default function Issue() {
 						VirtualCoffee.io
 					</a>{' '}
 					— a Remix Web App for our community created by Dan Ott.
-				</li>
-				<li>
-					<a href="https://github.com/Virtual-Coffee/podcast-transcripts">
-						Virtual Coffee Podcast Transcipts
-					</a>
-					— SRT files for the Virtual Coffee Podcast episodes.
 				</li>
 				<li>
 					<a href="https://github.com/freeCodeCamp/Developer_Quiz_Site">
@@ -366,30 +367,20 @@ export default function Issue() {
 			</ul>
 
 			<hr />
-			<div className="text-center">
-				<a href="https://www.levelupfinancialplanning.com/?vc">
-					<CdnImage
-						src={cmsImageUrl({ path: 'levelUP.png', folder: 'podcast' })}
-						alt="Sponsored by LevelUP Financial Planning"
-						width={679}
-						height={525}
-						sizes="(min-width: 768px) 400px, calc(100vw - 60px)"
-						style={{ height: 'auto' }}
-					/>
-				</a>
-			</div>
 
-			<LeadText>
-				<p>
-					Thanks to this issue's sponsor,{' '}
-					<a href="https://www.levelupfinancialplanning.com/?vc">
-						LevelUP Financial Planning
-					</a>
-					, who understands the importance of finding balance between having an
-					awesome life today, and being confident and excited about your future
-					possibilities.
-				</p>
-			</LeadText>
+			<p>
+				If you're a member and you’d like to give a Lunch & Learn or Workshop,
+				you can{' '}
+				<a href="https://virtualcoffee.io/lunch-and-learn-idea">
+					submit your idea here
+				</a>
+				.
+			</p>
+			<p>
+				Have a question, suggestion, or want to nominate someone’s act of
+				kindness or blogpost? Email us at{' '}
+				<a href="mailto:hello@virtualcoffee.io">hello@virtualcoffee.io</a>.
+			</p>
 		</>
 	);
 }

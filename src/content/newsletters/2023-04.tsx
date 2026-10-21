@@ -1,12 +1,13 @@
 import Link from 'next/link';
+import { resourceHref } from '@/util/resourceHref';
 
 export const handle = {
 	meta: {
-		title: 'Virtual Coffee Newsletter, May 2023',
-		description: 'Pair Programming in May 💝',
+		title: 'Virtual Coffee Newsletter, April 2023',
+		description: "We're going into our 4th year! 💝",
 	},
-	date: '2023-05-01',
-	listTitle: 'May 2023',
+	date: '2023-04-01',
+	listTitle: 'April 2023',
 };
 
 export default function Issue() {
@@ -14,8 +15,9 @@ export default function Issue() {
 		<>
 			<h2>Hey friends!</h2>
 			<p className="lead">
-				April was all about sharing the love and May is all about sharing the
-				cursor! We're gonna be pair programming at VC this month!
+				March was a great month for our lightning talks, and now we're
+				incredibly happy to be sharing what makes our community special as we
+				move into the fourth year of Virtual Coffee.
 			</p>
 
 			<hr />
@@ -26,70 +28,97 @@ export default function Issue() {
 			</p>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"As a new member here its obvious! I am grateful for this community
-					and the welcoming spirit of all!"
+					"Grateful for VC lightning talks especially applications with chat gpt
+					as a developer with prompt engineering skills [from] Matt McInnis,
+					feelings friday session, VC pomodoro flow club sessions to get me and
+					keep me in the state of flow at work, and my vyvanse + caffeine pill
+					to wake me up this morning."
 				</p>
-				<footer className="blockquote-footer">Matthew</footer>
+				<footer className="blockquote-footer">Ethan</footer>
+			</blockquote>
+			<blockquote className="blockquote">
+				<p className="mb-0">"Grateful for all of you and your trust in me."</p>
+				<footer className="blockquote-footer">Julia</footer>
 			</blockquote>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"Grateful for this community; sometimes looking forward to our chats
-					gets me through the week."
+					"Grateful for VC and for my wife and cats and all kinds of stuff, like
+					the idea of pants."
+				</p>
+				<footer className="blockquote-footer">Mark</footer>
+			</blockquote>
+			<blockquote className="blockquote">
+				<p className="mb-0">
+					"I’m grateful for finally feeling a bit better again, even though this
+					overall health situation is still super annoying and energy-consuming.
+					I’m also super happy that I’ve finally joined the VC volunteer team,
+					as that was one of my goals for 2023."
 				</p>
 				<footer className="blockquote-footer">Kai</footer>
-			</blockquote>
-			<blockquote className="blockquote">
-				<p className="mb-0">
-					"I am immensely grateful to the VC maintainers who work tirelessly to
-					ensure its smooth functioning."
-				</p>
-				<footer className="blockquote-footer">Justin</footer>
-			</blockquote>
-			<blockquote className="blockquote">
-				<p className="mb-0">
-					"I'm grateful for Virtual Coffee and the opportunity to give a lunch
-					and learn to my friends this morning."
-				</p>
-				<footer className="blockquote-footer">Jessica</footer>
 			</blockquote>
 
 			<hr />
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
 
-			<h3 className="fst-italic">April Recap</h3>
+			<h3 className="fst-italic">March Recap</h3>
+			<p>Monthly challenge -&gt; Public Speaking!</p>
 			<p>
-				<strong>💡Monthly Theme & Challenge</strong>: Gratitude!
-			</p>
-			<p>
-				Last month we really tried to spread the love around, acknowledging all
-				the wonderful people who make this space great! Sometimes we need to
-				remember that the most healing and restorative thing you do for yourself
-				is to share gratitude and support to the people around you! Thank you to
-				all the members who reached out to others and brought more positivity to
-				the space!
+				We were super excited to have so many great lightning talks last week.
+				We had 11 members share topics from AI to career development and more.
+				You can check out all of the talks on our{' '}
+				<a href="https://www.youtube.com/playlist?list=PLh9uT23TA65jtVEGgWo-DNVAcq7PnDV2r">
+					YouTube playlist
+				</a>
+				.
 			</p>
 
-			<h3 className="fst-italic">May Happenings</h3>
+			<h3 className="fst-italic">April Happenings</h3>
 			<p>
-				<strong>💡Monthly Theme & Challenge</strong>: Month of Pairing!
+				<strong>💡Monthly Theme & Challenge</strong>: Month of Community
+				Kindness!
 			</p>
 			<p>
-				This month we are{' '}
-				<a href="https://dev.to/virtualcoffee/the-power-of-pair-programming-benefits-types-and-tips-1h4c">
-					Pair Programming
-				</a>
-				! That means we are teaming up with each other all month to write code
-				together. Zoom tuple, Skype, whatever you'd like. Pair programming is a
-				great way to learn from each other and solve problems and we're taking
-				it one step further by seeing if we can get as many pairings as possible
-				as community!
+				As we work hard to make sure this community continues to be the special
+				and close-knit group it has been, this challenge encourages our members
+				to celebrate one of the things that continually makes this community so
+				special: Kindness. Some of the ways we see this include: practicing
+				gratitude, reaching out to support other members, mentoring, helping,
+				giving honest and constructive feedback, and continuing to make Virtual
+				Coffee a safe and supportive space.
 			</p>
-			<p>
-				For this challenge, members are challenged to hit 5 pairing sessions per
-				person. Some ways to get started pairing are on an open-source issue, a
-				LeetCode problem, or a project they need help on.
+
+			<h4 className="mt-4">🎙️ Podcasts</h4>
+			<p className="fst-italic">
+				We successfully finished season 7 of the podcast!
 			</p>
+			<ul>
+				<li>
+					<Link href="/podcast/rebecca-key-from-phd-to-frontend">
+						Rebecca Key — From PhD to Frontend
+					</Link>
+				</li>
+				<li>
+					<Link href="/podcast/arthur-doler-the-human-side-of-tech">
+						Arthur Doler — The Human Side of Tech
+					</Link>
+				</li>
+				<li>
+					<Link href="/podcast/dominic-duffin-finding-value-in-challenging-ourselves">
+						Dominic Duffin — Finding value in challenging ourselves
+					</Link>
+				</li>
+				<li>
+					<Link href="/podcast/ramón-huidobro-thoughtful-learning">
+						Ramón Huidobro — Thoughtful Learning
+					</Link>
+				</li>
+				<li>
+					<Link href="/podcast/season-seven-finale-live-with-nick-taylor">
+						Season Seven Finale — Live with Nick Taylor
+					</Link>
+				</li>
+			</ul>
 
 			<h4 className="mt-4">☕🪑 Coffee Table Events</h4>
 			<ul>
@@ -102,7 +131,6 @@ export default function Issue() {
 					Indie-startup hackers (Every other Wednesday at 12:00 PM ET — see
 					#indie-startup-hackers)
 				</li>
-				<li>The Pack Hunt (Tandem Job Hunting) (Wednesdays at 2:00 PM ET)</li>
 				<li>
 					Frontend Friday Folks fighting CSSBattle.dev (Fridays at 2:00 PM ET)
 				</li>
@@ -134,7 +162,11 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link href="/resources/virtual-coffee/get-involved/paths-to-leadership">
+				<Link
+					href={resourceHref(
+						'/resources/virtual-coffee-handbook/get-involved/paths-to-leadership',
+					)}
+				>
 					here
 				</Link>
 				!
@@ -144,30 +176,28 @@ export default function Issue() {
 
 			<h2>Member Blogpost Highlights</h2>
 			<p>
-				<em>Some of our member posts we loved in April!</em>
+				<em>Some of our member posts we loved in March!</em>
 			</p>
 			<ul>
 				<li>
-					<a href="https://dev.to/opensauced/managing-community-health-files-and-templates-with-a-github-repository-l8f">
-						Managing Community Health Files and Templates with a GitHub
-						Repository — Bekah Hawrot Weigel
+					<a href="https://dev.to/virtualcoffee/questions-to-ask-in-an-interview-2g0e">
+						Questions to ask in an interview — Bekah Hawrot Weigel
 					</a>
 				</li>
 				<li>
-					<a href="https://www.tigrisdata.com/blog/astro-tigris-integration/">
-						Creating database-driven Astro sites with the Tigris Astro
-						integration — Michael Jolley
+					<a href="https://dev.to/shiftyp/backbone-for-react-devs-the-song-remains-the-same-5hi2">
+						Backbone for React Devs: The Song Remains the Same — Ryan Kahn
 					</a>
 				</li>
 				<li>
-					<a href="https://dev.to/abbeyperini/dark-mode-toggle-and-prefers-color-scheme-4f3m">
-						Dark-Mode Toggle and Prefers Color Scheme — Abbey Perini
+					<a href="https://blog.joshuakgoldberg.com/seven-reasons-why-conversational-ai-is-dangerous/">
+						Seven Reasons Why Conversational AI is Dangerous — Josh Goldberg
 					</a>
 				</li>
 				<li>
-					<a href="https://ramonh.dev/2023/04/20/objective-c-versatility/">
-						How Objective-C Made Me a Versatile Software Engineer — Ramón
-						Huidobro
+					<a href="https://hackernoon.com/top-apache-kafkar-interview-questions-for-juniors-in-2023">
+						Top Apache Kafka® Interview Questions for Juniors In 2023 — Lucia
+						Cerchie
 					</a>
 				</li>
 			</ul>
@@ -178,27 +208,23 @@ export default function Issue() {
 					<div className="card-text">
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"Decided to try and make a new personal website this morning and
-								succeeded!"
+								"I finally bought my ticket and hotel for Render ATL!"
 							</p>
-							<footer className="blockquote-footer">Mark</footer>
+							<footer className="blockquote-footer">Jessica W.</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"I just got invited to my first ever software dev job
-								interview!!!"
+								"Just got selected to speak at THAT Conference in July."
 							</p>
-							<footer className="blockquote-footer">Sōme</footer>
+							<footer className="blockquote-footer">Brian M.</footer>
 						</blockquote>
 						<blockquote className="blockquote">
-							<p className="mb-0">"I gave my first conference talk!"</p>
-							<footer className="blockquote-footer">Nick</footer>
+							<p className="mb-0">"Joined the KnoCommerce team!!!"</p>
+							<footer className="blockquote-footer">Emmett</footer>
 						</blockquote>
 						<blockquote className="blockquote">
-							<p className="mb-0">
-								"I start my new job as Developer Experience Lead"
-							</p>
-							<footer className="blockquote-footer">Bekah</footer>
+							<p className="mb-0">"Got an offer letter!!!!"</p>
+							<footer className="blockquote-footer">Q</footer>
 						</blockquote>
 					</div>
 				</div>
@@ -220,9 +246,7 @@ export default function Issue() {
 					.
 				</li>
 				<li>
-					<a href="https://www.getrevue.co/profile/nickytonline/issues/yet-another-newsletter-lol-issue-31-1002343">
-						Nick Taylor's newsletter
-					</a>{' '}
+					<a href="https://www.nickyt.co/news">Nick Taylor's newsletter</a>{' '}
 					keeps you up to date with the hot topics in tech.
 				</li>
 				<li>

@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import LeadText from '@/components/content/LeadText';
+import { resourceHref } from '@/util/resourceHref';
 
 export const handle = {
 	meta: {
-		title: 'Virtual Coffee Newsletter, January 2024',
-		description: 'Ready, Set, Goals! 💝',
+		title: 'Virtual Coffee Newsletter, February 2024',
+		description: 'Month of Learning! 💝',
 	},
-	date: '2024-01-01',
-	listTitle: 'January 2024',
+	date: '2024-02-01',
+	listTitle: 'February 2024',
 };
 
 export default function Issue() {
@@ -16,10 +17,9 @@ export default function Issue() {
 			<h2>Hey Friends!</h2>
 			<LeadText>
 				<p>
-					2023 was a whirlwind year, for good and for bad, but the strength and
-					energy of this community shone through it all. We're looking forward
-					to a bright 2024, and starting it off with a goal-setting theme for
-					January!
+					It's the second month of the year and it's time to learn! Join us as
+					we implement our month of learning new things and putting our best
+					thoughts and attempts forward.
 				</p>
 			</LeadText>
 
@@ -31,95 +31,79 @@ export default function Issue() {
 			</p>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"Been loving the group pomodoro sessions in the{' '}
-					<code>#co-working-room</code>! Definitely help my ADHD brain get/stay
-					in flow state!"
-				</p>
-				<footer className="blockquote-footer">Ethan</footer>
-			</blockquote>
-			<blockquote className="blockquote">
-				<p className="mb-0">
-					"I spent all day in bed yesterday due to a migraine. Today, I didn't
-					really want to do anything, but I saw we needed a room leader for
-					today's coffee. Grudgingly, I volunteered. I had a great time and was
-					immediately lifted out of my horrible mood. Thanks so much to everyone
-					that started and helps keep VC running. My life would be a much darker
-					place without all of you."
+					"Thanks so much to everyone that started and helps keep VC running!"
 				</p>
 				<footer className="blockquote-footer">Justin</footer>
 			</blockquote>
 			<blockquote className="blockquote">
 				<p className="mb-0">
-					"I started a four month contract at EA this week as a Technical
-					Writer! This group has helped me feel more confident navigating a
-					career in tech, so thank you all so much."
+					"I'm grateful for everything I learn from this community."
 				</p>
-				<footer className="blockquote-footer">Taryn</footer>
+				<footer className="blockquote-footer">Cris</footer>
+			</blockquote>
+			<blockquote className="blockquote">
+				<p className="mb-0">
+					"I'm grateful for spending more time in <code>#co-working-room</code>{' '}
+					this week and catch up with my folks."
+				</p>
+				<footer className="blockquote-footer">Ayu</footer>
+			</blockquote>
+			<blockquote className="blockquote">
+				<p className="mb-0">
+					"It has been a long week; many things are still on my to-do list. I’m
+					grateful for all my chats in the <code>#co-working-room</code> this
+					week."
+				</p>
+				<footer className="blockquote-footer">Ethan</footer>
 			</blockquote>
 
 			<hr />
 
 			<h2 className="my-5">📆 What's happening at Virtual Coffee</h2>
-			<h3>December Recap</h3>
-			<p>
-				<strong>💡Monthly Theme & Challenge: Creative Community!</strong>
-			</p>
-			<p>
-				Keeping up a VC tradition, our December focus was on making, sharing,
-				and creativity. We baked, crocheted, sewed, built with Legos,
-				photographed, and everything in between. If you enjoyed it, you can join
-				in the fun all year in the <code>#making-stuff</code> channel!
-			</p>
-
-			<h3 className="mt-4">January: Goal Get It!</h3>
+			<h3>January Recap</h3>
 			<p>
 				<strong>💡Monthly Theme & Challenge: New Year, New Goals!</strong>
 			</p>
 			<p>
-				Setting goals is a pretty well-worn practice for January, but New Year's
-				resolutions are notoriously hard to keep. This month's challenge is
-				about setting better goals that will serve you all year long, then
-				building the habits and tools to help you achieve. Check out the{' '}
-				<Link href="/monthlychallenges/jan-2024">
-					VC Monthly Challenge page
-				</Link>{' '}
-				or{' '}
-				<a href="https://dev.to/virtualcoffee/join-virtual-coffee-in-new-year-new-goals-241m">
-					Ayu's blog post
+				We took time at the start of a new year to really sit with our goals and
+				put time and effort into making solid plans that we could stick to and
+				achieve
+			</p>
+
+			<h3 className="mt-4">February: Month of Learning!</h3>
+			<p>
+				<strong>💡Monthly Theme & Challenge: Month of Learning!</strong>
+			</p>
+			<p>
+				During this month, we'll work on learning new dev-related things. You
+				might deep-dive into one topic, focus on a new topic every week, or do a
+				little bit of everything.
+			</p>
+			<p>
+				If you're inspired by what you learn and want to share more, we
+				encourage you to give a{' '}
+				<Link href="/lunch-and-learn-idea">Lunch & Learn</Link> or get ready for
+				our Lightning Talks in April!
+			</p>
+			<p>
+				We aim to learn something new, share what we've learned, and{' '}
+				<a href="https://github.com/orgs/Virtual-Coffee/discussions/1123">
+					gather recommendations and resources
 				</a>{' '}
-				for more inspiration and info!
-			</p>
-			<p>
-				Some of our Coffee Table groups and Slack channels will have special
-				sessions and posts focused on the theme, including a goal-setting
-				workshop in <code>#tech-interview-study-group</code> on January 8 and
-				some creative goal tracking activities in The Pack Hunt.
-			</p>
-			<p>
-				In past years, our January theme has been "Month of Learning", and we'd
-				love to see folks setting goals to learn new tech stacks, data
-				structures and algorithms, RegEx wizardry, or tech interviewing skills.
-				But this community is more than tech! The goals to find more work/life
-				balance, improve your 5K time, or be a better ally are all just as
-				worthwhile. Whatever goals you set for this year, VC members are ready
-				to support you and cheer you on.
+				to share with the community.
 			</p>
 
 			<h3 className="mt-4">☕🪑 Coffee Table Events</h3>
 			<ul>
 				<li>Tech Interview Study Group (Mondays at 4:00 PM ET)</li>
 				<li>
-					Accountabilibuddies (Tuesdays at 7:00 PM ET | Thursdays at 9:00 AM ET
-					| Every other Sundays at 1:00 PM ET)
+					Accountabilibuddies (Tuesdays at 7:00 PM ET and Thursdays at 9:00 AM
+					ET)
 				</li>
 				<li>The Pack Hunt (Tandem Job Hunting) (Wednesdays at 2:00 PM ET)</li>
 				<li>Feelings Friday (Fridays at 10:00 AM ET)</li>
 				<li>
 					Frontend Friday Folks fighting CSSBattle.dev (Fridays at 11:00 AM ET)
-				</li>
-				<li>
-					Savvy Saturday Stylers Slaying CSSBattle.dev (Saturdays at 12:00 PM
-					ET)
 				</li>
 			</ul>
 
@@ -173,11 +157,16 @@ export default function Issue() {
 				Slack.
 			</p>
 
-			<h3>📝 Survey</h3>
+			<h3>📝 The End of Year Survey is here!</h3>
 			<p>
-				The end of the year survey will be ready soon. We ask you take a couple
-				of minutes to fill it out so we can continue to improve this community
-				and make it a space that provides value to our members.
+				It's that time of year where we get feedback from you, the members! We
+				always want to provide the best experience for our members and we'd love
+				for you to fill out our{' '}
+				<a href="https://airtable.com/appGHm8ztVWug6UxH/pagKrtAhS4jnRhtYD/form">
+					short survey
+				</a>{' '}
+				and tell us what you love about the community, what you want, and what
+				you wish you had more of!
 			</p>
 
 			<hr />
@@ -188,7 +177,11 @@ export default function Issue() {
 				active volunteers! All our active volunteers have an invite to send out
 				to someone interested in joining Virtual Coffee. If you're interested in
 				joining the volunteer team, check out some the roles{' '}
-				<Link href="/resources/virtual-coffee-handbook/get-involved/paths-to-leadership">
+				<Link
+					href={resourceHref(
+						'/resources/virtual-coffee-handbook/get-involved/paths-to-leadership',
+					)}
+				>
 					here
 				</Link>
 				!
@@ -206,30 +199,31 @@ export default function Issue() {
 			<h3>Articles</h3>
 			<ul>
 				<li>
-					<a href="https://chrissycodes.hashnode.dev/novice-to-expert-my-freecodecamp-writing-journey">
-						Novice To Expert: My freeCodeCamp Writing Journey — Christine Belzie
+					<a href="https://brianmeeker.me/2024/01/31/2023-year-in-review/">
+						2023 Year In Review — Brian Meeker
 					</a>
 				</li>
 				<li>
-					<a href="https://baldbeardedbuilder.com/blog/choosing-between-dotnet-controllers-and-minimal-apis/">
-						Choosing Between Controllers and Minimal API for .NET APIs — Michael
-						Jolley
+					<a href="https://dev.to/opensauced/stop-burning-out-maintainers-an-empathetic-guide-for-contributors-m20">
+						Stop Burning Out Maintainers: An Empathetic Guide for Contributors —
+						Bekah Hawrot Weigel
 					</a>
 				</li>
 				<li>
-					<a href="https://dev.to/jarvisscript/ugly-sweater-css-spider-man-2ke2">
-						Ugly Sweater CSS: Spider-man. — Chris Jarvis
+					<a href="https://dev.to/anshu21/write-your-first-hello-world-program-in-rust-579o">
+						Write your first Hello World! program in Rust — Anshuman Sathua
 					</a>
 				</li>
 				<li>
-					<a href="https://dev.to/opensauced/migrating-from-jest-to-vitest-for-your-react-application-1b75">
-						Migrating from Jest to Vitest for your React Application — Nick
+					<a href="https://dev.to/opensauced/the-native-browser-dialog-element-1nhn">
+						Unlocking the Power of HTML's Native Browser Dialog Element — Nick
 						Taylor
 					</a>
 				</li>
 				<li>
-					<a href="https://github.com/compose-us/build-in-public/blob/main/updates/2023-12-01%20Gathering%20Feedback/README.md">
-						Gathering Feedback (Build In Public project) — Jörn Bernhardt
+					<a href="https://mango-grammerjam.hashnode.dev/how-to-create-custom-clerk-auth-forms-with-next-typescript-and-tailwind">
+						How to Create Custom Clerk Auth Forms with Next, TypeScript, and
+						Tailwind — Alex Curtis-Slep and Steven Smodish
 					</a>
 				</li>
 			</ul>
@@ -237,20 +231,9 @@ export default function Issue() {
 			<h3>Videos</h3>
 			<ul>
 				<li>
-					<a href="https://www.youtube.com/watch?v=xbJRNwfnQb4&themeRefresh=1">
-						Introduction to Consumer Group IDs (Apache Kafka Explained) — Lucia
-						Cerchie
-					</a>
-				</li>
-				<li>
-					<a href="https://www.youtube.com/watch?v=xoEiMWxidPE">
-						The Power of Communities for Self-Taught Devs — Ayu Adiati
-					</a>
-				</li>
-				<li>
-					<a href="https://www.youtube.com/watch?v=n8mNX2YqkUs">
-						Learn JavaScript Interactively in New freeCodeCamp.org Curriculum —
-						Jessica Wilkins
+					<a href="https://www.youtube.com/watch?v=r0EoU5Mjttw">
+						How Not To Strangle Your Coworkers: Resolving Conflict with
+						Collaboration — Arthur Doler
 					</a>
 				</li>
 			</ul>
@@ -260,43 +243,42 @@ export default function Issue() {
 					<h2 className="card-title text-primary mb-3">🏆 Member Wins</h2>
 					<div className="card-text">
 						<blockquote className="blockquote">
-							<p className="mb-0">"My blog reached 10K+ views!"</p>
+							<p className="mb-0">
+								"Just did a major release with LinksHub, an open source project
+								I maintain with another colleague. We redesigned the website to
+								make it more user friendly and attractive."
+							</p>
 							<footer className="blockquote-footer">Christine</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"I finally broke a million post views on dev.to!"
+								"Just got accepted to Distribute Aid's Open Source Explorers
+								program, which I found out about here on VC back in November.
+								Program just kicked off today. Super psyched!!"
 							</p>
-							<footer className="blockquote-footer">Nick</footer>
+							<footer className="blockquote-footer">Dierdre</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"Woohoo! Bekah's New Maintainers Resources making it into
-								Favorite Series of the year on DEV! Congrats!!!"
+								"Offer letter has been signed and I officially join the DevRel
+								team at DigitalOcean as a Senior Developer Advocate."
 							</p>
-							<footer className="blockquote-footer">Ayu</footer>
+							<footer className="blockquote-footer">Chris</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"I deleted over 20,000 emails and freed 16% of my inbox."
+								"Finally finished my portfolio site! After weeks of
+								flip-flopping between design decisions and even scrapping it
+								altogether and starting over, I finally feel that this is worth
+								deploying and sharing with the world."
 							</p>
-							<footer className="blockquote-footer">Rad</footer>
+							<footer className="blockquote-footer">Shabab</footer>
 						</blockquote>
 						<blockquote className="blockquote">
 							<p className="mb-0">
-								"I've been really into both scrollytales and clis for a while
-								now... and now I'm iterating faster and faster! The hard work is
-								paying off."
+								"The app we programmed launched yesterday!"
 							</p>
-							<footer className="blockquote-footer">Lucia</footer>
-						</blockquote>
-						<blockquote className="blockquote">
-							<p className="mb-0">
-								"Just submitted the final draft of my final article for
-								Stoplight, and I think it’s one of the best articles I’ve ever
-								written. My editor agrees!"
-							</p>
-							<footer className="blockquote-footer">Julia</footer>
+							<footer className="blockquote-footer">Ariadne</footer>
 						</blockquote>
 					</div>
 				</div>
@@ -311,7 +293,9 @@ export default function Issue() {
 					</a>
 				</li>
 				<li>
-					<a href="https://www.nickyt.co/news">Nick Taylor's newsletter</a>{' '}
+					<a href="https://www.getrevue.co/profile/nickytonline/issues/yet-another-newsletter-lol-issue-31-1002343">
+						Nick Taylor's newsletter
+					</a>{' '}
 					keeps you up to date with the hot topics in tech.
 				</li>
 				<li>

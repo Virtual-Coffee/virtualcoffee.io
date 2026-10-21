@@ -82,22 +82,22 @@ export default function Issue() {
 			<h4 className="mt-4">🎙️ Podcast</h4>
 			<ul>
 				<li>
-					<Link href="/podcast/0104-vic-vijayakumar/">
+					<Link href="/podcast/0104-vic-vijayakumar">
 						Vic Vijayakumar - Indie Hacking
 					</Link>
 				</li>
 				<li>
-					<Link href="/podcast/0105-cameron-rahat/">
+					<Link href="/podcast/0105-cameron-rahat">
 						Cameron Bardell and Rahat Chowdhury - Mental Health & Tech
 					</Link>
 				</li>
 				<li>
-					<Link href="/podcast/0106-drew/">
+					<Link href="/podcast/0106-drew">
 						Drew Clements - Building a career and community
 					</Link>
 				</li>
 				<li>
-					<Link href="/podcast/0107-colleen/">
+					<Link href="/podcast/0107-colleen">
 						Colleen Schnettler - Tech: It's hard, but it's worth it
 					</Link>
 				</li>

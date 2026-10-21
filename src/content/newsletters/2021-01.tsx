@@ -49,7 +49,7 @@ export default function Issue() {
 			<ul>
 				<li>
 					Check out how our monthly challenge -&gt;{' '}
-					<Link href="/monthlychallenges/dec-2020/">Pair up!</Link> turned out
+					<Link href="/monthlychallenges/dec-2020">Pair up!</Link> turned out
 				</li>
 				<li>
 					<strong>New members:</strong> ~33 new members
