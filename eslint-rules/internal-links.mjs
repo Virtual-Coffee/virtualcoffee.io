@@ -1,4 +1,4 @@
-const INTERNAL_URL = /^https?:\/\/(www\.)?virtualcoffee\.io(\/|$)/;
+const INTERNAL_URL = /^https?:\/\/(www\.)?virtualcoffee\.io([/?#]|$)/;
 
 /**
  * A page on this site is linked with `Link` and a root-relative path, so
