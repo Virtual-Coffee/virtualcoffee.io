@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export const handle = {
 	listTitle: 'April 2021',
 	meta: {
@@ -21,10 +23,8 @@ export default function Issue() {
 				inviting people to talk about the job search would turn into a year of
 				100+ Virtual Coffees, 2 rounds of Lightning Talks, a Hacktoberfest
 				event, brownbags, bookclubs, member-formed groups, a{' '}
-				<a href="https://virtualcoffee.io/podcast/0309-season-three-wrap-up">
-					podcast
-				</a>
-				, this newsletter, an amazing community, and so much more.
+				<Link href="/podcast/0309-season-three-wrap-up">podcast</Link>, this
+				newsletter, an amazing community, and so much more.
 			</p>
 
 			<p className="lead">
@@ -95,14 +95,14 @@ export default function Issue() {
 			</p>
 			<ul>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0108-kirk/">
+					<Link href="/podcast/0108-kirk">
 						Kirk Shillingford: On Making Mistakes
-					</a>
+					</Link>
 				</li>
 				<li>
-					<a href="https://virtualcoffee.io/podcast/0109-bekah-dan/">
+					<Link href="/podcast/0109-bekah-dan">
 						Dan and Bekah: Season One wrap up
-					</a>
+					</Link>
 				</li>
 			</ul>
 
