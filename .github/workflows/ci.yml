@@ -10,6 +10,13 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  # Empty skips mise.dev.toml (docs/adr/0020): CI installs and runs only what
+  # mise.toml pins. `interleave` keeps a task's own output unprefixed, which
+  # the problem matchers and the sed below rely on.
+  MISE_ENV: ''
+  MISE_TASK_OUTPUT: interleave
+
 jobs:
   format:
     name: format
@@ -44,14 +51,10 @@ jobs:
           # The fix is committed through the API, so git itself never pushes.
           persist-credentials: false
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-
-      - name: Set up Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
+      # Node (.nvmrc) and pnpm as pinned in mise.toml. The action
+      # installs with --locked because mise.lock is committed.
+      - name: Set up mise
+        uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -61,7 +64,7 @@ jobs:
         run: |
           # Written outside the workspace: anything left in it would be swept
           # up by the auto-commit below.
-          if pnpm exec prettier --check --ignore-unknown . > "$RUNNER_TEMP/prettier-output.txt" 2>&1; then
+          if mise run -q format --check > "$RUNNER_TEMP/prettier-output.txt" 2>&1; then
             echo "needs_fix=false" >> "$GITHUB_OUTPUT"
           else
             echo "needs_fix=true" >> "$GITHUB_OUTPUT"
@@ -70,7 +73,7 @@ jobs:
 
       - name: Apply formatting
         if: steps.check.outputs.needs_fix == 'true' && env.CAN_AUTOFIX == 'true'
-        run: pnpm exec prettier --write --ignore-unknown .
+        run: mise run -q format
 
       # Committed through the GraphQL API rather than the git CLI, because
       # GitHub signs API-created commits: they show as Verified and are
@@ -133,7 +136,7 @@ jobs:
             grep '^\[warn\] ' "$RUNNER_TEMP/prettier-output.txt" | grep -v 'Code style issues' | sed 's/^\[warn\] //' || true
             echo '```'
             echo
-            echo 'Run `pnpm format` locally and push the result.'
+            echo 'Run `mise run format` locally and push the result.'
           } >> "$GITHUB_STEP_SUMMARY"
           exit 1
 
@@ -146,33 +149,25 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-
-      - name: Set up Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
+      # Node (.nvmrc) and pnpm as pinned in mise.toml. The action
+      # installs with --locked because mise.lock is committed.
+      - name: Set up mise
+        uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      # src/data/members/{core,members}.ts and src/data/undrawAspectRatios.ts
-      # are gitignored codegen that the app imports through the @/* alias. Only
-      # `prebuild` generates them, so lint/typecheck have to do it themselves.
-      - name: Generate codegen files
-        run: pnpm codegen
 
       - name: Register ESLint problem matcher
         run: echo "::add-matcher::.github/problem-matchers/eslint-stylish.json"
 
       - name: Lint
+        # The task depends on codegen: the gitignored barrels the app imports
+        # through the @/* alias have to exist first.
         # ESLint's stylish formatter prints absolute paths, which stop
         # annotations anchoring to the diff; strip the workspace prefix.
         run: |
           set -o pipefail
-          pnpm lint | sed "s|^${GITHUB_WORKSPACE}/||"
+          mise run -q lint | sed "s|^${GITHUB_WORKSPACE}/||"
 
   typecheck:
     name: typecheck
@@ -183,26 +178,20 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-
-      - name: Set up Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
+      # Node (.nvmrc) and pnpm as pinned in mise.toml. The action
+      # installs with --locked because mise.lock is committed.
+      - name: Set up mise
+        uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate codegen files
-        run: pnpm codegen
-
       - name: Register tsc problem matcher
         run: echo "::add-matcher::.github/problem-matchers/tsc.json"
 
+      # Depends on codegen, like every task below.
       - name: Typecheck
-        run: pnpm typecheck
+        run: mise run -q typecheck
 
   test:
     name: test
@@ -217,27 +206,18 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-
-      - name: Set up Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
+      # Node (.nvmrc) and pnpm as pinned in mise.toml. The action
+      # installs with --locked because mise.lock is committed.
+      - name: Set up mise
+        uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Same reason as lint/typecheck: a test is free to import a module that
-      # reaches the gitignored codegen through @/*.
-      - name: Generate codegen files
-        run: pnpm codegen
-
       # Vitest switches to its github-actions reporter on its own here, so
       # failures annotate the diff without a problem matcher.
       - name: Test
-        run: pnpm test:coverage
+        run: mise run -q test --coverage
 
       # Coverage totals in the job summary, plus a comment on the PR listing
       # the changed files' coverage. A fork PR's token can't write a comment,
@@ -259,24 +239,15 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-
-      - name: Set up Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
+      # Node (.nvmrc) and pnpm as pinned in mise.toml. The action
+      # installs with --locked because mise.lock is committed.
+      - name: Set up mise
+        uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5.1.1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Same reason as lint/typecheck: the codegen barrels are gitignored, and
-      # without them knip reports the imports as unresolved.
-      - name: Generate codegen files
-        run: pnpm codegen
-
       # The github-actions reporter emits workflow commands, so findings land
       # as inline annotations without a problem matcher.
       - name: Knip
-        run: pnpm knip --reporter github-actions
+        run: mise run -q knip -- --reporter github-actions

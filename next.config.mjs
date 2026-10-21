@@ -28,21 +28,6 @@ const localMdxPlugin = (relPath, options = {}) => {
 	return [absPath, { ...options, pluginVersion }];
 };
 
-// `netlify dev --live` serves the site from a per-developer tunnel host but
-// proxies to :9000, and sets `x-forwarded-host` to that local port. Next's
-// Server Action CSRF check compares `origin` to the forwarded host and aborts
-// on the mismatch, and its dev-resource guard blocks the tunnel the same way.
-// The subdomain differs per developer (`--live=<name>`), so allow the zone
-// rather than one host. `*` matches exactly one DNS label, so `*.netlify.live`
-// is the only pattern that matches `<sub>--<site>.netlify.live`.
-//
-// The CLI sets NETLIFY_DEV for both plain `netlify dev` and `--live`, and
-// nothing tells the framework which one it is under, so `pnpm dev:tunnel`
-// sets NETLIFY_TUNNEL=1 itself. Both lists are empty everywhere else,
-// including every deployed environment.
-const isTunnel = process.env.NETLIFY_TUNNEL === '1';
-const devTunnelOrigins = isTunnel ? ['*.netlify.live'] : [];
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	// `netlify dev` routes every request through the block-bots edge function
@@ -69,27 +54,17 @@ const nextConfig = {
 		],
 	},
 	pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
-	// Next 16 streams React's dev-only debug info (owner stacks, component
-	// origins) to the browser over the `/_next/hmr` websocket, keyed by request
-	// id, and the client router *blocks* the Flight decode until those chunks
-	// arrive. Behind `netlify dev --live` the socket connects and the server
-	// sends every chunk, but they never reach the browser, so every client-side
-	// navigation suspends forever: the RSC response is a clean 200, nothing
-	// throws, nothing is logged, and the page simply never changes. Off under
-	// the tunnel only; the cost is richer dev stack traces and nothing else.
 	experimental: {
-		reactDebugChannel: !isTunnel,
+		reactDebugChannel: true,
 		// Netlify's handler isn't minimal mode, so the default preload of every route blocks each cold start's first request by ~3s.
 		preloadEntriesOnStart: false,
 		serverActions: {
-			allowedOrigins: devTunnelOrigins,
 			// Next's default is 1MB; the CoC form's 4MiB attachment
 			// (MAX_ATTACHMENT_BYTES) plus multipart overhead needs more. Netlify
 			// buffers function requests at 6MB, so nothing higher would arrive anyway.
 			bodySizeLimit: '5mb',
 		},
 	},
-	allowedDevOrigins: devTunnelOrigins,
 	// Unmatched paths render /404, which the CDN caches; Next's own 404 path is no-store.
 	async rewrites() {
 		return {

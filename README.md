@@ -55,66 +55,37 @@ If you have just run `git clone ...` , the next step would be to move into the c
 cd virtualcoffee.io
 ```
 
-### 3. Install dependencies
-
-This repo requires `node` and `pnpm` to get started. The [Netlify CLI](https://www.netlify.com/products/dev/) is installed as a project dependency, so you don't need to install it globally.
-
-#### Installing `node`:
-
-The best way to install `node` is to [download the installer](https://nodejs.org/en/) from their site. This repo requires node version 24.20 (see `.nvmrc`).
-
-If you already have a different version of `node` installed, but don't want to update globally, you can install [a package called `nvm`](https://github.com/nvm-sh/nvm), which will allow you to easily switch `node` versions. Once you have `nvm` installed (or if you already have it installed), you can run `nvm use` in the main directory and it will install the proper version of `node`.
-
-#### Installing `pnpm`:
-
-`pnpm` is a package manager that is used to install the rest of our dependencies.
-
-Read more about `pnpm` [on their docs site](https://pnpm.io/motivation).
-
-The best way to install `pnpm` for this project is by using [Corepack](https://nodejs.org/api/corepack.html), a new feature bundled with Node.
-
-Install pnpm via corepack with the following commands:
-
-```sh
-corepack enable
-corepack prepare
-```
-
-#### Setting up your .env
-
-Use the following command to create a local `.env` file. Then open the new file (`.env`) and adjust any settings that are needed.
+### 3. Run the setup script
 
 ```shell
-cp .env.example .env
+bin/setup
 ```
 
-#### Installing package dependencies
+This is the whole setup. It uses [mise](https://mise.jdx.dev) to install the pinned Node and pnpm; if you don't have mise, it offers to install it, or to use `./bin/mise`, a copy that lives inside this folder. Then it installs the dependencies and creates your `.env` (it never overwrites an existing one). It also offers to set up the local database; you only need that for `/join`, `/admin` and the forms, so skip it for content and page changes. Run it again any time: every step that is already done is skipped.
 
-Once you have `node` and `pnpm` installed, you're ready to install the local dependencies! Run the following command:
+**Windows:** native Windows isn't supported. Use [WSL](https://learn.microsoft.com/windows/wsl/install), clone the repo inside the Linux filesystem and run `bin/setup` there. Or skip installing anything: open the repo in a [dev container](https://containers.dev) (GitHub Codespaces, or VS Code's Dev Containers extension); `.devcontainer/devcontainer.json` runs `bin/setup --yes` for you, and `mise run dev` serves on the forwarded port 9000.
+
+Every command below is a `mise run <task>`. **If you let the script use `./bin/mise`, write `./bin/mise run <task>` instead**, everywhere. `mise tasks` lists everything.
+
+When it finishes, start the site:
 
 ```shell
-pnpm install
+mise run dev
 ```
 
-At this point you're ready to roll! Run the following command to get rolling!
-
-```shell
-pnpm dev
-```
-
-Read more about what `pnpm dev` does in the following section.
+Read more about what `mise run dev` does in the following section.
 
 ## Commands
 
-The following commands are available for your use. Most of the time you'll only ever need `pnpm dev`.
+The following commands are available for your use. Most of the time you'll only ever need `mise run dev`.
 
-### `pnpm dev`
+### `mise run dev`
 
 ```shell
-pnpm dev
+mise run dev
 ```
 
-This is the only command you need to do normal local development.
+This is the only command you need to do normal local development. (`pnpm dev` is a shortcut for it.)
 
 Starts a local server and watches your source files for changes. Use this to preview local development.
 
@@ -124,39 +95,31 @@ You should see something like 'Server now ready on http://localhost:9000' below,
 
 Use `ctrl-c` to quit the server when you're done.
 
-### `pnpm dev:tunnel`
+### `mise run build`
 
 ```shell
-pnpm dev:tunnel
+mise run build
 ```
 
-The same as `pnpm dev`, but also served on a public `https://<random>--virtual-coffee-io.netlify.live` URL (printed on start) through [`netlify dev --live`](https://docs.netlify.com/cli/local-development/#share-a-live-development-server). Use it to check the site on a phone or to receive a webhook. It sets `NETLIFY_TUNNEL=1`, which switches on the tunnel-only settings in `next.config.mjs`; plain `pnpm dev` leaves them off because they break hot reloading on localhost.
+Builds a production-ready version of the site. Netlify runs `mise run build:deploy`, which is this plus the database migrations.
 
-### `pnpm build`
-
-```shell
-pnpm build
-```
-
-Builds a production-ready version of the site. This is what Netlify uses to build our site.
-
-### `pnpm format`
+### `mise run format`
 
 ```shell
-pnpm format
+mise run format
 ```
 
 Runs [Prettier](https://prettier.io/) on all of our files.
 
-If your branch lives in this repository, CI formats it for you and pushes the fix back to your pull request. **If you are working from a fork** — which is the normal path for most contributors — CI cannot push to your branch, so the `format` check will fail and list the offending files. Run `pnpm format` locally and push the result.
+If your branch lives in this repository, CI formats it for you and pushes the fix back to your pull request. **If you are working from a fork** — which is the normal path for most contributors — CI cannot push to your branch, so the `format` check will fail and list the offending files. Run `mise run format` locally and push the result.
 
-### `pnpm lint`
+### `mise run lint`
 
 ```shell
-pnpm lint
+mise run lint
 ```
 
-Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. CI runs this on every pull request and fails on errors (warnings are allowed for now). Run `pnpm build-member-files` first if you haven't built recently.
+Runs [ESLint](https://eslint.org/) on all of our files, so you can check for errors or warnings. CI runs this on every pull request and fails on errors (warnings are allowed for now). It regenerates the gitignored files first when their sources changed.
 
 Alongside the standard Next.js rules, `eslint-rules/` holds a few rules of our own for the things TypeScript can't check:
 
@@ -166,33 +129,45 @@ Alongside the standard Next.js rules, `eslint-rules/` holds a few rules of our o
 - **`vc/no-raw-dangerously-set-inner-html`** — render HTML through `DisplayHtml`, and sanitize it first.
 - **`vc/page-requires-metadata`** — every page exports `metadata` or `generateMetadata`.
 
-Most of these fix themselves with `pnpm lint --fix`.
+Most of these fix themselves with `mise run lint --fix`.
 
-### `pnpm typecheck`
+### `mise run typecheck`
 
 ```shell
-pnpm typecheck
+mise run typecheck
 ```
 
-Runs `next typegen` (which regenerates the gitignored `next-env.d.ts` and the route types) and then the TypeScript compiler (`tsc --noEmit`). CI runs this on every pull request. Run `pnpm build-member-files` first if you haven't built recently.
+Runs `next typegen` (which regenerates the gitignored `next-env.d.ts` and the route types) and then the TypeScript compiler (`tsc --noEmit`). CI runs this on every pull request. It regenerates the gitignored files first when their sources changed.
 
-### `pnpm build-member-files`
+### `mise run codegen`
 
 ```shell
-pnpm build-member-files
+mise run codegen
 ```
 
-Regenerates `src/data/members/core.ts` and `src/data/members/members.ts` from the files in `src/content/members/`. These generated files are gitignored. `pnpm dev` and `pnpm build` run this for you, and the dev watcher re-runs it whenever a member file changes.
+Regenerates the gitignored files the app imports: `src/data/members/core.ts` and `members.ts` from the files in `src/content/members/`, the Undraw aspect ratios, and the typed `/resources` links. `mise run dev`, `build`, `lint`, `typecheck` and `test` run this for you, and the dev watcher re-runs it whenever a source changes. `mise run codegen:members` (or `:undraw`, `:resources`) runs one part.
 
-### `pnpm build-bot-list`
+### `mise run check`
 
 ```shell
-pnpm build-bot-list
+mise run check
+```
+
+Codegen, typecheck, lint, test and knip together, which is everything CI checks. Run it before you push.
+
+### `mise run bots:build`
+
+```shell
+mise run bots:build
 ```
 
 Regenerates `src/data/bots.ts` — the list of crawlers the site blocks — from the [ai.robots.txt](https://github.com/ai-robots-txt/ai.robots.txt) release pinned in `.botlist-version.json`. It feeds both `/robots.txt` and the Netlify edge function.
 
 Unlike the other generated files this one **is** checked in, so nothing runs it for you and you only need it if you are changing the list. Edit `src/data/botOverrides.ts` — which holds every decision about who gets blocked or allowed — then run this and commit the result. Renovate keeps the pinned version current, and a scheduled workflow opens a PR when the list changes.
+
+### Maintainers: several worktrees
+
+Working in several git worktrees at once? Each one gets its own port, in `$WEB_PORT` inside `mise run` and `mise x`. `mise daemons register` once, then `mise daemons start web`, runs the site in the background there; `mise daemons urls` shows where.
 
 ## Loading data
 

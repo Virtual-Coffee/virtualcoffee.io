@@ -40,7 +40,7 @@ declare namespace NodeJS {
 		// would. Takes SMTP_PORT (default 1025).
 		SMTP_HOST?: string;
 		SMTP_PORT?: string;
-		// Set by `pnpm email:dev` only: where the templates' images load from
+		// Set by `mise run email:dev` only: where the templates' images load from
 		// while the preview server, not production, is serving them.
 		EMAIL_ASSET_ORIGIN?: string;
 
