@@ -79,6 +79,8 @@ const nextConfig = {
 	// the tunnel only; the cost is richer dev stack traces and nothing else.
 	experimental: {
 		reactDebugChannel: !isTunnel,
+		// Netlify's handler isn't minimal mode, so the default preload of every route blocks each cold start's first request by ~3s.
+		preloadEntriesOnStart: false,
 		serverActions: {
 			allowedOrigins: devTunnelOrigins,
 			// Next's default is 1MB; the CoC form's 4MiB attachment
