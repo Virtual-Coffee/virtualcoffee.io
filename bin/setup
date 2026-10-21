@@ -67,6 +67,12 @@ confirm() {
 # Whether KEY has a non-empty, uncommented value in .env.
 env_has() { grep -Eq "^${1}=['\"]?[^'\"[:space:]]" .env 2>/dev/null; }
 
+# env_append KEY VALUE: add a line to .env, first ending a last line that has no newline.
+env_append() {
+  if [[ -s .env && -n "$(tail -c 1 .env)" ]]; then printf '\n' >> .env; fi
+  printf '%s=%s\n' "$1" "$2" >> .env
+}
+
 kill_tree() {
   local child
   for child in $(pgrep -P "$1" 2>/dev/null || true); do kill_tree "$child"; done
@@ -188,7 +194,7 @@ if env_has BETTER_AUTH_SECRET; then
   skip "BETTER_AUTH_SECRET is set"
 else
   command -v openssl >/dev/null 2>&1 || die "openssl is required to generate BETTER_AUTH_SECRET."
-  printf 'BETTER_AUTH_SECRET=%s\n' "$(openssl rand -base64 32)" >> .env
+  env_append BETTER_AUTH_SECRET "$(openssl rand -base64 32)"
   ok "generated BETTER_AUTH_SECRET (not shown)"
 fi
 
@@ -202,7 +208,7 @@ elif confirm "Add a GitHub token for live /members and sponsor data? (a token wi
   read -rs token || true
   printf '\n'
   if [[ -n "${token:-}" ]]; then
-    printf 'GITHUB_TOKEN=%s\n' "$token" >> .env
+    env_append GITHUB_TOKEN "$token"
     ok "wrote GITHUB_TOKEN to .env (not shown)"
   else
     note "Nothing entered; skipped."
