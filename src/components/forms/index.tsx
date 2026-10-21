@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useId, type ComponentProps } from 'react';
 import { useFormStatus } from 'react-dom';
 
@@ -34,9 +35,9 @@ export function CodeOfConduct({ error }: { error?: string }) {
 			<p className="lead">
 				Just a reminder that all talks, events, group meetings, and other
 				activities need to adhere to our{' '}
-				<a href="/code-of-conduct" target="_blank" rel="noopener noreferrer">
+				<Link href="/code-of-conduct" target="_blank" rel="noopener noreferrer">
 					Code of Conduct
-				</a>
+				</Link>
 				.
 			</p>
 

@@ -12,7 +12,7 @@ export default {
 		// Namespace-iterated through the codegen barrels in src/data/members/.
 		'src/content/members/{core,members}/*.ts',
 		// Loaded as '@/content/newsletters/' + slug in src/data/newsletters.ts.
-		'src/content/newsletters/*.{jsx,tsx}',
+		'src/content/newsletters/*.tsx',
 		// Template-string import() from the simple-mdx-pages helper and the resources route.
 		'src/content/**/*.mdx',
 	],

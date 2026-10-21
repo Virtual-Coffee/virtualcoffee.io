@@ -14,6 +14,7 @@ import { dateForDisplay } from '@/util/date';
 import { sanitizeCmsData } from '@/util/sanitizeCmsData';
 import createCmsImage, { cmsImageUrl } from '@/util/cmsimage';
 import { Metadata } from 'next';
+import Link from 'next/link';
 
 export const dynamic = 'force-static';
 
@@ -252,8 +253,7 @@ export default async function PodcastEpisode({
 						<h5>Virtual Coffee:</h5>
 						<ul>
 							<li>
-								Virtual Coffee:{' '}
-								<a href="https://virtualcoffee.io/">virtualcoffee.io</a>
+								Virtual Coffee: <Link href="/">virtualcoffee.io</Link>
 							</li>
 							<li>
 								Podcast Contact:{' '}
