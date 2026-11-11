@@ -197,8 +197,8 @@ importers:
         specifier: ^11.11.0
         version: 11.11.0(next@16.4.5(@babel/core@7.29.7(supports-color@5.5.0))(@opentelemetry/api@1.9.1)(@types/node@24.19.2)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sass@1.108.1))(react@19.3.1)(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.108.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))(webpack@5.111.0(csso@5.0.5)(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.28)(sharp@0.35.5(@types/node@24.19.2))(svgo@4.1.0))
       '@sindresorhus/slugify':
-        specifier: ^3.0.1
-        version: 3.0.1
+        specifier: ^4.0.0
+        version: 4.0.1
       '@slack/web-api':
         specifier: ^8.3.0
         version: 8.3.0
@@ -3750,17 +3750,17 @@ packages:
     resolution: {integrity: sha512-MkngSCRZ8JdSOCHRaYd+D01XhvU3Hjy6MGl06zhOk614hp9EOAp5gIkBeQg7wtmxpitU6eAL4kdiRMcJa2dlrw==}
     engines: {node: '>=12'}
 
-  '@sindresorhus/slugify@3.0.1':
-    resolution: {integrity: sha512-N1oPvN6sytRKZCskv0L+vSyvnUYi9JplPXZ90lT6EBsijjHrUdoXttb0Lna6pw1TWMe8vlajQnLDtU9KYHqtDg==}
-    engines: {node: '>=20'}
+  '@sindresorhus/slugify@4.0.1':
+    resolution: {integrity: sha512-DsuqdYRMBj9zcLBQ6m0KrkrWi8PuxXcPlO7CEjrhCOZWt8JPEMCuD3LD3FOgET/sHqgOE++xvkZI0HONqFyaug==}
+    engines: {node: '>=22'}
 
   '@sindresorhus/transliterate@1.6.0':
     resolution: {integrity: sha512-doH1gimEu3A46VX6aVxpHTeHrytJAG6HgdxntYnCFiIFHEM/ZGpG8KiZGBChchjQmG0XFIBL552kBTjVcMZXwQ==}
     engines: {node: '>=12'}
 
-  '@sindresorhus/transliterate@2.3.1':
-    resolution: {integrity: sha512-gVaaGtKYMYAMmI8buULVH3A2TXVJ98QiwGwI7ddrWGuGidGC2uRt4FHs22+8iROJ0QTzju9CuMjlVsrvpqsdhA==}
-    engines: {node: '>=20'}
+  '@sindresorhus/transliterate@3.0.0':
+    resolution: {integrity: sha512-mqOUtMxpY419WtwwYw1EX865Oh+QWpa37yhGLXNmVc6d91wsBYLG51TgSePqrdnCSnTJn2AygX+35StK86tNOA==}
+    engines: {node: '>=22'}
 
   '@slack/logger@5.0.0':
     resolution: {integrity: sha512-VGXhmmgsAo9shdQYh4tFDndd+7nsgp0Y5h0UPDaUp8K359pBasI6YdkMqFW3mCOxLQkq09qj7o7cq6f3DuXcJQ==}
@@ -13010,16 +13010,16 @@ snapshots:
       '@sindresorhus/transliterate': 1.6.0
       escape-string-regexp: 5.0.0
 
-  '@sindresorhus/slugify@3.0.1':
+  '@sindresorhus/slugify@4.0.1':
     dependencies:
-      '@sindresorhus/transliterate': 2.3.1
+      '@sindresorhus/transliterate': 3.0.0
       escape-string-regexp: 5.0.0
 
   '@sindresorhus/transliterate@1.6.0':
     dependencies:
       escape-string-regexp: 5.0.0
 
-  '@sindresorhus/transliterate@2.3.1': {}
+  '@sindresorhus/transliterate@3.0.0': {}
 
   '@slack/logger@5.0.0':
     dependencies:
