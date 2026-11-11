@@ -21,7 +21,7 @@ import { styles } from './styles';
  * SVG images. The origin follows `siteUrl()`, same as every link in these
  * emails, so a local or preview send loads the logo from that env instead of
  * 404ing against production. `EMAIL_ASSET_ORIGIN` overrides it for
- * `pnpm email:dev`, which runs outside the Next app and serves the copy in
+ * `mise run email:dev`, which runs outside the Next app and serves the copy in
  * `src/emails/static/` itself. Read per-render, not cached at module load,
  * since `siteUrl()` reads the environment on every call.
  */

@@ -12,7 +12,7 @@ import { GRANTABLE_ROLES, type RoleName } from '@/lib/access/permissions';
  * something. Active only on a local checkout — `devtoolsEnabled()` — and the
  * library itself also refuses where `NODE_ENV` is production.
  *
- * `pnpm db:seed` registers its own users with the panel (`scripts/seed/users.ts`),
+ * `mise run db:seed` registers its own users with the panel (`scripts/seed/users.ts`),
  * among them a Volunteer with an allowance; a `volunteer` created from here
  * is a fresh one with no roster row and nothing to spend.
  */
@@ -24,7 +24,7 @@ const TEMPLATE_ROLES: ReadonlyArray<{ name: RoleName; description: string }> = [
 /**
  * Whether the panel is on: a local checkout (docs/adr/0018) outside a
  * production build. The library refuses a production build on its own; the
- * check is repeated so a local `pnpm start` doesn't offer the sign-in hint.
+ * check is repeated so a local `mise run start` doesn't offer the sign-in hint.
  */
 export function devtoolsEnabled(): boolean {
 	return process.env.NODE_ENV !== 'production' && deployContext() === 'local';

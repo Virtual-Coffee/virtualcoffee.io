@@ -68,7 +68,7 @@
 		},
 		{
 			"id": "bot-list-generated",
-			"rule": "src/data/bots.ts is generated from src/data/botOverrides.ts by pnpm build-bot-list and checked in; never hand-edit it.",
+			"rule": "src/data/bots.ts is generated from src/data/botOverrides.ts by mise run bots:build and checked in; never hand-edit it.",
 			"scope": [
 				"src/data/bots.ts",
 				"src/data/botOverrides.ts",

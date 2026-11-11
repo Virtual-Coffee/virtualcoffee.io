@@ -1,9 +1,15 @@
 [build]
 	# Migrations are applied here, by drizzle-kit, not by Netlify's own
-	# applier. See docs/adr/0001.
-	command   = "pnpm build && pnpm db:migrate:deploy"
+	# applier, and only after codegen and `next build` succeed. See
+	# docs/adr/0001 and docs/adr/0020.
+	command   = "mise run build:deploy"
 	functions = "netlify/functions"
 	publish   = ".next"
+
+	[build.environment]
+		# Skips mise.dev.toml: the image's older mise would otherwise install
+		# pitchfork, usage and watchexec, and trip over their v3 lockfile.
+		MISE_ENV = ""
 
 [[edge_functions]]
 	function = "block-bots"

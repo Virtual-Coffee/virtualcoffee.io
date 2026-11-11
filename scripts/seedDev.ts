@@ -10,7 +10,7 @@ import { seedDev } from './seed';
 import { fetchPlaceholder } from './seed/attachment';
 
 /**
- * Seed the local development database — `pnpm db:seed`, which runs this
+ * Seed the local development database — `mise run db:seed`, which runs this
  * under `scripts/with-local-netlify.ts` so the connection string and the
  * blob server are local ones. The work is in `scripts/seed/`; this is the
  * environment check, the blob store and the printout.
@@ -27,7 +27,7 @@ async function main() {
 	const databaseUrl = process.env.NETLIFY_DB_URL ?? process.env.DATABASE_URL;
 	if (!databaseUrl || !isLocalDatabaseUrl(databaseUrl)) {
 		throw new Error(
-			'Refusing to seed: the connection string is not local. Run `pnpm db:seed`.',
+			'Refusing to seed: the connection string is not local. Run `mise run db:seed`.',
 		);
 	}
 

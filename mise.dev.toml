@@ -1,0 +1,167 @@
+# Local development only, layered on mise.toml by `.miserc.toml` (`env = ["dev"]`)
+# — docs/adr/0020. CI and Netlify set `MISE_ENV=""`, so none of this loads
+# there: no pitchfork, usage or watchexec download, and no dev tasks in the log.
+# Its tools lock into mise.dev.lock, which is why mise.lock can stay readable by
+# the older mise Netlify's image ships.
+
+[settings]
+	# Daemons (`[daemons.web]`) and `[deps]` are experimental.
+	experimental = true
+
+[tools]
+	# Daemons (`[daemons.web]`) are run by pitchfork; tasks' `usage` specs need usage.
+	pitchfork = "2.29.0"
+	usage     = "6.12.0"
+	# `mise watch` shells out to watchexec.
+	watchexec = "latest"
+
+[env]
+	# Same entry as mise.toml. mise merges the two; knip's mise plugin reads one
+	# file at a time and only resolves `netlify`, `drizzle-kit` and `email` to
+	# their packages when the file itself puts node_modules/.bin on the PATH.
+	_.path = [
+		"{{config_root}}/node_modules/.bin",
+	]
+
+# `mise run` and `mise x` run `pnpm install` first whenever pnpm-lock.yaml is
+# newer than node_modules, so a fresh worktree or a pull needs no manual
+# install. CI calls pnpm directly and is unaffected.
+[deps.pnpm]
+	auto = true
+
+	# --- dev loop ---------------------------------------------------------------
+	#
+	# Replaces concurrently, npm-watch and cross-env. `dev` has no body: its
+	# dependencies are the two long-lived processes, which mise runs together.
+
+[tasks."dev:watch"]
+	depends     = ["codegen"]
+	description = "Re-run codegen when its sources change"
+	run         = "{{mise_bin}} watch codegen"
+
+# WEB_PORT comes from [daemons.web] when it is configured (one port per
+# worktree); the fallback is netlify.toml's 9000. netlify dev does not pass the
+# port to `[dev] command`, so Next gets it through PORT, and URL (which a .env
+# copy of .env.example also sets, to :9000) follows the site's port.
+[tasks."dev:server"]
+	alias       = "local-dev"
+	depends     = ["codegen"]
+	description = "netlify dev in front of next dev (site on $WEB_PORT, else 9000; next on one above)"
+	env         = { NODE_ENV = "development" }
+	# --mail points SMTP_* at the shared Mailpit on :1025, starting the mail
+	# daemon (below) only if nothing answers on :8025. Exported values win over
+	# .env: netlify dev ignores a .env var already in the process.
+	run = '''
+	port=${WEB_PORT:-9000}
+	export PORT=$((port + 1)) URL=http://localhost:$port
+	if [ "${usage_mail:-false}" = true ]; then
+	  if curl -s -o /dev/null --max-time 2 http://127.0.0.1:8025/api/v1/info; then
+	    echo "mail: reusing the Mailpit already on http://localhost:8025"
+	  else
+	    {{mise_bin}} daemons start mail
+	  fi
+	  export SMTP_HOST=localhost SMTP_PORT=1025
+	fi
+	exec netlify dev --port "$port" --target-port "$PORT"
+	'''
+	usage = 'flag "--mail" help="Send email to the shared Mailpit inbox on :8025 (installed on first use)"'
+
+[tasks.dev]
+	depends = [
+		"dev:watch",
+		"dev:server {% if usage.mail %}--mail{% endif %}",
+	]
+	description = "codegen once, then the watcher and netlify dev together"
+	usage = 'flag "--mail" help="Send email to the shared Mailpit inbox on :8025 (installed on first use)"'
+
+	# --- daemons ----------------------------------------------------------------
+	#
+	# Opt-in: `mise daemons start web` (pitchfork comes from [tools]). `mise run
+	# dev` stays the default way to run the site.
+	#
+	# `port.auto` gives the main checkout 9000 and each linked worktree its own
+	# slot, exported as WEB_PORT, so worktrees and agents can run side by side. The
+	# stride of 10 leaves room for the port above it, which dev:server gives to
+	# Next. Read the site's address from `mise daemons urls --json` or $WEB_PORT;
+	# never assume 9000.
+
+[daemons.web]
+	port      = { auto = true, base = 9000, stride = 10 }
+	proxy     = false
+	ready_cmd = "curl -s -o /dev/null --max-time 5 http://localhost:$WEB_PORT/"
+	# `dev`, not `dev:server`: the codegen watcher runs too, so a new member file
+	# reaches the running site.
+	task      = "dev"
+
+# One shared inbox for every checkout: Mailpit on its default ports (UI 8025,
+# SMTP 1025), data in memory. Its tool is scoped to the task, so only someone
+# who starts the daemon (via `mise run dev --mail`) ever downloads it.
+# dev:server reuses whatever already answers on 8025, so a second worktree never
+# starts a second one. (Global [daemon_providers] would need per-user config and
+# only support postgres, cockroachdb and nats.)
+[tasks."mail:server"]
+	description = "Mailpit: UI on :8025, SMTP on :1025"
+	run         = "exec mailpit --listen 127.0.0.1:8025 --smtp 127.0.0.1:1025"
+	tools       = { mailpit = "1.31.4" }
+
+[daemons.mail]
+	port      = 8025
+	proxy     = false
+	ready_cmd = "curl -s -o /dev/null --max-time 5 http://127.0.0.1:8025/api/v1/info"
+	task      = "mail:server"
+
+	# --- database ---------------------------------------------------------------
+	#
+	# scripts/with-local-netlify.ts supplies DATABASE_URL and a blob store to
+	# anything that is not the site process, and refuses a non-local connection
+	# string. It resolves its child against node_modules/.bin itself.
+
+[tasks."db:generate"]
+	description = "Generate a Drizzle migration into drizzle/"
+	# `mise run db:generate --name add-something`. The name is required and
+	# hyphenated: drizzle's own names use underscores, and Netlify's migration
+	# slugs are lowercase alphanumerics and hyphens only.
+	run = '''
+	case "$usage_name" in
+	  "" | *[!a-z0-9-]* | -*) echo "--name must be lowercase letters, digits and hyphens: $usage_name" >&2; exit 1 ;;
+	esac
+	exec drizzle-kit generate --name "$usage_name"
+	'''
+	usage = 'flag "--name <name>" required=#true help="Migration slug, e.g. add-invite-expiry (lowercase, digits, hyphens)"'
+
+[tasks."db:migrate"]
+	description = "Apply migrations locally (needs `mise run dev` running)"
+	run         = "tsx scripts/with-local-netlify.ts drizzle-kit migrate"
+
+# `--force` skips the CLI's own prompt so the mise `confirm` is the only one.
+[tasks."db:reset"]
+	confirm = { message = "Wipe the local database and re-apply every migration?", default = "no" }
+	description = "Reset the local database, then apply migrations (needs `mise run dev` running)"
+	run = [
+		"netlify database reset --force",
+		{ task = "db:migrate" },
+	]
+
+[tasks."db:seed"]
+	description = "Seed sample applications, volunteers, ledger rows and invites"
+	# URL follows this checkout's port, so the printed invite links open this site.
+	run         = 'URL="http://localhost:${WEB_PORT:-9000}" tsx scripts/with-local-netlify.ts tsx scripts/seedDev.ts'
+
+[tasks."db:studio"]
+	description = "Drizzle Studio on the local database"
+	run         = "tsx scripts/with-local-netlify.ts drizzle-kit studio"
+
+[tasks.invite-maintenance]
+	description = "Run the daily invite accrual and expiry by hand"
+	run         = "tsx scripts/with-local-netlify.ts tsx scripts/runInviteMaintenance.ts"
+
+[tasks."email:dev"]
+	description = "React Email preview on :3010"
+	env         = { EMAIL_ASSET_ORIGIN = "http://localhost:3010" }
+	run         = "email dev --dir src/emails --port 3010"
+
+	# --- onboarding -------------------------------------------------------------
+
+[tasks.setup]
+	description = "First-run wizard: tools, dependencies, .env, database"
+	run         = "bin/setup"

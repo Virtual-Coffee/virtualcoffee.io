@@ -68,7 +68,7 @@ drops it: never actionable, several a day, so `ignoreErrors` drops it by host.
 
 **Source maps upload from Netlify builds.** `withSentryConfig` needs
 `SENTRY_AUTH_TOKEN` in the build environment; without it the upload is skipped
-with a warning, so a fork or a local `pnpm build` is unaffected. Browser events
+with a warning, so a fork or a local `mise run build` is unaffected. Browser events
 go through the `/monitoring` tunnel, for the same reason `netlify.toml` proxies
 Plausible: content blockers drop direct requests.
 
