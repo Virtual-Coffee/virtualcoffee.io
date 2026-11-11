@@ -17,6 +17,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const dynamic = 'force-static';
+// An unknown slug 404s without a server render and cache write.
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
 	const podcastEpisodes = await getEpisodes({ limit: Infinity });

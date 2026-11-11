@@ -233,18 +233,18 @@ export async function fetchTranscript({
 }
 
 /**
- * Cached for 24 h. A throw is never cached, so a failed request costs one
- * render, not a day.
+ * Cached until the next deploy: a published transcript doesn't change, and a
+ * TTL here becomes the episode page's revalidate, which made every episode
+ * regenerate daily at runtime (10–45 s TTFB in Sentry).
  */
 export const getTranscript = unstable_cache(fetchTranscript, ['transcript'], {
-	revalidate: 86400,
 	tags: ['podcast'],
 });
 
 /**
- * A feed outage must not fail a deploy, but a runtime regeneration should throw
- * so ISR keeps serving the last good page (with its transcript). Resolves to
- * `null` for a failure during the production build, rethrows otherwise.
+ * A feed outage must not fail a deploy: during the production build a failure
+ * resolves to `null` and the page ships without a transcript until the next
+ * deploy. Anywhere else it rethrows.
  */
 export async function transcriptOrNullDuringBuild(
 	load: Promise<Transcript | null>,
