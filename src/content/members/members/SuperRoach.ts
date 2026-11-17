@@ -32,7 +32,6 @@ export const SuperRoach: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'brett-james-aba238180' },
 		// { type: 'dev', username: 'yourUserName' },
-		{ type: 'twitter', username: 'yourUserName' },
 		{ type: 'twitch', username: 'SuperRoach' },
 		{ type: 'youtube', channelId: 'UCzz4Xq0klO5GLC8d2aZh0ag' }, // OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },

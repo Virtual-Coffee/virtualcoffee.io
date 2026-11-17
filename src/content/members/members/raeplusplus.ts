@@ -33,7 +33,6 @@ export const raeplusplus: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'raeshellerose' },
 		{ type: 'dev', username: 'raeplusplus' },
-		{ type: 'twitch', username: 'raeplusplus' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR
 		{
 			type: 'youtube',
