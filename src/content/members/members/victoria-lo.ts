@@ -39,7 +39,6 @@ export const victoria_lo: MemberObject = {
 		{ type: 'twitter', username: 'lo_victoria2666' },
 		// { type: 'twitch', username: 'yourUserName' },
 		{ type: 'youtube', channelId: 'ragTechDev' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'victoria' },
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },

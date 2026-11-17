@@ -37,7 +37,6 @@ export const nickytonline: MemberObject = {
 		{ type: 'twitter', username: 'nickytonline' },
 		{ type: 'twitch', username: 'nickytonline' },
 		{ type: 'youtube', customUrl: 'https://nickyt.tube' },
-		{ type: 'polywork', username: 'nickytonline' },
 		{ type: 'hashnode', username: 'nickytonline' },
 		{
 			type: 'website',

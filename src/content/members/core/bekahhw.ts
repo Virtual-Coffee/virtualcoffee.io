@@ -39,7 +39,6 @@ export const bekahhw: MemberObject = {
 		{ type: 'twitch', username: 'bekahhw' },
 		{ type: 'youtube', channelId: 'UCyQMaTyYIcq4npG26u6Z2Fg' },
 		//  { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'bekahhw' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{
 			type: 'website',

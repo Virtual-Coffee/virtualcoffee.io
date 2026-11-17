@@ -37,7 +37,6 @@ export const _01001101CK: MemberObject = {
 		{ type: 'twitter', username: 'yufa_li' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://yufa-li.com/', title: 'Portfolio' },

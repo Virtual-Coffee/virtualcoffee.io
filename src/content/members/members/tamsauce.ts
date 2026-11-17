@@ -38,7 +38,6 @@ export const tamsauce: MemberObject = {
 		{ type: 'twitter', username: 'tamsaucce' },
 		{ type: 'twitch', username: 'tamsauce' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'tamsauce' },
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'tamsauce' },
 		{

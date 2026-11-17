@@ -301,17 +301,6 @@ async function loadUserData(
 							title: `${returnObject.name} on Twitch`,
 						};
 
-					case 'polywork':
-						if (!account.username) {
-							return null;
-						}
-						return {
-							...account,
-							Icon: 'Polywork',
-							url: `https://polywork.com/${account.username}`,
-							title: `${returnObject.name} on Polywork`,
-						};
-
 					case 'medium':
 						if (!account.username) {
 							return null;

@@ -10,7 +10,6 @@ export type Account =
 				| 'codenewbie'
 				| 'twitter'
 				| 'twitch'
-				| 'polywork'
 				| 'medium'
 				| 'hashnode'
 				| 'github';
@@ -89,7 +88,6 @@ export type Icons =
 	| 'Codenewbie'
 	| 'Twitter'
 	| 'Twitch'
-	| 'Polywork'
 	| 'Medium'
 	| 'HashNode'
 	| 'YouTube'

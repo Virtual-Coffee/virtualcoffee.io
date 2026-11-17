@@ -16,7 +16,6 @@ export const damonholden: MemberObject = {
 		{ type: 'twitter', username: 'damonholden_' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://damonholden.com/', title: 'My Website.' },

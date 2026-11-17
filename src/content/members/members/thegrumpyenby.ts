@@ -40,7 +40,6 @@ export const thegrumpyenby: MemberObject = {
 			type: 'youtube',
 			customUrl: 'https://www.youtube.com/channel/UCrshCSQSg36GA0Ebdgw1E7A',
 		},
-		{ type: 'polywork', username: 'thegrumpyenby' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{

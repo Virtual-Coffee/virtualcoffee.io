@@ -36,7 +36,6 @@ export const SuperRoach: MemberObject = {
 		{ type: 'twitter', username: 'yourUserName' },
 		{ type: 'twitch', username: 'SuperRoach' },
 		{ type: 'youtube', channelId: 'UCzz4Xq0klO5GLC8d2aZh0ag' }, // OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'superroach' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{

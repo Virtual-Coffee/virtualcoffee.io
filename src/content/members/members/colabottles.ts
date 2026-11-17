@@ -38,7 +38,6 @@ export const colabottles: MemberObject = {
 		{ type: 'twitter', username: 'toddlibby' },
 		{ type: 'twitch', username: 'toddlibby' },
 		{ type: 'youtube', customUrl: 'https://www.youtube.com/c/FrontEndNerdery' },
-		{ type: 'polywork', username: 'colabottles' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://toddl.dev', title: 'Todd Libby' },

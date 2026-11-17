@@ -37,7 +37,6 @@ export const mikerogers0: MemberObject = {
 		{ type: 'twitter', username: 'MikeRogers0' },
 		// { type: 'twitch', username: 'yourUserName' },
 		{ type: 'youtube', customUrl: 'https://www.youtube.com/c/MikeRogers0' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// {

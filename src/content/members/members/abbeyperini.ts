@@ -37,7 +37,6 @@ export const abbeyperini: MemberObject = {
 		{ type: 'twitter', username: 'abbeyperini' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'abbeyperini' },
 		{ type: 'medium', username: 'abbeyperini' },
 		{ type: 'hashnode', username: 'abbeyperini' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },

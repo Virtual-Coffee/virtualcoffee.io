@@ -37,7 +37,6 @@ export const JesseRWeigel: MemberObject = {
 		{ type: 'twitter', username: 'JesseRWeigel' },
 		{ type: 'twitch', username: 'jesserweigel' },
 		{ type: 'youtube', channelId: 'UCUGkNhK8IEUj8A0vbyJ1Bzw' },
-		{ type: 'polywork', username: 'jesseweigel' },
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'JesseRWeigel' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },

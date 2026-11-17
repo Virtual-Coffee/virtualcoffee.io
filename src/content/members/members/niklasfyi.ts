@@ -37,7 +37,6 @@ export const niklasfyi: MemberObject = {
 		{ type: 'twitter', username: 'niklasfyi' },
 		{ type: 'twitch', username: 'niklasfyi' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'niklasfyi' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },

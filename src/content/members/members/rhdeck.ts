@@ -37,7 +37,6 @@ export const rhdeck: MemberObject = {
 		{ type: 'twitter', username: 'ray_deck' },
 		// { type: 'twitch', username: 'yourUserName' },
 		{ type: 'youtube', channelId: 'UCQThhHKZusZ2u9KDoevVlqQ' }, //OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{

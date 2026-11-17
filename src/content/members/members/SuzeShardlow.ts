@@ -38,7 +38,6 @@ export const SuzeShardlow: MemberObject = {
 		{ type: 'twitter', username: 'SuzeShardlow' },
 		{ type: 'twitch', username: 'SuzeShardlow' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'Suze' },
 		{ type: 'medium', username: 'SuzeShardlow' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://suze.dev', title: 'suze.dev' },

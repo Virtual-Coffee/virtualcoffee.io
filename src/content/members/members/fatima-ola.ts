@@ -38,7 +38,6 @@ export const fatima_ola: MemberObject = {
 		{ type: 'twitter', username: 'fatima_ola1' },
 		//{ type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		//{ type: 'polywork', username: 'yourUserName' },
 		{ type: 'medium', username: 'fatima-ola' },
 		{ type: 'hashnode', username: 'fatima-ola' },
 		//{ type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },

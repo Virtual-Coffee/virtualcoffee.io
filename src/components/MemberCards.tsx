@@ -7,7 +7,6 @@ import Dev from '@/svg/Dev';
 import Codenewbie from '@/svg/Codenewbie';
 import Twitter from '@/svg/Twitter';
 import Twitch from '@/svg/Twitch';
-import Polywork from '@/svg/Polywork';
 import Medium from '@/svg/Medium';
 import HashNode from '@/svg/HashNode';
 import YouTube from '@/svg/YouTube';
@@ -25,7 +24,6 @@ export default function MemberCards({ data }: { data: MemberList }) {
 		Codenewbie,
 		Twitter,
 		Twitch,
-		Polywork,
 		Medium,
 		HashNode,
 		YouTube,

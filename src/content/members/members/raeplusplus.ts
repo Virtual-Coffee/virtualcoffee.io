@@ -41,7 +41,6 @@ export const raeplusplus: MemberObject = {
 			type: 'youtube',
 			customUrl: 'https://www.youtube.com/channel/UC-FknvQZklUcLAfSNrRbzhw',
 		},
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{

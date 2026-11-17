@@ -43,7 +43,6 @@ export const ausrname123: MemberObject = {
 		{ type: 'dev', username: 'nikkhielseath' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 	],
 	badges: [],

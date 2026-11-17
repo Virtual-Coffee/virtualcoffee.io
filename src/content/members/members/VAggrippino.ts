@@ -37,7 +37,6 @@ export const VAggrippino: MemberObject = {
 		{ type: 'twitter', username: 'VAggrippino' },
 		{ type: 'twitch', username: 'vinceaggrippino' },
 		{ type: 'youtube', channelId: 'UC4s3Np_QtrG-uLAihqEXlFQ' }, // OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{

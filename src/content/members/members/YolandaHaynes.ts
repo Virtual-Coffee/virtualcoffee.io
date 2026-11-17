@@ -38,7 +38,6 @@ export const YolandaHaynes: MemberObject = {
 		{ type: 'twitter', username: '_YolandaHaynes' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'yhaynes' },
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'yhaynes' },
 		{ type: 'website', url: 'https://www.yhaynes.com/', title: 'Portfolio' },

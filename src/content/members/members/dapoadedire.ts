@@ -37,7 +37,6 @@ export const dapoadedire: MemberObject = {
 		{ type: 'twitter', username: 'dapo_adedire' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		{ type: 'medium', username: 'dapoadedire' },
 		{ type: 'hashnode', username: 'dapoadedire' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },

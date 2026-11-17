@@ -37,7 +37,6 @@ export const ramonh: MemberObject = {
 		{ type: 'twitter', username: 'hola_soy_milk' },
 		{ type: 'twitch', username: 'hola_soy_milk_' },
 		{ type: 'youtube', channelId: 'UCUgropcJjbAIywZ8N5YJJ5Q' }, //OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'hola_soy_milk' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },
