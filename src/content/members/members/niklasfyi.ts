@@ -34,7 +34,6 @@ export const niklasfyi: MemberObject = {
 		{ type: 'linkedin', username: 'niklas-💻-resch-70448455' },
 		{ type: 'dev', username: 'niklasfyi' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'niklasfyi' },
 		{ type: 'twitch', username: 'niklasfyi' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },

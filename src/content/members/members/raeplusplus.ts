@@ -34,7 +34,6 @@ export const raeplusplus: MemberObject = {
 		{ type: 'linkedin', username: 'raeshellerose' },
 		{ type: 'dev', username: 'raeplusplus' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'raeplusplus' },
 		{ type: 'twitch', username: 'raeplusplus' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR
 		{

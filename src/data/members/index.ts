@@ -286,7 +286,7 @@ async function loadUserData(
 						return {
 							...account,
 							Icon: 'Twitter',
-							url: `https://twitter.com/${account.username}`,
+							url: `https://x.com/${account.username}`,
 							title: `${returnObject.name} on Twitter`,
 						};
 

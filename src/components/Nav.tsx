@@ -208,7 +208,7 @@ export default function Nav() {
 					</li>
 					<li className="nav-item">
 						<a
-							href="https://twitter.com/VirtualCoffeeIO"
+							href="https://x.com/VirtualCoffeeIO"
 							aria-label="Twitter"
 							className="nav-link d-inline-block px-2"
 						>

@@ -34,7 +34,6 @@ export const CassidyMountjoy: MemberObject = {
 		{ type: 'linkedin', username: 'cassidymountjoy' },
 		{ type: 'dev', username: 'cassidymountjoy' },
 		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'CptnMountjoy' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },
