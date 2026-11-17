@@ -34,7 +34,6 @@ export const mikestreety: MemberObject = {
 		{ type: 'linkedin', username: 'mikestreety' },
 		{ type: 'mastodon', url: 'https://hachyderm.io/@mikestreety' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

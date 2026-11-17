@@ -35,7 +35,6 @@ export const loganom: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'logan-mccamon' },
 		{ type: 'dev', username: 'loganom' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'LoganMcCamon' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

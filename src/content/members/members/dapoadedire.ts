@@ -32,7 +32,6 @@ export const dapoadedire: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'dapoadedire' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'dapo_adedire' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

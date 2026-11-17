@@ -33,7 +33,6 @@ export const SafetyVest2789: MemberObject = {
 	accounts: [
 		// { type: 'linkedin', username: 'yourlinkedinUserName' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'SafetyVest2789' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

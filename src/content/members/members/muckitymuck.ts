@@ -33,7 +33,6 @@ export const muckitymuck: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'andrewsgoldstein' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'andygoldstein00' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

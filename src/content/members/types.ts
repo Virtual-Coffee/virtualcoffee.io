@@ -7,7 +7,6 @@ export type Account =
 			type:
 				| 'linkedin'
 				| 'dev'
-				| 'codenewbie'
 				| 'twitter'
 				| 'twitch'
 				| 'medium'
@@ -85,7 +84,6 @@ export type Icons =
 	| 'GitHub'
 	| 'LinkedIn'
 	| 'Dev'
-	| 'Codenewbie'
 	| 'Twitter'
 	| 'Twitch'
 	| 'Medium'

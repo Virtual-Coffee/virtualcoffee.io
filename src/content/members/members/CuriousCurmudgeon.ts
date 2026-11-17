@@ -34,7 +34,6 @@ export const CuriousCurmudgeon: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'brianmeeker' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'CuriousCurmudge' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

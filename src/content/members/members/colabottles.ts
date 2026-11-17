@@ -34,7 +34,6 @@ export const colabottles: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'todd-libby' },
 		{ type: 'dev', username: 'colabottles' },
-		{ type: 'codenewbie', username: 'colabottles' },
 		{ type: 'twitch', username: 'toddlibby' },
 		{ type: 'youtube', customUrl: 'https://www.youtube.com/c/FrontEndNerdery' },
 		// { type: 'medium', username: 'yourUserName' },

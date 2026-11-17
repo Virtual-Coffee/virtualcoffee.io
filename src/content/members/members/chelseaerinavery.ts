@@ -34,7 +34,6 @@ export const chelseaerinavery: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'chelseaavery' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		{ type: 'medium', username: 'chelseaavery.js' },

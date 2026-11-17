@@ -34,7 +34,6 @@ export const bekahhw: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'bekahhw' },
 		{ type: 'dev', username: 'bekahhw' },
-		// { type: 'codenewbie', username: 'bekahhw' },
 		{ type: 'twitter', username: 'bekahhw' },
 		{ type: 'twitch', username: 'bekahhw' },
 		{ type: 'youtube', channelId: 'UCyQMaTyYIcq4npG26u6Z2Fg' },

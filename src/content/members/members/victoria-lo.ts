@@ -35,7 +35,6 @@ export const victoria_lo: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'victoria2666' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'lo_victoria2666' },
 		// { type: 'twitch', username: 'yourUserName' },
 		{ type: 'youtube', channelId: 'ragTechDev' },

@@ -34,7 +34,6 @@ export const nub_rin: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'arin-sharma' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'thatnubarin' },
 		{ type: 'twitch', username: 'thatnubarin' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

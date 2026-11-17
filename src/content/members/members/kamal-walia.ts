@@ -33,7 +33,6 @@ export const kamal_walia: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'kamalwalia' },
 		{ type: 'dev', username: 'kamalwalia' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: '_KamalWalia' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

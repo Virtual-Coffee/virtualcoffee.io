@@ -32,7 +32,6 @@ export const crislanarafael: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'crislana-rafael' },
 		{ type: 'dev', username: 'crislanarafael' },
-		{ type: 'codenewbie', username: 'crislanarafael' },
 		{ type: 'twitter', username: 'CrislanaRafael' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

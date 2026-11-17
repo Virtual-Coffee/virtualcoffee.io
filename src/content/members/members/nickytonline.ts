@@ -33,7 +33,6 @@ export const nickytonline: MemberObject = {
 	accounts: [
 		// { type: 'linkedin', username: 'yourUserName' },
 		{ type: 'dev', username: 'nickytonline' },
-		{ type: 'codenewbie', username: 'nickytonline' },
 		{ type: 'twitter', username: 'nickytonline' },
 		{ type: 'twitch', username: 'nickytonline' },
 		{ type: 'youtube', customUrl: 'https://nickyt.tube' },

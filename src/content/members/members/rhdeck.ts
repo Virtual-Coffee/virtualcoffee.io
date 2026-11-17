@@ -33,7 +33,6 @@ export const rhdeck: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'raydeck' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'ray_deck' },
 		// { type: 'twitch', username: 'yourUserName' },
 		{ type: 'youtube', channelId: 'UCQThhHKZusZ2u9KDoevVlqQ' }, //OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

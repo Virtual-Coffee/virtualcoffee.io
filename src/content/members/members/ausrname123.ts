@@ -41,7 +41,6 @@ export const ausrname123: MemberObject = {
 		},
 		{ type: 'medium', username: 'nikkhielseath' },
 		{ type: 'dev', username: 'nikkhielseath' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 	],

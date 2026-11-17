@@ -34,7 +34,6 @@ export const SuzeShardlow: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'SuzeShardlow' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'SuzeShardlow' },
 		{ type: 'twitch', username: 'SuzeShardlow' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

@@ -32,7 +32,6 @@ export const JesseRWeigel: MemberObject = {
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
 		{ type: 'dev', username: 'jesserweigel' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'JesseRWeigel' },
 		{ type: 'twitch', username: 'jesserweigel' },
 		{ type: 'youtube', channelId: 'UCUGkNhK8IEUj8A0vbyJ1Bzw' },

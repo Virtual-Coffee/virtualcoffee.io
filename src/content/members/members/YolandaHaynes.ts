@@ -34,7 +34,6 @@ export const YolandaHaynes: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'yolanda-haynes' },
 		{ type: 'dev', username: 'yhaynes' },
-		{ type: 'codenewbie', username: 'yhaynes' },
 		{ type: 'twitter', username: '_YolandaHaynes' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

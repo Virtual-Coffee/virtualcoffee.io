@@ -34,7 +34,6 @@ export const tamsauce: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'tamsauce' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitch', username: 'tamsauce' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },

@@ -11,7 +11,6 @@ export const damonholden: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'damonholden' },
 		{ type: 'dev', username: 'damonholden' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'damonholden_' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

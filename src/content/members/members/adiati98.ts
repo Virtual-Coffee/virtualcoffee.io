@@ -38,7 +38,6 @@ export const adiati98: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'adiatiayu' },
 		{ type: 'dev', username: 'adiatiayu' },
-		// { type: 'codenewbie', username: 'adiatiayu' },
 		{ type: 'twitter', username: 'AdiatiAyu' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

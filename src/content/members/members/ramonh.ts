@@ -32,7 +32,6 @@ export const ramonh: MemberObject = {
 	accounts: [
 		// { type: 'linkedin', username: 'yourlinkedinUserName' },
 		{ type: 'dev', username: 'hola_soy_milk' },
-		{ type: 'codenewbie', username: 'hola_soy_milk' },
 		{ type: 'twitter', username: 'hola_soy_milk' },
 		{ type: 'twitch', username: 'hola_soy_milk_' },
 		{ type: 'youtube', channelId: 'UCUgropcJjbAIywZ8N5YJJ5Q' }, //OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

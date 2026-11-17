@@ -33,7 +33,6 @@ export const lsparlin: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'lsparlin' },
 		{ type: 'dev', username: 'lsparlin' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'lsparlin_dev' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

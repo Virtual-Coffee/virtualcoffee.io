@@ -33,7 +33,6 @@ export const raaynaldo: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'teofilusraynaldo' },
 		{ type: 'dev', username: 'raaynaldo' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'raaynaldo' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

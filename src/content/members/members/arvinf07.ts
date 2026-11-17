@@ -33,7 +33,6 @@ export const arvinf07: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'arvin-fernandez' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'arvinf07arvin' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

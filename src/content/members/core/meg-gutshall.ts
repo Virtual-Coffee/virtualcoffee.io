@@ -33,7 +33,6 @@ export const meg_gutshall: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'meghan-gutshall' },
 		{ type: 'dev', username: 'meg_gutshall' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'meg_gutshall' },
 		{ type: 'twitch', username: 'meg_gutshall' },
 		{ type: 'youtube', channelId: 'UCUFzGA_o3MixAj6awfWvzBQ' },

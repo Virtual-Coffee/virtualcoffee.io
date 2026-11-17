@@ -34,7 +34,6 @@ export const devanshukoli: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'Devanshukoli' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'Devanshukoli' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

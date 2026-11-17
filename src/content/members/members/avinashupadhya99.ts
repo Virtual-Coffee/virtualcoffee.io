@@ -33,7 +33,6 @@ export const avinashupadhya99: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'avinash-upadhyaya' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'avinash_ukr' },
 		{ type: 'twitch', username: 'avinashupadhyaya' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

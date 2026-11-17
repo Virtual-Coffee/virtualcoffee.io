@@ -32,7 +32,6 @@ export const rishabh1S: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'rishabh1s' },
 		{ type: 'dev', username: 'rishabh1s' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'Rishabh1xs' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

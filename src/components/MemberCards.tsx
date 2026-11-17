@@ -4,7 +4,6 @@ import DisplayHtml from '@/components/DisplayHtml';
 import GitHub from '@/svg/GitHub';
 import LinkedIn from '@/svg/LinkedIn';
 import Dev from '@/svg/Dev';
-import Codenewbie from '@/svg/Codenewbie';
 import Twitter from '@/svg/Twitter';
 import Twitch from '@/svg/Twitch';
 import Medium from '@/svg/Medium';
@@ -21,7 +20,6 @@ export default function MemberCards({ data }: { data: MemberList }) {
 		GitHub,
 		LinkedIn,
 		Dev,
-		Codenewbie,
 		Twitter,
 		Twitch,
 		Medium,

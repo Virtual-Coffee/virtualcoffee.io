@@ -32,7 +32,6 @@ export const TarynMcMillan: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'taryn-mcmillan-7187b74b' },
 		{ type: 'dev', username: 'tarynmcmillan' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'TarynWritesCode' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },

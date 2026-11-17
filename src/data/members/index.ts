@@ -268,17 +268,6 @@ async function loadUserData(
 							title: `${returnObject.name} on DEV.to`,
 						};
 
-					case 'codenewbie':
-						if (!account.username) {
-							return null;
-						}
-						return {
-							...account,
-							Icon: 'Codenewbie',
-							url: `https://community.codenewbie.org/${account.username}`,
-							title: `${returnObject.name} on CodeNewbie Community`,
-						};
-
 					case 'twitter':
 						if (!account.username) {
 							return null;
