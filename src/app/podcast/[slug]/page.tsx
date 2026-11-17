@@ -266,15 +266,13 @@ export default async function PodcastEpisode({
 							<li>
 								Bekah: <a href="https://dev.to/bekahhw">dev.to/bekahhw</a>,
 								Twitter:{' '}
-								<a href="https://twitter.com/bekahhw">
-									https://twitter.com/bekahhw
-								</a>
-								, Instagram:{' '}
+								<a href="https://x.com/bekahhw">https://x.com/bekahhw</a>,
+								Instagram:{' '}
 								<a href="https://www.instagram.com/bekahhw">bekahhw</a>
 							</li>
 							<li>
 								Dan: <a href="https://dtott.com">dtott.com</a>, Twitter:{' '}
-								<a href="https://twitter.com/danieltott">@danieltott</a>
+								<a href="https://x.com/danieltott">@danieltott</a>
 							</li>
 						</ul>
 

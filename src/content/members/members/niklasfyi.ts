@@ -31,13 +31,9 @@ export const niklasfyi: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'niklas-💻-resch-70448455' },
 		{ type: 'dev', username: 'niklasfyi' },
-		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'niklasfyi' },
 		{ type: 'twitch', username: 'niklasfyi' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'niklasfyi' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },

@@ -33,11 +33,9 @@ export const secondl1ght: MemberObject = {
 	accounts: [
 		// { type: 'linkedin', username: 'yourlinkedinUserName' },
 		{ type: 'dev', username: 'secondl1ght' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'secondl1ght' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'secondl1ght' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://contra.com/secondl1ght', title: 'Contra' },

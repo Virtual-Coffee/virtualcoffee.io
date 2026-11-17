@@ -268,17 +268,6 @@ async function loadUserData(
 							title: `${returnObject.name} on DEV.to`,
 						};
 
-					case 'codenewbie':
-						if (!account.username) {
-							return null;
-						}
-						return {
-							...account,
-							Icon: 'Codenewbie',
-							url: `https://community.codenewbie.org/${account.username}`,
-							title: `${returnObject.name} on CodeNewbie Community`,
-						};
-
 					case 'twitter':
 						if (!account.username) {
 							return null;
@@ -286,7 +275,7 @@ async function loadUserData(
 						return {
 							...account,
 							Icon: 'Twitter',
-							url: `https://twitter.com/${account.username}`,
+							url: `https://x.com/${account.username}`,
 							title: `${returnObject.name} on Twitter`,
 						};
 
@@ -299,17 +288,6 @@ async function loadUserData(
 							Icon: 'Twitch',
 							url: `https://www.twitch.tv/${account.username}`,
 							title: `${returnObject.name} on Twitch`,
-						};
-
-					case 'polywork':
-						if (!account.username) {
-							return null;
-						}
-						return {
-							...account,
-							Icon: 'Polywork',
-							url: `https://polywork.com/${account.username}`,
-							title: `${returnObject.name} on Polywork`,
 						};
 
 					case 'medium':

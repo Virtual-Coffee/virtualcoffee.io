@@ -11,7 +11,6 @@ export const dapoadedire: MemberObject = {
 	// name: 'Your Name',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
-	mainUrl: 'https://dapoadedire.tech/',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
 	bio: `Software Engineer, Engineering Student at Obafemi Awolowo University, Open Source Contributor, and a lover of all things tech.`,
@@ -33,11 +32,9 @@ export const dapoadedire: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'dapoadedire' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'dapo_adedire' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		{ type: 'medium', username: 'dapoadedire' },
 		{ type: 'hashnode', username: 'dapoadedire' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },

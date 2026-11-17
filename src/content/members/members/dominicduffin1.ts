@@ -33,11 +33,9 @@ export const dominicduffin1: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'dominic-duffin-a992b0225' },
 		{ type: 'dev', username: 'dominicduffin1' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'DominicDuffin1' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'dominic' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{

@@ -34,17 +34,15 @@ export const Shubham_404: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'shubham-404-' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		{ type: 'medium', username: 'Shubham-404' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
 		{
 			type: 'website',
-			url: 'https://shubham-404.github.io/Portfolio/',
+			url: 'https://www.shubham404.me/',
 			title: 'Portfolio Website',
 		},
 	],

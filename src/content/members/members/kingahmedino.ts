@@ -33,11 +33,9 @@ export const kingahmedino: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'ahmed-me' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'kingahmedino' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'kingahmedino' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },

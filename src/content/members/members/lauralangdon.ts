@@ -33,11 +33,9 @@ export const LauraLangdon: MemberObject = {
 	accounts: [
 		// { type: 'linkedin', username: 'laura-langdon' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'laura_e_langdon' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'lauralangdon' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'g0g0gadget' },
 		// { type: 'website', url: 'https://lauralangdon.io', title: 'LauraLangdon.io' },

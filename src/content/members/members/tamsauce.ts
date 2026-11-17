@@ -34,18 +34,10 @@ export const tamsauce: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'tamsauce' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'tamsaucce' },
 		{ type: 'twitch', username: 'tamsauce' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'tamsauce' },
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'tamsauce' },
-		{
-			type: 'website',
-			url: 'https://www.tamsauce.com/',
-			title: 'Personal Portfolio',
-		},
 	],
 	badges: [],
 };

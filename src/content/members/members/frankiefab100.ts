@@ -34,15 +34,12 @@ export const frankiefab100: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'frankiefab100' },
 		{ type: 'dev', username: 'frankiefab100' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'frankiefab100' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'frankiefab100' },
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
-		{ type: 'website', url: 'https://bento.me/frankiefab', title: 'Bio Links' },
 	],
 	badges: ['Hacktoberfest2024'],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)

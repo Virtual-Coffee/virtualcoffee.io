@@ -31,16 +31,13 @@ export const thegrumpyenby: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'kaiandiekatschthaler' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'thegrumpyenby' },
 		{ type: 'twitch', username: 'thegrumpyenby' },
 		{
 			type: 'youtube',
 			customUrl: 'https://www.youtube.com/channel/UCrshCSQSg36GA0Ebdgw1E7A',
 		},
-		{ type: 'polywork', username: 'thegrumpyenby' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{

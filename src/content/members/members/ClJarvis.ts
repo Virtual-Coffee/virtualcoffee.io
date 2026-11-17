@@ -33,11 +33,9 @@ export const ClJarvis: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'christopherljarvis' },
 		{ type: 'dev', username: 'jarvisscript' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		//{ type: 'twitter', username: 'JarvisScript' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'chrisjarvis' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{

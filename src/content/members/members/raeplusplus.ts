@@ -33,15 +33,11 @@ export const raeplusplus: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'raeshellerose' },
 		{ type: 'dev', username: 'raeplusplus' },
-		// { type: 'codenewbie', username: 'yourUserName' },
-		{ type: 'twitter', username: 'raeplusplus' },
-		{ type: 'twitch', username: 'raeplusplus' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR
 		{
 			type: 'youtube',
 			customUrl: 'https://www.youtube.com/channel/UC-FknvQZklUcLAfSNrRbzhw',
 		},
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{
