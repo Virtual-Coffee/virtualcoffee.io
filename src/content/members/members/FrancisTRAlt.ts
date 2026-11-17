@@ -13,7 +13,6 @@ export const FrancisTRAlt: MemberObject = {
 	accounts: [
 		// { type: 'linkedin', username: 'yourlinkedinUserName' },
 		{ type: 'dev', username: 'francistrdev' },
-		{ type: 'website', url: 'https://francistr.github.io', title: 'Portfolio' },
 	],
 	badges: [],
 };

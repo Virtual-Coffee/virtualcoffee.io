@@ -39,16 +39,6 @@ export const jamescurran: MemberObject = {
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://noveltheory.com',
-			title: 'Novel Theory.com (Resume/showcase)',
-		},
-		{
-			type: 'website',
-			url: 'https://honestillusion.com',
-			title: 'Honest Illusion.com (Tech blog)',
-		},
 	],
 	badges: ['Hacktoberfest2023'],
 	location: {

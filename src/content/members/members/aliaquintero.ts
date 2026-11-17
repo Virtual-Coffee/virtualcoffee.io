@@ -38,7 +38,6 @@ export const aliaquintero: MemberObject = {
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://aliaquintero.com/', title: 'Portfolio' },
 	],
 	badges: [],
 };

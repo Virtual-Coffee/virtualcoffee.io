@@ -4,7 +4,6 @@ import { profileMasks } from '../flare';
 export const damonholden: MemberObject = {
 	github: 'damonholden',
 	name: 'Damon Holden',
-	mainUrl: 'https://damonholden.com/',
 	bio: `Developer @ BT. Learning. Building. Stand to be wrong.`,
 	flare: {
 		profileMask: profileMasks.circle,
@@ -18,7 +17,6 @@ export const damonholden: MemberObject = {
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://damonholden.com/', title: 'My Website.' },
 	],
 	badges: [],
 };

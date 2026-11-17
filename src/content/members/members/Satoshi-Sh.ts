@@ -11,7 +11,6 @@ export const Satoshi_Sh: MemberObject = {
 	name: 'Satoshi Sh.',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
-	mainUrl: 'https://satoshis-developer.xyz',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
 	bio: `Satoshi is a full-stack developer, who is looking for opportunities to learn something new. He enjoys collaborating with other developers.`,
@@ -38,11 +37,6 @@ export const Satoshi_Sh: MemberObject = {
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://satoshis-developer.xyz/mastlog/',
-			title: 'Mastlog',
-		},
 	],
 	badges: ['Hacktoberfest2023'],
 	location: {

@@ -39,7 +39,6 @@ export const ridonky: MemberObject = {
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		{ type: 'medium', username: 'lauren.perini' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://ridonky.github.io/', title: 'Portfolio' },
 	],
 	badges: ['Hacktoberfest2022'],
 };

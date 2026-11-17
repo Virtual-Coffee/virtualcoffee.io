@@ -39,11 +39,6 @@ export const tamsauce: MemberObject = {
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },
 		{ type: 'hashnode', username: 'tamsauce' },
-		{
-			type: 'website',
-			url: 'https://www.tamsauce.com/',
-			title: 'Personal Portfolio',
-		},
 	],
 	badges: [],
 };

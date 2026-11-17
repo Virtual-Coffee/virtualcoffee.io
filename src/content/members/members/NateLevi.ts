@@ -42,7 +42,6 @@ export const NateLevi: MemberObject = {
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
-		{ type: 'website', url: 'https://devnate.me', title: 'Personal Site' },
 	],
 	badges: [],
 	// Add your location to our member map at https://virtualcoffee.io/members (optional)

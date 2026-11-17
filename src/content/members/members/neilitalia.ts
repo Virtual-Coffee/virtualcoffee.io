@@ -39,11 +39,6 @@ export const neilitalia: MemberObject = {
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://neilitalia.dev',
-			title: 'Personal Website and Portfolio',
-		},
 	],
 	badges: [],
 };

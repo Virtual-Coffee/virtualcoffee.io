@@ -43,7 +43,7 @@ export const Shubham_404: MemberObject = {
 		// { type: 'mastodon', url: 'https://mastodon.server/@username' },
 		{
 			type: 'website',
-			url: 'https://shubham-404.github.io/Portfolio/',
+			url: 'https://www.shubham404.me/',
 			title: 'Portfolio Website',
 		},
 	],

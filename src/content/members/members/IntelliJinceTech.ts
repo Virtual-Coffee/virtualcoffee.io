@@ -40,11 +40,6 @@ export const IntelliJinceTech: MemberObject = {
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://www.christopherjin.com/',
-			title: 'Portfolio',
-		},
 	],
 	badges: ['Hacktoberfest2023'],
 	location: {

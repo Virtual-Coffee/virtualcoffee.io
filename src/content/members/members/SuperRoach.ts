@@ -38,11 +38,6 @@ export const SuperRoach: MemberObject = {
 		{ type: 'youtube', channelId: 'UCzz4Xq0klO5GLC8d2aZh0ag' }, // OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://brettjamesonline.com/',
-			title: 'Personal Website',
-		},
 	],
 	badges: [],
 };
