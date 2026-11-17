@@ -31,7 +31,6 @@ export const Satoshi_Sh: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'satoshi-89bb58a8' },
 		// { type: 'dev', username: 'yourUserName' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },

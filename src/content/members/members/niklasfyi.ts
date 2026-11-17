@@ -31,7 +31,6 @@ export const niklasfyi: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'niklas-💻-resch-70448455' },
 		{ type: 'dev', username: 'niklasfyi' },
 		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitch', username: 'niklasfyi' },

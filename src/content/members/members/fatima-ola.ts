@@ -32,7 +32,6 @@ export const fatima_ola: MemberObject = {
 	//
 	// Links - You can add one of each type, except website - you can add as many `website` accounts as you wish.
 	accounts: [
-		{ type: 'linkedin', username: 'fatima-olasunkanmi-ojo' },
 		//{ type: 'dev', username: 'yourUserName' },
 		//{ type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'fatima_ola1' },
