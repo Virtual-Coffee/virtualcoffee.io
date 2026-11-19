@@ -36,7 +36,7 @@ export function sanitizeCmsData<T>(data: T): T {
 	return sanitizeInternal(data as DataToSanitize) as SanitizedData<T>;
 }
 
-export async function sanitizeHtml(html: string) {
+export function sanitizeHtml(html: string) {
 	return sanitize(html, sanitizeOptions);
 }
 
