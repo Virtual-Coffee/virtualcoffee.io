@@ -5,7 +5,7 @@ import { expect, test } from 'vitest';
  * top-level file in netlify/functions/ as a function, and would try to deploy
  * `invite-maintenance.test`. Subdirectories without an index are ignored.
  */
-import { config } from '../invite-maintenance';
+import { config } from '../invite-maintenance.mts';
 
 test('the scheduled function runs daily', () => {
 	expect(config).toEqual({ schedule: '@daily' });
