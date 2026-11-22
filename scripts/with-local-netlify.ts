@@ -24,7 +24,7 @@ import { isLocalDatabaseUrl } from './lib/localOnly';
  *
  * Requires `netlify dev` to already be running in another terminal.
  *
- *   pnpm exec tsx scripts/with-local-netlify.ts tsx scripts/seedDev.ts
+ *   mise exec -- tsx scripts/with-local-netlify.ts tsx scripts/seedDev.ts
  */
 
 const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -213,7 +213,7 @@ async function main() {
 
 	if (!command) {
 		fail(
-			'Usage: pnpm exec tsx scripts/with-local-netlify.ts <command> [args…]',
+			'Usage: mise exec -- tsx scripts/with-local-netlify.ts <command> [args…]',
 		);
 	}
 

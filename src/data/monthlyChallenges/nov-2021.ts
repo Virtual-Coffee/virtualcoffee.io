@@ -6,7 +6,7 @@ import rows from './data/member-articles.json';
  * The November 2021 writing challenge, frozen as a snapshot of the Airtable
  * "Member Articles" table.
  *
- * Snapshot: `scripts/airtable/snapshotChallenges.ts`.
+ * Frozen snapshot, docs/adr/0004.
  */
 
 export type MemberArticle = {

@@ -20,7 +20,7 @@ Each table has one writer; go through it.
 - `src/lib/volunteers/invites.ts` writes `volunteer_invite_ledger` and sends every Claim Link (`issueAndSend`, `resendClaimLink`).
 - `src/lib/waitlist/lifecycle.ts` writes an Application's status and owns the guards, the send-first order and invite completion; the transition table is `applicationStatuses.ts`, which the action panel reads. Only the import writes `lapsed`.
 - The Invite Allowance is an append-only ledger; a correction is a new row through `adjustBalance` with a reason — `docs/adr/0011`.
-- Volunteers imported from Airtable come from a reviewed mapping — `docs/adr/0012`. Before running an Airtable script, read `scripts/airtable/README.md`.
+- Volunteers imported from Airtable come from a reviewed mapping — `docs/adr/0012`.
 
 ## Ordering
 
@@ -41,10 +41,10 @@ Each table has one writer; go through it.
 
 ## Schema & ids
 
-- A schema change is a new migration: `pnpm db:generate --name=<hyphenated-slug>`, both generated files committed — `docs/adr/0001`.
+- A schema change is a new migration: `mise run db:generate --name <hyphenated-slug>`, both generated files committed — `docs/adr/0001`.
 - `id` (UUIDv7, `newId()` in `src/db/ids.ts`) is the URL and foreign-key handle, checked with `isId()` on the way in; `reference` is display-only — `docs/adr/0008`.
 
 ## Local dev
 
 - One-off scripts run through `scripts/with-local-netlify.ts`, which supplies the local connection string and refuses a non-local one.
-- Locally, sign in by picking a seeded test user from the devtools panel on the sign-in pages (`pnpm db:seed`; local deploy context only — `src/lib/access/devtools.ts`).
+- Locally, sign in by picking a seeded test user from the devtools panel on the sign-in pages (`mise run db:seed`; local deploy context only — `src/lib/access/devtools.ts`).

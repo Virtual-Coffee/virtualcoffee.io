@@ -1,0 +1,3 @@
+# Loads mise.dev.toml for local work (docs/adr/0020). CI and Netlify override it
+# with `MISE_ENV=""` so they read mise.toml alone.
+env = ["dev"]

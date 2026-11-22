@@ -1,0 +1,19 @@
+{
+	"name": "virtualcoffee.io",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+	"features": {
+		"ghcr.io/devcontainers-extra/features/mise:1.0.0": {}
+	},
+	"postCreateCommand": "bin/setup --yes",
+	"forwardPorts": [9000],
+	"portsAttributes": {
+		"9000": {
+			"label": "Site (mise run dev)"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": ["hverlin.mise-vscode"]
+		}
+	}
+}

@@ -74,3 +74,5 @@ the README says how to regenerate it.
 - `importMembership.ts` must run first: this script attributes the Invites
   that one creates, and against an empty `invite` table reports
   `Attributed 0`.
+- The scripts were removed after the cut-over; see git history before the
+  commit that deleted `scripts/airtable/`.

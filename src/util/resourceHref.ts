@@ -6,7 +6,7 @@ type ResourceHref = Route<ResourcePath | `${ResourcePath}#${string}`>;
 /**
  * An href into the handbook and resources. `resources/[...slug]` types as
  * `/resources/${string}`, so a literal href would pass typedRoutes whatever
- * it said; `ResourcePath` is every page that exists, and `pnpm codegen`
+ * it said; `ResourcePath` is every page that exists, and `mise run codegen`
  * rewrites it when a file is added or moved. ESLint bans a raw `/resources`
  * href elsewhere.
  */

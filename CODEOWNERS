@@ -34,6 +34,6 @@ src/app/monthlychallenges/      @Virtual-Coffee/content-team @Virtual-Coffee/sup
 src/content/monthlychallenges/  @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors
 
 # Editorial assets. public/assets/svg/ is deliberately excluded: it feeds the
-# `pnpm build-undraw-ratios` codegen and is engineering-owned.
+# `mise run codegen:undraw` codegen and is engineering-owned.
 public/assets/images/           @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors
 public/assets/pdfs/             @Virtual-Coffee/content-team @Virtual-Coffee/super-contributors

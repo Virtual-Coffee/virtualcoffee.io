@@ -10,7 +10,7 @@ import { Layout } from './layout';
 
 /**
  * One template, three views of it. `Email` is the whole message — shell and
- * all — for sending and for the `pnpm email:dev` preview server. `Content`
+ * all — for sending and for the `mise run email:dev` preview server. `Content`
  * is the part a maintainer signs off on in a confirmation dialog, rendered
  * there as the same React component that produces the sent HTML.
  */
@@ -24,7 +24,7 @@ export type EmailTemplate<P extends object> = {
  * Declares a template from its parts: `Email` is built here, once, as the
  * `Content` inside the shared `Layout`, so no template can ship a shell that
  * disagrees with the one every other message uses. `PreviewProps` rides on
- * `Email` because the `pnpm email:dev` server reads it off the file's default
+ * `Email` because the `mise run email:dev` server reads it off the file's default
  * export.
  */
 export function defineEmail<P extends object>({

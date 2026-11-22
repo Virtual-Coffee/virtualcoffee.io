@@ -39,7 +39,7 @@ change of behaviour that lets a Volunteer plan around their allowance. The job r
 "ensure this month's row exists" rather than "run on the first": a monthly
 schedule that missed its window would leave everyone short until somebody
 noticed, a daily idempotent one heals itself the next morning, and
-`pnpm invite-maintenance` can run it by hand any number of times.
+`mise run invite-maintenance` can run it by hand any number of times.
 
 There is **no cap**; `deactivated_at` is the check on it. Someone who steps
 back stops accruing, so the unbounded case is a person actively volunteering

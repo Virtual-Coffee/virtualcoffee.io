@@ -16,7 +16,7 @@ type system cannot see Markdown links at all.
   `about`, `code-of-conduct` and `uses` are explicit routes sharing
   `src/util/simpleMdxPage.server.tsx`.
 - `/resources` keeps its catch-all, since the handbook is a tree of MDX
-  files. `pnpm codegen` writes the gitignored `ResourcePath` union from those
+  files. `mise run codegen` writes the gitignored `ResourcePath` union from those
   files. A `/resources` href is built with `resourceHref()`, and the ESLint
   rule `vc/resource-hrefs` bans a literal one.
 - The index is `resources/page.tsx` plus a required `[...slug]`, because a
@@ -33,5 +33,5 @@ type system cannot see Markdown links at all.
   slug in `SimpleMdxSlug` (`src/util/simpleMdxPage.server.tsx`).
 - A new catch-all at the root, or a wider one anywhere, switches link
   checking off for every path it matches. It is a review finding.
-- Adding or moving a resource file needs `pnpm codegen` before typecheck.
+- Adding or moving a resource file needs `mise run codegen` before typecheck.
 - A link in content to a redirected path must be pointed at its target.

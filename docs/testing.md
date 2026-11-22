@@ -1,6 +1,6 @@
 # Testing
 
-Vitest, configured in `vitest.config.mts` (read its header comment: it defines the two projects and where the `@/` alias comes from). Tests are colocated as `*.test.ts` beside the module (`*.test.tsx` where the subject is JSX, as in `src/emails/`), run in a plain `node` environment with explicit `import { test, expect } from 'vitest'`; there is no jsdom and no React Testing Library, so do not add either. `pnpm test --project unit` is the fast loop; `pnpm test` runs both projects. The exception is `netlify/edge-functions/`, which Netlify bundles file-by-file; its tests live in `netlify/tests/`.
+Vitest, configured in `vitest.config.mts` (read its header comment: it defines the two projects and where the `@/` alias comes from). Tests are colocated as `*.test.ts` beside the module (`*.test.tsx` where the subject is JSX, as in `src/emails/`), run in a plain `node` environment with explicit `import { test, expect } from 'vitest'`; there is no jsdom and no React Testing Library, so do not add either. `mise run test --project unit` is the fast loop; `mise run test` runs both projects (with `--coverage` for a report, and file or name filters as trailing arguments). The exception is `netlify/edge-functions/`, which Netlify bundles file-by-file; its tests live in `netlify/tests/`.
 
 ## What is tested, and how
 
