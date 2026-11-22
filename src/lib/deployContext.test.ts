@@ -18,6 +18,7 @@ describe('classify', () => {
 describe('from the environment', () => {
 	afterEach(() => {
 		vi.unstubAllEnvs();
+		vi.unstubAllGlobals();
 	});
 
 	test('reads CONTEXT', () => {
@@ -30,5 +31,20 @@ describe('from the environment', () => {
 		vi.stubEnv('CONTEXT', undefined);
 		expect(deployContext()).toBe('local');
 		expect(contextLabel()).toBe('local');
+	});
+
+	test('a function bundle without CONTEXT reads the request context', () => {
+		vi.stubEnv('CONTEXT', undefined);
+		vi.stubGlobal('Netlify', {
+			context: { deploy: { context: 'production' } },
+		});
+		expect(deployContext()).toBe('production');
+		expect(contextLabel()).toBe('production');
+	});
+
+	test('outside a request the runtime context is null, so it is local', () => {
+		vi.stubEnv('CONTEXT', undefined);
+		vi.stubGlobal('Netlify', { context: null });
+		expect(deployContext()).toBe('local');
 	});
 });

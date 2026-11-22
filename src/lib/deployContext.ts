@@ -12,11 +12,23 @@ export function classify(raw?: string): DeployClass {
 	return 'preview';
 }
 
+type NetlifyGlobal = { context?: { deploy?: { context?: string } } | null };
+
+/**
+ * `CONTEXT` is build-scope: `next.config.mjs` inlines it for Next, but a
+ * `netlify/functions` bundle never sees it (docs/adr/0007). There the
+ * runtime's per-request `Netlify.context` carries the same value.
+ */
+function rawContext(): string | undefined {
+	const netlify = (globalThis as { Netlify?: NetlifyGlobal }).Netlify;
+	return process.env.CONTEXT || netlify?.context?.deploy?.context || undefined;
+}
+
 export function deployContext(): DeployClass {
-	return classify(process.env.CONTEXT);
+	return classify(rawContext());
 }
 
 /** For log lines and warnings: which deploy this is, as Netlify names it. */
 export function contextLabel(): string {
-	return process.env.CONTEXT || 'local';
+	return rawContext() || 'local';
 }
