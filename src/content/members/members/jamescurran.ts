@@ -33,23 +33,11 @@ export const jamescurran: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'jamesmcurran' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'zamescurran' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://noveltheory.com',
-			title: 'Novel Theory.com (Resume/showcase)',
-		},
-		{
-			type: 'website',
-			url: 'https://honestillusion.com',
-			title: 'Honest Illusion.com (Tech blog)',
-		},
 	],
 	badges: ['Hacktoberfest2023'],
 	location: {

@@ -33,11 +33,9 @@ export const andreamartz: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'andreamartz' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'amartzcoder' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{

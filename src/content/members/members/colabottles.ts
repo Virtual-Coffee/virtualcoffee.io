@@ -34,11 +34,7 @@ export const colabottles: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'todd-libby' },
 		{ type: 'dev', username: 'colabottles' },
-		{ type: 'codenewbie', username: 'colabottles' },
-		{ type: 'twitter', username: 'toddlibby' },
-		{ type: 'twitch', username: 'toddlibby' },
 		{ type: 'youtube', customUrl: 'https://www.youtube.com/c/FrontEndNerdery' },
-		{ type: 'polywork', username: 'colabottles' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		{ type: 'website', url: 'https://toddl.dev', title: 'Todd Libby' },

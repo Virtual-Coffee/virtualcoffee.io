@@ -33,11 +33,9 @@ export const avinashupadhya99: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'avinash-upadhyaya' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'avinash_ukr' },
 		{ type: 'twitch', username: 'avinashupadhyaya' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		{ type: 'polywork', username: 'avinashupadhya99' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },

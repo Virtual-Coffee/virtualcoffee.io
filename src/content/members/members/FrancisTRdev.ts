@@ -1,8 +1,8 @@
 import type { MemberObject } from '../types';
 import { profileMasks } from '../flare';
 
-export const FrancisTRAlt: MemberObject = {
-	github: 'FrancisTRAlt',
+export const FrancisTRdev: MemberObject = {
+	github: 'FrancisTRdev',
 	name: 'Francis Tran',
 	emoji: '👩‍💻',
 	mainUrl: 'https://dev.to/francistrdev',
@@ -13,7 +13,6 @@ export const FrancisTRAlt: MemberObject = {
 	accounts: [
 		// { type: 'linkedin', username: 'yourlinkedinUserName' },
 		{ type: 'dev', username: 'francistrdev' },
-		{ type: 'website', url: 'https://francistr.github.io', title: 'Portfolio' },
 	],
 	badges: [],
 };

@@ -11,7 +11,6 @@ export const TarynMcMillan: MemberObject = {
 	name: 'Taryn McMillan',
 	//
 	// Main URL - If not defined here, it will default to the website displayed on your GitHub profile. If that's not defined, then a link to your GitHub profile will be displayed.
-	mainUrl: 'https://tarynmcmillan.com',
 	//
 	// Bio - Accepts [markdown](https://spec.commonmark.org/0.30/). Please keep your bio to a reasonable length. Refer to our [members page](https://virtualcoffee.io/members/) for examples.
 	bio: `Unity C# Developer | Educator | Writer | Canadian 🇨🇦 `,
@@ -33,14 +32,11 @@ export const TarynMcMillan: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'taryn-mcmillan-7187b74b' },
 		{ type: 'dev', username: 'tarynmcmillan' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'TarynWritesCode' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{ type: 'website', url: 'https://tarynmcmillan.com', title: 'Portfolio' },
 	],
 	badges: ['Hacktoberfest2023'],
 

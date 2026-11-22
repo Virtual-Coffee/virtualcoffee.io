@@ -33,11 +33,9 @@ export const carrollsa: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'carrollsa' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		// { type: 'twitter', username: 'yourUserName' },
 		// { type: 'twitch', username: 'yourUserName' },
 		{ type: 'youtube', channelId: 'UCRHvz8spFBKaaEyn6XNM49Q' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
 		// { type: 'website', url: 'https://virtualcoffee.io', title: 'Title of link' },

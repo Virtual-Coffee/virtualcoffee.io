@@ -34,18 +34,11 @@ export const IntelliJinceTech: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'chrisjin1' },
 		// { type: 'dev', username: 'yourUserName' },
-		// { type: 'codenewbie', username: 'yourUserName' },
 		{ type: 'twitter', username: 'theChrisJin' },
 		// { type: 'twitch', username: 'yourUserName' },
 		// { type: 'youtube', channelId: 'yourChannelId' }, OR { type: 'youtube', customUrl: 'https://www.youtube.com/c/yourCustomUrl' },
-		// { type: 'polywork', username: 'yourUserName' },
 		// { type: 'medium', username: 'yourUserName' },
 		// { type: 'hashnode', username: 'yourUserName' },
-		{
-			type: 'website',
-			url: 'https://www.christopherjin.com/',
-			title: 'Portfolio',
-		},
 	],
 	badges: ['Hacktoberfest2023'],
 	location: {

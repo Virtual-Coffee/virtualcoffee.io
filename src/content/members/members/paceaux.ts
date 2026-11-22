@@ -12,7 +12,6 @@ export const paceaux: MemberObject = {
 	accounts: [
 		{ type: 'linkedin', username: 'paceaux' },
 		{ type: 'dev', username: 'paceaux' },
-		{ type: 'twitter', username: 'paceaux' },
 		{ type: 'website', url: 'https://frankmtaylor.com/', title: 'Portfolio' },
 	],
 	badges: [],
